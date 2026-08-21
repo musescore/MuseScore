@@ -182,10 +182,10 @@ private:
     static void resolvePendingTempoResets(UpdateContext& ctx);
     static void fixAnacrusisTempo(UpdateContext& ctx);
 
-    static bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
-                                   UpdateContext& ctx);
-    static void addDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
-                                UpdateContext& ctx);
+    static bool tryAddDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
+                                   int priority);
+    static void addDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
+                                int priority);
     static void setTempoPoint(utick_t tick, int tickOffset, real_t normalizedBps, UpdateContext& ctx,
                               std::optional<EID> itemId = std::nullopt);
     //! NOTE: for callers that already know no point exists at tick (e.g. via lower_bound) - skips the redundant lookup
