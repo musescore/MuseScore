@@ -1107,7 +1107,11 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
 
             if (originItem->isFermata()) {
                 EngravingItem* fermataOriginBaseItem = seg->element(originTrack);
-                if (fermataOriginBaseItem && !fermataOriginBaseItem->sharedItem()) {
+                if (fermataOriginBaseItem && fermataOriginBaseItem->isChord()) {
+                    fermataOriginBaseItem = toChord(fermataOriginBaseItem)->upNote();
+                }
+                if (fermataOriginBaseItem && !(fermataOriginBaseItem->sharedItem() || fermataOriginBaseItem->isBarLine())) {
+                    // chordrests can't be linked, need to scan notes & check
                     continue;
                 }
             }
