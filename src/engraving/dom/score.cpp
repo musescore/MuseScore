@@ -3098,22 +3098,10 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
     }
 
     if (m_selection.isRange()) {
-        // Extend existing range selection
-
-        Segment* startSegment = findElementStartSegment(this, e);
-        if (startSegment) {
-            Segment* endSegment = findElementEndSegment(this, e, m_selection.endSegment());
-            staff_idx_t elementStaffIdx = e->staffIdx();
-            if (endSegment && elementStaffIdx != muse::nidx) {
-                Fraction tick = startSegment->tick();
-                Fraction etick = endSegment->tick();
-
-                m_selection.extendRangeSelection(startSegment, endSegment, elementStaffIdx, tick, etick);
-                m_selection.updateSelectedElements();
-
-                m_selection.setActiveTrack(e->track());
-                return;
-            }
+        // Try to extend existing range selection to e
+        bool success = tryExtendRangeSelectionToElem(e);
+        if (success) {
+            return;
         }
     }
 
@@ -3188,6 +3176,8 @@ bool Score::trySelectSimilarInRange(EngravingItem* e)
 
 bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx_t staffIdx)
 {
+    // TODO: Probably belongs in select.h/cpp?
+
     EngravingItem* selectedElement = m_selection.element();
     if (!selectedElement) {
         return false;
@@ -3200,15 +3190,33 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
 
     Segment* endSegment = findElementEndSegment(this, selectedElement, startSegment);
 
-    staff_idx_t startStaffIdx = selectedElement->staffIdx();
+    HBox* selectedHBox = selectedElement->isHBox() ? toHBox(selectedElement) : nullptr;
+    HBox* newHBox = newElement->isHBox() ? toHBox(newElement) : nullptr;
+
+    staff_idx_t startStaffIdx = muse::nidx;
+    staff_idx_t endStaffIdx = muse::nidx;
+
+    const auto expandStaveRangeToHBox = [&startStaffIdx, &endStaffIdx](const HBox* hBox) {
+        const System* system = hBox->system();
+        startStaffIdx = system->firstVisibleStaff();
+        endStaffIdx = system->lastVisibleStaff() + 1;
+    };
+
+    if (selectedHBox) {
+        expandStaveRangeToHBox(selectedHBox);
+    } else {
+        startStaffIdx = selectedElement->staffIdx();
+        endStaffIdx = startStaffIdx + 1;
+    }
+
     if (startStaffIdx == muse::nidx) {
         return false;
     }
 
-    staff_idx_t endStaffIdx = startStaffIdx + 1;
-
     track_idx_t activeTrack = newElement->track();
     bool activeSegmentIsStart = false;
+    bool extendedBackwards = false;
+    bool extendedForwards = false;
 
     if (newElement->isMeasure()) {
         Measure* m = toMeasure(newElement)->coveringMMRestOrThis();
@@ -3217,11 +3225,16 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
         if (tick < startSegment->tick()) {
             startSegment = m->first(SegmentType::ChordRest);
             activeSegmentIsStart = true;
+            extendedBackwards = true;
         }
         if (m == lastMeasureMM()) {
+            if (endSegment) {
+                extendedForwards = true;
+            }
             endSegment = nullptr;
         } else if (endSegment && tick + m->ticks() > endSegment->tick()) {
             endSegment = m->last();
+            extendedForwards = true;
         }
 
         startStaffIdx = std::min(startStaffIdx, staffIdx);
@@ -3233,27 +3246,90 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
         if (newStartSegment && newStartSegment->tick() < startSegment->tick()) {
             startSegment = newStartSegment;
             activeSegmentIsStart = true;
+            extendedBackwards = true;
         }
 
         Segment* newEndSegment = findElementEndSegment(this, newElement, newStartSegment);
         if (endSegment && (!newEndSegment || newEndSegment->tick() > endSegment->tick())) {
             endSegment = newEndSegment;
+            extendedForwards = true;
         }
 
         staff_idx_t newStaffIdx = newElement->staffIdx();
-        if (newStaffIdx != muse::nidx) {
+        if (newHBox) {
+            expandStaveRangeToHBox(newHBox);
+        } else if (newStaffIdx != muse::nidx) {
             startStaffIdx = std::min(startStaffIdx, newStaffIdx);
             endStaffIdx = std::max(endStaffIdx, newStaffIdx + 1);
         }
     }
 
-    m_selection.setRange(startSegment, endSegment, startStaffIdx, endStaffIdx);
+    std::optional<HBox*> startHBox;
+    if (extendedBackwards) {
+        //! NOTE: it's fine if newHBox is null...
+        startHBox = newHBox;
+    } else {
+        //! NOTE: it's fine if selectedHBox is null...
+        startHBox = selectedHBox;
+    }
+
+    std::optional<HBox*> endHBox;
+    if (extendedForwards) {
+        //! NOTE: it's fine if newHBox is null...
+        endHBox = newHBox;
+    } else {
+        //! NOTE: it's fine if selectedHBox is null...
+        endHBox = selectedHBox;
+    }
+
+    m_selection.setRange(startSegment, endSegment, startStaffIdx, endStaffIdx, startHBox, endHBox);
     m_selection.updateSelectedElements();
 
     m_selection.setActiveTrack(activeTrack);
     m_selection.setActiveSegment(activeSegmentIsStart ? startSegment : endSegment);
 
     return true;
+}
+
+bool Score::tryExtendRangeSelectionToElem(EngravingItem* e)
+{
+    // TODO: Probably belongs in select.h/cpp?
+
+    Segment* startSegment = findElementStartSegment(this, e);
+    if (!startSegment) {
+        return false;
+    }
+    Segment* endSegment = findElementEndSegment(this, e, m_selection.endSegment());
+    if (!endSegment) {
+        return false;
+    }
+
+    staff_idx_t elementStaffIdx = muse::nidx;
+
+    HBox* hBox = e->isHBox() ? toHBox(e) : nullptr;
+    if (hBox) {
+        const System* system = hBox->system();
+        elementStaffIdx = system->lastVisibleStaff();
+
+        // HBoxes span entire systems, so extending to an HBox should cause the
+        // range to span the entire system...
+        m_selection.setStaffStart(static_cast<int>(system->firstVisibleStaff()));
+    } else {
+        elementStaffIdx = e->staffIdx();
+    }
+
+    if (elementStaffIdx != muse::nidx) {
+        Fraction tick = startSegment->tick();
+        Fraction etick = endSegment->tick();
+
+        m_selection.extendRangeSelection(startSegment, endSegment, elementStaffIdx, tick, etick, hBox);
+        m_selection.updateSelectedElements();
+
+        m_selection.setActiveTrack(e->track());
+        return true;
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------

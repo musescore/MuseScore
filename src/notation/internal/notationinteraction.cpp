@@ -3536,7 +3536,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
 
     Color selectionColor = configuration()->selectionColor();
     double penWidth = 3.0 / currentScaling(painter);
-    double minPenWidth = 0.20 * m_selection->range()->measureRange().startMeasure->spatium();
+    double minPenWidth = 0.20 * m_selection->range()->measureBaseRange().startMeasureBase->spatium();
     penWidth = std::max(penWidth, minPenWidth);
 
     Pen pen;
@@ -4782,10 +4782,12 @@ void NotationInteraction::joinSelectedMeasures()
         return;
     }
 
-    INotationSelectionRange::MeasureRange measureRange = m_selection->range()->measureRange();
+    // TODO: Check this works. Hopefully it does becasue it's based on ticks and not measures...
+    INotationSelectionRange::MeasureBaseRange measureBaseRange = m_selection->range()->measureBaseRange();
 
     transaction(TranslatableString("undoableAction", "Join measures"), [&](engraving::Transaction& tx) {
-        SplitJoinMeasure::joinMeasures(tx, score()->masterScore(), measureRange.startMeasure->tick(), measureRange.endMeasure->tick());
+        SplitJoinMeasure::joinMeasures(tx, score()->masterScore(), measureBaseRange.startMeasureBase->tick(),
+                                       measureBaseRange.endMeasureBase->tick());
     });
 
     checkAndShowError();
@@ -4808,9 +4810,11 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         }
 
         if (selection()->isRange()) {
-            INotationSelectionRange::MeasureRange range = selection()->range()->measureRange();
-            int startMeasureIndex = range.startMeasure ? range.startMeasure->index() : 0;
-            int endMeasureIndex = range.endMeasure ? range.endMeasure->index() + 1 : 0;
+            INotationSelectionRange::MeasureBaseRange range = selection()->range()->measureBaseRange();
+
+            // TODO: Does this work now that HBoxes are included?
+            const int startMeasureIndex = range.startMeasureBase ? range.startMeasureBase->index() : 0;
+            const int endMeasureIndex = range.endMeasureBase ? range.endMeasureBase->index() + 1 : 0;
 
             beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
                              ? startMeasureIndex
@@ -6166,16 +6170,24 @@ Measure* NotationInteraction::selectedMeasure() const
 {
     INotationInteraction::HitElementContext context = hitElementContext();
     mu::engraving::Measure* measure = context.element && context.element->isMeasure() ? mu::engraving::toMeasure(context.element) : nullptr;
-
-    if (!measure) {
-        INotationSelectionPtr selection = this->selection();
-        if (selection->isRange()) {
-            measure = selection->range()->measureRange().endMeasure;
-        } else if (selection->element()) {
-            measure = selection->element()->findMeasure();
-        }
+    if (measure) {
+        return measure;
     }
-    return measure;
+
+    INotationSelectionPtr selection = this->selection();
+    if (selection->isRange()) {
+        MeasureBase* mb = selection->range()->measureBaseRange().endMeasureBase;
+        if (!mb) {
+            return nullptr;
+        }
+        return mb->isMeasure() ? toMeasure(mb) : mb->prevMeasure();
+    }
+
+    if (selection->element()) {
+        return selection->element()->findMeasure();
+    }
+
+    return nullptr;
 }
 
 void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIndex, TimeSignature* timeSignature)
@@ -6248,13 +6260,14 @@ void NotationInteraction::removeSelectedMeasures()
         return;
     }
 
-    mu::engraving::MeasureBase* firstMeasure = nullptr;
-    mu::engraving::MeasureBase* lastMeasure = nullptr;
+    mu::engraving::MeasureBase* firstMeasureBase = nullptr;
+    mu::engraving::MeasureBase* lastMeasureBase = nullptr;
 
     if (selection()->isRange()) {
-        INotationSelectionRange::MeasureRange measureRange = selection()->range()->measureRange();
-        firstMeasure = measureRange.startMeasure;
-        lastMeasure = measureRange.endMeasure;
+        // TODO: Does this still work with HBoxes?
+        INotationSelectionRange::MeasureBaseRange measureBaseRange = selection()->range()->measureBaseRange();
+        firstMeasureBase = measureBaseRange.startMeasureBase;
+        lastMeasureBase = measureBaseRange.endMeasureBase;
     } else {
         const std::vector<EngravingItem*>& elements = selection()->elements();
         if (elements.empty()) {
@@ -6264,24 +6277,24 @@ void NotationInteraction::removeSelectedMeasures()
         for (EngravingItem* element : elements) {
             mu::engraving::MeasureBase* elementMeasure = element->findMeasureBase();
 
-            if (!firstMeasure || firstMeasure->index() > elementMeasure->index()) {
-                firstMeasure = elementMeasure;
+            if (!firstMeasureBase || firstMeasureBase->index() > elementMeasure->index()) {
+                firstMeasureBase = elementMeasure;
             }
 
-            if (!lastMeasure || lastMeasure->index() < elementMeasure->index()) {
-                lastMeasure = elementMeasure;
+            if (!lastMeasureBase || lastMeasureBase->index() < elementMeasure->index()) {
+                lastMeasureBase = elementMeasure;
             }
         }
     }
 
-    IF_ASSERT_FAILED(firstMeasure && lastMeasure) {
+    IF_ASSERT_FAILED(firstMeasureBase && lastMeasureBase) {
         return;
     }
 
-    m_selection->select({ firstMeasure }, SelectType::REPLACE);
-    m_selection->select({ lastMeasure }, SelectType::RANGE);
+    m_selection->select({ firstMeasureBase }, SelectType::REPLACE);
+    m_selection->select({ lastMeasureBase }, SelectType::RANGE);
 
-    int numDeletedMeasures = 1 + lastMeasure->measureIndex() - firstMeasure->measureIndex();
+    int numDeletedMeasures = 1 + lastMeasureBase->measureIndex() - firstMeasureBase->measureIndex();
 
     startEdit(TranslatableString("undoableAction", "Delete %Ln measure(s)", nullptr, numDeletedMeasures));
     score()->cmdTimeDelete();

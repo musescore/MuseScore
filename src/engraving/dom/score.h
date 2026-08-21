@@ -909,6 +909,7 @@ private:
 
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
+    bool tryExtendRangeSelectionToElem(EngravingItem* e);
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);

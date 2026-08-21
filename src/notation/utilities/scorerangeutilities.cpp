@@ -22,6 +22,7 @@
 
 #include "scorerangeutilities.h"
 
+#include "engraving/dom/box.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/score.h"
@@ -34,7 +35,8 @@ using namespace mu::engraving;
 
 std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
                                                            const Segment* startSegment, const Segment* endSegment,
-                                                           staff_idx_t startStaffIndex, staff_idx_t endStaffIndex)
+                                                           staff_idx_t startStaffIndex, staff_idx_t endStaffIndex,
+                                                           const engraving::HBox* startHBox, const engraving::HBox* endHBox)
 {
     if (!startSegment || !endSegment || startSegment->tick() > endSegment->tick()) {
         return {};
@@ -73,8 +75,19 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
             bottomY += 0.5 * diff;
         }
 
-        double x1 = section.startSegment->pagePos().x();
-        const double x2 = section.endSegment->pageBoundingRect().right();
+        double x1 = 0.0;
+        if (startHBox && startHBox->system() == section.system) {
+            x1 = startHBox->pageBoundingRect().left();
+        } else {
+            x1 = section.startSegment->pagePos().x();
+        }
+        double x2 = 0.0;
+        if (endHBox && endHBox->system() == section.system) {
+            x2 = endHBox->pageBoundingRect().right();
+        } else {
+            x2 = section.endSegment->pageBoundingRect().right();
+        }
+
         const int padding = 0.5 * scoreFirstStaff->spatium(startSegment->tick());
         const double y1 = topY + segmentFirstStaff->y() + section.startSegment->pagePos().y() - padding;
         const double y2 = bottomY + segmentLastStaff->y() + section.endSegment->pagePos().y() + padding;
