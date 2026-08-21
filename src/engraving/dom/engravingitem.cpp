@@ -884,7 +884,7 @@ PointF EngravingItem::canvasPos() const
             Page* page = system ? system->page() : nullptr;
             p.ry() += measureStaffY(measure, idx) + systemStaffY(system, idx) + pageY(page);
         } else if (parent->isMeasure()) {
-            Measure* measure = toMeasure(parent);
+            Measure* measure = toMeasure(parent)->coveringMMRestOrThis();
             System* system = measure->system();
             Page* page = system->page();
             p.ry() += measureStaffY(measure, idx) + systemStaffY(system, idx) + pageY(page);

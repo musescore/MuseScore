@@ -3553,15 +3553,13 @@ void MusicXmlParserDirection::direction(const String& partId,
             sticking->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         }
 
-        if (hasTotalY()) {
-            // Add element to score later, after collecting all the others and sorting by default-y
-            // This allows default-y to be at least respected by the order of elements
-            MusicXmlDelayedDirectionElement* delayedDirection = new MusicXmlDelayedDirectionElement(
-                totalY(), sticking, m_track, placement(), measure, tick + m_offset);
-            delayedDirections.push_back(delayedDirection);
-        } else {
-            m_pass2.addElemOffset(sticking, m_track, placement(), measure, tick + m_offset);
-        }
+        // Add element to score later, after collecting all the others and sorting by default-y
+        // This allows default-y to be at least respected by the order of elements
+        // We also need to check whether the chord at the current tick has a grace note. Directions can appear
+        // before the note they apply to, so this may not have been read yet
+        MusicXmlDelayedDirectionElement* delayedDirection = new MusicXmlDelayedDirectionElement(
+            totalY(), sticking, m_track, placement(), measure, tick + m_offset);
+        delayedDirections.push_back(delayedDirection);
     } else if (isLikelyDynamicRange()) {
         isDynamicRange = true;
     } else if (!m_wordsText.empty() || !m_rehearsalText.empty() || !m_metroText.empty()) {

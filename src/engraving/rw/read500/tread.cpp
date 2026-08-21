@@ -1023,7 +1023,12 @@ void TRead::read(Instrument* item, XmlReader& e, ReadContext& ctx, Part* part)
 
     item->updateInstrumentId();
 
-    if (item->channel(0) && item->channel(0)->program() == -1) {
+    if (item->channel().empty()) { // for backward compatibility
+        InstrChannel* fallbackChannel = new InstrChannel;
+        fallbackChannel->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
+        fallbackChannel->setProgram(item->recognizeMidiProgram());
+        item->appendChannel(fallbackChannel);
+    } else if (item->channel(0)->program() == -1) {
         item->channel(0)->setProgram(item->recognizeMidiProgram());
     }
 
