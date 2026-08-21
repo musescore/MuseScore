@@ -1223,6 +1223,22 @@ enum class StaffGroup : unsigned char {
 };
 constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
 
+// keep in sync with the _presets initialization in StaffType::initStaffTypes() and _defaultPreset for legacy scores
+enum class StaffTypes : signed char {
+    STANDARD,
+    PERC_1LINE, PERC_2LINE, PERC_3LINE, PERC_5LINE,
+    TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
+    TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
+    TAB_5SIMPLE, TAB_5COMMON, TAB_5FULL,
+    TAB_UKULELE, TAB_BALALAJKA, TAB_DULCIMER,
+    TAB_ITALIAN, TAB_FRENCH,
+    TAB_7COMMON, TAB_8COMMON, TAB_9COMMON, TAB_10COMMON,
+    TAB_7SIMPLE, TAB_8SIMPLE, TAB_9SIMPLE, TAB_10SIMPLE,
+    STAFF_TYPES,
+    PERC_DEFAULT = StaffTypes::PERC_5LINE,
+    TAB_DEFAULT = StaffTypes::TAB_6COMMON,
+};
+
 enum class TrillType : unsigned char {
     TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
 };

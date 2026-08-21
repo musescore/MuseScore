@@ -26,7 +26,6 @@
 
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/pitchspelling.h"
-#include "engraving/dom/stafftype.h"
 #include "engraving/dom/tremolobar.h"
 
 namespace mu::engraving {

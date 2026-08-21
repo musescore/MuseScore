@@ -469,10 +469,10 @@ void StaffType::setDurationFontName(const String& name)
     if (idx >= m_durationFonts.size()) {
         idx = 0;              // if name not found, use first font
     }
+    m_durationFontIdx = idx;
     m_durationFont.setFamily(m_durationFonts[idx].family, Font::Type::Tablature);
     setDurationFontSize(m_durationFonts[idx].defSize);
     setDurationFontUserY(m_durationFonts[idx].defYOffset);
-    m_durationFontIdx = idx;
     setDurationMetrics();
 }
 

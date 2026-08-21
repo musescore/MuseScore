@@ -7,7 +7,7 @@ Copyright: Copyright (c) 2012-15, Maurizio M. Gavioli. Licensed under the SIL Op
 UComments: "To be used with MuseScore for Renaissance-style tabulatures."
 FontLog: "2010-12-3: Created."
 Version: 001.000
-DefaultBaseFilename: mscoreTab
+DefaultBaseFilename: MuseScoreTabFrench
 ItalicAngle: 0
 UnderlinePosition: -100
 UnderlineWidth: 50
