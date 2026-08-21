@@ -68,6 +68,9 @@ if (MUSE_APP_UNSTABLE)
     set(MUSE_APP_GUI_IDENTIFIER "${MUSE_APP_GUI_IDENTIFIER}Development")
 endif(MUSE_APP_UNSTABLE)
 
+# Branding for framework executables that stand in for the application.
+set(MUSE_APP_ICON_WIN "${PROJECT_SOURCE_DIR}/share/icons/AppIcon/MS4_AppIcon.ico")
+
 ###########################################
 # Setup paths
 ###########################################
