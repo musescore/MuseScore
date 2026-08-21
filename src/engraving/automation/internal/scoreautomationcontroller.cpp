@@ -62,6 +62,7 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
 {
     return muse::RealRound(bps.val, Constants::TEMPO_PRECISION);
 }
+
 static AutomationPoint makeTempoPoint(real_t normalizedBps, std::optional<EID> itemId)
 {
     AutomationPoint point;
@@ -780,13 +781,16 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
         return;
     }
 
+    AutomationCurve& curve = ctx.curves[key];
+    std::map<utick_t, int>& tickPrioMap = ctx.dynamicPriorities[key];
+
     if (const auto* ordinary = std::get_if<DynamicInfo::Ordinary>(&info.kind)) {
         AutomationPoint point;
         point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
         point.value.outValue = ordinary->value;
         point.itemId = info.eid;
         point.generated = true;
-        addDynamicPoint(key, info.tick, point, info.priority, ctx);
+        addDynamicPoint(curve, tickPrioMap, info.tick, point, info.priority);
         return;
     }
 
@@ -798,7 +802,7 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
         point.value.outValue = singleNote->value;
         point.itemId = info.eid;
         point.generated = true;
-        addDynamicPoint(key, info.tick, point, info.priority, ctx);
+        addDynamicPoint(curve, tickPrioMap, info.tick, point, info.priority);
 
         if (singleNote->nextTick) {
             // Recovers to whatever was active before this dynamic
@@ -806,7 +810,7 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
             const AutomationPoint::Ease preservedEase = ease(nextPoint).value_or(AutomationPoint::Ease::none());
             nextPoint.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, preservedEase };
             nextPoint.generated = true;
-            tryAddDynamicPoint(key, *singleNote->nextTick, nextPoint, info.priority, ctx);
+            tryAddDynamicPoint(curve, tickPrioMap, *singleNote->nextTick, nextPoint, info.priority);
         }
 
         return;
@@ -818,14 +822,14 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
         startPoint.value.outValue = compound->startValue;
         startPoint.itemId = info.eid;
         startPoint.generated = true;
-        addDynamicPoint(key, info.tick, startPoint, info.priority, ctx);
+        addDynamicPoint(curve, tickPrioMap, info.tick, startPoint, info.priority);
 
         AutomationPoint endPoint;
         endPoint.value.outValue = compound->endValue;
         endPoint.value.inValue = AutomationPoint::ExplicitArrival { endPoint.value.outValue, AutomationPoint::Ease::none() };
         endPoint.itemId = info.eid;
         endPoint.generated = true;
-        tryAddDynamicPoint(key, compound->endPointTick, endPoint, info.priority, ctx);
+        tryAddDynamicPoint(curve, tickPrioMap, compound->endPointTick, endPoint, info.priority);
     }
 }
 
@@ -912,6 +916,9 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
 
 void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const AutomationCurveKey& key, UpdateContext& ctx)
 {
+    AutomationCurve& curve = ctx.curves[key];
+    std::map<utick_t, int>& tickPrioMap = ctx.dynamicPriorities[key];
+
     // --- Determine valueFrom
     const AutomationPoint* prevPoint = activePoint(ctx.curves, key, info.from);
     const real_t prevOutValue = prevPoint ? prevPoint->value.outValue : real_t(0.0);
@@ -925,7 +932,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
         startPoint.value.inValue = AutomationPoint::ArrivalFromPrevious {};
         startPoint.itemId = info.eid;
         startPoint.generated = true;
-        tryAddDynamicPoint(key, info.from, startPoint, info.priority, ctx);
+        tryAddDynamicPoint(curve, tickPrioMap, info.from, startPoint, info.priority);
     }
 
     // --- Determine valueTo
@@ -939,24 +946,14 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
                            ? info.nominalValueTo.value()
                            : valueFrom + (info.isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
 
-    // Re-fetch curve in case tryAddDynamicPoint above created it
-    const auto curveIt = ctx.curves.find(key);
-    AutomationCurve::iterator endPointIt;
-    bool hasPointAtEnd = false;
-    if (curveIt != ctx.curves.end()) {
-        endPointIt = curveIt->second.find(info.to);
-        hasPointAtEnd = endPointIt != curveIt->second.end();
-    }
+    const auto endPointIt = curve.find(info.to);
+    const bool hasPointAtEnd = endPointIt != curve.end();
 
     if (hasPointAtEnd) {
         // A point already exists at the end tick; encode the hairpin's arrival via inValue, but only
         // if this hairpin has at least as much priority as whoever placed that point
-        bool canModify = true;
-        const auto prioKeyIt = ctx.dynamicPriorities.find(key);
-        if (prioKeyIt != ctx.dynamicPriorities.end()) {
-            const auto tickIt = prioKeyIt->second.find(info.to);
-            canModify = tickIt == prioKeyIt->second.end() || info.priority >= tickIt->second;
-        }
+        const auto tickIt = tickPrioMap.find(info.to);
+        const bool canModify = tickIt == tickPrioMap.end() || info.priority >= tickIt->second;
         if (canModify) {
             const AutomationPoint::Ease preservedEase = ease(endPointIt->second).value_or(AutomationPoint::Ease::none());
             endPointIt->second.value.inValue = AutomationPoint::ExplicitArrival { valueTo, preservedEase };
@@ -970,7 +967,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
         point.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, AutomationPoint::Ease::none() };
         point.itemId = info.eid;
         point.generated = true;
-        tryAddDynamicPoint(key, info.to, point, info.priority, ctx);
+        tryAddDynamicPoint(curve, tickPrioMap, info.to, point, info.priority);
     }
 }
 
@@ -1334,13 +1331,10 @@ void ScoreAutomationController::fixAnacrusisTempo(UpdateContext& ctx)
     }
 }
 
-bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
-                                                   int priority, UpdateContext& ctx)
+bool ScoreAutomationController::tryAddDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick,
+                                                   const AutomationPoint& point, int priority)
 {
     //! See: https://github.com/musescore/MuseScore/issues/23355
-    AutomationCurve& curve = ctx.curves[key];
-    std::map<utick_t, int>& tickPrioMap = ctx.dynamicPriorities[key];
-
     const auto prioIt = tickPrioMap.lower_bound(tick);
     const bool hasPrio = prioIt != tickPrioMap.end() && prioIt->first == tick;
 
@@ -1365,24 +1359,21 @@ bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key
     return true;
 }
 
-void ScoreAutomationController::addDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
-                                                int priority, UpdateContext& ctx)
+void ScoreAutomationController::addDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick,
+                                                const AutomationPoint& point, int priority)
 {
     // If a point with the same priority already exists at this tick, merge them:
     // keep the existing arrival value and use this point's departure value
-    const auto prioKeyIt = ctx.dynamicPriorities.find(key);
-    if (prioKeyIt != ctx.dynamicPriorities.end()) {
-        const auto prioIt = prioKeyIt->second.find(tick);
-        if (prioIt != prioKeyIt->second.end() && prioIt->second == priority) {
-            AutomationPoint& existing = ctx.curves[key][tick];
-            const AutomationPoint::InValue arrivalValue = existing.value.inValue;
-            existing = point;
-            existing.value.inValue = arrivalValue;
-            return;
-        }
+    const auto prioIt = tickPrioMap.find(tick);
+    if (prioIt != tickPrioMap.end() && prioIt->second == priority) {
+        AutomationPoint& existing = curve[tick];
+        const AutomationPoint::InValue arrivalValue = existing.value.inValue;
+        existing = point;
+        existing.value.inValue = arrivalValue;
+        return;
     }
 
-    tryAddDynamicPoint(key, tick, point, priority, ctx);
+    tryAddDynamicPoint(curve, tickPrioMap, tick, point, priority);
 }
 
 void ScoreAutomationController::setNoRepeatTempoPoint(utick_t rawTick, const AutomationPoint& point, UpdateContext& ctx)
