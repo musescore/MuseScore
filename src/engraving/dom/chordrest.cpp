@@ -458,7 +458,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 
 Beam* ChordRest::beam() const
 {
-    return !(measure() && measure()->stemless(staffIdx())) ? m_beam : nullptr;
+    return !(measure() && measure()->stemless(staffIdx(), tick())) ? m_beam : nullptr;
 }
 
 //---------------------------------------------------------
@@ -1082,7 +1082,7 @@ EngravingItem* ChordRest::nextSegmentElement()
 void ChordRest::scanElements(std::function<void(EngravingItem*)> func)
 {
     if (m_beam && (m_beam->elements().front() == this)
-        && !measure()->stemless(staffIdx())) {
+        && !measure()->stemless(staffIdx(), tick())) {
         m_beam->scanElements(func);
     }
     for (Lyrics* l : m_lyrics) {

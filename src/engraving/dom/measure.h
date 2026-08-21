@@ -63,6 +63,7 @@ class Part;
 class Score;
 class Spacer;
 class Staff;
+class StaffTypeChange;
 class System;
 class TieMap;
 class Transaction;
@@ -316,6 +317,7 @@ public:
     bool isCutawayClef(staff_idx_t staffIdx) const;
     bool isFullMeasureRest() const;
     bool visible(staff_idx_t staffIdx) const;
+    bool stemless(staff_idx_t staffIdx, const Fraction& tick) const;
     bool stemless(staff_idx_t staffIdx) const;
     bool isFinalMeasureOfSection() const;
     LayoutBreak* sectionBreakElement(bool includeNextFrames = true) const;
@@ -399,7 +401,13 @@ public:
     void respaceSegments();
 
     bool canAddStringTunings(staff_idx_t staffIdx) const;
-    bool canAddStaffTypeChange(staff_idx_t staffIdx) const;
+    bool canAddStaffTypeChange(staff_idx_t staffIdx, const Fraction& tick) const;
+    const StaffTypeChange* staffTypeChangeAt(staff_idx_t staffIdx, const Fraction& tick) const;
+    std::vector<Fraction> midMeasureStaffTypeChangeTicks(staff_idx_t staffIdx) const;
+    const StaffTypeChange* firstMidMeasureStaffTypeChange(staff_idx_t staffIdx) const;
+    bool isStaffTypeTransitionMeasure(staff_idx_t staffIdx, Fraction* transitionTick = nullptr) const;
+    bool isPostStaffTypeTransitionTick(staff_idx_t staffIdx, const Fraction& itemTick) const;
+    double computeStaffTypeTransitionOffset(staff_idx_t staffIdx, const Fraction& itemTick, double spatium) const;
 
     struct LayoutData : public MeasureBase::LayoutData {
     private:

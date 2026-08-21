@@ -153,9 +153,9 @@ void InsertRemoveMeasures::insertMeasures()
                 staff->moveStaffType(tick, tickNew);
 
                 for (EngravingItem* el : measure->el()) {
-                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
+                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES && el->tick() == tickNew) {
                         StaffTypeChange* stc = toStaffTypeChange(el);
-                        stc->setStaffType(staff->staffType(tickNew), false);
+                        stc->setStaffTypeAndTick(staff->staffType(tickNew), false, tickNew);
                         stIcon = true;
                         break;
                     }
@@ -272,9 +272,9 @@ void InsertRemoveMeasures::removeMeasures()
                 staff->moveStaffType(tick, newTick);
 
                 for (EngravingItem* el : measure->el()) {
-                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
+                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES && el->tick() == tick) {
                         StaffTypeChange* stc = toStaffTypeChange(el);
-                        stc->setStaffType(staff->staffType(newTick), false);
+                        stc->setStaffTypeAndTick(staff->staffType(newTick), false, newTick);
                         stIcon = true;
                         break;
                     }
