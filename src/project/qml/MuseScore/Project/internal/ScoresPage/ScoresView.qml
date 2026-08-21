@@ -40,4 +40,6 @@ Loader {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal revealInFileBrowserRequested(var scorePath)
+    signal viewOnlineRequested(var scoreId)
 }
