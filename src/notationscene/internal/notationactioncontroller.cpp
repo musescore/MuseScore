@@ -318,7 +318,7 @@ void NotationActionController::init()
     registerCommand(ADD_OTTAVA_8VA_COMMAND, &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
     registerCommand(ADD_OTTAVA_8VB_COMMAND, &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
 
-    registerCommand(ADD_DYNAMIC_COMMAND, &Interaction::toggleDynamicPopup);
+    registerCommand(ADD_DYNAMIC_COMMAND, [this]() { addDynamic(); });
     registerCommand(ADD_HAIRPIN_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN);
     registerCommand(ADD_HAIRPIN_REVERSE_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN);
     registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
@@ -2418,6 +2418,15 @@ void NotationActionController::addText(TextStyleType type)
     interaction->addTextToItem(type, item);
 }
 
+void NotationActionController::addDynamic()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+    interaction->toggleDynamicPopup(true);
+}
+
 void NotationActionController::addImage()
 {
     auto interaction = currentNotationInteraction();
@@ -3135,6 +3144,12 @@ bool NotationActionController::isNoteOrRestSelected() const
 
     INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
     return selection && selection->elementsSelected(NOTE_REST_TYPES);
+}
+
+bool NotationActionController::isHairpinSelected() const
+{
+    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    return selection && selection->element() && selection->element()->isHairpinSegment();
 }
 
 const mu::engraving::Harmony* NotationActionController::editedChordSymbol() const

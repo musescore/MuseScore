@@ -5653,7 +5653,7 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
     apply();
 }
 
-void NotationInteraction::toggleDynamicPopup()
+void NotationInteraction::toggleDynamicPopup(bool allowAnyGrip)
 {
     EngravingItem* el = selection()->element();
     if (!el) {
@@ -5676,9 +5676,7 @@ void NotationInteraction::toggleDynamicPopup()
             apply();
             startEditText(dynamic);
         };
-
-        switch (m_editData.curGrip) {
-        case Grip::START:
+        if (m_editData.curGrip == Grip::START || (m_editData.curGrip == Grip::APERTURE && hairpin->isDecrescendo())) {
             if (EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore()) {
                 // If there is already a dynamic, select it instead of opening an empty popup
                 select({ startDynOrExp });
@@ -5688,8 +5686,7 @@ void NotationInteraction::toggleDynamicPopup()
             } else {
                 addDynamic(hairpin->tick(), hairpin->track(), hairpin->voiceAssignment());
             }
-            break;
-        case Grip::END:
+        } else if (m_editData.curGrip == Grip::END || allowAnyGrip) {
             if (EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter()) {
                 // If there is already a dynamic, select it instead of opening an empty popup
                 select({ endDynOrExp });
@@ -5699,13 +5696,9 @@ void NotationInteraction::toggleDynamicPopup()
             } else {
                 addDynamic(hairpin->tick2(), hairpin->track2(), hairpin->voiceAssignment());
             }
-            break;
-        default:
-            break;
-        }
+        } // if repositioning hairpin by mouse drag, do nothing
         return;
     }
-
     addTextToItem(TextStyleType::DYNAMICS, el);
 }
 
