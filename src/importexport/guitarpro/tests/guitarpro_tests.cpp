@@ -63,6 +63,11 @@ static size_t collect(Score* score, ElementType type)
     size_t count = 0;
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+            for (const EngravingItem* annotation : segment->annotations()) {
+                if (annotation->type() == type) {
+                    ++count;
+                }
+            }
             for (const EngravingItem* item : segment->elist()) {
                 if (!item) {
                     continue;
