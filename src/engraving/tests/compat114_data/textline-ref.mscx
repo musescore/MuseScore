@@ -195,6 +195,7 @@
       <TextLine>
         <beginText>&lt;font size=&quot;12&quot;/&gt;VII</beginText>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>Y_Y</eid>
         <track>0</track>

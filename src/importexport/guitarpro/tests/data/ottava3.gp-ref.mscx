@@ -165,6 +165,7 @@
       <Ottava>
         <subtype>8va</subtype>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>T_T</eid>
         <track>0</track>

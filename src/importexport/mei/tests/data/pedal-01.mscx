@@ -370,6 +370,7 @@
         <continueTextPlace>auto</continueTextPlace>
         <endTextPlace>auto</endTextPlace>
         <track2>4</track2>
+        <startTick>0/1</startTick>
         <ticks>6/4</ticks>
         <eid>/_/</eid>
         <track>4</track>

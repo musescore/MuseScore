@@ -196,6 +196,7 @@
       <Ottava>
         <subtype>8vb</subtype>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>12/4</ticks>
         <eid>f_f</eid>
         <track>0</track>
