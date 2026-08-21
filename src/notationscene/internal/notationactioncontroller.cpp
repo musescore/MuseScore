@@ -31,6 +31,7 @@
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/property.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
@@ -39,6 +40,7 @@
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
 #include "notation/inotationautomation.h" // IWYU pragma: keep
+#include "notation/inotationnoteoffsets.h" // IWYU pragma: keep
 #include "notation/inotationelements.h"
 #include "notation/inotationmidiinput.h"
 #include "notation/inotationnoteinput.h"
@@ -581,6 +583,8 @@ void NotationActionController::init()
 
     registerCommand(TOGGLE_AUTOMATION_COMMAND, &Controller::toggleAutomation);
     registerQueryCommand(SELECT_AUTOMATION_TYPE_COMMAND, &Controller::selectAutomationType);
+    registerCommand(TOGGLE_NOTE_OFFSET_EDITOR_COMMAND, &Controller::toggleNoteOffsetEditor);
+    registerCommand(RESET_NOTE_OFFSETS_COMMAND, &Controller::resetNoteOffsets);
 
     // TAB
     registerCommand(SET_DURATION_WHOLE_TAB_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
@@ -1052,6 +1056,7 @@ void NotationActionController::init()
             { "scoop", ADD_SCOOP_COMMAND, {} },
             { "hammer-on-pull-off", ADD_HAMMER_ON_PULL_OFF_COMMAND, {} },
             { "toggle-automation", TOGGLE_AUTOMATION_COMMAND, {} },
+            { "toggle-note-offset-editor", TOGGLE_NOTE_OFFSET_EDITOR_COMMAND, {} },
             { "string-up", GOTO_STRING_ABOVE_COMMAND, {} },
             { "string-down", GOTO_STRING_BELOW_COMMAND, {} },
             { "move-up", MOVE_UP_COMMAND, {} },
@@ -1128,6 +1133,10 @@ void NotationActionController::init()
             if (const IMasterNotationPtr masterNotation = notation->masterNotation()) {
                 masterNotation->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
                     m_automationModeEnabledChanged.notify();
+                }, Asyncable::Mode::SetReplace);
+
+                masterNotation->noteOffsets()->editModeEnabledChanged().onNotify(this, [this]() {
+                    m_noteOffsetEditModeEnabledChanged.notify();
                 }, Asyncable::Mode::SetReplace);
             }
         }
@@ -3187,6 +3196,16 @@ bool NotationActionController::isAutomationModeEnabled() const
     return currentMasterNotation() ? currentMasterNotation()->automation()->isAutomationModeEnabled() : false;
 }
 
+bool NotationActionController::isNoteOffsetEditModeEnabled() const
+{
+    return currentMasterNotation() ? currentMasterNotation()->noteOffsets()->isEditModeEnabled() : false;
+}
+
+muse::async::Notification NotationActionController::noteOffsetEditModeEnabledChanged() const
+{
+    return m_noteOffsetEditModeEnabledChanged;
+}
+
 muse::async::Notification NotationActionController::automationModeEnabledChanged() const
 {
     return m_automationModeEnabledChanged;
@@ -3257,6 +3276,42 @@ void NotationActionController::toggleAutomation()
 
     const bool isEnabled = masterNotation->automation()->isAutomationModeEnabled();
     masterNotation->automation()->setAutomationModeEnabled(!isEnabled);
+}
+
+void NotationActionController::toggleNoteOffsetEditor()
+{
+    TRACEFUNC;
+
+    IMasterNotationPtr masterNotation = currentMasterNotation();
+    if (!masterNotation) {
+        return;
+    }
+
+    const bool isEnabled = masterNotation->noteOffsets()->isEditModeEnabled();
+    masterNotation->noteOffsets()->setEditModeEnabled(!isEnabled);
+}
+
+void NotationActionController::resetNoteOffsets()
+{
+    TRACEFUNC;
+
+    INotationSelectionPtr selection = currentNotationSelection();
+    std::vector<Note*> notes = selection ? selection->notes() : std::vector<Note*>();
+    if (notes.empty()) {
+        return;
+    }
+
+    INotationUndoStackPtr undoStack = currentNotationUndoStack();
+    if (!undoStack) {
+        return;
+    }
+
+    undoStack->prepareChanges(TranslatableString("undoableAction", "Reset note offsets"));
+    for (Note* note : notes) {
+        note->undoChangeProperty(Pid::PLAYBACK_START_OFFSET, 0, mu::engraving::PropertyFlags::NOSTYLE);
+        note->undoChangeProperty(Pid::PLAYBACK_DURATION_OFFSET, 0, mu::engraving::PropertyFlags::NOSTYLE);
+    }
+    undoStack->commitChanges();
 }
 
 muse::Ret NotationActionController::selectAutomationType(const muse::rcommand::CommandQuery& query)

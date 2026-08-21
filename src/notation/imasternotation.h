@@ -72,6 +72,7 @@ public:
     virtual void initNotationSoloMuteState(const INotationPtr notation) = 0;
 
     virtual INotationAutomationPtr automation() const = 0;
+    virtual INotationNoteOffsetsPtr noteOffsets() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

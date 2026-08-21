@@ -29,6 +29,8 @@
 
 #include "async/async.h"
 
+#include "segmentcanvasinterpolation.h"
+
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
 #include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
@@ -159,38 +161,10 @@ static const Segment* lastSegmentOfSystem(const System* system)
 }
 
 // Maps an x position to a tick via linear interpolation between the nearest Duration/barline segments on either side of it
-static std::optional<int> tickFromCanvasX(const System* system, const muse::RectF& staffCanvasRect, qreal x)
+static std::optional<int> automationTickFromCanvasX(const System* system, const muse::RectF& staffCanvasRect, qreal x)
 {
-    IF_ASSERT_FAILED(system) {
-        return std::nullopt;
-    }
-
     const double pointCanvasX = staffCanvasRect.x() + x * staffCanvasRect.width();
-    const mu::engraving::SegmentType type = mu::engraving::SegmentType::Duration | mu::engraving::SegmentType::BarLineTypes;
-
-    const Segment* prevSeg = nullptr;
-    const Segment* nextSeg = nullptr;
-    for (const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
-         seg && seg->system() == system; seg = seg->next1(type)) {
-        if (seg->canvasX() <= pointCanvasX) {
-            prevSeg = seg;
-        } else {
-            nextSeg = seg;
-            break;
-        }
-    }
-
-    if (!prevSeg) {
-        return nextSeg ? std::make_optional(nextSeg->tick().ticks()) : std::nullopt;
-    }
-
-    // No next segment - use prevSeg's own end as a virtual next point
-    const double nextCanvasX = nextSeg ? nextSeg->canvasX() : prevSeg->canvasX() + prevSeg->width();
-    const int nextTick = nextSeg ? nextSeg->tick().ticks() : prevSeg->tick().ticks() + prevSeg->ticks().ticks();
-    const double canvasSpan = nextCanvasX - prevSeg->canvasX();
-    const double ratio = canvasSpan > 0.0 ? (pointCanvasX - prevSeg->canvasX()) / canvasSpan : 0.0;
-
-    return prevSeg->tick().ticks() + static_cast<int>(ratio * (nextTick - prevSeg->tick().ticks()));
+    return tickFromCanvasX(system, pointCanvasX);
 }
 
 static AutomationCurveKey curveKeyFor(AutomationType type, const Staff* staff)
@@ -395,7 +369,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
             return;
         }
 
-        const std::optional<int> tick = tickFromCanvasX(system, staffCanvasRect, x);
+        const std::optional<int> tick = automationTickFromCanvasX(system, staffCanvasRect, x);
         if (!tick) {
             return;
         }
@@ -908,7 +882,7 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     // STEP 2 - Determine the new tick value based on the x parameter...
     const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-    const std::optional<int> newTickOpt = tickFromCanvasX(system, staffCanvasRect, x);
+    const std::optional<int> newTickOpt = automationTickFromCanvasX(system, staffCanvasRect, x);
     const int newTick = newTickOpt.value_or(oldPointData.tick);
     const bool tickChanged = newTick != oldPointData.tick;
 
@@ -998,7 +972,7 @@ bool NotationAutomationController::requestAddPoint(const SysStaffKey& key, qreal
     }
 
     const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-    const std::optional<int> newTick = tickFromCanvasX(system, staffCanvasRect, x);
+    const std::optional<int> newTick = automationTickFromCanvasX(system, staffCanvasRect, x);
     if (!newTick) {
         return false;
     }
