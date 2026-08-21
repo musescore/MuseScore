@@ -40,6 +40,7 @@ enum class CrossMeasure : signed char {
 class Articulation;
 class BeamBase;
 class BeamSegment;
+class DurationLine;
 class Lyrics;
 class Measure;
 class Score;
@@ -120,6 +121,10 @@ public:
     }
 
     String durationUserName() const;
+
+    const std::vector<DurationLine*>& durationLines() const { return m_durationLines; }
+    std::vector<DurationLine*>& durationLines() { return m_durationLines; }
+    void resizeDurationLinesTo(size_t newSize);
 
     void setTrack(track_idx_t val) override;
 
@@ -230,5 +235,7 @@ private:
     TDuration m_durationType;
     int m_staffMove = 0; // -1, 0, +1, used for crossbeaming
     int m_storedStaffMove = 0; // used to remember and re-apply staff move if needed
+
+    std::vector<DurationLine*> m_durationLines;
 };
 }
