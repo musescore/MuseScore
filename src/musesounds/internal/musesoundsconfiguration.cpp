@@ -76,8 +76,8 @@ RequestHeaders MuseSoundsConfiguration::headers() const
 UriQuery MuseSoundsConfiguration::soundsUri() const
 {
     return !getSoundsTestMode()
-           ? UriQuery("https://cosmos-customer-webservice.azurewebsites.net/graphql/v3")
-           : UriQuery("https://cosmos-customer-webservice-dev.azurewebsites.net/graphql/v3");
+           ? UriQuery("https://customers-api.musehub.com/graphql/v3")
+           : UriQuery("https://customers-api-dev.musehub.com/graphql/v3");
 }
 
 UriQuery MuseSoundsConfiguration::soundPageUri(const muse::String& soundCode) const
