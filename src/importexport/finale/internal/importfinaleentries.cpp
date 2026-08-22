@@ -521,13 +521,13 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
             } else {
                 // calculate pitch & accidentals
                 NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties({
-                    .pitchMode = PitchMode::Concert,
-                }), baseStaff->concertKey(entryTick));
+                        .pitchMode = PitchMode::Concert,
+                    }), baseStaff->concertKey(entryTick));
                 if (!partScore() && noteInfoPtr.calcIsEnharmonicRespellInAnyPart()) {
                     NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties({
-                        .pitchMode = PitchMode::Written,
-                        .enharmonicOverride = EnharmonicOverride::Respell,
-                    }), baseStaff->key(entryTick));
+                            .pitchMode = PitchMode::Written,
+                            .enharmonicOverride = EnharmonicOverride::Respell,
+                        }), baseStaff->key(entryTick));
                     nval.tpc2 = nvalTransposed.tpc2;
                 }
                 note->setNval(nval);
