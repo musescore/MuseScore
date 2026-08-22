@@ -227,6 +227,95 @@ enum class ElementType : unsigned char {
 
 constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
 
+constexpr bool autoplaceAppliesToType(ElementType type)
+{
+    switch (type) {
+    // Not user-visible / not laid out as a placeable item
+    case ElementType::INVALID:
+    case ElementType::BRACKET_ITEM:
+    case ElementType::PART:
+    case ElementType::SHARED_PART:
+    case ElementType::STAFF:
+    case ElementType::SCORE:
+    case ElementType::SEGMENT:
+    case ElementType::SYSTEM:
+    case ElementType::MEASURE:
+    case ElementType::PAGE:
+    case ElementType::SELECTION:
+    case ElementType::LASSO:
+    case ElementType::SHADOW_NOTE:
+    case ElementType::ROOT_ITEM:
+    case ElementType::DUMMY:
+    case ElementType::MAXTYPE:
+    case ElementType::TEXTLINE_BASE:
+    case ElementType::TIME_TICK_ANCHOR:
+    case ElementType::GRACE_NOTES_GROUP:
+
+    // Chord/note internals
+    case ElementType::CHORD:
+    case ElementType::NOTE:
+    case ElementType::NOTEHEAD:
+    case ElementType::NOTEDOT:
+    case ElementType::STEM:
+    case ElementType::STEM_SLASH:
+    case ElementType::HOOK:
+    case ElementType::BEAM:
+    case ElementType::LEDGER_LINE:
+    case ElementType::ACCIDENTAL:
+    case ElementType::ARPEGGIO:
+    case ElementType::CHORD_BRACKET:
+    case ElementType::TREMOLO_TWOCHORD:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::CHORDLINE:
+    case ElementType::DEAD_SLAPPED:
+    case ElementType::TAB_DURATION_SYMBOL:
+    case ElementType::PARENTHESIS:
+
+    // Measure internals
+    case ElementType::BAR_LINE:
+    case ElementType::CLEF:
+    case ElementType::KEYSIG:
+    case ElementType::AMBITUS:
+    case ElementType::BREATH:
+    case ElementType::MEASURE_REPEAT:
+    case ElementType::STAFF_LINES:
+    case ElementType::SYSTEM_DIVIDER:
+    case ElementType::INSTRUMENT_NAME:
+    case ElementType::BRACKET:
+    case ElementType::SPACER:
+    case ElementType::STAFF_STATE:
+    case ElementType::STAFFTYPE_CHANGE:
+    case ElementType::LAYOUT_BREAK:
+    case ElementType::STAFF_VISIBILITY_INDICATOR:
+    case ElementType::SYSTEM_LOCK_INDICATOR:
+    case ElementType::PAGE_LOCK_INDICATOR:
+
+    // Frames and their contents
+    case ElementType::HBOX:
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::TEXT:
+
+    // Attached items whose position follows their owner
+    case ElementType::SYMBOL:
+    case ElementType::FSYMBOL:
+    case ElementType::IMAGE:
+    case ElementType::BEND:
+    case ElementType::TREMOLOBAR:
+    case ElementType::BAGPIPE_EMBELLISHMENT:
+    case ElementType::ACTION_ICON:
+    case ElementType::SOUND_FLAG:
+    case ElementType::FIGURED_BASS_ITEM:
+    case ElementType::GUITAR_BEND_TEXT:
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+    case ElementType::TAPPING_TEXT:
+        return false;
+    default:
+        return true;
+    }
+}
+
 const static std::unordered_set<ElementType> TEXTBASE_TYPES {
     ElementType::TEXT,
     ElementType::LYRICS,

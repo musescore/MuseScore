@@ -247,7 +247,7 @@ NotationAutomationController::NotationAutomationController(QQuickItem* linesPare
 
 void NotationAutomationController::init()
 {
-    IF_ASSERT_FAILED(automation() && currentNotation()) {
+    if (!(automation() && currentNotation())) {
         return;
     }
 
@@ -445,7 +445,7 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
                                                                                                  int startTick, int endTick) const
 {
     QVector<PointData> points;
-    IF_ASSERT_FAILED(staff && score() && automationData()) {
+    if (!(staff && score() && automationData())) {
         return points;
     }
 

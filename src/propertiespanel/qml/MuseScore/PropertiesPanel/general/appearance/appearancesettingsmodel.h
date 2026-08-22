@@ -43,7 +43,9 @@ class AppearanceSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * arrangeOrder READ arrangeOrder CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(bool isSnappedToGrid READ isSnappedToGrid WRITE setIsSnappedToGrid NOTIFY isSnappedToGridChanged)
+    Q_PROPERTY(QString freezeCurrentPlacementShortcut READ freezeCurrentPlacementShortcut CONSTANT)
     Q_PROPERTY(bool isVerticalOffsetAvailable READ isVerticalOffsetAvailable NOTIFY isVerticalOffsetAvailableChanged)
+    Q_PROPERTY(bool isAutoplaceEnabled READ isAutoplaceEnabled NOTIFY isAutoplaceEnabledChanged)
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
@@ -56,6 +58,8 @@ public:
     Q_INVOKABLE void pushToFrontInOrder();
 
     Q_INVOKABLE void configureGrid();
+
+    Q_INVOKABLE void freezeCurrentPlacement();
 
     void createProperties() override;
     void requestElements() override;
@@ -70,15 +74,21 @@ public:
 
     bool isSnappedToGrid() const;
 
+    QString freezeCurrentPlacementShortcut() const;
+
     bool isVerticalOffsetAvailable() const;
+
+    bool isAutoplaceEnabled() const;
 
 public slots:
     void setIsSnappedToGrid(bool isSnapped);
     void setIsVerticalOffsetAvailable(bool isAvailable);
+    void setIsAutoplaceEnabled(bool isEnabled);
 
 signals:
     void isSnappedToGridChanged(bool isSnappedToGrid);
     void isVerticalOffsetAvailableChanged(bool isVerticalOffsetAvailable);
+    void isAutoplaceEnabledChanged(bool isAutoplaceEnabled);
 
 private:
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
@@ -86,6 +96,7 @@ private:
     void loadProperties(const mu::engraving::PropertyIdSet& allowedPropertyIdSet);
 
     void updateIsVerticalOffsetAvailable();
+    void updateIsAutoplaceEnabled();
 
     mu::engraving::Page* page() const;
     std::vector<mu::engraving::EngravingItem*> allElementsInPage() const;
@@ -99,6 +110,7 @@ private:
     PointFPropertyItem* m_offset = nullptr;
 
     bool m_isVerticalOffsetAvailable = true;
+    bool m_isAutoplaceEnabled = true;
 
     QList<engraving::EngravingItem*> m_elementsForOffsetProperty;
     QList<engraving::EngravingItem*> m_elementsForArrangeProperty;

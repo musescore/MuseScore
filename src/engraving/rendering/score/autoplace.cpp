@@ -32,17 +32,15 @@
 #include "dom/system.h"
 #include "dom/measure.h"
 
+#include "log.h"
+
 using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
 void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
 {
-    // rebase vertical offset on drag
-    double rebase = 0.0;
-    if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
-        rebase = rebaseOffset(item, ldata);
-    }
+    DO_ASSERT(autoplaceAppliesToType(item->type()));
 
     // TODO: proper item-to-item table for horizontal clearance in skyline
     const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleAbsolute(
@@ -75,7 +73,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         double minDistance = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        Shape shape = item->ldata()->shape().translate(item->systemPos());
+        Shape shape = item->ldata()->shape().translate(item->systemPos() - item->offset());
 
         // Adjust bbox Y pos for staffType offset
         shape.translate(item->staffOffset());
@@ -92,7 +90,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
 
         if (filteredSkyline.elements().empty()) {
             if (add && item->addToSkyline()) {
-                staffSkyline.add(shape);
+                staffSkyline.add(shape.translated(item->offset()));
             }
             return;
         }
@@ -105,31 +103,20 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             if (above) {
                 yd *= -1.0;
             }
-            if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
-                // user moved element within the skyline
-                // we may need to adjust minDistance, yd, and/or offset
-                if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above)) {
-                    shape.translate(PointF(0.0, rebase));
-                }
-            }
             ldata->moveY(yd);
             shape.translate(PointF(0.0, yd));
         }
 
         if (add && item->addToSkyline()) {
-            staffSkyline.add(shape);
+            staffSkyline.add(shape.translated(item->offset()));
         }
     }
-    setOffsetChanged(item, ldata, false);
 }
 
 void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
 {
-    // rebase vertical offset on drag
-    double rebase = 0.0;
-    if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
-        rebase = rebaseOffset(item, ldata);
-    }
+    // If this fires, item's type is missing from the true set of autoplaceAppliesToType()
+    DO_ASSERT(autoplaceAppliesToType(item->type()));
 
     if (item->autoplace() && item->explicitParent()) {
         const Measure* m = toMeasure(item->explicitParent());
@@ -152,7 +139,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
 
         SysStaff* ss = m->system()->staff(si);
         // shape rather than bbox is good for tuplets especially
-        Shape sh = item->shape().translate(m->pos() + item->pos() + item->staffOffset());
+        Shape sh = item->shape().translate(m->pos() + item->ldata()->pos() + item->staffOffset());
 
         SkylineLine sk(!above);
         SkylineLine& staffSkyline = above ? ss->skyline().north() : ss->skyline().south();
@@ -179,33 +166,22 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
             if (above) {
                 yd *= -1.0;
             }
-            if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
-                // user moved element within the skyline
-                // we may need to adjust minDistance, yd, and/or offset
-                if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above)) {
-                    sh.translateY(rebase);
-                }
-            }
             ldata->moveY(yd);
             sh.translateY(yd);
         }
         if (add && item->addToSkyline()) {
-            staffSkyline.add(sh);
+            staffSkyline.add(sh.translated(item->offset()));
         }
     }
-    setOffsetChanged(item, ldata, false);
 }
 
 void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata, double sp)
 {
+    // If this fires, item's type is missing from the true set of autoplaceAppliesToType()
+    DO_ASSERT(autoplaceAppliesToType(item->type()));
+
     if (item->spanner()->anchor() == Spanner::Anchor::NOTE) {
         return;
-    }
-
-    // rebase vertical offset on drag
-    double rebase = 0.0;
-    if (ldata->offsetChanged() != OffsetChange::NONE) {
-        rebase = rebaseOffset(item, ldata);
     }
 
     if (item->autoplace()) {
@@ -216,7 +192,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         bool above = item->spanner()->placeAbove();
         SkylineLine sl(!above);
         Shape sh = item->shape();
-        sl.add(sh.translate(item->pos()));
+        sl.add(sh.translate(item->ldata()->pos()));
         double yd = 0.0;
         staff_idx_t stfIdx = item->effectiveStaffIdx();
         if (stfIdx == muse::nidx) {
@@ -251,132 +227,9 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
             }
         }
         if (!RealIsNull(yd)) {
-            if (ldata->offsetChanged() != OffsetChange::NONE) {
-                // user moved element within the skyline
-                // we may need to adjust minDistance, yd, and/or offset
-                rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
-            }
             ldata->moveY(yd);
         }
     }
-    setOffsetChanged(item, ldata, false);
-}
-
-//---------------------------------------------------------
-//   rebaseOffset
-//    calculates new offset for moved elements
-//    for drag & other actions that result in absolute position, apply the new offset
-//    for nudge & other actions that result in relative adjustment, return the vertical difference
-//---------------------------------------------------------
-
-double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool nox)
-{
-    LD_CONDITION(ldata->isSetPos());
-
-    PointF off = item->offset();
-    PointF p = ldata->autoplace.changedPos - item->pos();
-    if (nox) {
-        p.rx() = 0.0;
-    }
-    //OffsetChange saveChangedValue = _offsetChanged;
-
-    bool staffRelative = item->staff() && item->explicitParent() && !(item->explicitParent()->isNote() || item->explicitParent()->isRest());
-    if (staffRelative && item->propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
-        // check if flipped
-        // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
-        // TODO: refactor to take advantage of existing cmdFlip() algorithms
-        // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
-        RectF r = ldata->bbox().translated(ldata->autoplace.changedPos);
-        double staffHeight = item->staff()->staffHeight(item->tick());
-        const EngravingItem* e = item->isSpannerSegment() ? toSpannerSegment(item)->spanner() : item;
-        bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
-        bool above = e->placeAbove();
-        bool flipped = above ? r.top() > staffHeight : r.bottom() < 0.0;
-        if (flipped && !multi) {
-            off.ry() += above ? -staffHeight : staffHeight;
-            const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
-            ldata->autoplace.offsetChanged = OffsetChange::ABSOLUTE_OFFSET;             //saveChangedValue;
-            ldata->moveY(above ? staffHeight : -staffHeight);
-            PropertyFlags pf = e->propertyFlags(Pid::PLACEMENT);
-            if (pf == PropertyFlags::STYLED) {
-                pf = PropertyFlags::UNSTYLED;
-            }
-            const PlacementV place = above ? PlacementV::BELOW : PlacementV::ABOVE;
-            const_cast<EngravingItem*>(e)->undoChangeProperty(Pid::PLACEMENT, place, pf);
-            const_cast<EngravingItem*>(item)->undoResetProperty(Pid::MIN_DISTANCE);
-            return 0.0;
-        }
-    }
-
-    if (ldata->autoplace.offsetChanged == OffsetChange::ABSOLUTE_OFFSET) {
-        const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
-        ldata->autoplace.offsetChanged = OffsetChange::ABSOLUTE_OFFSET;                 //saveChangedValue;
-        // allow autoplace to manage min distance even when not needed
-        const_cast<EngravingItem*>(item)->undoResetProperty(Pid::MIN_DISTANCE);
-        return 0.0;
-    }
-
-    // allow autoplace to manage min distance even when not needed
-    const_cast<EngravingItem*>(item)->undoResetProperty(Pid::MIN_DISTANCE);
-    return p.y();
-}
-
-//---------------------------------------------------------
-//   rebaseMinDistance
-//    calculates new minDistance for moved elements
-//    if necessary, also rebases offset
-//    updates md, yd
-//    returns true if shape needs to be rebased
-//---------------------------------------------------------
-
-bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd, double sp,
-                                  double rebase, bool above)
-{
-    bool rc = false;
-    PropertyFlags pf = item->propertyFlags(Pid::MIN_DISTANCE);
-    if (pf == PropertyFlags::STYLED) {
-        pf = PropertyFlags::UNSTYLED;
-    }
-    double adjustedY = item->pos().y() + yd;
-    double diff = ldata->autoplace.changedPos.y() - adjustedY;
-    if (!item->isStyled(Pid::MIN_DISTANCE)) {
-        md = (above ? md + yd : md - yd) / sp;
-        const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(md), pf);
-        yd += diff;
-    } else {
-        // min distance still styled
-        // user apparently moved element into skyline
-        // but perhaps not really, if performing a relative adjustment
-        if (ldata->autoplace.offsetChanged == OffsetChange::RELATIVE_OFFSET) {
-            // relative movement (cursor): fix only if moving vertically into direction of skyline
-            if ((above && diff > 0.0) || (!above && diff < 0.0)) {
-                // rebase offset
-                PointF p = item->offset();
-                p.ry() += rebase;
-                const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::OFFSET, p);
-                md = (above ? md - diff : md + diff) / sp;
-                const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(md), pf);
-                rc = true;
-                yd = 0.0;
-            }
-        } else {
-            // absolute movement (drag): fix unconditionally
-            md = (above ? md + yd : md - yd) / sp;
-            const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(md), pf);
-            yd = 0.0;
-        }
-    }
-    return rc;
-}
-
-void Autoplace::setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute, const PointF& diff)
-{
-    if (v) {
-        ldata->autoplace.offsetChanged = absolute ? OffsetChange::ABSOLUTE_OFFSET : OffsetChange::RELATIVE_OFFSET;
-    } else {
-        ldata->autoplace.offsetChanged = OffsetChange::NONE;
-    }
-    ldata->autoplace.changedPos = item->pos() + diff;
 }
 
 bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline)

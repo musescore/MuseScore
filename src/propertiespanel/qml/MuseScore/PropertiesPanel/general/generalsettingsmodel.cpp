@@ -95,8 +95,11 @@ void GeneralSettingsModel::requestElements()
         }
 
         elementsForIsVisibleProperty.insert(element);
-        elementsForIsAutoPlaceProperty.insert(element);
         elementsForIsPlayableProperty.insert(element);
+
+        if (autoplaceAppliesToType(element->type())) {
+            elementsForIsAutoPlaceProperty.insert(element);
+        }
     }
 
     m_elementsForIsSmallProperty = elementsForIsSmallProperty.values();
@@ -130,6 +133,7 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
     }
 
     if (muse::contains(propertyIdSet, Pid::AUTOPLACE)) {
+        m_isAutoPlaceAllowed->setIsEnabled(!m_elementsForIsAutoPlaceProperty.isEmpty());
         loadPropertyItem(m_isAutoPlaceAllowed, m_elementsForIsAutoPlaceProperty);
     }
 

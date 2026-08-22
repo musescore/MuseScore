@@ -2371,12 +2371,6 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
 
         double headWidth = note->bboxRightPos();
 
-        // update offset after drag
-        double rebase = 0.0;
-        if (ldata->offsetChanged() != OffsetChange::NONE && !tight) {
-            rebase = Autoplace::rebaseOffset(item, ldata);
-        }
-
         // temporarily exclude self from chord shape
         const_cast<Fingering*>(item)->setAutoplace(false);
 
@@ -2438,11 +2432,6 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (diff > 0.0) {
                         yd -= diff;
                     }
-                    if (ldata->offsetChanged() != OffsetChange::NONE) {
-                        // user moved element within the skyline
-                        // we may need to adjust minDistance, yd, and/or offset
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
-                    }
                     ldata->moveY(yd);
                 }
             } else {
@@ -2473,11 +2462,6 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (diff > 0.0) {
                         yd += diff;
                     }
-                    if (ldata->offsetChanged() != OffsetChange::NONE) {
-                        // user moved element within the skyline
-                        // we may need to adjust minDistance, yd, and/or offset
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
-                    }
                     ldata->moveY(yd);
                 }
             }
@@ -2494,11 +2478,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
 
         // restore autoplace
         const_cast<Fingering*>(item)->setAutoplace(true);
-    } else if (ldata->offsetChanged() != OffsetChange::NONE) {
-        // rebase horizontally too, as autoplace may have adjusted it
-        Autoplace::rebaseOffset(item, ldata, false);
     }
-    Autoplace::setOffsetChanged(item, ldata, false);
 }
 
 void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx)
@@ -3126,16 +3106,9 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         return;
     }
 
-    // rebase vertical offset on drag
-    if (ldata->offsetChanged() != OffsetChange::NONE) {
-        Autoplace::rebaseOffset(item, ldata);
-    }
-
     if (item->autoplace()) {
         Autoplace::autoplaceSpannerSegment(item, ldata, item->spatium());
     }
-
-    Autoplace::setOffsetChanged(item, ldata, false);
 }
 
 void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
