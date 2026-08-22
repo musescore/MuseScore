@@ -13,14 +13,17 @@ find_package(ZLIB REQUIRED)
 set(MUSX_DISPLAY_NODE_NAMES OFF CACHE BOOL "Log node names to trace as they are processed" FORCE)
 
 set(musx_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
+cmake_policy(PUSH)
+cmake_policy(SET CMP0168 OLD)
 FetchContent_Declare(
     musx
     GIT_REPOSITORY https://github.com/rpatters1/musxdom.git
-    GIT_TAG        main
+    GIT_TAG        origin/main
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
 FetchContent_MakeAvailable(musx)
+cmake_policy(POP)
 
 set(smufl_mapping_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
