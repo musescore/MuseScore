@@ -180,7 +180,7 @@ void MStaff::setTrack(track_idx_t track)
 //   Measure
 //---------------------------------------------------------
 
-Measure::Measure(System* parent)
+Measure::Measure(Score* parent)
     : MeasureBase(ElementType::MEASURE, parent), m_timesig(4, 4)
 {
     setTicks(Fraction(4, 4));
@@ -193,7 +193,7 @@ Measure::Measure(System* parent)
         Staff* staff = score()->staff(staffIdx);
         ms->setLines(Factory::createStaffLines(this));
         ms->lines()->setTrack(staffIdx * VOICES);
-        ms->lines()->setParent(this);
+        ms->lines()->setOwnershipParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
         m_mstaves.push_back(ms);
     }
@@ -243,7 +243,7 @@ void Measure::createStaves(staff_idx_t staffIdx)
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
         s->setLines(Factory::createStaffLines(this));
-        s->lines()->setParent(this);
+        s->lines()->setOwnershipParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(tick()));
         m_mstaves.push_back(s);
@@ -373,11 +373,6 @@ AccessibleItemPtr Measure::createAccessible()
 }
 
 #endif
-
-void Measure::setParent(System* s)
-{
-    MeasureBase::setParent(s);
-}
 
 //---------------------------------------------------------
 //   findAccidental
@@ -806,8 +801,8 @@ Segment* Measure::getSegmentR(SegmentType st, const Fraction& t)
 
 void Measure::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
-        e->setParent(this);
+    if (e->ownershipParent() != this) {
+        e->setOwnershipParent(this);
     }
 
     ElementType type = e->type();
@@ -839,7 +834,7 @@ void Measure::add(EngravingItem* e)
             }
             s = s->next();
         }
-        seg->setParent(this);
+        seg->setOwnershipParent(this);
         m_segments.insert(seg, s);
         //
         // update measure flags
@@ -944,7 +939,7 @@ void Measure::add(EngravingItem* e)
 
 void Measure::remove(EngravingItem* e)
 {
-    assert(e->explicitParent() == this);
+    assert(e->ownershipParent() == this);
     assert(e->score() == score());
 
     switch (e->type()) {
@@ -1220,7 +1215,7 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
         MStaff* ms   = new MStaff;
         ms->setLines(Factory::createStaffLines(this));
         ms->lines()->setTrack(i * VOICES);
-        ms->lines()->setParent(this);
+        ms->lines()->setOwnershipParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
         score()->undo(new InsertMStaff(this, ms, i));
     }
@@ -1274,7 +1269,7 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
             if (ots && !ots->isLocal()) {
                 TimeSig* timesig = Factory::copyTimeSig(*ots);
                 timesig->setTrack(staffIdx * VOICES);
-                timesig->setParent(ts);
+                timesig->setOwnershipParent(ts);
                 timesig->setSig(ots->sig(), ots->timeSigType());
                 score()->undoAddElement(timesig);
                 if (constructed) {
@@ -1297,7 +1292,7 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
                 BarLine* barline = Factory::copyBarLine(*obl);
                 barline->setSpanStaff(score()->staff(staffIdx)->barLineSpan());
                 barline->setTrack(staffIdx * VOICES);
-                barline->setParent(bs);
+                barline->setOwnershipParent(bs);
                 barline->setGenerated(false);
                 score()->undoAddElement(barline);
             }
@@ -1341,7 +1336,7 @@ void Measure::insertStaff(Staff* staff, staff_idx_t staffIdx)
 
     MStaff* ms = new MStaff;
     ms->setLines(Factory::createStaffLines(this));
-    ms->lines()->setParent(this);
+    ms->lines()->setOwnershipParent(this);
     ms->lines()->setTrack(staffIdx * VOICES);
     ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
     insertMStaff(ms, staffIdx);
@@ -1549,7 +1544,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     switch (e->type()) {
     case ElementType::MARKER:
     case ElementType::JUMP:
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(0);
         score()->undoAddElement(e);
         return e;
@@ -1567,7 +1562,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             delete e;
             return nullptr;
         }
-        e->setParent(parentSeg);
+        e->setOwnershipParent(parentSeg);
         e->setTrack(staff2track(staffIdx));
         score()->undoAddElement(e);
         return e;
@@ -1673,7 +1668,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
             }
             b->setTrack(0);
-            b->setParent(measure);
+            b->setOwnershipParent(measure);
             score()->undoAddElement(b);
         }
         measure->cleanupLayoutBreaks(true);
@@ -1684,7 +1679,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     {
         Spacer* spacer = toSpacer(e);
         spacer->setTrack(trackZeroVoice(data.track));
-        spacer->setParent(this);
+        spacer->setOwnershipParent(this);
         if (spacer->spacerType() == SpacerType::FIXED) {
             double gap = spatium() * 10;
             System* s = system();
@@ -1793,7 +1788,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
                 BarLine* staffBarLine = toBarLine(seg->element(stIdx * VOICES));
                 if (!staffBarLine) {
                     staffBarLine = Factory::createBarLine(seg);
-                    staffBarLine->setParent(seg);
+                    staffBarLine->setOwnershipParent(seg);
                     staffBarLine->setTrack(stIdx * VOICES);
                     undoAddElement(staffBarLine);
                 }
@@ -1833,7 +1828,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
                 return nullptr;
             }
             EngravingItem* stc = Factory::createStaffTypeChange(this);
-            stc->setParent(this);
+            stc->setOwnershipParent(this);
             stc->setTrack(trackZeroVoice(data.track));
             score()->undoAddElement(stc);
             break;
@@ -1851,7 +1846,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
 
     case ElementType::STAFFTYPE_CHANGE:
     {
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(trackZeroVoice(data.track));
         score()->undoAddElement(e);
     }
@@ -2653,7 +2648,7 @@ Fraction Measure::stretchedLen(const Staff* staff) const
 
 Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
 {
-    Measure* m      = new Measure(sc->dummy()->system());
+    Measure* m      = new Measure(sc);
     m->m_timesig    = m_timesig;
     m->m_len         = m_len;
     m->m_repeatCount = m_repeatCount;
@@ -2713,7 +2708,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
                         nt->clear();
                         nt->setTrack(track);
                         nt->setScore(sc);
-                        nt->setParent(m);
+                        nt->setOwnershipParent(m);
                         nt->setTick(m->tick() + ot->rtick());
                         tupletMap.add(ot, nt);
                     }
@@ -3285,7 +3280,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromI
     }
 
     // handle measure elements
-    if (e->explicitParent() == this) {
+    if (e->ownershipParent() == this) {
         auto i = std::find(el().begin(), el().end(), e);
         if (i != el().end()) {
             if (++i != el().end()) {
@@ -3297,7 +3292,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromI
         }
     }
 
-    for (; e && !e->isSegment(); e = e->parentItem()) {
+    for (; e && !e->isSegment(); e = e->layoutParent()) {
     }
     Segment* seg = toSegment(e);
     Segment* nextSegment = seg ? seg->next() : first();
@@ -3321,7 +3316,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
     }
 
     // handle measure elements
-    if (e->explicitParent() == this) {
+    if (e->ownershipParent() == this) {
         auto i = std::find(el().rbegin(), el().rend(), e);
         if (i != el().rend()) {
             if (++i != el().rend()) {
@@ -3584,7 +3579,7 @@ void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible
     if (!bl) {
         // no suitable bar line: create a new one
         bl = Factory::createBarLine(seg);
-        bl->setParent(seg);
+        bl->setOwnershipParent(seg);
         bl->setTrack(track);
         Part* part = score()->staff(track / VOICES)->part();
         // by default, barlines for multi-staff parts should span across staves

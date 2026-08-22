@@ -291,7 +291,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 cr = Factory::createChord(score->dummy()->segment());
             }
         }
-        cr->setParent(segment);
+        cr->setOwnershipParent(segment);
         cr->setTrack(track);
 
         TDuration d(l);
@@ -308,7 +308,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 tuplet = Factory::createTuplet(measure);
                 tuplets[track2] = tuplet;
                 setTuplet(tuplet, tuple);
-                tuplet->setParent(measure);
+                tuplet->setOwnershipParent(measure);
             }
             tuplet->setTrack(cr->track());
             tuplet->setBaseLen(l);
@@ -342,7 +342,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 if (dotted) {
                     // there is at most one dotted note in this guitar pro version
                     NoteDot* dot = Factory::createNoteDot(note);
-                    dot->setParent(note);
+                    dot->setOwnershipParent(note);
                     dot->setTrack(track);            // needed to know the staff it belongs to (and detect tablature)
                     dot->setVisible(true);
                     note->add(dot);
@@ -1017,7 +1017,7 @@ bool GuitarPro5::read(IODevice* io)
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);
             tun->setTrack(staff2track(s->idx()));
-            tun->setParent(seg);
+            tun->setOwnershipParent(seg);
             seg->add(tun);
 
             auto tuning = utils::standardTuningFor(p->instrument()->channel(0)->program(), (int)sd.strings());
@@ -1080,7 +1080,7 @@ bool GuitarPro5::read(IODevice* io)
                     sym->setSym(SymId::segnoSerpent2);
                 }
 
-                sym->setParent(measure);
+                sym->setOwnershipParent(measure);
                 sym->setTrack(0);
                 segment->add(sym);
                 auto iter = counter.find(articulations[i]);
@@ -1099,7 +1099,7 @@ bool GuitarPro5::read(IODevice* io)
                     "D.D.S. al Fine", "Da Coda", "Da Doppia Coda"
                 };
                 st->setPlainText(String::fromAscii(text[i - 4]));
-                st->setParent(s);
+                st->setOwnershipParent(s);
                 st->setTrack(0);
                 auto iter = counter.find(articulations[i]);
                 if (iter == counter.end()) {
@@ -1180,7 +1180,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             Slur* slur1 = Factory::createSlur(score->dummy());
             slur1->setStartElement(gnote->chord());
             slur1->setEndElement(note->chord());
-            slur1->setParent(0);
+            slur1->setOwnershipParent(0);
             slur1->setTrack(note->staffIdx());
             slur1->setTrack2(note->staffIdx());
             slur1->setTick(gnote->chord()->tick());
@@ -1722,7 +1722,7 @@ void GuitarPro5::addGlissandos()
         gliss->setStartElement(currentStart);
         gliss->setTick(currentStart->tick());
         gliss->setTrack(currentStart->track());
-        gliss->setParent(currentStart);
+        gliss->setOwnershipParent(currentStart);
         gliss->setGlissandoType(GlissandoType::STRAIGHT);
         gliss->setGlissandoShift(true);
         gliss->setEndElement(endNote);

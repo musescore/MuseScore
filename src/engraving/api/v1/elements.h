@@ -1294,7 +1294,9 @@ class EngravingItem : public apiv1::ScoreElement
     QPointF pagePos() const { return PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
     QPointF canvasPos() const { return PointF(element()->canvasPos() / element()->spatium()).toQPointF(); }
 
-    apiv1::EngravingItem* parent() const { return wrap(element()->parentItem()); }
+    //! \note Plugins have always seen the visual parent here (a measure reports
+    //!       its system, a spanner segment its system), so keep layoutParent().
+    apiv1::EngravingItem* parent() const { return wrap(element()->layoutParent()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;

@@ -240,12 +240,12 @@ EngravingItem* FretDiagram::linkedClone()
 
 Segment* FretDiagram::segment() const
 {
-    EngravingObject* parent = explicitParent();
+    EngravingObject* parent = ownershipParent();
     if (!parent || !parent->isSegment()) {
         return nullptr;
     }
 
-    return toSegment(explicitParent());
+    return toSegment(ownershipParent());
 }
 
 void FretDiagram::updateDiagram(const String& harmonyName)
@@ -989,7 +989,7 @@ void FretDiagram::setHarmony(String harmonyText)
 
 void FretDiagram::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     if (e->isHarmony()) {
         m_harmony = toHarmony(e);
 
@@ -1060,7 +1060,7 @@ EngravingItem* FretDiagram::drop(Transaction&, EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isHarmony()) {
         Harmony* h = toHarmony(e);
-        h->setParent(explicitParent());
+        h->setOwnershipParent(ownershipParent());
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {
@@ -1352,7 +1352,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
     FretDiagram* fretDiagram = nullptr;
 
-    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
+    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {
         Harmony* harmony = toHarmony(harmonyOrFretDiagram)->clone();
 
         fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
@@ -1360,8 +1360,8 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
         fretDiagram->updateDiagram(harmony->plainText());
 
         fretDiagram->add(harmony);
-    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
-        fretDiagram = toFretDiagram(harmonyOrFretDiagram->parentItem())->clone();
+    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {
+        fretDiagram = toFretDiagram(harmonyOrFretDiagram->ownershipParent())->clone();
     } else if (harmonyOrFretDiagram->isFretDiagram()) {
         fretDiagram = toFretDiagram(harmonyOrFretDiagram)->clone();
         fretDiagram->setOffset(PointF());
@@ -1376,7 +1376,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
 bool FretDiagram::isInFretBox() const
 {
-    EngravingObject* parent = explicitParent();
+    EngravingObject* parent = ownershipParent();
     return parent ? parent->isFBox() : false;
 }
 

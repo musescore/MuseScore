@@ -337,7 +337,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             Chord* gc = Factory::createChord(score->dummy()->segment());
             gc->setTrack(note->chord()->track());
             gc->add(gn);
-            gc->setParent(note->chord());
+            gc->setOwnershipParent(note->chord());
 
             TDuration d;
             d.setVal(grace_len);
@@ -930,7 +930,7 @@ bool GuitarPro4::read(IODevice* io)
                         cr = Factory::createChord(score->dummy()->segment());
                     }
                 }
-                cr->setParent(segment);
+                cr->setOwnershipParent(segment);
                 cr->setTrack(track);
                 if (lyrics) {
                     cr->add(lyrics);
@@ -950,7 +950,7 @@ bool GuitarPro4::read(IODevice* io)
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
                         setTuplet(tuplet, tuple);
-                        tuplet->setParent(measure);
+                        tuplet->setOwnershipParent(measure);
                     }
                     tuplet->setTrack(track);
                     tuplet->setBaseLen(l);
@@ -993,7 +993,7 @@ bool GuitarPro4::read(IODevice* io)
                             if (dotted) {
                                 // there is at most one dotted note in this guitar pro version
                                 NoteDot* dot = Factory::createNoteDot(note);
-                                dot->setParent(note);
+                                dot->setOwnershipParent(note);
                                 dot->setTrack(track);                  // needed to know the staff it belongs to (and detect tablature)
                                 dot->setVisible(true);
                                 note->add(dot);
@@ -1046,7 +1046,7 @@ bool GuitarPro4::read(IODevice* io)
                 if (slide != 2) {
                     if (hasSlur && (slurs[staffIdx] == 0)) {
                         Slur* slur = Factory::createSlur(score->dummy());
-                        slur->setParent(0);
+                        slur->setOwnershipParent(0);
                         slur->setTrack(track);
                         slur->setTrack2(track);
                         slur->setTick(cr->tick());
@@ -1094,7 +1094,7 @@ bool GuitarPro4::read(IODevice* io)
                                             s->setStartElement(n);
                                             s->setTick(seg->tick());
                                             s->setTrack(chord->track());
-                                            s->setParent(n);
+                                            s->setOwnershipParent(n);
                                             s->setGlissandoType(GlissandoType::STRAIGHT);
                                             s->setEndElement(last);
                                             s->setTick2(chord->segment()->tick());
@@ -1173,7 +1173,7 @@ bool GuitarPro4::read(IODevice* io)
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());
-                        s->setParent(n);
+                        s->setOwnershipParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         s->setEndElement(nt);
                         s->setTick2(nt->chord()->segment()->tick());

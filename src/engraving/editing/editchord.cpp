@@ -95,7 +95,7 @@ bool EditChord::toggleArticulation(Score* score, EngravingItem* el, Articulation
     }
 
     if (!a->isDouble()) {
-        a->setParent(c);
+        a->setOwnershipParent(c);
         a->setTrack(c->track());
         score->undoAddElement(a);
         return true;
@@ -107,7 +107,7 @@ bool EditChord::toggleArticulation(Score* score, EngravingItem* el, Articulation
         articCopy->setSymId(id);
 
         if (!c->hasArticulation(articCopy)) {
-            articCopy->setParent(c);
+            articCopy->setOwnershipParent(c);
             articCopy->setTrack(c->track());
             score->undoAddElement(articCopy);
             continue;
@@ -189,12 +189,12 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
 {
     track_idx_t track = chord->track();
     Parenthesis* leftParen = Factory::createParenthesis(chord);
-    leftParen->setParent(chord);
+    leftParen->setOwnershipParent(chord);
     leftParen->setTrack(track);
     leftParen->setDirection(DirectionH::LEFT);
     leftParen->setGenerated(generated);
     Parenthesis* rightParen = Factory::createParenthesis(chord);
-    rightParen->setParent(chord);
+    rightParen->setOwnershipParent(chord);
     rightParen->setTrack(track);
     rightParen->setDirection(DirectionH::RIGHT);
     rightParen->setGenerated(generated);
@@ -215,11 +215,11 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         Staff* linkedStaff = linkedChord->staff();
         Parenthesis* linkedParenLeft = toParenthesis(leftParen->linkedClone());
         linkedParenLeft->setScore(linkedScore);
-        linkedParenLeft->setParent(linkedChord);
+        linkedParenLeft->setOwnershipParent(linkedChord);
         linkedParenLeft->setTrack(linkedChord->track());
         Parenthesis* linkedParenRight = toParenthesis(rightParen->linkedClone());
         linkedParenRight->setScore(linkedScore);
-        linkedParenRight->setParent(linkedChord);
+        linkedParenRight->setOwnershipParent(linkedChord);
         linkedParenRight->setTrack(linkedChord->track());
 
         std::vector<Note*> linkedNotes;
@@ -379,7 +379,7 @@ void SwapCR::flip()
         TremoloTwoChord* t = toChord(cr1)->tremoloTwoChord();
         Chord* c1 = t->chord1();
         Chord* c2 = t->chord2();
-        t->setParent(toChord(c2));
+        t->setOwnershipParent(toChord(c2));
         t->setChords(toChord(c2), toChord(c1));
     }
 

@@ -133,7 +133,7 @@ std::optional<MnxChordTargetPosition> MnxExporter::mnxChordTargetPosition(const 
         return position;
     }
 
-    EngravingObject* parent = chord->explicitParent();
+    EngravingObject* parent = chord->ownershipParent();
     if (!parent || !parent->isChord()) {
         LOGW() << "Skipping grace-note target with missing main chord.";
         return std::nullopt;

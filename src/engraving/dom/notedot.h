@@ -44,8 +44,8 @@ public:
     NoteDot* clone() const override { return new NoteDot(*this); }
     double mag() const override;
 
-    Note* note() const { return explicitParent()->isNote() ? toNote(explicitParent()) : 0; }
-    Rest* rest() const { return explicitParent()->isRest() ? toRest(explicitParent()) : 0; }
+    Note* note() const { return ownershipParent()->isNote() ? toNote(ownershipParent()) : 0; }
+    Rest* rest() const { return ownershipParent()->isRest() ? toRest(ownershipParent()) : 0; }
     EngravingItem* elementBase() const override;
 
 private:

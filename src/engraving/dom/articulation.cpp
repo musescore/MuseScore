@@ -195,8 +195,8 @@ muse::TranslatableString Articulation::subtypeUserName() const
 
 ChordRest* Articulation::chordRest() const
 {
-    if (explicitParent() && explicitParent()->isChordRest()) {
-        return toChordRest(explicitParent());
+    if (ownershipParent() && ownershipParent()->isChordRest()) {
+        return toChordRest(ownershipParent());
     }
     return 0;
 }
@@ -210,11 +210,11 @@ Segment* Articulation::segment() const
 
     Segment* s = 0;
     if (cr->isGrace()) {
-        if (cr->explicitParent()) {
-            s = toSegment(cr->explicitParent()->explicitParent());
+        if (cr->ownershipParent()) {
+            s = toSegment(cr->ownershipParent()->ownershipParent());
         }
     } else {
-        s = toSegment(cr->explicitParent());
+        s = toSegment(cr->ownershipParent());
     }
 
     return s;
@@ -223,19 +223,19 @@ Segment* Articulation::segment() const
 Measure* Articulation::measure() const
 {
     Segment* s = segment();
-    return toMeasure(s ? s->explicitParent() : 0);
+    return toMeasure(s ? s->ownershipParent() : 0);
 }
 
 System* Articulation::system() const
 {
     Measure* m = measure();
-    return toSystem(m ? m->explicitParent() : 0);
+    return m ? m->system() : nullptr;
 }
 
 Page* Articulation::page() const
 {
     System* s = system();
-    return toPage(s ? s->explicitParent() : 0);
+    return s ? s->page() : nullptr;
 }
 
 bool Articulation::isHiddenOnTabStaff() const
@@ -277,7 +277,7 @@ bool Articulation::layoutCloseToNote() const
 std::vector<LineF> Articulation::dragAnchorLines() const
 {
     std::vector<LineF> result;
-    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
+    result.push_back(LineF(canvasPos(), layoutParent()->canvasPos()));
     return result;
 }
 
@@ -564,7 +564,7 @@ void Articulation::resetProperty(Pid id)
 
 double Articulation::mag() const
 {
-    return explicitParent() ? parentItem()->mag() * style().styleD(Sid::articulationMag) : 1.0;
+    return layoutParent() ? layoutParent()->mag() * style().styleD(Sid::articulationMag) : 1.0;
 }
 
 void Articulation::computeCategories()

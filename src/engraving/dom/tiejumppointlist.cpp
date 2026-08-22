@@ -246,7 +246,7 @@ void TieJumpPointList::undoAddTieToScore(TieJumpPoint* jumpPoint)
     }
     // Otherwise create incoming partial tie on note
     PartialTie* pt = Factory::createPartialTie(note);
-    pt->setParent(note);
+    pt->setOwnershipParent(note);
     pt->setEndNote(note);
     pt->setJumpPoint(jumpPoint);
     score->undoAddElement(pt);

@@ -39,7 +39,7 @@ Hook::Hook(Chord* parent)
 
 EngravingItem* Hook::elementBase() const
 {
-    return parentItem();
+    return chord();
 }
 
 void Hook::setHookType(int i)

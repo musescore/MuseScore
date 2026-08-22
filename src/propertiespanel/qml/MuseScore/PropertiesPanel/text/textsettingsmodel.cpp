@@ -115,7 +115,7 @@ void TextSettingsModel::requestElements()
 {
     m_elementList.clear();
     for (EngravingItem* elem : m_repository->findElementsByType(ElementType::TEXT)) {
-        EngravingObject* parent = elem->explicitParent();
+        EngravingObject* parent = elem->ownershipParent();
         if (!parent || !parent->isTextLineBaseSegment()) {
             m_elementList << elem;
             continue;

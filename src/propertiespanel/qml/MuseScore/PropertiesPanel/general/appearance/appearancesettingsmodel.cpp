@@ -105,7 +105,7 @@ void AppearanceSettingsModel::requestElements()
             continue;
         }
 
-        EngravingItem* parent = element->parentItem();
+        EngravingItem* parent = element->ownershipParentItem();
         if (parent && parent->isChord()) {
             elementsForOffsetProperty.insert(parent);
         }

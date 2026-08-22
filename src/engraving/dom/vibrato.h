@@ -38,7 +38,7 @@ class VibratoSegment final : public LineSegment
     DECLARE_CLASSOF(ElementType::VIBRATO_SEGMENT)
 
 public:
-    VibratoSegment(Vibrato* sp, System* parent);
+    VibratoSegment(Vibrato* sp);
 
     VibratoSegment* clone() const override { return new VibratoSegment(*this); }
 
@@ -73,14 +73,14 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
     PointF linePos(Grip grip, System** system) const override;
 
     void setVibratoType(VibratoType tt) { m_vibratoType = tt; }
     VibratoType vibratoType() const { return m_vibratoType; }
     String vibratoTypeUserName() const;
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

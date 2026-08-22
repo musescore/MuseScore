@@ -35,7 +35,7 @@ class Spanner;
 
 //---------------------------------------------------------
 //   @@ SpannerSegment
-//!    parent: System
+//!    parent: the Spanner it belongs to; placed on a System during layout
 //---------------------------------------------------------
 
 class SpannerSegment : public EngravingItem
@@ -44,11 +44,15 @@ class SpannerSegment : public EngravingItem
 
 public:
 
+    ~SpannerSegment() override;
+
     virtual double mag() const override;
     virtual Fraction tick() const override;
 
-    Spanner* spanner() const { return m_spanner; }
-    Spanner* setSpanner(Spanner* val) { return m_spanner = val; }
+    //! The spanner that owns this segment - derived from the ownership parent,
+    //! so that it can never go stale.
+    Spanner* spanner() const { return toSpanner(ownershipParent()); }
+    void setSpanner(Spanner* val);
 
     void setSpannerSegmentType(SpannerSegmentType s) { m_spannerSegmentType = s; }
     SpannerSegmentType spannerSegmentType() const { return m_spannerSegmentType; }
@@ -62,8 +66,21 @@ public:
     int subtype() const override;
     TranslatableString subtypeUserName() const override;
 
-    void setSystem(System* s);
-    System* system() const { return toSystem(explicitParent()); }
+    //! The system this segment is currently laid out on; null if not placed.
+    System* system() const { return m_system; }
+    //! Records the placement only. Reserved for System itself, which maintains its own
+    //! segment list; everyone else must use moveToSystem(), so that a non-null system()
+    //! always implies that the segment is in that system's segment list - otherwise the
+    //! pointer is left dangling when the system is destroyed.
+    void setSystem(System* s) { m_system = s; }
+    //! Detach from the current system's segment list and attach to the given one.
+    void moveToSystem(System* s);
+    EngravingItem* layoutParent() const override;
+
+    //! A segment is owned by its spanner; a system merely places it, see
+    //! setSystem()/moveToSystem(). This overload hides EngravingItem::setOwnershipParent,
+    //! so that no other parent can be set by accident.
+    void setOwnershipParent(Spanner* spanner);
 
     const PointF& userOff2() const { return m_offset2; }
     void setUserOff2(const PointF& o) { m_offset2 = o; }
@@ -122,8 +139,7 @@ public:
 
 protected:
 
-    SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
-    SpannerSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, Spanner*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
 
     PointF m_p2;
@@ -134,7 +150,7 @@ private:
     String formatStartBarsAndBeats(const Segment* segment) const;
     String formatEndBarsAndBeats(const Segment* segment) const;
 
-    Spanner* m_spanner = nullptr;
+    System* m_system = nullptr;   // current layout placement; not owned, not copied
     SpannerSegmentType m_spannerSegmentType = SpannerSegmentType::SINGLE;
 };
 
@@ -156,6 +172,8 @@ public:
     enum class Anchor : unsigned char {
         SEGMENT, MEASURE, CHORDREST, NOTE
     };
+
+    ~Spanner() override;
 
     virtual double mag() const override;
 
@@ -195,6 +213,7 @@ public:
     virtual void triggerLayout() const override;
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
+    EngravingItemList accessibleChildren() const override;
     virtual void scanElements(std::function<void(EngravingItem*)>) override {}
     bool removeSpannerBack();
     virtual void removeUnmanaged();
@@ -257,7 +276,7 @@ public:
     void reuse(SpannerSegment* seg);              // called when segment from unusedSegments
                                                   // is added back to the spanner.
     int reuseSegments(int number);
-    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
+    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* ()> createSegment);
 
     bool isUserModified() const override;
 

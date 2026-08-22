@@ -322,7 +322,7 @@ Chord::Chord(const Chord& c, bool link)
         if (link) {
             score()->undo(new Link(na, a));
         }
-        na->setParent(this);
+        na->setOwnershipParent(this);
         na->setTrack(track());
         m_articulations.push_back(na);
     }
@@ -400,9 +400,9 @@ Chord::Chord(const Chord& c, bool link)
     if (!c.noteParentheses().empty()) {
         for (const NoteParenthesisInfo* info : c.noteParentheses()) {
             Parenthesis* newLeftParen = toParenthesis(info->leftParen()->clone());
-            newLeftParen->setParent(this);
+            newLeftParen->setOwnershipParent(this);
             Parenthesis* newRightParen = toParenthesis(info->rightParen()->clone());
-            newRightParen->setParent(this);
+            newRightParen->setOwnershipParent(this);
 
             if (link && !info->leftParen()->generated()) {
                 score()->undo(new Link(newLeftParen, info->leftParen()));
@@ -616,8 +616,8 @@ void Chord::setTremoloSingleChord(TremoloSingleChord* tr)
 
 void Chord::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
-        e->setParent(this);
+    if (e->ownershipParent() != this) {
+        e->setOwnershipParent(this);
     }
     e->setTrack(track());
     switch (e->type()) {
@@ -1087,7 +1087,7 @@ bool Chord::shouldHaveHook() const
 void Chord::createStem()
 {
     Stem* stem = Factory::createStem(this);
-    stem->setParent(this);
+    stem->setOwnershipParent(this);
     stem->setGenerated(true);
     //! score()->undoAddElement calls add(), which assigns this created stem to _stem
     score()->doUndoAddElement(stem);
@@ -1109,7 +1109,7 @@ void Chord::removeStem()
 void Chord::createHook()
 {
     Hook* hook = new Hook(this);
-    hook->setParent(this);
+    hook->setOwnershipParent(this);
     hook->setGenerated(true);
     score()->doUndoAddElement(hook);
 }
@@ -1123,7 +1123,7 @@ bool Chord::underBeam() const
     if (m_noteType == NoteType::NORMAL) {
         return false;
     }
-    const Chord* cr = toChord(explicitParent());
+    const Chord* cr = toChord(ownershipParent());
     Beam* beam = cr->beam();
     if (!beam || !cr->beam()->up()) {
         return false;
@@ -1205,7 +1205,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
                 if (spanner->isTrill()) {
                     Ornament* ornament = toTrill(spanner)->ornament();
                     if (ornament) {
-                        ornament->setParent(this);
+                        ornament->setOwnershipParent(this);
                         ornament->computeNotesAboveAndBelow(as);
                     }
                 }
@@ -1245,12 +1245,12 @@ PointF Chord::pagePos() const
     }
 
     PointF p(pos());
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return p;
     }
     p.rx() = pageX();
 
-    const Chord* pc = toChord(explicitParent());
+    const Chord* pc = toChord(ownershipParent());
     System* system = pc->segment()->system();
     if (!system) {
         return p;
@@ -1523,7 +1523,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
                 }
                 atr->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
-            atr->setParent(this);
+            atr->setOwnershipParent(this);
             atr->setTrack(track());
 
             // Immediately add if the chord has no existing articulations, toggle otherwise...
@@ -1537,7 +1537,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
     }
 
     case ElementType::CHORDLINE:
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         break;
@@ -1551,7 +1551,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
                 return nullptr;
             }
         }
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         break;
@@ -1587,7 +1587,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
                 return 0;
             }
         }
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         break;
@@ -1600,7 +1600,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
             score()->undoRemoveElement(arpeggio());
         }
         a->setTrack(track());
-        a->setParent(this);
+        a->setOwnershipParent(this);
         score()->undoAddElement(a);
     }
         return e;
@@ -2092,8 +2092,8 @@ double Chord::mag() const
 
 Segment* Chord::segment() const
 {
-    EngravingItem* e = parentItem();
-    for (; e && !e->isSegment(); e = e->parentItem()) {
+    EngravingObject* e = ownershipParent();
+    for (; e && !e->isSegment(); e = e->ownershipParent()) {
     }
     return toSegment(e);
 }
@@ -2104,8 +2104,8 @@ Segment* Chord::segment() const
 
 Measure* Chord::measure() const
 {
-    EngravingItem* e = parentItem();
-    for (; e && !e->isMeasure(); e = e->parentItem()) {
+    EngravingObject* e = ownershipParent();
+    for (; e && !e->isMeasure(); e = e->ownershipParent()) {
     }
     return toMeasure(e);
 }
@@ -2171,7 +2171,7 @@ Chord* Chord::graceNoteAt(size_t idx) const
 //---------------------------------------------------------
 std::vector<Chord*> Chord::allGraceChordsOfMainChord()
 {
-    Chord* mainChord = isGrace() ? toChord(explicitParent()) : this;
+    Chord* mainChord = isGrace() ? toChord(ownershipParent()) : this;
     std::vector<Chord*> chords = { mainChord };
     const GraceNotesGroup& gnBefore = mainChord->graceNotesBefore();
     const GraceNotesGroup& gnAfter = mainChord->graceNotesAfter();
@@ -2190,14 +2190,14 @@ void Chord::setShowStemSlashInAdvance()
         return;
     }
     if (isGraceBefore()) {
-        GraceNotesGroup& graceBefore = toChord(explicitParent())->graceNotesBefore();
+        GraceNotesGroup& graceBefore = toChord(ownershipParent())->graceNotesBefore();
         Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
         if (grace && grace->beamMode() != BeamMode::NONE && grace->beamMode() != BeamMode::BEGIN) {
             grace->requestShowStemSlash(showStemSlash());
         }
     }
     if (isGraceAfter()) {
-        GraceNotesGroup& graceAfter = toChord(explicitParent())->graceNotesAfter();
+        GraceNotesGroup& graceAfter = toChord(ownershipParent())->graceNotesAfter();
         Chord* grace = graceAfter.empty() ? nullptr : graceAfter.back();
         if (grace && grace->beamMode() != BeamMode::NONE) {
             grace->requestShowStemSlash(showStemSlash());
@@ -2377,7 +2377,7 @@ EngravingItem* Chord::nextElement()
     case ElementType::FINGERING:
     case ElementType::TEXT:
     case ElementType::BEND: {
-        Note* n = toNote(e->explicitParent());
+        Note* n = toNote(e->ownershipParent());
         if (n == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;
@@ -2435,7 +2435,7 @@ EngravingItem* Chord::nextElement()
         break;
 
     case ElementType::ACCIDENTAL:
-        e = e->parentItem();
+        e = toAccidental(e)->note();
     // fall through
 
     case ElementType::NOTE: {

@@ -1484,7 +1484,7 @@ static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr
 
 static double parentHeight(const EngravingItem* element)
 {
-    const EngravingItem* parent = element->parentItem();
+    const EngravingItem* parent = element->layoutParent();
 
     if (!parent) {
         return 0;

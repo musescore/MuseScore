@@ -325,7 +325,7 @@ TEST_F(Engraving_NoteTests, grace)
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
     TremoloSingleChord* tr = Factory::createTremoloSingleChord(gc);
     tr->setTremoloType(TremoloType::R16);
-    tr->setParent(gc);
+    tr->setOwnershipParent(gc);
     tr->setTrack(gc->track());
     score->undoAddElement(tr);
     score->endCmd();
@@ -337,7 +337,7 @@ TEST_F(Engraving_NoteTests, grace)
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
     Articulation* ar = Factory::createArticulation(gc);
     ar->setSymId(SymId::articAccentAbove);
-    ar->setParent(gc);
+    ar->setOwnershipParent(gc);
     ar->setTrack(gc->track());
     score->undoAddElement(ar);
     score->endCmd();

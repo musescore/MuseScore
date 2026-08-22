@@ -31,7 +31,7 @@ class PartialTieSegment : public TieSegment
     DECLARE_CLASSOF(ElementType::PARTIAL_TIE_SEGMENT)
 
 public:
-    PartialTieSegment(System* parent);
+    PartialTieSegment(PartialTie* sp);
     PartialTieSegment(const PartialTieSegment& s);
 
     PartialTieSegment* clone() const override { return new PartialTieSegment(*this); }
@@ -61,7 +61,7 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override;
+    SlurTieSegment* newSlurTieSegment() override;
 
     Note* note() const { return isOutgoing() ? startNote() : endNote(); }
     void setStartNote(Note* note) override;

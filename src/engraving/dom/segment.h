@@ -128,7 +128,7 @@ public:
 
     ~Segment();
 
-    void setParent(Measure* parent);
+    void setOwnershipParent(Measure* parent);
 
     Segment* clone() const override { return new Segment(*this); }
 
@@ -182,8 +182,8 @@ public:
     void setElement(track_idx_t track, EngravingItem* el);
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
-    Measure* measure() const { return toMeasure(explicitParent()); }
-    System* system() const { return toSystem(explicitParent()->explicitParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()); }
+    System* system() const;
     double x() const override { return ldata()->pos().x(); }
 
     void insertStaff(staff_idx_t staff);

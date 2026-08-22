@@ -77,11 +77,11 @@ int StaffTextBase::aeolusStop(int group) const
 
 Segment* StaffTextBase::segment() const
 {
-    if (!explicitParent()->isSegment()) {
-        LOGD("parent %s", explicitParent()->typeName());
+    if (!ownershipParent()->isSegment()) {
+        LOGD("parent %s", ownershipParent()->typeName());
         return 0;
     }
-    Segment* s = toSegment(explicitParent());
+    Segment* s = toSegment(ownershipParent());
     return s;
 }
 

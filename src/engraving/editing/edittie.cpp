@@ -138,7 +138,7 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
         // set cursor at position after note
         if (c->isGraceBefore()) {
             // tie grace note before to main note
-            cr = toChord(c->explicitParent());
+            cr = toChord(c->ownershipParent());
             addToChord = true;
         } else {
             is.setTrack(note->chord()->track());
@@ -363,7 +363,7 @@ void EditTie::cmdToggleLaissezVib(Score* score)
             continue;
         } else {
             LaissezVib* lvTie = Factory::createLaissezVib(note);
-            lvTie->setParent(note);
+            lvTie->setOwnershipParent(note);
             score->undoAddElement(lvTie);
         }
     }

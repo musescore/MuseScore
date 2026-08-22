@@ -547,7 +547,7 @@ void EditStaff::initStaff()
     } else if (element->isMeasure()) {
         tick = mu::engraving::toMeasure(element)->tick();
     } else if (element->isInstrumentName()) {
-        const mu::engraving::System* system = mu::engraving::toSystem(mu::engraving::toInstrumentName(element)->explicitParent());
+        const mu::engraving::System* system = mu::engraving::toSystem(mu::engraving::toInstrumentName(element)->ownershipParent());
         const Measure* measure = system ? system->firstMeasure() : nullptr;
         staff = element->staff();
 

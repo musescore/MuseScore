@@ -339,6 +339,7 @@ void InsertRemoveMeasures::removeMeasures()
             if (page) {
                 // erase system from page
                 muse::remove(page->systems(), s);
+                s->setPage(nullptr);
             }
             // erase system from score
             muse::remove(score->systems(), s);

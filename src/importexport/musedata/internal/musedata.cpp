@@ -560,7 +560,7 @@ Measure* MuseData::createMeasure()
             return 0;
         }
     }
-    Measure* mes  = Factory::createMeasure(score->dummy()->system());
+    Measure* mes  = Factory::createMeasure(score);
     mes->setTick(curTick);
 
     score->measures()->append(mes);

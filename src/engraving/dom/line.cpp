@@ -52,13 +52,8 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-LineSegment::LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
-    : SpannerSegment(type, sp, parent, f)
-{
-}
-
-LineSegment::LineSegment(const ElementType& type, System* parent, ElementFlags f)
-    : SpannerSegment(type, parent, f)
+LineSegment::LineSegment(const ElementType& type, SLine* sp, ElementFlags f)
+    : SpannerSegment(type, sp, f)
 {
 }
 
@@ -960,7 +955,7 @@ PointF SLine::linePos(Grip grip, System** system) const
 void SLine::setLen(double l)
 {
     if (spannerSegments().empty()) {
-        add(createLineSegment(score()->dummy()->system()));
+        add(createLineSegment());
     }
     LineSegment* s = frontSegment();
     s->setPos(PointF());
@@ -1116,7 +1111,7 @@ Note* SLine::guessFinalNote(Note* startNote)
         }
     }
 
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         return 0;
     }
 

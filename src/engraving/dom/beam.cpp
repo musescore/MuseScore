@@ -56,11 +56,34 @@ static const ElementStyle beamStyle {
 //   Beam
 //---------------------------------------------------------
 
-Beam::Beam(System* parent)
-    : BeamBase(ElementType::BEAM, parent)
+Beam::Beam(Score* parent)
+    : BeamBase(ElementType::BEAM, parent->dummy())
 {
     initElementStyle(&beamStyle);
     resetProperty(Pid::BEAM_CROSS_STAFF_MOVE);
+}
+
+System* Beam::system() const
+{
+    if (m_elements.empty()) {
+        return nullptr;
+    }
+    Measure* measure = m_elements.front()->measure();
+    return measure ? measure->system() : nullptr;
+}
+
+EngravingItem* Beam::layoutParent() const
+{
+    return system();
+}
+
+EngravingItem* Beam::accessibleParentItem() const
+{
+    // The system a beam is drawn on does not own it and cannot list it, so in the
+    // accessibility tree the beam stays where it is parked: on the dummy.
+    EngravingObject* parent = this->parent();
+
+    return parent && parent->isEngravingItem() ? toEngravingItem(parent) : nullptr;
 }
 
 //---------------------------------------------------------

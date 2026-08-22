@@ -49,27 +49,41 @@ namespace mu::engraving {
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
-    : EngravingItem(type, parent, f)
+SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, ElementFlags f)
+    : EngravingItem(type, sp, f)
 {
-    m_spanner = sp;
+    setOwnershipParent(sp);
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
-}
-
-SpannerSegment::SpannerSegment(const ElementType& type, System* parent, ElementFlags f)
-    : EngravingItem(type, parent, f)
-{
-    setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    m_spanner = 0;
 }
 
 SpannerSegment::SpannerSegment(const SpannerSegment& s)
     : EngravingItem(s)
 {
-    m_spanner            = s.m_spanner;
     m_spannerSegmentType = s.m_spannerSegmentType;
     m_p2                 = s.m_p2;
     m_offset2            = s.m_offset2;
+}
+
+SpannerSegment::~SpannerSegment()
+{
+    // A system only places a segment, so it holds a plain back-reference to it: take
+    // that reference with us, rather than relying on every deletion site to do it.
+    moveToSystem(nullptr);
+}
+
+void SpannerSegment::setSpanner(Spanner* val)
+{
+    setOwnershipParent(val);
+}
+
+void SpannerSegment::setOwnershipParent(Spanner* spanner)
+{
+    EngravingItem::setOwnershipParent(spanner);
+}
+
+EngravingItem* SpannerSegment::layoutParent() const
+{
+    return m_system;
 }
 
 //---------------------------------------------------------
@@ -86,24 +100,25 @@ double SpannerSegment::mag() const
 
 Fraction SpannerSegment::tick() const
 {
-    return m_spanner ? m_spanner->tick() : Fraction(0, 1);
+    const Spanner* sp = spanner();
+    return sp ? sp->tick() : Fraction(0, 1);
 }
 
 //---------------------------------------------------------
-//   setSystem
+//   moveToSystem
 //---------------------------------------------------------
 
-void SpannerSegment::setSystem(System* s)
+void SpannerSegment::moveToSystem(System* s)
 {
-    if (system() != s) {
-        if (system()) {
-            system()->remove(this);
-        }
-        if (s) {
-            s->add(this);
-        } else {
-            resetExplicitParent();
-        }
+    if (m_system == s) {
+        return;
+    }
+    if (m_system) {
+        m_system->remove(this);
+    }
+    m_system = s;
+    if (s) {
+        s->add(this);
     }
 }
 
@@ -292,8 +307,8 @@ void SpannerSegment::setSelected(bool f)
 
 void SpannerSegment::setVisible(bool f)
 {
-    if (m_spanner) {
-        m_spanner->setVisible(f);
+    if (Spanner* sp = spanner()) {
+        sp->setVisible(f);
     }
     EngravingItem::setVisible(f);
 }
@@ -304,8 +319,8 @@ void SpannerSegment::setVisible(bool f)
 
 void SpannerSegment::setColor(const Color& col)
 {
-    if (m_spanner) {
-        m_spanner->setColor(col);
+    if (Spanner* sp = spanner()) {
+        sp->setColor(col);
     }
     EngravingItem::setColor(col);
 }
@@ -316,8 +331,8 @@ void SpannerSegment::setColor(const Color& col)
 
 void SpannerSegment::setZ(int val)
 {
-    if (m_spanner) {
-        m_spanner->setZ(val);
+    if (Spanner* sp = spanner()) {
+        sp->setZ(val);
     }
     EngravingItem::setZ(val);
 }
@@ -355,8 +370,8 @@ String SpannerSegment::accessibleInfo() const
 
 void SpannerSegment::triggerLayout() const
 {
-    if (m_spanner) {
-        m_spanner->triggerLayout();
+    if (Spanner* sp = spanner()) {
+        sp->triggerLayout();
     }
 }
 
@@ -369,8 +384,9 @@ std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation() con
         return result;
     }
 
-    for (const EngravingObject* linkedSpanner : m_spanner->linkList()) {
-        if (linkedSpanner == m_spanner || toSpanner(linkedSpanner)->placement() != m_spanner->placement()) {
+    const Spanner* sp = spanner();
+    for (const EngravingObject* linkedSpanner : sp->linkList()) {
+        if (linkedSpanner == sp || toSpanner(linkedSpanner)->placement() != sp->placement()) {
             continue;
         }
         const std::vector<SpannerSegment*>& linkedSegments = toSpanner(linkedSpanner)->spannerSegments();
@@ -444,9 +460,16 @@ Spanner::Spanner(const Spanner& s)
 
     for (auto* segment : s.m_segments) {
         SpannerSegment* newSegment = toSpannerSegment(segment->clone());
-        newSegment->setParent(nullptr);
-        add(newSegment);
+        add(newSegment);   // reparents the clone to this spanner
     }
+}
+
+Spanner::~Spanner()
+{
+    // A spanner owns its segments (they are its DOM children), so it has to free
+    // them. Without this they would only be unparented onto the dummy, where they
+    // would sit until the score is destroyed - with a dangling spanner() pointer.
+    eraseSpannerSegments();
 }
 
 //---------------------------------------------------------
@@ -491,6 +514,18 @@ void Spanner::remove(EngravingItem* e)
     m_segments.erase(std::remove(m_segments.begin(), m_segments.end(), ss), m_segments.end());
 }
 
+EngravingItemList Spanner::accessibleChildren() const
+{
+    // A segment that is placed on a system belongs to that system in the accessibility
+    // tree, even though this spanner is what owns it.
+    EngravingItemList children = EngravingItem::accessibleChildren();
+    muse::remove_if(children, [](EngravingItem* item) {
+        return item->isSpannerSegment() && toSpannerSegment(item)->system();
+    });
+
+    return children;
+}
+
 //---------------------------------------------------------
 //   removeUnmanaged
 //
@@ -506,8 +541,7 @@ void Spanner::removeUnmanaged()
 {
     for (SpannerSegment* ss : spannerSegments()) {
         if (ss->system()) {
-//                  ss->system()->remove(ss);
-            ss->setSystem(nullptr);
+            ss->moveToSystem(nullptr);
         }
     }
     score()->removeUnmanagedSpanner(this);
@@ -535,8 +569,8 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
         Fraction toTick = fromTick - len;
         if (tick() > fromTick) {          // start after beginning of removed time
             if (tick() < toTick) {        // start within removed time: bring start at removing point
-                if (explicitParent()) {
-                    parentItem()->remove(this);
+                if (ownershipParent()) {
+                    ownershipParentItem()->remove(this);
                     return;
                 } else {
                     newTick1 = fromTick;
@@ -556,8 +590,8 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
     // update properties as required
     if (newTick2 <= newTick1) {                 // if no longer any span: remove it
-        if (explicitParent()) {
-            parentItem()->remove(this);
+        if (ownershipParent()) {
+            ownershipParentItem()->remove(this);
         }
     } else {                                    // if either TICKS or TICK did change, update property
         if (newTick2 - newTick1 != tick2() - tick()) {
@@ -931,7 +965,7 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
     track_idx_t endTrack = endNote ? endNote->track() : startNote->track();
 
     setScore(score);
-    setParent(parent);
+    setOwnershipParent(parent);
     setStartElement(startNote);
     setEndElement(endNote);
     setTick(tick);
@@ -1476,7 +1510,7 @@ void Spanner::pushUnusedSegment(SpannerSegment* seg)
     if (!seg) {
         return;
     }
-    seg->setSystem(nullptr);
+    seg->moveToSystem(nullptr);
     m_unusedSegments.push_back(seg);
 }
 
@@ -1537,7 +1571,7 @@ int Spanner::reuseSegments(int number)
 //    Previously unused segments are added via reuse() call
 //---------------------------------------------------------
 
-void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System* parent)> createSegment)
+void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* ()> createSegment)
 {
     const int diff = targetNumber - int(nsegments());
     if (diff == 0) {
@@ -1546,7 +1580,7 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
     if (diff > 0) {
         const int ncreate = reuseSegments(diff);
         for (int i = 0; i < ncreate; ++i) {
-            add(createSegment(score()->dummy()->system()));
+            add(createSegment());
         }
     } else { // diff < 0
         const int nremove = -diff;
@@ -1577,13 +1611,11 @@ bool Spanner::isUserModified() const
 
 void Spanner::eraseSpannerSegments()
 {
+    // Unplace the used segments explicitly, so that System::remove() calls removed()
+    // on a fully alive segment. ~SpannerSegment would unplace them too, but from there
+    // the virtual call no longer reaches overrides below SpannerSegment.
+    // Unused segments were already unplaced on their way into m_unusedSegments.
     for (SpannerSegment* seg : m_segments) {
-        if (System* system = seg->system()) {
-            system->remove(seg);
-        }
-    }
-
-    for (SpannerSegment* seg : m_unusedSegments) {
         if (System* system = seg->system()) {
             system->remove(seg);
         }

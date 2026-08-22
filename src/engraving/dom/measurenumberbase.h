@@ -39,7 +39,7 @@ public:
     MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, TextStyleType = TextStyleType::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
 
-    Measure* measure() const { return toMeasure(explicitParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()); }
 
     bool isEditable() const override { return false; }    // The measure numbers' text should not be editable
     bool positionRelativeToNoteheadRest() const override { return false; }

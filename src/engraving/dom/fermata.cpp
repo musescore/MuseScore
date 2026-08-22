@@ -92,7 +92,7 @@ muse::TranslatableString Fermata::subtypeUserName() const
 Measure* Fermata::measure() const
 {
     Segment* s = segment();
-    return toMeasure(s ? s->explicitParent() : 0);
+    return toMeasure(s ? s->ownershipParent() : 0);
 }
 
 //---------------------------------------------------------
@@ -102,7 +102,7 @@ Measure* Fermata::measure() const
 System* Fermata::system() const
 {
     Measure* m = measure();
-    return toSystem(m ? m->explicitParent() : 0);
+    return m ? m->system() : nullptr;
 }
 
 //---------------------------------------------------------
@@ -112,7 +112,7 @@ System* Fermata::system() const
 Page* Fermata::page() const
 {
     System* s = system();
-    return toPage(s ? s->explicitParent() : 0);
+    return s ? s->page() : nullptr;
 }
 
 //---------------------------------------------------------
@@ -122,7 +122,7 @@ Page* Fermata::page() const
 std::vector<LineF> Fermata::dragAnchorLines() const
 {
     std::vector<LineF> result;
-    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
+    result.push_back(LineF(canvasPos(), layoutParent()->canvasPos()));
     return result;
 }
 
