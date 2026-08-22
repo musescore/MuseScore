@@ -31,7 +31,6 @@
 #include "score.h"
 #include "staff.h"
 #include "system.h"
-#include "tempo.h"
 #include "text.h"
 
 #include "log.h"
@@ -302,26 +301,6 @@ void Volta::setChannel() const
             int channel = st->channel(startTick, voice);
             st->insertIntoChannelList(voice, endTick, channel);
         }
-    }
-}
-
-//---------------------------------------------------------
-//   setTempo
-//---------------------------------------------------------
-
-void Volta::setTempo() const
-{
-    Measure* startMeasure = Spanner::startMeasure();
-    Measure* endMeasure = Spanner::endMeasure();
-
-    if (startMeasure && endMeasure) {
-        if (!endMeasure->repeatEnd()) {
-            return;
-        }
-        Fraction startTick = startMeasure->tick() - Fraction::eps();
-        Fraction endTick  = endMeasure->endTick() - Fraction::eps();
-        BeatsPerSecond tempoBeforeVolta = score()->tempomap()->tempo(startTick.ticks());
-        score()->setTempo(endTick, tempoBeforeVolta);
     }
 }
 

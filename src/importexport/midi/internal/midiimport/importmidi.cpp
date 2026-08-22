@@ -901,7 +901,7 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
 
     const Measure* m = score->lastMeasure();
     if (m) {
-        score->setUpTempoMap();
+        score->updateTicksAndTimeSigMap();
         lastTick = ReducedFraction(m->endTick());
     }
 }

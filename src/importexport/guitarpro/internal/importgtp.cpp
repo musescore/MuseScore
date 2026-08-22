@@ -1249,7 +1249,6 @@ void GuitarPro::setTempo(int newTempo, Measure* measure)
         segment->add(tt);
         tempo = newTempo;
         last_tempo = newTempo;
-        score->setTempo(measure->tick(), BeatsPerSecond::fromBPM(newTempo));
     }
 }
 
@@ -2948,7 +2947,7 @@ Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity
         }
     }
 
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }

@@ -330,10 +330,10 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tabdurationsymbol.h
     ${CMAKE_CURRENT_LIST_DIR}/tapping.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tapping.h
-    ${CMAKE_CURRENT_LIST_DIR}/tempo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tempo.h
     ${CMAKE_CURRENT_LIST_DIR}/tempotext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempotext.h
+    ${CMAKE_CURRENT_LIST_DIR}/tempotimeline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tempotimeline.h
     ${CMAKE_CURRENT_LIST_DIR}/text.cpp
     ${CMAKE_CURRENT_LIST_DIR}/text.h
     ${CMAKE_CURRENT_LIST_DIR}/textbase.cpp

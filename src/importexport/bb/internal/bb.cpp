@@ -577,7 +577,7 @@ Err importBB(MasterScore* score, const QString& name)
         keysig->setKey(cKey, key);
         sks->add(keysig);
     }
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     return engraving::Err::NoError;
 }
 

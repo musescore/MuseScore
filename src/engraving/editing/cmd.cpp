@@ -388,8 +388,8 @@ void MasterScore::update(bool resetCmdState, bool layoutAllParts)
         updateAll = true;
     }
 
-    if (needSetUpTempoMap()) {
-        setUpTempoMap();
+    if (needUpdateTicksAndTimeSigMap()) {
+        updateTicksAndTimeSigMap();
     }
 
     if (updateAll || m_cmdState.updateAll()) {

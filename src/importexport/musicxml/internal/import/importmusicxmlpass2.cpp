@@ -76,7 +76,6 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/tapping.h"
-#include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/textline.h"
 #include "engraving/dom/tie.h"
@@ -2691,13 +2690,21 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
     gcl.clear();
 }
 
-static bool canAddTempoText(const TempoMap* const tempoMap, const int tick)
+static bool canAddTempoText(const Score* const score, const int tick)
 {
-    if (!muse::contains(*tempoMap, tick)) {
+    const Measure* measure = score->tick2measure(Fraction::fromTicks(tick));
+    const Segment* segment = measure ? measure->findSegment(SegmentType::ChordRest, Fraction::fromTicks(tick)) : nullptr;
+    if (!segment) {
         return true;
     }
 
-    return tempoMap->tempo(tick) == Constants::DEFAULT_TEMPO;
+    for (const EngravingItem* e : segment->annotations()) {
+        if (e->isTempoText() && toTempoText(e)->tempo() != Constants::DEFAULT_TEMPO) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -2812,7 +2819,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
                 // to prevent duplicates, only if none is present yet
                 Fraction tick = time + mTime;
 
-                if (canAddTempoText(m_score->tempomap(), tick.ticks())) {
+                if (canAddTempoText(m_score, tick.ticks())) {
                     double tpo = tempoString.toDouble() / 60;
                     TempoText* t = Factory::createTempoText(m_score->dummy()->segment());
                     t->setXmlText(String(u"%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
@@ -2820,8 +2827,6 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
                     t->setVisible(false);
                     t->setTempo(tpo);
                     t->setFollowText(true);
-
-                    m_score->setTempo(tick, tpo);
 
                     addElemOffset(t, m_pass1.trackForPart(partId), u"above", measure, tick);
                 }
@@ -3521,7 +3526,7 @@ void MusicXmlParserDirection::direction(const String& partId,
     } else if (isLikelyTempoText(m_track)) {
         TempoText* tt = Factory::createTempoText(m_score->dummy()->segment());
         tt->setXmlText(m_wordsText + m_metroText);
-        if (m_tpoSound > 0 && canAddTempoText(m_score->tempomap(), tick.ticks())) {
+        if (m_tpoSound > 0 && canAddTempoText(m_score, tick.ticks())) {
             double tpo = m_tpoSound / 60;
             tt->setTempo(tpo);
             if (tt->plainText().contains('=')) {
@@ -3565,7 +3570,7 @@ void MusicXmlParserDirection::direction(const String& partId,
     } else if (!m_wordsText.empty() || !m_rehearsalText.empty() || !m_metroText.empty()) {
         TextBase* t = 0;
         if (m_tpoSound > 0.1) {
-            if (canAddTempoText(m_score->tempomap(), tick.ticks())) {
+            if (canAddTempoText(m_score, tick.ticks())) {
                 m_tpoSound /= 60;
                 t = Factory::createTempoText(m_score->dummy()->segment());
                 String rawWordsText = m_wordsText;
@@ -3577,7 +3582,6 @@ void MusicXmlParserDirection::direction(const String& partId,
                 if (t->plainText().contains('=')) {
                     ((TempoText*)t)->setFollowText(true);
                 }
-                m_score->setTempo(tick, m_tpoSound);
                 tempoTextAdded = true;
             }
         } else {
@@ -3681,7 +3685,7 @@ void MusicXmlParserDirection::direction(const String& partId,
         // direction without text but with sound tempo="..."
         // create an invisible default TempoText
 
-        if (canAddTempoText(m_score->tempomap(), tick.ticks())) {
+        if (canAddTempoText(m_score, tick.ticks())) {
             double tpo = m_tpoSound / 60;
             TempoText* t = Factory::createTempoText(m_score->dummy()->segment());
             t->setXmlText(String(u"%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
@@ -3689,9 +3693,6 @@ void MusicXmlParserDirection::direction(const String& partId,
             t->setVisible(false);
             t->setTempo(tpo);
             t->setFollowText(true);
-
-            // TBD may want ro use tick + _offset if sound is affected
-            m_score->setTempo(tick, tpo);
 
             m_pass2.addElemOffset(t, m_track, placement(), measure, tick + m_offset);
             tempoTextAdded = true;

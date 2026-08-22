@@ -1829,13 +1829,14 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                 direction = ChangeDirection::DECREASING;
             }
 
+            const Fraction etick = change != 0 ? tick + d->velocityChangeLength(mainScore->multipliedTempo(tick)) : tick;
+
             switch (d->voiceAssignment()) {
             case VoiceAssignment::ALL_VOICE_IN_STAFF: {
                 for (track_idx_t track = d->staffIdx() * VOICES; track < (d->staffIdx() + 1) * VOICES; ++track) {
                     context.velocitiesByTrack[track].addDynamic(tick, v);
                 }
                 if (change != 0) {
-                    Fraction etick = tick + d->velocityChangeLength();
                     ChangeMethod method = ChangeMethod::NORMAL;
                     for (track_idx_t track = d->staffIdx() * VOICES; track < (d->staffIdx() + 1) * VOICES; ++track) {
                         context.velocitiesByTrack[track].addHairpin(tick, etick, change, method, direction);
@@ -1859,7 +1860,6 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                         context.velocitiesByTrack[track].addDynamic(tick, v);
                     }
                     if (change != 0) {
-                        Fraction etick = tick + d->velocityChangeLength();
                         ChangeMethod method = ChangeMethod::NORMAL;
                         for (track_idx_t track = stp->idx() * VOICES; track < (stp->idx() + 1) * VOICES; ++track) {
                             context.velocitiesByTrack[track].addHairpin(tick, etick, change, method, direction);
@@ -1871,7 +1871,6 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
             case VoiceAssignment::CURRENT_VOICE_ONLY: {
                 context.velocitiesByTrack[d->track()].addDynamic(tick, v);
                 if (change != 0) {
-                    Fraction etick = tick + d->velocityChangeLength();
                     ChangeMethod method = ChangeMethod::NORMAL;
                     context.velocitiesByTrack[d->track()].addHairpin(tick, etick, change, method, direction);
                 }

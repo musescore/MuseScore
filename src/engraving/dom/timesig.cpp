@@ -476,7 +476,7 @@ void TimeSig::added()
         return;
     }
 
-    score()->setUpTempoMapLater();
+    score()->updateTicksAndTimeSigMapLater();
 }
 
 void TimeSig::removed()
@@ -485,6 +485,6 @@ void TimeSig::removed()
         return;
     }
 
-    score()->setUpTempoMapLater();
+    score()->updateTicksAndTimeSigMapLater();
 }
 }

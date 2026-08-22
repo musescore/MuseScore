@@ -49,8 +49,9 @@ class Excerpt;
 class MasterScore;
 class Part;
 class RepeatList;
+struct RepeatSegmentInfo;
 class Revisions;
-class TempoMap;
+class TempoTimeline;
 class TimeSigMap;
 class UndoStack;
 class ScoreAutomationController;
@@ -102,12 +103,11 @@ public:
     TransactionManager* transactionManager() const { return m_transactionManager.get(); }
     UndoStack* undoStack() const { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
-    TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
 
     AutomationDataConstPtr automationData() const override;
     void setAutomationData(AutomationDataPtr data);
-    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
+    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable = true) override;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
@@ -121,6 +121,11 @@ public:
     const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
 
     void invalidateRepeatList();
+
+    const TempoTimeline& tempoTimeline() const;
+    const TempoTimeline& tempoTimeline(bool expandRepeats) const;
+    bool setTempoMultiplier(BeatsPerSecond val);
+    void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
@@ -142,8 +147,6 @@ public:
 
     void update() { update(true); }
     void lockUpdates(bool locked);
-
-    void setTempomap(TempoMap* tm);
 
     int midiPortCount() const { return m_midiPortCount; }
     void setMidiPortCount(int val) { m_midiPortCount = val; }
@@ -198,7 +201,7 @@ private:
 
     void updateAutomation(const ScoreChanges& changes);
 
-    void onTimeInserted(const Fraction& tick, const Fraction& len) override;
+    void onTimeInserted(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments) override;
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -224,7 +227,6 @@ private:
     std::unique_ptr<TransactionManager> m_transactionManager;
     UndoStack* m_undoStack = nullptr;
     TimeSigMap* m_sigmap = nullptr;
-    TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
     ScoreAutomationController* m_automationController = nullptr;

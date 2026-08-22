@@ -838,7 +838,6 @@ void PowerTab::addToScore(ptSection& sec)
         tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(sec.tempo));
         tt->setTrack(0);
         segment->add(tt);
-        score->setTempo(measure->tick(), tt->tempo());
     }
     if (!sec.partName.empty() && lastPart != sec.partMarker) {
         lastPart = sec.partMarker;

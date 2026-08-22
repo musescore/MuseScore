@@ -1,36 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
-  <programVersion>4.0.0</programVersion>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
   <programRevision></programRevision>
   <Score>
+    <eid>IgMHKL4ZLqO_rbq68IziYT</eid>
     <Division>480</Division>
-    <Style>
-      <pageWidth>8.26772</pageWidth>
-      <pageHeight>11.6929</pageHeight>
-      <pagePrintableWidth>7.08661</pagePrintableWidth>
-      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
-      <pageOddTopMargin>0.590551</pageOddTopMargin>
-      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
-      <measureNumberPosBelow x="0" y="1"/>
-      <Spatium>1.74978</Spatium>
-      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <open>1</open>
     <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2022-09-26</metaTag>
+    <metaTag name="creationDate">2026-08-17</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="subtitle">Subtitle</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -81,15 +71,24 @@
       <unsorted/>
       </Order>
     <Part id="1">
-      <Staff id="1">
+      <eid>5xMB+ek5ncO_PbnxG93Xo6D</eid>
+      <Staff>
+        <eid>kFUYWio/LVF_yQHzJ61KE/G</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>2</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -105,144 +104,146 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>xE3wt+wn8wE_Msy6Bw0x8vD</eid>
         <voice>
+          <KeySig>
+            <eid>pfwbSmxyd0E_pOeBeBLEHlI</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
+            <eid>kVsLVP8U59P_b8teCq82WGG</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="GradualTempoChange">
-            <GradualTempoChange>
-              <tempoChangeType>ritardando</tempoChangeType>
-              <beginHookHeight>1.9</beginHookHeight>
-              <endHookType>0</endHookType>
-              <endHookHeight>1.9</endHookHeight>
-              <beginText>rit.</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <Segment>
-                <subtype>0</subtype>
-                <offset x="-0.146627" y="-2.04021"/>
-                <off2 x="1.16727" y="0"/>
-                <minDistance>-8.15102</minDistance>
-                <offset x="-0.146627" y="-2.04021"/>
-                </Segment>
-              </GradualTempoChange>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
           <Tempo>
-            <tempo>1.333333</tempo>
+            <tempo>3</tempo>
             <followText>1</followText>
-            <offset x="0.146627" y="-4.34604"/>
-            <text><sym>metNoteQuarterUp</sym><font face="Edwin"></font> = 80</text>
+            <eid>IBMcLLTot2I_yxoHudebAEP</eid>
+            <text><sym>metNoteQuarterUp</sym> = 180</text>
             </Tempo>
           <Chord>
-            <durationType>quarter</durationType>
+            <eid>Ab2Yp5vgwFN_dQ7w9QZqbuD</eid>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <eid>1IpaCr5R0aC_qSZK62wS8IG</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>cMlf/HvODbK_2ywHU2XLBAF</eid>
         <voice>
           <Chord>
-            <durationType>quarter</durationType>
+            <eid>kcrrocjYZUP_AV1vup0sanE</eid>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <eid>cmDppBC6aaE_gop5jcIMnNJ</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>rt0+2OxmU6L_x7BLMfLexiH</eid>
+        <voice>
+          <Chord>
+            <eid>IUG8SCdWd8_Hdgkuhxz29M</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>7wkoSLZ1b4P_zZjlwG+KniH</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>XQ4mwkuW3LG_ZcwlEsKJuWB</eid>
         <voice>
           <Tempo>
-            <tempo>3.116667</tempo>
-            <text>Presto</text>
+            <tempo>3</tempo>
+            <followText>1</followText>
+            <type>aTempo</type>
+            <eid>LiFEu9UsEeC_fsst2EN0f7P</eid>
+            <text>a tempo</text>
             </Tempo>
-          <Spanner type="GradualTempoChange">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <durationType>quarter</durationType>
+            <eid>REoePr0pK8G_Rgi4G3imHNI</eid>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <eid>R7PKdUkE1bN_O0C5g0UU0vD</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>EXi3ULEMAmG_cm31zQF8XQP</eid>
+        <voice>
+          <Tempo>
+            <tempo>3</tempo>
+            <followText>1</followText>
+            <type>tempoPrimo</type>
+            <eid>Qa1El2hQPBN_fFIxaIDI1kM</eid>
+            <text>Tempo I</text>
+            </Tempo>
           <Chord>
-            <durationType>quarter</durationType>
+            <eid>Soc7JR+5pJF_46wUH9Ob1RN</eid>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <eid>LfAW9z9T5gJ_uaaAXVJFtdD</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>jZqKyoInOvB_jjpSxkzWbmK</eid>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <eid>fzLI+yJqUlP_uhbqADcTav</eid>
+            </Fermata>
           <Chord>
-            <durationType>quarter</durationType>
+            <eid>qigNKcHkHUM_WCUT4zeQHjO</eid>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <eid>t/Y65++g7dH_xu/37qXqNMJ</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <GradualTempoChange>
+        <tempoChangeType>ritardando</tempoChangeType>
+        <tempoChangeFactor>0.5</tempoChangeFactor>
+        <beginHookHeight>1.9</beginHookHeight>
+        <endHookType>0</endHookType>
+        <endHookHeight>1.9</endHookHeight>
+        <beginTextOffset x="0" y="0"/>
+        <track2>0</track2>
+        <startTick>1/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>ksl6jFQEQ7D_rxqfwd8rVyL</eid>
+        <track>0</track>
+        <Segment>
+          <subtype>0</subtype>
+          <offset x="0" y="-2"/>
+          <off2 x="1.68293" y="0"/>
+          <eid>k/cK13go4qD_GF8tIHttI+I</eid>
+          <track>0</track>
+          <offset x="0" y="-2"/>
+          </Segment>
+        </GradualTempoChange>
+      </SpannerMap>
     </Score>
   </museScore>

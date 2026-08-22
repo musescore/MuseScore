@@ -6942,13 +6942,7 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
 SpannerSegment* TLayout::layoutSystem(Volta* line, System* system, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(line);
-    SpannerSegment* voltaSegment = layoutSystemSLine(line, system, ctx);
-
-    // we need set tempo in layout because all tempos of score is set in layout
-    // so fermata in seconda volta works correct because fermata apply itself tempo during layouting
-    line->setTempo();
-
-    return voltaSegment;
+    return layoutSystemSLine(line, system, ctx);
 }
 
 SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext& ctx)

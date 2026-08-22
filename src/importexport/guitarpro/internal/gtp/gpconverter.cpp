@@ -1504,7 +1504,6 @@ void GPConverter::addTempoMap()
             tt->setXmlText(tempoText);
             tt->setTrack(0);
             segment->add(tt);
-            _score->setTempo(tick, tt->tempo());
 
             if (_lastGradualTempoChange) {
                 _lastGradualTempoChange->setTick2(tick);
