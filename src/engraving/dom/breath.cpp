@@ -53,7 +53,7 @@ const std::vector<BreathType> Breath::BREATH_LIST {
 //   Breath
 //---------------------------------------------------------
 
-Breath::Breath(Segment* parent)
+Breath::Breath(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::BREATH, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_symId = SymId::breathMarkComma;

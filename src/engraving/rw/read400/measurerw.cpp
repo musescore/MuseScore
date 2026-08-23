@@ -48,6 +48,7 @@
 #include "../dom/staff.h"
 #include "../dom/stafflines.h"
 #include "../dom/stafftext.h"
+#include "../dom/system.h"
 #include "../dom/systemdivider.h"
 #include "../dom/timesig.h"
 #include "../dom/tuplet.h"

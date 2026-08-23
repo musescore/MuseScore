@@ -43,13 +43,13 @@ namespace mu::engraving {
 //   Symbol
 //---------------------------------------------------------
 
-Symbol::Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f)
+Symbol::Symbol(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : BSymbol(type, parent, f)
 {
     m_sym = SymId::accidentalSharp;          // arbitrary valid default
 }
 
-Symbol::Symbol(EngravingItem* parent, ElementFlags f)
+Symbol::Symbol(EngravingObject* parent, ElementFlags f)
     : Symbol(ElementType::SYMBOL, parent, f)
 {
 }

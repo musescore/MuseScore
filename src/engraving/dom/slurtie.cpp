@@ -346,7 +346,7 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
 //   SlurTie
 //---------------------------------------------------------
 
-SlurTie::SlurTie(const ElementType& type, EngravingItem* parent)
+SlurTie::SlurTie(const ElementType& type, EngravingObject* parent)
     : Spanner(type, parent)
 {
     m_slurDirection = DirectionV::AUTO;

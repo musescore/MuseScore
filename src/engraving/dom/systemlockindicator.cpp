@@ -31,7 +31,7 @@
 #include "system.h"
 
 namespace mu::engraving {
-SystemLockIndicator::SystemLockIndicator(System* parent, const RangeLock* lock)
+SystemLockIndicator::SystemLockIndicator(DummyParentOr<System> parent, const RangeLock* lock)
     : IndicatorIcon(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock) {}
 
 void SystemLockIndicator::setSelected(bool v)

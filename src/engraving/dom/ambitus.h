@@ -116,7 +116,7 @@ public:
 private:
 
     friend class Factory;
-    Ambitus(Segment* parent);
+    Ambitus(DummyParentOr<Segment> parent);
     Ambitus(const Ambitus& a);
 
     void normalize();

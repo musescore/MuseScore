@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <type_traits>
 #include <vector>
 
 #include "global/allocator.h"
@@ -59,6 +60,7 @@ class ChordRest;
 class Clef;
 class Capo;
 class DeadSlapped;
+class DummyParent;
 class DurationElement;
 class Dynamic;
 class Expression;
@@ -210,6 +212,34 @@ enum class Pid : short;
 enum class PropertyFlags : char;
 
 using EngravingObjectList = std::vector<EngravingObject*>;
+
+//! Parameter type for a parent that is either a real parent of one of the given types,
+//! or the dummy, i.e. no parent at all. It holds nothing but the pointer and makes no
+//! difference at runtime; the point is that "not attached to anything" has to be said
+//! rather than slipped in as a pointer of the wrong kind.
+//!
+//! Best-effort only: it narrows what a call site can pass, it does not prove anything.
+template<typename ... ParentTypes>
+class DummyParentOr
+{
+public:
+    template<typename T, std::enable_if_t<std::is_same_v<T, DummyParent>
+                                          || (std::is_base_of_v<ParentTypes, T> || ...), int> = 0>
+    DummyParentOr(T* parent)
+        : m_parent(parent) {}
+
+    operator EngravingObject*() const {
+        return m_parent;
+    }
+
+    //! The parent as one of the accepted types, or null when it is the dummy - i.e.
+    //! when there is no parent to speak to yet.
+    template<typename T>
+    T* as() const;
+
+private:
+    EngravingObject* m_parent = nullptr;
+};
 
 class EngravingObject
 {
@@ -595,6 +625,13 @@ public:
 
     bool isIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
 };
+
+template<typename ... ParentTypes>
+template<typename T>
+T* DummyParentOr<ParentTypes...>::as() const
+{
+    return m_parent && !m_parent->isType(ElementType::DUMMY) ? static_cast<T*>(m_parent) : nullptr;
+}
 
 //---------------------------------------------------
 // safe casting of EngravingObject

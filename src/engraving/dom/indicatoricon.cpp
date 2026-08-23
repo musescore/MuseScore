@@ -30,7 +30,7 @@
 using namespace mu::engraving;
 using namespace muse::draw;
 
-IndicatorIcon::IndicatorIcon(const ElementType& type, System* parent, ElementFlags flags)
+IndicatorIcon::IndicatorIcon(const ElementType& type, DummyParentOr<System> parent, ElementFlags flags)
     : EngravingItem(type, parent, flags)
 {
 }

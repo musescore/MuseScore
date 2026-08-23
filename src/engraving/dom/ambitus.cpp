@@ -44,7 +44,7 @@ using namespace mu::engraving;
 //   Ambitus
 //---------------------------------------------------------
 
-Ambitus::Ambitus(Segment* parent)
+Ambitus::Ambitus(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::AMBITUS, parent, ElementFlag::ON_STAFF)
 {
     m_noteHeadGroup    = NOTEHEADGROUP_DEFAULT;

@@ -58,23 +58,23 @@ namespace mu::engraving {
 //    Rest
 //--------------------------------------------------------
 
-Rest::Rest(Segment* parent)
+Rest::Rest(DummyParentOr<Segment> parent)
     : Rest(ElementType::REST, parent)
 {
 }
 
-Rest::Rest(const ElementType& type, Segment* parent)
+Rest::Rest(const ElementType& type, DummyParentOr<Segment> parent)
     : ChordRest(type, parent)
 {
     m_beamMode  = BeamMode::NONE;
 }
 
-Rest::Rest(Segment* parent, const TDuration& d)
+Rest::Rest(DummyParentOr<Segment> parent, const TDuration& d)
     : Rest(ElementType::REST, parent, d)
 {
 }
 
-Rest::Rest(const ElementType& type, Segment* parent, const TDuration& d)
+Rest::Rest(const ElementType& type, DummyParentOr<Segment> parent, const TDuration& d)
     : ChordRest(type, parent)
 {
     m_beamMode  = BeamMode::NONE;

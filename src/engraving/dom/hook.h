@@ -36,7 +36,7 @@ class Hook final : public Symbol
     DECLARE_CLASSOF(ElementType::HOOK)
 
 public:
-    Hook(Chord* parent = 0);
+    Hook(DummyParentOr<Chord> parent);
 
     Hook* clone() const override { return new Hook(*this); }
     double mag() const override { return layoutParent()->mag(); }

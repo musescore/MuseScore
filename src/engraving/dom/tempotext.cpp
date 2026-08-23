@@ -57,7 +57,7 @@ static const ElementStyle tempoStyle {
 //   TempoText
 //---------------------------------------------------------
 
-TempoText::TempoText(Segment* parent)
+TempoText::TempoText(DummyParentOr<Segment> parent)
     : TextBase(ElementType::TEMPO_TEXT, parent, TextStyleType::TEMPO, ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tempoStyle);

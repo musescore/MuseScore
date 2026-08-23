@@ -48,7 +48,7 @@ namespace mu::engraving {
  *              GuitarBend
  * **************************************/
 
-GuitarBend::GuitarBend(EngravingItem* parent)
+GuitarBend::GuitarBend(EngravingObject* parent)
     : SLine(ElementType::GUITAR_BEND, parent, ElementFlag::MOVABLE)
 {
 }

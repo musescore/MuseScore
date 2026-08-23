@@ -629,7 +629,7 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
     return noteHeads[direction][int(group)][int(t)];
 }
 
-NoteHead::NoteHead(Note* parent)
+NoteHead::NoteHead(DummyParentOr<Note> parent)
     : Symbol(ElementType::NOTEHEAD, parent) {}
 
 //---------------------------------------------------------
@@ -654,7 +654,7 @@ NoteHeadGroup NoteHead::headGroup() const
 //   Note
 //---------------------------------------------------------
 
-Note::Note(Chord* ch)
+Note::Note(DummyParentOr<Chord> ch)
     : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE)
 {
     m_playEvents.push_back(NoteEvent());      // add default play event
@@ -800,7 +800,7 @@ Note::Note(const Note& n, bool link)
     setDropTarget(false);
 }
 
-void Note::setOwnershipParent(Chord* ch)
+void Note::setOwnershipParent(DummyParentOr<Chord> ch)
 {
     EngravingItem::setOwnershipParent(ch);
 }

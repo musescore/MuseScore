@@ -33,7 +33,7 @@ class PageLockIndicator : public IndicatorIcon
     DECLARE_CLASSOF(ElementType::PAGE_LOCK_INDICATOR)
 
 public:
-    PageLockIndicator(System* parent, const RangeLock* lock);
+    PageLockIndicator(DummyParentOr<System> parent, const RangeLock* lock);
 
     void setSelected(bool v) override;
 
