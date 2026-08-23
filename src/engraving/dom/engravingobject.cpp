@@ -22,6 +22,8 @@
 
 #include "engravingobject.h"
 
+#include <algorithm>
+
 #include "global/containers.h"
 
 #include "../editing/addremoveelement.h"
@@ -257,7 +259,15 @@ void EngravingObject::removeChild(EngravingObject* o)
         return;
     }
     o->m_parent = nullptr;
-    muse::remove(m_children, o);
+
+    // Search from the back: a child is often unparented shortly after it was added, so it
+    // still sits near the end of the list. That matters for the dummy, whose child list is
+    // long-lived and large. Empirical evidence shows that searching from the back walks on
+    // average orders-of-magnitude less list entries than searching from the front.
+    auto it = std::find(m_children.rbegin(), m_children.rend(), o);
+    if (it != m_children.rend()) {
+        m_children.erase(std::next(it).base());
+    }
 }
 
 EngravingObject* EngravingObject::parent() const
