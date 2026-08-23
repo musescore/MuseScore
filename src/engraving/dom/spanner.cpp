@@ -86,6 +86,19 @@ EngravingItem* SpannerSegment::layoutParent() const
     return m_system;
 }
 
+EngravingItem* SpannerSegment::accessibleParentItem() const
+{
+    // Not placed on a system yet, so it is the spanner that lists it;
+    // see Spanner::accessibleChildren().
+    if (!m_system) {
+        if (EngravingItem* owner = ownershipParentItem()) {
+            return owner;
+        }
+    }
+
+    return EngravingItem::accessibleParentItem();
+}
+
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------

@@ -518,27 +518,28 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
         return nullptr;
     }
 
-    Spanner* item = nullptr;
-    Segment* segment = pos.measure->getSegment(SegmentType::ChordRest, pos.tick);
+    // a spanner is not attached to anything: the score manages it
+    DummyParent* dummy = m_score->dummy();
 
+    Spanner* item = nullptr;
     if (meiElement.m_name == "dir") {
         ElementType elementType = Convert::elementTypeForDirWithExt(meiElement);
         switch (elementType) {
-        case (ElementType::HAIRPIN): item = Factory::createHairpin(segment);
+        case (ElementType::HAIRPIN): item = Factory::createHairpin(dummy);
             break;
         default:
-            item = Factory::createTextLine(segment);
+            item = Factory::createTextLine(dummy);
         }
     } else if (meiElement.m_name == "hairpin") {
-        item = Factory::createHairpin(segment);
+        item = Factory::createHairpin(dummy);
     } else if (meiElement.m_name == "octave") {
-        item = Factory::createOttava(segment);
+        item = Factory::createOttava(dummy);
     } else if (meiElement.m_name == "pedal") {
-        item = Factory::createPedal(segment);
+        item = Factory::createPedal(dummy);
     } else if (meiElement.m_name == "slur") {
-        item = Factory::createSlur(segment);
+        item = Factory::createSlur(dummy);
     } else if (meiElement.m_name == "trill") {
-        item = Factory::createTrill(segment);
+        item = Factory::createTrill(dummy);
     } else {
         return nullptr;
     }

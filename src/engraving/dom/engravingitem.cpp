@@ -174,11 +174,6 @@ EngravingItem* EngravingItem::accessibleParentItem() const
         return p;
     }
 
-    // embedded in an item without being owned by it, e.g. a grace notes group
-    if (EngravingObject* raw = parent(); raw && raw->isEngravingItem()) {
-        return toEngravingItem(raw);
-    }
-
     // not placed anywhere, so not in the score's tree: head of the dummy's tree instead
     return score() && score()->dummy() ? score()->dummy()->rootItem() : nullptr;
 }

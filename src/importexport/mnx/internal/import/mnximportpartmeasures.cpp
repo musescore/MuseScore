@@ -1230,7 +1230,7 @@ void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Seg
         }
     }
 
-    Hairpin* hairpin = Factory::createHairpin(segment);
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setHairpinType(mnxHairpin.wedgeType() == mnx::DynamicWedgeType::Increasing
                             ? HairpinType::CRESC_HAIRPIN
                             : HairpinType::DIM_HAIRPIN);
