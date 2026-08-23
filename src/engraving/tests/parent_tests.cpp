@@ -107,10 +107,8 @@ public:
 // score-editing API, because the parent link itself is what is under test.
 // ---------------------------------------------------------------------------
 
-//! A freshly constructed item is not attached to anything: the constructor
-//! argument only supplies context (above all, the score). It does leave the item
-//! in that parent's child list, but the item does not report it as its parent.
-TEST_F(Engraving_ParentTests, newItemIsNotAttached)
+//! An item is attached to the parent it is constructed with.
+TEST_F(Engraving_ParentTests, newItemIsAttachedToItsConstructorParent)
 {
     Segment* segment = someSegment();
     ASSERT_TRUE(segment);
@@ -121,6 +119,23 @@ TEST_F(Engraving_ParentTests, newItemIsNotAttached)
 
     EXPECT_EQ(dynamic->parent(), segment);
     EXPECT_TRUE(isChildOf(dynamic, segment));
+
+    EXPECT_EQ(dynamic->ownershipParent(), segment);
+    EXPECT_EQ(dynamic->ownershipParentItem(), segment);
+    EXPECT_EQ(dynamic->layoutParent(), segment);
+
+    delete dynamic;
+}
+
+//! Constructing an item with the dummy means it is not attached to anything yet.
+TEST_F(Engraving_ParentTests, newItemOnTheDummyIsNotAttached)
+{
+    Dynamic* dynamic = Factory::createDynamic(m_score->dummy(), false /*isAccessibleEnabled*/);
+
+    EXPECT_EQ(dynamic->score(), m_score);
+
+    EXPECT_EQ(dynamic->parent(), m_score->dummy());
+    EXPECT_TRUE(isChildOf(dynamic, m_score->dummy()));
 
     EXPECT_EQ(dynamic->ownershipParent(), nullptr);
     EXPECT_EQ(dynamic->ownershipParentItem(), nullptr);

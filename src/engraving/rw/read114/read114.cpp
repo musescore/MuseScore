@@ -1589,7 +1589,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(st, ctx.tick());
             segment->add(barLine);
         } else if (tag == "Chord") {
-            Chord* chord = Factory::createChord(m->getSegment(SegmentType::ChordRest, ctx.tick()));
+            // where the chord belongs is only known once it has been read: a grace note
+            // goes on the chord it decorates rather than on a segment of its own, and
+            // reading moves the tick the segment is looked up by
+            Chord* chord = Factory::createChord(ctx.score()->dummy());
             chord->setTrack(ctx.track());
             readChord(m, chord, e, ctx);
             if (!chord->segment()) {
@@ -1725,7 +1728,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             e.readNext();
         } else if (tag == "Slur") {
-            Slur* sl = Factory::createSlur(m);
+            Slur* sl = Factory::createSlur(ctx.score()->dummy());
             sl->setTick(ctx.tick());
             Read206::readSlur206(e, ctx, sl);
             //

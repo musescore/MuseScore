@@ -485,8 +485,7 @@ public:
     void setAccessibleEnabled(bool enabled);
 
     //! Parent in the accessibility hierarchy: the layout parent when placed, otherwise
-    //! the item it is embedded in, otherwise the head of the tree the unattached
-    //! objects form.
+    //! the head of the tree the unattached objects form.
     virtual EngravingItem* accessibleParentItem() const;
     //! Children in the accessibility hierarchy: the items that name this one as their
     //! accessibleParentItem(). Those are the children it owns, unless ownership and

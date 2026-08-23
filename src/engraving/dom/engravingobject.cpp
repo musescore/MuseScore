@@ -57,10 +57,13 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         assert(parent);
     }
 
+    // The parent an object is constructed with is its parent: it is attached to it
+    // right away. Passing the dummy means it is not attached to anything yet.
     doSetParent(parent);
     if (m_parent) {
         doSetScore(m_parent->score());
     }
+    m_isParentExplicitlySet = parent && !parent->isType(ElementType::DUMMY);
 
     if (type == ElementType::SCORE) {
         m_score = static_cast<Score*>(this);
