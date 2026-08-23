@@ -703,7 +703,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "mag") {
             TRead::readProperty(d, e, ctx, Pid::MAG);
         } else if (tag == "Harmony") {
-            Harmony* h = new Harmony(d->score()->dummy()->segment());
+            Harmony* h = new Harmony(d->score()->dummy());
             read(h, e, ctx);
             if (h->chords().empty()) {
                 // Invalid harmony
@@ -1786,7 +1786,7 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         accidental->setOwnershipParent(o);
         accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
     } else if (tag == "Chord") {
-        Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
+        Chord* chord = Factory::createChord(ctx.score()->dummy());
         TRead::read(chord, xml, ctx);
         chord->setTrack(ctx.track());
         o->setCueNoteChord(chord);
@@ -1900,7 +1900,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "spanToOffset") {
             b->setSpanTo(e.readInt());
         } else if (tag == "Articulation") {
-            Articulation* a = Factory::createArticulation(b->score()->dummy()->chord());
+            Articulation* a = Factory::createArticulation(b->score()->dummy());
             TRead::read(a, e, ctx);
             b->add(a);
         } else if (tag == "Symbol") {
@@ -2070,7 +2070,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
             b->add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy()->segment());
+        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy());
         TRead::read(f, e, ctx);
         //! TODO Looks like a bug.
         //! The FretDiagram parent must be Segment

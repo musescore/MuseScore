@@ -251,7 +251,7 @@ void EditClef::undoChangeClef(Transaction&, Score* score, Staff* ostaff, Engravi
                 clef = toClef(gclef->linkedClone());
                 clef->setScore(staffScore);
             } else {
-                clef = Factory::createClef(staffScore->dummy()->segment());
+                clef = Factory::createClef(staffScore->dummy());
                 clef->setClefType(ct);
                 gclef = clef;
             }

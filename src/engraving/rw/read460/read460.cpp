@@ -966,7 +966,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                     continue;
                 }
 
-                Fermata* b = Factory::createFermata(score->dummy()->segment());
+                Fermata* b = Factory::createFermata(score->dummy());
                 b->setTrack(destTrack);
                 TRead::read(b, e, ctx);
                 b->setTrack(destTrack);
@@ -986,7 +986,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                     continue;
                 }
 
-                Breath* b = Factory::createBreath(score->dummy()->segment());
+                Breath* b = Factory::createBreath(score->dummy());
                 b->setTrack(destTrack);
                 TRead::read(b, e, ctx);
                 b->setTrack(destTrack);
@@ -1223,11 +1223,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
 
 void Read460::readTremoloCompat(compat::TremoloCompat* tc, XmlReader& xml)
 {
-    IF_ASSERT_FAILED(tc->parent) {
-        return;
-    }
-
-    ReadContext ctx(tc->parent->score());
+    ReadContext ctx(static_cast<EngravingObject*>(tc->parent)->score());
     ctx.setPasteMode(true);
     TRead::read(tc, xml, ctx);
 }

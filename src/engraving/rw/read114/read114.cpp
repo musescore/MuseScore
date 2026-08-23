@@ -903,7 +903,7 @@ static void readTremolo(TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 {
     auto createDefaultTremolo = [](TremoloCompat* t) {
         t->single = Factory::createTremoloSingleChord(t->parent);
-        t->single->setTrack(t->parent->track());
+        t->single->setTrack(t->parent.as<Chord>()->track());
         t->single->setTremoloType(TremoloType::R8);
     };
 
@@ -954,11 +954,11 @@ static void readTremolo(TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 
             if (isTremoloTwoChord(type)) {
                 t->two = Factory::createTremoloTwoChord(t->parent);
-                t->two->setTrack(t->parent->track());
+                t->two->setTrack(t->parent.as<Chord>()->track());
                 t->two->setTremoloType(type);
             } else {
                 t->single = Factory::createTremoloSingleChord(t->parent);
-                t->single->setTrack(t->parent->track());
+                t->single->setTrack(t->parent.as<Chord>()->track());
                 t->single->setTremoloType(type);
             }
         } else if (!TRead::readItemProperties(item(t), e, ctx)) {
@@ -1001,8 +1001,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            TremoloCompat tcompat;
-            tcompat.parent = chord;
+            TremoloCompat tcompat { chord };
             readTremolo(&tcompat, e, ctx);
             if (tcompat.two) {
                 tcompat.two->setOwnershipParent(chord);
@@ -1530,7 +1529,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             lastTick = ctx.tick();
         } else if (tag == "BarLine") {
-            BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
+            BarLine* barLine = Factory::createBarLine(ctx.dummy());
             barLine->setTrack(ctx.track());
             // initialize span properties with values from staff
             barLine->resetProperty(Pid::BARLINE_SPAN_FROM);
@@ -1659,7 +1658,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
             } else {
-                Rest* rest = Factory::createRest(ctx.score()->dummy()->segment());
+                Rest* rest = Factory::createRest(ctx.score()->dummy());
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
@@ -1844,7 +1843,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 m->setTimesig(ts->sig() / timeStretch);
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
+            KeySig* ks = Factory::createKeySig(ctx.dummy());
             ks->setTrack(ctx.track());
             read400::TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
@@ -1854,7 +1853,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment->add(ks);
             staff->setKey(curTick, ks->keySigEvent());
         } else if (tag == "Lyrics") {
-            Lyrics* l = Factory::createLyrics(ctx.dummy()->chord());
+            Lyrics* l = Factory::createLyrics(ctx.dummy());
             l->setTrack(ctx.track());
 
             int iEndTick = 0;                 // used for backward compatibility
@@ -2774,7 +2773,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         if (tag == "Staff") {
             readStaffContent(masterScore, e, ctx);
         } else if (tag == "KeySig") {                 // not supported
-            KeySig* ks = Factory::createKeySig(masterScore->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(masterScore->dummy());
             read400::TRead::read(ks, e, ctx);
             delete ks;
         } else if (tag == "siglist") {
@@ -2886,7 +2885,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             } else if (tag == "Pedal") {
                 readPedal114(e, ctx, toPedal(s));
             } else if (tag == "Trill") {
-                Ornament* ornament = Factory::createOrnament(score->dummy()->chord());
+                Ornament* ornament = Factory::createOrnament(score->dummy());
                 toTrill(s)->setOrnament(ornament);
                 Read206::readTrill206(e, ctx, toTrill(s));
             } else {
@@ -3118,7 +3117,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             continue;
         }
 
-        TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
+        TempoText* tt = Factory::createTempoText(masterScore->dummy());
         tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
         tt->setTempo(tempo);
         tt->setTrack(0);

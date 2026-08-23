@@ -120,23 +120,23 @@ struct makeElementImplWrapper {
         } \
     }; \
 
-IMPL_WRAPPER(Dynamic, score->dummy()->segment())
-IMPL_WRAPPER(MeasureRepeat, score->dummy()->segment())
-IMPL_WRAPPER(Hairpin, score->dummy()->segment())
-IMPL_WRAPPER(SystemText, score->dummy()->segment())
-IMPL_WRAPPER(TempoText, score->dummy()->segment())
-IMPL_WRAPPER(StaffText, score->dummy()->segment())
-IMPL_WRAPPER(Expression, score->dummy()->segment())
-IMPL_WRAPPER(PlayTechAnnotation, score->dummy()->segment())
-IMPL_WRAPPER(Capo, score->dummy()->segment())
-IMPL_WRAPPER(StringTunings, score->dummy()->segment())
-IMPL_WRAPPER(RehearsalMark, score->dummy()->segment())
+IMPL_WRAPPER(Dynamic, score->dummy())
+IMPL_WRAPPER(MeasureRepeat, score->dummy())
+IMPL_WRAPPER(Hairpin, score->dummy())
+IMPL_WRAPPER(SystemText, score->dummy())
+IMPL_WRAPPER(TempoText, score->dummy())
+IMPL_WRAPPER(StaffText, score->dummy())
+IMPL_WRAPPER(Expression, score->dummy())
+IMPL_WRAPPER(PlayTechAnnotation, score->dummy())
+IMPL_WRAPPER(Capo, score->dummy())
+IMPL_WRAPPER(StringTunings, score->dummy())
+IMPL_WRAPPER(RehearsalMark, score->dummy())
 
-IMPL_WRAPPER(Jump, score->dummy()->measure())
-IMPL_WRAPPER(MeasureNumber, score->dummy()->measure())
+IMPL_WRAPPER(Jump, score->dummy())
+IMPL_WRAPPER(MeasureNumber, score->dummy())
 
-IMPL_WRAPPER(Fingering, score->dummy()->note())
-IMPL_WRAPPER(NoteHead, score->dummy()->note())
+IMPL_WRAPPER(Fingering, score->dummy())
+IMPL_WRAPPER(NoteHead, score->dummy())
 
 // Dispatcher method ...
 template<class C, typename ... Args>
@@ -301,16 +301,16 @@ PalettePtr PaletteCreator::newKeySigPalette()
     sp->setYOffset(1.0);
 
     for (int i = 0; i < 7; ++i) {
-        auto k = Factory::makeKeySig(paletteScore()->dummy()->segment());
+        auto k = Factory::makeKeySig(paletteScore()->dummy());
         k->setKey(Key(i + 1));
         sp->appendElement(k, TConv::userName(Key(i + 1)));
     }
     for (int i = -7; i < 0; ++i) {
-        auto k = Factory::makeKeySig(paletteScore()->dummy()->segment());
+        auto k = Factory::makeKeySig(paletteScore()->dummy());
         k->setKey(Key(i));
         sp->appendElement(k, TConv::userName(Key(i)));
     }
-    auto k = Factory::makeKeySig(paletteScore()->dummy()->segment());
+    auto k = Factory::makeKeySig(paletteScore()->dummy());
     k->setKey(Key::C);
     sp->appendElement(k, TConv::userName(Key::C));
 
@@ -319,7 +319,7 @@ PalettePtr PaletteCreator::newKeySigPalette()
     nke.setConcertKey(Key::C);
     nke.setCustom(true);
     nke.setMode(KeyMode::NONE);
-    auto nk = Factory::makeKeySig(paletteScore()->dummy()->segment());
+    auto nk = Factory::makeKeySig(paletteScore()->dummy());
     nk->setKeySigEvent(nke);
     sp->appendElement(nk, TConv::userName(Key::C, true));
 
@@ -366,7 +366,7 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
 
     // bar line styles
     for (const BarLineTableItem& bti : BarLine::barLineTable) {
-        auto b = Factory::makeBarLine(paletteScore()->dummy()->segment());
+        auto b = Factory::makeBarLine(paletteScore()->dummy());
         b->setBarLineType(bti.type);
         sp->appendElement(b, bti.userName);
     }
@@ -383,7 +383,7 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
             { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, muse::TranslatableString("engraving/sym", "Short barline 2") }, // Not in SMuFL
         };
         for (auto span : spans) {
-            auto b = Factory::makeBarLine(paletteScore()->dummy()->segment());
+            auto b = Factory::makeBarLine(paletteScore()->dummy());
             b->setBarLineType(BarLineType::NORMAL);
             b->setSpanFrom(span.from);
             b->setSpanTo(span.to);
@@ -478,7 +478,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
             continue;
         }
 
-        auto b = Factory::makeBarLine(paletteScore()->dummy()->segment());
+        auto b = Factory::makeBarLine(paletteScore()->dummy());
         b->setBarLineType(bti.type);
         PaletteCellPtr cell = sp->appendElement(b, bti.userName);
         cell->drawStaff = false;
@@ -544,7 +544,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
         LayoutBreakType::NOBREAK
     };
     for (LayoutBreakType layoutBreakType : layoutBreaks) {
-        auto lb = Factory::makeLayoutBreak(paletteScore()->dummy()->measure());
+        auto lb = Factory::makeLayoutBreak(paletteScore()->dummy());
         lb->setLayoutBreakType(layoutBreakType);
         sp->appendElement(lb, TConv::userName(layoutBreakType));
     }
@@ -558,7 +558,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
         SpacerType::FIXED
     };
     for (SpacerType spacerType : spacers) {
-        auto spacer = Factory::makeSpacer(paletteScore()->dummy()->measure());
+        auto spacer = Factory::makeSpacer(paletteScore()->dummy());
         spacer->setSpacerType(spacerType);
         spacer->setGap(3_sp);
         PaletteCellPtr cell = sp->appendElement(spacer, spacer->subtypeUserName());
@@ -624,7 +624,7 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
     };
     // include additional symbol-based fingerings (temporarily?) implemented as articulations
     for (auto i : defaultPalette ? defaultLute : masterLute) {
-        auto s = Factory::makeArticulation(paletteScore()->dummy()->chord());
+        auto s = Factory::makeArticulation(paletteScore()->dummy());
         s->setSymId(i);
         sp->appendElement(s, s->subtypeUserName());
     }
@@ -640,13 +640,13 @@ PalettePtr PaletteCreator::newTremoloPalette()
     sp->setVisible(false);
 
     for (int i = int(TremoloType::R8); i <= int(TremoloType::BUZZ_ROLL); ++i) {
-        auto tremolo = Factory::makeTremoloSingleChord(paletteScore()->dummy()->chord());
+        auto tremolo = Factory::makeTremoloSingleChord(paletteScore()->dummy());
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
 
     for (int i = int(TremoloType::C8); i <= int(TremoloType::C256); ++i) {
-        auto tremolo = Factory::makeTremoloTwoChord(paletteScore()->dummy()->chord());
+        auto tremolo = Factory::makeTremoloTwoChord(paletteScore()->dummy());
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
@@ -659,7 +659,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
     };
     // include additional symbol-based tremolo articulations, implemented as articulations
     for (auto i : dots) {
-        auto s = Factory::makeArticulation(paletteScore()->dummy()->chord());
+        auto s = Factory::makeArticulation(paletteScore()->dummy());
         s->setSymId(i);
         sp->appendElement(s, s->subtypeUserName());
     }
@@ -767,7 +767,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     };
 
     for (SymId articulationType : defaultPalette ? defaultArticulations : masterArticulations) {
-        auto artic = Factory::makeArticulation(paletteScore()->dummy()->chord());
+        auto artic = Factory::makeArticulation(paletteScore()->dummy());
         artic->setSymId(articulationType);
         sp->appendElement(artic, artic->subtypeUserName());
     }
@@ -819,7 +819,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     };
 
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {
-        auto ornament = Factory::makeOrnament(paletteScore()->dummy()->chord());
+        auto ornament = Factory::makeOrnament(paletteScore()->dummy());
         ornament->setSymId(ornamentType);
         qreal mag = ornament->symId() == SymId::ornamentTrill ? 1.0 : 1.2;
         sp->appendElement(ornament, ornament->subtypeUserName(), mag);
@@ -987,7 +987,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
     // Breaths
 
     for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
-        auto f = Factory::makeFermata(paletteScore()->dummy()->segment());
+        auto f = Factory::makeFermata(paletteScore()->dummy());
         f->setSymIdAndTimeStretch(i);
         sp->appendElement(f, f->subtypeUserName());
     }
@@ -996,7 +996,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
         if ((breath.id == SymId::chantCaesura || breath.id == SymId::caesuraSingleStroke) && defaultPalette) {
             continue;
         }
-        auto a = Factory::makeBreath(paletteScore()->dummy()->segment());
+        auto a = Factory::makeBreath(paletteScore()->dummy());
         a->setSymId(breath.id);
         a->setPause(breath.pause);
         sp->appendElement(a, SymNames::userNameForSymId(breath.id));
@@ -1018,7 +1018,7 @@ PalettePtr PaletteCreator::newArpeggioPalette()
             // Deprecated, now handled by CHORD_BRACKET
             continue;
         }
-        auto a = Factory::makeArpeggio(paletteScore()->dummy()->chord());
+        auto a = Factory::makeArpeggio(paletteScore()->dummy());
         a->setArpeggioType(ArpeggioType(i));
         sp->appendElement(a, a->arpeggioTypeName());
     }
@@ -1042,20 +1042,20 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     };
 
     for (ChordLineType chordLineType : chordLineTypes) {
-        auto cl = Factory::makeChordLine(paletteScore()->dummy()->chord());
+        auto cl = Factory::makeChordLine(paletteScore()->dummy());
         cl->setChordLineType(chordLineType);
         sp->appendElement(cl, cl->chordLineTypeName());
     }
 
     for (ChordLineType chordLineType : chordLineTypes) {
-        auto cl = Factory::makeChordLine(paletteScore()->dummy()->chord());
+        auto cl = Factory::makeChordLine(paletteScore()->dummy());
         cl->setChordLineType(chordLineType);
         cl->setStraight(true);
         sp->appendElement(cl, cl->chordLineTypeName());
     }
 
     for (ChordLineType chordLineType : chordLineTypes) {
-        auto cl = Factory::makeChordLine(paletteScore()->dummy()->chord());
+        auto cl = Factory::makeChordLine(paletteScore()->dummy());
         cl->setChordLineType(chordLineType);
         cl->setStraight(true);
         cl->setWavy(true);
@@ -1090,7 +1090,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     };
 
     for (ClefType clefType : defaultPalette ? clefsDefault : clefsMaster) {
-        auto clef = Factory::makeClef(paletteScore()->dummy()->segment());
+        auto clef = Factory::makeClef(paletteScore()->dummy());
         clef->setClefType(ClefTypeList(clefType, clefType));
         sp->appendElement(clef, TConv::userName(clefType));
     }
@@ -1314,7 +1314,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     sp->appendActionIcon(ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
 
-    auto a = Factory::makeAmbitus(paletteScore()->dummy()->segment());
+    auto a = Factory::makeAmbitus(paletteScore()->dummy());
     sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
 
     auto letRing = makeElement<LetRing>(paletteScore());
@@ -1343,7 +1343,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
                                      QT_TRANSLATE_NOOP("palette", "Chord bracket (play with right hand)") };
     for (int i = 0; i < 3; ++i) {
         DirectionV hookPos = DirectionV(i);
-        auto c = Factory::makeChordBracket(paletteScore()->dummy()->chord());
+        auto c = Factory::makeChordBracket(paletteScore()->dummy());
         c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
         sp->appendElement(c, names[i]);
     }
@@ -1674,7 +1674,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
     };
 
     for (const TS& timeSignatureType : defaultPalette ? defaultTimeSignatureList : masterTimeSignatureList) {
-        auto timeSignature = Factory::makeTimeSig(paletteScore()->dummy()->segment());
+        auto timeSignature = Factory::makeTimeSig(paletteScore()->dummy());
         timeSignature->setSig(Fraction(timeSignatureType.numerator, timeSignatureType.denominator), timeSignatureType.type);
         sp->appendElement(timeSignature, timeSignatureType.name);
     }
@@ -1728,7 +1728,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = Factory::makeFretDiagram(paletteScore()->dummy()->segment());
+        auto fret = Factory::makeFretDiagram(paletteScore()->dummy());
 
         if (fretboardDiagram.harmony.empty()) {
             fret->clear();
@@ -1813,11 +1813,11 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
 
-    auto lhTapping = Factory::makeTapping(paletteScore()->dummy()->chord());
+    auto lhTapping = Factory::makeTapping(paletteScore()->dummy());
     lhTapping->setHand(TappingHand::LEFT);
     sp->appendElement(lhTapping, QT_TRANSLATE_NOOP("palette", "Left-hand tapping"), 1.0);
 
-    auto rhTapping = Factory::makeTapping(paletteScore()->dummy()->chord());
+    auto rhTapping = Factory::makeTapping(paletteScore()->dummy());
     rhTapping->setHand(TappingHand::RIGHT);
     sp->appendElement(rhTapping, QT_TRANSLATE_NOOP("palette", "Right-hand tapping"), 1.0);
 
@@ -1831,7 +1831,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     };
 
     for (auto i : luteSymbols) {
-        auto s = Factory::makeArticulation(paletteScore()->dummy()->chord());
+        auto s = Factory::makeArticulation(paletteScore()->dummy());
         s->setSymId(i);
         sp->appendElement(s, s->subtypeUserName());
     }
@@ -1929,7 +1929,7 @@ PalettePtr PaletteCreator::newKeyboardPalette()
                                      QT_TRANSLATE_NOOP("palette", "Chord bracket (play with right hand)") };
     for (int i = 0; i < 3; ++i) {
         DirectionV hookPos = DirectionV(i);
-        auto c = Factory::makeChordBracket(paletteScore()->dummy()->chord());
+        auto c = Factory::makeChordBracket(paletteScore()->dummy());
         c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
         sp->appendElement(c, names[i]);
     }
@@ -1969,7 +1969,7 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
         sp->appendElement(ottava, ottava->subtypeUserName());
     }
 
-    auto a = Factory::makeAmbitus(paletteScore()->dummy()->segment());
+    auto a = Factory::makeAmbitus(paletteScore()->dummy());
     sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
     return sp;
 }
@@ -1982,10 +1982,10 @@ PalettePtr PaletteCreator::newHarpPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    auto pedalDiagram = Factory::makeHarpPedalDiagram(paletteScore()->dummy()->segment());
+    auto pedalDiagram = Factory::makeHarpPedalDiagram(paletteScore()->dummy());
     sp->appendElement(pedalDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal diagram"));
 
-    auto pedalTextDiagram = Factory::makeHarpPedalDiagram(paletteScore()->dummy()->segment());
+    auto pedalTextDiagram = Factory::makeHarpPedalDiagram(paletteScore()->dummy());
     pedalTextDiagram->setIsDiagram(false);
 
     sp->appendElement(pedalTextDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal text diagram"));
@@ -2035,14 +2035,14 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
     };
 
     for (SymId symId : standardHandbellsArticSymbols) {
-        auto artic = Factory::makeArticulation(paletteScore()->dummy()->chord());
+        auto artic = Factory::makeArticulation(paletteScore()->dummy());
         artic->setSymId(symId);
         sp->appendElement(artic, artic->subtypeUserName(),
                           symId == SymId::handbellsGyro ? 0.7 : symId == SymId::handbellsMalletBellSuspended ? 1.4 : 1.0);
     }
 
     for (ArticulationTextType textType : handbellsTextTypes) {
-        auto artic = Factory::makeArticulation(paletteScore()->dummy()->chord());
+        auto artic = Factory::makeArticulation(paletteScore()->dummy());
         artic->setTextType(textType);
         sp->appendElement(artic, artic->subtypeUserName(), 1.1);
     }
@@ -2064,7 +2064,7 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
         };
 
         for (SymId symId : additionalHandbellsArticSymbols) {
-            auto artic = Factory::makeArticulation(paletteScore()->dummy()->chord());
+            auto artic = Factory::makeArticulation(paletteScore()->dummy());
             artic->setSymId(symId);
             sp->appendElement(artic, artic->subtypeUserName());
         }

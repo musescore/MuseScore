@@ -72,7 +72,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     QAction* a = new QAction("delete", this);
     a->setShortcut(Qt::Key_Delete);
     addAction(a);
-    clef = Factory::createClef(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    clef = Factory::createClef(paletteScoreProvider()->paletteScore()->dummy());
     clef->setClefType(ClefType::G);
     connect(a, &QAction::triggered, this, &KeyCanvas::deleteElement);
 }
@@ -408,7 +408,7 @@ void KeyEditor::addClicked()
         c.octAlt = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
         e.customKeyDefs().push_back(c);
     }
-    auto ks = Factory::makeKeySig(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    auto ks = Factory::makeKeySig(paletteScoreProvider()->paletteScore()->dummy());
     ks->setKeySigEvent(e);
     m_keySigPaletteWidget->appendElement(ks, "custom");
     m_dirty = true;

@@ -166,7 +166,7 @@ static void reindexGraceNotes(Chord* chord)
 
 static Chord* createGraceAfterChord(Chord* parent)
 {
-    Chord* graceChord = Factory::createChord(parent->score()->dummy()->segment());
+    Chord* graceChord = Factory::createChord(parent->score()->dummy());
     graceChord->setTrack(parent->track());
     graceChord->setNoteType(NoteType::GRACE8_AFTER);
     graceChord->setNoStem(true);

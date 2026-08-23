@@ -580,7 +580,7 @@ void CustomizeKitDialog::updateExample()
     int v         = m_editedDrumset.voice(pitch);
     DirectionV dir = m_editedDrumset.stemDirection(pitch);
     bool up = (DirectionV::UP == dir) || (DirectionV::AUTO == dir && line > 4);
-    std::shared_ptr<Chord> chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    std::shared_ptr<Chord> chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy());
     chord->setDurationType(DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setTrack(v);

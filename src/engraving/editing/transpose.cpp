@@ -643,7 +643,7 @@ void Transpose::transposeFretDiagram(Transaction& tx, FretDiagram* diagram, Scor
 
 String Transpose::transposedChordName(Score* score, const String& name, const std::function<int(int tpc)>& transformTpc)
 {
-    Harmony h(score->dummy()->segment());
+    Harmony h(score->dummy());
     h.setHarmony(name);
     for (HarmonyInfo* info : h.chords()) {
         info->setRootTpc(transformTpc(info->rootTpc()));

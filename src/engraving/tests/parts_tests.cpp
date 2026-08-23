@@ -371,7 +371,7 @@ MasterScore* Engraving_PartsTests::doAddBreath()
     Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
-    Breath* b = Factory::createBreath(score->dummy()->segment());
+    Breath* b = Factory::createBreath(score->dummy());
     b->setSymId(SymId::breathMarkComma);
     dd.dropElement = b;
 

@@ -285,7 +285,7 @@ TEST_F(Engraving_ParentTests, deletingASegmentUnplacesItFromItsSystem)
     ASSERT_FALSE(m_score->systems().empty());
     System* system = m_score->systems().front();
 
-    Hairpin* hairpin = Factory::createHairpin(m_score->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setTrack(0);
     hairpin->setTrack2(0);
 
@@ -308,7 +308,7 @@ TEST_F(Engraving_ParentTests, deletingASpannerDeletesItsSegments)
 {
     const size_t dummyChildrenBefore = m_score->dummy()->children().size();
 
-    Hairpin* hairpin = Factory::createHairpin(m_score->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setTrack(0);
     hairpin->setTrack2(0);
 
