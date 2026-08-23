@@ -39,7 +39,10 @@
 #include "engraving/types/typesconv.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/imasternotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
+
+#include "project/types/projectmeta.h"
 
 #include "internal/converterutils.h"
 

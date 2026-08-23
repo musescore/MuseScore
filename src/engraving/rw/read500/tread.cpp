@@ -136,6 +136,8 @@
 #include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
 
+#include "../../editing/editstaffbrackets.h"
+
 #include "../xmlreader.h"
 #include "../read206/read206.h"
 #include "../compat/compatutils.h"
@@ -1843,7 +1845,8 @@ static void setActionIconTypeFromAction(ActionIcon* i, const std::string& action
 
         { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE },
 
-        { "toggle-system-lock", ActionIconType::SYSTEM_LOCK }
+        { "toggle-system-lock", ActionIconType::SYSTEM_LOCK },
+        { "toggle-page-lock", ActionIconType::PAGE_LOCK }
     };
 
     auto it = map.find(actionCode);
@@ -3794,6 +3797,7 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
 
     if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::MASK_SLURTIE)) {
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment"
@@ -4117,21 +4121,21 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         Color color = Color::fromString(e.attribute("color"));
         int col = e.intAttribute("col", -1);
         if (col == -1) {
-            col = static_cast<int>(s->brackets().size());
+            col = static_cast<int>(ctx.score()->brackets(s->idx()).size());
         }
-        s->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-        s->setBracketSpan(col, e.intAttribute("span", 0));
-        s->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
-        BracketItem* bi = s->brackets().at(col);
+        EditStaffBrackets::setBracketType(ctx.score(), s->idx(), col, BracketType(e.intAttribute("type", -1)));
+        EditStaffBrackets::setBracketSpan(ctx.score(), s->idx(), col, e.intAttribute("span", 0));
+        EditStaffBrackets::setBracketVisible(ctx.score(), s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
+        BracketItem* bi = ctx.score()->brackets(s->idx()).at(col);
         if (color.isValid()) {
             bi->setColor(color);
         }
         e.readNext();
     } else if (tag == "BracketItem") {
         BracketItem* b = Factory::createBracketItem(s);
-        b->setStaff(s);
+        b->setStartStaffIdx(s->idx());
         read(b, e, ctx);
-        s->insertBracket(b);
+        EditStaffBrackets::insertBracket(ctx.score(), s->idx(), b);
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();
         if (barLineSpan < 0) {

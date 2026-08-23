@@ -26,7 +26,11 @@
 #include "translation.h"
 #include "log.h"
 
+#include "notation/imasternotation.h" // IWYU pragma: keep
+#include "notation/inotationautomation.h"
 #include "notation/inotationplayback.h"
+
+#include "project/inotationproject.h"
 
 using namespace mu::playback;
 using namespace muse;
@@ -95,6 +99,8 @@ const mu::engraving::InstrumentTrackId& MixerChannelItem::instrumentTrackId() co
 void MixerChannelItem::setInstrumentTrackId(const mu::engraving::InstrumentTrackId& instrumentTrackId)
 {
     m_instrumentTrackId = instrumentTrackId;
+
+    updateHasAutomationFlags();
 }
 
 QString MixerChannelItem::title() const
@@ -114,12 +120,42 @@ float MixerChannelItem::rightChannelPressure() const
 
 float MixerChannelItem::volumeLevel() const
 {
-    return m_outParams.volume;
+    return m_volumeLevel;
+}
+
+float MixerChannelItem::volumeLevelMin() const
+{
+    return audio::VOLUME_DB_MIN.raw();
+}
+
+float MixerChannelItem::volumeLevelMax() const
+{
+    return audio::VOLUME_DB_MAX.raw();
 }
 
 int MixerChannelItem::balance() const
 {
-    return m_outParams.balance * BALANCE_SCALING_FACTOR;
+    return m_balance;
+}
+
+int MixerChannelItem::balanceMin() const
+{
+    return audio::BALANCE_MIN.raw() * BALANCE_SCALING_FACTOR;
+}
+
+int MixerChannelItem::balanceMax() const
+{
+    return audio::BALANCE_MAX.raw() * BALANCE_SCALING_FACTOR;
+}
+
+bool MixerChannelItem::hasVolumeAutomation() const
+{
+    return m_hasVolumeAutomation;
+}
+
+bool MixerChannelItem::hasBalanceAutomation() const
+{
+    return m_hasBalanceAutomation;
 }
 
 bool MixerChannelItem::solo() const
@@ -238,12 +274,16 @@ void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
 {
     if (!muse::RealIsEqual(m_outParams.volume, newParams.volume)) {
         m_outParams.volume = newParams.volume;
-        emit volumeLevelChanged(newParams.volume);
+        if (!m_hasVolumeAutomation) {
+            setDisplayedVolumeLevel(m_outParams.volume);
+        }
     }
 
     if (!muse::RealIsEqual(m_outParams.balance, newParams.balance)) {
         m_outParams.balance = newParams.balance;
-        emit balanceChanged(newParams.balance);
+        if (!m_hasBalanceAutomation) {
+            setDisplayedBalance(m_outParams.balance.raw() * BALANCE_SCALING_FACTOR);
+        }
     }
 
     if (m_outParams.solo != newParams.solo) {
@@ -394,6 +434,21 @@ void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges& audioSi
     });
 }
 
+void MixerChannelItem::subscribeOnAutomatedControlParamsChanges(AutomatedControlParamsChanges& changes)
+{
+    m_automatedControlParamsChanges = changes;
+
+    m_automatedControlParamsChanges.onReceive(this, [this](const AutomatedControlParams& params) {
+        if (m_hasVolumeAutomation) {
+            setDisplayedVolumeLevel(params.volume.raw());
+        }
+
+        if (m_hasBalanceAutomation) {
+            setDisplayedBalance(params.balance.raw() * BALANCE_SCALING_FACTOR);
+        }
+    });
+}
+
 void MixerChannelItem::setTitle(QString title)
 {
     if (m_title == title) {
@@ -431,18 +486,18 @@ void MixerChannelItem::setVolumeLevel(float volumeLevel)
     }
 
     m_outParams.volume = volumeLevel;
-    emit volumeLevelChanged(m_outParams.volume);
+    setDisplayedVolumeLevel(volumeLevel);
     emit controlParamsChanged(m_outParams);
 }
 
 void MixerChannelItem::setBalance(int balance)
 {
-    if (m_outParams.balance * BALANCE_SCALING_FACTOR == balance) {
+    if (m_outParams.balance.raw() * BALANCE_SCALING_FACTOR == balance) {
         return;
     }
 
     m_outParams.balance = balance / BALANCE_SCALING_FACTOR;
-    emit balanceChanged(balance);
+    setDisplayedBalance(balance);
     emit controlParamsChanged(m_outParams);
 }
 
@@ -490,6 +545,59 @@ mu::notation::INotationPlaybackPtr MixerChannelItem::notationPlayback() const
 {
     project::INotationProjectPtr project = context()->currentProject();
     return project ? project->masterNotation()->playback() : nullptr;
+}
+
+void MixerChannelItem::updateHasAutomationFlags()
+{
+    bool hasVolumeAutomation = false;
+    bool hasBalanceAutomation = false;
+
+    INotationProjectPtr project = context()->currentProject();
+    const notation::AutomationDataConstPtr automationData
+        = (project && m_instrumentTrackId.isValid()) ? project->masterNotation()->automation()->automationData() : nullptr;
+
+    if (automationData) {
+        hasVolumeAutomation = !automationData->curve(
+            notation::AutomationCurveKey::instrument(notation::AutomationType::Volume, m_instrumentTrackId)).empty();
+        hasBalanceAutomation = !automationData->curve(
+            notation::AutomationCurveKey::instrument(notation::AutomationType::Pan, m_instrumentTrackId)).empty();
+    }
+
+    if (m_hasVolumeAutomation != hasVolumeAutomation) {
+        m_hasVolumeAutomation = hasVolumeAutomation;
+        emit hasVolumeAutomationChanged();
+        if (!m_hasVolumeAutomation) {
+            setDisplayedVolumeLevel(m_outParams.volume);
+        }
+    }
+
+    if (m_hasBalanceAutomation != hasBalanceAutomation) {
+        m_hasBalanceAutomation = hasBalanceAutomation;
+        emit hasBalanceAutomationChanged();
+        if (!m_hasBalanceAutomation) {
+            setDisplayedBalance(m_outParams.balance.raw() * BALANCE_SCALING_FACTOR);
+        }
+    }
+}
+
+void MixerChannelItem::setDisplayedVolumeLevel(float volumeLevel)
+{
+    if (muse::RealIsEqual(m_volumeLevel, volumeLevel)) {
+        return;
+    }
+
+    m_volumeLevel = volumeLevel;
+    emit volumeLevelChanged(m_volumeLevel);
+}
+
+void MixerChannelItem::setDisplayedBalance(int balance)
+{
+    if (m_balance == balance) {
+        return;
+    }
+
+    m_balance = balance;
+    emit balanceChanged(m_balance);
 }
 
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)

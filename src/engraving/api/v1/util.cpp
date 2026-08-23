@@ -25,6 +25,8 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
+#include "project/inotationproject.h"
+
 #include "util.h"
 
 #include "log.h"
@@ -118,7 +120,7 @@ QString FileIO::projectPath()
         return QString();
     }
 
-    auto project = globalContext()->currentProject();
+    project::INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         return QString();
     }

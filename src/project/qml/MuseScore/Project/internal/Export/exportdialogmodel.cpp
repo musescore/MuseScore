@@ -28,6 +28,8 @@
 #include <QTimer>
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 
 #include "translation.h"
 #include "log.h"

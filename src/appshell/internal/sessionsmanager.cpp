@@ -22,6 +22,8 @@
 
 #include "sessionsmanager.h"
 
+#include "project/inotationproject.h"
+
 using namespace mu::appshell;
 using namespace muse;
 using namespace muse::actions;
@@ -33,7 +35,7 @@ void SessionsManager::init()
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
         update();
 
-        if (auto project = globalContext()->currentProject()) {
+        if (project::INotationProjectPtr project = globalContext()->currentProject()) {
             project->pathChanged().onNotify(this, [this]() {
                 update();
             });

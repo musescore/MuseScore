@@ -24,7 +24,7 @@
 
 #include "types/typesconv.h"
 
-#include "bracketItem.h"
+#include "bracketitem.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"

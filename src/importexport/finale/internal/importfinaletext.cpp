@@ -1824,8 +1824,12 @@ void FinaleParser::importPageTexts()
         }
     };
 
-    std::unordered_map<page_idx_t, MeasureBase*> topBoxes;
-    std::unordered_map<page_idx_t, MeasureBase*> bottomBoxes;
+    std::vector<MeasureBase*> topBoxes;
+    std::vector<MeasureBase*> bottomBoxes;
+    for (const Page* page : m_score->pages()) {
+        topBoxes.push_back(toMeasureBase(page->firstMeasureBase()));
+        bottomBoxes.push_back(toMeasureBase(page->lastMeasureBase()));
+    }
     const double defaultSpatium = m_score->style().defaultSpatium();
 
     for (MusxInstance<others::PageTextAssign> pageTextAssign : notHF) {
@@ -1835,15 +1839,12 @@ void FinaleParser::importPageTexts()
             MeasureBase* mb = [&]() {
                 // Create frames at given position if needed
                 if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top) {
-                    if (MeasureBase* presentBase = muse::value(topBoxes, page->pageNumber(), nullptr)) {
-                        return presentBase;
+                    if (topBoxes.at(i)->isVBox()) {
+                        return topBoxes.at(i);
                     }
-                    System* system = page->systems().front();
-                    if (system && system->vbox()) {
-                        topBoxes.emplace(page->pageNumber(), system->first());
-                        return system->first();
-                    }
+
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                    System* system = page->systems().front();
                     double distToTopStaff = 0.0;
                     if (system) {
                         pageFrame->setTick(system->first()->tick());
@@ -1858,6 +1859,7 @@ void FinaleParser::importPageTexts()
                         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
                         m_score->measures()->append(pageFrame);
                     }
+
                     if (importCustomPositions()) {
                         rendering::score::LayoutContext pgctx(score());
                         const double headerExtension = rendering::score::HeaderFooterLayout::headerExtension(pgctx, page);
@@ -1882,18 +1884,16 @@ void FinaleParser::importPageTexts()
                         setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium::fromAbsolute(boxToStaffDist, defaultSpatium));
                         pageFrame->ryoffset() -= headerDistance;
                     }
-                    topBoxes.emplace(page->pageNumber(), toMeasureBase(pageFrame));
-                    return toMeasureBase(pageFrame);
+                    MeasureBase* pageMB = toMeasureBase(pageFrame);
+                    topBoxes.at(i) = pageMB;
+                    return pageMB;
                 } else if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Bottom) {
-                    if (MeasureBase* presentBase = muse::value(bottomBoxes, page->pageNumber(), nullptr)) {
-                        return presentBase;
+                    if (bottomBoxes.at(i)->isVBox()) {
+                        return bottomBoxes.at(i);
                     }
-                    System* system = page->systems().back();
-                    if (system && system->vbox()) {
-                        bottomBoxes.emplace(page->pageNumber(), system->first());
-                        return system->last();
-                    }
+
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                    System* system = page->systems().back();
                     double distToBottomStaff = 0.0;
                     if (system) {
                         pageFrame->setTick(system->last()->endTick());
@@ -1916,6 +1916,7 @@ void FinaleParser::importPageTexts()
                         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
                         m_score->measures()->append(pageFrame);
                     }
+
                     if (importCustomPositions()) {
                         /// @todo check scaling on this
                         double boxToNotationDist = m_score->style().styleAbsolute(Sid::minVerticalDistance);
@@ -1929,8 +1930,9 @@ void FinaleParser::importPageTexts()
                                             Spatium::fromAbsolute(boxToNotationDist, defaultSpatium));
                         setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium::fromAbsolute(boxToStaffDist, defaultSpatium));
                     }
-                    bottomBoxes.emplace(page->pageNumber(), toMeasureBase(pageFrame));
-                    return toMeasureBase(pageFrame);
+                    MeasureBase* pageMB = toMeasureBase(pageFrame);
+                    bottomBoxes.at(i) = pageMB;
+                    return pageMB;
                 }
                 // Don't add frames for text vertically aligned to the center.
                 /// @todo use sophisticated check for whether to import as frame or not. (i.e. distance to measure is too large, frame would get in the way of music)
@@ -1961,6 +1963,14 @@ void FinaleParser::importPageTexts()
     // if top or bottom, we should hopefully be able to check for distance to surrounding music and work from that
     // if not enough space, attempt to position based on closest measure
     //note: text is placed slightly lower than indicated position (line space? Or ascent instead of bbox)
+
+    for (page_idx_t i = 0; i < m_score->npages(); ++i) {
+        Page* page = m_score->pages().at(i);
+        if (page->pageLock()) {
+            m_score->removePageLock(page->pageLock());
+            m_score->addPageLock(new RangeLock(topBoxes.at(i), bottomBoxes.at(i)));
+        }
+    }
 }
 
 void FinaleParser::rebasePageTextOffsets()

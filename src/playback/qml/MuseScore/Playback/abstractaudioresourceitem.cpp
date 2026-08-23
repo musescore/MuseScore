@@ -3,7 +3,9 @@
 #include <QList>
 #include <QTimer>
 
+#include "log.h"
 #include "stringutils.h"
+
 #include "ui/view/iconcodes.h"
 
 using namespace muse;

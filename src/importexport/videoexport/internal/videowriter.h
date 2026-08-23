@@ -28,6 +28,7 @@
 
 #include "io/filestream.h"
 
+#include "engraving/rendering/layoutoptions.h"
 #include "engraving/style/style.h"
 
 #include "modularity/ioc.h"

@@ -22,7 +22,6 @@
 #include "playbackcontrollerstub.h"
 
 using namespace mu::playback;
-using namespace muse::actions;
 
 bool PlaybackControllerStub::isPlayAllowed() const
 {
@@ -54,6 +53,36 @@ muse::async::Channel<bool> PlaybackControllerStub::playbackInitedChanged() const
     return {};
 }
 
+muse::Ret PlaybackControllerStub::togglePlay()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::play(bool)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::playFromSelection(bool)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::pause(bool)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::stop()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::rewind(muse::secs_t)
+{
+    return muse::make_ok();
+}
+
 bool PlaybackControllerStub::isLoopEnabled() const
 {
     return false;
@@ -62,6 +91,61 @@ bool PlaybackControllerStub::isLoopEnabled() const
 muse::async::Channel<bool> PlaybackControllerStub::loopEnabledChanged() const
 {
     return {};
+}
+
+muse::Ret PlaybackControllerStub::toggleLoopPlayback()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::addLoopBoundary(LoopBoundaryType)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleMetronome()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleMidiInput()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::setMidiUseWrittenPitch(bool)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::togglePlayRepeats()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::togglePlayChordSymbols()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleAutomaticallyPan()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleCountIn()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleHearPlaybackWhenEditing()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::reloadPlaybackCache()
+{
+    return muse::make_ok();
 }
 
 const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrumentTrackIdMap() const
@@ -136,16 +220,6 @@ void PlaybackControllerStub::seekElement(const engraving::EngravingItem*, bool)
 
 void PlaybackControllerStub::seekBeat(int, int, bool)
 {
-}
-
-bool PlaybackControllerStub::actionChecked(const ActionCode&) const
-{
-    return false;
-}
-
-muse::async::Channel<ActionCode> PlaybackControllerStub::actionCheckedChanged() const
-{
-    return {};
 }
 
 muse::secs_t PlaybackControllerStub::totalPlayTime() const

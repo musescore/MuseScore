@@ -27,8 +27,12 @@
 #include "log.h"
 #include "translation.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotationautomation.h"
 #include "notation/inotationparts.h"
 #include "notation/inotationplayback.h"
+
+#include "project/inotationproject.h"
 
 using namespace muse;
 using namespace mu::playback;
@@ -323,6 +327,50 @@ void MixerPanelModel::setupConnections()
             removeItem(trackId);
         }
     });
+
+    subscribeOnAutomationChanges();
+}
+
+void MixerPanelModel::subscribeOnAutomationChanges()
+{
+    if (!currentProject()) {
+        return;
+    }
+
+    AutomationDataConstPtr automation = currentProject()->masterNotation()->automation()->automationData();
+    if (!automation) {
+        return;
+    }
+
+    automation->changed().onReceive(this, [this](const AutomationChanges& changes) {
+        if (changes.isFullReset) {
+            for (MixerChannelItem* item : m_mixerChannelList) {
+                item->updateHasAutomationFlags();
+            }
+            return;
+        }
+
+        InstrumentTrackIdSet affectedTrackIds;
+        for (const AutomationCurveKey& key : changes.affectedKeys) {
+            if (key.type != AutomationType::Volume && key.type != AutomationType::Pan) {
+                continue;
+            }
+
+            if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
+                affectedTrackIds.insert(*trackId);
+            }
+        }
+
+        if (affectedTrackIds.empty()) {
+            return;
+        }
+
+        for (MixerChannelItem* item : m_mixerChannelList) {
+            if (muse::contains(affectedTrackIds, item->instrumentTrackId())) {
+                item->updateHasAutomationFlags();
+            }
+        }
+    });
 }
 
 int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newInstrumentTrackId) const
@@ -451,6 +499,17 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to subscribe on audio signal changes from mixer channel, error code: " << errCode
+               << ", " << text;
+    });
+
+    playback()->automatedControlParamsChanges(trackId)
+    .onResolve(this, [this, trackId](AutomatedControlParamsChanges changes) {
+        if (MixerChannelItem* item = findChannelItem(trackId)) {
+            item->subscribeOnAutomatedControlParamsChanges(changes);
+        }
+    })
+    .onReject(this, [](int errCode, std::string text) {
+        LOGE() << "unable to subscribe on automated control params changes from mixer channel, error code: " << errCode
                << ", " << text;
     });
 

@@ -95,6 +95,8 @@ private:
     void clear();
     void setupConnections();
 
+    void subscribeOnAutomationChanges();
+
     int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
     int indexOf(const muse::audio::TrackId trackId) const;
 

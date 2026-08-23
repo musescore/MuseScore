@@ -574,12 +574,13 @@
                 </Channel>
               </Instrument>
             <eid>AB_AB</eid>
-            <autoplace>0</autoplace>
             <text>Instrument</text>
             </InstrumentChange>
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>BB_BB</eid>
               </Pedal>
             <next>

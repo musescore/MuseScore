@@ -70,7 +70,7 @@ public:
     ChangeBracketProperty(Staff* s, size_t l, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : ChangeProperty(nullptr, i, v, ps), staff(s), level(l) {}
     UNDO_NAME("ChangeBracketProperty")
-    UNDO_CHANGED_OBJECTS({ staff })
+    UNDO_CHANGED_OBJECTS({ })
 };
 
 class ChangeTextLineProperty : public ChangeProperty

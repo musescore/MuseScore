@@ -76,7 +76,7 @@ public:
     static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
     static BracketItem* createBracketItem(EngravingItem* parent);
-    static BracketItem* createBracketItem(EngravingItem* parent, BracketType a, int b);
+    static BracketItem* createBracketItem(EngravingItem* parent, BracketType bracketType, size_t span);
 
     static Breath* createBreath(Segment* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Breath> makeBreath(Segment* parent);

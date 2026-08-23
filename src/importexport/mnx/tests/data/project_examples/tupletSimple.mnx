@@ -47,14 +47,29 @@
     ],
     "mnx": {
         "_x": {
-            "schemaVersion": {
-                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            "mnxdom": {
+                "client": {
+                    "commit": "cb7c616c47a7",
+                    "name": "denigma",
+                    "version": "4.0.0"
+                },
+                "createdAt": "2026-07-31T22:16:14Z",
+                "mnxSchema": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/27",
+                "mnxdom": {
+                    "commit": "45bf462",
+                    "version": "3.1.0"
+                },
+                "provenanceSchemaVersion": 1,
+                "source": {
+                    "filename": "tupletSimple.enigmaxml",
+                    "format": "enigmaxml"
+                }
             }
         },
         "support": {
             "useBeams": true
         },
-        "version": 4
+        "version": 27
     },
     "parts": [
         {
@@ -70,6 +85,7 @@
                             }
                         }
                     ],
+                    "id": "P1.m1",
                     "sequences": [
                         {
                             "content": [
@@ -144,6 +160,7 @@
                                     "type": "tuplet"
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]

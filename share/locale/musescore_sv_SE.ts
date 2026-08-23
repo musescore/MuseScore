@@ -9703,12 +9703,12 @@ följda av bindestreck</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation type="unfinished"/>
+        <translation>Importera lj&amp;ud till dokumentet ...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation type="unfinished"/>
+        <translation>Importera ljud till dokumentet ...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>
@@ -10772,7 +10772,7 @@ Utgiven i enlighet med &lt;a href=&quot;%1&quot;&gt;GNU General Public License v
         <location filename="../../src/engraving/dom/capo.cpp" line="168"/>
         <source>Partial capo:
 Fret %1 on strings %2</source>
-        <translation>Delvis capotasto:
+        <translation>Partiellt capotasto:
 Band %1 på strängar %2</translation>
     </message>
     <message>
@@ -10960,7 +10960,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1298"/>
         <source>partial barré %1 %2 %3</source>
-        <translation>delvis barré %1 %2 %3</translation>
+        <translation>partiell barré %1 %2 %3</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1307"/>
@@ -11437,22 +11437,22 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8041"/>
         <source>Remove invalid incoming partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort ogiltig avslutande partiell legatobåge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8049"/>
         <source>Reset incoming partial slur</source>
-        <translation>Återställ avslutande partiell bindebåge</translation>
+        <translation>Återställ avslutande partiell legatobåge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8064"/>
         <source>Remove invalid outgoing partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort ogiltig inledande partiell legatobåge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8072"/>
         <source>Reset outgoing partial slur</source>
-        <translation>Återställ påbörjande partiell legatobåge</translation>
+        <translation>Återställ inledande partiell legatobåge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -26795,7 +26795,7 @@ Därutöver mönstrar Bemästra MuseScore en stödjande gemenskap av musiker, me
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="109"/>
         <source>Search sounds</source>
-        <translation type="unfinished"/>
+        <translation>Sök ljud</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="197"/>
@@ -35328,7 +35328,7 @@ misslyckades: %2</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="477"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="609"/>
         <source>Please try again later, or get help for this problem on MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Var vänlig och försök senare, eller få hjälp med detta problem på MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="493"/>
@@ -38096,7 +38096,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6922"/>
         <source>Add partial lyrics dash</source>
-        <translation>Lägg till partiell sångtextlinje</translation>
+        <translation>Lägg till partiellt sångtextbindestreck</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7126"/>

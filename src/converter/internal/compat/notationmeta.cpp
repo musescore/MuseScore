@@ -35,8 +35,11 @@
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "project/inotationproject.h"
+#include "project/iprojectaudiosettings.h"
 
 #include "log.h"
 

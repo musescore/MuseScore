@@ -32,7 +32,6 @@ namespace mu::notation {
 using NoteInputState = mu::engraving::InputState;
 using NoteInputMethod = mu::engraving::NoteEntryMethod;
 using NoteInputParams = mu::engraving::NoteInputParams;
-using Pad = mu::engraving::Pad;
 using PitchMode = mu::engraving::UpDownMode;
 
 using NoteVal = mu::engraving::NoteVal;
@@ -45,16 +44,20 @@ enum class NoteAddingMode : unsigned char
     InsertChord
 };
 
+static const std::map<std::string, NoteAddingMode> STR_NOTE_ADDING_MODE = {
+    { "current", NoteAddingMode::CurrentChord },
+    { "next", NoteAddingMode::NextChord },
+    { "insert", NoteAddingMode::InsertChord },
+};
+
 inline NoteAddingMode str_conv(const std::string& mode, NoteAddingMode def)
 {
-    if (mode == "current") {
-        return NoteAddingMode::CurrentChord;
-    } else if (mode == "next") {
-        return NoteAddingMode::NextChord;
-    } else if (mode == "insert") {
-        return NoteAddingMode::InsertChord;
-    }
-    return def;
+    return muse::value(STR_NOTE_ADDING_MODE, mode, def);
+}
+
+inline std::string str_conv(NoteAddingMode mode)
+{
+    return muse::key(STR_NOTE_ADDING_MODE, mode);
 }
 
 struct TupletOptions

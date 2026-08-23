@@ -30,6 +30,7 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
+#include "notation/inotation.h"
 #include "notation/inotationundostack.h"
 #include "notationscene/notationcommands.h"
 
@@ -312,7 +313,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
         makeMenuItem("toggle-percussion-panel"),
-        makeMenuItem("command://playback/show-playback-setup"),
+        makeMenuItem("command://playback/open-playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
@@ -563,8 +564,8 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 #endif
 
         MenuItemList audioItems {
-            makeMenuItem("action://audio/dev/use-drivermode"),
-            makeMenuItem("action://audio/dev/use-hybridmode"),
+            makeMenuItem("command://audio/dev/use-driver-mode"),
+            makeMenuItem("command://audio/dev/use-hybrid-mode"),
         };
 
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
@@ -692,7 +693,7 @@ MenuItemList AppMenuModel::makeTupletsItems()
         makeMenuItem(notation::ADD_SEPTUPLET_COMMAND),
         makeMenuItem(notation::ADD_OCTUPLET_COMMAND),
         makeMenuItem(notation::ADD_NONUPLET_COMMAND),
-        makeMenuItem(notation::SHOW_TUPLET_CONFIGURE_COMMAND)
+        makeMenuItem(notation::OPEN_TUPLET_CONFIGURE_COMMAND)
     };
 
     return items;

@@ -48,6 +48,9 @@
                 "id": "m7"
             },
             {
+                "barline": {
+                    "type": "short"
+                },
                 "id": "m8"
             },
             {
@@ -143,14 +146,29 @@
     ],
     "mnx": {
         "_x": {
-            "schemaVersion": {
-                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            "mnxdom": {
+                "client": {
+                    "commit": "cb7c616c47a7",
+                    "name": "denigma",
+                    "version": "4.0.0"
+                },
+                "createdAt": "2026-07-31T22:16:07Z",
+                "mnxSchema": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/27",
+                "mnxdom": {
+                    "commit": "45bf462",
+                    "version": "3.1.0"
+                },
+                "provenanceSchemaVersion": 1,
+                "source": {
+                    "filename": "barlineTypesOriginal.enigmaxml",
+                    "format": "enigmaxml"
+                }
             }
         },
         "support": {
             "useBeams": true
         },
-        "version": 4
+        "version": 27
     },
     "parts": [
         {
@@ -166,33 +184,43 @@
                             }
                         }
                     ],
+                    "id": "P1.m1",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m2",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m3",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m4",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m5",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m6",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m7",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m8",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m9",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m10",
                     "sequences": []
                 }
             ]

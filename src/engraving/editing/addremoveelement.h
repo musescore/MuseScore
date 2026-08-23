@@ -103,7 +103,7 @@ public:
 
     UNDO_TYPE(CommandType::ChangeParent)
     UNDO_NAME("ChangeParent")
-    UNDO_CHANGED_OBJECTS({ element })
+    UNDO_CHANGED_OBJECTS({ element, parent })
 };
 
 class ChangeSegmentParent : public UndoableCommand

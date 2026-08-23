@@ -35,12 +35,14 @@
 #include "notation/inotationplayback.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "notation/types/viewmode.h"
 
 #include "playback/iplaybackcontroller.h"
 
 #include "global/iglobalconfiguration.h"
 #include "ui/idragcontroller.h"
 #include "ui/iuiconfiguration.h"
+#include "rcommand/icommanddispatcher.h"
 
 #include "abstractelementpopupmodel.h"
 
@@ -97,6 +99,7 @@ public:
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::ui::IDragController> dragController = { this };

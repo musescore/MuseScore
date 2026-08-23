@@ -25,6 +25,7 @@
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/realizedharmony.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h" // IWYU pragma: keep
 

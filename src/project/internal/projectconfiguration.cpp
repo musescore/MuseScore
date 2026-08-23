@@ -29,7 +29,9 @@
 #include "settings.h"
 
 #include "engraving/infrastructure/mscio.h"
-#include "project/internal/notationproject.h"
+
+#include "internal/notationproject.h"
+#include "types/projectmeta.h"
 
 #include "log.h"
 

@@ -24,17 +24,19 @@
 #include <unordered_map>
 
 #include "types/translatablestring.h"
-#include "ui/view/iconcodes.h"
-#include "context/shortcutcontext.h"
-#include "notation/inotationinteraction.h"
-#include "notation/inotationselection.h"
-#include "notation/inotationautomation.h"
-#include "notation/inotationstyle.h"
-#include "notation/inotation.h"
-#include "notation/inotationnoteinput.h"
-#include "notation/inotationundostack.h"
 
-#include "engraving/style/styledef.h"
+#include "ui/view/iconcodes.h"
+
+#include "context/shortcutcontext.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationautomation.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu;
 using namespace mu::notation;
@@ -177,16 +179,6 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_DISABLED
              ),
 
-    UiAction("put-note", // args: PointF pos, bool replace, bool insert
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Put note")
-             ),
-    UiAction("remove-note", // args: PointF pos
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Remove note")
-             ),
     UiAction("next-element",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
@@ -1645,12 +1637,6 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Accessibility: Get location"),
              TranslatableString("action", "Accessibility: get location")
              ),
-    UiAction("edit-element",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Edit element"),
-             TranslatableString("action", "Edit element")
-             ),
     UiAction("select-prev-measure",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -1758,6 +1744,13 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Lock/unlock selected system(s)"),
              TranslatableString("action", "Lock/unlock selected system(s)"),
              IconCode::Code::SYSTEM_LOCK
+             ),
+    UiAction("toggle-page-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Lock/unlock selected page(s)"),
+             TranslatableString("action", "Lock/unlock selected page(s)"),
+             IconCode::Code::PAGE_LOCK
              ),
     UiAction("enh-both",
              mu::context::UiCtxProjectOpened,
@@ -2928,7 +2921,7 @@ void NotationUiActions::init()
         }
 
         m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
-        m_controller->currentNotationStyleChanged().onNotify(this, [this]() {
+        m_controller->notationStyleChanged().onNotify(this, [this]() {
             m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         }, Asyncable::Mode::SetReplace);
     });
@@ -3016,22 +3009,22 @@ bool NotationUiActions::isScoreConfigAction(const ActionCode& code) const
 bool NotationUiActions::isScoreConfigChecked(const ActionCode& code, const ScoreConfig& cfg) const
 {
     if (SHOW_INVISIBLE_CODE == code) {
-        return cfg.isShowInvisibleElements;
+        return cfg.isShown(ScoreConfigType::ShowInvisibleElements);
     }
     if (SHOW_UNPRINTABLE_CODE == code) {
-        return cfg.isShowUnprintableElements;
+        return cfg.isShown(ScoreConfigType::ShowUnprintableElements);
     }
     if (SHOW_FRAMES_CODE == code) {
-        return cfg.isShowFrames;
+        return cfg.isShown(ScoreConfigType::ShowFrames);
     }
     if (SHOW_PAGEBORDERS_CODE == code) {
-        return cfg.isShowPageMargins;
+        return cfg.isShown(ScoreConfigType::ShowPageMargins);
     }
     if (SHOW_SOUND_FLAGS == code) {
-        return cfg.isShowSoundFlags;
+        return cfg.isShown(ScoreConfigType::ShowSoundFlags);
     }
     if (SHOW_IRREGULAR_CODE == code) {
-        return cfg.isMarkIrregularMeasures;
+        return cfg.isShown(ScoreConfigType::MarkIrregularMeasures);
     }
 
     return false;
@@ -3047,7 +3040,7 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
     }
 
     if (act.code == TOGGLE_CONCERT_PITCH_CODE) {
-        auto style = m_controller->currentNotationStyle();
+        auto style = m_controller->notationStyle();
         if (style) {
             return style->styleValue(StyleId::concertPitch).toBool();
         }

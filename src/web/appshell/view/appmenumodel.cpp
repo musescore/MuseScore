@@ -137,8 +137,8 @@ MenuItem* AppMenuModel::makeEditMenu()
         makeMenuItem("notation-swap"),
         makeMenuItem("command://notation/delete"),
         makeSeparator(),
-        makeMenuItem("notation-select-all"),
-        makeMenuItem("notation-select-section"),
+        makeMenuItem("command://notation/select-all"),
+        makeMenuItem("command://notation/select-section"),
         makeMenuItem("find"),
     };
 
@@ -357,7 +357,7 @@ MenuItemList AppMenuModel::makeTupletsItems()
         makeMenuItem(notation::ADD_SEPTUPLET_COMMAND),
         makeMenuItem(notation::ADD_OCTUPLET_COMMAND),
         makeMenuItem(notation::ADD_NONUPLET_COMMAND),
-        makeMenuItem(notation::SHOW_TUPLET_CONFIGURE_COMMAND)
+        makeMenuItem(notation::OPEN_TUPLET_CONFIGURE_COMMAND)
     };
 
     return items;

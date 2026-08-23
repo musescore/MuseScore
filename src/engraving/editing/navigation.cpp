@@ -924,7 +924,13 @@ EngravingItem* Score::nextElement()
         case ElementType::SYSTEM_LOCK_INDICATOR:
         {
             staffId = 0;
-            e = toSystemLockIndicator(e)->systemLock()->endMB();
+            SystemLockIndicator* sli = toSystemLockIndicator(e);
+            System* system = sli->system();
+            if (system && system->pageLockIndicator()) {
+                return system->pageLockIndicator();
+            } else {
+                e = toSystemLockIndicator(e)->systemLock()->endMB();
+            }
             continue;
         }
         case ElementType::PAGE_LOCK_INDICATOR:
@@ -1185,7 +1191,13 @@ EngravingItem* Score::prevElement()
         case ElementType::PAGE_LOCK_INDICATOR:
         {
             staffId = 0;
-            e = toPageLockIndicator(e)->pageLock()->endMB();
+            PageLockIndicator* pli = toPageLockIndicator(e);
+            System* system = pli->system();
+            if (system && !system->systemLockIndicators().empty()) {
+                return system->systemLockIndicators().front();
+            } else {
+                e = toPageLockIndicator(e)->pageLock()->endMB();
+            }
             continue;
         }
         case ElementType::HARMONY: {

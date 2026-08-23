@@ -100,6 +100,7 @@
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <subtype>1</subtype>
             <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -146,6 +147,7 @@
         <eid>Q_Q</eid>
         <voice>
           <TimeSig>
+            <subtype>2</subtype>
             <eid>R_R</eid>
             <sigN>2</sigN>
             <sigD>2</sigD>

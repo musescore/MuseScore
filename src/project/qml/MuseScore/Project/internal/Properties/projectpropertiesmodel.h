@@ -32,6 +32,8 @@
 #include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
 
+#include "types/projectmeta.h"
+
 namespace mu::project {
 class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatus, public muse::Contextable
 {

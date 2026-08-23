@@ -30,6 +30,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h" // IWYU pragma: keep

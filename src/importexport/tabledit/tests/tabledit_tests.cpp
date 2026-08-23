@@ -70,6 +70,10 @@ TEST_F(TablEdit_Tests, tef_dynamic) {
     tefReadTest("dynamic");
 }
 
+TEST_F(TablEdit_Tests, tef_effects) {
+    tefReadTest("effects");
+}
+
 TEST_F(TablEdit_Tests, tef_fingerings_1) {
     tefReadTest("fingerings_1");
 }

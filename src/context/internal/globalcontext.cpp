@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "globalcontext.h"
 
 #include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "project/inotationproject.h"
 
 using namespace mu::context;
 using namespace mu::project;
