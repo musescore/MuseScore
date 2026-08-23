@@ -443,7 +443,7 @@ TranslatableString SpannerSegment::subtypeUserName() const
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(const ElementType& type, EngravingItem* parent, ElementFlags f)
+Spanner::Spanner(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
 }

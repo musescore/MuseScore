@@ -321,7 +321,7 @@ public:
 private:
 
     friend class Factory;
-    FiguredBass(Segment* parent = 0);
+    FiguredBass(DummyParentOr<Segment> parent);
     FiguredBass(const FiguredBass&);
 
     Sid getPropertyStyle(Pid) const override;

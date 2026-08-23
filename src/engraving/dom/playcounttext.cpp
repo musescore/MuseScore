@@ -36,7 +36,7 @@ static ElementStyle playCountStyle {
     { Sid::repeatPlayCountMinDistance, Pid::MIN_DISTANCE },
 };
 
-PlayCountText::PlayCountText(Segment* parent, TextStyleType tid)
+PlayCountText::PlayCountText(DummyParentOr<Segment> parent, TextStyleType tid)
     : TextBase(ElementType::PLAY_COUNT_TEXT, parent, tid, ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&playCountStyle);

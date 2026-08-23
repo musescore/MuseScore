@@ -99,11 +99,11 @@ class Tuplet final : public DurationElement
     DECLARE_CLASSOF(ElementType::TUPLET)
 
 public:
-    Tuplet(Measure* parent);
+    Tuplet(DummyParentOr<Measure> parent);
     Tuplet(const Tuplet&);
     ~Tuplet();
 
-    void setOwnershipParent(Measure* parent);
+    void setOwnershipParent(DummyParentOr<Measure> parent);
 
     Tuplet* clone() const override { return new Tuplet(*this); }
     void setTrack(track_idx_t val) override;

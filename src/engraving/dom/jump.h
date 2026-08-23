@@ -46,7 +46,7 @@ class Jump final : public TextBase
 
 public:
 
-    Jump(Measure* parent);
+    Jump(DummyParentOr<Measure> parent);
 
     void setJumpType(JumpType t);
     JumpType jumpType() const;

@@ -47,7 +47,7 @@ public:
 private:
     friend class Factory;
 
-    ChordBracket(Chord* parent);
+    ChordBracket(DummyParentOr<Chord> parent);
 
     Spatium m_hookLength = Spatium(1);
     DirectionV m_hookPos = DirectionV::AUTO; // AUTO == both up and down hooks

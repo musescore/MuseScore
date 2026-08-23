@@ -27,7 +27,7 @@
 #include "types/typesconv.h"
 
 namespace mu::engraving {
-Tapping::Tapping(ChordRest* parent)
+Tapping::Tapping(DummyParentOr<ChordRest> parent)
     : Articulation(parent, ElementType::TAPPING)
 {
 }

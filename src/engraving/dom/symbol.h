@@ -49,8 +49,8 @@ class Symbol : public BSymbol
     DECLARE_CLASSOF(ElementType::SYMBOL)
 
 public:
-    Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
-    Symbol(EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(const ElementType& type, EngravingObject* parent, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(EngravingObject* parent, ElementFlags f = ElementFlag::MOVABLE);
     Symbol(const Symbol&);
 
     Symbol& operator=(const Symbol&) = delete;

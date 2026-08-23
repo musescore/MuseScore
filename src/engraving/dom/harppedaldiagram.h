@@ -49,7 +49,7 @@ class HarpPedalDiagram final : public TextBase
     DECLARE_CLASSOF(ElementType::HARP_DIAGRAM)
 
 public:
-    HarpPedalDiagram(Segment* parent);
+    HarpPedalDiagram(DummyParentOr<Segment> parent);
     HarpPedalDiagram(const HarpPedalDiagram& h);
 
     HarpPedalDiagram* clone() const override { return new HarpPedalDiagram(*this); }

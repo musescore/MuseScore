@@ -284,7 +284,7 @@ public:
 
 protected:
 
-    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const ElementType& type, EngravingObject* parent, ElementFlags = ElementFlag::NOTHING);
     Spanner(const Spanner&);
 
     virtual void doComputeStartElement();

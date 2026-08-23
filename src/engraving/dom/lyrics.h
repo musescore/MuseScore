@@ -110,7 +110,7 @@ public:
 private:
 
     friend class Factory;
-    Lyrics(ChordRest* parent);
+    Lyrics(DummyParentOr<ChordRest> parent);
     Lyrics(const Lyrics&);
 
     int m_verse = 0;              // row index

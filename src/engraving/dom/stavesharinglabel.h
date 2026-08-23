@@ -30,7 +30,7 @@ class StaveSharingLabel final : public StaffTextBase
     DECLARE_CLASSOF(ElementType::STAVE_SHARING_LABEL)
 
 public:
-    StaveSharingLabel(Segment* parent = nullptr, TextStyleType tid = TextStyleType::STAVE_SHARING);
+    StaveSharingLabel(DummyParentOr<Segment> parent, TextStyleType tid = TextStyleType::STAVE_SHARING);
 
     bool isEditAllowed(EditData&) const override { return false; }
 

@@ -571,7 +571,7 @@ void MoveElementAnchors::rebaseOffsetOnMoveSegment(EngravingItem* element, const
  * TimeTickAnchor
  * *****************************************/
 
-TimeTickAnchor::TimeTickAnchor(Segment* parent)
+TimeTickAnchor::TimeTickAnchor(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::TIME_TICK_ANCHOR, parent,
                     ElementFlag::ON_STAFF
                     | ElementFlag::NOT_SELECTABLE

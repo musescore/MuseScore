@@ -31,7 +31,7 @@
 #include "system.h"
 
 namespace mu::engraving {
-PageLockIndicator::PageLockIndicator(System* parent, const RangeLock* lock)
+PageLockIndicator::PageLockIndicator(DummyParentOr<System> parent, const RangeLock* lock)
     : IndicatorIcon(ElementType::PAGE_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_pageLock(lock) {}
 
 void PageLockIndicator::setSelected(bool v)

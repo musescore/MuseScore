@@ -42,7 +42,7 @@ namespace mu::engraving {
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f)
+BSymbol::BSymbol(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
     m_align = { AlignH::LEFT, AlignV::BASELINE };

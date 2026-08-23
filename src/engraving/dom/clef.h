@@ -166,7 +166,7 @@ public:
 private:
 
     friend class Factory;
-    Clef(Segment* parent);
+    Clef(DummyParentOr<Segment> parent);
 
     bool m_showCourtesy = true;
     bool m_isSmall = false;

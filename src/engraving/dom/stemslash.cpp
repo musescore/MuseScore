@@ -29,7 +29,7 @@
 using namespace mu;
 
 namespace mu::engraving {
-StemSlash::StemSlash(Chord* parent)
+StemSlash::StemSlash(DummyParentOr<Chord> parent)
     : EngravingItem(ElementType::STEM_SLASH, parent)
 {
 }

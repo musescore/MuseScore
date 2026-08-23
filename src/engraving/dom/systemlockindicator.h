@@ -33,7 +33,7 @@ class SystemLockIndicator : public IndicatorIcon
     DECLARE_CLASSOF(ElementType::SYSTEM_LOCK_INDICATOR)
 
 public:
-    SystemLockIndicator(System* parent, const RangeLock* lock);
+    SystemLockIndicator(DummyParentOr<System> parent, const RangeLock* lock);
 
     void setSelected(bool v) override;
 

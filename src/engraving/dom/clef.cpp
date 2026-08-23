@@ -96,11 +96,12 @@ const ClefInfo ClefInfo::clefTable[] = {
 //   Clef
 //---------------------------------------------------------
 
-Clef::Clef(Segment* parent)
+Clef::Clef(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF)
 {
     m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
-    m_isHeader = parent->isHeaderClefType();
+    const Segment* segment = parent.as<Segment>();
+    m_isHeader = segment && segment->isHeaderClefType();
 }
 
 //---------------------------------------------------------

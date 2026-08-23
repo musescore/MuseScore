@@ -45,7 +45,7 @@ class TripletFeel final : public SystemText
     DECLARE_CLASSOF(ElementType::TRIPLET_FEEL)
 
 public:
-    TripletFeel(Segment* parent = nullptr, TripletFeelType tripletFillType = TripletFeelType::NONE);
+    TripletFeel(DummyParentOr<Segment> parent, TripletFeelType tripletFillType = TripletFeelType::NONE);
     void setTripletProperty();
 
     TripletFeel* clone() const override { return new TripletFeel(*this); }

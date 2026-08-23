@@ -36,7 +36,7 @@ class MeasureRepeat final : public Rest
     DECLARE_CLASSOF(ElementType::MEASURE_REPEAT)
 
 public:
-    MeasureRepeat(Segment* parent);
+    MeasureRepeat(DummyParentOr<Segment> parent);
     MeasureRepeat(const MeasureRepeat&) = default;
     MeasureRepeat& operator=(const MeasureRepeat&) = delete;
 

@@ -88,6 +88,7 @@
 #include "dom/stafftext.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
+#include "dom/system.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
 #include "dom/tempotext.h"

@@ -39,7 +39,7 @@ static const ElementStyle stemStyle {
     { Sid::stemWidth, Pid::LINE_WIDTH }
 };
 
-Stem::Stem(Chord* parent)
+Stem::Stem(DummyParentOr<Chord> parent)
     : EngravingItem(ElementType::STEM, parent)
 {
     initElementStyle(&stemStyle);

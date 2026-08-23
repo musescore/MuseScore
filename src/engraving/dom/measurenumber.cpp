@@ -42,7 +42,7 @@ static const ElementStyle measureNumberStyle {
 //   MeasureNumber
 //---------------------------------------------------------
 
-MeasureNumber::MeasureNumber(Measure* parent, TextStyleType tid)
+MeasureNumber::MeasureNumber(DummyParentOr<Measure> parent, TextStyleType tid)
     : MeasureNumberBase(ElementType::MEASURE_NUMBER, parent, tid)
 {
     initElementStyle(&measureNumberStyle);

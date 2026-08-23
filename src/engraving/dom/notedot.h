@@ -50,7 +50,7 @@ public:
 
 private:
     friend class Factory;
-    NoteDot(Note* parent);
+    NoteDot(DummyParentOr<Note> parent);
     NoteDot(Rest* parent);
 };
 } // namespace mu::engraving
