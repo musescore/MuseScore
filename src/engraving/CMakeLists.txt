@@ -328,8 +328,6 @@ target_sources(engraving PRIVATE
     compat/pageformat.h
     compat/writescorehook.cpp
     compat/writescorehook.h
-    compat/dummyelement.cpp
-    compat/dummyelement.h
     compat/engravingcompat.cpp
     compat/engravingcompat.h
 

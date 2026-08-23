@@ -78,6 +78,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/deadslapped.h
     ${CMAKE_CURRENT_LIST_DIR}/drumset.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drumset.h
+    ${CMAKE_CURRENT_LIST_DIR}/dummyparent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dummyparent.h
     ${CMAKE_CURRENT_LIST_DIR}/durationelement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationelement.h
     ${CMAKE_CURRENT_LIST_DIR}/durationtype.cpp

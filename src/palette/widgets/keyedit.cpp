@@ -32,9 +32,9 @@
 #include "modularity/ioc.h"
 #include "translation.h"
 
-#include "engraving/compat/dummyelement.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/dummyparent.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/masterscore.h"

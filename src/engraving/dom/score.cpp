@@ -52,7 +52,6 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "compat/dummyelement.h"
 
 #include "iengravingfont.h"
 #include "types/translatablestring.h"
@@ -65,6 +64,7 @@
 #include "capo.h"
 #include "chord.h"
 #include "clef.h"
+#include "dummyparent.h"
 #include "excerpt.h"
 #include "factory.h"
 #include "glissando.h"
@@ -184,7 +184,7 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     m_rootItem = new RootItem(this);
     m_rootItem->init();
 
-    m_dummy = new compat::DummyElement(this);
+    m_dummy = new DummyParent(this);
     m_dummy->init();
 
     createPaddingTable();

@@ -32,6 +32,7 @@
 #include "types/typesconv.h"
 
 #include "bracketitem.h"
+#include "dummyparent.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"

@@ -28,7 +28,7 @@
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
-#include "compat/dummyelement.h"
+#include "dom/dummyparent.h"
 
 #include "dom/factory.h"
 
@@ -312,7 +312,7 @@ std::shared_ptr<IEngravingFont> SingleLayout::Context::engravingFont() const
     return m_score->engravingFont();
 }
 
-compat::DummyElement* SingleLayout::Context::dummyParent() const
+DummyParent* SingleLayout::Context::dummyParent() const
 {
     return m_score->dummy();
 }

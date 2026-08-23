@@ -419,7 +419,7 @@ MeasureBase* DomAccessor::first()
     return score()->first();
 }
 
-compat::DummyElement* DomAccessor::dummyParent() const
+DummyParent* DomAccessor::dummyParent() const
 {
     IF_ASSERT_FAILED(score()) {
         return nullptr;
