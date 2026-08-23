@@ -186,7 +186,7 @@ void Symbol::reset()
 //   FSymbol
 //---------------------------------------------------------
 
-FSymbol::FSymbol(EngravingItem* parent)
+FSymbol::FSymbol(DummyParentOr<EngravingItem> parent)
     : BSymbol(ElementType::FSYMBOL, parent)
 {
     m_code = 0;

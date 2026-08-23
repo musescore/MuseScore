@@ -24,14 +24,10 @@
 #include "rootitem.h"
 #include "score.h"
 
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "../accessibility/accessibleitem.h"
-#endif
-
 using namespace mu::engraving;
 
-DummyParent::DummyParent(EngravingObject* parent)
-    : EngravingItem(ElementType::DUMMY, parent)
+DummyParent::DummyParent(Score* score)
+    : EngravingObject(ElementType::DUMMY, score)
 {
 }
 
@@ -42,33 +38,9 @@ DummyParent::~DummyParent()
 
 void DummyParent::init()
 {
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    setupAccessible();
-#endif
-
-    m_root = new RootItem(score());
-    m_root->setOwnershipParent(this);
+    m_root = new RootItem(score(), RootItem::Kind::Dummy);
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     m_root->setupAccessible();
 #endif
 }
-
-RootItem* DummyParent::rootItem()
-{
-    return m_root;
-}
-
-EngravingItem* DummyParent::clone() const
-{
-    return nullptr;
-}
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-AccessibleItemPtr DummyParent::createAccessible()
-{
-    using namespace muse::accessibility;
-    return std::make_shared<AccessibleItem>(this, IAccessible::Group);
-}
-
-#endif

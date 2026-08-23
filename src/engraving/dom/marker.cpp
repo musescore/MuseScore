@@ -65,13 +65,13 @@ const std::vector<MarkerTypeTableItem> markerTypeTable {
 //   Marker
 //---------------------------------------------------------
 
-Marker::Marker(EngravingItem* parent)
+Marker::Marker(DummyParentOr<EngravingItem> parent)
     : Marker(parent, TextStyleType::REPEAT_LEFT)
 {
     resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
-Marker::Marker(EngravingItem* parent, TextStyleType tid)
+Marker::Marker(DummyParentOr<EngravingItem> parent, TextStyleType tid)
     : TextBase(ElementType::MARKER, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);

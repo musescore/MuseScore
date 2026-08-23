@@ -212,6 +212,7 @@ enum class Pid : short;
 enum class PropertyFlags : char;
 
 using EngravingObjectList = std::vector<EngravingObject*>;
+using EngravingItemList = std::vector<EngravingItem*>;
 
 //! Parameter type for a parent that is either a real parent of one of the given types,
 //! or the dummy, i.e. no parent at all. It holds nothing but the pointer and makes no
@@ -279,6 +280,7 @@ public:
 
     const EngravingObjectList& children() const { return m_children; }
 
+    EngravingItemList childrenItems(bool all = false) const;
     std::vector<EngravingItem*> getChildren(bool includeInvisible = true) const;
     virtual void scanElements(std::function<void(EngravingItem*)>) {}
 

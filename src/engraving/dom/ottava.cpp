@@ -227,7 +227,7 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 //   Ottava
 //---------------------------------------------------------
 
-Ottava::Ottava(EngravingItem* parent)
+Ottava::Ottava(DummyParentOr<EngravingItem> parent)
     : TextLineBase(ElementType::OTTAVA, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     m_ottavaType  = OttavaType::OTTAVA_8VA;

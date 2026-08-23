@@ -75,7 +75,7 @@ public:
     static constexpr double GLISS_PALETTE_WIDTH = 4.0;
     static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
 
-    Glissando(EngravingItem* parent);
+    Glissando(DummyParentOr<EngravingItem> parent);
     Glissando(const Glissando&);
 
     Anchor anchor() const override { return Anchor::NOTE; }

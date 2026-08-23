@@ -65,7 +65,7 @@ public:
     static const String PEDAL_SYMBOL;
     static const String STAR_SYMBOL;
 
-    Pedal(EngravingItem* parent);
+    Pedal(DummyParentOr<EngravingItem> parent);
 
     Pedal* clone() const override { return new Pedal(*this); }
 

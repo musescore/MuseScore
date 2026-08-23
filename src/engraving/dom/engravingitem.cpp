@@ -68,6 +68,7 @@
 #include "page.h"
 #include "parenthesis.h"
 #include "part.h"
+#include "rootitem.h"
 #include "score.h"
 #include "segment.h"
 #include "shape.h"
@@ -169,18 +170,17 @@ void EngravingItem::setAccessibleEnabled(bool enabled)
 
 EngravingItem* EngravingItem::accessibleParentItem() const
 {
-    EngravingItem* p = layoutParent();
-    if (p) {
+    if (EngravingItem* p = layoutParent()) {
         return p;
     }
 
-    // fall back to the raw parent, so that e.g. palette items reach the dummy
-    EngravingObject* raw = parent();
-    if (raw && raw->isEngravingItem()) {
+    // embedded in an item without being owned by it, e.g. a grace notes group
+    if (EngravingObject* raw = parent(); raw && raw->isEngravingItem()) {
         return toEngravingItem(raw);
     }
 
-    return nullptr;
+    // not placed anywhere, so not in the score's tree: head of the dummy's tree instead
+    return score() && score()->dummy() ? score()->dummy()->rootItem() : nullptr;
 }
 
 EngravingItemList EngravingItem::accessibleChildren() const
@@ -201,26 +201,6 @@ EngravingItem* EngravingItem::ownershipParentItem() const
 EngravingItem* EngravingItem::layoutParent() const
 {
     return ownershipParentItem();
-}
-
-static void collectChildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)
-{
-    for (EngravingObject* ch : item->children()) {
-        if (ch->isEngravingItem()) {
-            list.push_back(toEngravingItem(ch));
-
-            if (all) {
-                collectChildrenItems(ch, list, all);
-            }
-        }
-    }
-}
-
-EngravingItemList EngravingItem::childrenItems(bool all) const
-{
-    EngravingItemList list;
-    collectChildrenItems(this, list, all);
-    return list;
 }
 
 const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const

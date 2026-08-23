@@ -33,7 +33,7 @@ namespace mu::engraving {
 //   LedgerLine
 //---------------------------------------------------------
 
-LedgerLine::LedgerLine(EngravingItem* s)
+LedgerLine::LedgerLine(DummyParentOr<EngravingItem> s)
     : EngravingItem(ElementType::LEDGER_LINE, s, ElementFlag::ON_STAFF)
 {
     setSelectable(false);

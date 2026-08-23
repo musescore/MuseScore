@@ -36,7 +36,7 @@ class Text final : public TextBase
     DECLARE_CLASSOF(ElementType::TEXT)
 
 public:
-    Text(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT);
+    Text(DummyParentOr<EngravingItem> parent, TextStyleType tid = TextStyleType::DEFAULT);
     Text* clone() const override { return new Text(*this); }
 
     EngravingObject* propertyDelegate(Pid) const override;
