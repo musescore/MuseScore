@@ -644,7 +644,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 //   F I G U R E D   B A S S
 //---------------------------------------------------------
 
-FiguredBass::FiguredBass(Segment* parent)
+FiguredBass::FiguredBass(DummyParentOr<Segment> parent)
     : TextBase(ElementType::FIGURED_BASS, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&figuredBassStyle);

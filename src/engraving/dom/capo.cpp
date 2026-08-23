@@ -33,7 +33,7 @@ static const ElementStyle CAPO_STYLE {
     { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
 };
 
-Capo::Capo(Segment* parent, TextStyleType textStyleType)
+Capo::Capo(DummyParentOr<Segment> parent, TextStyleType textStyleType)
     : StaffTextBase(ElementType::CAPO, parent, textStyleType, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&CAPO_STYLE);

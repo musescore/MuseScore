@@ -23,6 +23,7 @@
 #include "tuplethandler.h"
 
 #include "engraving/dom/factory.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/types/fraction.h"
 

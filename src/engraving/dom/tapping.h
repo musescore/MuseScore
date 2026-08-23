@@ -72,7 +72,7 @@ public:
 
 protected:
     friend class mu::engraving::Factory;
-    Tapping(ChordRest* parent);
+    Tapping(DummyParentOr<ChordRest> parent);
 
 private:
     TappingHand m_hand = TappingHand::INVALID;

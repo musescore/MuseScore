@@ -49,7 +49,7 @@ class PartialTie : public Tie
     M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::OUTGOING)
 
 public:
-    PartialTie(Note* parent);
+    PartialTie(DummyParentOr<Note> parent);
 
     Note* parentNote() const { return parent() ? toNote(parent()) : nullptr; }
 

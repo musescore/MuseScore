@@ -77,7 +77,7 @@ namespace mu::engraving {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(const ElementType& type, Segment* parent)
+ChordRest::ChordRest(const ElementType& type, DummyParentOr<Segment> parent)
     : DurationElement(type, parent)
 {
     m_staffMove    = 0;

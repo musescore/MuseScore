@@ -221,7 +221,7 @@ double TieSegment::dottedWidth() const
 //   Tie
 //---------------------------------------------------------
 
-Tie::Tie(const ElementType& type, EngravingItem* parent)
+Tie::Tie(const ElementType& type, EngravingObject* parent)
     : SlurTie(type, parent)
 {
 }
@@ -371,7 +371,7 @@ const TieJumpPointList* Tie::tieJumpPoints() const
     return startNote() ? startNote()->tieJumpPoints() : nullptr;
 }
 
-Tie::Tie(EngravingItem* parent)
+Tie::Tie(EngravingObject* parent)
     : SlurTie(ElementType::TIE, parent)
 {
 }

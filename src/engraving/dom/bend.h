@@ -96,7 +96,7 @@ public:
 private:
     friend class Factory;
 
-    Bend(Note* parent);
+    Bend(DummyParentOr<Note> parent);
 
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);

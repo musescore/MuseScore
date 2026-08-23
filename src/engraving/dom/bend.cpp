@@ -77,7 +77,7 @@ static const PitchValues PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
 //   Bend
 //---------------------------------------------------------
 
-Bend::Bend(Note* parent)
+Bend::Bend(DummyParentOr<Note> parent)
     : EngravingItem(ElementType::BEND, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&bendStyle);

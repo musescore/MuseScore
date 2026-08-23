@@ -281,7 +281,7 @@ std::vector<int> Chord::noteDistances() const
 //   Chord
 //---------------------------------------------------------
 
-Chord::Chord(Segment* parent)
+Chord::Chord(DummyParentOr<Segment> parent)
     : ChordRest(ElementType::CHORD, parent)
 {
     m_stem             = 0;
@@ -2797,8 +2797,8 @@ Note* Chord::firstGraceOrNote()
 // GRACE NOTES
 //---------------------------------
 
-GraceNotesGroup::GraceNotesGroup(Chord* c)
-    : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c) {}
+GraceNotesGroup::GraceNotesGroup(DummyParentOr<Chord> c)
+    : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c.as<Chord>()) {}
 
 void GraceNotesGroup::setPos(double x, double y)
 {

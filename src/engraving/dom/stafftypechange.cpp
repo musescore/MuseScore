@@ -35,7 +35,7 @@ using namespace mu::engraving;
 //   StaffTypeChange
 //---------------------------------------------------------
 
-StaffTypeChange::StaffTypeChange(MeasureBase* parent)
+StaffTypeChange::StaffTypeChange(DummyParentOr<MeasureBase> parent)
     : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent)
 {
     m_lw = spatium() * 0.3;

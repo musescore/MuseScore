@@ -214,7 +214,7 @@ EngravingObject* TextLineBaseSegment::propertyDelegate(Pid pid) const
 //   TextLineBase
 //---------------------------------------------------------
 
-TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
+TextLineBase::TextLineBase(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : SLine(type, parent, f)
 {
     setBeginHookHeight(1.9_sp);

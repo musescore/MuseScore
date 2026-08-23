@@ -87,7 +87,7 @@ class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
     OBJECT_ALLOCATOR(engraving, GraceNotesGroup)
 public:
     GraceNotesGroup* clone() const override { return new GraceNotesGroup(*this); }
-    GraceNotesGroup(Chord* c);
+    GraceNotesGroup(DummyParentOr<Chord> c);
 
     Chord* parent() const { return _parent; }
 
@@ -386,7 +386,7 @@ private:
 
     friend class Factory;
 
-    Chord(Segment* parent = 0);
+    Chord(DummyParentOr<Segment> parent);
     Chord(const Chord&, bool link = false);
 
     // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed

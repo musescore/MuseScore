@@ -103,7 +103,7 @@ private:
 
     friend class Factory;
 
-    ChordLine(Chord* parent);
+    ChordLine(DummyParentOr<Chord> parent);
     ChordLine(const ChordLine&);
 
     bool m_straight = false;

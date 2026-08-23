@@ -40,7 +40,7 @@ class LayoutBreak final : public EngravingItem
 
 public:
 
-    void setOwnershipParent(MeasureBase* parent);
+    void setOwnershipParent(DummyParentOr<MeasureBase> parent);
 
     LayoutBreak* clone() const override { return new LayoutBreak(*this); }
     int subtype() const override { return static_cast<int>(m_layoutBreakType); }
@@ -82,7 +82,7 @@ public:
 private:
 
     friend class Factory;
-    LayoutBreak(MeasureBase* parent = 0);
+    LayoutBreak(DummyParentOr<MeasureBase> parent);
     LayoutBreak(const LayoutBreak&);
 
     double m_pause = 0.0;
