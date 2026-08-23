@@ -291,7 +291,6 @@ bool Transpose::transpose(Transaction& tx, Score* score, TransposeMode mode, Tra
                 ks->setTrack(track);
                 Key nKey = transposeKey(Key::C, interval);
                 ks->setKey(nKey);
-                ks->setOwnershipParent(seg);
                 score->undoAddElement(ks);
             }
         }
@@ -365,7 +364,6 @@ void Transpose::transposeKeys(Transaction& tx, Score* score, staff_idx_t staffSt
                 nKey = cKey;
             }
             ks->setKey(cKey, nKey);
-            ks->setOwnershipParent(seg);
             score->undoAddElement(ks);
         }
     }

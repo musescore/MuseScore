@@ -5680,7 +5680,6 @@ void NotationInteraction::toggleDynamicPopup()
             Measure* measure = score()->tick2measure(tick);
             Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
             Dynamic* dynamic = Factory::createDynamic(segment);
-            dynamic->setOwnershipParent(segment);
             dynamic->setTrack(track);
             dynamic->setVoiceAssignment(voiceAssignment);
             score()->undoAddElement(dynamic);
@@ -6828,7 +6827,6 @@ void NotationInteraction::navigateToNextSyllable()
 
             Lyrics* toLyrics = Factory::createLyrics(initialCR);
             toLyrics->setTrack(track);
-            toLyrics->setOwnershipParent(initialCR);
             toLyrics->setVerse(verse);
             toLyrics->setTextStyleType(styleType);
             toLyrics->setPlacement(placement);
@@ -6904,7 +6902,6 @@ void NotationInteraction::navigateToNextSyllable()
 
         toLyrics = Factory::createLyrics(toLyricsChord);
         toLyrics->setTrack(track);
-        toLyrics->setOwnershipParent(toLyricsChord);
 
         toLyrics->setVerse(verse);
         toLyrics->setTextStyleType(styleType);
@@ -7007,7 +7004,6 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     if (!lyrics) {
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
-        lyrics->setOwnershipParent(cr);
         lyrics->setVerse(verse);
         lyrics->setTextStyleType(styleType);
         lyrics->setPlacement(placement);
@@ -7743,8 +7739,6 @@ void NotationInteraction::addMelisma()
     if (!toLyrics) {
         toLyrics = Factory::createLyrics(nextCR);
         toLyrics->setTrack(track);
-        toLyrics->setOwnershipParent(nextCR);
-
         toLyrics->setVerse(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         toLyrics->setTextStyleType(styleType);
@@ -7827,7 +7821,6 @@ void NotationInteraction::addLyricsVerse()
 
     mu::engraving::Lyrics* lyrics = Factory::createLyrics(oldLyrics->chordRest());
     lyrics->setTrack(oldLyrics->track());
-    lyrics->setOwnershipParent(oldLyrics->chordRest());
     lyrics->setPlacement(oldLyrics->placement());
     lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, oldLyrics->propertyFlags(mu::engraving::Pid::PLACEMENT));
 

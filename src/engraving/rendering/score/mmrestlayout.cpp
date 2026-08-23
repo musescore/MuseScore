@@ -206,7 +206,6 @@ void MMRestLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measu
             mmr->setDurationType(DurationType::V_MEASURE);
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
-            mmr->setOwnershipParent(chordRestSeg);
             ctx.mutDom().doUndoAddElement(mmr);
         }
     }
@@ -811,7 +810,6 @@ void MMRestLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
             rr = new MMRestRange(m);
             rr->setTrack(staffIdx * VOICES);
             rr->setGenerated(true);
-            rr->setOwnershipParent(m);
             m->add(rr);
         }
         // setXmlText is reimplemented to take care of brackets

@@ -1145,7 +1145,6 @@ static void handleTupletStart(const ChordRest* const cr, Tuplet*& tuplet,
     tuplet->setBracketType(tupletDesc.bracket);
     tuplet->setNumberType(tupletDesc.shownumber);
     tuplet->setDirection(tupletDesc.direction);
-    tuplet->setOwnershipParent(cr->measure());
 }
 
 //---------------------------------------------------------
@@ -1907,7 +1906,6 @@ static void cleanupUnterminatedTie(Tie* tie, const Score* score, bool fixForCros
 
     // Add Laissez Vibrer instead
     LaissezVib* lvTie = Factory::createLaissezVib(unterminatedTieNote);
-    lvTie->setOwnershipParent(unterminatedTieNote);
     unterminatedTieNote->score()->undoAddElement(lvTie);
 }
 
@@ -8369,7 +8367,6 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
 
                 // Slur starts & ends on same chord - add lv instead
                 LaissezVib* lvTie = Factory::createLaissezVib(note);
-                lvTie->setOwnershipParent(note);
                 note->score()->undoAddElement(lvTie);
                 return;
             }
@@ -8427,7 +8424,6 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
 
                 // Slur starts & ends on same chord - add lv instead
                 LaissezVib* lvTie = Factory::createLaissezVib(note);
-                lvTie->setOwnershipParent(note);
                 note->score()->undoAddElement(lvTie);
                 return;
             }
@@ -8980,7 +8976,6 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             gliss->setStartElement(note);
             gliss->setTick(tick);
             gliss->setTrack(track);
-            gliss->setOwnershipParent(note);
             gliss->setVisible(notation.visible());
             colorItem(gliss, Color::fromString(notation.attribute(u"color")));
             if (lineType == u"dashed") {
@@ -9171,7 +9166,6 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
         }
     } else if (type == "let-ring") {
         LaissezVib* lvTie = Factory::createLaissezVib(note);
-        lvTie->setOwnershipParent(note);
         lvTie->setVisible(notation.visible());
         colorItem(lvTie, Color::fromString(notation.attribute(u"color")));
 

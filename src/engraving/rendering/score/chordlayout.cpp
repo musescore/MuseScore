@@ -468,7 +468,6 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         // set stem position (stem length is set in Chord:layoutStem() )
         if (!item->stem()) {
             Stem* stem = Factory::createStem(item);
-            stem->setOwnershipParent(item);
             stem->setGenerated(true);
             ctx.mutDom().addElement(stem);
         }
@@ -2592,7 +2591,6 @@ void ChordLayout::setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(note);
-        dot->setOwnershipParent(note);
         dot->setTrack(note->track());      // needed to know the staff it belongs to (and detect tablature)
         dot->setVisible(note->visible());
         ctx.mutDom().undoAddElement(dot);

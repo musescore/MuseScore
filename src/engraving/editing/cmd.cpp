@@ -600,7 +600,6 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         }
 
         Note* note = Factory::createNote(chord);
-        note->setOwnershipParent(chord);
         note->setTrack(chord->track());
         note->setNval(nval, tick);
         undoAddElement(note);
@@ -609,7 +608,6 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             Accidental* a = Factory::createAccidental(note);
             a->setAccidentalType(m_is.accidentalType());
             a->setRole(AccidentalRole::USER);
-            a->setOwnershipParent(note);
             undoAddElement(a);
         }
         if (on->tieBack() && prevTied) {

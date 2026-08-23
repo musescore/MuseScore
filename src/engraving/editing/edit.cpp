@@ -360,7 +360,6 @@ Rest* Score::addRest(Segment* s, track_idx_t track, TDuration d, Tuplet* tuplet)
         rest->setTicks(d.fraction());
     }
     rest->setTrack(track);
-    rest->setOwnershipParent(s);
     rest->setTuplet(tuplet);
     undoAddCR(rest, tick2measure(s->tick()), s->tick());
     return rest;
@@ -649,7 +648,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
 
         textBox = Factory::createText(frame, type);
-        textBox->setOwnershipParent(frame);
         undoAddElement(textBox);
         break;
     }
@@ -658,7 +656,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             break;
         }
         textBox = Factory::createText(destinationElement, type);
-        textBox->setOwnershipParent(destinationElement);
         undoAddElement(textBox);
         break;
     }
@@ -668,7 +665,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             break;
         }
         textBox = Factory::createRehearsalMark(chordRest->segment());
-        textBox->setOwnershipParent(chordRest->segment());
         textBox->setTrack(0);
         RehearsalMark* r = toRehearsalMark(textBox);
         textBox->setXmlText(EditRehearsalMark::createRehearsalMarkText(this, r));
@@ -746,7 +742,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         textBox = Factory::createFingering(toNote(destinationElement), type);
         textBox->setTrack(destinationElement->track());
-        textBox->setOwnershipParent(destinationElement);
         undoAddElement(textBox);
         break;
     }
@@ -773,7 +768,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         Harmony* harmony = Factory::createHarmony(newParent);
         harmony->setTrack(track);
-        harmony->setOwnershipParent(newParent);
 
         static const std::map<TextStyleType, HarmonyType> harmonyTypes = {
             { TextStyleType::HARMONY_A, HarmonyType::STANDARD },
@@ -818,7 +812,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         // Also check how many partial lines there are
         Lyrics* lyrics = Factory::createLyrics(chordRest);
         lyrics->setTrack(chordRest->track());
-        lyrics->setOwnershipParent(chordRest);
         lyrics->setProperty(Pid::VERSE, no);
 
         textBox = lyrics;
@@ -884,7 +877,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
 
         TempoText* tempoText = Factory::createTempoText(chordRest->segment());
-        tempoText->setOwnershipParent(chordRest->segment());
         tempoText->setTrack(0);
         tempoText->setXmlText(text);
         tempoText->setFollowText(true);
@@ -1043,7 +1035,6 @@ void Score::addNoteLine()
     }
 
     NoteLine* line = Factory::createNoteLine(startNote);
-    line->setOwnershipParent(startNote);
     line->setStartElement(startNote);
     line->setTick(startNote->chord()->tick());
     line->setEndElement(endNote);
@@ -1697,7 +1688,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
                 TimeSig* nts = Factory::createTimeSig(s);
                 nts->setTrack(staffIdx * VOICES);
-                nts->setOwnershipParent(s);
                 nts->setFrom(lastDeletedForThisStaff);
                 nts->setStretch(nts->sig() / mAfterSel->timesig());
                 score->undoAddElement(nts);
@@ -1742,7 +1732,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 KeySig* nks = (KeySig*)s->element(staff2track(staffIdx));
                 if (!nks) {
                     nks = Factory::createKeySig(s);
-                    nks->setOwnershipParent(s);
                     nks->setTrack(staffIdx * VOICES);
                     nks->setKeySigEvent(nkse);
                     score->undoAddElement(nks);
@@ -3428,7 +3417,6 @@ void Score::undoUpdatePlayCountText(Measure* m)
         if (!topPlayCountText) {
             topPlayCountText = Factory::createPlayCountText(endBarSeg);
             topPlayCountText->setTrack(0);
-            topPlayCountText->setOwnershipParent(endBarSeg);
             topPlayCountText->setSelected(topBl->selected());
             undoAddElement(topPlayCountText);
         }
@@ -3577,7 +3565,6 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     BarLine* lbl = toBarLine(lsegment->element(ltrack));
                     if (!lbl) {
                         lbl = Factory::createBarLine(lsegment);
-                        lbl->setOwnershipParent(lsegment);
                         lbl->setTrack(ltrack);
                         lbl->setSpanStaff(lstaff->barLineSpan());
                         lbl->setSpanFrom(lstaff->barLineFrom());

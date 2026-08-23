@@ -71,7 +71,6 @@ TEST_F(Engraving_InstrumentChangeTests, testAdd)
     Measure* m = score->firstMeasure()->nextMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = new InstrumentChange(s);
-    ic->setOwnershipParent(s);
     ic->setTrack(0);
     ic->setXmlText("Instrument");
     score->startCmd(TranslatableString::untranslatable("Instrument change tests"));

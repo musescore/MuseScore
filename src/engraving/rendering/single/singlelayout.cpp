@@ -1112,7 +1112,6 @@ void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
     }
 
     HammerOnPullOffText* hopoText = hopoTexts.front();
-    hopoText->setOwnershipParent(item);
     hopoText->setXmlText("H/P");
 
     Align align;

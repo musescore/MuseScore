@@ -133,7 +133,6 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
                     dstChord->setDurationType(chord->durationType());
                     dstChord->setTicks(chord->ticks());
                     dstChord->setTuplet(dstCR->tuplet());
-                    dstChord->setOwnershipParent(s);
                     elementScore->undoRemoveElement(dstCR);
                 }
             } else if (!chord->tuplet()) {
@@ -189,7 +188,6 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
                 dstChord->setTrack(dstTrack);
                 dstChord->setDurationType(chord->durationType());
                 dstChord->setTicks(chord->ticks());
-                dstChord->setOwnershipParent(s);
                 // makeGapVoice will not back-fill an empty voice
                 if (voice && !dstCR) {
                     elementScore->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
@@ -294,7 +292,6 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
                 r->setDurationType(chord->durationType());
                 r->setTicks(chord->ticks());
                 r->setTuplet(chord->tuplet());
-                r->setOwnershipParent(s);
                 // if there were grace notes, move them
                 while (!chord->graceNotes().empty()) {
                     Chord* gc = chord->graceNotes().front();

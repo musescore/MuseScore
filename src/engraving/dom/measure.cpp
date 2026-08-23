@@ -193,7 +193,6 @@ Measure::Measure(Score* parent)
         Staff* staff = score()->staff(staffIdx);
         ms->setLines(Factory::createStaffLines(this));
         ms->lines()->setTrack(staffIdx * VOICES);
-        ms->lines()->setOwnershipParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
         m_mstaves.push_back(ms);
     }
@@ -243,7 +242,6 @@ void Measure::createStaves(staff_idx_t staffIdx)
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
         s->setLines(Factory::createStaffLines(this));
-        s->lines()->setOwnershipParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(tick()));
         m_mstaves.push_back(s);
@@ -1215,7 +1213,6 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
         MStaff* ms   = new MStaff;
         ms->setLines(Factory::createStaffLines(this));
         ms->lines()->setTrack(i * VOICES);
-        ms->lines()->setOwnershipParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
         score()->undo(new InsertMStaff(this, ms, i));
     }
@@ -1336,7 +1333,6 @@ void Measure::insertStaff(Staff* staff, staff_idx_t staffIdx)
 
     MStaff* ms = new MStaff;
     ms->setLines(Factory::createStaffLines(this));
-    ms->lines()->setOwnershipParent(this);
     ms->lines()->setTrack(staffIdx * VOICES);
     ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
     insertMStaff(ms, staffIdx);
@@ -1788,7 +1784,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
                 BarLine* staffBarLine = toBarLine(seg->element(stIdx * VOICES));
                 if (!staffBarLine) {
                     staffBarLine = Factory::createBarLine(seg);
-                    staffBarLine->setOwnershipParent(seg);
                     staffBarLine->setTrack(stIdx * VOICES);
                     undoAddElement(staffBarLine);
                 }
@@ -1828,7 +1823,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
                 return nullptr;
             }
             EngravingItem* stc = Factory::createStaffTypeChange(this);
-            stc->setOwnershipParent(this);
             stc->setTrack(trackZeroVoice(data.track));
             score()->undoAddElement(stc);
             break;
@@ -3579,7 +3573,6 @@ void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible
     if (!bl) {
         // no suitable bar line: create a new one
         bl = Factory::createBarLine(seg);
-        bl->setOwnershipParent(seg);
         bl->setTrack(track);
         Part* part = score()->staff(track / VOICES)->part();
         // by default, barlines for multi-staff parts should span across staves

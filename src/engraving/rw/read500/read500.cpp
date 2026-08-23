@@ -731,7 +731,6 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Clef* clef = Factory::createClef(segment);
                     TRead::read(clef, e, ctx);
                     clef->setTrack(ctx.track());
-                    clef->setOwnershipParent(segment);
                     score->undoChangeElement(segment->element(ctx.track()), clef);
                 } else if (tag == "Breath") {
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
@@ -744,7 +743,6 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     breath->setTrack(ctx.track());
                     breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
                     TRead::read(breath, e, ctx);
-                    breath->setOwnershipParent(segment);
                     score->undoChangeElement(segment->element(ctx.track()), breath);
                 } else if (tag == "Beam") {
                     Beam* beam = Factory::createBeam(score);
@@ -1078,7 +1076,6 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
                     el->setTrack(trackZeroVoice(destTrack));
                     TRead::read(el, e, ctx);
                     el->setTrack(trackZeroVoice(destTrack));
-                    el->setOwnershipParent(seg);
                     score->undoAddElement(el);
                 }
             } else if (tag == "Lyrics" || tag == "FiguredBass") {
@@ -1127,7 +1124,6 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
                     el->setTrack(destTrack);
                     TRead::read(el, e, ctx);
                     el->setTrack(destTrack);
-                    el->setOwnershipParent(cr);
                     score->undoAddElement(el);
                 } else if (tag == "FiguredBass") {
                     // FiguredBass always belongs to first staff voice

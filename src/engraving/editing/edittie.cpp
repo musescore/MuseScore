@@ -363,7 +363,6 @@ void EditTie::cmdToggleLaissezVib(Score* score)
             continue;
         } else {
             LaissezVib* lvTie = Factory::createLaissezVib(note);
-            lvTie->setOwnershipParent(note);
             score->undoAddElement(lvTie);
         }
     }

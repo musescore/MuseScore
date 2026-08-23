@@ -1772,7 +1772,6 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                     tuplet->setBaseLen(duration);
                     tuplet->setTick(Fraction::fromTicks(tick));
-                    tuplet->setOwnershipParent(measure);
                     // measure->add(tuplet);
                 }
             }

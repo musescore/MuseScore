@@ -1087,7 +1087,6 @@ bool Chord::shouldHaveHook() const
 void Chord::createStem()
 {
     Stem* stem = Factory::createStem(this);
-    stem->setOwnershipParent(this);
     stem->setGenerated(true);
     //! score()->undoAddElement calls add(), which assigns this created stem to _stem
     score()->doUndoAddElement(stem);
@@ -1109,7 +1108,6 @@ void Chord::removeStem()
 void Chord::createHook()
 {
     Hook* hook = new Hook(this);
-    hook->setOwnershipParent(this);
     hook->setGenerated(true);
     score()->doUndoAddElement(hook);
 }

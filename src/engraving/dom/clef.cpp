@@ -150,7 +150,6 @@ EngravingItem* Clef::drop(Transaction& tx, EditData& data)
                 score()->undoRemoveElement(segm->element(track()));
             }
             Ambitus* r = Factory::createAmbitus(segm);
-            r->setOwnershipParent(segm);
             r->setTrack(track());
             score()->undoAddElement(r);
         }

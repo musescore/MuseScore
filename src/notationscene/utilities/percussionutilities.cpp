@@ -78,7 +78,6 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
 
     Note* note = Factory::createNote(chord.get());
     note->setMark(true);
-    note->setOwnershipParent(chord.get());
     note->setTrack(voice);
     note->setPitch(pitch);
     note->setTpcFromPitch();
@@ -97,7 +96,6 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
     chord->add(note);
 
     Stem* stem = Factory::createStem(chord.get());
-    stem->setOwnershipParent(chord.get());
     stem->setBaseLength(up ? -3.0_sp : 3.0_sp);
     engravingRender()->layoutItem(stem);
     chord->add(stem);

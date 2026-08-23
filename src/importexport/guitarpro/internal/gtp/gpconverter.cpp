@@ -2464,7 +2464,6 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
     if (asHarmony) {
         Harmony* h = Factory::createHarmony(cr->segment());
         h->setTrack(cr->track());
-        h->setOwnershipParent(cr->segment());
         h->setHarmonyType(HarmonyType::STANDARD);
         h->setHarmony(diagram.name); // F#dim7
         h->setPlainText(h->harmonyName());
@@ -2581,7 +2580,6 @@ void GPConverter::addTimer(const GPBeat* beat, ChordRest* cr)
     st->setPlainText(String::number(minutes)
                      + u':'
                      + (seconds < 10 ? u'0' + String::number(seconds) : String::number(seconds)));
-    st->setOwnershipParent(cr->segment());
     st->setTrack(cr->track());
     cr->segment()->add(st);
 }
@@ -3053,7 +3051,6 @@ void GPConverter::addTuning()
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);
             tun->setTrack(staff2track(s->idx()));
-            tun->setOwnershipParent(seg);
             seg->add(tun);
         }
     }

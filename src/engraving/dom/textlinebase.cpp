@@ -44,8 +44,6 @@ TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, TextLineBase* 
 {
     m_text    = Factory::createText(this, TextStyleType::DEFAULT, false);
     m_endText = Factory::createText(this, TextStyleType::DEFAULT, false);
-    m_text->setOwnershipParent(this);
-    m_endText->setOwnershipParent(this);
     m_text->setFlag(ElementFlag::MOVABLE, false);
     m_endText->setFlag(ElementFlag::MOVABLE, false);
 }

@@ -987,7 +987,6 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
             Note* note = Factory::createNote(chord);
             // the note needs to know the properties of the track it belongs to
             note->setTrack(chord->track());
-            note->setOwnershipParent(chord);
             readNote(note, e, ctx);
             chord->add(note);
         } else if (tag == "Attribute" || tag == "Articulation") {
@@ -1654,7 +1653,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             if (m->isMMRest()) {
                 segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
                 MMRest* mmr = Factory::createMMRest(segment);
-                mmr->setOwnershipParent(segment);
                 mmr->setTrack(ctx.track());
                 read400::TRead::read(mmr, e, ctx);
                 mmr->setTicks(m->ticks());
@@ -2079,7 +2077,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
-            tuplet->setOwnershipParent(m);
             readTuplet(tuplet, e, ctx);
             ctx.addTuplet(tupletId, tuplet);
         } else if (tag == "startRepeat") {
@@ -2131,7 +2128,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             MeasureNumber* noText = new MeasureNumber(m);
             readText114(e, ctx, noText, m);
             noText->setTrack(ctx.track());
-            noText->setOwnershipParent(m);
             m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "multiMeasureRest") {
             m->setMMRestCount(e.readInt());
@@ -2986,7 +2982,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
                 KeySigEvent ke = i->second;
                 KeySig* ks = Factory::createKeySig(seg);
                 ks->setKeySigEvent(ke);
-                ks->setOwnershipParent(seg);
                 ks->setTrack(track);
                 ks->setGenerated(false);
                 seg->add(ks);

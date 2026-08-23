@@ -373,14 +373,12 @@ void PlaybackController::playNotes(const NoteValList& notes, staff_idx_t staffId
 {
     Segment* seg = const_cast<Segment*>(segment);
     Chord* chord = engraving::Factory::createChord(seg);
-    chord->setOwnershipParent(seg);
 
     std::vector<const EngravingItem*> elements;
     elements.reserve(notes.size());
 
     for (const NoteVal& nval : notes) {
         Note* note = engraving::Factory::createNote(chord);
-        note->setOwnershipParent(chord);
         note->setStaffIdx(staffIdx);
         note->setNval(nval);
         elements.push_back(note);

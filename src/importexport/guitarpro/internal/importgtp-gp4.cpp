@@ -1004,7 +1004,6 @@ bool GuitarPro4::read(IODevice* io)
                             if (dotted) {
                                 // there is at most one dotted note in this guitar pro version
                                 NoteDot* dot = Factory::createNoteDot(note);
-                                dot->setOwnershipParent(note);
                                 dot->setTrack(track);                  // needed to know the staff it belongs to (and detect tablature)
                                 dot->setVisible(true);
                                 note->add(dot);
@@ -1105,7 +1104,6 @@ bool GuitarPro4::read(IODevice* io)
                                             s->setStartElement(n);
                                             s->setTick(seg->tick());
                                             s->setTrack(chord->track());
-                                            s->setOwnershipParent(n);
                                             s->setGlissandoType(GlissandoType::STRAIGHT);
                                             s->setEndElement(last);
                                             s->setTick2(chord->segment()->tick());
@@ -1184,7 +1182,6 @@ bool GuitarPro4::read(IODevice* io)
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());
-                        s->setOwnershipParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         s->setEndElement(nt);
                         s->setTick2(nt->chord()->segment()->tick());
