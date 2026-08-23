@@ -10483,17 +10483,17 @@ Utgiven i enlighet med &lt;a href=&quot;%1&quot;&gt;GNU General Public License v
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="33"/>
         <source>Unlock Premium Playback</source>
-        <translation type="unfinished"/>
+        <translation>Lås upp premiumuppspelning</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Hör dina noter komma till liv med professionellt inspelade instrumentbibliotek för uttrycksfull, realistisk uppspelning i MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
         <source>Get MuseSounds Pro</source>
-        <translation type="unfinished"/>
+        <translation>Skaffa MuseSounds Pro</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
@@ -15970,7 +15970,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1120"/>
         <source>Pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Tonnamn utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1121"/>
@@ -15980,7 +15980,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1122"/>
         <source>German pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Tyska tonnamn utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1123"/>
@@ -25140,7 +25140,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="193"/>
         <source>Pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Tonnamn utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
@@ -25150,7 +25150,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
         <source>German pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Tyska tonnamn utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
@@ -26096,7 +26096,7 @@ upptakt</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="239"/>
         <source>Pitch names, no accidentals</source>
         <comment>notehead scheme</comment>
-        <translation type="unfinished"/>
+        <translation>Tonnamn utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="241"/>
@@ -26108,7 +26108,7 @@ upptakt</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="242"/>
         <source>German pitch names, no accidentals</source>
         <comment>notehead scheme</comment>
-        <translation type="unfinished"/>
+        <translation>Tyska tonnamn utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="244"/>
@@ -37469,7 +37469,7 @@ misslyckades: %2</translation>
         <translation>Återställ %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="594"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="599"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1271"/>
         <source>Edit style</source>
         <translation>Redigera stil</translation>

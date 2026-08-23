@@ -15970,7 +15970,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1120"/>
         <source>Pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Notnamn, utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1121"/>
@@ -15980,7 +15980,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1122"/>
         <source>German pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Tyska notnamn, utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1123"/>
@@ -16851,7 +16851,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
         <source>marker center on symbol</source>
-        <translation type="unfinished"/>
+        <translation>markörens centrum på symbol</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
@@ -17069,7 +17069,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="263"/>
         <source>staff move</source>
-        <translation type="unfinished"/>
+        <translation>notradsflytt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="264"/>
@@ -17314,12 +17314,12 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="322"/>
         <source>barline span from</source>
-        <translation type="unfinished"/>
+        <translation>taktstrecksspann från</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="323"/>
         <source>barline span to</source>
-        <translation type="unfinished"/>
+        <translation>taktstrecksspann till</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="324"/>
@@ -17409,7 +17409,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="344"/>
         <source>text script align</source>
-        <translation type="unfinished"/>
+        <translation>textskriptjustering</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="345"/>
@@ -17429,7 +17429,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="349"/>
         <source>begin text position</source>
-        <translation type="unfinished"/>
+        <translation>inledande textposition</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="350"/>
@@ -17449,22 +17449,22 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="353"/>
         <source>begin line arrow height</source>
-        <translation type="unfinished"/>
+        <translation>inledande linjepilhöjd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="354"/>
         <source>begin line arrow width</source>
-        <translation type="unfinished"/>
+        <translation>inledande linjepilbredd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="355"/>
         <source>begin filled arrow height</source>
-        <translation type="unfinished"/>
+        <translation>inledande ifylld pilhöjd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="356"/>
         <source>begin filled arrow width</source>
-        <translation type="unfinished"/>
+        <translation>inledande ifylld pilbredd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="357"/>
@@ -17484,32 +17484,32 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="360"/>
         <source>begin text musical symbols scale</source>
-        <translation type="unfinished"/>
+        <translation>inledande text musiksymboler skala</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="361"/>
         <source>continue text musical symbols scale</source>
-        <translation type="unfinished"/>
+        <translation>fortsättande text musiksymboler skala</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="362"/>
         <source>end text musical symbols scale</source>
-        <translation type="unfinished"/>
+        <translation>avslutande text musiksymboler skala</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="363"/>
         <source>begin text music symbols size</source>
-        <translation type="unfinished"/>
+        <translation>inledande text musiksymboler storlek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="364"/>
         <source>continue text music symbols size</source>
-        <translation type="unfinished"/>
+        <translation>fortsättande text musiksymboler storlek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="365"/>
         <source>end text music symbols size</source>
-        <translation type="unfinished"/>
+        <translation>avslutande text musiksymboler storlek</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="366"/>
@@ -17534,7 +17534,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="371"/>
         <source>continue text position</source>
-        <translation type="unfinished"/>
+        <translation>fortsättande textposition</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="372"/>
@@ -17574,7 +17574,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="380"/>
         <source>end text position</source>
-        <translation type="unfinished"/>
+        <translation>avslutande textposition</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="381"/>
@@ -17594,22 +17594,22 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="384"/>
         <source>end line arrow height</source>
-        <translation type="unfinished"/>
+        <translation>avslutande linjepilhöjd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="385"/>
         <source>end line arrow width</source>
-        <translation type="unfinished"/>
+        <translation>avslutande linjepilbredd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="386"/>
         <source>end filled arrow height</source>
-        <translation type="unfinished"/>
+        <translation>avslutande ifylld pilhöjd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="387"/>
         <source>end filled arrow width</source>
-        <translation type="unfinished"/>
+        <translation>avslutande ifylld pilbredd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="388"/>
@@ -17969,7 +17969,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="483"/>
         <source>partial spanner direction</source>
-        <translation type="unfinished"/>
+        <translation>riktning för delvist spann</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="485"/>
@@ -18059,12 +18059,12 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="508"/>
         <source>cutaway</source>
-        <translation type="unfinished"/>
+        <translation>bortklipp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="509"/>
         <source>hide system barline</source>
-        <translation type="unfinished"/>
+        <translation>dölj systemets taktstreck</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="510"/>
@@ -25140,7 +25140,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="193"/>
         <source>Pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Notnamn, inga förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
@@ -25150,7 +25150,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
         <source>German pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Tyska notnamn, utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
@@ -26096,7 +26096,7 @@ upptakt</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="239"/>
         <source>Pitch names, no accidentals</source>
         <comment>notehead scheme</comment>
-        <translation type="unfinished"/>
+        <translation>Notnamn, inga förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="241"/>
@@ -26108,7 +26108,7 @@ upptakt</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="242"/>
         <source>German pitch names, no accidentals</source>
         <comment>notehead scheme</comment>
-        <translation type="unfinished"/>
+        <translation>Tyska notnamn, utan förtecken</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="244"/>
@@ -26684,7 +26684,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="182"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>Dölj alla takter som inte innehåller noter (klipp)</translation>
+        <translation>Dölj alla takter som inte innehåller noter (bortklipp)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="200"/>
@@ -35852,7 +35852,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="629"/>
         <source>Reflow to fit video resolution</source>
-        <translation type="unfinished"/>
+        <translation>Ordna om för att passa videoupplösning</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="857"/>
@@ -37469,7 +37469,7 @@ misslyckades: %2</translation>
         <translation>Återställ %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="594"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="599"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1271"/>
         <source>Edit style</source>
         <translation>Redigera stil</translation>

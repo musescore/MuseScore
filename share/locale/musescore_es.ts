@@ -15851,7 +15851,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1209"/>
         <source>B♯ (Name)</source>
-        <translation>Ti♯ (Si♯) (Nombre)</translation>
+        <translation>Si♯ (Nombre)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1210"/>
@@ -20256,7 +20256,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6146"/>
         <source>Combining flag 7 (512th) below straight</source>
-        <translation>Combinar la 7ª bandera (fusa de 512) inferior recta </translation>
+        <translation>Combinar la 7ª bandera (fusa de 512) inferior recta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6147"/>
@@ -21585,7 +21585,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="32"/>
         <source>C♯-1</source>
-        <translation>Do#-1</translation>
+        <translation>Do♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="33"/>
@@ -21630,7 +21630,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="41"/>
         <source>F♯-1</source>
-        <translation>Fa#-1</translation>
+        <translation>Fa♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="42"/>
@@ -21675,7 +21675,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="50"/>
         <source>B♯-1</source>
-        <translation>Si♯1</translation>
+        <translation>Si♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="52"/>
@@ -21690,7 +21690,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="54"/>
         <source>C♯0</source>
-        <translation>Do#0</translation>
+        <translation>Do♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="55"/>
@@ -21705,7 +21705,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="57"/>
         <source>D♯0</source>
-        <translation>Re#0</translation>
+        <translation>Re♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="58"/>
@@ -21720,7 +21720,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="60"/>
         <source>E♯0</source>
-        <translation>Mi#0</translation>
+        <translation>Mi♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="61"/>
@@ -21735,7 +21735,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="63"/>
         <source>F♯0</source>
-        <translation>Fa#0</translation>
+        <translation>Fa♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="64"/>
@@ -21750,7 +21750,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="66"/>
         <source>G♯0</source>
-        <translation>Sol#0</translation>
+        <translation>Sol♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="67"/>
@@ -21765,7 +21765,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="69"/>
         <source>A♯0</source>
-        <translation>La#0</translation>
+        <translation>La♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="70"/>
@@ -21780,7 +21780,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="72"/>
         <source>B♯0</source>
-        <translation>Si#0</translation>
+        <translation>Si♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="74"/>
@@ -21795,7 +21795,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="76"/>
         <source>C♯1</source>
-        <translation>Do#1</translation>
+        <translation>Do♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="77"/>
@@ -21810,7 +21810,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="79"/>
         <source>D♯1</source>
-        <translation>Re#1</translation>
+        <translation>Re♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="80"/>
@@ -21825,7 +21825,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="82"/>
         <source>E♯1</source>
-        <translation>Mi#1</translation>
+        <translation>Mi♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="83"/>
@@ -21840,7 +21840,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="85"/>
         <source>F♯1</source>
-        <translation>Fa#1</translation>
+        <translation>Fa♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="86"/>
@@ -21855,7 +21855,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="88"/>
         <source>G♯1</source>
-        <translation>Sol#1</translation>
+        <translation>Sol♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="89"/>
@@ -21870,7 +21870,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="91"/>
         <source>A♯1</source>
-        <translation>La#1</translation>
+        <translation>La♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="92"/>
@@ -21885,7 +21885,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="94"/>
         <source>B♯1</source>
-        <translation>Si#1</translation>
+        <translation>Si♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="96"/>
@@ -21900,7 +21900,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="98"/>
         <source>C♯2</source>
-        <translation>Do#2</translation>
+        <translation>Do♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="99"/>
@@ -21915,7 +21915,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="101"/>
         <source>D♯2</source>
-        <translation>Re#2</translation>
+        <translation>Re♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="102"/>
@@ -21930,7 +21930,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="104"/>
         <source>E♯2</source>
-        <translation>Mi#2</translation>
+        <translation>Mi♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="105"/>
@@ -21945,7 +21945,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="107"/>
         <source>F♯2</source>
-        <translation>Fa#2</translation>
+        <translation>Fa♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="108"/>
@@ -21960,7 +21960,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="110"/>
         <source>G♯2</source>
-        <translation>Sol#2</translation>
+        <translation>Sol♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="111"/>
@@ -21975,7 +21975,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="113"/>
         <source>A♯2</source>
-        <translation>La#2</translation>
+        <translation>La♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="114"/>
@@ -21990,7 +21990,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="116"/>
         <source>B♯2</source>
-        <translation>Si#2</translation>
+        <translation>Si♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="118"/>
@@ -22005,7 +22005,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="120"/>
         <source>C♯3</source>
-        <translation>Do#3</translation>
+        <translation>Do♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="121"/>
@@ -22020,7 +22020,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="123"/>
         <source>D♯3</source>
-        <translation>Re#3</translation>
+        <translation>Re♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="124"/>
@@ -22035,7 +22035,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="126"/>
         <source>E♯3</source>
-        <translation>Mi#3</translation>
+        <translation>Mi♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="127"/>
@@ -22050,7 +22050,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="129"/>
         <source>F♯3</source>
-        <translation>Fa#3</translation>
+        <translation>Fa♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="130"/>
@@ -22065,7 +22065,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="132"/>
         <source>G♯3</source>
-        <translation>Sol#3</translation>
+        <translation>Sol♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="133"/>
@@ -22080,7 +22080,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="135"/>
         <source>A♯3</source>
-        <translation>La#3</translation>
+        <translation>La♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="136"/>
@@ -22095,7 +22095,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="138"/>
         <source>B♯3</source>
-        <translation>Si#3</translation>
+        <translation>Si♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="140"/>
@@ -22110,7 +22110,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="142"/>
         <source>C♯4</source>
-        <translation>Do#4</translation>
+        <translation>Do♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="143"/>
@@ -22125,7 +22125,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="145"/>
         <source>D♯4</source>
-        <translation>Re#4</translation>
+        <translation>Re♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="146"/>
@@ -22140,7 +22140,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="148"/>
         <source>E♯4</source>
-        <translation>Mi#4</translation>
+        <translation>Mi♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="149"/>
@@ -22155,7 +22155,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="151"/>
         <source>F♯4</source>
-        <translation>Fa#4</translation>
+        <translation>Fa♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="152"/>
@@ -22170,7 +22170,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="154"/>
         <source>G♯4</source>
-        <translation>Sol#4</translation>
+        <translation>Sol♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="155"/>
@@ -22185,7 +22185,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="157"/>
         <source>A♯4</source>
-        <translation>La#4</translation>
+        <translation>La♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="158"/>
@@ -22200,7 +22200,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="160"/>
         <source>B♯4</source>
-        <translation>Si#4</translation>
+        <translation>Si♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="162"/>
@@ -22215,7 +22215,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="164"/>
         <source>C♯5</source>
-        <translation>Do#5</translation>
+        <translation>Do♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="165"/>
@@ -22230,7 +22230,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="167"/>
         <source>D♯5</source>
-        <translation>Re#5</translation>
+        <translation>Re♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="168"/>
@@ -22245,7 +22245,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="170"/>
         <source>E♯5</source>
-        <translation>Mi#5</translation>
+        <translation>Mi♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="171"/>
@@ -22260,7 +22260,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="173"/>
         <source>F♯5</source>
-        <translation>Fa#5</translation>
+        <translation>Fa♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="174"/>
@@ -22275,7 +22275,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="176"/>
         <source>G♯5</source>
-        <translation>Sol#5</translation>
+        <translation>Sol♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="177"/>
@@ -22290,7 +22290,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="179"/>
         <source>A♯5</source>
-        <translation>La#5</translation>
+        <translation>La♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="180"/>
@@ -22305,7 +22305,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="182"/>
         <source>B♯5</source>
-        <translation>Si#5</translation>
+        <translation>Si♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="184"/>
@@ -22320,7 +22320,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="186"/>
         <source>C♯6</source>
-        <translation>Do#6</translation>
+        <translation>Do♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="187"/>
@@ -22335,7 +22335,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="189"/>
         <source>D♯6</source>
-        <translation>Re#6</translation>
+        <translation>Re♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="190"/>
@@ -22350,7 +22350,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="192"/>
         <source>E♯6</source>
-        <translation>Mi#6</translation>
+        <translation>Mi♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="193"/>
@@ -22365,7 +22365,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="195"/>
         <source>F♯6</source>
-        <translation>Fa#6</translation>
+        <translation>Fa♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="196"/>
@@ -22380,7 +22380,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="198"/>
         <source>G♯6</source>
-        <translation>Sol#6</translation>
+        <translation>Sol♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="199"/>
@@ -22395,7 +22395,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="201"/>
         <source>A♯6</source>
-        <translation>La#6</translation>
+        <translation>La♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="202"/>
@@ -22410,7 +22410,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="204"/>
         <source>B♯6</source>
-        <translation>Si#6</translation>
+        <translation>Si♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="206"/>
@@ -22425,7 +22425,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="208"/>
         <source>C♯7</source>
-        <translation>Do#7</translation>
+        <translation>Do♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="209"/>
@@ -22440,7 +22440,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="211"/>
         <source>D♯7</source>
-        <translation>Re#7</translation>
+        <translation>Re♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="212"/>
@@ -22455,7 +22455,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="214"/>
         <source>E♯7</source>
-        <translation>Mi#7</translation>
+        <translation>Mi♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="215"/>
@@ -22470,7 +22470,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="217"/>
         <source>F♯7</source>
-        <translation>Fa#7</translation>
+        <translation>Fa♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="218"/>
@@ -22485,7 +22485,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="220"/>
         <source>G♯7</source>
-        <translation>Sol#7</translation>
+        <translation>Sol♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="221"/>
@@ -22500,7 +22500,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="223"/>
         <source>A♯7</source>
-        <translation>La#7</translation>
+        <translation>La♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="224"/>
@@ -22515,7 +22515,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="226"/>
         <source>B♯7</source>
-        <translation>Si#7</translation>
+        <translation>Si♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="228"/>
@@ -22530,7 +22530,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="230"/>
         <source>C♯8</source>
-        <translation>Do#8</translation>
+        <translation>Do♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="231"/>
@@ -22545,7 +22545,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="233"/>
         <source>D♯8</source>
-        <translation>Re#8</translation>
+        <translation>Re♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="234"/>
@@ -22560,7 +22560,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="236"/>
         <source>E♯8</source>
-        <translation>Mi#8</translation>
+        <translation>Mi♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="237"/>
@@ -22575,7 +22575,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="239"/>
         <source>F♯8</source>
-        <translation>Fa#8</translation>
+        <translation>Fa♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="240"/>
@@ -22590,7 +22590,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="242"/>
         <source>G♯8</source>
-        <translation>Sol#8</translation>
+        <translation>Sol♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="243"/>
@@ -22605,7 +22605,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="245"/>
         <source>A♯8</source>
-        <translation>La#8</translation>
+        <translation>La♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="246"/>
@@ -22620,7 +22620,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="248"/>
         <source>B♯8</source>
-        <translation>Si#8</translation>
+        <translation>Si♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="250"/>
@@ -22635,7 +22635,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="252"/>
         <source>C♯9</source>
-        <translation>Do#9</translation>
+        <translation>Do♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="253"/>
@@ -22650,7 +22650,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="255"/>
         <source>D♯9</source>
-        <translation>Re#9</translation>
+        <translation>Re♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="256"/>
@@ -22665,7 +22665,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="258"/>
         <source>E♯9</source>
-        <translation>Mi#9</translation>
+        <translation>Mi♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="259"/>
@@ -22680,7 +22680,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="261"/>
         <source>F♯9</source>
-        <translation>Fa#9</translation>
+        <translation>Fa♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="262"/>
@@ -37482,7 +37482,7 @@ fallo: %2</translation>
         <translation>Restablecer %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="594"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="599"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1271"/>
         <source>Edit style</source>
         <translation>Editar estilo</translation>

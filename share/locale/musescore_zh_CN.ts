@@ -8001,7 +8001,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1678"/>
         <source>Change enharmonic spelling (current pitch mode only)</source>
-        <translation>更换等音拼写（仅当前音高模式）</translation>
+        <translation>变更异名同音记谱（仅当前音高模式）</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1684"/>
@@ -9344,7 +9344,7 @@ followed by dashes</source>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2747"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2748"/>
         <source>Show gap rests</source>
-        <translation type="unfinished"/>
+        <translation>显示间隙休止符</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2754"/>
@@ -10682,7 +10682,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="8437"/>
         <source>Toggle show gap rests</source>
-        <translation type="unfinished"/>
+        <translation>切换显示间隙休止符</translation>
     </message>
 </context>
 <context>
@@ -11497,17 +11497,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="81"/>
         <source>This file was last saved in a version older than 2.0.0. You can convert this score by opening and then saving in MuseScore version 2.x. Visit the &lt;a href=&quot;%1&quot;&gt;MuseScore download page&lt;/a&gt; to obtain such a 2.x version.</source>
-        <translation>本文件保存时所用的MuseScore版本低于2.0.0。您可用2.x版本的MuseScore打开这个文件来转换并保存。访问&lt;a href=&quot;%1&quot;&gt;MuseScore下载页&lt;/a&gt;以获取更新版本。</translation>
+        <translation>此文件保存时所用的 MuseScore 版本低于 2.0.0。您可用 2.x 版本的 MuseScore 打开这个文件来转换并保存。访问&lt;a href=&quot;%1&quot;&gt;MuseScore下载页&lt;/a&gt;以获取更新版本。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>此文件使用 MuseScore Studio 的新版本保存。请访问 &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; 以获取最新版本。</translation>
+        <translation>此文件使用了 MuseScore Studio 的较新版本保存。请访问 &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; 以获取最新版本。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
         <source>This file was last saved in a development version of 3.0.</source>
-        <translation>此文件上一次是用MuseScore 3.0的开发版本保存的。</translation>
+        <translation>此文件上一次是用 MuseScore 3.0 的开发版本保存的。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="96"/>
@@ -16286,22 +16286,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="79"/>
         <source>fixed</source>
-        <translation type="unfinished"/>
+        <translation>固定</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="80"/>
         <source>fixed line</source>
-        <translation type="unfinished"/>
+        <translation>固定线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="81"/>
         <source>head type</source>
-        <translation type="unfinished"/>
+        <translation>符头类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="82"/>
         <source>head</source>
-        <translation type="unfinished"/>
+        <translation>符头</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="83"/>
@@ -16349,12 +16349,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="92"/>
         <source>leading space</source>
-        <translation type="unfinished"/>
+        <translation>前导空格</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="93"/>
         <source>end of measure change</source>
-        <translation type="unfinished"/>
+        <translation>小节末尾变化</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="94"/>
@@ -16434,17 +16434,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="111"/>
         <source>ghost</source>
-        <translation type="unfinished"/>
+        <translation>虚音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="112"/>
         <source>dead</source>
-        <translation type="unfinished"/>
+        <translation>死音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="113"/>
         <source>played</source>
-        <translation type="unfinished"/>
+        <translation>演奏</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="114"/>
@@ -16479,12 +16479,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="120"/>
         <source>bracket start offset</source>
-        <translation type="unfinished"/>
+        <translation>括号起始偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="121"/>
         <source>bracket end offset</source>
-        <translation type="unfinished"/>
+        <translation>括号末尾偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="122"/>
@@ -16509,7 +16509,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="127"/>
         <source>autosize frame</source>
-        <translation type="unfinished"/>
+        <translation>自动调整边框大小</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="128"/>
@@ -16544,22 +16544,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="134"/>
         <source>padding to notation above</source>
-        <translation type="unfinished"/>
+        <translation>上方记谱内边距</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="135"/>
         <source>padding to notation below</source>
-        <translation type="unfinished"/>
+        <translation>下方记谱内边距</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="137"/>
         <source>layout break type</source>
-        <translation type="unfinished"/>
+        <translation>布局断行类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="138"/>
         <source>autoscale</source>
-        <translation type="unfinished"/>
+        <translation>自动缩放</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
@@ -16630,7 +16630,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="155"/>
         <source>size is spatium</source>
-        <translation type="unfinished"/>
+        <translation>大小以谱表空间为单位</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="156"/>
@@ -16651,12 +16651,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="161"/>
         <source>without slope</source>
-        <translation type="unfinished"/>
+        <translation>无斜率</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="162"/>
         <source>beam staff move</source>
-        <translation type="unfinished"/>
+        <translation>符杠谱表移动</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="163"/>
@@ -16691,7 +16691,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="171"/>
         <source>bracket</source>
-        <translation type="unfinished"/>
+        <translation>括号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="172"/>
@@ -16706,32 +16706,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="174"/>
         <source>numerator string</source>
-        <translation type="unfinished"/>
+        <translation>分子字符串</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="175"/>
         <source>denominator string</source>
-        <translation type="unfinished"/>
+        <translation>分母字符串</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="176"/>
         <source>prefix</source>
-        <translation type="unfinished"/>
+        <translation>前缀</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="177"/>
         <source>digit</source>
-        <translation type="unfinished"/>
+        <translation>数字</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="178"/>
         <source>suffix</source>
-        <translation type="unfinished"/>
+        <translation>后缀</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="179"/>
         <source>continuation line</source>
-        <translation type="unfinished"/>
+        <translation>连续线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="187"/>
@@ -16771,7 +16771,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="195"/>
         <source>hairpin cont height</source>
-        <translation type="unfinished"/>
+        <translation>楔形记号连续高度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="196"/>
@@ -16801,12 +16801,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="202"/>
         <source>change method</source>
-        <translation type="unfinished"/>
+        <translation>变化方式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="203"/>
         <source>placement</source>
-        <translation type="unfinished"/>
+        <translation>位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="204"/>
@@ -16816,7 +16816,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="205"/>
         <source>multimeasure rest range bracket type</source>
-        <translation type="unfinished"/>
+        <translation>多休止范围括号类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="207"/>
@@ -16851,7 +16851,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
         <source>marker center on symbol</source>
-        <translation type="unfinished"/>
+        <translation>记号以符号为中心</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
@@ -16916,7 +16916,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="228"/>
         <source>diagonal</source>
-        <translation type="unfinished"/>
+        <translation>对角</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="229"/>
@@ -16987,24 +16987,24 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
         <location filename="../../src/engraving/dom/property.cpp" line="297"/>
         <source>tick</source>
-        <translation type="unfinished"/>
+        <translation>拍子记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
         <source>ticks</source>
-        <translation type="unfinished"/>
+        <translation>拍子记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>end track</source>
-        <translation type="unfinished"/>
+        <translation>末尾轨道</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <location filename="../../src/engraving/dom/property.cpp" line="262"/>
         <source>end offset</source>
-        <translation type="unfinished"/>
+        <translation>末尾偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
@@ -17039,7 +17039,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="255"/>
         <source>stretch</source>
-        <translation type="unfinished"/>
+        <translation>拉伸</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
@@ -17049,22 +17049,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
         <source>irregular</source>
-        <translation type="unfinished"/>
+        <translation>不规则</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="259"/>
         <source>start offset</source>
-        <translation type="unfinished"/>
+        <translation>起始偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
         <source>left shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>左肩偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="261"/>
         <source>right shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>右肩偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="263"/>
@@ -17084,7 +17084,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
         <source>endings</source>
-        <translation type="unfinished"/>
+        <translation>结尾</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="269"/>
@@ -17094,7 +17094,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="270"/>
         <source>magnification</source>
-        <translation type="unfinished"/>
+        <translation>放大</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="271"/>
@@ -17114,7 +17114,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="274"/>
         <source>role</source>
-        <translation type="unfinished"/>
+        <translation>角色</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="275"/>
@@ -17134,7 +17134,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="279"/>
         <source>show nut</source>
-        <translation type="unfinished"/>
+        <translation>显示琴枕</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
@@ -17244,12 +17244,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="305"/>
         <source>creating system header</source>
-        <translation type="unfinished"/>
+        <translation>创建谱表表头</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="306"/>
         <source>lines</source>
-        <translation type="unfinished"/>
+        <translation>线数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="307"/>
@@ -17299,12 +17299,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="319"/>
         <source>y-offset</source>
-        <translation type="unfinished"/>
+        <translation>Y轴偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="320"/>
         <source>distance offset</source>
-        <translation type="unfinished"/>
+        <translation>距离偏移</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="321"/>
@@ -17329,7 +17329,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="326"/>
         <source>level</source>
-        <translation type="unfinished"/>
+        <translation>级别</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="327"/>
@@ -17344,7 +17344,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="329"/>
         <source>family</source>
-        <translation type="unfinished"/>
+        <translation>字体族</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="331"/>
@@ -17354,7 +17354,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="332"/>
         <source>user line distancing</source>
-        <translation type="unfinished"/>
+        <translation>用户行距</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="334"/>
@@ -17374,7 +17374,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="337"/>
         <source>frame round</source>
-        <translation type="unfinished"/>
+        <translation>边框圆角</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="338"/>
@@ -17389,12 +17389,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="340"/>
         <source>spatium dependent size</source>
-        <translation type="unfinished"/>
+        <translation>依赖谱表空间的大小</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="341"/>
         <source>spatium dependent text size</source>
-        <translation type="unfinished"/>
+        <translation>依赖谱表空间的文本大小</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="342"/>
@@ -17409,12 +17409,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="344"/>
         <source>text script align</source>
-        <translation type="unfinished"/>
+        <translation>文本脚本对齐</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="345"/>
         <source>system flag</source>
-        <translation type="unfinished"/>
+        <translation>系统标记</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="347"/>
@@ -17634,7 +17634,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="393"/>
         <source>note-anchored line placement</source>
-        <translation type="unfinished"/>
+        <translation>音符锚定线位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="395"/>
@@ -17644,7 +17644,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="396"/>
         <source>dynamic size</source>
-        <translation type="unfinished"/>
+        <translation>动态大小</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="397"/>
@@ -17654,22 +17654,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="398"/>
         <source>anchor to end of previous</source>
-        <translation type="unfinished"/>
+        <translation>锚定到前者之尾</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="400"/>
         <source>snap expression</source>
-        <translation type="unfinished"/>
+        <translation>吸附表情记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="401"/>
         <source>snap before</source>
-        <translation type="unfinished"/>
+        <translation>前吸附</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="402"/>
         <source>snap after</source>
-        <translation type="unfinished"/>
+        <translation>后吸附</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="404"/>
@@ -17684,32 +17684,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="407"/>
         <source>position above</source>
-        <translation type="unfinished"/>
+        <translation>上方位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="409"/>
         <source>staves distance</source>
-        <translation type="unfinished"/>
+        <translation>谱表间距</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="410"/>
         <source>voices distance</source>
-        <translation type="unfinished"/>
+        <translation>声部间距</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="411"/>
         <source>measures distance</source>
-        <translation type="unfinished"/>
+        <translation>小节间距</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="412"/>
         <source>position distance</source>
-        <translation type="unfinished"/>
+        <translation>定位间距</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="413"/>
         <source>grace note index</source>
-        <translation type="unfinished"/>
+        <translation>倚音索引</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="414"/>
@@ -17719,32 +17719,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>voice</source>
-        <translation type="unfinished"/>
+        <translation>声部</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="417"/>
         <source>position</source>
-        <translation type="unfinished"/>
+        <translation>定位</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>concert clef type</source>
-        <translation type="unfinished"/>
+        <translation>实际谱号类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>transposing clef type</source>
-        <translation type="unfinished"/>
+        <translation>移调谱号类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="421"/>
         <source>clef to barline position</source>
-        <translation type="unfinished"/>
+        <translation>谱号到小节线位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>is header</source>
-        <translation type="unfinished"/>
+        <translation>是表头</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="423"/>
@@ -17764,22 +17764,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="428"/>
         <source>arpeggio type</source>
-        <translation type="unfinished"/>
+        <translation>琶音类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="429"/>
         <source>chord line type</source>
-        <translation>和弦线性记号样式</translation>
+        <translation>和弦线型样式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>straight chord line</source>
-        <translation>和弦直线线性记号</translation>
+        <translation>直线形和弦记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="431"/>
         <source>wavy chord line</source>
-        <translation>和弦波浪线线性记号</translation>
+        <translation>波浪形和弦记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
@@ -17794,7 +17794,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="434"/>
         <source>harmony type</source>
-        <translation type="unfinished"/>
+        <translation>和声类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="436"/>
@@ -17814,7 +17814,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>bracket right side</source>
-        <translation type="unfinished"/>
+        <translation>括号右侧</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="443"/>
@@ -17844,7 +17844,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="448"/>
         <source>bend target time factor</source>
-        <translation>弯音目标时间因子</translation>
+        <translation>弯音目标时间系数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="449"/>
@@ -17854,32 +17854,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="450"/>
         <source>guitar dive tab pos</source>
-        <translation type="unfinished"/>
+        <translation>吉他下压指板位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="451"/>
         <source>guitar bend amount</source>
-        <translation type="unfinished"/>
+        <translation>吉他弯音量</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="452"/>
         <source>guitar dip tremolo line</source>
-        <translation type="unfinished"/>
+        <translation>吉他沉音颤音线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="453"/>
         <source>guitar dive is slack</source>
-        <translation type="unfinished"/>
+        <translation>吉他下压松弛</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
         <source>tremolobar type</source>
-        <translation type="unfinished"/>
+        <translation>震音线类型</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
         <source>tremolobar curve</source>
-        <translation type="unfinished"/>
+        <translation>震音线曲线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="458"/>
@@ -17899,12 +17899,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="462"/>
         <source>path</source>
-        <translation type="unfinished"/>
+        <translation>路径</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>prefer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>偏好升号或降号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="466"/>
@@ -17929,27 +17929,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>is diagram</source>
-        <translation type="unfinished"/>
+        <translation>是图例</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="474"/>
         <source>active</source>
-        <translation type="unfinished"/>
+        <translation>活跃</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="476"/>
         <source>fret position</source>
-        <translation type="unfinished"/>
+        <translation>品格位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="477"/>
         <source>ignored strings</source>
-        <translation type="unfinished"/>
+        <translation>忽略的弦</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="478"/>
         <source>automatically generate text</source>
-        <translation type="unfinished"/>
+        <translation>自动生成文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="479"/>
@@ -17959,52 +17959,52 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="481"/>
         <source>tie placement</source>
-        <translation type="unfinished"/>
+        <translation>连音位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="482"/>
         <source>minimum length</source>
-        <translation type="unfinished"/>
+        <translation>最小长度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="483"/>
         <source>partial spanner direction</source>
-        <translation type="unfinished"/>
+        <translation>局部跨音线方向</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="485"/>
         <source>position linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>与主谱关联的位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="486"/>
         <source>appearance linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>与主谱关联的外观</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="487"/>
         <source>text linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>与主谱关联的文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="488"/>
         <source>exclude from parts</source>
-        <translation type="unfinished"/>
+        <translation>从分谱中排除</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="490"/>
         <source>strings count</source>
-        <translation type="unfinished"/>
+        <translation>弦数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="491"/>
         <source>strings preset</source>
-        <translation type="unfinished"/>
+        <translation>弦预设</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="492"/>
         <source>visible strings</source>
-        <translation type="unfinished"/>
+        <translation>可见弦</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="494"/>
@@ -18019,22 +18019,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="496"/>
         <source>symbol angle</source>
-        <translation type="unfinished"/>
+        <translation>符号角度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="498"/>
         <source>apply to all staves</source>
-        <translation type="unfinished"/>
+        <translation>应用于所有谱表</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="499"/>
         <source>is courtesy</source>
-        <translation type="unfinished"/>
+        <translation>是提示性记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="500"/>
         <source>exclude vertical align</source>
-        <translation type="unfinished"/>
+        <translation>排除垂直对齐</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="502"/>
@@ -18054,27 +18054,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="506"/>
         <source>align with other rests in the same voice</source>
-        <translation type="unfinished"/>
+        <translation>与同声部其他休止符对齐</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="508"/>
         <source>cutaway</source>
-        <translation type="unfinished"/>
+        <translation>缺角</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="509"/>
         <source>hide system barline</source>
-        <translation type="unfinished"/>
+        <translation>隐藏谱表组小节线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="510"/>
         <source>merge matching rests</source>
-        <translation type="unfinished"/>
+        <translation>合并互相匹配的休止符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="511"/>
         <source>reflect transposition</source>
-        <translation type="unfinished"/>
+        <translation>反映移调</translation>
     </message>
 </context>
 <context>
@@ -18095,12 +18095,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="437"/>
         <source>Solid</source>
-        <translation>音量</translation>
+        <translation>实线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="439"/>
         <source>Dotted</source>
-        <translation>点状</translation>
+        <translation>点状线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="441"/>
@@ -18219,17 +18219,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3216"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>上行 25 个小型程间音差，（25S，约5:13S，约37S，5C 加 5C），上行 2° [53 平均律]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3224"/>
         <source>35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up</source>
-        <translation type="unfinished"/>
+        <translation>上行 35 个中型程间音差，（35M，约13M，约125M，5C 加 7C），上行 2/9 全音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3254"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation type="unfinished"/>
+        <translation>上行 5:7 kleisma，（5:7k，约11:13k，7C 减 5C）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3257"/>
@@ -19684,47 +19684,47 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4392"/>
         <source>Gyro</source>
-        <translation type="unfinished"/>
+        <translation>旋转</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4393"/>
         <source>Hand martellato</source>
-        <translation type="unfinished"/>
+        <translation>手锤击</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4394"/>
         <source>Mallet, bell on table</source>
-        <translation type="unfinished"/>
+        <translation>软槌，铃置桌上</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4395"/>
         <source>Mallet, bell suspended</source>
-        <translation type="unfinished"/>
+        <translation>软槌，铃悬空</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4396"/>
         <source>Mallet lift</source>
-        <translation type="unfinished"/>
+        <translation>抬槌</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4397"/>
         <source>Martellato</source>
-        <translation type="unfinished"/>
+        <translation>锤击</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4398"/>
         <source>Martellato lift</source>
-        <translation type="unfinished"/>
+        <translation>锤击抬手</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4399"/>
         <source>Muted martellato</source>
-        <translation type="unfinished"/>
+        <translation>弱音锤击</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4400"/>
         <source>Pluck lift</source>
-        <translation type="unfinished"/>
+        <translation>拨铃抬手</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
@@ -19764,57 +19764,57 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4798"/>
         <source>Tempus perfectum cum prolatione perfecta (9/8)</source>
-        <translation type="unfinished"/>
+        <translation>完全时间，完全律动（9/8）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4799"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 4</source>
-        <translation type="unfinished"/>
+        <translation>不完全时间，不完全律动减值4</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4800"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 5</source>
-        <translation type="unfinished"/>
+        <translation>不完全时间，不完全律动减值5</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4801"/>
         <source>Tempus perfectum cum prolatione imperfecta (3/4)</source>
-        <translation type="unfinished"/>
+        <translation>完全时间，不完全律动（3/4）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4802"/>
         <source>Tempus perfectum cum prolatione imperfecta diminution 1 (3/8)</source>
-        <translation type="unfinished"/>
+        <translation>完全时间，不完全律动减值1（3/8）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4803"/>
         <source>Tempus perfectum cum prolatione perfecta diminution 2 (9/16)</source>
-        <translation type="unfinished"/>
+        <translation>完全时间，完全律动减值2（9/16）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4804"/>
         <source>Tempus imperfectum cum prolatione perfecta (6/8)</source>
-        <translation type="unfinished"/>
+        <translation>不完全时间，完全律动（6/8）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4805"/>
         <source>Tempus imperfectum cum prolatione imperfecta (2/4)</source>
-        <translation type="unfinished"/>
+        <translation>不完全时间，不完全律动（2/4）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4806"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 1 (2/2)</source>
-        <translation type="unfinished"/>
+        <translation>不完全时间，不完全律动减值1（2/2）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4807"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 2 (6/16)</source>
-        <translation type="unfinished"/>
+        <translation>不完全时间，不完全律动减值2（6/16）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4808"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 3 (2/2)</source>
-        <translation type="unfinished"/>
+        <translation>不完全时间，不完全律动减值3（2/2）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4851"/>
@@ -20174,7 +20174,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5986"/>
         <source>Tuplet 3</source>
-        <translation type="unfinished"/>
+        <translation>三连音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6040"/>
@@ -24645,7 +24645,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/PedalStyleSettings.qml" line="62"/>
         <source>Make line to asterisk visible</source>
-        <translation type="unfinished"/>
+        <translation>显示到星号的线</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml" line="52"/>
@@ -25715,7 +25715,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="284"/>
         <source>Midpoint</source>
-        <translation type="unfinished"/>
+        <translation>中点</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="285"/>
@@ -25825,7 +25825,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="38"/>
         <source>Partial lyrics line</source>
-        <translation type="unfinished"/>
+        <translation>部分歌词行</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/notelinesettingsmodel.cpp" line="32"/>
@@ -26367,7 +26367,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="75"/>
         <source>Order:</source>
-        <translation>次序：</translation>
+        <translation>排列顺序：</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="91"/>
@@ -26820,12 +26820,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="54"/>
         <source>MuseSampler library is detected, version %1</source>
-        <translation>检测到Muse采样库，版本为%1</translation>
+        <translation>检测到 MuseSampler 库，版本为 %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
         <source>Installed MuseSampler library is not supported, version %1</source>
-        <translation>不支持所安装的MuseSampler库，版本为%1</translation>
+        <translation>不支持所安装的 MuseSampler 库，版本为 %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
@@ -27014,17 +27014,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
         <source>Notation/tab in open position</source>
-        <translation type="unfinished"/>
+        <translation>谱面/指法谱以开放位置显示</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="120"/>
         <source>Notation shows sounding pitches</source>
-        <translation type="unfinished"/>
+        <translation>谱面显示实际音高</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="121"/>
         <source>No transposition</source>
-        <translation type="unfinished"/>
+        <translation>不移调</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="136"/>
@@ -27748,7 +27748,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/GlissandoSection.qml" line="54"/>
         <source>Wavy</source>
-        <translation>波浪型</translation>
+        <translation>波浪线</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/GlissandoSection.qml" line="73"/>
@@ -27771,29 +27771,29 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="107"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="80"/>
         <source>Normal</source>
-        <translation>常</translation>
+        <translation>常规线条</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/LineStyleSection.qml" line="51"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="108"/>
         <source>Dashed</source>
-        <translation>长虚线</translation>
+        <translation>虚线</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/LineStyleSection.qml" line="52"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="109"/>
         <source>Dotted</source>
-        <translation>点状</translation>
+        <translation>点状线</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/LineStyleSection.qml" line="64"/>
         <source>Dash (dashed line):</source>
-        <translation>虚线单长</translation>
+        <translation>单段虚线长度：</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/LineStyleSection.qml" line="70"/>
         <source>Gap (dashed line):</source>
-        <translation>间隔（虚线）：</translation>
+        <translation>虚线间距：</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/NoteFlagsTypeSelector.qml" line="45"/>
@@ -28132,7 +28132,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="129"/>
         <source>Please select all notes that are part of this tuplet and try again.</source>
-        <translation>请选中该连音符的所有音符然后重试</translation>
+        <translation>请选中该连音符的所有音符后重试</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="132"/>
@@ -28412,12 +28412,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1492"/>
         <source>All Supported Files</source>
-        <translation>全部受支持的文件</translation>
+        <translation>所有受支持的文件</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1493"/>
         <source>Scalable Vector Graphics</source>
-        <translation>可缩放矢量图像</translation>
+        <translation>可缩放矢量图像（SVG）</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1494"/>
@@ -28481,7 +28481,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1856"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation>由于此样式文件来自不同版本的 MuseScore Studio，因此不保证您的乐谱显示正确。</translation>
+        <translation>由于此样式文件来自不同版本的 MuseScore Studio，因此无法保证您的乐谱能正常显示。</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1858"/>
@@ -29108,7 +29108,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1407"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation>本乐谱上次保存时的MuseScore Studio版本</translation>
+        <translation>此乐谱上次保存时所用的 MuseScore Studio 版本</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1409"/>
@@ -29335,32 +29335,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="247"/>
         <source>Lowercase bass notes</source>
-        <translation>小写低音音名</translation>
+        <translation>低音音名小写</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="254"/>
         <source>All caps (for Solfeggio and French)</source>
-        <translation type="unfinished"/>
+        <translation>全大写（用于视唱练耳和法式）</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="267"/>
         <source>Extensions (e.g. 7, 11)</source>
-        <translation>扩展（如 7、11）</translation>
+        <translation>扩展音（如 7、11）</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="342"/>
         <source>Modifiers (e.g. sus4, no 3)</source>
-        <translation>修饰符（如 sus4、no3）</translation>
+        <translation>修饰音（如 sus4、no3）</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="416"/>
         <source>Vertically stack modifiers</source>
-        <translation>纵向堆叠修饰符</translation>
+        <translation>纵向堆叠修饰音</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="425"/>
         <source>Altered bass notes (e.g. A7/G)</source>
-        <translation>变化低音音符（如 A7/G）</translation>
+        <translation>改换低音音符（如 A7/G）</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="528"/>
@@ -29385,7 +29385,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="667"/>
         <source>Exclude modifiers from horizontal alignment</source>
-        <translation>从水平对齐中排除修饰符</translation>
+        <translation>从水平对齐中排除修饰音</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="677"/>
@@ -29400,7 +29400,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="868"/>
         <source>Capo</source>
-        <translation>变调</translation>
+        <translation>变调夹</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="71"/>
@@ -29502,7 +29502,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="253"/>
         <source>Don’t show chord symbols transposed by capo</source>
-        <translation>不显示变调夹和弦符号</translation>
+        <translation>隐藏受变调夹影响的和弦符号</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="256"/>
@@ -29525,7 +29525,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="61"/>
         <source>Show ‘H’ and ‘P’ symbols on</source>
-        <translation>在……上显示击弦‘H’和勾弦‘P’符号</translation>
+        <translation>显示击弦‘H’和勾弦‘P’符号于</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="67"/>
@@ -29598,7 +29598,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="229"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="322"/>
         <source>Half slur</source>
-        <translation>半圆滑</translation>
+        <translation>半连音线</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="230"/>
@@ -29622,7 +29622,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="385"/>
         <source>Slur top and bottom notes in chords</source>
-        <translation>圆滑度过和弦中顶部和底部音符</translation>
+        <translation>和弦中连音线顶部和底部的音符</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="395"/>
@@ -30382,7 +30382,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/preferences/qml/MuseScore/Preferences/percussionpreferencesmodel.cpp" line="66"/>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/percussionpreferencesmodel.cpp" line="145"/>
         <source>When inputting notation on an unpitched percussion staff</source>
-        <translation>当在无音高打击乐谱表上输入记谱时</translation>
+        <translation>当在无音高打击乐谱表上输入时</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/percussionpreferencesmodel.cpp" line="71"/>
@@ -30447,12 +30447,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/staffvisibilitypopupmodel.cpp" line="340"/>
         <source>Change part visibility: %1</source>
-        <translation>更换分谱可见性：%1</translation>
+        <translation>更改分谱可见性：%1</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/staffvisibilitypopupmodel.cpp" line="357"/>
         <source>Change staff visibility: %1</source>
-        <translation>更换谱表可见性：%1</translation>
+        <translation>更改谱表可见性：%1</translation>
     </message>
 </context>
 <context>
@@ -30740,7 +30740,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message numerus="yes">
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="552"/>
         <source>%1, contains %Ln matching element(s)</source>
-        <translation><numerusform>%1，包含%Ln个匹配元素</numerusform></translation>
+        <translation><numerusform>%1，包含 %Ln 个匹配的元素</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="553"/>
@@ -30896,7 +30896,7 @@ failed.</source>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="350"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1834"/>
         <source>String tunings</source>
-        <translation>定弦</translation>
+        <translation>调弦</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="325"/>
@@ -31267,12 +31267,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1411"/>
         <source>Metric modulation: eighth note = eighth note</source>
-        <translation>韵律变化：8分音符=8分音符</translation>
+        <translation>韵律变化：八分音符=八分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1414"/>
         <source>Metric modulation: quarter note = quarter note</source>
-        <translation>韵律变化：4分音符=4分音符</translation>
+        <translation>韵律变化：四分音符=四分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1417"/>
@@ -31961,7 +31961,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="120"/>
         <source>Mandaic</source>
-        <translation>曼达安字母</translation>
+        <translation>曼达语字母</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="121"/>
@@ -33658,7 +33658,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="547"/>
         <source>Bank %1</source>
-        <translation>音色库%1</translation>
+        <translation>音色库 %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="62"/>
@@ -33833,7 +33833,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation>检查是否有新版本的MuseScore Studio可用</translation>
+        <translation>检查是否有新版本的 MuseScore Studio 可用</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
@@ -33981,7 +33981,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ImportStyleSection.qml" line="56"/>
         <source>Built-in style</source>
-        <translation>内建样式</translation>
+        <translation>内置样式</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ImportStyleSection.qml" line="80"/>
@@ -35004,7 +35004,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2361"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
-        <translation>此文件包含可致 MuseScore Studio 发生故障的错误。请尽快修复这些错误，以防止崩溃和进一步的损坏。</translation>
+        <translation>此文件包含可致 MuseScore Studio 发生故障的错误。请首先修复这些错误，以防止崩溃和进一步的损坏。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="107"/>
@@ -35325,22 +35325,22 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="115"/>
         <source>Private</source>
-        <translation>私有</translation>
+        <translation>仅自己可见</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="117"/>
         <source>Unlisted</source>
-        <translation>未列出</translation>
+        <translation>不公开列出</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="119"/>
         <source>Public</source>
-        <translation>公开</translation>
+        <translation>完全公开</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
         <source>Would you also like to share your music on Audio.com?</source>
-        <translation>您还想在Audio.com上分享您的音乐吗？</translation>
+        <translation>您想同时在 Audio.com 上分享您的音乐吗？</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
@@ -35531,12 +35531,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
         <source>Disable to let the importing app choose beam groupings.</source>
-        <translation type="unfinished"/>
+        <translation>禁用以让导入应用自行选择符杠分组</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="34"/>
         <source>Enable to export the staff line of every rest. Disable to let the importing app decide.</source>
-        <translation type="unfinished"/>
+        <translation>启用以导出每个休止符的谱线。禁用以让导入应用自行决定。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="38"/>
@@ -35556,12 +35556,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="92"/>
         <source>Export beams</source>
-        <translation type="unfinished"/>
+        <translation>导出符杠</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="118"/>
         <source>Export rest positions</source>
-        <translation type="unfinished"/>
+        <translation>导出休止符位置</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="33"/>
@@ -35951,7 +35951,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>为&lt;a href=&quot;%1&quot;&gt;Muse 鼓谱打击乐&lt;/a&gt;使用新式记谱和声音映射</translation>
+        <translation>为 &lt;a href=&quot;%1&quot;&gt;MDL 打击乐&lt;/a&gt;采用新式记谱和声音映射</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
@@ -36361,7 +36361,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
         <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
-        <translation>文件以非公开形式保存在您自己的个人账户上。您可以与他人共享草稿，也可以公开发布您完成的乐谱。</translation>
+        <translation>文件将以非公开形式保存在您自己的个人账户上。您可以与他人分享乐谱草稿，也可以公开发布您已完成的乐谱。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
@@ -36419,7 +36419,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation>每一次保存都可能占用一些时间，这取决于您的乐谱的文件大小。这些设置总是能在偏好中更改。</translation>
+        <translation>每次保存都可能会消耗一些时间，这取决于您的乐谱的文件大小。这些设置可在偏好设置中调整。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
@@ -36589,7 +36589,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
         <source>Your saved changes will be publicly visible. We will also need to generate a new MP3 for public playback.</source>
-        <translation>您保存的更改将公开可见。我们还需要生成一个新的MP3来发布录音。</translation>
+        <translation>您保存的更改将公开可见。我们同时将生成一个新的 MP3 以便提供公开播放。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
@@ -36642,12 +36642,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="568"/>
         <source>There are conflicting changes in the online score</source>
-        <translation>在线乐谱存在相互矛盾的变更</translation>
+        <translation>在线乐谱存在冲突变更</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="570"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation>您可以替换已有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;，或将其发布为新乐谱，以避免丢失当前在线版本中的更改。</translation>
+        <translation>您可以用它覆盖现有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;，或将它发布为新的乐谱以避免丢失当前在线版本中的更改。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="576"/>
@@ -36658,12 +36658,12 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="588"/>
         <source>Replace</source>
-        <translation>替换</translation>
+        <translation>覆盖</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="581"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation>您可以替换已有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;，或将其另存为新文件，以避免丢失当前在线版本中的更改。</translation>
+        <translation>您可以用它覆盖现有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;，或将它另存为新文件以避免丢失当前在线版本中的更改。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="587"/>
@@ -36675,7 +36675,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="464"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="557"/>
         <source>Log in or create a free account on MuseScore.com to open this score.</source>
-        <translation>在MuseScore.com上登录或创建一个免费账户以打开此乐谱。</translation>
+        <translation>在 MuseScore.com 上登录或创建一个免费账户以打开此乐谱。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1399"/>
@@ -36695,7 +36695,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1493"/>
         <source>Please add at least one instrument to enable saving.</source>
-        <translation>请至少添加一个乐器以保存。</translation>
+        <translation>请至少添加一个乐器才能保存。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1643"/>
@@ -36715,7 +36715,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1663"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation>为了保留您的乐谱，请试着重新保存一次。如果仍出现此消息，请将您的乐谱另存为新副本。您也可以在 %1 上获取对于此问题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（当请求支持时请引用）：%2</translation>
+        <translation>为了保护您的乐谱，请试着重新保存一次。如果仍出现此消息，请将您的乐谱另存为新副本。您也可以在 %1 上获取对于此问题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（当请求帮助时请提供）：%2</translation>
     </message>
 </context>
 <context>
@@ -36728,29 +36728,29 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="641"/>
         <source>Your Audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>您的Audio.com账户需要先进行验证。请通过激活电子邮件中的链接激活您的账户。</translation>
+        <translation>您的 Audio.com 账户需要先进行验证。请访问电子邮件中的链接来激活您的账户。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="647"/>
         <source>Audio.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that audio.com returned, which is a number.</extracomment>
-        <translation>audio.com返回了未知错误代码：%1。</translation>
+        <translation>Audio.com 返回了未知的错误代码：%1。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="650"/>
         <source>Audio.com returned an unknown error code.</source>
-        <translation>Audio.com返回了未知错误代码。</translation>
+        <translation>Audio.com 返回了未知错误代码。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="652"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="659"/>
         <source>Please try again later, or get help for this problem on Audio.com.</source>
-        <translation>请稍后再试，或在Audio.com上获取有关此问题的帮助。</translation>
+        <translation>请稍后再试，或在 Audio.com 上获取有关此问题的帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="655"/>
         <source>Could not connect to Audio.com. Please check your internet connection or try again later.</source>
-        <translation>无法连接到 Audio.com。请检查您的互联网连接或稍后再尝试。</translation>
+        <translation>无法连接到 Audio.com。请检查您的互联网连接或稍后再试。</translation>
     </message>
 </context>
 <context>
@@ -36772,7 +36772,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/EditMidiMappingDialog.qml" line="94"/>
         <source>Press a key or adjust a control on your MIDI device to assign it to this action.</source>
-        <translation>按下键或调整MIDI设备上的控件，将其分配给此操作。</translation>
+        <translation>按下按键或调整 MIDI 设备上的控件，以将其分配给此操作。</translation>
     </message>
     <message>
         <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/EditMidiMappingDialog.qml" line="103"/>
@@ -37470,7 +37470,7 @@ failed: %2</source>
         <translation>重置 %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="594"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="599"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1271"/>
         <source>Edit style</source>
         <translation>编辑样式</translation>
@@ -37510,7 +37510,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="455"/>
         <source>Edit bend curve</source>
-        <translation>编辑变音曲线</translation>
+        <translation>编辑弯音曲线</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/fretframe/fretframechordlistmodel.cpp" line="106"/>
@@ -37775,7 +37775,7 @@ failed: %2</source>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4565"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
-        <translation>按键性编辑</translation>
+        <translation>组合键式编辑</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4973"/>
@@ -38063,7 +38063,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6473"/>
         <source>Fill with slashes</source>
-        <translation>用斜杠填满小节节拍</translation>
+        <translation>用斜线填充小节节拍</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6484"/>
@@ -38073,12 +38073,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6491"/>
         <source>Change enharmonic spelling</source>
-        <translation>更改异名同音的音名</translation>
+        <translation>变更异名同音记谱</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6498"/>
         <source>Optimize enharmonic spelling</source>
-        <translation>优化等音拼写</translation>
+        <translation>优化异名同音记谱</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6505"/>
@@ -38098,7 +38098,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6526"/>
         <source>Resequence rehearsal marks</source>
-        <translation>排练号重排序</translation>
+        <translation>重新排列排练号顺序</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6533"/>
@@ -38423,7 +38423,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2180"/>
         <source>Display transposed</source>
-        <translation>显示已移调内容</translation>
+        <translation>显示移调音高</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="196"/>
@@ -38438,7 +38438,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/stringtuningssettingsmodel.cpp" line="142"/>
         <source>Set string tuning</source>
-        <translation>设置定弦</translation>
+        <translation>设置调弦</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/stringtuningssettingsmodel.cpp" line="230"/>
