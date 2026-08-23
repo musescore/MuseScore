@@ -188,6 +188,26 @@ void EngravingObject::moveToDummy()
     }
 }
 
+static void collectChildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)
+{
+    for (EngravingObject* ch : item->children()) {
+        if (ch->isEngravingItem()) {
+            list.push_back(toEngravingItem(ch));
+
+            if (all) {
+                collectChildrenItems(ch, list, all);
+            }
+        }
+    }
+}
+
+EngravingItemList EngravingObject::childrenItems(bool all) const
+{
+    EngravingItemList list;
+    collectChildrenItems(this, list, all);
+    return list;
+}
+
 EngravingItemList EngravingObject::getChildren(bool includeInvisible) const
 {
     EngravingItemList childrenList;

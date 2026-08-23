@@ -181,7 +181,7 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     m_fileDivision = Constants::DIVISION;
     m_style = DefaultStyle::defaultStyle();
 
-    m_rootItem = new RootItem(this);
+    m_rootItem = new RootItem(this, RootItem::Kind::Score);
     m_rootItem->init();
 
     m_dummy = new DummyParent(this);

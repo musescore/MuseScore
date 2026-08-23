@@ -503,7 +503,7 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
 //   Hairpin
 //---------------------------------------------------------
 
-Hairpin::Hairpin(EngravingItem* parent)
+Hairpin::Hairpin(DummyParentOr<EngravingItem> parent)
     : TextLineBase(ElementType::HAIRPIN, parent)
 {
     initElementStyle(&hairpinStyle);

@@ -62,11 +62,9 @@ EngravingItem* Page::layoutParent() const
 EngravingItem* Page::accessibleParentItem() const
 {
     // Above the visual hierarchy sits the root item, which exists only to head the
-    // accessibility tree. (The dummy's page hangs off the dummy's own root item, which
-    // the base implementation finds as its raw parent.)
-    EngravingItem* parent = EngravingItem::accessibleParentItem();
-
-    return parent ? parent : score()->rootItem();
+    // accessibility tree. A page that is not in the score belongs to the dummy's tree,
+    // which the base implementation finds.
+    return ownershipParent() ? score()->rootItem() : EngravingItem::accessibleParentItem();
 }
 
 Page::~Page()

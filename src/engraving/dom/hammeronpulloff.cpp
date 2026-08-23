@@ -32,7 +32,7 @@
 #include "system.h"
 
 namespace mu::engraving {
-HammerOnPullOff::HammerOnPullOff(EngravingItem* parent)
+HammerOnPullOff::HammerOnPullOff(DummyParentOr<EngravingItem> parent)
     : Slur(parent, ElementType::HAMMER_ON_PULL_OFF)
 {
 }

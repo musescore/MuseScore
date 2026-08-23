@@ -129,7 +129,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-EngravingItem* Factory::createItem(ElementType type, EngravingItem* parent, bool isAccessibleEnabled)
+EngravingItem* Factory::createItem(ElementType type, DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled)
 {
     EngravingItem* item = doCreateItem(type, parent);
 
@@ -148,9 +148,15 @@ static DummyParentOr<T> parentOfTypeOrDummy(EngravingItem* parent, DummyParent* 
     return parentOrDummy(dynamic_cast<T*>(parent), dummy);
 }
 
-EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
+EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingItem> parent)
 {
-    auto dummy = parent->score()->dummy();
+    EngravingObject* parentObject = parent;
+    Score* score = parentObject->score();
+    DummyParent* dummy = score->dummy();
+    // null when the item is to be created unattached; the cases below that need a
+    // parent of a particular type fall back to the dummy either way
+    EngravingItem* parentItem = parent.as<EngravingItem>();
+
     switch (type) {
     case ElementType::VOLTA:             return new Volta(parent);
     case ElementType::OTTAVA:            return new Ottava(parent);
@@ -167,96 +173,96 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::PICK_SCRAPE:       return new PickScrape(parent);
     case ElementType::PEDAL:             return new Pedal(parent);
     case ElementType::HAIRPIN:           return new Hairpin(parent);
-    case ElementType::CLEF:              return new Clef(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::KEYSIG:            return new KeySig(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::TIMESIG:           return new TimeSig(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::BAR_LINE:          return new BarLine(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parentOfTypeOrDummy<System>(parent, dummy));
-    case ElementType::ARPEGGIO:          return new Arpeggio(parentOfTypeOrDummy<Chord>(parent, dummy));
-    case ElementType::CHORD_BRACKET:     return new ChordBracket(parentOfTypeOrDummy<Chord>(parent, dummy));
-    case ElementType::BREATH:            return new Breath(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::CLEF:              return new Clef(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::KEYSIG:            return new KeySig(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::TIMESIG:           return new TimeSig(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::BAR_LINE:          return new BarLine(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parentOfTypeOrDummy<System>(parentItem, dummy));
+    case ElementType::ARPEGGIO:          return new Arpeggio(parentOfTypeOrDummy<Chord>(parentItem, dummy));
+    case ElementType::CHORD_BRACKET:     return new ChordBracket(parentOfTypeOrDummy<Chord>(parentItem, dummy));
+    case ElementType::BREATH:            return new Breath(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::GLISSANDO:         return new Glissando(parent);
     case ElementType::BRACKET:           return new Bracket(parent);
-    case ElementType::ARTICULATION:      return new Articulation(parentOfTypeOrDummy<ChordRest>(parent, dummy));
-    case ElementType::TAPPING:           return new Tapping(parentOfTypeOrDummy<ChordRest>(parent, dummy));
-    case ElementType::ORNAMENT:          return new Ornament(parentOfTypeOrDummy<ChordRest>(parent, dummy));
+    case ElementType::ARTICULATION:      return new Articulation(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
+    case ElementType::TAPPING:           return new Tapping(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
+    case ElementType::ORNAMENT:          return new Ornament(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::FERMATA:           return new Fermata(parent);
-    case ElementType::CHORDLINE:         return new ChordLine(parentOfTypeOrDummy<Chord>(parent, dummy));
+    case ElementType::CHORDLINE:         return new ChordLine(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::ACCIDENTAL:        return new Accidental(parent);
-    case ElementType::DYNAMIC:           return new Dynamic(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::EXPRESSION:        return new Expression(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::DYNAMIC:           return new Dynamic(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::EXPRESSION:        return new Expression(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::TEXT:              return new Text(parent);
-    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parentOfTypeOrDummy<Measure>(parent, dummy));
-    case ElementType::MMREST_RANGE:      return new MMRestRange(parentOfTypeOrDummy<Measure>(parent, dummy));
-    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parentOfTypeOrDummy<System>(parent, dummy));
-    case ElementType::STAFF_TEXT:        return new StaffText(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::STAVE_SHARING_LABEL: return new StaveSharingLabel(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::CAPO:              return new Capo(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::SYSTEM_TEXT:       return new SystemText(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parentOfTypeOrDummy<Measure>(parentItem, dummy));
+    case ElementType::MMREST_RANGE:      return new MMRestRange(parentOfTypeOrDummy<Measure>(parentItem, dummy));
+    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parentOfTypeOrDummy<System>(parentItem, dummy));
+    case ElementType::STAFF_TEXT:        return new StaffText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::STAVE_SHARING_LABEL: return new StaveSharingLabel(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::CAPO:              return new Capo(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::SYSTEM_TEXT:       return new SystemText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
     case ElementType::SOUND_FLAG:        return new SoundFlag(parent);
-    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parentOfTypeOrDummy<MeasureBase>(parent, dummy));
-    case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parentOfTypeOrDummy<System>(parent, dummy));
-    case ElementType::NOTEHEAD:          return new NoteHead(parentOfTypeOrDummy<Note>(parent, dummy));
+    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parentOfTypeOrDummy<MeasureBase>(parentItem, dummy));
+    case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parentOfTypeOrDummy<System>(parentItem, dummy));
+    case ElementType::NOTEHEAD:          return new NoteHead(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::NOTEDOT: {
-        if (parent->isNote()) {
-            return new NoteDot(toNote(parent));
-        } else if (parent->isRest()) {
-            return new NoteDot(toRest(parent));
+        if (parentItem && parentItem->isNote()) {
+            return new NoteDot(toNote(parentItem));
+        } else if (parentItem && parentItem->isRest()) {
+            return new NoteDot(toRest(parentItem));
         } else {
             return new NoteDot(dummy);
         }
     }
-    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parentOfTypeOrDummy<Chord>(parent, dummy));
-    case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parentOfTypeOrDummy<Chord>(parent, dummy));
-    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parentOfTypeOrDummy<MeasureBase>(parent, dummy));
+    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parentOfTypeOrDummy<Chord>(parentItem, dummy));
+    case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parentOfTypeOrDummy<Chord>(parentItem, dummy));
+    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parentOfTypeOrDummy<MeasureBase>(parentItem, dummy));
     case ElementType::MARKER:            return new Marker(parent);
-    case ElementType::JUMP:              return new Jump(parentOfTypeOrDummy<Measure>(parent, dummy));
-    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::JUMP:              return new Jump(parentOfTypeOrDummy<Measure>(parentItem, dummy));
+    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::ACTION_ICON:       return new ActionIcon(parent);
-    case ElementType::NOTE:              return new Note(parentOfTypeOrDummy<Chord>(parent, dummy));
+    case ElementType::NOTE:              return new Note(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::SYMBOL:            return new Symbol(parent);
     case ElementType::FSYMBOL:           return new FSymbol(parent);
-    case ElementType::CHORD:             return new Chord(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::REST:              return new Rest(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::MMREST:            return new MMRest(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::DEAD_SLAPPED:      return new DeadSlapped(toRest(parent));
-    case ElementType::SPACER:            return new Spacer(parentOfTypeOrDummy<Measure>(parent, dummy));
+    case ElementType::CHORD:             return new Chord(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::REST:              return new Rest(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::MMREST:            return new MMRest(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::DEAD_SLAPPED:      return new DeadSlapped(toRest(parentItem));
+    case ElementType::SPACER:            return new Spacer(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::STAFF_STATE:       return new StaffState(parent);
-    case ElementType::TEMPO_TEXT:        return new TempoText(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::HARMONY:           return new Harmony(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::BEND:              return new Bend(parentOfTypeOrDummy<Note>(parent, dummy));
-    case ElementType::GUITAR_BEND:       return new GuitarBend(parentOfTypeOrDummy<Note>(parent, dummy));
+    case ElementType::TEMPO_TEXT:        return new TempoText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::HARMONY:           return new Harmony(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::BEND:              return new Bend(parentOfTypeOrDummy<Note>(parentItem, dummy));
+    case ElementType::GUITAR_BEND:       return new GuitarBend(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
-    case ElementType::LYRICS:            return new Lyrics(parentOfTypeOrDummy<ChordRest>(parent, dummy));
+    case ElementType::LYRICS:            return new Lyrics(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::LYRICSLINE:        return new LyricsLine(parent);
-    case ElementType::FIGURED_BASS:      return new FiguredBass(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::STEM:              return new Stem(parentOfTypeOrDummy<Chord>(parent, dummy));
+    case ElementType::FIGURED_BASS:      return new FiguredBass(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::STEM:              return new Stem(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::SLUR:              return new Slur(parent);
     case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(parent);
     case ElementType::TIE:               return new Tie(parent);
-    case ElementType::TUPLET:            return new Tuplet(parentOfTypeOrDummy<Measure>(parent, dummy));
-    case ElementType::FINGERING:         return new Fingering(parentOfTypeOrDummy<Note>(parent, dummy));
-    case ElementType::HBOX:              return new HBox(parent->score());
-    case ElementType::VBOX:              return new VBox(parent->score());
-    case ElementType::TBOX:              return new TBox(parent->score());
-    case ElementType::FBOX:              return new FBox(parent->score());
-    case ElementType::MEASURE:           return new Measure(parent->score());
-    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parentOfTypeOrDummy<ChordRest>(parent, dummy));
+    case ElementType::TUPLET:            return new Tuplet(parentOfTypeOrDummy<Measure>(parentItem, dummy));
+    case ElementType::FINGERING:         return new Fingering(parentOfTypeOrDummy<Note>(parentItem, dummy));
+    case ElementType::HBOX:              return new HBox(score);
+    case ElementType::VBOX:              return new VBox(score);
+    case ElementType::TBOX:              return new TBox(score);
+    case ElementType::FBOX:              return new FBox(score);
+    case ElementType::MEASURE:           return new Measure(score);
+    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::IMAGE:             return new Image(parent);
     case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
-    case ElementType::AMBITUS:           return new Ambitus(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::STICKING:          return new Sticking(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::TRIPLET_FEEL:      return new TripletFeel(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::STRING_TUNINGS:      return new StringTunings(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parentOfTypeOrDummy<Segment>(parent, dummy));
-    case ElementType::LAISSEZ_VIB:       return new LaissezVib(parentOfTypeOrDummy<Note>(parent, dummy));
-    case ElementType::PARTIAL_TIE:       return new PartialTie(parentOfTypeOrDummy<Note>(parent, dummy));
+    case ElementType::AMBITUS:           return new Ambitus(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::STICKING:          return new Sticking(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::TRIPLET_FEEL:      return new TripletFeel(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::STRING_TUNINGS:      return new StringTunings(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::LAISSEZ_VIB:       return new LaissezVib(parentOfTypeOrDummy<Note>(parentItem, dummy));
+    case ElementType::PARTIAL_TIE:       return new PartialTie(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
     case ElementType::PARENTHESIS:       return new Parenthesis(parent);
 
@@ -324,7 +330,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     return nullptr;
 }
 
-EngravingItem* Factory::createItemByName(const AsciiStringView& name, EngravingItem* parent, bool isAccessibleEnabled)
+EngravingItem* Factory::createItemByName(const AsciiStringView& name, DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled)
 {
     ElementType type = TConv::fromXml(name, ElementType::INVALID, isAccessibleEnabled);
     if (type == ElementType::INVALID) {
@@ -355,8 +361,8 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, EngravingI
         return copy; \
     } \
 
-CREATE_ITEM_IMPL(Accidental, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Accidental, EngravingItem*)
+CREATE_ITEM_IMPL(Accidental, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Accidental, DummyParentOr<EngravingItem>)
 
 CREATE_ITEM_IMPL(Ambitus, DummyParentOr<Segment>, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Ambitus, DummyParentOr<Segment>)
@@ -386,16 +392,16 @@ MAKE_ITEM_IMPL(Beam, Score*)
 CREATE_ITEM_IMPL(Bend, DummyParentOr<Note>, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Bend, DummyParentOr<Note>)
 
-CREATE_ITEM_IMPL(Bracket, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Bracket, EngravingItem*)
+CREATE_ITEM_IMPL(Bracket, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Bracket, DummyParentOr<EngravingItem>)
 
-BracketItem* Factory::createBracketItem(EngravingItem * parent)
+BracketItem* Factory::createBracketItem(DummyParentOr<EngravingItem> parent)
 {
     BracketItem* bi = new BracketItem(parent);
     return bi;
 }
 
-BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType bracketType, size_t span)
+BracketItem* Factory::createBracketItem(DummyParentOr<EngravingItem> parent, BracketType bracketType, size_t span)
 {
     BracketItem* bi = new BracketItem(parent, bracketType, span);
     return bi;
@@ -454,7 +460,7 @@ MAKE_ITEM_IMPL(LayoutBreak, DummyParentOr<MeasureBase>)
 CREATE_ITEM_IMPL(Lyrics, DummyParentOr<ChordRest>, isAccessibleEnabled)
 COPY_ITEM_IMPL(Lyrics)
 
-CREATE_ITEM_IMPL(LyricsLine, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(LyricsLine, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 COPY_ITEM_IMPL(LyricsLine)
 
 CREATE_ITEM_IMPL(Measure, Score*, isAccessibleEnabled)
@@ -498,7 +504,7 @@ COPY_ITEM_IMPL(PageLockIndicator)
 CREATE_ITEM_IMPL(PartialTie, DummyParentOr<Note>, isAccessibleEnabled)
 COPY_ITEM_IMPL(PartialTie)
 
-CREATE_ITEM_IMPL(PartialLyricsLine, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PartialLyricsLine, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 COPY_ITEM_IMPL(PartialLyricsLine)
 
 CREATE_ITEM_IMPL(Rest, DummyParentOr<Segment>, isAccessibleEnabled)
@@ -529,8 +535,8 @@ Segment* Factory::createSegment(DummyParentOr<Measure> parent, SegmentType type,
     return s;
 }
 
-CREATE_ITEM_IMPL(Slur, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Slur, EngravingItem*)
+CREATE_ITEM_IMPL(Slur, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Slur, DummyParentOr<EngravingItem>)
 
 CREATE_ITEM_IMPL(Spacer, DummyParentOr<Measure>, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Spacer, DummyParentOr<Measure>)
@@ -545,7 +551,7 @@ Staff* Factory::createStaff(Part * parent)
 CREATE_ITEM_IMPL(StaffLines, DummyParentOr<Measure>, isAccessibleEnabled)
 COPY_ITEM_IMPL(StaffLines)
 
-CREATE_ITEM_IMPL(StaffState, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StaffState, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(StaffTypeChange, DummyParentOr<MeasureBase>, isAccessibleEnabled)
 MAKE_ITEM_IMPL(StaffTypeChange, DummyParentOr<MeasureBase>)
@@ -565,7 +571,7 @@ StaveSharingLabel* Factory::createStaveSharingLabel(DummyParentOr<Segment> paren
     return staveSharingLabel;
 }
 
-CREATE_ITEM_IMPL(SoundFlag, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(SoundFlag, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(Expression, DummyParentOr<Segment>, isAccessibleEnabled)
 
@@ -612,11 +618,11 @@ Fingering* Factory::createFingering(DummyParentOr<Note> parent, TextStyleType te
     return fingering;
 }
 
-CREATE_ITEM_IMPL(Harmony, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Harmony, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TempoText, DummyParentOr<Segment>, isAccessibleEnabled)
 
-Text* Factory::createText(EngravingItem * parent, TextStyleType tid, bool isAccessibleEnabled)
+Text* Factory::createText(DummyParentOr<EngravingItem> parent, TextStyleType tid, bool isAccessibleEnabled)
 {
     Text* t = new Text(parent, tid);
     t->setAccessibleEnabled(isAccessibleEnabled);
@@ -626,7 +632,7 @@ Text* Factory::createText(EngravingItem * parent, TextStyleType tid, bool isAcce
 
 COPY_ITEM_IMPL(Text)
 
-CREATE_ITEM_IMPL(Tie, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Tie, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 Tie* Factory::copyTie(const Tie& src)
 {
     Tie* copy = src.isLaissezVib() ? new LaissezVib(*toLaissezVib(&src)) : new Tie(src);
@@ -647,27 +653,27 @@ CREATE_ITEM_IMPL(TremoloSingleChord, DummyParentOr<Chord>, isAccessibleEnabled)
 COPY_ITEM_IMPL(TremoloSingleChord)
 MAKE_ITEM_IMPL(TremoloSingleChord, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(TremoloBar, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(TremoloBar, EngravingItem*)
+CREATE_ITEM_IMPL(TremoloBar, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(TremoloBar, DummyParentOr<EngravingItem>)
 
 CREATE_ITEM_IMPL(Tuplet, DummyParentOr<Measure>, isAccessibleEnabled)
 COPY_ITEM_IMPL(Tuplet)
 
-CREATE_ITEM_IMPL(Hairpin, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Hairpin, EngravingItem*)
+CREATE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(HammerOnPullOff, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(HammerOnPullOff, EngravingItem*)
+CREATE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Glissando, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Glissando, EngravingItem*)
+CREATE_ITEM_IMPL(Glissando, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Glissando, DummyParentOr<EngravingItem>)
 
 CREATE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>, isAccessibleEnabled)
 MAKE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>)
 
 CREATE_ITEM_IMPL(Jump, DummyParentOr<Measure>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(Trill, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Trill, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
 TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFeelType type, bool isAccessibleEnabled)
 {
@@ -677,18 +683,18 @@ TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFe
     return t;
 }
 
-CREATE_ITEM_IMPL(Vibrato, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Vibrato, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(TextLine, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(TextLine, EngravingItem*);
+CREATE_ITEM_IMPL(TextLine, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(TextLine, DummyParentOr<EngravingItem>);
 
-CREATE_ITEM_IMPL(Ottava, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Ottava, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(LetRing, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(LetRing, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(Marker, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Marker, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-Marker* Factory::createMarker(EngravingItem * parent, TextStyleType tid, bool isAccessibleEnabled)
+Marker* Factory::createMarker(DummyParentOr<EngravingItem> parent, TextStyleType tid, bool isAccessibleEnabled)
 {
     Marker* m = new Marker(parent, tid);
     m->setAccessibleEnabled(isAccessibleEnabled);
@@ -696,24 +702,24 @@ Marker* Factory::createMarker(EngravingItem * parent, TextStyleType tid, bool is
     return m;
 }
 
-MAKE_ITEM_IMPL(Marker, EngravingItem*)
+MAKE_ITEM_IMPL(Marker, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(GradualTempoChange, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(GradualTempoChange, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(PalmMute, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PalmMute, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(WhammyBar, EngravingItem*, isAccessibleEnabled)
-MAKE_ITEM_IMPL(WhammyBar, EngravingItem*)
+CREATE_ITEM_IMPL(WhammyBar, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+MAKE_ITEM_IMPL(WhammyBar, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Rasgueado, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Rasgueado, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(HarmonicMark, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(HarmonicMark, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(PickScrape, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PickScrape, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(Volta, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Volta, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(Pedal, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Pedal, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(Dynamic, DummyParentOr<Segment>, isAccessibleEnabled)
 
@@ -737,7 +743,7 @@ CREATE_ITEM_IMPL(TBox, Score*, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(FBox, Score*, isAccessibleEnabled)
 
-Image* Factory::createImage(EngravingItem * parent)
+Image* Factory::createImage(DummyParentOr<EngravingItem> parent)
 {
     Image* image = new Image(parent);
     image->setOwnershipParent(parent);
@@ -745,8 +751,8 @@ Image* Factory::createImage(EngravingItem * parent)
     return image;
 }
 
-CREATE_ITEM_IMPL(Symbol, EngravingItem*, isAccessibleEnabled)
-CREATE_ITEM_IMPL(FSymbol, EngravingItem*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Symbol, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(FSymbol, DummyParentOr<EngravingItem>, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(PlayCountText, DummyParentOr<Segment>, isAccessibleEnabled)
 
@@ -776,5 +782,5 @@ SystemLockIndicator* Factory::createSystemLockIndicator(DummyParentOr<System> pa
 
 COPY_ITEM_IMPL(SystemLockIndicator)
 
-CREATE_ITEM_IMPL(Parenthesis, EngravingItem*, isAccessibleEnabled);
+CREATE_ITEM_IMPL(Parenthesis, DummyParentOr<EngravingItem>, isAccessibleEnabled);
 COPY_ITEM_IMPL(Parenthesis)
