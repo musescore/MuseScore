@@ -9693,22 +9693,22 @@ suivies de tirets</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
         <source>Import P&amp;DF…</source>
-        <translation>Importer un P&amp;DF…</translation>
+        <translation>Importer un fichier P&amp;DF…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
         <source>Import PDF</source>
-        <translation>Importer un PDF</translation>
+        <translation>Importer un fichier PDF</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation>Importer de l&apos;a&amp;udio dans la partition…</translation>
+        <translation>Importer un fichier a&amp;udio MP3…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation>Importer de l&apos;audio dans la partition</translation>
+        <translation>Importer un fichier audio MP3</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>
@@ -37472,7 +37472,7 @@ a échoué : %2</translation>
         <translation>Réinitialiser %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="594"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="599"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1271"/>
         <source>Edit style</source>
         <translation>Éditer le style</translation>

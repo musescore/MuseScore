@@ -5445,7 +5445,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="105"/>
         <source>Restore the &amp;default layout</source>
-        <translation>&amp;Varsayılan yerleşimi geri yükle</translation>
+        <translation>Varsayı&amp;lan yerleşimi geri yükle</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="106"/>
@@ -5539,7 +5539,7 @@ asla sola hizalama</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="101"/>
         <source>&amp;Navigator</source>
-        <translation>&amp;Gezgin</translation>
+        <translation>G&amp;ezgin</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="167"/>
@@ -5587,7 +5587,7 @@ asla sola hizalama</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="199"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="134"/>
         <source>Piano &amp;keyboard</source>
-        <translation>&amp;Piyano klavyesi</translation>
+        <translation>P&amp;iyano klavyesi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="200"/>
@@ -5599,7 +5599,7 @@ asla sola hizalama</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="206"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="141"/>
         <source>Percussion</source>
-        <translation>Vurmalı</translation>
+        <translation>&amp;Vurmalı</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="207"/>
@@ -6751,7 +6751,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="595"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation>Her satır başına &amp;ölçü sayısı...</translation>
+        <translation>&amp;Her satır başına ölçü sayısı...</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="596"/>
@@ -9479,7 +9479,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="100"/>
         <source>Playback setup</source>
-        <translation>Çal&amp;ma kurulumu</translation>
+        <translation>&amp;Çalma kurulumu</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
@@ -10239,7 +10239,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="342"/>
         <source>&amp;Chords and fretboard diagrams</source>
-        <translation>&amp;Akor ve akor şeması</translation>
+        <translation>Akor ve akor &amp;şeması</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="346"/>
@@ -10324,12 +10324,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="202"/>
         <source>Open &amp;recent</source>
-        <translation>Son a&amp;çılanlar</translation>
+        <translation>&amp;Son açılanlar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation>Farklı k&amp;aydet</translation>
+        <translation>Farklı kayd&amp;et</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="209"/>
@@ -10371,7 +10371,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="431"/>
         <source>&amp;Plugins</source>
-        <translation>&amp;Eklentiler</translation>
+        <translation>E&amp;klentiler</translation>
     </message>
 </context>
 <context>
@@ -37470,7 +37470,7 @@ başarısız: %2</translation>
         <translation>%1&apos;i sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="594"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="599"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1271"/>
         <source>Edit style</source>
         <translation>Biçimi düzenle</translation>

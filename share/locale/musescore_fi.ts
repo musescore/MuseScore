@@ -10484,17 +10484,17 @@ Julkaistu &lt;a href=&quot;%1&quot;&gt;GNU General Public License -lisenssin ver
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="33"/>
         <source>Unlock Premium Playback</source>
-        <translation type="unfinished"/>
+        <translation>Avaa Premium-toisto käyttöön</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Kuule partituuriesi heräävän henkiin ammattimaisesti taltioitujen soitinkirjastojen avulla ja nauti ilmeikkäästä sekä realistisesta toistosta MuseScore Studiossa.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
         <source>Get MuseSounds Pro</source>
-        <translation type="unfinished"/>
+        <translation>Hanki MuseSounds Pro</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
@@ -15971,7 +15971,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1120"/>
         <source>Pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Sävelnimet, ei tilapäismerkkejä</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1121"/>
@@ -15981,7 +15981,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1122"/>
         <source>German pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Saksalaiset sävelnimet, ei tilapäismerkkejä</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1123"/>
@@ -25142,7 +25142,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="193"/>
         <source>Pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Sävelnimet, ei tilapäismerkkejä</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
@@ -25152,7 +25152,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
         <source>German pitch names, no accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Saksalaiset sävelnimet, ei tilapäismerkkejä</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
@@ -26098,7 +26098,7 @@ kohotahti</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="239"/>
         <source>Pitch names, no accidentals</source>
         <comment>notehead scheme</comment>
-        <translation type="unfinished"/>
+        <translation>Sävelnimet, ei tilapäismerkkejä</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="241"/>
@@ -26110,7 +26110,7 @@ kohotahti</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="242"/>
         <source>German pitch names, no accidentals</source>
         <comment>notehead scheme</comment>
-        <translation type="unfinished"/>
+        <translation>Saksalaiset sävelnimet, ei tilapäismerkkejä</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="244"/>
@@ -37473,7 +37473,7 @@ Haluatko korvata sen?</translation>
         <translation>Palauta %1</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="594"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/abstractinspectormodel.cpp" line="599"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1271"/>
         <source>Edit style</source>
         <translation>Muokkaa tyyliä</translation>
