@@ -112,7 +112,7 @@ EngravingObject::~EngravingObject()
         bool canMoveToDummy = !this->isType(ElementType::ROOT_ITEM)
                               && !this->isType(ElementType::DUMMY)
                               && !this->isType(ElementType::SCORE)
-                              && score()->rootItem() && score()->rootItem()->dummy();
+                              && score()->dummy();
 
         // copy because moveToDummy might modify children
         EngravingObjectList children = m_children;
