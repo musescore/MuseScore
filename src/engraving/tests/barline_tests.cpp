@@ -242,7 +242,6 @@ TEST_F(Engraving_BarlineTests, barline05)
     LayoutBreak* lb = Factory::createLayoutBreak(msr);
     lb->setLayoutBreakType(LayoutBreakType::LINE);
     lb->setTrack(0);
-    lb->setOwnershipParent(msr);
     score->undoAddElement(lb);
     score->doLayout();
 

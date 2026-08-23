@@ -892,13 +892,11 @@ void MeiImporter::setOrnamentAccid(engraving::Ornament* ornament, const Convert:
     if (ornament->hasIntervalAbove() && (ornamSt.accidTypeAbove != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeAbove);
-        accidental->setOwnershipParent(ornament);
         ornament->setAccidentalAbove(accidental);
     }
     if (ornament->hasIntervalBelow() && (ornamSt.accidTypeBelow != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeBelow);
-        accidental->setOwnershipParent(ornament);
         ornament->setAccidentalBelow(accidental);
     }
 }
@@ -2222,7 +2220,6 @@ bool MeiImporter::readTuplet(pugi::xml_node tupletNode, Measure* measure, int tr
     }
 
     m_tuplet->setTrack(track);
-    m_tuplet->setOwnershipParent(measure);
 
     success = readElements(tupletNode, measure, track, ticks);
 
@@ -2744,7 +2741,6 @@ bool MeiImporter::readGliss(pugi::xml_node glissNode, Measure* measure)
     gliss->setTick(startNote->chord()->tick());
     gliss->setStartElement(startNote);
     gliss->setTrack(startNote->track());
-    gliss->setOwnershipParent(startNote);
     gliss->setGlissandoStyle(startNote->part()->instrument(startNote->tick())->glissandoStyle());
 
     const String glissText = String(glissNode.text().as_string());
@@ -2878,7 +2874,6 @@ bool MeiImporter::readLv(pugi::xml_node lvNode, Measure* measure)
     }
 
     LaissezVib* lv = Factory::createLaissezVib(note);
-    lv->setOwnershipParent(note);
     note->score()->undoAddElement(lv);
     m_uids->reg(lv, meiLv.m_xmlId);
 

@@ -973,7 +973,6 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
     if (fb == 0) {                            // no FB at segment: create new
         fb = Factory::createFiguredBass(seg);
         fb->setTrack(track);
-        fb->setOwnershipParent(seg);
 
         // locate next SegChordRest in the same staff to estimate presumed duration of element
         endTick = Fraction::max();

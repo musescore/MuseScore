@@ -2254,7 +2254,6 @@ void Note::updateAccidental(AccidentalState* as)
         if (acci != AccidentalType::NONE && !m_hidden) {
             if (m_accidental == 0) {
                 Accidental* a = Factory::createAccidental(this);
-                a->setOwnershipParent(this);
                 a->setAccidentalType(acci);
                 a->setVisible(visible());
                 score()->undoAddElement(a);

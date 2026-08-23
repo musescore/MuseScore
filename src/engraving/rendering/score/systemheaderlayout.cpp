@@ -997,7 +997,6 @@ InstrumentName* SystemHeaderLayout::updateName(System* system, staff_idx_t staff
     if (!iname) {
         iname = new InstrumentName(system);
         iname->setGenerated(true);
-        iname->setOwnershipParent(system);
         iname->setSysStaff(sysStaff);
         iname->setTrack(staffIdx * VOICES);
         iname->setInstrumentNameType(type);

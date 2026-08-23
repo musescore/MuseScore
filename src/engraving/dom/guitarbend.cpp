@@ -848,7 +848,6 @@ GuitarBendSegment::GuitarBendSegment(GuitarBend* sp)
     : LineSegment(ElementType::GUITAR_BEND_SEGMENT, sp, ElementFlag::MOVABLE)
 {
     m_text = new GuitarBendText(this);
-    m_text->setOwnershipParent(this);
     setFlag(ElementFlag::ON_STAFF, true);
 }
 
@@ -857,7 +856,6 @@ GuitarBendSegment::GuitarBendSegment(const GuitarBendSegment& s)
 {
     m_vertexPointOff = s.m_vertexPointOff;
     m_text = new GuitarBendText(this);
-    m_text->setOwnershipParent(this);
 }
 
 GuitarBendSegment::~GuitarBendSegment()

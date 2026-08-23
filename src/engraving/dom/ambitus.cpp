@@ -59,8 +59,6 @@ Ambitus::Ambitus(DummyParentOr<Segment> parent)
 
     m_topAccidental = Factory::createAccidental(this, false);
     m_bottomAccidental = Factory::createAccidental(this, false);
-    m_topAccidental->setOwnershipParent(this);
-    m_bottomAccidental->setOwnershipParent(this);
 }
 
 Ambitus::Ambitus(const Ambitus& a)

@@ -310,7 +310,6 @@ void Rest::checkDots()
     int n = dots() - int(m_dots.size());
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(this);
-        dot->setOwnershipParent(this);
         dot->setVisible(visible());
         score()->undoAddElement(dot);
     }
