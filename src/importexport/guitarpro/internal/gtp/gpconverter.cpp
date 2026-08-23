@@ -752,7 +752,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
-            TimeSig* t = Factory::createTimeSig(_score->dummy()->segment());
+            TimeSig* t = Factory::createTimeSig(_score->dummy());
             track_idx_t curTrack = staffIdx * VOICES;
             t->setTrack(curTrack);
             t->setSig(scoreTimeSig);
@@ -864,7 +864,7 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
 
     if (!mB->section().first.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy()->segment());
+        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy());
         t->setPlainText(mB->section().first);
         t->setType(RehearsalMark::Type::Main);
         t->setTrack(0);
@@ -872,7 +872,7 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
     }
     if (!mB->section().second.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy()->segment());
+        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy());
         t->setPlainText(mB->section().second);
         t->setType(RehearsalMark::Type::Additional);
         t->setTrack(0);
@@ -985,7 +985,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
-            KeySig* t = mu::engraving::Factory::createKeySig(_score->dummy()->segment());
+            KeySig* t = mu::engraving::Factory::createKeySig(_score->dummy());
             t->setTrack(staffIdx * VOICES);
             t->setKey(scoreKeySig);
             t->setMode(scoreMode);
@@ -1574,7 +1574,7 @@ void GPConverter::addInstrumentChanges()
                 instr.setDrumset(drumset::gpDrumset);
             }
 
-            InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy()->segment(), instr);
+            InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy(), instr);
             instrCh->setTrack(trackIdx * VOICES);
             instrCh->setXmlText(instrName);
 
@@ -1693,7 +1693,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
     }
 
     Segment* s = lastMeasure->getSegment(SegmentType::HeaderClef, tick);
-    Clef* cl = mu::engraving::Factory::createClef(_score->dummy()->segment());
+    Clef* cl = mu::engraving::Factory::createClef(_score->dummy());
     cl->setTrack(curTrack);
     cl->setClefType(clef);
 
@@ -1737,9 +1737,9 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
 
     ChordRest* cr{ nullptr };
     if (beat->isRest()) {
-        cr = Factory::createRest(_score->dummy()->segment());
+        cr = Factory::createRest(_score->dummy());
     } else {
-        cr = Factory::createChord(_score->dummy()->segment());
+        cr = Factory::createChord(_score->dummy());
     }
 
     cr->setTrack(ctx.curTrack);
@@ -1829,7 +1829,7 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
         return SymId::ornamentUpPrall;
     };
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
     art->setSymId(scoreOrnament(gpnote->ornament()));
     if (!EditChord::toggleArticulation(_score, note, art)) {
         delete art;
@@ -1854,7 +1854,7 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
 
     Note* hnote = nullptr;
     if (gpnote->harmonic().type != GPNote::Harmonic::Type::Natural) {
-        hnote = mu::engraving::Factory::createNote(_score->dummy()->chord());
+        hnote = mu::engraving::Factory::createNote(_score->dummy());
         hnote->setTrack(note->track());
         hnote->setString(note->string());
         hnote->setPitch(note->pitch());
@@ -1919,7 +1919,7 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
 
     for (size_t flagIdx = 0; flagIdx < gpnote->accents().size(); flagIdx++) {
         if (gpnote->accents()[flagIdx] && symbolsIds.find(accentType(flagIdx)) == symbolsIds.end()) {
-            Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+            Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
             art->setSymId(accentType(flagIdx));
             note->chord()->add(art);
         }
@@ -1970,7 +1970,7 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
 
     for (size_t flagIdx = 2; flagIdx < gpnote->slides().size(); flagIdx++) {
         if (gpnote->slides()[flagIdx]) {
-            ChordLine* cl = Factory::createChordLine(_score->dummy()->chord());
+            ChordLine* cl = Factory::createChordLine(_score->dummy());
             cl->setChordLineType(slideType(flagIdx));
             cl->setStraight(true);
             note->chord()->add(cl);
@@ -1993,7 +1993,7 @@ void GPConverter::addPickScrape(const GPNote* gpnote, Note* note)
 {
     if (gpnote->pickScrape() != GPNote::PickScrape::None && m_currentGPBeat) {
         if (engravingConfiguration()->guitarProImportExperimental()) {
-            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy()->chord());
+            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy());
             cl->setChordLineType(gpnote->pickScrape() == GPNote::PickScrape::Down ? ChordLineType::FALL : ChordLineType::DOIT);
             cl->setWavy(true);
             note->chord()->add(cl);
@@ -2205,7 +2205,7 @@ void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
         return u"ppp";
     };
 
-    Dynamic* dynamic = Factory::createDynamic(_score->dummy()->segment());
+    Dynamic* dynamic = Factory::createDynamic(_score->dummy());
     dynamic->setTrack(cr->track());
     dynamic->setDynamicType(convertDynamic(gpb->dynamic()));
     cr->segment()->add(dynamic);
@@ -2246,7 +2246,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
                 if (m_tremolosInChords.find(startChord) != m_tremolosInChords.end()) {
                     TremoloType type = m_tremolosInChords.at(startChord);
                     DO_ASSERT(!isTremoloTwoChord(type));
-                    TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy()->chord());
+                    TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy());
                     t->setTremoloType(type);
                     endChord->add(t);
                     muse::remove(m_tremolosInChords, startChord);
@@ -2472,7 +2472,7 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
         return;
     }
 
-    FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy()->segment());
+    FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy());
     fretDiagram->setTrack(cr->track());
     fretDiagram->setStrings(diagram.stringCount);
     fretDiagram->setFretOffset(diagram.baseFret);
@@ -2511,7 +2511,7 @@ void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
     art->setTextType(ArticulationTextType::SLAP);
     cr->add(art);
 }
@@ -2522,7 +2522,7 @@ void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
     art->setTextType(ArticulationTextType::POP);
     cr->add(art);
 }
@@ -2541,7 +2541,7 @@ void GPConverter::addBrush(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy()->chord());
+    Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy());
     arp->setArpeggioType(brushType(beat->brush()));
     arp->setStretch(beat->arpeggioStretch());
 
@@ -2562,7 +2562,7 @@ void GPConverter::addArpeggio(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy()->chord());
+    Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy());
     arp->setArpeggioType(arpeggioType(beat->arpeggio()));
     arp->setStretch(beat->arpeggioStretch());
     cr->add(arp);
@@ -2658,7 +2658,7 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
     m_nextTupletInfo.lowestBase = std::min(m_nextTupletInfo.lowestBase, cr->ticks().denominator());
 
     if (!m_nextTupletInfo.tuplet) {
-        m_nextTupletInfo.tuplet  = Factory::createTuplet(_score->dummy()->measure());
+        m_nextTupletInfo.tuplet  = Factory::createTuplet(_score->dummy());
         m_nextTupletInfo.tuplet->setRatio(currentTupletType);
         m_nextTupletInfo.ratio = currentTupletType;
         m_nextTupletInfo.measure = cr->measure();
@@ -2715,7 +2715,7 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
     art->setSymId(scoreFadding(beat->fadding()));
     if (!EditChord::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
         delete art;
@@ -2745,7 +2745,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
     art->setSymId(scorePickStroke(beat->pickStroke()));
     if (!EditChord::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
         delete art;
@@ -2769,7 +2769,7 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy()->chord());
+    TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
     Chord* ch = toChord(cr);
     ch->add(t);
@@ -2792,7 +2792,7 @@ void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
         return SymId::brassMuteClosed;
     };
 
-    Articulation* art = Factory::createArticulation(_score->dummy()->chord());
+    Articulation* art = Factory::createArticulation(_score->dummy());
     art->setSymId(scoreWah(beat->wah()));
     if (!EditChord::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
         delete art;
@@ -2808,7 +2808,7 @@ void GPConverter::addGolpe(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    Articulation* art = Factory::createArticulation(_score->dummy()->chord());
+    Articulation* art = Factory::createArticulation(_score->dummy());
     art->setSymId(SymId::guitarGolpe);
 
     if (beat->golpe() == GPBeat::Golpe::Thumb) {
@@ -2870,7 +2870,7 @@ void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ct
         return;
     }
 
-    Lyrics* lyr = Factory::createLyrics(_score->dummy()->chord());
+    Lyrics* lyr = Factory::createLyrics(_score->dummy());
 
     if (lyrStr.back() == '-') {
         lyr->setSyllabic(LyricsSyllabic::MIDDLE);
@@ -3077,7 +3077,7 @@ void GPConverter::addCapos()
             params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
             params.fretPosition = it->second;
 
-            Capo* capo = Factory::createCapo(_score->dummy()->segment());
+            Capo* capo = Factory::createCapo(_score->dummy());
             capo->setTrack(track);
             capo->setParams(params);
             segment->add(capo);

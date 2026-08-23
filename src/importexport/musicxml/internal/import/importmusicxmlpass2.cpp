@@ -610,7 +610,7 @@ static InstrumentChange* createInstrumentChange(Score* score, const MusicXmlInst
         return nullptr;
     }
 
-    InstrumentChange* instrChange = Factory::createInstrumentChange(score->dummy()->segment(), instr);
+    InstrumentChange* instrChange = Factory::createInstrumentChange(score->dummy(), instr);
     instrChange->setTrack(track);
 
     // for text use instrument name (if known) else use "Instrument change"
@@ -1261,7 +1261,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     const SymId articSym = notation.symId();
     const String direction = notation.attribute(u"type");
     Segment* seg = cr->segment();
-    Fermata* fermata = Factory::createFermata(seg ? seg : cr->score()->dummy()->segment());
+    Fermata* fermata = Factory::createFermata(parentOrDummy(seg, cr->score()->dummy()));
     fermata->setSymIdAndTimeStretch(articSym);
     fermata->setTrack(cr->track());
     fermata->setVisible(notation.visible());
@@ -2052,7 +2052,7 @@ Err MusicXmlParserPass2::parse()
 static std::unique_ptr<BarLine> createBarline(const Score* score, const track_idx_t track, const BarLineType type, const bool visible,
                                               const String& barStyle, const bool spanStaff)
 {
-    std::unique_ptr<BarLine> barline(Factory::createBarLine(score->dummy()->segment()));
+    std::unique_ptr<BarLine> barline(Factory::createBarLine(score->dummy()));
     barline->setTrack(track);
     barline->setBarLineType(type);
     barline->setSpanStaff(spanStaff);
@@ -2820,7 +2820,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
 
                 if (canAddTempoText(m_score, tick.ticks())) {
                     double tpo = tempoString.toDouble() / 60;
-                    TempoText* t = Factory::createTempoText(m_score->dummy()->segment());
+                    TempoText* t = Factory::createTempoText(m_score->dummy());
                     t->setXmlText(String(u"%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
                                                          tempoString));
                     t->setVisible(false);
@@ -3523,7 +3523,7 @@ void MusicXmlParserDirection::direction(const String& partId,
         // Ignore (TBD: print to footer?)
         return;
     } else if (isLikelyTempoText(m_track)) {
-        TempoText* tt = Factory::createTempoText(m_score->dummy()->segment());
+        TempoText* tt = Factory::createTempoText(m_score->dummy());
         tt->setXmlText(m_wordsText + m_metroText);
         if (m_tpoSound > 0 && canAddTempoText(m_score, tick.ticks())) {
             double tpo = m_tpoSound / 60;
@@ -3542,13 +3542,13 @@ void MusicXmlParserDirection::direction(const String& partId,
 
         GradualTempoChangeType gtc = getTempoChangeTypeFromString(simplifiedText);
 
-        GradualTempoChange* tempoLine = Factory::createGradualTempoChange(m_score->dummy()->segment());
+        GradualTempoChange* tempoLine = Factory::createGradualTempoChange(m_score->dummy());
         tempoLine->setTempoChangeType(gtc);
         tempoLine->setBeginText(simplifiedText);
         tempoLine->setContinueText(u"");
         m_inferredTempoLineStart = tempoLine;
     } else if (isLikelySticking()) {
-        Sticking* sticking = Factory::createSticking(m_score->dummy()->segment());
+        Sticking* sticking = Factory::createSticking(m_score->dummy());
         sticking->setXmlText(m_wordsText);
         if (!RealIsNull(m_relativeX)) {
             PointF offset = sticking->offset();
@@ -3571,7 +3571,7 @@ void MusicXmlParserDirection::direction(const String& partId,
         if (m_tpoSound > 0.1) {
             if (canAddTempoText(m_score, tick.ticks())) {
                 m_tpoSound /= 60;
-                t = Factory::createTempoText(m_score->dummy()->segment());
+                t = Factory::createTempoText(m_score->dummy());
                 String rawWordsText = m_wordsText;
                 static const std::regex re("(<.*?>)");
                 rawWordsText.remove(re);
@@ -3594,17 +3594,17 @@ void MusicXmlParserDirection::direction(const String& partId,
                 }
                 isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty() && placement() == u"below";
                 if (isExpressionText) {
-                    t = Factory::createExpression(m_score->dummy()->segment());
+                    t = Factory::createExpression(m_score->dummy());
                 } else if (m_systemDirection) {
-                    t = Factory::createSystemText(m_score->dummy()->segment());
+                    t = Factory::createSystemText(m_score->dummy());
                 } else if (technique != PlayingTechniqueType::Undefined) {
-                    t = Factory::createPlayTechAnnotation(m_score->dummy()->segment(), technique, TextStyleType::STAFF);
+                    t = Factory::createPlayTechAnnotation(m_score->dummy(), technique, TextStyleType::STAFF);
                 } else {
-                    t = Factory::createStaffText(m_score->dummy()->segment());
+                    t = Factory::createStaffText(m_score->dummy());
                 }
                 t->setXmlText(m_wordsText + m_metroText);
             } else {
-                t = Factory::createRehearsalMark(m_score->dummy()->segment());
+                t = Factory::createRehearsalMark(m_score->dummy());
                 if (!m_rehearsalText.contains(u"<b>")) {
                     m_rehearsalText = u"<b></b>" + m_rehearsalText;            // explicitly turn bold off
                 }
@@ -3686,7 +3686,7 @@ void MusicXmlParserDirection::direction(const String& partId,
 
         if (canAddTempoText(m_score, tick.ticks())) {
             double tpo = m_tpoSound / 60;
-            TempoText* t = Factory::createTempoText(m_score->dummy()->segment());
+            TempoText* t = Factory::createTempoText(m_score->dummy());
             t->setXmlText(String(u"%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
                               m_tpoSound));
             t->setVisible(false);
@@ -3709,7 +3709,7 @@ void MusicXmlParserDirection::direction(const String& partId,
     // do dynamics
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     for (StringList::iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
-        Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
+        Dynamic* dynamic = Factory::createDynamic(m_score->dummy());
         dynamic->setDynamicType(*it);
         colorItem(dynamic, m_dynamicsColor);
 
@@ -4240,7 +4240,7 @@ void MusicXmlParserDirection::harpPedal()
     const std::vector <String> pedalSteps = { u"D", u"C", u"B", u"E", u"F", u"G", u"A" };
     const Color color = Color::fromString(m_e.attribute("color"));
 
-    HarpPedalDiagram* hpd = Factory::createHarpPedalDiagram(m_score->dummy()->segment());
+    HarpPedalDiagram* hpd = Factory::createHarpPedalDiagram(m_score->dummy());
     while (m_e.readNextStartElement()) {
         int stepIndex = 0;
         PedalPosition pedpos = PedalPosition::UNSET;
@@ -4554,7 +4554,7 @@ void MusicXmlParserDirection::textToCrescLine(String& text)
 
     // Create line
     text.clear();
-    Hairpin* line = Factory::createHairpin(m_score->dummy()->segment());
+    Hairpin* line = Factory::createHairpin(m_score->dummy());
 
     line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DIM_LINE);
     line->setBeginText(simplifiedText);
@@ -4802,28 +4802,28 @@ Jump* MusicXmlParserDirection::findJump(const String& repeat) const
 {
     Jump* jp = nullptr;
     if (repeat == u"daCapo") {
-        jp = Factory::createJump(m_score->dummy()->measure());
+        jp = Factory::createJump(m_score->dummy());
         jp->setJumpType(JumpType::DC);
     } else if (repeat == u"daCapoAlCoda") {
-        jp = Factory::createJump(m_score->dummy()->measure());
+        jp = Factory::createJump(m_score->dummy());
         jp->setJumpType(JumpType::DC_AL_CODA);
         jp->setPlayUntil(jp->playUntil() + m_codaId);
         jp->setContinueAt(jp->continueAt() + m_codaId);
     } else if (repeat == u"daCapoAlFine") {
-        jp = Factory::createJump(m_score->dummy()->measure());
+        jp = Factory::createJump(m_score->dummy());
         jp->setJumpType(JumpType::DC_AL_FINE);
     } else if (repeat == u"dalSegno") {
-        jp = Factory::createJump(m_score->dummy()->measure());
+        jp = Factory::createJump(m_score->dummy());
         jp->setJumpType(JumpType::DS);
         jp->setJumpTo(jp->jumpTo() + m_segnoId);
     } else if (repeat == u"dalSegnoAlCoda") {
-        jp = Factory::createJump(m_score->dummy()->measure());
+        jp = Factory::createJump(m_score->dummy());
         jp->setJumpType(JumpType::DS_AL_CODA);
         jp->setJumpTo(jp->jumpTo() + m_segnoId);
         jp->setPlayUntil(jp->playUntil() + m_codaId);
         jp->setContinueAt(jp->continueAt() + m_codaId);
     } else if (repeat == u"dalSegnoAlFine") {
-        jp = Factory::createJump(m_score->dummy()->measure());
+        jp = Factory::createJump(m_score->dummy());
         jp->setJumpType(JumpType::DS_AL_FINE);
         jp->setJumpTo(jp->jumpTo() + m_segnoId);
     }
@@ -4845,7 +4845,7 @@ void MusicXmlParserDirection::handleNmiCmi(Measure* measure, const Fraction& tic
     if (!m_wordsText.contains(u"NmiCmi")) {
         return;
     }
-    Harmony* ha = new Harmony(m_score->dummy()->segment());
+    Harmony* ha = new Harmony(m_score->dummy());
     HarmonyInfo* info = new HarmonyInfo(m_score);
     info->setRootTpc(Tpc::TPC_INVALID);
     info->setId(-1);
@@ -4869,7 +4869,7 @@ void MusicXmlParserDirection::handleChordSym(const Fraction& tick, HarmonyMap& h
         return;
     }
 
-    Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
+    Harmony* ha = Factory::createHarmony(m_score->dummy());
     ha->setHarmony(m_wordsText);
     ha->setTrack(m_track);
     ha->setPlacement(placement() == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
@@ -5241,7 +5241,7 @@ void MusicXmlParserDirection::dashes(const String& type, const int number,
             // TextLine supports only limited formatting, remove all (compatible with 1.3)
             String simplifiedText = MScoreTextToMusicXml::toPlainText(m_wordsText).simplified();
             if (isLikelyTempoLine(m_track)) {
-                b = Factory::createGradualTempoChange(m_score->dummy()->segment());
+                b = Factory::createGradualTempoChange(m_score->dummy());
                 GradualTempoChangeType gtc = getTempoChangeTypeFromString(simplifiedText);
                 toGradualTempoChange(b)->setTempoChangeType(gtc);
             }
@@ -5479,7 +5479,7 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
             m_e.skipCurrentElement();
             return;
         }
-        Hairpin* h = spdesc.isStopped ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
+        Hairpin* h = spdesc.isStopped ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy());
         h->setHairpinType(type == "crescendo"
                           ? HairpinType::CRESC_HAIRPIN : HairpinType::DIM_HAIRPIN);
         if (niente == "yes") {
@@ -5504,7 +5504,7 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
             m_e.skipCurrentElement();
             return;
         }
-        Hairpin* h = spdesc.isStarted ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
+        Hairpin* h = spdesc.isStarted ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy());
         if (niente == "yes") {
             h->setHairpinCircledTip(true);
         }
@@ -6603,7 +6603,7 @@ NoteType graceNoteType(const TDuration duration, const bool slash)
 static Chord* createGraceChord(Score* score, const int track,
                                const TDuration duration, const bool slash, const bool small)
 {
-    Chord* c = Factory::createChord(score->dummy()->segment());
+    Chord* c = Factory::createChord(score->dummy());
     c->setNoteType(graceNoteType(duration, slash));
     c->setTrack(track);
     // Chord is initialized with the smallness of its first note.
@@ -7675,7 +7675,7 @@ FiguredBassItem* MusicXmlParserPass2::figure(const int idx, const bool paren, Fi
 
 FiguredBass* MusicXmlParserPass2::figuredBass()
 {
-    FiguredBass* fb = Factory::createFiguredBass(m_score->dummy()->segment());
+    FiguredBass* fb = Factory::createFiguredBass(m_score->dummy());
 
     const bool parentheses = m_e.asciiAttribute("parentheses") == "yes";
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
@@ -7740,7 +7740,7 @@ FiguredBass* MusicXmlParserPass2::figuredBass()
 
 FretDiagram* MusicXmlParserPass2::frame()
 {
-    FretDiagram* fd = Factory::createFretDiagram(m_score->dummy()->segment());
+    FretDiagram* fd = Factory::createFretDiagram(m_score->dummy());
 
     colorItem(fd, Color::fromString(m_e.asciiAttribute("color").ascii()));
 
@@ -7862,7 +7862,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     std::vector<HDegree> degreeList;
 
     FretDiagram* fd = nullptr;
-    Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
+    Harmony* ha = Factory::createHarmony(m_score->dummy());
     HarmonyInfo* info = new HarmonyInfo(m_score);
     Fraction offset;
     if (!placement.empty()) {
@@ -8248,9 +8248,9 @@ void MusicXmlParserLyric::parse(bool visibility)
 
     TextBase* item = nullptr;
     if (isLikelySticking(formattedText, syllabic, hasExtend)) {
-        item = Factory::createSticking(m_score->dummy()->segment());
+        item = Factory::createSticking(m_score->dummy());
     } else {
-        item = Factory::createLyrics(m_score->dummy()->chord());
+        item = Factory::createLyrics(m_score->dummy());
     }
 
     //LOGD("formatted lyric '%s'", muPrintable(formattedText));
@@ -9537,7 +9537,7 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     // TODO: remove duplicate code (see MusicXml::direction)
     for (const String& d : std::as_const(m_dynamicsList)) {
-        Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
+        Dynamic* dynamic = Factory::createDynamic(m_score->dummy());
         dynamic->setDynamicType(d);
         colorItem(dynamic, m_dynamicsColor);
         m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), tick);

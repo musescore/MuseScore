@@ -968,7 +968,7 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         e.skipCurrentElement();
                         continue;
                     }
-                    Hairpin* h = Factory::createHairpin(score->dummy()->segment());
+                    Hairpin* h = Factory::createHairpin(score->dummy());
                     h->setTrack(destTrack);
                     TRead::read(h, e, ctx);
                     h->setTrack(destTrack);
@@ -1134,7 +1134,7 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
     }                                     // inner while readNextstartElement()
 }                                         // pasteSymbolList()
 
-void Read400::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
+void Read400::readTremoloCompat(compat::TremoloCompat*, Score*, XmlReader&)
 {
     UNREACHABLE;
 }

@@ -355,7 +355,7 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
     for (Articulation* oldOrnament : oldOrnaments) {
         Chord* parentChord = toChord(oldOrnament->chordRest());
 
-        Ornament* newOrnament = Factory::createOrnament(score->dummy()->chord());
+        Ornament* newOrnament = Factory::createOrnament(score->dummy());
         newOrnament->setOwnershipParent(parentChord);
         newOrnament->setTrack(oldOrnament->track());
         newOrnament->setSymId(oldOrnament->symId());
@@ -402,7 +402,7 @@ void CompatUtils::replaceOldWithNewExpressions(MasterScore* score)
     for (StaffText* oldExpression : oldExpressions) {
         Segment* parentSegment = oldExpression->segment();
 
-        Expression* newExpression = Factory::createExpression(score->dummy()->segment());
+        Expression* newExpression = Factory::createExpression(score->dummy());
         newExpression->setOwnershipParent(parentSegment);
         newExpression->setTrack(oldExpression->track());
         newExpression->setXmlText(oldExpression->xmlText());
@@ -482,7 +482,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
         auto components = mu::engraving::splitArticulations({ combinedArtic->symId() });
         Chord* parentChord = toChord(combinedArtic->chordRest());
         for (SymId id : components) {
-            Articulation* newArtic = Factory::createArticulation(masterScore->dummy()->chord());
+            Articulation* newArtic = Factory::createArticulation(masterScore->dummy());
             newArtic->setSymId(id);
             if (parentChord->hasArticulation(newArtic)) {
                 delete newArtic;

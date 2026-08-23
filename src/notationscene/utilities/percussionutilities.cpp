@@ -70,7 +70,7 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
         up = line > 4;
     }
 
-    auto chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    auto chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy());
     chord->setDurationType(DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setIsUiItem(true);

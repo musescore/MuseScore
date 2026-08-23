@@ -315,7 +315,7 @@ void Trill::setTrillType(TrillType tt)
     m_trillType = tt;
     if (!m_ornament) {
         // ornament parent will be explicitely set at layout stage
-        m_ornament = Factory::createOrnament((ChordRest*)score()->dummy()->chord());
+        m_ornament = Factory::createOrnament((ChordRest*)score()->dummy());
     }
     m_ornament->setTrack(track());
     m_ornament->setSymId(Ornament::fromTrillType(tt));

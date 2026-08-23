@@ -122,7 +122,7 @@ TEST_F(Engraving_BarlineTests, barline02)
     EXPECT_TRUE(score);
 
     Measure* msr = score->firstMeasure()->nextMeasure();
-    TimeSig* ts  = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts  = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, msr, 0, ts, false);
@@ -320,7 +320,7 @@ TEST_F(Engraving_BarlineTests, barline06)
 void dropNormalBarline(EngravingItem* e)
 {
     EditData dropData(0);
-    BarLine* barLine = Factory::createBarLine(e->score()->dummy()->segment());
+    BarLine* barLine = Factory::createBarLine(e->score()->dummy());
     barLine->setBarLineType(BarLineType::NORMAL);
     dropData.dropElement = barLine;
     dropData.track = 0;

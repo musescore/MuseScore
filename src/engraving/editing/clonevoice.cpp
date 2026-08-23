@@ -224,7 +224,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
 
         Segment* tst = dm->segments().firstCRSegment();
         if (srcTrack % VOICES && !(dstTrack % VOICES) && (!tst || (!tst->element(dstTrack)))) {
-            Rest* rest = Factory::createRest(destScore->dummy()->segment());
+            Rest* rest = Factory::createRest(destScore->dummy());
             rest->setTicks(dm->ticks());
             rest->setDurationType(DurationType::V_MEASURE);
             rest->setTrack(dstTrack);

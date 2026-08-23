@@ -338,7 +338,7 @@ void TrackList::appendGap(const Fraction& du, Score* score)
         m_duration   += du;
         rest->setTicks(dd);
     } else {
-        Rest* rest = Factory::createRest(score->dummy()->segment());
+        Rest* rest = Factory::createRest(score->dummy());
         rest->setTicks(du);
         std::vector<EngravingItem*>::push_back(rest);
         m_duration   += du;

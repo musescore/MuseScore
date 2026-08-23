@@ -1784,7 +1784,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
             }
             auto splitSyms = splitArticulations({ artic->symId() });
             for (const SymId& id : splitSyms) {
-                Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
+                Articulation* newArticulation = Factory::createArticulation(score()->dummy());
                 newArticulation->setSymId(id);
                 newArticulation->setAnchor(artic->anchor());
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, artic->propertyFlags(Pid::ARTICULATION_ANCHOR));
@@ -1871,7 +1871,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
     } else {
         // add articulations from newArtics that are not found in m_articulations
         for (const SymId& id : newArtics) {
-            Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
+            Articulation* newArticulation = Factory::createArticulation(score()->dummy());
             newArticulation->setSymId(id);
             if (overallAnchor != ArticulationAnchor::AUTO) {
                 newArticulation->setAnchor(overallAnchor);

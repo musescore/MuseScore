@@ -576,7 +576,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 
     if (inputState.rest()) {
         Score* s = score()->paletteScore() ? score()->paletteScore() : score();
-        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(s->dummy()->segment(), params.duration.type());
+        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(s->dummy(), params.duration.type());
         rest->setTicks(params.duration.fraction());
         symNotehead = rest->getSymbol(params.duration.type(), 0, staff->lines(position.segment->tick()));
         shadowNote.setState(symNotehead, params.duration, true, params.position.beyondScore);
@@ -2500,14 +2500,14 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
                 switch (elementType) {
                 case mu::engraving::ElementType::CLEF:
                 {
-                    mu::engraving::Clef* oclef = engraving::Factory::createClef(score->dummy()->segment());
+                    mu::engraving::Clef* oclef = engraving::Factory::createClef(score->dummy());
                     oclef->setClefType(staff->clef(tick2));
                     oelement = oclef;
                     break;
                 }
                 case mu::engraving::ElementType::KEYSIG:
                 {
-                    mu::engraving::KeySig* okeysig = engraving::Factory::createKeySig(score->dummy()->segment());
+                    mu::engraving::KeySig* okeysig = engraving::Factory::createKeySig(score->dummy());
                     okeysig->setKeySigEvent(staff->keySigEvent(tick2));
                     Key ck = okeysig->concertKey();
                     okeysig->setKey(ck);
@@ -2516,7 +2516,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
                 }
                 case mu::engraving::ElementType::TIMESIG:
                 {
-                    mu::engraving::TimeSig* otimesig = engraving::Factory::createTimeSig(score->dummy()->segment());
+                    mu::engraving::TimeSig* otimesig = engraving::Factory::createTimeSig(score->dummy());
                     otimesig->setFrom(staff->timeSig(tick2));
                     oelement = otimesig;
                     break;
@@ -7937,7 +7937,7 @@ void NotationInteraction::addFretboardDiagram()
     std::vector<engraving::FretDiagram*> created;
 
     for (EngravingItem* element : filteredElements) {
-        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
+        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy());
         diagram->setTrack(element->track());
 
         Harmony* harmony = toHarmony(element);
@@ -8023,7 +8023,7 @@ mu::engraving::Harmony* NotationInteraction::findHarmonyInSegment(const mu::engr
 mu::engraving::Harmony* NotationInteraction::createHarmony(mu::engraving::Segment* segment, track_idx_t track,
                                                            mu::engraving::HarmonyType type) const
 {
-    mu::engraving::Harmony* harmony = Factory::createHarmony(score()->dummy()->segment());
+    mu::engraving::Harmony* harmony = Factory::createHarmony(score()->dummy());
     harmony->setScore(score());
     harmony->setOwnershipParent(segment);
     harmony->setTrack(track);

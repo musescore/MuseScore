@@ -402,7 +402,7 @@ Lyrics* PartialLyricsLine::findAdjacentLyricsOrDefault() const
     }
 
     // If there are no adjacent lyrics, create dummy lyrics using the odd lyrics text style to get font information
-    Lyrics* dummyLyr = Factory::createLyrics(toChordRest(score()->dummy()->chord()));
+    Lyrics* dummyLyr = Factory::createLyrics(score()->dummy());
     dummyLyr->setTextStyleType(TextStyleType::LYRICS_ODD);
     return dummyLyr;
 }

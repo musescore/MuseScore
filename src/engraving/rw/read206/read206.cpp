@@ -2510,12 +2510,12 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
             case SymId::fermataLongBelow:
             case SymId::fermataVeryLongAbove:
             case SymId::fermataVeryLongBelow: {
-                Fermata* fe = Factory::createFermata(ctx.dummy()->segment());
+                Fermata* fe = Factory::createFermata(ctx.dummy());
                 fe->setSymIdAndTimeStretch(sym);
                 el = fe;
             } break;
             default:
-                Articulation* ar = Factory::createArticulation(ctx.dummy()->chord());
+                Articulation* ar = Factory::createArticulation(ctx.dummy());
                 ar->setSymId(sym);
                 ar->setDirection(direction);
                 el = ar;
@@ -2548,7 +2548,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     }
     // Special case for "no type" = ufermata, with missing subtype tag
     if (!el) {
-        Fermata* f = Factory::createFermata(ctx.dummy()->segment());
+        Fermata* f = Factory::createFermata(ctx.dummy());
         f->setSymIdAndTimeStretch(sym);
         el = f;
     }
@@ -2683,7 +2683,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "BarLine") {
             Fermata* fermataAbove = nullptr;
             Fermata* fermataBelow = nullptr;
-            BarLine* bl = Factory::createBarLine(ctx.dummy()->segment());
+            BarLine* bl = Factory::createBarLine(ctx.dummy());
             bl->setTrack(ctx.track());
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
@@ -2800,7 +2800,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 ctx.incTick(rest->actualTicks());
             }
         } else if (tag == "Breath") {
-            Breath* breath = Factory::createBreath(ctx.dummy()->segment());
+            Breath* breath = Factory::createBreath(ctx.dummy());
             breath->setTrack(ctx.track());
             breath->setPlacement(PlacementV::ABOVE);
             Fraction tick = ctx.tick();
@@ -2882,7 +2882,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             } else if (tag == "HairPin") {
                 Read206::readHairpin206(e, ctx, toHairpin(sp));
             } else if (tag == "Trill") {
-                Ornament* ornament = Factory::createOrnament(m->score()->dummy()->chord());
+                Ornament* ornament = Factory::createOrnament(m->score()->dummy());
                 toTrill(sp)->setOrnament(ornament);
                 Read206::readTrill206(e, ctx, toTrill(sp));
             } else {
@@ -2909,7 +2909,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             lastTick = ctx.tick();
             ctx.incTick(m->ticks());
         } else if (tag == "Clef") {
-            Clef* clef = Factory::createClef(ctx.dummy()->segment());
+            Clef* clef = Factory::createClef(ctx.dummy());
             clef->setTrack(ctx.track());
             read400::TRead::read(clef, e, ctx);
             clef->setGenerated(false);
@@ -2972,7 +2972,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
 
             segment->add(clef);
         } else if (tag == "TimeSig") {
-            TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
+            TimeSig* ts = Factory::createTimeSig(ctx.dummy());
             ts->setTrack(ctx.track());
             read400::TRead::read(ts, e, ctx);
             // if time sig not at beginning of measure => courtesy time sig
@@ -2999,7 +2999,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 }
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
+            KeySig* ks = Factory::createKeySig(ctx.dummy());
             ks->setTrack(ctx.track());
             read400::TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
@@ -3018,9 +3018,9 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (styleName == "System" || styleName == "Tempo"
                 || styleName == "Marker" || styleName == "Jump"
                 || styleName == "Volta") {    // TODO: is it possible to get it from style?
-                t = Factory::createSystemText(ctx.dummy()->segment());
+                t = Factory::createSystemText(ctx.dummy());
             } else {
-                t = Factory::createStaffText(ctx.dummy()->segment());
+                t = Factory::createStaffText(ctx.dummy());
             }
             t->setTrack(ctx.track());
             readTextPropertyStyle206(tctx.tag(), ctx, t, t);
@@ -3175,7 +3175,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             noText->setOwnershipParent(m);
             m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "SystemDivider") {
-            SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
+            SystemDivider* sd = new SystemDivider(ctx.dummy());
             read400::TRead::read(sd, e, ctx);
             m->add(sd);
         } else if (tag == "Ambitus") {
@@ -3725,7 +3725,7 @@ void Read206::pasteSymbols(XmlReader&, ChordRest*)
     UNREACHABLE;
 }
 
-void Read206::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
+void Read206::readTremoloCompat(compat::TremoloCompat*, Score*, XmlReader&)
 {
     UNREACHABLE;
 }

@@ -111,7 +111,7 @@ bool TimeEditor::showTimePalette() const
 
 void TimeEditor::addClicked()
 {
-    auto ts = mu::engraving::Factory::makeTimeSig(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    auto ts = mu::engraving::Factory::makeTimeSig(paletteScoreProvider()->paletteScore()->dummy());
     ts->setSig(Fraction(zNominal->value(), denominator()));
     ts->setGroups(groups->groups());
 

@@ -974,7 +974,7 @@ String FretDiagram::harmonyDisplayText() const
 void FretDiagram::setHarmony(String harmonyText)
 {
     if (!m_harmony) {
-        Harmony* h = new Harmony(this->score()->dummy()->segment());
+        Harmony* h = new Harmony(this->score()->dummy());
         add(h);
     }
 
@@ -1355,7 +1355,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
     if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {
         Harmony* harmony = toHarmony(harmonyOrFretDiagram)->clone();
 
-        fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
+        fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy());
 
         fretDiagram->updateDiagram(harmony->plainText());
 
@@ -1367,7 +1367,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
         fretDiagram->setOffset(PointF());
         if (!fretDiagram->harmony()) {
             //! generate from diagram and add harmony
-            fretDiagram->add(Factory::createHarmony(harmonyOrFretDiagram->score()->dummy()->segment()));
+            fretDiagram->add(Factory::createHarmony(harmonyOrFretDiagram->score()->dummy()));
         }
     }
 

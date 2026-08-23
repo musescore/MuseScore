@@ -3586,7 +3586,7 @@ static bool writeVoiceMove(XmlWriter& xml, WriteContext& ctx, Segment* seg, cons
 static void writeTimeSig(Score* score, const Fraction& tick, XmlWriter& xml, WriteContext& ctx)
 {
     Fraction tsf = score->sigmap()->timesig(tick).nominal();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(tsf);
     TWrite::write(ts, xml, ctx);
     ts->masterScore()->eidRegister()->removeItem(ts);
@@ -3718,7 +3718,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                 if (!keySigWritten) {
                     Key ck = score->staff(track2staff(track))->concertKey(segment->tick());
                     Key tk = score->staff(track2staff(track))->key(segment->tick());
-                    KeySig* ks = Factory::createKeySig(score->dummy()->segment());
+                    KeySig* ks = Factory::createKeySig(score->dummy());
                     ks->setKey(ck, tk);
                     TWrite::write(ks, xml, ctx);
                     ks->masterScore()->eidRegister()->removeItem(ks);

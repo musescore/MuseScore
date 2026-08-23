@@ -248,7 +248,7 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
         measure->adjustToLen(scoreOptions.withPickupMeasure ? scoreOptions.pickupTimesig : scoreOptions.globalTimesig);
 
         // Add timesigs...
-        TimeSig* timesig = Factory::createTimeSig(masterScore->dummy()->segment());
+        TimeSig* timesig = Factory::createTimeSig(masterScore->dummy());
         timesig->setSig(scoreOptions.globalTimesig, scoreOptions.timesigType);
         Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
         EditTimeSig::addTimeSig(tx, masterScore, measure, /*staffIdx*/ 0, timesig, /*local*/ false);

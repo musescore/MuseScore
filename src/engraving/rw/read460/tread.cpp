@@ -863,7 +863,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "mag") {
             TRead::readProperty(d, e, ctx, Pid::MAG);
         } else if (tag == "Harmony") {
-            Harmony* h = new Harmony(d->score()->dummy()->segment());
+            Harmony* h = new Harmony(d->score()->dummy());
             read(h, e, ctx);
             if (h->chords().empty()) {
                 // Invalid harmony
@@ -1929,7 +1929,7 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         accidental->setOwnershipParent(o);
         accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
     } else if (tag == "Chord") {
-        Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
+        Chord* chord = Factory::createChord(ctx.score()->dummy());
         TRead::read(chord, xml, ctx);
         chord->setTrack(ctx.track());
         chord->setIsTrillCueNote(true);
@@ -2047,7 +2047,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "spanToOffset") {
             b->setSpanTo(e.readInt());
         } else if (tag == "Articulation") {
-            Articulation* a = Factory::createArticulation(b->score()->dummy()->chord());
+            Articulation* a = Factory::createArticulation(b->score()->dummy());
             TRead::read(a, e, ctx);
             b->add(a);
         } else if (tag == "Symbol") {
@@ -2214,7 +2214,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
             b->add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy()->segment());
+        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy());
         TRead::read(f, e, ctx);
         //! TODO Looks like a bug.
         //! The FretDiagram parent must be Segment
@@ -4386,20 +4386,24 @@ void TRead::read(compat::TremoloCompat* tc, XmlReader& e, ReadContext& ctx)
         return tc->single;
     };
 
+    // read on its own, e.g. into a palette, there is no chord to belong to
+    const DummyParentOr<Chord> parent = parentOrDummy(tc->parent, ctx.dummy());
+    const track_idx_t track = tc->parent ? tc->parent->track() : 0;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             TremoloType type = TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO);
             if (isTremoloTwoChord(type)) {
                 if (!tc->two) {
-                    tc->two = Factory::createTremoloTwoChord(tc->parent);
-                    tc->two->setTrack(tc->parent->track());
+                    tc->two = Factory::createTremoloTwoChord(parent);
+                    tc->two->setTrack(track);
                 }
                 tc->two->setTremoloType(type);
             } else {
                 if (!tc->single) {
-                    tc->single = Factory::createTremoloSingleChord(tc->parent);
-                    tc->single->setTrack(tc->parent->track());
+                    tc->single = Factory::createTremoloSingleChord(parent);
+                    tc->single->setTrack(track);
                 }
                 tc->single->setTremoloType(type);
             }
@@ -4691,7 +4695,7 @@ void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)
             size_t systemIdx = e.intAttribute("idx");
             while (e.readNextStartElement()) {
                 if (e.name() == "SystemDivider") {
-                    SystemDivider* divider = new SystemDivider(score->dummy()->system());
+                    SystemDivider* divider = new SystemDivider(score->dummy());
                     read(divider, e, ctx);
                     score->addSystemDivider(systemIdx, divider);
                 } else {

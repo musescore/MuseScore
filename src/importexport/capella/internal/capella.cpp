@@ -680,7 +680,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               tick.ticks(), o->tupletDenominator, o->tripartite, o->isProlonging, ticks.ticks(), o->objects.size());
             }
 
-            Chord* chord = Factory::createChord(score->dummy()->segment());
+            Chord* chord = Factory::createChord(score->dummy());
             if (isgracenote) {             // grace notes
                 SetCapGraceDuration(chord, o);
                 chord->setTicks(chord->durationType().fraction());
@@ -1111,7 +1111,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         LOGD("first and second anchor for hairpin identical (tick %d track %d first %p second %p)",
                              tick.ticks(), track, cr1, cr2);
                     } else {
-                        Hairpin* hp = Factory::createHairpin(score->dummy()->segment());
+                        Hairpin* hp = Factory::createHairpin(score->dummy());
                         if (wdgo->decresc) {
                             hp->setHairpinType(HairpinType::DIM_HAIRPIN);
                         } else {

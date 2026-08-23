@@ -140,6 +140,14 @@ EngravingItem* Factory::createItem(ElementType type, EngravingItem* parent, bool
     return item;
 }
 
+//! The parent if it is of the given type, the dummy otherwise: a parent of the wrong
+//! type is no parent at all.
+template<typename T>
+static DummyParentOr<T> parentOfTypeOrDummy(EngravingItem* parent, DummyParent* dummy)
+{
+    return parentOrDummy(dynamic_cast<T*>(parent), dummy);
+}
+
 EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
 {
     auto dummy = parent->score()->dummy();
@@ -159,97 +167,96 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::PICK_SCRAPE:       return new PickScrape(parent);
     case ElementType::PEDAL:             return new Pedal(parent);
     case ElementType::HAIRPIN:           return new Hairpin(parent);
-    case ElementType::CLEF:              return new Clef(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::KEYSIG:            return new KeySig(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::TIMESIG:           return new TimeSig(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::BAR_LINE:          return new BarLine(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parent->isSystem() ? toSystem(parent) : dummy->system());
-    case ElementType::ARPEGGIO:          return new Arpeggio(parent->isChord() ? toChord(parent) : dummy->chord());
-    case ElementType::CHORD_BRACKET:     return new ChordBracket(parent->isChord() ? toChord(parent) : dummy->chord());
-    case ElementType::BREATH:            return new Breath(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::CLEF:              return new Clef(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::KEYSIG:            return new KeySig(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::TIMESIG:           return new TimeSig(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::BAR_LINE:          return new BarLine(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parentOfTypeOrDummy<System>(parent, dummy));
+    case ElementType::ARPEGGIO:          return new Arpeggio(parentOfTypeOrDummy<Chord>(parent, dummy));
+    case ElementType::CHORD_BRACKET:     return new ChordBracket(parentOfTypeOrDummy<Chord>(parent, dummy));
+    case ElementType::BREATH:            return new Breath(parentOfTypeOrDummy<Segment>(parent, dummy));
     case ElementType::GLISSANDO:         return new Glissando(parent);
     case ElementType::BRACKET:           return new Bracket(parent);
-    case ElementType::ARTICULATION:      return new Articulation(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
-    case ElementType::TAPPING:           return new Tapping(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
-    case ElementType::ORNAMENT:          return new Ornament(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::ARTICULATION:      return new Articulation(parentOfTypeOrDummy<ChordRest>(parent, dummy));
+    case ElementType::TAPPING:           return new Tapping(parentOfTypeOrDummy<ChordRest>(parent, dummy));
+    case ElementType::ORNAMENT:          return new Ornament(parentOfTypeOrDummy<ChordRest>(parent, dummy));
     case ElementType::FERMATA:           return new Fermata(parent);
-    case ElementType::CHORDLINE:         return new ChordLine(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::CHORDLINE:         return new ChordLine(parentOfTypeOrDummy<Chord>(parent, dummy));
     case ElementType::ACCIDENTAL:        return new Accidental(parent);
-    case ElementType::DYNAMIC:           return new Dynamic(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::EXPRESSION:        return new Expression(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::DYNAMIC:           return new Dynamic(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::EXPRESSION:        return new Expression(parentOfTypeOrDummy<Segment>(parent, dummy));
     case ElementType::TEXT:              return new Text(parent);
-    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
-    case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
-    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parent->isSystem() ? toSystem(parent) : dummy->system());
-    case ElementType::STAFF_TEXT:        return new StaffText(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::STAVE_SHARING_LABEL: return new StaveSharingLabel(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::CAPO:              return new Capo(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::SYSTEM_TEXT:       return new SystemText(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parentOfTypeOrDummy<Measure>(parent, dummy));
+    case ElementType::MMREST_RANGE:      return new MMRestRange(parentOfTypeOrDummy<Measure>(parent, dummy));
+    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parentOfTypeOrDummy<System>(parent, dummy));
+    case ElementType::STAFF_TEXT:        return new StaffText(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::STAVE_SHARING_LABEL: return new StaveSharingLabel(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::CAPO:              return new Capo(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::SYSTEM_TEXT:       return new SystemText(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parentOfTypeOrDummy<Segment>(parent, dummy));
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
     case ElementType::SOUND_FLAG:        return new SoundFlag(parent);
-    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
-    case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parent->isSystem()
-                                                                                      ? toSystem(parent) : dummy->system());
-    case ElementType::NOTEHEAD:          return new NoteHead(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parentOfTypeOrDummy<MeasureBase>(parent, dummy));
+    case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parentOfTypeOrDummy<System>(parent, dummy));
+    case ElementType::NOTEHEAD:          return new NoteHead(parentOfTypeOrDummy<Note>(parent, dummy));
     case ElementType::NOTEDOT: {
         if (parent->isNote()) {
             return new NoteDot(toNote(parent));
         } else if (parent->isRest()) {
             return new NoteDot(toRest(parent));
         } else {
-            return new NoteDot(dummy->note());
+            return new NoteDot(dummy);
         }
     }
-    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parent->isChord() ? toChord(parent) : dummy->chord());
-    case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parent->isChord() ? toChord(parent) : dummy->chord());
-    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
+    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parentOfTypeOrDummy<Chord>(parent, dummy));
+    case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parentOfTypeOrDummy<Chord>(parent, dummy));
+    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parentOfTypeOrDummy<MeasureBase>(parent, dummy));
     case ElementType::MARKER:            return new Marker(parent);
-    case ElementType::JUMP:              return new Jump(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
-    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::JUMP:              return new Jump(parentOfTypeOrDummy<Measure>(parent, dummy));
+    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parentOfTypeOrDummy<Segment>(parent, dummy));
     case ElementType::ACTION_ICON:       return new ActionIcon(parent);
-    case ElementType::NOTE:              return new Note(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::NOTE:              return new Note(parentOfTypeOrDummy<Chord>(parent, dummy));
     case ElementType::SYMBOL:            return new Symbol(parent);
     case ElementType::FSYMBOL:           return new FSymbol(parent);
-    case ElementType::CHORD:             return new Chord(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::REST:              return new Rest(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::MMREST:            return new MMRest(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::CHORD:             return new Chord(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::REST:              return new Rest(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::MMREST:            return new MMRest(parentOfTypeOrDummy<Segment>(parent, dummy));
     case ElementType::DEAD_SLAPPED:      return new DeadSlapped(toRest(parent));
-    case ElementType::SPACER:            return new Spacer(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
+    case ElementType::SPACER:            return new Spacer(parentOfTypeOrDummy<Measure>(parent, dummy));
     case ElementType::STAFF_STATE:       return new StaffState(parent);
-    case ElementType::TEMPO_TEXT:        return new TempoText(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::HARMONY:           return new Harmony(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
-    case ElementType::GUITAR_BEND:       return new GuitarBend(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::TEMPO_TEXT:        return new TempoText(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::HARMONY:           return new Harmony(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::BEND:              return new Bend(parentOfTypeOrDummy<Note>(parent, dummy));
+    case ElementType::GUITAR_BEND:       return new GuitarBend(parentOfTypeOrDummy<Note>(parent, dummy));
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
-    case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::LYRICS:            return new Lyrics(parentOfTypeOrDummy<ChordRest>(parent, dummy));
     case ElementType::LYRICSLINE:        return new LyricsLine(parent);
-    case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::FIGURED_BASS:      return new FiguredBass(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::STEM:              return new Stem(parentOfTypeOrDummy<Chord>(parent, dummy));
     case ElementType::SLUR:              return new Slur(parent);
     case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(parent);
     case ElementType::TIE:               return new Tie(parent);
-    case ElementType::TUPLET:            return new Tuplet(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
-    case ElementType::FINGERING:         return new Fingering(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::TUPLET:            return new Tuplet(parentOfTypeOrDummy<Measure>(parent, dummy));
+    case ElementType::FINGERING:         return new Fingering(parentOfTypeOrDummy<Note>(parent, dummy));
     case ElementType::HBOX:              return new HBox(parent->score());
     case ElementType::VBOX:              return new VBox(parent->score());
     case ElementType::TBOX:              return new TBox(parent->score());
     case ElementType::FBOX:              return new FBox(parent->score());
     case ElementType::MEASURE:           return new Measure(parent->score());
-    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parentOfTypeOrDummy<ChordRest>(parent, dummy));
     case ElementType::IMAGE:             return new Image(parent);
     case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
-    case ElementType::AMBITUS:           return new Ambitus(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::STICKING:          return new Sticking(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::TRIPLET_FEEL:      return new TripletFeel(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::LAISSEZ_VIB:       return new LaissezVib(parent->isNote() ? toNote(parent) : dummy->note());
-    case ElementType::PARTIAL_TIE:       return new PartialTie(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::AMBITUS:           return new Ambitus(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::STICKING:          return new Sticking(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::TRIPLET_FEEL:      return new TripletFeel(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::STRING_TUNINGS:      return new StringTunings(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parentOfTypeOrDummy<Segment>(parent, dummy));
+    case ElementType::LAISSEZ_VIB:       return new LaissezVib(parentOfTypeOrDummy<Note>(parent, dummy));
+    case ElementType::PARTIAL_TIE:       return new PartialTie(parentOfTypeOrDummy<Note>(parent, dummy));
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
     case ElementType::PARENTHESIS:       return new Parenthesis(parent);
 

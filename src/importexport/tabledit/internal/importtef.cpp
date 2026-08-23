@@ -297,7 +297,7 @@ static void addGraceNotesToChord(mu::engraving::Chord* chord, int pitch, int fre
     mu::engraving::TDuration durationType(mu::engraving::DurationType::V_INVALID);
     const int ticks { 240 };
     durationType.setVal(ticks);
-    mu::engraving::Chord* cr = Factory::createChord(chord->score()->dummy()->segment());
+    mu::engraving::Chord* cr = Factory::createChord(chord->score()->dummy());
     cr->setTrack(chord->track());
     cr->setNoteType(mu::engraving::NoteType::APPOGGIATURA);
     cr->setDurationType(mu::engraving::DurationType::V_EIGHTH);

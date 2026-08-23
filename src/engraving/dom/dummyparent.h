@@ -41,12 +41,6 @@ public:
     void init();
 
     RootItem* rootItem();
-    Page* page();
-    System* system();
-    Measure* measure();
-    Segment* segment();
-    Chord* chord();
-    Note* note();
 
     EngravingItem* clone() const override;
 
@@ -59,11 +53,5 @@ private:
 #endif
 
     RootItem* m_root = nullptr;
-    Page* m_page = nullptr;
-    System* m_system = nullptr;
-    Measure* m_measure = nullptr;
-    Segment* m_segment = nullptr;
-    Chord* m_chord = nullptr;
-    Note* m_note = nullptr;
 };
 }

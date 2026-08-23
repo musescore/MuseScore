@@ -277,19 +277,15 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
         duration.setDots(augmentDotsAtt->GetDots());
     }
 
-    Segment* segment = nullptr;
-    // For grace notes we use a dummy segment, otherwise a ChordRest segment with the appropriate ticks value
-    if (m_readingGraceNotes) {
-        segment = m_score->dummy()->segment();
-    } else {
-        segment = measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
-    }
+    // grace notes are added to the chord they precede, so they get no segment of their own
+    Segment* segment = m_readingGraceNotes ? nullptr : measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
+    const DummyParentOr<Segment> parent = parentOrDummy(segment, m_score->dummy());
 
     ChordRest* chordRest = nullptr;
     if (isRest) {
-        chordRest = Factory::createRest(segment);
+        chordRest = Factory::createRest(parent);
     } else {
-        chordRest = Factory::createChord(segment);
+        chordRest = Factory::createChord(parent);
     }
 
     // Do not use single note xml:id / EID for the ChordRest

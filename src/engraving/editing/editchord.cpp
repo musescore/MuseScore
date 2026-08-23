@@ -61,7 +61,7 @@ void EditChord::toggleArticulation(Score* score, SymId attr)
                     continue;
                 }
             }
-            Articulation* na = Factory::createArticulation(score->dummy()->chord());
+            Articulation* na = Factory::createArticulation(score->dummy());
             na->setSymId(attr);
             if (!EditChord::toggleArticulation(score, el, na)) {
                 delete na;

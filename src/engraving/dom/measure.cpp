@@ -1261,7 +1261,7 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
             }
             if (!ots) {
                 // no time signature found; use measure timesig to construct one
-                ots = Factory::createTimeSig(score()->dummy()->segment());
+                ots = Factory::createTimeSig(score()->dummy());
                 ots->setSig(timesig());
                 constructed = true;
             }
@@ -1949,7 +1949,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 // add rests for any other duration list value
                 Fraction tickOffset = tick() + rest->actualTicks();
                 for (unsigned i = 1; i < durList.size(); i++) {
-                    Rest* newRest = Factory::createRest(s->dummy()->segment());
+                    Rest* newRest = Factory::createRest(s->dummy());
                     TDuration dur = durList.at(i);
                     newRest->setDurationType(dur);
                     newRest->setTicks(dur.isMeasure() ? ticks() : dur.fraction());

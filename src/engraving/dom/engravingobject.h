@@ -241,6 +241,13 @@ private:
     EngravingObject* m_parent = nullptr;
 };
 
+//! The given parent if there is one, the dummy otherwise.
+template<typename T>
+DummyParentOr<T> parentOrDummy(T* parent, DummyParent* dummy)
+{
+    return parent ? DummyParentOr<T>(parent) : DummyParentOr<T>(dummy);
+}
+
 class EngravingObject
 {
 public:
