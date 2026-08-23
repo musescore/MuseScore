@@ -367,14 +367,19 @@ bool Score::isPaletteScore() const
     return this == paletteScore();
 }
 
-static void onBracketItemDestruction(const Score* score, const BracketItem* item)
+//! A bracket is a rendering of its bracket item, rebuilt from it on every layout, so
+//! one whose item is gone has nothing left to represent.
+static void onBracketItemDestruction(Score* score, const BracketItem* item)
 {
-    BracketItem* dummy = score->dummy()->bracketItem();
-
-    for (const System* system : score->systems()) {
-        for (Bracket* bracket : system->brackets()) {
+    for (System* system : score->systems()) {
+        std::vector<Bracket*>& brackets = system->brackets();
+        for (auto it = brackets.begin(); it != brackets.end();) {
+            Bracket* bracket = *it;
             if (bracket && bracket->bracketItem() == item) {
-                bracket->setBracketItem(dummy);
+                it = brackets.erase(it);
+                delete bracket;
+            } else {
+                ++it;
             }
         }
     }
