@@ -273,8 +273,8 @@ public:
     EngravingObject* parent() const;
 
     void setOwnershipParent(EngravingObject* p);
-    //! The parent this object has explicitly been attached to via setOwnershipParent().
-    //! Null while the object is merely constructed with a context parent, or parked on the dummy.
+    //! The parent this object is attached to. Null while it is parked on the dummy,
+    //! i.e. not attached to anything.
     EngravingObject* ownershipParent() const;
     void moveToDummy();
 
@@ -354,7 +354,6 @@ private:
     ElementType m_type = ElementType::INVALID;
 
     EngravingObject* m_parent = nullptr;
-    bool m_isParentExplicitlySet = false;
     EngravingObjectList m_children;
 
 public:
