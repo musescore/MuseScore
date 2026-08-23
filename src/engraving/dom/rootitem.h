@@ -24,8 +24,6 @@
 
 #include "engravingitem.h"
 
-#include "../compat/dummyelement.h"
-
 namespace mu::engraving {
 class Score;
 
@@ -37,9 +35,7 @@ class RootItem : public EngravingItem
     OBJECT_ALLOCATOR(engraving, RootItem)
 public:
     RootItem(Score* score);
-    ~RootItem() override;
 
-    compat::DummyElement* dummy() const;
     void init();
 
     EngravingItemList accessibleChildren() const override;
@@ -53,7 +49,5 @@ private:
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
-
-    compat::DummyElement* m_dummy = nullptr;
 };
 }

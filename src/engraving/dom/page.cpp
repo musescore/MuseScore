@@ -29,6 +29,7 @@
 #include "factory.h"
 #include "measurebase.h"
 #include "mscore.h"
+#include "rootitem.h"
 #include "score.h"
 #include "system.h"
 

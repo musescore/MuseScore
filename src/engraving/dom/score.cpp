@@ -91,6 +91,7 @@
 #include "rehearsalmark.h"
 #include "repeatlist.h"
 #include "rest.h"
+#include "rootitem.h"
 #include "scoreorder.h"
 #include "segment.h"
 #include "select.h"
@@ -182,6 +183,9 @@ Score::Score(const modularity::ContextPtr& iocCtx)
 
     m_rootItem = new RootItem(this);
     m_rootItem->init();
+
+    m_dummy = new compat::DummyElement(this);
+    m_dummy->init();
 
     createPaddingTable();
 
@@ -295,6 +299,10 @@ Score::~Score()
 
     delete m_rootItem;
     m_rootItem = nullptr;
+
+    // last: everything that is deleted above may park children on it on its way out
+    delete m_dummy;
+    m_dummy = nullptr;
 }
 
 muse::async::Channel<LoopBoundaryType, unsigned> Score::loopBoundaryTickChanged() const

@@ -24,6 +24,7 @@
 #include "dom/barline.h"
 #include "dom/factory.h"
 #include "dom/score.h"
+#include "dom/rootitem.h"
 #include "dom/page.h"
 #include "dom/system.h"
 #include "dom/measure.h"

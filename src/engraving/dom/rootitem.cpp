@@ -33,19 +33,6 @@ using namespace mu::engraving;
 RootItem::RootItem(Score* score)
     : EngravingItem(ElementType::ROOT_ITEM, score)
 {
-    m_dummy = new compat::DummyElement(this);
-}
-
-RootItem::~RootItem()
-{
-    compat::DummyElement* d = m_dummy;
-    m_dummy = nullptr;
-    delete d;
-}
-
-compat::DummyElement* RootItem::dummy() const
-{
-    return m_dummy;
 }
 
 EngravingItemList RootItem::accessibleChildren() const
@@ -67,9 +54,6 @@ void RootItem::init()
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
 #endif
-
-    m_dummy->setOwnershipParent(this);
-    m_dummy->init();
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
