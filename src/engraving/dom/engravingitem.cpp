@@ -58,6 +58,7 @@
 #include "../editing/navigation.h"
 
 #include "chord.h"
+#include "dummyparent.h"
 #include "factory.h"
 #include "linkedobjects.h"
 #include "masterscore.h"

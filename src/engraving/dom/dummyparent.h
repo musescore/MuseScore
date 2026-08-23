@@ -19,24 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_DUMMYELEMENT_H
-#define MU_ENGRAVING_DUMMYELEMENT_H
+#pragma once
 
-#include "../dom/engravingitem.h"
+#include "engravingitem.h"
 
 namespace mu::engraving {
 enum class Pid : short;
 
 class RootItem;
-}
 
-namespace mu::engraving::compat {
-class DummyElement : public EngravingItem
+//! The parent an object has while it is not attached to anything. Nothing is laid
+//! out in it and it takes no part in the score; it only keeps unattached objects
+//! reachable, and heads their accessibility tree.
+class DummyParent : public EngravingItem
 {
-    OBJECT_ALLOCATOR(engraving, DummyElement)
+    OBJECT_ALLOCATOR(engraving, DummyParent)
 public:
-    DummyElement(EngravingObject* parent);
-    ~DummyElement();
+    DummyParent(EngravingObject* parent);
+    ~DummyParent();
 
     void init();
 
@@ -69,5 +69,3 @@ private:
     BracketItem* m_bracketItem = nullptr;
 };
 }
-
-#endif // MU_ENGRAVING_DUMMYELEMENT_H

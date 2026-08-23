@@ -22,9 +22,9 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/compat/dummyelement.h"
 #include "engraving/compat/scoreaccess.h"
 
+#include "engraving/dom/dummyparent.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/hairpin.h"

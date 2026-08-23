@@ -19,33 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "dummyelement.h"
+#include "dummyparent.h"
 
-#include "dom/barline.h"
-#include "dom/factory.h"
-#include "dom/score.h"
-#include "dom/rootitem.h"
-#include "dom/page.h"
-#include "dom/system.h"
-#include "dom/measure.h"
-#include "dom/segment.h"
-#include "dom/chord.h"
-#include "dom/note.h"
-#include "dom/bracketitem.h"
+#include "barline.h"
+#include "bracketitem.h"
+#include "chord.h"
+#include "factory.h"
+#include "measure.h"
+#include "note.h"
+#include "page.h"
+#include "rootitem.h"
+#include "score.h"
+#include "segment.h"
+#include "system.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "accessibility/accessibleitem.h"
+#include "../accessibility/accessibleitem.h"
 #endif
 
 using namespace mu::engraving;
-using namespace mu::engraving::compat;
 
-DummyElement::DummyElement(EngravingObject* parent)
+DummyParent::DummyParent(EngravingObject* parent)
     : EngravingItem(ElementType::DUMMY, parent)
 {
 }
 
-DummyElement::~DummyElement()
+DummyParent::~DummyParent()
 {
     delete m_bracketItem;
     delete m_note;
@@ -57,7 +56,7 @@ DummyElement::~DummyElement()
     delete m_root;
 }
 
-void DummyElement::init()
+void DummyParent::init()
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
@@ -95,53 +94,53 @@ void DummyElement::init()
     m_bracketItem->setOwnershipParent(m_system);
 }
 
-RootItem* DummyElement::rootItem()
+RootItem* DummyParent::rootItem()
 {
     return m_root;
 }
 
-Page* DummyElement::page()
+Page* DummyParent::page()
 {
     return m_page;
 }
 
-System* DummyElement::system()
+System* DummyParent::system()
 {
     return m_system;
 }
 
-Measure* DummyElement::measure()
+Measure* DummyParent::measure()
 {
     return m_measure;
 }
 
-Segment* DummyElement::segment()
+Segment* DummyParent::segment()
 {
     return m_segment;
 }
 
-Chord* DummyElement::chord()
+Chord* DummyParent::chord()
 {
     return m_chord;
 }
 
-Note* DummyElement::note()
+Note* DummyParent::note()
 {
     return m_note;
 }
 
-BracketItem* DummyElement::bracketItem()
+BracketItem* DummyParent::bracketItem()
 {
     return m_bracketItem;
 }
 
-EngravingItem* DummyElement::clone() const
+EngravingItem* DummyParent::clone() const
 {
     return nullptr;
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
-AccessibleItemPtr DummyElement::createAccessible()
+AccessibleItemPtr DummyParent::createAccessible()
 {
     using namespace muse::accessibility;
     return std::make_shared<AccessibleItem>(this, IAccessible::Group);
