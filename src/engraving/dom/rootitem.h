@@ -28,16 +28,25 @@ namespace mu::engraving {
 class Score;
 
 //! Sits above the pages, which are the top of the visual hierarchy. It takes no part in
-//! that hierarchy - nothing is laid out inside it - and exists only to head the
+//! that hierarchy - nothing is laid out inside it - and exists only to head an
 //! accessibility tree; see EngravingItem::accessibleChildren().
 class RootItem : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, RootItem)
 public:
-    RootItem(Score* score);
+    //! Which tree this one heads: the score's own, or the one formed by the objects
+    //! parked on the dummy, which are not part of the score.
+    enum class Kind {
+        Score,
+        Dummy
+    };
+
+    RootItem(Score* score, Kind kind);
 
     void init();
 
+    //! The top of a tree has no parent within it.
+    EngravingItem* accessibleParentItem() const override { return nullptr; }
     EngravingItemList accessibleChildren() const override;
 
     EngravingItem* clone() const override { return nullptr; }
@@ -49,5 +58,7 @@ private:
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
+
+    Kind m_kind = Kind::Score;
 };
 }

@@ -74,7 +74,7 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp)
 //   Rasgueado
 //---------------------------------------------------------
 
-Rasgueado::Rasgueado(EngravingItem* parent)
+Rasgueado::Rasgueado(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::RASGUEADO, parent)
 {
     initElementStyle(&rasgueadoStyle);

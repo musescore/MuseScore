@@ -133,7 +133,7 @@ class LyricsLine : public SLine
     DECLARE_CLASSOF(ElementType::LYRICSLINE)
 
 public:
-    LyricsLine(EngravingItem* parent);
+    LyricsLine(DummyParentOr<EngravingItem> parent);
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
@@ -154,7 +154,7 @@ public:
     Sid getPropertyStyle(Pid) const override;
 
 protected:
-    LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    LyricsLine(const ElementType& type, DummyParentOr<EngravingItem> parent, ElementFlags = ElementFlag::NOTHING);
 
     bool isInSpannerMap() const override { return false; }
 
@@ -219,7 +219,7 @@ class PartialLyricsLine final : public LyricsLine
     DECLARE_CLASSOF(ElementType::PARTIAL_LYRICSLINE)
 
 public:
-    PartialLyricsLine(EngravingItem* parent);
+    PartialLyricsLine(DummyParentOr<EngravingItem> parent);
     PartialLyricsLine(const PartialLyricsLine&);
     PartialLyricsLine* clone() const override { return new PartialLyricsLine(*this); }
     LineSegment* createLineSegment() override;

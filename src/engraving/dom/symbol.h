@@ -96,7 +96,7 @@ class FSymbol final : public BSymbol
     DECLARE_CLASSOF(ElementType::FSYMBOL)
 
 public:
-    FSymbol(EngravingItem* parent);
+    FSymbol(DummyParentOr<EngravingItem> parent);
     FSymbol(const FSymbol&);
 
     FSymbol* clone() const override { return new FSymbol(*this); }

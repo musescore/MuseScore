@@ -57,7 +57,7 @@ class PickScrape final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::PICK_SCRAPE)
 
 public:
-    PickScrape(EngravingItem* parent);
+    PickScrape(DummyParentOr<EngravingItem> parent);
 
     PickScrape* clone() const override { return new PickScrape(*this); }
 

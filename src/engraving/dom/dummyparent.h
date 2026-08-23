@@ -21,37 +21,32 @@
  */
 #pragma once
 
-#include "engravingitem.h"
+#include "engravingobject.h"
 
 namespace mu::engraving {
 enum class Pid : short;
 
 class RootItem;
+class Score;
 
-//! The parent an object has while it is not attached to anything. Nothing is laid
-//! out in it and it takes no part in the score; it only keeps unattached objects
-//! reachable, and heads their accessibility tree.
-class DummyParent : public EngravingItem
+//! The parent an object has while it is not attached to anything. It is not part of
+//! the score and nothing is laid out in it - it is not even an item; it only keeps
+//! unattached objects reachable, and heads the accessibility tree they form.
+class DummyParent : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, DummyParent)
 public:
-    DummyParent(EngravingObject* parent);
+    DummyParent(Score* score);
     ~DummyParent();
 
     void init();
 
-    RootItem* rootItem();
-
-    EngravingItem* clone() const override;
+    RootItem* rootItem() const { return m_root; }
 
     PropertyValue getProperty(Pid) const override { return PropertyValue(); }
     bool setProperty(Pid, const PropertyValue&) override { return false; }
 
 private:
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    AccessibleItemPtr createAccessible() override;
-#endif
-
     RootItem* m_root = nullptr;
 };
 }

@@ -177,9 +177,9 @@ TEST_F(Engraving_ParentTests, deletingOwnerParksChildrenOnDummy)
     delete note;
 }
 
-//! Accessibility walks the layout hierarchy, but unattached items (e.g. palette
-//! items) must still reach the dummy so that they get an accessible ancestor.
-TEST_F(Engraving_ParentTests, accessibleParentFallsBackToTheDummy)
+//! Accessibility walks the layout hierarchy, but unattached items are not placed in
+//! it: they form a tree of their own, headed by the dummy's root item.
+TEST_F(Engraving_ParentTests, accessibleParentFallsBackToTheDummysRoot)
 {
     Segment* segment = someSegment();
     ASSERT_TRUE(segment);
@@ -192,7 +192,7 @@ TEST_F(Engraving_ParentTests, accessibleParentFallsBackToTheDummy)
     dynamic->moveToDummy();
 
     EXPECT_EQ(dynamic->layoutParent(), nullptr);
-    EXPECT_EQ(dynamic->accessibleParentItem(), m_score->dummy());
+    EXPECT_EQ(dynamic->accessibleParentItem(), m_score->dummy()->rootItem());
 
     delete dynamic;
 }
@@ -495,7 +495,7 @@ TEST_F(Engraving_ParentTests, accessibilityTreeAgreesInBothDirections)
     EXPECT_GT(checkedItems, 0u);
 
     // Downwards: whatever a parent lists must name it back. This is the direction a
-    // screen reader descends, starting from the root item.
+    // screen reader descends, starting from a root item.
     constexpr int MAX_DEPTH = 64;
     size_t checkedChildren = 0;
 
@@ -511,7 +511,13 @@ TEST_F(Engraving_ParentTests, accessibilityTreeAgreesInBothDirections)
         }
     };
 
-    checkChildren(m_score->rootItem(), 0);
+    auto checkTree = [&](const EngravingItem* root, const char* what) {
+        const size_t before = checkedChildren;
+        checkChildren(root, 0);
+        EXPECT_GT(checkedChildren, before) << "nothing is reachable through the " << what << " root";
+    };
 
-    EXPECT_GT(checkedChildren, 0u);
+    checkTree(m_score->rootItem(), "score");
+    // the objects that are not in the score are reached through the other root
+    checkTree(m_score->dummy()->rootItem(), "dummy");
 }

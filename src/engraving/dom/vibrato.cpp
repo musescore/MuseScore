@@ -112,7 +112,7 @@ static const ElementStyle vibratoStyle {
 //   Vibrato
 //---------------------------------------------------------
 
-Vibrato::Vibrato(EngravingItem* parent)
+Vibrato::Vibrato(DummyParentOr<EngravingItem> parent)
     : SLine(ElementType::VIBRATO, parent)
 {
     initElementStyle(&vibratoStyle);

@@ -158,7 +158,7 @@ EngravingObject* TrillSegment::propertyDelegate(Pid pid) const
 //   Trill
 //---------------------------------------------------------
 
-Trill::Trill(EngravingItem* parent)
+Trill::Trill(DummyParentOr<EngravingItem> parent)
     : SLine(ElementType::TRILL, parent)
 {
     m_trillType     = TrillType::TRILL_LINE;

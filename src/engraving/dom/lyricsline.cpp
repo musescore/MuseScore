@@ -45,7 +45,7 @@ static const ElementStyle lyricsLineElementStyle {
     { Sid::lyricsDashLineThickness, Pid::LINE_WIDTH }
 };
 
-LyricsLine::LyricsLine(EngravingItem* parent)
+LyricsLine::LyricsLine(DummyParentOr<EngravingItem> parent)
     : SLine(ElementType::LYRICSLINE, parent)
 {
     setDiagonal(false);
@@ -53,7 +53,7 @@ LyricsLine::LyricsLine(EngravingItem* parent)
     m_nextLyrics = 0;
 }
 
-LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
+LyricsLine::LyricsLine(const ElementType& type, DummyParentOr<EngravingItem> parent, ElementFlags f)
     : SLine(type, parent, f)
 {
     setDiagonal(false);
@@ -228,7 +228,7 @@ static const ElementStyle partialLyricsLineElementStyle {
     { Sid::lyricsPlacement,         Pid::PLACEMENT },
 };
 
-PartialLyricsLine::PartialLyricsLine(EngravingItem* parent)
+PartialLyricsLine::PartialLyricsLine(DummyParentOr<EngravingItem> parent)
     : LyricsLine(ElementType::PARTIAL_LYRICSLINE, parent)
 {
     setGenerated(false);
