@@ -63,7 +63,6 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
     if (m_parent) {
         doSetScore(m_parent->score());
     }
-    m_isParentExplicitlySet = parent && !parent->isType(ElementType::DUMMY);
 
     if (type == ElementType::SCORE) {
         m_score = static_cast<Score*>(this);
@@ -82,7 +81,6 @@ EngravingObject::EngravingObject(const EngravingObject& se)
     m_type = se.m_type;
     doSetParent(se.m_parent);
     m_score = se.m_score;
-    m_isParentExplicitlySet = se.m_isParentExplicitlySet;
     m_elementStyle = se.m_elementStyle;
     if (m_elementStyle) {
         size_t n = m_elementStyle->size();
@@ -269,7 +267,7 @@ EngravingObject* EngravingObject::parent() const
 
 EngravingObject* EngravingObject::ownershipParent() const
 {
-    if (!m_isParentExplicitlySet) {
+    if (!m_parent || m_parent->isType(ElementType::DUMMY)) {
         return nullptr;
     }
     return m_parent;
@@ -290,8 +288,6 @@ void EngravingObject::setOwnershipParent(EngravingObject* p)
     if (m_parent) {
         doSetScore(m_parent->score());
     }
-
-    m_isParentExplicitlySet = p && !p->isType(ElementType::DUMMY);
 }
 
 Score* EngravingObject::score() const
