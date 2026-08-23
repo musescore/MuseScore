@@ -314,7 +314,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 
         Segment* seg = segment();
         score()->undoRemoveElement(this);
-        Chord* chord = Factory::createChord(score()->dummy()->segment());
+        Chord* chord = Factory::createChord(score()->dummy());
         chord->setTrack(track());
         chord->setDurationType(durationType());
         chord->setTicks(ticks());

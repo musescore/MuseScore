@@ -863,7 +863,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "mag") {
             TRead::readProperty(d, e, ctx, Pid::MAG);
         } else if (tag == "Harmony") {
-            Harmony* h = new Harmony(d->score()->dummy()->segment());
+            Harmony* h = new Harmony(d->score()->dummy());
             read(h, e, ctx);
             if (h->chords().empty()) {
                 // Invalid harmony
@@ -1938,7 +1938,7 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         accidental->setOwnershipParent(o);
         accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
     } else if (tag == "Chord") {
-        Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
+        Chord* chord = Factory::createChord(ctx.score()->dummy());
         TRead::read(chord, xml, ctx);
         chord->setTrack(ctx.track());
         chord->setIsTrillCueNote(true);
@@ -2056,7 +2056,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "spanToOffset") {
             b->setSpanTo(e.readInt());
         } else if (tag == "Articulation") {
-            Articulation* a = Factory::createArticulation(b->score()->dummy()->chord());
+            Articulation* a = Factory::createArticulation(b->score()->dummy());
             TRead::read(a, e, ctx);
             b->add(a);
         } else if (tag == "Symbol") {
@@ -2223,7 +2223,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
             b->add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy()->segment());
+        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy());
         TRead::read(f, e, ctx);
         //! TODO Looks like a bug.
         //! The FretDiagram parent must be Segment
@@ -2531,8 +2531,7 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         bracket->setOwnershipParent(ch);
         ch->add(bracket);
     } else if (tag == "Tremolo") { // compat
-        compat::TremoloCompat tcompat;
-        tcompat.parent = ch;
+        compat::TremoloCompat tcompat { ch };
         TRead::read(&tcompat, e, ctx);
         if (tcompat.two) {
             tcompat.two->setOwnershipParent(ch);
@@ -4374,14 +4373,14 @@ void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(TremoloTwoChord* t, XmlReader& xml, ReadContext& ctx)
 {
-    compat::TremoloCompat tc;
+    compat::TremoloCompat tc { parentOrDummy(t->chord(), ctx.dummy()) };
     tc.two = t;
     read(&tc, xml, ctx);
 }
 
 void TRead::read(TremoloSingleChord* t, XmlReader& xml, ReadContext& ctx)
 {
-    compat::TremoloCompat tc;
+    compat::TremoloCompat tc { parentOrDummy(t->chord(), ctx.dummy()) };
     tc.single = t;
     read(&tc, xml, ctx);
 }
@@ -4395,6 +4394,9 @@ void TRead::read(compat::TremoloCompat* tc, XmlReader& e, ReadContext& ctx)
         return tc->single;
     };
 
+    const Chord* chord = tc->parent.as<Chord>();
+    const track_idx_t track = chord ? chord->track() : 0;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
@@ -4402,13 +4404,13 @@ void TRead::read(compat::TremoloCompat* tc, XmlReader& e, ReadContext& ctx)
             if (isTremoloTwoChord(type)) {
                 if (!tc->two) {
                     tc->two = Factory::createTremoloTwoChord(tc->parent);
-                    tc->two->setTrack(tc->parent->track());
+                    tc->two->setTrack(track);
                 }
                 tc->two->setTremoloType(type);
             } else {
                 if (!tc->single) {
                     tc->single = Factory::createTremoloSingleChord(tc->parent);
-                    tc->single->setTrack(tc->parent->track());
+                    tc->single->setTrack(track);
                 }
                 tc->single->setTremoloType(type);
             }
@@ -4700,7 +4702,7 @@ void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)
             size_t systemIdx = e.intAttribute("idx");
             while (e.readNextStartElement()) {
                 if (e.name() == "SystemDivider") {
-                    SystemDivider* divider = new SystemDivider(score->dummy()->system());
+                    SystemDivider* divider = new SystemDivider(score->dummy());
                     read(divider, e, ctx);
                     score->addSystemDivider(systemIdx, divider);
                 } else {

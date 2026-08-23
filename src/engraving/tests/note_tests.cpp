@@ -67,7 +67,7 @@ static ChordRest* chordRestAtTick(Score* score, const Fraction& tick, track_idx_
 TEST_F(Engraving_NoteTests, note)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
-    Chord* chord = Factory::createChord(score->dummy()->segment());
+    Chord* chord = Factory::createChord(score->dummy());
     Note* note = Factory::createNote(chord);
     chord->add(note);
 

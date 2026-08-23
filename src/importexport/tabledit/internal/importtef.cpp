@@ -303,7 +303,7 @@ static void addGraceNotesToChord(mu::engraving::Chord* chord, int pitch, int fre
     mu::engraving::TDuration durationType(mu::engraving::DurationType::V_INVALID);
     const int ticks { 240 };
     durationType.setVal(ticks);
-    mu::engraving::Chord* cr = Factory::createChord(chord->score()->dummy()->segment());
+    mu::engraving::Chord* cr = Factory::createChord(chord->score()->dummy());
     cr->setTrack(chord->track());
     cr->setNoteType(mu::engraving::NoteType::APPOGGIATURA);
     cr->setDurationType(mu::engraving::DurationType::V_EIGHTH);
@@ -715,7 +715,7 @@ static void addSingleNoteEffects(Score* score, const std::map<const TefNote* con
         }
         if (primary == EffectType::RINGING_NOTE
             || combination == EffectType::RINGING_NOTE) {
-            LetRing* lr = Factory::createLetRing(score->dummy()->segment());
+            LetRing* lr = Factory::createLetRing(score->dummy());
             lr->setTrack(msNote->track());
             lr->setTick(msNote->tick());
             lr->setTick2(msNote->tick() + 2 * msNote->chord()->ticks());

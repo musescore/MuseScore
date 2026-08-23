@@ -169,7 +169,7 @@ MeasureRepeat* EditMeasureRepeat::addMeasureRepeat(Transaction&, Score* score, c
                                                    int numMeasures)
 {
     Measure* measure = score->tick2measure(tick);
-    MeasureRepeat* mr = Factory::createMeasureRepeat(score->dummy()->segment());
+    MeasureRepeat* mr = Factory::createMeasureRepeat(score->dummy());
     mr->setNumMeasures(numMeasures);
     mr->setTicks(measure->stretchedLen(score->staff(track2staff(track))));
     mr->setTrack(track);

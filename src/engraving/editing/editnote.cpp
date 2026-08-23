@@ -167,7 +167,7 @@ void EditNote::toggleOrnament(Score* score, SymId attr)
                     continue;
                 }
             }
-            Ornament* na = Factory::createOrnament(score->dummy()->chord());
+            Ornament* na = Factory::createOrnament(score->dummy());
             na->setSymId(attr);
             if (!EditChord::toggleArticulation(score, el, na)) {
                 delete na;

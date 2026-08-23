@@ -241,7 +241,7 @@ void RealizeChordSymbols::realizeChordSymbols(Transaction&, Score* score, bool l
         Fraction duration = r.getActualDuration(tick.ticks(), durationType) * h->staff()->timeStretch(tick);
         bool concertPitch = score->style().styleB(Sid::concertPitch);
 
-        Chord* chord = Factory::createChord(score->dummy()->segment());     //chord template
+        Chord* chord = Factory::createChord(score->dummy());     //chord template
         chord->setTrack(h->track());     //set track so notes have a track to sit on
 
         //create chord from notes
