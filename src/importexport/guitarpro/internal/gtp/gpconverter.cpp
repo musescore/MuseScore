@@ -1526,7 +1526,7 @@ void GPConverter::addTempoMap()
             }
 
             if (tempIt->second.linear) {
-                GradualTempoChange* tempoChange = Factory::createGradualTempoChange(segment);
+                GradualTempoChange* tempoChange = Factory::createGradualTempoChange(_score->dummy());
                 tempoChange->setTick(tick);
                 tempoChange->setTrack(0);
                 _lastGradualTempoChange = tempoChange;

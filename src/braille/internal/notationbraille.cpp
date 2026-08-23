@@ -745,7 +745,7 @@ bool NotationBraille::addSlur()
 
             score()->startCmd(TranslatableString("undoableAction", "Add slur"));
 
-            Slur* slur = Factory::createSlur(firstChordRest->measure()->system());
+            Slur* slur = Factory::createSlur(firstChordRest->score()->dummy());
             slur->setScore(firstChordRest->score());
             slur->setTick(firstChordRest->tick());
             slur->setTick2(secondChordRest->tick());
@@ -790,7 +790,7 @@ bool NotationBraille::addLongSlur()
 
             score()->startCmd(TranslatableString("undoableAction", "Add long slur"));
 
-            Slur* slur = Factory::createSlur(firstChordRest->measure()->system());
+            Slur* slur = Factory::createSlur(firstChordRest->score()->dummy());
             slur->setScore(firstChordRest->score());
             slur->setTick(firstChordRest->tick());
             slur->setTick2(secondChordRest->tick());
