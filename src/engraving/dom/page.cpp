@@ -42,9 +42,6 @@ using namespace mu::engraving;
 Page::Page(Score* parent)
     : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE)
 {
-    // Owned by its score right away; Score::m_pages manages page lifetime
-    setOwnershipParent(parent);
-
     m_bspTreeValid = false;
 }
 

@@ -838,7 +838,6 @@ void SingleLayout::layoutGroupBracket(Bracket* item, const Context& ctx)
 
     if (!item->text()) {
         const_cast<Bracket*>(item)->setText(new Text(const_cast<Bracket*>(item)));
-        item->text()->setOwnershipParent(const_cast<Bracket*>(item));
     }
 
     Text* text = item->text();
@@ -1112,7 +1111,6 @@ void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
     }
 
     HammerOnPullOffText* hopoText = hopoTexts.front();
-    hopoText->setOwnershipParent(item);
     hopoText->setXmlText("H/P");
 
     Align align;
@@ -1675,7 +1673,6 @@ void SingleLayout::layout(Tapping* item, const Context& ctx)
         text = new TappingText(item);
     }
 
-    text->setOwnershipParent(item);
     item->setText(text);
     text->setTrack(item->track());
     DO_ASSERT(item->hand() != TappingHand::INVALID);
@@ -1978,7 +1975,6 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
     double hookHeight = item->absoluteFromSpatium(item->volta()->beginHookHeight());
     if (item->text()) {
         Text* text = item->text();
-        text->setOwnershipParent(item);
         RectF textBBox = text->ldata()->bbox().translated(text->pos());
         text->mutldata()->moveY(hookHeight - textBBox.bottom());
         text->mutldata()->moveX(0.5 * spatium);

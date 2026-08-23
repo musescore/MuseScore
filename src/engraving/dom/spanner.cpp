@@ -52,7 +52,6 @@ namespace mu::engraving {
 SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, ElementFlags f)
     : EngravingItem(type, sp, f)
 {
-    setOwnershipParent(sp);
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 

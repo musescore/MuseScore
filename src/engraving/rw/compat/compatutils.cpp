@@ -838,7 +838,6 @@ NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
     Note* endNote = toNote(textLine->endElement());
 
     NoteLine* noteLine = Factory::createNoteLine(startNote);
-    noteLine->setOwnershipParent(startNote);
     noteLine->setStartElement(startNote);
     noteLine->setTrack(textLine->track());
     noteLine->setTick(textLine->tick());
@@ -967,7 +966,6 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
         parentChord->remove(oldArtic);
 
         LaissezVib* lv = Factory::createLaissezVib(parentNote);
-        lv->setOwnershipParent(parentNote);
         parentNote->add(lv);
 
         delete oldArtic;

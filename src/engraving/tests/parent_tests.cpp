@@ -151,8 +151,6 @@ TEST_F(Engraving_ParentTests, attachingAndDetaching)
 
     Dynamic* dynamic = Factory::createDynamic(segment, false /*isAccessibleEnabled*/);
 
-    dynamic->setOwnershipParent(segment);
-
     EXPECT_EQ(dynamic->parent(), segment);
     EXPECT_EQ(dynamic->ownershipParent(), segment);
     EXPECT_EQ(dynamic->ownershipParentItem(), segment);
@@ -181,7 +179,6 @@ TEST_F(Engraving_ParentTests, deletingOwnerParksChildrenOnDummy)
 
     Chord* chord = Factory::createChord(segment, false /*isAccessibleEnabled*/);
     Note* note = Factory::createNote(chord, false /*isAccessibleEnabled*/);
-    note->setOwnershipParent(chord);
     ASSERT_EQ(note->ownershipParent(), chord);
 
     delete chord;
@@ -201,7 +198,6 @@ TEST_F(Engraving_ParentTests, accessibleParentFallsBackToTheDummysRoot)
 
     Dynamic* dynamic = Factory::createDynamic(segment, false /*isAccessibleEnabled*/);
 
-    dynamic->setOwnershipParent(segment);
     EXPECT_EQ(dynamic->accessibleParentItem(), segment);
 
     dynamic->moveToDummy();

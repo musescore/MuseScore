@@ -137,7 +137,6 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
         TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
         if (!anchor) {
             anchor = Factory::createTimeTickAnchor(segment);
-            anchor->setOwnershipParent(segment);
             anchor->setTrack(track);
             segment->add(anchor);
         }

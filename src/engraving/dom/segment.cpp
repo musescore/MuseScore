@@ -149,14 +149,12 @@ void Segment::removeElement(track_idx_t track)
 Segment::Segment(DummyParentOr<Measure> m)
     : EngravingItem(ElementType::SEGMENT, m, ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setOwnershipParent(m);
     init();
 }
 
 Segment::Segment(DummyParentOr<Measure> m, SegmentType st, const Fraction& t)
     : EngravingItem(ElementType::SEGMENT, m, ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setOwnershipParent(m);
 //      assert(t >= Fraction(0,1));
 //      assert(t <= m->ticks());
     m_segmentType = st;

@@ -141,8 +141,6 @@ void SysStaff::removeInstrumentName(InstrumentNameRole role)
 System::System(Score* parent)
     : EngravingItem(ElementType::SYSTEM, parent)
 {
-    // Owned by its score right away; a page only places it later
-    setOwnershipParent(parent);
 }
 
 void System::setOwnershipParent(Score* score)
@@ -333,7 +331,6 @@ void System::setHasStaffVisibilityIndicator(bool has)
 {
     if (has && !m_staffVisibilityIndicator) {
         m_staffVisibilityIndicator = Factory::createStaffVisibilityIndicator(this);
-        m_staffVisibilityIndicator->setOwnershipParent(this);
     } else if (!has && m_staffVisibilityIndicator) {
         delete m_staffVisibilityIndicator;
         m_staffVisibilityIndicator = nullptr;

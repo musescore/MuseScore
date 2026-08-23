@@ -532,7 +532,6 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
 
     SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
     lockIndicator->setTrack(0);
-    lockIndicator->setOwnershipParent(system);
     system->addSystemLockIndicator(lockIndicator);
 
     TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
@@ -554,7 +553,6 @@ void SystemLayout::layoutPageLockIndicators(System* system)
 
     PageLockIndicator* lockIndicator = Factory::createPageLockIndicator(system, lock);
     lockIndicator->setTrack(0);
-    lockIndicator->setOwnershipParent(system);
     system->setPageLockIndicator(lockIndicator);
 
     TLayout::layoutPageLockIndicator(lockIndicator, lockIndicator->mutldata());

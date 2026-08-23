@@ -1336,7 +1336,6 @@ void GuitarPro::createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr)
 {
     if (hasSlur && (slurs[staffIdx] == 0)) {
         Slur* slur = Factory::createSlur(score->dummy());
-        slur->setOwnershipParent(0);
         slur->setTrack(cr->track());
         slur->setTrack2(cr->track());
         slur->setTick(cr->tick());
@@ -1696,7 +1695,6 @@ bool GuitarPro2::read(IODevice* io)
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
                         setTuplet(tuplet, tuple);
-                        tuplet->setOwnershipParent(measure);
                     }
                     tuplet->setTrack(track);
                     tuplet->setBaseLen(l);
@@ -2484,7 +2482,6 @@ bool GuitarPro3::read(IODevice* io)
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
                         setTuplet(tuplet, tuple);
-                        tuplet->setOwnershipParent(measure);
                     }
                     tuplet->setTrack(track);
                     tuplet->setBaseLen(l);
@@ -2518,7 +2515,6 @@ bool GuitarPro3::read(IODevice* io)
                         if (dotted) {
                             NoteDot* dot = Factory::createNoteDot(note);
                             // there is at most one dotted note in this guitar pro version - set 0 index
-                            dot->setOwnershipParent(note);
                             dot->setTrack(track);                // needed to know the staff it belongs to (and detect tablature)
                             dot->setVisible(true);
                             note->add(dot);
@@ -2655,7 +2651,6 @@ bool GuitarPro3::read(IODevice* io)
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());
-                        s->setOwnershipParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         s->setEndElement(nt);
                         s->setTick2(cr->segment()->tick());
@@ -2783,7 +2778,6 @@ void GuitarPro::addTunings()
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);
             tun->setTrack(staff2track(s->idx()));
-            tun->setOwnershipParent(seg);
             seg->add(tun);
             // Instrument string data should be set to the standard
             tuning = utils::standardTuningFor(p->instrument()->channel(0)->program(), (int)sd.strings());

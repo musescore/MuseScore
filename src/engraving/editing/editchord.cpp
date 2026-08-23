@@ -189,12 +189,10 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
 {
     track_idx_t track = chord->track();
     Parenthesis* leftParen = Factory::createParenthesis(chord);
-    leftParen->setOwnershipParent(chord);
     leftParen->setTrack(track);
     leftParen->setDirection(DirectionH::LEFT);
     leftParen->setGenerated(generated);
     Parenthesis* rightParen = Factory::createParenthesis(chord);
-    rightParen->setOwnershipParent(chord);
     rightParen->setTrack(track);
     rightParen->setDirection(DirectionH::RIGHT);
     rightParen->setGenerated(generated);
