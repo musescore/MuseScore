@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/compat/dummyelement.h"
+#include "engraving/dom/dummyparent.h"
 
 #include "engraving/dom/beam.h"
 #include "engraving/dom/box.h"
