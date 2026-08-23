@@ -22,6 +22,8 @@
 
 #include "engravingobject.h"
 
+#include <algorithm>
+
 #include "global/containers.h"
 
 #include "../editing/addremoveelement.h"
@@ -257,7 +259,16 @@ void EngravingObject::removeChild(EngravingObject* o)
         return;
     }
     o->m_parent = nullptr;
-    muse::remove(m_children, o);
+
+    // Search from the back: a child is most often unparented shortly after it was added,
+    // so it still sits at the end of the list. That matters for the dummy, whose child
+    // list is long-lived and large - it holds every object that has no owner, which
+    // includes all beams and spanners. Laying out goldberg.mscx walks 59M list entries
+    // searching from the front, and 65k searching from the back. Order is preserved.
+    auto it = std::find(m_children.rbegin(), m_children.rend(), o);
+    if (it != m_children.rend()) {
+        m_children.erase(std::next(it).base());
+    }
 }
 
 EngravingObject* EngravingObject::parent() const
