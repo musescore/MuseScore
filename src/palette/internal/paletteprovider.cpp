@@ -607,8 +607,12 @@ void PaletteProvider::init()
 
     m_masterPaletteModel = new PaletteTreeModel(PaletteCreator(iocContext()).newMasterPaletteTree(), iocContext(), this);
 
-    m_searchFilterModel = new PaletteCellFilterProxyModel(this);
+    m_searchFilterModel = new QSortFilterProxyModel(this);
     m_searchFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    m_searchFilterModel->setFilterRole(Qt::ToolTipRole);
+    m_searchFilterModel->setRecursiveFilteringEnabled(true);
+    // accept row if its parent is accepted by filter: necessary to be able to search by palette name
+    m_searchFilterModel->setAutoAcceptChildRows(true);
 
     m_visibilityFilterModel = new QSortFilterProxyModel(this);
     m_visibilityFilterModel->setFilterRole(PaletteTreeModel::VisibleRole);

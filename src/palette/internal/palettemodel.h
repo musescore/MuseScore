@@ -225,19 +225,6 @@ private slots:
 public:
     FilterPaletteTreeModel(PaletteCellFilter* filter, PaletteTreeModel* model, QObject* parent = nullptr);
 };
-
-//---------------------------------------------------------
-//   PaletteCellFilterProxyModel
-//---------------------------------------------------------
-
-class PaletteCellFilterProxyModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
-public:
-    PaletteCellFilterProxyModel(QObject* parent = nullptr);
-
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
-};
 }
 
 #endif
