@@ -47,7 +47,6 @@ public:
     Segment* segment();
     Chord* chord();
     Note* note();
-    BracketItem* bracketItem();
 
     EngravingItem* clone() const override;
 
@@ -66,6 +65,5 @@ private:
     Segment* m_segment = nullptr;
     Chord* m_chord = nullptr;
     Note* m_note = nullptr;
-    BracketItem* m_bracketItem = nullptr;
 };
 }

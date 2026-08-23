@@ -22,7 +22,6 @@
 #include "dummyparent.h"
 
 #include "barline.h"
-#include "bracketitem.h"
 #include "chord.h"
 #include "factory.h"
 #include "measure.h"
@@ -46,7 +45,6 @@ DummyParent::DummyParent(EngravingObject* parent)
 
 DummyParent::~DummyParent()
 {
-    delete m_bracketItem;
     delete m_note;
     delete m_chord;
     delete m_segment;
@@ -89,9 +87,6 @@ void DummyParent::init()
 
     m_note = Factory::createNote(m_chord);
     m_note->setOwnershipParent(m_chord);
-
-    m_bracketItem = Factory::createBracketItem(m_system);
-    m_bracketItem->setOwnershipParent(m_system);
 }
 
 RootItem* DummyParent::rootItem()
@@ -127,11 +122,6 @@ Chord* DummyParent::chord()
 Note* DummyParent::note()
 {
     return m_note;
-}
-
-BracketItem* DummyParent::bracketItem()
-{
-    return m_bracketItem;
 }
 
 EngravingItem* DummyParent::clone() const
