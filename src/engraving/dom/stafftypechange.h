@@ -26,6 +26,7 @@
 #include "engravingitem.h"
 
 namespace mu::engraving {
+class Measure;
 class StaffType;
 
 //---------------------------------------------------------
@@ -42,8 +43,19 @@ public:
 
     StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
 
+    static Fraction insertionTick(const Measure* measure);
+    static Fraction insertionTick(const Measure* measure, const PointF& dropPos);
+
+    Fraction tick() const override { return m_tick; }
+    Fraction rtick() const override;
+
     const StaffType* staffType() const { return m_staffType; }
     void setStaffType(StaffType* st, bool owned);
+    void setStaffTypeAndTick(StaffType* st, bool owned, const Fraction& tick);
+    void setTickFromMeasure(const Measure* measure);
+    void setTickFromDropPosition(const Measure* measure, const PointF& dropPos);
+    void moveTicks(const Fraction& diff);
+    bool isAtMeasureStart() const;
 
     double lw() const { return m_lw; }
 
@@ -55,6 +67,8 @@ public:
 
 private:
 
+    void setTick(const Fraction& tick);
+
     friend class Factory;
     StaffTypeChange(MeasureBase* parent = 0);
     StaffTypeChange(const StaffTypeChange&);
@@ -64,6 +78,7 @@ private:
     StaffType* m_staffType = nullptr;
     bool m_ownsStaffType = false;
     double m_lw = 0.0;
+    Fraction m_tick = Fraction(0, 1);
 };
 } // namespace mu::engraving
 

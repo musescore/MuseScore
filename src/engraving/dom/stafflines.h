@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_STAFFLINES_H
 #define MU_ENGRAVING_STAFFLINES_H
 
+#include <utility>
 #include <vector>
 
 #include "engravingitem.h"
@@ -40,6 +41,11 @@ class StaffLines final : public EngravingItem
     DECLARE_CLASSOF(ElementType::STAFF_LINES)
 
 public:
+    struct ColoredLine {
+        LineF line;
+        Color color;
+        double width = 0.0;
+    };
 
     StaffLines* clone() const override { return new StaffLines(*this); }
 
@@ -47,7 +53,14 @@ public:
     PointF canvasPos() const override;    ///< position in page coordinates
 
     const std::vector<LineF>& lines() const { return m_lines; }
-    void setLines(const std::vector<LineF>& l) { m_lines = l; }
+    void setLines(std::vector<LineF> l)
+    {
+        m_lines = std::move(l);
+        m_coloredLines.clear();
+    }
+
+    const std::vector<ColoredLine>& coloredLines() const { return m_coloredLines; }
+    void setColoredLines(std::vector<ColoredLine> lines) { m_coloredLines = std::move(lines); }
 
     Measure* measure() const { return (Measure*)explicitParent(); }
     double y1() const;
@@ -66,6 +79,7 @@ private:
 
     double m_lw = 0.0;
     std::vector<LineF> m_lines;
+    std::vector<ColoredLine> m_coloredLines;
 };
 }
 
