@@ -277,7 +277,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
         return nullptr;
     }
 
-    Tuplet* tuplet = Factory::createTuplet(this->dummy());
+    Tuplet* tuplet = Factory::createTuplet(measure);
     tuplet->setRatio(_ratio);
 
     tuplet->setNumberType(numberType);
@@ -299,7 +299,6 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     tuplet->setTrack(destinationChordRest->track());
     tuplet->setTick(destinationChordRest->tick());
-    tuplet->setOwnershipParent(measure);
 
     if (ot) {
         tuplet->setTuplet(ot);
@@ -1152,14 +1151,11 @@ void Score::deleteItem(EngravingItem* el)
 
         // replace with rest
         if (chord->noteType() == NoteType::NORMAL) {
-            Rest* rest = Factory::createRest(this->dummy(), chord->durationType());
-            rest->setDurationType(chord->durationType());
-            rest->setTicks(chord->ticks());
-
-            rest->setTrack(el->track());
-            rest->setOwnershipParent(chord->ownershipParent());
-
             Segment* segment = chord->segment();
+            Rest* rest = Factory::createRest(segment, chord->durationType());
+            rest->setTicks(chord->ticks());
+            rest->setTrack(el->track());
+
             undoAddCR(rest, segment->measure(), segment->tick());
 
             Tuplet* tuplet = chord->tuplet();
@@ -1192,12 +1188,11 @@ void Score::deleteItem(EngravingItem* el)
     {
         MeasureRepeat* mr = toMeasureRepeat(el);
         removeChordRest(mr, false);
-        Rest* rest = Factory::createRest(this->dummy());
+        Segment* segment = mr->segment();
+        Rest* rest = Factory::createRest(segment);
         rest->setDurationType(DurationType::V_MEASURE);
         rest->setTicks(mr->measure()->stretchedLen(mr->staff()));
         rest->setTrack(mr->track());
-        rest->setOwnershipParent(mr->ownershipParent());
-        Segment* segment = mr->segment();
         undoAddCR(rest, segment->measure(), segment->tick());
 
         // tell measures they're not part of measure repeat group anymore

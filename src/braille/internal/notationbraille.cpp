@@ -718,14 +718,16 @@ bool NotationBraille::addTie()
     }
 
     score()->startCmd(TranslatableString("undoableAction", "Add tie"));
-    Note* note = toNote(currentEngravingItem());
 
-    Tie* tie = Factory::createTie(score()->dummy());
-    tie->setStartNote(brailleInput()->tieStartNote());
-    tie->setEndNote(note);
-    tie->setTrack(brailleInput()->tieStartNote()->track());
-    tie->setTick(brailleInput()->tieStartNote()->chord()->segment()->tick());
-    tie->setTicks(note->chord()->segment()->tick() - brailleInput()->tieStartNote()->chord()->segment()->tick());
+    Note* startNote = brailleInput()->tieStartNote();
+    Note* endNote = toNote(currentEngravingItem());
+
+    Tie* tie = Factory::createTie(startNote);
+    tie->setStartNote(startNote);
+    tie->setEndNote(endNote);
+    tie->setTrack(startNote->track());
+    tie->setTick(startNote->chord()->segment()->tick());
+    tie->setTicks(endNote->chord()->segment()->tick() - startNote->chord()->segment()->tick());
     score()->undoAddElement(tie);
     score()->endCmd();
     return true;
