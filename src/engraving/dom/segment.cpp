@@ -980,7 +980,6 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::BREATH:
         m_elist[track] = 0;
-        score()->setPause(tick(), 0);
         break;
 
     default:

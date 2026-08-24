@@ -26,61 +26,32 @@
 
 #include "../../dom/score.h"
 #include "../../dom/repeatlist.h"
-#include "../../dom/tempo.h"
+#include "../../dom/tempotimeline.h"
 
 #include "../../types/constants.h"
 
 namespace mu::engraving {
 inline muse::mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
 {
-    return score->repeatList().utick2utime(tick) * 1000000;
+    return score->tempoTimeline().utick2utime(tick) * 1000000;
 }
 
 inline int timestampToTick(const Score* score, const muse::mpe::timestamp_t timestamp)
 {
-    return score->repeatList().utime2utick(timestamp / 1000000.f);
+    return score->tempoTimeline().utime2utick(timestamp / 1000000.f);
 }
 
-// Returns the section-break pause at `tick` in microseconds, or 0.
-//
-// Section-break pauses should fire once — after the final repeat iteration —
-// but tick2time() includes the pause at every segment boundary.  To avoid
-// double-counting, we only return the pause for notes whose segment is the
-// one that carries it (i.e. the last segment in the repeat).
-//
-// Non-section-break pauses (caesuras, Fermata, etc.) are returned unconditionally.
-inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const int noteStartTick,
-                                     const int tickPositionOffset)
+// Returns the pause at `tick` in microseconds, or 0
+inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const int tickPositionOffset)
 {
-    double secs = score->tempomap()->pauseSecs(tick);
-    if (muse::RealIsNull(secs)) {
+    const TempoTimeline& timeline = score->tempoTimeline();
+    const auto pauseIt = timeline.pauses().find(tick + tickPositionOffset);
+    if (pauseIt == timeline.pauses().end()) {
         return 0;
     }
 
-    // Determine whether `tick` is a section-break boundary.
-    bool isSectionBreak = false;
-    for (const RepeatSegment* s : score->repeatList()) {
-        if (s->pause > 0.0 && s->tick + s->len() == tick) {
-            isSectionBreak = true;
-            break;
-        }
-    }
-
-    if (!isSectionBreak) {
-        return secs * 1000000;
-    }
-
-    // Section break: only subtract the pause if the note lives in the segment
-    // that carries it.  Other segments had the pause already removed from their
-    // time delta in updateTempo(), so subtracting again would double-count.
-    int utick = noteStartTick + tickPositionOffset;
-    for (const RepeatSegment* s : score->repeatList()) {
-        if (utick >= s->utick && utick < s->utick + s->len()) {
-            return s->pause > 0.0 ? secs * 1000000 : 0;
-        }
-    }
-
-    return 0;
+    double secs = pauseIt->second / timeline.tempoMultiplier().val;
+    return muse::RealIsNull(secs) ? 0 : secs* 1000000;
 }
 
 inline muse::mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick,
@@ -88,7 +59,7 @@ inline muse::mpe::duration_t durationFromStartAndEndTick(const Score* score, con
 {
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick + tickPositionOffset);
     muse::mpe::timestamp_t endTimestamp = timestampFromTicks(score, endTick + tickPositionOffset);
-    muse::mpe::duration_t pause = pauseUs(score, endTick, startTick, tickPositionOffset);
+    muse::mpe::duration_t pause = pauseUs(score, endTick, tickPositionOffset);
 
     return endTimestamp - startTimestamp - pause;
 }
@@ -106,7 +77,7 @@ inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationT
     int startTickWithOffset = startTick + tickPositionOffset;
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTickWithOffset);
     muse::mpe::timestamp_t endTimestamp = timestampFromTicks(score, startTickWithOffset + durationTicks);
-    muse::mpe::duration_t pause = pauseUs(score, startTick + durationTicks, startTick, tickPositionOffset);
+    muse::mpe::duration_t pause = pauseUs(score, startTick + durationTicks, tickPositionOffset);
     muse::mpe::duration_t duration = endTimestamp - startTimestamp - pause;
 
     return { startTimestamp, duration };

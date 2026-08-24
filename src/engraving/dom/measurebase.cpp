@@ -238,7 +238,6 @@ void MeasureBase::remove(EngravingItem* el)
             break;
         case LayoutBreakType::SECTION:
             setSectionBreak(false);
-            score()->setPause(endTick(), 0);
             if (lb->startWithMeasureOne()) {
                 triggerLayoutToEnd();
             }

@@ -47,6 +47,7 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
+#include "engraving/dom/tempotext.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
@@ -100,14 +101,24 @@ bool GuitarPro4::readMixChange(Measure* measure)
         readChar();
     }
     if (temp >= 0) {
-        if (last_segment) {
-            score->setTempo(last_segment->tick(), double(temp) / 60.0f);
-            last_segment = nullptr;
-        }
         if (temp != previousTempo) {
+            if (last_segment && last_segment->tick() != measure->tick()) {
+                bool hasTempoText = false;
+                for (EngravingItem* e : last_segment->annotations()) {
+                    hasTempoText |= e->isTempoText();
+                }
+                if (!hasTempoText) {
+                    TempoText* tt = Factory::createTempoText(last_segment);
+                    tt->setTempo(double(temp) / 60.0f);
+                    tt->setVisible(false);
+                    tt->setTrack(0);
+                    last_segment->add(tt);
+                }
+            }
             previousTempo = temp;
             setTempo(temp, measure);
         }
+        last_segment = nullptr;
         readChar();
         tempoEdited = true;
     }

@@ -82,10 +82,6 @@ public:
 
     Sid defaultPosSid() const override;
 
-protected:
-    void added() override;
-    void removed() override;
-
 private:
 
     friend class Factory;

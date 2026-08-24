@@ -448,7 +448,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         }
     }
 
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     score->autoUpdateSpatium();
 
     {

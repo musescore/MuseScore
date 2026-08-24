@@ -123,6 +123,7 @@ class Page;
 class Part;
 class RehearsalMark;
 class RepeatList;
+struct RepeatSegmentInfo;
 class Rest;
 class Score;
 class IEngravingFont;
@@ -132,7 +133,7 @@ class Spanner;
 class Staff;
 class System;
 class TDuration;
-class TempoMap;
+class TempoTimeline;
 class Text;
 class TimeSig;
 class TimeSigMap;
@@ -545,9 +546,9 @@ public:
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false, SegmentType segType = SegmentType::ChordRest) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
 
-    void setUpTempoMapLater();
-    void setUpTempoMap();
-    bool needSetUpTempoMap() const { return m_needSetUpTempoMap; }
+    void updateTicksAndTimeSigMap();
+    void updateTicksAndTimeSigMapLater() { m_needUpdateTicksAndTimeSigMap = true; }
+    bool needUpdateTicksAndTimeSigMap() const { return m_needUpdateTicksAndTimeSigMap; }
 
     EngravingItem* nextElement();
     EngravingItem* prevElement();
@@ -622,15 +623,11 @@ public:
 
     void cmdConcertPitchChanged(bool);
 
-    virtual TempoMap* tempomap() const;
     virtual TimeSigMap* sigmap() const;
 
-    void setTempo(Segment*, BeatsPerSecond bps);
-    void setTempo(const Fraction& tick, BeatsPerSecond bps);
-    void removeTempo(const Fraction& tick);
-    void setPause(const Fraction& tick, double seconds);
     BeatsPerSecond tempo(const Fraction& tick) const;
     BeatsPerSecond multipliedTempo(const Fraction& tick) const;
+    BeatsPerSecond multipliedTempoAtUtick(int utick) const;
 
     Text* getText(TextStyleType subtype) const;
 
@@ -662,11 +659,19 @@ public:
     const RepeatList& repeatList() const;
     /// For small, one-step operations, where you need to get the relevant repeatList just once
     const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+    /// Read-only snapshot, safe to call mid-edit (e.g. before a structural change invalidates the current repeatList)
+    std::vector<RepeatSegmentInfo> repeatSegmentInfoList(bool expandRepeats) const;
+    /// Always the repeat-expanded list, regardless of the current playback setting
+    const RepeatList& expandedRepeatList() const;
 
     void invalidateRepeatList();
 
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
+
+    const TempoTimeline& tempoTimeline() const;
+    const TempoTimeline& tempoTimeline(bool expandRepeats) const;
+    void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
 
     virtual size_t npages() const { return m_pages.size(); }
     virtual page_idx_t pageIdx(const Page* page) const { return muse::indexOf(m_pages, page); }
@@ -795,7 +800,7 @@ public:
     ChordRest* findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const;
     ChordRest* findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, voice_idx_t voice) const;
     ChordRest* findChordRestEndingBeforeTickInTrack(const Fraction& tick, track_idx_t trackIdx) const;
-    void insertTime(const Fraction& tickPos, const Fraction& tickLen);
+    void insertTime(const Fraction& tickPos, const Fraction& tickLen, const std::vector<RepeatSegmentInfo>& oldSegments);
 
     std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
     void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
@@ -862,7 +867,7 @@ public:
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
     virtual AutomationDataConstPtr automationData() const;
-    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
+    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable = true);
 
     friend class Chord;
 
@@ -873,7 +878,7 @@ public:
     size_t bracketLevels(staff_idx_t staffIdx) const;
 
 protected:
-    virtual void onTimeInserted(const Fraction& tick, const Fraction& len);
+    virtual void onTimeInserted(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments);
 
     friend class MasterScore;
     Score(const muse::modularity::ContextPtr& iocCtx);
@@ -910,10 +915,7 @@ private:
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
 
-    void resetTempo();
-    void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
-    void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
-    void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
+    void rebuildTimeSigMap(Measure* m);
 
     void doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo = true);
     void doUndoResetPartialSlur(Slur* slur, bool undo);
@@ -986,6 +988,7 @@ private:
     bool m_printing = false;                // True if we are drawing to a printer
     bool m_savedCapture = false;            // True if we saved an image capture
     bool m_corrupted = false;
+    bool m_needUpdateTicksAndTimeSigMap = false;
 
     ShowAnchors m_showAnchors;
 
@@ -995,7 +998,6 @@ private:
     int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
     bool m_isOpen = false;
-    bool m_needSetUpTempoMap = true;
 
     std::map<String, String> m_metaTags;
 

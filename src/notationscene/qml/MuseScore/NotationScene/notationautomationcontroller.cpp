@@ -27,13 +27,12 @@
 #include <optional>
 #include <set>
 
-#include "async/async.h"
-
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
 #include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/dynamicvalues.h"
+#include "engraving/automation/tempovalues.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
@@ -43,7 +42,9 @@
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 
+#include "global/async/async.h"
 #include "global/containers.h"
+#include "global/realfn.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -113,8 +114,42 @@ static double volumeLocalDbToLogicalDb(double localDb)
     return VOLUME_LOGICAL_CENTER_DB - diff / VOLUME_LOW_ACCURACY_STEP;
 }
 
+// Mirrors the volume fader curve above, anchored on the default tempo instead of 0dB - a plain
+// linear map would put the default tempo (120bpm) at ~12% up the lane instead of the center
+// This is a UI-only display cap - the score model still allows tempos up to Constants::MAX_TEMPO
+static constexpr double TEMPO_RANGE_MAX_BPM = 300.0;
+static const double TEMPO_LOGICAL_CENTER_BPM = mu::engraving::Constants::DEFAULT_TEMPO.toBPM().val;
+static const double TEMPO_LOCAL_CENTER_BPM = TEMPO_RANGE_MAX_BPM / 2.0;
+static const double TEMPO_HIGH_ACCURACY_STEP = (TEMPO_RANGE_MAX_BPM - TEMPO_LOCAL_CENTER_BPM)
+                                               / (TEMPO_RANGE_MAX_BPM - TEMPO_LOGICAL_CENTER_BPM);
+static const double TEMPO_LOW_ACCURACY_STEP = TEMPO_LOCAL_CENTER_BPM / TEMPO_LOGICAL_CENTER_BPM;
+
+// logical (actual) bpm -> local (linear-in-display) bpm
+static double tempoLogicalBpmToLocalBpm(double logicalBpm)
+{
+    if (logicalBpm > TEMPO_LOGICAL_CENTER_BPM) {
+        const double diff = TEMPO_RANGE_MAX_BPM - logicalBpm;
+        return TEMPO_RANGE_MAX_BPM - diff * TEMPO_HIGH_ACCURACY_STEP;
+    }
+
+    const double diff = TEMPO_LOGICAL_CENTER_BPM - logicalBpm;
+    return TEMPO_LOCAL_CENTER_BPM - diff * TEMPO_LOW_ACCURACY_STEP;
+}
+
+// local (linear-in-display) bpm -> logical (actual) bpm
+static double tempoLocalBpmToLogicalBpm(double localBpm)
+{
+    if (localBpm > TEMPO_LOCAL_CENTER_BPM) {
+        const double diff = TEMPO_RANGE_MAX_BPM - localBpm;
+        return TEMPO_RANGE_MAX_BPM - diff / TEMPO_HIGH_ACCURACY_STEP;
+    }
+
+    const double diff = TEMPO_LOCAL_CENTER_BPM - localBpm;
+    return TEMPO_LOGICAL_CENTER_BPM - diff / TEMPO_LOW_ACCURACY_STEP;
+}
+
 // Values are stored normalized [0, 1]; Dynamics rescales that into its own sub-range for display,
-// Volume additionally applies the fader curve above, other types map 1:1 onto the display range
+// Volume and Tempo additionally apply a fader curve, other types map 1:1 onto the display range
 static double automationValueToDisplay(AutomationType type, muse::real_t value)
 {
     if (type == AutomationType::Dynamics) {
@@ -129,10 +164,19 @@ static double automationValueToDisplay(AutomationType type, muse::real_t value)
         return std::clamp(display, 0.0, 1.0);
     }
 
+    if (type == AutomationType::Tempo) {
+        const double logicalBpm = mu::engraving::denormalizeTempo(value).toBPM().val;
+        const double localBpm = tempoLogicalBpmToLocalBpm(logicalBpm);
+        const double display = localBpm / TEMPO_RANGE_MAX_BPM;
+        return std::clamp(display, 0.0, 1.0);
+    }
+
     return std::clamp(static_cast<double>(value), 0.0, 1.0);
 }
 
-static muse::real_t automationValueFromDisplay(AutomationType type, double displayValue)
+// existingValue preserves Tempo values above the display cap when the drag lands back at the same clamped edge
+static muse::real_t automationValueFromDisplay(AutomationType type, double displayValue,
+                                               std::optional<muse::real_t> existingValue = std::nullopt)
 {
     if (type == AutomationType::Dynamics) {
         return DYNAMICS_DISPLAY_RANGE_MIN + displayValue * (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
@@ -143,6 +187,18 @@ static muse::real_t automationValueFromDisplay(AutomationType type, double displ
         const double logicalDb = volumeLocalDbToLogicalDb(localDb);
         const double normalized = (logicalDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
         return muse::real_t(normalized);
+    }
+
+    if (type == AutomationType::Tempo) {
+        if (existingValue && muse::RealIsEqualOrMore(displayValue, 1.0)
+            && muse::RealIsEqualOrMore(automationValueToDisplay(type, *existingValue), 1.0)) {
+            return *existingValue;
+        }
+
+        const double localBpm = displayValue * TEMPO_RANGE_MAX_BPM;
+        const double logicalBpm = tempoLocalBpmToLogicalBpm(localBpm);
+        const muse::real_t normalized = mu::engraving::normalizeTempo(mu::engraving::BeatsPerSecond::fromBPM(logicalBpm));
+        return std::clamp(normalized, mu::engraving::MIN_NORMALIZED_TEMPO, mu::engraving::MAX_NORMALIZED_TEMPO);
     }
 
     return muse::real_t(displayValue);
@@ -198,18 +254,32 @@ static std::optional<int> tickFromCanvasX(const System* system, const muse::Rect
 static AutomationCurveKey curveKeyFor(AutomationType type, const Staff* staff)
 {
     switch (type) {
+    case AutomationType::Dynamics:
+        return AutomationCurveKey::staff(type, staff->id());
+    case AutomationType::Tempo:
+        return AutomationCurveKey::global(type);
     case AutomationType::Volume:
     case AutomationType::Pan: {
         const Part* part = staff->part();
         const InstrumentTrackId trackId { part->id(), part->instrumentId() };
         return AutomationCurveKey::instrument(type, trackId);
     }
-    case AutomationType::Dynamics:
     case AutomationType::Unknown:
         break;
     }
 
-    return AutomationCurveKey::staff(type, staff->id());
+    return AutomationCurveKey();
+}
+
+static staff_idx_t firstVisibleStaffIdx(const Score* score)
+{
+    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+        if (score->staff(i)->show()) {
+            return i;
+        }
+    }
+
+    return muse::nidx;
 }
 
 static bool isStructuralChange(const mu::engraving::ScoreChanges& changes)
@@ -323,6 +393,11 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
     }
 
     const AutomationCurveKey curveKey = curveKeyFor(currentAutomationType(), staff);
+    if (curveKey.isGlobal() && staffIdx != firstVisibleStaffIdx(score())) {
+        // Score-scoped automation is only drawn on the score's first staff
+        return nullptr;
+    }
+
     if (curveKey.trackId().has_value() && !staff->isTop()) {
         // Instrument-scoped automation is only drawn on the instrument's first staff
         return nullptr;
@@ -918,11 +993,14 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
 
     std::set<muse::ID> affectedStaffIds;
     std::set<mu::engraving::InstrumentTrackId> affectedTrackIds;
+    bool globalAffected = false;
     for (const mu::engraving::AutomationCurveKey& key : changes.affectedKeys) {
         if (const std::optional<muse::ID> staffId = key.staffId()) {
             affectedStaffIds.insert(*staffId);
         } else if (const std::optional<mu::engraving::InstrumentTrackId> trackId = key.trackId()) {
             affectedTrackIds.insert(*trackId);
+        } else if (key.isGlobal()) {
+            globalAffected = true;
         }
     }
 
@@ -940,7 +1018,8 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
         const bool staffAffected = affectedStaffIds.find(staff->id()) != affectedStaffIds.end();
         const mu::engraving::InstrumentTrackId staffTrackId { staff->part()->id(), staff->part()->instrumentId() };
         const bool trackAffected = affectedTrackIds.find(staffTrackId) != affectedTrackIds.end();
-        if (!staffAffected && !trackAffected) {
+        const bool globalCurveAffected = globalAffected && curveKeyFor(currentAutomationType(), staff).isGlobal();
+        if (!staffAffected && !trackAffected && !globalCurveAffected) {
             continue;
         }
         const System* system = key.system;
@@ -986,7 +1065,8 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     const mu::engraving::real_t existingInValue = mu::engraving::resolveInValue(curve, existingIt);
 
     //! NOTE: Point in/out values are rescaled to the display range - higher value == lower Y...
-    const mu::engraving::real_t newValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y);
+    const mu::engraving::real_t referenceValue = pointType == PointData::PointType::IN ? existingInValue : existingPoint.value.outValue;
+    const mu::engraving::real_t newValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y, referenceValue);
 
     // STEP 4 - Update the point's value, and move it to the new tick if necessary...
 

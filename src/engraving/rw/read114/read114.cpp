@@ -38,6 +38,8 @@
 #include "style/defaultstyle.h"
 #include "style/style.h"
 
+#include "types/bps.h"
+#include "types/constants.h"
 #include "types/typesconv.h"
 
 #include "dom/accidental.h"
@@ -77,7 +79,6 @@
 #include "dom/stafftext.h"
 #include "dom/stafftype.h"
 #include "dom/stringdata.h"
-#include "dom/tempo.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textline.h"
@@ -2768,7 +2769,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     MasterScore* masterScore = static_cast<MasterScore*>(score);
 
-    TempoMap tm;
+    std::map<int, double> tm;
     while (e.readNextStartElement()) {
         ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
@@ -2793,18 +2794,13 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             e.skipCurrentElement();             // obsolete
         } else if (tag == "tempolist") {
             // store the tempo list to create invisible tempo text later
-            double tempo = e.doubleAttribute("fix", 2.0);
-            tm.setTempoMultiplier(tempo);
+            masterScore->setTempoMultiplier(e.doubleAttribute("fix", 2.0));
             while (e.readNextStartElement()) {
                 if (e.name() == "tempo") {
                     int tick   = e.attribute("tick").toInt();
                     double tmp = e.readText().toDouble();
                     tick       = ctx.fileDivision(tick);
-                    auto pos   = tm.find(tick);
-                    if (pos != tm.end()) {
-                        tm.erase(pos);
-                    }
-                    tm.setTempo(tick, tmp);
+                    tm[tick] = tmp;
                 } else if (e.name() == "relTempo") {
                     e.readText();
                 } else {
@@ -3097,28 +3093,46 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
-    masterScore->setUpTempoMap();
+    masterScore->updateTicksAndTimeSigMap();
     for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
-        BeatsPerSecond tempo   = i.second.tempo;
-        if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
-            TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
-            tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
-            tt->setTempo(tempo);
-            tt->setTrack(0);
-            tt->setVisible(false);
-            Measure* m = masterScore->tick2measure(tick);
-            if (m) {
-                Segment* seg = m->getSegment(SegmentType::ChordRest, tick);
-                seg->add(tt);
-                masterScore->setTempo(tick, tempo);
-            } else {
-                delete tt;
+        BeatsPerSecond tempo   = i.second;
+
+        if (i.first == tm.begin()->first && tempo == Constants::DEFAULT_TEMPO) {
+            continue;
+        }
+
+        Measure* m = masterScore->tick2measure(tick);
+        if (!m) {
+            continue;
+        }
+
+        Segment* seg = m->findSegment(SegmentType::ChordRest, tick);
+        bool hasMatchingTempo = false;
+        if (seg) {
+            for (const EngravingItem* segAnnotation : seg->annotations()) {
+                if (segAnnotation->isTempoText() && toTempoText(segAnnotation)->tempo() == tempo) {
+                    hasMatchingTempo = true;
+                    break;
+                }
             }
         }
+        if (hasMatchingTempo) {
+            continue;
+        }
+
+        TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
+        tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
+        tt->setTempo(tempo);
+        tt->setTrack(0);
+        tt->setVisible(false);
+
+        if (!seg) {
+            seg = m->getSegment(SegmentType::ChordRest, tick);
+        }
+        seg->add(tt);
     }
 
-    masterScore->setUpTempoMap();
     // While reading the score, some elements might use `score->repeatList()` (which is incorrect
     // anyway, because the repeatList will be incomplete because the score is incomplete, but some
     // elements still do it).

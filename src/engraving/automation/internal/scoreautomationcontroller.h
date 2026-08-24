@@ -22,39 +22,62 @@
 #pragma once
 
 #include <map>
+#include <optional>
 #include <set>
 #include <variant>
 #include <vector>
 
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
+#include "engraving/dom/tempotimeline.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
 class Score;
 class Fraction;
 class EngravingItem;
+class Measure;
 class Segment;
 class Dynamic;
+class Fermata;
 class Hairpin;
+class TempoText;
+class GradualTempoChange;
+class Volta;
 class MeasureRepeat;
+class RepeatList;
 class RepeatSegment;
+struct RepeatSegmentInfo;
 struct ScoreChanges;
 
 class ScoreAutomationController
 {
 public:
     void init(Score* score);
+    void ensureInitialized(Score* score);
 
-    void insertTime(const Fraction& tick, const Fraction& len);
+    void insertTime(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments);
     void update(const ScoreChanges& changes);
-
-    AutomationDataConstPtr automationData() const { return m_automationData; }
-    void setAutomationData(AutomationDataPtr data);
 
     void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
 
+    AutomationDataConstPtr automationData() const { return m_automationData; }
+    void setAutomationData(AutomationDataPtr data) { m_automationData = std::move(data); }
+
+    const TempoTimeline& tempoTimeline(bool expandRepeats = true) const;
+    void setTempoMultiplier(const BeatsPerSecond& bps);
+
+    void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
+
 private:
+    struct UpdateRequest {
+        int tickFrom = 0;
+        staff_idx_t staffIdxFrom = muse::nidx;
+        staff_idx_t staffIdxTo = muse::nidx;
+        bool includeTempo = false;
+        bool includeDynamics = false;
+    };
+
     struct StaffRange {
         StaffRange(const Score* score, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
 
@@ -73,14 +96,29 @@ private:
         int tickOffset = 0;
     };
 
+    struct AnacrusisMeasureInfo {
+        const Measure* measure = nullptr;
+        int tickOffset = 0;
+        std::optional<utick_t> nextMeasureUTick; // next measure in the same repeat pass, if any
+    };
+
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
     using MeasureRepeats = std::vector<std::pair<const MeasureRepeat*, int> >;
 
     struct UpdateContext {
+        UpdateRequest request;
         AutomationCurveMap curves;
         utick_t clearFromUTick = 0;
         DynamicPriorities dynamicPriorities;
         MeasureRepeats measureRepeats;
+        std::optional<BeatsPerSecond> tempoPrimo;
+        PausesMap pauses;
+        PausesMap noRepeatPauses; // repeat-agnostic twin of pauses
+        std::vector<AnacrusisMeasureInfo> anacrusisMeasures;
+        AutomationCurve* tempoCurve = nullptr;
+        AutomationCurve noRepeatTempoCurve; // repeat-agnostic Tempo curve
+        std::vector<std::pair<utick_t, int> > pendingTempoResets;
+        BeatsPerSecond tempoMultiplier = 1.0;
     };
 
     struct DynamicInfo {
@@ -113,10 +151,11 @@ private:
         std::optional<real_t> nominalValueTo;
     };
 
-    void update(int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
+    void update(const UpdateRequest& request, const AutomationCurveMap& curves);
+    void fullRebuild(AutomationCurveMap& curves, bool includeTempo = true, bool includeDynamics = true);
 
-    static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
-                                     AutomationCurveMap& destCurves);
+    static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick, bool includeTempo,
+                                     bool includeDynamics, AutomationCurveMap& destCurves);
 
     static void addSegmentPoints(const Segment* segment, int tickOffset, const StaffRange& range, UpdateContext& ctx);
     static void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const StaffRange& range, UpdateContext& ctx);
@@ -132,12 +171,28 @@ private:
     static void collectMeasureRepeats(const Segment* segment, int tickOffset, const StaffRange& range, MeasureRepeats& result);
     static void addMeasureRepeatPoints(UpdateContext& ctx);
 
-    void mirrorGlobalAndInstrumentPointsToRepeats(UpdateContext& ctx);
+    void mirrorAuthoredPointsToRepeats(UpdateContext& ctx);
+    void fillNoRepeatTempoCurve(const AutomationCurve& tempoCurve, AutomationCurve& noRepeatTempoCurve);
 
-    static bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
-                                   UpdateContext& ctx);
-    static void addDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
-                                UpdateContext& ctx);
+    static void collectPauses(const Measure* measure, int tickOffset, PausesMap& pauses, PausesMap& noRepeatPauses);
+    static void addTempoTextPoint(const TempoText* tt, int tickOffset, UpdateContext& ctx);
+    static void addFermataStretchPoints(const Fermata* fermata, int tickOffset, double stretch, UpdateContext& ctx);
+    static void addGradualTempoChangePoints(const GradualTempoChange* tempoChange, int tickOffset, UpdateContext& ctx);
+    static void addVoltaTempoResetPoint(const Volta* volta, UpdateContext& ctx);
+    static void resolvePendingTempoResets(UpdateContext& ctx);
+    static void fixAnacrusisTempo(UpdateContext& ctx);
+
+    static bool tryAddDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
+                                   int priority);
+    static void addDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
+                                int priority);
+    static void setTempoPoint(utick_t tick, int tickOffset, real_t normalizedBps, UpdateContext& ctx,
+                              std::optional<EID> itemId = std::nullopt);
+    //! NOTE: for callers that already know no point exists at tick (e.g. via lower_bound) - skips the redundant lookup
+    static void setTempoPoint(AutomationCurve::iterator hint, utick_t tick, int tickOffset, real_t normalizedBps, UpdateContext& ctx,
+                              std::optional<EID> itemId = std::nullopt);
+    static void setNoRepeatTempoPoint(utick_t rawTick, const AutomationPoint& point, UpdateContext& ctx);
+
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);
 
     void mirrorEditsToRepeats(const AutomationCurveKey& key, AutomationPointEdits& edits);
@@ -149,5 +204,8 @@ private:
 
     Score* m_score = nullptr;
     AutomationDataPtr m_automationData;
+    TempoTimeline m_tempoTimeline;
+    TempoTimeline m_flattenedTempoTimeline;
+    std::optional<TempoTimeline> m_tempoTimelineOverride;
 };
 }

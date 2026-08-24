@@ -3262,9 +3262,11 @@ void NotationActionController::toggleAutomation()
 muse::Ret NotationActionController::selectAutomationType(const muse::rcommand::CommandQuery& query)
 {
     const std::string type = query.param("type").toString();
-
     mu::engraving::AutomationType automationType = mu::engraving::AutomationType::Dynamics;
-    if (type == "volume") {
+
+    if (type == "tempo") {
+        automationType = mu::engraving::AutomationType::Tempo;
+    } else if (type == "volume") {
         automationType = mu::engraving::AutomationType::Volume;
     } else if (type == "pan") {
         automationType = mu::engraving::AutomationType::Pan;
