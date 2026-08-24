@@ -4,6 +4,8 @@
 
 #include "modularity/ioc.h"
 #include "appshell/internal/istartupscenario.h"
+#include "dockwindow/idockwindowprovider.h"
+#include "dockwindow/idockwindow.h"
 
 #include "muse_framework_config.h"
 #include "app_config.h"
@@ -140,13 +142,17 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
     startupScenario->runOnSplashScreen();
 
     QMetaObject::invokeMethod(qApp, [this, ctxId, startupScenario, options]() {
-#ifdef MUE_ENABLE_SPLASHSCREEN
-        if (m_splashScreen) {
-            m_splashScreen->close();
-            delete m_splashScreen;
-            m_splashScreen = nullptr;
+        auto dockWindowProvider = muse::modularity::ioc(ctxId)->resolve<muse::dock::IDockWindowProvider>("app");
+        muse::dock::IDockWindow* dockWindow = dockWindowProvider ? dockWindowProvider->window() : nullptr;
+        if (dockWindow) {
+            dockWindow->currentPageChanged().onNotify(this, [this, dockWindow]() {
+                dockWindow->currentPageChanged().disconnect(this);
+
+                QMetaObject::invokeMethod(qApp, [this]() {
+                    closeSplash();
+                }, Qt::QueuedConnection);
+            });
         }
-#endif
 
         muse::async::Promise<muse::Ret> startup = startupScenario->runAfterSplashScreen();
 
@@ -159,6 +165,17 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
         }
 #endif
     }, Qt::QueuedConnection);
+}
+
+void MuseScoreGuiApp::closeSplash()
+{
+#ifdef MUE_ENABLE_SPLASHSCREEN
+    if (m_splashScreen) {
+        m_splashScreen->close();
+        delete m_splashScreen;
+        m_splashScreen = nullptr;
+    }
+#endif
 }
 
 void MuseScoreGuiApp::applyCommandLineOptions(const std::shared_ptr<CmdOptions>& opt)

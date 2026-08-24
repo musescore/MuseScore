@@ -5,7 +5,7 @@
 
 #include "ui/internal/guiapplication.h"
 #include "../cmdoptions.h"
-
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "multiwindows/imultiwindowsprovider.h"
@@ -39,6 +39,7 @@ public:
     MuseScoreGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
 
     void showSplash() override;
+    void closeSplash() override;
 
 private:
 
