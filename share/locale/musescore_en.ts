@@ -1379,7 +1379,7 @@
         <translation type="unfinished">Staff line thickness:</translation>
     </message>
     <message>
-        <location filename="src/notationscene/widgets/editstyle.ui" line="115"/>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="118"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -1387,7 +1387,7 @@ space unit</extracomment>
         <translation type="unfinished">sp</translation>
     </message>
     <message>
-        <location filename="src/notationscene/widgets/editstyle.ui" line="182"/>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="185"/>
         <source>Reset to default</source>
         <translation type="unfinished">Reset to default</translation>
     </message>
@@ -2805,6 +2805,36 @@ space unit</extracomment>
         <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
         <source>Center on the rightmost system barline</source>
         <translation type="unfinished">Center on the rightmost system barline</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
+        <source>Dashed barline thickness:</source>
+        <translation type="unfinished">Dashed barline thickness:</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
+        <source>Reset &apos;Dashed barline thickness&apos; value</source>
+        <translation type="unfinished">Reset &apos;Dashed barline thickness&apos; value</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
+        <source>Dashed barline dash length:</source>
+        <translation type="unfinished">Dashed barline dash length:</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
+        <source>Reset &apos;Dashed barline dash length&apos; value</source>
+        <translation type="unfinished">Reset &apos;Dashed barline dash length&apos; value</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
+        <source>Dashed barline gap length:</source>
+        <translation type="unfinished">Dashed barline gap length:</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
+        <source>Reset &apos;Dashed barline gap length&apos; value</source>
+        <translation type="unfinished">Reset &apos;Dashed barline gap length&apos; value</translation>
     </message>
     <message>
         <location filename="src/notationscene/widgets/editstyle.ui" line="1"/>
@@ -5266,10 +5296,6 @@ followed by dashes</translation>
         <location filename="src/web/appshell/view/appmenumodel.cpp" line="1"/>
         <source>Redo</source>
         <translation type="unfinished">Redo</translation>
-    </message>
-    <message>
-        <source>Parts…</source>
-        <translation type="unfinished">Parts…</translation>
     </message>
     <message>
         <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
@@ -10345,118 +10371,6 @@ followed by dashes</translation>
         <source>Manage extensions</source>
         <translation type="unfinished">Manage extensions</translation>
     </message>
-    <message>
-        <source>Toggle playback</source>
-        <translation type="unfinished">Toggle playback</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle playback</source>
-        <translation type="unfinished">Dock: Toggle playback</translation>
-    </message>
-    <message>
-        <source>Toggle note input</source>
-        <translation type="unfinished">Toggle note input</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle note input</source>
-        <translation type="unfinished">Dock: Toggle note input</translation>
-    </message>
-    <message>
-        <source>Toggle palettes</source>
-        <translation type="unfinished">Toggle palettes</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle palettes</source>
-        <translation type="unfinished">Dock: Toggle palettes</translation>
-    </message>
-    <message>
-        <source>Toggle instruments</source>
-        <translation type="unfinished">Toggle instruments</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle instruments</source>
-        <translation type="unfinished">Dock: Toggle instruments</translation>
-    </message>
-    <message>
-        <source>Toggle properties</source>
-        <translation type="unfinished">Toggle properties</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle properties</source>
-        <translation type="unfinished">Dock: Toggle properties</translation>
-    </message>
-    <message>
-        <source>Toggle selection filter</source>
-        <translation type="unfinished">Toggle selection filter</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle selection filter</source>
-        <translation type="unfinished">Dock: Toggle selection filter</translation>
-    </message>
-    <message>
-        <source>Toggle undo history</source>
-        <translation type="unfinished">Toggle undo history</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle undo history</source>
-        <translation type="unfinished">Dock: Toggle undo history</translation>
-    </message>
-    <message>
-        <source>Toggle navigator</source>
-        <translation type="unfinished">Toggle navigator</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle navigator</source>
-        <translation type="unfinished">Dock: Toggle navigator</translation>
-    </message>
-    <message>
-        <source>Toggle braille</source>
-        <translation type="unfinished">Toggle braille</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle braille</source>
-        <translation type="unfinished">Dock: Toggle braille</translation>
-    </message>
-    <message>
-        <source>Toggle timeline</source>
-        <translation type="unfinished">Toggle timeline</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle timeline</source>
-        <translation type="unfinished">Dock: Toggle timeline</translation>
-    </message>
-    <message>
-        <source>Toggle mixer</source>
-        <translation type="unfinished">Toggle mixer</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle mixer</source>
-        <translation type="unfinished">Dock: Toggle mixer</translation>
-    </message>
-    <message>
-        <source>Toggle piano keyboard</source>
-        <translation type="unfinished">Toggle piano keyboard</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle piano keyboard</source>
-        <translation type="unfinished">Dock: Toggle piano keyboard</translation>
-    </message>
-    <message>
-        <source>Toggle percussion</source>
-        <translation type="unfinished">Toggle percussion</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle percussion</source>
-        <translation type="unfinished">Dock: Toggle percussion</translation>
-    </message>
-    <message>
-        <source>Toggle statusbar</source>
-        <translation type="unfinished">Toggle statusbar</translation>
-    </message>
-    <message>
-        <source>Dock: Toggle statusbar</source>
-        <translation type="unfinished">Dock: Toggle statusbar</translation>
-    </message>
 </context>
 <context>
     <name>appshell</name>
@@ -11160,6 +11074,21 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="1"/>
         <source>What’s new in MuseScore Studio</source>
         <translation type="unfinished">What’s new in MuseScore Studio</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="1"/>
+        <source>Unlock Premium Playback</source>
+        <translation type="unfinished">Unlock Premium Playback</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="1"/>
+        <source>Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio.</source>
+        <translation type="unfinished">Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio.</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="1"/>
+        <source>Get MuseSounds Pro</source>
+        <translation type="unfinished">Get MuseSounds Pro</translation>
     </message>
     <message>
         <location filename="src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="1"/>
@@ -24259,35 +24188,21 @@ pickup measure</translation>
         <translation type="unfinished">Zoom menu</translation>
     </message>
     <message>
-        <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
         <location filename="src/web/appshell/view/appmenumodel.cpp" line="1"/>
         <source>Insert &amp;after selection…</source>
         <translation type="unfinished">Insert &amp;after selection…</translation>
     </message>
     <message>
-        <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
         <location filename="src/web/appshell/view/appmenumodel.cpp" line="1"/>
         <source>Insert &amp;before selection…</source>
         <translation type="unfinished">Insert &amp;before selection…</translation>
     </message>
     <message>
-        <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
-        <source>&amp;Insert one measure before selection</source>
-        <translation type="unfinished">&amp;Insert one measure before selection</translation>
-    </message>
-    <message>
-        <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
-        <source>Insert &amp;one measure at end of score</source>
-        <translation type="unfinished">Insert &amp;one measure at end of score</translation>
-    </message>
-    <message>
-        <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
         <location filename="src/web/appshell/view/appmenumodel.cpp" line="1"/>
         <source>Insert at &amp;start of score…</source>
         <translation type="unfinished">Insert at &amp;start of score…</translation>
     </message>
     <message>
-        <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
         <location filename="src/web/appshell/view/appmenumodel.cpp" line="1"/>
         <source>Insert at &amp;end of score…</source>
         <translation type="unfinished">Insert at &amp;end of score…</translation>
@@ -24853,11 +24768,6 @@ pickup measure</translation>
         <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
         <source>Move measures</source>
         <translation type="unfinished">Move measures</translation>
-    </message>
-    <message>
-        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
-        <source>Create system from selection</source>
-        <translation type="unfinished">Create system from selection</translation>
     </message>
     <message>
         <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
@@ -31777,8 +31687,8 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
-        <source>Uncompressed MuseScore folder (experimental)</source>
-        <translation type="unfinished">Uncompressed MuseScore folder (experimental)</translation>
+        <source>Uncompressed MuseScore folder [experimental]</source>
+        <translation type="unfinished">Uncompressed MuseScore folder [experimental]</translation>
     </message>
     <message>
         <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
@@ -31937,8 +31847,38 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
-        <source>MNX files (experimental)</source>
-        <translation type="unfinished">MNX files (experimental)</translation>
+        <source>MNX files [experimental]</source>
+        <translation type="unfinished">MNX files [experimental]</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <source>BB files [experimental]</source>
+        <translation type="unfinished">BB files [experimental]</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <source>Overture / Score Writer files [experimental]</source>
+        <translation type="unfinished">Overture / Score Writer files [experimental]</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <source>Bagpipe Music Writer files [experimental]</source>
+        <translation type="unfinished">Bagpipe Music Writer files [experimental]</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <source>Power Tab Editor files [experimental]</source>
+        <translation type="unfinished">Power Tab Editor files [experimental]</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <source>TablEdit files [experimental]</source>
+        <translation type="unfinished">TablEdit files [experimental]</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <source>Uncompressed MuseScore folders [experimental]</source>
+        <translation type="unfinished">Uncompressed MuseScore folders [experimental]</translation>
     </message>
     <message>
         <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
@@ -31952,43 +31892,13 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
-        <source>BB files (experimental)</source>
-        <translation type="unfinished">BB files (experimental)</translation>
-    </message>
-    <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
-        <source>Overture / Score Writer files (experimental)</source>
-        <translation type="unfinished">Overture / Score Writer files (experimental)</translation>
-    </message>
-    <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
-        <source>Bagpipe Music Writer files (experimental)</source>
-        <translation type="unfinished">Bagpipe Music Writer files (experimental)</translation>
-    </message>
-    <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
         <source>Guitar Pro files</source>
         <translation type="unfinished">Guitar Pro files</translation>
     </message>
     <message>
         <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
-        <source>Power Tab Editor files (experimental)</source>
-        <translation type="unfinished">Power Tab Editor files (experimental)</translation>
-    </message>
-    <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
         <source>MEI files</source>
         <translation type="unfinished">MEI files</translation>
-    </message>
-    <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
-        <source>TablEdit files (experimental)</source>
-        <translation type="unfinished">TablEdit files (experimental)</translation>
-    </message>
-    <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
-        <source>Uncompressed MuseScore folders (experimental)</source>
-        <translation type="unfinished">Uncompressed MuseScore folders (experimental)</translation>
     </message>
     <message>
         <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
