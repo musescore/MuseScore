@@ -484,8 +484,9 @@ public:
     bool accessibleEnabled() const;
     void setAccessibleEnabled(bool enabled);
 
-    //! Parent in the accessibility hierarchy: the layout parent when placed, otherwise
-    //! the head of the tree the unattached objects form.
+    //! Parent in the accessibility hierarchy: the layout parent when placed; the head of
+    //! the tree the unattached objects form when attached to nothing; null in between,
+    //! i.e. while attached to something that does not place it.
     virtual EngravingItem* accessibleParentItem() const;
     //! Children in the accessibility hierarchy: the items that name this one as their
     //! accessibleParentItem(). Those are the children it owns, unless ownership and

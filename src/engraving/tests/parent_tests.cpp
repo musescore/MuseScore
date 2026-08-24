@@ -40,6 +40,8 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/system.h"
 
+#include "engraving/style/style.h"
+
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;
@@ -458,6 +460,37 @@ TEST_F(Engraving_ParentTests, ancestorWalksAgreeWithAttachment)
     }
 
     EXPECT_GT(checkedChordRests, 0u);
+}
+
+//! A multi-measure rest takes the measures it covers off their system, leaving them
+//! attached to the score but placed nowhere. Neither tree holds them then: the score's
+//! tree reaches items through their placement, and the dummy's tree only holds what is
+//! not attached to anything.
+TEST_F(Engraving_ParentTests, aMeasureThatIsPlacedNowhereIsInNeitherTree)
+{
+    m_score->startCmd(TranslatableString::untranslatable("Engraving parent tests"));
+    // enough empty measures at the end for a multi-measure rest to be made of them
+    for (int i = 0; i < 4; ++i) {
+        m_score->insertMeasure();
+    }
+    m_score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    m_score->setLayoutAll();
+    m_score->endCmd();
+
+    size_t unplacedMeasures = 0;
+
+    for (MeasureBase* measure = m_score->first(); measure; measure = measure->next()) {
+        if (measure->system()) {
+            EXPECT_EQ(measure->accessibleParentItem(), measure->system());
+            continue;
+        }
+
+        ++unplacedMeasures;
+        EXPECT_EQ(measure->accessibleParentItem(), nullptr)
+            << "a " << measure->typeName() << " that is placed nowhere names a parent that cannot list it";
+    }
+
+    EXPECT_GT(unplacedMeasures, 0u) << "no multi-measure rest was made, so nothing was left unplaced";
 }
 
 //! The accessibility tree mirrors the visual hierarchy, and a screen reader walks it in
