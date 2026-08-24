@@ -283,6 +283,7 @@ public:
     virtual void resetBeamMode() = 0;
     virtual void resetShapesAndPosition() = 0;
     virtual void resetToDefaultLayout() = 0;
+    virtual void freezeSelectionPosition() = 0;
 
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(const ScoreConfig& config) = 0;

@@ -1593,6 +1593,12 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Reset entire score to &default layout"),
              TranslatableString("action", "Reset entire score to default layout")
              ),
+    UiAction("freeze-current-placement",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Freeze current placement"),
+             TranslatableString("action", "Turn off auto-place and freeze the selection’s current position")
+             ),
     UiAction("zoomin",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

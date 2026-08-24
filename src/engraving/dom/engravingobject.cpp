@@ -467,14 +467,6 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             }
             changeProperties(this, p.pid, style().styleV(p.sid), PropertyFlags::STYLED);
         }
-    } else if (id == Pid::OFFSET) {
-        // TODO: do this in caller?
-        if (isEngravingItem()) {
-            EngravingItem* e = toEngravingItem(this);
-            if (e->offset() != v.value<PointF>()) {
-                e->setOffsetChanged(true, false, v.value<PointF>() - e->offset());
-            }
-        }
     } else if (id == Pid::EXCLUDE_FROM_OTHER_PARTS) {
         if (isEngravingItem() && getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS) != v) {
             EngravingItem* delegate = toEngravingItem(propertyDelegate(id));
