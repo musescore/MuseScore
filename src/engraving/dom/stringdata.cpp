@@ -22,6 +22,8 @@
 
 #include "stringdata.h"
 
+#include <algorithm>
+#include <limits>
 #include <map>
 
 #include "defer.h"
@@ -195,7 +197,15 @@ void StringData::fretChords(Chord* chord) const
     int count = 0;
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
+    // note any existing fretting before sortChordNotes() erases the invalid ones:
+    // the re-fretting at the end of this function only applies to chords which
+    // arrive with no fretting at all
+    int chordsInSegment = 0;
+    bool anyPreassigned = false;
+
     if (!chord->explicitParent()->isSegment()) {
+        chordsInSegment = 1;
+        anyPreassigned = hasPreassignedNote(chord);
         sortChordNotes(sortedNotes, chord, &count);
     } else {
         // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
@@ -206,6 +216,10 @@ void StringData::fretChords(Chord* chord) const
         for (trk = trkFrom; trk < trkTo; ++trk) {
             EngravingItem* ch = seg->elist().at(trk);
             if (ch && ch->isChord()) {
+                ++chordsInSegment;
+                if (hasPreassignedNote(toChord(ch))) {
+                    anyPreassigned = true;
+                }
                 sortChordNotes(sortedNotes, toChord(ch), &count);
             }
         }
@@ -240,6 +254,17 @@ void StringData::fretChords(Chord* chord) const
         if (note->fret() != INVALID_FRET_INDEX && note->fret() > maxFret) {
             maxFret = note->fret();
         }
+    }
+
+    // a chord in a drop tuning has to be fretted as a unit: fretting it note by note
+    // puts power chords onto open strings instead of the barre shape which is really
+    // played. everything else is fretted note by note below
+    if (chord->configuration()->fretDropTuningChordsAsUnit()
+        && chordsInSegment == 1 && !anyPreassigned
+        && isMonotonicTuning() && isDropLikeTuning()
+        && !chord->staff()->capo(chord->tick()).active
+        && fretChordAsUnit(chord, sortedNotes, bUsed)) {
+        return;
     }
 
     // scan chord notes from highest, matching with strings from the highest
@@ -302,8 +327,6 @@ void StringData::fretChords(Chord* chord) const
             && bUsed[nNewString] > 1) {
             tryResolveStringConflictWithOutOfRangeFret(note, strings, bUsed, nNewString, nNewFret);
         }
-
-        // TODO : try to optimize used fret range, avoiding excessively open positions
 
         // if fretting did change, store as a fret change
         if (nFret != nNewFret) {
@@ -757,7 +780,8 @@ void StringData::sortChordNotesUseSameString(const Chord* chord) const
 //          then by order of submission to disambiguate notes with the same pitch.
 //          Everything else being equal, this makes notes in higher-numbered voices
 //          to be sorted after notes in lower-numbered voices (voice 2 after voice 1 and so on)
-//    Notes without a string assigned yet, are sorted according to the lowest string which can accommodate them.
+//    Notes without a string assigned yet sort ahead of all assigned notes, via the
+//    INVALID_STRING_INDEX sentinel.
 //---------------------------------------------------------
 
 void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const
@@ -845,5 +869,306 @@ int StringData::adjustBanjo5thFret(int fret) const
 bool StringData::isFiveStringBanjo() const
 {
     return m_stringTable.size() == 5 && m_stringTable[0].pitch > m_stringTable[1].pitch;
+}
+
+//---------------------------------------------------------
+//   hasPreassignedNote
+//    Returns true if any note of the chord already carries a fretting
+//    which sortChordNotes() will keep
+//---------------------------------------------------------
+
+bool StringData::hasPreassignedNote(const Chord* chord) const
+{
+    const int numStrings = static_cast<int>(m_stringTable.size());
+    for (const Note* note : chord->notes()) {
+        const int string = note->string();
+        const int noteFret = note->fret();
+        if (string < 0 || string >= numStrings || noteFret <= INVALID_FRET_INDEX) {
+            continue;
+        }
+        const int pitch = getPitch(string, noteFret, pitchOffsetAt(note->staff(), chord->tick(), string));
+        if (pitchIsValid(pitch) && pitch != note->pitch()) {
+            continue;               // no longer matches the pitch: sortChordNotes() will erase it
+        }
+        return true;
+    }
+    return false;
+}
+
+//---------------------------------------------------------
+//   fretChordAsUnit
+//    Frets the whole chord in one hand position, for the drop tunings where
+//    fretting note by note would spread a power chord over open strings.
+//    Returns false if the chord does not need it or no such fretting exists,
+//    in which case the caller frets note by note as usual
+//---------------------------------------------------------
+
+bool StringData::fretChordAsUnit(Chord* chord, const std::map<int, Note*>& sortedNotes, std::vector<int>& bUsed) const
+{
+    const int pitchOffset = pitchOffsetAt(chord->staff(), chord->tick());
+
+    std::vector<Note*> notes;
+    for (const auto& p : sortedNotes) {
+        Note* note = p.second;
+        if (note->deadNote() || note->negativeFretUsed()
+            || note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
+            return false;
+        }
+        notes.push_back(note);
+    }
+
+    if (notes.size() < 2) {
+        return false;
+    }
+
+    std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) {
+        return a->pitch() < b->pitch();
+    });
+
+    // what fretting note by note would give: whether the chord needs this at all is
+    // decided against that, so that only the chords which come out wrong are changed
+    std::vector<std::pair<int, int> > noteByNote;
+    std::vector<int> pitches;
+    for (const Note* note : notes) {
+        int string = INVALID_STRING_INDEX;
+        int noteFret = INVALID_FRET_INDEX;
+        if (!convertPitch(note->pitch(), pitchOffset, &string, &noteFret)) {
+            return false;
+        }
+        noteFret = fret(note->pitch(), string, pitchOffsetAt(chord->staff(), chord->tick(), string));
+        if (noteFret == INVALID_FRET_INDEX) {
+            return false;
+        }
+        for (const auto& placed : noteByNote) {
+            if (placed.first == string) {
+                return false;           // two notes on one string: leave it to the normal path
+            }
+        }
+        noteByNote.push_back({ string, noteFret });
+        pitches.push_back(note->pitch());
+    }
+
+    if (!needsCompactFingering(noteByNote)) {
+        return false;
+    }
+
+    std::vector<std::pair<int, int> > fingering;
+    if (!findCompactFingering(pitches, &fingering, pitchOffset)) {
+        return false;
+    }
+
+    for (size_t i = 0; i < notes.size(); ++i) {
+        notes[i]->setFretConflict(false);
+        bUsed[fingering[i].first]++;
+        if (notes[i]->fret() != fingering[i].second) {
+            notes[i]->undoChangeProperty(Pid::FRET, fingering[i].second);
+        }
+        if (notes[i]->string() != fingering[i].first) {
+            notes[i]->undoChangeProperty(Pid::STRING, fingering[i].first);
+        }
+    }
+
+    return true;
+}
+
+//---------------------------------------------------------
+//   needsCompactFingering
+//    Returns true if a note sits further than a hand span below the highest fretted
+//    note and on a higher string, i.e. it could have been fretted up in position
+//---------------------------------------------------------
+
+bool StringData::needsCompactFingering(const std::vector<std::pair<int, int> >& placements) const
+{
+    // highest fret which is in range: the out of range frets from
+    // tryResolveStringConflictWithOutOfRangeFret() must not raise the threshold
+    int highFret = -1;
+    for (const auto& placement : placements) {
+        if (placement.second >= 0 && placement.second <= m_frets && placement.second > highFret) {
+            highFret = placement.second;
+        }
+    }
+
+    if (highFret < HAND_SPAN + 1) {
+        return false;
+    }
+
+    const int reachableFrom = highFret - HAND_SPAN - 1;
+
+    for (const auto& high : placements) {
+        if (high.second != highFret) {
+            continue;
+        }
+        for (const auto& low : placements) {
+            if (low.second < 0 || low.second > m_frets) {
+                continue;
+            }
+            // low note is out of reach of the high note's hand position, but sits on a
+            // higher string, so it could have been fretted up there instead
+            if (low.second <= reachableFrom && low.first < high.first) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
+//   findCompactFingering
+//    Looks for a fretting of pitches (ascending) which fits under one hand,
+//    anchoring the lowest note on each string in turn.
+//    Fills *out and returns true only if the result is compact enough to be worth
+//    replacing the existing fretting
+//---------------------------------------------------------
+
+bool StringData::findCompactFingering(const std::vector<int>& pitches,
+                                      std::vector<std::pair<int, int> >* out,
+                                      int pitchOffset) const
+{
+    const int numStrings = static_cast<int>(m_stringTable.size());
+    if (pitches.size() < 2 || numStrings < 2) {
+        // nothing to re-fret
+        return false;
+    }
+
+    std::vector<std::pair<int, int> > best;
+    size_t bestDistinct = std::numeric_limits<size_t>::max();
+    int bestSpan = std::numeric_limits<int>::max();
+
+    // try the lowest note on each string which can play it, lowest string first
+    for (int anchor = numStrings - 1; anchor >= 0; --anchor) {
+        const int anchorFret = fret(pitches[0], anchor, pitchOffset);
+        if (anchorFret == INVALID_FRET_INDEX) {
+            continue;
+        }
+
+        std::vector<std::pair<int, int> > trial;
+        trial.push_back({ anchor, anchorFret });
+        int lo = anchorFret;
+        int hi = anchorFret;
+        int prev = anchor;
+        bool complete = true;
+
+        // each higher note takes the first string towards the top whose fret keeps
+        // the running span within reach
+        for (size_t i = 1; i < pitches.size(); ++i) {
+            bool placed = false;
+            for (int candidate = prev - 1; candidate >= 0; --candidate) {
+                const int f = fret(pitches[i], candidate, pitchOffset);
+                if (f == INVALID_FRET_INDEX) {
+                    continue;
+                }
+                const int newLo = std::min(lo, f);
+                const int newHi = std::max(hi, f);
+                if (newHi - newLo > HAND_SPAN) {
+                    continue;
+                }
+                trial.push_back({ candidate, f });
+                lo = newLo;
+                hi = newHi;
+                prev = candidate;
+                placed = true;
+                break;
+            }
+            if (!placed) {
+                complete = false;
+                break;
+            }
+        }
+
+        if (!complete) {
+            continue;
+        }
+
+        // count distinct fretted positions; open strings need no finger
+        std::vector<int> distinctFrets;
+        for (const auto& placement : trial) {
+            if (placement.second > 0 && !muse::contains(distinctFrets, placement.second)) {
+                distinctFrets.push_back(placement.second);
+            }
+        }
+
+        const int span = hi - lo;
+        if (distinctFrets.size() > MAX_ADOPT_DISTINCT_FRETS || span > MAX_ADOPT_SPAN) {
+            // playable, but not compact enough to be worth replacing what is there
+            continue;
+        }
+
+        if (distinctFrets.size() < bestDistinct
+            || (distinctFrets.size() == bestDistinct && span < bestSpan)) {
+            best = trial;
+            bestDistinct = distinctFrets.size();
+            bestSpan = span;
+        }
+    }
+
+    if (best.empty()) {
+        return false;
+    }
+
+    *out = best;
+    return true;
+}
+
+//---------------------------------------------------------
+//   isDropLikeTuning
+//    Returns true for a regular stack of fourths whose lowest string has been dropped
+//    below it (drop D, drop C, 7 and 8 string drops).
+//    False for standard, alternate and open tunings, where ringing open strings are
+//    part of the intended sound
+//---------------------------------------------------------
+
+bool StringData::isDropLikeTuning() const
+{
+    const size_t numStrings = m_stringTable.size();
+    if (numStrings < MIN_DROP_TUNING_STRINGS) {
+        // mountain dulcimer and 3-course bouzouki match the intervals otherwise
+        return false;
+    }
+
+    if (!isMonotonicTuning()) {
+        return false;
+    }
+
+    // m_stringTable is ordered lowest pitch first, so [1] - [0] is the bottom gap
+    if (m_stringTable[1].pitch - m_stringTable[0].pitch < MIN_DROPPED_STRING_GAP) {
+        return false;
+    }
+
+    for (size_t i = 1; i + 1 < numStrings; ++i) {
+        const int gap = m_stringTable[i + 1].pitch - m_stringTable[i].pitch;
+        if (gap != 4 && gap != 5) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//---------------------------------------------------------
+//   isMonotonicTuning
+//    False for re-entrant tunings (5 string banjo, theorbo, charango), which break
+//    the assumption that a lower string index means a higher pitch
+//---------------------------------------------------------
+
+bool StringData::isMonotonicTuning() const
+{
+    if (m_stringTable.size() < 2) {
+        return false;
+    }
+
+    for (size_t i = 1; i < m_stringTable.size(); ++i) {
+        if (m_stringTable[i].pitch <= m_stringTable[i - 1].pitch) {
+            return false;
+        }
+    }
+
+    for (const instrString& strg : m_stringTable) {
+        if (strg.startFret != 0) {
+            return false;
+        }
+    }
+
+    return true;
 }
 }
