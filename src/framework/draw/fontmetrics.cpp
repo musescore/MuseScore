@@ -59,6 +59,21 @@ double FontMetrics::descent() const
     return fontProvider()->descent(m_font);
 }
 
+double FontMetrics::underlinePos() const
+{
+    return fontProvider()->underlinePos(m_font);
+}
+
+double FontMetrics::lineWidth() const
+{
+    return fontProvider()->lineWidth(m_font);
+}
+
+double FontMetrics::strikeOutPos() const
+{
+    return fontProvider()->strikeOutPos(m_font);
+}
+
 double FontMetrics::width(const String& string) const
 {
     return horizontalAdvance(string);
