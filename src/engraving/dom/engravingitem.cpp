@@ -174,7 +174,12 @@ EngravingItem* EngravingItem::accessibleParentItem() const
         return p;
     }
 
-    // not placed anywhere, so not in the score's tree: head of the dummy's tree instead
+    if (ownershipParent()) {
+        // attached to something, but not placed anywhere: in neither tree
+        return nullptr;
+    }
+
+    // not attached to anything: head of the tree those objects form
     return score() && score()->dummy() ? score()->dummy()->rootItem() : nullptr;
 }
 
