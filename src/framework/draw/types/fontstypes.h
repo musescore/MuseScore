@@ -150,6 +150,8 @@ struct FontParams {
     bool bold = false;
     bool italic = false;
     float pointSize = 0.0f;
+    bool underline = false;
+    bool strike = false;
 };
 }
 
