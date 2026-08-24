@@ -570,6 +570,18 @@ f26dot6_t FontFaceFT::capHeight() const
     return gm->bbox.height();
 }
 
+f26dot6_t FontFaceFT::underlinePos() const
+{
+    f26dot6_t thickness = FT_MulFix(m_data->face->underline_thickness, m_data->face->size->metrics.y_scale);
+    f26dot6_t centerPos = -FT_MulFix(m_data->face->underline_position, m_data->face->size->metrics.y_scale);
+    return centerPos - thickness / 2;
+}
+
+f26dot6_t FontFaceFT::lineWidth() const
+{
+    return FT_MulFix(m_data->face->underline_thickness, m_data->face->size->metrics.y_scale);
+}
+
 GlyphMetrics* FontFaceFT::glyphMetrics(glyph_idx_t idx) const
 {
     if (m_data->glyphsMetrics.find(idx) != m_data->glyphsMetrics.end()) {

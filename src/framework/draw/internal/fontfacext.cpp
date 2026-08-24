@@ -107,6 +107,10 @@ bool FontFaceXT::load(const FaceKey& key, const FontData& fontData, bool isSymbo
                 m_xHeight = std::stol(valStr);
             } else if (name == "capHeight") {
                 m_capHeight = std::stol(valStr);
+            } else if (name == "underlinePos") {
+                m_underlinePos = std::stol(valStr);
+            } else if (name == "lineWidth") {
+                m_lineWidth = std::stol(valStr);
             } else {
                 LOGW() << "unknown param: " << name;
             }
@@ -275,6 +279,16 @@ f26dot6_t FontFaceXT::xHeight() const
 f26dot6_t FontFaceXT::capHeight() const
 {
     return m_capHeight;
+}
+
+f26dot6_t FontFaceXT::underlinePos() const
+{
+    return m_underlinePos;
+}
+
+f26dot6_t FontFaceXT::lineWidth() const
+{
+    return m_lineWidth;
 }
 
 void FontFaceXT::applyLigatures(std::vector<glyph_idx_t>& glyphs, const Ligatures& ls)
