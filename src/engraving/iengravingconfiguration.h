@@ -142,6 +142,8 @@ public:
 
     virtual bool allowReadingImagesFromOutsideMscz() const = 0;
 
+    virtual bool fretDropTuningChordsAsUnit() const = 0;
+
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
