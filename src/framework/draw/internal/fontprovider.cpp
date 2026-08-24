@@ -63,6 +63,21 @@ double FontProvider::descent(const muse::draw::Font& f) const
     return fontsEngine()->descent(f);
 }
 
+double FontProvider::underlinePos(const muse::draw::Font& f) const
+{
+    return fontsEngine()->underlinePos(f);
+}
+
+double FontProvider::lineWidth(const muse::draw::Font& f) const
+{
+    return fontsEngine()->lineWidth(f);
+}
+
+double FontProvider::strikeOutPos(const muse::draw::Font& f) const
+{
+    return fontsEngine()->strikeOutPos(f);
+}
+
 bool FontProvider::inFont(const muse::draw::Font& f, char32_t ucs4) const
 {
     return fontsEngine()->inFont(f, ucs4);
