@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ομάδα ξύλινων σε σημειογραφία διπλού συστήματος.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="217"/>
@@ -27,7 +27,7 @@
         <source>Wi.</source>
         <comment>winds shortName</comment>
         <extracomment>shortName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Wi.</translation>
+        <translation>Πν.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="224"/>
@@ -55,7 +55,7 @@
         <source>Picc.</source>
         <comment>eb-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Πίκ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="232"/>
@@ -90,7 +90,7 @@
         <source>Picc.</source>
         <comment>db-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Πίκ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="243"/>
@@ -104,7 +104,7 @@
         <source>Standard concert piccolo in C.</source>
         <comment>piccolo description</comment>
         <extracomment>description for Piccolo; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Τυπικό πίκολο ορχήστρας σε Ντο</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="248"/>
@@ -125,7 +125,7 @@
         <source>Picc.</source>
         <comment>piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Πίκ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="254"/>
@@ -160,7 +160,7 @@
         <source>Tr. Fl.</source>
         <comment>treble-flute shortName</comment>
         <extracomment>shortName for Treble Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tr. Fl.</translation>
+        <translation>Τρ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="266"/>
@@ -223,7 +223,7 @@
         <source>Flute in E♭, sounding a minor third above the standard flute.</source>
         <comment>soprano-flute description</comment>
         <extracomment>description for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλάουτο σε Μι♭, το οποίο ηχεί μία τρίτη μικρή ψηλότερα από το τυπικό φλάουτο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="286"/>
@@ -244,14 +244,14 @@
         <source>Sop. Fl.</source>
         <comment>soprano-flute shortName</comment>
         <extracomment>shortName for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sop. Fl.</translation>
+        <translation>Σοπ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="293"/>
         <source>6-hole simple-system wooden transverse flute.</source>
         <comment>irish-flute description</comment>
         <extracomment>description for Irish Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ξύλινο φλάουτο τραβέρσο με απλό σύστημα 6 οπών.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="295"/>
@@ -272,14 +272,14 @@
         <source>Ir. Fl.</source>
         <comment>irish-flute shortName</comment>
         <extracomment>shortName for Irish Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ir. Fl.</translation>
+        <translation>Ιρ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="302"/>
         <source>Baroque wooden transverse flute.</source>
         <comment>traverso description</comment>
         <extracomment>description for Traverso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Μπαρόκ ξύλινο φλάουτο τραβέρσο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="304"/>
@@ -307,7 +307,7 @@
         <source>Standard concert flute in C.</source>
         <comment>flute description</comment>
         <extracomment>description for Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Τυπικό φλάουτο ορχήστρας σε Ντο</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="313"/>
@@ -328,14 +328,14 @@
         <source>Fl.</source>
         <comment>flute shortName</comment>
         <extracomment>shortName for Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fl.</translation>
+        <translation>Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="320"/>
         <source>Flute in G, sounding a fourth lower than the standard flute.</source>
         <comment>alto-flute description</comment>
         <extracomment>description for Alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλάουτο σε Σολ, το οποίο ηχεί μία τετάρτη χαμηλότερα από το τυπικό φλάουτο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="322"/>
@@ -356,14 +356,14 @@
         <source>A. Fl.</source>
         <comment>alto-flute shortName</comment>
         <extracomment>shortName for Alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A. Fl.</translation>
+        <translation>Αλ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="329"/>
         <source>Flute in C, sounding an octave lower than the standard flute.</source>
         <comment>bass-flute description</comment>
         <extracomment>description for Bass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλάουτο σε Ντο, το οποίο ηχεί μία οκτάβα χαμηλότερα από το τυπικό φλάουτο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="331"/>
@@ -384,35 +384,35 @@
         <source>B. Fl.</source>
         <comment>bass-flute shortName</comment>
         <extracomment>shortName for Bass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B. Fl.</translation>
+        <translation>Μπ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="338"/>
         <source>Flute in G, sounding an octave below the alto flute.</source>
         <comment>contra-alto-flute description</comment>
         <extracomment>description for Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλάουτο σε Σολ, το οποίο ηχεί μία οκτάβα χαμηλότερα από το άλτο φλάουτο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="340"/>
         <source>Contra-alto Flute</source>
         <comment>contra-alto-flute trackName</comment>
         <extracomment>trackName for Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Κοντράλτο Φλάουτο</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="342"/>
         <source>Contra-alto Flute</source>
         <comment>contra-alto-flute longName</comment>
         <extracomment>longName for Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Κοντράλτο Φλάουτο</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="344"/>
         <source>C-a. Fl.</source>
         <comment>contra-alto-flute shortName</comment>
         <extracomment>shortName for Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C-a. Fl.</translation>
+        <translation>Κ-ά. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="347"/>
@@ -440,14 +440,14 @@
         <source>Cb. Fl.</source>
         <comment>contrabass-flute shortName</comment>
         <extracomment>shortName for Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cb. Fl.</translation>
+        <translation>Κμπ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="356"/>
         <source>Flute in G, sounding two octaves below the alto flute.</source>
         <comment>subcontra-alto-flute description</comment>
         <extracomment>description for Sub Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλάουτο σε Σολ, το οποίο ηχεί δύο οκτάβες χαμηλότερα από το άλτο φλάουτο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
@@ -468,14 +468,14 @@
         <source>Sc-a. Fl.</source>
         <comment>subcontra-alto-flute shortName</comment>
         <extracomment>shortName for Sub Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sc-a. Fl.</translation>
+        <translation>Υπ-ά. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="365"/>
         <source>Flute in C, sounding three octaves below the standard flute.</source>
         <comment>double-contrabass-flute description</comment>
         <extracomment>description for Double Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλάουτο σε Ντο, το οποίο ηχεί τρεις οκτάβες χαμηλότερα από το τυπικό φλάουτο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="367"/>
@@ -496,14 +496,14 @@
         <source>D. Cb. Fl.</source>
         <comment>double-contrabass-flute shortName</comment>
         <extracomment>shortName for Double Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D. Cb. Fl.</translation>
+        <translation>Δ. Κμπ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="374"/>
         <source>Flute in C, sounding four octaves below the standard flute.</source>
         <comment>hyperbass-flute description</comment>
         <extracomment>description for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλάουτο σε Ντο, το οποίο ηχεί τέσσερις οκτάβες χαμηλότερα από το τυπικό φλάουτο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="376"/>
@@ -524,7 +524,7 @@
         <source>Hb. Fl.</source>
         <comment>hyperbass-flute shortName</comment>
         <extracomment>shortName for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hb. Fl.</translation>
+        <translation>Υπ-μπ. Φλ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="383"/>
@@ -972,21 +972,21 @@
         <source>French Flageolet</source>
         <comment>french-flageolet trackName</comment>
         <extracomment>trackName for French Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Γαλλικό Flageolet</translation>
+        <translation>Γαλλικό Φλαζολέ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="524"/>
         <source>French Flageolet</source>
         <comment>french-flageolet longName</comment>
         <extracomment>longName for French Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Γαλλικό Flageolet</translation>
+        <translation>Γαλλικό Φλαζολέ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="526"/>
         <source>Fr. Fla.</source>
         <comment>french-flageolet shortName</comment>
         <extracomment>shortName for French Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fr. Fla.</translation>
+        <translation>Γαλ. Φλα.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="529"/>
@@ -1000,21 +1000,21 @@
         <source>English Flageolet</source>
         <comment>english-flageolet trackName</comment>
         <extracomment>trackName for English Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Αγγλικό Flageolet</translation>
+        <translation>Αγγλικό Φλαζολέ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="533"/>
         <source>English Flageolet</source>
         <comment>english-flageolet longName</comment>
         <extracomment>longName for English Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Αγγλικό Flageolet</translation>
+        <translation>Αγγλικό Φλαζολέ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="535"/>
         <source>Eng. Fla.</source>
         <comment>english-flageolet shortName</comment>
         <extracomment>shortName for English Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Eng. Fla.</translation>
+        <translation>Αγγ. Φλα.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="538"/>
@@ -1028,21 +1028,21 @@
         <source>Flageolet</source>
         <comment>flageolet trackName</comment>
         <extracomment>trackName for Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flageolet</translation>
+        <translation>Φλαζολέ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="542"/>
         <source>Flageolet</source>
         <comment>flageolet longName</comment>
         <extracomment>longName for Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flageolet</translation>
+        <translation>Φλαζολέ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="544"/>
         <source>Fla.</source>
         <comment>flageolet shortName</comment>
         <extracomment>shortName for Flageolet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fla.</translation>
+        <translation>Φλα.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="547"/>
@@ -1805,7 +1805,7 @@
         <source>Pn. Fl.</source>
         <comment>pan-flute shortName</comment>
         <extracomment>shortName for Pan Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pn. Fl.</translation>
+        <translation>Αυλ. Πν.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="790"/>
@@ -5137,7 +5137,7 @@
         <source>Bagp.</source>
         <comment>bagpipe shortName</comment>
         <extracomment>shortName for Bagpipe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bagp.</translation>
+        <translation>Γκάι.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1857"/>
@@ -5165,7 +5165,7 @@
         <source>Acc.</source>
         <comment>accordion shortName</comment>
         <extracomment>shortName for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Acc.</translation>
+        <translation>Ακο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1866"/>
@@ -5193,7 +5193,7 @@
         <source>Ban.</source>
         <comment>bandoneon shortName</comment>
         <extracomment>shortName for Bandoneon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ban.</translation>
+        <translation>Μπαν.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1875"/>
@@ -5221,7 +5221,7 @@
         <source>Conc.</source>
         <comment>concertina shortName</comment>
         <extracomment>shortName for Concertina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Conc.</translation>
+        <translation>Κοντσ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1884"/>
@@ -5984,7 +5984,7 @@
         <source>Brass section notated on a grand staff.</source>
         <comment>brass description</comment>
         <extracomment>description for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ομάδα χάλκινων σε σημειογραφία διπλού συστήματος.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2129"/>
@@ -8679,7 +8679,7 @@
         <source>Flugelhorn in B♭.</source>
         <comment>flugelhorn description</comment>
         <extracomment>description for Flugelhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλικόρνο σε Σι♭.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2961"/>
@@ -8700,7 +8700,7 @@
         <source>Flghn.</source>
         <comment>flugelhorn shortName</comment>
         <extracomment>shortName for Flugelhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flghn.</translation>
+        <translation>Φλικ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2967"/>
@@ -8721,7 +8721,7 @@
         <source>Small flugelhorn in B♭, played using a deep bowled mouthpiece.</source>
         <comment>kuhlohorn description</comment>
         <extracomment>description for Kuhlohorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Μικρό φλικόρνο σε σι♭, το οποίο εκτελείται με βαθύ λεβητοειδές επιστόμιο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2974"/>
@@ -10586,6 +10586,41 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3568"/>
+        <source>Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.</source>
+        <comment>glockenspiel description</comment>
+        <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3577"/>
+        <source>Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.</source>
+        <comment>xylophone description</comment>
+        <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3595"/>
+        <source>Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</source>
+        <comment>vibraphone description</comment>
+        <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3622"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba description</comment>
+        <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3631"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba-single description</comment>
+        <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
         <source>Korean hourglass-shaped drum used in samulnori percussion ensemble.</source>
         <comment>samul-janggu description</comment>
@@ -10695,6 +10730,104 @@
         <source>So. Buk</source>
         <comment>sori-buk shortName</comment>
         <extracomment>shortName for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5031"/>
+        <source>Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.</source>
+        <comment>celesta description</comment>
+        <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5040"/>
+        <source>Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.</source>
+        <comment>clavichord description</comment>
+        <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5049"/>
+        <source>Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.</source>
+        <comment>clavinet description</comment>
+        <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5058"/>
+        <source>Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.</source>
+        <comment>harpsichord description</comment>
+        <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5067"/>
+        <source>Small harpsichord with only one string per key, which limits the dynamic range and timbre.</source>
+        <comment>virginal description</comment>
+        <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5076"/>
+        <source>Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)</source>
+        <comment>electric-piano description</comment>
+        <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5085"/>
+        <source>Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.</source>
+        <comment>grand-piano description</comment>
+        <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5094"/>
+        <source>Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.</source>
+        <comment>honky-tonk-piano description</comment>
+        <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5103"/>
+        <source>Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.</source>
+        <comment>piano description</comment>
+        <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5112"/>
+        <source>Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.</source>
+        <comment>toy-piano description</comment>
+        <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5121"/>
+        <source>Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.</source>
+        <comment>upright-piano description</comment>
+        <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5541"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).</source>
+        <comment>electric-guitar description</comment>
+        <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5562"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).</source>
+        <comment>electric-guitar-treble-clef description</comment>
+        <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5621"/>
+        <source>Solid-body guitar with electrically amplified strings (tablature).</source>
+        <comment>electric-guitar-tablature description</comment>
+        <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10894,7 +11027,6 @@
         <translation>pizzicato</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3568"/>
         <source>Glockenspiel.</source>
         <comment>glockenspiel description</comment>
         <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -10922,7 +11054,6 @@
         <translation>Glock.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3577"/>
         <source>Xylophone.</source>
         <comment>xylophone description</comment>
         <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -10978,7 +11109,6 @@
         <translation>XMrm.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3595"/>
         <source>Vibraphone.</source>
         <comment>vibraphone description</comment>
         <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -11062,7 +11192,6 @@
         <translation>Cimb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3622"/>
         <source>Marimba notated on a grand staff.</source>
         <comment>marimba description</comment>
         <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -11090,7 +11219,6 @@
         <translation>Mrm.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3631"/>
         <source>Marimba notated on a single staff.</source>
         <comment>marimba-single description</comment>
         <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -11626,7 +11754,7 @@
         <source>Flexatone.</source>
         <comment>flexatone description</comment>
         <extracomment>description for Flexatone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Φλεξάτονο.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3804"/>
@@ -11647,7 +11775,7 @@
         <source>Flt.</source>
         <comment>flexatone shortName</comment>
         <extracomment>shortName for Flexatone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flt.</translation>
+        <translation>Φλτ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3811"/>
@@ -15290,7 +15418,6 @@
         <translation>Kaz.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5031"/>
         <source>Celesta.</source>
         <comment>celesta description</comment>
         <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15318,7 +15445,6 @@
         <translation>Cel.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5040"/>
         <source>Clavichord.</source>
         <comment>clavichord description</comment>
         <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15346,7 +15472,6 @@
         <translation>Cch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5049"/>
         <source>Electrically amplified clavichord.</source>
         <comment>clavinet description</comment>
         <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15374,7 +15499,6 @@
         <translation>Clav.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5058"/>
         <source>Harpsichord.</source>
         <comment>harpsichord description</comment>
         <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15402,7 +15526,6 @@
         <translation>Hch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5067"/>
         <source>Virginal.</source>
         <comment>virginal description</comment>
         <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15430,7 +15553,6 @@
         <translation>Vir.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5076"/>
         <source>Electric piano.</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15458,7 +15580,6 @@
         <translation>El. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5085"/>
         <source>Specifically a grand piano.</source>
         <comment>grand-piano description</comment>
         <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15486,7 +15607,6 @@
         <translation>Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5094"/>
         <source>Honky-tonk (very out of tune) piano.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15514,7 +15634,6 @@
         <translation>Hnk. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5103"/>
         <source>Piano.</source>
         <comment>piano description</comment>
         <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15542,7 +15661,6 @@
         <translation>Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5112"/>
         <source>Toy piano.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15570,7 +15688,6 @@
         <translation>Toy Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5121"/>
         <source>Specifically an upright piano.</source>
         <comment>upright-piano description</comment>
         <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -16879,7 +16996,6 @@
         <translation>σίγαση</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5541"/>
         <source>Electric guitar (notated with 8va bassa treble clef).</source>
         <comment>electric-guitar description</comment>
         <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -16949,7 +17065,6 @@
         <translation>overdriven</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5562"/>
         <source>Electric guitar (notated with normal treble clef).</source>
         <comment>electric-guitar-treble-clef description</comment>
         <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -17138,7 +17253,6 @@
         <translation>σίγαση</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5621"/>
         <source>Electric guitar (tablature).</source>
         <comment>electric-guitar-tablature description</comment>
         <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -19480,7 +19594,7 @@
         <source>String section notated on a grand staff.</source>
         <comment>strings description</comment>
         <extracomment>description for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ομάδα εγχόρδων σε σημειογραφία διπλού συστήματος.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6423"/>
@@ -19606,14 +19720,14 @@
         <source>Violin section.</source>
         <comment>violins description</comment>
         <extracomment>description for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ομάδα βιολιών.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6462"/>
         <source>Violins (section)</source>
         <comment>violins trackName</comment>
         <extracomment>trackName for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Βιολιά (ομάδα)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6464"/>
@@ -19704,14 +19818,14 @@
         <source>Viola section.</source>
         <comment>violas description</comment>
         <extracomment>description for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ομάδα βιολών.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6492"/>
         <source>Violas (section)</source>
         <comment>violas trackName</comment>
         <extracomment>trackName for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Βιόλες (ομάδα)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6494"/>
@@ -19802,14 +19916,14 @@
         <source>Violoncello section.</source>
         <comment>violoncellos description</comment>
         <extracomment>description for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ομάδα βιολοντσέλων.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6522"/>
         <source>Violoncellos (section)</source>
         <comment>violoncellos trackName</comment>
         <extracomment>trackName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Βιολοντσέλα (ομάδα)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6524"/>
@@ -19900,14 +20014,14 @@
         <source>Contrabass (double bass) section.</source>
         <comment>contrabasses description</comment>
         <extracomment>description for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ομάδα κοντραμπάσων.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6552"/>
         <source>Contrabasses (section)</source>
         <comment>contrabasses trackName</comment>
         <extracomment>trackName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Κοντραμπάσα (ομάδα)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6554"/>
@@ -20566,7 +20680,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
         <source>Flageolets</source>
-        <translation type="unfinished"/>
+        <translation>Φλαζολέ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="96"/>
@@ -20586,7 +20700,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="99"/>
         <source>Pan Flutes</source>
-        <translation type="unfinished"/>
+        <translation>Αυλοί Πάνα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="100"/>
@@ -20896,7 +21010,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="161"/>
         <source>Flexatones</source>
-        <translation type="unfinished"/>
+        <translation>Φλεξάτονα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="162"/>
