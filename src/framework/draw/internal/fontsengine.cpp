@@ -204,6 +204,31 @@ double FontsEngine::descent(const Font& f) const
     return from_f26d6(rf->face->descent()) * rf->pixelScale();
 }
 
+double FontsEngine::underlinePos(const Font& f) const
+{
+    RequireFace* rf = fontFace(f);
+    IF_ASSERT_FAILED(rf && rf->face) {
+        return 0.0;
+    }
+
+    return from_f26d6(rf->face->underlinePos()) * rf->pixelScale();
+}
+
+double FontsEngine::lineWidth(const Font& f) const
+{
+    RequireFace* rf = fontFace(f);
+    IF_ASSERT_FAILED(rf && rf->face) {
+        return 1.0;
+    }
+
+    return from_f26d6(rf->face->lineWidth()) * rf->pixelScale();
+}
+
+double FontsEngine::strikeOutPos(const Font& f) const
+{
+    return ascent(f) / 3.0;
+}
+
 bool FontsEngine::inFont(const Font& f, char32_t ucs4) const
 {
     RequireFace* rf = fontFace(f);

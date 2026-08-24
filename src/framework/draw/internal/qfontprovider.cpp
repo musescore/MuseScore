@@ -91,6 +91,21 @@ double QFontProvider::descent(const Font& f) const
     return QFontMetricsF(f.toQFont(), &device).descent();
 }
 
+double QFontProvider::underlinePos(const Font& f) const
+{
+    return QFontMetricsF(f.toQFont(), &device).underlinePos();
+}
+
+double QFontProvider::lineWidth(const Font& f) const
+{
+    return QFontMetricsF(f.toQFont(), &device).lineWidth();
+}
+
+double QFontProvider::strikeOutPos(const Font& f) const
+{
+    return QFontMetricsF(f.toQFont(), &device).strikeOutPos();
+}
+
 bool QFontProvider::inFont(const Font& f, char32_t ucs4) const
 {
     // NOTE: QFontMetricsF::inFontUcs4 is unreliable for our use case because it uses Qt's fallback
