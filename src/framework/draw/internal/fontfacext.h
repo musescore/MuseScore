@@ -89,6 +89,8 @@ public:
     f26dot6_t descent() const override;
     f26dot6_t xHeight() const override;
     f26dot6_t capHeight() const override;
+    f26dot6_t underlinePos() const override;
+    f26dot6_t lineWidth() const override;
 
     std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const override;
     glyph_idx_t glyphIndex(char32_t ucs4) const override;
@@ -121,6 +123,8 @@ private:
     f26dot6_t m_descent = -1;
     f26dot6_t m_xHeight = -1;
     f26dot6_t m_capHeight = -1;
+    f26dot6_t m_underlinePos = -1;
+    f26dot6_t m_lineWidth = -1;
 
     Ligatures m_ligatures;
     Kernings m_kernings;
