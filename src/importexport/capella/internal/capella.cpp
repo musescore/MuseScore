@@ -804,7 +804,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 // TODO: compute tpc from pitch & line
                 note->setTpcFromPitch();
                 if (o->rightTie) {
-                    Tie* tie = Factory::createTie(score->dummy());
+                    Tie* tie = Factory::createTie(note);
                     tie->setStartNote(note);
                     tie->setTrack(track);
                     note->setTieFor(tie);

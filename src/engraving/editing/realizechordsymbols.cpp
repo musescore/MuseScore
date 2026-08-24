@@ -141,7 +141,7 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
             //set tie forward
             if (i + 1 < n) {
                 for (size_t j = 0; j < notes.size(); ++j) {
-                    tie[j] = Factory::createTie(score->dummy());
+                    tie[j] = Factory::createTie(notes[j]);
                     tie[j]->setStartNote(notes[j]);
                     tie[j]->setTick(tie[j]->startNote()->tick());
                     tie[j]->setTrack(track);
@@ -194,7 +194,7 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
         //  next part of note
         std::vector<Note*> notes = nr->notes();
         for (size_t i = 0; i < notes.size(); ++i) {
-            tie[i] = Factory::createTie(score->dummy());
+            tie[i] = Factory::createTie(notes[i]);
             tie[i]->setStartNote(notes[i]);
             tie[i]->setTick(tie[i]->startNote()->tick());
             tie[i]->setTrack(notes[i]->track());

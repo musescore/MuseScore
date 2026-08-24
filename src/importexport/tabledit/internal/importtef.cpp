@@ -563,13 +563,12 @@ static void addContinuousSlideHammerOn(Score* _score, const std::map<const TefNo
 
         /// Layout info
         if (tefNote->effect() == EffectType::SLIDE) {
-            Glissando* gl = mu::engraving::Factory::createGlissando(_score->dummy());
+            Glissando* gl = mu::engraving::Factory::createGlissando(startNote);
             gl->setStartElement(startNote);
             gl->setTrack(track);
             gl->setTick(startTick);
             gl->setTick2(endNote->chord()->tick());
             gl->setEndElement(endNote);
-            gl->setOwnershipParent(startNote);
             gl->setText(u"Sl");
             gl->setGlissandoType(GlissandoType::STRAIGHT);
             gl->setGlissandoStyle(startNote->part()->instrument(startTick)->glissandoStyle());

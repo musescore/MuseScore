@@ -377,7 +377,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     note->setTrack(0);
     xmlSetPitch(note, sao.s.toLatin1(), sao.a, sao.o);
     if (tieStart) {
-        mu::engraving::Tie* tie = new mu::engraving::Tie(score->dummy());
+        mu::engraving::Tie* tie = new mu::engraving::Tie(note);
         note->setTieFor(tie);
         tie->setStartNote(note);
         tie->setTrack(0);

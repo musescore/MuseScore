@@ -821,7 +821,7 @@ bool GuitarPro4::read(IODevice* io)
             params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
             params.fretPosition = capo;
 
-            Capo* capoEl = Factory::createCapo(score->dummy());
+            Capo* capoEl = Factory::createCapo(s);
             capoEl->setTrack(track);
             capoEl->setParams(params);
             s->add(capoEl);
@@ -951,10 +951,10 @@ bool GuitarPro4::read(IODevice* io)
                         delete cr;
                         cr = 0;
                     }
-                    cr = Factory::createRest(score->dummy());
+                    cr = Factory::createRest(segment);
                 } else {
                     if (!segment->cr(track)) {
-                        cr = Factory::createChord(score->dummy());
+                        cr = Factory::createChord(segment);
                     }
                 }
                 cr->setOwnershipParent(segment);

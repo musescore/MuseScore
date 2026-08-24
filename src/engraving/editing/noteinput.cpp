@@ -607,7 +607,7 @@ Note* NoteInput::addTiedMidiPitch(Transaction& tx, Score* score, int pitch, bool
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
-            Tie* tie = Factory::createTie(score->dummy());
+            Tie* tie = Factory::createTie(nn);
             tie->setStartNote(nn);
             tie->setEndNote(n);
             tie->setTick(tie->startNote()->tick());

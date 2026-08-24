@@ -8207,9 +8207,8 @@ mu::engraving::Harmony* NotationInteraction::findHarmonyInSegment(const mu::engr
 mu::engraving::Harmony* NotationInteraction::createHarmony(mu::engraving::Segment* segment, track_idx_t track,
                                                            mu::engraving::HarmonyType type) const
 {
-    mu::engraving::Harmony* harmony = Factory::createHarmony(score()->dummy());
+    mu::engraving::Harmony* harmony = Factory::createHarmony(segment);
     harmony->setScore(score());
-    harmony->setOwnershipParent(segment);
     harmony->setTrack(track);
     harmony->setHarmonyType(type);
 
