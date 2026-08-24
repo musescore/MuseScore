@@ -1,0 +1,765 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2026 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "notationnoteoffsetcontroller.h"
+
+#include "noteoffsetoverlay.h"
+#include "segmentcanvasinterpolation.h"
+
+#include <algorithm>
+#include <optional>
+
+#include "async/async.h"
+#include "global/containers.h"
+
+#include "engraving/dom/chord.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/property.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/tie.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteoffsets.h"
+#include "notation/inotationselection.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotationundostack.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
+using namespace mu::notation;
+using namespace mu::engraving;
+
+// Each rectangle is anchored on its own note's vertical position, not on a fixed lane above the
+// staff - this way a rectangle always sits right above its notehead, and chord notes naturally
+// stack in the same order as their pitches instead of needing an artificial row index.
+constexpr static double RECT_TOP_MARGIN_SP = 0.45; // gap between the notehead center and the rectangle's top edge
+constexpr static double RECT_BOTTOM_OVERLAP_SP = 0.4; // how far below the notehead center the rectangle's bottom edge extends
+
+constexpr static int MAX_OFFSET_TICKS = 1920; // matches the Properties panel spinbox range
+constexpr static int MIN_EFFECTIVE_TICKS = 1;
+
+static std::optional<int> noteOffsetTickFromCanvasX(const System* system, const muse::RectF& bandCanvasRect, qreal xN)
+{
+    const double pointCanvasX = bandCanvasRect.x() + xN * bandCanvasRect.width();
+    return mu::notation::tickFromCanvasX(system, pointCanvasX);
+}
+
+// Pixel shift corresponding to a tick offset away from baseTick, using the same segment
+// interpolation as canvasXFromTick/noteOffsetTickFromCanvasX so it round-trips exactly with how
+// the mouse position was interpreted. Falls back to a locally-derived ratio only if the note
+// sits right at a system boundary where interpolation has nothing to anchor to.
+static double pixelDeltaForTickOffset(const System* system, int baseTick, int tickOffset, double fallbackPxPerTick)
+{
+    if (tickOffset == 0) {
+        return 0.0;
+    }
+
+    const std::optional<double> basePx = mu::notation::canvasXFromTick(system, baseTick);
+    const std::optional<double> offsetPx = mu::notation::canvasXFromTick(system, baseTick + tickOffset);
+    if (basePx && offsetPx) {
+        return *offsetPx - *basePx;
+    }
+
+    return tickOffset * fallbackPxPerTick;
+}
+
+NotationNoteOffsetController::NotationNoteOffsetController(QQuickItem* overlaysParent, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Contextable(iocCtx), m_overlaysParent(overlaysParent)
+{
+}
+
+void NotationNoteOffsetController::init()
+{
+    IF_ASSERT_FAILED(noteOffsets() && currentNotation()) {
+        return;
+    }
+
+    onCurrentNotationChanged();
+
+    noteOffsets()->editModeEnabledChanged().onNotify(this, [this]() {
+        if (noteOffsets()->isEditModeEnabled()) {
+            rebuildAllOverlays();
+        } else {
+            updateOverlaysGeometry();
+        }
+    }, Asyncable::Mode::SetReplace);
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
+    }, Asyncable::Mode::SetReplace);
+}
+
+void NotationNoteOffsetController::onCurrentNotationChanged()
+{
+    rebuildAllOverlays();
+
+    if (mu::engraving::Score* thisScore = score()) {
+        // TODO: More efficient if we only rebuild the affected staves/systems...
+        // SetReplace only dedupes a subscription against the exact same Score/Notation instance -
+        // switching documents subscribes to a brand new instance each time, so guard the callback
+        // itself against firing for a document that's no longer current, rather than leaking one
+        // live subscription per every document ever opened this session.
+        score()->changesChannel().onReceive(this, [this, thisScore](const mu::engraving::ScoreChanges&) {
+            if (thisScore != score()) {
+                return;
+            }
+            scheduleRebuild();
+        }, Asyncable::Mode::SetReplace);
+    }
+
+    const INotationPtr notation = currentNotation();
+    if (notation) {
+        mu::notation::INotation* thisNotation = notation.get();
+
+        // Switching between Page/Continuous/Continuous vertical view completely re-flows the
+        // systems - the overlays' cached positions need to be rebuilt from scratch, not just
+        // repositioned via the view matrix.
+        notation->viewModeChanged().onNotify(this, [this, thisNotation]() {
+            if (thisNotation != currentNotation().get()) {
+                return;
+            }
+            scheduleRebuild();
+        }, Asyncable::Mode::SetReplace);
+
+        if (notation->style()) {
+            // Style edits (e.g. live-dragging "Staff space (sp)" in Page Settings) relayout the
+            // score without necessarily going through changesChannel() - without this, the
+            // overlay's cached note positions go stale and stop tracking the rescaled notation.
+            notation->style()->styleChanged().onNotify(this, [this, thisNotation]() {
+                if (thisNotation != currentNotation().get()) {
+                    return;
+                }
+                scheduleRebuild();
+            }, Asyncable::Mode::SetReplace);
+        }
+
+        if (notation->interaction()) {
+            notation->interaction()->selectionChanged().onNotify(this, [this, thisNotation]() {
+                if (thisNotation != currentNotation().get()) {
+                    return;
+                }
+                updateSelectionHighlight();
+            }, Asyncable::Mode::SetReplace);
+        }
+    }
+}
+
+void NotationNoteOffsetController::scheduleRebuild()
+{
+    if (m_rebuildScheduled) {
+        return;
+    }
+    m_rebuildScheduled = true;
+
+    // Defer to the next event loop iteration - the score may still be mid-layout at the
+    // point the changesChannel notification fires, so rebuilding synchronously here (which
+    // reads System/Segment/Chord layout data) is not safe.
+    muse::async::Async::call(this, [this]() {
+        m_rebuildScheduled = false;
+        if (noteOffsets() && noteOffsets()->isEditModeEnabled()) {
+            rebuildAllOverlays();
+        }
+    });
+}
+
+void NotationNoteOffsetController::rebuildAllOverlays()
+{
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        if (data.overlay->isDragging()) {
+            // Deleting an overlay that currently holds the mouse grab (mid-drag) would drop the
+            // in-progress edit and risk delivering the next mouse event to a freed item - wait
+            // for the drag to finish instead of rebuilding out from under it.
+            scheduleRebuild();
+            return;
+        }
+    }
+
+    m_noteLocations.clear();
+
+    if (!score()) {
+        // Happens on close...
+        for (const auto& [key, data] : m_overlaysByStaff) {
+            delete data.overlay;
+        }
+        m_overlaysByStaff.clear();
+        return;
+    }
+
+    // createOverlayForStaff reuses an existing overlay item in place (just updating its rects)
+    // when a staff already had one, instead of destroying and recreating every overlay QQuickItem
+    // on every edit - it consumes matching entries out of m_overlaysByStaff as it goes, so
+    // whatever is left there afterwards belongs to a staff that's no longer visible/primary/has
+    // no offsettable notes anymore, and can be deleted.
+    OverlaysMap newOverlays;
+
+    for (const System* system : score()->systems()) {
+        staff_idx_t staffIdx = system->firstVisibleStaff();
+        while (staffIdx != muse::nidx) {
+            createOverlayForStaff(system, staffIdx, newOverlays);
+            staffIdx = system->nextVisibleStaff(staffIdx);
+        }
+    }
+
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        delete data.overlay;
+    }
+
+    m_overlaysByStaff = std::move(newOverlays);
+
+    updateOverlaysGeometry();
+}
+
+void NotationNoteOffsetController::createOverlayForStaff(const System* system, staff_idx_t staffIdx, OverlaysMap& newOverlays)
+{
+    IF_ASSERT_FAILED(system && m_overlaysParent && score()) {
+        return;
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    const SysStaff* sysStaff = system->staff(staffIdx);
+    if (!staff || !sysStaff || !staff->isPrimaryStaff()) {
+        return;
+    }
+
+    // Computed up front (not just for the final overlay geometry, below) - a tie chain that
+    // enters this system from a previous one, or continues past it into the next, has nothing of
+    // its own tick to anchor a rectangle edge on within this system, so that edge is clamped to
+    // the system's own visual bounds for this staff instead.
+    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+
+    std::vector<NoteEntry> entries;
+
+    const track_idx_t strack = staffIdx * VOICES;
+    const track_idx_t etrack = strack + VOICES;
+
+    for (const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(SegmentType::ChordRest) : nullptr;
+         seg && seg->system() == system; seg = seg->next1(SegmentType::ChordRest)) {
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            EngravingItem* item = seg->element(track);
+            if (!item || !item->isChord()) {
+                continue;
+            }
+            const Chord* chord = toChord(item);
+
+            for (Note* note : chord->notes()) {
+                const Tie* backTie = note->tieBack();
+
+                if (!backTie) {
+                    // Chain head (or an untied note) - walk forward to where the tie chain
+                    // actually ends (mirroring the tick range NoteRenderer::renderNormalTie()
+                    // already applies to playback), so the rectangle covers the whole chain
+                    // instead of stopping at this note's own duration.
+                    Note* tailNote = note->lastTiedNote(/*ignorePlayback*/ false);
+                    const Chord* tailChord = tailNote->chord();
+                    const bool tailInSameSystem = tailChord && tailChord->segment()->system() == system;
+
+                    NoteEntry entry;
+                    entry.headNote = note;
+                    entry.tailNote = tailNote;
+                    entry.anchorNote = note;
+                    entry.nominalLeftX = note->canvasX();
+                    entry.hasLeftHandle = true;
+                    entry.hasRightHandle = tailInSameSystem;
+
+                    if (tailInSameSystem) {
+                        const int tailEndTick = tailChord->tick().ticks() + tailChord->ticks().ticks();
+                        const std::optional<double> rx = mu::notation::canvasXFromTick(system, tailEndTick);
+                        entry.nominalRightX = rx ? *rx : (staffCanvasRect.x() + staffCanvasRect.width());
+                    } else {
+                        // The chain continues past this system - stop at the system's own right
+                        // edge instead of interpolating a tick that lies entirely outside it. The
+                        // rest of the chain gets its own fragment wherever its later systems are
+                        // processed (see the tieBack() branch below).
+                        entry.nominalRightX = staffCanvasRect.x() + staffCanvasRect.width();
+                    }
+
+                    entries.push_back(entry);
+                    continue;
+                }
+
+                // A tied-continuation note. Playback (NoteRenderer::shouldRender) skips these
+                // entirely - only the chain's head note's own offset is ever honored - so it never
+                // gets an independent handle of its own. It only needs a fragment here if the
+                // previous note in the chain lives in a *different* system: that's the one case
+                // the head's own fragment (built above, in the head's own system) can't reach,
+                // since each system's overlay only has coordinate data for itself. A continuation
+                // note whose predecessor is in this same system is already fully covered by that
+                // fragment's extended right edge.
+                const Note* prevNote = backTie->startNote();
+                const Chord* prevChord = prevNote ? prevNote->chord() : nullptr;
+                if (!prevChord || prevChord->segment()->system() == system) {
+                    continue;
+                }
+
+                Note* headNote = note->firstTiedNote(/*ignorePlayback*/ false);
+                Note* tailNote = note->lastTiedNote(/*ignorePlayback*/ false);
+                const Chord* tailChord = tailNote->chord();
+                const bool tailInSameSystem = tailChord && tailChord->segment()->system() == system;
+
+                NoteEntry entry;
+                entry.headNote = headNote;
+                entry.tailNote = tailNote;
+                entry.anchorNote = note;
+                entry.nominalLeftX = staffCanvasRect.x();
+                entry.hasLeftHandle = false;
+                entry.hasRightHandle = tailInSameSystem;
+
+                if (tailInSameSystem) {
+                    const int tailEndTick = tailChord->tick().ticks() + tailChord->ticks().ticks();
+                    const std::optional<double> rx = mu::notation::canvasXFromTick(system, tailEndTick);
+                    entry.nominalRightX = rx ? *rx : (staffCanvasRect.x() + staffCanvasRect.width());
+                } else {
+                    entry.nominalRightX = staffCanvasRect.x() + staffCanvasRect.width();
+                }
+
+                entries.push_back(entry);
+            }
+        }
+    }
+
+    if (entries.empty()) {
+        return;
+    }
+
+    const double spatium = entries.front().anchorNote->spatium();
+    const double topMargin = RECT_TOP_MARGIN_SP * spatium;
+    const double bottomOverlap = RECT_BOTTOM_OVERLAP_SP * spatium;
+    const double rectHeight = topMargin + bottomOverlap;
+    const double vPadding = 0.3 * spatium;
+
+    // Anchored on each fragment's own anchor note's vertical position (the note actually laid
+    // out in this system), so the rectangle sits right above its notehead (and chord notes stack
+    // in pitch order without needing an artificial row index)
+    std::vector<double> centerY;
+    centerY.reserve(entries.size());
+    double minY = 0.0;
+    double maxY = 0.0;
+    for (size_t i = 0; i < entries.size(); ++i) {
+        const double noteY = entries[i].anchorNote->canvasPos().y();
+        const double y = noteY - topMargin + rectHeight / 2.0;
+        centerY.push_back(y);
+        if (i == 0) {
+            minY = noteY - topMargin;
+            maxY = noteY + bottomOverlap;
+        } else {
+            minY = std::min(minY, noteY - topMargin);
+            maxY = std::max(maxY, noteY + bottomOverlap);
+        }
+    }
+    minY -= vPadding;
+    maxY += vPadding;
+
+    // The overlay's vertical bounds are derived from the actual note positions rather than a
+    // fixed margin around the staff - this way it always contains every rectangle regardless of
+    // how far above/below the staff a note sits (ledger lines, etc.)
+    const muse::RectF overlayCanvasRect(staffCanvasRect.x(), minY, staffCanvasRect.width(), maxY - minY);
+
+    const std::vector<Note*> selected = selectedNotes();
+
+    QVector<NoteOffsetOverlay::RectData> rects;
+    rects.reserve(static_cast<int>(entries.size()));
+
+    for (size_t i = 0; i < entries.size(); ++i) {
+        const NoteEntry& entry = entries[i];
+        const Note* headNote = entry.headNote;
+        const Note* tailNote = entry.tailNote;
+        const Chord* headChord = headNote ? headNote->chord() : nullptr;
+        const Chord* tailChord = tailNote ? tailNote->chord() : nullptr;
+        IF_ASSERT_FAILED(headChord && tailChord) {
+            continue;
+        }
+
+        const int headStartTick = headChord->tick().ticks();
+        const int tailEndTick = tailChord->tick().ticks() + tailChord->ticks().ticks();
+
+        // Fallback local px-per-tick rate, only used if an offset pushes an edge right at a
+        // system boundary where segment interpolation has nothing to anchor to.
+        const int totalTicks = tailEndTick - headStartTick;
+        const double fallbackPxPerTick = totalTicks > 0 ? (entry.nominalRightX - entry.nominalLeftX) / totalTicks : 0.0;
+
+        // A fragment without a given handle doesn't own that edge (it belongs to a fragment in a
+        // different system) - its position stays pinned to the system boundary it was clamped to,
+        // rather than tracking an offset that isn't actually about this fragment's own edge.
+        const double leftPx = entry.hasLeftHandle
+                              ? entry.nominalLeftX
+                              + pixelDeltaForTickOffset(system, headStartTick, headNote->playbackStartOffset(), fallbackPxPerTick)
+                              : entry.nominalLeftX;
+        const double rightPx = entry.hasRightHandle
+                               ? entry.nominalRightX
+                               + pixelDeltaForTickOffset(system, tailEndTick, headNote->playbackDurationOffset(), fallbackPxPerTick)
+                               : entry.nominalRightX;
+
+        NoteOffsetOverlay::RectData rect;
+        rect.leftN = (leftPx - overlayCanvasRect.x()) / overlayCanvasRect.width();
+        rect.rightN = (rightPx - overlayCanvasRect.x()) / overlayCanvasRect.width();
+        rect.centerYN = (centerY[i] - overlayCanvasRect.y()) / overlayCanvasRect.height();
+        rect.heightYN = rectHeight / overlayCanvasRect.height();
+        rect.hasLeftHandle = entry.hasLeftHandle;
+        rect.hasRightHandle = entry.hasRightHandle;
+        rect.selected = muse::contains(selected, entry.headNote) || muse::contains(selected, entry.tailNote)
+                        || muse::contains(selected, entry.anchorNote);
+        rect.userModified = headNote->playbackStartOffset() != 0 || headNote->playbackDurationOffset() != 0;
+        rects.push_back(rect);
+    }
+
+    if (rects.isEmpty()) {
+        return;
+    }
+
+    const SysStaffKey key { system, staffIdx };
+    for (int i = 0; i < static_cast<int>(entries.size()); ++i) {
+        const NoteEntry& entry = entries[i];
+        m_noteLocations[entry.anchorNote] = NoteLocation { key, i };
+        if (entry.hasRightHandle && entry.tailNote != entry.anchorNote) {
+            m_noteLocations[entry.tailNote] = NoteLocation { key, i };
+        }
+    }
+
+    NoteOffsetOverlay* overlay = nullptr;
+    const auto oldIt = m_overlaysByStaff.find(key);
+    if (oldIt != m_overlaysByStaff.end()) {
+        // Reuse the existing overlay item in place rather than destroying and recreating it -
+        // its drag-signal connection (bound to this same key) is still valid.
+        overlay = oldIt->second.overlay;
+        overlay->setRects(rects);
+        m_overlaysByStaff.erase(oldIt);
+    } else {
+        overlay = new NoteOffsetOverlay(m_overlaysParent);
+        overlay->setRects(rects);
+        applyOverlayColors(overlay);
+        overlay->setVisible(false);
+
+        QObject::connect(overlay, &NoteOffsetOverlay::edgeDragged,
+                         [this, key](int rectIndex, bool isLeftEdge, qreal newXN, bool completed) {
+            onEdgeDragged(key, rectIndex, isLeftEdge, newXN, completed);
+        });
+    }
+
+    StaffOverlayData data;
+    data.overlay = overlay;
+    data.notes = std::move(entries);
+    data.bandRect = overlayCanvasRect;
+    newOverlays[key] = std::move(data);
+}
+
+void NotationNoteOffsetController::applyOverlayColors(NoteOffsetOverlay* overlay) const
+{
+    IF_ASSERT_FAILED(overlay) {
+        return;
+    }
+
+    overlay->setFillColor(QColor(90, 180, 140, 60));
+    overlay->setSelectedFillColor(QColor(60, 160, 210, 90));
+    overlay->setModifiedFillColor(QColor(235, 140, 40, 90));
+    overlay->setBorderColor(QColor(50, 130, 100, 200));
+    overlay->setHandleColor(QColor(90, 180, 140, 230).darker(160));
+    overlay->setSelectedHandleColor(QColor(60, 160, 210, 230).darker(140));
+    overlay->setModifiedHandleColor(QColor(235, 140, 40, 230).darker(140));
+}
+
+void NotationNoteOffsetController::updateSelectionHighlight()
+{
+    if (!noteOffsets() || !noteOffsets()->isEditModeEnabled()) {
+        return;
+    }
+
+    const std::vector<Note*> selected = selectedNotes();
+
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        const QVector<NoteOffsetOverlay::RectData>& rects = data.overlay->rects();
+        if (rects.size() != static_cast<int>(data.notes.size())) {
+            continue;
+        }
+
+        // Only a handful of notes typically change selection at once, even on a staff with many
+        // notes - update just those rects in place instead of copying the whole vector out and
+        // back regardless of how many actually changed.
+        for (int i = 0; i < rects.size(); ++i) {
+            const NoteEntry& entry = data.notes.at(i);
+            const bool isSelected = muse::contains(selected, entry.headNote) || muse::contains(selected, entry.tailNote)
+                                    || muse::contains(selected, entry.anchorNote);
+            if (rects.at(i).selected != isSelected) {
+                NoteOffsetOverlay::RectData rect = rects.at(i);
+                rect.selected = isSelected;
+                data.overlay->updateRect(i, rect);
+            }
+        }
+    }
+}
+
+void NotationNoteOffsetController::updateOverlaysGeometry()
+{
+    const bool visible = noteOffsets() && noteOffsets()->isEditModeEnabled();
+
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        data.overlay->setVisible(visible);
+        if (!visible) {
+            continue;
+        }
+
+        const muse::RectF screenRect = m_viewMatrix.map(data.bandRect);
+        data.overlay->setWidth(screenRect.width());
+        data.overlay->setHeight(screenRect.height());
+        data.overlay->setX(screenRect.x());
+        data.overlay->setY(screenRect.y());
+    }
+}
+
+void NotationNoteOffsetController::setViewMatrix(const muse::draw::Transform& viewMatrix)
+{
+    if (viewMatrix == m_viewMatrix) {
+        return;
+    }
+    m_viewMatrix = viewMatrix;
+
+    if (noteOffsets() && noteOffsets()->isEditModeEnabled()) {
+        updateOverlaysGeometry();
+    }
+}
+
+std::vector<mu::engraving::Note*> NotationNoteOffsetController::selectedNotes() const
+{
+    const INotationPtr notation = currentNotation();
+    if (!notation || !notation->interaction() || !notation->interaction()->selection()) {
+        return {};
+    }
+
+    return notation->interaction()->selection()->notes();
+}
+
+void NotationNoteOffsetController::previewNoteRect(const NoteLocation& location, int newStartOffset, int newDurationOffset)
+{
+    const auto dataIt = m_overlaysByStaff.find(location.key);
+    IF_ASSERT_FAILED(dataIt != m_overlaysByStaff.end() && location.rectIndex >= 0
+                     && static_cast<size_t>(location.rectIndex) < dataIt->second.notes.size()) {
+        return;
+    }
+    const StaffOverlayData& data = dataIt->second;
+
+    const NoteEntry& entry = data.notes.at(location.rectIndex);
+    const Chord* headChord = entry.headNote ? entry.headNote->chord() : nullptr;
+    const Chord* tailChord = entry.tailNote ? entry.tailNote->chord() : nullptr;
+    IF_ASSERT_FAILED(headChord && tailChord) {
+        return;
+    }
+
+    const int headStartTick = headChord->tick().ticks();
+    const int tailEndTick = tailChord->tick().ticks() + tailChord->ticks().ticks();
+    const int totalTicks = tailEndTick - headStartTick;
+    const double fallbackPxPerTick = totalTicks > 0 ? (entry.nominalRightX - entry.nominalLeftX) / totalTicks : 0.0;
+
+    const double leftPx = entry.hasLeftHandle
+                          ? entry.nominalLeftX
+                          + pixelDeltaForTickOffset(location.key.system, headStartTick, newStartOffset, fallbackPxPerTick)
+                          : entry.nominalLeftX;
+    const double rightPx = entry.hasRightHandle
+                           ? entry.nominalRightX
+                           + pixelDeltaForTickOffset(location.key.system, tailEndTick, newDurationOffset, fallbackPxPerTick)
+                           : entry.nominalRightX;
+
+    const QVector<NoteOffsetOverlay::RectData>& rects = data.overlay->rects();
+    if (location.rectIndex >= rects.size()) {
+        return;
+    }
+
+    // Single-struct copy plus an in-place update, instead of copying the whole staff's rect
+    // vector out and back on every mouse-move during a drag.
+    NoteOffsetOverlay::RectData rect = rects.at(location.rectIndex);
+    rect.leftN = (leftPx - data.bandRect.x()) / data.bandRect.width();
+    rect.rightN = (rightPx - data.bandRect.x()) / data.bandRect.width();
+    data.overlay->updateRect(location.rectIndex, rect);
+}
+
+void NotationNoteOffsetController::onEdgeDragged(const SysStaffKey& key, int rectIndex, bool isLeftEdge, qreal newXN, bool completed)
+{
+    const auto dataIt = m_overlaysByStaff.find(key);
+    IF_ASSERT_FAILED(key.isValid() && dataIt != m_overlaysByStaff.end()
+                     && rectIndex >= 0 && static_cast<size_t>(rectIndex) < dataIt->second.notes.size()) {
+        return;
+    }
+    const StaffOverlayData& data = dataIt->second;
+
+    const NoteEntry& draggedEntry = data.notes.at(rectIndex);
+    Note* headNote = draggedEntry.headNote;
+    Note* tailNote = draggedEntry.tailNote;
+    Chord* headChord = headNote ? headNote->chord() : nullptr;
+    Chord* tailChord = tailNote ? tailNote->chord() : nullptr;
+    IF_ASSERT_FAILED(headNote && tailNote && headChord && tailChord) {
+        return;
+    }
+
+    const std::optional<int> newTick = noteOffsetTickFromCanvasX(key.system, data.bandRect, newXN);
+    if (!newTick) {
+        return;
+    }
+
+    // Only the chain's head note's own offset is ever honored during playback (see the tieBack()
+    // skip in createOverlayForStaff), so it's always the target here regardless of which
+    // fragment/handle - possibly on the chain's last note, in a different system - was dragged.
+    const int headChordStartTick = headChord->tick().ticks();
+    const int headChordEndTick = headChordStartTick + headChord->ticks().ticks();
+    const int tailChordStartTick = tailChord->tick().ticks();
+    const int tailChordEndTick = tailChordStartTick + tailChord->ticks().ticks();
+
+    int newStartOffset = headNote->playbackStartOffset();
+    int newDurationOffset = headNote->playbackDurationOffset();
+
+    if (isLeftEdge) {
+        newStartOffset = std::clamp(*newTick - headChordStartTick, -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+        // Never let the start creep past the end of the *first* tied note's own span - dragging
+        // the start into (or past) a later tied note has no sensible meaning either, mirroring
+        // the floor applied to the duration handle below. For an untied note tailNote == headNote,
+        // so this reduces to the original same-note bound (can't cross wherever the duration
+        // handle currently puts the note's own effective end).
+        const int ceilingTick = (tailNote == headNote) ? (tailChordEndTick + newDurationOffset) : headChordEndTick;
+        if (ceilingTick - (headChordStartTick + newStartOffset) < MIN_EFFECTIVE_TICKS) {
+            newStartOffset = std::clamp(ceilingTick - MIN_EFFECTIVE_TICKS - headChordStartTick, -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+        }
+    } else {
+        newDurationOffset = std::clamp(*newTick - tailChordEndTick, -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+        // Never let the total duration shrink to end before the *last* tied note's own start -
+        // dragging into the middle of the tie chain has no sensible meaning (there's no tick at
+        // which "the note" could be said to end while a tied continuation is still sounding).
+        // For an untied note tailNote == headNote, so this reduces to the original same-note bound.
+        const int floorTick = (tailNote == headNote) ? (headChordStartTick + newStartOffset) : tailChordStartTick;
+        if ((tailChordEndTick + newDurationOffset) - floorTick < MIN_EFFECTIVE_TICKS) {
+            newDurationOffset = std::clamp(floorTick + MIN_EFFECTIVE_TICKS - tailChordEndTick, -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+        }
+    }
+
+    // If the dragged note is part of a multi-note selection, apply the same tick delta to every
+    // other selected note's corresponding offset, each clamped independently.
+    const int delta = isLeftEdge ? (newStartOffset - headNote->playbackStartOffset())
+                      : (newDurationOffset - headNote->playbackDurationOffset());
+
+    std::vector<Note*> affectedNotes { headNote };
+    if (delta != 0 || !completed) {
+        const std::vector<Note*> selected = selectedNotes();
+        if (selected.size() > 1 && muse::contains(selected, headNote)) {
+            affectedNotes = selected;
+        }
+    }
+
+    struct PendingChange {
+        Note* note = nullptr;
+        int startOffset = 0;
+        int durationOffset = 0;
+    };
+    std::vector<PendingChange> changes;
+    changes.reserve(affectedNotes.size());
+
+    for (Note* note : affectedNotes) {
+        if (note == headNote) {
+            changes.push_back({ note, newStartOffset, newDurationOffset });
+            continue;
+        }
+
+        const Chord* chord = note->chord();
+        if (!chord) {
+            continue;
+        }
+
+        int otherStartOffset = note->playbackStartOffset();
+        int otherDurationOffset = note->playbackDurationOffset();
+
+        if (isLeftEdge) {
+            otherStartOffset = std::clamp(otherStartOffset + delta, -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+            const int chordEndTick = chord->tick().ticks() + chord->ticks().ticks();
+            const int effEnd = chordEndTick + otherDurationOffset;
+            if (effEnd - (chord->tick().ticks() + otherStartOffset) < MIN_EFFECTIVE_TICKS) {
+                otherStartOffset = std::clamp(effEnd - MIN_EFFECTIVE_TICKS - chord->tick().ticks(),
+                                              -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+            }
+        } else {
+            otherDurationOffset = std::clamp(otherDurationOffset + delta, -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+            const int chordStartTick = chord->tick().ticks();
+            const int chordEndTick = chordStartTick + chord->ticks().ticks();
+            const int effStart = chordStartTick + otherStartOffset;
+            if ((chordEndTick + otherDurationOffset) - effStart < MIN_EFFECTIVE_TICKS) {
+                otherDurationOffset = std::clamp(effStart + MIN_EFFECTIVE_TICKS - chordEndTick,
+                                                 -MAX_OFFSET_TICKS, MAX_OFFSET_TICKS);
+            }
+        }
+
+        changes.push_back({ note, otherStartOffset, otherDurationOffset });
+    }
+
+    if (!completed) {
+        // Live drag preview - update every affected overlay's displayed rect without touching
+        // the score, anchored on the same nominal note positions used when overlays were built.
+        // The actually-dragged fragment is addressed directly by its own (key, rectIndex) rather
+        // than via m_noteLocations, since that map resolves headNote back to *its own* fragment -
+        // which, when dragging the duration handle on a different system's tail fragment, is not
+        // the same fragment the mouse is over.
+        const NoteLocation draggedLocation { key, rectIndex };
+        for (const PendingChange& change : changes) {
+            if (change.note == headNote) {
+                previewNoteRect(draggedLocation, change.startOffset, change.durationOffset);
+                continue;
+            }
+            const auto locIt = m_noteLocations.find(change.note);
+            if (locIt != m_noteLocations.end()) {
+                previewNoteRect(locIt->second, change.startOffset, change.durationOffset);
+            }
+        }
+        return;
+    }
+
+    const INotationPtr notation = currentNotation();
+    const INotationUndoStackPtr undoStack = notation ? notation->undoStack() : nullptr;
+    IF_ASSERT_FAILED(undoStack) {
+        return;
+    }
+
+    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Change note playback offset"));
+    for (const PendingChange& change : changes) {
+        if (isLeftEdge) {
+            change.note->undoChangeProperty(mu::engraving::Pid::PLAYBACK_START_OFFSET, change.startOffset,
+                                            mu::engraving::PropertyFlags::NOSTYLE);
+        } else {
+            change.note->undoChangeProperty(mu::engraving::Pid::PLAYBACK_DURATION_OFFSET, change.durationOffset,
+                                            mu::engraving::PropertyFlags::NOSTYLE);
+        }
+    }
+    undoStack->commitChanges();
+}
+
+INotationNoteOffsetsPtr NotationNoteOffsetController::noteOffsets() const
+{
+    const IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    return masterNotation ? masterNotation->noteOffsets() : nullptr;
+}
+
+INotationPtr NotationNoteOffsetController::currentNotation() const
+{
+    return globalContext()->currentNotation();
+}
+
+mu::engraving::Score* NotationNoteOffsetController::score() const
+{
+    return currentNotation() ? currentNotation()->elements()->msScore() : nullptr;
+}

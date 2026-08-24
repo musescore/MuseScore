@@ -51,6 +51,7 @@
 #include "excerptnotation.h"
 #include "masternotationparts.h"
 #include "notationautomation.h"
+#include "notationnoteoffsets.h"
 #include "types/scorecreateoptions.h"
 
 #ifdef MUE_BUILD_ENGRAVING_PLAYBACK
@@ -92,6 +93,7 @@ MasterNotation::MasterNotation(project::INotationProject* project, const muse::m
 #endif
 
     m_notationAutomation = std::make_shared<NotationAutomation>(undoStack());
+    m_notationNoteOffsets = std::make_shared<NotationNoteOffsets>();
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -765,6 +767,11 @@ INotationPlaybackPtr MasterNotation::playback() const
 INotationAutomationPtr MasterNotation::automation() const
 {
     return m_notationAutomation;
+}
+
+INotationNoteOffsetsPtr MasterNotation::noteOffsets() const
+{
+    return m_notationNoteOffsets;
 }
 
 void MasterNotation::initNotationSoloMuteState(const INotationPtr notation)
