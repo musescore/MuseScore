@@ -601,7 +601,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
         Tie* tieFor = on->tieFor();
         if (tieFor) {
-            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()) : Factory::createTie(this->dummy());
+            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(note) : Factory::createTie(note);
             tie->setStartNote(note);
             tie->setTick(note->tick());
             tie->setTrack(note->track());
@@ -851,7 +851,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
             for (unsigned int i = 0; i < oc->notes().size(); ++i) {
                 Note* on = oc->notes()[i];
                 Note* nn = nc->notes()[i];
-                Tie* tie = Factory::createTie(this->dummy());
+                Tie* tie = Factory::createTie(on);
                 tie->setStartNote(on);
                 tie->setEndNote(nn);
                 tie->setTick(tie->startNote()->tick());
@@ -969,7 +969,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 
                 ncr = chord;
                 if (i + 1 < n) {
-                    tie = Factory::createTie(this->dummy());
+                    tie = Factory::createTie(note);
                     tie->setStartNote(note);
                     tie->setTick(tie->startNote()->tick());
                     tie->setTrack(track);
@@ -1034,7 +1034,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
         //  Note does not fit on current measure, create Tie to
         //  next part of note
         if (!isRest) {
-            tie = Factory::createTie(this->dummy());
+            tie = Factory::createTie((Note*)nr);
             tie->setStartNote((Note*)nr);
             tie->setTick(tie->startNote()->tick());
             tie->setTrack(nr->track());

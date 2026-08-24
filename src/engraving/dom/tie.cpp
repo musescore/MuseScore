@@ -516,11 +516,10 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
         return;
     }
 
-    Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()) : Factory::createTie(score->dummy());
+    Tie* newTie = addPartialTie ? Factory::createPartialTie(startNote) : Factory::createTie(startNote);
 
     score->undoRemoveElement(oldTie);
 
-    newTie->setOwnershipParent(startNote);
     newTie->setStartNote(startNote);
     newTie->setTick(startNote->tick());
     newTie->setTrack(startNote->track());

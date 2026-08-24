@@ -3119,7 +3119,7 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, Measure* measure)
         return true;
     }
 
-    Tie* tie = new Tie(m_score->dummy());
+    Tie* tie = new Tie(startNote);
     this->readXmlId(tie, meiTie.m_xmlId);
     startNote->setTieFor(tie);
     tie->setStartNote(startNote);

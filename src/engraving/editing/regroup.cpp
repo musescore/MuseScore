@@ -163,7 +163,7 @@ void Regroup::regroupNotesAndRests(Transaction& tx, Score* score, const Fraction
                             std::vector<Note*> nl2 = nchord2->notes();
                             if (!firstpart) {
                                 for (size_t j = 0; j < nl1.size(); ++j) {
-                                    Tie* tie = Factory::createTie(score->dummy());
+                                    Tie* tie = Factory::createTie(nl1[j]);
                                     tie->setStartNote(nl1[j]);
                                     tie->setEndNote(nl2[j]);
                                     tie->setTick(tie->startNote()->tick());
@@ -217,7 +217,7 @@ void Regroup::regroupNotesAndRests(Transaction& tx, Score* score, const Fraction
                         Note* n = startChord->notes()[i];
                         Note* nn = nchord->notes()[i];
                         if (tieBack[i]) {
-                            Tie* tie = Factory::createTie(score->dummy());
+                            Tie* tie = Factory::createTie(tieBack[i]);
                             tie->setStartNote(tieBack[i]);
                             tie->setEndNote(n);
                             tie->setTick(tie->startNote()->tick());
@@ -228,7 +228,7 @@ void Regroup::regroupNotesAndRests(Transaction& tx, Score* score, const Fraction
                             ties.push_back(tie);
                         }
                         if (tieFor[i]) {
-                            Tie* tie = Factory::createTie(score->dummy());
+                            Tie* tie = Factory::createTie(nn);
                             tie->setStartNote(nn);
                             tie->setEndNote(tieFor[i]);
                             tie->setTick(tie->startNote()->tick());

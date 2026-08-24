@@ -287,13 +287,12 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 delete cr;
                 cr = 0;
             }
-            cr = Factory::createRest(score->dummy());
+            cr = Factory::createRest(segment);
         } else {
             if (!cr) {
-                cr = Factory::createChord(score->dummy());
+                cr = Factory::createChord(segment);
             }
         }
-        cr->setOwnershipParent(segment);
         cr->setTrack(track);
 
         TDuration d(l);
@@ -671,7 +670,7 @@ bool GuitarPro5::readTracks()
             params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
             params.fretPosition = capo;
 
-            Capo* capoEl = Factory::createCapo(score->dummy());
+            Capo* capoEl = Factory::createCapo(s);
             capoEl->setTrack(track);
             capoEl->setParams(params);
             s->add(capoEl);
@@ -749,7 +748,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                 auto cr = seg->cr(gpLyrics.lyricTrack);
                 if (cr) {
                     if (str[0] != '-') {
-                        Lyrics* lyr = Factory::createLyrics(score->dummy());
+                        Lyrics* lyr = Factory::createLyrics(cr);
 
                         std::string text;
                         auto pos = str.find('-');
@@ -1600,7 +1599,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                         if (m_tremolosInChords.find(chord2) != m_tremolosInChords.end()) {
                             TremoloType type = m_tremolosInChords.at(chord2);
                             DO_ASSERT(!isTremoloTwoChord(type));
-                            TremoloSingleChord* t = Factory::createTremoloSingleChord(score->dummy());
+                            TremoloSingleChord* t = Factory::createTremoloSingleChord(chord);
                             t->setTremoloType(type);
                             chord->add(t);
                             muse::remove(m_tremolosInChords, chord2);

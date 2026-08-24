@@ -752,14 +752,14 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
-            TimeSig* t = Factory::createTimeSig(_score->dummy());
+            Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
+            TimeSig* t = Factory::createTimeSig(s);
             track_idx_t curTrack = staffIdx * VOICES;
             t->setTrack(curTrack);
             t->setSig(scoreTimeSig);
             if (mB->freeTime()) {
                 t->setLargeParentheses(true);
             }
-            Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
             s->add(t);
         }
     }
@@ -864,7 +864,7 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
 
     if (!mB->section().first.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy());
+        RehearsalMark* t = Factory::createRehearsalMark(s);
         t->setPlainText(mB->section().first);
         t->setType(RehearsalMark::Type::Main);
         t->setTrack(0);
@@ -872,7 +872,7 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
     }
     if (!mB->section().second.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy());
+        RehearsalMark* t = Factory::createRehearsalMark(s);
         t->setPlainText(mB->section().second);
         t->setType(RehearsalMark::Type::Additional);
         t->setTrack(0);
@@ -985,11 +985,11 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
-            KeySig* t = mu::engraving::Factory::createKeySig(_score->dummy());
+            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
+            KeySig* t = mu::engraving::Factory::createKeySig(s);
             t->setTrack(staffIdx * VOICES);
             t->setKey(scoreKeySig);
             t->setMode(scoreMode);
-            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             s->add(t);
             _lastKeySigs[staffIdx] = mB->keySig();
         }
@@ -1024,13 +1024,13 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     }
 
     if (!gpscore->title().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
-        Text* s = Factory::createText(_score->dummy(), TextStyleType::TITLE);
+        Text* s = Factory::createText(m, TextStyleType::TITLE);
         s->setPlainText(gpscore->title());
         m->add(s);
     }
     if (!gpscore->subTitle().isEmpty() || !gpscore->artist().isEmpty() || !gpscore->album().isEmpty()
         || engravingConfiguration()->guitarProImportExperimental()) {
-        Text* s = Factory::createText(_score->dummy(), TextStyleType::SUBTITLE);
+        Text* s = Factory::createText(m, TextStyleType::SUBTITLE);
         String str;
         if (!gpscore->subTitle().isEmpty()) {
             str.append(gpscore->subTitle());
@@ -1051,13 +1051,13 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         m->add(s);
     }
     if (!gpscore->composer().isEmpty()) {
-        Text* s = Factory::createText(_score->dummy(), TextStyleType::COMPOSER);
+        Text* s = Factory::createText(m, TextStyleType::COMPOSER);
         s->setPlainText(muse::mtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
         m->add(s);
     }
 
     if (!gpscore->poet().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
-        Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
+        Text* s = Factory::createText(m, TextStyleType::LYRICIST);
         if (!gpscore->poet().isEmpty()) {
             s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
         }
@@ -1347,13 +1347,12 @@ void GPConverter::addContinuousSlideHammerOn()
 
         /// Layout info
         if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::Slide) {
-            Glissando* gl = mu::engraving::Factory::createGlissando(_score->dummy());
+            Glissando* gl = mu::engraving::Factory::createGlissando(startNote);
             gl->setStartElement(startNote);
             gl->setTrack(track);
             gl->setTick(startTick);
             gl->setTick2(endNote->chord()->tick());
             gl->setEndElement(endNote);
-            gl->setOwnershipParent(startNote);
             gl->setText(u"");
             gl->setGlissandoType(GlissandoType::STRAIGHT);
             gl->setGlissandoShift(slide.second == SlideHammerOn::Slide);
@@ -1544,10 +1543,7 @@ void GPConverter::addInstrumentChanges()
             int bar = soundAutomation.second.bar;
             float pos = soundAutomation.second.position;
 
-            Measure* m = _score->crMeasure(bar);
-            Segment* seg = m->first(SegmentType::ChordRest);
             int trackIdx = track.second->idx();
-            float position = soundAutomation.second.position; // offset for automation segment in current measure
 
             int midiProgramm = 0;
             String instrName;
@@ -1566,6 +1562,17 @@ void GPConverter::addInstrumentChanges()
                 continue;
             }
 
+            Measure* m = _score->crMeasure(bar);
+            Segment* seg = m->first(SegmentType::ChordRest);
+            if (pos != 0) {
+                // searching for correct segment to put instrument change
+                Fraction tick = m->tick() + Fraction::fromTicks(pos * Constants::DIVISION);
+                Segment* positionedSegment = m->findSegment(SegmentType::ChordRest, tick);
+                if (positionedSegment) {
+                    seg = positionedSegment;
+                }
+            }
+
             Instrument instr;
             instr.setTranspose(track.second->transpose());
             instr.setStringData(*_score->parts()[trackIdx]->instrument()->stringData());
@@ -1574,18 +1581,9 @@ void GPConverter::addInstrumentChanges()
                 instr.setDrumset(drumset::gpDrumset);
             }
 
-            InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy(), instr);
+            InstrumentChange* instrCh =  Factory::createInstrumentChange(seg, instr);
             instrCh->setTrack(trackIdx * VOICES);
             instrCh->setXmlText(instrName);
-
-            if (position != 0) {
-                // searching for correct segment to put instrument change
-                Fraction tick = m->tick() + Fraction::fromTicks(position * Constants::DIVISION);
-                Segment* positionedSegment = m->findSegment(SegmentType::ChordRest, tick);
-                if (positionedSegment) {
-                    seg = positionedSegment;
-                }
-            }
 
             seg->add(instrCh);
         }
@@ -1854,7 +1852,7 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
 
     Note* hnote = nullptr;
     if (gpnote->harmonic().type != GPNote::Harmonic::Type::Natural) {
-        hnote = mu::engraving::Factory::createNote(_score->dummy());
+        hnote = mu::engraving::Factory::createNote(note->chord());
         hnote->setTrack(note->track());
         hnote->setString(note->string());
         hnote->setPitch(note->pitch());
@@ -1919,7 +1917,7 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
 
     for (size_t flagIdx = 0; flagIdx < gpnote->accents().size(); flagIdx++) {
         if (gpnote->accents()[flagIdx] && symbolsIds.find(accentType(flagIdx)) == symbolsIds.end()) {
-            Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
+            Articulation* art = mu::engraving::Factory::createArticulation(note->chord());
             art->setSymId(accentType(flagIdx));
             note->chord()->add(art);
         }
@@ -1970,7 +1968,7 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
 
     for (size_t flagIdx = 2; flagIdx < gpnote->slides().size(); flagIdx++) {
         if (gpnote->slides()[flagIdx]) {
-            ChordLine* cl = Factory::createChordLine(_score->dummy());
+            ChordLine* cl = Factory::createChordLine(note->chord());
             cl->setChordLineType(slideType(flagIdx));
             cl->setStraight(true);
             note->chord()->add(cl);
@@ -1993,7 +1991,7 @@ void GPConverter::addPickScrape(const GPNote* gpnote, Note* note)
 {
     if (gpnote->pickScrape() != GPNote::PickScrape::None && m_currentGPBeat) {
         if (engravingConfiguration()->guitarProImportExperimental()) {
-            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy());
+            ChordLine* cl = mu::engraving::Factory::createChordLine(note->chord());
             cl->setChordLineType(gpnote->pickScrape() == GPNote::PickScrape::Down ? ChordLineType::FALL : ChordLineType::DOIT);
             cl->setWavy(true);
             note->chord()->add(cl);
@@ -2205,7 +2203,7 @@ void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
         return u"ppp";
     };
 
-    Dynamic* dynamic = Factory::createDynamic(_score->dummy());
+    Dynamic* dynamic = Factory::createDynamic(cr->segment());
     dynamic->setTrack(cr->track());
     dynamic->setDynamicType(convertDynamic(gpb->dynamic()));
     cr->segment()->add(dynamic);
@@ -2218,8 +2216,8 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
         return;
     }
 
-    auto startTie = [](Note* startNote, Score* sc, TieMap& ties, track_idx_t curTrack) {
-        Tie* tie = Factory::createTie(sc->dummy());
+    auto startTie = [](Note* startNote, TieMap& ties, track_idx_t curTrack) {
+        Tie* tie = Factory::createTie(startNote);
         startNote->add(tie);
         ties[curTrack].push_back(tie);
     };
@@ -2246,7 +2244,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
                 if (m_tremolosInChords.find(startChord) != m_tremolosInChords.end()) {
                     TremoloType type = m_tremolosInChords.at(startChord);
                     DO_ASSERT(!isTremoloTwoChord(type));
-                    TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy());
+                    TremoloSingleChord* t = Factory::createTremoloSingleChord(endChord);
                     t->setTremoloType(type);
                     endChord->add(t);
                     muse::remove(m_tremolosInChords, startChord);
@@ -2259,10 +2257,10 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
     };
 
     if (gpnote->tieType() == GPNote::TieType::Start) {
-        startTie(note, _score, ties, note->track());
+        startTie(note, ties, note->track());
     } else if (gpnote->tieType() == GPNote::TieType::Mediate) {
         endTie(note, ties, note->track());
-        startTie(note, _score, ties, note->track());
+        startTie(note, ties, note->track());
     } else if (gpnote->tieType() == GPNote::TieType::End) {
         endTie(note, ties, note->track());
     }
@@ -2471,7 +2469,7 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
         return;
     }
 
-    FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy());
+    FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(cr->segment());
     fretDiagram->setTrack(cr->track());
     fretDiagram->setStrings(diagram.stringCount);
     fretDiagram->setFretOffset(diagram.baseFret);
@@ -2510,7 +2508,7 @@ void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
+    Articulation* art = mu::engraving::Factory::createArticulation(cr);
     art->setTextType(ArticulationTextType::SLAP);
     cr->add(art);
 }
@@ -2521,7 +2519,7 @@ void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy());
+    Articulation* art = mu::engraving::Factory::createArticulation(cr);
     art->setTextType(ArticulationTextType::POP);
     cr->add(art);
 }

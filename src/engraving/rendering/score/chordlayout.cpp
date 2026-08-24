@@ -441,7 +441,6 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         double llX         = stemX - (headWidth + extraLen) * 0.5;
         for (int i = 0; i < ledgerLines; i++) {
             LedgerLine* ldgLin = item->ledgerLines()[i];
-            ldgLin->setOwnershipParent(item);
             ldgLin->setTrack(item->track());
             ldgLin->setVisible(item->visible());
             ldgLin->setLen(headWidth + extraLen);
@@ -546,7 +545,6 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             } else {
                 item->tabDur()->setDuration(item->durationType().type(), item->dots(), tab);
             }
-            item->tabDur()->setOwnershipParent(item);
             item->tabDur()->setRepeat(repeat);
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
             TLayout::layoutTabDurationSymbol(item->tabDur(), item->tabDur()->mutldata());
@@ -1421,7 +1419,6 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < ledgerLineData.size(); ++i) {
         LedgerLineData lld = ledgerLineData[i];
         LedgerLine* h = item->ledgerLines()[i];
-        h->setOwnershipParent(item);
         h->setTrack(track);
         h->setVisible(lld.visible && staffVisible);
         h->setLen(lld.maxX - lld.minX);

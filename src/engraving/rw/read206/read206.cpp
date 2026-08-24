@@ -3171,7 +3171,6 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment = m->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);
             readAmbitus(range, e, ctx);
-            range->setOwnershipParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(ctx.track()));
             segment->add(range);
         } else if (tag == "multiMeasureRest") {

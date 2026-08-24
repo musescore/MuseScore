@@ -425,7 +425,7 @@ void GuitarPro::addTextArticulation(Note* note, ArticulationTextType type)
     }
 
     if (Chord* ch = toChord(note->parent())) {
-        Articulation* art = mu::engraving::Factory::createArticulation(score->dummy());
+        Articulation* art = mu::engraving::Factory::createArticulation(ch);
         art->setTextType(type);
         ch->add(art);
     }
@@ -1575,7 +1575,7 @@ bool GuitarPro2::read(IODevice* io)
             params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
             params.fretPosition = capo;
 
-            Capo* capoEl = Factory::createCapo(score->dummy());
+            Capo* capoEl = Factory::createCapo(s);
             capoEl->setTrack(track);
             capoEl->setParams(params);
             s->add(capoEl);
@@ -1671,9 +1671,9 @@ bool GuitarPro2::read(IODevice* io)
                 Fraction l = len2fraction(len);
                 ChordRest* cr;
                 if (strings) {
-                    cr = Factory::createChord(score->dummy());
+                    cr = Factory::createChord(segment);
                 } else {
-                    cr = Factory::createRest(score->dummy());
+                    cr = Factory::createRest(segment);
                 }
                 cr->setTrack(track);
                 if (lyrics) {
@@ -1882,13 +1882,12 @@ GuitarPro::ReadNoteResult GuitarPro1::readNote(int string, Note* note)
                 // no transition
             } else if (transition == 1) {
                 //note->setSlideNote(gn);
-                Glissando* glis = new Glissando(score->dummy());
+                Glissando* glis = new Glissando(gn);
                 glis->setGlissandoType(GlissandoType::STRAIGHT);
                 gn->chord()->add(glis);
                 glis->setStartElement(gn);
                 glis->setTick(gn->chord()->tick());
                 glis->setTrack(gn->track());
-                glis->setOwnershipParent(gn);
                 glis->setEndElement(note);
                 glis->setTick2(note->chord()->tick());
                 glis->setTrack2(note->track());
@@ -2332,7 +2331,7 @@ bool GuitarPro3::read(IODevice* io)
             params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
             params.fretPosition = capo;
 
-            Capo* capoEl = Factory::createCapo(score->dummy());
+            Capo* capoEl = Factory::createCapo(s);
             capoEl->setTrack(track);
             capoEl->setParams(params);
             s->add(capoEl);
@@ -2451,7 +2450,7 @@ bool GuitarPro3::read(IODevice* io)
                 // if (!pause || strings)
                 if (strings) {
                     if (!segment->cr(track)) {
-                        cr = Factory::createChord(score->dummy());
+                        cr = Factory::createChord(segment);
                     }
                 } else {
                     if (segment->cr(track)) {
@@ -2459,7 +2458,7 @@ bool GuitarPro3::read(IODevice* io)
                         delete cr;
                         cr = 0;
                     }
-                    cr = Factory::createRest(score->dummy());
+                    cr = Factory::createRest(segment);
                 }
 
                 cr->setTrack(track);
@@ -2848,7 +2847,7 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
     }
 
     if (!gp->poet.isEmpty() || experimental) {
-        Text* s = Factory::createText(score->dummy(), TextStyleType::LYRICIST);
+        Text* s = Factory::createText(m, TextStyleType::LYRICIST);
         if (!gp->poet.isEmpty()) {
             s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gp->poet));
         }

@@ -198,7 +198,7 @@ private:
 
     friend class FiguredBass;
 
-    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
+    FiguredBassItem(FiguredBass* parent, int line = 0);
     FiguredBassItem(const FiguredBassItem&);
 
     // part parsing
