@@ -54,6 +54,7 @@ static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinke
 
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
 static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fretboardDiagramsAutoUpdate");
+static const Settings::Key FRET_DROP_TUNING_CHORDS_AS_UNIT("engraving", "score/fretDropTuningChordsAsUnit");
 
 struct VoiceColor {
     Settings::Key key;
@@ -143,6 +144,8 @@ void EngravingConfiguration::init()
     settings()->valueChanged(DYNAMICS_APPLY_TO_ALL_VOICES).onReceive(this, [this](const Val& val) {
         m_dynamicsApplyToAllVoicesChanged.send(val.toBool());
     });
+
+    settings()->setDefaultValue(FRET_DROP_TUNING_CHORDS_AS_UNIT, Val(true));
 
     settings()->setDefaultValue(FRETBOARD_DIAGRAMS_AUTO_UPDATE, Val(true));
     settings()->valueChanged(FRETBOARD_DIAGRAMS_AUTO_UPDATE).onReceive(this, [this](const Val& val) {
@@ -383,6 +386,11 @@ muse::async::Channel<voice_idx_t, Color> EngravingConfiguration::selectionColorC
 Color EngravingConfiguration::highlightSelectionColor(voice_idx_t voice) const
 {
     return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
+}
+
+bool EngravingConfiguration::fretDropTuningChordsAsUnit() const
+{
+    return settings()->value(FRET_DROP_TUNING_CHORDS_AS_UNIT).toBool();
 }
 
 bool EngravingConfiguration::dynamicsApplyToAllVoices() const

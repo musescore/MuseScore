@@ -23,6 +23,7 @@
 #pragma once
 
 #include <cstddef>
+#include <utility>
 #include <vector>
 #include <map>
 
@@ -84,11 +85,23 @@ public:
     void        configBanjo5thString();
     int         adjustBanjo5thFret(int fret) const;
     bool        isFiveStringBanjo() const;
+    bool        isDropLikeTuning() const;
+    bool        isMonotonicTuning() const;
+    bool        findCompactFingering(const std::vector<int>& pitches, std::vector<std::pair<int, int> >* out, int pitchOffset = 0) const;
+    bool        needsCompactFingering(const std::vector<std::pair<int, int> >& placements) const;
     bool        useFlats() const { return m_useFlats; }
 
 private:
 
+    static constexpr size_t MIN_DROP_TUNING_STRINGS = 4;    // below this, drone instruments match the pattern too
+    static constexpr int MIN_DROPPED_STRING_GAP = 6;        // semitones the lowest string sits below the rest
+    static constexpr int HAND_SPAN = 4;                     // frets a fretting may stretch while being searched
+    static constexpr int MAX_ADOPT_SPAN = 2;                // only replace an existing fretting with a barre...
+    static constexpr size_t MAX_ADOPT_DISTINCT_FRETS = 2;   // ...plus at most one more finger
+
     int         fret(int pitch, int string, int pitchOffset) const;
+    bool        hasPreassignedNote(const Chord* chord) const;
+    bool        fretChordAsUnit(Chord* chord, const std::map<int, Note*>& sortedNotes, std::vector<int>& bUsed) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const;
     void        sortChordNotesUseSameString(const Chord* chord) const;
     bool        hasPendingPitchChange(const Chord* chord) const;

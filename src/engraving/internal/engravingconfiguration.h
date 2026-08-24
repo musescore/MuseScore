@@ -111,6 +111,8 @@ public:
 
     bool allowReadingImagesFromOutsideMscz() const override;
 
+    bool fretDropTuningChordsAsUnit() const override;
+
     bool guitarProImportExperimental() const override;
     bool negativeFretsAllowed() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;

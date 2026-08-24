@@ -97,6 +97,8 @@ public:
 
     MOCK_METHOD(bool, allowReadingImagesFromOutsideMscz, (), (const, override));
 
+    MOCK_METHOD(bool, fretDropTuningChordsAsUnit, (), (const, override));
+
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
     MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));
