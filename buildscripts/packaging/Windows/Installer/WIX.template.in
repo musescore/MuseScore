@@ -74,12 +74,15 @@
         <!-- Background updates: a scheduled task running as SYSTEM installs the package
              the application downloads, since an ordinary user cannot write to Program
              Files. cert-from is this package, so the task accepts only updates signed
-             with the same certificate. Failures are ignored - without the task the
-             application falls back to asking the user to run the installer.
+             with the same key, chaining to the same root; upgrade-code and
+             product-version are what it is, so the task accepts only later versions of
+             this same product and nothing else that key ever signed. Failures are
+             ignored - without the task the application falls back to asking the user to
+             run the installer.
              The trailing "\" doubles the one INSTALL_ROOT ends with, so that
              CommandLineToArgvW does not read it as an escaped quote. -->
         <CustomAction Id="SetRegisterUpdateTask" Property="RegisterUpdateTask"
-            Value="&quot;[INSTALL_ROOT]bin\museupdater.exe&quot; --register-task --app-id &quot;$(var.MUSESCORE_EXECUTABLE_NAME)&quot; --app-exe &quot;bin\$(var.ExeName)&quot; --install-dir &quot;[INSTALL_ROOT]\&quot; --package-type msi --install-args &quot;INSTALL_ROOT={install-dir}&quot; --cert-from &quot;[OriginalDatabase]&quot;" />
+            Value="&quot;[INSTALL_ROOT]bin\museupdater.exe&quot; --register-task --app-id &quot;$(var.MUSESCORE_EXECUTABLE_NAME)&quot; --app-exe &quot;bin\$(var.ExeName)&quot; --install-dir &quot;[INSTALL_ROOT]\&quot; --package-type msi --install-args &quot;INSTALL_ROOT={install-dir}&quot; --upgrade-code &quot;[UpgradeCode]&quot; --product-version &quot;[ProductVersion]&quot; --cert-from &quot;[OriginalDatabase]&quot;" />
         <CustomAction Id="RegisterUpdateTask" BinaryKey="WixCA" DllEntry="WixQuietExec"
             Execute="deferred" Impersonate="no" Return="ignore" />
 
