@@ -345,6 +345,24 @@ TEST_F(MidiRenderer_Tests, ghostNote)
     checkEventInterval(events, 480, 959, 57, ghostVol);
 }
 
+TEST_F(MidiRenderer_Tests, compoundArticulations)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int accentVol = defVol * 1.2;
+    constexpr int marcatoVol = defVol * 1.44;
+
+    EventsHolder events = renderMidiEvents(u"compound_articulations.mscx");
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 10);
+
+    checkEventInterval(events, 0, 479, 60, defVol);
+    checkEventInterval(events, 480, 719, 62, accentVol);
+    checkEventInterval(events, 960, 1199, 64, marcatoVol);
+    checkEventInterval(events, 1440, 1919, 65, accentVol);
+    checkEventInterval(events, 1920, 2399, 67, marcatoVol);
+}
+
 TEST_F(MidiRenderer_Tests, simpleTremolo)
 {
     constexpr int defVol = 96; // f
