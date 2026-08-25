@@ -35,6 +35,7 @@
 #include "internal/projectmigrator.h"
 #include "internal/projectautosaver.h"
 #include "internal/convertfiletoscorescenario.h"
+#include "internal/convertfiletoscoreservice.h"
 
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
@@ -68,6 +69,7 @@ void ProjectModule::registerExports()
     m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
     m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(iocContext());
     m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
+    m_convertFileToScoreService = std::make_shared<ConvertFileToScoreService>(iocContext());
     m_convertFileToScoreScenario = std::make_shared<ConvertFileToScoreScenario>(iocContext());
 
 #ifdef Q_OS_MAC
@@ -90,6 +92,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator(iocContext()));
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(moduleName(), m_engravingPluginAPIHelper);
+    ioc()->registerExport<IConvertFileToScoreService>(moduleName(), m_convertFileToScoreService);
     ioc()->registerExport<IConvertFileToScoreScenario>(moduleName(), m_convertFileToScoreScenario);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
@@ -143,10 +146,13 @@ void ProjectModule::onInit(const IApplication::RunMode& mode)
     m_actionsController->init();
     m_recentFilesController->init();
     m_projectAutoSaver->init();
+    m_convertFileToScoreService->init();
     m_convertFileToScoreScenario->init();
 }
 
 void ProjectModule::onDelayedInit()
 {
-    m_convertFileToScoreScenario->resumeConvert();
+    //! NOTE: resuming polling can show dialogs (errors, review prompts), so it must wait
+    //! until the main window is up rather than running during onInit()
+    m_convertFileToScoreService->resumeConvert();
 }

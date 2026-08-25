@@ -43,6 +43,7 @@ target_sources(project PRIVATE
     iprojectrwregister.h
     iprojectwriter.h
     iconvertfiletoscorescenario.h
+    iconvertfiletoscoreservice.h
 
     types/projecttypes.h
     types/projectmeta.h
@@ -62,6 +63,8 @@ target_sources(project PRIVATE
     internal/projectautosaver.h
     internal/convertfiletoscorescenario.cpp
     internal/convertfiletoscorescenario.h
+    internal/convertfiletoscoreservice.cpp
+    internal/convertfiletoscoreservice.h
     internal/projectactionscontroller.cpp
     internal/projectactionscontroller.h
     internal/engravingpluginapihelper.cpp

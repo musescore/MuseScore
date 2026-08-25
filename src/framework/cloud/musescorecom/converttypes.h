@@ -32,6 +32,7 @@
 #include <QUrl>
 
 #include "global/logstream.h"
+#include "io/path.h"
 
 class QIODevice;
 
@@ -117,6 +118,7 @@ struct ConvertConfig {
 struct ConvertFile {
     std::shared_ptr<QIODevice> data;
     QString fileName;
+    muse::io::path_t path;
 
     bool isValid() const { return data != nullptr && !fileName.isEmpty(); }
 };
