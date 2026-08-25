@@ -136,12 +136,12 @@ void AppMenuModel::setupConnections()
 #endif
 
     extensionsRegister()->manifestListChanged().onNotify(this, [this]() {
-        MenuItem& pluginsMenu = findMenu("menu-plugins");
+        MenuItem& pluginsMenu = findMenu("menu-extensions");
         pluginsMenu.setSubitems(makeExtensionsSubitems());
     });
 
     extensionsRegister()->enabledChanged().onReceive(this, [this](const ExtensionUri&) {
-        MenuItem& pluginsItem = findMenu("menu-plugins");
+        MenuItem& pluginsItem = findMenu("menu-extensions");
         pluginsItem.setSubitems(makeExtensionsSubitems());
     });
 
@@ -419,7 +419,7 @@ muse::uicomponents::MenuItemList AppMenuModel::makeExtensionsSubitems()
 
 MenuItem* AppMenuModel::makeExtensionsMenu()
 {
-    return makeMenu(TranslatableString("appshell/menu/plugins", "&Plugins"), makeExtensionsSubitems(), "menu-plugins");
+    return makeMenu(TranslatableString("appshell/menu/plugins", "E&xtensions"), makeExtensionsSubitems(), "menu-extensions");
 }
 
 MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
@@ -537,17 +537,18 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem(AUDIO_DEV_USE_HYBRID_MODE_COMMAND),
         };
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Testflow"), testflowItems, "menu-testflow");
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-diagnostics-actions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics",
+                                       "&Accessibility"), accessibilityItems, "menu-diagnostics-accessibility")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-diagnostics-engraving")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-diagnostics-extensions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Testflow"), testflowItems, "menu-diagnostics-testflow");
 
 #ifdef MUSE_MODULE_VST
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-vst");
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-diagnostics-vst");
 #endif
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-audio")
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-diagnostics-audio")
               << makeMenuItem(MULTIWINDOWS_DEV_SHOW_INFO_COMMAND);
     }
 
@@ -741,16 +742,8 @@ MenuItemList AppMenuModel::makeExtensionsItems()
     ManifestList manifests = extensionsRegister()->manifestList(Filter::Enabled);
 
     auto makeMenuItem = [this](const Manifest& m, const Action& a) {
-        MenuItem* item = new MenuItem(this);
-        item->setTitle(!a.title.empty()
-                       ? TranslatableString::untranslatable(a.title)
-                       : TranslatableString::untranslatable(m.title));
-
-        rcommand::CommandQuery query = makeCommandQuery(m.uri, a.code);
-        item->setCommandQuery(query);
-        item->setCommandState(commandsState()->commandState(query.uri()));
-
-        return item;
+        rcommand::Command command = makeCommand(m.uri, a.code);
+        return this->makeMenuItem(command);
     };
 
     auto addMenuItems = [this, makeMenuItem](MenuItemList& items, const Manifest& m) {

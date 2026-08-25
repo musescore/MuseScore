@@ -420,8 +420,11 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
                                             const muse::UriQuery& extensionUri)
 {
+    extensions::ExtensionUri uri = extensionUri.uri();
+    extensions::ExtensionActionCode actionCode = extensionUri.param("action", Val("main")).toString();
+
     //! NOTE First we do the extension, it can modify the notation (score)
-    Ret ret = extensionsProvider()->perform(extensionUri);
+    Ret ret = extensionsProvider()->perform(uri, actionCode);
     if (!ret) {
         return ret;
     }
