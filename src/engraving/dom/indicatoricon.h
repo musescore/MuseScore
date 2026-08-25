@@ -35,7 +35,7 @@ public:
     IndicatorIcon(const ElementType& type, System* parent = nullptr, ElementFlags = ElementFlag::NOTHING);
     IndicatorIcon* clone() const override { return new IndicatorIcon(*this); }
 
-    System* system() const { return toSystem(explicitParent()); }
+    System* system() const { return toSystem(ownershipParent()); }
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<RectF> rangeRect = { "[IndicatorIcon] rangeRect", RectF() };

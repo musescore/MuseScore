@@ -77,9 +77,9 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     m_showCourtesy           = lb.m_showCourtesy;
 }
 
-void LayoutBreak::setParent(MeasureBase* parent)
+void LayoutBreak::setOwnershipParent(MeasureBase* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 char16_t LayoutBreak::iconCode() const
@@ -188,7 +188,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         triggerLayoutToEnd();
     } else {
         triggerLayout();
-        if (explicitParent() && measure()->next()) {
+        if (ownershipParent() && measure()->next()) {
             measure()->next()->triggerLayout();
         }
     }

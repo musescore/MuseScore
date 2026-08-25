@@ -21,6 +21,7 @@
  */
 #include "rootitem.h"
 
+#include "page.h"
 #include "score.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -47,13 +48,27 @@ compat::DummyElement* RootItem::dummy() const
     return m_dummy;
 }
 
+EngravingItemList RootItem::accessibleChildren() const
+{
+    EngravingItemList children = EngravingItem::accessibleChildren();
+
+    if (this == score()->rootItem()) {
+        // The pages are owned by the score, but this is the top of the accessibility
+        // tree, so this is where they are listed. (The dummy has a root item of its
+        // own, which heads the tree of the items parked on it and has no pages.)
+        children.insert(children.end(), score()->pages().begin(), score()->pages().end());
+    }
+
+    return children;
+}
+
 void RootItem::init()
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
 #endif
 
-    m_dummy->setParent(this);
+    m_dummy->setOwnershipParent(this);
     m_dummy->init();
 }
 

@@ -299,7 +299,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         mu::engraving::MeasureBase* mb = score->first();
         if (mb && mb->isVBox()) {
             mu::engraving::VBox* tvb = toVBox(mb);
-            nvb = Factory::createTitleVBox(score->dummy()->system());
+            nvb = Factory::createTitleVBox(score);
             nvb->setBoxHeight(tvb->boxHeight());
             nvb->setBoxWidth(tvb->boxWidth());
             nvb->setTopGap(tvb->topGap());
@@ -338,7 +338,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             mu::engraving::MeasureBase* measure = score->measures()->first();
             if (!measure->isVBox()) {
                 if (!nvb) {
-                    nvb = Factory::createTitleVBox(score->dummy()->system());
+                    nvb = Factory::createTitleVBox(score);
                 }
                 nvb->setTick(mu::engraving::Fraction(0, 1));
                 nvb->setNext(measure);

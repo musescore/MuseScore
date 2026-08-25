@@ -66,7 +66,7 @@ public:
     size_t span() const { return m_bi->bracketSpan(); }
     double magx() const { return m_magx; }
 
-    System* system() const { return (System*)explicitParent(); }
+    System* system() const { return (System*)ownershipParent(); }
 
     Measure* measure() const { return m_measure; }
     void setMeasure(Measure* measure) { m_measure = measure; }

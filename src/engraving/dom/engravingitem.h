@@ -173,8 +173,16 @@ public:
 
     void deleteLater();
 
-    EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems(bool all = false) const;
+
+    //! Item-typed variant of ownershipParent(); additionally null when the
+    //! owner is not an item.
+    EngravingItem* ownershipParentItem() const;
+
+    //! The parent in the visual hierarchy, which positions are relative to.
+    //! Defaults to the owner; overridden where placement differs from ownership
+    //! (e.g. measures are placed on systems, but not owned by them).
+    virtual EngravingItem* layoutParent() const;
 
     const std::shared_ptr<IEngravingConfiguration>& configuration() const;
     const muse::modularity::ContextPtr& iocContext() const;
@@ -479,6 +487,14 @@ public:
 
     bool accessibleEnabled() const;
     void setAccessibleEnabled(bool enabled);
+
+    //! Parent in the accessibility hierarchy: the layout parent when placed,
+    //! otherwise the raw parent (so that e.g. palette items reach the dummy).
+    virtual EngravingItem* accessibleParentItem() const;
+    //! Children in the accessibility hierarchy: the items that name this one as their
+    //! accessibleParentItem(). Those are the children it owns, unless ownership and
+    //! placement diverge, in which case the item that places them lists them instead.
+    virtual EngravingItemList accessibleChildren() const;
 
     virtual String accessibleInfo() const;
     virtual String screenReaderInfo() const { return accessibleInfo(); }

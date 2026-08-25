@@ -761,7 +761,7 @@ Note::Note(const Note& n, bool link)
 
     if (n.laissezVib()) {
         m_tieFor = Factory::copyLaissezVib(*toLaissezVib(n.m_tieFor));
-        m_tieFor->setParent(this);
+        m_tieFor->setOwnershipParent(this);
         m_tieFor->setStartNote(this);
         m_tieFor->setTick(tick());
         if (link) {
@@ -769,7 +769,7 @@ Note::Note(const Note& n, bool link)
         }
     } else if (n.outgoingPartialTie()) {
         setTieFor(Factory::copyPartialTie(*toPartialTie(n.m_tieFor)));
-        m_tieFor->setParent(this);
+        m_tieFor->setOwnershipParent(this);
         m_tieFor->setStartNote(this);
         m_tieFor->setTick(tick());
         if (link) {
@@ -784,7 +784,7 @@ Note::Note(const Note& n, bool link)
 
     if (n.incomingPartialTie()) {
         setTieBack(Factory::copyPartialTie(*toPartialTie(n.m_tieBack)));
-        m_tieBack->setParent(this);
+        m_tieBack->setOwnershipParent(this);
         m_tieBack->setEndNote(this);
         m_tieBack->setTick(tick());
         if (link) {
@@ -800,9 +800,9 @@ Note::Note(const Note& n, bool link)
     setDropTarget(false);
 }
 
-void Note::setParent(Chord* ch)
+void Note::setOwnershipParent(Chord* ch)
 {
-    EngravingItem::setParent(ch);
+    EngravingItem::setOwnershipParent(ch);
 }
 
 //---------------------------------------------------------
@@ -1354,8 +1354,8 @@ void Note::removeSpanner(Spanner* l)
 
 void Note::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
-        e->setParent(this);
+    if (e->ownershipParent() != this) {
+        e->setOwnershipParent(this);
     }
     e->setTrack(track());
 
@@ -1863,13 +1863,13 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
     switch (e->type()) {
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
-        e->setParent(this);
+        e->setOwnershipParent(this);
         score()->undoAddElement(e);
         return e;
 
     case ElementType::FINGERING:
         if (!isTablature || tabFingering) {
-            e->setParent(this);
+            e->setOwnershipParent(this);
             score()->undoAddElement(e);
             return e;
         } else {
@@ -1878,7 +1878,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
         return 0;
 
     case ElementType::LYRICS:
-        e->setParent(ch);
+        e->setOwnershipParent(ch);
         e->setTrack(track());
         score()->undoAddElement(e);
         return e;
@@ -1888,7 +1888,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
         break;
 
     case ElementType::BEND:
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         return e;
@@ -2041,7 +2041,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
         v.flip();
         n->setTpc2(Transpose::transposeTpc(n->tpc1(), v, true));
         // replace this note with new note
-        n->setParent(ch);
+        n->setOwnershipParent(ch);
         if (this->tieBack()) {
             n->setTieBack(this->tieBack());
             n->tieBack()->setEndNote(n);
@@ -2092,7 +2092,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
                 gliss->setGlissandoType(GlissandoType::STRAIGHT);
                 gliss->setShowText(false);
             }
-            gliss->setParent(this);
+            gliss->setOwnershipParent(this);
 
             const Sid styleId = gliss->getPropertyStyle(Pid::GLISS_STYLE);
             if (gliss->isStyled(Pid::GLISS_STYLE) && score()->style().isDefault(styleId)) {
@@ -2146,7 +2146,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
     default:
         Spanner* spanner;
         if (e->isSpanner() && (spanner = toSpanner(e))->anchor() == Spanner::Anchor::NOTE) {
-            spanner->setParent(this);
+            spanner->setOwnershipParent(this);
             spanner->setStartElement(this);
             spanner->setTick(tick());
             spanner->setTrack(track());
@@ -2254,13 +2254,13 @@ void Note::updateAccidental(AccidentalState* as)
         if (acci != AccidentalType::NONE && !m_hidden) {
             if (m_accidental == 0) {
                 Accidental* a = Factory::createAccidental(this);
-                a->setParent(this);
+                a->setOwnershipParent(this);
                 a->setAccidentalType(acci);
                 a->setVisible(visible());
                 score()->undoAddElement(a);
             } else if (m_accidental->accidentalType() != acci) {
                 Accidental* a = m_accidental->clone();
-                a->setParent(this);
+                a->setOwnershipParent(this);
                 a->setAccidentalType(acci);
                 score()->undoChangeElement(m_accidental, a);
             }
@@ -2277,7 +2277,7 @@ void Note::updateAccidental(AccidentalState* as)
                     }
                     if (m_accidental->accidentalType() != acci) {
                         Accidental* a = m_accidental->clone();
-                        a->setParent(this);
+                        a->setOwnershipParent(this);
                         a->setAccidentalType(acci);
                         score()->undoChangeElement(m_accidental, a);
                     }
@@ -2441,7 +2441,7 @@ double Note::mag() const
 //---------------------------------------------------------
 EngravingItem* Note::elementBase() const
 {
-    return parentItem();
+    return chord();
 }
 
 //---------------------------------------------------------

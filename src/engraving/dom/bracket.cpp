@@ -169,7 +169,7 @@ void Bracket::endDragGrip(EditData&)
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {
-        double ay  = parentItem()->pagePos().y();
+        double ay  = layoutParent()->pagePos().y();
         System* s = system();
         double y   = s->staff(staffIdx1)->y() + ay;
         double h1  = staff()->staffHeight();

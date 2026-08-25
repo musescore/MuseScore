@@ -672,7 +672,7 @@ FiguredBass::FiguredBass(const FiguredBass& fb)
     setTicks(fb.ticks());
     for (auto i : fb.m_items) {       // deep copy is needed
         FiguredBassItem* fbi = new FiguredBassItem(*i);
-        fbi->setParent(this);
+        fbi->setOwnershipParent(this);
         m_items.push_back(fbi);
     }
 //      items = fb.items;
@@ -917,7 +917,7 @@ void FiguredBass::addItemToLinked(FiguredBassItem* item)
         Score* linkedScore = linkedObject->score();
         if (linkedObject == this) {
             item->setTrack(track());
-            item->setParent(this);
+            item->setOwnershipParent(this);
             m_items.push_back(item);
             score()->doUndoAddElement(item);
         } else {
@@ -932,7 +932,7 @@ void FiguredBass::addItemToLinked(FiguredBassItem* item)
 
             itemClone->linkTo(item);
             itemClone->setTrack(linkedFb->track());
-            itemClone->setParent(linkedFb);
+            itemClone->setOwnershipParent(linkedFb);
             itemClone->setScore(linkedFb->score());
             linkedFb->appendItem(itemClone);
             linkedScore->doUndoAddElement(itemClone);
@@ -973,7 +973,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
     if (fb == 0) {                            // no FB at segment: create new
         fb = Factory::createFiguredBass(seg);
         fb->setTrack(track);
-        fb->setParent(seg);
+        fb->setOwnershipParent(seg);
 
         // locate next SegChordRest in the same staff to estimate presumed duration of element
         endTick = Fraction::max();

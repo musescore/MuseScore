@@ -107,7 +107,7 @@ EngravingItem* Expression::drop(Transaction& tx, EditData& ed)
         }
 
         item->setTrack(track());
-        item->setParent(segment());
+        item->setOwnershipParent(segment());
         score()->undoAddElement(item);
         item->undoChangeProperty(Pid::PLACEMENT, placement(), PropertyFlags::UNSTYLED);
         return item;

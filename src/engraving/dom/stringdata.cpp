@@ -195,7 +195,7 @@ void StringData::fretChords(Chord* chord) const
     int count = 0;
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         sortChordNotes(sortedNotes, chord, &count);
     } else {
         // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes

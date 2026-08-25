@@ -77,7 +77,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
     DomAccessor& dom = ctx.mutDom();
 
     if (!state.page() || state.pageIdx() >= dom.npages()) {
-        state.setPage(Factory::createPage(dom.rootItem()));
+        state.setPage(Factory::createPage(dom.score()));
         dom.pages().push_back(state.page());
         state.setPrevSystem(nullptr);
         state.setPageOldMeasure(nullptr);

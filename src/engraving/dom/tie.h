@@ -38,7 +38,7 @@ class TieSegment : public SlurTieSegment
     DECLARE_CLASSOF(ElementType::TIE_SEGMENT)
 
 public:
-    TieSegment(System* parent);
+    TieSegment(Tie* sp);
     TieSegment(const TieSegment& s);
 
     TieSegment* clone() const override { return new TieSegment(*this); }
@@ -69,7 +69,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(TieSegment)
 
 protected:
-    TieSegment(const ElementType& type, System* parent);
+    TieSegment(const ElementType& type, Tie* sp);
     void changeAnchor(EditData&, EngravingItem*) override;
 
 private:
@@ -119,7 +119,7 @@ public:
     TieSegment* segmentAt(int n) { return toTieSegment(Spanner::segmentAt(n)); }
     const TieSegment* segmentAt(int n) const { return toTieSegment(Spanner::segmentAt(n)); }
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override { return new TieSegment(parent); }
+    SlurTieSegment* newSlurTieSegment() override { return new TieSegment(this); }
 
     double scalingFactor() const override;
 

@@ -39,13 +39,13 @@ namespace mu::engraving {
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
-TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
-    : LineSegment(type, sp, parent, f)
+TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, TextLineBase* sp, ElementFlags f)
+    : LineSegment(type, sp, f)
 {
     m_text    = Factory::createText(this, TextStyleType::DEFAULT, false);
     m_endText = Factory::createText(this, TextStyleType::DEFAULT, false);
-    m_text->setParent(this);
-    m_endText->setParent(this);
+    m_text->setOwnershipParent(this);
+    m_endText->setOwnershipParent(this);
     m_text->setFlag(ElementFlag::MOVABLE, false);
     m_endText->setFlag(ElementFlag::MOVABLE, false);
 }
@@ -55,8 +55,8 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
 {
     m_text    = seg.m_text->clone();
     m_endText = seg.m_endText->clone();
-    m_text->setParent(this);
-    m_endText->setParent(this);
+    m_text->setOwnershipParent(this);
+    m_endText->setOwnershipParent(this);
     // set the right _text
     renderer()->layoutTextLineBaseSegment(this);
 }

@@ -293,7 +293,7 @@ void Cursor::add(EngravingItem* wrapped)
     wrapped->setOwnership(Ownership::SCORE);
     s->setScore(m_score);
     s->setTrack(m_track);
-    s->setParent(_segment);
+    s->setOwnershipParent(_segment);
 
     if (s->isChordRest()) {
         s->score()->undoAddCR(toChordRest(s), _segment->measure(), _segment->tick());
@@ -302,7 +302,7 @@ void Cursor::add(EngravingItem* wrapped)
     switch (s->type()) {
     case ElementType::KEYSIG: {
         mu::engraving::Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
-        s->setParent(ns);
+        s->setOwnershipParent(ns);
         m_score->undoAddElement(s);
         break;
     }
@@ -331,7 +331,7 @@ void Cursor::add(EngravingItem* wrapped)
     case ElementType::HBOX:
     case ElementType::STAFFTYPE_CHANGE: {
         mu::engraving::Measure* m = _segment->measure();
-        s->setParent(m);
+        s->setOwnershipParent(m);
         m_score->undoAddElement(s);
         break;
     }
@@ -358,7 +358,7 @@ void Cursor::add(EngravingItem* wrapped)
     case ElementType::LYRICS: {
         mu::engraving::EngravingItem* curElement = currentElement();
         if (curElement->isChordRest()) {
-            s->setParent(curElement);
+            s->setOwnershipParent(curElement);
             m_score->undoAddElement(s);
         }
         break;
@@ -368,7 +368,7 @@ void Cursor::add(EngravingItem* wrapped)
     case ElementType::SYMBOL: {
         mu::engraving::EngravingItem* curElement = currentElement();
         if (curElement->isRest()) {
-            s->setParent(curElement);
+            s->setOwnershipParent(curElement);
             m_score->undoAddElement(s);
         }
         [[fallthrough]];
@@ -407,7 +407,7 @@ void Cursor::add(EngravingItem* wrapped)
             }
         }
         mu::engraving::Segment* destSeg = measure->undoGetSegmentR(st, rt);
-        clef->setParent(destSeg);
+        clef->setOwnershipParent(destSeg);
         clef->setTrack(m_track);
         clef->setIsHeader(st == SegmentType::HeaderClef);
         m_score->undoAddElement(clef);
@@ -423,7 +423,7 @@ void Cursor::add(EngravingItem* wrapped)
                 continue;
             }
             parent = m->undoGetSegmentR(SegmentType::Ambitus, mu::engraving::Fraction(0, 1));
-            s->setParent(parent);
+            s->setOwnershipParent(parent);
             s->setTrack(m_track);
             m_score->undoAddElement(s);
             break;
@@ -563,7 +563,7 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
     m_score->changeCRlen(cr, fDuration);
 
     mu::engraving::Tuplet* tuplet = new mu::engraving::Tuplet(tupletMeasure);
-    tuplet->setParent(tupletMeasure);
+    tuplet->setOwnershipParent(tupletMeasure);
     tuplet->setTrack(track());
     tuplet->setTick(tupletTick);
     tuplet->setRatio(fRatio);

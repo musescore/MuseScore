@@ -127,9 +127,9 @@ GradualTempoChange* GradualTempoChange::clone() const
     return new GradualTempoChange(*this);
 }
 
-LineSegment* GradualTempoChange::createLineSegment(System* parent)
+LineSegment* GradualTempoChange::createLineSegment()
 {
-    GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this, parent);
+    GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this);
     lineSegment->setTrack(track());
     return lineSegment;
 }
@@ -356,8 +356,8 @@ Sid GradualTempoChange::defaultPosSid() const
     return placeAbove() ? Sid::tempoChangePosAbove : Sid::tempoChangePosBelow;
 }
 
-GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent)
-    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent,
+GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation)
+    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation,
                           ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoSegmentStyle);

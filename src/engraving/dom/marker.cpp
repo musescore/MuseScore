@@ -227,16 +227,16 @@ String Marker::accessibleInfo() const
 
 std::vector<LineF> Marker::dragAnchorLines() const
 {
-    Measure* measure = parentItem() ? toMeasure(parentItem()) : nullptr;
+    Measure* m = measure();
 
     std::vector<LineF> lines(TextBase::dragAnchorLines());
 
-    if (!measure || !isRightMarker()) {
+    if (!m || !isRightMarker()) {
         return lines;
     }
 
     for (LineF& l : lines) {
-        l.setP1(l.p1() + PointF(measure->width(), 0.0));
+        l.setP1(l.p1() + PointF(m->width(), 0.0));
     }
 
     return lines;

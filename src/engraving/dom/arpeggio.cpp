@@ -411,11 +411,11 @@ EngravingItem* Arpeggio::drop(Transaction&, EditData& data)
     case ElementType::CHORD_BRACKET:
     {
         Arpeggio* a = toArpeggio(e);
-        if (explicitParent()) {
+        if (ownershipParent()) {
             score()->undoRemoveElement(this);
         }
         a->setTrack(track());
-        a->setParent(explicitParent());
+        a->setOwnershipParent(ownershipParent());
         score()->undoAddElement(a);
     }
         return e;

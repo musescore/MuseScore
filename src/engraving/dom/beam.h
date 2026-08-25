@@ -68,7 +68,12 @@ public:
 
     void reset() override;
 
-    System* system() const { return toSystem(explicitParent()); }
+    //! A beam has no owner: its lifetime is managed by the chord/rests it beams,
+    //! which drop it through ChordRest::removeDeleteBeam() once it runs empty.
+    //! The system it is drawn on is that of its first chord/rest.
+    System* system() const;
+    EngravingItem* layoutParent() const override;
+    EngravingItem* accessibleParentItem() const override;
 
     const std::vector<ChordRest*>& elements() const { return m_elements; }
     std::vector<ChordRest*>& elements() { return m_elements; }
@@ -175,7 +180,7 @@ private:
 
     friend class Factory;
     friend class BeamSegment;
-    Beam(System* parent);
+    Beam(Score* parent);
     Beam(const Beam&);
 
     void initBeamEditData(EditData& ed);

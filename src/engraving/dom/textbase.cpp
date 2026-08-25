@@ -2181,8 +2181,8 @@ void TextBase::select(SelectTextType type)
 
 RectF TextBase::pageRectangle() const
 {
-    if (explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox() || explicitParent()->isTBox())) {
-        Box* box = toBox(explicitParent());
+    if (ownershipParent() && (ownershipParent()->isHBox() || ownershipParent()->isVBox() || ownershipParent()->isTBox())) {
+        Box* box = toBox(ownershipParent());
         RectF r = box->pageBoundingRect();
         double x = r.x() + box->leftMargin() * DPMM;
         double y = r.y() + box->topMargin() * DPMM;
@@ -2194,8 +2194,8 @@ RectF TextBase::pageRectangle() const
 
         return RectF(x, y, w, h);
     }
-    if (explicitParent() && explicitParent()->isPage()) {
-        Page* box  = toPage(explicitParent());
+    if (ownershipParent() && ownershipParent()->isPage()) {
+        Page* box  = toPage(ownershipParent());
         RectF r = box->pageBoundingRect();
         double x = r.x() + box->lm();
         double y = r.y() + box->tm();
@@ -2594,7 +2594,7 @@ bool TextBase::isPropertyLinkedToMaster(Pid id) const
 
 bool TextBase::isUnlinkedFromMaster() const
 {
-    EngravingItem* parent = parentItem();
+    EngravingItem* parent = ownershipParentItem();
     if (parent && parent->isUnlinkedFromMaster()) {
         return true;
     }
@@ -2764,7 +2764,7 @@ PropertyValue TextBase::propertyDefault(Pid id) const
     }
 
     if (composition()) {
-        PropertyValue v = explicitParent()->propertyDefault(id);
+        PropertyValue v = ownershipParent()->propertyDefault(id);
         if (v.isValid()) {
             return v;
         }

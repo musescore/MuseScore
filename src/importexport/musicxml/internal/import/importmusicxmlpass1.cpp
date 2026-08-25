@@ -917,7 +917,7 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 
 VBox* MusicXmlParserPass1::createAndAddVBoxForCreditWords(Score* score, Fraction tick)
 {
-    VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
+    VBox* vbox = Factory::createTitleVBox(score);
     vbox->setTick(tick);
     score->measures()->append(vbox);
     return vbox;
@@ -1188,7 +1188,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
         }
 
         // create and add the measure
-        Measure* measure  = Factory::createMeasure(score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(score);
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
         measure->setMeasureNumber(int(i));

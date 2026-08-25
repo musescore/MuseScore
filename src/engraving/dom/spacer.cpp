@@ -168,7 +168,7 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 
 void Spacer::triggerLayout() const
 {
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return;
     }
 

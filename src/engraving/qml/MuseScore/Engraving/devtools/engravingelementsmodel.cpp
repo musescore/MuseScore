@@ -332,8 +332,8 @@ void EngravingElementsModel::click1(QModelIndex index)
     const mu::engraving::EngravingObject* parent = el->parent();
     UNUSED(parent);
 
-    const mu::engraving::EngravingObject* explicitParent = el->explicitParent();
-    UNUSED(explicitParent);
+    const mu::engraving::EngravingObject* ownershipParent = el->ownershipParent();
+    UNUSED(ownershipParent);
 
     size_t children = el->children().size();
     UNUSED(children);

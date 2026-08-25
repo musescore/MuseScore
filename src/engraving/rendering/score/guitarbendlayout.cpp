@@ -59,15 +59,15 @@ void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx, 
     unsigned int segmentsNeeded = system1 == system2 ? 1 : 2;
     size_t segmentCount = item->spannerSegments().size();
     if (segmentCount != segmentsNeeded) {
-        item->fixupSegments(segmentsNeeded, [item](System* parent) { return item->createLineSegment(parent); });
+        item->fixupSegments(segmentsNeeded, [item]() { return item->createLineSegment(); });
     }
 
-    item->frontSegment()->setSystem(system1);
+    item->frontSegment()->moveToSystem(system1);
     if (segmentsNeeded == 1) {
         item->frontSegment()->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     } else {
         item->frontSegment()->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-        item->backSegment()->setSystem(system2);
+        item->backSegment()->moveToSystem(system2);
         item->backSegment()->setSpannerSegmentType(SpannerSegmentType::END);
     }
 
@@ -554,7 +554,7 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
     item->mutldata()->setArrow(arrow);
 
     GuitarBendText* guitarBendText = item->bendText();
-    guitarBendText->setParent(item);
+    guitarBendText->setOwnershipParent(item);
     guitarBendText->setXmlText(bend->ldata()->bendDigit());
     TextLayout::layoutBaseTextBase(toTextBase(guitarBendText), ctx);
     double verticalTextPad = 0.2 * spatium;

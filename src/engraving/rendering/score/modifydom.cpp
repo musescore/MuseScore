@@ -437,7 +437,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                         bool generated = e->generated();
                         EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
                         eClone->setGenerated(generated);
-                        eClone->setParent(mmSeg);
+                        eClone->setOwnershipParent(mmSeg);
                         ctx.mutDom().doUndoAddElement(eClone);
                     }
                 }
@@ -484,7 +484,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                         bool generated = e->generated();
                         EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
                         eClone->setGenerated(generated);
-                        eClone->setParent(mmSeg);
+                        eClone->setOwnershipParent(mmSeg);
                         ctx.mutDom().doUndoAddElement(eClone);
                     }
                 }

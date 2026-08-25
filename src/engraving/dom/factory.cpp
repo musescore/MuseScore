@@ -235,11 +235,11 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::TIE:               return new Tie(parent);
     case ElementType::TUPLET:            return new Tuplet(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::FINGERING:         return new Fingering(parent->isNote() ? toNote(parent) : dummy->note());
-    case ElementType::HBOX:              return new HBox(parent->isSystem() ? toSystem(parent) : dummy->system());
-    case ElementType::VBOX:              return new VBox(parent->isSystem() ? toSystem(parent) : dummy->system());
-    case ElementType::TBOX:              return new TBox(parent->isSystem() ? toSystem(parent) : dummy->system());
-    case ElementType::FBOX:              return new FBox(parent->isSystem() ? toSystem(parent) : dummy->system());
-    case ElementType::MEASURE:           return new Measure(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::HBOX:              return new HBox(parent->score());
+    case ElementType::VBOX:              return new VBox(parent->score());
+    case ElementType::TBOX:              return new TBox(parent->score());
+    case ElementType::FBOX:              return new FBox(parent->score());
+    case ElementType::MEASURE:           return new Measure(parent->score());
     case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::IMAGE:             return new Image(parent);
     case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
@@ -373,8 +373,8 @@ CREATE_ITEM_IMPL(BarLine, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(BarLine)
 MAKE_ITEM_IMPL(BarLine, Segment)
 
-CREATE_ITEM_IMPL(Beam, System, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Beam, System)
+CREATE_ITEM_IMPL(Beam, Score, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Beam, Score)
 
 CREATE_ITEM_IMPL(Bend, Note, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Bend, Note)
@@ -450,7 +450,7 @@ COPY_ITEM_IMPL(Lyrics)
 CREATE_ITEM_IMPL(LyricsLine, EngravingItem, isAccessibleEnabled)
 COPY_ITEM_IMPL(LyricsLine)
 
-CREATE_ITEM_IMPL(Measure, System, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Measure, Score, isAccessibleEnabled)
 COPY_ITEM_IMPL(Measure)
 
 CREATE_ITEM_IMPL(MeasureRepeat, Segment, isAccessibleEnabled)
@@ -477,7 +477,7 @@ COPY_ITEM_IMPL(NoteDot)
 CREATE_ITEM_IMPL(NoteLine, Note, isAccessibleEnabled)
 MAKE_ITEM_IMPL(NoteLine, Note);
 
-CREATE_ITEM_IMPL(Page, RootItem, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Page, Score, isAccessibleEnabled)
 
 PageLockIndicator* Factory::createPageLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
 {
@@ -570,7 +570,7 @@ COPY_ITEM_IMPL(Stem)
 CREATE_ITEM_IMPL(StemSlash, Chord, isAccessibleEnabled)
 COPY_ITEM_IMPL(StemSlash)
 
-CREATE_ITEM_IMPL(System, Page, isAccessibleEnabled)
+CREATE_ITEM_IMPL(System, Score, isAccessibleEnabled)
 
 SystemText* Factory::createSystemText(Segment * parent, TextStyleType textStyleType, ElementType type, bool isAccessibleEnabled)
 {
@@ -711,9 +711,9 @@ CREATE_ITEM_IMPL(Dynamic, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(MMRest, Segment, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(VBox, System, isAccessibleEnabled)
+CREATE_ITEM_IMPL(VBox, Score, isAccessibleEnabled)
 
-VBox* Factory::createTitleVBox(System * parent, bool isAccessibleEnabled)
+VBox* Factory::createTitleVBox(Score * parent, bool isAccessibleEnabled)
 {
     VBox* b = new VBox(parent);
     b->setAccessibleEnabled(isAccessibleEnabled);
@@ -723,16 +723,16 @@ VBox* Factory::createTitleVBox(System * parent, bool isAccessibleEnabled)
     return b;
 }
 
-CREATE_ITEM_IMPL(HBox, System, isAccessibleEnabled)
+CREATE_ITEM_IMPL(HBox, Score, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(TBox, System, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TBox, Score, isAccessibleEnabled)
 
-CREATE_ITEM_IMPL(FBox, System, isAccessibleEnabled)
+CREATE_ITEM_IMPL(FBox, Score, isAccessibleEnabled)
 
 Image* Factory::createImage(EngravingItem * parent)
 {
     Image* image = new Image(parent);
-    image->setParent(parent);
+    image->setOwnershipParent(parent);
 
     return image;
 }

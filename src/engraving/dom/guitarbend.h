@@ -65,7 +65,7 @@ public:
 
     GuitarBend* clone() const override { return new GuitarBend(*this); }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     Anchor anchor() const override { return Anchor::NOTE; }
 
@@ -180,7 +180,7 @@ class GuitarBendSegment final : public LineSegment
     DECLARE_CLASSOF(ElementType::GUITAR_BEND_SEGMENT)
 
 public:
-    GuitarBendSegment(GuitarBend* sp, System* parent);
+    GuitarBendSegment(GuitarBend* sp);
     GuitarBendSegment(const GuitarBendSegment&);
     ~GuitarBendSegment() override;
 
@@ -258,7 +258,7 @@ public:
 
     Anchor anchor() const override { return Anchor::NOTE; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     PropertyValue propertyDefault(Pid id) const override;
 
@@ -267,7 +267,7 @@ public:
     Note* startNote() const;
     Note* endNote() const;
 
-    GuitarBend* guitarBend() const { return toGuitarBend(explicitParent()); }
+    GuitarBend* guitarBend() const { return toGuitarBend(ownershipParent()); }
 
     double lineWidth() const;
 
@@ -281,7 +281,7 @@ class GuitarBendHoldSegment final : public LineSegment
     DECLARE_CLASSOF(ElementType::GUITAR_BEND_HOLD_SEGMENT)
 
 public:
-    GuitarBendHoldSegment(GuitarBendHold* sp, System* parent);
+    GuitarBendHoldSegment(GuitarBendHold* sp);
 
     GuitarBendHold* guitarBendHold() const { return toGuitarBendHold(spanner()); }
 

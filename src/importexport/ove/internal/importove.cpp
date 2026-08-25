@@ -329,7 +329,7 @@ void OveToMScore::createStructure()
     }
 
     for (i = 0; i < m_ove->getMeasureCount(); ++i) {
-        Measure* measure  = Factory::createMeasure(m_score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(m_score);
         int tick = m_mtt->getTick(i, 0);
         measure->setTick(Fraction::fromTicks(tick));
         measure->setMeasureNumber(i);
@@ -363,7 +363,7 @@ void addText(VBox*& vbox, Score* s, QString strTxt, TextStyleType stl)
 {
     if (!strTxt.isEmpty()) {
         if (vbox == 0) {
-            vbox = Factory::createVBox(s->dummy()->system());
+            vbox = Factory::createVBox(s);
         }
         Text* text = Factory::createText(vbox, stl);
         text->setPlainText(strTxt);
@@ -1772,7 +1772,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                     tuplet->setBaseLen(duration);
                     tuplet->setTick(Fraction::fromTicks(tick));
-                    tuplet->setParent(measure);
+                    tuplet->setOwnershipParent(measure);
                     // measure->add(tuplet);
                 }
             }

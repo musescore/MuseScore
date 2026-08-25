@@ -71,7 +71,7 @@ static void addText(mu::engraving::VBox*& vbx, mu::engraving::Score* s, QString 
 {
     if (!strTxt.isEmpty()) {
         if (vbx == 0) {
-            vbx = new mu::engraving::VBox(s->dummy()->system());
+            vbx = new mu::engraving::VBox(s);
         }
         mu::engraving::Text* text = Factory::createText(vbx, stl);
         text->setPlainText(strTxt);
@@ -212,7 +212,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     ++measureNumber;
 
     // create a new measure
-    currentMeasure  = Factory::createMeasure(score->dummy()->system());
+    currentMeasure  = Factory::createMeasure(score);
     currentMeasure->setTick(tick);
     currentMeasure->setTimesig(mu::engraving::Fraction(beats, beat));
     currentMeasure->setMeasureNumber(measureNumber);

@@ -166,7 +166,7 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
 
     GuitarBendText* bendText = item->bendText();
     if (item->isSingleEndType()) {
-        bendText->setParent(item);
+        bendText->setOwnershipParent(item);
         bendText->setXmlText(bend->ldata()->bendDigit());
         TextLayout::layoutBaseTextBase(bendText, ctx);
         double verticalTextPad = 0.35 * item->spatium();
@@ -461,7 +461,7 @@ void GuitarDiveLayout::layoutDip(GuitarBendSegment* item, LayoutContext& ctx)
     item->mutldata()->setBbox(bbox);
 
     GuitarBendText* bendText = item->bendText();
-    bendText->setParent(item);
+    bendText->setOwnershipParent(item);
     bendText->setXmlText(bend->ldata()->bendDigit());
     TextLayout::layoutBaseTextBase(bendText, ctx);
     double verticalTextPad = 0.35 * item->spatium();

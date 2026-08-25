@@ -742,7 +742,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
     const auto handleTuplet = [&](Tuplet* tuplet) {
         tuplet->clear();
         tuplet->setTrack(track);
-        tuplet->setParent(nm);
+        tuplet->setOwnershipParent(nm);
         tuplet->styleChanged();
         tuplet->scanElements([&](EngravingItem* newElement) { updateSpatium(ot, newElement); });
     };
@@ -891,23 +891,23 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     MeasureBase* nmb = nullptr;
 
     if (mb->isHBox()) {
-        nmb = Factory::createHBox(score->dummy()->system());
+        nmb = Factory::createHBox(score);
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
     } else if (mb->isVBox()) {
         if (toBox(mb)->isTitleFrame()) {
-            nmb = Factory::createTitleVBox(score->dummy()->system());
+            nmb = Factory::createTitleVBox(score);
         } else {
-            nmb = Factory::createVBox(score->dummy()->system());
+            nmb = Factory::createVBox(score);
         }
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
     } else if (mb->isFBox()) {
-        nmb = Factory::createFBox(score->dummy()->system());
+        nmb = Factory::createFBox(score);
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
     } else if (mb->isTBox()) {
-        nmb = Factory::createTBox(score->dummy()->system());
+        nmb = Factory::createTBox(score);
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
         Text* text = toTBox(mb)->text();
@@ -916,7 +916,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         nmb->add(ne);
     } else if (mb->isMeasure()) {
         const Measure* m  = toMeasure(mb);
-        Measure* nm = Factory::createMeasure(score->dummy()->system());
+        Measure* nm = Factory::createMeasure(score);
         nmb = nm;
         nm->setTick(m->tick());
         nm->setTicks(m->ticks());
@@ -1019,7 +1019,6 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 Beam* nb = ocr->beam()->clone();
                                 nb->clear();
                                 nb->setTrack(track);
-                                nb->setParent(nm->system());
                                 nb->setScore(score);
                                 nb->add(ncr);
                                 ncr->setBeam(nb);
@@ -1191,7 +1190,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
                 if (MeasureBase* prevMB = measures->last()) {
                     EngravingItem* newSectionBreak = sectionBreak->linkedClone();
                     newSectionBreak->setScore(dstScore);
-                    newSectionBreak->setParent(prevMB);
+                    newSectionBreak->setOwnershipParent(prevMB);
                     dstScore->doUndoAddElement(newSectionBreak);
                 }
             }
@@ -1334,7 +1333,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                 }
                 if (ne) {
                     ne->setTrack(dstTrack);
-                    ne->setParent(seg);
+                    ne->setOwnershipParent(seg);
                     ne->setScore(score);
                     if (ne->isChordRest()) {
                         ChordRest* ncr = toChordRest(ne);
@@ -1403,7 +1402,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             // be created and linked on each staff.
                             EngravingItem* ne1 = e->linkedClone();
                             ne1->setTrack(dstTrack);
-                            ne1->setParent(seg);
+                            ne1->setOwnershipParent(seg);
                             ne1->setScore(score);
                             score->doUndoAddElement(ne1);
                             continue;
@@ -1411,7 +1410,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         default:
                             EngravingItem* ne1 = e->clone();
                             ne1->setTrack(dstTrack);
-                            ne1->setParent(seg);
+                            ne1->setOwnershipParent(seg);
                             ne1->setScore(score);
                             score->undoAddElement(ne1);
                         }
@@ -1586,7 +1585,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 continue;
             }
             EngravingItem* newEl = oldEl->linkedClone();
-            newEl->setParent(nm);
+            newEl->setOwnershipParent(nm);
             newEl->setStaffIdx(oldEl->systemFlag() ? 0 : dstStaffIdx);
             newEl->setScore(score);
             newEl->styleChanged();
@@ -1603,7 +1602,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     if (!firstVoiceVisible) {
                         EngravingItem* ne = oef->linkedClone();
                         ne->setTrack(trackZeroVoice(dstTrack));
-                        ne->setParent(ns);
+                        ne->setOwnershipParent(ns);
                         ne->setScore(score);
                         ne->styleChanged();
                         ne->scanElements([&](EngravingItem* newElement) { updateSpatium(oef, newElement); });
@@ -1629,7 +1628,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                     EngravingItem* ne1 = e->linkedClone();
                     ne1->setTrack(dstTrack);
-                    ne1->setParent(ns);
+                    ne1->setOwnershipParent(ns);
                     ne1->setScore(score);
                     ne1->styleChanged();
                     addElement(ne1);
@@ -1647,7 +1646,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 oe->setGenerated(false);
                 EngravingItem* ne = oe->linkedClone();
                 ne->setTrack(dstTrack);
-                ne->setParent(ns);
+                ne->setOwnershipParent(ns);
                 ne->setScore(score);
                 ne->styleChanged();
                 ne->scanElements([&](EngravingItem* newElement) { updateSpatium(oe, newElement); });
@@ -1682,7 +1681,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     if (bendBack && newStartNote) {
                         GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
                         newBend->setScore(score);
-                        newBend->setParent(newStartNote);
+                        newBend->setOwnershipParent(newStartNote);
                         newBend->setTrack(newStartNote->track());
                         newBend->setTrack2(nn->track());
                         newBend->setStartElement(newStartNote);
@@ -1695,7 +1694,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         // Because slight bends aren't detected as "bendBack"
                         GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
                         newBend->setScore(score);
-                        newBend->setParent(nn);
+                        newBend->setOwnershipParent(nn);
                         newBend->setTrack(nn->track());
                         newBend->setTrack2(nn->track());
                         newBend->setStartElement(nn);

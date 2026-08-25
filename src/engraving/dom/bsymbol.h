@@ -39,7 +39,7 @@ class BSymbol : public EngravingItem
     OBJECT_ALLOCATOR(engraving, BSymbol)
 public:
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 

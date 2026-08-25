@@ -50,7 +50,7 @@ public:
     RectF drag(EditData&) override;
 
     Segment* segment() const override { return nullptr; }
-    System* system() const { return (System*)explicitParent(); }
+    System* system() const { return (System*)ownershipParent(); }
 
     PropertyValue propertyDefault(Pid id) const override;
 

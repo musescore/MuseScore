@@ -42,7 +42,7 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     GradualTempoChangeType tempoChangeType() const;
     ChangeMethod easingMethod() const;
@@ -84,7 +84,7 @@ class GradualTempoChangeSegment : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT)
 
 public:
-    GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent);
+    GradualTempoChangeSegment(GradualTempoChange* annotation);
 
     GradualTempoChangeSegment* clone() const override;
 

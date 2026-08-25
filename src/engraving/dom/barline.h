@@ -86,7 +86,7 @@ public:
 
     BarLine& operator=(const BarLine&) = delete;
 
-    void setParent(Segment* parent);
+    void setOwnershipParent(Segment* parent);
 
     BarLine* clone() const override { return new BarLine(*this); }
     PointF canvasPos() const override;      ///< position in canvas coordinates
@@ -100,8 +100,8 @@ public:
     EngravingItem* drop(Transaction& tx, EditData&) override;
     bool isEditable() const override { return true; }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
-    Measure* measure() const { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : nullptr; }
+    Segment* segment() const { return toSegment(ownershipParent()); }
+    Measure* measure() const { return ownershipParent() ? toMeasure(ownershipParent()->ownershipParent()) : nullptr; }
 
     void setSpanStaff(const bool val) { m_spanStaff = val; }
     void setSpanFrom(int val) { m_spanFrom = val; }

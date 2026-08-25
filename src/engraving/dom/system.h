@@ -104,8 +104,6 @@ class System final : public EngravingItem
 public:
     ~System();
 
-    void moveToPage(Page* parent);
-
     System* clone() const override { return new System(*this); }
 
     void add(EngravingItem*) override;
@@ -113,12 +111,21 @@ public:
     void change(EngravingItem* o, EngravingItem* n) override;
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
+    EngravingItemList accessibleChildren() const override;
 
     void appendMeasure(MeasureBase*);
     void removeMeasure(MeasureBase*);
     void removeLastMeasure();
 
-    Page* page() const { return (Page*)explicitParent(); }
+    //! The page this system is currently laid out on; null if not placed.
+    Page* page() const { return m_page; }
+    void setPage(Page* p) { m_page = p; }
+    EngravingItem* layoutParent() const override;
+
+    //! A system is owned by its score; a page merely places it, see setPage().
+    //! This overload hides EngravingItem::setOwnershipParent, so that no other
+    //! parent can be set by accident.
+    void setOwnershipParent(Score* score);
 
     void clear(); ///< Clear measure list.
 
@@ -268,12 +275,14 @@ public:
 private:
     friend class Factory;
 
-    System(Page* parent);
+    System(Score* parent);
 
     staff_idx_t firstVisibleSysStaff() const;
     staff_idx_t lastVisibleSysStaff() const;
 
     staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
+
+    Page* m_page = nullptr;   // current layout placement; not owned, not copied
 
     SystemDivider* m_systemDividerLeft = nullptr;       // to the next system
     SystemDivider* m_systemDividerRight = nullptr;

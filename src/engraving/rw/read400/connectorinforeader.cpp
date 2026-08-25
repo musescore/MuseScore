@@ -378,13 +378,13 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                     n = n->tieFor()->endNote();
                 }
                 Tie* tie = toTie(sp);
-                tie->setParent(n);
+                tie->setOwnershipParent(n);
                 tie->setStartNote(n);
                 n->setTieFor(tie);
             } else {
                 sp->setStartElement(item);
                 item->addSpannerFor(sp);
-                sp->setParent(item);
+                sp->setOwnershipParent(item);
             }
         } else if (info->isEnd()) {
             sp->setTrack2(l.track());
@@ -394,8 +394,8 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 item->setTieBack(toTie(sp));
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-                if ((sp->isGlissando() || isNoteAnchoredTextLine) && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);
+                if ((sp->isGlissando() || isNoteAnchoredTextLine) && item->ownershipParent() && item->ownershipParent()->isChord()) {
+                    toChord(item->ownershipParent())->setEndsNoteAnchoredLine(true);
                 }
                 item->addSpannerBack(sp);
             }

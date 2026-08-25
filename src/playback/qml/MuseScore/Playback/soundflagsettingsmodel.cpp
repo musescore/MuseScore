@@ -372,7 +372,7 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
 
 bool SoundFlagSettingsModel::updateStaffText()
 {
-    EngravingItem* parent = m_item->parentItem();
+    EngravingObject* parent = m_item->ownershipParent();
     if (!parent || !parent->isStaffText()) {
         return false;
     }

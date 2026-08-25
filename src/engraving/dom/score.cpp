@@ -1067,7 +1067,7 @@ void Score::styleChanged()
 
 void Score::addElement(EngravingItem* element)
 {
-    EngravingItem* parent = element->parentItem();
+    EngravingItem* parent = element->ownershipParentItem();
     element->triggerLayout();
 
 //      LOGD("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
@@ -1083,6 +1083,10 @@ void Score::addElement(EngravingItem* element)
         measures()->add(toMeasureBase(element));
         element->triggerLayout();
         return;
+    }
+
+    if (et == ElementType::BEAM) {            // a beam is not attached to its system
+        parent = nullptr;
     }
 
     if (parent) {
@@ -1221,7 +1225,7 @@ void Score::doUndoAddElement(EngravingItem* element)
 
 void Score::removeElement(EngravingItem* element)
 {
-    EngravingItem* parent = element->parentItem();
+    EngravingItem* parent = element->ownershipParentItem();
     element->triggerLayout();
 
     // special for MEASURE, HBOX, VBOX
@@ -1256,6 +1260,7 @@ void Score::removeElement(EngravingItem* element)
             Page* page = system->page();
             if (page) {
                 muse::remove(page->systems(), system);
+                system->setPage(nullptr);
             }
 
             muse::remove(m_systems, system);
@@ -1282,9 +1287,8 @@ void Score::removeElement(EngravingItem* element)
         return;
     }
 
-    if (et == ElementType::BEAM) {            // beam parent does not survive layout
-        element->resetExplicitParent();
-        parent = 0;
+    if (et == ElementType::BEAM) {            // a beam is not attached to its system
+        parent = nullptr;
     }
 
     if (parent) {
@@ -1878,7 +1882,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         Spanner* ns = toSpanner(spanner->clone());
         ns->setScore(this);
-        ns->resetExplicitParent();
+        ns->moveToDummy();
         ns->setTick(spanner->tick() - startTick + tickOfAppend);
         ns->setTick2(spanner->tick2() - startTick + tickOfAppend);
         ns->computeStartElement();
@@ -1913,7 +1917,7 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     Clef* clef = Factory::createClef(seg);
     clef->setClefType(ClefType::F);
     clef->setTrack((staffIdx + 1) * VOICES);
-    clef->setParent(seg);
+    clef->setOwnershipParent(seg);
     clef->setIsHeader(true);
     undoAddElement(clef);
 
@@ -2330,7 +2334,7 @@ void Score::adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km)
 
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             KeySig* keysig = Factory::createKeySig(s);
-            keysig->setParent(s);
+            keysig->setOwnershipParent(s);
             keysig->setTrack(staffIdx * VOICES);
             keysig->setKeySigEvent(key);
             doUndoAddElement(keysig);
@@ -2743,7 +2747,7 @@ void Score::selectSingle(EngravingItem* e, staff_idx_t staffIdx)
         m_is.setTrack(e->track());
         selState = SelState::LIST;
         if (e->isNote()) {
-            e = e->parentItem();
+            e = toNote(e)->chord();
         }
         if (e->isChordRest()) {
             m_is.setLastSegment(m_is.segment());
@@ -2825,7 +2829,7 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
     ChordRest* cr = nullptr;
 
     if (e->isNote()) {
-        cr = toChordRest(e->parentItem());
+        cr = toNote(e)->chord();
     } else if (e->isChordRest()) {
         cr = toChordRest(e);
     } else if (EngravingItem* c = e->findAncestor(ElementType::CHORD)) {
@@ -2935,7 +2939,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
             deselectAll();
         }
 
-        ChordRest* cr = e->isNote() ? toChordRest(e->parentItem()) : toChordRest(e);
+        ChordRest* cr = e->isNote() ? static_cast<ChordRest*>(toNote(e)->chord()) : toChordRest(e);
 
         SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
         m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
@@ -3108,7 +3112,7 @@ void Score::collectMatch(ElementPattern* p, EngravingItem* e)
                 }
                 break;
             }
-            ee = ee->parentItem();
+            ee = ee->layoutParent();
         } while (ee);
     }
 
@@ -3476,7 +3480,7 @@ void Score::lassoSelectEnd()
         }
         ++noteRestCount;
         if (e->isNote()) {
-            e = e->parentItem();
+            e = toNote(e)->chord();
         }
         Segment* seg = toChordRest(e)->segment();
         if ((startSegment == 0) || (*seg < *startSegment)) {
@@ -4778,7 +4782,7 @@ void Score::connectTies(bool silent)
                         spanner->setTick2(n->chord()->tick());
                         spanner->setTrack(n->track());
                         spanner->setTrack2(n->track());
-                        spanner->setParent(initialNote);
+                        spanner->setOwnershipParent(initialNote);
                         initialNote->add(spanner);
                     } else {
                         delete spanner;

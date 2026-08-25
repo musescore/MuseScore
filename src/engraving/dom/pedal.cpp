@@ -82,8 +82,8 @@ static const ElementStyle pedalStyle {
 const String Pedal::PEDAL_SYMBOL = u"<sym>keyboardPedalPed</sym>";
 const String Pedal::STAR_SYMBOL = u"<sym>keyboardPedalUp</sym>";
 
-PedalSegment::PedalSegment(Pedal* sp, System* parent)
-    : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+PedalSegment::PedalSegment(Pedal* sp)
+    : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -132,9 +132,9 @@ static const ElementStyle pedalSegmentStyle {
     { Sid::pedalMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Pedal::createLineSegment(System* parent)
+LineSegment* Pedal::createLineSegment()
 {
-    PedalSegment* p = new PedalSegment(this, parent);
+    PedalSegment* p = new PedalSegment(this);
     p->setTrack(track());
     p->initElementStyle(&pedalSegmentStyle);
     return p;

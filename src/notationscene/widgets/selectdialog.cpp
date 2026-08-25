@@ -155,7 +155,7 @@ mu::engraving::System* SelectDialog::elementSystem(const EngravingItem* element)
         if (_element->isSystem()) {
             return toSystem(_element);
         }
-        _element = _element->parentItem();
+        _element = _element->layoutParent();
     } while (element);
 
     return nullptr;

@@ -352,12 +352,12 @@ void ChangeElement::flip()
         }
     }
 
-    if (oldElement->explicitParent() == nullptr) {
+    if (oldElement->ownershipParent() == nullptr) {
         newElement->setScore(score);
         score->removeElement(oldElement);
         score->addElement(newElement);
     } else {
-        oldElement->parentItem()->change(oldElement, newElement);
+        oldElement->ownershipParentItem()->change(oldElement, newElement);
     }
 
     if (newElement->isKeySig()) {
@@ -389,10 +389,10 @@ void ChangeElement::flip()
 
 void ChangeParent::flip()
 {
-    EngravingItem* p = element->parentItem();
+    EngravingItem* p = element->ownershipParentItem();
     staff_idx_t si = element->staffIdx();
     p->remove(element);
-    element->setParent(parent);
+    element->setOwnershipParent(parent);
     element->setTrack(staffIdx * VOICES + element->voice());
     parent->add(element);
     staffIdx = si;
@@ -475,7 +475,7 @@ void ChangeSegmentParent::flip()
     Measure* p = segment->measure();
     Fraction oldTick = segment->rtick();
     p->remove(segment);
-    segment->setParent(parent);
+    segment->setOwnershipParent(parent);
     segment->setRtick(tick);
     parent->add(segment);
 

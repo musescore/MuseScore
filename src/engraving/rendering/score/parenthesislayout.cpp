@@ -171,8 +171,8 @@ bool ParenthesisLayout::isInternalParenPadding(const EngravingItem* item1, const
 {
     const Chord* chord1 = toChord(item1->findAncestor(ElementType::CHORD));
     const Chord* chord2 = toChord(item2->findAncestor(ElementType::CHORD));
-    const EngravingItem* parent1 = item1->parentItem();
-    const EngravingItem* parent2 = item2->parentItem();
+    const EngravingObject* parent1 = item1->ownershipParent();
+    const EngravingObject* parent2 = item2->ownershipParent();
 
     bool internalPadding = (item1->isParenthesis() && parent1 == item2)
                            || (item2->isParenthesis() && parent2 == item1)
@@ -184,7 +184,7 @@ bool ParenthesisLayout::isInternalParenPadding(const EngravingItem* item1, const
 
 double ParenthesisLayout::computeExternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2)
 {
-    EngravingItem* parent = item1->isParenthesis() ? item1->parentItem() : item2->parentItem();
+    EngravingItem* parent = item1->isParenthesis() ? item1->ownershipParentItem() : item2->ownershipParentItem();
 
     ElementType type1 = item1->type();
     ElementType type2 = item2->type();
@@ -346,7 +346,7 @@ void ParenthesisLayout::createSmuflShape(Parenthesis* item, Parenthesis::LayoutD
 
 void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
-    if (!item->parentItem()) {
+    if (!item->ownershipParent()) {
         return;
     }
 
@@ -356,7 +356,7 @@ void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutDa
     ldata->symId.reset();
 
     // Set ldata values based on parent
-    switch (item->parentItem()->type()) {
+    switch (item->ownershipParent()->type()) {
     case ElementType::CHORD:
         setChordValues(item, ldata);
         break;
@@ -381,7 +381,7 @@ void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutDa
 
 void ParenthesisLayout::setClefValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
 {
-    const EngravingItem* parent = item->parentItem();
+    const EngravingItem* parent = item->ownershipParentItem();
     const Fraction tick = parent->tick();
     const Measure* measure = item->findMeasure();
 
@@ -404,7 +404,7 @@ void ParenthesisLayout::setClefValues(Parenthesis* item, Parenthesis::LayoutData
 
 void ParenthesisLayout::setTimeSigValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
-    const TimeSig* parentTs = toTimeSig(item->parentItem());
+    const TimeSig* parentTs = toTimeSig(item->ownershipParent());
     if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::NORMAL) {
         return;
     }
@@ -415,7 +415,7 @@ void ParenthesisLayout::setTimeSigValues(Parenthesis* item, Parenthesis::LayoutD
 
 void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
 {
-    Chord* chord = toChord(item->parentItem());
+    Chord* chord = toChord(item->ownershipParent());
 
     ldata->setMag(chord->mag());
     ldata->intrinsicMag = chord->intrinsicMag();    // Scaling information not linked to staff size. item->spatium is NOT scaled by this
@@ -477,7 +477,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
 void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
     const double spatium = item->spatium();
-    Harmony* parent = toHarmony(item->parentItem());
+    Harmony* parent = toHarmony(item->ownershipParent());
     RectF bbox = parent->ldata()->bbox();
 
     double endPointThickness = 0.03;
@@ -531,10 +531,10 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
 void ParenthesisLayout::setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
 {
     const double spatium = item->spatium();
-    EngravingItem* parent = item->parentItem();
+    EngravingItem* parent = item->layoutParent();
     RectF bbox = parent->ldata()->bbox();
 
-    ldata->setMag(item->parentItem()->mag());
+    ldata->setMag(parent->mag());
     ldata->startY = bbox.top() - 0.25 * spatium;
     ldata->height = bbox.height() + 0.5 * spatium;
     ldata->midPointThickness.set_value(ldata->height / 60 * ldata->mag());  // 0.1sp for a height of 6sp

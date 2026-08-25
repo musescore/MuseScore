@@ -182,7 +182,7 @@ void EngravingObject::moveToDummy()
     Score* sc = score();
     if (sc) {
         if (sc->dummy() && sc->dummy() != this) {
-            setParent(sc->dummy());
+            setOwnershipParent(sc->dummy());
         }
     }
 }
@@ -216,7 +216,7 @@ void EngravingObject::setScore(Score* s)
     if (m_parent->isType(ElementType::DUMMY)) {
         moveToDummy();
     } else if (m_parent->isType(ElementType::SCORE)) {
-        setParent(s);
+        setOwnershipParent(s);
     }
 }
 
@@ -243,7 +243,7 @@ EngravingObject* EngravingObject::parent() const
     return m_parent;
 }
 
-EngravingObject* EngravingObject::explicitParent() const
+EngravingObject* EngravingObject::ownershipParent() const
 {
     if (!m_isParentExplicitlySet) {
         return nullptr;
@@ -251,12 +251,7 @@ EngravingObject* EngravingObject::explicitParent() const
     return m_parent;
 }
 
-void EngravingObject::setParent(EngravingObject* p)
-{
-    setParentInternal(p);
-}
-
-void EngravingObject::setParentInternal(EngravingObject* p)
+void EngravingObject::setOwnershipParent(EngravingObject* p)
 {
     IF_ASSERT_FAILED(this != p) {
         return;
@@ -272,16 +267,7 @@ void EngravingObject::setParentInternal(EngravingObject* p)
         doSetScore(m_parent->score());
     }
 
-    if (p && !p->isType(ElementType::DUMMY)) {
-        m_isParentExplicitlySet = true;
-    } else {
-        m_isParentExplicitlySet = false;
-    }
-}
-
-void EngravingObject::resetExplicitParent()
-{
-    m_isParentExplicitlySet = false;
+    m_isParentExplicitlySet = p && !p->isType(ElementType::DUMMY);
 }
 
 Score* EngravingObject::score() const

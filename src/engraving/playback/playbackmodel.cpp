@@ -1104,7 +1104,7 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChanges& 
             applyTieTickBoundaries(toTie(item), result);
         }
 
-        const EngravingItem* parent = item->parentItem();
+        const EngravingObject* parent = item->ownershipParent();
         if (!parent) {
             continue;
         }

@@ -211,7 +211,7 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
     items << makeSeparator();
 
     if (element) {
-        engraving::EngravingObject* parent = element->isHarmony() ? element->explicitParent() : nullptr;
+        engraving::EngravingObject* parent = element->isHarmony() ? element->ownershipParent() : nullptr;
         bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
         if (!hasLinkedFretboardDiagram) {
             items << makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND);
@@ -419,7 +419,7 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
 MenuItemList NotationContextMenuModel::makeTextItems()
 {
     const EngravingItem* element = currentElement();
-    if (!(element->parentItem() && element->parentItem()->isBarLine())) {
+    if (!(element->ownershipParent() && element->ownershipParent()->isBarLine())) {
         // Regular text
         return makeElementItems();
     }

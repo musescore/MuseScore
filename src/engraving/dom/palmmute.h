@@ -38,7 +38,7 @@ class PalmMuteSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::PALM_MUTE_SEGMENT)
 
 public:
-    PalmMuteSegment(PalmMute* sp, System* parent);
+    PalmMuteSegment(PalmMute* sp);
 
     PalmMuteSegment* clone() const override { return new PalmMuteSegment(*this); }
 
@@ -63,7 +63,7 @@ public:
 
 //      virtual void write(XmlWriter& xml) const override;
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
     void setChannel();

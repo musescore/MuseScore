@@ -87,7 +87,7 @@ class OttavaSegment final : public TextLineBaseSegment
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
 public:
-    OttavaSegment(Ottava* sp, System* parent);
+    OttavaSegment(Ottava* sp);
 
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }
     Ottava* ottava() const { return (Ottava*)spanner(); }
@@ -129,7 +129,7 @@ public:
 
     void setPlacement(PlacementV);
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
     int pitchShift() const;
 
     PropertyValue getProperty(Pid propertyId) const override;

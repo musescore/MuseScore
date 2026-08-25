@@ -1745,7 +1745,7 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
         return KerningType::KERN_UNTIL_RIGHT_EDGE;
     }
 
-    EngravingItem* nextParent = item2->parentItem(true);
+    EngravingObject* nextParent = item2->ownershipParent();
     if (nextParent && nextParent->isNote() && toNote(nextParent)->isTrillCueNote()) {
         return KerningType::NON_KERNING;
     }
@@ -1780,16 +1780,16 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
 
 KerningType HorizontalSpacing::computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2)
 {
-    if (!stemSlash->chord() || !stemSlash->chord()->beam() || !item2->parentItem()) {
+    if (!stemSlash->chord() || !stemSlash->chord()->beam() || !item2->ownershipParent()) {
         return KerningType::KERNING;
     }
 
-    EngravingItem* nextParent = item2->parentItem();
+    EngravingObject* nextParent = item2->ownershipParent();
     Chord* nextChord = nullptr;
     if (nextParent->isChord()) {
         nextChord = toChord(nextParent);
     } else if (nextParent->isNote()) {
-        nextChord = toChord(nextParent->parentItem());
+        nextChord = toChord(nextParent->ownershipParent());
     }
     if (!nextChord) {
         return KerningType::KERNING;
