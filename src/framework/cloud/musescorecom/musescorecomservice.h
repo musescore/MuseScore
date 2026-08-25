@@ -35,7 +35,7 @@
 #include "musescorecom/imusescorecomservice.h"
 
 namespace muse::cloud {
-class MuseScoreComService : public IMuseScoreComService, public IMuseScoreComImportService, public AbstractCloudService,
+class MuseScoreComService : public IMuseScoreComService, public IMuseScoreComConvertService, public AbstractCloudService,
     public std::enable_shared_from_this<MuseScoreComService>
 {
     GlobalInject<ICloudConfiguration> configuration;
@@ -47,7 +47,7 @@ public:
 
     IAuthorizationServicePtr authorization() override;
 
-    IMuseScoreComImportServicePtr import() override;
+    IMuseScoreComConvertServicePtr convert() override;
 
     CloudInfo cloudInfo() const override;
 
@@ -65,16 +65,16 @@ public:
     ProgressPtr downloadScore(int scoreId, DevicePtr scoreData, const QString& hash = QString(),
                               const QString& secret = QString()) override;
 
-    // IMuseScoreComImportService
-    async::Promise<RetVal<ImportConfig> > fetchImportConfig() override;
+    // IMuseScoreComConvertService
+    async::Promise<RetVal<ConvertConfig> > fetchConfig() override;
 
-    ProgressPtr uploadImport(ImportType type, const ImportFileList& files) override;
-    ProgressPtr downloadImportedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData) override;
+    ProgressPtr upload(ConvertType type, const ConvertFileList& files) override;
+    ProgressPtr downloadConvertedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData) override;
 
-    async::Promise<RetVal<ImportQueueList> > fetchImportQueue() override;
-    async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ImportType type, int id) override;
+    async::Promise<RetVal<ConvertQueueList> > fetchQueue() override;
+    async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ConvertType type, int id) override;
 
-    async::Promise<RetVal<ImportResult> > submitOmrReview(int id, OmrReviewRating review, const QString& reason = QString()) override;
+    async::Promise<RetVal<ConvertResult> > submitOmrReview(int id, OmrReviewRating review, const QString& reason = QString()) override;
 
 private:
     ServerConfig serverConfig() const override;
@@ -83,7 +83,7 @@ private:
     async::Promise<Ret> updateTokens() override;
 
     network::RequestHeaders headers() const;
-    network::RequestHeaders importHeaders() const;
+    network::RequestHeaders convertHeaders() const;
 
     void doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished);
 
@@ -96,8 +96,8 @@ private:
 
     async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
 
-    async::Promise<Ret> doUploadImport(ImportType type, const ImportFileList& files, ProgressPtr progress);
+    async::Promise<Ret> doUpload(ConvertType type, const ConvertFileList& files, ProgressPtr progress);
 
-    std::optional<ImportConfig> m_cachedImportConfig;
+    std::optional<ConvertConfig> m_cachedConfig;
 };
 }

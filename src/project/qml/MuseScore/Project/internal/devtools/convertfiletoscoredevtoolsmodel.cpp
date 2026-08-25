@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "importfiletoscoredevtoolsmodel.h"
+#include "convertfiletoscoredevtoolsmodel.h"
 
 #include "actions/actiontypes.h"
 #include "project/projecterrors.h"
@@ -29,19 +29,19 @@ using namespace mu::project;
 using namespace muse;
 using namespace muse::actions;
 
-ImportFileToScoreDevToolsModel::ImportFileToScoreDevToolsModel(QObject* parent)
+ConvertFileToScoreDevToolsModel::ConvertFileToScoreDevToolsModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 
-void ImportFileToScoreDevToolsModel::init()
+void ConvertFileToScoreDevToolsModel::init()
 {
-    importFileToScoreScenario()->importFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
+    convertFileToScoreScenario()->convertFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
         if (!ret) {
             IInteractive::Text text;
             text.text = ret.toString();
-            text.detailedText = io::pathsToString(ret.data<io::paths_t>(IMPORT_FAILED_FILES_KEY, {}), "\n");
-            interactive()->error("Import failed", text);
+            text.detailedText = io::pathsToString(ret.data<io::paths_t>(CONVERT_FAILED_FILES_KEY, {}), "\n");
+            interactive()->error("Conversion failed", text);
             return;
         }
 
@@ -57,10 +57,10 @@ void ImportFileToScoreDevToolsModel::init()
     });
 }
 
-void ImportFileToScoreDevToolsModel::selectAndImportFiles()
+void ConvertFileToScoreDevToolsModel::selectAndConvertFiles()
 {
-    importFileToScoreScenario()->selectFilesToImport()
-    .onResolve(this, [this](const ImportSelection& selection) {
-        importFileToScoreScenario()->importFiles(selection.type, selection.paths);
+    convertFileToScoreScenario()->selectFilesToConvert()
+    .onResolve(this, [this](const ConvertSelection& selection) {
+        convertFileToScoreScenario()->convertFiles(selection.type, selection.paths);
     });
 }

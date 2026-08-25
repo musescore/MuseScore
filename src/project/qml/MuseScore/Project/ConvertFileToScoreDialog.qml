@@ -29,7 +29,7 @@ import MuseScore.Project
 StyledDialogView {
     id: root
 
-    title: "Import file to Score"
+    title: "Convert file to Score"
 
     contentWidth: 520
     contentHeight: 362
@@ -37,8 +37,8 @@ StyledDialogView {
 
     modal: true
 
-    ImportFileToScoreModel {
-        id: importModel
+    ConvertFileToScoreModel {
+        id: convertModel
 
         onValidationFinished: function(type, paths) {
             root.finish(type, paths)
@@ -142,9 +142,9 @@ StyledDialogView {
                     navigation.order: 1
 
                     onClicked: {
-                        var files = importModel.selectFiles()
+                        var files = convertModel.selectFiles()
                         if (files.length > 0) {
-                            importModel.validateFiles(files)
+                            convertModel.validateFiles(files)
                         }
                     }
                 }
@@ -153,7 +153,7 @@ StyledDialogView {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.topMargin: 16
 
-                    text: importModel.guidelinesLinkText
+                    text: convertModel.guidelinesLinkText
                     font: ui.theme.bodyFont
                 }
             }
@@ -164,7 +164,7 @@ StyledDialogView {
                 onDropped: function(drop) {
                     if (drop.hasUrls) {
                         var urls = drop.urls.map(function(url) { return url.toString() })
-                        importModel.validateFiles(urls)
+                        convertModel.validateFiles(urls)
                     }
                 }
             }

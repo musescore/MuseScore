@@ -29,7 +29,7 @@ import MuseScore.Project
 Rectangle {
     color: ui.theme.backgroundSecondaryColor
 
-    ImportFileToScoreDevToolsModel {
+    ConvertFileToScoreDevToolsModel {
         id: model
     }
 
@@ -42,7 +42,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.margins: 12
 
-        text: "Import files"
-        onClicked: model.selectAndImportFiles()
+        text: "Convert files"
+        onClicked: model.selectAndConvertFiles()
     }
 }

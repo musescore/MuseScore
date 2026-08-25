@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "importfiletoscoremodel.h"
+#include "convertfiletoscoremodel.h"
 
 #include <QUrl>
 
@@ -39,18 +39,18 @@ static QString localPath(const QString& pathOrUrl)
     return pathOrUrl;
 }
 
-ImportFileToScoreModel::ImportFileToScoreModel(QObject* parent)
+ConvertFileToScoreModel::ConvertFileToScoreModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 
-QString ImportFileToScoreModel::guidelinesLinkText() const
+QString ConvertFileToScoreModel::guidelinesLinkText() const
 {
     return "<a href=\"" + configuration()->scoreUploadingGuidelinesUrl().toString() + "\">"
            + "Uploading guidelines" + "</a>";
 }
 
-QStringList ImportFileToScoreModel::selectFiles()
+QStringList ConvertFileToScoreModel::selectFiles()
 {
     const std::vector<std::string> filters {
         "Importable files (*.pdf *.jpg *.jpeg *.png *.mp3)",
@@ -69,7 +69,7 @@ QStringList ImportFileToScoreModel::selectFiles()
     return paths;
 }
 
-void ImportFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
+void ConvertFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
 {
     io::paths_t ioPaths;
     ioPaths.reserve(pathsOrUrls.size());
@@ -83,7 +83,7 @@ void ImportFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
         normalizedPaths << path;
     }
 
-    importFileToScoreScenario()->validateFiles(ioPaths).onResolve(this, [this, normalizedPaths](const RetVal<cloud::ImportType>& result) {
+    convertFileToScoreScenario()->validateFiles(ioPaths).onResolve(this, [this, normalizedPaths](const RetVal<cloud::ConvertType>& result) {
         if (result.ret) {
             emit validationFinished(int(result.val), normalizedPaths);
         }
