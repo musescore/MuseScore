@@ -57,7 +57,8 @@ public:
         TYPE_DYNAMIC,
         TYPE_TEXT,
         TYPE_PARTIAL_TIE,
-        TYPE_SHADOW_NOTE
+        TYPE_SHADOW_NOTE,
+        TYPE_ARTICULATION
     };
     Q_ENUM(PopupModelType)
 

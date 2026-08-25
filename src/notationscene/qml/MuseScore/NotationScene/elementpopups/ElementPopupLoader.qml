@@ -57,6 +57,7 @@ Item {
             case AbstractElementPopupModel.TYPE_TEXT: return textStyleComp
             case AbstractElementPopupModel.TYPE_PARTIAL_TIE: return partialTieComp
             case AbstractElementPopupModel.TYPE_SHADOW_NOTE: return shadowNoteComp
+            case AbstractElementPopupModel.TYPE_ARTICULATION: return articulationComp
             }
 
             return null
@@ -198,6 +199,12 @@ Item {
     Component {
         id: shadowNoteComp
         ShadowNotePopup {
+        }
+    }
+
+    Component {
+        id: articulationComp
+        ArticulationPopup {
         }
     }
 }

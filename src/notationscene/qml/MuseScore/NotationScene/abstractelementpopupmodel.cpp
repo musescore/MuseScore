@@ -31,6 +31,7 @@
 #include "notation/inotationundostack.h"
 #include "notation/inotationviewstate.h"
 
+#include "elementpopups/articulationpopupmodel.h"
 #include "elementpopups/partialtiepopupmodel.h"
 #include "elementpopups/shadownotepopupmodel.h"
 
@@ -61,6 +62,7 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::SHADOW_NOTE, PopupModelType::TYPE_SHADOW_NOTE },
+    { mu::engraving::ElementType::ARTICULATION, PopupModelType::TYPE_ARTICULATION },
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -85,6 +87,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
         mu::engraving::ElementType::TEMPO_TEXT,
         mu::engraving::ElementType::PLAY_COUNT_TEXT } },
     { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
+    { PopupModelType::TYPE_ARTICULATION, { mu::engraving::ElementType::ARTICULATION } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
@@ -123,6 +126,8 @@ bool AbstractElementPopupModel::hasElementEditPopup(const EngravingItem* element
         return PartialTiePopupModel::canOpen(element);
     case PopupModelType::TYPE_SHADOW_NOTE:
         return ShadowNotePopupModel::canOpen(element);
+    case PopupModelType::TYPE_ARTICULATION:
+        return ArticulationPopupModel::canOpen(element);
     default:
         return true;
     }
