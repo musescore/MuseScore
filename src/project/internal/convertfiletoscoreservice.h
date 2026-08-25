@@ -55,7 +55,7 @@ public:
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
     muse::async::Channel<int, ConvertType> reviewRequested() const override;
-    void submitReview(int queueId, OmrReviewRating rating) override;
+    void submitReview(int queueId, ReviewRating rating) override;
 
 private:
     enum class DownloadStatus {

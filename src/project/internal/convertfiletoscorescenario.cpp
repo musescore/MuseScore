@@ -285,7 +285,7 @@ void ConvertFileToScoreScenario::askReviewRating(int queueId)
         { good, bad }, goodBtn);
 
     promise.onResolve(this, [this, queueId](const IInteractive::Result& res) {
-        OmrReviewRating rating = res.isButton(goodBtn) ? OmrReviewRating::Good : OmrReviewRating::Bad;
+        ReviewRating rating = res.isButton(goodBtn) ? ReviewRating::Good : ReviewRating::Bad;
         service()->submitReview(queueId, rating);
     });
 }

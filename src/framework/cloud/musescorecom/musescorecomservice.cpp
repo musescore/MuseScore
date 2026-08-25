@@ -54,11 +54,12 @@ static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_RO
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
-static const QUrl MUSESCORECOM_CONVERT_CONFIG_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/config");
+//! TODO: not an API endpoint, replace with the real URL once known
+static const QUrl MUSESCORECOM_CONVERT_CONFIG_URL("");
 static const QUrl MUSESCORECOM_CONVERT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert");
 static const QUrl MUSESCORECOM_CONVERT_QUEUE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/queue");
 static const QUrl MUSESCORECOM_CONVERT_MSCZ_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/mscz");
-static const QUrl MUSESCORECOM_OMR_REVIEW_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/omr/review");
+static const QUrl MUSESCORECOM_REVIEW_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/review");
 
 static const QString MUSESCORE_TEXT_LOGO("https://musescore.com/static/public/musescore/img/logo/musescore-logo.svg");
 
@@ -268,10 +269,15 @@ static QString convertTypeToApiString(ConvertType type)
 
 static ConvertType convertTypeFromApiString(const QString& str)
 {
+    if (str == "omr") {
+        return ConvertType::Omr;
+    }
+
     if (str == "audio2score") {
         return ConvertType::Audio2Score;
     }
 
+    LOGW() << "Unknown convert type: \"" << str << "\", falling back to Omr";
     return ConvertType::Omr;
 }
 
@@ -485,13 +491,13 @@ static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const C
     return multiPart;
 }
 
-static QByteArray makeOmrReviewRequestBody(int id, OmrReviewRating review, const QString& reason)
+static QByteArray makeReviewRequestBody(int id, ReviewRating review, const QString& reason)
 {
     QJsonObject obj;
     obj["id"] = id;
     obj["review"] = int(review);
 
-    if (review == OmrReviewRating::Bad && !reason.isEmpty()) {
+    if (review == ReviewRating::Bad && !reason.isEmpty()) {
         obj["reason"] = reason;
     }
 
@@ -951,7 +957,7 @@ Promise<RetVal<ConvertConfig> > MuseScoreComService::fetchConfig()
         }
 
         auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->get(MUSESCORECOM_CONVERT_CONFIG_API_URL, receivedData, convertHeaders());
+        RetVal<Progress> progress = m_networkManager->get(MUSESCORECOM_CONVERT_CONFIG_URL, receivedData, convertHeaders());
         if (!progress.ret) {
             return resolve(RetVal<ConvertConfig>::make_ret(progress.ret));
         }
@@ -1153,16 +1159,16 @@ Promise<RetVal<SignedMsczUrl> > MuseScoreComService::fetchMsczUrl(ConvertType ty
     });
 }
 
-Promise<RetVal<ConvertResult> > MuseScoreComService::submitOmrReview(int id, OmrReviewRating review, const QString& reason)
+Promise<RetVal<ConvertResult> > MuseScoreComService::submitReview(int id, ReviewRating review, const QString& reason)
 {
     return Promise<RetVal<ConvertResult> >([this, id, review, reason](auto resolve, auto) {
-        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_OMR_REVIEW_API_URL);
+        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_REVIEW_API_URL);
         if (!url.ret) {
             return resolve(RetVal<ConvertResult>::make_ret(url.ret));
         }
 
         auto bodyDevice = std::make_shared<QBuffer>();
-        bodyDevice->setData(makeOmrReviewRequestBody(id, review, reason));
+        bodyDevice->setData(makeReviewRequestBody(id, review, reason));
 
         RequestHeaders headers = convertHeaders();
         headers.rawHeaders["Content-Type"] = "application/json";

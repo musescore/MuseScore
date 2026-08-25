@@ -76,7 +76,7 @@ void ConvertFileToScoreService::init()
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
 
     //! NOTE: prefetch and cache convert config
-    museScoreComService()->convert()->fetchConvertConfig().onResolve(this, [this](const RetVal<ConvertConfig>& config) {
+    museScoreComService()->convert()->fetchConfig().onResolve(this, [this](const RetVal<ConvertConfig>& config) {
         if (!config.ret) {
             LOGW() << "Could not prefetch convert config: " << config.ret.toString();
             return;
@@ -104,7 +104,7 @@ void ConvertFileToScoreService::convert(ConvertType type, const ConvertFileList&
         filePaths.push_back(file.path);
     }
 
-    ProgressPtr progress = museScoreComService()->convert()->uploadConvert(type, files);
+    ProgressPtr progress = museScoreComService()->convert()->upload(type, files);
 
     progress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         LOGI() << "Uploading: " << current << "/" << total;
@@ -135,9 +135,9 @@ async::Channel<int, ConvertType> ConvertFileToScoreService::reviewRequested() co
     return m_reviewRequested;
 }
 
-void ConvertFileToScoreService::submitReview(int queueId, OmrReviewRating rating)
+void ConvertFileToScoreService::submitReview(int queueId, ReviewRating rating)
 {
-    museScoreComService()->convert()->submitOmrReview(queueId, rating)
+    museScoreComService()->convert()->submitReview(queueId, rating)
     .onResolve(this, [queueId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
             LOGE() << "Could not submit the review for conversion " << queueId << ": " << submitRes.ret.toString();
@@ -170,7 +170,7 @@ void ConvertFileToScoreService::poll()
 
     m_pollInProgress = true;
 
-    museScoreComService()->convert()->fetchConvertQueue().onResolve(this, [this](const RetVal<ConvertQueueList>& result) {
+    museScoreComService()->convert()->fetchQueue().onResolve(this, [this](const RetVal<ConvertQueueList>& result) {
         m_pollInProgress = false;
 
         if (!result.ret) {

@@ -74,7 +74,7 @@ public:
     async::Promise<RetVal<ConvertQueueList> > fetchQueue() override;
     async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ConvertType type, int id) override;
 
-    async::Promise<RetVal<ConvertResult> > submitOmrReview(int id, OmrReviewRating review, const QString& reason = QString()) override;
+    async::Promise<RetVal<ConvertResult> > submitReview(int id, ReviewRating review, const QString& reason = QString()) override;
 
 private:
     ServerConfig serverConfig() const override;

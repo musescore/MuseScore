@@ -33,7 +33,7 @@ namespace mu::project {
 using ConvertConfig = muse::cloud::ConvertConfig;
 using ConvertType = muse::cloud::ConvertType;
 using ConvertFileList = muse::cloud::ConvertFileList;
-using OmrReviewRating = muse::cloud::OmrReviewRating;
+using ReviewRating = muse::cloud::ReviewRating;
 
 class IConvertFileToScoreService : MODULE_CONTEXT_INTERFACE
 {
@@ -48,7 +48,7 @@ public:
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 
     virtual muse::async::Channel<int /*queueId*/, ConvertType> reviewRequested() const = 0;
-    virtual void submitReview(int queueId, OmrReviewRating rating) = 0;
+    virtual void submitReview(int queueId, ReviewRating rating) = 0;
 };
 
 using IConvertFileToScoreServicePtr = std::shared_ptr<IConvertFileToScoreService>;

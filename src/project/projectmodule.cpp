@@ -146,13 +146,15 @@ void ProjectModule::onInit(const IApplication::RunMode& mode)
     m_actionsController->init();
     m_recentFilesController->init();
     m_projectAutoSaver->init();
-    m_convertFileToScoreService->init();
-    m_convertFileToScoreScenario->init();
+
+    // TODO
+    // m_convertFileToScoreService->init();
+    // m_convertFileToScoreScenario->init();
 }
 
 void ProjectModule::onDelayedInit()
 {
     //! NOTE: resuming polling can show dialogs (errors, review prompts), so it must wait
     //! until the main window is up rather than running during onInit()
-    m_convertFileToScoreService->resumeConvert();
+    // m_convertFileToScoreService->resumeConvert();
 }

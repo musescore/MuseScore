@@ -158,7 +158,7 @@ struct SignedMsczUrl {
 };
 
 //! NOTE: must be in sync with the musescore.com API
-enum class OmrReviewRating {
+enum class ReviewRating {
     Bad = 0,
     Good = 1,
 };

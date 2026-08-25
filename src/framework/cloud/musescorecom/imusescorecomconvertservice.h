@@ -37,20 +37,15 @@ namespace muse::cloud {
 /// upload limits (max file size, page/image counts, allowed types) for client-side validation
 /// before upload() is called.
 ///
-/// Expected call order for an OMR conversion:
+/// Expected call order for a conversion (OMR or Audio2Score):
 /// 1. upload() to submit the file(s) and start processing
 /// 2. Poll fetchQueue() and watch the item's status
 /// 3. As soon as the status is AwaitingReview or Done, the MSCZ is already
 ///    available: call fetchMsczUrl() then downloadConvertedScore() to get the score
-/// 4. Rating the recognition quality (submitOmrReview(), once AwaitingReview) is optional
+/// 4. Rating the recognition quality (submitReview(), once AwaitingReview) is optional
 ///    and does not gate the download above
 /// 5. Keep polling fetchQueue() until the status is Failed, or the item disappears
 ///    from the queue (which should be treated the same as Done)
-///
-/// Expected call order for an Audio2Score conversion (no meta/review steps):
-/// 1. upload() to submit the file and start processing
-/// 2. Poll fetchQueue() and watch the item's status
-/// 3. Once Done, call fetchMsczUrl() to get the final score, then downloadConvertedScore()
 class IMuseScoreComConvertService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMuseScoreComConvertService)
@@ -66,7 +61,7 @@ public:
     virtual async::Promise<RetVal<ConvertQueueList> > fetchQueue() = 0;
     virtual async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ConvertType type, int id) = 0;
 
-    virtual async::Promise<RetVal<ConvertResult> > submitOmrReview(int id, OmrReviewRating review, const QString& reason = QString()) = 0;
+    virtual async::Promise<RetVal<ConvertResult> > submitReview(int id, ReviewRating review, const QString& reason = QString()) = 0;
 };
 using IMuseScoreComConvertServicePtr = std::shared_ptr<IMuseScoreComConvertService>;
 }
