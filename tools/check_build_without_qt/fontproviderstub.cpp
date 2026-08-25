@@ -38,6 +38,21 @@ double FontProviderStub::descent(const Font&) const
     return 0.0;
 }
 
+double FontProviderStub::underlinePos(const Font&) const
+{
+    return 0.0;
+}
+
+double FontProviderStub::lineWidth(const Font&) const
+{
+    return 0.0;
+}
+
+double FontProviderStub::strikeOutPos(const Font&) const
+{
+    return 0.0;
+}
+
 bool FontProviderStub::inFont(const Font&, char32_t) const
 {
     return false;
