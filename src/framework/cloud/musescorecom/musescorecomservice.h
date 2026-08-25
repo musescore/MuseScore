@@ -74,10 +74,6 @@ public:
     async::Promise<RetVal<ImportQueueList> > fetchImportQueue() override;
     async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ImportType type, int id) override;
 
-    async::Promise<RetVal<SongAutocompleteList> > fetchSongAutocomplete(const QString& searchText) override;
-    async::Promise<RetVal<GenreList> > fetchGenres() override;
-
-    async::Promise<RetVal<ImportResult> > submitOmrMeta(const OmrMeta& meta) override;
     async::Promise<RetVal<ImportResult> > submitOmrReview(int id, OmrReviewRating review, const QString& reason = QString()) override;
 
 private:
@@ -103,6 +99,5 @@ private:
     async::Promise<Ret> doUploadImport(ImportType type, const ImportFileList& files, ProgressPtr progress);
 
     std::optional<ImportConfig> m_cachedImportConfig;
-    std::optional<GenreList> m_cachedGenres;
 };
 }

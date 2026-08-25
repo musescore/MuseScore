@@ -23,7 +23,6 @@
 #pragma once
 
 #include <memory>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -44,7 +43,6 @@ enum class ImportType {
 
 enum class ImportStatus {
     Processing,
-    AwaitingMeta,
     AwaitingReview,
     Done,
     Failed,
@@ -64,7 +62,6 @@ inline const char* importStatusToString(ImportStatus status)
 {
     switch (status) {
     case ImportStatus::Processing: return "Processing";
-    case ImportStatus::AwaitingMeta: return "AwaitingMeta";
     case ImportStatus::AwaitingReview: return "AwaitingReview";
     case ImportStatus::Done: return "Done";
     case ImportStatus::Failed: return "Failed";
@@ -157,44 +154,6 @@ struct SignedMsczUrl {
 
     bool isValid() const { return id > 0 && url.isValid(); }
 };
-
-struct Genre {
-    int id = 0;
-    QString name;
-
-    bool isValid() const { return id > 0 && !name.isEmpty(); }
-};
-
-using GenreList = std::vector<Genre>;
-using GenreIdSet = std::set<int>;
-
-struct OmrMeta {
-    int id = 0;
-    QString title;
-    QString songName;
-    QString artistName;
-    int songId = 0;
-    int artistId = 0;
-    GenreIdSet genreIds;
-    bool isOriginComposition = false;
-
-    bool isValid() const { return id > 0 && !title.isEmpty(); }
-};
-
-struct SongAutocompleteItem {
-    int songId = 0;
-    QString songName;
-    int artistId = 0;
-    QString artistName;
-    bool isPublicDomain = false;
-    bool isModerated = false;
-    int scoresCount = 0;
-    GenreList genres;
-
-    bool isValid() const { return songId > 0 && !songName.isEmpty(); }
-};
-
-using SongAutocompleteList = std::vector<SongAutocompleteItem>;
 
 //! NOTE: must be in sync with the musescore.com API
 enum class OmrReviewRating {

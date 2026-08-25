@@ -94,7 +94,6 @@ private:
     void onStatusChanged(const muse::cloud::ImportQueueItem& item);
     bool shouldHandle(int queueId, muse::cloud::ImportStatus status);
 
-    void submitMeta(muse::cloud::ImportType type, int queueId);
     void askReviewRating(muse::cloud::ImportType type, int queueId);
     void downloadIfNotAlready(muse::cloud::ImportType type, int queueId);
     void fetchScoreUrlAndDownload(muse::cloud::ImportType type, int queueId);

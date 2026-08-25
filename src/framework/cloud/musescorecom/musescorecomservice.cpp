@@ -58,10 +58,7 @@ static const QUrl MUSESCORECOM_IMPORT_CONFIG_API_URL(MUSESCORECOM_API_ROOT_URL +
 static const QUrl MUSESCORECOM_IMPORT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/import");
 static const QUrl MUSESCORECOM_IMPORT_QUEUE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/import/queue");
 static const QUrl MUSESCORECOM_IMPORT_MSCZ_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/mscz");
-static const QUrl MUSESCORECOM_OMR_META_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/omr/meta");
 static const QUrl MUSESCORECOM_OMR_REVIEW_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/omr/review");
-static const QUrl MUSESCORECOM_SONG_AUTOCOMPLETE_API_URL(MUSESCORECOM_API_ROOT_URL + "/song/autocomplete");
-static const QUrl MUSESCORECOM_GENRES_API_URL(MUSESCORECOM_API_ROOT_URL + "/genres");
 
 static const QString MUSESCORE_TEXT_LOGO("https://musescore.com/static/public/musescore/img/logo/musescore-logo.svg");
 
@@ -282,8 +279,6 @@ static ImportStatus importStatusFromApiString(const QString& str)
 {
     if (str == "processing") {
         return ImportStatus::Processing;
-    } else if (str == "awaiting_meta") {
-        return ImportStatus::AwaitingMeta;
     } else if (str == "awaiting_review") {
         return ImportStatus::AwaitingReview;
     } else if (str == "done") {
@@ -488,94 +483,6 @@ static QHttpMultiPartPtr makeMultiPartForImportUpload(ImportType type, const Imp
     }
 
     return multiPart;
-}
-
-static RetVal<GenreList> parseGenreList(const QByteArray& data)
-{
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        return RetVal<GenreList>::make_ret((int)Ret::Code::InternalError, err.errorString().toStdString());
-    }
-
-    QJsonArray items = doc.object().value("items").toArray();
-
-    GenreList result;
-    result.reserve(items.size());
-
-    for (const QJsonValue& itemVal : items) {
-        QJsonObject itemObj = itemVal.toObject();
-
-        Genre genre;
-        genre.id = itemObj.value("id").toInt();
-        genre.name = itemObj.value("name").toString();
-
-        result.push_back(genre);
-    }
-
-    return RetVal<GenreList>::make_ok(result);
-}
-
-static RetVal<SongAutocompleteList> parseSongAutocompleteList(const QByteArray& data)
-{
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        return RetVal<SongAutocompleteList>::make_ret((int)Ret::Code::InternalError, err.errorString().toStdString());
-    }
-
-    QJsonArray items = doc.object().value("items").toArray();
-
-    SongAutocompleteList result;
-    result.reserve(items.size());
-
-    for (const QJsonValue& itemVal : items) {
-        QJsonObject itemObj = itemVal.toObject();
-
-        SongAutocompleteItem item;
-        item.songId = itemObj.value("song_id").toInt();
-        item.songName = itemObj.value("song_name").toString();
-        item.artistId = itemObj.value("artist_id").toInt();
-        item.artistName = itemObj.value("artist_name").toString();
-        item.isPublicDomain = itemObj.value("is_public_domain").toBool();
-        item.isModerated = itemObj.value("is_moderated").toBool();
-        item.scoresCount = itemObj.value("scores_count").toInt();
-
-        QJsonArray genresArr = itemObj.value("genres").toArray();
-        item.genres.reserve(genresArr.size());
-        for (const QJsonValue& genreVal : genresArr) {
-            QJsonObject genreObj = genreVal.toObject();
-
-            Genre genre;
-            genre.id = genreObj.value("id").toInt();
-            genre.name = genreObj.value("name").toString();
-            item.genres.push_back(genre);
-        }
-
-        result.push_back(item);
-    }
-
-    return RetVal<SongAutocompleteList>::make_ok(result);
-}
-
-static QByteArray makeOmrMetaRequestBody(const OmrMeta& meta)
-{
-    QJsonObject obj;
-    obj["id"] = meta.id;
-    obj["title"] = meta.title;
-    obj["song_name"] = meta.songName;
-    obj["artist_name"] = meta.artistName;
-    obj["song_id"] = meta.songId > 0 ? QJsonValue(meta.songId) : QJsonValue();
-    obj["artist_id"] = meta.artistId > 0 ? QJsonValue(meta.artistId) : QJsonValue();
-    obj["is_origin"] = meta.isOriginComposition;
-
-    QJsonArray genresArr;
-    for (int genreId : meta.genreIds) {
-        genresArr.append(genreId);
-    }
-    obj["genres"] = genresArr;
-
-    return QJsonDocument(obj).toJson(QJsonDocument::Compact);
 }
 
 static QByteArray makeOmrReviewRequestBody(int id, OmrReviewRating review, const QString& reason)
@@ -1243,121 +1150,6 @@ Promise<RetVal<SignedMsczUrl> > MuseScoreComService::fetchMsczUrl(ImportType typ
         });
 
         return Promise<RetVal<SignedMsczUrl> >::dummy_result();
-    });
-}
-
-Promise<RetVal<SongAutocompleteList> > MuseScoreComService::fetchSongAutocomplete(const QString& searchText)
-{
-    return Promise<RetVal<SongAutocompleteList> >([this, searchText](auto resolve, auto) {
-        QVariantMap params;
-        params["search"] = searchText;
-
-        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_SONG_AUTOCOMPLETE_API_URL, params);
-        if (!url.ret) {
-            return resolve(RetVal<SongAutocompleteList>::make_ret(url.ret));
-        }
-
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->get(url.val, receivedData, importHeaders());
-        if (!progress.ret) {
-            return resolve(RetVal<SongAutocompleteList>::make_ret(progress.ret));
-        }
-
-        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
-            if (!res.ret) {
-                printServerReply(*receivedData);
-                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
-                appendServerErrorCode(ret, receivedData->data());
-                (void)resolve(RetVal<SongAutocompleteList>::make_ret(ret));
-                return;
-            }
-
-            (void)resolve(parseSongAutocompleteList(receivedData->data()));
-        });
-
-        return Promise<RetVal<SongAutocompleteList> >::dummy_result();
-    });
-}
-
-Promise<RetVal<GenreList> > MuseScoreComService::fetchGenres()
-{
-    return Promise<RetVal<GenreList> >([this](auto resolve, auto) {
-        if (m_cachedGenres.has_value()) {
-            (void)resolve(RetVal<GenreList>::make_ok(m_cachedGenres.value()));
-            return Promise<RetVal<GenreList> >::dummy_result();
-        }
-
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->get(MUSESCORECOM_GENRES_API_URL, receivedData, importHeaders());
-        if (!progress.ret) {
-            return resolve(RetVal<GenreList>::make_ret(progress.ret));
-        }
-
-        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
-            if (!res.ret) {
-                printServerReply(*receivedData);
-                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
-                appendServerErrorCode(ret, receivedData->data());
-                (void)resolve(RetVal<GenreList>::make_ret(ret));
-                return;
-            }
-
-            RetVal<GenreList> list = parseGenreList(receivedData->data());
-            if (list.ret) {
-                m_cachedGenres = list.val;
-            }
-            (void)resolve(list);
-        });
-
-        return Promise<RetVal<GenreList> >::dummy_result();
-    });
-}
-
-Promise<RetVal<ImportResult> > MuseScoreComService::submitOmrMeta(const OmrMeta& meta)
-{
-    IF_ASSERT_FAILED(meta.isValid()) {
-        return Promise<RetVal<ImportResult> >([](auto resolve, auto) {
-            return resolve(RetVal<ImportResult>::make_ret(make_ret(Err::InvalidData)));
-        });
-    }
-
-    if (!meta.songName.isEmpty() && meta.artistId <= 0 && meta.artistName.isEmpty() && !meta.isOriginComposition) {
-        return Promise<RetVal<ImportResult> >([](auto resolve, auto) {
-            return resolve(RetVal<ImportResult>::make_ret(make_ret(Err::Status422_ValidationFailed)));
-        });
-    }
-
-    return Promise<RetVal<ImportResult> >([this, meta](auto resolve, auto) {
-        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_OMR_META_API_URL);
-        if (!url.ret) {
-            return resolve(RetVal<ImportResult>::make_ret(url.ret));
-        }
-
-        auto bodyDevice = std::make_shared<QBuffer>();
-        bodyDevice->setData(makeOmrMetaRequestBody(meta));
-
-        RequestHeaders headers = importHeaders();
-        headers.rawHeaders["Content-Type"] = "application/json";
-
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->post(url.val, DevicePtr(bodyDevice), receivedData, headers);
-        if (!progress.ret) {
-            return resolve(RetVal<ImportResult>::make_ret(progress.ret));
-        }
-
-        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
-            if (!res.ret) {
-                printServerReply(*receivedData);
-                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
-                appendServerErrorCode(ret, receivedData->data());
-                (void)resolve(RetVal<ImportResult>::make_ret(ret));
-                return;
-            }
-
-            (void)resolve(parseImportResult(receivedData->data()));
-        });
-
-        return Promise<RetVal<ImportResult> >::dummy_result();
     });
 }
 

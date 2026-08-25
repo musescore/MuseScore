@@ -40,12 +40,10 @@ namespace muse::cloud {
 /// Expected call order for an OMR import:
 /// 1. uploadImport() to submit the file(s) and start processing
 /// 2. Poll fetchImportQueue() and watch the item's status
-/// 3. As soon as the status is AwaitingMeta, AwaitingReview, or Done, the MSCZ is already
+/// 3. As soon as the status is AwaitingReview or Done, the MSCZ is already
 ///    available: call fetchMsczUrl() then downloadImportedScore() to get the score
-/// 4. Submitting meta (submitOmrMeta(), once AwaitingMeta, options via
-///    fetchSongAutocomplete()/fetchGenres()) and rating the recognition quality
-///    (submitOmrReview(), once AwaitingReview) are both optional and do not gate the
-///    download above — they only affect the score's state on musescore.com
+/// 4. Rating the recognition quality (submitOmrReview(), once AwaitingReview) is optional
+///    and does not gate the download above
 /// 5. Keep polling fetchImportQueue() until the status is Failed, or the item disappears
 ///    from the queue (which should be treated the same as Done)
 ///
@@ -68,10 +66,6 @@ public:
     virtual async::Promise<RetVal<ImportQueueList> > fetchImportQueue() = 0;
     virtual async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ImportType type, int id) = 0;
 
-    virtual async::Promise<RetVal<SongAutocompleteList> > fetchSongAutocomplete(const QString& searchText) = 0;
-    virtual async::Promise<RetVal<GenreList> > fetchGenres() = 0;
-
-    virtual async::Promise<RetVal<ImportResult> > submitOmrMeta(const OmrMeta& meta) = 0;
     virtual async::Promise<RetVal<ImportResult> > submitOmrReview(int id, OmrReviewRating review, const QString& reason = QString()) = 0;
 };
 using IMuseScoreComImportServicePtr = std::shared_ptr<IMuseScoreComImportService>;

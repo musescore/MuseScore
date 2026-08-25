@@ -528,14 +528,8 @@ void ImportFileToScoreScenario::onStatusChanged(const ImportQueueItem& item)
     case ImportStatus::Processing:
     case ImportStatus::Unknown:
         break;
-    case ImportStatus::AwaitingMeta:
-        //! NOTE: the MSCZ is already available at this point; submitting meta is optional,
-        //! so it doesn't gate the download
-        submitMeta(item.type, item.id);
-        downloadIfNotAlready(item.type, item.id);
-        break;
     case ImportStatus::AwaitingReview:
-        //! NOTE: same as AwaitingMeta above - the review rating doesn't gate the download
+        //! NOTE: the MSCZ is already available at this point; the review rating doesn't gate the download
         askReviewRating(item.type, item.id);
         downloadIfNotAlready(item.type, item.id);
         break;
@@ -562,22 +556,6 @@ bool ImportFileToScoreScenario::shouldHandle(int queueId, ImportStatus status)
 
     it->second.lastHandledStatus = status;
     return true;
-}
-
-void ImportFileToScoreScenario::submitMeta(ImportType type, int queueId)
-{
-    //! NOTE: dummy meta until the meta-fill dialog is built
-    OmrMeta meta;
-    meta.id = queueId;
-    meta.title = "Untitled";
-    meta.isOriginComposition = true;
-
-    museScoreComService()->import()->submitOmrMeta(meta).onResolve(this, [this, type, queueId](const RetVal<ImportResult>& res) {
-        if (!res.ret) {
-            LOGE() << "Could not submit the score information for import "
-                   << importLogId(queueId, type) << ": " << res.ret.toString();
-        }
-    });
 }
 
 void ImportFileToScoreScenario::askReviewRating(ImportType type, int queueId)
