@@ -24,6 +24,8 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include "actions/actiontypes.h"
+
 #include "project/projecterrors.h"
 #include "project/types/projecttypes.h"
 
@@ -52,12 +54,23 @@ void ConvertFileToScoreScenario::init()
     TRACEFUNC;
 
     service()->convertFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
+        if (ret) {
+            showScoreReadyNotification(path);
+        } else {
+            LOGE() << ret.text();
+        }
+
         m_convertFinished.send(ret, path);
     });
 
     service()->reviewRequested().onReceive(this, [this](int queueId, ConvertType) {
         askReviewRating(queueId);
     });
+}
+
+const ConvertConfig& ConvertFileToScoreScenario::convertConfig() const
+{
+    return service()->config();
 }
 
 async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert()
@@ -267,7 +280,63 @@ void ConvertFileToScoreScenario::openFilesAndUpload(ConvertType type, const io::
         return;
     }
 
+    if (configuration()->showConvertFileProcessingDialog()) {
+        showFileProcessingDialog();
+    }
+
     service()->convert(type, files);
+}
+
+void ConvertFileToScoreScenario::showFileProcessingDialog()
+{
+    constexpr int uploadMoreBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    IInteractive::ButtonData uploadMore(uploadMoreBtn, muse::trc("project/convert", "Upload more"));
+    IInteractive::ButtonData goToScores(goToScoresBtn, muse::trc("project/convert", "Go to scores"));
+    IInteractive::ButtonData ok = interactive()->buttonData(IInteractive::Button::Ok);
+
+    std::string msg = muse::trc("project/convert",
+                                "We’ll notify you once the score is ready to open. "
+                                "You can check the status of the score in Home > Scores.");
+
+    interactive()->info(muse::trc("project/convert", "Your score is being processed"), msg,
+                        { uploadMore, goToScores, ok }, static_cast<int>(IInteractive::Button::Ok),
+                        IInteractive::Option::WithDontShowAgainCheckBox)
+    .onResolve(this, [this, uploadMoreBtn, goToScoresBtn](const IInteractive::Result& result) {
+        configuration()->setShowConvertFileProcessingDialog(result.showAgain());
+
+        if (result.isButton(uploadMoreBtn)) {
+            selectFilesToConvert()
+            .onResolve(this, [this](const ConvertSelection& selection) {
+                convertFiles(selection.type, selection.paths);
+            });
+        } else if (result.isButton(goToScoresBtn)) {
+            interactive()->openUrl(museScoreComService()->scoreManagerUrl());
+        }
+    });
+}
+
+void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& path)
+{
+    constexpr int openScoreBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    IInteractive::ButtonData openScore(openScoreBtn, muse::trc("project/convert", "Open score"), /*accent*/ true);
+    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+
+    QString scoreName = QFileInfo(path.toQString()).completeBaseName();
+    std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
+                      .arg(scoreName).toStdString();
+
+    //! TODO: replace with toast
+    interactive()->info(muse::trc("project/convert", "Your score is ready!"), msg,
+                        { dismiss, openScore }, dismissBtn, IInteractive::Option::WithIcon)
+    .onResolve(this, [this, path, openScoreBtn](const IInteractive::Result& result) {
+        if (result.isButton(openScoreBtn)) {
+            dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(path.toQUrl()));
+        }
+    });
 }
 
 void ConvertFileToScoreScenario::askReviewRating(int queueId)

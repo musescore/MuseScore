@@ -172,6 +172,9 @@ public:
 
     virtual bool createBackupBeforeSaving() const = 0;
     virtual void setCreateBackupBeforeSaving(bool create) = 0;
+
+    virtual bool showConvertFileProcessingDialog() const = 0;
+    virtual void setShowConvertFileProcessingDialog(bool show) = 0;
 };
 }
 

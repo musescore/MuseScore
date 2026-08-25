@@ -62,6 +62,7 @@ static const Settings::Key OPEN_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "p
 static const Settings::Key HAS_ASKED_AUDIO_GENERATION_SETTINGS(module_name, "project/hasAskedAudioGenerationSettings");
 static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "project/generateAudioTimePeriodType");
 static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
+static const Settings::Key SHOW_CONVERT_FILE_PROCESSING_DIALOG(module_name, "project/showConvertFileProcessingDialog");
 static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
 static const Settings::Key DISABLE_VERSION_CHECKING(module_name, "project/disableVersionChecking");
 static const Settings::Key CREATE_BACKUP_BEFORE_SAVING(module_name, "project/createBackupBeforeSaving");
@@ -115,6 +116,8 @@ void ProjectConfiguration::init()
 
     settings()->setDefaultValue(SHOW_ALSO_SHARE_AUDIO_COM_DIALOG, Val(true));
     settings()->setDefaultValue(HAS_ASKED_ALSO_SHARE_AUDIO_COM, Val(false));
+
+    settings()->setDefaultValue(SHOW_CONVERT_FILE_PROCESSING_DIALOG, Val(true));
 
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
     settings()->setDefaultValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
@@ -764,4 +767,14 @@ bool ProjectConfiguration::disableVersionChecking() const
 void ProjectConfiguration::setDisableVersionChecking(bool disable)
 {
     settings()->setSharedValue(DISABLE_VERSION_CHECKING, Val(disable));
+}
+
+bool ProjectConfiguration::showConvertFileProcessingDialog() const
+{
+    return settings()->value(SHOW_CONVERT_FILE_PROCESSING_DIALOG).toBool();
+}
+
+void ProjectConfiguration::setShowConvertFileProcessingDialog(bool show)
+{
+    settings()->setSharedValue(SHOW_CONVERT_FILE_PROCESSING_DIALOG, Val(show));
 }

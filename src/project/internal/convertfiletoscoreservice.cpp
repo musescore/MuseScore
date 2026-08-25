@@ -75,15 +75,30 @@ void ConvertFileToScoreService::init()
 
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
 
+    //! TODO: remove once the config is reliably available; fills in dummy data for local testing
+    if (m_config.omr.allowedExtensions.isEmpty()) {
+        m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "tiff" };
+        m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
+        m_config.omr.maxPages = 50;
+        m_config.omr.maxImages = 15;
+    }
+    if (m_config.audio2score.allowedExtensions.isEmpty()) {
+        m_config.audio2score.allowedExtensions = { "mp3" };
+        m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
+        m_config.audio2score.maxFiles = 1;
+    }
+    //! ---------------------------------------------------------------------------------
+
+    /* TODO
     //! NOTE: prefetch and cache convert config
     museScoreComService()->convert()->fetchConfig().onResolve(this, [this](const RetVal<ConvertConfig>& config) {
         if (!config.ret) {
             LOGW() << "Could not prefetch convert config: " << config.ret.toString();
-            return;
+        } else {
+            m_config = config.val;
         }
-
-        m_config = config.val;
     });
+    */
 }
 
 void ConvertFileToScoreService::resumeConvert()

@@ -24,24 +24,43 @@ import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
+import Muse.Cloud
 import MuseScore.Project
+
+import "internal/ConvertFileToScore"
 
 StyledDialogView {
     id: root
 
-    title: "Convert file to Score"
+    title: qsTrc("project/convert", "Convert file to score")
 
-    contentWidth: 520
-    contentHeight: 362
-    margins: 24
+    contentHeight: 502
+    contentWidth: 616
+    margins: 0
 
     modal: true
+    resizable: false
+
+    background.color: ui.theme.popupBackgroundColor
+
+    property int convertType: -1
+    property int currentPageIndex: 0
+    property var selectedPaths: []
 
     ConvertFileToScoreModel {
         id: convertModel
 
         onValidationFinished: function(type, paths) {
-            root.finish(type, paths)
+            root.convertType = type
+            root.selectedPaths = paths
+
+            if (root.currentPageIndex === 0) {
+                root.currentPageIndex = 1
+            }
+        }
+
+        onGoingBackConfirmed: {
+            root.currentPageIndex = 0
         }
     }
 
@@ -50,140 +69,102 @@ StyledDialogView {
         root.hide()
     }
 
+    function selectAndValidateFiles(existingPaths) {
+        var files = convertModel.selectFiles(existingPaths)
+        if (files.length > 0) {
+            convertModel.validateFiles(existingPaths.concat(files))
+        }
+    }
+
     onNavigationActivateRequested: {
-        chooseFileButton.navigation.requestActive()
+        if (root.currentPageIndex === 0) {
+            pageLoader.item.focusOnSelect()
+        } else {
+            pageLoader.item.focusOnFileList()
+        }
     }
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 24
+        anchors.topMargin: 18
+        anchors.bottomMargin: 18
+        anchors.leftMargin: 48
+        anchors.rightMargin: 48
+        spacing: 18
 
-        StyledTextLabel {
+        RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter
+            spacing: 12
 
-            text: "Convert from a file to MSCZ"
-            font: ui.theme.largeBodyBoldFont
+            StyledTextLabel {
+                Layout.fillWidth: true
+
+                text: qsTrc("project/convert", "Convert a file to score")
+                font: ui.theme.largeBodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            AccountAvatar {
+                side: 30
+                withBackground: false
+                url: convertModel.accountAvatarUrl
+            }
         }
 
-        Item {
-            id: dropZone
+        Loader {
+            id: pageLoader
 
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            Canvas {
-                id: dashedBorder
+            sourceComponent: root.currentPageIndex === 0 ? selectFilePageComponent : selectedFilesPageComponent
+        }
+    }
 
-                anchors.fill: parent
+    Component {
+        id: selectFilePageComponent
 
-                onPaint: {
-                    var radius = 8
-                    var ctx = getContext("2d")
-                    ctx.clearRect(0, 0, width, height)
-                    ctx.strokeStyle = ui.theme.strokeColor
-                    ctx.lineWidth = 1
-                    ctx.setLineDash([4, 4])
-                    ctx.beginPath()
-                    ctx.moveTo(radius, 0)
-                    ctx.lineTo(width - radius, 0)
-                    ctx.quadraticCurveTo(width, 0, width, radius)
-                    ctx.lineTo(width, height - radius)
-                    ctx.quadraticCurveTo(width, height, width - radius, height)
-                    ctx.lineTo(radius, height)
-                    ctx.quadraticCurveTo(0, height, 0, height - radius)
-                    ctx.lineTo(0, radius)
-                    ctx.quadraticCurveTo(0, 0, radius, 0)
-                    ctx.stroke()
-                }
+        SelectFilePage {
+            guidelinesLinkText: convertModel.guidelinesLinkText
+            audioComUrl: convertModel.audioComUrl
+            fileRequirements: convertModel.fileRequirements
+            navigationSection: root.navigationSection
 
-                onWidthChanged: requestPaint()
-                onHeightChanged: requestPaint()
-            }
+            onCancelRequested: root.reject()
 
-            ColumnLayout {
-                anchors.centerIn: parent
+            onSelectFilesRequested: root.selectAndValidateFiles([])
 
-                width: parent.width - 48
-                spacing: 12
-
-                StyledIconLabel {
-                    Layout.alignment: Qt.AlignHCenter
-
-                    iconCode: IconCode.IMPORT
-                    font.pixelSize: 32
-                }
-
-                StyledTextLabel {
-                    Layout.alignment: Qt.AlignHCenter
-
-                    text: "Drag and drop your file here"
-                    font: ui.theme.tabBoldFont
-                }
-
-                StyledTextLabel {
-                    Layout.alignment: Qt.AlignHCenter
-
-                    text: "Acceptable files - .pdf .mp3 (beta) .jpg .png"
-                    font: ui.theme.bodyFont
-                    opacity: 0.7
-                }
-
-                FlatButton {
-                    id: chooseFileButton
-
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 8
-
-                    text: "Choose file"
-                    accentButton: true
-
-                    navigation.panel: cancelButtonBox.navigationPanel
-                    navigation.order: 1
-
-                    onClicked: {
-                        var files = convertModel.selectFiles()
-                        if (files.length > 0) {
-                            convertModel.validateFiles(files)
-                        }
-                    }
-                }
-
-                StyledTextLabel {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 16
-
-                    text: convertModel.guidelinesLinkText
-                    font: ui.theme.bodyFont
-                }
-            }
-
-            DropArea {
-                anchors.fill: parent
-
-                onDropped: function(drop) {
-                    if (drop.hasUrls) {
-                        var urls = drop.urls.map(function(url) { return url.toString() })
-                        convertModel.validateFiles(urls)
-                    }
-                }
+            onFilesDropped: function(urls) {
+                convertModel.validateFiles(urls)
             }
         }
+    }
 
-        ButtonBox {
-            id: cancelButtonBox
+    Component {
+        id: selectedFilesPageComponent
 
-            Layout.fillWidth: true
+        SelectedFilesPage {
+            navigationSection: root.navigationSection
+            files: root.selectedPaths
+            canSelectMultipleFiles: convertModel.canSelectMultipleFiles(root.convertType, root.selectedPaths)
+            fileRequirements: convertModel.fileRequirements
 
-            buttons: [ButtonBoxModel.Cancel]
+            onCancelRequested: root.reject()
 
-            navigationPanel.section: root.navigationSection
-            navigationPanel.order: 2
-
-            onStandardButtonClicked: function(buttonId) {
-                if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+            onBackRequested: function(confirm) {
+                if (confirm) {
+                    convertModel.confirmGoingBack()
+                } else {
+                    root.currentPageIndex = 0
                 }
+            }
+
+            onConvertRequested: function(paths) {
+                root.finish(root.convertType, paths)
+            }
+
+            onSelectMoreFilesRequested: function(existingPaths) {
+                root.selectAndValidateFiles(existingPaths)
             }
         }
     }

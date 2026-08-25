@@ -147,6 +147,9 @@ public:
 
     MOCK_METHOD(bool, createBackupBeforeSaving, (), (const, override));
     MOCK_METHOD(void, setCreateBackupBeforeSaving, (bool), (override));
+
+    MOCK_METHOD(bool, showConvertFileProcessingDialog, (), (const, override));
+    MOCK_METHOD(void, setShowConvertFileProcessingDialog, (bool), (override));
 };
 }
 

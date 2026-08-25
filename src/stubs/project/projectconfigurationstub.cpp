@@ -400,3 +400,12 @@ bool ProjectConfigurationStub::createBackupBeforeSaving() const
 void ProjectConfigurationStub::setCreateBackupBeforeSaving(bool)
 {
 }
+
+bool ProjectConfigurationStub::showConvertFileProcessingDialog() const
+{
+    return false;
+}
+
+void ProjectConfigurationStub::setShowConvertFileProcessingDialog(bool)
+{
+}

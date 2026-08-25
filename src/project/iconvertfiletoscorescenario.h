@@ -43,6 +43,8 @@ class IConvertFileToScoreScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IConvertFileToScoreScenario() = default;
 
+    virtual const muse::cloud::ConvertConfig& convertConfig() const = 0;
+
     virtual muse::async::Promise<ConvertSelection> selectFilesToConvert() = 0;
     virtual muse::async::Promise<muse::RetVal<muse::cloud::ConvertType> > validateFiles(const muse::io::paths_t& paths) = 0;
     virtual bool convertFiles(muse::cloud::ConvertType type, const muse::io::paths_t& files) = 0;

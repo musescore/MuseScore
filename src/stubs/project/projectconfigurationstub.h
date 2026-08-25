@@ -147,5 +147,8 @@ public:
 
     bool createBackupBeforeSaving() const override;
     void setCreateBackupBeforeSaving(bool create) override;
+
+    bool showConvertFileProcessingDialog() const override;
+    void setShowConvertFileProcessingDialog(bool show) override;
 };
 }

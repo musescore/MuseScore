@@ -168,6 +168,9 @@ public:
     bool createBackupBeforeSaving() const override;
     void setCreateBackupBeforeSaving(bool create) override;
 
+    bool showConvertFileProcessingDialog() const override;
+    void setShowConvertFileProcessingDialog(bool show) override;
+
 private:
     muse::io::path_t appTemplatesPath() const;
     muse::io::path_t legacyCloudProjectsPath() const;

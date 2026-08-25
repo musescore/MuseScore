@@ -45,7 +45,6 @@ class ConvertFileToScoreDevToolsModel : public QObject, public muse::async::Asyn
 public:
     explicit ConvertFileToScoreDevToolsModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void init();
     Q_INVOKABLE void selectAndConvertFiles();
 };
 }

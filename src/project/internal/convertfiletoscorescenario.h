@@ -24,6 +24,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
+#include "actions/iactionsdispatcher.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
@@ -36,6 +37,7 @@ class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public mu
 {
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<IConvertFileToScoreService> service = { this };
 
@@ -44,6 +46,8 @@ public:
         : muse::Contextable(iocCtx) {}
 
     void init();
+
+    const muse::cloud::ConvertConfig& convertConfig() const override;
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
     muse::async::Promise<muse::RetVal<muse::cloud::ConvertType> > validateFiles(const muse::io::paths_t& paths) override;
@@ -60,6 +64,8 @@ private:
     void showFileValidationError(const std::string& title, const std::string& text);
 
     void openFilesAndUpload(muse::cloud::ConvertType type, const muse::io::paths_t& paths);
+    void showFileProcessingDialog();
+    void showScoreReadyNotification(const muse::io::path_t& path);
 
     void askReviewRating(int queueId);
 

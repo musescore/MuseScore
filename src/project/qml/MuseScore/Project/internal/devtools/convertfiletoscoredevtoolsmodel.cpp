@@ -34,29 +34,6 @@ ConvertFileToScoreDevToolsModel::ConvertFileToScoreDevToolsModel(QObject* parent
 {
 }
 
-void ConvertFileToScoreDevToolsModel::init()
-{
-    convertFileToScoreScenario()->convertFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
-        if (!ret) {
-            IInteractive::Text text;
-            text.text = ret.toString();
-            text.detailedText = io::pathsToString(ret.data<io::paths_t>(CONVERT_FAILED_FILES_KEY, {}), "\n");
-            interactive()->error("Conversion failed", text);
-            return;
-        }
-
-        const IInteractive::ButtonData openScoreBtn(IInteractive::Button::CustomButton, "Open score", true /*accent*/);
-        const IInteractive::ButtonData closeBtn(IInteractive::Button::Close, "Close");
-
-        interactive()->info("Your score is ready!", "", { openScoreBtn, closeBtn }, closeBtn.btn)
-        .onResolve(this, [this, path, openScoreBtn](const IInteractive::Result& res) {
-            if (res.isButton(openScoreBtn.btn)) {
-                dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(path.toQUrl()));
-            }
-        });
-    });
-}
-
 void ConvertFileToScoreDevToolsModel::selectAndConvertFiles()
 {
     convertFileToScoreScenario()->selectFilesToConvert()
