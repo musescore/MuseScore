@@ -43,7 +43,7 @@ static const muse::UriQuery CUSTOMIZE_KIT_URI("musescore://palette/customizekit"
 void PaletteActionsController::init()
 {
     auto cd = commandDispatcher();
-    cd->onRequest(this, TOGGLE_MASTER_PALETTE_COMMAND, [this](const CommandQuery& query) { return toggleMasterPalette(query); });
+    cd->onRequest(this, TOGGLE_MASTER_PALETTE_COMMAND, [this](const rcommand::Params& params) { return toggleMasterPalette(params); });
     cd->onRequest(this, TOGGLE_SPECIAL_CHARACTERS_COMMAND, [this]() { toggleSpecialCharactersDialog(); return muse::make_ok(); });
     cd->onRequest(this, OPEN_TIME_SIGNATURE_PROPERTIES_COMMAND, [this]() { openTimeSignaturePropertiesDialog(); return muse::make_ok(); });
     cd->onRequest(this, OPEN_CUSTOMIZE_KIT_COMMAND, [this]() { openCustomizeKitDialog(); return muse::make_ok(); });
@@ -100,13 +100,13 @@ ValCh<bool> PaletteActionsController::isMasterPaletteOpened() const
     return m_masterPaletteOpened;
 }
 
-Ret PaletteActionsController::toggleMasterPalette(const CommandQuery& query)
+Ret PaletteActionsController::toggleMasterPalette(const rcommand::Params& params)
 {
     if (interactive()->isOpened(MASTER_PALETTE_URI.uri()).val) {
         interactive()->close(MASTER_PALETTE_URI.uri());
     } else {
-        if (query.contains("palette_name")) {
-            std::string paletteName = query.param("palette_name").toString();
+        if (params.contains("palette_name")) {
+            std::string paletteName = params.at("palette_name").toString();
             interactive()->open(MASTER_PALETTE_URI.addingParam("selectedPaletteName", Val(paletteName)));
         } else {
             interactive()->open(MASTER_PALETTE_URI);

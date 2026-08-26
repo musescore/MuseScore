@@ -141,22 +141,22 @@ private:
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
 
-    muse::Ret addNote(const muse::rcommand::CommandQuery& query);
+    muse::Ret addNote(const muse::rcommand::Params& params);
     void addNote(NoteName noteName, NoteAddingMode addingMode);
-    muse::Ret addDrumNote(const muse::rcommand::CommandQuery& query);
+    muse::Ret addDrumNote(const muse::rcommand::Params& params);
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
     void setDuration(engraving::DurationType duration);
     void toggleRest();
     void toggleDots(int dots);
-    muse::Ret putNote(const muse::rcommand::CommandQuery& query);
-    muse::Ret removeNote(const muse::rcommand::CommandQuery& query);
+    muse::Ret putNote(const muse::rcommand::Params& params);
+    muse::Ret removeNote(const muse::rcommand::Params& params);
     void increaseDecreaseDuration(int steps, bool stepByDots);
     void realtimeAdvance();
 
     void toggleAccidental(engraving::AccidentalType type);
     void toggleArticulation(SymbolId articulationSymbolId);
 
-    muse::Ret putTuplet(const muse::rcommand::CommandQuery& query);
+    muse::Ret putTuplet(const muse::rcommand::Params& params);
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
 
@@ -186,10 +186,10 @@ private:
 
     void openSelectionMoreOptions();
 
-    muse::Ret startEditSelectedElement(const muse::rcommand::CommandQuery& query);
-    muse::Ret startEditSelectedText(const muse::rcommand::CommandQuery& query);
+    muse::Ret startEditSelectedElement(const muse::rcommand::Params& params);
+    muse::Ret startEditSelectedText(const muse::rcommand::Params& params);
 
-    muse::Ret addMeasures(const muse::rcommand::CommandQuery& query, AddBoxesTarget target);
+    muse::Ret addMeasures(const muse::rcommand::Params& params, AddBoxesTarget target);
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target);
 
     void addStretch(qreal value);
@@ -204,7 +204,7 @@ private:
     void resetStretch();
     void resetBeamMode();
 
-    muse::Ret openEditStyleDialog(const muse::rcommand::CommandQuery& query);
+    muse::Ret openEditStyleDialog(const muse::rcommand::Params& params);
     void openPageSettingsDialog();
     void openStaffProperties();
     void openEditStringsDialog();
@@ -268,15 +268,15 @@ private:
     void checkForScoreCorruptions();
 
     void toggleAutomation();
-    muse::Ret selectAutomationType(const muse::rcommand::CommandQuery& query);
+    muse::Ret selectAutomationType(const muse::rcommand::Params& params);
 
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);
     void registerCommand(const muse::rcommand::Command&, std::function<void()>, bool (NotationActionController::*)() const);
-    void registerQueryCommand(const muse::rcommand::Command&, std::function<muse::Ret(const muse::rcommand::CommandQuery&)>);
+    void registerCommandWithParams(const muse::rcommand::Command&, std::function<muse::Ret(const muse::rcommand::Params&)>);
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)());
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
-    void registerQueryCommand(const muse::rcommand::Command&, muse::Ret (NotationActionController::*)(const muse::rcommand::CommandQuery&));
+    void registerCommandWithParams(const muse::rcommand::Command&, muse::Ret (NotationActionController::*)(const muse::rcommand::Params&));
 
     void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
                          bool (NotationActionController::*)() const = nullptr);
@@ -287,16 +287,16 @@ private:
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
     void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
 
-    muse::Ret select(const muse::rcommand::CommandQuery& query);
+    muse::Ret select(const muse::rcommand::Params& params);
     void select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
 
     void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)());
     template<typename P1>
     void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)(P1), P1);
 
-    muse::Ret zoomToPercent(const muse::rcommand::CommandQuery& query);
+    muse::Ret zoomToPercent(const muse::rcommand::Params& params);
 
-    muse::Ret setPianoKeyboardNumberOfKeys(const muse::rcommand::CommandQuery& query);
+    muse::Ret setPianoKeyboardNumberOfKeys(const muse::rcommand::Params& params);
 
     INotationViewController* m_viewController = nullptr;
 

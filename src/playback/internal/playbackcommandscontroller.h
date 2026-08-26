@@ -57,15 +57,15 @@ public:
 
 private:
 
-    muse::Ret rewind(const muse::rcommand::CommandQuery& query);
+    muse::Ret rewind(const muse::rcommand::Params& params);
     muse::Ret showPlaybackSetup();
 
-    muse::Ret toggleMixerSection(const muse::rcommand::CommandQuery& query);
-    muse::Ret toggleAuxSend(const muse::rcommand::CommandQuery& query);
-    muse::Ret toggleAuxChannel(const muse::rcommand::CommandQuery& query);
+    muse::Ret toggleMixerSection(const muse::rcommand::Params& params);
+    muse::Ret toggleAuxSend(const muse::rcommand::Params& params);
+    muse::Ret toggleAuxChannel(const muse::rcommand::Params& params);
 
     void registerCommand(const muse::rcommand::Command&, const std::function<muse::Ret()>&);
-    void registerCommand(const muse::rcommand::Command&, const std::function<muse::Ret(const muse::rcommand::CommandQuery&)>&);
+    void registerCommand(const muse::rcommand::Command&, const std::function<muse::Ret(const muse::rcommand::Params&)>&);
 
     void registerCommand(const muse::rcommand::Command&, muse::Ret (IPlaybackController::*)());
     template<typename P1>

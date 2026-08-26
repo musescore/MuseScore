@@ -88,7 +88,7 @@ void ProjectActionsController::init()
     auto d = commandDispatcher();
 
     d->onRequest(this, PROJECT_NEW_COMMAND, [this]() { return newProject(); });
-    d->onRequest(this, PROJECT_OPEN_COMMAND, [this](const rcommand::CommandQuery& query) { return openProject(query); });
+    d->onRequest(this, PROJECT_OPEN_COMMAND, [this](const rcommand::Params& params) { return openProject(params); });
     d->onRequest(this, PROJECT_CLOSE_COMMAND, [this]() { return closeProject(); });
 
     d->onRequest(this, PROJECT_SAVE_COMMAND, [this]() { return saveProject(SaveMode::Save); });
@@ -96,7 +96,7 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_SAVE_A_COPY_COMMAND, [this]() { return saveProject(SaveMode::SaveCopy); });
     d->onRequest(this, PROJECT_SAVE_SELECTION_COMMAND, [this]() { return saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
     d->onRequest(this, PROJECT_SAVE_TO_CLOUD_COMMAND, [this]() { return saveProject(SaveMode::Save, SaveLocationType::Cloud); });
-    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::CommandQuery& query) { return saveProjectAt(query); });
+    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::Params& params) { return saveProjectAt(params); });
 
     d->onRequest(this, PROJECT_PUBLISH_COMMAND, [this]() { return publish(); });
     d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return sharedAudio(); });
@@ -292,10 +292,10 @@ bool ProjectActionsController::isFileSupported(const muse::io::path_t& path) con
     return false;
 }
 
-muse::Ret ProjectActionsController::openProject(const muse::rcommand::CommandQuery& query)
+muse::Ret ProjectActionsController::openProject(const muse::rcommand::Params& params)
 {
-    const QString url = query.param("url").toQString();
-    const QString displayNameOverride = query.param("display_name").toQString();
+    const QString url = params.at("url").toQString();
+    const QString displayNameOverride = params.at("display_name").toQString();
 
     Ret ret = openProject(ProjectFile(QUrl(url), displayNameOverride));
     if (!ret) {
@@ -1055,9 +1055,9 @@ void ProjectActionsController::uploadAudioToAudioCom(const AudioFile& audio, con
     });
 }
 
-muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::CommandQuery& query)
+muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::Params& params)
 {
-    const std::string& path = query.param("path").toString();
+    const std::string& path = params.at("path").toString();
     if (!path.empty()) {
         return saveProjectAt(SaveLocation(muse::io::path_t(path)));
     }
