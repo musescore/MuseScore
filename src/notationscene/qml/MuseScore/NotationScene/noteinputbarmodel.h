@@ -57,6 +57,15 @@ public:
 
     static const muse::ui::ToolConfig& defaultNoteInputConfig();
 
+    static const std::string CROSS_STAFF_BEAMING_SUBITEMS;
+    static const std::string TUPLET_SUBITEMS;
+
+    struct ServiceItemInfo {
+        muse::MnemonicString title;
+        muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE;
+    };
+    static ServiceItemInfo serviceItemInfo(const std::string& intent);
+
 signals:
     void isInputAllowedChanged();
 
@@ -71,8 +80,8 @@ private:
     void init();
     void load() override;
 
-    muse::uicomponents::MenuItem* makeCommandItem(const muse::rcommand::CommandInfo& info, const QString& section,
-                                                  const muse::uicomponents::MenuItemList& subitems = {});
+    muse::uicomponents::MenuItem* makeServiceItem(const std::string& intent, const QString& section);
+    muse::uicomponents::MenuItem* makeCommandItem(const muse::rcommand::Command& command, const QString& section);
     muse::uicomponents::MenuItem* makeAddItem(const QString& section);
 
     muse::uicomponents::MenuItemList makeCrossStaffBeamingItems();

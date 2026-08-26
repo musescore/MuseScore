@@ -45,8 +45,9 @@ using namespace muse::uicomponents;
 static const QString TOOLBAR_NAME("noteInput");
 
 static const ActionCode ADD_ACTION_CODE("add");
-static const std::string CROSS_STAFF_BEAMING_SUBITEMS("cross-staff-beaming-subitems");
-static const std::string TUPLET_SUBITEMS("tuplets-subitems");
+
+const std::string NoteInputBarModel::CROSS_STAFF_BEAMING_SUBITEMS("cross-staff-beaming-subitems");
+const std::string NoteInputBarModel::TUPLET_SUBITEMS("tuplets-subitems");
 
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -146,8 +147,8 @@ const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
             { TOGGLE_TENUTO_COMMAND, true },
             { TOGGLE_STACCATO_COMMAND, true },
             { ToolConfig::____________, true },
-            { CROSS_STAFF_BEAMING_SUBITEMS, true }, // virtual
-            { TUPLET_SUBITEMS, true },              // virtual
+            { CROSS_STAFF_BEAMING_SUBITEMS, true }, // service
+            { TUPLET_SUBITEMS, true },              // service
             { FLIP_COMMAND, true },
             { ToolConfig::____________, true },
             { USE_VOICE_1_COMMAND, true },
@@ -176,16 +177,18 @@ void NoteInputBarModel::load()
             continue;
         }
 
-        MenuItemList subitems;
         if (citem.intent == CROSS_STAFF_BEAMING_SUBITEMS) {
-            subitems = makeCrossStaffBeamingItems();
+            MenuItem* item = makeServiceItem(CROSS_STAFF_BEAMING_SUBITEMS, QString::number(section));
+            item->setSubitems(makeCrossStaffBeamingItems());
+            items << item;
         } else if (citem.intent == TUPLET_SUBITEMS) {
-            subitems = makeTupletItems();
+            MenuItem* item = makeServiceItem(TUPLET_SUBITEMS, QString::number(section));
+            item->setSubitems(makeTupletItems());
+            items << item;
+        } else {
+            MenuItem* item = makeCommandItem(rcommand::Command(citem.intent), QString::number(section));
+            items << item;
         }
-
-        const rcommand::CommandInfo info = commandsRegister()->commandInfo(rcommand::Command(citem.intent));
-        MenuItem* item = makeCommandItem(info, QString::number(section), subitems);
-        items << item;
     }
 
     items << makeAddItem(QString::number(++section));
@@ -197,12 +200,31 @@ bool NoteInputBarModel::isInputAllowed() const
     return commandsController()->isNoteInputAllowed();
 }
 
-MenuItem* NoteInputBarModel::makeCommandItem(const muse::rcommand::CommandInfo& info, const QString& section,
-                                             const muse::uicomponents::MenuItemList& subitems)
+NoteInputBarModel::ServiceItemInfo NoteInputBarModel::serviceItemInfo(const std::string& intent)
 {
+    if (intent == CROSS_STAFF_BEAMING_SUBITEMS) {
+        return { TranslatableString("action", "Cross-staff beaming"), IconCode::Code::CROSS_STAFF_BEAMING };
+    } else if (intent == TUPLET_SUBITEMS) {
+        return { TranslatableString("action", "Tuplet"), IconCode::Code::NOTE_TUPLET };
+    }
+    return { };
+}
+
+MenuItem* NoteInputBarModel::makeServiceItem(const std::string& intent, const QString& section)
+{
+    const ServiceItemInfo info = serviceItemInfo(intent);
+    MenuItem* item = new MenuItem(this);
+    item->setTitle(info.title);
+    item->setIcon(info.icon);
+    item->setSection(section);
+    return item;
+}
+
+MenuItem* NoteInputBarModel::makeCommandItem(const muse::rcommand::Command& command, const QString& section)
+{
+    const rcommand::CommandInfo info = commandsRegister()->commandInfo(command);
     MenuItem* item = new MenuItem(info, this);
     item->setSection(section);
-    item->setSubitems(subitems);
     return item;
 }
 
