@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/durationtype.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/segment.h"
@@ -45,6 +46,8 @@ private slots:
     void doubleDuration();
     void decDurationDotted();
     void incDurationDotted();
+    void augmentationLines();
+    void diminutionLines();
 };
 
 // Simple tests for command "half-duration" (default shortcut "Q").
@@ -169,4 +172,38 @@ TEST_F(Engraving_DurationTypeTests, incDurationDotted)
     });
 
     delete score;
+}
+
+TEST_F(Engraving_DurationTypeTests, augmentationLines)
+{
+    auto durationLines = [](DurationType type, int dots) {
+        TDuration duration(type);
+        duration.setDots(dots);
+        return duration.augmentationLines();
+    };
+
+    EXPECT_EQ(durationLines(DurationType::V_HALF, 0), 1);
+    EXPECT_EQ(durationLines(DurationType::V_HALF, 1), 2);
+    EXPECT_EQ(durationLines(DurationType::V_HALF, 2), 2);
+    EXPECT_EQ(durationLines(DurationType::V_WHOLE, 0), 3);
+    EXPECT_EQ(durationLines(DurationType::V_WHOLE, 1), 5);
+    EXPECT_EQ(durationLines(DurationType::V_BREVE, 0), 7);
+    EXPECT_EQ(durationLines(DurationType::V_LONG, 0), 15);
+}
+
+TEST_F(Engraving_DurationTypeTests, diminutionLines)
+{
+    EXPECT_EQ(TDuration(DurationType::V_LONG).diminutionLines(), 0);
+    EXPECT_EQ(TDuration(DurationType::V_BREVE).diminutionLines(), 0);
+    EXPECT_EQ(TDuration(DurationType::V_WHOLE).diminutionLines(), 0);
+    EXPECT_EQ(TDuration(DurationType::V_HALF).diminutionLines(), 0);
+    EXPECT_EQ(TDuration(DurationType::V_QUARTER).diminutionLines(), 0);
+    EXPECT_EQ(TDuration(DurationType::V_EIGHTH).diminutionLines(), 1);
+    EXPECT_EQ(TDuration(DurationType::V_16TH).diminutionLines(), 2);
+    EXPECT_EQ(TDuration(DurationType::V_32ND).diminutionLines(), 3);
+    EXPECT_EQ(TDuration(DurationType::V_64TH).diminutionLines(), 4);
+    EXPECT_EQ(TDuration(DurationType::V_128TH).diminutionLines(), 5);
+    EXPECT_EQ(TDuration(DurationType::V_256TH).diminutionLines(), 6);
+    EXPECT_EQ(TDuration(DurationType::V_512TH).diminutionLines(), 7);
+    EXPECT_EQ(TDuration(DurationType::V_1024TH).diminutionLines(), 8);
 }

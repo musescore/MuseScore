@@ -41,11 +41,6 @@ DurationLine::DurationLine(EngravingItem* s)
     : EngravingItem(ElementType::DURATION_LINE, s)
 {
     setSelectable(false);
-    m_len = 0.;
-}
-
-DurationLine::~DurationLine()
-{
 }
 
 //---------------------------------------------------------
@@ -54,9 +49,20 @@ DurationLine::~DurationLine()
 
 PointF DurationLine::pagePos() const
 {
-    System* system = chordRest()->measure()->system();
-    double yp = y() + system->staff(staffIdx())->y() + system->y();
-    return PointF(pageX(), yp);
+    if (ChordRest* chordRest = this->chordRest()) {
+        if (Measure* measure = chordRest->measure()) {
+            if (System* system = measure->system()) {
+                if (system->staves().size() > staffIdx()) {
+                    if (SysStaff* staff = system->staff(staffIdx())) {
+                        double yp = y() + staff->y() + system->y();
+                        return PointF(pageX(), yp);
+                    }
+                }
+            }
+        }
+    }
+
+    return EngravingItem::pagePos();
 }
 
 //---------------------------------------------------------
@@ -65,7 +71,9 @@ PointF DurationLine::pagePos() const
 
 void DurationLine::spatiumChanged(double oldValue, double newValue)
 {
-    m_len = (m_len / oldValue) * newValue;
+    if (oldValue != 0.0) {
+        m_len = (m_len / oldValue) * newValue;
+    }
 }
 
 //---------------------------------------------------------

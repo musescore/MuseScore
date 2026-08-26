@@ -40,12 +40,6 @@ OctaveDot::OctaveDot(EngravingItem* s)
     : EngravingItem(ElementType::OCTAVE_DOT, s)
 {
     setSelectable(false);
-    m_len = 0.;
-    m_above = false;
-}
-
-OctaveDot::~OctaveDot()
-{
 }
 
 //---------------------------------------------------------
@@ -54,7 +48,9 @@ OctaveDot::~OctaveDot()
 
 void OctaveDot::spatiumChanged(double oldValue, double newValue)
 {
-    m_len = (m_len / oldValue) * newValue;
+    if (oldValue != 0.0) {
+        m_len = (m_len / oldValue) * newValue;
+    }
 }
 
 //---------------------------------------------------------

@@ -826,6 +826,9 @@ bool TDuration::isValid(Fraction f)
 
 //---------------------------------------------------------
 //   augmentation lines - number of Line to lengthen duration
+//
+//   The undotted duration uses base - 1 lines. Each dot adds half
+//   the line count represented by the preceding duration value.
 //---------------------------------------------------------
 int TDuration::augmentationLines() const
 {

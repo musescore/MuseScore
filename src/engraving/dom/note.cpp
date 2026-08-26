@@ -4275,6 +4275,7 @@ void Note::resizeOctaveDotsTo(size_t newSize)
 {
     while (m_octaveDots.size() < newSize) {
         OctaveDot* dot = new OctaveDot(this);
+        dot->setParent(this);
         dot->setTrack(track());
         m_octaveDots.push_back(dot);
     }

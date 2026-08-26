@@ -44,7 +44,7 @@ class OctaveDot final : public EngravingItem
 
 public:
     OctaveDot(EngravingItem*);
-    ~OctaveDot();
+    ~OctaveDot() override = default;
     OctaveDot& operator=(const OctaveDot&) = delete;
 
     OctaveDot* clone() const override { return new OctaveDot(*this); }

@@ -1392,7 +1392,8 @@ bool ChordRest::hasPrecedingJumpItem() const
 void ChordRest::resizeDurationLinesTo(size_t newSize)
 {
     while (m_durationLines.size() < newSize) {
-        DurationLine* dl = new DurationLine(score()->dummy());
+        DurationLine* dl = new DurationLine(this);
+        dl->setParent(this);
         dl->setTrack(track());
         m_durationLines.push_back(dl);
     }
