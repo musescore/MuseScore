@@ -82,7 +82,8 @@ private:
     void updateAddSeparatorAvailability();
     void setIsAddSeparatorAvailable(bool isAddSeparatorAvailable);
 
-    NoteInputBarCustomiseItem* makeItem(const muse::ui::UiAction& action, bool checked);
+    NoteInputBarCustomiseItem* makeServiceItem(const std::string& intent, bool checked);
+    NoteInputBarCustomiseItem* makeActionItem(const std::string& intent, bool checked);
     NoteInputBarCustomiseItem* makeSeparatorItem();
 
     void saveActions();
