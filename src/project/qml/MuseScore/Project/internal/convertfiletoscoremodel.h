@@ -31,10 +31,10 @@
 #include "iinteractive.h"
 
 #include "project/iprojectconfiguration.h"
-#include "project/iimportfiletoscorescenario.h"
+#include "project/iconvertfiletoscorescenario.h"
 
 namespace mu::project {
-class ImportFileToScoreModel : public QObject, public muse::async::Asyncable, public muse::Contextable
+class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -43,11 +43,11 @@ class ImportFileToScoreModel : public QObject, public muse::async::Asyncable, pu
     QML_ELEMENT
 
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<IImportFileToScoreScenario> importFileToScoreScenario = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
-    explicit ImportFileToScoreModel(QObject* parent = nullptr);
+    explicit ConvertFileToScoreModel(QObject* parent = nullptr);
 
     QString guidelinesLinkText() const;
 
@@ -55,6 +55,6 @@ public:
     Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
 
 signals:
-    void validationFinished(int type, QString paths);
+    void validationFinished(int type, QVariantList paths);
 };
 }

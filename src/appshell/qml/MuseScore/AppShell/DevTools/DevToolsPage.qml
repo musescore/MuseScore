@@ -42,7 +42,7 @@ DockPage {
         case "interactive": root.central = interactiveComp; break
         case "crashhandler": root.central = crashhandlerComp; break
         case "corruptscore": root.central = corruptScoreComp; break
-        case "importfiletoscore": root.central = importFileToScoreComp; break
+        case "convertfiletoscore": root.central = convertFileToScoreComp; break
         case "mpe": root.central = mpeComponent; break
         case "extensions": root.central = extensionsComp; break
         case "navigation": root.central = keynavComp; break
@@ -75,7 +75,7 @@ DockPage {
                         { "name": "interactive", "title": "Interactive" },
                         { "name": "crashhandler", "title": "Crash handler" },
                         { "name": "corruptscore", "title": "Corrupt score" },
-                        { "name": "importfiletoscore", "title": "Import file to score" },
+                        { "name": "convertfiletoscore", "title": "Convert file to score" },
                         { "name": "mpe", "title": "MPE" },
                         { "name": "extensions", "title": "Extensions" },
                         { "name": "navigation", "title": "KeyNav" }
@@ -122,9 +122,9 @@ DockPage {
     }
 
     Component {
-        id: importFileToScoreComp
+        id: convertFileToScoreComp
 
-        ImportFileToScoreDevTools {}
+        ConvertFileToScoreDevTools {}
     }
 
     Component {

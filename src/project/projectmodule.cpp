@@ -34,7 +34,8 @@
 #include "internal/templatesrepository.h"
 #include "internal/projectmigrator.h"
 #include "internal/projectautosaver.h"
-#include "internal/importfiletoscorescenario.h"
+#include "internal/convertfiletoscorescenario.h"
+#include "internal/convertfiletoscoreservice.h"
 
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
@@ -68,7 +69,8 @@ void ProjectModule::registerExports()
     m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
     m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(iocContext());
     m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
-    m_importFileToScoreScenario = std::make_shared<ImportFileToScoreScenario>(iocContext());
+    m_convertFileToScoreService = std::make_shared<ConvertFileToScoreService>(iocContext());
+    m_convertFileToScoreScenario = std::make_shared<ConvertFileToScoreScenario>(iocContext());
 
 #ifdef Q_OS_MAC
     m_recentFilesController = std::make_shared<MacOSRecentFilesController>();
@@ -90,7 +92,8 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator(iocContext()));
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(moduleName(), m_engravingPluginAPIHelper);
-    ioc()->registerExport<IImportFileToScoreScenario>(moduleName(), m_importFileToScoreScenario);
+    ioc()->registerExport<IConvertFileToScoreService>(moduleName(), m_convertFileToScoreService);
+    ioc()->registerExport<IConvertFileToScoreScenario>(moduleName(), m_convertFileToScoreScenario);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
@@ -114,7 +117,7 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore.Project", "ExportDialog");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore.Project", "MigrationDialog");
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore.Project", "ProjectPropertiesDialog");
-        ir->registerQmlUri(Uri("musescore://project/import/selectfiles"), "MuseScore.Project", "ImportFileToScoreDialog");
+        ir->registerQmlUri(Uri("musescore://project/convert/selectfiles"), "MuseScore.Project", "ConvertFileToScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore.Project", "UploadProgressDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore.Project", "ProjectUploadedDialog");
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
@@ -143,5 +146,15 @@ void ProjectModule::onInit(const IApplication::RunMode& mode)
     m_actionsController->init();
     m_recentFilesController->init();
     m_projectAutoSaver->init();
-    m_importFileToScoreScenario->init();
+
+    // TODO
+    // m_convertFileToScoreService->init();
+    // m_convertFileToScoreScenario->init();
+}
+
+void ProjectModule::onDelayedInit()
+{
+    //! NOTE: resuming polling can show dialogs (errors, review prompts), so it must wait
+    //! until the main window is up rather than running during onInit()
+    // m_convertFileToScoreService->resumeConvert();
 }

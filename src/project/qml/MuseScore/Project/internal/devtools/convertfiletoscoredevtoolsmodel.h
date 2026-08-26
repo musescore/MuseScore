@@ -27,39 +27,25 @@
 
 #include "async/asyncable.h"
 
+#include "actions/iactionsdispatcher.h"
+#include "global/iinteractive.h"
 #include "modularity/ioc.h"
-#include "project/iimportfiletoscorescenario.h"
+#include "project/iconvertfiletoscorescenario.h"
 
 namespace mu::project {
-class ImportFileToScoreDevToolsModel : public QObject, public muse::async::Asyncable, public muse::Contextable
+class ConvertFileToScoreDevToolsModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
-
-    Q_PROPERTY(QString log READ log NOTIFY logChanged)
-
     QML_ELEMENT
 
-    muse::ContextInject<IImportFileToScoreScenario> importFileToScoreScenario = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    explicit ImportFileToScoreDevToolsModel(QObject* parent = nullptr);
-
-    QString log() const;
+    explicit ConvertFileToScoreDevToolsModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
-
-    //! NOTE: calls selectFilesToImport(), then importFiles() with the resolved selection
-    Q_INVOKABLE void selectAndImportFiles();
-
-    Q_INVOKABLE void checkImportInProgress();
-    Q_INVOKABLE void clearLog();
-
-signals:
-    void logChanged();
-
-private:
-    void appendLog(const QString& line);
-
-    QString m_log;
+    Q_INVOKABLE void selectAndConvertFiles();
 };
 }

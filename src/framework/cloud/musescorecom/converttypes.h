@@ -23,7 +23,6 @@
 #pragma once
 
 #include <memory>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -32,25 +31,48 @@
 #include <QStringList>
 #include <QUrl>
 
+#include "global/logstream.h"
+#include "io/path.h"
+
 class QIODevice;
 
 namespace muse::cloud {
-enum class ImportType {
+enum class ConvertType {
     Omr,
     Audio2Score
 };
 
-enum class ImportStatus {
+enum class ConvertStatus {
     Processing,
-    AwaitingMeta,
     AwaitingReview,
     Done,
     Failed,
     Unknown
 };
 
+inline const char* convertTypeToString(ConvertType type)
+{
+    switch (type) {
+    case ConvertType::Omr: return "Omr";
+    case ConvertType::Audio2Score: return "Audio2Score";
+    }
+    return "Unknown";
+}
+
+inline const char* convertStatusToString(ConvertStatus status)
+{
+    switch (status) {
+    case ConvertStatus::Processing: return "Processing";
+    case ConvertStatus::AwaitingReview: return "AwaitingReview";
+    case ConvertStatus::Done: return "Done";
+    case ConvertStatus::Failed: return "Failed";
+    case ConvertStatus::Unknown: break;
+    }
+    return "Unknown";
+}
+
 //! NOTE: must be in sync with the musescore.com API's error_code values
-enum class ImportErrorCode {
+enum class ConvertErrorCode {
     Unknown,
     UnsupportedFormat,
     FileTooLarge,
@@ -70,111 +92,86 @@ enum class ImportErrorCode {
     InternalServerError,
 };
 
-//! NOTE: key for ImportErrorCode stored in Ret::data
-static const std::string IMPORT_ERROR_CODE_KEY("errorCode");
+//! NOTE: key for ConvertErrorCode stored in Ret::data
+static const std::string CONVERT_ERROR_CODE_KEY("errorCode");
 
-static const qint64 MAX_IMPORT_FILE_SIZE_BYTES = 1024LL * 1024 * 1024; // 1 GB
+static const qint64 MAX_CONVERT_FILE_SIZE_BYTES = 1024LL * 1024 * 1024; // 1 GB
 
-struct OmrImportConfig {
+struct OmrConfig {
     qint64 maxFileSizeBytes = 0;
     int maxPages = 0;
     int maxImages = 0;
     QStringList allowedExtensions;
 };
 
-struct Audio2ScoreImportConfig {
+struct Audio2ScoreConfig {
     qint64 maxFileSizeBytes = 0;
     int maxFiles = 0;
     QStringList allowedExtensions;
 };
 
-struct ImportConfig {
-    OmrImportConfig omr;
-    Audio2ScoreImportConfig audio2score;
+struct ConvertConfig {
+    OmrConfig omr;
+    Audio2ScoreConfig audio2score;
 };
 
-struct ImportFile {
+struct ConvertFile {
     std::shared_ptr<QIODevice> data;
     QString fileName;
+    muse::io::path_t path;
 
     bool isValid() const { return data != nullptr && !fileName.isEmpty(); }
 };
 
-using ImportFileList = std::vector<ImportFile>;
+using ConvertFileList = std::vector<ConvertFile>;
 
-struct ImportResult {
+struct ConvertResult {
     int id = 0;
-    ImportType type = ImportType::Omr;
-    ImportStatus status = ImportStatus::Processing;
+    ConvertType type = ConvertType::Omr;
+    ConvertStatus status = ConvertStatus::Processing;
 
     bool isValid() const { return id > 0; }
 };
 
-struct ImportQueueItem {
+struct ConvertQueueItem {
     int id = 0;
-    ImportType type = ImportType::Omr;
-    ImportStatus status = ImportStatus::Processing;
+    ConvertType type = ConvertType::Omr;
+    ConvertStatus status = ConvertStatus::Processing;
     QString filename;
     int scoreId = 0;
     QDateTime createdAt;
     QDateTime updatedAt;
-    ImportErrorCode errorCode = ImportErrorCode::Unknown;
+    ConvertErrorCode errorCode = ConvertErrorCode::Unknown;
 
     bool isValid() const { return id > 0; }
 };
 
-using ImportQueueList = std::vector<ImportQueueItem>;
+using ConvertQueueList = std::vector<ConvertQueueItem>;
 
 struct SignedMsczUrl {
     int id = 0;
-    ImportType type = ImportType::Omr;
+    ConvertType type = ConvertType::Omr;
     QUrl url;
     int expiresInSeconds = 0;
 
     bool isValid() const { return id > 0 && url.isValid(); }
 };
 
-struct Genre {
-    int id = 0;
-    QString name;
-
-    bool isValid() const { return id > 0 && !name.isEmpty(); }
-};
-
-using GenreList = std::vector<Genre>;
-using GenreIdSet = std::set<int>;
-
-struct OmrMeta {
-    int id = 0;
-    QString title;
-    QString songName;
-    QString artistName;
-    int songId = 0;
-    int artistId = 0;
-    GenreIdSet genreIds;
-    bool isOriginComposition = false;
-
-    bool isValid() const { return id > 0 && !title.isEmpty(); }
-};
-
-struct SongAutocompleteItem {
-    int songId = 0;
-    QString songName;
-    int artistId = 0;
-    QString artistName;
-    bool isPublicDomain = false;
-    bool isModerated = false;
-    int scoresCount = 0;
-    GenreList genres;
-
-    bool isValid() const { return songId > 0 && !songName.isEmpty(); }
-};
-
-using SongAutocompleteList = std::vector<SongAutocompleteItem>;
-
 //! NOTE: must be in sync with the musescore.com API
-enum class OmrReviewRating {
+enum class ReviewRating {
     Bad = 0,
     Good = 1,
 };
+}
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::cloud::ConvertQueueItem& item)
+{
+    s << "id: " << item.id
+      << ", filename: \"" << item.filename << "\""
+      << ", type: " << muse::cloud::convertTypeToString(item.type)
+      << ", status: " << muse::cloud::convertStatusToString(item.status)
+      << ", scoreId: " << item.scoreId
+      << ", createdAt: " << item.createdAt.toString(Qt::ISODate)
+      << ", updatedAt: " << item.updatedAt.toString(Qt::ISODate);
+    return s;
 }

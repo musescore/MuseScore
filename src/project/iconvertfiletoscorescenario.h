@@ -28,28 +28,27 @@
 #include "io/path.h"
 #include "types/retval.h"
 
-#include "cloud/musescorecom/importtypes.h"
+#include "cloud/musescorecom/converttypes.h"
 
 namespace mu::project {
-struct ImportSelection {
-    muse::cloud::ImportType type = muse::cloud::ImportType::Omr;
+struct ConvertSelection {
+    muse::cloud::ConvertType type = muse::cloud::ConvertType::Omr;
     muse::io::paths_t paths;
 };
 
-class IImportFileToScoreScenario : MODULE_CONTEXT_INTERFACE
+class IConvertFileToScoreScenario : MODULE_CONTEXT_INTERFACE
 {
-    INTERFACE_ID(IImportFileToScoreScenario)
+    INTERFACE_ID(IConvertFileToScoreScenario)
 
 public:
-    virtual ~IImportFileToScoreScenario() = default;
+    virtual ~IConvertFileToScoreScenario() = default;
 
-    virtual muse::async::Promise<ImportSelection> selectFilesToImport() = 0;
-    virtual muse::async::Promise<muse::RetVal<muse::cloud::ImportType> > validateFiles(const muse::io::paths_t& paths) = 0;
-    virtual bool importFiles(muse::cloud::ImportType type, const muse::io::paths_t& files) = 0;
+    virtual muse::async::Promise<ConvertSelection> selectFilesToConvert() = 0;
+    virtual muse::async::Promise<muse::RetVal<muse::cloud::ConvertType> > validateFiles(const muse::io::paths_t& paths) = 0;
+    virtual bool convertFiles(muse::cloud::ConvertType type, const muse::io::paths_t& files) = 0;
 
-    virtual bool isImportInProgress() const = 0;
-    virtual muse::async::Channel<muse::Ret, muse::io::path_t> importFinished() const = 0;
+    virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 };
 
-using IImportFileToScoreScenarioPtr = std::shared_ptr<IImportFileToScoreScenario>;
+using IConvertFileToScoreScenarioPtr = std::shared_ptr<IConvertFileToScoreScenario>;
 }
