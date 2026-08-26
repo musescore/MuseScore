@@ -75,6 +75,12 @@ StyledFlickable {
                         onClicked: staveSharingModel.allowVoiceCrossing.value = !staveSharingModel.allowVoiceCrossing.value
                     }
 
+                    CheckBox {
+                        text: qsTrc("notation/editstyle/stavesharing", "Show player numerals for instrument changes")
+                        checked: staveSharingModel.staveSharingInstrChangePlayerNum.value === true
+                        onClicked: staveSharingModel.staveSharingInstrChangePlayerNum.value = !staveSharingModel.staveSharingInstrChangePlayerNum.value
+                    }
+
                     StyledGroupBox {
                         Layout.fillWidth: true
                         title: qsTrc("notation/editstyle/stavesharing", "Instrument labels on staff")

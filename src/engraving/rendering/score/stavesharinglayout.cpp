@@ -28,6 +28,7 @@
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
+#include "dom/instrchange.h"
 #include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/part.h"
@@ -488,6 +489,11 @@ bool StaveSharingLayout::checkAnnotationsForSameVoice(Segment* segment, track_id
     std::multimap<ElementType, EngravingItem*> annotationsOnNextTrack;
 
     for (EngravingItem* annotation : segment->annotations()) {
+        if (annotation->isInstrumentChange()) {
+            // Instrument change labels should not prevent combining
+            continue;
+        }
+
         if (annotation->track() == prevTrack) {
             annotationsOnPrevTrack.insert({ annotation->type(), annotation });
         } else if (annotation->track() == nextTrack) {
@@ -1150,7 +1156,7 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                     continue;
                 }
 
-                if (item->isTextBase() && toTextBase(item)->xmlText() != toTextBase(originItem)->xmlText()) {
+                if (!item->isInstrumentChange() && item->isTextBase() && toTextBase(item)->xmlText() != toTextBase(originItem)->xmlText()) {
                     continue;
                 }
 
@@ -1163,6 +1169,24 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                 sharedItem->setTrack(sharedTrack);
                 sharedItem->setOwnershipParent(seg);
                 score->undoAddElement(sharedItem);
+            }
+
+            if (sharedItem->isInstrumentChange()) {
+                // Prefix the number to the string shown
+                // TODO make these editable by the user
+                InstrumentChange* originChange = toInstrumentChange(originItem);
+                InstrumentChange* sharedChange = toInstrumentChange(sharedItem);
+
+                const Staff* originStaff = ctx.layoutCtx.dom().staff(originChange->vStaffIdx());
+                const Part* originPart = originStaff ? originStaff->part() : nullptr;
+                if (originPart) {
+                    String text = originChange->xmlText();
+                    String prefix = score->style().styleB(Sid::staveSharingInstrChangePlayerNum) ? String::number(originPart->number())
+                                    + u". " : String();
+
+                    text = prefix + text;
+                    sharedChange->setXmlText(text);
+                }
             }
 
             EngravingItem::connectSharedItem(sharedItem, originItem);
