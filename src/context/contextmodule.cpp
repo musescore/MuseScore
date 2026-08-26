@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "internal/globalcontext.h"
 #include "internal/uicontextresolver.h"
+#include "internal/extensioncontextresolver.h"
 #include "shortcutcontext.h"
 
 #include "muse_framework_config.h"
@@ -52,9 +53,11 @@ void ContextModuleContext::registerExports()
 {
     m_globalContext = std::make_shared<GlobalContext>();
     m_uicontextResolver = std::make_shared<UiContextResolver>(iocContext());
+    m_extensionContextResolver = std::make_shared<ExtensionContextResolver>(iocContext());
 
     ioc()->registerExport<IGlobalContext>(mname, m_globalContext);
     ioc()->registerExport<IUiContextResolver>(mname, m_uicontextResolver);
+    ioc()->registerExport<muse::extensions::IExtensionContextResolver>(mname, m_extensionContextResolver);
     ioc()->registerExport<IShortcutContextPriority>(mname, new ShortcutContextPriority());
 
 #ifdef MUSE_MODULE_SHORTCUTS_V2
@@ -69,6 +72,7 @@ void ContextModuleContext::onInit(const muse::IApplication::RunMode& mode)
     }
 
     m_uicontextResolver->init();
+    m_extensionContextResolver->init();
 }
 
 void ContextModuleContext::onDeinit()

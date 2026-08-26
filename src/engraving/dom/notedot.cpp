@@ -54,7 +54,7 @@ NoteDot::NoteDot(Rest* parent)
 
 EngravingItem* NoteDot::elementBase() const
 {
-    return parentItem();
+    return ownershipParentItem(); // a dot can belong to a note or a rest
 }
 
 //---------------------------------------------------------
@@ -63,6 +63,6 @@ EngravingItem* NoteDot::elementBase() const
 
 double NoteDot::mag() const
 {
-    return parentItem()->mag() * style().styleD(Sid::dotMag);
+    return layoutParent()->mag() * style().styleD(Sid::dotMag);
 }
 }

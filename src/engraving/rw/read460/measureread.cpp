@@ -78,7 +78,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         Staff* staff = ctx.staff(n);
         MStaff* s = new MStaff;
         s->setLines(Factory::createStaffLines(measure));
-        s->lines()->setParent(measure);
+        s->lines()->setOwnershipParent(measure);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(measure->tick()));
         measure->mstaves().push_back(s);
@@ -293,7 +293,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
                 MMRest* mmr = Factory::createMMRest(segment);
                 mmr->setTrack(ctx.track());
-                mmr->setParent(segment);
+                mmr->setOwnershipParent(segment);
                 TRead::read(mmr, e, ctx);
                 segment->add(mmr);
                 ctx.incTick(mmr->actualTicks());
@@ -547,7 +547,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             tuplet = Factory::createTuplet(measure);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
-            tuplet->setParent(measure);
+            tuplet->setOwnershipParent(measure);
             TRead::read(tuplet, e, ctx);
             if (oldTuplet) {
                 oldTuplet->add(tuplet);
@@ -570,10 +570,9 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             }
             e.readNext();
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(ctx.dummy()->system());
+            Beam* beam = Factory::createBeam(ctx.score());
             beam->setTrack(ctx.track());
             TRead::read(beam, e, ctx);
-            beam->resetExplicitParent();
             if (startingBeam) {
                 LOGD("The read beam was not used");
                 delete startingBeam;
@@ -585,7 +584,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             segment = measure->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);
             TRead::read(range, e, ctx);
-            range->setParent(segment);                // a parent segment is needed for setTrack() to work
+            range->setOwnershipParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(ctx.track()));
             segment->add(range);
         } else {

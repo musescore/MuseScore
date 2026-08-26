@@ -267,6 +267,7 @@ Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const Score
     TRACEFUNC;
 
     setScore(score);
+    std::static_pointer_cast<NotationAutomation>(m_notationAutomation)->setMasterScore(score);
 
     undoStack()->lock();
 
@@ -298,7 +299,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         mu::engraving::MeasureBase* mb = score->first();
         if (mb && mb->isVBox()) {
             mu::engraving::VBox* tvb = toVBox(mb);
-            nvb = Factory::createTitleVBox(score->dummy()->system());
+            nvb = Factory::createTitleVBox(score);
             nvb->setBoxHeight(tvb->boxHeight());
             nvb->setBoxWidth(tvb->boxWidth());
             nvb->setTopGap(tvb->topGap());
@@ -337,7 +338,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             mu::engraving::MeasureBase* measure = score->measures()->first();
             if (!measure->isVBox()) {
                 if (!nvb) {
-                    nvb = Factory::createTitleVBox(score->dummy()->system());
+                    nvb = Factory::createTitleVBox(score);
                 }
                 nvb->setTick(mu::engraving::Fraction(0, 1));
                 nvb->setNext(measure);
@@ -447,7 +448,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         }
     }
 
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     score->autoUpdateSpatium();
 
     {
@@ -679,7 +680,7 @@ void MasterNotation::updatePotentialExcerpts() const
     std::vector<Part*> partsWithoutExcerpt;
 
     for (Part* part : score()->parts()) {
-        if (findExcerptByPart(m_excerpts, part) != m_excerpts.end()) {
+        if (part->isSharedPart() || findExcerptByPart(m_excerpts, part) != m_excerpts.end()) {
             continue;
         }
 

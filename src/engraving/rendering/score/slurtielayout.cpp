@@ -67,8 +67,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [item](System* parent) {
-        return item->newSlurTieSegment(parent);
+    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [item]() {
+        return item->newSlurTieSegment();
     }));
 
     SpannerSegmentType sst;
@@ -456,10 +456,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     sp->p1 = scr->pos() + scr->segment()->pos() + scr->measure()->pos();
     sp->p2 = ecr->pos() + ecr->segment()->pos() + ecr->measure()->pos();
     if (scr->isGrace()) {
-        sp->p1 += scr->parentItem()->pos();
+        sp->p1 += scr->layoutParent()->pos();
     }
     if (ecr->isGrace()) {
-        sp->p2 += ecr->parentItem()->pos();
+        sp->p2 += ecr->layoutParent()->pos();
     }
 
     // adjust for cross-staff
@@ -1183,7 +1183,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     if (slurSeg->isSingleBeginType()) {
         if (startCR->isChord() && toChord(startCR)->isGraceAfter()) {
             // if this is a grace-note-after, the shape is stored the *appended* segment
-            Chord* parent = toChord(startCR->parentItem());
+            Chord* parent = toChord(startCR->ownershipParent());
             if (parent) {
                 startSeg = parent->graceNotesAfter().appendedSegment();
             }
@@ -1198,7 +1198,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     if (slurSeg->isSingleEndType()) {
         if (endCR->isChord() && toChord(endCR)->isGraceAfter()) {
             // if this is a grace-note-after, the shape is stored the *appended* segment
-            Chord* parent = toChord(endCR->parentItem());
+            Chord* parent = toChord(endCR->ownershipParent());
             if (parent) {
                 endSeg = parent->graceNotesAfter().appendedSegment();
             }
@@ -1278,11 +1278,11 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
 
     // Remove items that the slur shouldn't try to avoid
     segShape.remove_if([&](ShapeElement& shapeEl) {
-        if (!shapeEl.item() || !shapeEl.item()->parentItem() || !shapeEl.item()->visible()) {
+        if (!shapeEl.item() || !shapeEl.item()->ownershipParent() || !shapeEl.item()->visible()) {
             return true;
         }
         const EngravingItem* item = shapeEl.item();
-        const EngravingItem* parent = item->parentItem();
+        const EngravingObject* parent = item->ownershipParent();
         // Don't remove arpeggio starting on a different voice and ending on the same voice as endCR when slur is on the outside
         if ((item->isArpeggio() || item->isChordBracket()) && (endCR->track() == toArpeggio(item)->endTrack())
             && endCR->tick() == item->tick()
@@ -1297,7 +1297,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         }
         // Ornament accidentals on start or end chord
         if (item->isAccidental() && parent->isOrnament()) {
-            EngravingItem* parentParent = parent->parentItem();
+            const EngravingObject* parentParent = parent->ownershipParent();
             if (parentParent && (parentParent == startCR || parentParent == endCR)) {
                 return true;
             }
@@ -1622,7 +1622,7 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
     TieSegment* segment = item->segmentAt(0);
     segment->setTrack(item->track());
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
-    segment->setSystem(system);   // Needed to populate System.spannerSegments
+    segment->moveToSystem(system);   // Needed to populate System.spannerSegments
     segment->resetAdjustmentOffset();
     segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();
 
@@ -1706,7 +1706,7 @@ TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContex
     item->fixupSegments(2);
     TieSegment* segment = item->segmentAt(1);
     segment->setTrack(item->track());
-    segment->setSystem(system);
+    segment->moveToSystem(system);
     segment->resetAdjustmentOffset();
 
     if (chord) {
@@ -1860,7 +1860,7 @@ void SlurTieLayout::createSlurSegments(Slur* item, LayoutContext& ctx)
             continue;
         }
         SlurSegment* lineSegm = item->segmentAt(segIdx++);
-        lineSegm->setSystem(system);
+        lineSegm->moveToSystem(system);
         if (startSysIdx == endSysIdx) {
             lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
         } else if (i == startSysIdx) {
@@ -1950,7 +1950,7 @@ LaissezVibSegment* SlurTieLayout::createLaissezVibSegment(LaissezVib* item)
     LaissezVibSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     segment->setTrack(item->track());
-    segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
+    segment->moveToSystem(item->startNote()->chord()->segment()->measure()->system());
     segment->resetAdjustmentOffset();
 
     return segment;
@@ -2029,7 +2029,7 @@ PartialTieSegment* SlurTieLayout::createPartialTieSegment(PartialTie* item)
     item->fixupSegments(1);
     PartialTieSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    segment->setSystem(chord->segment()->measure()->system());
+    segment->moveToSystem(chord->segment()->measure()->system());
     segment->setTrack(item->track());
     segment->resetAdjustmentOffset();
     segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();
@@ -3000,8 +3000,9 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
     if (c2->isGrace() && c2->up() != up) {
         return true;
     }
-    if (c1->isGraceBefore() && c2->isGraceAfter() && c1->parentItem() == c2->parentItem()) {
-        if (toChord(c1->parentItem())->stem() && toChord(c1->parentItem())->up() != up) {
+    if (c1->isGraceBefore() && c2->isGraceAfter() && c1->ownershipParent() == c2->ownershipParent()) {
+        const Chord* mainChord = toChord(c1->ownershipParent());
+        if (mainChord->stem() && mainChord->up() != up) {
             return true;
         }
     }

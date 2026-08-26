@@ -29,6 +29,7 @@
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "ui/uitypes.h"
+#include "ui/toolconfig.h"
 
 namespace mu::playback {
 class PlaybackUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable, public muse::Contextable

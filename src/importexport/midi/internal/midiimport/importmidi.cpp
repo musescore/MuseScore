@@ -371,7 +371,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
         text->setPlainText(String::fromUtf8((const char*)(mm.edata())));
 
         if (!measure->isVBox()) {
-            measure = Factory::createVBox(cs->dummy()->system());
+            measure = Factory::createVBox(cs);
             measure->setTick(Fraction(0, 1));
             measure->setNext(cs->first());
             cs->measures()->append(measure);
@@ -833,7 +833,7 @@ void tryCreatePickupMeasure(
     const Fraction secondTimeSig = score->sigmap()->timesig(secondBarTick).timesig();
 
     if (isPickupWithLessTimeSig(firstTimeSig, secondTimeSig)) {
-        Measure* pickup = Factory::createMeasure(score->dummy()->system());
+        Measure* pickup = Factory::createMeasure(score);
         pickup->setTick(Fraction::fromTicks(firstBarTick));
         pickup->setMeasureNumber(0);
         pickup->setExcludeFromNumbering(true);
@@ -849,14 +849,14 @@ void tryCreatePickupMeasure(
 
         score->sigmap()->add(firstBarTick, secondTimeSig);
 
-        Measure* firstBar = Factory::createMeasure(score->dummy()->system());
+        Measure* firstBar = Factory::createMeasure(score);
         firstBar->setTick(Fraction::fromTicks(firstBarTick));
         firstBar->setMeasureNumber(0);
         firstBar->setTimesig(secondTimeSig);
         firstBar->setTicks(secondTimeSig);
         score->measures()->append(firstBar);
 
-        Measure* secondBar = Factory::createMeasure(score->dummy()->system());
+        Measure* secondBar = Factory::createMeasure(score);
         secondBar->setTick(Fraction::fromTicks(firstBarTick + secondTimeSig.ticks()));
         secondBar->setMeasureNumber(1);
         secondBar->setTimesig(secondTimeSig);
@@ -889,7 +889,7 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
     }
 
     for (int i = begBarIndex; i < barCount; ++i) {
-        Measure* m = Factory::createMeasure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score);
         const int t = score->sigmap()->bar2tick(i, 0);
         m->setTick(Fraction::fromTicks(tick));
         m->setMeasureNumber(i);
@@ -901,7 +901,7 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
 
     const Measure* m = score->lastMeasure();
     if (m) {
-        score->setUpTempoMap();
+        score->updateTicksAndTimeSigMap();
         lastTick = ReducedFraction(m->endTick());
     }
 }

@@ -321,6 +321,8 @@ void NotationActionController::init()
     registerCommand(ADD_DYNAMIC_COMMAND, &Interaction::toggleDynamicPopup);
     registerCommand(ADD_HAIRPIN_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN);
     registerCommand(ADD_HAIRPIN_REVERSE_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN);
+    registerCommand(INCREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ 1);
+    registerCommand(DECREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ -1);
     registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
 
     registerCommand(ADD_IMAGE_COMMAND, [this]() { addImage(); });
@@ -886,11 +888,13 @@ void NotationActionController::init()
             { "add-dynamic", ADD_DYNAMIC_COMMAND, {} },
             { "add-hairpin", ADD_HAIRPIN_COMMAND, {} },
             { "add-hairpin-reverse", ADD_HAIRPIN_REVERSE_COMMAND, {} },
+            { "increase-dynamic", INCREASE_DYNAMIC_COMMAND, {} },
+            { "decrease-dynamic", DECREASE_DYNAMIC_COMMAND, {} },
             { "add-noteline", ADD_NOTELINE_COMMAND, {} },
             { "add-image", ADD_IMAGE_COMMAND, {} },
-            { "stretch-decrease", STRETCH_DECREASE_COMMAND, {} },
-            { "stretch-increase", STRETCH_INCREASE_COMMAND, {} },
-            { "stretch-reset", STRETCH_RESET_COMMAND, {} },
+            { "stretch-", STRETCH_DECREASE_COMMAND, {} },
+            { "stretch+", STRETCH_INCREASE_COMMAND, {} },
+            { "reset-stretch", STRETCH_RESET_COMMAND, {} },
             { "title-text", ADD_TITLE_TEXT_COMMAND, {} },
             { "subtitle-text", ADD_SUBTITLE_TEXT_COMMAND, {} },
             { "composer-text", ADD_COMPOSER_TEXT_COMMAND, {} },
@@ -3262,9 +3266,11 @@ void NotationActionController::toggleAutomation()
 muse::Ret NotationActionController::selectAutomationType(const muse::rcommand::CommandQuery& query)
 {
     const std::string type = query.param("type").toString();
-
     mu::engraving::AutomationType automationType = mu::engraving::AutomationType::Dynamics;
-    if (type == "volume") {
+
+    if (type == "tempo") {
+        automationType = mu::engraving::AutomationType::Tempo;
+    } else if (type == "volume") {
         automationType = mu::engraving::AutomationType::Volume;
     } else if (type == "pan") {
         automationType = mu::engraving::AutomationType::Pan;

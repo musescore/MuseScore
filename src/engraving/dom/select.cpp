@@ -155,7 +155,7 @@ ChordRest* Selection::cr() const
         return 0;
     }
     if (e->isNote()) {
-        e = e->parentItem();
+        e = toNote(e)->chord();
     }
     if (e->isChordRest()) {
         return toChordRest(e);
@@ -286,7 +286,7 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
     if (m_el.size() == 1) {
         EngravingItem* el = m_el[0];
         if (el->isNote()) {
-            return toChordRest(el->explicitParent());
+            return toChordRest(el->ownershipParent());
         } else if (el->isChordRest()) {
             return toChordRest(el);
         }
@@ -295,7 +295,7 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
     ChordRest* cr = nullptr;
     for (EngravingItem* el : m_el) {
         if (el->isNote()) {
-            el = el->parentItem();
+            el = toNote(el)->chord();
         }
         if (el->isChordRest()) {
             if (track != muse::nidx && el->track() != track) {
@@ -322,7 +322,7 @@ ChordRest* Selection::lastChordRest(track_idx_t track) const
         EngravingItem* el = m_el[0];
         if (el) {
             if (el->isNote()) {
-                return toChordRest(el->explicitParent());
+                return toChordRest(el->ownershipParent());
             } else if (el->isChordRest()) {
                 return toChordRest(el);
             }
@@ -1104,10 +1104,10 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::CHORD_BRACKET:
         case ElementType::TREMOLO_SINGLECHORD: {
             // ignore articulations not attached to chords/rest or segment
-            if (!e->explicitParent()->isChordRest()) {
+            if (!e->ownershipParent()->isChordRest()) {
                 continue;
             }
-            ChordRest* cr = toChordRest(e->explicitParent());
+            ChordRest* cr = toChordRest(e->ownershipParent());
             seg = cr->segment();
         } break;
         case ElementType::FERMATA:
@@ -1141,8 +1141,8 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::HARMONY:
         case ElementType::FRET_DIAGRAM:
             // ignore chord symbols or fret diagrams not attached to segment
-            if (e->explicitParent()->isSegment()) {
-                seg = toSegment(e->explicitParent());
+            if (e->ownershipParent()->isSegment()) {
+                seg = toSegment(e->ownershipParent());
                 break;
             }
             continue;

@@ -311,7 +311,7 @@ void GPConverter::fillTuplet()
     Tuplet* tuplet = m_nextTupletInfo.tuplet;
     ChordRest* firstCr = m_nextTupletInfo.elements.front();
     tuplet->setTrack(firstCr->track());
-    tuplet->setParent(firstCr->measure());
+    tuplet->setOwnershipParent(firstCr->measure());
     tuplet->setTick(firstCr->tick());
     tuplet->setBaseLen(Fraction(1, m_nextTupletInfo.lowestBase));
     tuplet->setTicks(m_nextTupletInfo.duration);
@@ -1012,12 +1012,12 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
     MeasureBase* m = nullptr;
     if (!_score->measures()->first()) {
-        m = Factory::createTitleVBox(_score->dummy()->system());
+        m = Factory::createTitleVBox(_score);
         _score->measures()->append(m);
     } else {
         m = _score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = Factory::createTitleVBox(_score->dummy()->system());
+            MeasureBase* mb = Factory::createTitleVBox(_score);
             _score->addMeasure(mb, m);
             m = mb;
         }
@@ -1353,7 +1353,7 @@ void GPConverter::addContinuousSlideHammerOn()
             gl->setTick(startTick);
             gl->setTick2(endNote->chord()->tick());
             gl->setEndElement(endNote);
-            gl->setParent(startNote);
+            gl->setOwnershipParent(startNote);
             gl->setText(u"");
             gl->setGlissandoType(GlissandoType::STRAIGHT);
             gl->setGlissandoShift(slide.second == SlideHammerOn::Slide);
@@ -1504,7 +1504,6 @@ void GPConverter::addTempoMap()
             tt->setXmlText(tempoText);
             tt->setTrack(0);
             segment->add(tt);
-            _score->setTempo(tick, tt->tempo());
 
             if (_lastGradualTempoChange) {
                 _lastGradualTempoChange->setTick2(tick);
@@ -1705,7 +1704,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
 Measure* GPConverter::addMeasure(const GPMasterBar* mB)
 {
     Fraction tick = _score->measures()->last() ? _score->measures()->last()->endTick() : Fraction(0, 1);
-    Measure* measure = Factory::createMeasure(_score->dummy()->system());
+    Measure* measure = Factory::createMeasure(_score);
     measure->setTick(tick);
     GPMasterBar::TimeSig sig = mB->timeSig();
     auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
@@ -2465,7 +2464,7 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
     if (asHarmony) {
         Harmony* h = Factory::createHarmony(cr->segment());
         h->setTrack(cr->track());
-        h->setParent(cr->segment());
+        h->setOwnershipParent(cr->segment());
         h->setHarmonyType(HarmonyType::STANDARD);
         h->setHarmony(diagram.name); // F#dim7
         h->setPlainText(h->harmonyName());
@@ -2582,7 +2581,7 @@ void GPConverter::addTimer(const GPBeat* beat, ChordRest* cr)
     st->setPlainText(String::number(minutes)
                      + u':'
                      + (seconds < 10 ? u'0' + String::number(seconds) : String::number(seconds)));
-    st->setParent(cr->segment());
+    st->setOwnershipParent(cr->segment());
     st->setTrack(cr->track());
     cr->segment()->add(st);
 }
@@ -3054,7 +3053,7 @@ void GPConverter::addTuning()
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);
             tun->setTrack(staff2track(s->idx()));
-            tun->setParent(seg);
+            tun->setOwnershipParent(seg);
             seg->add(tun);
         }
     }

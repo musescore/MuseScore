@@ -895,13 +895,13 @@ void MeiImporter::setOrnamentAccid(engraving::Ornament* ornament, const Convert:
     if (ornament->hasIntervalAbove() && (ornamSt.accidTypeAbove != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeAbove);
-        accidental->setParent(ornament);
+        accidental->setOwnershipParent(ornament);
         ornament->setAccidentalAbove(accidental);
     }
     if (ornament->hasIntervalBelow() && (ornamSt.accidTypeBelow != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeBelow);
-        accidental->setParent(ornament);
+        accidental->setOwnershipParent(ornament);
         ornament->setAccidentalBelow(accidental);
     }
 }
@@ -1134,7 +1134,7 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
         }
 
         if (!vBox) {
-            vBox = Factory::createTitleVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score);
         }
 
         Text* text = Factory::createText(vBox, textStyle);
@@ -1442,7 +1442,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
     meiMeasure.Read(measureNode);
     Convert::MeasureStruct measureSt = Convert::measureFromMEI(meiMeasure, warning);
 
-    Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+    Measure* measure = Factory::createMeasure(m_score);
     this->readXmlId(measure, meiMeasure.m_xmlId);
     measure->setTick(m_ticks);
     measure->setTimesig(m_currentTimeSig);
@@ -2225,7 +2225,7 @@ bool MeiImporter::readTuplet(pugi::xml_node tupletNode, Measure* measure, int tr
     }
 
     m_tuplet->setTrack(track);
-    m_tuplet->setParent(measure);
+    m_tuplet->setOwnershipParent(measure);
 
     success = readElements(tupletNode, measure, track, ticks);
 
@@ -2590,7 +2590,7 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
     FiguredBassItem* figuredBassItem = figuredBass->createItem(line);
     this->readXmlId(figuredBassItem, meiF.m_xmlId);
     figuredBassItem->setTrack(figuredBass->track());
-    figuredBassItem->setParent(figuredBass);
+    figuredBassItem->setOwnershipParent(figuredBass);
 
     StringList meiLines;
     size_t meiLine = 0;
@@ -2747,7 +2747,7 @@ bool MeiImporter::readGliss(pugi::xml_node glissNode, Measure* measure)
     gliss->setTick(startNote->chord()->tick());
     gliss->setStartElement(startNote);
     gliss->setTrack(startNote->track());
-    gliss->setParent(startNote);
+    gliss->setOwnershipParent(startNote);
     gliss->setGlissandoStyle(startNote->part()->instrument(startNote->tick())->glissandoStyle());
 
     const String glissText = String(glissNode.text().as_string());
@@ -2881,7 +2881,7 @@ bool MeiImporter::readLv(pugi::xml_node lvNode, Measure* measure)
     }
 
     LaissezVib* lv = Factory::createLaissezVib(note);
-    lv->setParent(note);
+    lv->setOwnershipParent(note);
     note->score()->undoAddElement(lv);
     m_uids->reg(lv, meiLv.m_xmlId);
 
@@ -3165,7 +3165,7 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
         Trill* trill = toTrill(this->addSpanner(meiTrill, measure, trillNode));
         if (trill) {
             // move ornament to spanner
-            ornament->parentItem()->remove(ornament);
+            ornament->ownershipParentItem()->remove(ornament);
             trill->setOrnament(ornament);
             // @color
             Convert::colorlineFromMEI(trill, meiTrill);
@@ -3545,7 +3545,7 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 {
     if (!str.isEmpty()) {
         if (vBox == nullptr) {
-            vBox = Factory::createTitleVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score);
         }
         Text* text = Factory::createText(vBox, textStyleType);
         text->setPlainText(str);

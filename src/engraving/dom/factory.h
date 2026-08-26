@@ -27,7 +27,6 @@
 #include "engravingitem.h"
 namespace mu::engraving {
 class Instrument;
-class RootItem;
 class RangeLock;
 class TremoloSingleChord;
 class TremoloTwoChord;
@@ -67,8 +66,8 @@ public:
     static BarLine* copyBarLine(const BarLine& src);
     static std::shared_ptr<BarLine> makeBarLine(Segment* parent);
 
-    static Beam* createBeam(System* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Beam> makeBeam(System* parent);
+    static Beam* createBeam(Score* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Beam> makeBeam(Score* parent);
 
     static Bend* createBend(Note* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bend> makeBend(Note* parent);
@@ -129,7 +128,7 @@ public:
     static LyricsLine* createLyricsLine(EngravingItem* parent, bool isAccessibleEnabled = true);
     static LyricsLine* copyLyricsLine(const LyricsLine& src);
 
-    static Measure* createMeasure(System* parent, bool isAccessibleEnabled = true);
+    static Measure* createMeasure(Score* parent, bool isAccessibleEnabled = true);
     static Measure* copyMeasure(const Measure& src);
 
     static MeasureRepeat* createMeasureRepeat(Segment* parent, bool isAccessibleEnabled = true);
@@ -146,7 +145,7 @@ public:
     static NoteLine* createNoteLine(Note* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<NoteLine> makeNoteLine(Note* parent);
 
-    static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
+    static Page* createPage(Score* parent, bool isAccessibleEnabled = true);
 
     static PageLockIndicator* createPageLockIndicator(System* parent, const RangeLock* lock, bool isAccessibleEnabled = true);
     static PageLockIndicator* copyPageLockIndicator(const PageLockIndicator& src);
@@ -203,7 +202,7 @@ public:
     static StemSlash* createStemSlash(Chord* parent, bool isAccessibleEnabled = true);
     static StemSlash* copyStemSlash(const StemSlash& src);
 
-    static System* createSystem(Page* parent, bool isAccessibleEnabled = true);
+    static System* createSystem(Score* parent, bool isAccessibleEnabled = true);
     static SystemText* createSystemText(Segment* parent, TextStyleType textStyleType = TextStyleType::SYSTEM,
                                         ElementType type = ElementType::SYSTEM_TEXT, bool isAccessibleEnabled = true);
 
@@ -295,17 +294,17 @@ public:
 
     static Dynamic* createDynamic(Segment* parent, bool isAccessibleEnabled = true);
 
-    static VBox* createVBox(System* parent, bool isAccessibleEnabled = true);
+    static VBox* createVBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static VBox* createVBox(const ElementType& type, System* parent, bool isAccessibleEnabled = true);
+    static VBox* createVBox(const ElementType& type, Score* parent, bool isAccessibleEnabled = true);
 
-    static VBox* createTitleVBox(System* parent, bool isAccessibleEnabled = true);
+    static VBox* createTitleVBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static HBox* createHBox(System* parent, bool isAccessibleEnabled = true);
+    static HBox* createHBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static TBox* createTBox(System* parent, bool isAccessibleEnabled = true);
+    static TBox* createTBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static FBox* createFBox(System* parent, bool isAccessibleEnabled = true);
+    static FBox* createFBox(Score* parent, bool isAccessibleEnabled = true);
 
     static Image* createImage(EngravingItem* parent);
 

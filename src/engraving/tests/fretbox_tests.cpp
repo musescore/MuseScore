@@ -62,7 +62,7 @@ public:
             diagram->updateDiagram(chord);
 
             diagram->setTrack(0);
-            diagram->setParent(segment);
+            diagram->setOwnershipParent(segment);
 
             diagram->assignNewEID();
 
@@ -93,7 +93,7 @@ public:
         diagram->updateDiagram(chord);
 
         diagram->setTrack(0);
-        diagram->setParent(segment);
+        diagram->setOwnershipParent(segment);
 
         diagram->assignNewEID();
 

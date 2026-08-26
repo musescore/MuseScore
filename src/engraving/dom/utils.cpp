@@ -535,7 +535,7 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
     }
 
     if (chord->isGraceBefore()) {
-        chord = toChord(chord->explicitParent());
+        chord = toChord(chord->ownershipParent());
 
         // try to tie to next grace note
 
@@ -558,7 +558,7 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
         // grace after
         // we will try to tie to note in next normal chord, below
         // meanwhile, set chord to parent chord so the endTick calculation will make sense
-        chord = toChord(chord->explicitParent());
+        chord = toChord(chord->ownershipParent());
     } else {
         // normal chord
         // try to tie to grace note after if present

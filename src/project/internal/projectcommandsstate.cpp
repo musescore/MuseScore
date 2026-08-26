@@ -146,11 +146,11 @@ CommandState ProjectCommandsState::commandState(const Command& command) const
     switch (condition) {
     case PCondition::Any: return CommandState(true, false);
     case PCondition::HasProject: return CommandState(controller()->hasProject(), false);
-    case PCondition::NeedSave: return CommandState(controller()->needSave(), false);
+    case PCondition::NeedSave: return CommandState(controller()->hasProject() && controller()->needSave(), false);
     case PCondition::NotBusy: {
-        return CommandState(!controller()->isBusy(PROJECT_COMMAND_BUSY_STATUSES.at(command)), false);
+        return CommandState(controller()->hasProject() && !controller()->isBusy(PROJECT_COMMAND_BUSY_STATUSES.at(command)), false);
     }
-    case PCondition::HasSelection: return CommandState(controller()->hasSelection(), false);
+    case PCondition::HasSelection: return CommandState(controller()->hasProject() && controller()->hasSelection(), false);
     }
     return CommandState(true, false);
 }

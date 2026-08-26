@@ -110,18 +110,10 @@
             <eid>P_P</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
-            <duration>1/32</duration>
-            <acciaccatura/>
+            <appoggiatura/>
             <noStem>1</noStem>
             <Note>
               <eid>Q_Q</eid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>5</fret>
-              <string>3</string>
-              </Note>
-            <Note>
-              <eid>R_R</eid>
               <parentheses>both</parentheses>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -131,18 +123,32 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>R_R</NoteEID>
+                <NoteEID>Q_Q</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
+            <durationType>eighth</durationType>
+            <duration>1/32</duration>
+            <acciaccatura/>
+            <showStemSlash>0</showStemSlash>
+            <Note>
+              <eid>S_S</eid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>5</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Note>
               <eid>N_N</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>T_T</eid>
+                <eid>U_U</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -152,16 +158,16 @@
                 <guitarBendType>pre-dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
-                <startElement>R_R</startElement>
+                <startElement>Q_Q</startElement>
                 <endElement>N_N</endElement>
-                <eid>U_U</eid>
+                <eid>V_V</eid>
                 <track>0</track>
                 </GuitarBend>
               <Glissando>
                 <text></text>
-                <startElement>Q_Q</startElement>
+                <startElement>S_S</startElement>
                 <endElement>N_N</endElement>
-                <eid>V_V</eid>
+                <eid>W_W</eid>
                 <track>0</track>
                 <diagonal>1</diagonal>
                 </Glissando>
@@ -172,9 +178,9 @@
       </Staff>
     <SpannerMap>
       <Slur>
-        <startElement>P_P</startElement>
-        <endElement>S_S</endElement>
-        <eid>W_W</eid>
+        <startElement>R_R</startElement>
+        <endElement>T_T</endElement>
+        <eid>X_X</eid>
         <track>0</track>
         </Slur>
       </SpannerMap>

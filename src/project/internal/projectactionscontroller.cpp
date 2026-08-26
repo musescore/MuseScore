@@ -47,7 +47,6 @@
 #include "notation/inotationselection.h"
 
 #include "projecterrors.h"
-#include "projectextensionpoints.h"
 
 #include "../projectcommands.h"
 #include "rcommand/actiontocommand.h"
@@ -526,8 +525,6 @@ muse::Ret ProjectActionsController::doOpenCloudProjectOffline(const muse::io::pa
 
 Ret ProjectActionsController::doFinishOpenProject()
 {
-    extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
-
     //! Show MuseSounds / MuseSampler update if need
     auto showUpdateNotification = [this]() {
         QTimer::singleShot(1000, [this]() {
@@ -797,8 +794,6 @@ muse::Ret ProjectActionsController::newProject()
 
     auto promise = interactive()->open(NEW_SCORE_URI);
     promise.onResolve(this, [this](const Val&) {
-        extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_CREATED);
-
         Ret ret = doFinishOpenProject();
 
         if (!ret) {
@@ -1104,14 +1099,7 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
         return false;
     }
 
-    Ret ret = make_ok();
-    if (saveMode == SaveMode::Save) {
-        ret = extensionsProvider()->performPoint(EXEC_ONPRE_PROJECT_SAVE);
-    }
-
-    if (ret) {
-        ret = project->save(filePath, saveMode, createBackup);
-    }
+    Ret ret = project->save(filePath, saveMode, createBackup);
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -1136,10 +1124,6 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
             }
         }
         return false;
-    }
-
-    if (saveMode == SaveMode::Save) {
-        ret = extensionsProvider()->performPoint(EXEC_ONPOST_PROJECT_SAVED);
     }
 
     recentFilesController()->prependRecentFile(makeRecentFile(project));
@@ -2050,17 +2034,17 @@ async::Promise<io::path_t> ProjectActionsController::selectScoreOpeningFile() co
                                       muse::trc("project", "MuseScore files") + " (*.mscz)",
                                       muse::trc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)",
                                       muse::trc("project", "MIDI files") + " (*.mid *.midi *.kar)",
-                                      muse::trc("project", "MNX files (experimental)") + " (*.mnx *.json)",
+                                      muse::trc("project", "MNX files [experimental]") + " (*.mnx *.json)",
                                       muse::trc("project", "MuseData files") + " (*.md)",
                                       muse::trc("project", "Capella files") + " (*.cap *.capx)",
-                                      muse::trc("project", "BB files (experimental)") + " (*.mgu *.sgu)",
-                                      muse::trc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)",
-                                      muse::trc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)",
+                                      muse::trc("project", "BB files [experimental]") + " (*.mgu *.sgu)",
+                                      muse::trc("project", "Overture / Score Writer files [experimental]") + " (*.ove *.scw)",
+                                      muse::trc("project", "Bagpipe Music Writer files [experimental]") + " (*.bmw *.bww)",
                                       muse::trc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)",
-                                      muse::trc("project", "Power Tab Editor files (experimental)") + " (*.ptb)",
+                                      muse::trc("project", "Power Tab Editor files [experimental]") + " (*.ptb)",
                                       muse::trc("project", "MEI files") + " (*.mei)",
-                                      muse::trc("project", "TablEdit files (experimental)") + " (*.tef)",
-                                      muse::trc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)",
+                                      muse::trc("project", "TablEdit files [experimental]") + " (*.tef)",
+                                      muse::trc("project", "Uncompressed MuseScore folders [experimental]") + " (*.mscx)",
                                       muse::trc("project", "MuseScore developer files") + " (*.mscs)",
                                       muse::trc("project", "MuseScore backup files") + " (*.mscz~)" };
 

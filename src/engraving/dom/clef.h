@@ -95,8 +95,8 @@ public:
     Clef* clone() const override { return new Clef(*this); }
     double mag() const override;
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
-    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent()->ownershipParent(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;

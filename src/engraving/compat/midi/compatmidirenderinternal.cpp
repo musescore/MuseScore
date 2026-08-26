@@ -419,7 +419,7 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
 
         if (endNote->chord()->isGraceAfter()) {
             if (currentNotes.empty()) {
-                IF_ASSERT_FAILED(note->chord() == endNote->chord()->explicitParent()) {
+                IF_ASSERT_FAILED(note->chord() == endNote->chord()->ownershipParent()) {
                     LOGE() << "error in filling bends midi data for note on track " << note->track() << ", tick " << note->tick().ticks();
                     return {};
                 }
@@ -812,7 +812,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     int tieLen = calculateTieLength(note);
     if (chord->isGrace()) {
         assert(!CompatMidiRendererInternal::graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
-        chord = toChord(chord->explicitParent());
+        chord = toChord(chord->ownershipParent());
     }
 
     int ticks = chord->actualTicks().ticks();   // ticks of the actual note
@@ -1829,13 +1829,14 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                 direction = ChangeDirection::DECREASING;
             }
 
+            const Fraction etick = change != 0 ? tick + d->velocityChangeLength(mainScore->multipliedTempo(tick)) : tick;
+
             switch (d->voiceAssignment()) {
             case VoiceAssignment::ALL_VOICE_IN_STAFF: {
                 for (track_idx_t track = d->staffIdx() * VOICES; track < (d->staffIdx() + 1) * VOICES; ++track) {
                     context.velocitiesByTrack[track].addDynamic(tick, v);
                 }
                 if (change != 0) {
-                    Fraction etick = tick + d->velocityChangeLength();
                     ChangeMethod method = ChangeMethod::NORMAL;
                     for (track_idx_t track = d->staffIdx() * VOICES; track < (d->staffIdx() + 1) * VOICES; ++track) {
                         context.velocitiesByTrack[track].addHairpin(tick, etick, change, method, direction);
@@ -1859,7 +1860,6 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                         context.velocitiesByTrack[track].addDynamic(tick, v);
                     }
                     if (change != 0) {
-                        Fraction etick = tick + d->velocityChangeLength();
                         ChangeMethod method = ChangeMethod::NORMAL;
                         for (track_idx_t track = stp->idx() * VOICES; track < (stp->idx() + 1) * VOICES; ++track) {
                             context.velocitiesByTrack[track].addHairpin(tick, etick, change, method, direction);
@@ -1871,7 +1871,6 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
             case VoiceAssignment::CURRENT_VOICE_ONLY: {
                 context.velocitiesByTrack[d->track()].addDynamic(tick, v);
                 if (change != 0) {
-                    Fraction etick = tick + d->velocityChangeLength();
                     ChangeMethod method = ChangeMethod::NORMAL;
                     context.velocitiesByTrack[d->track()].addHairpin(tick, etick, change, method, direction);
                 }

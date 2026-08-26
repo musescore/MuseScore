@@ -75,12 +75,12 @@ static const std::string DEV_INFO_NAME = "devinfo";
 
 static constexpr bool ADD_SEPARATOR = true;
 
-Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
-                                 const OpenParams& openParams)
+Ret BackendApi::exportScoreMedia(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
+                                 const muse::io::path_t& highlightConfigPath, const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
+    RetVal<INotationProjectPtr> prj = openProject(iocCtx, in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -109,11 +109,12 @@ Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::pat
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret BackendApi::exportScoreMeta(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
+                                const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
+    RetVal<INotationProjectPtr> prj = openProject(iocCtx, in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -130,11 +131,12 @@ Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret BackendApi::exportScoreParts(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
+                                 const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
+    RetVal<INotationProjectPtr> prj = openProject(iocCtx, in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -142,18 +144,19 @@ Ret BackendApi::exportScoreParts(const muse::io::path_t& in, const muse::io::pat
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    Ret ret = doExportScoreParts(prj.val->masterNotation(), outputFile);
+    Ret ret = doExportScoreParts(iocCtx, prj.val->masterNotation(), outputFile);
 
     outputFile.close();
 
     return ret;
 }
 
-Ret BackendApi::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret BackendApi::exportScorePartsPdfs(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
+                                     const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
+    RetVal<INotationProjectPtr> prj = openProject(iocCtx, in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -170,12 +173,12 @@ Ret BackendApi::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io:
     return ret;
 }
 
-Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                     const OpenParams& openParams)
+Ret BackendApi::exportScoreTranspose(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
+                                     const std::string& optionsJson, const OpenParams& openParams)
 {
     TRACEFUNC
 
-    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
+    RetVal<INotationProjectPtr> prj = openProject(iocCtx, in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -192,17 +195,17 @@ Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io:
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    bool result = doExportScoreTranspose(notation, jsonWriter);
+    bool result = doExportScoreTranspose(iocCtx, notation, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out,
+Ret BackendApi::exportScoreElements(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
                                     const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    RetVal<INotationProjectPtr> prj = openProject(in, openParams);
+    RetVal<INotationProjectPtr> prj = openProject(iocCtx, in, openParams);
     if (!prj.ret) {
         return prj.ret;
     }
@@ -228,11 +231,12 @@ Ret BackendApi::openOutputFile(QFile& file, const muse::io::path_t& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::io::path_t& path, const OpenParams& params)
+RetVal<project::INotationProjectPtr> BackendApi::openProject(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& path,
+                                                             const OpenParams& params)
 {
     TRACEFUNC
 
-    auto notationProject = notationCreator()->newProject(nullptr);
+    auto notationProject = notationCreator()->newProject(iocCtx);
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Ret::Code::InternalError);
     }
@@ -535,7 +539,8 @@ RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, cons
     return result;
 }
 
-Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIODevice& destinationDevice)
+Ret BackendApi::doExportScoreParts(const muse::modularity::ContextPtr& iocCtx, const IMasterNotationPtr masterNotation,
+                                   QIODevice& destinationDevice)
 {
     QJsonArray partsObjList;
     QJsonArray partsMetaList;
@@ -566,7 +571,7 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
         partsMetaList << partMetaObj;
 
         std::string fileName = io::escapeFileName(partScore->name().toStdString()).toStdString() + ".mscz";
-        QJsonValue partObj(QString::fromLatin1(scorePartJson(partScore, fileName).val));
+        QJsonValue partObj(QString::fromLatin1(scorePartJson(iocCtx, partScore, fileName).val));
         partsObjList << partObj;
     }
 
@@ -625,7 +630,8 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     return ok;
 }
 
-Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::doExportScoreTranspose(const muse::modularity::ContextPtr& iocCtx, const INotationPtr notation,
+                                       BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     mu::engraving::Score* score = notation->elements()->msScore();
 
@@ -634,7 +640,7 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     std::string fileNumber = std::to_string(QRandomGenerator::global()->generate() % 1000000);
     std::string fileName = score->name().toStdString() + "_transposed." + fileNumber + ".mscz";
 
-    RetVal<QByteArray> scoreJson = scorePartJson(score, fileName);
+    RetVal<QByteArray> scoreJson = scorePartJson(iocCtx, score, fileName);
     if (!scoreJson.ret) {
         LOGW() << "Transpose: adding mscz failed";
     }
@@ -742,7 +748,8 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
     return make_ok();
 }
 
-RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const std::string& fileName)
+RetVal<QByteArray> BackendApi::scorePartJson(const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score,
+                                             const std::string& fileName)
 {
     ByteArray scoreData;
     Buffer buf(&scoreData);
@@ -755,7 +762,7 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
     MscWriter mscWriter(params);
     mscWriter.open();
 
-    bool ok = MscSaver(muse::modularity::globalCtx()).exportPart(score, mscWriter);
+    bool ok = MscSaver(iocCtx).exportPart(score, mscWriter);
     if (!ok) {
         LOGW() << "Error save mscz file";
     }
@@ -817,12 +824,13 @@ void BackendApi::initPotentialExcerpts(notation::IMasterNotationPtr masterNotati
     renderExcerptsContents(masterNotation);
 }
 
-Ret BackendApi::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)
+Ret BackendApi::updateSource(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const std::string& newSource,
+                             bool forceMode)
 {
     OpenParams openParams;
     openParams.forceMode = forceMode;
 
-    RetVal<INotationProjectPtr> project = openProject(in, openParams);
+    RetVal<INotationProjectPtr> project = openProject(iocCtx, in, openParams);
     if (!project.ret) {
         return project.ret;
     }

@@ -55,13 +55,13 @@ namespace mu::engraving {
 //   TieSegment
 //---------------------------------------------------------
 
-TieSegment::TieSegment(System* parent)
-    : SlurTieSegment(ElementType::TIE_SEGMENT, parent)
+TieSegment::TieSegment(Tie* sp)
+    : SlurTieSegment(ElementType::TIE_SEGMENT, sp)
 {
 }
 
-TieSegment::TieSegment(const ElementType& type, System* parent)
-    : SlurTieSegment(type, parent)
+TieSegment::TieSegment(const ElementType& type, Tie* sp)
+    : SlurTieSegment(type, sp)
 {
 }
 
@@ -239,7 +239,7 @@ void Tie::updatePossibleJumpPoints()
 
     tieJumpPoints()->clear();
 
-    const Note* note = toNote(parentItem());
+    const Note* note = toNote(ownershipParent());
     const Chord* chord = note ? note->chord() : nullptr;
     const Measure* measure = chord ? chord->measure() : nullptr;
     if (!measure) {
@@ -443,7 +443,7 @@ double Tie::scalingFactor() const
 void Tie::setStartNote(Note* note)
 {
     setStartElement(note);
-    setParent(note);
+    setOwnershipParent(note);
 }
 
 Note* Tie::startNote() const
@@ -520,7 +520,7 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
 
     score->undoRemoveElement(oldTie);
 
-    newTie->setParent(startNote);
+    newTie->setOwnershipParent(startNote);
     newTie->setStartNote(startNote);
     newTie->setTick(startNote->tick());
     newTie->setTrack(startNote->track());

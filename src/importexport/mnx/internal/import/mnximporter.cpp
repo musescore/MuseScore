@@ -647,7 +647,7 @@ void MnxImporter::setBarline(engraving::Measure* measure, const mnx::global::Bar
         mensurStriche = mensurStriche && !localSpan && !localTick && !localShort;
 
         BarLine* bl = Factory::createBarLine(bls);
-        bl->setParent(bls);
+        bl->setOwnershipParent(bls);
         bl->setTrack(staff2track(idx));
         bl->setVisible(mnxBlt != mnx::BarlineType::NoBarline);
         bl->setGenerated(false);
@@ -731,7 +731,7 @@ void MnxImporter::createJumpOrMarker(engraving::Measure* measure, const mnx::Fra
                                     : ElementType::MARKER;
 
     TextBase* item = toTextBase(Factory::createItem(elementType, measure));
-    item->setParent(measure);
+    item->setOwnershipParent(measure);
     item->setTrack(curTrackIdx);
 
     std::visit([&](const auto& v) {
@@ -787,7 +787,7 @@ void MnxImporter::createTempoMark(engraving::Measure* measure, const mnx::global
     Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
 
     TempoText* item = Factory::createTempoText(s);
-    item->setParent(s);
+    item->setOwnershipParent(s);
     item->setTrack(curTrackIdx);
 
     Fraction noteValueInQuarters = toMuseScoreFraction(tempo.value()) / Fraction(1, 4);
@@ -816,7 +816,7 @@ void MnxImporter::importGlobalMeasures()
     int lastDisplayNum = 0;
     for (const mnx::global::Measure& mnxMeasure : mnxDocument().global().measures()) {
         const bool isFirst = mnxMeasure.calcArrayIndex() == 0;
-        Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+        Measure* measure = Factory::createMeasure(m_score);
         Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
         measure->setTick(tick);
         if (const std::optional<mnx::TimeSignature>& mnxTimeSig = mnxMeasure.time()) {

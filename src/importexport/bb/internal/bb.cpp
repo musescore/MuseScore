@@ -426,7 +426,7 @@ Err importBB(MasterScore* score, const QString& name)
     //---------------------------------------------------
 
     for (int i = 0; i < bb.measures(); ++i) {
-        Measure* measure  = Factory::createMeasure(score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(score);
         Fraction tick = Fraction::fromTicks(score->sigmap()->bar2tick(i, 0));
         measure->setTick(tick);
         Fraction ts = score->sigmap()->timesig(tick.ticks()).timesig();
@@ -488,7 +488,7 @@ Err importBB(MasterScore* score, const QString& name)
     text->setPlainText(String::fromUtf8(bb.title()));
 
     if (!measureB->isVBox()) {
-        measureB = Factory::createTitleVBox(score->dummy()->system());
+        measureB = Factory::createTitleVBox(score);
         measureB->setNext(score->first());
         score->measures()->append(measureB);
     }
@@ -577,7 +577,7 @@ Err importBB(MasterScore* score, const QString& name)
         keysig->setKey(cKey, key);
         sks->add(keysig);
     }
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     return engraving::Err::NoError;
 }
 

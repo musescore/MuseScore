@@ -1020,7 +1020,7 @@ int SvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
     case QPaintDevice::PdmDevicePixelRatioScaled:
         return 1;
     default:
-        LOGW("SvgGenerator::metric(), unhandled metric %d\n", metric);
+        LOGD("SvgGenerator::metric(), unhandled metric %d\n", metric);
         break;
     }
     return 0;

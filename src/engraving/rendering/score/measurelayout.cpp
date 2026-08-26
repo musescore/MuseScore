@@ -56,6 +56,7 @@
 
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
+#include "chordbracketlayout.h"
 #include "chordlayout.h"
 #include "horizontalspacing.h"
 #include "layoutcontext.h"
@@ -81,7 +82,7 @@ using namespace mu::engraving::rendering::score;
 
 void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
 {
-    assert(item->explicitParent());
+    assert(item->system());
     assert(ctx.dom().nstaves() == item->mstaves().size());
 
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
@@ -302,6 +303,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
                 }
             }
         } else if (segment.isChordRestType()) {
+            ChordBracketLayout::layoutSegment(&segment, ctx);
             for (EngravingItem* e : segment.annotations()) {
                 if (e->isSymbol() || e->isHarmony() || e->isFretDiagram()) {
                     TLayout::layoutItem(e, ctx);
@@ -500,6 +502,7 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
             }
         }
 
+        ChordBracketLayout::layoutSegment(&seg, ctx);
         seg.createShapes();
         isFirstChordInMeasure = false;
     }
@@ -595,7 +598,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
                 measureNumber = new MeasureNumber(m);
                 measureNumber->setTrack(staff2track(staffIdx));
                 measureNumber->setGenerated(true);
-                measureNumber->setParent(m);
+                measureNumber->setOwnershipParent(m);
                 m->add(measureNumber);
             }
 
@@ -782,7 +785,7 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
             }
         } else {
             bl = Factory::createBarLine(seg);
-            bl->setParent(seg);
+            bl->setOwnershipParent(seg);
             bl->setTrack(track);
             bl->setGenerated(true);
             bl->setSpanStaff(staff->barLineSpan());
@@ -920,7 +923,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
             const Staff* staff = ctx.dom().staff(staffIdx);
             if (!barLine) {
                 barLine = Factory::createBarLine(barlineSeg);
-                barLine->setParent(barlineSeg);
+                barLine->setOwnershipParent(barlineSeg);
                 barLine->setTrack(track);
                 barLine->setGenerated(true);
                 barLine->setSpanStaff(staff->barLineSpan());
@@ -1102,7 +1105,7 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
             courtesyTimeSig = Factory::createTimeSig(courtesySigSeg);
             courtesyTimeSig->setTrack(track);
             courtesyTimeSig->setGenerated(true);
-            courtesyTimeSig->setParent(courtesySigSeg);
+            courtesyTimeSig->setOwnershipParent(courtesySigSeg);
             courtesyTimeSig->setIsCourtesy(true);
             courtesySigSeg->add(courtesyTimeSig);
         }
@@ -1227,7 +1230,7 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
             courtesyKeySig = Factory::createKeySig(courtesySigSeg);
             courtesyKeySig->setTrack(track);
             courtesyKeySig->setGenerated(true);
-            courtesyKeySig->setParent(courtesySigSeg);
+            courtesyKeySig->setOwnershipParent(courtesySigSeg);
             courtesyKeySig->setIsCourtesy(true);
             courtesySigSeg->add(courtesyKeySig);
         }
@@ -1341,7 +1344,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
             courtesyClef->setTrack(track);
             courtesyClef->setGenerated(true);
             courtesyClef->setSmall(true);
-            courtesyClef->setParent(courtesyClefSeg);
+            courtesyClef->setOwnershipParent(courtesyClefSeg);
             courtesyClef->setClefType(actualClef->clefType());
             courtesyClef->setIsCourtesy(true);
             courtesyClefSeg->add(courtesyClef);
@@ -1375,7 +1378,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
 static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom, LayoutContext& ctx)
 {
-    EngravingItem* parent = item->parentItem();
+    EngravingItem* parent = item->layoutParent();
     const double spatium = item->spatium();
     if (!parent) {
         return;
@@ -1785,7 +1788,7 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
             clef = Factory::createClef(cSegment);
             clef->setTrack(track);
             clef->setGenerated(true);
-            clef->setParent(cSegment);
+            clef->setOwnershipParent(cSegment);
             clef->setIsHeader(true);
             clef->setShowCourtesy(showCourtesy);
             cSegment->add(clef);
@@ -1798,7 +1801,7 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
         TLayout::layoutClef(clef, clef->mutldata(), ctx.conf());
         cSegment->setEnabled(true);
     } else if (clef) {
-        clef->parentItem()->remove(clef);
+        clef->ownershipParentItem()->remove(clef);
         if (clef->generated()) {
             delete clef;
         }
@@ -1855,7 +1858,7 @@ Segment* MeasureLayout::addHeaderKeySig(Measure* m, bool isFirstKeysig, const St
             keysig = Factory::createKeySig(kSegment);
             keysig->setTrack(track);
             keysig->setGenerated(true);
-            keysig->setParent(kSegment);
+            keysig->setOwnershipParent(kSegment);
             kSegment->add(keysig);
         }
         keysig->setKeySigEvent(keyIdx);
@@ -1872,7 +1875,7 @@ Segment* MeasureLayout::addHeaderKeySig(Measure* m, bool isFirstKeysig, const St
         }
 
         if (remove) {
-            keysig->parentItem()->remove(keysig);
+            keysig->ownershipParentItem()->remove(keysig);
             if (keysig->generated()) {
                 delete keysig;
             }
@@ -2079,7 +2082,7 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
                 bl = Factory::createBarLine(s);
                 bl->setTrack(track);
                 bl->setGenerated(true);
-                bl->setParent(s);
+                bl->setOwnershipParent(s);
                 bl->setBarLineType(BarLineType::NORMAL);
                 bl->setSpanStaff(true);
                 s->add(bl);

@@ -144,7 +144,6 @@
 #include "dom/soundflag.h"
 
 #include "dom/tapping.h"
-#include "dom/tempo.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textbase.h"
@@ -1672,7 +1671,10 @@ void TWrite::writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& 
         xml.tag("track2", t2);
         xml.tagFraction("startTick", item->tick());
         xml.tagFraction("ticks", item->ticks());
-    } else {
+    } else if (!item->isGuitarBendHold()) {
+        /* GuitarBendHold lines are regenerated during layout by GuitarBend::updateHoldLine(),
+         * which recomputes their endpoints, so there is no point in serializing them */
+
         const bool isPartialTieOrLV = item->isPartialTie() || item->isLaissezVib();
         const bool hasStartEndElements = item->startElement() && item->endElement();
         IF_ASSERT_FAILED(item->score()->isPaletteScore() || isPartialTieOrLV || hasStartEndElements) {
@@ -3328,7 +3330,7 @@ void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     writeProperty(item, xml, Pid::PLAY);
-    xml.tag("tempo", TConv::toXml(item->tempo(), TEMPO_PRECISION));
+    xml.tag("tempo", TConv::toXml(item->tempo(), Constants::TEMPO_PRECISION));
     if (item->followText()) {
         xml.tag("followText", item->followText());
     }

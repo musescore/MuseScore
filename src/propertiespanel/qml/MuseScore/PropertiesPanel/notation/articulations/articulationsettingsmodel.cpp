@@ -59,7 +59,7 @@ void ArticulationSettingsModel::requestElements()
         = m_repository->findElementsByType(mu::engraving::ElementType::TAPPING_HALF_SLUR_SEGMENT);
     for (mu::engraving::EngravingItem* halfSlurSeg : halfSlurSegs) {
         TappingHalfSlur* halfSlur = toTappingHalfSlur(toTappingHalfSlurSegment(halfSlurSeg)->spanner());
-        Tapping* tapping = toTapping(halfSlur->parentItem());
+        Tapping* tapping = halfSlur->tapping();
         m_elementList.push_back(tapping);
     }
 }

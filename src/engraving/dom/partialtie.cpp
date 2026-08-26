@@ -44,9 +44,9 @@ bool PartialTie::setProperty(Pid propertyId, const PropertyValue& v)
     return true;
 }
 
-SlurTieSegment* PartialTie::newSlurTieSegment(System* parent)
+SlurTieSegment* PartialTie::newSlurTieSegment()
 {
-    PartialTieSegment* seg = new PartialTieSegment(parent);
+    PartialTieSegment* seg = new PartialTieSegment(this);
     seg->setTrack(track());
     return seg;
 }
@@ -63,7 +63,7 @@ void PartialTie::setEndNote(Note* note)
     setPartialSpannerDirection(PartialSpannerDirection::INCOMING);
     Tie::setStartNote(nullptr);
     Tie::setEndNote(note);
-    setParent(note);
+    setOwnershipParent(note);
 }
 
 bool PartialTie::allJumpPointsInactive() const
@@ -100,8 +100,8 @@ Note* PartialTie::startNote() const
     return startTie() ? startTie()->startNote() : nullptr;
 }
 
-PartialTieSegment::PartialTieSegment(System* parent)
-    : TieSegment(ElementType::PARTIAL_TIE_SEGMENT, parent)
+PartialTieSegment::PartialTieSegment(PartialTie* sp)
+    : TieSegment(ElementType::PARTIAL_TIE_SEGMENT, sp)
 {
 }
 

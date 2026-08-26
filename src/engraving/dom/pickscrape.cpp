@@ -63,8 +63,8 @@ static const ElementStyle pickScrapeStyle {
     { Sid::dummyMusicalSymbolsScale,              Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
-    : TextLineBaseSegment(ElementType::PICK_SCRAPE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+PickScrapeSegment::PickScrapeSegment(PickScrape* sp)
+    : TextLineBaseSegment(ElementType::PICK_SCRAPE_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -96,9 +96,9 @@ static const ElementStyle pickScrapeSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* PickScrape::createLineSegment(System* parent)
+LineSegment* PickScrape::createLineSegment()
 {
-    PickScrapeSegment* wb = new PickScrapeSegment(this, parent);
+    PickScrapeSegment* wb = new PickScrapeSegment(this);
     wb->setTrack(track());
     wb->initElementStyle(&pickScrapeSegmentStyle);
     return wb;

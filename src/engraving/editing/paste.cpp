@@ -346,7 +346,7 @@ bool Paste::repeatListSelection(Transaction& tx, Score* score)
         const TremoloSingleChord* oldTsc = sourceChord->tremoloSingleChord();
         if (!newChord->tremoloSingleChord() && oldTsc) {
             TremoloSingleChord* newTsc = oldTsc->clone();
-            newTsc->setParent(newChord);
+            newTsc->setOwnershipParent(newChord);
             newTsc->setTrack(newChord->track());
             score->doUndoAddElement(newTsc);
         }

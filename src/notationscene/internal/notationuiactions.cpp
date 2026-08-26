@@ -1366,6 +1366,18 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "&Diminuendo"),
              TranslatableString("action", "Add hairpin: diminuendo")
              ),
+    UiAction("increase-dynamic",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Increase dynamics"),
+             TranslatableString("action", "Increase selected dynamics")
+             ),
+    UiAction("decrease-dynamic",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Decrease dynamics"),
+             TranslatableString("action", "Decrease selected dynamics")
+             ),
     UiAction("add-noteline",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -3160,65 +3172,4 @@ SymbolId NotationUiActions::actionArticulationSymbolId(const ActionCode& actionC
     }
 
     return symbolId;
-}
-
-const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
-{
-    static ToolConfig config;
-    if (!config.isValid()) {
-        config.items = {
-            { "note-input-by-note-name", true },
-            { "note-input-by-duration", true },
-            { "note-input-rhythm", false },
-            { "note-input-repitch", false },
-            { "note-input-realtime-auto", false },
-            { "note-input-realtime-manual", false },
-            { "note-input-timewise", false },
-            { "", true },
-            { "pad-note-1024", false },
-            { "pad-note-512", false },
-            { "pad-note-256", false },
-            { "pad-note-128", false },
-            { "pad-note-64", true },
-            { "pad-note-32", true },
-            { "pad-note-16", true },
-            { "pad-note-8", true },
-            { "pad-note-4", true },
-            { "pad-note-2", true },
-            { "pad-note-1", true },
-            { "note-breve", false },
-            { "note-longa", false },
-            { "", true },
-            { "pad-dot", true },
-            { "pad-dot2", false },
-            { "pad-dot3", false },
-            { "pad-dot4", false },
-            { "pad-rest", true },
-            { "", true },
-            { "flat2", true },
-            { "flat", true },
-            { "nat", true },
-            { "sharp", true },
-            { "sharp2", true },
-            { "", true },
-            { "tie", true },
-            { "add-slur", true },
-            { "lv", false },
-            { "", true },
-            { "add-marcato", true },
-            { "add-sforzato", true },
-            { "add-tenuto", true },
-            { "add-staccato", true },
-            { "", true },
-            { "cross-staff-beaming", false },
-            { "tuplet", true },
-            { "flip", true },
-            { "", true },
-            { "voice-1", true },
-            { "voice-2", true },
-            { "voice-3", false },
-            { "voice-4", false }
-        };
-    }
-    return config;
 }

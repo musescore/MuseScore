@@ -48,8 +48,8 @@ using namespace mu::engraving;
 using namespace muse::draw;
 
 namespace mu::engraving {
-SlurSegment::SlurSegment(System* parent, ElementType type)
-    : SlurTieSegment(type, parent)
+SlurSegment::SlurSegment(Slur* sp, ElementType type)
+    : SlurTieSegment(type, sp)
 {
 }
 

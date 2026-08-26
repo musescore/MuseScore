@@ -93,7 +93,7 @@ void StaffText::scanElements(std::function<void(EngravingItem*)> func)
 
 void StaffText::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     e->setTrack(track());
 
     switch (e->type()) {
@@ -156,7 +156,7 @@ void StaffText::setSoundFlag(SoundFlag* flag)
     m_soundFlag = flag;
 
     if (m_soundFlag) {
-        m_soundFlag->setParent(this);
+        m_soundFlag->setOwnershipParent(this);
         m_soundFlag->setTrack(track());
     }
 

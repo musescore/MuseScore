@@ -297,7 +297,7 @@ int Harmony::rootTpc() const
 
 bool Harmony::isInFretBox() const
 {
-    EngravingObject* parent = explicitParent();
+    EngravingObject* parent = ownershipParent();
     if (!parent) {
         return false;
     }
@@ -390,24 +390,24 @@ int Harmony::id() const
 Segment* Harmony::getParentSeg() const
 {
     Segment* seg = nullptr;
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return nullptr;
     }
 
-    if (explicitParent()->isFretDiagram()) {
+    if (ownershipParent()->isFretDiagram()) {
         // When this harmony is the child of a fret diagram, we need to go up twice
         // to get to the parent seg.
-        seg = toFretDiagram(explicitParent())->segment();
+        seg = toFretDiagram(ownershipParent())->segment();
     } else {
-        seg = toSegment(explicitParent());
+        seg = toSegment(ownershipParent());
     }
     return seg;
 }
 
 FretDiagram* Harmony::getParentFretDiagram() const
 {
-    if (explicitParent() && explicitParent()->isFretDiagram()) {
-        return toFretDiagram(explicitParent());
+    if (ownershipParent() && ownershipParent()->isFretDiagram()) {
+        return toFretDiagram(ownershipParent());
     }
 
     return nullptr;
@@ -1460,7 +1460,7 @@ EngravingItem* Harmony::drop(Transaction& tx, EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
         FretDiagram* fd = toFretDiagram(e);
-        fd->setParent(explicitParent());
+        fd->setOwnershipParent(ownershipParent());
         fd->setTrack(track());
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
@@ -1577,7 +1577,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         setHarmony(v.value<String>());
         String newText = xmlText();
         if (newText != curText) {
-            FretDiagram* fretDiagram = explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
+            FretDiagram* fretDiagram = ownershipParent()->isFretDiagram() ? toFretDiagram(ownershipParent()) : nullptr;
             if (fretDiagram && !fretDiagram->isCustom(curText) && configuration()->autoUpdateFretboardDiagrams()) {
                 fretDiagram->updateDiagram(plainText());
             }

@@ -42,7 +42,7 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     GradualTempoChangeType tempoChangeType() const;
     ChangeMethod easingMethod() const;
@@ -64,14 +64,9 @@ public:
     PointF linePos(Grip grip, System** system) const override;
 
 protected:
-    void added() override;
-    void removed() override;
-
     Sid defaultPosSid() const override;
 
 private:
-    void requestToRebuildTempo();
-
     GradualTempoChangeType m_tempoChangeType = GradualTempoChangeType::Undefined;
     ChangeMethod m_tempoEasingMethod = ChangeMethod::NORMAL;
     std::optional<float> m_tempoChangeFactor;
@@ -89,15 +84,13 @@ class GradualTempoChangeSegment : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT)
 
 public:
-    GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent);
+    GradualTempoChangeSegment(GradualTempoChange* annotation);
 
     GradualTempoChangeSegment* clone() const override;
 
     GradualTempoChange* tempoChange() const;
 
     void endEdit(EditData& editData) override;
-    void added() override;
-    void removed() override;
 
     GradualTempoChangeSegment* findElementToSnapBefore() const;
     TempoText* findElementToSnapAfter() const;

@@ -295,7 +295,7 @@ bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     if (score->isMaster()) {
         // While reading the score, some elements might use `score->repeatList()` (which is incorrect
         // anyway, because the repeatList will be incomplete because the score is incomplete, but some
@@ -485,7 +485,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         tuplet->setTicks(ticksScaled);
                         tuplet->setBaseLen(tuplet->baseLen().fraction() * scale);
                     }
-                    tuplet->setParent(measure);
+                    tuplet->setOwnershipParent(measure);
                     tuplet->setTick(tick);
                     tuplet->setTuplet(oldTuplet);
                     if (tuplet->rtick() + tuplet->actualTicks() > measure->ticks()) {
@@ -681,7 +681,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             score->undoRemoveElement(el);
                         }
                     }
-                    harmony->setParent(seg);
+                    harmony->setOwnershipParent(seg);
                     score->undoAddElement(harmony);
                     pastedHarmony.push_back(harmony);
                 } else if (tag == "Dynamic"
@@ -715,7 +715,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Segment* seg = el->isFretDiagram()
                                    ? m->undoGetSegment(SegmentType::ChordRest, tick)
                                    : m->undoGetChordRestOrTimeTickSegment(tick);
-                    el->setParent(seg);
+                    el->setOwnershipParent(seg);
 
                     // be sure to paste the element in the destination track;
                     // setting track needs to be repeated, as it might have been overwritten by el->read()
@@ -732,7 +732,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Clef* clef = Factory::createClef(segment);
                     TRead::read(clef, e, ctx);
                     clef->setTrack(ctx.track());
-                    clef->setParent(segment);
+                    clef->setOwnershipParent(segment);
                     score->undoChangeElement(segment->element(ctx.track()), clef);
                 } else if (tag == "Breath") {
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
@@ -745,13 +745,12 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     breath->setTrack(ctx.track());
                     breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
                     TRead::read(breath, e, ctx);
-                    breath->setParent(segment);
+                    breath->setOwnershipParent(segment);
                     score->undoChangeElement(segment->element(ctx.track()), breath);
                 } else if (tag == "Beam") {
-                    Beam* beam = Factory::createBeam(score->dummy()->system());
+                    Beam* beam = Factory::createBeam(score);
                     beam->setTrack(ctx.track());
                     TRead::read(beam, e, ctx);
-                    beam->resetExplicitParent();
                     if (startingBeam) {
                         LOGD("The read beam was not used");
                         delete startingBeam;
@@ -951,7 +950,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                 el->setTrack(destTrack);
                 TRead::readItem(el, e, ctx);
                 el->setTrack(destTrack);
-                el->setParent(cr);
+                el->setOwnershipParent(cr);
                 score->undoAddElement(el);
             } else if (tag == "Fermata") {
                 if (destTrack >= maxTrack) {
@@ -971,7 +970,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                 b->setTrack(destTrack);
                 TRead::read(b, e, ctx);
                 b->setTrack(destTrack);
-                b->setParent(seg);
+                b->setOwnershipParent(seg);
                 score->undoAddElement(b);
             } else if (tag == "Breath") {
                 if (destTrack >= maxTrack) {
@@ -991,7 +990,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                 b->setTrack(destTrack);
                 TRead::read(b, e, ctx);
                 b->setTrack(destTrack);
-                b->setParent(seg);
+                b->setOwnershipParent(seg);
                 score->undoAddElement(b);
             } else if (tag == "Dynamic"
                        || tag == "Expression"
@@ -1019,7 +1018,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                 el->setTrack(destTrack);
                 TRead::readItem(el, e, ctx);
                 el->setTrack(destTrack);
-                el->setParent(seg);
+                el->setOwnershipParent(seg);
                 score->undoAddElement(el);
             } else if (tag == "Slur"
                        || tag == "HairPin"
@@ -1073,14 +1072,14 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                         interval.flip();
                         Transpose::undoTransposeHarmony(tx, el, interval);
                     }
-                    el->setParent(seg);
+                    el->setOwnershipParent(seg);
                     score->undoAddElement(el);
                 } else {
                     FretDiagram* el = Factory::createFretDiagram(seg);
                     el->setTrack(trackZeroVoice(destTrack));
                     TRead::read(el, e, ctx);
                     el->setTrack(trackZeroVoice(destTrack));
-                    el->setParent(seg);
+                    el->setOwnershipParent(seg);
                     score->undoAddElement(el);
                 }
             } else if (tag == "Lyrics" || tag == "FiguredBass") {
@@ -1129,7 +1128,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                     el->setTrack(destTrack);
                     TRead::read(el, e, ctx);
                     el->setTrack(destTrack);
-                    el->setParent(cr);
+                    el->setOwnershipParent(cr);
                     score->undoAddElement(el);
                 } else if (tag == "FiguredBass") {
                     // FiguredBass always belongs to first staff voice
@@ -1210,7 +1209,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                     if (oldFB) {
                         score->undoRemoveElement(oldFB);
                     }
-                    el->setParent(currSegm);
+                    el->setOwnershipParent(currSegm);
                     el->setTicks(ticks);
                     score->undoAddElement(el);
                 }

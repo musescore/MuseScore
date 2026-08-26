@@ -5144,7 +5144,7 @@
         <source>Bellows-driven free-reed instrument with a keyboard or buttons on one end, and buttons on the other.</source>
         <comment>accordion description</comment>
         <extracomment>description for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>风箱驱动的自由簧片乐器，一端有键盘或按钮，另一端有按钮。</translation>
+        <translation>风箱驱动的自由簧乐器，一端有键盘或按钮，另一端有按钮。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1859"/>
@@ -5200,7 +5200,7 @@
         <source>Bellows-driven free-reed instrument with buttons usually on both ends.</source>
         <comment>concertina description</comment>
         <extracomment>description for Concertina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>风箱驱动的自由簧片乐器，通常两端都有按钮。</translation>
+        <translation>风箱驱动的自由簧乐器，通常两端都有按钮。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1877"/>
@@ -5788,7 +5788,7 @@
         <source>Mouth-blown free reed instrument with a keyboard.</source>
         <comment>melodica description</comment>
         <extracomment>description for Melodica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>带键盘的口吹自由簧片乐器。</translation>
+        <translation>带键盘的吹奏式自由簧乐器。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2063"/>
@@ -5844,7 +5844,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>sheng description</comment>
         <extracomment>description for Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>中国自由吹奏簧管乐器。</translation>
+        <translation>中国吹奏式自由簧乐器。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2081"/>
@@ -5872,7 +5872,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>soprano-sheng description</comment>
         <extracomment>description for Soprano Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>中国自由吹奏簧管乐器。</translation>
+        <translation>中国吹奏式自由簧乐器。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2090"/>
@@ -5900,7 +5900,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>alto-sheng description</comment>
         <extracomment>description for Alto Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>中国自由吹奏簧管乐器。</translation>
+        <translation>中国吹奏式自由簧乐器。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2099"/>
@@ -5928,7 +5928,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>tenor-sheng description</comment>
         <extracomment>description for Tenor Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>中国自由吹奏簧管乐器。</translation>
+        <translation>中国吹奏式自由簧乐器。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2108"/>
@@ -5956,7 +5956,7 @@
         <source>Chinese mouth-blown free reed instrument.</source>
         <comment>bass-sheng description</comment>
         <extracomment>description for Bass Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>中国自由吹奏簧管乐器。</translation>
+        <translation>中国吹奏式自由簧乐器。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2117"/>
@@ -10338,7 +10338,7 @@
         <source>High C single tenor steel pan.</source>
         <comment>soprano-steel-drums description</comment>
         <extracomment>description for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>高音C的单个次中音钢鼓。</translation>
+        <translation>高音C的具有单排音的次中音钢鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3489"/>
@@ -10366,21 +10366,21 @@
         <source>Double tenor steel pans.</source>
         <comment>alto-steel-drums description</comment>
         <extracomment>description for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>具有两排次中音的钢鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3498"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums trackName</comment>
         <extracomment>trackName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>双次中音钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3500"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums longName</comment>
         <extracomment>longName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>双次中音钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3502"/>
@@ -10394,21 +10394,21 @@
         <source>Double second steel pans.</source>
         <comment>tenor-steel-drums description</comment>
         <extracomment>description for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>具有两排音的第二钢鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3507"/>
         <source>Double Second Steel Pans</source>
         <comment>tenor-steel-drums trackName</comment>
         <extracomment>trackName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>双第二钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3509"/>
         <source>Double Second Steel Pans</source>
         <comment>tenor-steel-drums longName</comment>
         <extracomment>longName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>双第二钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3511"/>
@@ -10422,21 +10422,21 @@
         <source>Guitar steel pans.</source>
         <comment>guitar-steel-drums description</comment>
         <extracomment>description for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>吉他钢鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3516"/>
         <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums trackName</comment>
         <extracomment>trackName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>吉他钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3518"/>
         <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums longName</comment>
         <extracomment>longName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>吉他钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3520"/>
@@ -10450,21 +10450,21 @@
         <source>Three cello steel pans.</source>
         <comment>cello-steel-drums description</comment>
         <extracomment>description for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>具有三排音的大提琴钢鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3525"/>
         <source>Triple Cello Steel Pans</source>
         <comment>cello-steel-drums trackName</comment>
         <extracomment>trackName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>三大提琴钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3527"/>
         <source>Triple Cello Steel Pans</source>
         <comment>cello-steel-drums longName</comment>
         <extracomment>longName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>三大提琴钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3529"/>
@@ -10478,21 +10478,21 @@
         <source>Four cello steel pans.</source>
         <comment>cello-steel-drums-four description</comment>
         <extracomment>description for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>具有四排音的大提琴钢鼓。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3534"/>
         <source>Four Cello Steel Pans</source>
         <comment>cello-steel-drums-four trackName</comment>
         <extracomment>trackName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>四大提琴钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3536"/>
         <source>Four Cello Steel Pans</source>
         <comment>cello-steel-drums-four longName</comment>
         <extracomment>longName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>四大提琴钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3538"/>
@@ -10584,6 +10584,41 @@
         <comment>bass-steel-drums shortName</comment>
         <extracomment>shortName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>B. Pans</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3568"/>
+        <source>Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.</source>
+        <comment>glockenspiel description</comment>
+        <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>经过调音的金属棒按照钢琴键盘的方式排列，并使用琴槌敲击演奏。发出的声音比谱面音高要高两个八度。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3577"/>
+        <source>Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.</source>
+        <comment>xylophone description</comment>
+        <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>经过调音的木棒按照钢琴键盘的方式排列，下方有时设有共鸣管。使用琴槌敲击演奏。发出的声音比谱面音高要高一个八度。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3595"/>
+        <source>Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</source>
+        <comment>vibraphone description</comment>
+        <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>经过调音的铝棒按照钢琴键盘的方式排列，设有共鸣管和延音踏板。有的还装有变速电动马达，以通过快速开关共鸣管来产生颤音效果。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3622"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba description</comment>
+        <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>经过调音的木棒按照钢琴键盘的方式排列，下方设有共鸣管。使用琴槌敲击演奏。比木琴的声音更深沉、圆润，且音高与谱面一致。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3631"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba-single description</comment>
+        <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>经过调音的木棒按照钢琴键盘的方式排列，下方设有共鸣管。使用琴槌敲击演奏。比木琴的声音更深沉、圆润，且音高与谱面一致。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
@@ -10696,6 +10731,104 @@
         <comment>sori-buk shortName</comment>
         <extracomment>shortName for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>So. Buk</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5031"/>
+        <source>Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.</source>
+        <comment>celesta description</comment>
+        <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>钟式钢琴。本质上是一种带延音踏板的键盘式钢片琴。发出的声音比谱面音高要高一个八度。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5040"/>
+        <source>Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.</source>
+        <comment>clavichord description</comment>
+        <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>可以利用切线（小刀片）来敲击金属弦或调节其长度（音高）。演奏效果富有表现力，但声音非常轻柔。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5049"/>
+        <source>Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.</source>
+        <comment>clavinet description</comment>
+        <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>配备电声放大式琴弦的克拉维琴。这会改变音色并解除音量限制。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5058"/>
+        <source>Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.</source>
+        <comment>harpsichord description</comment>
+        <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>拨动式琴弦，发出的声音比钢琴更尖锐，动态范围也更小。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5067"/>
+        <source>Small harpsichord with only one string per key, which limits the dynamic range and timbre.</source>
+        <comment>virginal description</comment>
+        <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>小型的羽管键琴，每个琴键仅有一根琴弦，这限制了其动态范围和音色。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5076"/>
+        <source>Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)</source>
+        <comment>electric-piano description</comment>
+        <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>利用电子放大式的琴弦、簧片或音叉发声的钢琴。（或音色上模拟电钢琴的数字钢琴。）</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5085"/>
+        <source>Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.</source>
+        <comment>grand-piano description</comment>
+        <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>与立式钢琴相比具有更大的平面结构，能提供更丰富的音色和更精准的键盘控制力。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5094"/>
+        <source>Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.</source>
+        <comment>honky-tonk-piano description</comment>
+        <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>“Honky-tonk”（音准极差的）立式钢琴，常与酒吧、乡村音乐和音乐厅联系在一起。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5103"/>
+        <source>Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.</source>
+        <comment>piano description</comment>
+        <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>立式钢琴或三角钢琴。通过琴槌敲击琴弦，从而具有宽广的动态范围。可通过踏板使音符持续发声。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5112"/>
+        <source>Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.</source>
+        <comment>toy-piano description</comment>
+        <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>小型的钢琴，用金属棒代替琴弦，其工作原理与钢片琴类似。通常没有踏板，最初是为儿童设计的。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5121"/>
+        <source>Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.</source>
+        <comment>upright-piano description</comment>
+        <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>与三角钢琴相比具有更小的立面结构，使其更加紧凑。通常用于排练，或在非正式场合进行演奏。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5541"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).</source>
+        <comment>electric-guitar description</comment>
+        <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>带有电子放大式琴弦的实心吉他（五线谱，以低八度高音谱号记谱）。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5562"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).</source>
+        <comment>electric-guitar-treble-clef description</comment>
+        <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>带有电子放大式琴弦的实心吉他（五线谱，以常规高音谱号记谱）。</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5621"/>
+        <source>Solid-body guitar with electrically amplified strings (tablature).</source>
+        <comment>electric-guitar-tablature description</comment>
+        <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>带有电子放大式琴弦的实心吉他（指法谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6253"/>
@@ -10894,7 +11027,6 @@
         <translation>拨奏</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3568"/>
         <source>Glockenspiel.</source>
         <comment>glockenspiel description</comment>
         <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -10922,7 +11054,6 @@
         <translation>Glock.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3577"/>
         <source>Xylophone.</source>
         <comment>xylophone description</comment>
         <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -10978,7 +11109,6 @@
         <translation>XMrm.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3595"/>
         <source>Vibraphone.</source>
         <comment>vibraphone description</comment>
         <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -11062,7 +11192,6 @@
         <translation>Cimb.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3622"/>
         <source>Marimba notated on a grand staff.</source>
         <comment>marimba description</comment>
         <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -11090,7 +11219,6 @@
         <translation>Mrm.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3631"/>
         <source>Marimba notated on a single staff.</source>
         <comment>marimba-single description</comment>
         <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15290,7 +15418,6 @@
         <translation>Kaz.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5031"/>
         <source>Celesta.</source>
         <comment>celesta description</comment>
         <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15318,7 +15445,6 @@
         <translation>Cel.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5040"/>
         <source>Clavichord.</source>
         <comment>clavichord description</comment>
         <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15346,7 +15472,6 @@
         <translation>Cch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5049"/>
         <source>Electrically amplified clavichord.</source>
         <comment>clavinet description</comment>
         <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15374,7 +15499,6 @@
         <translation>Clav.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5058"/>
         <source>Harpsichord.</source>
         <comment>harpsichord description</comment>
         <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15402,7 +15526,6 @@
         <translation>Hch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5067"/>
         <source>Virginal.</source>
         <comment>virginal description</comment>
         <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15430,7 +15553,6 @@
         <translation>Vir.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5076"/>
         <source>Electric piano.</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15458,7 +15580,6 @@
         <translation>El. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5085"/>
         <source>Specifically a grand piano.</source>
         <comment>grand-piano description</comment>
         <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15486,7 +15607,6 @@
         <translation>Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5094"/>
         <source>Honky-tonk (very out of tune) piano.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15514,7 +15634,6 @@
         <translation>Hnk. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5103"/>
         <source>Piano.</source>
         <comment>piano description</comment>
         <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15542,7 +15661,6 @@
         <translation>Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5112"/>
         <source>Toy piano.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15570,7 +15688,6 @@
         <translation>Toy Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5121"/>
         <source>Specifically an upright piano.</source>
         <comment>upright-piano description</comment>
         <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -16879,7 +16996,6 @@
         <translation>弱音</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5541"/>
         <source>Electric guitar (notated with 8va bassa treble clef).</source>
         <comment>electric-guitar description</comment>
         <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -16949,7 +17065,6 @@
         <translation>过载</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5562"/>
         <source>Electric guitar (notated with normal treble clef).</source>
         <comment>electric-guitar-treble-clef description</comment>
         <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -16981,7 +17096,7 @@
         <source>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-steel description</comment>
         <extracomment>description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>原音钢弦吉他（五线谱，以低8度高音谱号记谱）。</translation>
+        <translation>原音钢弦吉他（五线谱，以低八度高音谱号记谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5573"/>
@@ -17058,7 +17173,7 @@
         <source>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-nylon description</comment>
         <extracomment>description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>原音尼龙弦吉他（五线谱，以低8度高音谱号记谱）。</translation>
+        <translation>原音尼龙弦吉他（五线谱，以低八度高音谱号记谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5597"/>
@@ -17138,7 +17253,6 @@
         <translation>弱音</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5621"/>
         <source>Electric guitar (tablature).</source>
         <comment>electric-guitar-tablature description</comment>
         <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -17184,7 +17298,7 @@
         <source>Acoustic steel-string guitar (tablature).</source>
         <comment>guitar-steel-tablature description</comment>
         <extracomment>description for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>原音尼钢弦吉他（指法谱）。</translation>
+        <translation>原音钢弦吉他（指法谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5637"/>
@@ -18696,7 +18810,7 @@
         <source>9-course</source>
         <comment>ren.-tenor-lute-9-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>8复弦</translation>
+        <translation>9复弦</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6119"/>
@@ -20881,12 +20995,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="158"/>
         <source>Keyboard Percussion</source>
-        <translation>键盘打击乐器</translation>
+        <translation>键盘打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="159"/>
         <source>Pitched Metal Percussion</source>
-        <translation>有音高金属打击乐器</translation>
+        <translation>有音高金属打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="160"/>
@@ -20926,17 +21040,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="167"/>
         <source>Unpitched Metal Percussion</source>
-        <translation>无音高金属打击乐器</translation>
+        <translation>无音高金属打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="168"/>
         <source>Unpitched Wooden Percussion</source>
-        <translation>无音高木制打击乐器</translation>
+        <translation>无音高木制打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="169"/>
         <source>Other Percussion</source>
-        <translation>其他打击乐器</translation>
+        <translation>其他打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="170"/>
@@ -21134,7 +21248,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Common</source>
-        <translation>常见</translation>
+        <translation>常见乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
@@ -21197,7 +21311,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1854"/>
         <source>Free Reed</source>
-        <translation>自由簧管</translation>
+        <translation>自由簧乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2124"/>
@@ -21207,22 +21321,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3457"/>
         <source>Percussion - Pitched</source>
-        <translation>有音高打击乐器</translation>
+        <translation>有音高打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3874"/>
         <source>Percussion - Unpitched</source>
-        <translation>无音高打击乐器</translation>
+        <translation>无音高打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4768"/>
         <source>Percussion - Marching</source>
-        <translation>行进打击乐器</translation>
+        <translation>行进打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4816"/>
         <source>Percussion - Body</source>
-        <translation>人体打击乐器</translation>
+        <translation>人体打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4855"/>
@@ -21237,7 +21351,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5193"/>
         <source>Electronic</source>
-        <translation>电子</translation>
+        <translation>电子乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5483"/>

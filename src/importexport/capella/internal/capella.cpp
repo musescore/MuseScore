@@ -582,7 +582,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tuplet->setBaseLen(d);
                     tuplet->setTrack(track);
                     tuplet->setTick(tick);
-                    tuplet->setParent(m);
+                    tuplet->setOwnershipParent(m);
                     Fraction nn = ((o->tupletTicks.isZero()) ? (ticks * tupletNotesSpanned) : o->tupletTicks) / f;
                     tuplet->setTicks(nn);
                 }
@@ -672,7 +672,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tuplet->setBaseLen(d);
                     tuplet->setTrack(track);
                     tuplet->setTick(tick);
-                    tuplet->setParent(m);
+                    tuplet->setOwnershipParent(m);
                     Fraction nn = ((o->tupletTicks.isZero()) ? (ticks * tupletNotesSpanned) : o->tupletTicks) / f;
                     tuplet->setTicks(nn);
                 }
@@ -1042,12 +1042,12 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 s->setXmlText(ss);
 
                 if (!measure->isVBox()) {
-                    MeasureBase* mb = Factory::createVBox(score->dummy()->system());
+                    MeasureBase* mb = Factory::createVBox(score);
                     mb->setTick(Fraction(0, 1));
                     score->addMeasure(mb, measure);
                     measure = mb;
                 }
-                s->setParent(measure);
+                s->setOwnershipParent(measure);
                 measure->add(s);
             }
             break;
@@ -1308,7 +1308,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             }
 
             if (!measure) {
-                measure = Factory::createTitleVBox(score->dummy()->system());
+                measure = Factory::createTitleVBox(score);
                 score->addMeasure(measure, score->measures()->first());
             }
 
@@ -1339,7 +1339,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         if (mbl->size() && mbl->first()->isVBox()) {
             mb = static_cast<VBox*>(mbl->first());
         } else {
-            VBox* vb = Factory::createTitleVBox(score->dummy()->system());
+            VBox* vb = Factory::createTitleVBox(score);
             score->addMeasure(vb, mb);
             mb = vb;
         }
@@ -1421,7 +1421,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     }
     // score->connectSlurs();
     score->connectTies();
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     score->invalidateRepeatList();
     score->setLayoutAll();
 }

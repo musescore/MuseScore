@@ -48,7 +48,7 @@ class HairpinSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::HAIRPIN_SEGMENT)
 
 public:
-    HairpinSegment(Hairpin* sp, System* parent);
+    HairpinSegment(Hairpin* sp);
 
     HairpinSegment* clone() const override { return new HairpinSegment(*this); }
 
@@ -121,7 +121,7 @@ public:
     HairpinType hairpinType() const { return m_hairpinType; }
     void setHairpinType(HairpinType val);
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     bool hairpinCircledTip() const { return m_hairpinCircledTip; }
     void setHairpinCircledTip(bool val) { m_hairpinCircledTip = val; }

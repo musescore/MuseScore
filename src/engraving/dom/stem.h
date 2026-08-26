@@ -57,7 +57,7 @@ public:
 
     staff_idx_t vStaffIdx() const override;
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
     bool up() const;
 
     Spatium baseLength() const { return m_baseLength; }

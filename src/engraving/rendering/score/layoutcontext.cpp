@@ -419,14 +419,6 @@ MeasureBase* DomAccessor::first()
     return score()->first();
 }
 
-RootItem* DomAccessor::rootItem() const
-{
-    IF_ASSERT_FAILED(score()) {
-        return nullptr;
-    }
-    return score()->rootItem();
-}
-
 compat::DummyElement* DomAccessor::dummyParent() const
 {
     IF_ASSERT_FAILED(score()) {
@@ -611,10 +603,6 @@ LayoutContext::LayoutContext(Score* score)
 
 LayoutContext::~LayoutContext()
 {
-    for (Spanner* s : m_state.processedSpanners()) {
-        TLayout::layoutSystemsDone(s);
-    }
-
     for (MuseScoreView* v : m_score->getViewer()) {
         v->layoutChanged();
     }

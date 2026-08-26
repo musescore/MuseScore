@@ -61,6 +61,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
+#include "engraving/types/constants.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/tremolosinglechord.h"
@@ -74,6 +75,8 @@
 
 #include "modularity/ioc.h"
 #include "importexport/ove/ioveconfiguration.h"
+
+#include "global/realfn.h"
 
 #include "log.h"
 
@@ -326,7 +329,7 @@ void OveToMScore::createStructure()
     }
 
     for (i = 0; i < m_ove->getMeasureCount(); ++i) {
-        Measure* measure  = Factory::createMeasure(m_score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(m_score);
         int tick = m_mtt->getTick(i, 0);
         measure->setTick(Fraction::fromTicks(tick));
         measure->setMeasureNumber(i);
@@ -360,7 +363,7 @@ void addText(VBox*& vbox, Score* s, QString strTxt, TextStyleType stl)
 {
     if (!strTxt.isEmpty()) {
         if (vbox == 0) {
-            vbox = Factory::createVBox(s->dummy()->system());
+            vbox = Factory::createVBox(s);
         }
         Text* text = Factory::createText(vbox, stl);
         text->setPlainText(strTxt);
@@ -964,11 +967,25 @@ void OveToMScore::convertSignatures()
     }
 
     std::map<int, double>::iterator it;
-    int lastTempo = 0;
+    double lastTempo = 0.0;
     for (it=tempos.begin(); it != tempos.end(); ++it) {
-        if (it == tempos.begin() || (*it).second != lastTempo) {
-            double tpo = ((*it).second) / 60.0;
-            m_score->setTempo(Fraction::fromTicks((*it).first), tpo);
+        if (it == tempos.begin() || !muse::RealIsEqual((*it).second, lastTempo)) {
+            const double tpo = ((*it).second) / 60.0;
+            const bool isDefault = it == tempos.begin() && muse::RealIsEqual(tpo, Constants::DEFAULT_TEMPO.val);
+
+            if (!isDefault) {
+                Fraction tick = Fraction::fromTicks((*it).first);
+                Measure* measure = m_score->tick2measure(tick);
+                if (measure) {
+                    Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+                    TempoText* t = Factory::createTempoText(s);
+                    t->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tpo * 60.0)));
+                    t->setTempo(tpo);
+                    t->setVisible(false);
+                    t->setTrack(0);
+                    s->add(t);
+                }
+            }
         }
 
         lastTempo = (*it).second;
@@ -1370,7 +1387,6 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         TempoText* t = new TempoText(s);
         double tpo = (tempoPtr->getQuarterTempo()) / 60.0;
-        m_score->setTempo(Fraction::fromTicks(absTick), tpo);
 
         t->setTempo(tpo);
         QString durationTempoL;
@@ -1756,7 +1772,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                     tuplet->setBaseLen(duration);
                     tuplet->setTick(Fraction::fromTicks(tick));
-                    tuplet->setParent(measure);
+                    tuplet->setOwnershipParent(measure);
                     // measure->add(tuplet);
                 }
             }

@@ -81,8 +81,8 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaBeginFilledArrowWidth,        Pid::BEGIN_FILLED_ARROW_WIDTH },
 };
 
-OttavaSegment::OttavaSegment(Ottava* sp, System* parent)
-    : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+OttavaSegment::OttavaSegment(Ottava* sp)
+    : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -266,9 +266,9 @@ static const ElementStyle ottavaSegmentStyle {
     { Sid::ottavaMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Ottava::createLineSegment(System* parent)
+LineSegment* Ottava::createLineSegment()
 {
-    OttavaSegment* os = new OttavaSegment(this, parent);
+    OttavaSegment* os = new OttavaSegment(this);
     os->setTrack(track());
     os->initElementStyle(&ottavaSegmentStyle);
     return os;

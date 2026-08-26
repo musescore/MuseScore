@@ -677,7 +677,7 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
 
     double y1l;
     double y2l;
-    if (item->explicitParent() == 0) {      // for use in palette (always Bravura)
+    if (item->ownershipParent() == 0) {      // for use in palette (always Bravura)
         //Bravura shifted repeatDot symbol 0.5sp upper in the font itself (1.272)
         y1l = 1.5 * spatium;
         y2l = 2.5 * spatium;
@@ -743,8 +743,12 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
     break;
 
     case BarLineType::BROKEN: {
-        double lw = item->style().styleAbsolute(Sid::barWidth) * item->mag();
-        painter->setPen(Pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap));
+        double lw = item->style().styleAbsolute(Sid::dashBarWidth) * item->mag();
+        double dl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarDash) * item->mag() / lw;
+        double gl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarGap) * item->mag() / lw;
+        Pen pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap);
+        pen.setDashPattern({ dl, gl });
+        painter->setPen(pen);
         painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
     }
     break;
@@ -2528,7 +2532,7 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const Pa
 {
     TRACE_DRAW_ITEM;
 
-    EngravingItem* parent = item->parentItem();
+    EngravingObject* parent = item->ownershipParent();
     TimeSig* parentTs = parent && parent->isTimeSig() ? toTimeSig(parent) : nullptr;
 
     if (parentTs && !parentTs->showOnThisStaff()) {
@@ -3216,7 +3220,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
     const TabDurationSymbol::LayoutData* ldata = item->ldata();
 
     if (item->isRepeat() && (item->tab()->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
-        Chord* chord = toChord(item->explicitParent());
+        Chord* chord = toChord(item->ownershipParent());
         ChordRest* prevCR = Navigation::prevChordRest(chord);
         if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
             return;

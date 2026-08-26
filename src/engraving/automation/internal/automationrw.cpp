@@ -32,6 +32,7 @@ using namespace mu::engraving;
 
 static const std::unordered_map<AutomationType, muse::String> AUTOMATION_TYPE_TO_STRING {
     { AutomationType::Dynamics, u"Dynamics" },
+    { AutomationType::Tempo, u"Tempo" },
     { AutomationType::Volume, u"Volume" },
     { AutomationType::Pan, u"Pan" },
 };

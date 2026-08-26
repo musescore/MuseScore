@@ -49,9 +49,11 @@
 #include "beamlayout.h"
 #include "tupletlayout.h"
 #include "chordlayout.h"
+#include "chordbracketlayout.h"
 #include "arpeggiolayout.h"
 #include "measurelayout.h"
 #include "horizontalspacing.h"
+#include "masklayout.h"
 #include "tremololayout.h"
 #include "slurtielayout.h"
 #include "systemheaderlayout.h"
@@ -120,7 +122,7 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
     if (layoutAll) {
         for (System* s : mutDom.systems()) {
             for (SpannerSegment* ss : s->spannerSegments()) {
-                ss->resetExplicitParent();
+                ss->setSystem(nullptr);
             }
         }
         muse::DeleteAll(mutDom.systems());
@@ -133,15 +135,15 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
         }
 
         for (MeasureBase* mb = ctx.mutDom().first(); mb; mb = mb->next()) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
         }
 
-        page = Factory::createPage(ctx.mutDom().rootItem());
+        page = Factory::createPage(ctx.mutDom().score());
         ctx.mutDom().pages().push_back(page);
         page->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
         page->setPageNumber(0);
 
-        System* system = Factory::createSystem(page);
+        System* system = Factory::createSystem(page->score());
         ctx.mutDom().systems().push_back(system);
         page->appendSystem(system);
         system->adjustStavesNumber(ctx.dom().nstaves());
@@ -212,6 +214,16 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                             }
                         }
                         ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
+                        for (EngravingItem* element : c->el()) {
+                            if (element->isChordBracket()) {
+                                ChordBracket* bracket = toChordBracket(element);
+                                if (c->onTabStaff()) {
+                                    TLayout::layoutItem(bracket, ctx);
+                                } else {
+                                    ChordBracketLayout::updateVerticalGeometry(bracket, ctx);
+                                }
+                            }
+                        }
                         ChordLayout::layoutSpanners(c, ctx);
                         if (c->tremoloSingleChord()) {
                             TremoloLayout::layout(c->tremoloSingleChord(), ctx);
@@ -251,6 +263,7 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     system->setPos(lm, tm);
     ctx.mutState().page()->setWidth(lm + system->width() + rm);
     ctx.mutState().page()->setHeight(tm + system->height() + bm);
+    MaskLayout::computeMasks(ctx, ctx.mutState().page());
     ctx.mutState().page()->invalidateBspTree();
 }
 
@@ -264,7 +277,7 @@ void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
     for (const RangeLock* lock : systemLocks) {
         SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
         lockIndicator->setTrack(0);
-        lockIndicator->setParent(system);
+        lockIndicator->setOwnershipParent(system);
         system->addSystemLockIndicator(lockIndicator);
         TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
     }
@@ -301,7 +314,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
 
     while (ctx.state().curMeasure()) {
         if (ctx.state().curMeasure()->isVBoxBase()) {
-            ctx.mutState().curMeasure()->resetExplicitParent();
+            ctx.mutState().curMeasure()->setSystem(nullptr);
             MeasureLayout::getNextMeasure(ctx);
             MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
             continue;
@@ -313,7 +326,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
         if (ctx.state().curMeasure()->isMeasure()) {
             Measure* m = toMeasure(ctx.mutState().curMeasure());
             if (m->mmRest()) {
-                m->mmRest()->resetExplicitParent();
+                m->mmRest()->setSystem(nullptr);
             }
             if (firstMeasureInScore) {
                 SystemLayout::layoutSystem(system, ctx, curSystemWidth);

@@ -77,9 +77,9 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     m_showCourtesy           = lb.m_showCourtesy;
 }
 
-void LayoutBreak::setParent(MeasureBase* parent)
+void LayoutBreak::setOwnershipParent(MeasureBase* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 char16_t LayoutBreak::iconCode() const
@@ -164,7 +164,6 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
-        score()->setUpTempoMapLater();
         break;
     case Pid::START_WITH_LONG_NAMES:
         setStartWithLongNames(v.toBool());
@@ -189,7 +188,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         triggerLayoutToEnd();
     } else {
         triggerLayout();
-        if (explicitParent() && measure()->next()) {
+        if (ownershipParent() && measure()->next()) {
             measure()->next()->triggerLayout();
         }
     }
@@ -238,24 +237,6 @@ muse::TranslatableString LayoutBreak::subtypeUserName() const
 String LayoutBreak::accessibleInfo() const
 {
     return translatedSubtypeUserName();
-}
-
-void LayoutBreak::added()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
-}
-
-void LayoutBreak::removed()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
 }
 
 Font LayoutBreak::font() const
