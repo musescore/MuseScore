@@ -255,6 +255,7 @@
         <beginTextOffset x="0" y="0"/>
         <continueText>Fdbk</continueText>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/4</ticks>
         <eid>k_k</eid>
         <track>0</track>

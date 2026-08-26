@@ -59,6 +59,7 @@
     <TextLine>
       <beginText>VII</beginText>
       <track2>0</track2>
+      <startTick>0/1</startTick>
       <ticks>1/1</ticks>
       <eid>N_N</eid>
       <track>0</track>

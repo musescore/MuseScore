@@ -147,6 +147,7 @@
         <continueTextPlace>auto</continueTextPlace>
         <endTextPlace>auto</endTextPlace>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>P_P</eid>
         <track>0</track>
