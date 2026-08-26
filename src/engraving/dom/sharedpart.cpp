@@ -122,22 +122,25 @@ void mu::engraving::SharedPart::removeMapsBetweenTicks(const Fraction& startTick
     }
 }
 
-void SharedPart::computeIsSameInstruments()
+bool SharedPart::isSameInstrumentsAtTick(const Fraction& tick)
 {
     if (m_originParts.empty()) {
-        m_isSameInstruments = false;
-        return;
+        return false;
     }
 
-    const Instrument* instr = m_originParts.front()->instrument();
+    const Instrument* instr = m_originParts.front()->instrument(tick);
     for (Part* p : m_originParts) {
-        if (p->instrument()->id() != instr->id()) {
-            m_isSameInstruments = false;
-            return;
+        if (p->instrument(tick)->id() != instr->id()) {
+            return false;
         }
     }
 
-    m_isSameInstruments = true;
+    return true;
+}
+
+void SharedPart::computeIsSameInstruments()
+{
+    m_isSameInstruments = isSameInstrumentsAtTick(Fraction(0, 1));
 }
 
 mu::engraving::String mu::engraving::SharedPart::partName() const

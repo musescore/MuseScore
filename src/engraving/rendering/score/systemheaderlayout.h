@@ -74,6 +74,7 @@ private:
     static String formattedGroupName(System* system, Part* part, const Fraction& tick);
 
     static String formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
+    static Part* originPartForStaff(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
     static String formatVerticalSharedLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle);
 
     static String& resolveTokens(String& str, const String& name, const String& transposition, const String& number);
