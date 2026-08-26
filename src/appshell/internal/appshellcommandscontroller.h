@@ -111,7 +111,7 @@ private:
 
     void setupConnections();
 
-    muse::Ret quit(const muse::rcommand::CommandQuery& query);
+    muse::Ret quit(const muse::rcommand::Params& params);
     muse::Ret quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
     void restart();
 
