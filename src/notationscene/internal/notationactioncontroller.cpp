@@ -321,6 +321,8 @@ void NotationActionController::init()
     registerCommand(ADD_DYNAMIC_COMMAND, &Interaction::toggleDynamicPopup);
     registerCommand(ADD_HAIRPIN_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN);
     registerCommand(ADD_HAIRPIN_REVERSE_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN);
+    registerCommand(INCREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ 1);
+    registerCommand(DECREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ -1);
     registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
 
     registerCommand(ADD_IMAGE_COMMAND, [this]() { addImage(); });
@@ -886,6 +888,8 @@ void NotationActionController::init()
             { "add-dynamic", ADD_DYNAMIC_COMMAND, {} },
             { "add-hairpin", ADD_HAIRPIN_COMMAND, {} },
             { "add-hairpin-reverse", ADD_HAIRPIN_REVERSE_COMMAND, {} },
+            { "increase-dynamic", INCREASE_DYNAMIC_COMMAND, {} },
+            { "decrease-dynamic", DECREASE_DYNAMIC_COMMAND, {} },
             { "add-noteline", ADD_NOTELINE_COMMAND, {} },
             { "add-image", ADD_IMAGE_COMMAND, {} },
             { "stretch-", STRETCH_DECREASE_COMMAND, {} },
