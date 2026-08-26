@@ -140,6 +140,7 @@ private:
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts);
 
+    int countExistingInstruments(const InstrumentTemplate& instrument) const;
     int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 
     void setBracketsAndBarlines();

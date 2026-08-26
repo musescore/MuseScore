@@ -1202,6 +1202,9 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
 
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
+            // Update numbering for existing parts
+            int instrumentNumber = countExistingInstruments(pi.instrumentTemplate);
+            score()->partById(pi.partId)->setNumber(instrumentNumber);
             ++partIdx;
             continue;
         }
@@ -1275,8 +1278,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
     score()->undo(new mu::engraving::SortStaves(score(), staffMapping));
 }
 
-int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrument,
-                                              const PartInstrumentList& allNewInstruments) const
+int NotationParts::countExistingInstruments(const InstrumentTemplate& instrument) const
 {
     int count = 0;
 
@@ -1287,6 +1289,14 @@ int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrume
             ++count;
         }
     }
+
+    return count;
+}
+
+int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrument,
+                                              const PartInstrumentList& allNewInstruments) const
+{
+    int count = countExistingInstruments(instrument);
 
     if (count > 0) {
         return count + 1;
