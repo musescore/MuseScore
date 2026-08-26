@@ -244,9 +244,30 @@ bool StaveSharingLayout::isEmpty(track_idx_t track, StaveSharingContext& ctx)
     return true;
 }
 
+bool StaveSharingLayout::sameInstrument(track_idx_t prevTrack, track_idx_t nextTrack, const Fraction& tick, StaveSharingContext& ctx)
+{
+    const Staff* nextStaff = ctx.layoutCtx.dom().staff(track2staff(nextTrack));
+    const Staff* prevStaff = ctx.layoutCtx.dom().staff(track2staff(prevTrack));
+
+    const Part* nextPart = nextStaff ? nextStaff->part() : nullptr;
+    const Part* prevPart = prevStaff ? prevStaff->part() : nullptr;
+
+    const Instrument* nextInstrument = nextPart ? nextPart->instrument(tick) : nullptr;
+    const Instrument* prevInstrument = prevPart ? prevPart->instrument(tick) : nullptr;
+    if (!nextInstrument || !prevInstrument) {
+        return false;
+    }
+
+    return nextInstrument->id() == prevInstrument->id();
+}
+
 bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx)
 {
     for (Segment* segment : ctx.crSegments) {
+        if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
+            return false;
+        }
+
         ChordRest* cr1 = toChordRest(segment->element(prevTrack));
         ChordRest* cr2 = toChordRest(segment->element(nextTrack));
         if (bool(cr1) != bool(cr2)) {
@@ -342,6 +363,9 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
     std::vector<Note*> potentialUnisonNotes;
 
     for (Segment* segment : ctx.crSegments) {
+        if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
+            return false;
+        }
         ChordRest* cr1 = toChordRest(segment->element(prevTrack));
         ChordRest* cr2 = toChordRest(segment->element(nextTrack));
         if (bool(cr1) != bool(cr2)) {
@@ -642,11 +666,14 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
 bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack,
                                           StaveSharingContext& ctx)
 {
-    if (ctx.style.styleB(Sid::allowVoiceCrossing)) {
-        return true;
-    }
-
     for (Segment* segment : ctx.crSegments) {
+        if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
+            return false;
+        }
+
+        if (ctx.style.styleB(Sid::allowVoiceCrossing)) {
+            continue;
+        }
         ChordRest* cr1 = toChordRest(segment->element(prevTrack));
         ChordRest* cr2 = toChordRest(segment->element(nextTrack));
         if (cr1 && cr2 && cr1->isChord() && cr2->isChord()) {

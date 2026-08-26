@@ -68,6 +68,8 @@ private:
 
     static bool isEmpty(track_idx_t track, StaveSharingContext& ctx);
 
+    static bool sameInstrument(track_idx_t prevTrack, track_idx_t nextTrack, const Fraction& tick, StaveSharingContext& ctx);
+
     static bool isUnison(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
     static bool canGoToSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx, const TrackGroup& curTrackGroup,
                                  std::unordered_set<Note*>& localUnisonNotes);
