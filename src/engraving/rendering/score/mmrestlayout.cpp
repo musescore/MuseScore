@@ -380,6 +380,13 @@ void MMRestLayout::changeAnnotationsParent(Segment* oldParent, Segment* newParen
             continue;
         }
 
+        if (e->isInstrumentChange()) {
+            /* InstrumentChange items register their Instrument in Part::instruments(), keyed by the tick of
+             * the segment they belong to (see Segment::add/remove). Re-parenting one to a segment at a different
+             * tick would re-key that entry, making the instrument change take effect at the wrong time: */
+            DO_ASSERT_X(oldParent->tick() == newParent->tick(), "Changing InstrumentChange's parent to a different tick");
+        }
+
         e->score()->undoChangeParent(e, newParent, e->staffIdx(), false);
     }
 }
