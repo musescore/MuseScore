@@ -1589,14 +1589,15 @@ CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines)
 
 NoteVal notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, Key key)
 {
-    auto [noteType, octave, alteration, staffLine] = noteProperties;
     NoteVal nval;
-    nval.pitch = 60 /*middle C*/ + (octave - 4) * PITCH_DELTA_OCTAVE + step2pitch(int(noteType)) + alteration;
-    if (alteration < int(AccidentalVal::MIN) || alteration > int(AccidentalVal::MAX) || !pitchIsValid(nval.pitch)) {
+    nval.pitch = 60 /*middle C*/ + (noteProperties.octave - 4) * PITCH_DELTA_OCTAVE
+                 + step2pitch(int(noteProperties.noteName)) + noteProperties.alteration;
+    if (noteProperties.alteration < int(AccidentalVal::MIN) || noteProperties.alteration > int(AccidentalVal::MAX)
+        || !pitchIsValid(nval.pitch)) {
         nval.pitch = clampPitch(nval.pitch);
         nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     } else {
-        nval.tpc1 = step2tpc(int(noteType), AccidentalVal(alteration));
+        nval.tpc1 = step2tpc(int(noteProperties.noteName), AccidentalVal(noteProperties.alteration));
     }
     nval.tpc2 = nval.tpc1;
     return nval;

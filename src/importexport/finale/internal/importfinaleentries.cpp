@@ -520,10 +520,14 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
                 note->setNval(nval);
             } else {
                 // calculate pitch & accidentals
-                NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(entryTick));
+                NoteVal nval = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties({
+                        .pitchMode = PitchMode::Concert,
+                    }), baseStaff->concertKey(entryTick));
                 if (!partScore() && noteInfoPtr.calcIsEnharmonicRespellInAnyPart()) {
-                    NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(EnharmonicOverride::Respell),
-                                                                     baseStaff->key(entryTick));
+                    NoteVal nvalTransposed = notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties({
+                            .pitchMode = PitchMode::Written,
+                            .enharmonicOverride = EnharmonicOverride::Respell,
+                        }), baseStaff->key(entryTick));
                     nval.tpc2 = nvalTransposed.tpc2;
                 }
                 note->setNval(nval);
@@ -794,7 +798,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
                     logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc,
                                          entryInfo.getStaff(), entryInfo.getMeasure());
                 }
-                auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
+                int staffPosition = noteInfoPtr.calcNoteProperties().staffPosition;
                 //const int defaultLine = (baseStaff->lines(entryRTick) + 1) / 2; // Spatiums relative to top staff
                 const double lineSpacing = baseStaff->lineDistance(entryRTick);
                 // const int defaultMusxLine = 2 * defaultLine - currMusxStaff->calcTopLinePosition();
@@ -1168,7 +1172,7 @@ void FinaleParser::importEntries()
             const musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxStaffId, measureId, legacyPickupSpacer);
             bool processContext = bool(gfHold);
-            if (processContext && gfHold.calcIsCuesOnly()) {
+            if (processContext && musx::util::Cue::calcStaffMeasureAnalysis(gfHold).isCueOnly) {
                 logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, musxStaffId, measureId);
                 processContext = false;
             }

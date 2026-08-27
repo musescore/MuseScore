@@ -464,11 +464,13 @@ ReadableExpression::ReadableExpression(const FinaleParser& context, const MusxIn
     if (firstFont.symbolsSize > 0.0) {
         symbolsScale = firstFont.symbolsSize / SYMBOLS_DEFAULT_SIZE;
     }
-    // If font properties are only set once, write them as properties instead
+    // If font properties are only set once, write them as properties instead. Symbol-only or malformed expressions
+    // may not provide a usable text font; preserve the element's type-specific MuseScore font style in that case.
     options.plainText = true;
-    if (xmlText == context.stringFromEnigmaText(parsingContext, options)) {
+    const bool hasUniformFormatting = xmlText == context.stringFromEnigmaText(parsingContext, options);
+    if (hasUniformFormatting && firstFont.fontSize > 0.0) {
         startingFont = firstFont;
-    } else {
+    } else if (!hasUniformFormatting) {
         options.plainText = false;
         xmlText = context.stringFromEnigmaText(parsingContext, options);
     }

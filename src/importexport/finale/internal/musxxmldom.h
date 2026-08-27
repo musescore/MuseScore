@@ -26,7 +26,7 @@
 #include "musx/musx.h"
 
 namespace mu::iex::finale::xml {
-class Attribute final : public musx::factory::IXmlAttribute
+class Attribute final : public musx::xml::IXmlAttribute
 {
     muse::XmlDomAttribute attr;
 
@@ -44,14 +44,14 @@ public:
         return attr.value().toStdString();
     }
 
-    std::shared_ptr<IXmlAttribute> nextAttribute() const override
+    std::shared_ptr<musx::xml::IXmlAttribute> nextAttribute() const override
     {
         auto next = attr.nextAttribute();
         return next.isNull() ? nullptr : std::make_shared<Attribute>(next);
     }
 };
 
-class Element final : public musx::factory::IXmlElement
+class Element final : public musx::xml::IXmlElement
 {
     muse::XmlDomElement elem;
 
@@ -74,44 +74,44 @@ public:
         return elem.text().toStdString();
     }
 
-    std::shared_ptr<Attribute::IXmlAttribute> getFirstAttribute() const override
+    std::shared_ptr<musx::xml::IXmlAttribute> getFirstAttribute() const override
     {
         auto attr = elem.firstAttribute();
         return attr.isNull() ? nullptr : std::make_shared<Attribute>(attr);
     }
 
-    std::shared_ptr<Attribute::IXmlAttribute> findAttribute(const std::string& name) const override
+    std::shared_ptr<musx::xml::IXmlAttribute> findAttribute(const std::string& name) const override
     {
         auto attr = elem.attribute(name.c_str());
         return attr.isNull() ? nullptr : std::make_shared<Attribute>(attr);
     }
 
-    musx::factory::XmlElementPtr getFirstChildElement(const std::string& tag = {}) const override
+    musx::xml::XmlElementPtr getFirstChildElement(const std::string& tag = {}) const override
     {
         auto child = elem.firstChildElement(tagPtr(tag));
         return child.isNull() ? nullptr : std::make_shared<Element>(child);
     }
 
-    musx::factory::XmlElementPtr getNextSibling(const std::string& tag = {}) const override
+    musx::xml::XmlElementPtr getNextSibling(const std::string& tag = {}) const override
     {
         auto sib = elem.nextSiblingElement(tagPtr(tag));
         return sib.isNull() ? nullptr : std::make_shared<Element>(sib);
     }
 
-    musx::factory::XmlElementPtr getPreviousSibling(const std::string& tag = {}) const override
+    musx::xml::XmlElementPtr getPreviousSibling(const std::string& tag = {}) const override
     {
         auto sib = elem.previousSiblingElement(tagPtr(tag));
         return sib.isNull() ? nullptr : std::make_shared<Element>(sib);
     }
 
-    musx::factory::XmlElementPtr getParent() const override
+    musx::xml::XmlElementPtr getParent() const override
     {
         auto parent = elem.parent().toElement();
         return parent.isNull() ? nullptr : std::make_shared<Element>(parent);
     }
 };
 
-class Document final : public musx::factory::IXmlDocument
+class Document final : public musx::xml::IXmlDocument
 {
     muse::XmlDomDocument doc;
 
@@ -121,7 +121,7 @@ public:
         muse::ByteArray bytes = muse::ByteArray::fromRawData(data, size);
         doc.setContent(bytes);
         if (doc.hasError()) {
-            throw musx::factory::load_error(doc.errorString().toStdString());
+            throw musx::xml::load_error(doc.errorString().toStdString());
         }
     }
 
@@ -130,7 +130,7 @@ public:
         loadFromBuffer(xmlContent.data(), xmlContent.size());
     }
 
-    std::shared_ptr<Element::IXmlElement> getRootElement() const override
+    std::shared_ptr<musx::xml::IXmlElement> getRootElement() const override
     {
         auto root = doc.rootElement();
         return root.isNull() ? nullptr : std::make_shared<Element>(root);
