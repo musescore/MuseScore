@@ -100,47 +100,25 @@
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Trill">
-            <Trill>
-              <subtype>trill</subtype>
-              <eid>O_O</eid>
-              <Ornament>
-                <subtype>ornamentTrill</subtype>
-                <eid>P_P</eid>
-                </Ornament>
-              </Trill>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>P_P</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>S_S</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>R_R</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>U_U</eid>
+                <eid>S_S</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
@@ -151,5 +129,20 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Trill>
+        <subtype>trill</subtype>
+        <track2>0</track2>
+        <startTick>2/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>T_T</eid>
+        <track>0</track>
+        <Ornament>
+          <subtype>ornamentTrill</subtype>
+          <eid>U_U</eid>
+          <track>0</track>
+          </Ornament>
+        </Trill>
+      </SpannerMap>
     </Score>
   </museScore>

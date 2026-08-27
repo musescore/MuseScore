@@ -31,7 +31,6 @@
 #include "text.h"
 
 namespace mu::engraving {
-class RootItem;
 class Factory;
 class System;
 class Text;
@@ -52,7 +51,16 @@ class Page final : public EngravingItem
     DECLARE_CLASSOF(ElementType::PAGE)
 
 public:
+    ~Page() override;
+
     Page* clone() const override { return new Page(*this); }
+
+    //! A page is owned by its score. This overload hides EngravingItem::setOwnershipParent,
+    //! so that no other parent can be set by accident.
+    void setOwnershipParent(Score* score);
+
+    EngravingItem* layoutParent() const override;
+    EngravingItem* accessibleParentItem() const override;
 
     const std::vector<System*>& systems() const { return m_systems; }
     std::vector<System*>& systems() { return m_systems; }
@@ -74,6 +82,7 @@ public:
     double rm() const;
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
+    EngravingItemList accessibleChildren() const override;
 
     std::vector<EngravingItem*> items(const RectF& r);
     std::vector<EngravingItem*> items(const PointF& p);
@@ -98,7 +107,7 @@ public:
 
 private:
     friend class Factory;
-    Page(RootItem* parent);
+    Page(Score* parent);
 
     void doRebuildBspTree();
 

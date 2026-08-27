@@ -31,6 +31,7 @@
 #include "dom/factory.h"
 #include "dom/harmony.h"
 #include "dom/image.h"
+#include "dom/instrchange.h"
 #include "dom/key.h"
 #include "dom/keylist.h"
 #include "dom/laissezvib.h"
@@ -45,6 +46,7 @@
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/staff.h"
+#include "dom/staffstate.h"
 #include "dom/stafftext.h"
 #include "dom/stafftextbase.h"
 #include "dom/stem.h"
@@ -353,10 +355,10 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
     }
 
     for (Articulation* oldOrnament : oldOrnaments) {
-        Chord* parentChord = toChord(oldOrnament->parentItem());
+        Chord* parentChord = toChord(oldOrnament->chordRest());
 
         Ornament* newOrnament = Factory::createOrnament(score->dummy()->chord());
-        newOrnament->setParent(parentChord);
+        newOrnament->setOwnershipParent(parentChord);
         newOrnament->setTrack(oldOrnament->track());
         newOrnament->setSymId(oldOrnament->symId());
         newOrnament->setPos(oldOrnament->pos());
@@ -400,10 +402,10 @@ void CompatUtils::replaceOldWithNewExpressions(MasterScore* score)
     }
 
     for (StaffText* oldExpression : oldExpressions) {
-        Segment* parentSegment = toSegment(oldExpression->parentItem(true));
+        Segment* parentSegment = oldExpression->segment();
 
         Expression* newExpression = Factory::createExpression(score->dummy()->segment());
-        newExpression->setParent(parentSegment);
+        newExpression->setOwnershipParent(parentSegment);
         newExpression->setTrack(oldExpression->track());
         newExpression->setXmlText(oldExpression->xmlText());
         newExpression->mapPropertiesFromOldExpressions(oldExpression);
@@ -480,7 +482,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
     // separate into individual articulations
     for (Articulation* combinedArtic : toRemove) {
         auto components = mu::engraving::splitArticulations({ combinedArtic->symId() });
-        Chord* parentChord = toChord(combinedArtic->parentItem());
+        Chord* parentChord = toChord(combinedArtic->chordRest());
         for (SymId id : components) {
             Articulation* newArtic = Factory::createArticulation(masterScore->dummy()->chord());
             newArtic->setSymId(id);
@@ -488,7 +490,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
                 delete newArtic;
                 continue;
             }
-            newArtic->setParent(parentChord);
+            newArtic->setOwnershipParent(parentChord);
             newArtic->setTrack(combinedArtic->track());
             newArtic->setPos(combinedArtic->pos());
             newArtic->setDirection(combinedArtic->direction());
@@ -515,7 +517,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
                     continue;
                 }
                 Articulation* oldArtic = toArticulation(linkedItem);
-                Chord* oldParent = toChord(oldArtic->parentItem());
+                Chord* oldParent = toChord(oldArtic->chordRest());
                 oldParent->add(newArtic->linkedClone());
             }
         }
@@ -524,7 +526,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
     for (Articulation* combinedArtic : toRemove) {
         LinkedObjects* links = combinedArtic->links();
         if (!links || links->empty()) {
-            Chord* parentChord = toChord(combinedArtic->parentItem());
+            Chord* parentChord = toChord(combinedArtic->chordRest());
             parentChord->remove(combinedArtic);
             delete combinedArtic;
             continue;
@@ -538,12 +540,12 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
         }
         for (Articulation* linkedArtic : removeLinks) {
             if (linkedArtic != combinedArtic) {
-                Chord* linkedParent = toChord(linkedArtic->parentItem());
+                Chord* linkedParent = toChord(linkedArtic->chordRest());
                 linkedParent->remove(linkedArtic);
                 delete linkedArtic;
             }
         }
-        Chord* parentChord = toChord(combinedArtic->parentItem());
+        Chord* parentChord = toChord(combinedArtic->chordRest());
         parentChord->remove(combinedArtic);
         delete combinedArtic;
     }
@@ -827,12 +829,16 @@ void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
 
 NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
 {
-    assert(textLine->anchor() == Spanner::Anchor::NOTE);
+    IF_ASSERT_FAILED((textLine->startElement() && textLine->startElement()->isNote())
+                     && (textLine->endElement() && textLine->endElement()->isNote())) {
+        LOGW("Skipping textline with non note endpoints");
+        return nullptr;
+    }
     Note* startNote = toNote(textLine->startElement());
     Note* endNote = toNote(textLine->endElement());
 
     NoteLine* noteLine = Factory::createNoteLine(startNote);
-    noteLine->setParent(startNote);
+    noteLine->setOwnershipParent(startNote);
     noteLine->setStartElement(startNote);
     noteLine->setTrack(textLine->track());
     noteLine->setTick(textLine->tick());
@@ -848,7 +854,7 @@ NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
     }
 
     for (const SpannerSegment* oldSeg : textLine->spannerSegments()) {
-        LineSegment* newSeg = noteLine->createLineSegment(toSystem(oldSeg->parent()));
+        LineSegment* newSeg = noteLine->createLineSegment();
         newSeg->setOffset(oldSeg->offset());
         newSeg->setUserOff2(oldSeg->userOff2());
 
@@ -881,7 +887,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                 Chord* chord = toChord(el);
                 for (Note* note : chord->notes()) {
                     for (Spanner* spanner : note->spannerFor()) {
-                        if (!spanner->isTextLine() || spanner->anchor() != Spanner::Anchor::NOTE) {
+                        if (!spanner->isTextLine()) {
                             continue;
                         }
 
@@ -893,8 +899,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                         }
 
                         for (EngravingObject* linked : *links) {
-                            if (linked != spanner && linked && linked->isTextLine()
-                                && toTextLine(linked)->anchor() == Spanner::Anchor::NOTE) {
+                            if (linked != spanner && linked && linked->isTextLine()) {
                                 oldLines.insert(toTextLine(linked));
                             }
                         }
@@ -906,7 +911,12 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
 
     for (TextLine* oldLine : oldLines) {
         NoteLine* newLine = createNoteLineFromTextLine(oldLine);
-        EngravingItem* parent = newLine->parentItem();
+        if (!newLine) {
+            oldLine->ownershipParentItem()->remove(oldLine);
+            delete oldLine;
+            continue;
+        }
+        EngravingItem* parent = newLine->ownershipParentItem();
 
         parent->remove(oldLine);
         parent->add(newLine);
@@ -951,13 +961,13 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
     }
 
     for (Articulation* oldArtic : oldArtics) {
-        Chord* parentChord = toChord(oldArtic->parentItem());
+        Chord* parentChord = toChord(oldArtic->chordRest());
         Note* parentNote = oldArtic->up() ? parentChord->upNote() : parentChord->downNote();
 
         parentChord->remove(oldArtic);
 
         LaissezVib* lv = Factory::createLaissezVib(parentNote);
-        lv->setParent(parentNote);
+        lv->setOwnershipParent(parentNote);
         parentNote->add(lv);
 
         delete oldArtic;
@@ -1132,12 +1142,39 @@ void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
     item->setProperty(Pid::OFFSET, offset);
 }
 
+static void reregisterInstrumentChanges(Score* score)
+{
+    /* When reading the <5.0 InstrumentChange MMRest copy, it has overwritten the Part's InstrumentList
+     * entry for this segment's tick. Deleting the copies unregistered their Instruments from the
+     * InstrumentList. So we need to restore the InstrumentList entries with the originals. */
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            for (EngravingItem* annotation : seg.annotations()) {
+                Instrument* instr = nullptr;
+                if (annotation->isInstrumentChange()) {
+                    instr = toInstrumentChange(annotation)->instrument();
+                } else if (annotation->isStaffState() && toStaffState(annotation)->staffStateType() == StaffStateType::INSTRUMENT) {
+                    instr = toStaffState(annotation)->instrument();
+                }
+                if (instr) {
+                    annotation->part()->setInstrument(instr, seg.tick());
+                }
+            }
+        }
+    }
+}
+
 void CompatUtils::removeMMRestElements(MasterScore* masterScore)
 {
     // <5.0 MMRests had copies of underlying elements. We now move the element when toggling the rests.
     // Remove redundant copies which are written to the file
 
     for (Score* score : masterScore->scoreList()) {
+        bool removedInstrumentChange = false;
+
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             if (!mb->isMeasure()) {
                 continue;
@@ -1161,6 +1198,9 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
             for (Segment& seg : mmrest->segments()) {
                 std::vector<EngravingItem*> annotations = seg.annotations();
                 for (EngravingItem* annotation : annotations) {
+                    removedInstrumentChange |= annotation->isInstrumentChange()
+                                               || (annotation->isStaffState()
+                                                   && toStaffState(annotation)->staffStateType() == StaffStateType::INSTRUMENT);
                     annotation->unlink();
                     score->removeElement(annotation);
                     delete annotation;
@@ -1179,6 +1219,9 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
                     delete el;
                 }
             }
+        }
+        if (removedInstrumentChange) {
+            reregisterInstrumentChanges(score);
         }
     }
 }

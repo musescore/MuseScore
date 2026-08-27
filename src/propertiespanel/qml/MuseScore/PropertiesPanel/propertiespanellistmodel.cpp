@@ -299,7 +299,10 @@ void PropertiesPanelListModel::removeUnusedModels(const ElementKeySet& newElemen
         m_modelList.removeAt(index);
 
         //! NOTE: may run synchronously from a model's own property-change callback;
-        //! deleting immediately would destroy "this" mid-call, so defer it
+        //! deleting immediately would destroy "this" mid-call, so defer it.
+        //! Disconnect now so it (and its submodels) doesn't react to further updates
+        //! while it awaits destruction
+        model->disconnectAll();
         model->deleteLater();
 
         endRemoveRows();

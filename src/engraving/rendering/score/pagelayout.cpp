@@ -51,6 +51,7 @@
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "chordbracketlayout.h"
 #include "headerfooterlayout.h"
 #include "masklayout.h"
 #include "measurelayout.h"
@@ -76,7 +77,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
     DomAccessor& dom = ctx.mutDom();
 
     if (!state.page() || state.pageIdx() >= dom.npages()) {
-        state.setPage(Factory::createPage(dom.rootItem()));
+        state.setPage(Factory::createPage(dom.score()));
         dom.pages().push_back(state.page());
         state.setPrevSystem(nullptr);
         state.setPageOldMeasure(nullptr);
@@ -256,7 +257,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
         assert(ctx.state().curSystem() != nextSystem);
         ctx.mutState().setCurSystem(nextSystem);
 
-        MeasureBase* endMB = ctx.state().prevSystem()->lastMeasure();
+        MeasureBase* endMB = ctx.state().prevSystem()->last();
         bool endOfPageLock = endMB && endMB->isEndOfPageLock();
         const MeasureBase* nextMB = endMB ? endMB->nextMM() : nullptr;
         bool pageLockStart = nextMB && nextMB->isStartOfPageLock();
@@ -366,7 +367,12 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             for (EngravingItem* e : c->el()) {
                                 if (e->isChordBracket()) {
-                                    ArpeggioLayout::layoutArpeggio2(toChordBracket(e), ctx);
+                                    ChordBracket* bracket = toChordBracket(e);
+                                    if (c->onTabStaff()) {
+                                        TLayout::layoutItem(bracket, ctx);
+                                    } else {
+                                        ChordBracketLayout::updateVerticalGeometry(bracket, ctx);
+                                    }
                                 }
                             }
                             ChordLayout::layoutSpanners(c, ctx);

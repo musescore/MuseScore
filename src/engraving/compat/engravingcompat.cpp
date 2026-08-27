@@ -22,24 +22,22 @@
 
 #include "engravingcompat.h"
 
-#include "engraving/style/defaultstyle.h"
+#include "dom/beam.h"
+#include "dom/box.h"
+#include "dom/chord.h"
+#include "dom/instrument.h"
+#include "dom/lyrics.h"
 #include "dom/marker.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/note.h"
+#include "dom/part.h"
+#include "dom/pedal.h"
+#include "dom/spanner.h"
+#include "dom/staff.h"
 #include "dom/system.h"
-#include "engraving/dom/beam.h"
-#include "engraving/dom/box.h"
-#include "engraving/dom/chord.h"
-#include "engraving/dom/instrument.h"
-#include "engraving/dom/lyrics.h"
-#include "engraving/dom/masterscore.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/parenthesis.h"
-#include "engraving/dom/part.h"
-#include "engraving/dom/pedal.h"
-#include "engraving/dom/spanner.h"
-#include "engraving/dom/staff.h"
+#include "editing/editchord.h"
 #include "rw/compat/compatutils.h"
-
-#include "engraving/editing/editchord.h"
 
 using namespace mu::engraving;
 
@@ -232,7 +230,9 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
             if (mb->isVBoxBase()) {
                 VBox* vbox = static_cast<VBox*>(mb);
                 vbox->setProperty(Pid::PADDING_TO_NOTATION_ABOVE, Spatium()); // Because pre-4.6 these didn't exist
+                vbox->setPropertyFlags(Pid::PADDING_TO_NOTATION_ABOVE, PropertyFlags::UNSTYLED);
                 vbox->setProperty(Pid::PADDING_TO_NOTATION_BELOW, Spatium());
+                vbox->setPropertyFlags(Pid::PADDING_TO_NOTATION_BELOW, PropertyFlags::UNSTYLED);
                 if (nextmb && nextmb->isVBoxBase()) {
                     VBox* first = static_cast<VBox*>(mb);
                     VBox* second = static_cast<VBox*>(nextmb);

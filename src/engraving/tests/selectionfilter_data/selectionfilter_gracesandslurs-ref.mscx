@@ -165,16 +165,6 @@
           <Chord>
             <eid>Dm0NSaCFTfL_LEIWFbVwMAN</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>7E+B1li6ZlC_R1n4dfmZosD</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/8</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <acciaccatura/>
             <Note>
               <eid>ECILIZrZDDJ_qu/Ppb70iSN</eid>
@@ -196,14 +186,6 @@
             <eid>wcUwO/EZB7G_crtWIv6pWEI</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/8</fractions>
-                  <grace>0</grace>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>HAPManPwkDF_Tdok2ruiG0H</eid>
               <pitch>77</pitch>
@@ -218,17 +200,6 @@
           <Chord>
             <eid>uXsbmPyNtqC_3YkoQdCNNEP</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>Cll+oHwFeAH_6xgPf6o7qMO</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/8</fractions>
-                  <grace>0</grace>
-                  </location>
-                </next>
-              </Spanner>
             <acciaccatura/>
             <Note>
               <eid>piz+SmzeURP_ynH/dwHAKIC</eid>
@@ -249,14 +220,6 @@
           <Chord>
             <eid>iGI7UXBjySG_CpbhCgBRL4G</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/8</fractions>
-                  <grace>0</grace>
-                  </location>
-                </prev>
-              </Spanner>
             <acciaccatura/>
             <Note>
               <eid>g8B0eLHkB3D_kWvKZBTaovG</eid>
@@ -283,17 +246,6 @@
             <eid>d8Imqp59fkD_70nSU55xRkF</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>Z70XTRVn5C_mZ+ZGQFUKN</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/8</fractions>
-                  <grace>0</grace>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <eid>Jv1+pbvlf7L_kGmtYFFPK6L</eid>
               <pitch>67</pitch>
@@ -303,13 +255,6 @@
           <Chord>
             <eid>1aozrtPgTrG_GYejskNe/qP</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/8</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <acciaccatura/>
             <Note>
               <eid>POGrgyfMWlK_e2OxmS2CklC</eid>
@@ -631,5 +576,25 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>Dm0NSaCFTfL_LEIWFbVwMAN</startElement>
+        <endElement>wcUwO/EZB7G_crtWIv6pWEI</endElement>
+        <eid>7E+B1li6ZlC_R1n4dfmZosD</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>uXsbmPyNtqC_3YkoQdCNNEP</startElement>
+        <endElement>iGI7UXBjySG_CpbhCgBRL4G</endElement>
+        <eid>Cll+oHwFeAH_6xgPf6o7qMO</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>d8Imqp59fkD_70nSU55xRkF</startElement>
+        <endElement>1aozrtPgTrG_GYejskNe/qP</endElement>
+        <eid>Z70XTRVn5C_mZ+ZGQFUKN</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

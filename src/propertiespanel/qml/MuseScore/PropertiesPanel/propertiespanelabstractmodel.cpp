@@ -543,6 +543,11 @@ void PropertiesPanelAbstractModel::requestElements()
     }
 }
 
+void PropertiesPanelAbstractModel::disconnectAll()
+{
+    async_disconnectAll();
+}
+
 void PropertiesPanelAbstractModel::onCurrentNotationChanged()
 {
 }

@@ -1294,7 +1294,9 @@ class EngravingItem : public apiv1::ScoreElement
     QPointF pagePos() const { return PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
     QPointF canvasPos() const { return PointF(element()->canvasPos() / element()->spatium()).toQPointF(); }
 
-    apiv1::EngravingItem* parent() const { return wrap(element()->parentItem()); }
+    //! \note Plugins have always seen the visual parent here (a measure reports
+    //!       its system, a spanner segment its system), so keep layoutParent().
+    apiv1::EngravingItem* parent() const { return wrap(element()->layoutParent()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;
@@ -2558,10 +2560,6 @@ class Spanner : public EngravingItem
     API_PROPERTY(spannerTicks,            SPANNER_TICKS)
     /// The track this spanner end at.
     API_PROPERTY_T(int, spannerTrack2,    SPANNER_TRACK2)
-
-    /// The Anchor type for this spanner,
-    /// one of PluginAPI::PluginAPI::Anchor values.
-    API_PROPERTY_T(int, anchor,           ANCHOR)
 
     /// The starting element of the spanner.
     Q_PROPERTY(apiv1::EngravingItem * startElement READ startElement)

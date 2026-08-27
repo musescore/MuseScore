@@ -166,7 +166,7 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
 
     GuitarBendText* bendText = item->bendText();
     if (item->isSingleEndType()) {
-        bendText->setParent(item);
+        bendText->setOwnershipParent(item);
         bendText->setXmlText(bend->ldata()->bendDigit());
         TextLayout::layoutBaseTextBase(bendText, ctx);
         double verticalTextPad = 0.35 * item->spatium();
@@ -250,20 +250,33 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
 {
     GuitarBend* bend = item->guitarBend();
     double spatium = item->spatium();
-    Note* endNote = bend->endNote();
-    PointF endNotePos = endNote->systemPos();
 
-    RectF endNoteBbox = getNoteAndParenthesesShape(endNote);
-    if (bend->isFullReleaseDive()) {
-        double y = endNotePos.y() + endNoteBbox.top() + 0.5 * item->lineWidth();
-        double x = item->isSingleEndType() ? endNotePos.x() + endNoteBbox.left() - 0.25 * spatium
-                   : item->system()->endingXForOpenEndedLines();
-        return PointF(x, y);
+    double x = 0.0;
+    if (item->isSingleEndType()) {
+        Note* endNote = bend->endNote();
+        PointF endNotePos = endNote->systemPos();
+        RectF endNoteBbox = getNoteAndParenthesesShape(endNote);
+
+        if (bend->isFullReleaseDive()) {
+            x = endNotePos.x() + endNoteBbox.left() - 0.25 * spatium;
+            double y = endNotePos.y() + endNoteBbox.top() + 0.5 * item->lineWidth();
+            return PointF(x, y);
+        }
+
+        x = bend->bendType() == GuitarBendType::PRE_DIVE ? item->pos().x() : endNotePos.x() + 0.5 * endNoteBbox.width();
+    } else {
+        x = item->system()->endingXForOpenEndedLines();
+
+        if (bend->isFullReleaseDive()) {
+            /* Full release dives end at the same y as they started, so we can use the startNote's position
+             * here in the case that the segment is BEGIN type (bc its endNote hasn't been laid out yet) */
+            Note* startNote = bend->startNote();
+            PointF startNotePos = startNote->systemPos();
+            RectF startNoteBbox = getNoteAndParenthesesShape(startNote);
+            double y = startNotePos.y() + startNoteBbox.top() + 0.5 * item->lineWidth();
+            return PointF(x, y);
+        }
     }
-
-    double x = item->isSingleEndType() ? bend->bendType() == GuitarBendType::PRE_DIVE
-               ? item->pos().x() : endNotePos.x() + 0.5 * endNoteBbox.width()
-               : item->system()->endingXForOpenEndedLines();
 
     if (bend->bendType() == GuitarBendType::PRE_DIVE) {
         LineSegment* prevSegment = findPrevHoldOrBendSegment(item);
@@ -275,6 +288,18 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
 
     int diveLevel = bend->totBendAmountIncludingPrecedingBends();
     bool aboveStaff = diveLevel > 0;
+
+    const StaffType* staffType = item->staffType();
+    IF_ASSERT_FAILED(staffType) {
+        return PointF(x, 0.0);
+    }
+    int staffLines = staffType->lines();
+    double lineDist = item->absoluteFromSpatium(staffType->lineDistance());
+
+    if (!item->isSingleEndType()) {
+        double y = aboveStaff ? -lineDist : staffLines * lineDist;
+        return PointF(x, y);
+    }
 
     const std::set<int>& diveLevels = bend->ldata()->diveLevels();
     std::deque<int> diveLevelsInThisDirection;
@@ -289,18 +314,6 @@ PointF GuitarDiveLayout::computeEndPosOnStaff(GuitarBendSegment* item, LayoutCon
     size_t levelNumber = muse::indexOf(diveLevelsInThisDirection, diveLevel);
     IF_ASSERT_FAILED(levelNumber != muse::nidx) {
         return PointF(x, 0.0);
-    }
-
-    const StaffType* staffType = item->staffType();
-    IF_ASSERT_FAILED(staffType) {
-        return PointF(x, 0.0);
-    }
-    int staffLines = staffType->lines();
-    double lineDist = item->absoluteFromSpatium(staffType->lineDistance());
-
-    if (!item->isSingleEndType()) {
-        double y = aboveStaff ? -lineDist : staffLines * lineDist;
-        return PointF(x, y);
     }
 
     double zeroDiveLevel = aboveStaff ? -1.5 * lineDist : lineDist * (staffLines + 0.5);
@@ -354,16 +367,20 @@ PointF GuitarDiveLayout::computeEndPosAboveStaff(GuitarBendSegment* item, Layout
 {
     GuitarBend* bend = item->guitarBend();
     double spatium = item->spatium();
-    Note* endNote = bend->endNote();
-    PointF endNotePos = endNote->systemPos();
 
-    RectF endNoteBbox = getNoteAndParenthesesShape(endNote);
-    double x = item->isSingleEndType() ? bend->bendType() == GuitarBendType::PRE_DIVE
-               ? item->pos().x() : endNotePos.x() + 0.5 * endNoteBbox.width()
-               : item->system()->endingXForOpenEndedLines();
+    double x = 0.0;
+    if (item->isSingleEndType()) {
+        Note* endNote = bend->endNote();
+        PointF endNotePos = endNote->systemPos();
+        RectF endNoteBbox = getNoteAndParenthesesShape(endNote);
+        x = bend->bendType() == GuitarBendType::PRE_DIVE
+            ? item->pos().x() : endNotePos.x() + 0.5 * endNoteBbox.width();
+    } else {
+        x = item->system()->endingXForOpenEndedLines();
+    }
 
-    LineSegment* prevSegment = findPrevHoldOrBendSegment(item);
     if (bend->bendType() == GuitarBendType::PRE_DIVE) {
+        LineSegment* prevSegment = findPrevHoldOrBendSegment(item);
         if (prevSegment && prevSegment->isGuitarBendHoldSegment()) {
             double y = prevSegment->pos().y() + prevSegment->pos2().y();
             return PointF(x, y);
@@ -444,7 +461,7 @@ void GuitarDiveLayout::layoutDip(GuitarBendSegment* item, LayoutContext& ctx)
     item->mutldata()->setBbox(bbox);
 
     GuitarBendText* bendText = item->bendText();
-    bendText->setParent(item);
+    bendText->setOwnershipParent(item);
     bendText->setXmlText(bend->ldata()->bendDigit());
     TextLayout::layoutBaseTextBase(bendText, ctx);
     double verticalTextPad = 0.35 * item->spatium();

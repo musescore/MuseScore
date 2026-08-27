@@ -109,9 +109,9 @@ BarLine::~BarLine()
     muse::DeleteAll(m_el);
 }
 
-void BarLine::setParent(Segment* parent)
+void BarLine::setOwnershipParent(Segment* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------
@@ -121,7 +121,7 @@ void BarLine::setParent(Segment* parent)
 PointF BarLine::canvasPos() const
 {
     PointF pos = EngravingItem::canvasPos();
-    if (explicitParent()) {
+    if (ownershipParent()) {
         System* system = measure()->system();
         double yoff = system ? system->staff(staffIdx())->y() : 0.0;
         pos.ry() += yoff;
@@ -231,7 +231,7 @@ void BarLine::calcY()
 {
     BarLine::LayoutData* data = mutldata();
     double _spatium = spatium();
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         // for use in palette
         data->y1 = m_spanFrom * _spatium * .5;
         data->y2 = (8 - m_spanTo) * _spatium * .5;
@@ -445,12 +445,12 @@ EngravingItem* BarLine::drop(Transaction& tx, EditData& data)
         delete e;
     } else if (e->isArticulationFamily()) {
         Articulation* atr = toArticulation(e);
-        atr->setParent(this);
+        atr->setOwnershipParent(this);
         atr->setTrack(track());
         score()->undoAddElement(atr);
         return atr;
     } else if (e->isSymbol() || e->isImage()) {
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         return e;
@@ -464,14 +464,14 @@ EngravingItem* BarLine::drop(Transaction& tx, EditData& data)
                 } else {
                     e->setPlacement(el->placement());
                     e->setTrack(track());
-                    e->setParent(segment());
+                    e->setOwnershipParent(segment());
                     score()->undoChangeElement(el, e);
                     return e;
                 }
             }
         }
         e->setTrack(track());
-        e->setParent(segment());
+        e->setOwnershipParent(segment());
         score()->undoAddElement(e);
         return e;
     } else if (e->isMeasureNumber() || e->isJump() || e->isMarker() || e->isLayoutBreak()) {
@@ -545,7 +545,7 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 
 void BarLine::styleChanged()
 {
-    if (explicitParent() && m_barLineType == BarLineType::END_REPEAT) {
+    if (ownershipParent() && m_barLineType == BarLineType::END_REPEAT) {
         score()->undoUpdatePlayCountText(measure());
     }
     EngravingItem::styleChanged();
@@ -682,7 +682,7 @@ void BarLine::endDragGrip(EditData& ed)
                 b = toBarLine(linkedClone());
                 b->setSpanStaff(true);
                 b->setTrack(staffIdx * VOICES);
-                b->setParent(s);
+                b->setOwnershipParent(s);
                 score()->undoAddElement(b);
             }
             breakLast = b->spanTo();
@@ -741,7 +741,7 @@ void BarLine::setTrack(track_idx_t t)
 
 void BarLine::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::SYMBOL:

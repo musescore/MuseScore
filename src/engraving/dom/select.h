@@ -86,6 +86,17 @@ enum class SelState : char {
     // is selected
 };
 
+//---------------------------------------------------------
+//   SelectedSymbol
+//---------------------------------------------------------
+
+struct SelectedSymbol {
+    track_idx_t track = muse::nidx;
+    int tickOffset = 0;
+    int segDelta = 0;
+    EngravingItem* element = nullptr;
+};
+
 //-------------------------------------------------------------------
 //   Selection
 //    For SelState::LIST state only visible elements can be selected

@@ -378,13 +378,13 @@ Note* NotationMidiInput::makePreviewNote(const muse::midi::Event& e)
     Segment* seg = inputState.lastSegment() ? inputState.lastSegment() : score->dummy()->segment();
 
     Chord* chord = engraving::Factory::createChord(seg);
-    chord->setParent(seg);
+    chord->setOwnershipParent(seg);
 
     const ChordRest* cr = inputState.cr();
     const staff_idx_t staffIdx = cr ? engraving::track2staff(cr->track()) : 0;
 
     Note* note = engraving::Factory::createNote(chord);
-    note->setParent(chord);
+    note->setOwnershipParent(chord);
     note->setStaffIdx(staffIdx);
 
     engraving::NoteVal nval = NoteInput::noteVal(score, e.note(), staffIdx, configuration()->midiUseWrittenPitch().val);

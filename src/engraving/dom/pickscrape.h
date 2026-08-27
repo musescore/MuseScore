@@ -38,7 +38,7 @@ class PickScrapeSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::PICK_SCRAPE_SEGMENT)
 
 public:
-    PickScrapeSegment(PickScrape* sp, System* parent);
+    PickScrapeSegment(PickScrape* sp);
 
     PickScrapeSegment* clone() const override { return new PickScrapeSegment(*this); }
 
@@ -61,7 +61,9 @@ public:
 
     PickScrape* clone() const override { return new PickScrape(*this); }
 
-    LineSegment* createLineSegment(System* parent) override;
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
+    LineSegment* createLineSegment() override;
 
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;

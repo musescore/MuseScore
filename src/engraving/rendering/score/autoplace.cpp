@@ -48,7 +48,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
     const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleAbsolute(
         Sid::skylineMinHorizontalClearance) * item->mag();
 
-    if (item->autoplace() && item->explicitParent()) {
+    if (item->autoplace() && item->ownershipParent()) {
         const Segment* s = toSegment(item->findAncestor(ElementType::SEGMENT));
         IF_ASSERT_FAILED(s) {
             return;
@@ -131,8 +131,8 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
         rebase = rebaseOffset(item, ldata);
     }
 
-    if (item->autoplace() && item->explicitParent()) {
-        const Measure* m = toMeasure(item->explicitParent());
+    if (item->autoplace() && item->ownershipParent()) {
+        const Measure* m = toMeasure(item->ownershipParent());
 
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(ldata->isSetBbox());
@@ -280,7 +280,8 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
     }
     //OffsetChange saveChangedValue = _offsetChanged;
 
-    bool staffRelative = item->staff() && item->explicitParent() && !(item->explicitParent()->isNote() || item->explicitParent()->isRest());
+    bool staffRelative = item->staff() && item->ownershipParent()
+                         && !(item->ownershipParent()->isNote() || item->ownershipParent()->isRest());
     if (staffRelative && item->propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
         // check if flipped
         // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
@@ -385,8 +386,9 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return true;
     }
 
-    if (itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
-        return itemsShouldIgnoreEachOther(itemToAutoplace, itemInSkyline->parentItem());
+    const EngravingItem* skylineItemOwner = itemInSkyline->ownershipParentItem();
+    if (itemInSkyline->isText() && skylineItemOwner && skylineItemOwner->isSLineSegment()) {
+        return itemsShouldIgnoreEachOther(itemToAutoplace, skylineItemOwner);
     }
 
     ElementType type1 = itemToAutoplace->type();
@@ -397,7 +399,7 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
     }
 
     if (type1 == ElementType::FRET_DIAGRAM && (type2 == ElementType::FRET_DIAGRAM || type2 == ElementType::HARMONY)) {
-        bool isFretDiagAgainstItsOwnHarmony = itemInSkyline->parentItem() == itemToAutoplace;
+        bool isFretDiagAgainstItsOwnHarmony = skylineItemOwner == itemToAutoplace;
         bool areOnDifferentSegments = itemToAutoplace->findAncestor(ElementType::SEGMENT)
                                       != itemInSkyline->findAncestor(ElementType::SEGMENT);
         return isFretDiagAgainstItsOwnHarmony || areOnDifferentSegments;
@@ -439,10 +441,6 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
     if (itemToAutoplace->isArticulationOrFermata() && itemInSkyline->isArticulationOrFermata()) {
         // Ignore fermatas and articulations on other segments
         return itemToAutoplace->findAncestor(ElementType::SEGMENT) != itemInSkyline->findAncestor(ElementType::SEGMENT);
-    }
-
-    if (type1 == ElementType::VIBRATO_SEGMENT && type2 == ElementType::GUITAR_BEND_SEGMENT) {
-        return true;
     }
 
     return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;

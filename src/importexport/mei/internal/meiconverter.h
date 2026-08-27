@@ -32,8 +32,6 @@
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 
-#include "engraving/iengravingfontsprovider.h"
-
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/cmnornaments.h"
 #include "thirdparty/libmei/fingering.h"
@@ -91,8 +89,8 @@ enum ElisionType {
 class Convert
 {
     // The fallback font is used to convert smufl codes (char32_t) to engraving::SymId
-    static inline muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
-    static inline muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
+    static muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
+    static muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
 public:
 
     /**

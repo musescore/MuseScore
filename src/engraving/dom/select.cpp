@@ -26,7 +26,6 @@
 */
 
 #include "global/containers.h"
-#include "global/io/buffer.h"
 
 #include "../types/types.h"
 
@@ -78,7 +77,6 @@
 #include "log.h"
 
 using namespace mu;
-using namespace muse::io;
 using namespace mu::engraving;
 
 // ====================================================
@@ -157,7 +155,7 @@ ChordRest* Selection::cr() const
         return 0;
     }
     if (e->isNote()) {
-        e = e->parentItem();
+        e = toNote(e)->chord();
     }
     if (e->isChordRest()) {
         return toChordRest(e);
@@ -288,7 +286,7 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
     if (m_el.size() == 1) {
         EngravingItem* el = m_el[0];
         if (el->isNote()) {
-            return toChordRest(el->explicitParent());
+            return toChordRest(el->ownershipParent());
         } else if (el->isChordRest()) {
             return toChordRest(el);
         }
@@ -297,7 +295,7 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
     ChordRest* cr = nullptr;
     for (EngravingItem* el : m_el) {
         if (el->isNote()) {
-            el = el->parentItem();
+            el = toNote(el)->chord();
         }
         if (el->isChordRest()) {
             if (track != muse::nidx && el->track() != track) {
@@ -324,7 +322,7 @@ ChordRest* Selection::lastChordRest(track_idx_t track) const
         EngravingItem* el = m_el[0];
         if (el) {
             if (el->isNote()) {
-                return toChordRest(el->explicitParent());
+                return toChordRest(el->ownershipParent());
             } else if (el->isChordRest()) {
                 return toChordRest(el);
             }
@@ -1078,58 +1076,8 @@ muse::ByteArray Selection::mimeData() const
 
 muse::ByteArray Selection::staffMimeData() const
 {
-    auto buffer = Buffer::opened(IODevice::WriteOnly);
-    XmlWriter xml(&buffer);
-
-    xml.startDocument();
-
-    SelectionFilter filter = selectionFilter();
-    Fraction curTick;
-
-    Fraction ticks = tickEnd() - tickStart();
-    int staves = static_cast<int>(staffEnd() - staffStart());
-
-    XmlWriter::Attributes staffListAttributes = {
-        { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
-        { "tick", tickStart().toString() },
-        { "len", ticks.toString() },
-        { "staff", staffStart() },
-        { "staves", staves },
-    };
-
-    // Note: canCopy() ensures that the whole selection has a single time stretch ratio.
-    Fraction timeStretch = score()->staff(staffStart())->timeStretch(tickStart());
-    if (timeStretch != Fraction(1, 1)) {
-        staffListAttributes.push_back({ "timeStretch", timeStretch.toString() });
-    }
-
-    xml.startElement("StaffList", staffListAttributes);
-
-    Segment* seg1 = m_startSegment;
-    Segment* seg2 = m_endSegment;
-
-    for (staff_idx_t staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
-        track_idx_t startTrack = staffIdx * VOICES;
-        track_idx_t endTrack   = startTrack + VOICES;
-
-        xml.startElement("Staff", { { "id", staffIdx } });
-
-        Staff* staff = m_score->staff(staffIdx);
-        Part* part = staff->part();
-        Interval interval = part->instrument(seg1->tick())->transpose();
-        if (interval.chromatic) {
-            xml.tag("transposeChromatic", interval.chromatic);
-        }
-        if (interval.diatonic) {
-            xml.tag("transposeDiatonic", interval.diatonic);
-        }
-        rw::RWRegister::writer()->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
-        xml.endElement();
-    }
-
-    xml.endElement();
-    xml.flush();
-    return buffer.data();
+    return rw::RWRegister::writer()->writeStaffSelection(m_score, selectionFilter(), staffStart(), staffEnd(), tickStart(), tickEnd(),
+                                                         m_startSegment, m_endSegment);
 }
 
 muse::ByteArray Selection::symbolListMimeData() const
@@ -1138,11 +1086,6 @@ muse::ByteArray Selection::symbolListMimeData() const
         EngravingItem* e;
         Segment* s;
     };
-
-    auto buffer = Buffer::opened(IODevice::WriteOnly);
-    XmlWriter xml(&buffer);
-
-    xml.startDocument();
 
     track_idx_t topTrack    = 1000000;
     track_idx_t bottomTrack = 0;
@@ -1161,10 +1104,10 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::CHORD_BRACKET:
         case ElementType::TREMOLO_SINGLECHORD: {
             // ignore articulations not attached to chords/rest or segment
-            if (!e->explicitParent()->isChordRest()) {
+            if (!e->ownershipParent()->isChordRest()) {
                 continue;
             }
-            ChordRest* cr = toChordRest(e->explicitParent());
+            ChordRest* cr = toChordRest(e->ownershipParent());
             seg = cr->segment();
         } break;
         case ElementType::FERMATA:
@@ -1198,8 +1141,8 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::HARMONY:
         case ElementType::FRET_DIAGRAM:
             // ignore chord symbols or fret diagrams not attached to segment
-            if (e->explicitParent()->isSegment()) {
-                seg = toSegment(e->explicitParent());
+            if (e->ownershipParent()->isSegment()) {
+                seg = toSegment(e->ownershipParent());
                 break;
             }
             continue;
@@ -1257,22 +1200,18 @@ muse::ByteArray Selection::symbolListMimeData() const
         map.insert(std::pair<int64_t, MapData>(((int64_t)track << 32) + seg->tick().ticks(), mapData));
     }
 
-    xml.startElement("SymbolList", { { "version", Constants::MSC_VERSION_STR },
-                         { "fromtrack", topTrack },
-                         { "totrack", bottomTrack } });
-
-    // scan the map, outputting elements each with a relative <track> tag on track change,
-    // a relative tick and the number of CR segments to skip
+    // scan the map, computing for each element a relative track and tick offset,
+    // and the number of CR segments to skip
+    std::vector<SelectedSymbol> symbols;
     track_idx_t currTrack = muse::nidx;
     for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
         int numSegs;
         track_idx_t track = static_cast<track_idx_t>(iter->first >> 32);
         if (currTrack != track) {
-            xml.tag("trackOffset", static_cast<int>(track - topTrack));
             currTrack = track;
             seg       = firstSeg;
         }
-        xml.tag("tickOffset", static_cast<int>(iter->first & 0xFFFFFFFF) - firstTick.ticks());
+        int tickOffset = static_cast<int>(iter->first & 0xFFFFFFFF) - firstTick.ticks();
         numSegs = 0;
         // with figured bass, we need to look for the proper segment
         // not only according to ChordRest elements, but also annotations
@@ -1312,14 +1251,10 @@ muse::ByteArray Selection::symbolListMimeData() const
                 numSegs++;
             }
         }
-        xml.tag("segDelta", numSegs);
-        rw::RWRegister::writer()->writeItem(iter->second.e, xml);
+        symbols.push_back({ track, tickOffset, numSegs, iter->second.e });
     }
 
-    xml.endElement();
-    xml.flush();
-    buffer.close();
-    return buffer.data();
+    return rw::RWRegister::writer()->writeSymbolListSelection(topTrack, bottomTrack, symbols);
 }
 
 std::vector<EngravingItem*> Selection::elements(ElementType type) const

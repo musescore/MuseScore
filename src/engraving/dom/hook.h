@@ -39,13 +39,13 @@ public:
     Hook(Chord* parent = 0);
 
     Hook* clone() const override { return new Hook(*this); }
-    double mag() const override { return parentItem()->mag(); }
+    double mag() const override { return layoutParent()->mag(); }
     EngravingItem* elementBase() const override;
 
     void setHookType(int v);
     int hookType() const { return m_hookType; }
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
     PointF smuflAnchor() const;
 
     //! @p index: the number of flags (positive: upwards, negative: downwards)

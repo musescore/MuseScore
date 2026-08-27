@@ -22,6 +22,7 @@
 #pragma once
 
 #include "../inotationautomation.h"
+#include "../inotationundostack.h"
 
 #include "async/notification.h"
 
@@ -33,7 +34,7 @@ namespace mu::notation {
 class NotationAutomation : public INotationAutomation
 {
 public:
-    NotationAutomation();
+    explicit NotationAutomation(INotationUndoStackPtr undoStack);
 
     bool isAutomationModeEnabled() const override;
     void setAutomationModeEnabled(bool enabled) override;
@@ -50,5 +51,6 @@ private:
     muse::async::Notification m_automationModeEnabledChanged;
 
     engraving::MasterScore* m_masterScore = nullptr;
+    const INotationUndoStackPtr m_undoStack;
 };
 }

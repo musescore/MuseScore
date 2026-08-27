@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <cmath>
 
 #include <unordered_map>
@@ -40,9 +41,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-#define MIN_TEMPO 5.0 / 60
-#define MAX_TEMPO 999.0 / 60
-
 //TODO: textChanged() needs to be called during/after editing
 
 //---------------------------------------------------------
@@ -75,7 +73,6 @@ TempoText::TempoText(Segment* parent)
 void TempoText::setTempoTextType(TempoTextType ttt)
 {
     m_tempoTextType = ttt;
-    score()->setUpTempoMapLater();
 }
 
 double TempoText::tempoBpm() const
@@ -218,22 +215,17 @@ String TempoText::duration2tempoTextString(const TDuration dur)
 }
 
 //---------------------------------------------------------
-// updateScore
+// tempo
 //---------------------------------------------------------
 
-void TempoText::updateScore()
+BeatsPerSecond TempoText::tempo() const
 {
-    score()->setUpTempoMapLater();
-}
-
-//---------------------------------------------------------
-// updateRelative
-//---------------------------------------------------------
-
-void TempoText::updateRelative()
-{
-    BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::eps());
-    setTempo(tempoBefore * m_relative);
+    if (m_isRelative) {
+        const BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::eps());
+        const BeatsPerSecond v = tempoBefore * m_relative;
+        return BeatsPerSecond(std::clamp(v.val, Constants::MIN_TEMPO.val, Constants::MAX_TEMPO.val));
+    }
+    return m_tempo;
 }
 
 //---------------------------------------------------------
@@ -284,11 +276,10 @@ void TempoText::updateTempo()
         if (!match.empty()) {
             if (match.size() == 2) {
                 BeatsPerSecond nt = BeatsPerSecond(String::fromStdString(match[1].str()).toDouble() * pa.f);
-                if (nt != m_tempo) {
+                if (m_isRelative || nt != m_tempo) {
                     undoChangeProperty(Pid::TEMPO, PropertyValue(nt), propertyFlags(Pid::TEMPO));
                     m_relative = 1.0;
                     m_isRelative = false;
-                    updateScore();
                 }
                 break;
             }
@@ -307,8 +298,6 @@ void TempoText::updateTempo()
                 if (!match2.empty()) {
                     m_relative = pa2.f / pa.f;
                     m_isRelative = true;
-                    updateRelative();
-                    updateScore();
                     return;
                 }
             }
@@ -322,12 +311,14 @@ void TempoText::updateTempo()
 
 void TempoText::setTempo(BeatsPerSecond v)
 {
-    if (v.val < MIN_TEMPO) {
-        v = MIN_TEMPO;
-    } else if (v.val > MAX_TEMPO) {
-        v = MAX_TEMPO;
+    if (v.val < Constants::MIN_TEMPO.val) {
+        v = Constants::MIN_TEMPO;
+    } else if (v.val > Constants::MAX_TEMPO.val) {
+        v = Constants::MAX_TEMPO;
     }
     m_tempo = v;
+    m_relative = 1.0;
+    m_isRelative = false;
 }
 
 //---------------------------------------------------------
@@ -359,11 +350,9 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::PLAY:
         setPlayTempoText(v.toBool());
-        score()->setUpTempoMapLater();
         break;
     case Pid::TEMPO:
         setTempo(v.value<BeatsPerSecond>());
-        score()->setUpTempoMapLater();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
         setFollowText(v.toBool());
@@ -477,16 +466,6 @@ String TempoText::tempoInfo() const
     }
 
     return info;
-}
-
-void TempoText::added()
-{
-    updateScore();
-}
-
-void TempoText::removed()
-{
-    updateScore();
 }
 
 void TempoText::commitText()

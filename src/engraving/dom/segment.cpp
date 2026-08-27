@@ -113,7 +113,7 @@ const char* Segment::subTypeName(SegmentType t)
 void Segment::setElement(track_idx_t track, EngravingItem* el)
 {
     if (el) {
-        el->setParent(this);
+        el->setOwnershipParent(this);
         m_elist[track] = el;
         setEmpty(false);
     } else {
@@ -149,14 +149,14 @@ void Segment::removeElement(track_idx_t track)
 Segment::Segment(Measure* m)
     : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setParent(m);
+    setOwnershipParent(m);
     init();
 }
 
 Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
     : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setParent(m);
+    setOwnershipParent(m);
 //      assert(t >= Fraction(0,1));
 //      assert(t <= m->ticks());
     m_segmentType = st;
@@ -184,16 +184,16 @@ Segment::Segment(const Segment& s)
         EngravingItem* ne = 0;
         if (e) {
             ne = e->clone();
-            ne->setParent(this);
+            ne->setOwnershipParent(this);
         }
         m_elist.push_back(ne);
     }
     m_shapes  = s.m_shapes;
 }
 
-void Segment::setParent(Measure* parent)
+void Segment::setOwnershipParent(Measure* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------
@@ -608,6 +608,12 @@ EngravingItem* Segment::element(track_idx_t track) const
     return m_elist[track];
 }
 
+System* Segment::system() const
+{
+    Measure* m = measure();
+    return m ? m->system() : nullptr;
+}
+
 //---------------------------------------------------------
 //   insertStaff
 //---------------------------------------------------------
@@ -680,8 +686,8 @@ void Segment::add(EngravingItem* el)
 {
 //      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
 
-    if (el->explicitParent() != this) {
-        el->setParent(this);
+    if (el->ownershipParent() != this) {
+        el->setOwnershipParent(this);
     }
 
     track_idx_t track = el->track();
@@ -934,20 +940,14 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::STAFF_STATE:
         if (toStaffState(el)->staffStateType() == StaffStateType::INSTRUMENT) {
-            Part* part = el->part();
-            part->removeInstrument(tick());
+            el->part()->removeInstrument(toStaffState(el)->instrument(), tick());
         }
         removeAnnotation(el);
         break;
 
     case ElementType::INSTRUMENT_CHANGE:
-    {
-        if (!isMMRestSegment()) {
-            InstrumentChange* is = toInstrumentChange(el);
-            Part* part = is->part();
-            part->removeInstrument(tick());
-        }
-    }
+        // Ensure that the entry in the Part's InstrumentList for this segment's tick is the one this InstrumentChange owns:
+        el->part()->removeInstrument(toInstrumentChange(el)->instrument(), tick());
         removeAnnotation(el);
         break;
 
@@ -980,7 +980,6 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::BREATH:
         m_elist[track] = 0;
-        score()->setPause(tick(), 0);
         break;
 
     default:
@@ -1998,7 +1997,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::STICKING:
     case ElementType::TUPLET: {
         EngravingItem* next = nullptr;
-        if (e->explicitParent() == this) {
+        if (e->ownershipParent() == this) {
             next = nextAnnotation(e);
 
             if (next && next->isFretDiagram()) {
@@ -2078,13 +2077,13 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             p = sp->startElement();
         } else {
             p = e;
-            EngravingItem* pp = p->parentItem();
+            EngravingItem* pp = p->ownershipParentItem();
             if (pp->isNote() || pp->isRest() || (pp->isChord() && !p->isNote())) {
                 p = pp;
             }
         }
         EngravingItem* el = p;
-        for (; p && !p->isSegment(); p = p->parentItem()) {
+        for (; p && !p->isSegment(); p = p->layoutParent()) {
         }
         Segment* seg = toSegment(p);
         // next in _elist
@@ -2232,7 +2231,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         }
 
         EngravingItem* prevAnnotation = nullptr;
-        if (e->explicitParent() == this) {
+        if (e->ownershipParent() == this) {
             prevAnnotation = this->prevAnnotation(e);
         }
         if (prevAnnotation) {
@@ -2309,9 +2308,9 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             el = sp->startElement();
             seg = sp->startSegment();
         } else {
-            EngravingItem* ep = e->parentItem();
+            EngravingItem* ep = e->ownershipParentItem();
             if (ep->isNote() || ep->isRest() || (ep->isChord() && !e->isNote())) {
-                el = e->parentItem();
+                el = e->ownershipParentItem();
             }
         }
 
@@ -2667,8 +2666,9 @@ void Segment::createShape(staff_idx_t staffIdx)
             // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
             PointF pos = e->pos();
             // Harmony attached to invisible fret diagram
-            if (e->isHarmony() && e->parent()->isFretDiagram()) {
-                pos += e->parentItem()->pos();
+            const EngravingItem* parent = e->layoutParent();
+            if (e->isHarmony() && parent && parent->isFretDiagram()) {
+                pos += parent->pos();
             }
             RectF bbox = e->ldata()->bbox().translated(pos);
             if (Parenthesis* p = e->leftParen()) {

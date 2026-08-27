@@ -33,7 +33,7 @@ class PlayCountText final : public TextBase
 public:
     PlayCountText* clone() const override { return new PlayCountText(*this); }
 
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
     BarLine* barline() const;
 
     bool isEditable() const override { return true; }

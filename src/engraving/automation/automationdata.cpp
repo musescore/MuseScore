@@ -38,6 +38,12 @@ static void diffPoints(const AutomationCurveKey& key, const AutomationCurve& old
     utick_t firstTick = 0;
     utick_t lastTick = 0;
 
+    // An ArrivalFromPrevious point can be bit-identical yet resolve differently if its predecessor's
+    // outValue changed; only meaningful when that predecessor is the same point in both curves
+    std::optional<real_t> prevOldOut;
+    std::optional<real_t> prevNewOut;
+    bool predecessorAligned = true;
+
     while (oldIt != oldCurve.end() && newIt != newCurve.end()) {
         utick_t tick;
         bool differs;
@@ -45,14 +51,23 @@ static void diffPoints(const AutomationCurveKey& key, const AutomationCurve& old
         if (oldIt->first < newIt->first) {
             tick = oldIt->first; // point removed
             differs = true;
+            prevOldOut = oldIt->second.value.outValue;
+            predecessorAligned = false;
             ++oldIt;
         } else if (newIt->first < oldIt->first) {
             tick = newIt->first; // point added
             differs = true;
+            prevNewOut = newIt->second.value.outValue;
+            predecessorAligned = false;
             ++newIt;
         } else {
             tick = oldIt->first;
-            differs = oldIt->second != newIt->second; // point changed
+            differs = oldIt->second != newIt->second // point changed
+                      || (predecessorAligned
+                          && resolveInValue(oldIt->second.value, prevOldOut) != resolveInValue(newIt->second.value, prevNewOut));
+            prevOldOut = oldIt->second.value.outValue;
+            prevNewOut = newIt->second.value.outValue;
+            predecessorAligned = true;
             ++oldIt;
             ++newIt;
         }
@@ -265,6 +280,68 @@ void AutomationData::editPoints(const AutomationCurveKey& key, const AutomationP
 muse::async::Channel<AutomationChanges> AutomationData::changed() const
 {
     return m_changesChannel;
+}
+
+std::string AutomationData::dump() const
+{
+    auto typeName = [](AutomationType type) -> const char* {
+        switch (type) {
+        case AutomationType::Dynamics: return "Dynamics";
+        case AutomationType::Tempo: return "Tempo";
+        case AutomationType::Volume: return "Volume";
+        case AutomationType::Pan: return "Pan";
+        case AutomationType::Unknown: break;
+        }
+        return "Unknown";
+    };
+
+    auto scopeStr = [](const AutomationCurveKey& key) -> std::string {
+        if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
+            return "instrument = " + trackId->partId.toStdString() + "/" + trackId->instrumentId.toStdString();
+        }
+
+        if (const std::optional<muse::ID> staffId = key.staffId()) {
+            std::string scope = "staff = " + staffId->toStdString();
+            if (const std::optional<size_t> voiceIdx = key.voiceIdx()) {
+                scope += ", voice = " + std::to_string(*voiceIdx);
+            }
+            return scope;
+        }
+
+        return "global";
+    };
+
+    auto inValueStr = [](const AutomationPoint::InValue& inValue) -> std::string {
+        if (std::holds_alternative<AutomationPoint::ArrivalFromPrevious>(inValue)) {
+            return "in = <from previous>";
+        }
+
+        const AutomationPoint::ExplicitArrival& arrival = std::get<AutomationPoint::ExplicitArrival>(inValue);
+        std::string result = "in = " + std::to_string(arrival.value.raw());
+        if (!arrival.ease.isNone()) {
+            result += " (ease t = " + std::to_string(arrival.ease.t.raw()) + ", value = " + std::to_string(arrival.ease.value.raw()) + ")";
+        }
+        return result;
+    };
+
+    std::string result = "AutomationData: " + std::to_string(m_curveMap.size()) + " curves";
+
+    for (const auto& [key, curve] : m_curveMap) {
+        result += "\n[" + std::string(typeName(key.type)) + " " + scopeStr(key) + "] " + std::to_string(curve.size()) + " points";
+
+        for (const auto& [tick, point] : curve) {
+            result += "\n    tick = " + std::to_string(tick) + ", " + inValueStr(point.value.inValue)
+                      + ", out = " + std::to_string(point.value.outValue.raw());
+            if (point.generated) {
+                result += ", [generated]";
+            }
+            if (point.itemId.has_value()) {
+                result += ", itemId = " + point.itemId->toStdString();
+            }
+        }
+    }
+
+    return result;
 }
 
 void AutomationData::notifyChanged(const AutomationChanges& changes)

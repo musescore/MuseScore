@@ -1674,6 +1674,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        INCREASE_DYNAMIC_COMMAND,
+        TranslatableString("action", "Increase dynamics"),
+        TranslatableString("action", "Increase selected dynamics"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        DECREASE_DYNAMIC_COMMAND,
+        TranslatableString("action", "Decrease dynamics"),
+        TranslatableString("action", "Decrease selected dynamics"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         ADD_NOTELINE_COMMAND,
         TranslatableString("action", "&Note-anchored line"),
         TranslatableString("action", "Add note-anchored line"),
@@ -2966,6 +2980,258 @@ static const std::vector<CommandInfo> s_commandInfos = {
             { "pos_x", Arg(DataType::Float, u"X cursor position") },
             { "pos_y", Arg(DataType::Float, u"Y cursor position") },
         }),
+        Decoration()
+    },
+
+    // view commands
+    CommandInfo {
+        ZOOM_IN_COMMAND,
+        TranslatableString("action", "Zoom in"),
+        TranslatableString("action", "Zoom in"),
+        InputSchema(),
+        Decoration(IconCode::Code::ZOOM_IN)
+    },
+    CommandInfo {
+        ZOOM_OUT_COMMAND,
+        TranslatableString("action", "Zoom out"),
+        TranslatableString("action", "Zoom out"),
+        InputSchema(),
+        Decoration(IconCode::Code::ZOOM_OUT)
+    },
+    CommandInfo {
+        ZOOM_TO_100_COMMAND,
+        TranslatableString("action", "Zoom to 100%"),
+        TranslatableString("action", "Zoom to 100%"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_PAGE_WIDTH_COMMAND,
+        TranslatableString("action", "Zoom to page width"),
+        TranslatableString("action", "Zoom to page width"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_WHOLE_PAGE_COMMAND,
+        TranslatableString("action", "Zoom to whole page"),
+        TranslatableString("action", "Zoom to whole page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_TWO_PAGES_COMMAND,
+        TranslatableString("action", "Zoom to two pages"),
+        TranslatableString("action", "Zoom to two pages"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_PERCENT_COMMAND,
+        TranslatableString("action", "Zoom to percent"),
+        TranslatableString("action", "Zoom to percent"),
+        InputSchema({
+            { "percent", Arg(DataType::Integer, u"Percent") },
+        }),
+        Decoration()
+    },
+
+    CommandInfo {
+        VIEW_MODE_PAGE_COMMAND,
+        TranslatableString("action", "Page view"),
+        TranslatableString("action", "Display page view"),
+        InputSchema(),
+        Decoration(IconCode::Code::PAGE_VIEW)
+    },
+    CommandInfo {
+        VIEW_MODE_FLOAT_COMMAND,
+        TranslatableString("action", "Floating"),
+        TranslatableString("action", "Display floating view"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        VIEW_MODE_CONTINUOUS_COMMAND,
+        TranslatableString("action", "Continuous view (horizontal)"),
+        TranslatableString("action", "Display continuous view (horizontal)"),
+        InputSchema(),
+        Decoration(IconCode::Code::CONTINUOUS_VIEW)
+    },
+    CommandInfo {
+        VIEW_MODE_SINGLE_COMMAND,
+        TranslatableString("action", "Continuous view (vertical)"),
+        TranslatableString("action", "Display continuous view (vertical)"),
+        InputSchema(),
+        Decoration(IconCode::Code::CONTINUOUS_VIEW_VERTICAL)
+    },
+
+    CommandInfo {
+        NEXT_SCREEN_COMMAND,
+        TranslatableString("action", "Screen: Next"),
+        TranslatableString("action", "Jump to next screen"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        PREV_SCREEN_COMMAND,
+        TranslatableString("action", "Screen: Previous"),
+        TranslatableString("action", "Jump to previous screen"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        NEXT_PAGE_COMMAND,
+        TranslatableString("action", "Page: Next"),
+        TranslatableString("action", "Jump to next page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        PREV_PAGE_COMMAND,
+        TranslatableString("action", "Page: Previous"),
+        TranslatableString("action", "Jump to previous page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        TOP_OF_FIRST_PAGE_COMMAND,
+        TranslatableString("action", "Page: Top of first"),
+        TranslatableString("action", "Jump to top of first page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        BOTTOM_OF_LAST_PAGE_COMMAND,
+        TranslatableString("action", "Page: Bottom of last"),
+        TranslatableString("action", "Jump to bottom of last page"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        CONTEXT_MENU_OF_SELECTION_COMMAND,
+        TranslatableString("action", "Context menu of selection"),
+        TranslatableString("action", "Open context menu of selection"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        SHOW_SEARCH_COMMAND,
+        TranslatableString("action", "Show search"),
+        TranslatableString("action", "Show search"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // piano keyboard commands
+    CommandInfo {
+        PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND,
+        TranslatableString("action", "Piano keyboard: Set number of keys"),
+        TranslatableString("action", "Set number of keys for piano keyboard"),
+        InputSchema({
+            { "keys", Arg(DataType::Integer, u"Number of keys") },
+        }),
+        Decoration()
+    },
+
+    // diagnostic commands
+    CommandInfo {
+        DIAGNOSTIC_VIEW_REDRAW_COMMAND,
+        TranslatableString("action", "View redraw"),
+        TranslatableString("action", "Diagnostic: Redraw the view"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ELEMENT_BOUNDING_RECTS_COMMAND,
+        TranslatableString("action", "Show element bounding rects"),
+        TranslatableString("action", "Diagnostic: Show element bounding rects"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        COLOR_ELEMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Color element shapes"),
+        TranslatableString("action", "Diagnostic: Color element shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SEGMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Show segment shapes"),
+        TranslatableString("action", "Diagnostic: Show segment shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        COLOR_SEGMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Color segment shapes"),
+        TranslatableString("action", "Diagnostic: Color segment shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SKYLINES_COMMAND,
+        TranslatableString("action", "Show Skylines"),
+        TranslatableString("action", "Diagnostic: Show Skylines"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SYSTEM_BOUNDING_RECTS_COMMAND,
+        TranslatableString("action", "Show system bounding rects"),
+        TranslatableString("action", "Diagnostic: Show system bounding rects"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ELEMENT_MASKS_COMMAND,
+        TranslatableString("action", "Show element masks"),
+        TranslatableString("action", "Diagnostic: Show element masks"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_LINE_ATTACH_POINTS_COMMAND,
+        TranslatableString("action", "Show line attach points"),
+        TranslatableString("action", "Diagnostic: Show line attach points"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        MARK_EMPTY_STAFF_COMMAND,
+        TranslatableString("action", "Mark empty staff"),
+        TranslatableString("action", "Diagnostic: Mark empty staff"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        MARK_CORRUPTED_MEASURES_COMMAND,
+        TranslatableString("action", "Mark corrupted measures"),
+        TranslatableString("action", "Diagnostic: Mark corrupted measures"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_GAP_RESTS_COMMAND,
+        TranslatableString("action", "Show gap rests"),
+        TranslatableString("action", "Diagnostic: Show gap rests"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ORIGIN_AND_COMBINED_COMMAND,
+        TranslatableString("action", "Show origin and combined"),
+        TranslatableString("action", "Diagnostic: Show origin and combined"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        CHECK_FOR_SCORE_CORRUPTIONS_COMMAND,
+        TranslatableString("action", "Check for score corruptions"),
+        TranslatableString("action", "Diagnostic: Check for score corruptions"),
+        InputSchema(),
         Decoration()
     },
 };

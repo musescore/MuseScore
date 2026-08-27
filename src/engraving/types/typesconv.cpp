@@ -3243,6 +3243,56 @@ StaffGroup TConv::fromXml(const AsciiStringView& tag, StaffGroup def)
     return findTypeByXmlTag<StaffGroup>(STAFFGROUP_TYPES, tag, def);
 }
 
+static const std::array<Item<StaffTypes>, 27> STAFFTYPES_ITEMS = { {
+    { StaffTypes::STANDARD,      "stdNormal",      muse::TranslatableString("engraving/stafftypes", "Standard") },
+    { StaffTypes::PERC_1LINE,    "perc1Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 1 line") },
+    { StaffTypes::PERC_2LINE,    "perc2Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 2 lines") },
+    { StaffTypes::PERC_3LINE,    "perc3Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 3 lines") },
+    { StaffTypes::PERC_5LINE,    "perc5Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 5 lines") },
+    { StaffTypes::TAB_6SIMPLE,   "tab6StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 6-str. simple") },
+    { StaffTypes::TAB_6COMMON,   "tab6StrCommon",  muse::TranslatableString("engraving/stafftypes", "Tab. 6-str. common") },
+    { StaffTypes::TAB_6FULL,     "tab6StrFull",    muse::TranslatableString("engraving/stafftypes", "Tab. 6-str. full") },
+    { StaffTypes::TAB_4SIMPLE,   "tab4StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 4-str. simple") },
+    { StaffTypes::TAB_4COMMON,   "tab4StrCommon",  muse::TranslatableString("engraving/stafftypes", "Tab. 4-str. common") },
+    { StaffTypes::TAB_4FULL,     "tab4StrFull",    muse::TranslatableString("engraving/stafftypes", "Tab. 4-str. full") },
+    { StaffTypes::TAB_5SIMPLE,   "tab5StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 5-str. simple") },
+    { StaffTypes::TAB_5COMMON,   "tab5StrCommon",  muse::TranslatableString("engraving/stafftypes", "Tab. 5-str. common") },
+    { StaffTypes::TAB_5FULL,     "tab5StrFull",    muse::TranslatableString("engraving/stafftypes", "Tab. 5-str. full") },
+    { StaffTypes::TAB_UKULELE,   "tabUkulele",     muse::TranslatableString("engraving/stafftypes", "Tab. ukulele") },
+    { StaffTypes::TAB_BALALAJKA, "tabBalajka",     muse::TranslatableString("engraving/stafftypes", "Tab. balalaika") },
+    { StaffTypes::TAB_DULCIMER,  "tabDulcimer",    muse::TranslatableString("engraving/stafftypes", "Tab. dulcimer") },
+    { StaffTypes::TAB_ITALIAN,   "tab6StrItalian", muse::TranslatableString("engraving/stafftypes", "Tab. 6-str. Italian") },
+    { StaffTypes::TAB_FRENCH,    "tab6StrFrench",  muse::TranslatableString("engraving/stafftypes", "Tab. 6-str. French") },
+    { StaffTypes::TAB_7COMMON,   "tab7StrCommon",  muse::TranslatableString("engraving/stafftypes", "Tab. 7-str. common") },
+    { StaffTypes::TAB_8COMMON,   "tab8StrCommon",  muse::TranslatableString("engraving/stafftypes", "Tab. 8-str. common") },
+    { StaffTypes::TAB_9COMMON,   "tab9StrCommon",  muse::TranslatableString("engraving/stafftypes", "Tab. 9-str. common") },
+    { StaffTypes::TAB_10COMMON,  "tab10StrCommon", muse::TranslatableString("engraving/stafftypes", "Tab. 10-str. common") },
+    { StaffTypes::TAB_7SIMPLE,   "tab7StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 7-str. simple") },
+    { StaffTypes::TAB_8SIMPLE,   "tab8StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 8-str. simple") },
+    { StaffTypes::TAB_9SIMPLE,   "tab9StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 9-str. simple") },
+    { StaffTypes::TAB_10SIMPLE,  "tab10StrSimple", muse::TranslatableString("engraving/stafftypes", "Tab. 10-str. simple") },
+} };
+
+const TranslatableString& TConv::userName(StaffTypes v)
+{
+    return findCapitalizedUserNameByType(STAFFTYPES_ITEMS, v);
+}
+
+String TConv::translatedUserName(StaffTypes v)
+{
+    return findCapitalizedUserNameByType(STAFFTYPES_ITEMS, v).translated();
+}
+
+AsciiStringView TConv::toXml(StaffTypes v)
+{
+    return findXmlTagByType<StaffTypes>(STAFFTYPES_ITEMS, v);
+}
+
+StaffTypes TConv::fromXml(const AsciiStringView& tag, StaffTypes def)
+{
+    return findTypeByXmlTag<StaffTypes>(STAFFTYPES_ITEMS, tag, def);
+}
+
 const std::array<Item<TrillType>, 4> TRILL_TYPES = { {
     { TrillType::TRILL_LINE,      "trill",      muse::TranslatableString("engraving/trilltype", "Trill line") },
     { TrillType::UPPRALL_LINE,    "upprall",    muse::TranslatableString("engraving/trilltype", "Upprall line") },

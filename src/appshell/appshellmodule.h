@@ -47,7 +47,7 @@ private:
 };
 
 class AppShellState;
-class ApplicationActionController;
+class AppshellCommandsController;
 class ApplicationUiActions;
 class SessionsManager;
 class AppShellContext : public muse::modularity::IContextSetup
@@ -64,7 +64,7 @@ public:
 
 private:
     std::shared_ptr<AppShellState> m_appshellState;
-    std::shared_ptr<ApplicationActionController> m_applicationActionController;
+    std::shared_ptr<AppshellCommandsController> m_commandsController;
     std::shared_ptr<ApplicationUiActions> m_applicationUiActions;
     std::shared_ptr<SessionsManager> m_sessionsManager;
 };

@@ -848,51 +848,18 @@
             <durationType>16th</durationType>
             <Note>
               <eid>iC_iC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>jC_jC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-15/16</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <velocity>76</velocity>
               </Note>
             <Note>
-              <eid>kC_kC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>lC_lC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-15/16</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>jC_jC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>85</velocity>
               </Note>
             <Note>
-              <eid>mC_mC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>nC_nC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-15/16</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>kC_kC</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <velocity>86</velocity>
@@ -903,51 +870,45 @@
       <Measure>
         <voice>
           <Beam>
-            <eid>oC_oC</eid>
+            <eid>lC_lC</eid>
             <l1>8</l1>
             <l2>8</l2>
             </Beam>
           <Chord>
-            <eid>pC_pC</eid>
+            <eid>mC_mC</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>qC_qC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>15/16</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>nC_nC</eid>
+              <Tie>
+                <startElement>iC_iC</startElement>
+                <endElement>nC_nC</endElement>
+                <eid>oC_oC</eid>
+                <track>4</track>
+                </Tie>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <velocity>76</velocity>
               </Note>
             <Note>
-              <eid>rC_rC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>15/16</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>pC_pC</eid>
+              <Tie>
+                <startElement>jC_jC</startElement>
+                <endElement>pC_pC</endElement>
+                <eid>qC_qC</eid>
+                <track>4</track>
+                </Tie>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>85</velocity>
               </Note>
             <Note>
-              <eid>sC_sC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>15/16</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>rC_rC</eid>
+              <Tie>
+                <startElement>kC_kC</startElement>
+                <endElement>rC_rC</endElement>
+                <eid>sC_sC</eid>
+                <track>4</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <velocity>86</velocity>

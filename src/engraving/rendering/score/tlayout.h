@@ -100,6 +100,7 @@
 #include "../../dom/systemtext.h"
 #include "../../dom/soundflag.h"
 
+#include "../../dom/tabdurationsymbol.h"
 #include "../../dom/tapping.h"
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"
@@ -247,7 +248,7 @@ public:
     static void layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGroup::LayoutData* ldata);
     static void layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx);
     static void layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& ctx);
-    static void layoutGuitarBend(GuitarBend* item, LayoutContext& ctx);
+    static void layoutGuitarBend(GuitarBend* item, LayoutContext& ctx, System* system = nullptr);
     static void layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ctx);
     static void fillGuitarBendSegmentShape(const GuitarBendSegment* item, GuitarBendSegment::LayoutData* ldata);
 
@@ -380,7 +381,6 @@ public:
     static SpannerSegment* layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx);
     static SpannerSegment* layoutSystem(Volta* line, System* system, LayoutContext& ctx);
     static SpannerSegment* layoutSystem(Slur* line, System* system, LayoutContext& ctx);
-    static void layoutSystemsDone(Spanner* item);
 
 private:
 
@@ -390,8 +390,7 @@ private:
 
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
     static double voltaMidEndSegmentStartX(Volta* volta, System* system, LayoutContext& ctx);
-    static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
-                                                      std::function<SpannerSegment* (System* parent)> createSegment);
+    static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system, std::function<SpannerSegment* ()> createSegment);
 
     static void manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx);
 

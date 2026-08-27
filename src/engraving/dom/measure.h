@@ -159,8 +159,6 @@ public:
 
     ~Measure();
 
-    void setParent(System* s);
-
     Measure* clone() const override { return new Measure(*this); }
     void setScore(Score* s) override;
     Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
@@ -173,7 +171,6 @@ public:
     void change(EngravingItem* o, EngravingItem* n) override;
     void spatiumChanged(double oldValue, double newValue) override;
 
-    System* system() const { return toSystem(explicitParent()); }
     bool hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool considerInvisible = false) const;
     bool hasVoices(staff_idx_t staffIdx) const;
     void setHasVoices(staff_idx_t staffIdx, bool v);
@@ -414,7 +411,7 @@ private:
 
     friend class Factory;
 
-    Measure(System* parent = 0);
+    Measure(Score* parent);
     Measure(const Measure&);
 
     void push_back(Segment* e);

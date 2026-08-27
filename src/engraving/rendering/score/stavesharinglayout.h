@@ -49,6 +49,7 @@ private:
         std::vector<Spanner*> overlappingSpanners;
 
         SharedPart* curSharedPart = nullptr;
+        SharedTrackMap curTrackMap;
         std::unordered_set<Note*> sharedUnisonNotes;
         std::vector<StaveSharingLabel*> oldStaveSharingLabels;
         std::vector<StaveSharingLabel*> updatedStaveSharingLabels;
@@ -72,6 +73,7 @@ private:
                                  std::unordered_set<Note*>& localUnisonNotes);
 
     static bool checkAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
+    static bool checkBreathsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool checkNoteSpannersForUnison(const Note* note1, const Note* note2);
     static bool checkSpannersForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
     static bool checkArticulationsForSameVoice(Chord* chord1, Chord* chord2);
@@ -84,6 +86,7 @@ private:
 
     static void makeSharedNotation(StaveSharingContext& ctx);
     static void makeSharedChordRests(StaveSharingContext& ctx);
+    static void makeSharedBreaths(StaveSharingContext& ctx);
     static void makeSharedArticulations(Chord* originChord, Chord* sharedChord);
     static void makeSharedTiesAndNoteSpanners(Note* originNote, Note* sharedNote);
     static void makeSharedAnnotations(StaveSharingContext& ctx);

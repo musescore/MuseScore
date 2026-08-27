@@ -22,6 +22,7 @@
 #include "tie.h"
 
 #include "../editing/mscoreview.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -54,13 +55,13 @@ namespace mu::engraving {
 //   TieSegment
 //---------------------------------------------------------
 
-TieSegment::TieSegment(System* parent)
-    : SlurTieSegment(ElementType::TIE_SEGMENT, parent)
+TieSegment::TieSegment(Tie* sp)
+    : SlurTieSegment(ElementType::TIE_SEGMENT, sp)
 {
 }
 
-TieSegment::TieSegment(const ElementType& type, System* parent)
-    : SlurTieSegment(type, parent)
+TieSegment::TieSegment(const ElementType& type, Tie* sp)
+    : SlurTieSegment(type, sp)
 {
 }
 
@@ -223,7 +224,6 @@ double TieSegment::dottedWidth() const
 Tie::Tie(const ElementType& type, EngravingItem* parent)
     : SlurTie(type, parent)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 TieJumpPointList* Tie::startTieJumpPoints() const
@@ -239,7 +239,7 @@ void Tie::updatePossibleJumpPoints()
 
     tieJumpPoints()->clear();
 
-    const Note* note = toNote(parentItem());
+    const Note* note = toNote(ownershipParent());
     const Chord* chord = note ? note->chord() : nullptr;
     const Measure* measure = chord ? chord->measure() : nullptr;
     if (!measure) {
@@ -374,7 +374,6 @@ const TieJumpPointList* Tie::tieJumpPoints() const
 Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 Tie::Tie(const Tie& t)
@@ -399,8 +398,6 @@ PropertyValue Tie::getProperty(Pid propertyId) const
 PropertyValue Tie::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::ANCHOR:
-        return int(Anchor::NOTE);
     case Pid::TIE_PLACEMENT:
         return TiePlacement::AUTO;
     default:
@@ -446,7 +443,7 @@ double Tie::scalingFactor() const
 void Tie::setStartNote(Note* note)
 {
     setStartElement(note);
-    setParent(note);
+    setOwnershipParent(note);
 }
 
 Note* Tie::startNote() const
@@ -523,7 +520,7 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
 
     score->undoRemoveElement(oldTie);
 
-    newTie->setParent(startNote);
+    newTie->setOwnershipParent(startNote);
     newTie->setStartNote(startNote);
     newTie->setTick(startNote->tick());
     newTie->setTrack(startNote->track());

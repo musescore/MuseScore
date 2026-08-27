@@ -11,7 +11,6 @@
 #include "dom/drumset.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
-#include "dom/easeInOut.h"
 #include "dom/glissando.h"
 #include "dom/instrument.h"
 #include "dom/masterscore.h"
@@ -27,8 +26,9 @@
 #include "dom/staff.h"
 #include "dom/swing.h"
 #include "dom/synthesizerstate.h"
-#include "dom/tempo.h"
 #include "dom/tie.h"
+
+#include "types/bps.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/trill.h"
@@ -36,6 +36,8 @@
 #include "dom/volta.h"
 #include "editing/navigation.h"
 #include "types/constants.h"
+
+#include "easeinout.h"
 
 namespace mu::engraving {
 static int slideTicks(const Chord* chord);
@@ -301,7 +303,7 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
         NoteEventList* events = &(ell)[i];
         events->clear();
 
-        auto tempoRatio = chord->score()->tempomap()->multipliedTempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
+        auto tempoRatio = chord->score()->multipliedTempo(chord->tick()).val / Constants::DEFAULT_TEMPO.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
         ot = std::clamp(ot + ontime, ot, 1000);

@@ -64,8 +64,8 @@ static const ElementStyle whammyBarStyle {
     { Sid::dummyMusicalSymbolsScale,               Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
-    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+WhammyBarSegment::WhammyBarSegment(WhammyBar* sp)
+    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -97,9 +97,9 @@ static const ElementStyle whammyBarSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* WhammyBar::createLineSegment(System* parent)
+LineSegment* WhammyBar::createLineSegment()
 {
-    WhammyBarSegment* wb = new WhammyBarSegment(this, parent);
+    WhammyBarSegment* wb = new WhammyBarSegment(this);
     wb->setTrack(track());
     wb->initElementStyle(&whammyBarSegmentStyle);
     return wb;

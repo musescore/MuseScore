@@ -70,6 +70,8 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     MIRROR_NOTEHEAD_COMMAND,
     MOVE_UP_COMMAND,
     MOVE_DOWN_COMMAND,
+    INCREASE_DYNAMIC_COMMAND,
+    DECREASE_DYNAMIC_COMMAND
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
@@ -261,6 +263,21 @@ static const std::vector<Command> TAB_COMMANDS = {
     GOTO_STRING_BELOW_COMMAND
 };
 
+static const std::vector<Command> DEBUG_COMMANDS = {
+    SHOW_ELEMENT_BOUNDING_RECTS_COMMAND,
+    COLOR_ELEMENT_SHAPES_COMMAND,
+    SHOW_SEGMENT_SHAPES_COMMAND,
+    COLOR_SEGMENT_SHAPES_COMMAND,
+    SHOW_SKYLINES_COMMAND,
+    SHOW_SYSTEM_BOUNDING_RECTS_COMMAND,
+    SHOW_ELEMENT_MASKS_COMMAND,
+    SHOW_LINE_ATTACH_POINTS_COMMAND,
+    MARK_EMPTY_STAFF_COMMAND,
+    MARK_CORRUPTED_MEASURES_COMMAND,
+    SHOW_GAP_RESTS_COMMAND,
+    SHOW_ORIGIN_AND_COMBINED_COMMAND,
+};
+
 std::string NotationCommandsState::moduleName() const
 {
     return "notation";
@@ -277,9 +294,11 @@ void NotationCommandsState::init()
         updateCommandStates();
     });
 
-    interactive()->opened().onReceive(this, [this](const muse::Uri&) {
-        updateCommandStates();
-    });
+    if (interactive()) {
+        interactive()->opened().onReceive(this, [this](const muse::Uri&) {
+            updateCommandStates();
+        });
+    }
 
     controller()->selectionChanged().onNotify(this, [this]() {
         updateCommandStates(HAS_SELECTION_REQUIRED_COMMANDS);
@@ -332,13 +351,19 @@ void NotationCommandsState::init()
         updateCommandStates({ TOGGLE_AUTOMATION_COMMAND });
     });
 
+    controller()->debuggingOptionsChanged().onNotify(this, [this]() {
+        updateCommandStates(DEBUG_COMMANDS);
+    });
+
     updateCommandStates();
 }
 
 void NotationCommandsState::deinit()
 {
     globalContext()->currentProjectChanged().disconnect(this);
-    interactive()->opened().disconnect(this);
+    if (interactive()) {
+        interactive()->opened().disconnect(this);
+    }
     controller()->selectionChanged().disconnect(this);
     controller()->stackChanged().disconnect(this);
     controller()->textEditingChanged().disconnect(this);
@@ -347,6 +372,7 @@ void NotationCommandsState::deinit()
     controller()->scoreConfigChanged().disconnect(this);
     controller()->notationStyleChanged().disconnect(this);
     controller()->automationModeEnabledChanged().disconnect(this);
+    controller()->debuggingOptionsChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -465,6 +491,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->isAutomationModeEnabled());
     }
 
+    if (muse::contains(DEBUG_COMMANDS, command)) {
+        return CommandState(true, controller()->isDebuggingCommandEnabled(command));
+    }
+
     return CommandState(true, false);
 }
 
@@ -488,7 +518,7 @@ bool NotationCommandsState::isProjectOpened() const
         return false;
     }
 
-    if (!interactive()->isOpened(PROJECT_PAGE_URI).val) {
+    if (!interactive() || !interactive()->isOpened(PROJECT_PAGE_URI).val) {
         return false;
     }
 

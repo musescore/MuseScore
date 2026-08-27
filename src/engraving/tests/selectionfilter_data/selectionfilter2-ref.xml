@@ -19,46 +19,37 @@
         <tpc>16</tpc>
         </Note>
       </Chord>
-    <Spanner type="Trill">
-      <Trill>
-        <subtype>trill</subtype>
-        <ticks_f>1/4</ticks_f>
-        <eid>H_H</eid>
-        <Ornament>
-          <subtype>ornamentTrill</subtype>
-          <eid>I_I</eid>
-          </Ornament>
-        </Trill>
-      <next>
-        <location>
-          <fractions>1/4</fractions>
-          </location>
-        </next>
-      </Spanner>
+    <Chord>
+      <eid>H_H</eid>
+      <durationType>quarter</durationType>
+      <Note>
+        <eid>I_I</eid>
+        <pitch>76</pitch>
+        <tpc>18</tpc>
+        </Note>
+      </Chord>
     <Chord>
       <eid>J_J</eid>
       <durationType>quarter</durationType>
       <Note>
         <eid>K_K</eid>
-        <pitch>76</pitch>
-        <tpc>18</tpc>
-        </Note>
-      </Chord>
-    <Spanner type="Trill">
-      <prev>
-        <location>
-          <fractions>-1/4</fractions>
-          </location>
-        </prev>
-      </Spanner>
-    <Chord>
-      <eid>L_L</eid>
-      <durationType>quarter</durationType>
-      <Note>
-        <eid>M_M</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>
       </Chord>
     </Staff>
+  <SpannerMap>
+    <Trill>
+      <subtype>trill</subtype>
+      <track2>0</track2>
+      <startTick>1/2</startTick>
+      <ticks>1/4</ticks>
+      <eid>L_L</eid>
+      <track>0</track>
+      <Ornament>
+        <subtype>ornamentTrill</subtype>
+        <eid>M_M</eid>
+        </Ornament>
+      </Trill>
+    </SpannerMap>
   </StaffList>

@@ -47,8 +47,6 @@ class RepeatSegment
 public:
     int tick;           // start tick
     int utick;
-    double utime;
-    double timeOffset;
     double pause;
     int playbackCount;
 
@@ -77,6 +75,12 @@ private:
     std::vector<const Measure*> m_measureList;
 };
 
+struct RepeatSegmentInfo {
+    int tick = 0;
+    int endTick = 0;
+    int utick = 0;
+};
+
 //---------------------------------------------------------
 //   RepeatList
 //---------------------------------------------------------
@@ -97,12 +101,11 @@ public:
 
     int utick2tick(int tick) const;
     int tick2utick(int tick) const;
-    int utime2utick(double secs) const;
-    double utick2utime(int) const;
-    void updateTempo();
+    void updateUticks();
     int ticks() const;
 
     std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
+    std::vector<RepeatSegmentInfo> segmentInfoList() const;
 
 private:
     void collectRepeatListElements();
@@ -117,7 +120,7 @@ private:
     void flatten();
 
     Score* m_score = nullptr;
-    mutable unsigned m_idx1, m_idx2 = 0;     // cached values
+    mutable unsigned m_utick2tickHint = 0; // cached RepeatList index for utick2tick
 
     bool m_expanded = false;
     bool m_scoreChanged = true;

@@ -24,6 +24,7 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
+#include "editing/editautomationpoints.h"
 #include "editing/editkeysig.h"
 #include "editing/editmeasures.h"
 #include "editing/transaction/transaction.h"
@@ -41,18 +42,16 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "factory.h"
-#include "box.h"
 #include "clef.h"
 #include "key.h"
 #include "keysig.h"
-#include "linkedobjects.h"
 #include "part.h"
 #include "repeatlist.h"
 #include "rest.h"
 #include "sig.h"
 #include "staff.h"
-#include "tempo.h"
 #include "timesig.h"
+#include "linkedobjects.h"
 
 #include "log.h"
 
@@ -70,7 +69,6 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     m_project = project;
     m_transactionManager = std::make_unique<TransactionManager>(this);
     m_undoStack   = new UndoStack();
-    m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();
     m_automationController = new ScoreAutomationController();
     m_expandedRepeatList  = new RepeatList(this);
@@ -114,20 +112,9 @@ MasterScore::~MasterScore()
     delete m_expandedRepeatList;
     delete m_nonExpandedRepeatList;
     delete m_sigmap;
-    delete m_tempomap;
     delete m_undoStack;
     delete m_automationController;
     muse::DeleteAll(m_excerpts);
-}
-
-//---------------------------------------------------------
-//   setTempomap
-//---------------------------------------------------------
-
-void MasterScore::setTempomap(TempoMap* tm)
-{
-    delete m_tempomap;
-    m_tempomap = tm;
 }
 
 //---------------------------------------------------------
@@ -159,14 +146,22 @@ void MasterScore::setAutomationData(AutomationDataPtr data)
     m_automationController->setAutomationData(std::move(data));
 }
 
-void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable)
 {
-    m_automationController->editPoints(key, edits);
+    IF_ASSERT_FAILED(key.isValid() && !edits.empty()) {
+        return;
+    }
+
+    if (undoable) {
+        undo(new EditAutomationPoints(this, m_automationController, key, edits));
+    } else {
+        m_automationController->editPoints(key, edits);
+    }
 }
 
-void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
+void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments)
 {
-    m_automationController->insertTime(tick, len);
+    m_automationController->insertTime(tick, len, oldSegments);
 }
 
 //---------------------------------------------------------
@@ -199,8 +194,8 @@ void MasterScore::setExpandRepeats(bool expand)
 
 void MasterScore::updateRepeatListTempo()
 {
-    m_expandedRepeatList->updateTempo();
-    m_nonExpandedRepeatList->updateTempo();
+    m_expandedRepeatList->updateUticks();
+    m_nonExpandedRepeatList->updateUticks();
 }
 
 void MasterScore::updateRepeatList()
@@ -233,6 +228,36 @@ const RepeatList& MasterScore::repeatList(bool expandRepeats, bool updateTies) c
 
     m_nonExpandedRepeatList->update(false, updateTies);
     return *m_nonExpandedRepeatList;
+}
+
+const TempoTimeline& MasterScore::tempoTimeline() const
+{
+    return tempoTimeline(masterScore()->expandRepeats());
+}
+
+const TempoTimeline& MasterScore::tempoTimeline(bool expandRepeats) const
+{
+    m_automationController->ensureInitialized(const_cast<MasterScore*>(this));
+    return m_automationController->tempoTimeline(expandRepeats);
+}
+
+bool MasterScore::setTempoMultiplier(BeatsPerSecond val)
+{
+    IF_ASSERT_FAILED(val > BeatsPerSecond(0.0)) {
+        return false;
+    }
+
+    if (m_automationController->tempoTimeline().tempoMultiplier() == val) {
+        return false;
+    }
+
+    m_automationController->setTempoMultiplier(val);
+    return true;
+}
+
+void MasterScore::setTempoTimelineOverride(std::optional<TempoTimeline> timeline)
+{
+    m_automationController->setTempoTimelineOverride(std::move(timeline));
 }
 
 //---------------------------------------------------------
@@ -573,7 +598,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             }
         }
 
-        Measure* newMeasure = Factory::createMeasure(score->dummy()->system());
+        Measure* newMeasure = Factory::createMeasure(score);
         newMeasure->setTick(tick);
 
         if (actualBeforeMeasure) {
@@ -763,7 +788,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         for (TimeSig* ts : timeSigList) {
             TimeSig* nts = Factory::copyTimeSig(*ts);
             Segment* s   = newMeasure->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
-            nts->setParent(s);
+            nts->setOwnershipParent(s);
             doUndoAddElement(nts);
         }
         for (KeySig* ks : keySigList) {
@@ -772,7 +797,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             if (headerKeySig || newMeasure->tick().isZero()) {
                 s->setHeader(true);
             }
-            nks->setParent(s);
+            nks->setOwnershipParent(s);
             if (!nks->isAtonal()) {
                 nks->setKey(nks->concertKey());  // to set correct (transposing) key
             }
@@ -782,32 +807,32 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
             s->setHeader(true);
-            nClef->setParent(s);
+            nClef->setOwnershipParent(s);
             doUndoAddElement(nClef);
         }
         for (Clef* clef : afterBarlineClefs) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, Fraction(0, 1));
             s->setHeader(true);
-            nClef->setParent(s);
+            nClef->setOwnershipParent(s);
             doUndoAddElement(nClef);
         }
         for (Clef* clef : previousClefList) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, newMeasure->ticks());
-            nClef->setParent(s);
+            nClef->setOwnershipParent(s);
             doUndoAddElement(nClef);
         }
         for (Clef* clef : specialCaseClefs) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, newMeasure->ticks());
-            nClef->setParent(s);
+            nClef->setOwnershipParent(s);
             doUndoAddElement(nClef);
         }
         for (BarLine* barLine : previousBarLinesList) {
             BarLine* nBarLine = Factory::copyBarLine(*barLine);
             Segment* s = newMeasure->undoGetSegmentR(SegmentType::EndBarLine, newMeasure->ticks());
-            nBarLine->setParent(s);
+            nBarLine->setOwnershipParent(s);
             doUndoAddElement(nBarLine);
         }
     }

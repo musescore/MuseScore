@@ -22,6 +22,7 @@
 #include "appmenumodel.h"
 
 #include "log.h"
+#include "rcommand/commandtypes.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
@@ -34,6 +35,20 @@
 #include "notation/inotationundostack.h"
 #include "notationscene/notationcommands.h"
 
+#include "appshell/appshellcommands.h"
+#include "project/projectcommands.h"
+#include "notationscene/notationcommands.h"
+#include "playback/playbackcommands.h"
+#include "palette/palettecommands.h"
+#include "dockwindow_v2/dockcommands.h"
+#include "update/updatecommands.h"
+#include "diagnostics/diagnosticscommands.h"
+#include "musesampler/musesamplercommands.h"
+#include "vst/vstcommands.h"
+#include "audio/main/audiocommands.h"
+#include "multiwindows/multiwindowscommands.h"
+#include "extensions/extensionscommands.h"
+
 using namespace muse;
 using namespace mu::appshell;
 using namespace muse::ui;
@@ -42,18 +57,22 @@ using namespace mu::project;
 using namespace muse::workspace;
 using namespace muse::actions;
 using namespace muse::extensions;
-
-static const ActionCode TOGGLE_UNDO_HISTORY_PANEL_CODE = "toggle-undo-history-panel";
-static const QString VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID = "view/toggle-undo-history-panel";
-
-static QString makeId(const ActionCode& actionCode, int itemIndex)
-{
-    return QString::fromStdString(actionCode) + QString::number(itemIndex);
-}
+using namespace mu::notation;
+using namespace mu::playback;
+using namespace mu::palette;
+using namespace muse::dock;
+using namespace muse::update;
+using namespace muse::diagnostics;
+using namespace muse::musesampler;
+using namespace muse::vst;
+using namespace muse::audio;
+using namespace muse::mi;
 
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
+    setObjectName("AppMenuModel");
+
 #ifdef MUSE_MODULE_WORKSPACE
     m_workspacesMenuModel = std::make_shared<WorkspacesMenuModel>(this);
 #endif
@@ -76,7 +95,7 @@ void AppMenuModel::load()
         makeAddMenu(),
         makeFormatMenu(),
         makeToolsMenu(),
-        makePluginsMenu()
+        makeExtensionsMenu()
     };
 
     if (globalConfiguration()->devModeEnabled()) {
@@ -103,20 +122,10 @@ bool AppMenuModel::isGlobalMenuAvailable()
 void AppMenuModel::setupConnections()
 {
     recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
-        MenuItem& recentScoreListItem = findMenu("menu-file-open");
-
-        MenuItemList recentScoresList = makeRecentScoresItems();
-        bool openRecentEnabled = !recentScoresList.empty();
-
-        if (!recentScoresList.empty()) {
-            recentScoresList = appendClearRecentSection(recentScoresList);
-        }
-
-        UiActionState state = recentScoreListItem.state();
-        state.enabled = openRecentEnabled;
-        recentScoreListItem.setState(state);
-
-        recentScoreListItem.setSubitems(recentScoresList);
+        MenuItem& recentMenuItem = findMenu("menu-file-open");
+        MenuItemList recentSubMenuItems = makeRecentSubMenuItems();
+        recentMenuItem.setSubitems(recentSubMenuItems);
+        recentMenuItem.setEnabled(!recentSubMenuItems.empty());
     });
 
 #ifdef MUSE_MODULE_WORKSPACE
@@ -126,14 +135,14 @@ void AppMenuModel::setupConnections()
     });
 #endif
 
-    extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
-        MenuItem& pluginsMenu = findMenu("menu-plugins");
-        pluginsMenu.setSubitems(makePluginsMenuSubitems());
+    extensionsRegister()->manifestListChanged().onNotify(this, [this]() {
+        MenuItem& pluginsMenu = findMenu("menu-extensions");
+        pluginsMenu.setSubitems(makeExtensionsSubitems());
     });
 
-    extensionsProvider()->manifestChanged().onReceive(this, [this](const Manifest&) {
-        MenuItem& pluginsItem = findMenu("menu-plugins");
-        pluginsItem.setSubitems(makePluginsMenuSubitems());
+    extensionsRegister()->enabledChanged().onReceive(this, [this](const ExtensionUri&) {
+        MenuItem& pluginsItem = findMenu("menu-extensions");
+        pluginsItem.setSubitems(makeExtensionsSubitems());
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -148,20 +157,6 @@ void AppMenuModel::setupConnections()
     });
 }
 
-void AppMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
-{
-    AbstractMenuModel::onActionsStateChanges(codes);
-
-    if (muse::contains(codes, TOGGLE_UNDO_HISTORY_PANEL_CODE)) {
-        // Appears both in Edit and View menus; AbstractMenuModel::onActionsStateChanges()
-        // handles only one occurrence per action code
-        MenuItem& item = findItem(VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID);
-        if (item.isValid()) {
-            item.setState(uiActionsRegister()->actionState(TOGGLE_UNDO_HISTORY_PANEL_CODE));
-        }
-    }
-}
-
 bool AppMenuModel::isMuseSamplerModuleAdded() const
 {
 #ifdef MUSE_MODULE_MUSESAMPLER
@@ -174,96 +169,80 @@ bool AppMenuModel::isMuseSamplerModuleAdded() const
 MenuItemList AppMenuModel::makeChordAndFretboardDiagramsItems()
 {
     MenuItemList items {
-        makeMenuItem("chord-text"),
-        makeMenuItem("add-fretboard-diagram"),
+        makeMenuItem(ADD_CHORD_TEXT_COMMAND),
+        makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND),
         makeSeparator(),
-        makeMenuItem("insert-fretframe", TranslatableString("appshell/menu/add/chordandfret", "Fretboard diagram legend"))
+        makeMenuItem(INSERT_FRETFRAME_COMMAND, TranslatableString("appshell/menu/add/chordandfret", "Fretboard diagram legend"))
     };
 
     return items;
 }
 
-MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole menuRole)
+MenuItem* AppMenuModel::makeMenuItem(const muse::rcommand::Command& command, MenuItemRole role)
 {
-    MenuItem* item = makeMenuItem(actionCode);
-    item->setRole(menuRole);
+    MenuItem* item = makeMenuItem(command);
+    item->setRole(role);
     return item;
 }
 
 MenuItem* AppMenuModel::makeFileMenu()
 {
-    MenuItemList recentScoresList = makeRecentScoresItems();
-    bool openRecentEnabled = !recentScoresList.isEmpty();
-
-    if (!recentScoresList.empty()) {
-        recentScoresList = appendClearRecentSection(recentScoresList);
-    }
+    MenuItemList recentSubMenuItems = makeRecentSubMenuItems();
+    bool openRecentEnabled = !recentSubMenuItems.isEmpty();
 
     MenuItemList fileItems {
-        makeMenuItem("file-new"),
-        makeMenuItem("file-open"),
-        makeMenu(TranslatableString("appshell/menu/file", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
-        makeMenuItem("file-close"),
+        makeMenuItem(PROJECT_NEW_COMMAND),
+        makeMenuItem(PROJECT_OPEN_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/file", "Open &recent"), recentSubMenuItems, "menu-file-open", openRecentEnabled),
+        makeMenuItem(PROJECT_CLOSE_COMMAND),
         makeSeparator(),
-        makeMenuItem("file-save"),
-        makeMenuItem("file-save-as"),
-        makeMenuItem("file-save-to-cloud"),
-        makeMenu(TranslatableString("appshell/menu/file", "Save o&ther"), makeSaveOtherSubItems()),
-        makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), makePublishOnlineSubItems()),
+        makeMenuItem(PROJECT_SAVE_COMMAND),
+        makeMenuItem(PROJECT_SAVE_AS_COMMAND),
+        makeMenuItem(PROJECT_SAVE_TO_CLOUD_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/file", "Save o&ther"), {
+            makeMenuItem(PROJECT_SAVE_A_COPY_COMMAND),
+            makeMenuItem(PROJECT_SAVE_SELECTION_COMMAND),
+        }),
+        makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), {
+            makeMenuItem(PROJECT_PUBLISH_COMMAND),
+            makeMenuItem(PROJECT_SHARED_AUDIO_COMMAND),
+        }),
         makeSeparator(),
-        makeMenuItem("file-import-pdf"),
-        makeMenuItem("file-import-audio-to-score"),
-        makeMenuItem("file-export"),
+        makeMenuItem(PROJECT_IMPORT_PDF_COMMAND),
+        makeMenuItem(PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND),
+        makeMenuItem(PROJECT_EXPORT_COMMAND),
         makeSeparator(),
-        makeMenuItem("project-properties"),
-        makeMenuItem("parts", TranslatableString("action", "Parts…")),
+        makeMenuItem(PROJECT_PROPERTIES_COMMAND),
+        makeMenuItem(OPEN_PARTS_COMMAND),
         makeSeparator(),
-        makeMenuItem("print"),
+        makeMenuItem(PROJECT_PRINT_COMMAND),
         makeSeparator(),
-        makeMenuItem("quit", MenuItemRole::QuitRole)
+        makeMenuItem(APP_QUIT_COMMAND, MenuItemRole::QuitRole)
     };
 
     return makeMenu(TranslatableString("appshell/menu/file", "&File"), fileItems, "menu-file");
 }
 
-MenuItemList AppMenuModel::makeSaveOtherSubItems()
-{
-    MenuItemList subItems {
-        makeMenuItem("file-save-a-copy"),
-        makeMenuItem("file-save-selection"),
-    };
-    return subItems;
-}
-
-MenuItemList AppMenuModel::makePublishOnlineSubItems()
-{
-    MenuItemList subItems {
-        makeMenuItem("file-publish"),
-        makeMenuItem("file-share-audio"),
-    };
-    return subItems;
-}
-
 MenuItem* AppMenuModel::makeEditMenu()
 {
     MenuItemList editItems {
-        makeMenuItem("command://notation/undo"),
-        makeMenuItem("command://notation/redo"),
-        makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE),
+        makeMenuItem(UNDO_COMMAND),
+        makeMenuItem(REDO_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_UNDO_HISTORY_COMMAND),
         makeSeparator(),
-        makeMenuItem("command://notation/cut"),
-        makeMenuItem("command://notation/copy"),
-        makeMenuItem("command://notation/paste"),
-        makeMenuItem("notation-paste-half"),
-        makeMenuItem("notation-paste-double"),
-        makeMenuItem("notation-swap"),
-        makeMenuItem("command://notation/delete"),
+        makeMenuItem(CUT_COMMAND),
+        makeMenuItem(COPY_COMMAND),
+        makeMenuItem(PASTE_COMMAND),
+        makeMenuItem(PASTE_HALF_COMMAND),
+        makeMenuItem(PASTE_DOUBLE_COMMAND),
+        makeMenuItem(COPY_PASTE_SWAP_COMMAND),
+        makeMenuItem(DELETE_COMMAND),
         makeSeparator(),
-        makeMenuItem("notation-select-all"),
-        makeMenuItem("notation-select-section"),
-        makeMenuItem("find"),
+        makeMenuItem(SELECT_ALL_COMMAND),
+        makeMenuItem(SELECT_SECTION_COMMAND),
+        makeMenuItem(SHOW_SEARCH_COMMAND),
         makeSeparator(),
-        makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
+        makeMenuItem(APP_PREFERENCES_COMMAND, MenuItemRole::PreferencesRole)
     };
 
     return makeMenu(TranslatableString("appshell/menu/edit", "&Edit"), editItems, "menu-edit");
@@ -279,13 +258,13 @@ void AppMenuModel::updateUndoRedoItems()
 {
     auto stack = undoStack();
 
-    MenuItem& undoItem = findItem(ActionCode("command://notation/undo"));
+    MenuItem& undoItem = findItem(UNDO_COMMAND);
     const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
     undoItem.setTitle(undoActionName.isEmpty()
                       ? TranslatableString("action", "Undo")
                       : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
 
-    MenuItem& redoItem = findItem(ActionCode("command://notation/redo"));
+    MenuItem& redoItem = findItem(REDO_COMMAND);
     const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
     redoItem.setTitle(redoActionName.isEmpty()
                       ? TranslatableString("action", "Redo")
@@ -294,39 +273,44 @@ void AppMenuModel::updateUndoRedoItems()
 
 MenuItem* AppMenuModel::makeViewMenu()
 {
-    MenuItem* historyItem = makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE);
-    historyItem->setId(VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID);
-
     MenuItemList viewItems {
 #ifndef Q_OS_MAC
-        makeMenuItem("fullscreen"),
+        makeMenuItem(APP_FULLSCREEN_COMMAND),
 #endif
-        makeMenuItem("toggle-palettes"),
-        makeMenuItem("masterpalette"),
-        makeMenuItem("toggle-instruments"),
-        makeMenuItem("toggle-properties-panel"),
-        makeMenuItem("toggle-selection-filter"),
-        historyItem,
-        makeMenuItem("toggle-navigator"),
-        makeMenuItem("toggle-braille-panel"),
-        makeMenuItem("toggle-timeline"),
-        makeMenuItem("toggle-mixer"),
-        makeMenuItem("toggle-piano-keyboard"),
-        makeMenuItem("toggle-percussion-panel"),
-        makeMenuItem("command://playback/open-playback-setup"),
-        //makeMenuItem("toggle-scorecmp-tool"), // not implemented
+        makeMenuItem(DOCK_TOGGLE_PALETTES_COMMAND),
+        makeMenuItem(TOGGLE_MASTER_PALETTE_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_INSTRUMENTS_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_PROPERTIES_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_SELECTION_FILTER_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_UNDO_HISTORY_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_NAVIGATOR_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_BRAILLE_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_TIMELINE_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_MIXER_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_PERCUSSION_COMMAND),
+        makeMenuItem(OPEN_PLAYBACK_SETUP_COMMAND),
         makeSeparator(),
-        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
-    };
-
+        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), {
+            makeMenuItem(DOCK_TOGGLE_PLAYBACK_COMMAND),
+            makeMenuItem(DOCK_TOGGLE_NOTEINPUT_COMMAND),
+            makeMenuItem(DOCK_TOGGLE_STATUSBAR_COMMAND)
+        }, "menu-toolbars"),
 #ifdef MUSE_MODULE_WORKSPACE
-    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
+        makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
 #endif
-
-    viewItems << makeSeparator()
-              << makeMenu(TranslatableString("appshell/menu/view", "&Show"), makeShowItems(), "menu-show")
-              << makeSeparator()
-              << makeMenuItem("dock-restore-default-layout");
+        makeSeparator(),
+        makeMenu(TranslatableString("appshell/menu/view", "&Show"), {
+            makeMenuItem(SHOW_INVISIBLE_COMMAND),
+            makeMenuItem(SHOW_UNPRINTABLE_COMMAND),
+            makeMenuItem(SHOW_FRAMES_COMMAND),
+            makeMenuItem(SHOW_PAGEBORDERS_COMMAND),
+            makeMenuItem(SHOW_IRREGULAR_COMMAND),
+            makeMenuItem(SHOW_SOUNDFLAGS_COMMAND),
+        }, "menu-show"),
+        makeSeparator(),
+        makeMenuItem(DOCK_RESTORE_DEFAULT_LAYOUT_COMMAND),
+    };
 
     return makeMenu(TranslatableString("appshell/menu/view", "&View"), viewItems, "menu-view");
 }
@@ -351,26 +335,24 @@ MenuItem* AppMenuModel::makeAddMenu()
 
 MenuItem* AppMenuModel::makeFormatMenu()
 {
-    MenuItemList stretchItems {
-        makeMenuItem("stretch+"),
-        makeMenuItem("stretch-"),
-        makeMenuItem("reset-stretch")
-    };
-
     MenuItemList formatItems {
-        makeMenuItem("edit-style"),
-        makeMenuItem("page-settings"),
+        makeMenuItem(OPEN_EDIT_STYLE_COMMAND),
+        makeMenuItem(OPEN_PAGE_SETTINGS_COMMAND),
         makeSeparator(),
-        makeMenuItem("measures-per-system"),
-        makeMenu(TranslatableString("appshell/menu/format", "Str&etch"), stretchItems, "menu-stretch"),
+        makeMenuItem(OPEN_BREAKS_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/format", "Str&etch"), {
+            makeMenuItem(STRETCH_INCREASE_COMMAND),
+            makeMenuItem(STRETCH_DECREASE_COMMAND),
+            makeMenuItem(STRETCH_RESET_COMMAND)
+        }, "menu-stretch"),
         makeSeparator(),
-        makeMenuItem("reset-text-style-overrides"),
-        makeMenuItem("reset-beammode"),
-        makeMenuItem("reset"),
-        makeMenuItem("reset-to-default-layout"),
+        makeMenuItem(RESET_TEXT_STYLE_OVERRIDES_COMMAND),
+        makeMenuItem(RESET_BEAMS_COMMAND),
+        makeMenuItem(RESET_SHAPES_AND_POSITIONS_COMMAND),
+        makeMenuItem(RESET_TO_DEFAULT_LAYOUT_COMMAND),
         makeSeparator(),
-        makeMenuItem("load-style"),
-        makeMenuItem("save-style")
+        makeMenuItem(LOAD_STYLE_COMMAND),
+        makeMenuItem(SAVE_STYLE_COMMAND)
     };
 
     return makeMenu(TranslatableString("appshell/menu/format", "F&ormat"), formatItems, "menu-format");
@@ -378,77 +360,66 @@ MenuItem* AppMenuModel::makeFormatMenu()
 
 MenuItem* AppMenuModel::makeToolsMenu()
 {
-    MenuItemList voicesItems {
-        makeMenuItem("voice-x12"),
-        makeMenuItem("voice-x13"),
-        makeMenuItem("voice-x14"),
-        makeMenuItem("voice-x23"),
-        makeMenuItem("voice-x24"),
-        makeMenuItem("voice-x34")
-    };
-
-    MenuItemList measuresItems {
-        makeMenuItem("split-measure"),
-        makeMenuItem("join-measures")
-    };
-
-    MenuItemList enharmonicSpellingItems {
-        makeMenuItem("enh-both"),
-        makeMenuItem("enh-current"),
-        makeMenuItem("pitch-spell"),
-    };
-
     MenuItemList toolsItems {
-        makeMenuItem("transpose"),
+        makeMenuItem(OPEN_TRANSPOSE_COMMAND),
         makeSeparator(),
-        makeMenuItem("explode"),
-        makeMenuItem("implode"),
-        makeMenuItem("realize-chord-symbols"),
-        makeMenu(TranslatableString("appshell/menu/tools", "&Voices"), voicesItems, "menu-voices"),
-        makeMenu(TranslatableString("appshell/menu/tools", "&Measures"), measuresItems, "menu-tools-measures"),
-        makeMenuItem("time-delete"),
+        makeMenuItem(STAFF_EXPLODE_COMMAND),
+        makeMenuItem(STAFF_IMPLODE_COMMAND),
+        makeMenuItem(OPEN_REALIZECHORDSYMBOLS_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/tools", "&Voices"), {
+            makeMenuItem(SWAP_VOICE_X12_COMMAND),
+            makeMenuItem(SWAP_VOICE_X13_COMMAND),
+            makeMenuItem(SWAP_VOICE_X14_COMMAND),
+            makeMenuItem(SWAP_VOICE_X23_COMMAND),
+            makeMenuItem(SWAP_VOICE_X24_COMMAND),
+            makeMenuItem(SWAP_VOICE_X34_COMMAND)
+        }, "menu-voices"),
+        makeMenu(TranslatableString("appshell/menu/tools", "&Measures"), {
+            makeMenuItem(SPLIT_MEASURE_COMMAND),
+            makeMenuItem(JOIN_MEASURES_COMMAND)
+        }, "menu-tools-measures"),
+        makeMenuItem(REMOVE_SELECTED_RANGE_COMMAND),
         makeSeparator(),
-        makeMenuItem("slash-fill"),
-        makeMenuItem("slash-rhythm"),
+        makeMenuItem(SLASH_FILL_COMMAND),
+        makeMenuItem(SLASH_RHYTHM_COMMAND),
         makeSeparator(),
-        makeMenuItem("pitch-spell-sharps"),
-        makeMenuItem("pitch-spell-flats"),
-        makeMenu(TranslatableString("appshell/menu/tools", "Enharmonic spelling"), enharmonicSpellingItems, "menu-enharmonic-spelling"),
+        makeMenuItem(PITCH_SPELL_SHARPS_COMMAND),
+        makeMenuItem(PITCH_SPELL_FLATS_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/tools", "Enharmonic spelling"), {
+            makeMenuItem(ENHARMONIC_SPELL_BOTH_COMMAND),
+            makeMenuItem(ENHARMONIC_SPELL_CURRENT_COMMAND),
+            makeMenuItem(PITCH_SPELL_COMMAND),
+        }, "menu-enharmonic-spelling"),
         makeSeparator(),
-        makeMenuItem("reset-groupings"),
-        makeMenuItem("resequence-rehearsal-marks"),
-        /*
-         * TODO: https://github.com/musescore/MuseScore/issues/9670
-        makeMenuItem("unroll-repeats"),
-         */
+        makeMenuItem(REGROUP_RHYTHMS_COMMAND),
+        makeMenuItem(RESEQUENCE_REHEARSAL_MARKS_COMMAND),
         makeSeparator(),
-        makeMenuItem("copy-lyrics-to-clipboard"),
-        makeMenuItem("del-empty-measures"),
+        makeMenuItem(COPY_LYRICS_COMMAND),
+        makeMenuItem(REMOVE_EMPTY_TRAILING_MEASURES_COMMAND),
     };
 
     return makeMenu(TranslatableString("appshell/menu/tools", "&Tools"), toolsItems, "menu-tools");
 }
 
-MenuItem* AppMenuModel::makePluginsMenu()
-{
-    return makeMenu(TranslatableString("appshell/menu/plugins", "&Plugins"), makePluginsMenuSubitems(), "menu-plugins");
-}
-
-MenuItemList AppMenuModel::makePluginsMenuSubitems()
+muse::uicomponents::MenuItemList AppMenuModel::makeExtensionsSubitems()
 {
     MenuItemList subitems {
-        makeMenuItem("manage-plugins"),
+        makeMenuItem(APP_EXTENSIONS_COMMAND),
     };
 
-    MenuItemList enabledPlugins = makePluginsItems();
+    MenuItemList extensions = makeExtensionsItems();
 
-    if (!enabledPlugins.empty()) {
+    if (!extensions.empty()) {
         subitems << makeSeparator();
     }
 
-    subitems << enabledPlugins;
-
+    subitems << extensions;
     return subitems;
+}
+
+MenuItem* AppMenuModel::makeExtensionsMenu()
+{
+    return makeMenu(TranslatableString("appshell/menu/plugins", "E&xtensions"), makeExtensionsSubitems(), "menu-extensions");
 }
 
 MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
@@ -456,12 +427,12 @@ MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
     MenuItemList helpItems;
 
     if (updateConfiguration()->isAppUpdatable()) {
-        helpItems << makeMenuItem("check-update");
+        helpItems << makeMenuItem(UPDATE_CHECK_COMMAND);
         helpItems << makeSeparator();
     }
 
-    helpItems << makeMenuItem("online-handbook");
-    helpItems << makeMenuItem("ask-help");
+    helpItems << makeMenuItem(APP_ONLINE_HANDBOOK_COMMAND);
+    helpItems << makeMenuItem(APP_ASK_HELP_COMMAND);
     helpItems << makeSeparator();
 
     if (addDiagnosticsSubMenu) {
@@ -469,45 +440,43 @@ MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
         helpItems << makeSeparator();
     }
 
-    helpItems << makeMenuItem("about-musescore", MenuItemRole::AboutRole);
-    helpItems << makeMenuItem("about-qt", MenuItemRole::AboutQtRole);
-    helpItems << makeMenuItem("about-musicxml");
-    helpItems << makeMenuItem("accessibility-statement");
+    helpItems << makeMenuItem(APP_ABOUT_MUSESCORE_COMMAND, MenuItemRole::AboutRole);
+    helpItems << makeMenuItem(APP_ABOUT_QT_COMMAND, MenuItemRole::AboutQtRole);
+    helpItems << makeMenuItem(APP_ABOUT_MUSICXML_COMMAND);
+    helpItems << makeMenuItem(APP_ACCESSIBILITY_STATEMENT_COMMAND);
     helpItems << makeSeparator();
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
     if (isMuseSamplerModuleAdded()) {
-        helpItems << makeMenuItem("command://playback/clear-onlinesounds-cache");
+        helpItems << makeMenuItem(CLEAR_ONLINESOUNDS_CACHE_COMMAND);
         helpItems << makeSeparator();
     }
 #endif
 
-    helpItems << makeMenuItem("revert-factory");
+    helpItems << makeMenuItem(APP_REVERT_TO_FACTORY_COMMAND);
 
     return makeMenu(TranslatableString("appshell/menu/help", "&Help"), helpItems, "menu-help");
 }
 
 MenuItem* AppMenuModel::makeDiagnosticsMenu()
 {
-    MenuItemList systemItems {
-        makeMenuItem("diagnostic-show-paths"),
-        makeMenuItem("diagnostic-show-graphicsinfo"),
-        makeMenuItem("diagnostic-show-profiler"),
-    };
-
     MenuItemList items {
-        makeMenuItem("diagnostic-save-diagnostic-files"),
-        makeMenuItem("command://playback/reload-playback-cache"),
-        makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
+        makeMenuItem(DIAGNOSTICS_SAVE_FILES_COMMAND),
+        makeMenuItem(RELOAD_PLAYBACK_CACHE_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), {
+            makeMenuItem(DIAGNOSTICS_SHOW_PATHS_COMMAND),
+            makeMenuItem(DIAGNOSTICS_SHOW_GRAPHICSINFO_COMMAND),
+            makeMenuItem(DIAGNOSTICS_SHOW_PROFILER_COMMAND),
+        }, "menu-system")
     };
 
     if (isMuseSamplerModuleAdded()) {
         MenuItemList museSamplerItems {
-            makeMenuItem("musesampler-check"),
+            makeMenuItem(MUSESAMPLER_CHECK_COMMAND),
         };
 
         if (globalConfiguration()->devModeEnabled()) {
-            museSamplerItems << makeMenuItem("musesampler-reload");
+            museSamplerItems << makeMenuItem(MUSESAMPLER_RELOAD_COMMAND);
         }
 
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&MuseSampler"), museSamplerItems, "menu-musesampler");
@@ -515,41 +484,38 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
     if (globalConfiguration()->devModeEnabled()) {
         MenuItemList actionsItems {
-            makeMenuItem("diagnostic-show-actions"),
-            makeMenuItem("diagnostic-show-rcommands"),
-            makeMenuItem("action://diagnostic/actions/query"),
-            makeMenuItem("action://diagnostic/actions/query_params1?param1=val1"),
-            makeMenuItem("action://diagnostic/actions/query_params2?param1=val1")
+            makeMenuItem(DIAGNOSTICS_SHOW_ACTIONS_COMMAND),
+            makeMenuItem(DIAGNOSTICS_SHOW_RCOMMANDS_COMMAND)
         };
 
         MenuItemList accessibilityItems {
-            makeMenuItem("diagnostic-show-navigation-tree"),
-            makeMenuItem("diagnostic-show-accessible-tree"),
-            makeMenuItem("diagnostic-accessible-tree-dump"),
+            makeMenuItem(DIAGNOSTICS_SHOW_NAVIGATION_TREE_COMMAND),
+            makeMenuItem(DIAGNOSTICS_SHOW_ACCESSIBLE_TREE_COMMAND),
+            makeMenuItem(DIAGNOSTICS_DUMP_ACCESSIBLE_TREE_COMMAND),
         };
 
         MenuItemList engravingItems {
-            makeMenuItem("diagnostic-show-engraving-elements"),
-            makeMenuItem("diagnostic-show-engraving-undostack"),
-            makeMenuItem("diagnostic-show-engraving-style"),
+            makeMenuItem(DIAGNOSTICS_SHOW_ENGRAVING_ELEMENTS_COMMAND),
+            makeMenuItem(DIAGNOSTICS_SHOW_ENGRAVING_UNDOSTACK_COMMAND),
+            makeMenuItem(DIAGNOSTICS_SHOW_ENGRAVING_STYLE_COMMAND),
             makeSeparator(),
-            makeMenuItem("show-element-bounding-rects"),
-            makeMenuItem("color-element-shapes"),
-            makeMenuItem("show-segment-shapes"),
-            makeMenuItem("color-segment-shapes"),
-            makeMenuItem("show-skylines"),
-            makeMenuItem("show-system-bounding-rects"),
-            makeMenuItem("show-element-masks"),
-            makeMenuItem("show-gap-rests"),
-            makeMenuItem("show-line-attach-points"),
-            makeMenuItem("mark-empty-staff-visibility-overrides"),
-            makeMenuItem("show-both-origin-and-combined"),
-            makeMenuItem("mark-corrupted-measures"),
-            makeMenuItem("check-for-score-corruptions")
+            makeMenuItem(SHOW_ELEMENT_BOUNDING_RECTS_COMMAND),
+            makeMenuItem(COLOR_ELEMENT_SHAPES_COMMAND),
+            makeMenuItem(SHOW_SEGMENT_SHAPES_COMMAND),
+            makeMenuItem(COLOR_SEGMENT_SHAPES_COMMAND),
+            makeMenuItem(SHOW_SKYLINES_COMMAND),
+            makeMenuItem(SHOW_SYSTEM_BOUNDING_RECTS_COMMAND),
+            makeMenuItem(SHOW_ELEMENT_MASKS_COMMAND),
+            makeMenuItem(SHOW_GAP_RESTS_COMMAND),
+            makeMenuItem(SHOW_LINE_ATTACH_POINTS_COMMAND),
+            makeMenuItem(MARK_EMPTY_STAFF_COMMAND),
+            makeMenuItem(SHOW_ORIGIN_AND_COMBINED_COMMAND),
+            makeMenuItem(MARK_CORRUPTED_MEASURES_COMMAND),
+            makeMenuItem(CHECK_FOR_SCORE_CORRUPTIONS_COMMAND)
         };
 
         MenuItemList extensionsItems {
-            makeMenuItem("extensions-show-apidump"),
+            makeMenuItem("command://extensions/open-apidump"),
         };
 
         MenuItemList testflowItems {
@@ -558,97 +524,85 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
 #ifdef MUSE_MODULE_VST
         MenuItemList vstItems {
-            makeMenuItem("vst-use-oldview"),
-            makeMenuItem("vst-use-newview"),
+            makeMenuItem(VST_USE_OLDVIEW_COMMAND),
+            makeMenuItem(VST_USE_NEWVIEW_COMMAND),
         };
 #endif
 
         MenuItemList audioItems {
-            makeMenuItem("command://audio/dev/use-driver-mode"),
-            makeMenuItem("command://audio/dev/use-hybrid-mode"),
+            makeMenuItem(AUDIO_DEV_USE_DRIVER_MODE_COMMAND),
+            makeMenuItem(AUDIO_DEV_USE_HYBRID_MODE_COMMAND),
         };
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Testflow"), testflowItems, "menu-testflow");
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-diagnostics-actions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics",
+                                       "&Accessibility"), accessibilityItems, "menu-diagnostics-accessibility")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-diagnostics-engraving")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-diagnostics-extensions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Testflow"), testflowItems, "menu-diagnostics-testflow");
 
 #ifdef MUSE_MODULE_VST
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-vst");
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-diagnostics-vst");
 #endif
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-audio")
-              << makeMenuItem("multiwindows-dev-show-info");
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-diagnostics-audio")
+              << makeMenuItem(MULTIWINDOWS_DEV_SHOW_INFO_COMMAND);
     }
 
     return makeMenu(TranslatableString("appshell/menu/diagnostics", "&Diagnostics"), items, "menu-diagnostic");
 }
 
-MenuItemList AppMenuModel::makeRecentScoresItems()
+MenuItemList AppMenuModel::makeRecentSubMenuItems()
 {
     MenuItemList items;
     const RecentFilesList& recentFiles = recentFilesController()->recentFilesList();
 
-    int index = 0;
     for (const RecentFile& file : recentFiles) {
+        rcommand::CommandQuery query(PROJECT_OPEN_COMMAND);
+        query.set("url", Val(file.path.toQUrl().toString().toStdString()));
+        query.set("display_name", Val(file.displayNameOverride.toStdString()));
+
         MenuItem* item = new MenuItem(this);
+        item->setCommandQuery(query);
+        item->setTitle(TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true)));
+        item->setSelectable(true);
 
-        UiAction action;
-        action.code = "file-open";
-        action.title = TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true));
         bool isCloud = projectConfiguration()->isCloudProject(file.path);
-
         if (isCloud) {
-            action.iconCode = IconCode::Code::CLOUD;
+            item->setIcon(IconCode::Code::CLOUD);
         }
 
-        item->setAction(action);
-
-        item->setId(makeId(item->action().code, index++));
-
-        UiActionState state;
-        state.enabled = true;
-        item->setState(state);
-
-        item->setSelectable(true);
-        item->setArgs(ActionData::make_arg2<QUrl, QString>(file.path.toQUrl(), file.displayNameOverride));
-
         items << item;
+    }
+
+    if (!items.empty()) {
+        items << makeSeparator()
+              << makeMenuItem(PROJECT_CLEAR_RECENT_COMMAND);
     }
 
     return items;
 }
 
-MenuItemList AppMenuModel::appendClearRecentSection(const muse::uicomponents::MenuItemList& recentScores)
-{
-    MenuItemList result = recentScores;
-    result << makeSeparator()
-           << makeMenuItem("clear-recent");
-
-    return result;
-}
-
 MenuItemList AppMenuModel::makeNotesItems()
 {
     MenuItemList items {
-        makeMenuItem("command://notation/toggle-note-input"),
+        makeMenuItem(TOGGLE_NOTE_INPUT_COMMAND),
         makeSeparator(),
-        makeMenuItem("command://notation/enter-note-c"),
-        makeMenuItem("command://notation/enter-note-d"),
-        makeMenuItem("command://notation/enter-note-e"),
-        makeMenuItem("command://notation/enter-note-f"),
-        makeMenuItem("command://notation/enter-note-g"),
-        makeMenuItem("command://notation/enter-note-a"),
-        makeMenuItem("command://notation/enter-note-b"),
+        makeMenuItem(ENTER_NOTE_C_COMMAND),
+        makeMenuItem(ENTER_NOTE_D_COMMAND),
+        makeMenuItem(ENTER_NOTE_E_COMMAND),
+        makeMenuItem(ENTER_NOTE_F_COMMAND),
+        makeMenuItem(ENTER_NOTE_G_COMMAND),
+        makeMenuItem(ENTER_NOTE_A_COMMAND),
+        makeMenuItem(ENTER_NOTE_B_COMMAND),
         makeSeparator(),
-        makeMenuItem("command://notation/add-note-c"),
-        makeMenuItem("command://notation/add-note-d"),
-        makeMenuItem("command://notation/add-note-e"),
-        makeMenuItem("command://notation/add-note-f"),
-        makeMenuItem("command://notation/add-note-g"),
-        makeMenuItem("command://notation/add-note-a"),
-        makeMenuItem("command://notation/add-note-b"),
+        makeMenuItem(ADD_NOTE_C_COMMAND),
+        makeMenuItem(ADD_NOTE_D_COMMAND),
+        makeMenuItem(ADD_NOTE_E_COMMAND),
+        makeMenuItem(ADD_NOTE_F_COMMAND),
+        makeMenuItem(ADD_NOTE_G_COMMAND),
+        makeMenuItem(ADD_NOTE_A_COMMAND),
+        makeMenuItem(ADD_NOTE_B_COMMAND),
     };
 
     return items;
@@ -657,26 +611,26 @@ MenuItemList AppMenuModel::makeNotesItems()
 MenuItemList AppMenuModel::makeIntervalsItems()
 {
     MenuItemList items {
-        makeMenuItem("interval1"),
-        makeMenuItem("interval2"),
-        makeMenuItem("interval3"),
-        makeMenuItem("interval4"),
-        makeMenuItem("interval5"),
-        makeMenuItem("interval6"),
-        makeMenuItem("interval7"),
-        makeMenuItem("interval8"),
-        makeMenuItem("interval9"),
-        makeMenuItem("interval10"),
+        makeMenuItem(ADD_INTERVAL_PLUS_1_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_2_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_3_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_4_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_5_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_6_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_7_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_8_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_9_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_10_COMMAND),
         makeSeparator(),
-        makeMenuItem("interval-2"),
-        makeMenuItem("interval-3"),
-        makeMenuItem("interval-4"),
-        makeMenuItem("interval-5"),
-        makeMenuItem("interval-6"),
-        makeMenuItem("interval-7"),
-        makeMenuItem("interval-8"),
-        makeMenuItem("interval-9"),
-        makeMenuItem("interval-10")
+        makeMenuItem(ADD_INTERVAL_MINUS_2_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_3_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_4_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_5_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_6_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_7_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_8_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_9_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_10_COMMAND)
     };
 
     return items;
@@ -685,15 +639,15 @@ MenuItemList AppMenuModel::makeIntervalsItems()
 MenuItemList AppMenuModel::makeTupletsItems()
 {
     MenuItemList items {
-        makeMenuItem(notation::ADD_DUPLET_COMMAND),
-        makeMenuItem(notation::ADD_TRIPLET_COMMAND),
-        makeMenuItem(notation::ADD_QUADRUPLET_COMMAND),
-        makeMenuItem(notation::ADD_QUINTUPLET_COMMAND),
-        makeMenuItem(notation::ADD_SEXTUPLET_COMMAND),
-        makeMenuItem(notation::ADD_SEPTUPLET_COMMAND),
-        makeMenuItem(notation::ADD_OCTUPLET_COMMAND),
-        makeMenuItem(notation::ADD_NONUPLET_COMMAND),
-        makeMenuItem(notation::OPEN_TUPLET_CONFIGURE_COMMAND)
+        makeMenuItem(ADD_DUPLET_COMMAND),
+        makeMenuItem(ADD_TRIPLET_COMMAND),
+        makeMenuItem(ADD_QUADRUPLET_COMMAND),
+        makeMenuItem(ADD_QUINTUPLET_COMMAND),
+        makeMenuItem(ADD_SEXTUPLET_COMMAND),
+        makeMenuItem(ADD_SEPTUPLET_COMMAND),
+        makeMenuItem(ADD_OCTUPLET_COMMAND),
+        makeMenuItem(ADD_NONUPLET_COMMAND),
+        makeMenuItem(OPEN_TUPLET_CONFIGURE_COMMAND)
     };
 
     return items;
@@ -702,14 +656,14 @@ MenuItemList AppMenuModel::makeTupletsItems()
 MenuItemList AppMenuModel::makeMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measure", TranslatableString("notation", "&Insert one measure before selection")),
-        makeMenuItem("append-measure", TranslatableString("notation", "Insert &one measure at end of score")),
+        makeMenuItem(INSERT_MEASURE_COMMAND),
+        makeMenuItem(APPEND_MEASURE_COMMAND),
         makeSeparator(),
-        makeMenuItem("insert-measures", TranslatableString("notation", "Insert &before selection…")),
-        makeMenuItem("insert-measures-after-selection", TranslatableString("notation", "Insert &after selection…")),
+        makeMenuItem(INSERT_MEASURES_COMMAND),
+        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND),
         makeSeparator(),
-        makeMenuItem("insert-measures-at-start-of-score", TranslatableString("notation", "Insert at &start of score…")),
-        makeMenuItem("append-measures", TranslatableString("notation", "Insert at &end of score…"))
+        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND),
+        makeMenuItem(APPEND_MEASURES_COMMAND)
     };
 
     return items;
@@ -718,24 +672,17 @@ MenuItemList AppMenuModel::makeMeasuresItems()
 MenuItemList AppMenuModel::makeFramesItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-hbox"),
-        makeMenuItem("insert-vbox"),
-        makeMenuItem("insert-textframe"),
-        makeMenuItem("insert-fretframe"),
+        makeMenuItem(INSERT_HBOX_COMMAND),
+        makeMenuItem(INSERT_VBOX_COMMAND),
+        makeMenuItem(INSERT_TEXTFRAME_COMMAND),
+        makeMenuItem(INSERT_FRETFRAME_COMMAND),
         makeSeparator(),
-        makeMenu(TranslatableString("notation", "Insert at end of score"), makeFramesAppendItems())
-    };
-
-    return items;
-}
-
-MenuItemList AppMenuModel::makeFramesAppendItems()
-{
-    MenuItemList items {
-        makeMenuItem("append-hbox"),
-        makeMenuItem("append-vbox"),
-        makeMenuItem("append-textframe"),
-        makeMenuItem("append-fretframe")
+        makeMenu(TranslatableString("notation", "Insert at end of score"), {
+            makeMenuItem(APPEND_HBOX_COMMAND),
+            makeMenuItem(APPEND_VBOX_COMMAND),
+            makeMenuItem(APPEND_TEXTFRAME_COMMAND),
+            makeMenuItem(APPEND_FRETFRAME_COMMAND)
+        })
     };
 
     return items;
@@ -744,27 +691,27 @@ MenuItemList AppMenuModel::makeFramesAppendItems()
 MenuItemList AppMenuModel::makeTextItems()
 {
     MenuItemList items {
-        makeMenuItem("title-text"),
-        makeMenuItem("subtitle-text"),
-        makeMenuItem("composer-text"),
-        makeMenuItem("poet-text"),
-        makeMenuItem("part-text"),
+        makeMenuItem(ADD_TITLE_TEXT_COMMAND),
+        makeMenuItem(ADD_SUBTITLE_TEXT_COMMAND),
+        makeMenuItem(ADD_COMPOSER_TEXT_COMMAND),
+        makeMenuItem(ADD_LYRICIST_TEXT_COMMAND),
+        makeMenuItem(ADD_PART_TEXT_COMMAND),
         makeSeparator(),
-        makeMenuItem("system-text"),
-        makeMenuItem("staff-text"),
-        makeMenuItem("add-dynamic"),
-        makeMenuItem("expression-text"),
-        makeMenuItem("rehearsalmark-text"),
-        makeMenuItem("instrument-change-text"),
-        makeMenuItem("fingering-text"),
+        makeMenuItem(ADD_SYSTEM_TEXT_COMMAND),
+        makeMenuItem(ADD_STAFF_TEXT_COMMAND),
+        makeMenuItem(ADD_DYNAMIC_COMMAND),
+        makeMenuItem(ADD_EXPRESSION_TEXT_COMMAND),
+        makeMenuItem(ADD_REHEARSALMARK_TEXT_COMMAND),
+        makeMenuItem(ADD_INSTRUMENT_CHANGE_TEXT_COMMAND),
+        makeMenuItem(ADD_FINGERING_TEXT_COMMAND),
         makeSeparator(),
-        makeMenuItem("sticking-text"),
-        makeMenuItem("chord-text"),
-        makeMenuItem("roman-numeral-text"),
-        makeMenuItem("nashville-number-text"),
-        makeMenuItem("lyrics"),
-        makeMenuItem("figured-bass"),
-        makeMenuItem("tempo")
+        makeMenuItem(ADD_STICKING_TEXT_COMMAND),
+        makeMenuItem(ADD_CHORD_TEXT_COMMAND),
+        makeMenuItem(ADD_ROMAN_NUMERAL_TEXT_COMMAND),
+        makeMenuItem(ADD_NASHVILLE_NUMBER_TEXT_COMMAND),
+        makeMenuItem(ADD_LYRICS_COMMAND),
+        makeMenuItem(ADD_FIGURED_BASS_COMMAND),
+        makeMenuItem(ADD_TEMPO_COMMAND)
     };
 
     return items;
@@ -773,78 +720,53 @@ MenuItemList AppMenuModel::makeTextItems()
 MenuItemList AppMenuModel::makeLinesItems()
 {
     MenuItemList items {
-        makeMenuItem("add-slur"),
-        makeMenuItem("add-hairpin"),
-        makeMenuItem("add-hairpin-reverse"),
-        makeMenuItem("add-8va"),
-        makeMenuItem("add-8vb"),
-        makeMenuItem("add-noteline")
+        makeMenuItem(ADD_SLUR_COMMAND),
+        makeMenuItem(ADD_HAIRPIN_COMMAND),
+        makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
+        makeMenuItem(ADD_OTTAVA_8VA_COMMAND),
+        makeMenuItem(ADD_OTTAVA_8VB_COMMAND),
+        makeMenuItem(ADD_NOTELINE_COMMAND)
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::makeToolbarsItems()
-{
-    MenuItemList items {
-        makeMenuItem("toggle-transport"),
-        makeMenuItem("toggle-noteinput"),
-        makeMenuItem("toggle-statusbar")
-    };
-
-    return items;
-}
-
-MenuItemList AppMenuModel::makeShowItems()
-{
-    MenuItemList items {
-        makeMenuItem("show-invisible"),
-        makeMenuItem("show-unprintable"),
-        makeMenuItem("show-frames"),
-        makeMenuItem("show-pageborders"),
-        makeMenuItem("show-irregular"),
-        makeMenuItem("show-soundflags"),
-    };
-
-    return items;
-}
-
-MenuItemList AppMenuModel::makePluginsItems()
+MenuItemList AppMenuModel::makeExtensionsItems()
 {
     MenuItemList result;
 
-    KnownCategories categories = extensionsProvider()->knownCategories();
-    ManifestList enabledExtensions = extensionsProvider()->manifestList(Filter::Enabled);
+    KnownCategories categories = extensionsRegister()->knownCategories();
+    ManifestList manifests = extensionsRegister()->manifestList(Filter::Enabled);
 
-    auto addMenuItems = [this](MenuItemList& items, const Manifest& m) {
-        if (m.actions.size() == 1) {
-            const muse::extensions::Action& a = m.actions.at(0);
+    auto makeMenuItem = [this](const Manifest& m, const Action& a) {
+        rcommand::Command command = makeCommand(m.uri, a.code);
+        return this->makeMenuItem(command);
+    };
+
+    auto addMenuItems = [this, makeMenuItem](MenuItemList& items, const Manifest& m) {
+        MenuItemList sub;
+        for (const muse::extensions::Action& a : m.actions) {
             if (!a.showOnAppmenu) {
-                return;
+                continue;
             }
-            items << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
-                                  !a.title.empty()
-                                  ? TranslatableString::untranslatable(a.title)
-                                  : TranslatableString::untranslatable(m.title));
-        } else {
-            MenuItemList sub;
-            for (const muse::extensions::Action& a : m.actions) {
-                if (!a.showOnAppmenu) {
-                    continue;
-                }
-                sub << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
-                                    TranslatableString::untranslatable(a.title));
-            }
-
-            if (!sub.empty()) {
-                items << makeMenu(TranslatableString::untranslatable(m.title), sub);
-            }
+            sub << makeMenuItem(m, a);
         }
+
+        if (sub.empty()) {
+            return;
+        }
+
+        if (sub.size() == 1) {
+            items << sub.at(0);
+            return;
+        }
+
+        items << makeMenu(TranslatableString::untranslatable(m.title), sub);
     };
 
     std::map<std::string, MenuItemList> categoriesMap;
     MenuItemList pluginsWithoutCategories;
-    for (const Manifest& m : enabledExtensions) {
+    for (const Manifest& m : manifests) {
         std::string categoryStr = m.category.toStdString();
         if (!categoryStr.empty()) {
             if (!muse::contains(categories, categoryStr)) {

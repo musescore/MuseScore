@@ -36,7 +36,7 @@ public:
     Parenthesis(const Parenthesis& p);
 
     Parenthesis* clone() const override { return new Parenthesis(*this); }
-    Segment* segment() const { return explicitParent() && explicitParent()->isSegment() ? toSegment(explicitParent()) : nullptr; }
+    Segment* segment() const { return ownershipParent() && ownershipParent()->isSegment() ? toSegment(ownershipParent()) : nullptr; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

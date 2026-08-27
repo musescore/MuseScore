@@ -23,6 +23,7 @@
 #include "repeatlist.h"
 
 #include <list>
+#include <set>
 #include <utility> // std::pair
 
 #include "jump.h"
@@ -30,10 +31,10 @@
 #include "marker.h"
 #include "measure.h"
 #include "score.h"
-#include "tempo.h"
 #include "volta.h"
 
-#include "log.h"
+#include "global/realfn.h"
+#include "global/log.h"
 
 using namespace mu;
 
@@ -43,7 +44,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 RepeatSegment::RepeatSegment(int playbackCount)
-    : tick(0), utick(0), utime(0.0), timeOffset(0.0), pause(0.0), playbackCount(playbackCount)
+    : tick(0), utick(0), pause(0.0), playbackCount(playbackCount)
 {
 }
 
@@ -146,8 +147,6 @@ bool operator==(const RepeatSegment& lhs, const RepeatSegment& rhs)
     }
     return lhs.tick == rhs.tick
            && lhs.utick == rhs.utick
-           && muse::RealIsEqual(lhs.utime, rhs.utime)
-           && muse::RealIsEqual(lhs.timeOffset, rhs.timeOffset)
            && muse::RealIsEqual(lhs.pause, rhs.pause)
            && lhs.playbackCount == rhs.playbackCount;
 }
@@ -159,8 +158,7 @@ bool operator==(const RepeatSegment& lhs, const RepeatSegment& rhs)
 RepeatList::RepeatList(Score* s)
 {
     m_score = s;
-    m_idx1  = 0;
-    m_idx2  = 0;
+    m_utick2tickHint = 0;
 }
 
 //---------------------------------------------------------
@@ -224,28 +222,13 @@ void RepeatList::update(bool expand, bool updateTies)
     }
 }
 
-//---------------------------------------------------------
-//   updateTempo
-//---------------------------------------------------------
-
-void RepeatList::updateTempo()
+void RepeatList::updateUticks()
 {
-    const TempoMap* tl = m_score->tempomap();
-    if (tl->empty()) {
-        return;
-    }
-
     int utick = 0;
-    double t  = 0;
 
     for (RepeatSegment* s : *this) {
-        s->utick      = utick;
-        s->utime      = t;
-        double ct      = tl->tick2time(s->tick);
-        s->timeOffset = t - ct;
-        int len       = s->len();
-        utick        += len;
-        t            += tl->tick2time(s->tick + len) - ct;
+        s->utick = utick;
+        utick += s->len();
     }
 }
 
@@ -262,10 +245,10 @@ int RepeatList::utick2tick(int tick) const
     if (tick < 0) {
         return 0;
     }
-    unsigned ii = (m_idx1 < n) && (tick >= at(m_idx1)->utick) ? m_idx1 : 0;
+    unsigned ii = (m_utick2tickHint < n) && (tick >= at(m_utick2tickHint)->utick) ? m_utick2tickHint : 0;
     for (unsigned i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
-            m_idx1 = i;
+            m_utick2tickHint = i;
             return tick - (at(i)->utick - at(i)->tick);
         }
     }
@@ -291,47 +274,6 @@ int RepeatList::tick2utick(int tick) const
     return back()->utick + (tick - back()->tick);
 }
 
-//---------------------------------------------------------
-//   utick2utime
-//---------------------------------------------------------
-
-double RepeatList::utick2utime(int tick) const
-{
-    size_t n = size();
-    unsigned ii = (m_idx1 < n) && (tick >= at(m_idx1)->utick) ? m_idx1 : 0;
-    for (unsigned i = ii; i < n; ++i) {
-        if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
-            int t     = tick - (at(i)->utick - at(i)->tick);
-            double tt = m_score->tempomap()->tick2time(t) + at(i)->timeOffset;
-            return tt;
-        }
-    }
-    return 0.0;
-}
-
-//---------------------------------------------------------
-//   utime2utick
-//---------------------------------------------------------
-
-int RepeatList::utime2utick(double secs) const
-{
-    size_t repeatSegmentsCount = size();
-    unsigned ii = (m_idx2 < repeatSegmentsCount) && (secs >= at(m_idx2)->utime) ? m_idx2 : 0;
-    for (unsigned i = ii; i < repeatSegmentsCount; ++i) {
-        if ((secs >= at(i)->utime) && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
-            m_idx2 = i;
-            return m_score->tempomap()->time2tick(secs - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
-        }
-    }
-
-    if (!empty()) {
-        ASSERT_X(String(u"time %1 not found in RepeatList").arg(secs));
-    }
-    // else: requesting from an empty map can be expected as a valid scenario
-
-    return 0;
-}
-
 ///
 /// \brief Lookup the RepeatSegment containing the given utick
 ///
@@ -345,6 +287,18 @@ std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTi
     }
 
     return cend();
+}
+
+std::vector<RepeatSegmentInfo> RepeatList::segmentInfoList() const
+{
+    std::vector<RepeatSegmentInfo> result;
+    result.reserve(size());
+
+    for (const RepeatSegment* seg : *this) {
+        result.push_back({ seg->tick, seg->endTick(), seg->utick });
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
@@ -1110,7 +1064,7 @@ void RepeatList::unwind()
         }
     }
 
-    updateTempo();
+    updateUticks();
     m_expanded = true;
 }
 }

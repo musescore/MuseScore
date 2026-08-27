@@ -67,7 +67,7 @@ TremoloSingleChord::~TremoloSingleChord()
 
 double TremoloSingleChord::chordMag() const
 {
-    return explicitParent() ? toChord(explicitParent())->intrinsicMag() : 1.0;
+    return chord() ? chord()->intrinsicMag() : 1.0;
 }
 
 double TremoloSingleChord::minHeight() const

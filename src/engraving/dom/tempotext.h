@@ -52,17 +52,18 @@ public:
 
     TempoText* clone() const override { return new TempoText(*this); }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
-    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()->ownershipParent()); }
 
     TempoTextType tempoTextType() const { return m_tempoTextType; }
     void setTempoTextType(TempoTextType);
 
-    BeatsPerSecond tempo() const { return m_tempo; }
+    BeatsPerSecond tempo() const;
     double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
     bool isRelative() const { return m_isRelative; }
     void setRelative(double v) { m_isRelative = true; m_relative = v; }
+    double relativeValue() const { return m_relative; }
 
     bool isNormal() const { return m_tempoTextType == TempoTextType::NORMAL; }
     void setNormal() { setTempoTextType(TempoTextType::NORMAL); }
@@ -80,7 +81,6 @@ public:
     void setFollowText(bool v) { m_followText = v; }
 
     void updateTempo();
-    void updateRelative();
 
     TDuration duration() const;
 
@@ -100,13 +100,9 @@ public:
     static constexpr double DEFAULT_SYM_SIZE_RATIO = 5.0 / 3.0;
 
 protected:
-    void added() override;
-    void removed() override;
     void commitText() override;
 
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-
-    void updateScore();
 
     TempoTextType m_tempoTextType;
     BeatsPerSecond m_tempo;             // beats per second

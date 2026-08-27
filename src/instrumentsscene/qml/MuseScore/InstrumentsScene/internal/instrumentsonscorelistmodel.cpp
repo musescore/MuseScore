@@ -145,6 +145,9 @@ void InstrumentsOnScoreListModel::load()
     QList<Item*> instruments;
 
     for (const Part* part : parts) {
+        if (part->isSharedPart()) {
+            continue;
+        }
         InstrumentItem* instrument = new InstrumentItem(this);
         instrument->id = part->instrument()->id();
         instrument->partId = part->id();

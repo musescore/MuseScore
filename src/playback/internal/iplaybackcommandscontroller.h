@@ -24,6 +24,10 @@
 
 #include "global/modularity/imoduleinterface.h"
 
+#include "global/async/channel.h"
+
+#include "../playbacktypes.h"
+
 namespace mu::playback {
 class IPlaybackCommandsController : MODULE_CONTEXT_INTERFACE
 {

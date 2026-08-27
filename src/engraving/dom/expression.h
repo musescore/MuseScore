@@ -40,7 +40,7 @@ public:
 
     Expression* clone() const override { return new Expression(*this); }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
 
     PropertyValue propertyDefault(Pid id) const override;
 

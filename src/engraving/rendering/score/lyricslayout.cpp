@@ -43,7 +43,7 @@ using namespace mu::engraving::rendering::score;
 
 void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
-    if (!item->explicitParent()) {   // palette & clone trick
+    if (!item->ownershipParent()) {   // palette & clone trick
         item->setPos(PointF());
         TextLayout::layoutBaseTextBase1(item, ctx);
         return;
@@ -486,12 +486,13 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
     if (isEndMelisma() || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
         if (!item->separator()) {
             LyricsLine* separator = Factory::createLyricsLine(ctx.mutDom().dummyParent());
+            separator->setGenerated(true);
             separator->setTick(cr->tick());
             separator->setVisible(item->visible());
             item->setSeparator(separator);
             ctx.mutDom().addUnmanagedSpanner(item->separator());
         }
-        item->separator()->setParent(item);
+        item->separator()->setOwnershipParent(item);
         item->separator()->setTick(cr->tick());
         item->separator()->setTicks(lyricsLineTicks);
         item->separator()->setTrack(item->track());

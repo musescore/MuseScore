@@ -252,7 +252,7 @@ EngravingItem* Lyrics::drop(Transaction& tx, EditData& data)
         return 0;
     }
     Text* e = toText(data.dropElement);
-    e->setParent(this);
+    e->setOwnershipParent(this);
     score()->undoAddElement(e);
     return e;
 }

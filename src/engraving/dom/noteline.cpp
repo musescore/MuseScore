@@ -63,8 +63,8 @@ static const ElementStyle noteLineStyle {
     { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-NoteLineSegment::NoteLineSegment(Spanner* sp, System* parent)
-    : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+NoteLineSegment::NoteLineSegment(NoteLine* sp)
+    : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, ElementFlag::MOVABLE)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -84,7 +84,7 @@ NoteLine::NoteLine(EngravingItem* parent)
 {
     initElementStyle(&noteLineStyle);
 
-    static const std::array<Pid, 19> propertiesToInitialise {
+    static const std::array<Pid, 18> propertiesToInitialise {
         Pid::BEGIN_TEXT,
         Pid::CONTINUE_TEXT,
         Pid::END_TEXT,
@@ -102,8 +102,7 @@ NoteLine::NoteLine(EngravingItem* parent)
         Pid::DIAGONAL,
         Pid::NOTELINE_PLACEMENT,
         Pid::GAP_BETWEEN_TEXT_AND_LINE,
-        Pid::SYSTEM_FLAG,
-        Pid::ANCHOR
+        Pid::SYSTEM_FLAG
     };
 
     for (const Pid& pid : propertiesToInitialise) {
@@ -116,9 +115,9 @@ NoteLine::NoteLine(const NoteLine& nl)
 {
 }
 
-LineSegment* NoteLine::createLineSegment(System* parent)
+LineSegment* NoteLine::createLineSegment()
 {
-    NoteLineSegment* seg = new NoteLineSegment(this, parent);
+    NoteLineSegment* seg = new NoteLineSegment(this);
     seg->setTrack(track());
     return seg;
 }
@@ -156,9 +155,6 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
         return 0.5_sp;
     case Pid::SYSTEM_FLAG:
         return false;
-    case Pid::ANCHOR:
-        return int(Spanner::Anchor::NOTE);
-
     case Pid::TEXT_STYLE:
         return TextStyleType::NOTELINE;
     default:

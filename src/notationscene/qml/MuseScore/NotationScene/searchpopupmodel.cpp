@@ -41,9 +41,6 @@ void SearchPopupModel::classBegin()
 
 void SearchPopupModel::init()
 {
-    dispatcher()->reg(this, "find", [this]() {
-        emit showPopupRequested();
-    });
 }
 
 void SearchPopupModel::search(const QString& text)

@@ -194,17 +194,6 @@
             <StemDirection>up</StemDirection>
             <Note>
               <eid>U_U</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>V_V</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
@@ -212,22 +201,20 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>W_W</eid>
+        <eid>V_V</eid>
         <voice>
           <Chord>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>Y_Y</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>X_X</eid>
+              <Tie>
+                <startElement>U_U</startElement>
+                <endElement>X_X</endElement>
+                <eid>Y_Y</eid>
+                <track>0</track>
+                </Tie>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>

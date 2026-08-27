@@ -37,11 +37,11 @@ BaseSection {
     property bool useColor: true
     property alias color: colorPicker.color
 
+    property string colorLabel: qsTrc("preferences", "Color")
+
     property alias wallpaperPath: wallpaperPicker.path
     property alias wallpapersDir: wallpaperPicker.dir
     property alias wallpaperFilter: wallpaperPicker.filter
-
-    property alias opacityOverride: gridSection.opacity
 
     signal useColorChangeRequested(var newValue)
     signal colorChangeRequested(var newColor)
@@ -61,7 +61,7 @@ BaseSection {
             implicitWidth: root.columnWidth
 
             checked: root.useColor
-            text: qsTrc("preferences", "Color")
+            text: root.colorLabel
 
             navigation.name: "ColorBox"
             navigation.panel: root.navigation

@@ -50,8 +50,7 @@ protected:
     virtual void dragGrip(EditData&) override;
     void startDrag(EditData&) override;
 
-    LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f = ElementFlag::NOTHING);
-    LineSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    LineSegment(const ElementType& type, SLine* sp, ElementFlags f = ElementFlag::NOTHING);
 
 public:
 
@@ -106,7 +105,7 @@ public:
     SLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
 
-    virtual LineSegment* createLineSegment(System* parent) = 0;
+    virtual LineSegment* createLineSegment() = 0;
     void setLen(double l);
 
     bool diagonal() const { return m_diagonal; }

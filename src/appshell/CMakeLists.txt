@@ -25,11 +25,17 @@ target_sources(appshell PRIVATE
     appshellmodule.h
     iappshellconfiguration.h
     appshelltypes.h
+    appshellcommands.h
 
+    internal/iappshellcommandscontroller.h
+    internal/appshellcommandscontroller.cpp
+    internal/appshellcommandscontroller.h
+    internal/appshellcommandsregister.cpp
+    internal/appshellcommandsregister.h
+    internal/appshellcommandsstate.cpp
+    internal/appshellcommandsstate.h
     internal/appshellstate.cpp
     internal/appshellstate.h
-    internal/applicationactioncontroller.cpp
-    internal/applicationactioncontroller.h
     internal/applicationuiactions.cpp
     internal/applicationuiactions.h
     internal/appshellconfiguration.cpp
@@ -71,6 +77,7 @@ qt_add_resources(appshell appshell_resources
         resources/welcomedialog/ExploreTutorials.png
         resources/welcomedialog/MuseScoreCom.png
         resources/welcomedialog/MuseSounds.png
+        resources/welcomedialog/MuseSoundsPro.png
         resources/welcomedialog/WhatsNew.png
         resources/win_opengl_buglist.json
 )

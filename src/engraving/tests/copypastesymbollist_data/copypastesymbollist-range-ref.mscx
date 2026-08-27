@@ -28,7 +28,7 @@
       <Staff>
         <eid>4XyViKqA39P_4XyViKqA39P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="violin">
@@ -81,7 +81,7 @@
       <Staff>
         <eid>6XyViKqA39P_6XyViKqA39P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="viola">

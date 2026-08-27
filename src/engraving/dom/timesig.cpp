@@ -29,6 +29,7 @@
 #include "../editing/edittimesig.h"
 #include "../editing/transaction/transaction.h"
 
+#include "measure.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -64,9 +65,9 @@ TimeSig::TimeSig(Segment* parent)
     setMinDistance(0.5_sp); // TODO: style
 }
 
-void TimeSig::setParent(Segment* parent)
+void TimeSig::setOwnershipParent(Segment* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------
@@ -475,7 +476,7 @@ void TimeSig::added()
         return;
     }
 
-    score()->setUpTempoMapLater();
+    score()->updateTicksAndTimeSigMapLater();
 }
 
 void TimeSig::removed()
@@ -484,6 +485,6 @@ void TimeSig::removed()
         return;
     }
 
-    score()->setUpTempoMapLater();
+    score()->updateTicksAndTimeSigMapLater();
 }
 }

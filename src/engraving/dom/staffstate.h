@@ -63,7 +63,7 @@ public:
     Instrument* instrument() const { return m_instrument; }
     void setInstrument(const Instrument* i) { *m_instrument = *i; }
     void setInstrument(const Instrument&& i) { *m_instrument = i; }
-    Segment* segment() { return (Segment*)explicitParent(); }
+    Segment* segment() { return (Segment*)ownershipParent(); }
 
     struct LayoutData : public EngravingItem::LayoutData {
         double lw = 0.0;

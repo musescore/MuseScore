@@ -125,11 +125,9 @@ MasterScore* MasterScore::unrollRepeats()
     // create a copy of the original score to play with
     MasterScore* score = original->clone();
 
-    // figure out repeat structure
-    original->setExpandRepeats(true);
-
     // if no repeats, just return the score as-is
-    if (original->repeatList().size() == 1) {
+    const RepeatList& expandedRepeats = original->expandedRepeatList();
+    if (expandedRepeats.size() == 1) {
         return score;
     }
 
@@ -143,7 +141,7 @@ MasterScore* MasterScore::unrollRepeats()
 
     // follow along with the repeatList
     bool first = true;
-    for (const RepeatSegment* rs: original->repeatList()) {
+    for (const RepeatSegment* rs: expandedRepeats) {
         Fraction startTick = Fraction::fromTicks(rs->tick);
         Fraction endTick   = Fraction::fromTicks(rs->endTick());
 
@@ -160,7 +158,7 @@ MasterScore* MasterScore::unrollRepeats()
 
     removeRepeatMarkings(score);
 
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
 
     score->setLayoutAll();
     score->doLayout();

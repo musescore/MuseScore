@@ -157,8 +157,8 @@ public:
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
 
-    Chord* chord() const { return (Chord*)explicitParent(); }
-    void setParent(Chord* ch);
+    Chord* chord() const { return (Chord*)ownershipParent(); }
+    void setOwnershipParent(Chord* ch);
 
     void undoUnlink() override;
 

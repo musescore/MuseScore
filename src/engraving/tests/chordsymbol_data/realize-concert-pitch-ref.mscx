@@ -852,92 +852,42 @@
             <durationType>whole</durationType>
             <Note>
               <eid>MC_MC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>NC_NC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>OC_OC</eid>
+              <eid>NC_NC</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>PC_PC</eid>
+                <eid>OC_OC</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>QC_QC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
             <Note>
-              <eid>RC_RC</eid>
+              <eid>PC_PC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>SC_SC</eid>
+                <eid>QC_QC</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>TC_TC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <tpc2>22</tpc2>
               </Note>
             <Note>
-              <eid>UC_UC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>VC_VC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>RC_RC</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>WC_WC</eid>
+              <eid>SC_SC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>XC_XC</eid>
+                <eid>TC_TC</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>YC_YC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -946,72 +896,67 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>ZC_ZC</eid>
+        <eid>UC_UC</eid>
         <voice>
           <Chord>
-            <eid>aC_aC</eid>
+            <eid>VC_VC</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>bC_bC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>WC_WC</eid>
+              <Tie>
+                <startElement>MC_MC</startElement>
+                <endElement>WC_WC</endElement>
+                <eid>XC_XC</eid>
+                <track>0</track>
+                </Tie>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>cC_cC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>YC_YC</eid>
+              <Tie>
+                <startElement>NC_NC</startElement>
+                <endElement>YC_YC</endElement>
+                <eid>ZC_ZC</eid>
+                <track>0</track>
+                </Tie>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
             <Note>
-              <eid>dC_dC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>aC_aC</eid>
+              <Tie>
+                <startElement>PC_PC</startElement>
+                <endElement>aC_aC</endElement>
+                <eid>bC_bC</eid>
+                <track>0</track>
+                </Tie>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <tpc2>22</tpc2>
               </Note>
             <Note>
-              <eid>eC_eC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>cC_cC</eid>
+              <Tie>
+                <startElement>RC_RC</startElement>
+                <endElement>cC_cC</endElement>
+                <eid>dC_dC</eid>
+                <track>0</track>
+                </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>fC_fC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>eC_eC</eid>
+              <Tie>
+                <startElement>SC_SC</startElement>
+                <endElement>eC_eC</endElement>
+                <eid>fC_fC</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -1225,92 +1170,42 @@
             <durationType>whole</durationType>
             <Note>
               <eid>ID_ID</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>JD_JD</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>KD_KD</eid>
+              <eid>JD_JD</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>LD_LD</eid>
+                <eid>KD_KD</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>MD_MD</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
             <Note>
-              <eid>ND_ND</eid>
+              <eid>LD_LD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>OD_OD</eid>
+                <eid>MD_MD</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>PD_PD</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <tpc2>22</tpc2>
               </Note>
             <Note>
-              <eid>QD_QD</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>RD_RD</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>ND_ND</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>SD_SD</eid>
+              <eid>OD_OD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>TD_TD</eid>
+                <eid>PD_PD</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>UD_UD</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -1319,72 +1214,67 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>VD_VD</eid>
+        <eid>QD_QD</eid>
         <voice>
           <Chord>
-            <eid>WD_WD</eid>
+            <eid>RD_RD</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>XD_XD</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>SD_SD</eid>
+              <Tie>
+                <startElement>ID_ID</startElement>
+                <endElement>SD_SD</endElement>
+                <eid>TD_TD</eid>
+                <track>0</track>
+                </Tie>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>YD_YD</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>UD_UD</eid>
+              <Tie>
+                <startElement>JD_JD</startElement>
+                <endElement>UD_UD</endElement>
+                <eid>VD_VD</eid>
+                <track>0</track>
+                </Tie>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
             <Note>
-              <eid>ZD_ZD</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>WD_WD</eid>
+              <Tie>
+                <startElement>LD_LD</startElement>
+                <endElement>WD_WD</endElement>
+                <eid>XD_XD</eid>
+                <track>0</track>
+                </Tie>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <tpc2>22</tpc2>
               </Note>
             <Note>
-              <eid>aD_aD</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>YD_YD</eid>
+              <Tie>
+                <startElement>ND_ND</startElement>
+                <endElement>YD_YD</endElement>
+                <eid>ZD_ZD</eid>
+                <track>0</track>
+                </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>bD_bD</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>aD_aD</eid>
+              <Tie>
+                <startElement>OD_OD</startElement>
+                <endElement>aD_aD</endElement>
+                <eid>bD_bD</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>

@@ -20,6 +20,23 @@ if(MSS_USE_SYSTEM_MNXDOM)
         "mnxdom source control revision to embed in provenance" FORCE)
     message(STATUS "Using system-installed mnxdom ${mnxdom_VERSION}")
 else()
+    # nlohmann_json and json_schema_validator come from muse_deps (see
+    # buildscripts/cmake/DependencyManifest.cmake); mnxdom finds them there
+    # instead of fetching and building its own copies. The w3c schema and
+    # examples are vendored in mnxdom itself, so nothing to point it at.
+    get_property(NLOHMANN_JSON_PREFIX GLOBAL PROPERTY nlohmann_json_PREFIX)
+    get_property(JSON_SCHEMA_VALIDATOR_PREFIX GLOBAL PROPERTY json_schema_validator_PREFIX)
+    if(NOT NLOHMANN_JSON_PREFIX OR NOT JSON_SCHEMA_VALIDATOR_PREFIX)
+        # Without this, mnxdom would quietly fetch and build its own copies
+        message(FATAL_ERROR "[mnxdom] nlohmann_json / json_schema_validator not resolved; "
+                            "DependencyManifest.cmake must run before this module")
+    endif()
+    list(PREPEND CMAKE_PREFIX_PATH "${NLOHMANN_JSON_PREFIX}" "${JSON_SCHEMA_VALIDATOR_PREFIX}")
+    set(USE_SYSTEM_NLOHMANN_JSON ON CACHE BOOL "" FORCE)
+    set(USE_SYSTEM_JSON_SCHEMA_VALIDATOR ON CACHE BOOL "" FORCE)
+    message(STATUS "Using muse_deps nlohmann_json from ${NLOHMANN_JSON_PREFIX}")
+    message(STATUS "Using muse_deps json_schema_validator from ${JSON_SCHEMA_VALIDATOR_PREFIX}")
+
     set(MNXDOM_GIT_TAG 45bf46221c00411e968c851ff9a1be4e202af5c2)
     string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(

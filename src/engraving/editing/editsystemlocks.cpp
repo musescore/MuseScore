@@ -26,6 +26,7 @@
 #include "transaction/transaction.h"
 #include "transaction/undoablecommand.h"
 
+#include "../dom/measure.h"
 #include "../dom/measurebase.h"
 #include "../dom/rangelock.h"
 #include "../dom/score.h"

@@ -83,7 +83,7 @@ bool Engraving_TupletTests::createTuplet(int n, ChordRest* cr)
     tuplet->setTrack(cr->track());
     tuplet->setTick(tick);
     Measure* measure = cr->measure();
-    tuplet->setParent(measure);
+    tuplet->setOwnershipParent(measure);
 
     if (ot) {
         tuplet->setTuplet(ot);

@@ -43,7 +43,7 @@ public:
     TremoloSingleChord* clone() const override { return new TremoloSingleChord(*this); }
     ~TremoloSingleChord() override;
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
 
     int subtype() const override { return static_cast<int>(m_tremoloType); }
     TranslatableString subtypeUserName() const override;

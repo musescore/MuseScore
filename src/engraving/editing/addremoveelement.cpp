@@ -29,13 +29,13 @@
 #include "../dom/engravingitem.h"
 #include "../dom/keysig.h"
 #include "../dom/linkedobjects.h"
+#include "../dom/measure.h"
 #include "../dom/note.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
 #include "../dom/spanner.h"
 #include "../dom/staff.h"
 #include "../dom/system.h"
-#include "../dom/tempotext.h"
 #include "../dom/tie.h"
 #include "../dom/tremolotwochord.h"
 #include "../dom/tuplet.h"
@@ -352,12 +352,12 @@ void ChangeElement::flip()
         }
     }
 
-    if (oldElement->explicitParent() == nullptr) {
+    if (oldElement->ownershipParent() == nullptr) {
         newElement->setScore(score);
         score->removeElement(oldElement);
         score->addElement(newElement);
     } else {
-        oldElement->parentItem()->change(oldElement, newElement);
+        oldElement->ownershipParentItem()->change(oldElement, newElement);
     }
 
     if (newElement->isKeySig()) {
@@ -365,9 +365,6 @@ void ChangeElement::flip()
         if (!ks->generated()) {
             ks->staff()->setKey(ks->tick(), ks->keySigEvent());
         }
-    } else if (newElement->isTempoText()) {
-        TempoText* t = toTempoText(oldElement);
-        score->setTempo(t->segment(), t->tempo());
     }
 
     if (newElement->isSpannerSegment()) {
@@ -392,10 +389,10 @@ void ChangeElement::flip()
 
 void ChangeParent::flip()
 {
-    EngravingItem* p = element->parentItem();
+    EngravingItem* p = element->ownershipParentItem();
     staff_idx_t si = element->staffIdx();
     p->remove(element);
-    element->setParent(parent);
+    element->setOwnershipParent(parent);
     element->setTrack(staffIdx * VOICES + element->voice());
     parent->add(element);
     staffIdx = si;
@@ -478,7 +475,7 @@ void ChangeSegmentParent::flip()
     Measure* p = segment->measure();
     Fraction oldTick = segment->rtick();
     p->remove(segment);
-    segment->setParent(parent);
+    segment->setOwnershipParent(parent);
     segment->setRtick(tick);
     parent->add(segment);
 

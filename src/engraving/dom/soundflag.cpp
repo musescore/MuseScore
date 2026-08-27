@@ -24,6 +24,8 @@
 
 #include <climits>
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../editing/editsoundflag.h"
 #include "linkedobjects.h"
 #include "mscore.h"
@@ -56,7 +58,7 @@ bool SoundFlag::isEditable() const
 
 void SoundFlag::setSelected(bool f)
 {
-    EngravingItem* parent = parentItem();
+    EngravingItem* parent = ownershipParentItem();
     if (parent) {
         parent->setSelected(f);
     }
@@ -190,7 +192,7 @@ bool SoundFlag::shouldHide() const
         return false;
     }
 
-    const EngravingItem* parent = parentItem();
+    const EngravingItem* parent = ownershipParentItem();
     if (parent && parent->selected() && score()->selection().isSingle()) {
         return false;
     }

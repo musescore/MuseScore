@@ -19,18 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "mnxexporter.h"
 #include "internal/shared/mnxtypesconv.h"
 
 #include <stdexcept>
 
-#include "engraving/dom/masterscore.h"
-#include "engraving/dom/score.h"
 #include "global/iapplication.h"
-#include "io/path.h"
-#include "modularity/ioc.h"
-#include "log.h"
-#include "translation.h"
+#include "global/io/path.h"
+#include "global/log.h"
+#include "global/modularity/ioc.h"
+#include "global/translation.h"
+
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
 
 using namespace mu::engraving;
 
@@ -130,7 +133,7 @@ std::optional<MnxChordTargetPosition> MnxExporter::mnxChordTargetPosition(const 
         return position;
     }
 
-    EngravingObject* parent = chord->explicitParent();
+    EngravingObject* parent = chord->ownershipParent();
     if (!parent || !parent->isChord()) {
         LOGW() << "Skipping grace-note target with missing main chord.";
         return std::nullopt;

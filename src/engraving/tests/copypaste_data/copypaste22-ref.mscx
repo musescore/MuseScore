@@ -137,15 +137,6 @@
           <Chord>
             <eid>H_H</eid>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>1</staves>
-                  <voices>-1</voices>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>I_I</eid>
               <pitch>69</pitch>
@@ -204,15 +195,6 @@
           <Chord>
             <eid>U_U</eid>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>1</staves>
-                  <voices>-1</voices>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>V_V</eid>
               <pitch>69</pitch>
@@ -242,29 +224,17 @@
           <Chord>
             <eid>J_J</eid>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>K_K</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>-1</staves>
-                  <voices>1</voices>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
@@ -285,29 +255,17 @@
           <Chord>
             <eid>W_W</eid>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>X_X</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>-1</staves>
-                  <voices>1</voices>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>X_X</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>Z_Z</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
@@ -320,5 +278,19 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>H_H</endElement>
+        <eid>N_N</eid>
+        <track>4</track>
+        </Slur>
+      <Slur>
+        <startElement>W_W</startElement>
+        <endElement>U_U</endElement>
+        <eid>a_a</eid>
+        <track>4</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

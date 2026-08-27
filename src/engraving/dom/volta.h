@@ -41,7 +41,7 @@ class VoltaSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::VOLTA_SEGMENT)
 
 public:
-    VoltaSegment(Volta*, System* parent);
+    VoltaSegment(Volta*);
 
     VoltaSegment* clone() const override { return new VoltaSegment(*this); }
 
@@ -65,18 +65,17 @@ public:
         OPEN, CLOSED
     };
 
-    static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
-
     Volta(EngravingItem* parent);
 
     Volta* clone() const override { return new Volta(*this); }
 
-    LineSegment* createLineSegment(System* parent) override;
+    Anchor anchor() const override { return Anchor::MEASURE; }
+
+    LineSegment* createLineSegment() override;
 
     bool allowTimeAnchor() const override { return false; }
 
     void setChannel() const;
-    void setTempo() const;
 
     std::vector<int> endings() const { return m_endings; }
     std::vector<int>& endings() { return m_endings; }

@@ -22,6 +22,7 @@
 
 #include "measurebase.h"
 
+#include "box.h"
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"
@@ -39,9 +40,30 @@ using namespace mu::engraving;
 //   MeasureBase
 //---------------------------------------------------------
 
-MeasureBase::MeasureBase(const ElementType& type, System* system)
-    : EngravingItem(type, system)
+MeasureBase::MeasureBase(const ElementType& type, Score* parent)
+    : EngravingItem(type, parent)
 {
+    // Owned by its score right away; a system only places it later
+    setOwnershipParent(parent);
+}
+
+void MeasureBase::setOwnershipParent(Score* score)
+{
+    EngravingItem::setOwnershipParent(score);
+}
+
+void MeasureBase::setOwnershipParent(Box* box)
+{
+    EngravingItem::setOwnershipParent(box);
+}
+
+EngravingItem* MeasureBase::layoutParent() const
+{
+    if (m_system) {
+        return m_system;
+    }
+    // e.g. a horizontal frame nested inside a vertical frame is placed within its parent frame
+    return EngravingItem::layoutParent();
 }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
@@ -178,8 +200,8 @@ Page* MeasureBase::nextPage() const
 
 void MeasureBase::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
-        e->setParent(this);
+    if (e->ownershipParent() != this) {
+        e->setOwnershipParent(this);
     }
 
     if (e->isLayoutBreak()) {
@@ -238,7 +260,6 @@ void MeasureBase::remove(EngravingItem* el)
             break;
         case LayoutBreakType::SECTION:
             setSectionBreak(false);
-            score()->setPause(endTick(), 0);
             if (lb->startWithMeasureOne()) {
                 triggerLayoutToEnd();
             }
@@ -350,9 +371,9 @@ double MeasureBase::pause() const
 MeasureBase* MeasureBase::top() const
 {
     const MeasureBase* mb = this;
-    while (mb->explicitParent()) {
-        if (mb->explicitParent()->isMeasureBase()) {
-            mb = toMeasureBase(mb->explicitParent());
+    while (mb->ownershipParent()) {
+        if (mb->ownershipParent()->isMeasureBase()) {
+            mb = toMeasureBase(mb->ownershipParent());
         } else {
             break;
         }
@@ -506,7 +527,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
         lb->setTrack(0);
-        lb->setParent(mb);
+        lb->setOwnershipParent(mb);
         score()->undoAddElement(lb);
     }
     cleanupLayoutBreaks(true);
@@ -889,10 +910,10 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
         m_first = nb;
     }
     if (nb->isBox()) {
-        nb->setParent(ob->system());
+        nb->setSystem(ob->system());
     }
     for (EngravingItem* e : nb->el()) {
-        e->setParent(nb);
+        e->setOwnershipParent(nb);
     }
 }
 
@@ -960,29 +981,10 @@ MeasureBase* MeasureBaseList::firstMeasureBaseAtTick(int tick) const
 
     auto it = m_tickIndex.upper_bound(tick);
 
-    if (it == m_tickIndex.begin()) {
-        MeasureBase* mb = it->second;
-
-        return mb;
+    if (it != m_tickIndex.begin()) {
+        --it;
     }
-
-    --it;
-    for (;; --it) {
-        if (it == m_tickIndex.begin()) {
-            MeasureBase* mb = it->second;
-
-            return mb;
-        }
-
-        MeasureBase* mb = it->second;
-        if (!mb) {
-            break;
-        }
-
-        return mb;
-    }
-
-    return nullptr;
+    return it->second;
 }
 
 std::vector<MeasureBase*> MeasureBaseList::measureBasesAtTick(int tick) const
