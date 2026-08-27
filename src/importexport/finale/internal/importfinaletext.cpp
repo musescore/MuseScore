@@ -768,7 +768,7 @@ void FinaleParser::importTextExpressions()
                                                                                    s->tick().toString(), String::number(curTrackIdx)));
             TextBase* item = toTextBase(Factory::createItem(elementType, s));
             const MusxInstance<others::TextExpressionDef>& expressionDef = expressionAssignment->getTextExpression();
-            item->setParent(s);
+            item->setOwnershipParent(s);
             item->setTrack(curTrackIdx);
             item->setVisible(!expressionAssignment->hidden); /// @todo staff visibility, and save adding excessive links
             item->setXmlText(expression->xmlText);
@@ -1247,7 +1247,7 @@ void FinaleParser::importTextExpressions()
                     }
                     Lyrics* lyric = Factory::createLyrics(cr);
                     lyric->setTrack(cr->track());
-                    lyric->setParent(cr);
+                    lyric->setOwnershipParent(cr);
                     lyric->setVerse(musxLyricsList.lyricNumber - 1);
 
                     // Text
@@ -1397,7 +1397,7 @@ void FinaleParser::importJumps()
                                                                                    measure->tick().toString(),
                                                                                    String::number(curTrackIdx)));
             TextBase* item = toTextBase(Factory::createItem(repeatText->elementType, measure));
-            item->setParent(measure);
+            item->setOwnershipParent(measure);
             item->setVisible(!repeatAssignment->hidden);
             item->setTrack(curTrackIdx);
             if (item->isJump()) {
@@ -1794,7 +1794,7 @@ void FinaleParser::importPageTexts()
                 delete text;
                 return;
             }
-            text->setParent(mb);
+            text->setOwnershipParent(mb);
             toBox(mb)->add(text);
         }
 
@@ -1843,7 +1843,7 @@ void FinaleParser::importPageTexts()
                         return topBoxes.at(i);
                     }
 
-                    VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                    VBox* pageFrame = Factory::createVBox(m_score->dummy());
                     System* system = page->systems().front();
                     double distToTopStaff = 0.0;
                     if (system) {
@@ -1892,7 +1892,7 @@ void FinaleParser::importPageTexts()
                         return bottomBoxes.at(i);
                     }
 
-                    VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                    VBox* pageFrame = Factory::createVBox(m_score->dummy());
                     System* system = page->systems().back();
                     double distToBottomStaff = 0.0;
                     if (system) {

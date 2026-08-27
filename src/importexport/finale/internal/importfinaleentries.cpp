@@ -496,7 +496,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
             NoteInfoPtr noteInfoPtr(entryInfo, i);
 
             engraving::Note* note = Factory::createNote(chord);
-            note->setParent(chord);
+            note->setOwnershipParent(chord);
             note->setTrack(ctx->track);
             note->setVisible(entryIsVisible);
             note->setPlay(!currentEntry->noPlayback && !neverPlayback); /// @todo account for spanners
@@ -550,7 +550,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
                         a->setRole(noteInfoPtr->freezeAcci ? AccidentalRole::USER : AccidentalRole::AUTO);
                         a->setVisible(note->visible() && noteInfoPtr->showAcci);
                         a->setBracket(noteInfoPtr->parenAcci ? AccidentalBracket::PARENTHESIS : AccidentalBracket::NONE);
-                        a->setParent(note);
+                        a->setOwnershipParent(note);
                         if (currentEntry->noteDetail) {
                             // Accidental size and offset
                             /// @todo Finale doesn't offset notes for ledger lines, MuseScore offsets
@@ -628,7 +628,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
                             if (customSym != SymId::noSym) {
                                 for (int j = 0; j < 2; ++j) {
                                     Parenthesis* p = Factory::createParenthesis(note);
-                                    p->setParent(note);
+                                    p->setOwnershipParent(note);
                                     p->setTrack(ctx->track);
                                     p->setVisible(note->visible());
                                     p->setDirection(j == 0 ? DirectionH::LEFT : DirectionH::RIGHT);
@@ -876,7 +876,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
             if (n) {
                 for (int i = 0; i < cr->dots(); ++i) {
                     NoteDot* dot = Factory::createNoteDot(n);
-                    dot->setParent(n);
+                    dot->setOwnershipParent(n);
                     dot->setVisible(n->visible());
                     dot->setTrack(cr->track());
                     dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->spatium()); // correctly scaled?
@@ -885,7 +885,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
             } else if (r) {
                 for (int i = 0; i < cr->dots(); ++i) {
                     NoteDot* dot = Factory::createNoteDot(r);
-                    dot->setParent(r);
+                    dot->setOwnershipParent(r);
                     dot->setVisible(r->visible());
                     dot->setTrack(cr->track());
                     dot->setOffset(evpuToPointF(da->hOffset + i * museInterdot, -da->vOffset) * dot->spatium()); // correctly scaled?
@@ -1020,7 +1020,7 @@ static void processTremolos(const std::vector<ReadableTuplet>& tremoloMap, track
         tremolo->setTremoloType(TremoloType(tremoloBeamsNum));
         tremolo->setTrack(curTrackIdx);
         tremolo->setVisible(c1->notes().front()->visible());
-        tremolo->setParent(c1);
+        tremolo->setOwnershipParent(c1);
         tremolo->setChords(c1, c2);
         c1->setTremoloTwoChord(tremolo);
     }
@@ -1114,7 +1114,7 @@ void FinaleParser::createTupletsFromMap(Measure* measure, track_idx_t curTrackId
         tupletMap[i].scoreTuplet = Factory::createTuplet(measure);
         tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
         tupletMap[i].scoreTuplet->setTick(measure->tick() + tupletMap[i].startTick);
-        tupletMap[i].scoreTuplet->setParent(measure);
+        tupletMap[i].scoreTuplet->setOwnershipParent(measure);
         tupletMap[i].scoreTuplet->setRatio(tupletRatio);
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
@@ -1332,7 +1332,7 @@ void FinaleParser::importEntries()
             // Finale offers independent visibility controls for tie segments, MuseScore currently does not.
             // We set the visibility based on
             tie->setVisible(note->visible());
-            tie->setParent(note);
+            tie->setOwnershipParent(note);
             note->setTieFor(tie);
             tie->setEndNote(endNote);
             assert(endNote->tick() >= note->tick()); // dbg
@@ -1350,7 +1350,7 @@ void FinaleParser::importEntries()
             tie->setStartNote(note);
             tie->setTick(note->tick());
             tie->setTrack(note->track());
-            tie->setParent(note);
+            tie->setOwnershipParent(note);
             note->setTieFor(tie);
             if (importCustomPositions()) {
                 setAndStyleProperty(tie, Pid::SLUR_DIRECTION, directionVFromShapeContour(noteInfoPtr.calcEffectiveTieDirection()));
@@ -1362,7 +1362,7 @@ void FinaleParser::importEntries()
                 tie->setStartNote(note);
                 tie->setTick(note->tick());
                 tie->setTrack(note->track());
-                tie->setParent(note);
+                tie->setOwnershipParent(note);
                 note->setTieFor(tie);
 
                 for (const auto& source : pseudoLvTieInfo.sources) {
@@ -1425,7 +1425,7 @@ void FinaleParser::importEntries()
                 tie->setStartNote(note);
                 tie->setTick(note->tick());
                 tie->setTrack(note->track());
-                tie->setParent(note);
+                tie->setOwnershipParent(note);
                 note->setTieFor(tie);
                 startTie = tie;
                 if (importCustomPositions()) {

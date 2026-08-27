@@ -169,7 +169,7 @@ void FinaleParser::parse()
             copy->setVisible(false);
             copy->linkTo(e);
             if (!e->isSpanner()) {
-                copy->setParent(e->parentItem());
+                copy->setOwnershipParent(e->ownershipParent());
             }
             m_score->addElement(copy);
         }

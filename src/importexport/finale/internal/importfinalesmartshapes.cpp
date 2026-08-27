@@ -420,7 +420,7 @@ static bool elementsValidForSpannerType(const ElementType type, EngravingItem*& 
             return false;
         }
         /// @note Guitar bends of 'slight bend' type have the same start and end note
-        return type == ElementType::GUITAR_BEND || startElement->parentItem() != endElement->parentItem();
+        return type == ElementType::GUITAR_BEND || startElement->ownershipParent() != endElement->ownershipParent();
     }
     case ElementType::SLUR:
         return startElement && startElement->isChordRest() && endElement && endElement->isChordRest() && startElement != endElement;
@@ -635,7 +635,7 @@ void FinaleParser::importSmartShapes()
             if (smartShape->startNoteId && smartShape->endNoteId) {
                 newSpanner->setAnchor(Spanner::Anchor::NOTE);
             } else {
-                newSpanner->setAnchor(Spanner::Anchor::CHORD);
+                newSpanner->setAnchor(Spanner::Anchor::CHORDREST);
             }
             newSpanner->setTrack(startElement->track());
             newSpanner->setTrack2(endElement->track());
@@ -883,7 +883,7 @@ void FinaleParser::importSmartShapes()
         }
 
         if (newSpanner->anchor() == Spanner::Anchor::NOTE) {
-            newSpanner->setParent(startElement);
+            newSpanner->setOwnershipParent(startElement);
             toNote(startElement)->add(newSpanner);
             logger()->logInfo(String(u"Added spanner of %1 type to note at tick %2, end: %3").arg(
                                   TConv::userName(type).translated(), startTick.toString(), endTick.toString()));

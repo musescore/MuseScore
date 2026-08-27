@@ -910,7 +910,7 @@ void FinaleParser::importArticulations()
                     }
 
                     engraving::Note* note = Factory::createNote(graceChord);
-                    note->setParent(graceChord);
+                    note->setOwnershipParent(graceChord);
                     note->setTrack(graceChord->track());
                     note->setVisible(!articAssign->hide && !articDef->noPrint);
                     note->setPlay(false);
@@ -971,7 +971,7 @@ void FinaleParser::importArticulations()
                 engraving::Note* n = findClosestNote(articAssign, articDef, c);
                 if (!n->leftParen()) {
                     Parenthesis* p = Factory::createParenthesis(n);
-                    p->setParent(n);
+                    p->setOwnershipParent(n);
                     p->setTrack(n->track());
                     p->setVisible(!articAssign->hide);
                     p->setDirection(DirectionH::LEFT);
@@ -984,7 +984,7 @@ void FinaleParser::importArticulations()
                 engraving::Note* n = findClosestNote(articAssign, articDef, c);
                 if (!n->rightParen()) {
                     Parenthesis* p = Factory::createParenthesis(n);
-                    p->setParent(n);
+                    p->setOwnershipParent(n);
                     p->setTrack(n->track());
                     p->setVisible(!articAssign->hide);
                     p->setDirection(DirectionH::RIGHT);
@@ -999,7 +999,7 @@ void FinaleParser::importArticulations()
                 TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(c);
                 tremolo->setTrack(c->track());
                 tremolo->setTremoloType(musxArtic->tremoloType);
-                tremolo->setParent(c);
+                tremolo->setOwnershipParent(c);
                 tremolo->setDurationType(c->durationType());
                 tremolo->setPlayTremolo(articDef->playArtic);
                 tremolo->setVisible(!articAssign->hide);
@@ -1060,7 +1060,7 @@ void FinaleParser::importArticulations()
                 }
                 Spatium s = Spatium::fromAbsolute(cb->symWidth(musxArtic->articSym), cb->spatium());
                 setAndStyleProperty(cb, Pid::BRACKET_HOOK_LEN, s);
-                cb->setParent(c);
+                cb->setOwnershipParent(c);
                 c->add(cb);
                 continue;
             }

@@ -951,7 +951,7 @@ void FinaleParser::importStaffItems()
             }
             if (collectStaffType(staffType, currStaff) && tick.isNotZero()) {
                 StaffTypeChange* stc = Factory::createStaffTypeChange(measure);
-                stc->setParent(measure);
+                stc->setOwnershipParent(measure);
                 stc->setTrack(curTrackIdx);
                 stc->setStaffType(staffType, true);
                 measure->add(stc);
@@ -1251,7 +1251,7 @@ void FinaleParser::applyStaffStyles()
                     if (sp.value->isVolta()) {
                         sp.value->setVisible(!staffStyle->hideRepeats);
                     }
-                    if (sp.value->anchor() != Spanner::Anchor::CHORD || sp.value->anchor() != Spanner::Anchor::NOTE) {
+                    if (sp.value->anchor() != Spanner::Anchor::CHORDREST || sp.value->anchor() != Spanner::Anchor::NOTE) {
                         continue;
                     }
                     bool isAltLayer = layerFromTrack(sp.value->track(), sp.value->tick()) == staffStyle->altLayer;
@@ -1499,7 +1499,7 @@ void FinaleParser::importBarlines()
 
             for (track_idx_t track = 0; track < m_score->ntracks(); track += VOICES) {
                 BarLine* bl = Factory::createBarLine(lbls);
-                bl->setParent(lbls);
+                bl->setOwnershipParent(lbls);
                 bl->setTrack(track);
                 bl->setVisible(lblVisible);
                 bl->setGenerated(lblGenerated);
@@ -1574,7 +1574,7 @@ void FinaleParser::importBarlines()
             mensurStriche = mensurStriche && !localSpan && !localTick;
 
             BarLine* bl = Factory::createBarLine(bls);
-            bl->setParent(bls);
+            bl->setOwnershipParent(bls);
             bl->setTrack(staff2track(staffIdx));
             bl->setVisible(localVisible);
             bl->setGenerated(localGenerated);
