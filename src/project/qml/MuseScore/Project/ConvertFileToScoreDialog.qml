@@ -46,6 +46,7 @@ StyledDialogView {
     property int convertType: -1
     property int currentPageIndex: 0
     property var selectedPaths: []
+    property string selectedLink: ""
 
     ConvertFileToScoreModel {
         id: convertModel
@@ -53,6 +54,7 @@ StyledDialogView {
         onValidationFinished: function(type, paths) {
             root.convertType = type
             root.selectedPaths = paths
+            root.selectedLink = ""
 
             if (root.currentPageIndex === 0) {
                 root.currentPageIndex = 1
@@ -61,11 +63,12 @@ StyledDialogView {
 
         onGoingBackConfirmed: {
             root.currentPageIndex = 0
+            root.selectedLink = ""
         }
     }
 
-    function finish(type, paths) {
-        root.ret = { errcode: 0, value: { type: type, paths: paths } }
+    function finish(type, paths, link, convertedFileName) {
+        root.ret = { errcode: 0, value: { type: type, paths: paths, link: link, convertedFileName: convertedFileName } }
         root.hide()
     }
 
@@ -126,7 +129,8 @@ StyledDialogView {
 
         SelectFilePage {
             guidelinesLinkText: convertModel.guidelinesLinkText
-            audioComUrl: convertModel.audioComUrl
+            linkPasteText: convertModel.linkPasteText
+            maxLinkLength: convertModel.maxLinkLength
             fileRequirements: convertModel.fileRequirements
             navigationSection: root.navigationSection
 
@@ -137,6 +141,13 @@ StyledDialogView {
             onFilesDropped: function(urls) {
                 convertModel.validateFiles(urls)
             }
+
+            onLinkSubmitted: function(link) {
+                root.convertType = 1 // audio2score
+                root.selectedPaths = []
+                root.selectedLink = link
+                root.currentPageIndex = 1
+            }
         }
     }
 
@@ -146,6 +157,7 @@ StyledDialogView {
         SelectedFilesPage {
             navigationSection: root.navigationSection
             files: root.selectedPaths
+            link: root.selectedLink
             canSelectMultipleFiles: convertModel.canSelectMultipleFiles(root.convertType, root.selectedPaths)
             fileRequirements: convertModel.fileRequirements
 
@@ -156,11 +168,12 @@ StyledDialogView {
                     convertModel.confirmGoingBack()
                 } else {
                     root.currentPageIndex = 0
+                    root.selectedLink = ""
                 }
             }
 
-            onConvertRequested: function(paths) {
-                root.finish(root.convertType, paths)
+            onConvertRequested: function(paths, link, convertedFileName) {
+                root.finish(root.convertType, paths, link, convertedFileName)
             }
 
             onSelectMoreFilesRequested: function(existingPaths) {

@@ -47,6 +47,7 @@ target_sources(project PRIVATE
 
     types/projecttypes.h
     types/projectmeta.h
+    types/converttypes.h
 
     internal/iprojectmigrator.h
     internal/notationproject.cpp

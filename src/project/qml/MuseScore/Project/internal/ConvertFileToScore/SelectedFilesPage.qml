@@ -30,14 +30,17 @@ Item {
     id: root
 
     property var files: []
+    property string link: ""
     property bool canSelectMultipleFiles: true
     property var fileRequirements: []
     property NavigationSection navigationSection: null
 
+    readonly property string saveAsNameError: fileListModel.validateFileName(saveAsField.currentText)
+
     signal cancelRequested()
     signal backRequested(bool confirm)
     signal selectMoreFilesRequested(var existingPaths)
-    signal convertRequested(var paths)
+    signal convertRequested(var paths, string link, string convertedFileName)
 
     function focusOnFileList() {
         if (filesPanelLoader.item) {
@@ -49,7 +52,7 @@ Item {
         var wasEmpty = fileListModel.count === 0
         fileListModel.setPaths(root.files)
         if (wasEmpty && fileListModel.count > 0) {
-            saveAsField.currentText = fileListModel.baseName(0)
+            saveAsField.currentText = fileListModel.defaultSaveAsName()
         }
     }
 
@@ -81,7 +84,13 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            sourceComponent: root.canSelectMultipleFiles ? multipleFilesPanelComponent : singleFilePanelComponent
+            sourceComponent: {
+                if (root.link) {
+                    return linkPanelComponent
+                }
+
+                return root.canSelectMultipleFiles ? multipleFilesPanelComponent : singleFilePanelComponent
+            }
         }
 
         Column {
@@ -102,6 +111,14 @@ Item {
                 onTextChanged: function(newTextValue) {
                     saveAsField.currentText = newTextValue
                 }
+            }
+
+            StyledTextLabel {
+                width: parent.width
+
+                visible: Boolean(text)
+                horizontalAlignment: Text.AlignLeft
+                text: root.saveAsNameError
             }
         }
 
@@ -141,10 +158,10 @@ Item {
                 buttonId: ButtonBoxModel.CustomButton + 3
 
                 accentButton: true
-                enabled: Boolean(saveAsField.currentText)
+                enabled: Boolean(saveAsField.currentText) && !root.saveAsNameError
 
                 onClicked: {
-                    root.convertRequested(fileListModel.paths())
+                    root.convertRequested(root.link ? [] : fileListModel.paths(), root.link, saveAsField.currentText)
                 }
             }
         }
@@ -160,6 +177,28 @@ Item {
 
             onSelectMoreFilesRequested: function(existingPaths) {
                 root.selectMoreFilesRequested(existingPaths)
+            }
+        }
+    }
+
+    Component {
+        id: linkPanelComponent
+
+        Rectangle {
+            function focusOnFileList() {}
+
+            color: ui.theme.backgroundPrimaryColor
+            border.width: 1
+            border.color: ui.theme.strokeColor
+            radius: 3
+
+            StyledTextLabel {
+                anchors.centerIn: parent
+                anchors.margins: 16
+                width: parent.width - 32
+
+                text: root.link
+                wrapMode: Text.Wrap
             }
         }
     }

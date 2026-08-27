@@ -29,7 +29,8 @@ Item {
     id: root
 
     property alias guidelinesLinkText: guidelinesLabel.text
-    property string audioComUrl: ""
+    property string linkPasteText: ""
+    property int maxLinkLength: 0
 
     property var fileRequirements: []
 
@@ -39,6 +40,7 @@ Item {
 
     signal selectFilesRequested()
     signal filesDropped(var urls)
+    signal linkSubmitted(string link)
     signal cancelRequested()
 
     function focusOnSelect() {
@@ -171,6 +173,8 @@ Item {
         }
 
         Rectangle {
+            visible: Boolean(root.linkPasteText)
+
             Layout.fillWidth: true
             Layout.preferredHeight: linkPasteColumn.implicitHeight + 2 * root.contentPadding
 
@@ -190,9 +194,7 @@ Item {
                 StyledTextLabel {
                     width: parent.width
 
-                    text: qsTrc("project/convert", "Or paste a link from %1 or %2 (beta)")
-                          .arg("<b>Youtube</b>")
-                          .arg("<b><a href=\"" + root.audioComUrl + "\">Audio.com</a></b>")
+                    text: root.linkPasteText
                     font: ui.theme.bodyFont
                     horizontalAlignment: Text.AlignLeft
                 }
@@ -208,6 +210,7 @@ Item {
                         implicitWidth: 0
 
                         hint: "https://"
+                        maximumLength: root.maxLinkLength > 0 ? root.maxLinkLength : 32767
 
                         navigation.panel: navPanel
                         navigation.order: 2
@@ -228,6 +231,10 @@ Item {
 
                         navigation.panel: navPanel
                         navigation.order: 3
+
+                        onClicked: {
+                            root.linkSubmitted(linkInputField.currentText)
+                        }
                     }
                 }
             }

@@ -26,6 +26,9 @@
 
 #include "project/types/projecttypes.h"
 
+#include "global/io/path.h"
+#include "global/translation.h"
+
 using namespace mu::project;
 using namespace muse::ui;
 
@@ -131,13 +134,13 @@ QStringList FileListModel::paths() const
     return m_paths;
 }
 
-QString FileListModel::baseName(int index) const
+QString FileListModel::defaultSaveAsName() const
 {
-    if (index < 0 || index >= m_paths.size()) {
+    if (m_paths.isEmpty()) {
         return QString();
     }
 
-    return QFileInfo(m_paths.at(index)).completeBaseName();
+    return QFileInfo(m_paths.first()).completeBaseName();
 }
 
 QString FileListModel::fileName(int index) const
@@ -147,4 +150,17 @@ QString FileListModel::fileName(int index) const
     }
 
     return QFileInfo(m_paths.at(index)).fileName();
+}
+
+QString FileListModel::validateFileName(const QString& name) const
+{
+    if (name.isEmpty()) {
+        return QString();
+    }
+
+    if (!muse::io::isAllowedFileName(muse::io::path_t(name))) {
+        return muse::qtrc("project/convert", "“%1” cannot be used as a file name. Please choose a different name.").arg(name);
+    }
+
+    return QString();
 }

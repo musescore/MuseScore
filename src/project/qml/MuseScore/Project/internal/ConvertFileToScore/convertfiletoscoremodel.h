@@ -47,6 +47,9 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
 
     Q_PROPERTY(QVariantList fileRequirements READ fileRequirements CONSTANT)
 
+    Q_PROPERTY(QString linkPasteText READ linkPasteText CONSTANT)
+    Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
+
     QML_ELEMENT
 
     muse::ContextInject<muse::IInteractive> interactive = { this };
@@ -63,6 +66,9 @@ public:
     QString audioComUrl() const;
 
     QVariantList fileRequirements() const;
+
+    QString linkPasteText() const;
+    int maxLinkLength() const;
 
     Q_INVOKABLE bool canSelectMultipleFiles(int type, const QStringList& paths) const;
 

@@ -150,5 +150,11 @@ public:
 
     bool showConvertFileProcessingDialog() const override;
     void setShowConvertFileProcessingDialog(bool show) override;
+
+    muse::io::path_t convertedScoresPath() const override;
+    muse::io::path_t pendingConvertsJsonPath() const override;
+
+    std::string uniqueFileNameAddition(const muse::io::path_t& filename, const muse::io::path_t& folderPath,
+                                       const std::string& suffix = std::string()) const override;
 };
 }

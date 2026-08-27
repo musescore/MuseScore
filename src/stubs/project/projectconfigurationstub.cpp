@@ -409,3 +409,18 @@ bool ProjectConfigurationStub::showConvertFileProcessingDialog() const
 void ProjectConfigurationStub::setShowConvertFileProcessingDialog(bool)
 {
 }
+
+muse::io::path_t ProjectConfigurationStub::convertedScoresPath() const
+{
+    return muse::io::path_t();
+}
+
+muse::io::path_t ProjectConfigurationStub::pendingConvertsJsonPath() const
+{
+    return muse::io::path_t();
+}
+
+std::string ProjectConfigurationStub::uniqueFileNameAddition(const muse::io::path_t&, const muse::io::path_t&, const std::string&) const
+{
+    return std::string();
+}

@@ -175,6 +175,12 @@ public:
 
     virtual bool showConvertFileProcessingDialog() const = 0;
     virtual void setShowConvertFileProcessingDialog(bool show) = 0;
+
+    virtual muse::io::path_t convertedScoresPath() const = 0;
+    virtual muse::io::path_t pendingConvertsJsonPath() const = 0;
+
+    virtual std::string uniqueFileNameAddition(const muse::io::path_t& filename, const muse::io::path_t& folderPath,
+                                               const std::string& suffix = std::string()) const = 0;
 };
 }
 

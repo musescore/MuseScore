@@ -51,8 +51,9 @@ public:
     Q_INVOKABLE void move(int from, int to);
 
     Q_INVOKABLE QStringList paths() const;
-    Q_INVOKABLE QString baseName(int index) const;
+    Q_INVOKABLE QString defaultSaveAsName() const;
     Q_INVOKABLE QString fileName(int index) const;
+    Q_INVOKABLE QString validateFileName(const QString& name) const;
 
 signals:
     void countChanged();

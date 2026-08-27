@@ -42,6 +42,18 @@ static QString localPath(const QString& pathOrUrl)
     return pathOrUrl;
 }
 
+static QString joinWithOr(QStringList items)
+{
+    if (items.size() <= 1) {
+        return items.join(QString());
+    }
+
+    const QString last = items.takeLast();
+    const QString beforeLastSeparator = items.size() > 1 ? QString(", ") : QString(" ");
+
+    return items.join(", ") + beforeLastSeparator + muse::qtrc("global", "or") + " " + last;
+}
+
 static QString formatsText(const QStringList& extensions)
 {
     QStringList upperExtensions;
@@ -50,14 +62,7 @@ static QString formatsText(const QStringList& extensions)
         upperExtensions << ext.toUpper();
     }
 
-    if (upperExtensions.size() <= 1) {
-        return upperExtensions.join(QString());
-    }
-
-    const QString last = upperExtensions.takeLast();
-    const QString beforeLastSeparator = upperExtensions.size() > 1 ? QString(", ") : QString(" ");
-
-    return upperExtensions.join(", ") + beforeLastSeparator + muse::qtrc("project/convert", "or") + " " + last;
+    return joinWithOr(upperExtensions);
 }
 
 static QString maxFileSizeText(qint64 maxFileSizeBytes)
@@ -137,7 +142,7 @@ QString ConvertFileToScoreModel::audioComUrl() const
 
 QVariantList ConvertFileToScoreModel::fileRequirements() const
 {
-    const cloud::ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
     const cloud::OmrConfig& omr = config.omr;
     const cloud::Audio2ScoreConfig& a2s = config.audio2score;
 
@@ -208,11 +213,38 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
     return result;
 }
 
+QString ConvertFileToScoreModel::linkPasteText() const
+{
+    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
+
+    if (a2s.allowedLinkSources.isEmpty()) {
+        return QString();
+    }
+
+    QStringList sources;
+    for (const QString& source : a2s.allowedLinkSources) {
+        if (source.compare("youtube", Qt::CaseInsensitive) == 0) {
+            sources << "<b>Youtube</b>";
+        } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
+            sources << "<b><a href=\"" + audioComUrl() + "\">Audio.com</a></b>";
+        } else {
+            sources << "<b>" + source + "</b>";
+        }
+    }
+
+    return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(joinWithOr(sources));
+}
+
+int ConvertFileToScoreModel::maxLinkLength() const
+{
+    return convertFileToScoreScenario()->convertConfig().audio2score.maxLinkLength;
+}
+
 bool ConvertFileToScoreModel::canSelectMultipleFiles(int type, const QStringList& paths) const
 {
-    const cloud::ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
 
-    if (cloud::ConvertType(type) == cloud::ConvertType::Audio2Score) {
+    if (ConvertType(type) == ConvertType::Audio2Score) {
         return allowsMultipleFiles(config.audio2score.maxFiles);
     }
 
@@ -225,7 +257,7 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles(int type, const QStringList
 
 QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPaths)
 {
-    const cloud::ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
 
     QStringList extensions = existingPaths.isEmpty()
                              ? config.omr.allowedExtensions + config.audio2score.allowedExtensions
@@ -283,7 +315,7 @@ void ConvertFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
         normalizedPaths << path;
     }
 
-    convertFileToScoreScenario()->validateFiles(ioPaths).onResolve(this, [this, normalizedPaths](const RetVal<cloud::ConvertType>& result) {
+    convertFileToScoreScenario()->validate(ioPaths).onResolve(this, [this, normalizedPaths](const RetVal<ConvertType>& result) {
         if (result.ret) {
             emit validationFinished(int(result.val), normalizedPaths);
         }

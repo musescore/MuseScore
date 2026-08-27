@@ -23,8 +23,7 @@
 
 #include <algorithm>
 
-#include <QFileInfo>
-#include <QTemporaryFile>
+#include <QFile>
 
 #include "project/projecterrors.h"
 
@@ -67,6 +66,11 @@ static std::string convertLogId(int queueId, ConvertType type)
     return std::to_string(queueId) + " (type: " + convertTypeToString(type) + ")";
 }
 
+static std::string convertLogId(const QString& convertedFileName, int queueId, ConvertType type)
+{
+    return "\"" + convertedFileName.toStdString() + "\" (conversion " + convertLogId(queueId, type) + ")";
+}
+
 void ConvertFileToScoreService::init()
 {
     TRACEFUNC;
@@ -86,6 +90,8 @@ void ConvertFileToScoreService::init()
         m_config.audio2score.allowedExtensions = { "mp3" };
         m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
         m_config.audio2score.maxFiles = 1;
+        m_config.audio2score.maxLinkLength = 2048;
+        m_config.audio2score.allowedLinkSources = { "youtube", "audio_com" };
     }
     //! ---------------------------------------------------------------------------------
 
@@ -111,33 +117,34 @@ const ConvertConfig& ConvertFileToScoreService::config() const
     return m_config;
 }
 
-void ConvertFileToScoreService::convert(ConvertType type, const ConvertFileList& files)
+Ret ConvertFileToScoreService::convert(const ConvertInput& input, const QString& convertedFileName)
 {
-    io::paths_t filePaths;
-    filePaths.reserve(files.size());
-    for (const ConvertFile& file : files) {
-        filePaths.push_back(file.path);
+    IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
+        return make_ret(Err::ConvertValidationFailed);
     }
 
-    ProgressPtr progress = museScoreComService()->convert()->upload(type, files);
+    const ConvertType type = convertTypeOf(input);
+    ProgressPtr progress = museScoreComService()->convert()->upload(input);
 
     progress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         LOGI() << "Uploading: " << current << "/" << total;
     });
 
-    progress->finished().onReceive(this, [this, type, filePaths](const ProgressResult& res) {
+    progress->finished().onReceive(this, [this, type, convertedFileName](const ProgressResult& res) {
         if (!res.ret) {
-            LOGE() << "Could not upload the following files (type: " << convertTypeToString(type) << "): "
-                   << io::pathsToString(filePaths, ", ") << ": " << res.ret.toString();
+            LOGE() << "Could not upload files for \"" << convertedFileName << "\" (type: "
+                   << convertTypeToString(type) << "): " << res.ret.toString();
             Ret ret = res.ret;
-            ret.setData(CONVERT_FAILED_FILES_KEY, filePaths);
+            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
             finishConvert(ret);
             return;
         }
 
         const int queueId = res.val.toMap()["id"].toInt();
-        watch(queueId, type, filePaths);
+        watch(queueId, type, convertedFileName);
     });
+
+    return make_ok();
 }
 
 async::Channel<Ret, io::path_t> ConvertFileToScoreService::convertFinished() const
@@ -160,9 +167,9 @@ void ConvertFileToScoreService::submitReview(int queueId, ReviewRating rating)
     });
 }
 
-void ConvertFileToScoreService::watch(int queueId, ConvertType type, const io::paths_t& filePaths)
+void ConvertFileToScoreService::watch(int queueId, ConvertType type, const QString& convertedFileName)
 {
-    m_watchedItems.insert_or_assign(queueId, WatchedItem { type, filePaths, DownloadStatus::NotStarted });
+    m_watchedItems.insert_or_assign(queueId, WatchedItem { type, convertedFileName, DownloadStatus::NotStarted });
     saveWatchedItems();
 
     if (!m_timer.isActive()) {
@@ -198,19 +205,11 @@ void ConvertFileToScoreService::poll()
             LOGE() << "Could not check the conversion status after " << MAX_CONSECUTIVE_POLL_FAILURES
                    << " attempts, giving up on " << m_watchedItems.size() << " pending conversion(s): " << result.ret.toString();
 
-            io::paths_t filePaths;
-            for (const auto& pair : m_watchedItems) {
-                filePaths.insert(filePaths.end(), pair.second.filePaths.begin(), pair.second.filePaths.end());
-            }
-
-            Ret ret = result.ret;
-            ret.setData(CONVERT_FAILED_FILES_KEY, filePaths);
-
             m_timer.stop();
             m_watchedItems.clear();
             m_pollFailureCount = 0;
             saveWatchedItems();
-            finishConvert(ret);
+            finishConvert(result.ret);
             return;
         }
 
@@ -252,16 +251,11 @@ void ConvertFileToScoreService::poll()
     });
 }
 
-io::path_t ConvertFileToScoreService::pendingConvertsJsonPath() const
-{
-    return globalConfiguration()->userAppDataPath().appendingComponent("pending_converts.json");
-}
-
 void ConvertFileToScoreService::loadWatchedItems()
 {
     TRACEFUNC;
 
-    RetVal<ByteArray> data = fileSystem()->readFile(pendingConvertsJsonPath());
+    RetVal<ByteArray> data = fileSystem()->readFile(configuration()->pendingConvertsJsonPath());
     if (!data.ret || data.val.empty()) {
         if (!data.ret && data.ret.code() != static_cast<int>(io::Err::FSNotExist)) {
             LOGE() << "Could not read the pending conversions file: " << data.ret;
@@ -283,14 +277,9 @@ void ConvertFileToScoreService::loadWatchedItems()
         const JsonObject obj = array.at(i).toObject();
         const int queueId = obj.value("id").toInt();
         const ConvertType type = static_cast<ConvertType>(obj.value("type").toInt());
+        const QString convertedFileName = QString::fromStdString(obj.value("convertedFileName").toStdString());
 
-        io::paths_t filePaths;
-        const JsonArray filePathsArray = obj.value("filePaths").toArray();
-        for (size_t j = 0; j < filePathsArray.size(); ++j) {
-            filePaths.push_back(io::path_t(filePathsArray.at(j).toStdString()));
-        }
-
-        m_watchedItems.insert_or_assign(queueId, WatchedItem { type, filePaths, DownloadStatus::NotStarted });
+        m_watchedItems.insert_or_assign(queueId, WatchedItem { type, convertedFileName, DownloadStatus::NotStarted });
     }
 
     if (!m_watchedItems.empty()) {
@@ -305,32 +294,28 @@ void ConvertFileToScoreService::saveWatchedItems()
 
     JsonArray array;
     for (const auto& pair : m_watchedItems) {
-        JsonArray filePaths;
-        for (const io::path_t& filePath : pair.second.filePaths) {
-            filePaths << filePath.toStdString();
-        }
-
         JsonObject obj;
         obj["id"] = pair.first;
         obj["type"] = static_cast<int>(pair.second.type);
-        obj["filePaths"] = filePaths;
+
+        if (!pair.second.convertedFileName.isEmpty()) {
+            obj["convertedFileName"] = pair.second.convertedFileName.toStdString();
+        }
+
         array << obj;
     }
 
     JsonDocument json(array);
-    Ret ret = fileSystem()->writeFile(pendingConvertsJsonPath(), json.toJson());
+    Ret ret = fileSystem()->writeFile(configuration()->pendingConvertsJsonPath(), json.toJson());
     if (!ret) {
         LOGE() << "Could not save the pending conversions list: " << ret.toString();
     }
 }
 
-Ret ConvertFileToScoreService::attachFailedFiles(Ret ret, int queueId) const
+QString ConvertFileToScoreService::convertedFileNameFor(int queueId) const
 {
     auto it = m_watchedItems.find(queueId);
-    if (it != m_watchedItems.end()) {
-        ret.setData(CONVERT_FAILED_FILES_KEY, it->second.filePaths);
-    }
-    return ret;
+    return it != m_watchedItems.end() ? it->second.convertedFileName : QString();
 }
 
 void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
@@ -353,10 +338,17 @@ void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
     case ConvertStatus::Done:
         downloadIfNotAlready(item.type, item.id);
         break;
-    case ConvertStatus::Failed:
-        LOGE() << "Conversion failed: " << item << ", errorCode: " << errorCodeToString(item.errorCode);
-        finishConvert(attachFailedFiles(make_ret(Err::ConvertProcessingFailed, errorCodeToString(item.errorCode)), item.id));
+    case ConvertStatus::Failed: {
+        const QString convertedFileName = convertedFileNameFor(item.id);
+
+        LOGE() << "Conversion failed for \"" << convertedFileName << "\": "
+               << item << ", errorCode: " << errorCodeToString(item.errorCode);
+
+        Ret ret = make_ret(Err::ConvertProcessingFailed, errorCodeToString(item.errorCode));
+        ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
+        finishConvert(ret);
         break;
+    }
     }
 }
 
@@ -392,19 +384,23 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
 {
     museScoreComService()->convert()->fetchMsczUrl(type, queueId)
     .onResolve(this, [this, type, queueId](const RetVal<SignedMsczUrl>& urlInfo) {
+        const QString convertedFileName = convertedFileNameFor(queueId);
+
         if (!urlInfo.ret) {
-            LOGE() << "Could not fetch the converted score for conversion "
-                   << convertLogId(queueId, type) << ": " << urlInfo.ret.toString();
+            LOGE() << "Could not fetch the converted score " << convertLogId(convertedFileName, queueId, type)
+                   << ": " << urlInfo.ret.toString();
+            Ret ret = urlInfo.ret;
+            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
             clearDownloading(queueId);
-            finishConvert(attachFailedFiles(urlInfo.ret, queueId));
+            finishConvert(ret);
             return;
         }
 
         if (urlInfo.val.expiresInSeconds <= 0) {
             Ret ret = make_ret(Err::DownloadLinkExpired, std::string("The download link has already expired"));
-            ret = attachFailedFiles(ret, queueId);
-            LOGW() << "Could not download the converted score for conversion "
-                   << convertLogId(queueId, type) << ": " << ret.toString();
+            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
+            LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, queueId, type)
+                   << ": " << ret.toString();
             m_watchedItems.erase(queueId);
             saveWatchedItems();
             finishConvert(ret);
@@ -417,34 +413,41 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
 
 void ConvertFileToScoreService::downloadScoreAndFinish(const SignedMsczUrl& urlInfo)
 {
-    io::path_t dir = globalConfiguration()->userAppDataPath() + "/converted_scores";
+    const io::path_t dir = configuration()->convertedScoresPath();
     fileSystem()->makePath(dir);
 
-    auto scoreFile = std::make_shared<QTemporaryFile>(dir.toQString() + "/convertedScore_XXXXXX.mscz");
-    scoreFile->setAutoRemove(false);
+    const QString convertedFileName = convertedFileNameFor(urlInfo.id);
+    const io::path_t baseName = io::escapeFileName(io::path_t(convertedFileName));
+    const std::string addition = configuration()->uniqueFileNameAddition(baseName, dir, "mscz");
+    const io::path_t path = dir.appendingComponent(baseName + addition).appendingSuffix("mscz");
 
-    if (!scoreFile->open()) {
+    auto scoreFile = std::make_shared<QFile>(path.toQString());
+
+    if (!scoreFile->open(QIODevice::WriteOnly)) {
         Ret ret = make_ret(Err::FileCreateError, std::string("Could not create a file for the converted score"));
-        LOGE() << "Could not create a file for the converted score for conversion "
-               << convertLogId(urlInfo.id, urlInfo.type) << ": " << ret.toString();
+        ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
+        LOGE() << "Could not create a file for the converted score " << convertLogId(convertedFileName, urlInfo.id, urlInfo.type)
+               << ": " << ret.toString();
         clearDownloading(urlInfo.id);
-        finishConvert(attachFailedFiles(ret, urlInfo.id));
+        finishConvert(ret);
         return;
     }
 
-    const muse::io::path_t path = QFileInfo(*scoreFile).absoluteFilePath();
     ProgressPtr progress = museScoreComService()->convert()->downloadConvertedScore(urlInfo, scoreFile);
 
-    progress->finished().onReceive(this, [this, path, queueId = urlInfo.id, type = urlInfo.type](const ProgressResult& res) {
+    progress->finished().onReceive(this, [=](const ProgressResult& res) {
         if (!res.ret) {
-            LOGE() << "Could not download the converted score for conversion "
-                   << convertLogId(queueId, type) << ": " << res.ret.toString();
-            clearDownloading(queueId);
-            finishConvert(attachFailedFiles(res.ret, queueId));
+            LOGE() << "Could not download the converted score " << convertLogId(convertedFileName, urlInfo.id, urlInfo.type)
+                   << ": " << res.ret.toString();
+            scoreFile->remove();
+            Ret ret = res.ret;
+            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
+            clearDownloading(urlInfo.id);
+            finishConvert(ret);
             return;
         }
 
-        markDownloaded(queueId);
+        markDownloaded(urlInfo.id);
         finishConvert(make_ok(), path);
     });
 }

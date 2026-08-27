@@ -150,6 +150,12 @@ public:
 
     MOCK_METHOD(bool, showConvertFileProcessingDialog, (), (const, override));
     MOCK_METHOD(void, setShowConvertFileProcessingDialog, (bool), (override));
+
+    MOCK_METHOD(muse::io::path_t, convertedScoresPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, pendingConvertsJsonPath, (), (const, override));
+
+    MOCK_METHOD(std::string, uniqueFileNameAddition, (const muse::io::path_t&, const muse::io::path_t&, const std::string&),
+                (const, override));
 };
 }
 

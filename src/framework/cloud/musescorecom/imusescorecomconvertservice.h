@@ -55,7 +55,7 @@ public:
 
     virtual async::Promise<RetVal<ConvertConfig> > fetchConfig() = 0;
 
-    virtual ProgressPtr upload(ConvertType type, const ConvertFileList& files) = 0;
+    virtual ProgressPtr upload(const ConvertInput& input) = 0;
     virtual ProgressPtr downloadConvertedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData) = 0;
 
     virtual async::Promise<RetVal<ConvertQueueList> > fetchQueue() = 0;
