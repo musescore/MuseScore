@@ -1162,8 +1162,8 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     int verticalLimit = style.styleI(Sid::instrumentNumeralsVerticalThreshold);
     int hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
 
-    std::vector<Instrument*> instrumentsMappedToFirstVoice;
-    std::vector<Instrument*> instrumentsMappedToSecondVoice;
+    std::vector<const Instrument*> instrumentsMappedToFirstVoice;
+    std::vector<const Instrument*> instrumentsMappedToSecondVoice;
     for (auto [originTrack, sharedTrack] : trackMap) {
         if (track2staff(sharedTrack) == staffIdx) {
             if (track2voice(sharedTrack) == 0) {
@@ -1198,7 +1198,7 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         instrumentsMappedToFirstVoice.insert(instrumentsMappedToFirstVoice.end(),
                                              instrumentsMappedToSecondVoice.begin(), instrumentsMappedToSecondVoice.end());
         std::sort(instrumentsMappedToFirstVoice.begin(), instrumentsMappedToFirstVoice.end(),
-                  [](Instrument* a, Instrument* b) { return a->number() < b->number(); });
+                  [](const Instrument* a, const Instrument* b) { return a->number() < b->number(); });
 
         String result;
 
@@ -1222,11 +1222,11 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     return result;
 }
 
-String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle)
+String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle)
 {
     String result;
 
-    for (Instrument* instr : instruments) {
+    for (const Instrument* instr : instruments) {
         if (!result.empty()) {
             result += '\n';
         }
@@ -1241,7 +1241,7 @@ String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrumen
     return result;
 }
 
-String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle,
+String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle,
                                                   bool trailingDotMultiple, int hyphenLimit)
 {
     String result;
@@ -1254,11 +1254,11 @@ String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<Instrument*>
             result += '.';
         }
 
-        Instrument* instr = instruments[i];
+        const Instrument* instr = instruments[i];
         int startNumber = instr->number();
         int curNumber = startNumber;
         for (size_t j = i + 1; j < instruments.size(); ++j) {
-            Instrument* nextInstr = instruments[j];
+            const Instrument* nextInstr = instruments[j];
             int nextNumber = nextInstr->number();
             if (nextNumber == curNumber + 1) {
                 curNumber = nextNumber;

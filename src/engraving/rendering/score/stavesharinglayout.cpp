@@ -1171,27 +1171,17 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                 score->undoAddElement(sharedItem);
             }
 
-            if (sharedItem->isInstrumentChange()) {
-                // Prefix the number to the string shown
-                // TODO make these editable by the user
-                InstrumentChange* originChange = toInstrumentChange(originItem);
-                InstrumentChange* sharedChange = toInstrumentChange(sharedItem);
-
-                const Staff* originStaff = ctx.layoutCtx.dom().staff(originChange->vStaffIdx());
-                const Part* originPart = originStaff ? originStaff->part() : nullptr;
-                if (originPart) {
-                    String text = originChange->xmlText();
-                    String prefix = score->style().styleB(Sid::staveSharingInstrChangePlayerNum) ? String::number(originPart->number())
-                                    + u". " : String();
-
-                    text = prefix + text;
-                    sharedChange->setXmlText(text);
-                }
-            }
-
             EngravingItem::connectSharedItem(sharedItem, originItem);
 
             sharedAnnotations.push_back(sharedItem);
+
+            if (sharedItem->isInstrumentChange()) {
+                InstrumentChange* originChange = toInstrumentChange(originItem);
+                InstrumentChange* sharedChange = toInstrumentChange(sharedItem);
+                String text = formatInstrumentChangeLable(originChange, sharedChange, ctx);
+
+                sharedChange->setXmlText(text);
+            }
         }
     }
 
@@ -1358,7 +1348,7 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
 
     std::vector<track_idx_t> originTracks;
     originTracks.reserve(originUnisonsCount);
-    std::vector<Instrument*> originInstruments;
+    std::vector<const Instrument*> originInstruments;
     originInstruments.reserve(originUnisonsCount);
     std::vector<track_idx_t> tracksMappedToThisStave;
     tracksMappedToThisStave.reserve(originUnisonsCount);
@@ -1408,6 +1398,44 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
     }
 
     return result;
+}
+
+String StaveSharingLayout::formatInstrumentChangeLable(const InstrumentChange* originChange, const InstrumentChange* sharedChange,
+                                                       const StaveSharingContext& ctx)
+{
+    // Prefix the number to the string shown
+    // TODO make these editable by the user
+    const MStyle& style = ctx.style;
+
+    if (sharedChange->originItems().empty() || !style.styleB(Sid::staveSharingInstrChangePlayerNum)) {
+        return originChange->xmlText();
+    }
+
+    bool trailingDotSingle;
+    bool trailingDotMultiple;
+    int hyphenLimit;
+    if (style.styleB(Sid::sharedOnStaffNumeralsFollowInstrumentNumerals)) {
+        trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(
+            Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
+    } else {
+        trailingDotSingle = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::sharedOnStaffNumeralsHyphenEnable)
+                      ? style.styleI(Sid::sharedOnStaffNumeralsHyphenThreshold) : INT_MAX;
+    }
+
+    String prefix;
+    std::vector<const Instrument*> originInstruments;
+    for (const EngravingItem* originChange : sharedChange->originItems()) {
+        const Part* originPart = originChange->part();
+        originInstruments.push_back(originPart->instrument());
+    }
+    prefix = SystemHeaderLayout::formatSharedVoiceLabel(originInstruments, trailingDotSingle, trailingDotMultiple,
+                                                        hyphenLimit);
+
+    return prefix + u" " + originChange->xmlText();
 }
 
 void StaveSharingLayout::manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems,
