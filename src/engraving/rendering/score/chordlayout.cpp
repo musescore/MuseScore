@@ -1742,7 +1742,7 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
     double lengtheningY = -item->spatium() * .5;
     for (int i = 0; i < lines; ++i) {
         DurationLine* dl = item->durationLines()[i];
-        dl->setParent(item);
+        dl->setOwnershipParent(item);
         dl->setTrack(track);
         dl->setVisible(staffVisible);
         dl->setLen(hw);
@@ -1804,7 +1804,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
         note->resizeOctaveDotsTo(dots);
         for (int i = 0; i < dots; ++i) {
             OctaveDot* dot = note->octaveDots()[i];
-            dot->setParent(note);
+            dot->setOwnershipParent(note);
             dot->setTrack(track);
             dot->setVisible(staffVisible);
             dot->setAbove(octave > baseOctave);

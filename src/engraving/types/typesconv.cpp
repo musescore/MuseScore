@@ -3250,8 +3250,9 @@ StaffGroup TConv::fromXml(const AsciiStringView& tag, StaffGroup def)
     return findTypeByXmlTag<StaffGroup>(STAFFGROUP_TYPES, tag, def);
 }
 
-static const std::array<Item<StaffTypes>, 27> STAFFTYPES_ITEMS = { {
+static const std::array<Item<StaffTypes>, 28> STAFFTYPES_ITEMS = { {
     { StaffTypes::STANDARD,      "stdNormal",      muse::TranslatableString("engraving/stafftypes", "Standard") },
+    { StaffTypes::JIANPU,        "stdJianpu",      muse::TranslatableString("engraving/stafftypes", "Jianpu") },
     { StaffTypes::PERC_1LINE,    "perc1Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 1 line") },
     { StaffTypes::PERC_2LINE,    "perc2Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 2 lines") },
     { StaffTypes::PERC_3LINE,    "perc3Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 3 lines") },

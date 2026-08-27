@@ -1393,7 +1393,7 @@ void ChordRest::resizeDurationLinesTo(size_t newSize)
 {
     while (m_durationLines.size() < newSize) {
         DurationLine* dl = new DurationLine(this);
-        dl->setParent(this);
+        dl->setOwnershipParent(this);
         dl->setTrack(track());
         m_durationLines.push_back(dl);
     }

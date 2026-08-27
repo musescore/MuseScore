@@ -94,7 +94,7 @@ void expectOctaveDotsOwnedByNote(const Note* note)
 
     for (OctaveDot* octaveDot : note->octaveDots()) {
         ASSERT_NE(octaveDot, nullptr);
-        EXPECT_EQ(octaveDot->explicitParent(), note);
+        EXPECT_EQ(octaveDot->ownershipParent(), note);
         EXPECT_EQ(octaveDot->track(), note->track());
     }
 }

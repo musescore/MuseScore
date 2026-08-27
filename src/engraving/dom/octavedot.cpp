@@ -59,7 +59,7 @@ void OctaveDot::spatiumChanged(double oldValue, double newValue)
 
 Note* OctaveDot::note() const
 {
-    auto* parent = explicitParent();
+    auto* parent = ownershipParent();
     if (parent && parent->isNote()) {
         return toNote(parent);
     } else {

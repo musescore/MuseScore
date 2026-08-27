@@ -90,7 +90,7 @@ void expectDurationLinesOwnedByChordRest(const ChordRest* chordRest)
 
     for (DurationLine* durationLine : chordRest->durationLines()) {
         ASSERT_NE(durationLine, nullptr);
-        EXPECT_EQ(durationLine->explicitParent(), chordRest);
+        EXPECT_EQ(durationLine->ownershipParent(), chordRest);
         EXPECT_EQ(durationLine->track(), chordRest->track());
     }
 }
@@ -138,7 +138,7 @@ TEST_F(Engraving_DurationLineTests, detachedDurationLineUsesLocalPosition)
         // EngravingObject requires a non-null constructor parent, so detach it afterwards.
         // Scoped so it is destroyed (and unlinked from chordRest) before the score is deleted.
         DurationLine durationLine(chordRest);
-        durationLine.resetExplicitParent();
+        durationLine.setOwnershipParent(nullptr);
         durationLine.setPos(PointF(2.0, 3.0));
 
         EXPECT_EQ(durationLine.pagePos(), PointF(2.0, 3.0));

@@ -216,7 +216,7 @@ void RestLayout::layoutRestForJianpu(const Rest* item, Rest::LayoutData* ldata, 
         const_cast<Rest*>(item)->resizeDurationLinesTo(lines);
         for (int i = 0; i < lines; ++i) {
             DurationLine* dl = item->durationLines()[i];
-            dl->setParent(const_cast<Rest*>(item));
+            dl->setOwnershipParent(const_cast<Rest*>(item));
             dl->setTrack(track);
             dl->setVisible(staffVisible);
             dl->setLen(width);

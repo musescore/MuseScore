@@ -1228,7 +1228,7 @@ constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoi
 
 // keep in sync with the _presets initialization in StaffType::initStaffTypes() and _defaultPreset for legacy scores
 enum class StaffTypes : signed char {
-    STANDARD,
+    STANDARD, JIANPU,
     PERC_1LINE, PERC_2LINE, PERC_3LINE, PERC_5LINE,
     TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
     TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,

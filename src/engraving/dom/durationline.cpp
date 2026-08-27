@@ -82,7 +82,7 @@ void DurationLine::spatiumChanged(double oldValue, double newValue)
 
 double DurationLine::mag() const
 {
-    auto* parent = explicitParent();
+    auto* parent = ownershipParent();
     if (parent && parent->isRest()) {
         return toRest(parent)->mag();
     }
@@ -99,7 +99,7 @@ double DurationLine::mag() const
 
 ChordRest* DurationLine::chordRest() const
 {
-    auto* parent = explicitParent();
+    auto* parent = ownershipParent();
     if (parent && parent->isChordRest()) {
         return toChordRest(parent);
     } else {
