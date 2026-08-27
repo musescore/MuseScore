@@ -872,6 +872,7 @@
     <SpannerMap>
       <LetRing>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>2/4</ticks>
         <eid>9B_9B</eid>
         <track>0</track>
@@ -879,6 +880,7 @@
       <Vibrato>
         <subtype>guitarVibrato</subtype>
         <track2>8</track2>
+        <startTick>0/1</startTick>
         <ticks>2/4</ticks>
         <eid>+B_+B</eid>
         <track>8</track>
@@ -888,6 +890,7 @@
         <beginTextOffset x="0" y="0"/>
         <continueText>AH</continueText>
         <track2>16</track2>
+        <startTick>0/1</startTick>
         <ticks>5/4</ticks>
         <eid>/B_/B</eid>
         <track>16</track>
@@ -897,6 +900,7 @@
         <beginTextOffset x="0" y="0"/>
         <continueText>TH</continueText>
         <track2>16</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>AC_AC</eid>
         <track>16</track>

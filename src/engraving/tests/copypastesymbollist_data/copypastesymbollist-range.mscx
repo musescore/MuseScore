@@ -27,7 +27,7 @@
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Violin</trackName>
@@ -80,7 +80,7 @@
     <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Viola</trackName>

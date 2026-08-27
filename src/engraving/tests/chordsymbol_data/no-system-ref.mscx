@@ -26,7 +26,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="flute">
@@ -66,7 +66,7 @@
       <Staff>
         <eid>F_F</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="alto-saxophone">
@@ -230,7 +230,7 @@
           <eid>b_b</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="flute">
@@ -347,7 +347,7 @@
           <eid>p_p</eid>
           <linkedTo>F_F</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="alto-saxophone">

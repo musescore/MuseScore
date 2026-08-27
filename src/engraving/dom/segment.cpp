@@ -940,20 +940,14 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::STAFF_STATE:
         if (toStaffState(el)->staffStateType() == StaffStateType::INSTRUMENT) {
-            Part* part = el->part();
-            part->removeInstrument(tick());
+            el->part()->removeInstrument(toStaffState(el)->instrument(), tick());
         }
         removeAnnotation(el);
         break;
 
     case ElementType::INSTRUMENT_CHANGE:
-    {
-        if (!isMMRestSegment()) {
-            InstrumentChange* is = toInstrumentChange(el);
-            Part* part = is->part();
-            part->removeInstrument(tick());
-        }
-    }
+        // Ensure that the entry in the Part's InstrumentList for this segment's tick is the one this InstrumentChange owns:
+        el->part()->removeInstrument(toInstrumentChange(el)->instrument(), tick());
         removeAnnotation(el);
         break;
 

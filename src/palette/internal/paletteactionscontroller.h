@@ -62,7 +62,7 @@ public:
     muse::async::Channel<bool /* expand */> expandCollapseAllRequested() const override;
 
 private:
-    muse::Ret toggleMasterPalette(const muse::rcommand::CommandQuery& query);
+    muse::Ret toggleMasterPalette(const muse::rcommand::Params& params);
     void toggleSpecialCharactersDialog();
     void openTimeSignaturePropertiesDialog();
     void openCustomizeKitDialog();

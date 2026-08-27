@@ -485,10 +485,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
     if (globalConfiguration()->devModeEnabled()) {
         MenuItemList actionsItems {
             makeMenuItem(DIAGNOSTICS_SHOW_ACTIONS_COMMAND),
-            makeMenuItem(DIAGNOSTICS_SHOW_RCOMMANDS_COMMAND),
-            makeMenuItem(DIAGNOSTICS_ACTIONS_QUERY_COMMAND),
-            makeMenuItem(DIAGNOSTICS_ACTIONS_QUERY_PARAMS1_COMMAND),
-            makeMenuItem(DIAGNOSTICS_ACTIONS_QUERY_PARAMS2_COMMAND)
+            makeMenuItem(DIAGNOSTICS_SHOW_RCOMMANDS_COMMAND)
         };
 
         MenuItemList accessibilityItems {

@@ -4077,7 +4077,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            t->setXmlName(e.readText());
+            t->setType(TConv::fromXml(e.readAsciiText(), StaffTypes::STANDARD));
         } else if (tag == "StaffLabel") {
             StaffLabel& staffLabel = t->staffLabel();
             readStaffLabel(staffLabel, e);

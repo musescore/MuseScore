@@ -37,6 +37,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="voice">

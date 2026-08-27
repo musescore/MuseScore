@@ -2633,6 +2633,7 @@
         <direction>down</direction>
         <lineVisible>0</lineVisible>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <eid>NH_NH</eid>
         <track>0</track>
         </HairPin>
