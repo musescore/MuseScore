@@ -184,7 +184,7 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
     }
 
     std::string dialogText = muse::trc("project/save", "Log in or create a new account on Audio.com to share your music.");
-    Ret ret = audioComService()->authorization()->ensureAuthorization(false, dialogText).ret;
+    Ret ret = ensureAuthorization(muse::cloud::AUDIO_COM_CLOUD_CODE, false, dialogText).ret;
     if (!ret) {
         return ret;
     }
@@ -237,7 +237,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     std::string dialogText = isPublishShare
                              ? muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.")
                              : muse::trc("project/save", "Log in to MuseScore.com to publish this score.");
-    RetVal<Val> retVal = museScoreComService()->authorization()->ensureAuthorization(true, dialogText);
+    RetVal<Val> retVal = ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText);
     if (!retVal.ret) {
         return retVal.ret;
     }
@@ -527,6 +527,28 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
     }
 
     interactive()->warning(title, message);
+}
+
+muse::RetVal<Val> OpenSaveProjectScenario::ensureAuthorization(const QString& cloudeCode, bool publishingScore,
+                                                               const std::string& text) const
+{
+    IF_ASSERT_FAILED(cloudeCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE || cloudeCode == muse::cloud::AUDIO_COM_CLOUD_CODE) {
+        return muse::RetVal<Val>::make_ret(Err::UnknownError);
+    }
+
+    bool isMuseScoreCom = cloudeCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE;
+    bool userAuthorized = isMuseScoreCom ? museScoreComService()->authorization()->userAuthorized().val
+                          : audioComService()->authorization()->userAuthorized().val;
+
+    if (userAuthorized) {
+        return muse::make_ok();
+    }
+
+    UriQuery query("muse://cloud/requireauthorization");
+    query.addParam("text", Val(text));
+    query.addParam("cloudCode", Val(cloudeCode));
+    query.addParam("publishingScore", Val(publishingScore));
+    return interactive()->openSync(query);
 }
 
 Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublishShare,

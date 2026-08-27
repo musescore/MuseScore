@@ -65,6 +65,8 @@ public:
     muse::Ret showAudioCloudShareError(const muse::Ret& ret) const override;
 
 private:
+    muse::RetVal<muse::Val> ensureAuthorization(const QString& cloudeCode, bool publishingScore, const std::string& text) const;
+
     muse::RetVal<SaveLocationType> saveLocationType() const;
     muse::RetVal<SaveLocationType> askSaveLocationType() const;
 
