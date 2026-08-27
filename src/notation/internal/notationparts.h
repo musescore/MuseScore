@@ -141,6 +141,7 @@ private:
     void sortParts(const PartInstrumentList& parts);
 
     int countExistingInstruments(const InstrumentTemplate& instrument) const;
+    int resolveExistingInstrumentNumber(const muse::ID& partId, const InstrumentTemplate& instrument) const;
     int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 
     void setBracketsAndBarlines();
