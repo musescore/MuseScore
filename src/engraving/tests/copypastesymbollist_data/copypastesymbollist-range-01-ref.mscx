@@ -28,7 +28,7 @@
       <Staff>
         <eid>/JGCLp7p+7P_/JGCLp7p+7P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="violin">
@@ -81,7 +81,7 @@
       <Staff>
         <eid>BKGCLp7p+7P_BKGCLp7p+7P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="viola">

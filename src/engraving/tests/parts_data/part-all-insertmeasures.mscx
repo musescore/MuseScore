@@ -29,7 +29,7 @@
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="alto">
@@ -75,7 +75,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="tenor">
@@ -1112,7 +1112,7 @@
           <eid>6C_6C</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="alto">
@@ -1836,7 +1836,7 @@
           <eid>0E_0E</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="tenor">

@@ -261,7 +261,7 @@
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="alto">
@@ -301,7 +301,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="tenor">
