@@ -374,11 +374,15 @@ void Part::setInstruments(const InstrumentList& instruments)
 //   removeInstrument
 //---------------------------------------------------------
 
-void Part::removeInstrument(const Fraction& tick)
+void Part::removeInstrument(Instrument* instr, const Fraction& tick)
 {
     auto i = m_instruments.find(tick.ticks());
     if (i == m_instruments.end()) {
         LOGD("Part::removeInstrument: not found at tick %d", tick.ticks());
+        return;
+    }
+    if (i->second != instr) {
+        LOGD("Part::removeInstrument: item at tick %d (%p) != instr (%p)", tick.ticks(), i->second, instr);
         return;
     }
     m_instruments.erase(i);

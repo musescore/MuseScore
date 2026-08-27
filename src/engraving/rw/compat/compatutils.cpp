@@ -31,6 +31,7 @@
 #include "dom/factory.h"
 #include "dom/harmony.h"
 #include "dom/image.h"
+#include "dom/instrchange.h"
 #include "dom/key.h"
 #include "dom/keylist.h"
 #include "dom/laissezvib.h"
@@ -45,6 +46,7 @@
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/staff.h"
+#include "dom/staffstate.h"
 #include "dom/stafftext.h"
 #include "dom/stafftextbase.h"
 #include "dom/stem.h"
@@ -1140,12 +1142,39 @@ void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
     item->setProperty(Pid::OFFSET, offset);
 }
 
+static void reregisterInstrumentChanges(Score* score)
+{
+    /* When reading the <5.0 InstrumentChange MMRest copy, it has overwritten the Part's InstrumentList
+     * entry for this segment's tick. Deleting the copies unregistered their Instruments from the
+     * InstrumentList. So we need to restore the InstrumentList entries with the originals. */
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            for (EngravingItem* annotation : seg.annotations()) {
+                Instrument* instr = nullptr;
+                if (annotation->isInstrumentChange()) {
+                    instr = toInstrumentChange(annotation)->instrument();
+                } else if (annotation->isStaffState() && toStaffState(annotation)->staffStateType() == StaffStateType::INSTRUMENT) {
+                    instr = toStaffState(annotation)->instrument();
+                }
+                if (instr) {
+                    annotation->part()->setInstrument(instr, seg.tick());
+                }
+            }
+        }
+    }
+}
+
 void CompatUtils::removeMMRestElements(MasterScore* masterScore)
 {
     // <5.0 MMRests had copies of underlying elements. We now move the element when toggling the rests.
     // Remove redundant copies which are written to the file
 
     for (Score* score : masterScore->scoreList()) {
+        bool removedInstrumentChange = false;
+
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             if (!mb->isMeasure()) {
                 continue;
@@ -1169,6 +1198,9 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
             for (Segment& seg : mmrest->segments()) {
                 std::vector<EngravingItem*> annotations = seg.annotations();
                 for (EngravingItem* annotation : annotations) {
+                    removedInstrumentChange |= annotation->isInstrumentChange()
+                                               || (annotation->isStaffState()
+                                                   && toStaffState(annotation)->staffStateType() == StaffStateType::INSTRUMENT);
                     annotation->unlink();
                     score->removeElement(annotation);
                     delete annotation;
@@ -1187,6 +1219,9 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
                     delete el;
                 }
             }
+        }
+        if (removedInstrumentChange) {
+            reregisterInstrumentChanges(score);
         }
     }
 }
