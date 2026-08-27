@@ -35,7 +35,7 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/chord.h"
@@ -68,6 +68,8 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/utils.h"
+
+#include "engraving/editing/editstaffbrackets.h"
 
 #include "engraving/types/symnames.h"
 
@@ -340,7 +342,7 @@ void FinaleParser::importMeasures()
     const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     int lastDisplayNum = 0;
     for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
-        Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+        Measure* measure = Factory::createMeasure(m_score);
         Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
         measure->setTick(tick);
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
@@ -524,7 +526,7 @@ void FinaleParser::importBrackets()
         int groupSpan = int(groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
-        m_score->staff(startStaffIdx)->addBracket(bi);
+        EditStaffBrackets::addBracket(m_score, startStaffIdx, bi);
         if (bi->bracketType() == BracketType::BRACE) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
                 m_stavesWithPianoBraces.at(idx) = true;
@@ -1623,7 +1625,7 @@ void FinaleParser::importPageLayout()
             }
             MeasureBase* prev = afterBlank->prev();
             for (; blankPagesToAdd > 0; --blankPagesToAdd) {
-                VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                VBox* pageFrame = Factory::createVBox(m_score);
                 pageFrame->setTick(pageStartTick);
                 pageFrame->setNext(afterBlank);
                 pageFrame->setPrev(prev);
@@ -1639,7 +1641,7 @@ void FinaleParser::importPageLayout()
         }
     }
     for (; blankPagesToAdd > 0; --blankPagesToAdd) {
-        VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+        VBox* pageFrame = Factory::createVBox(m_score);
         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
         m_score->measures()->append(pageFrame);
         if (importCustomPositions()) {
@@ -1705,7 +1707,7 @@ void FinaleParser::importPageLayout()
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
                 m_score->style().set(Sid::firstSystemIndentationValue, Spatium::fromAbsolute(leftMargin, scoreSpatium));
             } else {
-                HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
+                HBox* leftBox = Factory::createHBox(m_score);
                 setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
                 leftBox->setBoxWidth(Spatium::fromAbsolute(leftMargin, defaultSpatium));
                 leftBox->setTick(startMeasure->tick());
@@ -1720,7 +1722,7 @@ void FinaleParser::importPageLayout()
         }
         MeasureBase* sysEnd = endMeasure;
         if (importCustomPositions() && !muse::RealIsNull(double(-rightStaffSystem->right))) {
-            HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
+            HBox* rightBox = Factory::createHBox(m_score);
             setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
             double rightMargin = evpuToSp(-rightStaffSystem->right) * pageSpatium;
             rightBox->setBoxWidth(Spatium::fromAbsolute(rightMargin, defaultSpatium));
@@ -1921,7 +1923,7 @@ void FinaleParser::rebaseSystemLeftMargins()
                 m_score->measures()->remove(leftBox, leftBox);
             }
         } else {
-            HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
+            HBox* leftBox = Factory::createHBox(m_score);
             leftBox->setBoxWidth(Spatium::fromAbsolute(-s->leftMargin(), leftBox->defaultSpatium()));
             setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
             leftBox->setTick(s->first()->tick());

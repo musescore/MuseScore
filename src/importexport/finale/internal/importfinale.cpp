@@ -116,7 +116,6 @@ static Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data,
 
         /// @todo see which are needed
         score->connectTies();
-        score->setUpTempoMap();
         static_cast<MasterScore*>(score)->invalidateRepeatList();
         score->setLayoutAll();
         return Err::NoError;

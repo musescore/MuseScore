@@ -60,6 +60,8 @@
 
 #include "engraving/editing/navigation.h"
 
+#include "engraving/rendering/iscorerenderer.h"
+
 #include "engraving/types/symnames.h"
 #include "engraving/types/types.h"
 #include "engraving/types/typesconv.h"
@@ -632,17 +634,11 @@ void FinaleParser::importSmartShapes()
                 delete newSpanner;
                 continue;
             }
-            if (smartShape->startNoteId && smartShape->endNoteId) {
-                newSpanner->setAnchor(Spanner::Anchor::NOTE);
-            } else {
-                newSpanner->setAnchor(Spanner::Anchor::CHORDREST);
-            }
             newSpanner->setTrack(startElement->track());
             newSpanner->setTrack2(endElement->track());
             newSpanner->setStartElement(startElement);
             newSpanner->setEndElement(endElement);
         } else {
-            newSpanner->setAnchor(Spanner::Anchor::SEGMENT);
             staff_idx_t staffIdx1 = muse::value(m_inst2Staff, smartShape->startTermSeg->endPoint->staffId, muse::nidx);
             staff_idx_t staffIdx2 = muse::value(m_inst2Staff, smartShape->endTermSeg->endPoint->staffId, muse::nidx);
             if (staffIdx1 == muse::nidx || staffIdx2 == muse::nidx) {
@@ -921,7 +917,7 @@ void FinaleParser::importSmartShapes()
 
         setAndStyleProperty(newSpanner, Pid::PLACEMENT, PlacementV::ABOVE, true); // for now
 
-        m_score->renderer()->layoutItem(newSpanner);
+        newSpanner->renderer()->layoutItem(newSpanner);
         logger()->logInfo(String(u"Repositioning %1 spanner segments...").arg(newSpanner->nsegments()));
 
         bool diagonal = !smartShape->makeHorz;
@@ -1150,7 +1146,7 @@ void FinaleParser::importVoltas()
         m_systemObjectStaves.insert(curStaffIdx);
 
         if (importCustomPositions()) {
-            volta->fixupSegments(1, [volta](System* parent) { return volta->createLineSegment(parent); });
+            volta->fixupSegments(1, [volta]() { return volta->createLineSegment(); });
             VoltaSegment* vs = toVoltaSegment(volta->frontSegment());
             vs->setSystem(measure->system());
 
@@ -1183,7 +1179,7 @@ void FinaleParser::importVoltas()
             copy->setStaffIdx(linkedStaffIdx);
 
             if (importCustomPositions()) {
-                copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
+                copy->fixupSegments(1, [copy]() { return copy->createLineSegment(); });
                 VoltaSegment* linkedVs = toVoltaSegment(copy->frontSegment());
                 linkedVs->setSystem(measure->system());
 
@@ -1290,7 +1286,7 @@ void FinaleParser::importVoltas()
         };
 
         if (importCustomPositions()) {
-            cur->fixupSegments(1, [cur](System* parent) { return cur->createLineSegment(parent); });
+            cur->fixupSegments(1, [cur]() { return cur->createLineSegment(); });
             VoltaSegment* vs = toVoltaSegment(cur->frontSegment());
             vs->setSystem(measure->system());
 
@@ -1352,7 +1348,7 @@ void FinaleParser::importVoltas()
                 continue;
             }
 
-            copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
+            copy->fixupSegments(1, [copy]() { return copy->createLineSegment(); });
             VoltaSegment* linkedVs = toVoltaSegment(copy->frontSegment());
             linkedVs->setSystem(measure->system());
 

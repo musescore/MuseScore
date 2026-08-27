@@ -67,6 +67,7 @@
 
 #include "engraving/editing/navigation.h"
 
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rendering/score/headerfooterlayout.h"
 #include "engraving/rendering/score/layoutcontext.h"
 #include "engraving/rendering/score/stemlayout.h"
@@ -853,7 +854,7 @@ void FinaleParser::importTextExpressions()
                 expr->setAutoplace(false);
                 setAndStyleProperty(expr, Pid::PLACEMENT, PlacementV::ABOVE);
                 setAndStyleProperty(expr, Pid::OFFSET, PointF());
-                m_score->renderer()->layoutItem(expr);
+                expr->renderer()->layoutItem(expr);
                 PointF p;
                 if (rTick == measure->ticks()) {
                     p.rx() = measure->findSegmentR(SegmentType::EndBarLine, measure->ticks())->pageX();
@@ -1437,7 +1438,7 @@ void FinaleParser::importJumps()
                 /// @note 'center' position centers over barline in MuseScore, over measure in Finale.
                 /// Like for text expressions, it's easiest to layout first and then subtract positions.
                 repeatMarking->setOffset(PointF());
-                m_score->renderer()->layoutItem(item);
+                item->renderer()->layoutItem(item);
                 point -= repeatMarking->pos();
                 if (repeatMarking->position() == AlignH::LEFT) {
                     double measureWidth = measure->width();
@@ -1817,7 +1818,7 @@ void FinaleParser::importPageTexts()
             AlignH hAlignment = toAlignH(useRightPagePositioning ? pageTextAssign->hPosRp : pageTextAssign->hPosLp);
             setAndStyleProperty(text, Pid::ALIGN, Align(hAlignment, toAlignV(pageTextAssign->vPos)), true);
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
-            text->score()->renderer()->layoutItem(text);
+            text->renderer()->layoutItem(text);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
             setAndStyleProperty(text, Pid::OFFSET, (mb->isBox() ? p : p - mb->pagePos()) - text->defaultPos());
             FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
@@ -1845,7 +1846,7 @@ void FinaleParser::importPageTexts()
                         return topBoxes.at(i);
                     }
 
-                    VBox* pageFrame = Factory::createVBox(m_score->dummy());
+                    VBox* pageFrame = Factory::createVBox(m_score);
                     System* system = page->systems().front();
                     double distToTopStaff = 0.0;
                     if (system) {
@@ -1894,7 +1895,7 @@ void FinaleParser::importPageTexts()
                         return bottomBoxes.at(i);
                     }
 
-                    VBox* pageFrame = Factory::createVBox(m_score->dummy());
+                    VBox* pageFrame = Factory::createVBox(m_score);
                     System* system = page->systems().back();
                     double distToBottomStaff = 0.0;
                     if (system) {

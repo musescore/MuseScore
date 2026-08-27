@@ -931,7 +931,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         }
     };
 
-    Beam* beam = Factory::createBeam(m_score->dummy()->system());
+    Beam* beam = Factory::createBeam(m_score);
     beam->setTrack(curTrackIdx);
     if (firstCr) {
         beam->add(firstCr);
@@ -984,7 +984,6 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
             }
         }
     }
-    beam->resetExplicitParent();
     return true;
 }
 
