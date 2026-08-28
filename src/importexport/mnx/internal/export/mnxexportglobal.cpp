@@ -22,7 +22,6 @@
 #include "mnxexporter.h"
 
 #include <optional>
-#include <cmath>
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/engravingitem.h"
@@ -261,7 +260,7 @@ static void createTempo(mnx::global::Measure& mnxMeasure, const TempoText* tempo
         return;
     }
 
-    auto mnxTempo = mnxMeasure.ensure_tempos().append(static_cast<int>(std::lround(bpm)), *noteValue);
+    auto mnxTempo = mnxMeasure.ensure_tempos().append(bpm, *noteValue);
     if (relTick.isNotZero()) {
         mnxTempo.ensure_location(location);
     }
