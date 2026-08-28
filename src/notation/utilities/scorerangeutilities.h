@@ -27,6 +27,7 @@
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
+class Box;
 class Score;
 class Segment;
 class System;
@@ -38,7 +39,8 @@ class ScoreRangeUtilities
 public:
     static std::vector<muse::RectF> boundingArea(
         const engraving::Score* score, const engraving::Segment* startSegment, const engraving::Segment* endSegment,
-        engraving::staff_idx_t startStaffIndex, engraving::staff_idx_t endStaffIndex);
+        engraving::staff_idx_t startStaffIndex, engraving::staff_idx_t endStaffIndex, const engraving::Box* startBox,
+        const engraving::Box* endBox);
 
 private:
     struct RangeSection {

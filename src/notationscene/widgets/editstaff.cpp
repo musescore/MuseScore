@@ -530,7 +530,7 @@ void EditStaff::initStaff()
         INotationSelectionPtr selection = interaction->selection();
         if (selection->isRange()) {
             INotationSelectionRangePtr range = selection->range();
-            element = range->measureRange().endMeasure;
+            element = range->measureBaseRange().endMeasureBase; // TODO: Check this
             staff = element->score()->staff(range->endStaffIndex() - 1);
         }
     }

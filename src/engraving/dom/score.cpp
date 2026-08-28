@@ -3098,22 +3098,10 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
     }
 
     if (m_selection.isRange()) {
-        // Extend existing range selection
-
-        Segment* startSegment = findElementStartSegment(this, e);
-        if (startSegment) {
-            Segment* endSegment = findElementEndSegment(this, e, m_selection.endSegment());
-            staff_idx_t elementStaffIdx = e->staffIdx();
-            if (endSegment && elementStaffIdx != muse::nidx) {
-                Fraction tick = startSegment->tick();
-                Fraction etick = endSegment->tick();
-
-                m_selection.extendRangeSelection(startSegment, endSegment, elementStaffIdx, tick, etick);
-                m_selection.updateSelectedElements();
-
-                m_selection.setActiveTrack(e->track());
-                return;
-            }
+        // Try to extend existing range selection to e
+        bool success = tryExtendRangeSelectionToElem(e);
+        if (success) {
+            return;
         }
     }
 
@@ -3171,6 +3159,7 @@ bool Score::trySelectSimilarInRange(EngravingItem* e)
         return false;
     }
 
+    // TODO: Investigate Box situation here...
     m_selection.setRange(s1, s2, idx1, idx2 + 1);
     selectSimilarInRange(e);
     if (selectedElement->track() == e->track()) {
@@ -3188,27 +3177,73 @@ bool Score::trySelectSimilarInRange(EngravingItem* e)
 
 bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx_t staffIdx)
 {
+    // TODO: Probably belongs in select.h/cpp?
+
     EngravingItem* selectedElement = m_selection.element();
     if (!selectedElement) {
         return false;
     }
 
-    Segment* startSegment = findElementStartSegment(this, selectedElement);
-    if (!startSegment) {
+    Segment* startSegment = nullptr;
+    Segment* endSegment = nullptr;
+
+    Box* selectedBox = selectedElement->isBox() ? toBox(selectedElement) : nullptr;
+    if (selectedBox && selectedBox->tick() >= endTick()) {
+        startSegment = lastSegment();
+    } else {
+        startSegment = findElementStartSegment(this, selectedElement);
+        endSegment = findElementEndSegment(this, selectedElement, startSegment);
+    }
+    if (!startSegment) { //! NOTE: endSegment is allowed to be null (meaning "extend to end of score")...
         return false;
     }
 
-    Segment* endSegment = findElementEndSegment(this, selectedElement, startSegment);
+    Box* newBox = newElement->isBox() ? toBox(newElement) : nullptr;
 
-    staff_idx_t startStaffIdx = selectedElement->staffIdx();
+    const staff_idx_t scoreNstaves = nstaves();
+    staff_idx_t startStaffIdx = muse::nidx;
+    staff_idx_t endStaffIdx = muse::nidx;
+
+    const auto expandStaveRangeToBox = [&startStaffIdx, &endStaffIdx, scoreNstaves](const Box* box) {
+        if (box->isVBoxBase()) {
+            if (scoreNstaves == 0) {
+                return;
+            }
+            startStaffIdx = 0;
+            endStaffIdx = scoreNstaves;
+            return;
+        }
+
+        const System* system = box->system();
+        if (!system) {
+            return;
+        }
+
+        const staff_idx_t firstVisible = system->firstVisibleStaff();
+        const staff_idx_t lastVisible = system->lastVisibleStaff();
+        if (firstVisible == muse::nidx || lastVisible == muse::nidx) {
+            return;
+        }
+
+        startStaffIdx = startStaffIdx == muse::nidx ? firstVisible : std::min(startStaffIdx, firstVisible);
+        endStaffIdx = endStaffIdx == muse::nidx ? lastVisible + 1 : std::max(endStaffIdx, lastVisible + 1);
+    };
+
+    if (selectedBox) {
+        expandStaveRangeToBox(selectedBox);
+    } else {
+        startStaffIdx = selectedElement->staffIdx();
+        endStaffIdx = startStaffIdx + 1;
+    }
+
     if (startStaffIdx == muse::nidx) {
         return false;
     }
 
-    staff_idx_t endStaffIdx = startStaffIdx + 1;
-
     track_idx_t activeTrack = newElement->track();
     bool activeSegmentIsStart = false;
+    bool extendedBackwards = false;
+    bool extendedForwards = false;
 
     if (newElement->isMeasure()) {
         Measure* m = toMeasure(newElement)->coveringMMRestOrThis();
@@ -3217,11 +3252,16 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
         if (tick < startSegment->tick()) {
             startSegment = m->first(SegmentType::ChordRest);
             activeSegmentIsStart = true;
+            extendedBackwards = true;
         }
         if (m == lastMeasureMM()) {
+            if (endSegment) {
+                extendedForwards = true;
+            }
             endSegment = nullptr;
         } else if (endSegment && tick + m->ticks() > endSegment->tick()) {
             endSegment = m->last();
+            extendedForwards = true;
         }
 
         startStaffIdx = std::min(startStaffIdx, staffIdx);
@@ -3233,27 +3273,88 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
         if (newStartSegment && newStartSegment->tick() < startSegment->tick()) {
             startSegment = newStartSegment;
             activeSegmentIsStart = true;
+            extendedBackwards = true;
         }
 
         Segment* newEndSegment = findElementEndSegment(this, newElement, newStartSegment);
         if (endSegment && (!newEndSegment || newEndSegment->tick() > endSegment->tick())) {
             endSegment = newEndSegment;
+            extendedForwards = true;
         }
 
         staff_idx_t newStaffIdx = newElement->staffIdx();
-        if (newStaffIdx != muse::nidx) {
+        if (newBox) {
+            expandStaveRangeToBox(newBox);
+        } else if (newStaffIdx != muse::nidx) {
             startStaffIdx = std::min(startStaffIdx, newStaffIdx);
             endStaffIdx = std::max(endStaffIdx, newStaffIdx + 1);
         }
     }
 
-    m_selection.setRange(startSegment, endSegment, startStaffIdx, endStaffIdx);
+    Box* startBox = extendedBackwards ? newBox : selectedBox;
+    Box* endBox = extendedForwards ? newBox : selectedBox;
+
+    m_selection.setRange(startSegment, endSegment, startStaffIdx, endStaffIdx, startBox, endBox);
     m_selection.updateSelectedElements();
 
     m_selection.setActiveTrack(activeTrack);
     m_selection.setActiveSegment(activeSegmentIsStart ? startSegment : endSegment);
 
     return true;
+}
+
+bool Score::tryExtendRangeSelectionToElem(EngravingItem* e)
+{
+    // TODO: Probably belongs in select.h/cpp?
+
+    Box* box = e->isBox() ? toBox(e) : nullptr;
+
+    Segment* elemStartSeg = nullptr;
+    Segment* elemEndSeg = nullptr;
+    if (box && box->tick() >= endTick()) {
+        elemStartSeg = lastSegment();
+    } else {
+        elemStartSeg = findElementStartSegment(this, e);
+        elemEndSeg = findElementEndSegment(this, e, m_selection.endSegment());
+    }
+
+    if (!elemStartSeg) { //! NOTE: elemEndSeg allowed to be null (meaning "extend to end of score")...
+        return false;
+    }
+
+    staff_idx_t elementStaffIdx = muse::nidx;
+
+    if (box) {
+        if (box->isVBoxBase()) {
+            if (nstaves() == 0) {
+                return false;
+            }
+            m_selection.setStaffStart(0);
+            elementStaffIdx = nstaves() - 1;
+        } else {
+            const System* system = box->system();
+            elementStaffIdx = system->lastVisibleStaff();
+            m_selection.setStaffStart(static_cast<int>(system->firstVisibleStaff()));
+        }
+    } else {
+        elementStaffIdx = e->staffIdx();
+    }
+
+    if (elementStaffIdx != muse::nidx) {
+        Fraction elemStartTick = elemStartSeg->tick();
+        Fraction elemEndTick = elemEndSeg ? elemEndSeg->tick() : endTick();
+
+        m_selection.extendRangeSelection(elemStartSeg, elemEndSeg,
+                                         elementStaffIdx,
+                                         elemStartTick, elemEndTick,
+                                         box);
+
+        m_selection.updateSelectedElements();
+        m_selection.setActiveTrack(e->track());
+        return true;
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -3686,7 +3787,10 @@ void Score::lassoSelectEnd()
         endSegment = endCR->nextSegmentAfterCR(SegmentType::ChordRest
                                                | SegmentType::EndBarLine
                                                | SegmentType::Clef);
+
+        // TODO: Investigate Box situation here...
         m_selection.setRange(startSegment, endSegment, startStaff, endStaff + 1);
+
         if (!m_selection.isRange()) {
             m_selection.setState(SelState::RANGE);
         }
@@ -3821,13 +3925,8 @@ void Score::cmdSelectAll()
         return;
     }
     deselectAll();
-    Measure* first = firstMeasureMM();
-    if (!first) {
-        return;
-    }
-    Measure* last = lastMeasureMM();
-    selectRange(first, 0);
-    selectRange(last, nstaves() - 1);
+    selectRange(firstMM(), 0);
+    selectRange(last(), nstaves() - 1);
     setUpdateAll();
     update();
 }
@@ -3868,7 +3967,9 @@ void Score::cmdSelectSection()
         return;
     }
 
+    // TODO: Investigate Box situation here...
     m_selection.setRange(toMeasure(sm)->first(), toMeasure(em)->last(), 0, nstaves());
+
     setUpdateAll();
     update();
 }

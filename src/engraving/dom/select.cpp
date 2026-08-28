@@ -35,6 +35,7 @@
 #include "arpeggio.h"
 #include "articulation.h"
 #include "beam.h"
+#include "box.h"
 #include "breath.h"
 #include "chord.h"
 #include "dynamic.h"
@@ -89,6 +90,8 @@ Selection::Selection(Score* s)
     m_state         = SelState::NONE;
     m_startSegment  = 0;
     m_endSegment    = 0;
+    m_startBox      = 0;
+    m_endBox        = 0;
     m_activeSegment = 0;
     m_staffStart    = 0;
     m_staffEnd      = 0;
@@ -373,6 +376,10 @@ MeasureBase* Selection::startMeasureBase() const
         }
     }
 
+    if (m_startBox) {
+        return m_startBox;
+    }
+
     if (tickStart().negative()) { // Tick is not set
         return nullptr;
     }
@@ -395,6 +402,10 @@ MeasureBase* Selection::endMeasureBase() const
         if (mb) {
             return mb;
         }
+    }
+
+    if (m_endBox) {
+        return m_endBox;
     }
 
     if (tickEnd().negative()) { // Tick is not set
@@ -493,6 +504,8 @@ void Selection::clear()
     m_el.clear();
     m_startSegment  = 0;
     m_endSegment    = 0;
+    m_startBox      = 0;
+    m_endBox        = 0;
     m_activeSegment = 0;
     m_staffStart    = 0;
     m_staffEnd      = 0;
@@ -714,9 +727,6 @@ void Selection::updateSelectedElements()
         return;
     }
     if (m_state == SelState::RANGE && m_plannedTick1 != Fraction(-1, 1) && m_plannedTick2 != Fraction(-1, 1)) {
-        const staff_idx_t staffStart = m_staffStart;
-        const staff_idx_t staffEnd = m_staffEnd;
-
         deselectAll();
 
         Segment* s1 = m_score->tick2segmentMM(m_plannedTick1);
@@ -742,7 +752,7 @@ void Selection::updateSelectedElements()
             }
         }
 
-        setRange(s1, s2, staffStart, staffEnd);
+        setRange(s1, s2, m_staffStart, m_staffEnd, m_startBox, m_endBox);
 
         m_plannedTick1 = Fraction(-1, 1);
         m_plannedTick2 = Fraction(-1, 1);
@@ -881,13 +891,58 @@ bool Selection::rangeContainsMultiNoteChords() const
     return m_rangeContainsMultiNoteChords;
 }
 
-void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd)
+void Selection::setStartSegment(Segment* s)
+{
+    m_startSegment = s;
+    validateBoxesAndSegments();
+}
+
+void Selection::setEndSegment(Segment* s)
+{
+    m_endSegment = s;
+    validateBoxesAndSegments();
+}
+
+void Selection::setStartBox(Box* box)
+{
+    m_startBox = box;
+    validateBoxesAndSegments();
+}
+
+void Selection::setEndBox(Box* box)
+{
+    m_endBox = box;
+    validateBoxesAndSegments();
+}
+
+void Selection::validateBoxesAndSegments()
+{
+    if (m_startBox) {
+        IF_ASSERT_FAILED(m_startSegment && m_startSegment->tick() == m_startBox->tick()) {
+            m_startBox = nullptr;
+        }
+    }
+
+    if (m_endBox) {
+        const Fraction endTick = m_endSegment ? m_endSegment->tick() : m_score->endTick();
+        IF_ASSERT_FAILED(endTick == m_endBox->tick()) {
+            m_endBox = nullptr;
+        }
+    }
+}
+
+void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd,
+                         Box* startBox, Box* endBox)
 {
     assert(staffEnd > staffStart && staffEnd <= m_score->nstaves());
     assert(!(endSegment && !startSegment));
 
-    m_startSegment  = startSegment;
+    m_startSegment = startSegment;
     m_endSegment = endSegment;
+    m_startBox = startBox;
+    m_endBox = endBox;
+    validateBoxesAndSegments();
+
     m_activeSegment = endSegment;
     m_staffStart = staffStart;
     m_staffEnd = staffEnd;
@@ -908,13 +963,16 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t
 //    creating MM rests is pending).
 //---------------------------------------------------------
 
-void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd)
+void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd,
+                              Box* startBox, Box* endBox)
 {
     assert(staffEnd > staffStart && staffEnd <= m_score->nstaves());
 
     m_plannedTick1 = tick1;
     m_plannedTick2 = tick2;
     m_startSegment = m_endSegment = m_activeSegment = nullptr;
+    m_startBox = startBox;
+    m_endBox = endBox;
     m_staffStart = staffStart;
     m_staffEnd = staffEnd;
     m_activeTrack = staff2track(staffStart);
@@ -1468,27 +1526,41 @@ bool Selection::canCopy() const
 }
 
 //---------------------------------------------------------
-//   measureRange
+//   measureBaseRange
 //    return false if no measure range selected
 //---------------------------------------------------------
 
-bool Selection::measureRange(Measure** m1, Measure** m2) const
+bool Selection::measureBaseRange(MeasureBase** mb1, MeasureBase** mb2) const
 {
     if (!isRange()) {
         return false;
     }
-    *m1 = startSegment()->measure();
+
+    if (m_startBox) {
+        *mb1 = m_startBox;
+    } else {
+        *mb1 = startSegment()->measure();
+    }
+
     Segment* s2 = endSegment();
-    *m2 = s2 ? s2->measure() : m_score->lastMeasure();
-    if (*m1 == *m2) {
+    if (m_endBox) {
+        *mb2 = m_endBox;
+    } else {
+        *mb2 = s2 ? s2->measure() : m_score->lastMeasure();
+    }
+
+    if (*mb1 == *mb2) {
         return true;
     }
+
     // if selection extends to last segment of a measure,
     // then endSegment() will point to next measure
     // this won't normally happen because end barlines are excluded from range selection
     // but just in case, detect this and back up one measure
-    if (*m2 && s2 && (*m2)->tick() == s2->tick()) {
-        *m2 = (*m2)->prevMeasure();
+    if (*mb2 && s2) {
+        if ((*mb2)->isMeasure() && (*mb2)->tick() == s2->tick()) {
+            *mb2 = (*mb2)->prevMeasure();
+        }
     }
     return true;
 }
@@ -1593,7 +1665,8 @@ void Selection::extendRangeSelection(ChordRest* cr)
 //    extending by a chord rest.
 //---------------------------------------------------------
 
-void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick)
+void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick,
+                                     const Fraction& etick, Box* box)
 {
     bool activeSegmentIsStart = false;
     staff_idx_t activeStaff = m_activeTrack / VOICES;
@@ -1610,19 +1683,31 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
         }
     }
 
-    if (tick < tickStart()) {
+    // start/end tick may not have changed, but we might have extended to a Box...
+    const bool newBoxAtStart = !m_startBox && box && box->tick() == tickStart();
+    const bool newBoxAtEnd = !m_endBox && box && box->tick() == tickEnd();
+
+    if (tick < tickStart() || newBoxAtStart) {
+        // Range extends backwards...
         m_startSegment = seg;
+        m_startBox = box;
         activeSegmentIsStart = true;
-    } else if (etick > tickEnd()) {
+    } else if (etick > tickEnd() || newBoxAtEnd) {
+        // Range extends forwards...
         m_endSegment = segAfter;
+        m_endBox = box;
     } else {
         if (m_activeSegment == m_startSegment) {
             m_startSegment = seg;
+            m_startBox = box;
             activeSegmentIsStart = true;
         } else {
             m_endSegment = segAfter;
+            m_endBox = box;
         }
     }
+    validateBoxesAndSegments();
+
     m_activeSegment = activeSegmentIsStart ? m_startSegment : m_endSegment;
     m_score->setSelectionChanged(true);
     assert(!(m_endSegment && !m_startSegment));

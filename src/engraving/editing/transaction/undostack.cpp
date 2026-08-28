@@ -36,6 +36,9 @@
 
 #include "containers.h"
 
+#include "dom/box.h"
+#include "dom/select.h"
+
 #include "editing/editproperty.h"
 #include "editing/editstyle.h"
 #include "editing/textedit.h"
@@ -334,6 +337,7 @@ bool UndoableTransaction::canRecordSelectedElement(const EngravingItem* e)
 void UndoableTransaction::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
 {
     info.staffStart = info.staffEnd = muse::nidx;
+    info.startBox = info.endBox = nullptr;
     info.elements.clear();
 
     if (sel.isList()) {
@@ -351,6 +355,8 @@ void UndoableTransaction::fillSelectionInfo(SelectionInfo& info, const Selection
         info.staffEnd = sel.staffEnd();
         info.tickStart = sel.tickStart();
         info.tickEnd = sel.tickEnd();
+        info.startBox = sel.startBox();
+        info.endBox = sel.endBox();
     }
 }
 
@@ -361,7 +367,7 @@ void UndoableTransaction::applySelectionInfo(const SelectionInfo& info, Selectio
             sel.add(e);
         }
     } else if (info.staffStart != muse::nidx) {
-        sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd);
+        sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd, info.startBox, info.endBox);
     }
 }
 

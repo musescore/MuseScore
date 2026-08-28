@@ -457,6 +457,11 @@ MeasureBase* Score::last()  const
     return m_measures.last();
 }
 
+std::vector<MeasureBase*> Score::measureBasesAtTick(const Fraction& tick) const
+{
+    return m_measures.measureBasesAtTick(tick.ticks());
+}
+
 //---------------------------------------------------------
 //   undoSetBreak
 //---------------------------------------------------------

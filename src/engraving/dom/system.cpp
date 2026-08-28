@@ -376,7 +376,7 @@ staff_idx_t System::nextVisibleStaff(staff_idx_t staffIdx) const
 
 staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
 {
-    if (startStaffIdx == 0) {
+    if (startStaffIdx == 0 || m_staves.empty()) {
         return muse::nidx;
     }
 
@@ -399,7 +399,7 @@ staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
 staff_idx_t System::lastVisibleStaff() const
 {
     size_t nstaves = score()->nstaves();
-    if (nstaves < 1) {
+    if (nstaves < 1 || m_staves.empty()) {
         return muse::nidx;
     }
 

@@ -22,6 +22,7 @@
 
 #include "scorerangeutilities.h"
 
+#include "engraving/dom/box.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/score.h"
@@ -32,15 +33,87 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
+const Box* getLeadingTrailingBox(const System* system, bool leading)
+{
+    IF_ASSERT_FAILED(system) {
+        return nullptr;
+    }
+    const MeasureBase* mb = leading ? system->first() : system->last();
+    return mb->isBox() ? toBox(mb) : nullptr;
+}
+
+static std::set<const System*> boxOnlySystems(const System* startSystem, const System* endSystem)
+{
+    std::set<const System*> result;
+    IF_ASSERT_FAILED(startSystem) {
+        return result;
+    }
+    const System* currSystem = startSystem;
+    while (currSystem) {
+        bool isBoxOnlySystem = true;
+        const MeasureBase* mb = currSystem->first();
+        while (mb && mb->system() == currSystem) {
+            if (!mb->isBox()) {
+                isBoxOnlySystem = false;
+                break;
+            }
+            mb = mb->nextMM();
+        }
+        if (isBoxOnlySystem) {
+            result.emplace(currSystem);
+        }
+        if (currSystem == endSystem) {
+            break;
+        }
+        const MeasureBase* firstInNext = currSystem->last() ? currSystem->last()->next() : nullptr;
+        currSystem = firstInNext ? firstInNext->system() : nullptr;
+    }
+    return result;
+}
+
 std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
                                                            const Segment* startSegment, const Segment* endSegment,
-                                                           staff_idx_t startStaffIndex, staff_idx_t endStaffIndex)
+                                                           staff_idx_t startStaffIndex, staff_idx_t endStaffIndex,
+                                                           const engraving::Box* startBox,
+                                                           const engraving::Box* endBox)
 {
-    if (!startSegment || !endSegment || startSegment->tick() > endSegment->tick()) {
+    if (!score || !startSegment || !endSegment || startSegment->tick() > endSegment->tick()) {
         return {};
     }
 
     std::vector<RectF> result;
+
+    // Collect and add systems consisting solely of boxes...
+    const System* startSystem = startBox ? startBox->system() : startSegment->system();
+    const System* endSystem = endBox ? endBox->system() : endSegment->system();
+    const std::set<const System*> boxSystems = boxOnlySystems(startSystem, endSystem);
+    for (const System* boxSys : boxSystems) {
+        RectF startRect = boxSys->first()->canvasBoundingRect();
+        const RectF& endRect = boxSys->last()->canvasBoundingRect();
+        result.push_back(startRect.unite(endRect));
+    }
+
+    // Handle start/EndBoxes that exist on a different system to the start/end segment...
+    if (startBox && startBox->system() != startSegment->system() && boxSystems.find(startSegment->system()) != boxSystems.end()) {
+        // TODO: This doesn't quite work correctly...
+        RectF startRect = startBox->canvasBoundingRect();
+        const MeasureBase* mb = startBox->nextMM();
+        while (mb && mb->system() == startBox->system() && mb->isBox()) {
+            startRect.unite(mb->canvasBoundingRect());
+            mb = mb->nextMM();
+        }
+        result.push_back(startRect);
+    }
+    if (endBox && endSegment->system() != endSegment->system() && boxSystems.find(endSegment->system()) != boxSystems.end()) {
+        // TODO: This doesn't quite work correctly...
+        RectF endRect = endBox->canvasBoundingRect();
+        const MeasureBase* mb = endBox->prevMM();
+        while (mb && mb->system() == startBox->system() && mb->isBox()) {
+            endRect.unite(mb->canvasBoundingRect());
+            mb = mb->prevMM();
+        }
+        result.push_back(endRect);
+    }
 
     const std::vector<RangeSection> sections = splitRangeBySections(startSegment, endSegment);
 
@@ -50,6 +123,16 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
         if (firstStaff == muse::nidx || lastStaff == muse::nidx) {
             continue;
         }
+
+        // If the range starts before this system, we'll visually include all of the leading boxes for this system - otherwise
+        // we'll visually include startBox (if any) and all leading boxes after it...
+        const bool rangeStartsBefore = startSegment->system() != section.system && (!startBox || startBox->system() != section.system);
+        const Box* sectionStartBox = rangeStartsBefore ? getLeadingTrailingBox(section.system, /*leading*/ true) : startBox;
+
+        // // If the range ends after this system, we'll visually include all of the trailing boxes for this system - otherwise
+        // // we'll visually include endBox (if any) and all trailing before after it...
+        const bool rangeEndsAfter = endSegment->system() != section.system && (!endBox || endBox->system() != section.system);
+        const Box* sectionEndBox = rangeEndsAfter ? getLeadingTrailingBox(section.system, /*leading*/ false) : endBox;
 
         const SysStaff* segmentFirstStaff = section.system->staff(firstStaff);
         const SysStaff* segmentLastStaff = section.system->staff(lastStaff);
@@ -73,13 +156,25 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
             bottomY += 0.5 * diff;
         }
 
-        double x1 = section.startSegment->pagePos().x();
-        const double x2 = section.endSegment->pageBoundingRect().right();
+        double x1 = 0.0;
+        if (sectionStartBox) {
+            x1 = sectionStartBox->pageBoundingRect().left();
+        } else {
+            x1 = section.startSegment->pagePos().x();
+        }
+
+        double x2 = 0.0;
+        if (sectionEndBox) {
+            x2 = sectionEndBox->pageBoundingRect().right();
+        } else {
+            x2 = section.endSegment->pageBoundingRect().right();
+        }
+
         const int padding = 0.5 * scoreFirstStaff->spatium(startSegment->tick());
         const double y1 = topY + segmentFirstStaff->y() + section.startSegment->pagePos().y() - padding;
         const double y2 = bottomY + segmentLastStaff->y() + section.endSegment->pagePos().y() + padding;
 
-        if (section.startSegment->measure()->firstEnabled() == section.startSegment) {
+        if (!sectionStartBox && section.startSegment->measure()->firstEnabled() == section.startSegment) {
             x1 = section.startSegment->measure()->pagePos().x();
         }
 
