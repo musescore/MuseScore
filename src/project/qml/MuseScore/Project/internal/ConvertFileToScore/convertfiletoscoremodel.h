@@ -41,13 +41,19 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString guidelinesLinkText READ guidelinesLinkText CONSTANT)
     Q_PROPERTY(QString accountAvatarUrl READ accountAvatarUrl CONSTANT)
-    Q_PROPERTY(QString audioComUrl READ audioComUrl CONSTANT)
+    Q_PROPERTY(QString guidelinesLinkText READ guidelinesLinkText CONSTANT)
+
+    Q_PROPERTY(int convertType READ convertType NOTIFY convertTypeChanged)
+    Q_PROPERTY(QStringList selectedPaths READ selectedPaths WRITE setSelectedPaths NOTIFY selectedPathsChanged)
+    Q_PROPERTY(QString selectedLink READ selectedLink WRITE setSelectedLink NOTIFY selectedLinkChanged)
 
     Q_PROPERTY(QVariantList fileRequirements READ fileRequirements CONSTANT)
+    Q_PROPERTY(QVariantMap convertLimits READ convertLimits NOTIFY convertTypeChanged)
+    Q_PROPERTY(QString combinedFilesNote READ combinedFilesNote NOTIFY convertTypeChanged)
+    Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY convertTypeChanged)
 
-    Q_PROPERTY(QString linkPasteText READ linkPasteText CONSTANT)
+    Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
     Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
 
     QML_ELEMENT
@@ -61,24 +67,45 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
 public:
     explicit ConvertFileToScoreModel(QObject* parent = nullptr);
 
-    QString guidelinesLinkText() const;
     QString accountAvatarUrl() const;
-    QString audioComUrl() const;
+    QString guidelinesLinkText() const;
+
+    int convertType() const; // OMR = 0, Audio2Score = 1
+
+    QStringList selectedPaths() const;
+    void setSelectedPaths(const QStringList& paths);
+
+    QString selectedLink() const;
+    void setSelectedLink(const QString& link);
 
     QVariantList fileRequirements() const;
+    QVariantMap convertLimits() const;
+    QString combinedFilesNote() const;
+    bool canSelectMultipleFiles() const;
 
-    QString linkPasteText() const;
+    QString linkHintText() const;
     int maxLinkLength() const;
 
-    Q_INVOKABLE bool canSelectMultipleFiles(int type, const QStringList& paths) const;
-
-    Q_INVOKABLE QStringList selectFiles(const QStringList& existingPaths = {});
     Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
+    Q_INVOKABLE void selectAndValidateFiles(const QStringList& existingPaths = {});
 
     Q_INVOKABLE void confirmGoingBack();
 
 signals:
-    void validationFinished(int type, QVariantList paths);
+    void convertTypeChanged();
+    void selectedPathsChanged();
+    void selectedLinkChanged();
+
+    void validationFinished();
     void goingBackConfirmed();
+
+private:
+    void setConvertType(int type);
+
+    QStringList selectFiles(const QStringList& existingPaths = {});
+
+    ConvertType m_convertType = ConvertType::Omr;
+    QStringList m_selectedPaths;
+    QString m_selectedLink;
 };
 }

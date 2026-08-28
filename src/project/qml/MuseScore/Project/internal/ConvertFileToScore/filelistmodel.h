@@ -25,15 +25,22 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
-#include "ui/view/iconcodes.h"
-
 namespace mu::project {
 class FileListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
-    Q_PROPERTY(int fileIconCode READ fileIconCode NOTIFY countChanged)
+    Q_PROPERTY(QStringList paths READ paths WRITE setPaths NOTIFY pathsChanged)
+    Q_PROPERTY(int count READ rowCount NOTIFY pathsChanged)
+    Q_PROPERTY(int fileIconCode READ fileIconCode NOTIFY pathsChanged)
+
+    Q_PROPERTY(QVariantMap convertLimits READ convertLimits WRITE setConvertLimits NOTIFY convertLimitsChanged)
+    Q_PROPERTY(int maxFileCount READ maxFileCount NOTIFY convertLimitsChanged)
+
+    Q_PROPERTY(QString usedSizeString READ usedSizeString NOTIFY usedSizeStringChanged)
+    Q_PROPERTY(bool exceedsLimits READ exceedsLimits NOTIFY exceedsLimitsChanged)
+
+    Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY pathsChanged)
 
     QML_ELEMENT
 
@@ -44,19 +51,30 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    QStringList paths() const;
+    void setPaths(const QStringList& paths);
+
+    QString defaultSaveAsName() const;
     int fileIconCode() const;
 
-    Q_INVOKABLE void setPaths(const QStringList& paths);
+    QVariantMap convertLimits() const;
+    void setConvertLimits(const QVariantMap& limits);
+
+    int maxFileCount() const;
+    QString usedSizeString() const;
+    bool exceedsLimits() const;
+
     Q_INVOKABLE void removeAt(int index);
     Q_INVOKABLE void move(int from, int to);
 
-    Q_INVOKABLE QStringList paths() const;
-    Q_INVOKABLE QString defaultSaveAsName() const;
     Q_INVOKABLE QString fileName(int index) const;
     Q_INVOKABLE QString validateFileName(const QString& name) const;
 
 signals:
-    void countChanged();
+    void pathsChanged();
+    void convertLimitsChanged();
+    void exceedsLimitsChanged();
+    void usedSizeStringChanged();
 
 private:
     enum Roles {
@@ -64,6 +82,16 @@ private:
         FileNameRole
     };
 
+    qint64 maxCombinedSizeBytes() const;
+
+    void updateTotalSizeBytes();
+    void updateExceedsLimits();
+    void updateUsedSizeString();
+
     QStringList m_paths;
+    QVariantMap m_convertLimits;
+    bool m_exceedsLimits = false;
+    qint64 m_totalSizeBytes = 0;
+    QString m_usedSizeString;
 };
 }

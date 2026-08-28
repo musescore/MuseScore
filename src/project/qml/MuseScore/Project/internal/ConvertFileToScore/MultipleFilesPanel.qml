@@ -32,6 +32,7 @@ Rectangle {
     property NavigationPanel navigationPanel: null
     property var filesModel: null
     property var fileRequirements: []
+    property alias combinedFilesNote: combinedFilesNoteLabel.text
 
     signal selectMoreFilesRequested(var existingPaths)
 
@@ -173,11 +174,25 @@ Rectangle {
             Layout.fillWidth: true
             spacing: 12
 
-            FileRequirements {
-                fileRequirements: root.fileRequirements
+            ColumnLayout {
+                spacing: 2
 
-                navigation.panel: root.navigationPanel
-                navigation.order: 1
+                StyledTextLabel {
+                    id: usedSizeLabel
+
+                    visible: Boolean(usedSizeLabel.text)
+
+                    text: root.filesModel.usedSizeString
+                    horizontalAlignment: Text.AlignLeft
+                    color: ui.theme.fontSecondaryColor
+                }
+
+                FileRequirements {
+                    fileRequirements: root.fileRequirements
+
+                    navigation.panel: root.navigationPanel
+                    navigation.order: 1
+                }
             }
 
             Item {
@@ -217,14 +232,27 @@ Rectangle {
                     text: qsTrc("global", "Select more")
                     accentButton: true
 
+                    enabled: root.filesModel.maxFileCount <= 0 || root.filesModel.count < root.filesModel.maxFileCount
+
                     navigation.panel: root.navigationPanel
                     navigation.order: 4
 
                     onClicked: {
-                        root.selectMoreFilesRequested(root.filesModel.paths())
+                        root.selectMoreFilesRequested(root.filesModel.paths)
                     }
                 }
             }
+        }
+
+        StyledTextLabel {
+            id: combinedFilesNoteLabel
+
+            Layout.fillWidth: true
+            Layout.topMargin: 3
+
+            visible: Boolean(combinedFilesNoteLabel.text)
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
         }
     }
 }

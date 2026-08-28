@@ -26,6 +26,9 @@
 
 #include "project/types/projecttypes.h"
 
+#include "ui/view/iconcodes.h"
+
+#include "global/dataformatter.h"
 #include "global/io/path.h"
 #include "global/translation.h"
 
@@ -76,6 +79,36 @@ QHash<int, QByteArray> FileListModel::roleNames() const
     return roles;
 }
 
+QStringList FileListModel::paths() const
+{
+    return m_paths;
+}
+
+void FileListModel::setPaths(const QStringList& paths)
+{
+    if (paths == m_paths) {
+        return;
+    }
+
+    beginResetModel();
+    m_paths = paths;
+    endResetModel();
+
+    emit pathsChanged();
+    updateTotalSizeBytes();
+    updateExceedsLimits();
+    updateUsedSizeString();
+}
+
+QString FileListModel::defaultSaveAsName() const
+{
+    if (m_paths.isEmpty()) {
+        return QString();
+    }
+
+    return QFileInfo(m_paths.first()).completeBaseName();
+}
+
 int FileListModel::fileIconCode() const
 {
     if (m_paths.isEmpty()) {
@@ -95,13 +128,41 @@ int FileListModel::fileIconCode() const
     return int(IconCode::Code::NEW_FILE);
 }
 
-void FileListModel::setPaths(const QStringList& paths)
+QVariantMap FileListModel::convertLimits() const
 {
-    beginResetModel();
-    m_paths = paths;
-    endResetModel();
+    return m_convertLimits;
+}
 
-    emit countChanged();
+void FileListModel::setConvertLimits(const QVariantMap& limits)
+{
+    if (m_convertLimits == limits) {
+        return;
+    }
+
+    m_convertLimits = limits;
+    emit convertLimitsChanged();
+    updateExceedsLimits();
+    updateUsedSizeString();
+}
+
+int FileListModel::maxFileCount() const
+{
+    return m_convertLimits.value("maxFileCount", 0).toInt();
+}
+
+qint64 FileListModel::maxCombinedSizeBytes() const
+{
+    return m_convertLimits.value("maxCombinedSizeBytes", 0).toLongLong();
+}
+
+QString FileListModel::usedSizeString() const
+{
+    return m_usedSizeString;
+}
+
+bool FileListModel::exceedsLimits() const
+{
+    return m_exceedsLimits;
 }
 
 void FileListModel::removeAt(int index)
@@ -114,7 +175,10 @@ void FileListModel::removeAt(int index)
     m_paths.removeAt(index);
     endRemoveRows();
 
-    emit countChanged();
+    emit pathsChanged();
+    updateTotalSizeBytes();
+    updateExceedsLimits();
+    updateUsedSizeString();
 }
 
 void FileListModel::move(int from, int to)
@@ -127,20 +191,8 @@ void FileListModel::move(int from, int to)
     beginMoveRows(QModelIndex(), from, from, QModelIndex(), destination);
     m_paths.move(from, to);
     endMoveRows();
-}
 
-QStringList FileListModel::paths() const
-{
-    return m_paths;
-}
-
-QString FileListModel::defaultSaveAsName() const
-{
-    if (m_paths.isEmpty()) {
-        return QString();
-    }
-
-    return QFileInfo(m_paths.first()).completeBaseName();
+    emit pathsChanged();
 }
 
 QString FileListModel::fileName(int index) const
@@ -163,4 +215,55 @@ QString FileListModel::validateFileName(const QString& name) const
     }
 
     return QString();
+}
+
+void FileListModel::updateTotalSizeBytes()
+{
+    m_totalSizeBytes = 0;
+    for (const QString& path : m_paths) {
+        m_totalSizeBytes += QFileInfo(path).size();
+    }
+}
+
+void FileListModel::updateExceedsLimits()
+{
+    bool exceeds = false;
+
+    const int maxCount = maxFileCount();
+    if (maxCount > 0 && m_paths.size() > maxCount) {
+        exceeds = true;
+    }
+
+    if (!exceeds) {
+        const qint64 maxBytes = maxCombinedSizeBytes();
+        if (maxBytes > 0 && m_totalSizeBytes > maxBytes) {
+            exceeds = true;
+        }
+    }
+
+    if (m_exceedsLimits == exceeds) {
+        return;
+    }
+
+    m_exceedsLimits = exceeds;
+    emit exceedsLimitsChanged();
+}
+
+void FileListModel::updateUsedSizeString()
+{
+    const qint64 maxBytes = maxCombinedSizeBytes();
+
+    QString sizeString;
+    if (maxBytes > 0) {
+        const QString totalSize = muse::DataFormatter::formatFileSize(size_t(m_totalSizeBytes));
+        const QString maxSize = muse::DataFormatter::formatFileSize(size_t(maxBytes));
+        sizeString = muse::qtrc("project/convert", "%1/%2 used").arg(totalSize, maxSize);
+    }
+
+    if (m_usedSizeString == sizeString) {
+        return;
+    }
+
+    m_usedSizeString = sizeString;
+    emit usedSizeStringChanged();
 }

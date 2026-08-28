@@ -81,7 +81,7 @@ void ConvertFileToScoreService::init()
 
     //! TODO: remove once the config is reliably available; fills in dummy data for local testing
     if (m_config.omr.allowedExtensions.isEmpty()) {
-        m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "tiff" };
+        m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "jpeg" };
         m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
         m_config.omr.maxPages = 50;
         m_config.omr.maxImages = 15;

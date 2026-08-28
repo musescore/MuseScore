@@ -221,6 +221,8 @@ bool ConvertFileToScoreScenario::validateAgainstConfig(ConvertType type, const i
         return false;
     }
 
+    qint64 totalSizeBytes = 0;
+
     for (const io::path_t& path : paths) {
         QFileInfo info(path.toQString());
 
@@ -230,10 +232,14 @@ bool ConvertFileToScoreScenario::validateAgainstConfig(ConvertType type, const i
             return false;
         }
 
-        if (config.omr.maxFileSizeBytes > 0 && info.size() > config.omr.maxFileSizeBytes) {
-            showFileTooLargeError(config.omr.maxFileSizeBytes);
-            return false;
-        }
+        totalSizeBytes += info.size();
+    }
+
+    //! NOTE: maxFileSizeBytes is a combined budget across all selected images
+    //! (or the single file's own size, for a PDF)
+    if (config.omr.maxFileSizeBytes > 0 && totalSizeBytes > config.omr.maxFileSizeBytes) {
+        showFileTooLargeError(config.omr.maxFileSizeBytes);
+        return false;
     }
 
     return true;

@@ -77,6 +77,11 @@ static QString maxCombinedFileSizeText(qint64 maxFileSizeBytes)
     return muse::qtrc("project/convert", "%1 max combined").arg(size);
 }
 
+static QString combinedImagesNoteText()
+{
+    return muse::qtrc("project/convert", "Images will be combined into one score in the order you upload them");
+}
+
 static QVariantMap requirementsSection(const QString& title, const QStringList& items)
 {
     QVariantMap result;
@@ -124,20 +129,65 @@ ConvertFileToScoreModel::ConvertFileToScoreModel(QObject* parent)
 {
 }
 
+QString ConvertFileToScoreModel::accountAvatarUrl() const
+{
+    return museScoreComService()->authorization()->accountInfo().avatarUrl.toString();
+}
+
 QString ConvertFileToScoreModel::guidelinesLinkText() const
 {
     return "<a href=\"" + configuration()->scoreUploadingGuidelinesUrl().toString() + "\">"
            + muse::qtrc("project/convert", "Uploading guidelines") + "</a>";
 }
 
-QString ConvertFileToScoreModel::accountAvatarUrl() const
+int ConvertFileToScoreModel::convertType() const
 {
-    return museScoreComService()->authorization()->accountInfo().avatarUrl.toString();
+    return int(m_convertType);
 }
 
-QString ConvertFileToScoreModel::audioComUrl() const
+void ConvertFileToScoreModel::setConvertType(int type)
 {
-    return audioComService()->cloudInfo().url.toString();
+    if (m_convertType == ConvertType(type)) {
+        return;
+    }
+
+    m_convertType = ConvertType(type);
+    emit convertTypeChanged();
+}
+
+QStringList ConvertFileToScoreModel::selectedPaths() const
+{
+    return m_selectedPaths;
+}
+
+void ConvertFileToScoreModel::setSelectedPaths(const QStringList& paths)
+{
+    if (m_selectedPaths == paths) {
+        return;
+    }
+
+    m_selectedPaths = paths;
+    emit selectedPathsChanged();
+}
+
+QString ConvertFileToScoreModel::selectedLink() const
+{
+    return m_selectedLink;
+}
+
+void ConvertFileToScoreModel::setSelectedLink(const QString& link)
+{
+    if (m_selectedLink == link) {
+        return;
+    }
+
+    m_selectedLink = link;
+    emit selectedLinkChanged();
+
+    if (!link.isEmpty()) {
+        setConvertType(int(ConvertType::Audio2Score));
+        setSelectedPaths({});
+    }
 }
 
 QVariantList ConvertFileToScoreModel::fileRequirements() const
@@ -186,7 +236,7 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
     }
 
     if (!imageItems.isEmpty()) {
-        imageItems << muse::qtrc("project/convert", "Images will be combined into one score in the order you upload them");
+        imageItems << combinedImagesNoteText();
         result << requirementsSection(muse::qtrc("project/convert", "Images"), imageItems);
     }
 
@@ -213,10 +263,50 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
     return result;
 }
 
-QString ConvertFileToScoreModel::linkPasteText() const
+QVariantMap ConvertFileToScoreModel::convertLimits() const
+{
+    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+
+    QVariantMap result;
+
+    if (m_convertType == ConvertType::Audio2Score) {
+        result["maxFileCount"] = config.audio2score.maxFiles;
+        result["maxCombinedSizeBytes"] = config.audio2score.maxFileSizeBytes;
+    } else {
+        result["maxFileCount"] = config.omr.maxImages;
+        result["maxCombinedSizeBytes"] = config.omr.maxFileSizeBytes;
+    }
+
+    return result;
+}
+
+QString ConvertFileToScoreModel::combinedFilesNote() const
+{
+    if (m_convertType != ConvertType::Omr) {
+        return QString();
+    }
+
+    return combinedImagesNoteText();
+}
+
+bool ConvertFileToScoreModel::canSelectMultipleFiles() const
+{
+    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+
+    if (m_convertType == ConvertType::Audio2Score) {
+        return allowsMultipleFiles(config.audio2score.maxFiles);
+    }
+
+    if (containsPdf(m_selectedPaths)) {
+        return false;
+    }
+
+    return allowsMultipleFiles(config.omr.maxImages);
+}
+
+QString ConvertFileToScoreModel::linkHintText() const
 {
     const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
-
     if (a2s.allowedLinkSources.isEmpty()) {
         return QString();
     }
@@ -226,7 +316,8 @@ QString ConvertFileToScoreModel::linkPasteText() const
         if (source.compare("youtube", Qt::CaseInsensitive) == 0) {
             sources << "<b>Youtube</b>";
         } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
-            sources << "<b><a href=\"" + audioComUrl() + "\">Audio.com</a></b>";
+            const QString url = audioComService()->cloudInfo().url.toString();
+            sources << "<b><a href=\"" + url + "\">Audio.com</a></b>";
         } else {
             sources << "<b>" + source + "</b>";
         }
@@ -240,21 +331,6 @@ int ConvertFileToScoreModel::maxLinkLength() const
     return convertFileToScoreScenario()->convertConfig().audio2score.maxLinkLength;
 }
 
-bool ConvertFileToScoreModel::canSelectMultipleFiles(int type, const QStringList& paths) const
-{
-    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
-
-    if (ConvertType(type) == ConvertType::Audio2Score) {
-        return allowsMultipleFiles(config.audio2score.maxFiles);
-    }
-
-    if (containsPdf(paths)) {
-        return false;
-    }
-
-    return allowsMultipleFiles(config.omr.maxImages);
-}
-
 QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPaths)
 {
     const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
@@ -264,7 +340,7 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
                              : resolveExtensions(existingPaths);
 
     if (extensions.isEmpty()) {
-        extensions = { "pdf", "jpg", "jpeg", "png", "mp3" };
+        extensions = { "pdf", "jpg", "jpeg", "png", "mp3" }; // fallback
     }
 
     QStringList patterns;
@@ -306,7 +382,7 @@ void ConvertFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
     io::paths_t ioPaths;
     ioPaths.reserve(pathsOrUrls.size());
 
-    QVariantList normalizedPaths;
+    QStringList normalizedPaths;
     normalizedPaths.reserve(pathsOrUrls.size());
 
     for (const QString& pathOrUrl : pathsOrUrls) {
@@ -317,9 +393,21 @@ void ConvertFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
 
     convertFileToScoreScenario()->validate(ioPaths).onResolve(this, [this, normalizedPaths](const RetVal<ConvertType>& result) {
         if (result.ret) {
-            emit validationFinished(int(result.val), normalizedPaths);
+            setSelectedPaths(normalizedPaths);
+            setSelectedLink(QString());
+            setConvertType(int(result.val));
+
+            emit validationFinished();
         }
     });
+}
+
+void ConvertFileToScoreModel::selectAndValidateFiles(const QStringList& existingPaths)
+{
+    QStringList files = selectFiles(existingPaths);
+    if (!files.isEmpty()) {
+        validateFiles(existingPaths + files);
+    }
 }
 
 void ConvertFileToScoreModel::confirmGoingBack()

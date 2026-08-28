@@ -29,7 +29,7 @@ Item {
     id: root
 
     property alias guidelinesLinkText: guidelinesLabel.text
-    property string linkPasteText: ""
+    property string linkHintText: ""
     property int maxLinkLength: 0
 
     property var fileRequirements: []
@@ -175,7 +175,7 @@ Item {
         }
 
         Rectangle {
-            visible: Boolean(root.linkPasteText)
+            visible: Boolean(root.linkHintText)
 
             Layout.fillWidth: true
             Layout.topMargin: 2
@@ -197,7 +197,7 @@ Item {
                 StyledTextLabel {
                     width: parent.width
 
-                    text: root.linkPasteText
+                    text: root.linkHintText
                     font: ui.theme.bodyFont
                     horizontalAlignment: Text.AlignLeft
                 }

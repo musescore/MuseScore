@@ -31,8 +31,12 @@ Item {
 
     property var files: []
     property string link: ""
-    property bool canSelectMultipleFiles: true
+
+    property var convertLimits: ({})
     property var fileRequirements: []
+    property string combinedFilesNote: ""
+    property bool canSelectMultipleFiles: true
+
     property NavigationSection navigationSection: null
 
     readonly property string saveAsNameError: fileListModel.validateFileName(saveAsField.currentText)
@@ -48,16 +52,11 @@ Item {
         }
     }
 
-    onFilesChanged: {
-        var wasEmpty = fileListModel.count === 0
-        fileListModel.setPaths(root.files)
-        if (wasEmpty && fileListModel.count > 0) {
-            saveAsField.currentText = fileListModel.defaultSaveAsName()
-        }
-    }
-
     FileListModel {
         id: fileListModel
+
+        paths: root.files
+        convertLimits: root.convertLimits
 
         onCountChanged: {
             if (fileListModel.count === 0) {
@@ -104,6 +103,8 @@ Item {
 
             TextInputField {
                 id: saveAsField
+
+                currentText: fileListModel.defaultSaveAsName
 
                 navigation.panel: navPanel
                 navigation.order: 5
@@ -158,10 +159,10 @@ Item {
                 buttonId: ButtonBoxModel.CustomButton + 3
 
                 accentButton: true
-                enabled: Boolean(saveAsField.currentText) && !root.saveAsNameError
+                enabled: Boolean(saveAsField.currentText) && !root.saveAsNameError && !fileListModel.exceedsLimits
 
                 onClicked: {
-                    root.convertRequested(root.link ? [] : fileListModel.paths(), root.link, saveAsField.currentText)
+                    root.convertRequested(root.link ? [] : fileListModel.paths, root.link, saveAsField.currentText)
                 }
             }
         }
@@ -174,6 +175,7 @@ Item {
             navigationPanel: navPanel
             filesModel: fileListModel
             fileRequirements: root.fileRequirements
+            combinedFilesNote: root.combinedFilesNote
 
             onSelectMoreFilesRequested: function(existingPaths) {
                 root.selectMoreFilesRequested(existingPaths)
