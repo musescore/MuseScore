@@ -39,6 +39,7 @@ Item {
 
     readonly property int contentMargin: 8
     readonly property int hitPointsPanelMinWidth: 240
+    readonly property int hitPointsPanelMaxWidth: 420
     property int hitPointsPanelWidth: 260
     readonly property int timelineFrameRate: Math.max(1, Math.round(videoModel.frameRate))
     readonly property int timelineFrameCount: videoModel.hasVideo && video.duration > 0 ? Math.floor((video.duration / 1000) * root.timelineFrameRate) + 1 : 0
@@ -272,7 +273,6 @@ Item {
         id: contentSplitView
 
         anchors.fill: parent
-        anchors.margins: root.contentMargin
         orientation: Qt.Horizontal
 
         handle: Rectangle {
@@ -303,22 +303,17 @@ Item {
             ]
         }
 
-        ColumnLayout {
+        Item {
+            id: leftPane
+
             SplitView.fillWidth: true
             SplitView.fillHeight: true
-            spacing: 8
+            SplitView.minimumWidth: 320
 
-            RowLayout {
-                Layout.fillWidth: true
-
-                Item {
-                    Layout.fillWidth: true
-                }
-
-                StyledTextLabel {
-                    text: videoModel.hasVideo ? videoModel.formatTimecode(video.position) : ""
-                }
-            }
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: root.contentMargin
+                spacing: 8
 
             Rectangle {
                 id: previewSlot
@@ -332,6 +327,17 @@ Item {
                 border.width: ui.theme.borderWidth
                 border.color: ui.theme.strokeColor
                 clip: true
+
+                StyledTextLabel {
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.topMargin: 10
+                    visible: videoModel.hasVideo
+                    text: videoModel.formatTimecode(video.position)
+                    font.pixelSize: 20
+                    font.bold: true
+                    color: "#F0F0F0"
+                }
 
                 Item {
                     id: videoFrame
@@ -629,6 +635,7 @@ Item {
                     videoModel.videoPath = newPath
                 }
             }
+            }
         }
 
         VideoHitPointsPanel {
@@ -636,6 +643,7 @@ Item {
 
             SplitView.preferredWidth: root.hitPointsPanelWidth
             SplitView.minimumWidth: root.hitPointsPanelMinWidth
+            SplitView.maximumWidth: root.hitPointsPanelMaxWidth
             SplitView.fillHeight: true
 
             videoModel: videoModel

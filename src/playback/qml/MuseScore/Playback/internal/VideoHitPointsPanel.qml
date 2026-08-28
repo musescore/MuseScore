@@ -62,8 +62,17 @@ ExpandableBlank {
         }
     }
 
-    contentItemComponent: ColumnLayout {
+    contentItemComponent: Item {
         width: root.width
+        implicitHeight: innerColumn.implicitHeight + 16
+
+        ColumnLayout {
+        id: innerColumn
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 8
         spacing: 8
 
         StyledTabBar {
@@ -303,6 +312,7 @@ ExpandableBlank {
                     Layout.fillHeight: true
                 }
             }
+        }
         }
     }
 }

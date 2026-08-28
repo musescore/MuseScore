@@ -47,8 +47,8 @@ static const Settings::Key SOUND_PRESETS_MULTI_SELECTION_KEY(moduleName, "applic
 
 static const Settings::Key VIDEO_HIT_POINTS_PANEL_WIDTH_KEY(moduleName, "playback/video/hitPointsPanelWidth");
 static constexpr int VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH = 260;
-static constexpr int VIDEO_HIT_POINTS_PANEL_MIN_WIDTH = 180;
-static constexpr int VIDEO_HIT_POINTS_PANEL_MAX_WIDTH = 600;
+static constexpr int VIDEO_HIT_POINTS_PANEL_MIN_WIDTH = 240;
+static constexpr int VIDEO_HIT_POINTS_PANEL_MAX_WIDTH = 420;
 
 static const Settings::Key MIXER_LABELS_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/labelsSectionVisible");
 static const Settings::Key MIXER_SOUND_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/soundSectionVisible");
