@@ -759,7 +759,7 @@ void Segment::add(EngravingItem* el)
 
     case ElementType::HARP_DIAGRAM:
         // already a diagram in this segment
-        if (el->part()->harpDiagrams.count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
+        if (el->part()->harpDiagrams().count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
             break;
         }
         el->part()->addHarpDiagram(toHarpPedalDiagram(el));
