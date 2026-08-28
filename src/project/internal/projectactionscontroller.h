@@ -99,9 +99,6 @@ public:
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
 
-    const ProjectBeingDownloaded& projectBeingDownloaded() const override;
-    muse::async::Notification projectBeingDownloadedChanged() const override;
-
 private:
     void setupConnections();
 

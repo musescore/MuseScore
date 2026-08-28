@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iprojectfilescontroller.h"
+#include "internal/iopenprojectscenario.h"
 
 namespace mu::project {
 class CloudScoreStatusWatcher : public QObject, public muse::async::Asyncable, public muse::Contextable
@@ -43,7 +43,8 @@ class CloudScoreStatusWatcher : public QObject, public muse::async::Asyncable, p
 
     QML_ELEMENT
 
-    muse::ContextInject<IProjectFilesController> projectFilesController = { this };
+    muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
+
 public:
     explicit CloudScoreStatusWatcher(QObject* parent = nullptr);
 

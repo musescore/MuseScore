@@ -32,21 +32,16 @@
 #include <qobject.h>
 
 #include "async/async.h"
-#include "async/processevents.h"
 #include "defer.h"
 #include "rcommand/commandtypes.h"
 #include "translation.h"
 
-#include "cloud/clouderrors.h"
-#include "cloud/qml/Muse/Cloud/enums.h"
 #include "engraving/infrastructure/mscio.h"
-#include "engraving/engravingerrors.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 
-#include "projecterrors.h"
 #include "inotationproject.h"
 
 #include "../projectcommands.h"
@@ -69,9 +64,6 @@ static const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress"
 
 static const QString MUSESCORE_URL_SCHEME("musescore");
 static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
-
-static constexpr int RETRY_SAVE_BTN_ID = int(IInteractive::Button::CustomButton);
-static constexpr int SAVE_AS_BTN_ID    = RETRY_SAVE_BTN_ID + 1;
 
 auto openArgs = [](const rcommand::Command& command, const ActionData& args) -> muse::rcommand::CommandQuery {
     rcommand::CommandQuery query(command);
@@ -324,16 +316,6 @@ muse::Ret ProjectActionsController::openProject(const muse::io::path_t& path, co
 muse::Ret ProjectActionsController::openProject(const muse::rcommand::Params& params)
 {
     return openProjectScenario()->openProject(params);
-}
-
-const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const
-{
-    return openProjectScenario()->projectBeingDownloaded();
-}
-
-muse::async::Notification ProjectActionsController::projectBeingDownloadedChanged() const
-{
-    return openProjectScenario()->projectBeingDownloadedChanged();
 }
 
 bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath) const
