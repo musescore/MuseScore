@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <array>
 #include <memory>
-#include <optional>
 #include <regex>
 #include <string>
 #include <string_view>
@@ -36,7 +35,6 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/engravingerrors.h"
-#include "engraving/types/typesconv.h"
 #include "framework/global/modularity/ioc.h"
 #include "logger.h"
 #include "importexport/mnx/imnxconfiguration.h"
@@ -44,9 +42,7 @@
 
 #include "engraving/tests/utils/scorerw.h"
 #include "importexport/mnx/internal/notationmnxreader.h"
-#include "importexport/mnx/internal/import/mnximporter.h"
-#include "importexport/mnx/internal/export/mnxexporter.h"
-#include "importexport/mnx/internal/shared/mnxtypesconv.h"
+#include "mnxtestutils.h"
 
 #include "io/dir.h"
 #include "io/buffer.h"
@@ -60,12 +56,6 @@
 #include "types/bytearray.h"
 #include "types/ret.h"
 #include "engraving/rw/rwregister.h"
-
-#ifdef MNXDOM_SYSTEM
-#include <mnxdom/mnxdom.h>
-#else
-#include "mnxdom.h"
-#endif
 
 using namespace mu::engraving;
 using namespace mu::iex::mnxio;
@@ -268,8 +258,6 @@ class Mnx_Tests : public ::testing::Test
 {
 public:
     MasterScore* readMnxScore(const String& fileName, bool isAbsolutePath = false);
-    std::string exportMnxJson(Score* score);
-    MasterScore* importMnxFromJson(const std::string& json, const String& virtualPath);
     MasterScore* roundTripMnxScore(Score* sourceScore, const String& exportedFile);
 
     bool compareWithMscxReference(Score* score, const String& referencePath, const char* testName = nullptr,
@@ -278,16 +266,6 @@ public:
     void runProjectFileTest(const char* name);
     void runW3cExampleTest(const char* name);
 };
-
-//---------------------------------------------------------
-//   fixupScore -- do required fixups after reading/importing score
-//---------------------------------------------------------
-
-static void fixupScore(MasterScore* score)
-{
-    score->connectTies();
-    score->masterScore()->rebuildMidiMapping();
-}
 
 MasterScore* Mnx_Tests::readMnxScore(const String& fileName, bool isAbsolutePath)
 {
@@ -318,48 +296,6 @@ MasterScore* Mnx_Tests::readMnxScore(const String& fileName, bool isAbsolutePath
     return score;
 }
 
-std::string Mnx_Tests::exportMnxJson(Score* score)
-{
-    auto mnxConfiguration = muse::modularity::globalIoc()->resolve<mu::iex::mnxio::IMnxConfiguration>("iex_mnx");
-    const bool exportBeams = mnxConfiguration ? mnxConfiguration->mnxExportBeams() : true;
-    const bool exportRestPositions = mnxConfiguration ? mnxConfiguration->mnxExportRestPositions() : false;
-    LOGI() << "MNX export initiated; exportBeams=" << (exportBeams ? "true" : "false")
-           << " exportRestPositions=" << (exportRestPositions ? "true" : "false");
-    MnxExporter exporter(score, exportBeams, exportRestPositions);
-    Ret ret = exporter.exportMnx();
-    if (!ret.success()) {
-        return {};
-    }
-
-    return exporter.mnxDocument().root()->dump(2);
-}
-
-MasterScore* Mnx_Tests::importMnxFromJson(const std::string& json, const String& virtualPath)
-{
-    auto score = std::unique_ptr<MasterScore>(
-        compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr));
-    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(muse::io::path_t(virtualPath)));
-
-    try {
-        auto doc = mnx::Document::create(json.data(), json.size());
-        if (!mnx::validation::schemaValidate(doc)) {
-            ADD_FAILURE() << "Roundtrip MNX is not valid: " << virtualPath.toStdString();
-            return nullptr;
-        }
-        if (doc.global().measures().empty()) {
-            ADD_FAILURE() << "Roundtrip MNX contains no measures: " << virtualPath.toStdString();
-            return nullptr;
-        }
-        MnxImporter importer(score.get(), std::move(doc));
-        importer.importMnx();
-    } catch (const std::exception& ex) {
-        ADD_FAILURE() << "Roundtrip MNX failed to parse: " << ex.what();
-        return nullptr;
-    }
-
-    return score.release();
-}
-
 MasterScore* Mnx_Tests::roundTripMnxScore(Score* sourceScore, const String& exportedFile)
 {
     if (!sourceScore) {
@@ -373,10 +309,7 @@ MasterScore* Mnx_Tests::roundTripMnxScore(Score* sourceScore, const String& expo
 
     MasterScore* roundTrip = importMnxFromJson(json, exportedFile);
     if (roundTrip) {
-        roundTrip->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
-            fixupScore(roundTrip);
-            roundTrip->doLayout();
-        });
+        fixupAndLayoutScore(roundTrip);
     }
 
     return roundTrip;
@@ -564,10 +497,7 @@ std::unique_ptr<MasterScore> Mnx_Tests::importReferenceExample(const String& bas
         return nullptr;
     }
 
-    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
-        fixupScore(score.get());
-        score->doLayout();
-    });
+    fixupAndLayoutScore(score.get());
 
     return score;
 }
@@ -585,10 +515,7 @@ void Mnx_Tests::runProjectFileTest(const char* name)
     std::unique_ptr<MasterScore> score(readMnxScore(sourcePath));
     ASSERT_TRUE(score);
 
-    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
-        fixupScore(score.get());
-        score->doLayout();
-    });
+    fixupAndLayoutScore(score.get());
 
     const String referencePath = projectRefPath(baseName);
     EXPECT_TRUE(compareWithMscxReference(score.get(), referencePath, testName.c_str()));
@@ -759,124 +686,3 @@ MNX_W3C_EXAMPLE_TEST(two_bar_c_major_scale)
 #undef MNX_W3C_EXAMPLE_TEST
 #undef MNX_PROJECT_FILE_TEST_DISABLED
 #undef MNX_PROJECT_FILE_TEST
-
-//---------------------------------------------------------
-//   dynamic spelling tests
-//   toMnxDynamicFromLetters is how a dynamic MuseScore renders without a music font, and
-//   therefore cannot classify, still reaches MNX. No score fixture spells a dynamic that
-//   way -- they all carry glyphs -- so exercise the grammar directly.
-//---------------------------------------------------------
-
-namespace {
-using DynPrefix = mnx::DynamicPrefix;
-using DynSuffix = mnx::DynamicSuffix;
-using DynValue = mnx::DynamicValue;
-
-MnxDynamicMapping plainDynamic(DynValue value)
-{
-    MnxDynamicMapping mapping;
-    mapping.value = value;
-    return mapping;
-}
-
-MnxDynamicMapping accentDynamic(DynPrefix prefix, DynValue value, DynSuffix suffix,
-                                std::optional<DynValue> residual = std::nullopt)
-{
-    MnxDynamicMapping mapping;
-    mapping.isAccent = true;
-    mapping.accentPrefix = prefix;
-    mapping.accentSuffix = suffix;
-    mapping.value = value;
-    mapping.residualValue = residual;
-    return mapping;
-}
-
-void expectDynamicLetters(const char* letters, const MnxDynamicMapping& expected)
-{
-    SCOPED_TRACE(letters);
-    const auto actual = toMnxDynamicFromLetters(letters);
-    ASSERT_TRUE(actual.has_value());
-    EXPECT_EQ(actual->value, expected.value);
-    EXPECT_EQ(actual->residualValue, expected.residualValue);
-    EXPECT_EQ(actual->isAccent, expected.isAccent);
-    EXPECT_EQ(actual->accentPrefix, expected.accentPrefix);
-    EXPECT_EQ(actual->accentSuffix, expected.accentSuffix);
-}
-} // namespace
-
-TEST_F(Mnx_Tests, dynamicValueSpellingsCarryNoAffixLetters)
-{
-    // toMnxDynamicFromLetters reads the accent affixes one character at a time, which is only
-    // unambiguous because no DynamicValue spells itself with s, r, or z. That is a property of
-    // mnxdom, not of this code, so assert it here rather than let a schema change silently
-    // turn "sf" into a value lookup that swallows the prefix.
-    for (const auto& [value, spelling] : mnx::EnumStringMapping<mnx::DynamicValue>::enumToString()) {
-        SCOPED_TRACE(spelling);
-        EXPECT_FALSE(spelling.empty());
-        for (const char ch : spelling) {
-            EXPECT_TRUE(ch == 'p' || ch == 'm' || ch == 'f' || ch == 'n')
-                << "DynamicValue \"" << spelling << "\" contains '" << ch
-                << "', which the letters grammar treats as an accent affix.";
-        }
-    }
-}
-
-TEST_F(Mnx_Tests, dynamicLettersAccepted)
-{
-    expectDynamicLetters("p", plainDynamic(DynValue::p));
-    expectDynamicLetters("mf", plainDynamic(DynValue::mf));
-    expectDynamicLetters("n", plainDynamic(DynValue::n));
-    // A value is taken as far as it goes, so "fff" is one dynamic rather than f followed by a
-    // residual ff. A residualValue here would make this an accent, which it is not.
-    expectDynamicLetters("fff", plainDynamic(DynValue::fff));
-    expectDynamicLetters("ffffff", plainDynamic(DynValue::ffffff));
-
-    expectDynamicLetters("sf", accentDynamic(DynPrefix::s, DynValue::f, DynSuffix::None));
-    expectDynamicLetters("sfz", accentDynamic(DynPrefix::s, DynValue::f, DynSuffix::z));
-    expectDynamicLetters("rfz", accentDynamic(DynPrefix::r, DynValue::f, DynSuffix::z));
-    expectDynamicLetters("fz", accentDynamic(DynPrefix::None, DynValue::f, DynSuffix::z));
-    expectDynamicLetters("sfpp", accentDynamic(DynPrefix::s, DynValue::f, DynSuffix::None, DynValue::pp));
-
-    // fp and pf carry no accent letters at all, but residualValue is accent-only in MNX.
-    expectDynamicLetters("fp", accentDynamic(DynPrefix::None, DynValue::f, DynSuffix::None, DynValue::p));
-    expectDynamicLetters("pf", accentDynamic(DynPrefix::None, DynValue::p, DynSuffix::None, DynValue::f));
-
-    // Spellings MuseScore has no DynamicType for. These are the reason the fallback exists:
-    // MNX builds a dynamic from parts, so it can say what MuseScore can only draw.
-    expectDynamicLetters("sfzp", accentDynamic(DynPrefix::s, DynValue::f, DynSuffix::z, DynValue::p));
-    expectDynamicLetters("ffz", accentDynamic(DynPrefix::None, DynValue::ff, DynSuffix::z));
-}
-
-TEST_F(Mnx_Tests, dynamicLettersRejected)
-{
-    // Anything that is not wholly a dynamic spelling has to be refused rather than guessed at,
-    // since the caller hands us whatever text the user typed. Note that a bare affix is
-    // rejected too: MNX has nothing to hang an accent on without a value.
-    for (const char* letters : { "", "s", "r", "z", "sz",
-                                 "sempre f", "f subito", "poco", "f-p",
-                                 "SFZ", "Sfz",                          // spelling is case sensitive
-                                 "fx", "fzz", "ffzz" }) {
-        SCOPED_TRACE(letters);
-        EXPECT_FALSE(toMnxDynamicFromLetters(letters).has_value());
-    }
-}
-
-TEST_F(Mnx_Tests, dynamicLettersMatchDynamicTypeTable)
-{
-    for (int index = 0; index < int(DynamicType::LAST); index++) {
-        const DynamicType type = DynamicType(index);
-        const MnxDynamicMapping expected = toMnxDynamicType(type);
-        if (!expected.value) {
-            continue; // MNX cannot express this one
-        }
-        SCOPED_TRACE(TConv::toXml(type).ascii());
-
-        // Every dynamic MNX can express must parse back from the letters MuseScore spells it
-        // with, or the grammar and toMnxDynamicType have drifted apart.
-        expectDynamicLetters(TConv::toXml(type).ascii(), expected);
-
-        // toMuseScoreDynamicType returns the first table entry that matches, which is only
-        // correct because no two types share a mapping. Check that they still do not.
-        EXPECT_EQ(toMuseScoreDynamicType(expected), std::make_optional(type));
-    }
-}
