@@ -76,8 +76,6 @@ public:
     void revertToLastSaved() override;
     muse::Ret finishOpening() override;
 
-    bool isProjectOpened(const muse::io::path_t& scorePath) const override;
-
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     muse::async::Notification projectBeingDownloadedChanged() const override;
 
@@ -89,6 +87,8 @@ public:
 private:
     using BusyStatus = IProjectCommandsController::BusyStatus;
 
+    bool isProjectOpened(const muse::io::path_t& scorePath) const;
+
     void setBusy(BusyStatus status, bool isBusy);
 
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);
@@ -99,8 +99,7 @@ private:
     muse::Ret doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
     muse::Ret doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride);
 
-    void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(),
-                                     bool isOwner = true);
+    void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
     muse::Ret openMuseScoreUrl(const QUrl& url);
     muse::Ret openScoreFromMuseScoreCom(const QUrl& url);
 

@@ -47,6 +47,7 @@
 #include "notation/inotationselection.h"
 
 #include "projecterrors.h"
+#include "inotationproject.h"
 
 #include "../projectcommands.h"
 #include "rcommand/actiontocommand.h"
@@ -337,7 +338,17 @@ muse::async::Notification ProjectActionsController::projectBeingDownloadedChange
 
 bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath) const
 {
-    return openProjectScenario()->isProjectOpened(scorePath);
+    auto project = globalContext()->currentProject();
+    if (!project) {
+        return false;
+    }
+
+    LOGD() << "project->path: " << project->path() << ", check path: " << scorePath;
+    if (project->path() == scorePath) {
+        return true;
+    }
+
+    return false;
 }
 
 bool ProjectActionsController::isAnyProjectOpened() const

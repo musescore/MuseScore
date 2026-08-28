@@ -47,8 +47,6 @@ public:
 
     virtual muse::Ret finishOpening() = 0;
 
-    virtual bool isProjectOpened(const muse::io::path_t& scorePath) const = 0;
-
     virtual const ProjectBeingDownloaded& projectBeingDownloaded() const = 0;
     virtual muse::async::Notification projectBeingDownloadedChanged() const = 0;
 

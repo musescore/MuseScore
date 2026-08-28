@@ -32,7 +32,6 @@
 
 #include "cloud/clouderrors.h"
 #include "engraving/engravingerrors.h"
-#include "engraving/infrastructure/mscio.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
@@ -322,8 +321,8 @@ RetVal<INotationProjectPtr> OpenProjectScenario::loadProject(const muse::io::pat
 }
 
 Ret OpenProjectScenario::loadWithFallback(const std::shared_ptr<INotationProject>& project,
-                                               const muse::io::path_t& loadPath,
-                                               const std::string& format)
+                                          const muse::io::path_t& loadPath,
+                                          const std::string& format)
 {
     Ret result = project->load(loadPath, OpenParams(), format);
 
