@@ -39,10 +39,10 @@ Item {
 
     readonly property int contentMargin: 8
     readonly property bool compactMode: width < 620
-    readonly property color hitPointColor: "#3B94E5"
     readonly property real previewHeightRatio: 0.42
     readonly property int controlsScrollbarReserve: 12
     readonly property int minimumControlsHeight: 168
+    readonly property int hitPointsPanelWidth: 260
     readonly property int timelineFrameRate: Math.max(1, Math.round(videoModel.frameRate))
     readonly property int timelineFrameCount: videoModel.hasVideo && video.duration > 0 ? Math.floor((video.duration / 1000) * root.timelineFrameRate) + 1 : 0
 
@@ -58,6 +58,10 @@ Item {
         videoModel.load()
     }
 
+    function colorFromInt(value) {
+        return "#" + value.toString(16).padStart(6, "0")
+    }
+
     function targetVideoPositionMs() {
         return Math.max(0, Math.min(video.duration, videoModel.scorePlaybackPositionMs + videoModel.offsetMs))
     }
@@ -66,6 +70,12 @@ Item {
         video.stop()
         video.source = ""
         Qt.callLater(videoModel.clearVideo)
+    }
+
+    // Seeks both the video element and the score to the given video-timeline position.
+    function seekToVideoPositionMs(videoPositionMs) {
+        video.seek(videoPositionMs)
+        videoModel.seekScoreToVideoPositionMs(videoPositionMs)
     }
 
     function detectedFrameRate() {
@@ -150,13 +160,6 @@ Item {
         }
 
         return 16 / 9
-    }
-
-    function autodetectFrameRate() {
-        var rate = detectedFrameRate()
-        if (rate > 0) {
-            videoModel.frameRate = rate
-        }
     }
 
     function timelineTickHeight(frameIndex) {
@@ -267,616 +270,391 @@ Item {
         }
     }
 
-    Item {
-        id: contentItem
+    StyledFlickable {
+        id: contentFlickable
 
         anchors.fill: parent
         anchors.margins: root.contentMargin
 
-        Rectangle {
-            id: previewSlot
+        contentHeight: contentColumn.implicitHeight
+        interactive: contentHeight > height
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        readonly property bool overflowing: contentHeight > height + 1
 
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            height: Math.round(Math.max(96, Math.min(parent.height * root.previewHeightRatio, parent.height - root.minimumControlsHeight)))
-
-            radius: 4
-            color: "#111111"
-            border.width: ui.theme.borderWidth
-            border.color: ui.theme.strokeColor
-            clip: true
-
-            Item {
-                id: videoFrame
-
-                readonly property real aspectRatio: Math.max(0.1, root.videoAspectRatio())
-                readonly property real availableWidth: Math.max(0, previewSlot.width - 2)
-                readonly property real availableHeight: Math.max(0, previewSlot.height - 2)
-                readonly property bool limitedByHeight: availableHeight > 0 && availableWidth / availableHeight > aspectRatio
-
-                anchors.centerIn: parent
-                width: Math.round(limitedByHeight ? availableHeight * aspectRatio : availableWidth)
-                height: Math.round(limitedByHeight ? availableHeight : availableWidth / aspectRatio)
-
-                Video {
-                    id: video
-
-                    anchors.fill: parent
-                    source: videoModel.videoUrl
-                    muted: videoModel.muted
-                    volume: videoModel.volumePercent / 100
-                    fillMode: VideoOutput.PreserveAspectFit
-                    visible: videoModel.hasVideo
-
-                    onSourceChanged: {
-                        stop()
-                    }
-
-                    onDurationChanged: {
-                        root.syncVideoToScore(true)
-                    }
-                }
-
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    width: Math.min(parent.width - 24, 200)
-                    spacing: 6
-                    visible: !videoModel.hasVideo
-
-                    StyledIconLabel {
-                        Layout.alignment: Qt.AlignHCenter
-                        iconCode: IconCode.PLAY
-                        font.pixelSize: 24
-                        opacity: 0.45
-                    }
-
-                    StyledTextLabel {
-                        Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignHCenter
-                        text: qsTrc("playback", "No video attached")
-                        maximumLineCount: 2
-                        wrapMode: Text.WordWrap
-                    }
-                }
-            }
-
-            FlatButton {
-                anchors.centerIn: videoFrame
-                width: 44
-                height: 44
-                visible: videoModel.hasVideo && video.playbackState !== MediaPlayer.PlayingState
-                icon: IconCode.PLAY_FILL
-                buttonType: FlatButton.IconOnly
-                transparent: true
-                iconColor: "white"
-                toolTipTitle: qsTrc("playback", "Play video")
-                navigation.panel: navigationPanel
-                navigation.order: root.contentNavigationPanelOrderStart + 1
-
-                onClicked: {
-                    video.play()
-                }
-            }
-
+        ScrollBar.vertical: StyledScrollBar {
+            policy: contentFlickable.overflowing ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
+            padding: 0
         }
 
-        StyledFlickable {
-            id: controlsFlickable
-
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: previewSlot.bottom
-            anchors.topMargin: 8
-            anchors.bottom: parent.bottom
-
-            contentHeight: controlsColumn.implicitHeight
-            interactive: contentHeight > height
-            clip: true
-            boundsBehavior: Flickable.StopAtBounds
-            readonly property bool overflowing: contentHeight > height + 1
-
-            ScrollBar.vertical: StyledScrollBar {
-                policy: controlsFlickable.overflowing ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
-                padding: 0
-            }
         ColumnLayout {
-            id: controlsColumn
+            id: contentColumn
 
-            width: Math.max(0, controlsFlickable.width - (controlsFlickable.overflowing ? root.controlsScrollbarReserve : 0))
+            width: Math.max(0, contentFlickable.width - (contentFlickable.overflowing ? root.controlsScrollbarReserve : 0))
             spacing: 8
 
-            RowLayout {
+            GridLayout {
                 Layout.fillWidth: true
-                spacing: 8
+                columns: root.compactMode ? 1 : 2
+                columnSpacing: 12
+                rowSpacing: 8
 
-                FlatButton {
-                    Layout.preferredWidth: 36
-                    Layout.preferredHeight: 30
-                    enabled: videoModel.hasVideo
-                    icon: video.playbackState === MediaPlayer.PlayingState ? IconCode.PAUSE : IconCode.PLAY
-                    buttonType: FlatButton.IconOnly
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 2
-
-                    onClicked: {
-                        if (video.playbackState === MediaPlayer.PlayingState) {
-                            video.pause()
-                        } else {
-                            video.play()
-                        }
-                    }
-                }
-
-                Item {
+                ColumnLayout {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: videoModel.hitPoints.length > 0 ? 70 : 58
-
-                    StyledSlider {
-                        id: positionSlider
-
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.topMargin: videoModel.hitPoints.length > 0 ? 17 : 8
-                        from: 0
-                        to: Math.max(video.duration, 1)
-                        stepSize: 100
-                        value: video.position
-                        enabled: videoModel.hasVideo && video.seekable
-                        navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 3
-
-                        onMoved: {
-                            video.seek(value)
-                        }
-                    }
-
-                    Canvas {
-                        id: frameTickCanvas
-
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        y: 41
-                        height: 28
-                        visible: videoModel.hasVideo && video.duration > 0
-
-                        onPaint: {
-                            var ctx = getContext("2d")
-                            ctx.clearRect(0, 0, width, height)
-
-                            var tickCount = root.timelineFrameCount
-                            if (tickCount <= 0) {
-                                return
-                            }
-
-                            var primaryColor = ui.theme.fontPrimaryColor.toString()
-                            var secondaryColor = ui.theme.strokeColor.toString()
-                            for (var i = 0; i < tickCount; ++i) {
-                                var tickWidth = root.timelineTickWidth(i)
-                                var tickHeight = root.timelineTickHeight(i)
-                                var x = Math.max(0, Math.min(width - tickWidth, (i / Math.max(tickCount - 1, 1)) * width - (tickWidth / 2)))
-                                ctx.globalAlpha = i % root.timelineFrameRate === 0 ? 0.62 : 0.24
-                                ctx.fillStyle = i % root.timelineFrameRate === 0 ? primaryColor : secondaryColor
-                                ctx.fillRect(x, 0, tickWidth, tickHeight)
-                            }
-
-                            var durationSeconds = Math.floor(video.duration / 1000)
-                            ctx.font = "10px sans-serif"
-                            ctx.textAlign = "center"
-                            ctx.textBaseline = "bottom"
-                            ctx.fillStyle = primaryColor
-                            ctx.globalAlpha = 0.74
-                            for (var second = 0; second <= durationSeconds; second += 5) {
-                                var labelX = (second * 1000 / Math.max(video.duration, 1)) * width
-                                ctx.fillText(root.timelineLabel(second), labelX, height)
-                            }
-                            ctx.globalAlpha = 1
-                        }
-
-                        Connections {
-                            target: videoModel
-                            function onVideoSettingsChanged() {
-                                frameTickCanvas.requestPaint()
-                            }
-                        }
-
-                        Connections {
-                            target: video
-                            function onDurationChanged() {
-                                frameTickCanvas.requestPaint()
-                            }
-                        }
-
-                        onWidthChanged: requestPaint()
-                        onVisibleChanged: requestPaint()
-                    }
-
-                    Repeater {
-                        model: videoModel.hitPoints
-
-                        Rectangle {
-                            id: hitPointMarker
-
-                            required property var modelData
-                            required property int index
-                            property bool dragging: false
-                            property real dragTimeMs: modelData.timeMs
-                            readonly property real displayTimeMs: dragging ? dragTimeMs : modelData.timeMs
-
-                            x: Math.max(0, Math.min(parent.width - width, (displayTimeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
-                            y: 13
-                            width: 3
-                            height: 34
-                            radius: 1
-                            visible: videoModel.hasVideo && video.duration > 0
-                            color: root.hitPointColor
-
-                            StyledTextLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.bottom: parent.top
-                                anchors.bottomMargin: 1
-                                text: parent.modelData.label
-                                maximumLineCount: 1
-                                font.pixelSize: 10
-                                color: root.hitPointColor
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                anchors.leftMargin: -8
-                                anchors.rightMargin: -8
-                                cursorShape: Qt.SizeHorCursor
-                                preventStealing: true
-
-                                onPressed: function(mouse) {
-                                    var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
-                                    hitPointMarker.dragging = true
-                                    hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
-                                }
-
-                                onPositionChanged: function(mouse) {
-                                    if (!pressed) {
-                                        return
-                                    }
-
-                                    var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
-                                    hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
-                                }
-
-                                onReleased: {
-                                    videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, hitPointMarker.dragTimeMs)
-                                    hitPointMarker.dragging = false
-                                }
-
-                                onCanceled: {
-                                    hitPointMarker.dragging = false
-                                }
-                            }
-                        }
-                    }
-                }
-
-                StyledTextLabel {
-                    Layout.preferredWidth: root.compactMode ? 86 : 116
-                    horizontalAlignment: Text.AlignRight
-                    text: videoModel.hasVideo ? videoModel.formatTimecode(video.position) : ""
-                }
-            }
-
-            FilePicker {
-                Layout.fillWidth: true
-                path: videoModel.videoPath
-                dialogTitle: qsTrc("playback", "Choose video")
-                filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
-                buttonType: FlatButton.IconOnly
-                navigation: navigationPanel
-                navigationRowOrderStart: root.contentNavigationPanelOrderStart + 4
-
-                onPathEdited: function(newPath) {
-                    videoModel.videoPath = newPath
-                }
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTrc("playback", "Offset")
-                }
-
-                FlatButton {
-                    text: root.compactMode ? qsTrc("playback", "-100") : qsTrc("playback", "-100 ms")
-                    enabled: videoModel.hasVideo
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 6
-
-                    onClicked: {
-                        videoModel.nudgeOffset(-100)
-                    }
-                }
-
-                TextInputField {
-                    Layout.preferredWidth: root.compactMode ? 64 : 88
-                    currentText: videoModel.offsetMs.toString()
-                    enabled: videoModel.hasVideo
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 7
-
-                    onTextEditingFinished: function(newTextValue) {
-                        var parsedValue = parseInt(newTextValue, 10)
-                        if (!isNaN(parsedValue)) {
-                            videoModel.offsetMs = parsedValue
-                        }
-                    }
-                }
-
-                StyledTextLabel {
-                    text: qsTrc("playback", "ms")
-                }
-
-                FlatButton {
-                    text: root.compactMode ? qsTrc("playback", "+100") : qsTrc("playback", "+100 ms")
-                    enabled: videoModel.hasVideo
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 8
-
-                    onClicked: {
-                        videoModel.nudgeOffset(100)
-                    }
-                }
-            }
-
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 4
-                visible: videoModel.hasVideo
-
-                RowLayout {
-                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignTop
                     spacing: 8
 
-                    StyledTextLabel {
+                    Rectangle {
+                        id: previewSlot
+
                         Layout.fillWidth: true
-                        text: videoModel.hasVideo ? videoModel.hitPoints.length + " " + qsTrc("playback", "hit points") : ""
-                    }
+                        Layout.preferredHeight: Math.round(Math.max(96, width * 9 / 16 * root.previewHeightRatio * 2))
 
-                    StyledTextLabel {
-                        text: qsTrc("playback", "fps")
-                    }
+                        radius: 4
+                        color: "#111111"
+                        border.width: ui.theme.borderWidth
+                        border.color: ui.theme.strokeColor
+                        clip: true
 
-                    TextInputField {
-                        Layout.preferredWidth: 56
-                        currentText: videoModel.frameRate.toString()
-                        enabled: videoModel.hasVideo
-                        navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 9
+                        Item {
+                            id: videoFrame
 
-                        onTextEditingFinished: function(newTextValue) {
-                            var parsedValue = parseFloat(newTextValue)
-                            if (!isNaN(parsedValue)) {
-                                videoModel.frameRate = parsedValue
-                            }
-                        }
-                    }
+                            readonly property real aspectRatio: Math.max(0.1, root.videoAspectRatio())
+                            readonly property real availableWidth: Math.max(0, previewSlot.width - 2)
+                            readonly property real availableHeight: Math.max(0, previewSlot.height - 2)
+                            readonly property bool limitedByHeight: availableHeight > 0 && availableWidth / availableHeight > aspectRatio
 
-                    FlatButton {
-                        text: qsTrc("playback", "Detect FPS")
-                        enabled: videoModel.hasVideo && root.detectedFrameRate() > 0
-                        navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 10
+                            anchors.centerIn: parent
+                            width: Math.round(limitedByHeight ? availableHeight * aspectRatio : availableWidth)
+                            height: Math.round(limitedByHeight ? availableHeight : availableWidth / aspectRatio)
 
-                        onClicked: {
-                            root.autodetectFrameRate()
-                        }
-                    }
+                            Video {
+                                id: video
 
-                    FlatButton {
-                        text: qsTrc("playback", "Add hit point")
-                        enabled: videoModel.hasVideo
-                        navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 11
+                                anchors.fill: parent
+                                source: videoModel.videoUrl
+                                muted: videoModel.muted
+                                volume: videoModel.volumePercent / 100
+                                fillMode: VideoOutput.PreserveAspectFit
+                                visible: videoModel.hasVideo
 
-                        onClicked: {
-                            videoModel.addHitPoint(video.position)
-                        }
-                    }
-                }
+                                onSourceChanged: {
+                                    stop()
+                                }
 
-                StyledFlickable {
-                    id: hitPointsFlickable
-
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: Math.min(hitPointsColumn.implicitHeight, 148)
-                    Layout.maximumHeight: 132
-                    visible: videoModel.hitPoints.length > 0
-
-                    contentHeight: hitPointsColumn.implicitHeight
-                    interactive: contentHeight > height
-                    clip: true
-                    boundsBehavior: Flickable.StopAtBounds
-                    readonly property bool overflowing: contentHeight > height + 1
-
-                    ScrollBar.vertical: StyledScrollBar {
-                        policy: hitPointsFlickable.overflowing ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
-                        padding: 0
-                    }
-
-                    ColumnLayout {
-                        id: hitPointsColumn
-
-                        width: Math.max(0, hitPointsFlickable.width - (hitPointsFlickable.overflowing ? root.controlsScrollbarReserve : 0))
-                        spacing: 4
-
-                        RowLayout {
-                            width: hitPointsColumn.width
-                            spacing: 8
-
-                            StyledTextLabel {
-                                Layout.preferredWidth: 92
-                                text: qsTrc("playback", "Timecode")
-                                font: ui.theme.bodyBoldFont
-                                maximumLineCount: 1
+                                onDurationChanged: {
+                                    root.syncVideoToScore(true)
+                                }
                             }
 
-                            StyledTextLabel {
-                                Layout.preferredWidth: 68
-                                text: qsTrc("playback", "Measure")
-                                font: ui.theme.bodyBoldFont
-                                maximumLineCount: 1
-                            }
+                            ColumnLayout {
+                                anchors.centerIn: parent
+                                width: Math.min(parent.width - 24, 200)
+                                spacing: 6
+                                visible: !videoModel.hasVideo
 
-                            StyledTextLabel {
-                                Layout.fillWidth: true
-                                text: qsTrc("playback", "Name")
-                                font: ui.theme.bodyBoldFont
-                                maximumLineCount: 1
-                            }
-
-                            Item {
-                                Layout.preferredWidth: 32
-                            }
-                        }
-
-                        Repeater {
-                            model: videoModel.hitPoints
-
-                            RowLayout {
-                                id: hitPointDelegate
-
-                                required property var modelData
-                                required property int index
-
-                                property bool editingLabel: false
-                                property bool editingTimecode: false
-
-                                width: hitPointsColumn.width
-                                spacing: 8
-
-                                Item {
-                                    Layout.preferredWidth: 92
-                                    Layout.preferredHeight: 28
-
-                                    StyledTextLabel {
-                                        anchors.fill: parent
-                                        verticalAlignment: Text.AlignVCenter
-                                        text: hitPointDelegate.modelData.timecode
-                                        maximumLineCount: 1
-                                        visible: !hitPointDelegate.editingTimecode
-
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            onClicked: {
-                                                hitPointDelegate.editingTimecode = true
-                                                timecodeEditor.forceActiveFocus()
-                                            }
-                                        }
-                                    }
-
-                                    TextInputField {
-                                        id: timecodeEditor
-
-                                        anchors.fill: parent
-                                        currentText: hitPointDelegate.modelData.timecode
-                                        visible: hitPointDelegate.editingTimecode
-                                        navigation.panel: navigationPanel
-                                        navigation.order: root.contentNavigationPanelOrderStart + 12 + hitPointDelegate.index
-
-                                        onTextEditingFinished: function(newTextValue) {
-                                            videoModel.setHitPointTimecode(hitPointDelegate.modelData.id, newTextValue)
-                                            hitPointDelegate.editingTimecode = false
-                                        }
-
-                                        Keys.onEscapePressed: {
-                                            hitPointDelegate.editingTimecode = false
-                                        }
-                                    }
+                                StyledIconLabel {
+                                    Layout.alignment: Qt.AlignHCenter
+                                    iconCode: IconCode.PLAY
+                                    font.pixelSize: 24
+                                    opacity: 0.45
                                 }
 
                                 StyledTextLabel {
-                                    Layout.preferredWidth: 68
-                                    text: hitPointDelegate.modelData.musicalPosition
-                                    maximumLineCount: 1
+                                    Layout.fillWidth: true
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: qsTrc("playback", "No video attached")
+                                    maximumLineCount: 2
+                                    wrapMode: Text.WordWrap
+                                }
+                            }
+                        }
+
+                        FlatButton {
+                            anchors.centerIn: videoFrame
+                            visible: videoModel.hasVideo && video.playbackState !== MediaPlayer.PlayingState
+                            icon: IconCode.PLAY_FILL
+                            buttonType: FlatButton.IconOnly
+                            transparent: true
+                            toolTipTitle: qsTrc("playback", "Play")
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 1
+
+                            onClicked: {
+                                videoModel.toggleScorePlay()
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        FlatButton {
+                            Layout.preferredWidth: 30
+                            Layout.preferredHeight: 30
+                            enabled: videoModel.hasVideo
+                            icon: video.playbackState === MediaPlayer.PlayingState ? IconCode.PAUSE : IconCode.PLAY
+                            iconFont: ui.theme.toolbarIconsFont
+                            buttonType: FlatButton.IconOnly
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 2
+
+                            onClicked: {
+                                videoModel.toggleScorePlay()
+                            }
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: videoModel.hitPoints.length > 0 ? 70 : 58
+
+                            StyledSlider {
+                                id: positionSlider
+
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.topMargin: videoModel.hitPoints.length > 0 ? 17 : 8
+                                from: 0
+                                to: Math.max(video.duration, 1)
+                                stepSize: 100
+                                value: video.position
+                                enabled: videoModel.hasVideo && video.seekable
+                                navigation.panel: navigationPanel
+                                navigation.order: root.contentNavigationPanelOrderStart + 3
+
+                                onMoved: {
+                                    root.seekToVideoPositionMs(value)
+                                }
+                            }
+
+                            Canvas {
+                                id: frameTickCanvas
+
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                y: 41
+                                height: 28
+                                visible: videoModel.hasVideo && video.duration > 0
+
+                                onPaint: {
+                                    var ctx = getContext("2d")
+                                    ctx.clearRect(0, 0, width, height)
+
+                                    var tickCount = root.timelineFrameCount
+                                    if (tickCount <= 0) {
+                                        return
+                                    }
+
+                                    var primaryColor = ui.theme.fontPrimaryColor.toString()
+                                    var secondaryColor = ui.theme.strokeColor.toString()
+                                    for (var i = 0; i < tickCount; ++i) {
+                                        var tickWidth = root.timelineTickWidth(i)
+                                        var tickHeight = root.timelineTickHeight(i)
+                                        var x = Math.max(0, Math.min(width - tickWidth, (i / Math.max(tickCount - 1, 1)) * width - (tickWidth / 2)))
+                                        ctx.globalAlpha = i % root.timelineFrameRate === 0 ? 0.62 : 0.24
+                                        ctx.fillStyle = i % root.timelineFrameRate === 0 ? primaryColor : secondaryColor
+                                        ctx.fillRect(x, 0, tickWidth, tickHeight)
+                                    }
+
+                                    var durationSeconds = Math.floor(video.duration / 1000)
+                                    ctx.font = "10px sans-serif"
+                                    ctx.textAlign = "center"
+                                    ctx.textBaseline = "bottom"
+                                    ctx.fillStyle = primaryColor
+                                    ctx.globalAlpha = 0.74
+                                    for (var second = 0; second <= durationSeconds; second += 5) {
+                                        var labelX = (second * 1000 / Math.max(video.duration, 1)) * width
+                                        ctx.fillText(root.timelineLabel(second), labelX, height)
+                                    }
+                                    ctx.globalAlpha = 1
                                 }
 
-                                Item {
-                                    Layout.fillWidth: true
-                                    Layout.preferredHeight: 28
+                                Connections {
+                                    target: videoModel
+                                    function onVideoSettingsChanged() {
+                                        frameTickCanvas.requestPaint()
+                                    }
+                                }
+
+                                Connections {
+                                    target: video
+                                    function onDurationChanged() {
+                                        frameTickCanvas.requestPaint()
+                                    }
+                                }
+
+                                onWidthChanged: requestPaint()
+                                onVisibleChanged: requestPaint()
+                            }
+
+                            Repeater {
+                                model: videoModel.hitPoints
+
+                                Rectangle {
+                                    id: hitPointMarker
+
+                                    required property var modelData
+                                    required property int index
+                                    property bool dragging: false
+                                    property real dragTimeMs: modelData.timeMs
+                                    readonly property real displayTimeMs: dragging ? dragTimeMs : modelData.timeMs
+
+                                    x: Math.max(0, Math.min(parent.width - width, (displayTimeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
+                                    y: 13
+                                    width: 3
+                                    height: 34
+                                    radius: 1
+                                    visible: videoModel.hasVideo && video.duration > 0
+                                    color: root.colorFromInt(modelData.color)
 
                                     StyledTextLabel {
-                                        anchors.fill: parent
-                                        verticalAlignment: Text.AlignVCenter
-                                        text: hitPointDelegate.modelData.label
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        anchors.bottom: parent.top
+                                        anchors.bottomMargin: 1
+                                        text: parent.modelData.label
                                         maximumLineCount: 1
-                                        visible: !hitPointDelegate.editingLabel
-
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            onClicked: {
-                                                hitPointDelegate.editingLabel = true
-                                                labelEditor.forceActiveFocus()
-                                            }
-                                        }
+                                        font.pixelSize: 10
+                                        color: root.colorFromInt(parent.modelData.color)
                                     }
 
-                                    TextInputField {
-                                        id: labelEditor
-
+                                    MouseArea {
                                         anchors.fill: parent
-                                        currentText: hitPointDelegate.modelData.label
-                                        visible: hitPointDelegate.editingLabel
-                                        navigation.panel: navigationPanel
-                                        navigation.order: root.contentNavigationPanelOrderStart + 11 + hitPointDelegate.index
+                                        anchors.leftMargin: -8
+                                        anchors.rightMargin: -8
+                                        cursorShape: Qt.SizeHorCursor
+                                        preventStealing: true
 
-                                        onTextEditingFinished: function(newTextValue) {
-                                            videoModel.renameHitPoint(hitPointDelegate.modelData.id, newTextValue)
-                                            hitPointDelegate.editingLabel = false
+                                        onPressed: function(mouse) {
+                                            var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
+                                            hitPointMarker.dragging = true
+                                            hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
                                         }
 
-                                        Keys.onEscapePressed: {
-                                            hitPointDelegate.editingLabel = false
+                                        onPositionChanged: function(mouse) {
+                                            if (!pressed) {
+                                                return
+                                            }
+
+                                            var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
+                                            hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
                                         }
-                                    }
-                                }
 
-                                FlatButton {
-                                    Layout.preferredWidth: 32
-                                    Layout.preferredHeight: 28
-                                    icon: IconCode.DELETE_TANK
-                                    buttonType: FlatButton.IconOnly
-                                    navigation.panel: navigationPanel
-                                    navigation.order: root.contentNavigationPanelOrderStart + 18 + hitPointDelegate.index
+                                        onReleased: {
+                                            videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, hitPointMarker.dragTimeMs)
+                                            root.seekToVideoPositionMs(hitPointMarker.dragTimeMs)
+                                            hitPointMarker.dragging = false
+                                        }
 
-                                    onClicked: {
-                                        videoModel.removeHitPoint(hitPointDelegate.modelData.id)
+                                        onCanceled: {
+                                            hitPointMarker.dragging = false
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: root.compactMode ? 86 : 116
+                            horizontalAlignment: Text.AlignRight
+                            text: videoModel.hasVideo ? videoModel.formatTimecode(video.position) : ""
+                        }
+                    }
+
+                    FilePicker {
+                        Layout.fillWidth: true
+                        path: videoModel.videoPath
+                        dialogTitle: qsTrc("playback", "Choose video")
+                        filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
+                        buttonType: FlatButton.IconOnly
+                        navigation: navigationPanel
+                        navigationRowOrderStart: root.contentNavigationPanelOrderStart + 4
+
+                        onPathEdited: function(newPath) {
+                            videoModel.videoPath = newPath
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            text: qsTrc("playback", "Offset")
+                        }
+
+                        FlatButton {
+                            text: root.compactMode ? qsTrc("playback", "-100") : qsTrc("playback", "-100 ms")
+                            enabled: videoModel.hasVideo
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 6
+
+                            onClicked: {
+                                videoModel.nudgeOffset(-100)
+                            }
+                        }
+
+                        TextInputField {
+                            Layout.preferredWidth: root.compactMode ? 64 : 88
+                            currentText: videoModel.offsetMs.toString()
+                            enabled: videoModel.hasVideo
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 7
+
+                            onTextEditingFinished: function(newTextValue) {
+                                var parsedValue = parseInt(newTextValue, 10)
+                                if (!isNaN(parsedValue)) {
+                                    videoModel.offsetMs = parsedValue
+                                }
+                            }
+                        }
+
+                        StyledTextLabel {
+                            text: qsTrc("playback", "ms")
+                        }
+
+                        FlatButton {
+                            text: root.compactMode ? qsTrc("playback", "+100") : qsTrc("playback", "+100 ms")
+                            enabled: videoModel.hasVideo
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 8
+
+                            onClicked: {
+                                videoModel.nudgeOffset(100)
+                            }
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
+
+                        FlatButton {
+                            text: qsTrc("playback", "Clear")
+                            enabled: videoModel.hasVideo
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 9
+
+                            onClicked: {
+                                root.clearAttachedVideo()
+                            }
+                        }
                     }
                 }
-            }
 
-            RowLayout {
-                Layout.fillWidth: true
+                VideoHitPointsPanel {
+                    Layout.preferredWidth: root.compactMode ? -1 : root.hitPointsPanelWidth
+                    Layout.fillWidth: root.compactMode
+                    Layout.alignment: Qt.AlignTop
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
-                FlatButton {
-                    text: qsTrc("playback", "Clear")
-                    enabled: videoModel.hasVideo
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 30
-
-                    onClicked: {
-                        root.clearAttachedVideo()
-                    }
+                    videoModel: videoModel
+                    seekToVideoPositionMs: root.seekToVideoPositionMs
+                    detectFrameRate: root.detectedFrameRate
+                    currentVideoPositionMs: video.position
+                    navigationPanel: navigationPanel
+                    navigationOrderStart: root.contentNavigationPanelOrderStart + 20
                 }
             }
-        }
         }
     }
 

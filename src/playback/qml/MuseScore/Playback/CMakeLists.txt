@@ -81,6 +81,8 @@ qt_add_qml_module(playback_qml
         internal/PlaybackToolBarActions.qml
         internal/SoundFlag/MuseSoundsParams.qml
         internal/SoundFlag/ParamsGridView.qml
+        internal/VideoHitPointRow.qml
+        internal/VideoHitPointsPanel.qml
         internal/VolumePressureMeter.qml
         internal/VolumeSlider.qml
         MixerPanel.qml
