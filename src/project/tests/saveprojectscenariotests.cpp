@@ -45,7 +45,6 @@
 
 #include "mocks/exportprojectscenariomock.h"
 #include "mocks/notationprojectmock.h"
-#include "mocks/opensaveprojectscenariomock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/recentfilescontrollermock.h"
 
@@ -73,7 +72,6 @@ protected:
         m_authorization = std::make_shared<NiceMock<cloud::AuthorizationServiceMock> >();
         m_platformInteractive = std::make_shared<NiceMock<PlatformInteractiveMock> >();
         m_recentFiles = std::make_shared<NiceMock<RecentFilesControllerMock> >();
-        m_openSaveScenario = std::make_shared<NiceMock<OpenSaveProjectScenarioMock> >();
         m_exportScenario = std::make_shared<NiceMock<ExportProjectScenarioMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
@@ -85,7 +83,6 @@ protected:
         m_scenario->audioComService.set(m_audioComService);
         m_scenario->platformInteractive.set(m_platformInteractive);
         m_scenario->recentFilesController.set(m_recentFiles);
-        m_scenario->openSaveProjectScenario.set(m_openSaveScenario);
         m_scenario->exportProjectScenario.set(m_exportScenario);
         m_scenario->interactive.set(m_interactive);
         m_scenario->globalContext.set(m_globalContext);
@@ -113,6 +110,7 @@ protected:
         ON_CALL(*m_interactive, buttonData(_)).WillByDefault([](IInteractive::Button btn) {
             return IInteractive::ButtonData(btn, "");
         });
+        ON_CALL(*m_interactive, info(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
         ON_CALL(*m_interactive, open(_)).WillByDefault([] {
             return async::make_promise<Val>([](auto resolve, auto) {
                 return resolve(Val());
@@ -157,6 +155,20 @@ protected:
     static void drainDeferredCalls()
     {
         async::processMessages();
+    }
+
+    //! The save location dialog is settled on "local file", and resolves to `path`.
+    void givenUserPicksLocalFile(const io::path_t& path)
+    {
+        ON_CALL(*m_configuration, shouldAskSaveLocationType()).WillByDefault(Return(false));
+        ON_CALL(*m_configuration, lastUsedSaveLocationType()).WillByDefault(Return(SaveLocationType::Local));
+        ON_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).WillByDefault(Return(path));
+    }
+
+    //! The user dismisses the file dialog without choosing anything.
+    void givenUserCancelsTheSaveDialog()
+    {
+        givenUserPicksLocalFile(io::path_t());
     }
 
     void givenReachableCloud()
@@ -206,7 +218,6 @@ protected:
     std::shared_ptr<cloud::AuthorizationServiceMock> m_authorization;
     std::shared_ptr<PlatformInteractiveMock> m_platformInteractive;
     std::shared_ptr<RecentFilesControllerMock> m_recentFiles;
-    std::shared_ptr<OpenSaveProjectScenarioMock> m_openSaveScenario;
     std::shared_ptr<ExportProjectScenarioMock> m_exportScenario;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<context::GlobalContextMock> m_globalContext;
@@ -229,7 +240,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ExistingLocalScore_SavesWithoutAski
 
     //! [THEN] The save location is not asked for, and the score is written back over itself:
     //! an empty path is what tells the project to keep the file it already has
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, save(io::path_t(), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it...
@@ -253,7 +264,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ExistingCloudScore_SavesWithoutAski
 
     //! [THEN] The save location is not asked for; the score keeps the cloud details it already had,
     //! and is still written to disk so that the work survives until the connection returns
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, setCloudInfo(::testing::Field(&CloudProjectInfo::sourceUrl, m_cloudInfo.sourceUrl))).Times(1);
     EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
 
@@ -268,8 +279,8 @@ TEST_F(SaveProjectScenarioTests, SaveProject_NewlyCreatedScore_AsksForSaveLocati
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
     //! [THEN] The save location is asked for
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, SaveMode::Save, SaveLocationType::Undefined))
-    .WillOnce(Return(RetVal<SaveLocation>(make_ret(Ret::Code::Cancel))));
+    givenUserCancelsTheSaveDialog();
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving it...
     Ret ret = saveProject(SaveMode::Save);
@@ -285,8 +296,8 @@ TEST_F(SaveProjectScenarioTests, SaveProject_SaveAs_AlwaysAsksForSaveLocation)
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
     //! [THEN] "Save as" asks for a location even though the score already has one
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, SaveMode::SaveAs, _))
-    .WillOnce(Return(RetVal<SaveLocation>(make_ret(Ret::Code::Cancel))));
+    givenUserCancelsTheSaveDialog();
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving it as a new file...
     saveProject(SaveMode::SaveAs);
@@ -299,8 +310,10 @@ TEST_F(SaveProjectScenarioTests, SaveProject_LocalScoreToCloud_AsksForSaveLocati
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
     //! [THEN] The cloud is a destination it has never had, so it is asked for
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, SaveMode::Save, SaveLocationType::Cloud))
-    .WillOnce(Return(RetVal<SaveLocation>(make_ret(Ret::Code::Cancel))));
+    givenReachableCloud();
+    ON_CALL(*m_interactive, openSync(_))
+    .WillByDefault(Return(RetVal<Val>(make_ret(Ret::Code::Cancel))));
+    EXPECT_CALL(*m_interactive, openSync(_)).Times(1);
 
     //! [WHEN] Saving it to the cloud...
     saveProject(SaveMode::Save, SaveLocationType::Cloud);
@@ -313,8 +326,8 @@ TEST_F(SaveProjectScenarioTests, SaveProject_SaveCopy_AsksForSaveLocation)
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
     //! [THEN] A copy is a new file, so its location is asked for
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, SaveMode::SaveCopy, _))
-    .WillOnce(Return(RetVal<SaveLocation>(make_ret(Ret::Code::Cancel))));
+    givenUserCancelsTheSaveDialog();
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving a copy...
     saveProject(SaveMode::SaveCopy);
@@ -328,8 +341,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ChosenLocalLocation_IsUsedAsGiven)
 
     //! [GIVEN] ...and a user who picks a local file for it
     const io::path_t chosen = "/scores/chosen.mscz";
-    ON_CALL(*m_openSaveScenario, askSaveLocation(_, _, _))
-    .WillByDefault(Return(RetVal<SaveLocation>::make_ok(SaveLocation(chosen))));
+    givenUserPicksLocalFile(chosen);
 
     //! [THEN] The score lands exactly where the user pointed
     EXPECT_CALL(*m_project, save(chosen, SaveMode::Save, true)).Times(1);
@@ -347,24 +359,35 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ChosenCloudLocation_IsAppliedToTheP
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(true));
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
-    //! [GIVEN] ...a user who picks the cloud for it
-    CloudProjectInfo chosen;
-    chosen.name = "Chosen name";
-    chosen.sourceUrl = QUrl("https://musescore.com/scores/777");
+    //! [GIVEN] ...and a user who picks the cloud for it, naming the score in the dialog
+    givenReachableCloud();
+    ON_CALL(*m_configuration, shouldAskSaveLocationType()).WillByDefault(Return(false));
+    ON_CALL(*m_configuration, lastUsedSaveLocationType()).WillByDefault(Return(SaveLocationType::Cloud));
 
-    ON_CALL(*m_openSaveScenario, askSaveLocation(_, _, _))
-    .WillByDefault(Return(RetVal<SaveLocation>::make_ok(SaveLocation(chosen))));
+    QVariantMap answer;
+    answer["response"] = int(cloud::SaveToCloudResponse::SaveToCloudResponse::Ok);
+    answer["name"] = "Chosen name";
+    answer["visibility"] = int(cloud::Visibility::Private);
+    answer["replaceExisting"] = false;
+    ON_CALL(*m_interactive, openSync(_)).WillByDefault(Return(RetVal<Val>::make_ok(Val::fromQVariant(answer))));
 
-    //! [GIVEN] ...while the cloud is unreachable, so the upload is skipped
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
-    ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+    givenUploadFinishesWith(make_ok(), ValMap());
 
-    //! [THEN] The chosen cloud details are put on the project, and it is written locally meanwhile
-    EXPECT_CALL(*m_project, setCloudInfo(::testing::Field(&CloudProjectInfo::sourceUrl, chosen.sourceUrl))).Times(1);
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
+    std::vector<CloudProjectInfo> stored;
+    ON_CALL(*m_project, setCloudInfo(_)).WillByDefault([&stored](const CloudProjectInfo& i) {
+        stored.push_back(i);
+    });
+
+    //! [THEN] The score is written to disk on the way to the cloud
+    EXPECT_CALL(*m_project, save(_, _, _)).Times(::testing::AtLeast(1));
 
     //! [WHEN] Saving it...
     saveProject(SaveMode::Save);
+
+    //! [THEN] The name the user gave in the dialog is what lands on the project
+    ASSERT_FALSE(stored.empty());
+    EXPECT_EQ(stored.front().name, QString("Chosen name"));
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProject_Forced_SkipsTheCanSaveCheck)
@@ -388,7 +411,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_NoOpenScore_IsRefusedInsteadOfCrash
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
 
     //! [THEN] Nothing is asked and nothing is written
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
 
     //! [WHEN] A save is requested anyway, as the command path allows...
     Ret ret = saveProject(SaveMode::Save);
@@ -409,11 +432,13 @@ TEST_F(SaveProjectScenarioTests, SaveProject_AlreadySaving_RefusesToStartAgain)
     Ret nested;
     bool busyDuringDialog = false;
 
-    ON_CALL(*m_openSaveScenario, askSaveLocation(_, _, _))
-    .WillByDefault([this, &nested, &busyDuringDialog](INotationProjectPtr, SaveMode, SaveLocationType) {
+    givenUserCancelsTheSaveDialog();
+    ON_CALL(*m_interactive, selectSavingFileSync(_, _, _, _))
+    .WillByDefault([this, &nested, &busyDuringDialog](const std::string&, const io::path_t&,
+                                                      const std::vector<std::string>&, bool) {
         busyDuringDialog = m_scenario->isBusy(IProjectCommandsController::BusyStatus::Saving);
         nested = saveProject(SaveMode::Save);
-        return RetVal<SaveLocation>(make_ret(Ret::Code::Cancel));
+        return io::path_t();
     });
 
     //! [WHEN] Saving it...
@@ -465,7 +490,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_PathGiven_WritesThereWithoutA
     const io::path_t path = "/scores/explicit.mscz";
 
     //! [THEN] It is used as is, and nothing is asked
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, save(path, SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving to that path...
@@ -481,7 +506,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_NoPath_SavesTheScoreWhereItAl
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
     //! [THEN] Omitting the path falls back to a plain save over the existing file
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, save(io::path_t(), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving without naming a path...
@@ -668,8 +693,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndSaveAs_Ask
     .WillByDefault(Return(IInteractive::Result(SAVE_AS_BTN_ID)));
 
     //! [THEN] A fresh destination is asked for, so the healthy version can go somewhere else
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, SaveMode::SaveAs, _))
-    .WillOnce(Return(RetVal<SaveLocation>(make_ret(Ret::Code::Cancel))));
+    givenUserCancelsTheSaveDialog();
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving it, then letting the deferred call run...
     saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
@@ -686,7 +711,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndCancel_Doe
     EXPECT_CALL(*m_project, save(_, _, _))
     .Times(1)
     .WillOnce(Return(make_ret(Err::CorruptionUponSavingError)));
-    EXPECT_CALL(*m_openSaveScenario, askSaveLocation(_, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
 
     //! [WHEN] Saving it, then letting any deferred call run...
     Ret ret = saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
@@ -766,8 +791,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInst
     ON_CALL(*m_authorization, ensureAuthorization(_, _))
     .WillByDefault(Return(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead)))));
 
-    ON_CALL(*m_openSaveScenario, askLocalPath(_, _))
-    .WillByDefault(Return(RetVal<io::path_t>::make_ok(io::path_t("/local/instead.mscz"))));
+    givenUserPicksLocalFile(io::path_t("/local/instead.mscz"));
 
     //! [THEN] The score goes to the chosen local file, the preference is remembered, and nothing is uploaded
     EXPECT_CALL(*m_project, save(io::path_t("/local/instead.mscz"), SaveMode::Save, true)).Times(1);
@@ -790,8 +814,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNot
     ON_CALL(*m_authorization, ensureAuthorization(_, _))
     .WillByDefault(Return(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead)))));
 
-    ON_CALL(*m_openSaveScenario, askLocalPath(_, _))
-    .WillByDefault(Return(RetVal<io::path_t>(make_ret(Ret::Code::Cancel))));
+    givenUserCancelsTheSaveDialog();
 
     //! [THEN] Nothing is written anywhere
     EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
@@ -860,8 +883,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb_Asks
     .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
 
     //! [GIVEN] ...and a user who declines the warning
-    ON_CALL(*m_openSaveScenario, warnBeforeSavingToExistingPubliclyVisibleCloudProject())
-    .WillByDefault(Return(false));
+    ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
+    .WillByDefault(Return(IInteractive::Result(int(IInteractive::Button::Cancel))));
 
     //! [THEN] Nothing is written and nothing is uploaded
     EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
@@ -942,8 +965,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UploadFails_ReportsTheError)
     givenUploadFinishesWith(make_ret(Ret::Code::InternalError), ValMap());
 
     //! [THEN] The failure is shown through the cloud save error dialog
-    EXPECT_CALL(*m_openSaveScenario, showCloudSaveError(_, _, false /*publishMode*/, true /*alreadyAttempted*/))
-    .WillOnce(Return(make_ret(Ret::Code::Cancel)));
+    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
+    .WillOnce(Return(IInteractive::Result(int(IInteractive::Button::Cancel))));
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
