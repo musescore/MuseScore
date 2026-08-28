@@ -514,6 +514,17 @@ void Spanner::remove(EngravingItem* e)
     m_segments.erase(std::remove(m_segments.begin(), m_segments.end(), ss), m_segments.end());
 }
 
+void Spanner::removed()
+{
+    for (SpannerSegment* seg : m_segments) {
+        seg->moveToSystem(nullptr);
+    }
+
+    for (SpannerSegment* seg : m_unusedSegments) {
+        seg->moveToSystem(nullptr);
+    }
+}
+
 EngravingItemList Spanner::accessibleChildren() const
 {
     // A segment that is placed on a system belongs to that system in the accessibility

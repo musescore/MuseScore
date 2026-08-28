@@ -1366,6 +1366,11 @@ void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* 
         return;
     }
 
+    IF_ASSERT_FAILED(!sharedItem->isChord() && !originItem->isChord()) {
+        // Notes are connected, not chords
+        return;
+    }
+
     IF_ASSERT_FAILED(sharedItem->ldata()->m_sharedItem == nullptr && originItem->ldata()->m_originItems.empty()) {
         return;
     }
