@@ -41,7 +41,7 @@ Item {
     readonly property int hitPointsPanelMinWidth: 240
     readonly property int hitPointsPanelMaxWidth: 420
     property int hitPointsPanelWidth: 260
-    readonly property int timelineZoomMax: 8
+    readonly property int timelineZoomMax: 10
     property real timelineZoom: 1
     readonly property int timelineFrameRate: Math.max(1, Math.round(videoModel.frameRate))
     readonly property int timelineFrameCount: videoModel.hasVideo && video.duration > 0 ? Math.floor((video.duration / 1000) * root.timelineFrameRate) + 1 : 0
@@ -484,6 +484,20 @@ Item {
                     }
                 }
 
+                FlatButton {
+                    Layout.preferredWidth: 30
+                    Layout.preferredHeight: 30
+                    enabled: videoModel.hasVideo
+                    text: qsTrc("playback", "M", "Mark: add a hit point at the current position")
+                    toolTipTitle: qsTrc("playback", "Add hit point at current position")
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 3
+
+                    onClicked: {
+                        videoModel.addHitPoint(video.position)
+                    }
+                }
+
                 Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 76
@@ -606,8 +620,8 @@ Item {
                                                     return
                                                 }
 
-                                                var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
-                                                hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
+                                                var mapped = mapToItem(timelineTrack, mouse.x, mouse.y)
+                                                hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, timelineTrack.width)
                                             }
 
                                             onReleased: function(mouse) {
@@ -660,8 +674,11 @@ Item {
                                 }
                             }
 
-                            // Zone 2: timeline -- scrubber, frame ticks, and a thin position line
-                            // per hit point (for reference only; the ruler above is interactive).
+                            // Zone 2: timeline -- frame-tick ruler with duration labels, a thin
+                            // position line per hit point (reference only; the ruler above is
+                            // interactive), and the playhead itself as a full-height bar rather
+                            // than a slider thumb, for more precise visual tracking during
+                            // playback. Click or drag anywhere in this zone to seek.
                             Rectangle {
                                 id: timelineTrack
 
@@ -672,23 +689,21 @@ Item {
                                 anchors.bottom: parent.bottom
                                 color: ui.theme.backgroundTertiaryColor
 
-                            StyledSlider {
-                                id: positionSlider
-
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.top: parent.top
-                                anchors.topMargin: 6
-                                from: 0
-                                to: Math.max(video.duration, 1)
-                                stepSize: 100
-                                value: video.position
+                            MouseArea {
+                                anchors.fill: parent
                                 enabled: videoModel.hasVideo && video.seekable
-                                navigation.panel: navigationPanel
-                                navigation.order: root.contentNavigationPanelOrderStart + 3
+                                cursorShape: Qt.PointingHandCursor
 
-                                onMoved: {
-                                    root.seekToVideoPositionMs(value)
+                                onPressed: function(mouse) {
+                                    root.seekToVideoPositionMs(root.timelinePositionForX(mouse.x, width))
+                                }
+
+                                onPositionChanged: function(mouse) {
+                                    if (!pressed) {
+                                        return
+                                    }
+
+                                    root.seekToVideoPositionMs(root.timelinePositionForX(mouse.x, width))
                                 }
                             }
 
@@ -700,7 +715,7 @@ Item {
 
                                     x: Math.max(0, Math.min(parent.width - width,
                                                              (modelData.timeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
-                                    y: 24
+                                    y: 2
                                     width: 1
                                     height: parent.height - y
                                     color: ui.theme.accentColor
@@ -714,8 +729,8 @@ Item {
 
                                 anchors.left: parent.left
                                 anchors.right: parent.right
-                                y: 24
-                                height: 22
+                                y: 6
+                                height: 30
                                 visible: videoModel.hasVideo && video.duration > 0
 
                                 onPaint: {
@@ -798,6 +813,19 @@ Item {
                                 onWidthChanged: requestPaint()
                                 onVisibleChanged: requestPaint()
                             }
+
+                            Rectangle {
+                                id: playheadBar
+
+                                readonly property real tickX: (video.position / Math.max(video.duration, 1)) * parent.width
+
+                                x: Math.max(0, Math.min(parent.width - width, tickX - width / 2))
+                                y: 0
+                                width: 2
+                                height: parent.height
+                                color: ui.theme.focusColor
+                                visible: videoModel.hasVideo && video.duration > 0
+                            }
                             }
                         }
                     }
@@ -805,7 +833,7 @@ Item {
 
                 RowLayout {
                     Layout.alignment: Qt.AlignVCenter
-                    spacing: 2
+                    spacing: 4
 
                     FlatButton {
                         Layout.preferredWidth: 24
@@ -816,11 +844,30 @@ Item {
                         enabled: videoModel.hasVideo && root.timelineZoom > 1
                         toolTipTitle: qsTrc("playback", "Zoom out timeline")
                         navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 3
+                        navigation.order: root.contentNavigationPanelOrderStart + 5
 
                         onClicked: {
-                            root.timelineZoom = Math.max(1, root.timelineZoom - 1)
+                            root.timelineZoom = Math.max(1, root.timelineZoom - 0.25)
                         }
+                    }
+
+                    TextInputField {
+                        Layout.preferredWidth: 44
+                        currentText: Math.round(root.timelineZoom * 100).toString()
+                        enabled: videoModel.hasVideo
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 6
+
+                        onTextEditingFinished: function(newTextValue) {
+                            var parsedValue = parseInt(newTextValue, 10)
+                            if (!isNaN(parsedValue) && parsedValue > 0) {
+                                root.timelineZoom = Math.max(1, Math.min(root.timelineZoomMax, parsedValue / 100))
+                            }
+                        }
+                    }
+
+                    StyledTextLabel {
+                        text: "%"
                     }
 
                     FlatButton {
@@ -832,10 +879,29 @@ Item {
                         enabled: videoModel.hasVideo && root.timelineZoom < root.timelineZoomMax
                         toolTipTitle: qsTrc("playback", "Zoom in timeline")
                         navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 3
+                        navigation.order: root.contentNavigationPanelOrderStart + 7
 
                         onClicked: {
-                            root.timelineZoom = Math.min(root.timelineZoomMax, root.timelineZoom + 1)
+                            root.timelineZoom = Math.min(root.timelineZoomMax, root.timelineZoom + 0.25)
+                        }
+                    }
+
+                    Repeater {
+                        model: [100, 250, 500, 750]
+
+                        FlatButton {
+                            required property int modelData
+                            required property int index
+
+                            Layout.preferredHeight: 24
+                            text: modelData + "%"
+                            enabled: videoModel.hasVideo
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 8 + index
+
+                            onClicked: {
+                                root.timelineZoom = modelData / 100
+                            }
                         }
                     }
                 }
@@ -851,9 +917,10 @@ Item {
                     id: filePicker
 
                     anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.right: recentFilesButton.left
+                    anchors.rightMargin: 4
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: 4
+                    anchors.leftMargin: 4
                     path: videoModel.videoPath
                     dialogTitle: qsTrc("playback", "Choose video")
                     filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
@@ -863,6 +930,37 @@ Item {
 
                     onPathEdited: function(newPath) {
                         videoModel.videoPath = newPath
+                    }
+                }
+
+                FlatButton {
+                    id: recentFilesButton
+
+                    anchors.right: parent.right
+                    anchors.rightMargin: 4
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 22
+                    height: 22
+                    icon: IconCode.SMALL_ARROW_DOWN
+                    buttonType: FlatButton.IconOnly
+                    transparent: true
+                    toolTipTitle: qsTrc("playback", "Recently opened videos")
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 4 + 2
+
+                    onClicked: {
+                        recentFilesMenu.items = videoModel.recentVideoFiles().map(function(path) {
+                            return { id: path, title: path }
+                        })
+                        recentFilesMenu.show(Qt.point(0, height))
+                    }
+
+                    ContextMenuLoader {
+                        id: recentFilesMenu
+
+                        onHandleMenuItem: function(itemId) {
+                            videoModel.videoPath = itemId
+                        }
                     }
                 }
             }
