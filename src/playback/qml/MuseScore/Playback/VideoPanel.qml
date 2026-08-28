@@ -59,10 +59,6 @@ Item {
         root.hitPointsPanelWidth = videoModel.hitPointsPanelWidth()
     }
 
-    function colorFromInt(value) {
-        return "#" + value.toString(16).padStart(6, "0")
-    }
-
     function targetVideoPositionMs() {
         return Math.max(0, Math.min(video.duration, videoModel.scorePlaybackPositionMs + videoModel.offsetMs))
     }
@@ -332,6 +328,7 @@ Item {
 
                 FontMetrics {
                     id: timerFontMetrics
+                    font.family: "monospace"
                     font.pixelSize: 20
                     font.bold: true
                 }
@@ -355,6 +352,7 @@ Item {
                             id: timecodeLabel
                             anchors.right: parent.right
                             text: videoModel.formatTimecode(video.position)
+                            font.family: "monospace"
                             font.pixelSize: 20
                             font.bold: true
                             color: "#F0F0F0"
@@ -379,6 +377,7 @@ Item {
                             id: musicalPositionLabel
                             anchors.left: parent.left
                             text: videoModel.musicalPositionText(video.position)
+                            font.family: "monospace"
                             font.pixelSize: 20
                             font.bold: true
                             color: "#F0F0F0"
@@ -487,7 +486,7 @@ Item {
 
                 Item {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: videoModel.hitPoints.length > 0 ? 70 : 58
+                    Layout.preferredHeight: 76
 
                     StyledFlickable {
                         id: timelineFlickable
@@ -510,13 +509,176 @@ Item {
                             width: timelineFlickable.contentWidth
                             height: timelineFlickable.height
 
+                            // Zone 1: ruler -- hit-point badges. Double-click empty space to add
+                            // a new hit point there; right-click a badge for Edit/Delete.
+                            Rectangle {
+                                id: hitPointsRuler
+
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                height: 20
+                                color: ui.theme.backgroundSecondaryColor
+                                visible: videoModel.hasVideo && video.duration > 0
+
+                                MouseArea {
+                                    anchors.fill: parent
+
+                                    onDoubleClicked: function(mouse) {
+                                        videoModel.addHitPoint(root.timelinePositionForX(mouse.x, width))
+                                    }
+                                }
+
+                                Repeater {
+                                    model: videoModel.hitPoints
+
+                                    Rectangle {
+                                        id: hitPointMarker
+
+                                        required property var modelData
+                                        required property int index
+                                        property bool dragging: false
+                                        property bool editingLabel: false
+                                        property real dragTimeMs: modelData.timeMs
+                                        readonly property real displayTimeMs: dragging ? dragTimeMs : modelData.timeMs
+                                        readonly property real tickX: (displayTimeMs / Math.max(video.duration, 1)) * parent.width
+
+                                        x: Math.max(0, Math.min(parent.width - width, tickX - width / 2))
+                                        y: 2
+                                        width: Math.max(20, badgeLabel.implicitWidth + 12)
+                                        height: 16
+                                        radius: height / 2
+                                        color: ui.theme.accentColor
+                                        border.width: hitPointMarker.dragging ? 2 : 0
+                                        border.color: "white"
+
+                                        StyledTextLabel {
+                                            id: badgeLabel
+                                            anchors.centerIn: parent
+                                            text: parent.modelData.label
+                                            maximumLineCount: 1
+                                            font.pixelSize: 9
+                                            font.bold: true
+                                            color: "white"
+                                            visible: !hitPointMarker.editingLabel
+                                        }
+
+                                        TextInputField {
+                                            id: markerLabelEditor
+
+                                            anchors.centerIn: parent
+                                            width: Math.max(70, parent.width)
+                                            currentText: hitPointMarker.modelData.label
+                                            visible: hitPointMarker.editingLabel
+
+                                            onTextEditingFinished: function(newTextValue) {
+                                                videoModel.renameHitPoint(hitPointMarker.modelData.id, newTextValue)
+                                                hitPointMarker.editingLabel = false
+                                            }
+
+                                            Keys.onEscapePressed: {
+                                                hitPointMarker.editingLabel = false
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            id: hitPointMouseArea
+
+                                            anchors.fill: parent
+                                            anchors.margins: -4
+                                            acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                            cursorShape: Qt.SizeHorCursor
+                                            preventStealing: true
+
+                                            onPressed: function(mouse) {
+                                                if (mouse.button === Qt.RightButton) {
+                                                    hitPointContextMenu.show(Qt.point(mouse.x, mouse.y))
+                                                    return
+                                                }
+
+                                                var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
+                                                hitPointMarker.dragging = true
+                                                hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
+                                            }
+
+                                            onPositionChanged: function(mouse) {
+                                                if (!pressed) {
+                                                    return
+                                                }
+
+                                                var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
+                                                hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
+                                            }
+
+                                            onReleased: function(mouse) {
+                                                if (mouse.button === Qt.RightButton) {
+                                                    return
+                                                }
+
+                                                videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, hitPointMarker.dragTimeMs)
+                                                root.seekToVideoPositionMs(hitPointMarker.dragTimeMs)
+                                                hitPointMarker.dragging = false
+                                            }
+
+                                            onCanceled: {
+                                                hitPointMarker.dragging = false
+                                            }
+
+                                            onDoubleClicked: function(mouse) {
+                                                if (mouse.button === Qt.RightButton) {
+                                                    return
+                                                }
+
+                                                hitPointMarker.editingLabel = true
+                                                markerLabelEditor.forceActiveFocus()
+                                                markerLabelEditor.selectAll()
+                                            }
+
+                                            ContextMenuLoader {
+                                                id: hitPointContextMenu
+
+                                                items: [
+                                                    { id: "edit", title: qsTrc("playback", "Edit"), icon: IconCode.EDIT },
+                                                    { id: "delete", title: qsTrc("playback", "Delete"), icon: IconCode.DELETE_TANK }
+                                                ]
+
+                                                onHandleMenuItem: function(itemId) {
+                                                    switch (itemId) {
+                                                    case "edit":
+                                                        hitPointMarker.editingLabel = true
+                                                        markerLabelEditor.forceActiveFocus()
+                                                        markerLabelEditor.selectAll()
+                                                        break
+                                                    case "delete":
+                                                        videoModel.removeHitPoint(hitPointMarker.modelData.id)
+                                                        break
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Zone 2: timeline -- scrubber, frame ticks, and a thin position line
+                            // per hit point (for reference only; the ruler above is interactive).
+                            Rectangle {
+                                id: timelineTrack
+
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: hitPointsRuler.bottom
+                                anchors.topMargin: 2
+                                anchors.bottom: parent.bottom
+                                color: ui.theme.backgroundTertiaryColor
+
                             StyledSlider {
                                 id: positionSlider
 
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.top: parent.top
-                                anchors.topMargin: videoModel.hitPoints.length > 0 ? 17 : 8
+                                anchors.topMargin: 6
                                 from: 0
                                 to: Math.max(video.duration, 1)
                                 stepSize: 100
@@ -530,13 +692,30 @@ Item {
                                 }
                             }
 
+                            Repeater {
+                                model: videoModel.hitPoints
+
+                                Rectangle {
+                                    required property var modelData
+
+                                    x: Math.max(0, Math.min(parent.width - width,
+                                                             (modelData.timeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
+                                    y: 24
+                                    width: 1
+                                    height: parent.height - y
+                                    color: ui.theme.accentColor
+                                    opacity: 0.8
+                                    visible: videoModel.hasVideo && video.duration > 0
+                                }
+                            }
+
                             Canvas {
                                 id: frameTickCanvas
 
                                 anchors.left: parent.left
                                 anchors.right: parent.right
-                                y: 41
-                                height: 28
+                                y: 24
+                                height: 22
                                 visible: videoModel.hasVideo && video.duration > 0
 
                                 onPaint: {
@@ -619,98 +798,6 @@ Item {
                                 onWidthChanged: requestPaint()
                                 onVisibleChanged: requestPaint()
                             }
-
-                            Repeater {
-                                model: videoModel.hitPoints
-
-                                Rectangle {
-                                    id: hitPointMarker
-
-                                    required property var modelData
-                                    required property int index
-                                    property bool dragging: false
-                                    property bool editingLabel: false
-                                    property real dragTimeMs: modelData.timeMs
-                                    readonly property real displayTimeMs: dragging ? dragTimeMs : modelData.timeMs
-                                    readonly property real tickX: (displayTimeMs / Math.max(video.duration, 1)) * parent.width
-
-                                    x: Math.max(0, Math.min(parent.width - width, tickX - width / 2))
-                                    y: 1
-                                    width: Math.max(20, badgeLabel.implicitWidth + 12)
-                                    height: 16
-                                    radius: height / 2
-                                    visible: videoModel.hasVideo && video.duration > 0
-                                    color: root.colorFromInt(modelData.color)
-                                    border.width: hitPointMarker.dragging ? 2 : 0
-                                    border.color: "white"
-
-                                    StyledTextLabel {
-                                        id: badgeLabel
-                                        anchors.centerIn: parent
-                                        text: parent.modelData.label
-                                        maximumLineCount: 1
-                                        font.pixelSize: 9
-                                        font.bold: true
-                                        color: "white"
-                                        visible: !hitPointMarker.editingLabel
-                                    }
-
-                                    TextInputField {
-                                        id: markerLabelEditor
-
-                                        anchors.centerIn: parent
-                                        width: Math.max(70, parent.width)
-                                        currentText: hitPointMarker.modelData.label
-                                        visible: hitPointMarker.editingLabel
-
-                                        onTextEditingFinished: function(newTextValue) {
-                                            videoModel.renameHitPoint(hitPointMarker.modelData.id, newTextValue)
-                                            hitPointMarker.editingLabel = false
-                                        }
-
-                                        Keys.onEscapePressed: {
-                                            hitPointMarker.editingLabel = false
-                                        }
-                                    }
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        anchors.margins: -4
-                                        cursorShape: Qt.SizeHorCursor
-                                        preventStealing: true
-
-                                        onPressed: function(mouse) {
-                                            var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
-                                            hitPointMarker.dragging = true
-                                            hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
-                                        }
-
-                                        onPositionChanged: function(mouse) {
-                                            if (!pressed) {
-                                                return
-                                            }
-
-                                            var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
-                                            hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
-                                        }
-
-                                        onReleased: {
-                                            videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, hitPointMarker.dragTimeMs)
-                                            root.seekToVideoPositionMs(hitPointMarker.dragTimeMs)
-                                            hitPointMarker.dragging = false
-                                        }
-
-                                        onCanceled: {
-                                            hitPointMarker.dragging = false
-                                        }
-
-                                        onDoubleClicked: {
-                                            hitPointMarker.editingLabel = true
-                                            markerLabelEditor.forceActiveFocus()
-                                            markerLabelEditor.selectAll()
-                                        }
-                                    }
-                                }
                             }
                         }
                     }
@@ -754,17 +841,29 @@ Item {
                 }
             }
 
-            FilePicker {
+            Rectangle {
                 Layout.fillWidth: true
-                path: videoModel.videoPath
-                dialogTitle: qsTrc("playback", "Choose video")
-                filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
-                buttonType: FlatButton.IconOnly
-                navigation: navigationPanel
-                navigationRowOrderStart: root.contentNavigationPanelOrderStart + 4
+                implicitHeight: filePicker.implicitHeight + 8
+                color: ui.theme.backgroundSecondaryColor
+                radius: 2
 
-                onPathEdited: function(newPath) {
-                    videoModel.videoPath = newPath
+                FilePicker {
+                    id: filePicker
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: 4
+                    path: videoModel.videoPath
+                    dialogTitle: qsTrc("playback", "Choose video")
+                    filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
+                    buttonType: FlatButton.IconOnly
+                    navigation: navigationPanel
+                    navigationRowOrderStart: root.contentNavigationPanelOrderStart + 4
+
+                    onPathEdited: function(newPath) {
+                        videoModel.videoPath = newPath
+                    }
                 }
             }
             }

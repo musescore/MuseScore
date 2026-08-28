@@ -44,10 +44,6 @@ RowLayout {
     property bool editingLabel: false
     property bool editingTimecode: false
 
-    function colorFromInt(value) {
-        return "#" + value.toString(16).padStart(6, "0")
-    }
-
     spacing: 8
 
     Item {
@@ -59,7 +55,7 @@ RowLayout {
             verticalAlignment: Text.AlignVCenter
             text: root.hitPoint.timecode
             maximumLineCount: 1
-            color: root.colorFromInt(root.hitPoint.color)
+            color: ui.theme.accentColor
             visible: !root.editingTimecode
 
             MouseArea {
