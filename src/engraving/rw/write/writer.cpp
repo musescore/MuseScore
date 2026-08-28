@@ -89,31 +89,6 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
 {
     TRACEFUNC;
 
-    // if we have multi measure rests and some parts are hidden,
-    // then some layout information is missing:
-    // relayout with all parts set visible (but rollback at end)
-
-    std::vector<Part*> hiddenParts;
-    bool unhide = false;
-    if (score->style().styleB(Sid::createMultiMeasureRests)) {
-        for (Part* part : score->m_parts) {
-            if (!part->show()) {
-                if (!unhide) {
-                    score->startCmd(TranslatableString::untranslatable("Unhide instruments for save"));
-                    unhide = true;
-                }
-                part->undoChangeProperty(Pid::VISIBLE, true);
-                hiddenParts.push_back(part);
-            }
-        }
-    }
-    if (unhide) {
-        score->doLayout();
-        for (Part* p : hiddenParts) {
-            p->setShow(false);
-        }
-    }
-
     xml.startElement(score);
 
     TWrite::writeItemEid(score, xml);
@@ -271,10 +246,6 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     TWrite::writeSystemDividers(score, xml, ctx);
 
     xml.endElement(); // score
-
-    if (unhide) {
-        score->endCmd(true);
-    }
 }
 
 void Writer::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack, track_idx_t etrack,
