@@ -335,7 +335,11 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: 10
                     visible: videoModel.hasVideo
-                    text: videoModel.formatTimecode(video.position)
+                    text: {
+                        var timecode = videoModel.formatTimecode(video.position)
+                        var musicalPosition = videoModel.musicalPositionText(video.position)
+                        return musicalPosition.length > 0 ? (timecode + "   |   " + musicalPosition) : timecode
+                    }
                     font.pixelSize: 20
                     font.bold: true
                     color: "#F0F0F0"

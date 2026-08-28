@@ -76,6 +76,10 @@ public:
     Q_INVOKABLE void setHitPointTimeMs(int hitPointId, int videoPositionMs);
     Q_INVOKABLE void setHitPointTimecode(int hitPointId, const QString& timecode);
     Q_INVOKABLE QString formatTimecode(int videoPositionMs) const;
+    //! NOTE "<measure>.<beat>" for the score position corresponding to videoPositionMs,
+    //! e.g. "34.3" -- same format already used per-hit-point in hitPoints(). Empty
+    //! string if there is no current project/score.
+    Q_INVOKABLE QString musicalPositionText(int videoPositionMs) const;
 
     //! NOTE Toggles the score's own playback; the video follows via the existing
     //! score->video sync (playbackSyncChanged), it is not driven directly here.
@@ -132,7 +136,6 @@ private:
     void updateAttachment(const project::VideoAttachmentSettings& attachment);
     QVariantMap hitPointToMap(const project::VideoHitPointSettings& hitPoint) const;
     static int indexOfHitPoint(const project::VideoAttachmentSettings& attachment, int hitPointId);
-    QString musicalPositionText(int videoPositionMs) const;
     int parseTimecodeToMs(const QString& timecode) const;
     void listenCurrentProject();
     void listenPlaybackState();
