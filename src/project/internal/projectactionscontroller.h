@@ -47,6 +47,7 @@
 #include "iexportprojectscenario.h"
 #include "inotationreadersregister.h"
 #include "iopensaveprojectscenario.h"
+#include "isaveprojectscenario.h"
 #include "imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "notation/inotationconfiguration.h"
@@ -83,6 +84,7 @@ public:
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };
+    muse::ContextInject<ISaveProjectScenario> saveProjectScenario = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
@@ -151,67 +153,14 @@ private:
 
     muse::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
-    muse::Ret canSaveProject() const;
     muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
-    muse::Ret saveProjectAt(const muse::rcommand::Params& params);
-    muse::Ret saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
-    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
-
-    struct AudioFile {
-        QString format;
-        std::shared_ptr<QIODevice> device = nullptr;
-
-        AudioFile() {}
-
-        bool isValid() const
-        {
-            return !format.isEmpty() && device != nullptr;
-        }
-    };
-
     muse::Ret publish();
-    muse::Ret shareAudio(const AudioFile& existingAudio);
-    muse::Ret sharedAudio() { return shareAudio(AudioFile()); }
-    void uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project, const CloudAudioInfo& info);
-    void alsoShareAudioCom(const AudioFile& audio);
-
-    muse::Ret askAudioGenerationSettings() const;
-    muse::RetVal<bool> needGenerateAudio(bool isPublic) const;
-    AudioFile exportMp3(const notation::INotationPtr notation) const;
-
-    void showUploadProgressDialog();
-    void closeUploadProgressDialog();
-
-    muse::Ret uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
-    void uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave,
-                                   bool publishMode);
-
-    void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
-    muse::Ret onProjectUploadFailed(const muse::Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
-                                    bool publishMode);
-
-    void onAudioSuccessfullyUploaded(const QUrl& urlToOpen);
-    void onAudioUploadFailed(const muse::Ret& ret);
-
-    void warnCloudIsNotAvailable();
-
-    bool askIfUserAgreesToSaveProjectWithErrors(const muse::Ret& ret, const SaveLocation& location);
-    void warnScoreWithoutPartsCannotBeSaved();
-    bool askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
-    void warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert);
-    bool askIfUserAgreesToSaveCorruptedScoreLocally(const std::string& errorText, bool canRevert);
-    bool askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText);
-    void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
-
-    void warnScoreCouldnotBeSaved(const muse::Ret& ret);
-    void warnScoreCouldnotBeSaved(const std::string& errorText);
-    int warnScoreHasBecomeCorruptedAfterSave(const muse::Ret& ret);
+    muse::Ret sharedAudio();
+    muse::Ret saveProjectAt(const muse::rcommand::Params& params);
 
     void revertCorruptedScoreToLastSaved();
 
     RecentFile makeRecentFile(INotationProjectPtr project);
-
-    void moveProject(INotationProjectPtr project, const muse::io::path_t& newPath, bool replace);
 
     muse::Ret importPdf();
     muse::Ret importAudioToScore();
@@ -223,7 +172,6 @@ private:
     muse::Ret openProjectProperties();
 
     muse::async::Promise<muse::io::path_t> selectScoreOpeningFile() const;
-    muse::io::path_t selectScoreSavingFile(const muse::io::path_t& defaultFilePath, const QString& saveTitle);
 
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);
     muse::Ret loadWithFallback(const std::shared_ptr<INotationProject>& project, const muse::io::path_t& loadPath,
@@ -238,8 +186,6 @@ private:
     muse::Ret exportScore();
     muse::Ret printScore();
 
-    QUrl scoreManagerUrl() const;
-
     void setBusy(BusyStatus status, bool isBusy);
 
     std::set<BusyStatus> m_busyStatuses;
@@ -247,11 +193,6 @@ private:
 
     muse::async::Notification m_needSaveChanged;
     muse::async::Notification m_hasSelectionChanged;
-
-    muse::ProgressPtr m_uploadingProjectProgress = nullptr;
-    muse::ProgressPtr m_uploadingAudioProgress = nullptr;
-
-    int m_numberOfSavesToCloud = 0;
 
     ProjectBeingDownloaded m_projectBeingDownloaded;
     muse::async::Notification m_projectBeingDownloadedChanged;
