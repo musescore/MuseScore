@@ -33,6 +33,7 @@
 #include "notation/inotation.h"
 #include "notation/inotationundostack.h"
 #include "notationscene/notationcommands.h"
+#include "project/inotationproject.h"
 
 using namespace muse;
 using namespace mu::appshell;

@@ -24,6 +24,7 @@
 #include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
 #include "context/shortcutcontext.h"
+#include "project/inotationproject.h"
 #include "project/iprojectvideosettings.h"
 
 #include "dockwindow/idockwindow.h"
