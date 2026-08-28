@@ -26,7 +26,7 @@
 
 #include "async/processevents.h"
 
-#include "project/internal/projectactionscontroller.h"
+#include "project/internal/saveprojectscenario.h"
 #include "project/projecterrors.h"
 
 #include "cloud/qml/Muse/Cloud/enums.h"
@@ -58,12 +58,12 @@ using namespace muse;
 using namespace mu::project;
 
 namespace mu::project {
-class ProjectActionsControllerTests : public ::testing::Test
+class SaveProjectScenarioTests : public ::testing::Test
 {
 protected:
     void SetUp() override
     {
-        m_controller = std::make_shared<ProjectActionsController>(modularity::globalCtx());
+        m_scenario = std::make_shared<SaveProjectScenario>(modularity::globalCtx());
 
         m_configuration = std::make_shared<NiceMock<ProjectConfigurationMock> >();
         m_fileSystem = std::make_shared<NiceMock<io::FileSystemMock> >();
@@ -78,17 +78,17 @@ protected:
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
 
-        m_controller->configuration.set(m_configuration);
-        m_controller->fileSystem.set(m_fileSystem);
-        m_controller->notationConfiguration.set(m_notationConfiguration);
-        m_controller->museScoreComService.set(m_museScoreComService);
-        m_controller->audioComService.set(m_audioComService);
-        m_controller->platformInteractive.set(m_platformInteractive);
-        m_controller->recentFilesController.set(m_recentFiles);
-        m_controller->openSaveProjectScenario.set(m_openSaveScenario);
-        m_controller->exportProjectScenario.set(m_exportScenario);
-        m_controller->interactive.set(m_interactive);
-        m_controller->globalContext.set(m_globalContext);
+        m_scenario->configuration.set(m_configuration);
+        m_scenario->fileSystem.set(m_fileSystem);
+        m_scenario->notationConfiguration.set(m_notationConfiguration);
+        m_scenario->museScoreComService.set(m_museScoreComService);
+        m_scenario->audioComService.set(m_audioComService);
+        m_scenario->platformInteractive.set(m_platformInteractive);
+        m_scenario->recentFilesController.set(m_recentFiles);
+        m_scenario->openSaveProjectScenario.set(m_openSaveScenario);
+        m_scenario->exportProjectScenario.set(m_exportScenario);
+        m_scenario->interactive.set(m_interactive);
+        m_scenario->globalContext.set(m_globalContext);
 
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
         m_masterNotation = std::make_shared<NiceMock<notation::MasterNotationMock> >();
@@ -129,27 +129,27 @@ protected:
 
     Ret saveProject(SaveMode mode, SaveLocationType type = SaveLocationType::Undefined, bool force = false)
     {
-        return m_controller->saveProject(mode, type, force);
+        return m_scenario->saveProject(mode, type, force);
     }
 
     Ret saveProjectAt(const SaveLocation& location, SaveMode mode = SaveMode::Save, bool force = false)
     {
-        return m_controller->saveProjectAt(location, mode, force);
+        return m_scenario->saveProjectAt(location, mode, force);
     }
 
     Ret saveProjectAt(const rcommand::Params& params)
     {
-        return m_controller->saveProjectAt(params);
+        return m_scenario->saveProjectAt(params);
     }
 
     bool saveProjectToCloud(const CloudProjectInfo& info, SaveMode mode = SaveMode::Save)
     {
-        return m_controller->saveProjectToCloud(info, mode);
+        return m_scenario->saveProjectToCloud(info, mode);
     }
 
     RetVal<bool> needGenerateAudio(bool isPublic)
     {
-        return m_controller->needGenerateAudio(isPublic);
+        return m_scenario->needGenerateAudio(isPublic);
     }
 
     //! NOTE Some failure paths retry through async::Async::call, which queues onto the async
@@ -196,7 +196,7 @@ protected:
     static constexpr int SAVE_AS_BTN_ID = RETRY_SAVE_BTN_ID + 1;
     static constexpr int SAVE_ANYWAY_BTN_ID = int(IInteractive::Button::CustomButton);
 
-    std::shared_ptr<ProjectActionsController> m_controller;
+    std::shared_ptr<SaveProjectScenario> m_scenario;
 
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<io::FileSystemMock> m_fileSystem;
@@ -221,7 +221,7 @@ protected:
 
 // ─── Where does the score go: ask, or save silently ──────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProject_ExistingLocalScore_SavesWithoutAsking)
+TEST_F(SaveProjectScenarioTests, SaveProject_ExistingLocalScore_SavesWithoutAsking)
 {
     //! [GIVEN] An already saved local score...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -238,7 +238,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_ExistingLocalScore_SavesWithou
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_ExistingCloudScore_SavesWithoutAsking)
+TEST_F(SaveProjectScenarioTests, SaveProject_ExistingCloudScore_SavesWithoutAsking)
 {
     //! [GIVEN] An already saved cloud score...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -261,7 +261,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_ExistingCloudScore_SavesWithou
     saveProject(SaveMode::Save);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_NewlyCreatedScore_AsksForSaveLocation)
+TEST_F(SaveProjectScenarioTests, SaveProject_NewlyCreatedScore_AsksForSaveLocation)
 {
     //! [GIVEN] A score that has never been saved...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(true));
@@ -278,7 +278,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_NewlyCreatedScore_AsksForSaveL
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_SaveAs_AlwaysAsksForSaveLocation)
+TEST_F(SaveProjectScenarioTests, SaveProject_SaveAs_AlwaysAsksForSaveLocation)
 {
     //! [GIVEN] An already saved local score...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -292,7 +292,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_SaveAs_AlwaysAsksForSaveLocati
     saveProject(SaveMode::SaveAs);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_LocalScoreToCloud_AsksForSaveLocation)
+TEST_F(SaveProjectScenarioTests, SaveProject_LocalScoreToCloud_AsksForSaveLocation)
 {
     //! [GIVEN] An already saved score that does not live in the cloud yet...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -306,7 +306,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_LocalScoreToCloud_AsksForSaveL
     saveProject(SaveMode::Save, SaveLocationType::Cloud);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_SaveCopy_AsksForSaveLocation)
+TEST_F(SaveProjectScenarioTests, SaveProject_SaveCopy_AsksForSaveLocation)
 {
     //! [GIVEN] An already saved local score...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -320,7 +320,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_SaveCopy_AsksForSaveLocation)
     saveProject(SaveMode::SaveCopy);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_ChosenLocalLocation_IsUsedAsGiven)
+TEST_F(SaveProjectScenarioTests, SaveProject_ChosenLocalLocation_IsUsedAsGiven)
 {
     //! [GIVEN] A score that has never been saved...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(true));
@@ -341,7 +341,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_ChosenLocalLocation_IsUsedAsGi
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_ChosenCloudLocation_IsAppliedToTheProject)
+TEST_F(SaveProjectScenarioTests, SaveProject_ChosenCloudLocation_IsAppliedToTheProject)
 {
     //! [GIVEN] A score that has never been saved...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(true));
@@ -367,7 +367,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_ChosenCloudLocation_IsAppliedT
     saveProject(SaveMode::Save);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_Forced_SkipsTheCanSaveCheck)
+TEST_F(SaveProjectScenarioTests, SaveProject_Forced_SkipsTheCanSaveCheck)
 {
     //! [GIVEN] A corrupted score the user has chosen to save anyway...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -382,7 +382,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_Forced_SkipsTheCanSaveCheck)
     saveProject(SaveMode::Save, SaveLocationType::Undefined, true /*force*/);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_NoOpenScore_IsRefusedInsteadOfCrashing)
+TEST_F(SaveProjectScenarioTests, SaveProject_NoOpenScore_IsRefusedInsteadOfCrashing)
 {
     //! [GIVEN] No score open at all...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
@@ -399,7 +399,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_NoOpenScore_IsRefusedInsteadOf
 
 // ─── One save at a time ──────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProject_AlreadySaving_RefusesToStartAgain)
+TEST_F(SaveProjectScenarioTests, SaveProject_AlreadySaving_RefusesToStartAgain)
 {
     //! [GIVEN] A score that has never been saved...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(true));
@@ -411,7 +411,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_AlreadySaving_RefusesToStartAg
 
     ON_CALL(*m_openSaveScenario, askSaveLocation(_, _, _))
     .WillByDefault([this, &nested, &busyDuringDialog](INotationProjectPtr, SaveMode, SaveLocationType) {
-        busyDuringDialog = m_controller->isBusy(IProjectCommandsController::BusyStatus::Saving);
+        busyDuringDialog = m_scenario->isBusy(IProjectCommandsController::BusyStatus::Saving);
         nested = saveProject(SaveMode::Save);
         return RetVal<SaveLocation>(make_ret(Ret::Code::Cancel));
     });
@@ -424,7 +424,7 @@ TEST_F(ProjectActionsControllerTests, SaveProject_AlreadySaving_RefusesToStartAg
     EXPECT_EQ(nested.code(), int(Ret::Code::Busy));
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProject_AfterSaving_IsNoLongerBusy)
+TEST_F(SaveProjectScenarioTests, SaveProject_AfterSaving_IsNoLongerBusy)
 {
     //! [GIVEN] An already saved local score...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -434,32 +434,32 @@ TEST_F(ProjectActionsControllerTests, SaveProject_AfterSaving_IsNoLongerBusy)
     EXPECT_TRUE(saveProject(SaveMode::Save));
 
     //! [THEN] The busy flag is released, so the next save is not refused
-    EXPECT_FALSE(m_controller->isBusy(IProjectCommandsController::BusyStatus::Saving));
+    EXPECT_FALSE(m_scenario->isBusy(IProjectCommandsController::BusyStatus::Saving));
     EXPECT_TRUE(saveProject(SaveMode::Save));
 }
 
 // ─── The public entry point used by the close and quit flows ─────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToPath_AlreadySaving_RefusesToStartAgain)
+TEST_F(SaveProjectScenarioTests, SaveProjectToPath_AlreadySaving_RefusesToStartAgain)
 {
     //! [GIVEN] A write that re-enters the save while it is still in progress...
     bool nested = true;
 
     ON_CALL(*m_project, save(_, _, _))
     .WillByDefault([this, &nested](const io::path_t&, SaveMode, bool) {
-        nested = m_controller->saveProject(io::path_t("/scores/other.mscz"));
+        nested = m_scenario->saveProject(io::path_t("/scores/other.mscz"));
         return make_ok();
     });
 
     //! [WHEN] Saving to an explicit path...
-    bool ok = m_controller->saveProject(io::path_t("/scores/explicit.mscz"));
+    bool ok = m_scenario->saveProject(io::path_t("/scores/explicit.mscz"));
 
     //! [THEN] The outer save succeeds and the re-entrant one is refused
     EXPECT_TRUE(ok);
     EXPECT_FALSE(nested);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToPath_PathGiven_WritesThereWithoutAsking)
+TEST_F(SaveProjectScenarioTests, SaveProjectToPath_PathGiven_WritesThereWithoutAsking)
 {
     //! [GIVEN] An explicit destination...
     const io::path_t path = "/scores/explicit.mscz";
@@ -469,12 +469,12 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToPath_PathGiven_WritesThereWit
     EXPECT_CALL(*m_project, save(path, SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving to that path...
-    bool ok = m_controller->saveProject(path);
+    bool ok = m_scenario->saveProject(path);
 
     EXPECT_TRUE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToPath_NoPath_SavesTheScoreWhereItAlreadyLives)
+TEST_F(SaveProjectScenarioTests, SaveProjectToPath_NoPath_SavesTheScoreWhereItAlreadyLives)
 {
     //! [GIVEN] An already saved local score...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -485,18 +485,18 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToPath_NoPath_SavesTheScoreWher
     EXPECT_CALL(*m_project, save(io::path_t(), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving without naming a path...
-    bool ok = m_controller->saveProject();
+    bool ok = m_scenario->saveProject();
 
     EXPECT_TRUE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToPath_WriteFails_ReportsFailure)
+TEST_F(SaveProjectScenarioTests, SaveProjectToPath_WriteFails_ReportsFailure)
 {
     //! [GIVEN] A score whose write will fail...
     ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
 
     //! [WHEN] Saving it to an explicit path...
-    bool ok = m_controller->saveProject(io::path_t("/scores/explicit.mscz"));
+    bool ok = m_scenario->saveProject(io::path_t("/scores/explicit.mscz"));
 
     //! [THEN] The failure is reported, so that the close and quit flows can stop
     EXPECT_FALSE(ok);
@@ -504,7 +504,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToPath_WriteFails_ReportsFailur
 
 // ─── Writing to disk ─────────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_LocalLocation_WritesToTheGivenPath)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_LocalLocation_WritesToTheGivenPath)
 {
     //! [GIVEN] A local destination...
     const io::path_t path = "/scores/symphony.mscz";
@@ -519,7 +519,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_LocalLocation_WritesToTheGiv
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_WriteFails_DoesNotRememberTheFile)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_WriteFails_DoesNotRememberTheFile)
 {
     //! [GIVEN] A score whose write will fail...
     ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
@@ -533,7 +533,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_WriteFails_DoesNotRememberTh
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_ScoreCannotBeSaved_DoesNotWrite)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_ScoreCannotBeSaved_DoesNotWrite)
 {
     //! [GIVEN] A score that reports it cannot be saved...
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::NoPartsError)));
@@ -547,7 +547,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_ScoreCannotBeSaved_DoesNotWr
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_Forced_WritesWithoutCheckingCanSave)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_Forced_WritesWithoutCheckingCanSave)
 {
     //! [GIVEN] A score that reports it cannot be saved...
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
@@ -559,7 +559,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_Forced_WritesWithoutChecking
     saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")), SaveMode::Save, true /*force*/);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_UndefinedLocation_Fails)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_UndefinedLocation_Fails)
 {
     //! [GIVEN] A location that is neither local nor cloud...
     //! [THEN] Nothing is written
@@ -571,7 +571,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_UndefinedLocation_Fails)
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_FromCommandParams_UsesTheGivenPath)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_FromCommandParams_UsesTheGivenPath)
 {
     //! [GIVEN] A "save at" command carrying a path...
     rcommand::Params params;
@@ -586,7 +586,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_FromCommandParams_UsesTheGiv
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_FromCommandParams_EmptyPathIsRejected)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_FromCommandParams_EmptyPathIsRejected)
 {
     //! [GIVEN] A "save at" command with no path...
     rcommand::Params params;
@@ -604,7 +604,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_FromCommandParams_EmptyPathI
 
 // ─── Saving a score that reports problems ────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_CorruptedScoreAndUserAgrees_WritesAnyway)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedScoreAndUserAgrees_WritesAnyway)
 {
     //! [GIVEN] An existing score that reports corruption...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -621,7 +621,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_CorruptedScoreAndUserAgrees_
     saveProjectAt(SaveLocation(io::path_t("/scores/corrupted.mscz")));
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_CorruptedOnOpeningAndCloudTarget_DoesNotWrite)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedOnOpeningAndCloudTarget_DoesNotWrite)
 {
     //! [GIVEN] A score that arrived corrupted and is headed for the cloud...
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionUponOpenningError)));
@@ -637,7 +637,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_CorruptedOnOpeningAndCloudTa
 
 // ─── The score became corrupted while being written ──────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProjectLocally_CorruptedOnSaveAndRetry_RewritesWithoutABackup)
+TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndRetry_RewritesWithoutABackup)
 {
     //! [GIVEN] A write that corrupts the file, and a user who chooses "Try again"...
     const io::path_t path = "/scores/symphony.mscz";
@@ -656,7 +656,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectLocally_CorruptedOnSaveAndRetry
     drainDeferredCalls();
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectLocally_CorruptedOnSaveAndSaveAs_AsksForANewLocation)
+TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndSaveAs_AsksForANewLocation)
 {
     //! [GIVEN] An existing score whose write corrupts the file...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
@@ -676,7 +676,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectLocally_CorruptedOnSaveAndSaveA
     drainDeferredCalls();
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectLocally_CorruptedOnSaveAndCancel_DoesNotRetry)
+TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndCancel_DoesNotRetry)
 {
     //! [GIVEN] A write that corrupts the file, and a user who cancels...
     ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
@@ -695,7 +695,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectLocally_CorruptedOnSaveAndCance
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectLocally_OrdinaryFailure_WarnsTheUser)
+TEST_F(SaveProjectScenarioTests, SaveProjectLocally_OrdinaryFailure_WarnsTheUser)
 {
     //! [GIVEN] A write that fails for a reason other than corruption...
     ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
@@ -710,7 +710,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectLocally_OrdinaryFailure_WarnsTh
 
 // ─── Saving to the cloud ─────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_CloudUnreachable_SavesLocallyAndReportsSuccess)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_CloudUnreachable_SavesLocallyAndReportsSuccess)
 {
     //! [GIVEN] An unreachable cloud...
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
@@ -727,7 +727,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_CloudUnreachable_SavesL
     EXPECT_TRUE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_AlreadyACloudProject_WritesToItsOwnFile)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyACloudProject_WritesToItsOwnFile)
 {
     //! [GIVEN] A score that already lives in the cloud and has a local file of its own...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(true));
@@ -742,7 +742,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_AlreadyACloudProject_Wr
     saveProjectToCloud(CloudProjectInfo(), SaveMode::Save);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_NotACloudProjectYet_WritesToTheCloudSavingPath)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotACloudProjectYet_WritesToTheCloudSavingPath)
 {
     //! [GIVEN] A score that is going to the cloud for the first time...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
@@ -757,7 +757,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_NotACloudProjectYet_Wri
     saveProjectToCloud(CloudProjectInfo(), SaveMode::Save);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
 {
     //! [GIVEN] A reachable cloud whose login dialog is answered with "Save to computer"...
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
@@ -781,7 +781,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_UserChoosesToSaveLocall
     EXPECT_FALSE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_LocalPathCancelled_WritesNothing)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNothing)
 {
     //! [GIVEN] A user who picks "Save to computer" and then cancels the file dialog...
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
@@ -802,7 +802,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_LocalPathCancelled_Writ
     EXPECT_FALSE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_NotLoggedIn_WritesNothing)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotLoggedIn_WritesNothing)
 {
     //! [GIVEN] A reachable cloud the user refuses to log in to...
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
@@ -819,7 +819,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_NotLoggedIn_WritesNothi
     EXPECT_FALSE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_TextBeingEdited_CommitsTheTextFirst)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_TextBeingEdited_CommitsTheTextFirst)
 {
     //! [GIVEN] A score with an unfinished text edit...
     ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(true));
@@ -833,7 +833,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_TextBeingEdited_CommitsTheTe
     saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectAt_NoTextBeingEdited_WritesStraightAway)
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_NoTextBeingEdited_WritesStraightAway)
 {
     //! [GIVEN] A score with no text edit in progress...
     ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(false));
@@ -848,7 +848,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectAt_NoTextBeingEdited_WritesStra
 
 // ─── Up-to-date cloud details before uploading ───────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb_AsksBeforeOverwriting)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb_AsksBeforeOverwriting)
 {
     //! [GIVEN] A cloud score that has meanwhile been made public on the site...
     givenReachableCloud();
@@ -873,7 +873,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::Save));
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_RemoteInfoUnavailable_KeepsTheLastKnownDetails)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_RemoteInfoUnavailable_KeepsTheLastKnownDetails)
 {
     //! [GIVEN] A cloud score whose remote details cannot be fetched...
     givenReachableCloud();
@@ -896,7 +896,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_RemoteInfoUnavailable_K
 
 // ─── Uploading ───────────────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_UploadSucceeds_CountsTheSaveAndStoresTheNewSource)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UploadSucceeds_CountsTheSaveAndStoresTheNewSource)
 {
     //! [GIVEN] A reachable cloud that accepts the upload...
     givenReachableCloud();
@@ -934,7 +934,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_UploadSucceeds_CountsTh
     EXPECT_FALSE(needGenerateAudio(false).val);
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_UploadFails_ReportsTheError)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UploadFails_ReportsTheError)
 {
     //! [GIVEN] A reachable cloud whose upload fails...
     givenReachableCloud();
@@ -951,7 +951,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_UploadFails_ReportsTheE
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::SaveAs));
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_ProjectCannotBeSerialised_DoesNotUpload)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ProjectCannotBeSerialised_DoesNotUpload)
 {
     //! [GIVEN] A score that cannot be written into the upload buffer...
     givenReachableCloud();
@@ -966,7 +966,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_ProjectCannotBeSerialis
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::SaveAs));
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_AudioCannotBeRendered_DoesNotUpload)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AudioCannotBeRendered_DoesNotUpload)
 {
     //! [GIVEN] A public score, which always needs an mp3, whose export fails...
     givenReachableCloud();
@@ -982,7 +982,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_AudioCannotBeRendered_D
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::SaveAs));
 }
 
-TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_AlreadyUploading_DoesNotStartASecondUpload)
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyUploading_DoesNotStartASecondUpload)
 {
     //! [GIVEN] An upload already in flight, re-entered from within its own event loop...
     givenReachableCloud();
@@ -1007,7 +1007,7 @@ TEST_F(ProjectActionsControllerTests, SaveProjectToCloud_AlreadyUploading_DoesNo
 
 // ─── Whether an mp3 is generated for the cloud ───────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_PublicUpload_AlwaysGenerates)
+TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_PublicUpload_AlwaysGenerates)
 {
     //! [GIVEN] Audio generation switched off entirely...
     ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(true));
@@ -1021,7 +1021,7 @@ TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_PublicUpload_AlwaysGener
     EXPECT_TRUE(need.val);
 }
 
-TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_PrivateUploadAndNever_DoesNotGenerate)
+TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_PrivateUploadAndNever_DoesNotGenerate)
 {
     //! [GIVEN] Audio generation switched off...
     ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(true));
@@ -1035,7 +1035,7 @@ TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_PrivateUploadAndNever_Do
     EXPECT_FALSE(need.val);
 }
 
-TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_PrivateUploadAndAlways_Generates)
+TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_PrivateUploadAndAlways_Generates)
 {
     //! [GIVEN] Audio generation switched on for every save...
     ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(true));
@@ -1049,7 +1049,7 @@ TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_PrivateUploadAndAlways_G
     EXPECT_TRUE(need.val);
 }
 
-TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_EveryNthSave_GeneratesOnTheFirstSave)
+TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_EveryNthSave_GeneratesOnTheFirstSave)
 {
     //! [GIVEN] Audio generation set to happen every fifth save...
     ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(true));
@@ -1065,7 +1065,7 @@ TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_EveryNthSave_GeneratesOn
     EXPECT_TRUE(need.val);
 }
 
-TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_SettingsNeverShown_AsksBeforeDeciding)
+TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_SettingsNeverShown_AsksBeforeDeciding)
 {
     //! [GIVEN] The audio generation settings have never been shown...
     ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(false));
@@ -1078,18 +1078,4 @@ TEST_F(ProjectActionsControllerTests, NeedGenerateAudio_SettingsNeverShown_AsksB
     needGenerateAudio(false);
 }
 
-// ─── Project state exposed to the UI ─────────────────────────────────────────
-
-TEST_F(ProjectActionsControllerTests, HasProject_FollowsTheCurrentProject)
-{
-    //! [GIVEN] An open score...
-    //! [THEN] The controller reports that a project is open
-    EXPECT_TRUE(m_controller->hasProject());
-
-    //! [WHEN] The score is closed...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
-
-    //! [THEN] The controller reports that no project is open
-    EXPECT_FALSE(m_controller->hasProject());
-}
 }
