@@ -42,6 +42,7 @@
 #include "iexportprojectscenario.h"
 #include "iprojectconfiguration.h"
 #include "irecentfilescontroller.h"
+#include "iopenprojectscenario.h"
 
 namespace mu::project {
 class SaveProjectScenario : public ISaveProjectScenario, public muse::Contextable, public muse::async::Asyncable
@@ -59,6 +60,7 @@ public:
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
 
     SaveProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
@@ -73,8 +75,6 @@ public:
 
     bool isBusy(IProjectCommandsController::BusyStatus status) const override;
     muse::async::Notification busyChanged() const override;
-
-    muse::async::Notification revertToLastSavedRequested() const override;
 
 private:
     using BusyStatus = IProjectCommandsController::BusyStatus;

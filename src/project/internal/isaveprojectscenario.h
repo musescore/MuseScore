@@ -26,15 +26,12 @@
 #include "async/notification.h"
 #include "io/path.h"
 #include "rcommand/commandtypes.h"
-#include "types/retval.h"
 
 #include "iprojectcommandscontroller.h"
 #include "types/projecttypes.h"
 #include "types/savelocation.h"
 
 namespace mu::project {
-//! NOTE Owns the whole "where does this score go, and how" flow: it asks the user whatever it needs
-//! to, writes the file, and uploads it. Callers hand over the intent and get back the outcome.
 class ISaveProjectScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(ISaveProjectScenario)
@@ -53,9 +50,5 @@ public:
 
     virtual bool isBusy(IProjectCommandsController::BusyStatus status) const = 0;
     virtual muse::async::Notification busyChanged() const = 0;
-
-    //! NOTE Raised when the user answered a corruption dialog with "Revert to last saved". Reopening
-    //! the file belongs to the open flow, so performing it is left to the listener.
-    virtual muse::async::Notification revertToLastSavedRequested() const = 0;
 };
 }

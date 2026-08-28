@@ -96,11 +96,6 @@ muse::async::Notification SaveProjectScenario::busyChanged() const
     return m_busyChanged;
 }
 
-muse::async::Notification SaveProjectScenario::revertToLastSavedRequested() const
-{
-    return m_revertToLastSavedRequested;
-}
-
 muse::Ret SaveProjectScenario::shareAudio()
 {
     return shareAudio(AudioFile());
@@ -245,7 +240,7 @@ muse::Ret SaveProjectScenario::shareAudio(const AudioFile& existingAudio)
 }
 
 void SaveProjectScenario::uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project,
-                                                     const CloudAudioInfo& info)
+                                                const CloudAudioInfo& info)
 {
     m_uploadingAudioProgress = audioComService()->uploadAudio(audio.device, audio.format, info.name,
                                                               project->cloudAudioInfo().url, info.visibility,
@@ -688,8 +683,8 @@ Ret SaveProjectScenario::uploadProject(const CloudProjectInfo& info, const Audio
 }
 
 void SaveProjectScenario::uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
-                                                         bool isFirstSave,
-                                                         bool publishMode)
+                                                    bool isFirstSave,
+                                                    bool publishMode)
 {
     m_uploadingAudioProgress = museScoreComService()->uploadAudio(audio.device, audio.format, sourceUrl);
 
@@ -758,8 +753,8 @@ void SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, b
 }
 
 Ret SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio,
-                                                    bool openEditUrl,
-                                                    bool publishMode)
+                                               bool openEditUrl,
+                                               bool publishMode)
 {
     setBusy(BusyStatus::Uploading, false);
 
@@ -851,7 +846,7 @@ bool SaveProjectScenario::askIfUserAgreesToSaveProjectWithErrors(const Ret& ret,
 }
 
 bool SaveProjectScenario::askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText,
-                                                                   bool newlyCreated)
+                                                              bool newlyCreated)
 {
     switch (location.type) {
     case SaveLocationType::Cloud: {
@@ -910,7 +905,7 @@ void SaveProjectScenario::warnCorruptedScoreCannotBeSavedOnCloud(const std::stri
 }
 
 bool SaveProjectScenario::askIfUserAgreesToSaveCorruptedScoreLocally(const std::string& errorText,
-                                                                          bool canRevert)
+                                                                     bool canRevert)
 {
     std::string title = muse::trc("project", "This score has become corrupted and contains errors");
 
@@ -949,7 +944,7 @@ bool SaveProjectScenario::askIfUserAgreesToSaveCorruptedScoreLocally(const std::
 }
 
 bool SaveProjectScenario::askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location,
-                                                                               const std::string& errorText)
+                                                                          const std::string& errorText)
 {
     switch (location.type) {
     case SaveLocationType::Cloud:
@@ -1050,8 +1045,7 @@ void SaveProjectScenario::askToRevertCorruptedScoreToLastSaved()
             return;
         }
 
-        //! NOTE Reopening the file is part of the open flow, so it is left to the listener
-        m_revertToLastSavedRequested.notify();
+        openProjectScenario()->revertToLastSaved();
     });
 }
 
@@ -1139,7 +1133,7 @@ static std::string saveCloudStatusCodeErrorMessage(const Ret& ret, bool withHelp
 }
 
 RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
-                                                              SaveLocationType preselectedType) const
+                                                          SaveLocationType preselectedType) const
 {
     SaveLocationType type = preselectedType;
 
@@ -1524,10 +1518,8 @@ Ret SaveProjectScenario::warnCloudNotAvailableForSharingAudio() const
     return make_ret(Ret::Code::Cancel);
 }
 
-
-
 muse::RetVal<Val> SaveProjectScenario::ensureAuthorization(const QString& cloudeCode, bool publishingScore,
-                                                               const std::string& text) const
+                                                           const std::string& text) const
 {
     IF_ASSERT_FAILED(cloudeCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE || cloudeCode == muse::cloud::AUDIO_COM_CLOUD_CODE) {
         return muse::RetVal<Val>::make_ret(Err::UnknownError);
@@ -1549,7 +1541,7 @@ muse::RetVal<Val> SaveProjectScenario::ensureAuthorization(const QString& cloude
 }
 
 Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublishShare,
-                                                bool alreadyAttempted) const
+                                            bool alreadyAttempted) const
 {
     std::string title;
     if (alreadyAttempted) {

@@ -30,6 +30,16 @@ namespace mu::project {
 class OpenProjectScenarioMock : public IOpenProjectScenario
 {
 public:
+    MOCK_METHOD(muse::Ret, openProject, (const ProjectFile& file), (override));
+    MOCK_METHOD(muse::Ret, openProject, (const muse::io::path_t& path, const QString& displayNameOverride), (override));
+    MOCK_METHOD(muse::Ret, openProject, (const muse::rcommand::Params& params), (override));
+    MOCK_METHOD(void, revertToLastSaved, (), (override));
+    MOCK_METHOD(muse::Ret, finishOpening, (), (override));
+    MOCK_METHOD(bool, isProjectOpened, (const muse::io::path_t& scorePath), (const, override));
+    MOCK_METHOD(const ProjectBeingDownloaded&, projectBeingDownloaded, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, projectBeingDownloadedChanged, (), (const, override));
+    MOCK_METHOD(bool, isBusy, (IProjectCommandsController::BusyStatus status), (const, override));
+    MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
     MOCK_METHOD(void, showCloudOpenError, (const muse::Ret& ret), (const, override));
 };
 }
