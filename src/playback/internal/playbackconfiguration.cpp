@@ -235,7 +235,7 @@ PlaybackCursorType PlaybackConfiguration::cursorType() const
 int PlaybackConfiguration::videoHitPointsPanelWidth() const
 {
     return std::clamp(settings()->value(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY).toInt(),
-                       VIDEO_HIT_POINTS_PANEL_MIN_WIDTH, VIDEO_HIT_POINTS_PANEL_MAX_WIDTH);
+                      VIDEO_HIT_POINTS_PANEL_MIN_WIDTH, VIDEO_HIT_POINTS_PANEL_MAX_WIDTH);
 }
 
 void PlaybackConfiguration::setVideoHitPointsPanelWidth(int width)
