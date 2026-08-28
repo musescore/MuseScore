@@ -127,8 +127,6 @@ private:
     muse::Ret sharedAudio();
     muse::Ret saveProjectAt(const muse::rcommand::Params& params);
 
-    void revertCorruptedScoreToLastSaved();
-
     muse::Ret importPdf();
     muse::Ret importAudioToScore();
 
@@ -148,6 +146,5 @@ private:
 
     muse::async::Notification m_needSaveChanged;
     muse::async::Notification m_hasSelectionChanged;
-
 };
 }

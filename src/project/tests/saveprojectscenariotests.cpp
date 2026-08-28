@@ -45,6 +45,7 @@
 
 #include "mocks/exportprojectscenariomock.h"
 #include "mocks/notationprojectmock.h"
+#include "mocks/openprojectscenariomock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/recentfilescontrollermock.h"
 
@@ -73,6 +74,7 @@ protected:
         m_platformInteractive = std::make_shared<NiceMock<PlatformInteractiveMock> >();
         m_recentFiles = std::make_shared<NiceMock<RecentFilesControllerMock> >();
         m_exportScenario = std::make_shared<NiceMock<ExportProjectScenarioMock> >();
+        m_openScenario = std::make_shared<NiceMock<OpenProjectScenarioMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
 
@@ -84,6 +86,7 @@ protected:
         m_scenario->platformInteractive.set(m_platformInteractive);
         m_scenario->recentFilesController.set(m_recentFiles);
         m_scenario->exportProjectScenario.set(m_exportScenario);
+        m_scenario->openProjectScenario.set(m_openScenario);
         m_scenario->interactive.set(m_interactive);
         m_scenario->globalContext.set(m_globalContext);
 
@@ -207,6 +210,7 @@ protected:
     static constexpr int RETRY_SAVE_BTN_ID = int(IInteractive::Button::CustomButton);
     static constexpr int SAVE_AS_BTN_ID = RETRY_SAVE_BTN_ID + 1;
     static constexpr int SAVE_ANYWAY_BTN_ID = int(IInteractive::Button::CustomButton);
+    static constexpr int REVERT_TO_LAST_SAVED_BTN_ID = SAVE_ANYWAY_BTN_ID + 1;
 
     std::shared_ptr<SaveProjectScenario> m_scenario;
 
@@ -219,6 +223,7 @@ protected:
     std::shared_ptr<PlatformInteractiveMock> m_platformInteractive;
     std::shared_ptr<RecentFilesControllerMock> m_recentFiles;
     std::shared_ptr<ExportProjectScenarioMock> m_exportScenario;
+    std::shared_ptr<OpenProjectScenarioMock> m_openScenario;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<context::GlobalContextMock> m_globalContext;
 
@@ -1101,4 +1106,52 @@ TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_SettingsNeverShown_AsksBefore
     needGenerateAudio(false);
 }
 
+// ─── Giving up on a corrupted score ──────────────────────────────────────────
+
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedScoreAndUserReverts_ReopensTheLastSavedVersion)
+{
+    //! [GIVEN] An already saved score that reports corruption, so reverting is possible...
+    ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
+    ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
+
+    //! [GIVEN] ...a user who picks "Revert to last saved" and confirms losing the changes
+    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
+    .WillByDefault(Return(IInteractive::Result(REVERT_TO_LAST_SAVED_BTN_ID)));
+    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillByDefault([] {
+        return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
+            return resolve(IInteractive::Result(int(IInteractive::Button::Yes)));
+        });
+    });
+
+    //! [THEN] The file is read again from disk, and the corrupted state is not written anywhere
+    EXPECT_CALL(*m_openScenario, revertToLastSaved()).Times(1);
+    EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
+
+    //! [WHEN] Saving it locally, then letting the confirmation resolve...
+    saveProjectAt(SaveLocation(io::path_t("/scores/corrupted.mscz")));
+    drainDeferredCalls();
+}
+
+TEST_F(SaveProjectScenarioTests, SaveProjectAt_RevertIsConfirmedWithNo_ChangesAreKept)
+{
+    //! [GIVEN] The same score, but a user who backs out of the confirmation...
+    ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
+    ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
+    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
+    .WillByDefault(Return(IInteractive::Result(REVERT_TO_LAST_SAVED_BTN_ID)));
+    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillByDefault([] {
+        return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
+            return resolve(IInteractive::Result(int(IInteractive::Button::No)));
+        });
+    });
+
+    //! [THEN] Nothing is reopened, so the unsaved work survives
+    EXPECT_CALL(*m_openScenario, revertToLastSaved()).Times(0);
+
+    //! [WHEN] Saving it locally, then letting the confirmation resolve...
+    saveProjectAt(SaveLocation(io::path_t("/scores/corrupted.mscz")));
+    drainDeferredCalls();
+}
 }

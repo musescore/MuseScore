@@ -148,10 +148,6 @@ void ProjectActionsController::init()
         m_busyChanged.notify();
     });
 
-    saveProjectScenario()->revertToLastSavedRequested().onNotify(this, [this]() {
-        revertCorruptedScoreToLastSaved();
-    });
-
     // listen changes
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
         auto project = globalContext()->currentProject();
@@ -501,11 +497,6 @@ muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::Params& 
 bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& path, SaveMode saveMode, bool createBackup)
 {
     return saveProjectScenario()->saveProjectLocally(path, saveMode, createBackup);
-}
-
-void ProjectActionsController::revertCorruptedScoreToLastSaved()
-{
-    openProjectScenario()->revertToLastSaved();
 }
 
 muse::Ret ProjectActionsController::importPdf()

@@ -38,6 +38,5 @@ public:
     MOCK_METHOD(muse::Ret, shareAudio, (), (override));
     MOCK_METHOD(bool, isBusy, (IProjectCommandsController::BusyStatus status), (const, override));
     MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
-    MOCK_METHOD(muse::async::Notification, revertToLastSavedRequested, (), (const, override));
 };
 }
