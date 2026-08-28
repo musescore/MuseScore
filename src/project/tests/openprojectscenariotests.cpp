@@ -26,7 +26,7 @@
 
 #include "async/processevents.h"
 
-#include "project/internal/projectactionscontroller.h"
+#include "project/internal/openprojectscenario.h"
 #include "project/projecterrors.h"
 
 #include "cloud/clouderrors.h"
@@ -44,13 +44,10 @@
 
 #include "mocks/mscmetareadermock.h"
 #include "mocks/notationprojectmock.h"
-#include "mocks/notationreadersregistermock.h"
-#include "mocks/opensaveprojectscenariomock.h"
 #include "mocks/projectautosavermock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/projectcreatormock.h"
 #include "mocks/recentfilescontrollermock.h"
-#include "mocks/saveprojectscenariomock.h"
 
 using ::testing::_;
 using ::testing::NiceMock;
@@ -61,12 +58,12 @@ using namespace muse;
 using namespace mu::project;
 
 namespace mu::project {
-class ProjectActionsControllerTests : public ::testing::Test
+class OpenProjectScenarioTests : public ::testing::Test
 {
 protected:
     void SetUp() override
     {
-        m_controller = std::make_shared<ProjectActionsController>(modularity::globalCtx());
+        m_scenario = std::make_shared<OpenProjectScenario>(modularity::globalCtx());
 
         m_configuration = std::make_shared<NiceMock<ProjectConfigurationMock> >();
         m_fileSystem = std::make_shared<NiceMock<io::FileSystemMock> >();
@@ -74,32 +71,26 @@ protected:
         m_museScoreComService = std::make_shared<NiceMock<cloud::MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<cloud::AuthorizationServiceMock> >();
         m_projectCreator = std::make_shared<NiceMock<ProjectCreatorMock> >();
-        m_readers = std::make_shared<NiceMock<NotationReadersRegisterMock> >();
         m_autoSaver = std::make_shared<NiceMock<ProjectAutoSaverMock> >();
         m_recentFiles = std::make_shared<NiceMock<RecentFilesControllerMock> >();
-        m_openSaveScenario = std::make_shared<NiceMock<OpenSaveProjectScenarioMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
         m_museSounds = std::make_shared<NiceMock<musesounds::MuseSoundsCheckUpdateScenarioMock> >();
         m_museSampler = std::make_shared<NiceMock<musesounds::MuseSamplerCheckUpdateScenarioMock> >();
-        m_saveScenario = std::make_shared<NiceMock<SaveProjectScenarioMock> >();
         m_mscMetaReader = std::make_shared<NiceMock<notation::MscMetaReaderMock> >();
 
-        m_controller->configuration.set(m_configuration);
-        m_controller->fileSystem.set(m_fileSystem);
-        m_controller->multiwindowsProvider.set(m_multiwindows);
-        m_controller->museScoreComService.set(m_museScoreComService);
-        m_controller->projectCreator.set(m_projectCreator);
-        m_controller->readers.set(m_readers);
-        m_controller->projectAutoSaver.set(m_autoSaver);
-        m_controller->recentFilesController.set(m_recentFiles);
-        m_controller->openSaveProjectScenario.set(m_openSaveScenario);
-        m_controller->interactive.set(m_interactive);
-        m_controller->globalContext.set(m_globalContext);
-        m_controller->museSoundsCheckUpdateScenario.set(m_museSounds);
-        m_controller->museSamplerCheckUpdateScenario.set(m_museSampler);
-        m_controller->saveProjectScenario.set(m_saveScenario);
-        m_controller->mscMetaReader.set(m_mscMetaReader);
+        m_scenario->configuration.set(m_configuration);
+        m_scenario->fileSystem.set(m_fileSystem);
+        m_scenario->multiwindowsProvider.set(m_multiwindows);
+        m_scenario->museScoreComService.set(m_museScoreComService);
+        m_scenario->projectCreator.set(m_projectCreator);
+        m_scenario->projectAutoSaver.set(m_autoSaver);
+        m_scenario->recentFilesController.set(m_recentFiles);
+        m_scenario->interactive.set(m_interactive);
+        m_scenario->globalContext.set(m_globalContext);
+        m_scenario->museSoundsCheckUpdateScenario.set(m_museSounds);
+        m_scenario->museSamplerCheckUpdateScenario.set(m_museSampler);
+        m_scenario->mscMetaReader.set(m_mscMetaReader);
 
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
         m_masterNotation = std::make_shared<NiceMock<notation::MasterNotationMock> >();
@@ -153,7 +144,7 @@ protected:
         });
 
         // Downloading writes a real file, so point it somewhere writable.
-        m_downloadDir = io::path_t(std::string(project_test_DATA_ROOT)) + "/../cloud-tmp";
+        m_downloadDir = io::path_t(QDir::tempPath().toStdString()) + "/musescore-open-tests";
         QDir().mkpath(m_downloadDir.toQString());
         ON_CALL(*m_configuration, cloudProjectPath(_))
         .WillByDefault([this](int id) { return m_downloadDir + "/" + std::to_string(id) + ".mscz"; });
@@ -166,22 +157,20 @@ protected:
         });
     }
 
-    //! NOTE Friendship is not inherited, and TEST_F bodies live in a subclass of this fixture,
-    //! so the private entry points are reached through these forwarders.
     Ret openProject(const io::path_t& path, const QString& displayNameOverride = QString())
     {
-        return m_controller->openProject(path, displayNameOverride);
+        return m_scenario->openProject(path, displayNameOverride);
     }
 
     Ret openProject(const rcommand::Params& params)
     {
-        return m_controller->openProject(params);
+        return m_scenario->openProject(params);
     }
 
     void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(),
                                      bool isOwner = true)
     {
-        m_controller->downloadAndOpenCloudProject(scoreId, hash, secret, isOwner);
+        m_scenario->downloadAndOpenCloudProject(scoreId, hash, secret, isOwner);
     }
 
     //! NOTE The download subscribes and returns; its result arrives afterwards.
@@ -198,7 +187,7 @@ protected:
         async::processMessages();
     }
 
-    std::shared_ptr<ProjectActionsController> m_controller;
+    std::shared_ptr<OpenProjectScenario> m_scenario;
 
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<io::FileSystemMock> m_fileSystem;
@@ -206,15 +195,12 @@ protected:
     std::shared_ptr<cloud::MuseScoreComServiceMock> m_museScoreComService;
     std::shared_ptr<cloud::AuthorizationServiceMock> m_authorization;
     std::shared_ptr<ProjectCreatorMock> m_projectCreator;
-    std::shared_ptr<NotationReadersRegisterMock> m_readers;
     std::shared_ptr<ProjectAutoSaverMock> m_autoSaver;
     std::shared_ptr<RecentFilesControllerMock> m_recentFiles;
-    std::shared_ptr<OpenSaveProjectScenarioMock> m_openSaveScenario;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<context::GlobalContextMock> m_globalContext;
     std::shared_ptr<musesounds::MuseSoundsCheckUpdateScenarioMock> m_museSounds;
     std::shared_ptr<musesounds::MuseSamplerCheckUpdateScenarioMock> m_museSampler;
-    std::shared_ptr<SaveProjectScenarioMock> m_saveScenario;
     std::shared_ptr<notation::MscMetaReaderMock> m_mscMetaReader;
 
     std::shared_ptr<NotationProjectMock> m_project;
@@ -229,7 +215,7 @@ protected:
 
 // ─── Which kind of thing are we being asked to open ──────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenProject_LocalFileUrl_OpensThatFile)
+TEST_F(OpenProjectScenarioTests, OpenProject_LocalFileUrl_OpensThatFile)
 {
     //! [GIVEN] A local file...
     ProjectFile file(QUrl::fromLocalFile("/scores/symphony.mscz"));
@@ -239,12 +225,12 @@ TEST_F(ProjectActionsControllerTests, OpenProject_LocalFileUrl_OpensThatFile)
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(1);
 
     //! [WHEN] Opening it...
-    Ret ret = m_controller->openProject(file);
+    Ret ret = m_scenario->openProject(file);
 
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_MuseScoreUrlThatIsNotAScore_IsRejected)
+TEST_F(OpenProjectScenarioTests, OpenProject_MuseScoreUrlThatIsNotAScore_IsRejected)
 {
     //! [GIVEN] A musescore:// url that does not point at a score...
     ProjectFile file(QUrl("musescore://something-else/42"));
@@ -253,13 +239,13 @@ TEST_F(ProjectActionsControllerTests, OpenProject_MuseScoreUrlThatIsNotAScore_Is
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = m_controller->openProject(file);
+    Ret ret = m_scenario->openProject(file);
 
     //! [THEN] It is refused as an unsupported address
     EXPECT_EQ(ret.code(), int(Err::UnsupportedUrl));
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_ForeignUrl_IsRejected)
+TEST_F(OpenProjectScenarioTests, OpenProject_ForeignUrl_IsRejected)
 {
     //! [GIVEN] A url of a scheme the app knows nothing about...
     ProjectFile file(QUrl("https://example.com/score.mscz"));
@@ -268,12 +254,12 @@ TEST_F(ProjectActionsControllerTests, OpenProject_ForeignUrl_IsRejected)
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = m_controller->openProject(file);
+    Ret ret = m_scenario->openProject(file);
 
     EXPECT_EQ(ret.code(), int(Err::UnsupportedUrl));
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_NothingGiven_AsksTheUserForAFile)
+TEST_F(OpenProjectScenarioTests, OpenProject_NothingGiven_AsksTheUserForAFile)
 {
     //! [GIVEN] No file named, and a user who picks one...
     const io::path_t picked = "/scores/picked.mscz";
@@ -287,11 +273,11 @@ TEST_F(ProjectActionsControllerTests, OpenProject_NothingGiven_AsksTheUserForAFi
     EXPECT_CALL(*m_project, load(picked, _, _)).Times(1);
 
     //! [WHEN] Opening without naming a file...
-    m_controller->openProject(ProjectFile());
+    m_scenario->openProject(ProjectFile());
     drainDeferredCalls();
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_FileDialogCancelled_OpensNothing)
+TEST_F(OpenProjectScenarioTests, OpenProject_FileDialogCancelled_OpensNothing)
 {
     //! [GIVEN] No file named, and a user who dismisses the dialog...
     ON_CALL(*m_interactive, selectOpeningFile(_, _, _))
@@ -304,13 +290,13 @@ TEST_F(ProjectActionsControllerTests, OpenProject_FileDialogCancelled_OpensNothi
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening without naming a file...
-    m_controller->openProject(ProjectFile());
+    m_scenario->openProject(ProjectFile());
     drainDeferredCalls();
 }
 
 // ─── Deciding where the score should be opened ───────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenProject_AlreadyOpenHere_JustShowsIt)
+TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpenHere_JustShowsIt)
 {
     //! [GIVEN] The very score that is already open in this window...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
@@ -326,7 +312,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_AlreadyOpenHere_JustShowsIt)
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_AlreadyOpenElsewhere_RaisesThatWindow)
+TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpenElsewhere_RaisesThatWindow)
 {
     //! [GIVEN] A score already open in another window...
     ON_CALL(*m_multiwindows, isProjectAlreadyOpened(_)).WillByDefault(Return(true));
@@ -341,7 +327,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_AlreadyOpenElsewhere_RaisesTha
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_ThisWindowIsTaken_OpensANewWindow)
+TEST_F(OpenProjectScenarioTests, OpenProject_ThisWindowIsTaken_OpensANewWindow)
 {
     //! [GIVEN] A different score already open in this window...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
@@ -357,7 +343,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_ThisWindowIsTaken_OpensANewWin
     EXPECT_TRUE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_NewWindowWithDisplayName_PassesTheNameAlong)
+TEST_F(OpenProjectScenarioTests, OpenProject_NewWindowWithDisplayName_PassesTheNameAlong)
 {
     //! [GIVEN] A different score already open in this window...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
@@ -371,7 +357,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_NewWindowWithDisplayName_Passe
     openProject("/scores/symphony.mscz", "Cloud title");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_EmptyPath_IsRefused)
+TEST_F(OpenProjectScenarioTests, OpenProject_EmptyPath_IsRefused)
 {
     //! [GIVEN] A path that resolves to nothing...
     ON_CALL(*m_fileSystem, absoluteFilePath(_)).WillByDefault(Return(io::path_t()));
@@ -387,7 +373,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_EmptyPath_IsRefused)
 
 // ─── Cloud scores ────────────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenProject_CloudScoreAndCloudReachable_DownloadsTheLatestVersion)
+TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreAndCloudReachable_DownloadsTheLatestVersion)
 {
     //! [GIVEN] A cloud score and a reachable cloud...
     ON_CALL(*m_configuration, isCloudProject(_)).WillByDefault(Return(true));
@@ -403,7 +389,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_CloudScoreAndCloudReachable_Do
     openProject("/cloud/42.mscz");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_CloudScoreOffline_OpensTheLocalCopy)
+TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOffline_OpensTheLocalCopy)
 {
     //! [GIVEN] A cloud score, an unreachable cloud, but the file is on disk...
     ON_CALL(*m_configuration, isCloudProject(_)).WillByDefault(Return(true));
@@ -413,13 +399,13 @@ TEST_F(ProjectActionsControllerTests, OpenProject_CloudScoreOffline_OpensTheLoca
 
     //! [THEN] The local copy is opened so the user can keep working offline
     EXPECT_CALL(*m_project, load(io::path_t("/cloud/42.mscz"), _, _)).Times(1);
-    EXPECT_CALL(*m_openSaveScenario, showCloudOpenError(_)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
 
     //! [WHEN] Opening it...
     openProject("/cloud/42.mscz");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_CloudScoreOfflineAndNotOnDisk_ReportsTheNetwork)
+TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOfflineAndNotOnDisk_ReportsTheNetwork)
 {
     //! [GIVEN] A cloud score, an unreachable cloud, and no local copy...
     ON_CALL(*m_configuration, isCloudProject(_)).WillByDefault(Return(true));
@@ -428,7 +414,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_CloudScoreOfflineAndNotOnDisk_
     ON_CALL(*m_fileSystem, exists(_)).WillByDefault(Return(false));
 
     //! [THEN] There is nothing to open, and the user is told why
-    EXPECT_CALL(*m_openSaveScenario, showCloudOpenError(_)).Times(1);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
@@ -437,7 +423,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_CloudScoreOfflineAndNotOnDisk_
     EXPECT_EQ(ret.code(), int(cloud::Err::NetworkError));
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_LegacyCloudScore_IsOpenedAsAnOrdinaryFile)
+TEST_F(OpenProjectScenarioTests, OpenProject_LegacyCloudScore_IsOpenedAsAnOrdinaryFile)
 {
     //! [GIVEN] A score from the old cloud layout...
     ON_CALL(*m_configuration, isCloudProject(_)).WillByDefault(Return(true));
@@ -453,7 +439,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_LegacyCloudScore_IsOpenedAsAnO
 
 // ─── One open at a time ──────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenProject_AlreadyOpening_RefusesToStartAgain)
+TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpening_RefusesToStartAgain)
 {
     //! [GIVEN] An open whose path resolution re-enters the open, the way a nested event loop does
     Ret nested;
@@ -475,7 +461,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_AlreadyOpening_RefusesToStartA
 
 // ─── Opening from a command ──────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenProject_FromCommandParams_UsesUrlAndDisplayName)
+TEST_F(OpenProjectScenarioTests, OpenProject_FromCommandParams_UsesUrlAndDisplayName)
 {
     //! [GIVEN] An "open" command carrying a file url and a display name...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
@@ -494,18 +480,18 @@ TEST_F(ProjectActionsControllerTests, OpenProject_FromCommandParams_UsesUrlAndDi
 }
 // ─── Downloading a cloud score ───────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_NoScoreId_ReportsInsteadOfDownloading)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_NoScoreId_ReportsInsteadOfDownloading)
 {
     //! [GIVEN] A cloud score whose id never made it to the server...
     //! [THEN] The user is told, and nothing is fetched
-    EXPECT_CALL(*m_openSaveScenario, showCloudOpenError(_)).Times(1);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
     EXPECT_CALL(*m_museScoreComService, downloadScore(_, _, _, _)).Times(0);
 
     //! [WHEN] Opening it...
     downloadAndOpenCloudProject(0);
 }
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_NotLoggedIn_FetchesNothing)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_NotLoggedIn_FetchesNothing)
 {
     //! [GIVEN] A user who declines to log in...
     ON_CALL(*m_authorization, ensureAuthorization(_, _))
@@ -518,21 +504,21 @@ TEST_F(ProjectActionsControllerTests, DownloadCloudScore_NotLoggedIn_FetchesNoth
     downloadAndOpenCloudProject(42);
 }
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_ScoreInfoUnavailable_ReportsIt)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_ScoreInfoUnavailable_ReportsIt)
 {
     //! [GIVEN] A server that will not say anything about the score...
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
     .WillByDefault(Return(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))));
 
     //! [THEN] The user is told, and nothing is fetched
-    EXPECT_CALL(*m_openSaveScenario, showCloudOpenError(_)).Times(1);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
     EXPECT_CALL(*m_museScoreComService, downloadScore(_, _, _, _)).Times(0);
 
     //! [WHEN] Opening it...
     downloadAndOpenCloudProject(42);
 }
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_LocalCopyIsUpToDate_SkipsTheDownload)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_LocalCopyIsUpToDate_SkipsTheDownload)
 {
     //! [GIVEN] A local copy at the same revision as the server's...
     cloud::ScoreInfo remote;
@@ -554,7 +540,7 @@ TEST_F(ProjectActionsControllerTests, DownloadCloudScore_LocalCopyIsUpToDate_Ski
     downloadAndOpenCloudProject(42);
 }
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_LocalCopyIsStale_FetchesTheNewVersion)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_LocalCopyIsStale_FetchesTheNewVersion)
 {
     //! [GIVEN] A local copy older than the server's...
     cloud::ScoreInfo remote;
@@ -574,14 +560,14 @@ TEST_F(ProjectActionsControllerTests, DownloadCloudScore_LocalCopyIsStale_Fetche
     downloadAndOpenCloudProject(42);
 }
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_DownloadFails_ReportsAndOpensNothing)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_DownloadFails_ReportsAndOpensNothing)
 {
     //! [GIVEN] A download that will fail...
     ON_CALL(*m_mscMetaReader, readCloudProjectInfo(_))
     .WillByDefault(Return(RetVal<CloudProjectInfo>(make_ret(Ret::Code::InternalError))));
 
     //! [THEN] The user is told, and no score becomes current
-    EXPECT_CALL(*m_openSaveScenario, showCloudOpenError(_)).Times(1);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Opening it, then letting the download report back...
@@ -589,7 +575,7 @@ TEST_F(ProjectActionsControllerTests, DownloadCloudScore_DownloadFails_ReportsAn
     finishDownloadWith(make_ret(Ret::Code::InternalError));
 }
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_DownloadSucceeds_OpensItWithItsCloudDetails)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_DownloadSucceeds_OpensItWithItsCloudDetails)
 {
     //! [GIVEN] A fresh download of a score the user owns...
     cloud::ScoreInfo remote;
@@ -610,7 +596,7 @@ TEST_F(ProjectActionsControllerTests, DownloadCloudScore_DownloadSucceeds_OpensI
     finishDownloadWith(make_ok());
 }
 
-TEST_F(ProjectActionsControllerTests, DownloadCloudScore_SomeoneElsesScore_OpensAsAFreshUnsavedCopy)
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_SomeoneElsesScore_OpensAsAFreshUnsavedCopy)
 {
     //! [GIVEN] A score belonging to another account...
     ON_CALL(*m_mscMetaReader, readCloudProjectInfo(_))
@@ -627,17 +613,17 @@ TEST_F(ProjectActionsControllerTests, DownloadCloudScore_SomeoneElsesScore_Opens
 
 // ─── Opening a musescore.com link ────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenScoreUrl_NotAScoreId_IsRejected)
+TEST_F(OpenProjectScenarioTests, OpenScoreUrl_NotAScoreId_IsRejected)
 {
     //! [GIVEN] An open-score link whose last segment is not a number...
     //! [WHEN] Following it...
-    Ret ret = m_controller->openProject(ProjectFile(QUrl("musescore://open-score/not-a-number")));
+    Ret ret = m_scenario->openProject(ProjectFile(QUrl("musescore://open-score/not-a-number")));
 
     //! [THEN] It is refused as malformed
     EXPECT_EQ(ret.code(), int(Err::MalformedOpenScoreUrl));
 }
 
-TEST_F(ProjectActionsControllerTests, OpenScoreUrl_OwnScoreAlreadyOpenElsewhere_RaisesThatWindow)
+TEST_F(OpenProjectScenarioTests, OpenScoreUrl_OwnScoreAlreadyOpenElsewhere_RaisesThatWindow)
 {
     //! [GIVEN] A link to the user's own score, already open in another window...
     cloud::ScoreInfo remote;
@@ -652,10 +638,10 @@ TEST_F(ProjectActionsControllerTests, OpenScoreUrl_OwnScoreAlreadyOpenElsewhere_
     EXPECT_CALL(*m_museScoreComService, downloadScore(_, _, _, _)).Times(0);
 
     //! [WHEN] Following the link...
-    m_controller->openProject(ProjectFile(QUrl("musescore://open-score/42")));
+    m_scenario->openProject(ProjectFile(QUrl("musescore://open-score/42")));
 }
 
-TEST_F(ProjectActionsControllerTests, OpenScoreUrl_WindowIsTaken_OpensANewWindowWithTheTitle)
+TEST_F(OpenProjectScenarioTests, OpenScoreUrl_WindowIsTaken_OpensANewWindowWithTheTitle)
 {
     //! [GIVEN] A link to a score while this window already holds another...
     cloud::ScoreInfo remote;
@@ -670,10 +656,10 @@ TEST_F(ProjectActionsControllerTests, OpenScoreUrl_WindowIsTaken_OpensANewWindow
     EXPECT_CALL(*m_multiwindows, openNewWindow(expected)).Times(1);
 
     //! [WHEN] Following the link...
-    m_controller->openProject(ProjectFile(QUrl("musescore://open-score/42")));
+    m_scenario->openProject(ProjectFile(QUrl("musescore://open-score/42")));
 }
 
-TEST_F(ProjectActionsControllerTests, OpenScoreUrl_SharedLink_PassesHashAndSecretToTheDownload)
+TEST_F(OpenProjectScenarioTests, OpenScoreUrl_SharedLink_PassesHashAndSecretToTheDownload)
 {
     //! [GIVEN] A shared link carrying its access parameters...
     ON_CALL(*m_mscMetaReader, readCloudProjectInfo(_))
@@ -683,11 +669,11 @@ TEST_F(ProjectActionsControllerTests, OpenScoreUrl_SharedLink_PassesHashAndSecre
     EXPECT_CALL(*m_museScoreComService, downloadScore(42, _, QString("abc"), QString("xyz"))).Times(1);
 
     //! [WHEN] Following the link...
-    m_controller->openProject(ProjectFile(QUrl("musescore://open-score/42?h=abc&secret=xyz")));
+    m_scenario->openProject(ProjectFile(QUrl("musescore://open-score/42?h=abc&secret=xyz")));
 }
 // ─── A file that will not load on the first try ──────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenProject_FileFromAnOlderVersionAndUserAgrees_LoadsItForcibly)
+TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserAgrees_LoadsItForcibly)
 {
     //! [GIVEN] A score saved by an older version, and a user who wants it opened anyway...
     ON_CALL(*m_project, load(_, _, _))
@@ -703,7 +689,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_FileFromAnOlderVersionAndUserA
     openProject("/scores/ancient.mscz");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_FileFromAnOlderVersionAndUserDeclines_GivesUp)
+TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserDeclines_GivesUp)
 {
     //! [GIVEN] A score saved by an older version, and a user who cancels...
     ON_CALL(*m_project, load(_, _, _))
@@ -721,7 +707,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_FileFromAnOlderVersionAndUserD
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_FileFromANewerVersion_RetriesOnlyIfCheckingIsOff)
+TEST_F(OpenProjectScenarioTests, OpenProject_FileFromANewerVersion_RetriesOnlyIfCheckingIsOff)
 {
     //! [GIVEN] A score saved by a newer version, with version checking switched off...
     ON_CALL(*m_project, load(_, _, _))
@@ -737,7 +723,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_FileFromANewerVersion_RetriesO
     openProject("/scores/future.mscz");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_FileFromANewerVersionAndCheckingIsOn_GivesUp)
+TEST_F(OpenProjectScenarioTests, OpenProject_FileFromANewerVersionAndCheckingIsOn_GivesUp)
 {
     //! [GIVEN] A score saved by a newer version, with version checking left on...
     ON_CALL(*m_project, load(_, _, _))
@@ -751,7 +737,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_FileFromANewerVersionAndChecki
     openProject("/scores/future.mscz");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_CorruptedFileAndUserAgrees_LoadsItForcibly)
+TEST_F(OpenProjectScenarioTests, OpenProject_CorruptedFileAndUserAgrees_LoadsItForcibly)
 {
     //! [GIVEN] A corrupted score the user wants opened regardless...
     ON_CALL(*m_project, load(_, _, _))
@@ -767,7 +753,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_CorruptedFileAndUserAgrees_Loa
     openProject("/scores/broken.mscz");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_CriticallyCorruptedFile_IsNeverRetried)
+TEST_F(OpenProjectScenarioTests, OpenProject_CriticallyCorruptedFile_IsNeverRetried)
 {
     //! [GIVEN] A score damaged beyond use...
     ON_CALL(*m_project, load(_, _, _))
@@ -783,7 +769,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_CriticallyCorruptedFile_IsNeve
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_UnreadableFile_IsReportedAndNotRetried)
+TEST_F(OpenProjectScenarioTests, OpenProject_UnreadableFile_IsReportedAndNotRetried)
 {
     //! [GIVEN] A file that cannot be read at all...
     ON_CALL(*m_project, load(_, _, _))
@@ -799,7 +785,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_UnreadableFile_IsReportedAndNo
     EXPECT_FALSE(ret);
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_UserCancelledTheLoad_AsksNothingFurther)
+TEST_F(OpenProjectScenarioTests, OpenProject_UserCancelledTheLoad_AsksNothingFurther)
 {
     //! [GIVEN] A load the user cancelled from inside, for instance at a format prompt...
     ON_CALL(*m_project, load(_, _, _))
@@ -816,7 +802,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_UserCancelledTheLoad_AsksNothi
 
 // ─── Unsaved work from a previous session ────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, OpenProject_HasAnAutosave_LoadsItAndKeepsTheOriginalPath)
+TEST_F(OpenProjectScenarioTests, OpenProject_HasAnAutosave_LoadsItAndKeepsTheOriginalPath)
 {
     //! [GIVEN] A score with unsaved changes left over from a crash...
     ON_CALL(*m_autoSaver, projectHasUnsavedChanges(_)).WillByDefault(Return(true));
@@ -833,7 +819,7 @@ TEST_F(ProjectActionsControllerTests, OpenProject_HasAnAutosave_LoadsItAndKeepsT
     openProject("/scores/symphony.mscz");
 }
 
-TEST_F(ProjectActionsControllerTests, OpenProject_AutosaveOfANeverSavedScore_OpensAsNewlyCreated)
+TEST_F(OpenProjectScenarioTests, OpenProject_AutosaveOfANeverSavedScore_OpensAsNewlyCreated)
 {
     //! [GIVEN] An autosave of a score that was never saved anywhere...
     ON_CALL(*m_autoSaver, isAutosaveOfNewlyCreatedProject(_)).WillByDefault(Return(true));
