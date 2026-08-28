@@ -21,12 +21,18 @@
  */
 #include <gtest/gtest.h>
 
+#include <memory>
 #include <optional>
 #include <string>
 
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/tempotext.h"
 #include "engraving/types/typesconv.h"
 
 #include "importexport/mnx/internal/shared/mnxtypesconv.h"
+#include "mnxtestutils.h"
 
 #ifdef MNXDOM_SYSTEM
 #include <mnxdom/mnxdom.h>
@@ -168,4 +174,92 @@ TEST_F(Mnx_UnitTests, dynamicLettersMatchDynamicTypeTable)
         // correct because no two types share a mapping. Check that they still do not.
         EXPECT_EQ(toMuseScoreDynamicType(expected), std::make_optional(type));
     }
+}
+
+//---------------------------------------------------------
+//   tempo tests
+//---------------------------------------------------------
+
+namespace {
+std::string fractionalTempoMnx()
+{
+    return R"({
+  "mnx": { "version": )" + std::to_string(mnx::MNX_VERSION) + R"( },
+  "global": {
+    "measures": [
+      {
+        "id": "m1",
+        "key": { "fifths": 0 },
+        "tempos": [
+          { "bpm": 92.5, "value": { "base": "quarter" } }
+        ],
+        "time": { "count": 4, "unit": 4 }
+      }
+    ]
+  },
+  "parts": [
+    {
+      "id": "P1",
+      "measures": [
+        {
+          "clefs": [ { "clef": { "sign": "G", "staffPosition": -2 } } ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "type": "event",
+                  "duration": { "base": "whole" },
+                  "notes": [ { "pitch": { "octave": 4, "step": "C" } } ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+})";
+}
+
+const TempoText* findFirstTempoText(const Score* score)
+{
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+            for (const EngravingItem* item : segment->annotations()) {
+                if (item && item->isTempoText()) {
+                    return toTempoText(item);
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+} // namespace
+
+TEST_F(Mnx_UnitTests, fractionalTempoRoundTrips)
+{
+    // MNX widened bpm from an integer to a number, so a tempo such as 92.5 has to survive both
+    // directions unrounded. MuseScore has always carried tempo as a double, so the whole loss
+    // was on the MNX side.
+    std::unique_ptr<MasterScore> score(importMnxFromJson(fractionalTempoMnx(), u"<fractionalTempo>/tempo.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+
+    const TempoText* tempoText = findFirstTempoText(score.get());
+    ASSERT_TRUE(tempoText);
+    // The bpm is spelled into the tempo text, which is where MuseScore reads it back from.
+    EXPECT_DOUBLE_EQ(tempoText->tempoBpm(), 92.5);
+    // A quarter note at 92.5 bpm is 92.5 quarter notes per minute.
+    EXPECT_NEAR(tempoText->tempo().val, 92.5 / 60.0, 1e-9);
+
+    const std::string json = exportMnxJson(score.get());
+    ASSERT_FALSE(json.empty());
+
+    auto doc = mnx::Document::create(json.data(), json.size());
+    ASSERT_TRUE(mnx::validation::schemaValidate(doc));
+    ASSERT_FALSE(doc.global().measures().empty());
+    const std::optional<mnx::Array<mnx::global::Tempo> > tempos = doc.global().measures()[0].tempos();
+    ASSERT_TRUE(tempos.has_value());
+    ASSERT_EQ(tempos->size(), size_t(1));
+    EXPECT_DOUBLE_EQ((*tempos)[0].bpm(), 92.5);
 }
