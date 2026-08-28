@@ -32,6 +32,7 @@
 
 #include "cloud/clouderrors.h"
 #include "engraving/engravingerrors.h"
+#include "engraving/infrastructure/mscio.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
@@ -486,8 +487,7 @@ void OpenProjectScenario::downloadAndOpenCloudProject(int scoreId, const QString
         return;
     }
 
-    std::string dialogText = muse::trc("project/save", "Log in or create a free account on MuseScore.com to open this score.");
-    Ret ret = museScoreComService()->authorization()->ensureAuthorization(false, dialogText).ret;
+    Ret ret = ensureAuthorization().ret;
     if (!ret) {
         return;
     }
@@ -579,8 +579,7 @@ Ret OpenProjectScenario::openScoreFromMuseScoreCom(const QUrl& url)
     }
 
     // Ensure logged in
-    std::string dialogText = muse::trc("project/save", "Log in or create a free account on MuseScore.com to open this score.");
-    Ret ret = museScoreComService()->authorization()->ensureAuthorization(false, dialogText).ret;
+    Ret ret = ensureAuthorization().ret;
     if (!ret) {
         return ret;
     }
@@ -842,4 +841,20 @@ async::Promise<io::path_t> OpenProjectScenario::selectScoreOpeningFile() const
     }
 
     return interactive()->selectOpeningFile(muse::trc("project", "Open"), defaultDir, filter);
+}
+
+muse::RetVal<Val> OpenProjectScenario::ensureAuthorization() const
+{
+    bool userAuthorized = museScoreComService()->authorization()->userAuthorized().val;
+
+    if (userAuthorized) {
+        return muse::make_ok();
+    }
+
+    const std::string dialogText = muse::trc("project/save", "Log in or create a free account on MuseScore.com to open this score.");
+
+    UriQuery query("muse://cloud/requireauthorization");
+    query.addParam("text", Val(dialogText));
+    query.addParam("cloudCode", Val(muse::cloud::MUSESCORE_COM_CLOUD_CODE));
+    return interactive()->openSync(query);
 }

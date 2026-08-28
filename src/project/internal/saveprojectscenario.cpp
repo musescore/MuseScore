@@ -194,11 +194,11 @@ muse::Ret SaveProjectScenario::publish()
     }
 
     AudioFile audio = exportMp3(project->masterNotation()->notation());
-    if (audio.isValid()) {
-        uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true);
+    if (!audio.isValid()) {
+        return make_ret(Ret::Code::BadData);
     }
 
-    return make_ok();
+    return uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true);
 }
 
 muse::Ret SaveProjectScenario::shareAudio(const AudioFile& existingAudio)
@@ -370,7 +370,7 @@ bool SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, SaveMode sav
         warnCloudIsNotAvailable();
     } else {
         std::string dialogText = muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
-        RetVal<Val> retVal = museScoreComService()->authorization()->ensureAuthorization(true, dialogText);
+        RetVal<Val> retVal = ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText);
         if (!retVal.ret) {
             return false;
         }
@@ -527,6 +527,11 @@ RetVal<bool> SaveProjectScenario::needGenerateAudio(bool isPublicUpload) const
         return RetVal<bool>::make_ok(true);
     case GenerateAudioTimePeriodType::AfterCertainNumberOfSaves: {
         int requiredNumberOfSaves = configuration()->numberOfSavesToGenerateAudio();
+        if (requiredNumberOfSaves <= 0) {
+            LOGW() << "invalid number of saves to generate audio: " << requiredNumberOfSaves;
+            return RetVal<bool>::make_ok(true);
+        }
+
         return RetVal<bool>::make_ok(m_numberOfSavesToCloud % requiredNumberOfSaves == 0);
     }
     }
@@ -1332,8 +1337,8 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     }
 
     std::string dialogText = isPublishShare
-                             ? muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.")
-                             : muse::trc("project/save", "Log in to MuseScore.com to publish this score.");
+                             ? muse::trc("project/save", "Log in to MuseScore.com to publish this score.")
+                             : muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
     RetVal<Val> retVal = ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText);
     if (!retVal.ret) {
         return retVal.ret;
