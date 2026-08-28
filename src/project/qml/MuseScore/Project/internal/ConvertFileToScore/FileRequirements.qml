@@ -45,6 +45,17 @@ Item {
         }
     }
 
+    function accessibleRequirementsText() {
+        var parts = []
+
+        for (var i = 0; i < root.fileRequirements.length; ++i) {
+            var section = root.fileRequirements[i]
+            parts.push(section.title + ": " + section.items.join(", "))
+        }
+
+        return parts.join(". ")
+    }
+
     NavigationControl {
         id: navCtrl
 
@@ -53,6 +64,7 @@ Item {
 
         accessible.role: MUAccessible.Button
         accessible.name: qsTrc("project/convert", "File requirements")
+        accessible.description: root.accessibleRequirementsText()
         accessible.visualItem: root
         accessible.enabled: navCtrl.enabled
 

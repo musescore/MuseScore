@@ -79,6 +79,11 @@ Rectangle {
 
                 property int scrollBarGap: 8
 
+                navigation.section: root.navigationPanel.section
+                navigation.order: 0
+                navigation.direction: NavigationPanel.Both
+                accessible.name: qsTrc("project/convert", "Selected files")
+
                 ScrollBar.vertical: StyledScrollBar {
                     thickness: fileListView.scrollBarThickness
                     policy: ScrollBar.AlwaysOn
@@ -139,7 +144,19 @@ Rectangle {
                         isSelected: root.filesModel.count > 1 && fileListView.currentIndex === dropArea.index
 
                         navigation.panel: fileListView.navigation
-                        navigation.order: dropArea.index
+                        navigation.row: dropArea.index
+                        navigation.column: 0
+
+                        onNavigationActivated: fileListView.currentIndex = dropArea.index
+
+                        removeButtonNavigation.panel: fileListView.navigation
+                        removeButtonNavigation.row: dropArea.index
+                        removeButtonNavigation.column: 1
+
+                        onRemoveButtonNavigationActivated: {
+                            fileListView.currentIndex = dropArea.index
+                            fileListView.positionViewAtIndex(dropArea.index, ListView.Contain)
+                        }
 
                         Drag.active: fileItem.dragged
                         Drag.source: fileItem
@@ -204,6 +221,7 @@ Rectangle {
 
                 FlatButton {
                     icon: IconCode.ARROW_UP
+                    toolTipTitle: qsTrc("global", "Move up")
 
                     enabled: fileListView.count > 1 && fileListView.currentIndex > 0
 
@@ -215,6 +233,7 @@ Rectangle {
 
                 FlatButton {
                     icon: IconCode.ARROW_DOWN
+                    toolTipTitle: qsTrc("global", "Move down")
 
                     enabled: fileListView.count > 1 && fileListView.currentIndex >= 0 && fileListView.currentIndex < root.filesModel.count - 1
 

@@ -114,8 +114,9 @@ StyledDialogView {
         id: selectFilePageComponent
 
         SelectFilePage {
-            guidelinesLinkText: convertModel.guidelinesLinkText
+            guidelinesUrl: convertModel.guidelinesUrl
             linkHintText: convertModel.linkHintText
+            linkHintPlainText: convertModel.linkHintPlainText
             maxLinkLength: convertModel.maxLinkLength
             fileRequirements: convertModel.fileRequirements
             navigationSection: root.navigationSection

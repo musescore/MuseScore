@@ -134,10 +134,9 @@ QString ConvertFileToScoreModel::accountAvatarUrl() const
     return museScoreComService()->authorization()->accountInfo().avatarUrl.toString();
 }
 
-QString ConvertFileToScoreModel::guidelinesLinkText() const
+QString ConvertFileToScoreModel::guidelinesUrl() const
 {
-    return "<a href=\"" + configuration()->scoreUploadingGuidelinesUrl().toString() + "\">"
-           + muse::qtrc("project/convert", "Uploading guidelines") + "</a>";
+    return configuration()->scoreUploadingGuidelinesUrl().toString();
 }
 
 int ConvertFileToScoreModel::convertType() const
@@ -304,12 +303,34 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles() const
     return allowsMultipleFiles(config.omr.maxImages);
 }
 
+static QString linkHintTextFor(const QStringList& sources)
+{
+    if (sources.isEmpty()) {
+        return QString();
+    }
+
+    return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(joinWithOr(sources));
+}
+
+static QStringList linkSourceDisplayNames(const QStringList& allowedLinkSources)
+{
+    QStringList names;
+    for (const QString& source : allowedLinkSources) {
+        if (source.compare("youtube", Qt::CaseInsensitive) == 0) {
+            names << "Youtube";
+        } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
+            names << "Audio.com";
+        } else {
+            names << source;
+        }
+    }
+
+    return names;
+}
+
 QString ConvertFileToScoreModel::linkHintText() const
 {
     const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
-    if (a2s.allowedLinkSources.isEmpty()) {
-        return QString();
-    }
 
     QStringList sources;
     for (const QString& source : a2s.allowedLinkSources) {
@@ -323,7 +344,13 @@ QString ConvertFileToScoreModel::linkHintText() const
         }
     }
 
-    return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(joinWithOr(sources));
+    return linkHintTextFor(sources);
+}
+
+QString ConvertFileToScoreModel::linkHintPlainText() const
+{
+    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
+    return linkHintTextFor(linkSourceDisplayNames(a2s.allowedLinkSources));
 }
 
 int ConvertFileToScoreModel::maxLinkLength() const

@@ -32,12 +32,18 @@ ListItemBlank {
     property alias iconCode: iconlabel.iconCode
     property bool selectable: false
 
+    property alias removeButtonNavigation: removeButton.navigation
+
+    signal removeButtonNavigationActivated()
+
     implicitHeight: 32
 
     radius: 3
     normalColor: ui.theme.buttonColor
 
     mouseArea.enabled: root.visible && root.enabled && root.selectable
+
+    navigation.accessible.name: root.fileName
 
     RowLayout {
         id: contentRow
@@ -78,11 +84,25 @@ ListItemBlank {
         }
 
         FlatButton {
+            id: removeButton
+
             icon: IconCode.DELETE_TANK
+            toolTipTitle: qsTrc("global", "Remove")
             transparent: true
-            isNarrow: true
+
+            navigation.accessible.name: removeButton.toolTipTitle + " " + root.fileName
 
             onClicked: root.removeSelectionRequested()
+
+            Connections {
+                target: removeButton.navigation
+
+                function onActiveChanged(active) {
+                    if (active) {
+                        root.removeButtonNavigationActivated()
+                    }
+                }
+            }
         }
     }
 }

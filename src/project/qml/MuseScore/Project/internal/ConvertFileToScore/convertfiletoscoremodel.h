@@ -42,7 +42,7 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_OBJECT
 
     Q_PROPERTY(QString accountAvatarUrl READ accountAvatarUrl CONSTANT)
-    Q_PROPERTY(QString guidelinesLinkText READ guidelinesLinkText CONSTANT)
+    Q_PROPERTY(QString guidelinesUrl READ guidelinesUrl CONSTANT)
 
     Q_PROPERTY(int convertType READ convertType NOTIFY convertTypeChanged)
     Q_PROPERTY(QStringList selectedPaths READ selectedPaths WRITE setSelectedPaths NOTIFY selectedPathsChanged)
@@ -54,6 +54,7 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY convertTypeChanged)
 
     Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
+    Q_PROPERTY(QString linkHintPlainText READ linkHintPlainText CONSTANT)
     Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
 
     QML_ELEMENT
@@ -68,7 +69,7 @@ public:
     explicit ConvertFileToScoreModel(QObject* parent = nullptr);
 
     QString accountAvatarUrl() const;
-    QString guidelinesLinkText() const;
+    QString guidelinesUrl() const;
 
     int convertType() const; // OMR = 0, Audio2Score = 1
 
@@ -84,6 +85,7 @@ public:
     bool canSelectMultipleFiles() const;
 
     QString linkHintText() const;
+    QString linkHintPlainText() const;
     int maxLinkLength() const;
 
     Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);

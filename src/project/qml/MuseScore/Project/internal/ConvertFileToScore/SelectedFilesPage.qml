@@ -97,6 +97,8 @@ Item {
             spacing: 8
 
             StyledTextLabel {
+                id: saveAsLabel
+
                 text: qsTrc("project/convert", "Save as")
                 horizontalAlignment: Text.AlignLeft
             }
@@ -108,6 +110,8 @@ Item {
 
                 navigation.panel: navPanel
                 navigation.order: 5
+                navigation.accessible.name: saveAsLabel.text + " " + saveAsField.currentText
+                navigation.accessible.description: root.saveAsNameError
 
                 onTextChanged: function(newTextValue) {
                     saveAsField.currentText = newTextValue
@@ -187,7 +191,9 @@ Item {
         id: linkPanelComponent
 
         Rectangle {
-            function focusOnFileList() {}
+            function focusOnFileList() {
+                saveAsField.navigation.requestActive()
+            }
 
             color: ui.theme.backgroundSecondaryColor
             border.width: 1

@@ -59,6 +59,9 @@ Rectangle {
             navigation.panel: root.navigationPanel
             navigation.order: 1
 
+            removeButtonNavigation.panel: root.navigationPanel
+            removeButtonNavigation.order: 2
+
             onRemoveSelectionRequested: root.removeRequested()
         }
 
@@ -68,7 +71,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
 
             navigation.panel: root.navigationPanel
-            navigation.order: 2
+            navigation.order: 3
         }
     }
 }

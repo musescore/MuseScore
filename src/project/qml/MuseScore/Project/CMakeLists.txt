@@ -68,6 +68,7 @@ qt_add_qml_module(project_qml
         ExportDialog.qml
         ConvertFileToScoreDialog.qml
         internal/ConvertFileToScore/SelectFilePage.qml
+        internal/ConvertFileToScore/LinkPastePanel.qml
         internal/ConvertFileToScore/SelectedFilesPage.qml
         internal/ConvertFileToScore/MultipleFilesPanel.qml
         internal/ConvertFileToScore/SingleFilePanel.qml

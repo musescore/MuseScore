@@ -28,9 +28,10 @@ import Muse.UiComponents
 Item {
     id: root
 
-    property alias guidelinesLinkText: guidelinesLabel.text
-    property string linkHintText: ""
-    property int maxLinkLength: 0
+    property string guidelinesUrl: ""
+    property alias linkHintText: linkPastePanel.hintText
+    property alias linkHintPlainText: linkPastePanel.hintPlainText
+    property alias maxLinkLength: linkPastePanel.maxLinkLength
 
     property var fileRequirements: []
 
@@ -141,7 +142,7 @@ Item {
                     fileRequirements: root.fileRequirements
 
                     navigation.panel: navPanel
-                    navigation.order: 0
+                    navigation.order: 1
                 }
 
                 FlatButton {
@@ -154,7 +155,7 @@ Item {
                     accentButton: true
 
                     navigation.panel: navPanel
-                    navigation.order: 1
+                    navigation.order: 0
 
                     onClicked: {
                         root.selectFilesRequested()
@@ -174,72 +175,17 @@ Item {
             }
         }
 
-        Rectangle {
-            visible: Boolean(root.linkHintText)
+        LinkPastePanel {
+            id: linkPastePanel
 
             Layout.fillWidth: true
             Layout.topMargin: 2
-            Layout.preferredHeight: linkPasteColumn.implicitHeight + 2 * root.contentPadding
 
-            color: ui.theme.backgroundSecondaryColor
-            border.width: 1
-            border.color: ui.theme.strokeColor
-            radius: 3
+            navigationPanel: navPanel
+            firstNavigationOrder: 2
 
-            Column {
-                id: linkPasteColumn
-
-                anchors.fill: parent
-                anchors.margins: root.contentPadding
-
-                spacing: 8
-
-                StyledTextLabel {
-                    width: parent.width
-
-                    text: root.linkHintText
-                    font: ui.theme.bodyFont
-                    horizontalAlignment: Text.AlignLeft
-                }
-
-                RowLayout {
-                    width: parent.width
-                    spacing: 8
-
-                    TextInputField {
-                        id: linkInputField
-
-                        Layout.fillWidth: true
-                        implicitWidth: 0
-
-                        hint: "https://"
-                        maximumLength: root.maxLinkLength > 0 ? root.maxLinkLength : 32767
-
-                        navigation.panel: navPanel
-                        navigation.order: 2
-
-                        onTextChanged: function(newTextValue) {
-                            linkInputField.currentText = newTextValue
-                        }
-                    }
-
-                    FlatButton {
-                        Layout.preferredWidth: 90
-                        Layout.preferredHeight: 30
-
-                        text: qsTrc("global", "Next")
-
-                        accentButton: true
-                        enabled: Boolean(linkInputField.currentText)
-
-                        navigation.panel: navPanel
-                        navigation.order: 3
-
-                        onClicked: {
-                            root.linkSubmitted(linkInputField.currentText)
-                        }
-                    }
-                }
+            onLinkSubmitted: function(link) {
+                root.linkSubmitted(link)
             }
         }
 
@@ -247,13 +193,42 @@ Item {
             Layout.fillWidth: true
             spacing: 12
 
-            StyledTextLabel {
-                id: guidelinesLabel
+            Item {
+                id: guidelinesItem
 
                 Layout.fillWidth: true
+                implicitHeight: guidelinesLabel.implicitHeight
 
-                font: ui.theme.bodyFont
-                horizontalAlignment: Text.AlignLeft
+                NavigationControl {
+                    id: guidelinesNavCtrl
+
+                    name: "UploadingGuidelines"
+                    panel: navPanel
+                    order: 4
+                    enabled: root.enabled && root.visible
+
+                    accessible.role: MUAccessible.Button
+                    accessible.name: qsTrc("project/convert", "Uploading guidelines")
+                    accessible.visualItem: guidelinesItem
+
+                    onTriggered: {
+                        Qt.openUrlExternally(root.guidelinesUrl)
+                    }
+                }
+
+                NavigationFocusBorder {
+                    navigationCtrl: guidelinesNavCtrl
+                }
+
+                StyledTextLabel {
+                    id: guidelinesLabel
+
+                    anchors.fill: parent
+
+                    text: "<a href=\"" + root.guidelinesUrl + "\">" + qsTrc("project/convert", "Uploading guidelines") + "</a>"
+                    font: ui.theme.bodyFont
+                    horizontalAlignment: Text.AlignLeft
+                }
             }
 
             ButtonBox {

@@ -37,13 +37,9 @@ StyledPopupView {
     contentHeight: content.implicitHeight
     padding: 8
 
-    NavigationPanel {
-        id: navPanel
-
-        name: "FileRequirementsPopup"
-        section: root.navigationSection
-        order: 1
-    }
+    //! NOTE: purely informational content — must never steal keyboard focus
+    openPolicies: PopupView.NoActivateFocus
+    navigationSection: null
 
     Column {
         id: content
@@ -96,19 +92,6 @@ StyledPopupView {
                         }
                     }
                 }
-            }
-        }
-
-        FlatButton {
-            width: parent.width
-
-            text: qsTrc("global", "Close")
-
-            navigation.panel: navPanel
-            navigation.order: 1
-
-            onClicked: {
-                root.close()
             }
         }
     }
