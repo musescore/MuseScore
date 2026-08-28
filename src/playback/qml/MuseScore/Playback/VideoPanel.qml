@@ -330,19 +330,60 @@ Item {
                 border.color: ui.theme.strokeColor
                 clip: true
 
-                StyledTextLabel {
+                FontMetrics {
+                    id: timerFontMetrics
+                    font.pixelSize: 20
+                    font.bold: true
+                }
+
+                RowLayout {
                     anchors.top: parent.top
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: 10
                     visible: videoModel.hasVideo
-                    text: {
-                        var timecode = videoModel.formatTimecode(video.position)
-                        var musicalPosition = videoModel.musicalPositionText(video.position)
-                        return musicalPosition.length > 0 ? (timecode + "   |   " + musicalPosition) : timecode
+                    spacing: 8
+
+                    // NOTE: each zone below has a fixed width so digits changing width
+                    // (e.g. "1" vs "0") during playback can't shift anything else --
+                    // same technique as MeasureAndBeatFields.qml (see its comment/the
+                    // linked issue #9633) applied to plain read-only labels here.
+                    Item {
+                        Layout.preferredWidth: timerFontMetrics.advanceWidth("00:00:00:00")
+                        Layout.preferredHeight: timecodeLabel.implicitHeight
+
+                        StyledTextLabel {
+                            id: timecodeLabel
+                            anchors.right: parent.right
+                            text: videoModel.formatTimecode(video.position)
+                            font.pixelSize: 20
+                            font.bold: true
+                            color: "#F0F0F0"
+                        }
                     }
-                    font.pixelSize: 20
-                    font.bold: true
-                    color: "#F0F0F0"
+
+                    StyledTextLabel {
+                        text: "|"
+                        visible: musicalPositionLabel.text.length > 0
+                        font.pixelSize: 20
+                        font.bold: true
+                        opacity: 0.6
+                        color: "#F0F0F0"
+                    }
+
+                    Item {
+                        Layout.preferredWidth: timerFontMetrics.advanceWidth("9999.9")
+                        Layout.preferredHeight: musicalPositionLabel.implicitHeight
+                        visible: musicalPositionLabel.text.length > 0
+
+                        StyledTextLabel {
+                            id: musicalPositionLabel
+                            anchors.left: parent.left
+                            text: videoModel.musicalPositionText(video.position)
+                            font.pixelSize: 20
+                            font.bold: true
+                            color: "#F0F0F0"
+                        }
+                    }
                 }
 
                 Item {
@@ -523,17 +564,41 @@ Item {
                                     ctx.textBaseline = "bottom"
                                     ctx.fillStyle = primaryColor
                                     ctx.globalAlpha = 0.74
-                                    for (var second = 0; second <= durationSeconds; second += 5) {
+
+                                    // The total duration is always shown, right-aligned at the very
+                                    // end -- reserve its space so no regular 5s-grid label (which
+                                    // may not land on a "nice" interval, especially when zoomed) can
+                                    // be drawn overlapping it.
+                                    var minLabelGap = 6
+                                    var finalLabel = root.timelineLabel(durationSeconds)
+                                    var finalLabelLeftEdge = width - ctx.measureText(finalLabel).width
+
+                                    var lastLabelRightEdge = -Infinity
+                                    var lastGridSecond = durationSeconds - (durationSeconds % 5)
+
+                                    for (var second = 0; second <= lastGridSecond; second += 5) {
+                                        var label = root.timelineLabel(second)
+                                        var labelWidth = ctx.measureText(label).width
                                         var labelX = (second * 1000 / Math.max(video.duration, 1)) * width
-                                        if (labelX < 16) {
-                                            ctx.textAlign = "left"
-                                        } else if (labelX > width - 16) {
-                                            ctx.textAlign = "right"
-                                        } else {
-                                            ctx.textAlign = "center"
+
+                                        var align = labelX < 16 ? "left" : (labelX > width - 16 ? "right" : "center")
+                                        var leftEdge = align === "left" ? labelX : (align === "right" ? labelX - labelWidth : labelX - labelWidth / 2)
+                                        var rightEdge = leftEdge + labelWidth
+
+                                        if (leftEdge < lastLabelRightEdge + minLabelGap) {
+                                            continue
                                         }
-                                        ctx.fillText(root.timelineLabel(second), labelX, height)
+                                        if (second !== lastGridSecond && rightEdge + minLabelGap > finalLabelLeftEdge) {
+                                            continue
+                                        }
+
+                                        ctx.textAlign = align
+                                        ctx.fillText(label, labelX, height)
+                                        lastLabelRightEdge = rightEdge
                                     }
+
+                                    ctx.textAlign = "right"
+                                    ctx.fillText(finalLabel, width, height)
                                     ctx.globalAlpha = 1
                                 }
 
@@ -567,44 +632,34 @@ Item {
                                     property bool editingLabel: false
                                     property real dragTimeMs: modelData.timeMs
                                     readonly property real displayTimeMs: dragging ? dragTimeMs : modelData.timeMs
+                                    readonly property real tickX: (displayTimeMs / Math.max(video.duration, 1)) * parent.width
 
-                                    x: Math.max(0, Math.min(parent.width - width, (displayTimeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
-                                    y: 13
-                                    width: 3
-                                    height: 34
-                                    radius: 1
+                                    x: Math.max(0, Math.min(parent.width - width, tickX - width / 2))
+                                    y: 1
+                                    width: Math.max(20, badgeLabel.implicitWidth + 12)
+                                    height: 16
+                                    radius: height / 2
                                     visible: videoModel.hasVideo && video.duration > 0
                                     color: root.colorFromInt(modelData.color)
+                                    border.width: hitPointMarker.dragging ? 2 : 0
+                                    border.color: "white"
 
                                     StyledTextLabel {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        anchors.bottom: parent.top
-                                        anchors.bottomMargin: 1
+                                        id: badgeLabel
+                                        anchors.centerIn: parent
                                         text: parent.modelData.label
                                         maximumLineCount: 1
-                                        font.pixelSize: 10
-                                        color: root.colorFromInt(parent.modelData.color)
+                                        font.pixelSize: 9
+                                        font.bold: true
+                                        color: "white"
                                         visible: !hitPointMarker.editingLabel
-
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            anchors.margins: -4
-
-                                            onDoubleClicked: {
-                                                hitPointMarker.editingLabel = true
-                                                markerLabelEditor.forceActiveFocus()
-                                                markerLabelEditor.selectAll()
-                                            }
-                                        }
                                     }
 
                                     TextInputField {
                                         id: markerLabelEditor
 
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        anchors.bottom: parent.top
-                                        anchors.bottomMargin: 1
-                                        width: 84
+                                        anchors.centerIn: parent
+                                        width: Math.max(70, parent.width)
                                         currentText: hitPointMarker.modelData.label
                                         visible: hitPointMarker.editingLabel
 
@@ -620,8 +675,7 @@ Item {
 
                                     MouseArea {
                                         anchors.fill: parent
-                                        anchors.leftMargin: -8
-                                        anchors.rightMargin: -8
+                                        anchors.margins: -4
                                         cursorShape: Qt.SizeHorCursor
                                         preventStealing: true
 
@@ -648,6 +702,12 @@ Item {
 
                                         onCanceled: {
                                             hitPointMarker.dragging = false
+                                        }
+
+                                        onDoubleClicked: {
+                                            hitPointMarker.editingLabel = true
+                                            markerLabelEditor.forceActiveFocus()
+                                            markerLabelEditor.selectAll()
                                         }
                                     }
                                 }
