@@ -21,6 +21,8 @@
  */
 #include "playbackconfiguration.h"
 
+#include <algorithm>
+
 #include "settings.h"
 #include "types/string.h"
 
@@ -42,6 +44,11 @@ static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/play
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
 
 static const Settings::Key SOUND_PRESETS_MULTI_SELECTION_KEY(moduleName, "application/playback/soundPresetsMultiSelectionEnabled");
+
+static const Settings::Key VIDEO_HIT_POINTS_PANEL_WIDTH_KEY(moduleName, "playback/video/hitPointsPanelWidth");
+static constexpr int VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH = 260;
+static constexpr int VIDEO_HIT_POINTS_PANEL_MIN_WIDTH = 180;
+static constexpr int VIDEO_HIT_POINTS_PANEL_MAX_WIDTH = 600;
 
 static const Settings::Key MIXER_LABELS_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/labelsSectionVisible");
 static const Settings::Key MIXER_SOUND_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/soundSectionVisible");
@@ -113,6 +120,7 @@ void PlaybackConfiguration::init()
         m_playNotesOnMidiInputChanged.send(val.toBool());
     });
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
+    settings()->setDefaultValue(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY, Val(VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(true));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(true));
@@ -222,6 +230,18 @@ muse::async::Channel<bool> PlaybackConfiguration::playNotesOnMidiInputChanged() 
 PlaybackCursorType PlaybackConfiguration::cursorType() const
 {
     return settings()->value(PLAYBACK_CURSOR_TYPE_KEY).toEnum<PlaybackCursorType>();
+}
+
+int PlaybackConfiguration::videoHitPointsPanelWidth() const
+{
+    return std::clamp(settings()->value(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY).toInt(),
+                       VIDEO_HIT_POINTS_PANEL_MIN_WIDTH, VIDEO_HIT_POINTS_PANEL_MAX_WIDTH);
+}
+
+void PlaybackConfiguration::setVideoHitPointsPanelWidth(int width)
+{
+    width = std::clamp(width, VIDEO_HIT_POINTS_PANEL_MIN_WIDTH, VIDEO_HIT_POINTS_PANEL_MAX_WIDTH);
+    settings()->setSharedValue(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY, Val(width));
 }
 
 bool PlaybackConfiguration::isMixerSectionVisible(MixerSectionType sectionType) const

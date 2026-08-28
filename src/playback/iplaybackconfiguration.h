@@ -53,6 +53,9 @@ public:
 
     virtual PlaybackCursorType cursorType() const = 0;
 
+    virtual int videoHitPointsPanelWidth() const = 0;
+    virtual void setVideoHitPointsPanelWidth(int width) = 0;
+
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
     virtual muse::async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const = 0;

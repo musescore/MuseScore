@@ -46,6 +46,9 @@ public:
 
     PlaybackCursorType cursorType() const override;
 
+    int videoHitPointsPanelWidth() const override;
+    void setVideoHitPointsPanelWidth(int width) override;
+
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
     muse::async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const override;

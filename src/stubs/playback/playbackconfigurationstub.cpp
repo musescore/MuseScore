@@ -88,6 +88,15 @@ PlaybackCursorType PlaybackConfigurationStub::cursorType() const
     return PlaybackCursorType::SMOOTH;
 }
 
+int PlaybackConfigurationStub::videoHitPointsPanelWidth() const
+{
+    return 260;
+}
+
+void PlaybackConfigurationStub::setVideoHitPointsPanelWidth(int)
+{
+}
+
 bool PlaybackConfigurationStub::isMixerSectionVisible(MixerSectionType) const
 {
     return false;

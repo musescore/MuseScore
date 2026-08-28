@@ -33,6 +33,7 @@
 #include "project/iprojectvideosettings.h"
 
 #include "iplaybackcontroller.h"
+#include "iplaybackconfiguration.h"
 
 namespace mu::playback {
 class VideoPanelModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -57,6 +58,7 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
 
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<IPlaybackController> playbackController = { this };
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
 
 public:
     explicit VideoPanelModel(QObject* parent = nullptr);
@@ -82,6 +84,12 @@ public:
     //! the sync offset). Does not touch the video element itself -- QML seeks the
     //! video separately since it owns that QtMultimedia object.
     Q_INVOKABLE void seekScoreToVideoPositionMs(int videoPositionMs);
+
+    //! NOTE Persisted user preference for the hit-points side panel's width (not a
+    //! live-bound Q_PROPERTY -- QML reads it once on load and writes it back when
+    //! the user finishes dragging the resize handle).
+    Q_INVOKABLE int hitPointsPanelWidth() const;
+    Q_INVOKABLE void setHitPointsPanelWidth(int width);
 
     bool hasVideo() const;
     QString videoPath() const;

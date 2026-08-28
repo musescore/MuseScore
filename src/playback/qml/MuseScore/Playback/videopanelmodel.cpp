@@ -186,6 +186,16 @@ void VideoPanelModel::seekScoreToVideoPositionMs(int videoPositionMs)
     playbackController()->rewind(muse::secs_t(scoreTimeSeconds));
 }
 
+int VideoPanelModel::hitPointsPanelWidth() const
+{
+    return configuration()->videoHitPointsPanelWidth();
+}
+
+void VideoPanelModel::setHitPointsPanelWidth(int width)
+{
+    configuration()->setVideoHitPointsPanelWidth(width);
+}
+
 int VideoPanelModel::parseTimecodeToMs(const QString& timecode) const
 {
     const QStringList parts = timecode.trimmed().split(QLatin1Char(':'));
