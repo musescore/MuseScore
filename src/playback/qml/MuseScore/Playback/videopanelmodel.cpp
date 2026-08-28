@@ -196,6 +196,11 @@ void VideoPanelModel::setHitPointsPanelWidth(int width)
     configuration()->setVideoHitPointsPanelWidth(width);
 }
 
+QStringList VideoPanelModel::recentVideoFiles() const
+{
+    return configuration()->recentVideoFiles();
+}
+
 int VideoPanelModel::parseTimecodeToMs(const QString& timecode) const
 {
     const QStringList parts = timecode.trimmed().split(QLatin1Char(':'));
@@ -267,6 +272,8 @@ void VideoPanelModel::setVideoPath(const QString& path)
     VideoAttachmentSettings updated = attachment();
     updated.path = path;
     updateAttachment(updated);
+
+    configuration()->addRecentVideoFile(path);
 }
 
 int VideoPanelModel::offsetMs() const

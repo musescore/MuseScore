@@ -50,6 +50,10 @@ static constexpr int VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH = 260;
 static constexpr int VIDEO_HIT_POINTS_PANEL_MIN_WIDTH = 240;
 static constexpr int VIDEO_HIT_POINTS_PANEL_MAX_WIDTH = 420;
 
+static const Settings::Key RECENT_VIDEO_FILES_KEY(moduleName, "playback/video/recentFiles");
+static constexpr int RECENT_VIDEO_FILES_MAX = 5;
+static const QChar RECENT_VIDEO_FILES_SEPARATOR(u'\n');
+
 static const Settings::Key MIXER_LABELS_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/labelsSectionVisible");
 static const Settings::Key MIXER_SOUND_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/soundSectionVisible");
 static const Settings::Key MIXER_AUDIO_FX_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/audioFxSectionVisible");
@@ -121,6 +125,7 @@ void PlaybackConfiguration::init()
     });
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
     settings()->setDefaultValue(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY, Val(VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH));
+    settings()->setDefaultValue(RECENT_VIDEO_FILES_KEY, Val(std::string()));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(true));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(true));
@@ -242,6 +247,32 @@ void PlaybackConfiguration::setVideoHitPointsPanelWidth(int width)
 {
     width = std::clamp(width, VIDEO_HIT_POINTS_PANEL_MIN_WIDTH, VIDEO_HIT_POINTS_PANEL_MAX_WIDTH);
     settings()->setSharedValue(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY, Val(width));
+}
+
+QStringList PlaybackConfiguration::recentVideoFiles() const
+{
+    QString joined = QString::fromStdString(settings()->value(RECENT_VIDEO_FILES_KEY).toString());
+    if (joined.isEmpty()) {
+        return {};
+    }
+
+    return joined.split(RECENT_VIDEO_FILES_SEPARATOR, Qt::SkipEmptyParts);
+}
+
+void PlaybackConfiguration::addRecentVideoFile(const QString& path)
+{
+    if (path.isEmpty()) {
+        return;
+    }
+
+    QStringList files = recentVideoFiles();
+    files.removeAll(path);
+    files.prepend(path);
+    while (files.size() > RECENT_VIDEO_FILES_MAX) {
+        files.removeLast();
+    }
+
+    settings()->setSharedValue(RECENT_VIDEO_FILES_KEY, Val(files.join(RECENT_VIDEO_FILES_SEPARATOR).toStdString()));
 }
 
 bool PlaybackConfiguration::isMixerSectionVisible(MixerSectionType sectionType) const

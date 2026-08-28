@@ -61,6 +61,9 @@ public:
     int videoHitPointsPanelWidth() const override;
     void setVideoHitPointsPanelWidth(int width) override;
 
+    QStringList recentVideoFiles() const override;
+    void addRecentVideoFile(const QString& path) override;
+
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
     muse::async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const override;

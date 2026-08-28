@@ -97,6 +97,15 @@ void PlaybackConfigurationStub::setVideoHitPointsPanelWidth(int)
 {
 }
 
+QStringList PlaybackConfigurationStub::recentVideoFiles() const
+{
+    return {};
+}
+
+void PlaybackConfigurationStub::addRecentVideoFile(const QString&)
+{
+}
+
 bool PlaybackConfigurationStub::isMixerSectionVisible(MixerSectionType) const
 {
     return false;

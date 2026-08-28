@@ -22,6 +22,8 @@
 #ifndef MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 #define MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 
+#include <QStringList>
+
 #include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "async/notification.h"
@@ -55,6 +57,10 @@ public:
 
     virtual int videoHitPointsPanelWidth() const = 0;
     virtual void setVideoHitPointsPanelWidth(int width) = 0;
+
+    //! NOTE Most-recently-used first, capped at a small fixed size.
+    virtual QStringList recentVideoFiles() const = 0;
+    virtual void addRecentVideoFile(const QString& path) = 0;
 
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <QStringList>
 #include <QUrl>
 #include <QVariantList>
 #include <qqmlintegration.h>
@@ -94,6 +95,8 @@ public:
     //! the user finishes dragging the resize handle).
     Q_INVOKABLE int hitPointsPanelWidth() const;
     Q_INVOKABLE void setHitPointsPanelWidth(int width);
+
+    Q_INVOKABLE QStringList recentVideoFiles() const;
 
     bool hasVideo() const;
     QString videoPath() const;
