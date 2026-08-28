@@ -30,7 +30,7 @@ import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Playback
 
-ExpandableBlank {
+Item {
     id: root
 
     required property VideoPanelModel videoModel
@@ -47,27 +47,11 @@ ExpandableBlank {
 
     readonly property int hitPointsRowStride: 3
 
-    title: qsTrc("playback", "Hit points")
-    titleFont: ui.theme.bodyBoldFont
-    isExpanded: true
     enabled: videoModel.hasVideo
+    implicitHeight: contentColumn.implicitHeight + 16
 
-    navigation.panel: navigationPanel
-    navigation.order: navigationOrderStart
-
-    headerAccessory: Component {
-        StyledTextLabel {
-            text: root.videoModel.hitPoints.length.toString()
-            opacity: 0.7
-        }
-    }
-
-    contentItemComponent: Item {
-        width: root.width
-        implicitHeight: innerColumn.implicitHeight + 16
-
-        ColumnLayout {
-        id: innerColumn
+    ColumnLayout {
+        id: contentColumn
 
         anchors.left: parent.left
         anchors.right: parent.right
@@ -85,7 +69,7 @@ ExpandableBlank {
 
                 navigation.name: "VideoHitPointsTab"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationOrderStart + 1
+                navigation.row: root.navigationOrderStart
             }
 
             StyledTabButton {
@@ -93,7 +77,7 @@ ExpandableBlank {
 
                 navigation.name: "VideoSettingsTab"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationOrderStart + 2
+                navigation.row: root.navigationOrderStart + 1
             }
         }
 
@@ -109,7 +93,7 @@ ExpandableBlank {
                     text: qsTrc("playback", "Add hit point")
                     enabled: root.videoModel.hasVideo
                     navigation.panel: root.navigationPanel
-                    navigation.order: root.navigationOrderStart + 3
+                    navigation.order: root.navigationOrderStart + 2
 
                     onClicked: {
                         root.videoModel.addHitPoint(root.currentVideoPositionMs)
@@ -213,7 +197,7 @@ ExpandableBlank {
                         currentText: root.videoModel.frameRate.toString()
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
-                        navigation.order: root.navigationOrderStart + 4
+                        navigation.order: root.navigationOrderStart + 3
 
                         onTextEditingFinished: function(newTextValue) {
                             var parsedValue = parseFloat(newTextValue)
@@ -228,7 +212,7 @@ ExpandableBlank {
                         text: qsTrc("playback", "Detect")
                         enabled: root.videoModel.hasVideo && root.detectFrameRate() > 0
                         navigation.panel: root.navigationPanel
-                        navigation.order: root.navigationOrderStart + 5
+                        navigation.order: root.navigationOrderStart + 4
 
                         onClicked: {
                             var rate = root.detectFrameRate()
@@ -252,7 +236,7 @@ ExpandableBlank {
                         currentText: root.videoModel.offsetMs.toString()
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
-                        navigation.order: root.navigationOrderStart + 6
+                        navigation.order: root.navigationOrderStart + 5
 
                         onTextEditingFinished: function(newTextValue) {
                             var parsedValue = parseInt(newTextValue, 10)
@@ -276,7 +260,7 @@ ExpandableBlank {
                         text: qsTrc("playback", "-100 ms")
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
-                        navigation.order: root.navigationOrderStart + 7
+                        navigation.order: root.navigationOrderStart + 6
 
                         onClicked: {
                             root.videoModel.nudgeOffset(-100)
@@ -288,7 +272,7 @@ ExpandableBlank {
                         text: qsTrc("playback", "+100 ms")
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
-                        navigation.order: root.navigationOrderStart + 8
+                        navigation.order: root.navigationOrderStart + 7
 
                         onClicked: {
                             root.videoModel.nudgeOffset(100)
@@ -301,7 +285,7 @@ ExpandableBlank {
                     text: qsTrc("playback", "Clear video")
                     enabled: root.videoModel.hasVideo
                     navigation.panel: root.navigationPanel
-                    navigation.order: root.navigationOrderStart + 9
+                    navigation.order: root.navigationOrderStart + 8
 
                     onClicked: {
                         root.clearAttachedVideo()
@@ -312,7 +296,6 @@ ExpandableBlank {
                     Layout.fillHeight: true
                 }
             }
-        }
         }
     }
 }
