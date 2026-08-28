@@ -169,6 +169,23 @@ QString VideoPanelModel::formatTimecode(int videoPositionMs) const
     return project::formatVideoTimecode(videoPositionMs, frameRate());
 }
 
+void VideoPanelModel::toggleScorePlay()
+{
+    if (playbackController()) {
+        playbackController()->togglePlay();
+    }
+}
+
+void VideoPanelModel::seekScoreToVideoPositionMs(int videoPositionMs)
+{
+    if (!playbackController()) {
+        return;
+    }
+
+    const double scoreTimeSeconds = std::max(0.0, static_cast<double>(videoPositionMs - offsetMs()) / 1000.0);
+    playbackController()->rewind(muse::secs_t(scoreTimeSeconds));
+}
+
 int VideoPanelModel::parseTimecodeToMs(const QString& timecode) const
 {
     const QStringList parts = timecode.trimmed().split(QLatin1Char(':'));

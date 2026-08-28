@@ -32,6 +32,8 @@
 #include "context/iglobalcontext.h"
 #include "project/iprojectvideosettings.h"
 
+#include "iplaybackcontroller.h"
+
 namespace mu::playback {
 class VideoPanelModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
@@ -54,6 +56,7 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
     QML_ELEMENT
 
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<IPlaybackController> playbackController = { this };
 
 public:
     explicit VideoPanelModel(QObject* parent = nullptr);
@@ -71,6 +74,14 @@ public:
     Q_INVOKABLE void setHitPointTimeMs(int hitPointId, int videoPositionMs);
     Q_INVOKABLE void setHitPointTimecode(int hitPointId, const QString& timecode);
     Q_INVOKABLE QString formatTimecode(int videoPositionMs) const;
+
+    //! NOTE Toggles the score's own playback; the video follows via the existing
+    //! score->video sync (playbackSyncChanged), it is not driven directly here.
+    Q_INVOKABLE void toggleScorePlay();
+    //! NOTE Seeks the score to the position corresponding to videoPositionMs (minus
+    //! the sync offset). Does not touch the video element itself -- QML seeks the
+    //! video separately since it owns that QtMultimedia object.
+    Q_INVOKABLE void seekScoreToVideoPositionMs(int videoPositionMs);
 
     bool hasVideo() const;
     QString videoPath() const;
