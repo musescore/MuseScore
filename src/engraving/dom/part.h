@@ -141,12 +141,14 @@ public:
     void removeNonPrimaryInstruments();
     const InstrumentList& instruments() const;
 
+    const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
     const StringData* stringData(const Fraction& tick, staff_idx_t staffIdx) const;
     void addStringTunings(StringTunings* stringTunings);
     void removeStringTunings(StringTunings* stringTunings);
 
     void insertTime(const Fraction& tick, const Fraction& len);
 
+    const std::map<int, HarpPedalDiagram*>& harpDiagrams() const { return m_harpDiagrams; }
     void addHarpDiagram(HarpPedalDiagram*);
     void removeHarpDiagram(HarpPedalDiagram*);
     void clearHarpDiagrams();
@@ -184,10 +186,6 @@ public:
     PreferSharpFlat preferSharpFlat() const { return m_preferSharpFlat; }
     void setPreferSharpFlat(PreferSharpFlat v) { m_preferSharpFlat = v; }
 
-    std::map<int, HarpPedalDiagram*> harpDiagrams;
-
-    const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
-
     SharedPart* sharedPart() const { return m_sharedPart; }
     void setSharedPart(SharedPart* p) { m_sharedPart = p; }
 
@@ -209,6 +207,7 @@ private:
 
     PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
+    std::map<int, HarpPedalDiagram*> m_harpDiagrams;
     std::map<int, StringTunings*> m_stringTunings;
 
     SharedPart* m_sharedPart = nullptr;
