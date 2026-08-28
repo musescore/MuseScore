@@ -30,6 +30,9 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 
+#include "cloud/musescorecom/imusescorecomservice.h"
+#include "cloud/audiocom/iaudiocomservice.h"
+
 #include "project/iprojectconfiguration.h"
 #include "project/iconvertfiletoscorescenario.h"
 
@@ -39,22 +42,43 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_OBJECT
 
     Q_PROPERTY(QString guidelinesLinkText READ guidelinesLinkText CONSTANT)
+    Q_PROPERTY(QString accountAvatarUrl READ accountAvatarUrl CONSTANT)
+    Q_PROPERTY(QString audioComUrl READ audioComUrl CONSTANT)
+
+    Q_PROPERTY(QVariantList fileRequirements READ fileRequirements CONSTANT)
+
+    Q_PROPERTY(QString linkPasteText READ linkPasteText CONSTANT)
+    Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
 
     QML_ELEMENT
 
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
+    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::ContextInject<muse::cloud::IAudioComService> audioComService = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
     explicit ConvertFileToScoreModel(QObject* parent = nullptr);
 
     QString guidelinesLinkText() const;
+    QString accountAvatarUrl() const;
+    QString audioComUrl() const;
 
-    Q_INVOKABLE QStringList selectFiles();
+    QVariantList fileRequirements() const;
+
+    QString linkPasteText() const;
+    int maxLinkLength() const;
+
+    Q_INVOKABLE bool canSelectMultipleFiles(int type, const QStringList& paths) const;
+
+    Q_INVOKABLE QStringList selectFiles(const QStringList& existingPaths = {});
     Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
+
+    Q_INVOKABLE void confirmGoingBack();
 
 signals:
     void validationFinished(int type, QVariantList paths);
+    void goingBackConfirmed();
 };
 }

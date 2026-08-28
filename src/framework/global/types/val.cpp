@@ -319,7 +319,8 @@ Val Val::fromQVariant(const QVariant& var)
     case QMetaType::ULongLong: return Val(static_cast<int64_t>(var.toLongLong()));
     case QMetaType::Double: return Val(var.toDouble());
     case QMetaType::QString: return Val(var.toString().toStdString());
-    case QMetaType::QVariantList: {
+    case QMetaType::QVariantList:
+    case QMetaType::QStringList: {
         ValList l;
         QVariantList vl = var.toList();
         for (const QVariant& v : vl) {

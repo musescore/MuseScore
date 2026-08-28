@@ -23,6 +23,8 @@
 #include "musescorecomservice.h"
 
 #include <QBuffer>
+#include <QFile>
+#include <QFileInfo>
 #include <QHttpMultiPart>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -390,6 +392,7 @@ static RetVal<ConvertQueueList> parseConvertQueueList(const QByteArray& data)
         item.type = convertTypeFromApiString(itemObj.value("type").toString());
         item.status = convertStatusFromApiString(itemObj.value("status").toString());
         item.filename = itemObj.value("filename").toString();
+        item.link = itemObj.value("link").toString();
         item.scoreId = itemObj.value("score_id").toInt();
         item.createdAt = QDateTime::fromSecsSinceEpoch(itemObj.value("created_at").toInteger());
         item.updatedAt = QDateTime::fromSecsSinceEpoch(itemObj.value("updated_at").toInteger());
@@ -456,6 +459,10 @@ static RetVal<ConvertConfig> parseConvertConfig(const QByteArray& data)
     for (const QJsonValue& extension : audio2scoreObj.value("allowed_extensions").toArray()) {
         result.audio2score.allowedExtensions.push_back(extension.toString());
     }
+    result.audio2score.maxLinkLength = audio2scoreObj.value("max_link_length").toInt();
+    for (const QJsonValue& source : audio2scoreObj.value("allowed_link_sources").toArray()) {
+        result.audio2score.allowedLinkSources.push_back(source.toString());
+    }
 
     return RetVal<ConvertConfig>::make_ok(result);
 }
@@ -469,7 +476,9 @@ static QString sanitizeContentDispositionFilename(const QString& fileName)
     return sanitized;
 }
 
-static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const ConvertFileList& files)
+using ConvertFileList = std::vector<std::shared_ptr<QFile> >;
+
+static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const ConvertFileList& files, const QString& link)
 {
     auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
 
@@ -478,13 +487,20 @@ static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const C
     typePart.setBody(convertTypeToApiString(type).toUtf8());
     multiPart->append(typePart);
 
-    for (const ConvertFile& file : files) {
+    if (!link.isEmpty()) {
+        QHttpPart linkPart;
+        linkPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"link\""));
+        linkPart.setBody(link.toUtf8());
+        multiPart->append(linkPart);
+    }
+
+    for (const std::shared_ptr<QFile>& file : files) {
         QHttpPart filePart;
         filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
         QString contentDisposition
-            = QString("form-data; name=\"files[]\"; filename=\"%1\"").arg(sanitizeContentDispositionFilename(file.fileName));
+            = QString("form-data; name=\"files[]\"; filename=\"%1\"").arg(sanitizeContentDispositionFilename(QFileInfo(*file).fileName()));
         filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
-        filePart.setBodyDevice(file.data.get());
+        filePart.setBodyDevice(file.get());
         multiPart->append(filePart);
     }
 
@@ -982,13 +998,13 @@ Promise<RetVal<ConvertConfig> > MuseScoreComService::fetchConfig()
     });
 }
 
-ProgressPtr MuseScoreComService::upload(ConvertType type, const ConvertFileList& files)
+ProgressPtr MuseScoreComService::upload(const ConvertInput& input)
 {
     ProgressPtr progress = std::make_shared<Progress>();
     progress->start();
 
-    executeAsyncRequest([this, type, files, progress]() {
-        return doUpload(type, files, progress);
+    executeAsyncRequest([this, input, progress]() {
+        return doUpload(input, progress);
     }).onResolve(this, [progress](const Ret& ret) {
         if (progress->isStarted()) {
             progress->finish(ret);
@@ -998,33 +1014,36 @@ ProgressPtr MuseScoreComService::upload(ConvertType type, const ConvertFileList&
     return progress;
 }
 
-Promise<Ret> MuseScoreComService::doUpload(ConvertType type, const ConvertFileList& files, ProgressPtr progress)
+Promise<Ret> MuseScoreComService::doUpload(const ConvertInput& input, ProgressPtr progress)
 {
     TRACEFUNC;
 
-    return make_promise<Ret>([this, type, files, progress](auto resolve, auto) {
+    return make_promise<Ret>([this, input, progress](auto resolve, auto) {
         RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_CONVERT_UPLOAD_API_URL);
         if (!uploadUrl.ret) {
             return resolve(uploadUrl.ret);
         }
 
-        for (const ConvertFile& file : files) {
-            IF_ASSERT_FAILED(file.isValid()) {
+        const ConvertType type = convertTypeOf(input);
+        const QString link = convertLinkOf(input);
+
+        ConvertFileList files;
+        for (const io::path_t& path : convertPathsOf(input)) {
+            auto file = std::make_shared<QFile>(path.toQString());
+            if (!file->open(QIODevice::ReadOnly)) {
                 return resolve(make_ret(Err::InvalidData));
             }
 
-            if (file.data->size() > MAX_CONVERT_FILE_SIZE_BYTES) {
+            if (file->size() > MAX_CONVERT_FILE_SIZE_BYTES) {
                 Ret ret = make_ret(Err::Status422_ValidationFailed);
                 ret.setData(CONVERT_ERROR_CODE_KEY, ConvertErrorCode::FileTooLarge);
                 return resolve(ret);
             }
 
-            if (!file.data->isOpen() || !file.data->seek(0)) {
-                return resolve(make_ret(Err::InvalidData));
-            }
+            files.push_back(file);
         }
 
-        auto multiPart = makeMultiPartForConvertUpload(type, files);
+        auto multiPart = makeMultiPartForConvertUpload(type, files, link);
         auto receivedData = std::make_shared<QBuffer>();
 
         RetVal<Progress> uploadProgress = m_networkManager->post(uploadUrl.val, multiPart, receivedData, convertHeaders());
@@ -1036,7 +1055,9 @@ Promise<Ret> MuseScoreComService::doUpload(ConvertType type, const ConvertFileLi
             progress->progress(current, total, msg);
         });
 
-        uploadProgress.val.finished().onReceive(this, [this, receivedData, resolve, progress](const ProgressResult& res) {
+        //! NOTE: files must stay alive (and open) until the request finishes,
+        //! since multiPart's file parts hold raw pointers into them
+        uploadProgress.val.finished().onReceive(this, [this, files, receivedData, resolve, progress](const ProgressResult& res) {
             if (!res.ret) {
                 printServerReply(*receivedData);
                 Ret ret = uploadingDownloadingRetFromRawRet(res.ret);

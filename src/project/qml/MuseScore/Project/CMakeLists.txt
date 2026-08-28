@@ -32,8 +32,10 @@ qt_add_qml_module(project_qml
         internal/devtools/convertfiletoscoredevtoolsmodel.h
         internal/Export/exportdialogmodel.cpp
         internal/Export/exportdialogmodel.h
-        internal/convertfiletoscoremodel.cpp
-        internal/convertfiletoscoremodel.h
+        internal/ConvertFileToScore/convertfiletoscoremodel.cpp
+        internal/ConvertFileToScore/convertfiletoscoremodel.h
+        internal/ConvertFileToScore/filelistmodel.cpp
+        internal/ConvertFileToScore/filelistmodel.h
         internal/NewScore/additionalinfomodel.cpp
         internal/NewScore/additionalinfomodel.h
         internal/NewScore/newscoremodel.cpp
@@ -65,6 +67,13 @@ qt_add_qml_module(project_qml
         AudioGenerationSettingsDialog.qml
         ExportDialog.qml
         ConvertFileToScoreDialog.qml
+        internal/ConvertFileToScore/SelectFilePage.qml
+        internal/ConvertFileToScore/SelectedFilesPage.qml
+        internal/ConvertFileToScore/MultipleFilesPanel.qml
+        internal/ConvertFileToScore/SingleFilePanel.qml
+        internal/ConvertFileToScore/FileItem.qml
+        internal/ConvertFileToScore/FileRequirements.qml
+        internal/ConvertFileToScore/FileRequirementsPopup.qml
         internal/devtools/ConvertFileToScoreDevTools.qml
         internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml
@@ -150,4 +159,5 @@ target_include_directories(project_qml PRIVATE
     internal/NewScore
     internal/Properties
     internal/ScoresPage
+    internal/ConvertFileToScore
 )

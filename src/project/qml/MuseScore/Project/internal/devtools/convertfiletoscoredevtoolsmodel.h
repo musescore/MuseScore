@@ -27,8 +27,6 @@
 
 #include "async/asyncable.h"
 
-#include "actions/iactionsdispatcher.h"
-#include "global/iinteractive.h"
 #include "modularity/ioc.h"
 #include "project/iconvertfiletoscorescenario.h"
 
@@ -39,13 +37,10 @@ class ConvertFileToScoreDevToolsModel : public QObject, public muse::async::Asyn
     QML_ELEMENT
 
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
-    muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit ConvertFileToScoreDevToolsModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void init();
     Q_INVOKABLE void selectAndConvertFiles();
 };
 }

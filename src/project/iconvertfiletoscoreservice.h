@@ -27,14 +27,9 @@
 #include "io/path.h"
 #include "types/ret.h"
 
-#include "cloud/musescorecom/converttypes.h"
+#include "types/converttypes.h"
 
 namespace mu::project {
-using ConvertConfig = muse::cloud::ConvertConfig;
-using ConvertType = muse::cloud::ConvertType;
-using ConvertFileList = muse::cloud::ConvertFileList;
-using ReviewRating = muse::cloud::ReviewRating;
-
 class IConvertFileToScoreService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IConvertFileToScoreService)
@@ -44,7 +39,7 @@ public:
 
     virtual const ConvertConfig& config() const = 0;
 
-    virtual void convert(ConvertType type, const ConvertFileList& files) = 0;
+    virtual muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) = 0;
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 
     virtual muse::async::Channel<int /*queueId*/, ConvertType> reviewRequested() const = 0;

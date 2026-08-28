@@ -27,19 +27,19 @@
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "global/iglobalconfiguration.h"
 #include "io/ifilesystem.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 #include "project/iconvertfiletoscoreservice.h"
+#include "project/iprojectconfiguration.h"
 
 namespace mu::project {
 class ConvertFileToScoreService : public IConvertFileToScoreService, public muse::async::Asyncable, public muse::Contextable
 {
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
-    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
     explicit ConvertFileToScoreService(const muse::modularity::ContextPtr& iocCtx)
@@ -50,7 +50,7 @@ public:
 
     const ConvertConfig& config() const override;
 
-    void convert(ConvertType type, const ConvertFileList& files) override;
+    muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) override;
 
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
@@ -64,27 +64,25 @@ private:
     };
 
     struct WatchedItem {
-        muse::cloud::ConvertType type = muse::cloud::ConvertType::Omr;
-        muse::io::paths_t filePaths;
+        ConvertType type = ConvertType::Omr;
+        QString convertedFileName;
         DownloadStatus downloadStatus = DownloadStatus::NotStarted;
         muse::cloud::ConvertStatus lastHandledStatus = muse::cloud::ConvertStatus::Unknown;
     };
 
-    void watch(int queueId, muse::cloud::ConvertType type, const muse::io::paths_t& filePaths);
+    void watch(int queueId, ConvertType type, const QString& convertedFileName);
     void poll();
-
-    muse::io::path_t pendingConvertsJsonPath() const;
 
     void loadWatchedItems();
     void saveWatchedItems();
 
-    muse::Ret attachFailedFiles(muse::Ret ret, int queueId) const;
+    QString convertedFileNameFor(int queueId) const;
 
     void onStatusChanged(const muse::cloud::ConvertQueueItem& item);
     bool shouldHandle(int queueId, muse::cloud::ConvertStatus status);
 
-    void downloadIfNotAlready(muse::cloud::ConvertType type, int queueId);
-    void fetchScoreUrlAndDownload(muse::cloud::ConvertType type, int queueId);
+    void downloadIfNotAlready(ConvertType type, int queueId);
+    void fetchScoreUrlAndDownload(ConvertType type, int queueId);
     void downloadScoreAndFinish(const muse::cloud::SignedMsczUrl& urlInfo);
     void markDownloaded(int queueId);
     void clearDownloading(int queueId);
@@ -97,6 +95,6 @@ private:
     bool m_pollInProgress = false;
     int m_pollFailureCount = 0;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
-    muse::async::Channel<int, muse::cloud::ConvertType> m_reviewRequested;
+    muse::async::Channel<int, ConvertType> m_reviewRequested;
 };
 }

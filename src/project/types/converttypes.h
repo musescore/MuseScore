@@ -20,24 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "convertfiletoscoredevtoolsmodel.h"
+#pragma once
 
-#include "actions/actiontypes.h"
-#include "project/projecterrors.h"
+#include "cloud/musescorecom/converttypes.h"
 
-using namespace mu::project;
-using namespace muse;
-using namespace muse::actions;
-
-ConvertFileToScoreDevToolsModel::ConvertFileToScoreDevToolsModel(QObject* parent)
-    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
-{
-}
-
-void ConvertFileToScoreDevToolsModel::selectAndConvertFiles()
-{
-    convertFileToScoreScenario()->selectFilesToConvert()
-    .onResolve(this, [this](const ConvertSelection& selection) {
-        convertFileToScoreScenario()->convert(selection.input, selection.convertedFileName);
-    });
+namespace mu::project {
+using ConvertConfig = muse::cloud::ConvertConfig;
+using ConvertType = muse::cloud::ConvertType;
+using ConvertInput = muse::cloud::ConvertInput;
+using ReviewRating = muse::cloud::ReviewRating;
 }

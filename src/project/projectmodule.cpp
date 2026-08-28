@@ -147,9 +147,8 @@ void ProjectModule::onInit(const IApplication::RunMode& mode)
     m_recentFilesController->init();
     m_projectAutoSaver->init();
 
-    // TODO
-    // m_convertFileToScoreService->init();
-    // m_convertFileToScoreScenario->init();
+    m_convertFileToScoreService->init();
+    m_convertFileToScoreScenario->init();
 }
 
 void ProjectModule::onDelayedInit()

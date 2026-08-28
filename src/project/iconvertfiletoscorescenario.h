@@ -28,12 +28,12 @@
 #include "io/path.h"
 #include "types/retval.h"
 
-#include "cloud/musescorecom/converttypes.h"
+#include "types/converttypes.h"
 
 namespace mu::project {
 struct ConvertSelection {
-    muse::cloud::ConvertType type = muse::cloud::ConvertType::Omr;
-    muse::io::paths_t paths;
+    ConvertInput input;
+    QString convertedFileName;
 };
 
 class IConvertFileToScoreScenario : MODULE_CONTEXT_INTERFACE
@@ -43,9 +43,11 @@ class IConvertFileToScoreScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IConvertFileToScoreScenario() = default;
 
+    virtual const ConvertConfig& convertConfig() const = 0;
+
     virtual muse::async::Promise<ConvertSelection> selectFilesToConvert() = 0;
-    virtual muse::async::Promise<muse::RetVal<muse::cloud::ConvertType> > validateFiles(const muse::io::paths_t& paths) = 0;
-    virtual bool convertFiles(muse::cloud::ConvertType type, const muse::io::paths_t& files) = 0;
+    virtual muse::async::Promise<muse::RetVal<ConvertType> > validate(const muse::io::paths_t& paths) = 0;
+    virtual muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) = 0;
 
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 };

@@ -33,10 +33,6 @@ Rectangle {
         id: model
     }
 
-    Component.onCompleted: {
-        model.init()
-    }
-
     FlatButton {
         anchors.top: parent.top
         anchors.left: parent.left

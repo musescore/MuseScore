@@ -24,6 +24,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
+#include "actions/iactionsdispatcher.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
@@ -36,6 +37,7 @@ class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public mu
 {
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<IConvertFileToScoreService> service = { this };
 
@@ -45,21 +47,25 @@ public:
 
     void init();
 
+    const ConvertConfig& convertConfig() const override;
+
     muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
-    muse::async::Promise<muse::RetVal<muse::cloud::ConvertType> > validateFiles(const muse::io::paths_t& paths) override;
-    bool convertFiles(muse::cloud::ConvertType type, const muse::io::paths_t& files) override;
+    muse::async::Promise<muse::RetVal<ConvertType> > validate(const muse::io::paths_t& paths) override;
+    muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) override;
 
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
 private:
     muse::Ret ensureAuthorization();
 
-    bool validateAgainstConfig(muse::cloud::ConvertType type, const muse::io::paths_t& paths, const muse::cloud::ConvertConfig& config);
+    bool validateAgainstConfig(ConvertType type, const muse::io::paths_t& paths, const ConvertConfig& config);
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError(const QStringList& allowedExtensions);
     void showFileValidationError(const std::string& title, const std::string& text);
 
-    void openFilesAndUpload(muse::cloud::ConvertType type, const muse::io::paths_t& paths);
+    muse::Ret startUpload(const ConvertInput& input, const QString& convertedFileName);
+    void showFileProcessingDialog();
+    void showScoreReadyNotification(const muse::io::path_t& path);
 
     void askReviewRating(int queueId);
 

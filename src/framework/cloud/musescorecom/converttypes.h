@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include <memory>
 #include <string>
+#include <variant>
 #include <vector>
 
 #include <QDateTime>
@@ -33,8 +33,6 @@
 
 #include "global/logstream.h"
 #include "io/path.h"
-
-class QIODevice;
 
 namespace muse::cloud {
 enum class ConvertType {
@@ -108,6 +106,8 @@ struct Audio2ScoreConfig {
     qint64 maxFileSizeBytes = 0;
     int maxFiles = 0;
     QStringList allowedExtensions;
+    int maxLinkLength = 0;
+    QStringList allowedLinkSources;
 };
 
 struct ConvertConfig {
@@ -115,15 +115,41 @@ struct ConvertConfig {
     Audio2ScoreConfig audio2score;
 };
 
-struct ConvertFile {
-    std::shared_ptr<QIODevice> data;
-    QString fileName;
-    muse::io::path_t path;
-
-    bool isValid() const { return data != nullptr && !fileName.isEmpty(); }
+struct OmrConvertInput {
+    muse::io::paths_t paths;
 };
 
-using ConvertFileList = std::vector<ConvertFile>;
+struct Audio2ScoreConvertInput {
+    std::variant<muse::io::paths_t, QString> data; // paths or link
+};
+
+using ConvertInput = std::variant<OmrConvertInput, Audio2ScoreConvertInput>;
+
+inline ConvertType convertTypeOf(const ConvertInput& input)
+{
+    return std::holds_alternative<OmrConvertInput>(input) ? ConvertType::Omr : ConvertType::Audio2Score;
+}
+
+inline muse::io::paths_t convertPathsOf(const ConvertInput& input)
+{
+    if (const OmrConvertInput* omr = std::get_if<OmrConvertInput>(&input)) {
+        return omr->paths;
+    }
+
+    const muse::io::paths_t* paths = std::get_if<muse::io::paths_t>(&std::get<Audio2ScoreConvertInput>(input).data);
+    return paths ? *paths : muse::io::paths_t();
+}
+
+inline QString convertLinkOf(const ConvertInput& input)
+{
+    const Audio2ScoreConvertInput* a2s = std::get_if<Audio2ScoreConvertInput>(&input);
+    if (!a2s) {
+        return QString();
+    }
+
+    const QString* link = std::get_if<QString>(&a2s->data);
+    return link ? *link : QString();
+}
 
 struct ConvertResult {
     int id = 0;
@@ -138,6 +164,7 @@ struct ConvertQueueItem {
     ConvertType type = ConvertType::Omr;
     ConvertStatus status = ConvertStatus::Processing;
     QString filename;
+    QString link; //! audio2score only
     int scoreId = 0;
     QDateTime createdAt;
     QDateTime updatedAt;
@@ -168,6 +195,7 @@ inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::clo
 {
     s << "id: " << item.id
       << ", filename: \"" << item.filename << "\""
+      << ", link: \"" << item.link << "\""
       << ", type: " << muse::cloud::convertTypeToString(item.type)
       << ", status: " << muse::cloud::convertStatusToString(item.status)
       << ", scoreId: " << item.scoreId

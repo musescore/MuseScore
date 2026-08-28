@@ -48,8 +48,8 @@ enum class Err {
     DownloadLinkExpired,
 };
 
-//! NOTE: key for the list of files stored in Ret::data
-static const std::string CONVERT_FAILED_FILES_KEY("failedFiles");
+//! NOTE: key for the converted file name stored in Ret::data
+static const std::string CONVERT_FAILED_FILE_NAME_KEY("convertedFileName");
 
 inline muse::Ret make_ret(Err e)
 {
