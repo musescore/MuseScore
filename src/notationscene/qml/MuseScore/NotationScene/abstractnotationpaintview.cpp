@@ -580,9 +580,8 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
         return;
     }
 
-    Color markerColor = score->style().styleV(engraving::Sid::videoHitPointLineColor).value<Color>();
     const int transparency = std::clamp(score->style().styleI(engraving::Sid::videoHitPointLineTransparency), 0, 100);
-    markerColor.setAlpha(static_cast<int>(std::lround(255.0 * (100 - transparency) / 100.0)));
+    const int markerAlpha = static_cast<int>(std::lround(255.0 * (100 - transparency) / 100.0));
 
     Qt::PenStyle penStyle = Qt::SolidLine;
     switch (score->style().styleV(engraving::Sid::videoHitPointLineStyle).value<engraving::LineType>()) {
@@ -598,7 +597,6 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
     }
 
     const qreal lineWidth = std::max<qreal>(0.08, 0.12 * score->style().spatium());
-    QPen markerPen(markerColor.toQColor(), lineWidth, penStyle, Qt::FlatCap);
     QFont labelFont(score->style().styleV(engraving::Sid::videoHitPointFontFace).value<String>().toQString());
     qreal labelSize = score->style().styleD(engraving::Sid::videoHitPointFontSize);
     if (score->style().styleB(engraving::Sid::videoHitPointFontSpatiumDependent)) {
@@ -610,7 +608,6 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
     labelFont.setItalic(fontStyle & engraving::FontStyle::Italic);
     labelFont.setUnderline(fontStyle & engraving::FontStyle::Underline);
     labelFont.setStrikeOut(fontStyle & engraving::FontStyle::Strike);
-    const QColor labelColor = score->style().styleV(engraving::Sid::videoHitPointColor).value<Color>().toQColor();
     const QFontMetrics labelMetrics(labelFont);
     const PointF labelOffset = score->style().styleV(engraving::Sid::videoHitPointPosAbove).value<PointF>();
     const qreal labelOffsetX = labelOffset.x() * score->style().spatium();
@@ -636,6 +633,10 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
             continue;
         }
 
+        QColor hitPointColor = QColor(static_cast<QRgb>(hitPoint.color));
+        hitPointColor.setAlpha(markerAlpha);
+        const QPen markerPen(hitPointColor, lineWidth, penStyle, Qt::FlatCap);
+
         const qreal x = markerRect.left();
         const QString label = (hitPoint.label.empty() ? String(u"Hit") : hitPoint.label).toQString();
         const int labelWidth = std::max(qRound(18.0), labelMetrics.horizontalAdvance(label) + qRound(4.0));
@@ -646,7 +647,7 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
 
         painter->setPen(markerPen);
         painter->drawLine(QPointF(x, markerRect.top()), QPointF(x, markerRect.bottom()));
-        painter->setPen(labelColor);
+        painter->setPen(QColor(static_cast<QRgb>(hitPoint.color)));
         painter->drawText(labelRect, Qt::AlignCenter, label);
     }
 
@@ -700,7 +701,7 @@ muse::RectF AbstractNotationPaintView::videoHitPointRectByTick(muse::midi::tick_
         if (tick >= t1 && tick < t2) {
             const Fraction dt = t2 - t1;
             const qreal dx = x2 - x1;
-            x = x1 + dx * (tick - t1).ticks() / dt.ticks();
+            x = dt.ticks() != 0 ? x1 + dx * (tick - t1).ticks() / dt.ticks() : x1;
             break;
         }
 
