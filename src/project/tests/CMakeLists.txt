@@ -21,15 +21,27 @@
 set(MODULE_TEST project_test)
 
 set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/exportprojectscenariomock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/mscmetareadermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/notationprojectmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/opensaveprojectscenariomock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectconfigurationmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/recentfilescontrollermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mscmetareadertests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/projectactionscontrollertests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp
+)
+
+set(MODULE_TEST_INCLUDE
+    ${CMAKE_CURRENT_LIST_DIR}/..
 )
 
 set(MODULE_TEST_DATA_ROOT "${CMAKE_CURRENT_LIST_DIR}/data")
 
-set(MODULE_TEST_LINK project)
+set(MODULE_TEST_LINK
+    project
+    Qt::Qml
+)
 
 include(SetupGTest)
 

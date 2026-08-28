@@ -925,6 +925,10 @@ muse::Ret ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationT
     };
 
     INotationProjectPtr project = currentNotationProject();
+    if (!project) {
+        LOGW() << "no current project";
+        return make_ret(Err::NoProjectError);
+    }
 
     const bool isExistingSave = saveMode == SaveMode::Save && !project->isNewlyCreated();
     const bool wantNewCloudSave = saveLocationType == SaveLocationType::Cloud && !project->isCloudProject();
