@@ -30,6 +30,8 @@
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
+#include "engraving/dom/bracket.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chordbracket.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/engravingitem.h"
@@ -42,6 +44,7 @@
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/stafftext.h"
@@ -50,6 +53,7 @@
 #include "engraving/dom/marker.h"
 #include "engraving/dom/tapping.h"
 #include "engraving/dom/whammybar.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/types/symid.h"
 #include "engraving/types/typesconv.h"
 #include "engraving/dom/layoutbreak.h"
@@ -220,6 +224,11 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
         return;
     }
 
+    if (palette.type() == Palette::Type::Bracket) {
+        addNewBracketItems(palette, paletteScore);
+        return;
+    }
+
     if (palette.type() == Palette::Type::Line) {
         addNewLineItems(palette, paletteScore);
         return;
@@ -356,6 +365,47 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     if (!containsFFrame) {
         guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
     }
+}
+
+void PaletteCompat::addNewBracketItems(Palette& bracketsPalette, Score* paletteScore)
+{
+    bool containsGroupBracket = false;
+    staff_idx_t bracketStaffIdx = muse::nidx;
+
+    for (const PaletteCellPtr& cell : bracketsPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element || !element->isBracket()) {
+            continue;
+        }
+
+        BracketItem* bracketItem = toBracket(element.get())->bracketItem();
+        if (bracketStaffIdx == muse::nidx) {
+            bracketStaffIdx = bracketItem->startStaffIdx();
+        }
+
+        if (bracketItem->bracketType() == BracketType::GROUP) {
+            containsGroupBracket = true;
+        }
+    }
+
+    if (containsGroupBracket) {
+        return;
+    }
+
+    if (bracketStaffIdx == muse::nidx) {
+        Part* bracketItemOwnerPart = new Part(paletteScore);
+        Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
+        paletteScore->appendStaff(bracketItemOwner);
+        bracketStaffIdx = bracketItemOwner->idx();
+    }
+
+    size_t groupBracketIdx = paletteScore->brackets(bracketStaffIdx).size();
+    EditStaffBrackets::setBracketType(paletteScore, bracketStaffIdx, groupBracketIdx, BracketType::GROUP);
+    BracketItem* groupBracketItem = paletteScore->brackets(bracketStaffIdx)[groupBracketIdx];
+
+    auto groupBracket = Factory::makeBracket(paletteScore->dummy());
+    groupBracket->setBracketItem(groupBracketItem);
+    bracketsPalette.appendElement(groupBracket, QT_TRANSLATE_NOOP("palette", "Group bracket"));
 }
 
 void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)

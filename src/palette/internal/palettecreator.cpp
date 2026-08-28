@@ -953,7 +953,7 @@ PalettePtr PaletteCreator::newBracketsPalette()
         const auto& type = types[i];
         bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);
-        sp->appendElement(b1, type.second); // Bracket, Brace, Square, Line
+        sp->appendElement(b1, type.second); // Bracket, Brace, Square, Line, Group
     }
     return sp;
 }
