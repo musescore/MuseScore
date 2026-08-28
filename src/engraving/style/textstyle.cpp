@@ -1876,20 +1876,24 @@ static std::vector<TextStyleType> _editableTextStyles;
 const std::vector<TextStyleType>& editableTextStyles()
 {
     if (_editableTextStyles.empty()) {
-        _editableTextStyles = allTextStyles();
-        muse::remove(_editableTextStyles, TextStyleType::DYNAMICS);
-        // Reinsert video hit point text for the Style dialog without making it a
-        // globally serialized text style.
+        _editableTextStyles.reserve(allTextStyles().size() + 1);
+
+        // Video hit point text is edited here in place of Dynamics (which has its own
+        // dedicated style controls elsewhere). Substituting it at the same position
+        // -- rather than removing Dynamics and inserting elsewhere -- keeps this list
+        // in the same relative order as allTextStyles(), which other code relies on
+        // when mapping a row index between the two (e.g. EditStyle::goToTextStylePage).
         bool inserted = false;
-        for (auto it = _editableTextStyles.begin(); it != _editableTextStyles.end(); ++it) {
-            if (*it == TextStyleType::SYSTEM) {
-                _editableTextStyles.insert(++it, TextStyleType::VIDEO_HIT_POINT);
+        for (TextStyleType type : allTextStyles()) {
+            if (type == TextStyleType::DYNAMICS) {
+                _editableTextStyles.push_back(TextStyleType::VIDEO_HIT_POINT);
                 inserted = true;
-                break;
+                continue;
             }
+            _editableTextStyles.push_back(type);
         }
         if (!inserted) {
-            LOGE() << "SYSTEM text style not found; VIDEO_HIT_POINT not inserted";
+            LOGE() << "DYNAMICS text style not found; VIDEO_HIT_POINT not inserted";
         }
     }
     return _editableTextStyles;
