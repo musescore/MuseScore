@@ -27,8 +27,7 @@
 #include "io/path.h"
 #include "rcommand/commandtypes.h"
 
-#include "iprojectcommandscontroller.h"
-#include "iprojectfilescontroller.h"
+#include "types/projecttypes.h"
 #include "types/projectfile.h"
 
 namespace mu::project {
@@ -38,6 +37,9 @@ class IOpenProjectScenario : MODULE_CONTEXT_INTERFACE
 
 public:
     virtual ~IOpenProjectScenario() = default;
+
+    virtual bool isUrlSupported(const QUrl& url) const = 0;
+    virtual bool isFileSupported(const muse::io::path_t& path) const = 0;
 
     virtual muse::Ret openProject(const ProjectFile& file) = 0;
     virtual muse::Ret openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString()) = 0;
@@ -50,7 +52,7 @@ public:
     virtual const ProjectBeingDownloaded& projectBeingDownloaded() const = 0;
     virtual muse::async::Notification projectBeingDownloadedChanged() const = 0;
 
-    virtual bool isBusy(IProjectCommandsController::BusyStatus status) const = 0;
+    virtual bool isBusy(BusyStatus status) const = 0;
     virtual muse::async::Notification busyChanged() const = 0;
 };
 }

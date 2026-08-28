@@ -24,7 +24,7 @@
 
 #include <gmock/gmock.h>
 
-#include "project/internal/isaveprojectscenario.h"
+#include "project/isaveprojectscenario.h"
 
 namespace mu::project {
 class SaveProjectScenarioMock : public ISaveProjectScenario
@@ -36,7 +36,7 @@ public:
     MOCK_METHOD(muse::Ret, saveProjectAt, (const muse::rcommand::Params& params), (override));
     MOCK_METHOD(muse::Ret, publish, (), (override));
     MOCK_METHOD(muse::Ret, shareAudio, (), (override));
-    MOCK_METHOD(bool, isBusy, (IProjectCommandsController::BusyStatus status), (const, override));
+    MOCK_METHOD(bool, isBusy, (BusyStatus status), (const, override));
     MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
 };
 }

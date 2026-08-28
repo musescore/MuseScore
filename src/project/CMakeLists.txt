@@ -81,8 +81,8 @@ target_sources(project PRIVATE
     internal/exporttype.h
     internal/exportprojectscenario.cpp
     internal/exportprojectscenario.h
-    internal/iopenprojectscenario.h
-    internal/isaveprojectscenario.h
+    iopenprojectscenario.h
+    isaveprojectscenario.h
     internal/openprojectscenario.cpp
     internal/openprojectscenario.h
     internal/saveprojectscenario.cpp

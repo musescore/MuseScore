@@ -441,7 +441,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_AlreadySaving_RefusesToStartAgain)
     ON_CALL(*m_interactive, selectSavingFileSync(_, _, _, _))
     .WillByDefault([this, &nested, &busyDuringDialog](const std::string&, const io::path_t&,
                                                       const std::vector<std::string>&, bool) {
-        busyDuringDialog = m_scenario->isBusy(IProjectCommandsController::BusyStatus::Saving);
+        busyDuringDialog = m_scenario->isBusy(BusyStatus::Saving);
         nested = saveProject(SaveMode::Save);
         return io::path_t();
     });
@@ -464,7 +464,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_AfterSaving_IsNoLongerBusy)
     EXPECT_TRUE(saveProject(SaveMode::Save));
 
     //! [THEN] The busy flag is released, so the next save is not refused
-    EXPECT_FALSE(m_scenario->isBusy(IProjectCommandsController::BusyStatus::Saving));
+    EXPECT_FALSE(m_scenario->isBusy(BusyStatus::Saving));
     EXPECT_TRUE(saveProject(SaveMode::Save));
 }
 

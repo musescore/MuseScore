@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "internal/iopenprojectscenario.h"
+#include "iopenprojectscenario.h"
 
 namespace mu::project {
 class CloudScoreStatusWatcher : public QObject, public muse::async::Asyncable, public muse::Contextable
