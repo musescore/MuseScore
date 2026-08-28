@@ -81,10 +81,10 @@ target_sources(project PRIVATE
     internal/exporttype.h
     internal/exportprojectscenario.cpp
     internal/exportprojectscenario.h
-    internal/iopensaveprojectscenario.h
+    internal/iopenprojectscenario.h
     internal/isaveprojectscenario.h
-    internal/opensaveprojectscenario.cpp
-    internal/opensaveprojectscenario.h
+    internal/openprojectscenario.cpp
+    internal/openprojectscenario.h
     internal/saveprojectscenario.cpp
     internal/saveprojectscenario.h
     internal/recentfilescontroller.cpp

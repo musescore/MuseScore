@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,22 +22,14 @@
 
 #pragma once
 
-#include "iopensaveprojectscenario.h"
+#include <gmock/gmock.h>
 
-#include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
+#include "project/internal/iopenprojectscenario.h"
 
 namespace mu::project {
-class OpenSaveProjectScenario : public IOpenSaveProjectScenario, public muse::Contextable
+class OpenProjectScenarioMock : public IOpenProjectScenario
 {
-    muse::ContextInject<muse::IInteractive> interactive = { this };
-
 public:
-    OpenSaveProjectScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx)
-    {
-    }
-
-    void showCloudOpenError(const muse::Ret& ret) const override;
+    MOCK_METHOD(void, showCloudOpenError, (const muse::Ret& ret), (const, override));
 };
 }
