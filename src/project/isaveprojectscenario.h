@@ -27,7 +27,6 @@
 #include "io/path.h"
 #include "rcommand/commandtypes.h"
 
-#include "iprojectcommandscontroller.h"
 #include "types/projecttypes.h"
 #include "types/savelocation.h"
 
@@ -48,7 +47,7 @@ public:
     virtual muse::Ret publish() = 0;
     virtual muse::Ret shareAudio() = 0;
 
-    virtual bool isBusy(IProjectCommandsController::BusyStatus status) const = 0;
+    virtual bool isBusy(BusyStatus status) const = 0;
     virtual muse::async::Notification busyChanged() const = 0;
 };
 }

@@ -60,7 +60,7 @@ static std::map<Command, PCondition> PROJECT_COMMAND_CONDITIONS = {
     { PROJECT_PROPERTIES_COMMAND, PCondition::HasProject },
 };
 
-using BusyStatus = IProjectCommandsController::BusyStatus;
+using BusyStatus = BusyStatus;
 static std::map<Command, BusyStatus> PROJECT_COMMAND_BUSY_STATUSES = {
     { PROJECT_CLOSE_COMMAND, BusyStatus::Closing },
     { PROJECT_SAVE_COMMAND, BusyStatus::Saving },

@@ -41,6 +41,7 @@
 #include "imscmetareader.h"
 #include "iprojectautosaver.h"
 #include "iprojectconfiguration.h"
+#include "inotationreadersregister.h"
 #include "iprojectcreator.h"
 #include "irecentfilescontroller.h"
 
@@ -55,6 +56,7 @@ public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
     muse::GlobalInject<IProjectCreator> projectCreator;
+    muse::GlobalInject<INotationReadersRegister> readers;
     muse::GlobalInject<IMscMetaReader> mscMetaReader;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<IProjectAutoSaver> projectAutoSaver = { this };
@@ -66,6 +68,9 @@ public:
 
     OpenProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
+
+    bool isUrlSupported(const QUrl& url) const override;
+    bool isFileSupported(const muse::io::path_t& path) const override;
 
     using IOpenProjectScenario::openProject;
 
@@ -79,11 +84,11 @@ public:
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     muse::async::Notification projectBeingDownloadedChanged() const override;
 
-    bool isBusy(IProjectCommandsController::BusyStatus status) const override;
+    bool isBusy(BusyStatus status) const override;
     muse::async::Notification busyChanged() const override;
 
 private:
-    using BusyStatus = IProjectCommandsController::BusyStatus;
+    using BusyStatus = BusyStatus;
 
     bool isProjectOpened(const muse::io::path_t& scorePath) const;
 

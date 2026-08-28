@@ -175,6 +175,35 @@ void OpenProjectScenario::showCloudOpenError(const Ret& ret) const
     interactive()->warning(title, message);
 }
 
+bool OpenProjectScenario::isUrlSupported(const QUrl& url) const
+{
+    if (url.isLocalFile()) {
+        return isFileSupported(muse::io::path_t(url));
+    }
+
+    if (url.scheme() == MUSESCORE_URL_SCHEME) {
+        if (url.host() == OPEN_SCORE_URL_HOSTNAME) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool OpenProjectScenario::isFileSupported(const muse::io::path_t& path) const
+{
+    std::string suffix = io::suffix(path);
+    if (engraving::isMuseScoreFile(suffix)) {
+        return true;
+    }
+
+    if (readers()->reader(suffix)) {
+        return true;
+    }
+
+    return false;
+}
+
 muse::Ret OpenProjectScenario::openProject(const muse::rcommand::Params& params)
 {
     const QString url = params.at("url").toQString();

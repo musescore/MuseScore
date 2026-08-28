@@ -36,8 +36,6 @@
 #include "rcommand/commandtypes.h"
 #include "translation.h"
 
-#include "engraving/infrastructure/mscio.h"
-
 #include "notation/imasternotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
@@ -266,46 +264,12 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
     return true;
 }
 
-bool ProjectActionsController::isUrlSupported(const QUrl& url) const
-{
-    if (url.isLocalFile()) {
-        return isFileSupported(muse::io::path_t(url));
-    }
-
-    if (url.scheme() == MUSESCORE_URL_SCHEME) {
-        if (url.host() == OPEN_SCORE_URL_HOSTNAME) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ProjectActionsController::isFileSupported(const muse::io::path_t& path) const
-{
-    std::string suffix = io::suffix(path);
-    if (engraving::isMuseScoreFile(suffix)) {
-        return true;
-    }
-
-    if (readers()->reader(suffix)) {
-        return true;
-    }
-
-    return false;
-}
-
 muse::Ret ProjectActionsController::openPageIfNeed(muse::Uri pageUri)
 {
     if (!interactive()->isOpened(pageUri).val) {
         interactive()->open(pageUri);
     }
     return make_ret(Ret::Code::Ok);
-}
-
-muse::Ret ProjectActionsController::openProject(const ProjectFile& file)
-{
-    return openProjectScenario()->openProject(file);
 }
 
 muse::Ret ProjectActionsController::openProject(const muse::io::path_t& path, const QString& displayNameOverride)
@@ -467,6 +431,11 @@ muse::Ret ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationT
     return saveProjectScenario()->saveProject(saveMode, saveLocationType, force);
 }
 
+muse::Ret ProjectActionsController::saveProject(const muse::io::path_t& path)
+{
+    return saveProjectScenario()->saveProject(path);
+}
+
 muse::Ret ProjectActionsController::publish()
 {
     return saveProjectScenario()->publish();
@@ -477,19 +446,9 @@ muse::Ret ProjectActionsController::sharedAudio()
     return saveProjectScenario()->shareAudio();
 }
 
-bool ProjectActionsController::saveProject(const muse::io::path_t& path)
-{
-    return saveProjectScenario()->saveProject(path);
-}
-
 muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::Params& params)
 {
     return saveProjectScenario()->saveProjectAt(params);
-}
-
-bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& path, SaveMode saveMode, bool createBackup)
-{
-    return saveProjectScenario()->saveProjectLocally(path, saveMode, createBackup);
 }
 
 muse::Ret ProjectActionsController::importPdf()

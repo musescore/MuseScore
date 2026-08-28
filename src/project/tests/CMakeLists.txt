@@ -26,6 +26,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationprojectmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/recentfilescontrollermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/notationreadermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationreadersregistermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/openprojectscenariomock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectautosavermock.h

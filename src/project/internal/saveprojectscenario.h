@@ -73,11 +73,11 @@ public:
     muse::Ret publish() override;
     muse::Ret shareAudio() override;
 
-    bool isBusy(IProjectCommandsController::BusyStatus status) const override;
+    bool isBusy(BusyStatus status) const override;
     muse::async::Notification busyChanged() const override;
 
 private:
-    using BusyStatus = IProjectCommandsController::BusyStatus;
+    using BusyStatus = BusyStatus;
 
     static constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
     static constexpr int RET_CODE_CONFLICT_RESPONSE_SAVE_AS = 1235;
@@ -171,7 +171,5 @@ private:
     muse::ProgressPtr m_uploadingAudioProgress = nullptr;
 
     int m_numberOfSavesToCloud = 0;
-
-    muse::async::Notification m_revertToLastSavedRequested;
 };
 }

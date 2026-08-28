@@ -44,6 +44,8 @@
 
 #include "mocks/mscmetareadermock.h"
 #include "mocks/notationprojectmock.h"
+#include "mocks/notationreadermock.h"
+#include "mocks/notationreadersregistermock.h"
 #include "mocks/projectautosavermock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/projectcreatormock.h"
@@ -71,6 +73,7 @@ protected:
         m_museScoreComService = std::make_shared<NiceMock<cloud::MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<cloud::AuthorizationServiceMock> >();
         m_projectCreator = std::make_shared<NiceMock<ProjectCreatorMock> >();
+        m_readers = std::make_shared<NiceMock<NotationReadersRegisterMock> >();
         m_autoSaver = std::make_shared<NiceMock<ProjectAutoSaverMock> >();
         m_recentFiles = std::make_shared<NiceMock<RecentFilesControllerMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
@@ -84,6 +87,7 @@ protected:
         m_scenario->multiwindowsProvider.set(m_multiwindows);
         m_scenario->museScoreComService.set(m_museScoreComService);
         m_scenario->projectCreator.set(m_projectCreator);
+        m_scenario->readers.set(m_readers);
         m_scenario->projectAutoSaver.set(m_autoSaver);
         m_scenario->recentFilesController.set(m_recentFiles);
         m_scenario->interactive.set(m_interactive);
@@ -195,6 +199,7 @@ protected:
     std::shared_ptr<cloud::MuseScoreComServiceMock> m_museScoreComService;
     std::shared_ptr<cloud::AuthorizationServiceMock> m_authorization;
     std::shared_ptr<ProjectCreatorMock> m_projectCreator;
+    std::shared_ptr<NotationReadersRegisterMock> m_readers;
     std::shared_ptr<ProjectAutoSaverMock> m_autoSaver;
     std::shared_ptr<RecentFilesControllerMock> m_recentFiles;
     std::shared_ptr<InteractiveMock> m_interactive;
@@ -830,5 +835,67 @@ TEST_F(OpenProjectScenarioTests, OpenProject_AutosaveOfANeverSavedScore_OpensAsN
 
     //! [WHEN] Opening it...
     openProject("/scores/untitled.mscz");
+}
+// ─── Can the app open this at all ────────────────────────────────────────────
+
+TEST_F(OpenProjectScenarioTests, IsFileSupported_MuseScoreFile_IsAccepted)
+{
+    //! [GIVEN] A native score file...
+    //! [THEN] It is accepted without consulting the import readers
+    EXPECT_CALL(*m_readers, reader(_)).Times(0);
+
+    //! [WHEN] Asking whether it can be opened...
+    EXPECT_TRUE(m_scenario->isFileSupported(io::path_t("/scores/symphony.mscz")));
+}
+
+TEST_F(OpenProjectScenarioTests, IsFileSupported_ForeignFormatWithAReader_IsAccepted)
+{
+    //! [GIVEN] A format the app has an import reader for...
+    ON_CALL(*m_readers, reader(std::string("mid")))
+    .WillByDefault(Return(std::make_shared<NiceMock<NotationReaderMock> >()));
+
+    //! [WHEN] Asking whether it can be opened...
+    EXPECT_TRUE(m_scenario->isFileSupported(io::path_t("/scores/tune.mid")));
+}
+
+TEST_F(OpenProjectScenarioTests, IsFileSupported_UnknownFormat_IsRefused)
+{
+    //! [GIVEN] A format nothing can read...
+    ON_CALL(*m_readers, reader(_)).WillByDefault(Return(nullptr));
+
+    //! [WHEN] Asking whether it can be opened...
+    EXPECT_FALSE(m_scenario->isFileSupported(io::path_t("/scores/notes.txt")));
+}
+
+TEST_F(OpenProjectScenarioTests, IsUrlSupported_LocalFile_DefersToTheFileCheck)
+{
+    //! [GIVEN] A local file url of an unreadable format...
+    ON_CALL(*m_readers, reader(_)).WillByDefault(Return(nullptr));
+
+    //! [WHEN] Asking about the url...
+    //! [THEN] The answer is the same as for the file itself
+    EXPECT_FALSE(m_scenario->isUrlSupported(QUrl::fromLocalFile("/scores/notes.txt")));
+    EXPECT_TRUE(m_scenario->isUrlSupported(QUrl::fromLocalFile("/scores/symphony.mscz")));
+}
+
+TEST_F(OpenProjectScenarioTests, IsUrlSupported_OpenScoreLink_IsAccepted)
+{
+    //! [GIVEN] A musescore.com open-score link...
+    //! [WHEN] Asking about it...
+    EXPECT_TRUE(m_scenario->isUrlSupported(QUrl("musescore://open-score/42")));
+}
+
+TEST_F(OpenProjectScenarioTests, IsUrlSupported_OtherMuseScoreLink_IsRefused)
+{
+    //! [GIVEN] A musescore:// link that is not about opening a score...
+    //! [WHEN] Asking about it...
+    EXPECT_FALSE(m_scenario->isUrlSupported(QUrl("musescore://something-else/42")));
+}
+
+TEST_F(OpenProjectScenarioTests, IsUrlSupported_ForeignScheme_IsRefused)
+{
+    //! [GIVEN] A url of a scheme the app knows nothing about...
+    //! [WHEN] Asking about it...
+    EXPECT_FALSE(m_scenario->isUrlSupported(QUrl("https://example.com/score.mscz")));
 }
 }

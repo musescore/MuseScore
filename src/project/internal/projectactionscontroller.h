@@ -42,7 +42,6 @@
 #include "multiwindows/imultiwindowsprovider.h"
 #include "multiwindows/iprojectprovider.h"
 #include "print/iprintprovider.h"
-#include "inotationreadersregister.h"
 #include "iopenprojectscenario.h"
 #include "isaveprojectscenario.h"
 
@@ -58,7 +57,6 @@ class ProjectActionsController : public IProjectCommandsController, public IProj
 
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
-    muse::GlobalInject<INotationReadersRegister> readers;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
@@ -87,13 +85,7 @@ public:
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
-    bool isUrlSupported(const QUrl& url) const override;
-    bool isFileSupported(const muse::io::path_t& path) const override;
-    muse::Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool goToHome = true) override;
-    bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
-    bool saveProjectLocally(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save,
-                            bool createBackup = true) override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
@@ -120,6 +112,7 @@ private:
     muse::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
+    muse::Ret saveProject(const muse::io::path_t& path = muse::io::path_t());
     muse::Ret publish();
     muse::Ret sharedAudio();
     muse::Ret saveProjectAt(const muse::rcommand::Params& params);
