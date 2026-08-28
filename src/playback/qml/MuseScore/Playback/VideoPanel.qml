@@ -307,8 +307,12 @@ Item {
                     Rectangle {
                         id: previewSlot
 
+                        readonly property real availableContentHeight: root.height - 2 * root.contentMargin
+
                         Layout.fillWidth: true
-                        Layout.preferredHeight: Math.round(Math.max(96, width * 9 / 16 * root.previewHeightRatio * 2))
+                        Layout.preferredHeight: Math.round(Math.max(96, Math.min(
+                                                                availableContentHeight * root.previewHeightRatio,
+                                                                availableContentHeight - root.minimumControlsHeight)))
 
                         radius: 4
                         color: "#111111"

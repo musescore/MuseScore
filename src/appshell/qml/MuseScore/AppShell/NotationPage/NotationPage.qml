@@ -575,7 +575,10 @@ DockPage {
 
             height: 360
             minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
+            //! NOTE: unlike other horizontal panels (Timeline, Selection Filter), the
+            //! Video panel benefits from being resized/maximized much larger when
+            //! floated -- so it gets its own ceiling instead of the shared 520px one.
+            maximumHeight: root.panelMaxDimension
 
             minimumWidth: root.panelMinDimension
             maximumWidth: root.panelMaxDimension
