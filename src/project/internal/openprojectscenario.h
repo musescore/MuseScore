@@ -82,8 +82,6 @@ public:
     bool isBusy(IProjectCommandsController::BusyStatus status) const override;
     muse::async::Notification busyChanged() const override;
 
-    void showCloudOpenError(const muse::Ret& ret) const override;
-
 private:
     using BusyStatus = IProjectCommandsController::BusyStatus;
 
@@ -111,6 +109,8 @@ private:
     bool askIfUserAgreesToOpenCorruptedProject(const muse::String& projectName, const std::string& errorText);
     void warnProjectCriticallyCorrupted(const muse::String& projectName, const std::string& errorText);
     void warnProjectCannotBeOpened(const muse::Ret& ret, const muse::io::path_t& filepath);
+
+    void showCloudOpenError(const muse::Ret& ret) const;
 
     muse::async::Promise<muse::io::path_t> selectScoreOpeningFile() const;
 

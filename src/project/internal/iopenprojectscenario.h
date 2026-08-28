@@ -52,7 +52,5 @@ public:
 
     virtual bool isBusy(IProjectCommandsController::BusyStatus status) const = 0;
     virtual muse::async::Notification busyChanged() const = 0;
-
-    virtual void showCloudOpenError(const muse::Ret& ret) const = 0;
 };
 }
