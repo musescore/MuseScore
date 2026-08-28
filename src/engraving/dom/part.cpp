@@ -58,7 +58,6 @@ const Fraction Part::MAIN_INSTRUMENT_TICK = Fraction(-1, 1);
 Part::Part(Score* s, ElementType type)
     : EngravingObject(type, s)
 {
-    m_color   = DEFAULT_COLOR;
     m_show    = true;
     m_soloist = false;
     m_instruments.setInstrument(new Instrument, -1);     // default instrument

@@ -2671,10 +2671,6 @@ void TWrite::writeProperties(const Part* item, XmlWriter& xml, WriteContext& ctx
         xml.tag("soloist", item->soloist());
     }
 
-    if (item->color() != Part::DEFAULT_COLOR) {
-        xml.tag("color", item->color());
-    }
-
     if (item->hideWhenEmpty() != AutoOnOff::AUTO) {
         xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
     }
