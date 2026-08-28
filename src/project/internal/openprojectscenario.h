@@ -108,6 +108,8 @@ private:
 
     muse::Ret openPageIfNeed(muse::Uri pageUri);
 
+    muse::RetVal<muse::Val> ensureAuthorization() const;
+
     bool shouldRetryLoadAfterError(const muse::Ret& ret, const muse::io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
     void warnFileTooNew(const muse::io::path_t& filepath);

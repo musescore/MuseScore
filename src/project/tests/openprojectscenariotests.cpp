@@ -137,7 +137,7 @@ protected:
 
         // A logged-in account, a server that answers, and downloads that hand back a progress
         // the test can finish.
-        ON_CALL(*m_authorization, ensureAuthorization(_, _)).WillByDefault(Return(RetVal<Val>::make_ok(Val())));
+        givenSignedIn();
         ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
         .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(cloud::ScoreInfo())));
         ON_CALL(*m_authorization, accountInfo()).WillByDefault(ReturnRef(m_accountInfo));
@@ -184,6 +184,30 @@ protected:
         ProgressResult res;
         res.ret = ret;
         m_download->finish(res);
+    }
+
+    static ::testing::Matcher<const UriQuery&> IsLoginDialog()
+    {
+        return ::testing::Truly([](const UriQuery& q) {
+            return q.uri().toString() == "muse://cloud/requireauthorization";
+        });
+    }
+
+    //! The account is signed in, so nothing is asked.
+    void givenSignedIn()
+    {
+        ValCh<bool> authorized;
+        authorized.val = true;
+        ON_CALL(*m_authorization, userAuthorized()).WillByDefault(Return(authorized));
+    }
+
+    //! The account is signed out, and the login dialog answers with `answer`.
+    void givenLoginDialogAnswers(const RetVal<Val>& answer)
+    {
+        ValCh<bool> authorized;
+        authorized.val = false;
+        ON_CALL(*m_authorization, userAuthorized()).WillByDefault(Return(authorized));
+        ON_CALL(*m_interactive, openSync(IsLoginDialog())).WillByDefault(Return(answer));
     }
 
     static void drainDeferredCalls()
@@ -387,7 +411,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreAndCloudReachable_Downloa
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
 
     //! [THEN] The freshest version is fetched rather than the local copy being loaded
-    EXPECT_CALL(*m_authorization, ensureAuthorization(_, _)).Times(1);
+    EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>())).Times(1);
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
@@ -498,9 +522,8 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_NoScoreId_ReportsInsteadOfDo
 
 TEST_F(OpenProjectScenarioTests, DownloadCloudScore_NotLoggedIn_FetchesNothing)
 {
-    //! [GIVEN] A user who declines to log in...
-    ON_CALL(*m_authorization, ensureAuthorization(_, _))
-    .WillByDefault(Return(RetVal<Val>(make_ret(Ret::Code::Cancel))));
+    //! [GIVEN] A signed-out user who dismisses the login dialog...
+    givenLoginDialogAnswers(RetVal<Val>(make_ret(Ret::Code::Cancel)));
 
     //! [THEN] Nothing is fetched
     EXPECT_CALL(*m_museScoreComService, downloadScore(_, _, _, _)).Times(0);
@@ -897,5 +920,34 @@ TEST_F(OpenProjectScenarioTests, IsUrlSupported_ForeignScheme_IsRefused)
     //! [GIVEN] A url of a scheme the app knows nothing about...
     //! [WHEN] Asking about it...
     EXPECT_FALSE(m_scenario->isUrlSupported(QUrl("https://example.com/score.mscz")));
+}
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_AlreadySignedIn_DoesNotAskToLogIn)
+{
+    //! [GIVEN] A signed-in account...
+    givenSignedIn();
+    ON_CALL(*m_mscMetaReader, readCloudProjectInfo(_))
+    .WillByDefault(Return(RetVal<CloudProjectInfo>(make_ret(Ret::Code::InternalError))));
+
+    //! [THEN] The login dialog is not shown, and the download goes ahead
+    EXPECT_CALL(*m_interactive, openSync(IsLoginDialog())).Times(0);
+    EXPECT_CALL(*m_museScoreComService, downloadScore(_, _, _, _)).Times(1);
+
+    //! [WHEN] Opening a cloud score...
+    downloadAndOpenCloudProject(42);
+}
+
+TEST_F(OpenProjectScenarioTests, DownloadCloudScore_SignedOutButLogsIn_ProceedsWithTheDownload)
+{
+    //! [GIVEN] A signed-out user who goes through with logging in...
+    givenLoginDialogAnswers(RetVal<Val>::make_ok(Val()));
+    ON_CALL(*m_mscMetaReader, readCloudProjectInfo(_))
+    .WillByDefault(Return(RetVal<CloudProjectInfo>(make_ret(Ret::Code::InternalError))));
+
+    //! [THEN] They are asked once, and the download follows
+    EXPECT_CALL(*m_interactive, openSync(IsLoginDialog())).Times(1);
+    EXPECT_CALL(*m_museScoreComService, downloadScore(_, _, _, _)).Times(1);
+
+    //! [WHEN] Opening a cloud score...
+    downloadAndOpenCloudProject(42);
 }
 }

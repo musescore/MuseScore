@@ -107,6 +107,10 @@ protected:
         ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ok()));
         ON_CALL(*m_project, cloudInfo()).WillByDefault(ReturnRef(m_cloudInfo));
 
+        // A publish also uploads the rendered audio; hand it a progress of its own.
+        ON_CALL(*m_museScoreComService, uploadAudio(_, _, _))
+        .WillByDefault([](DevicePtr, const QString&, const QUrl&) { return std::make_shared<Progress>(); });
+
         // Dialogs resolve immediately so that unstubbed paths do not abort the test.
         ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
         ON_CALL(*m_interactive, error(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
@@ -153,8 +157,30 @@ protected:
         return m_scenario->needGenerateAudio(isPublic);
     }
 
-    //! NOTE Some failure paths retry through async::Async::call, which queues onto the async
-    //! message queue rather than the Qt event loop; this is how the controller drains it too.
+    static ::testing::Matcher<const UriQuery&> IsLoginDialog()
+    {
+        return ::testing::Truly([](const UriQuery& q) {
+            return q.uri().toString() == "muse://cloud/requireauthorization";
+        });
+    }
+
+    //! The account is signed in, so nothing is asked.
+    void givenSignedIn()
+    {
+        ValCh<bool> authorized;
+        authorized.val = true;
+        ON_CALL(*m_authorization, userAuthorized()).WillByDefault(Return(authorized));
+    }
+
+    //! The account is signed out, and the login dialog answers with `answer`.
+    void givenLoginDialogAnswers(const RetVal<Val>& answer)
+    {
+        ValCh<bool> authorized;
+        authorized.val = false;
+        ON_CALL(*m_authorization, userAuthorized()).WillByDefault(Return(authorized));
+        ON_CALL(*m_interactive, openSync(IsLoginDialog())).WillByDefault(Return(answer));
+    }
+
     static void drainDeferredCalls()
     {
         async::processMessages();
@@ -174,11 +200,22 @@ protected:
         givenUserPicksLocalFile(io::path_t());
     }
 
+    //! The cloud destination dialog is answered with "publish under this name".
+    void givenUserConfirmsCloudDialog(const QString& name = "Score")
+    {
+        QVariantMap answer;
+        answer["response"] = int(cloud::SaveToCloudResponse::SaveToCloudResponse::Ok);
+        answer["name"] = name;
+        answer["visibility"] = int(cloud::Visibility::Private);
+        answer["replaceExisting"] = false;
+        ON_CALL(*m_interactive, openSync(_))
+        .WillByDefault(Return(RetVal<Val>::make_ok(Val::fromQVariant(answer))));
+    }
+
     void givenReachableCloud()
     {
         ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
-        ON_CALL(*m_authorization, ensureAuthorization(_, _))
-        .WillByDefault(Return(RetVal<Val>::make_ok(Val(int(cloud::SaveToCloudResponse::SaveToCloudResponse::Ok)))));
+        givenSignedIn();
 
         // Settled audio generation settings, so that the decision does not open a dialog and abort the save.
         ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(true));
@@ -793,8 +830,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInst
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
-    ON_CALL(*m_authorization, ensureAuthorization(_, _))
-    .WillByDefault(Return(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead)))));
+    givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
 
     givenUserPicksLocalFile(io::path_t("/local/instead.mscz"));
 
@@ -816,8 +852,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNot
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
-    ON_CALL(*m_authorization, ensureAuthorization(_, _))
-    .WillByDefault(Return(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead)))));
+    givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
 
     givenUserCancelsTheSaveDialog();
 
@@ -834,8 +869,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotLoggedIn_WritesNothing)
 {
     //! [GIVEN] A reachable cloud the user refuses to log in to...
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
-    ON_CALL(*m_authorization, ensureAuthorization(_, _))
-    .WillByDefault(Return(RetVal<Val>(make_ret(Ret::Code::Cancel))));
+    givenLoginDialogAnswers(RetVal<Val>(make_ret(Ret::Code::Cancel)));
 
     //! [THEN] Nothing is written and nothing is uploaded
     EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
@@ -998,6 +1032,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AudioCannotBeRendered_DoesNo
 {
     //! [GIVEN] A public score, which always needs an mp3, whose export fails...
     givenReachableCloud();
+    givenUserConfirmsCloudDialog();
     ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(false));
 
     //! [THEN] Nothing is uploaded, because a public score without audio has no web playback
@@ -1016,8 +1051,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyUploading_DoesNotStar
     givenReachableCloud();
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
 
-    bool nested = true;
-    givenUploadFinishesWith(make_ok(), ValMap(), [this, &nested]() {
+    bool reentered = false;
+    bool nested = false;
+    givenUploadFinishesWith(make_ok(), ValMap(), [this, &reentered, &nested]() {
+        reentered = true;
         nested = saveProjectToCloud(CloudProjectInfo(), SaveMode::SaveAs);
     });
 
@@ -1029,7 +1066,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyUploading_DoesNotStar
     info.sourceUrl = QUrl("https://musescore.com/scores/99");
     saveProjectToCloud(info, SaveMode::SaveAs);
 
-    //! [THEN] The re-entrant attempt reported success without doing anything, so the caller does not retry
+    //! [THEN] The re-entrant call really happened...
+    ASSERT_TRUE(reentered);
+
+    //! [THEN] ...and reported success without doing anything, so the caller does not retry
     EXPECT_TRUE(nested);
 }
 
@@ -1153,5 +1193,88 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_RevertIsConfirmedWithNo_ChangesAr
     //! [WHEN] Saving it locally, then letting the confirmation resolve...
     saveProjectAt(SaveLocation(io::path_t("/scores/corrupted.mscz")));
     drainDeferredCalls();
+}
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadySignedIn_DoesNotAskToLogIn)
+{
+    //! [GIVEN] A reachable cloud and a signed-in account...
+    givenReachableCloud();
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+    givenUploadFinishesWith(make_ok(), ValMap());
+
+    //! [THEN] The login dialog is not shown, and the upload goes ahead
+    EXPECT_CALL(*m_interactive, openSync(IsLoginDialog())).Times(0);
+    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(1);
+
+    //! [WHEN] Saving to the cloud...
+    CloudProjectInfo info;
+    info.sourceUrl = QUrl("https://musescore.com/scores/99");
+    saveProjectToCloud(info, SaveMode::SaveAs);
+}
+// ─── Publishing ──────────────────────────────────────────────────────────────
+
+TEST_F(SaveProjectScenarioTests, Publish_AudioCannotBeRendered_ReportsFailure)
+{
+    //! [GIVEN] A publish whose mp3 export fails...
+    givenReachableCloud();
+    givenUserConfirmsCloudDialog();
+
+    //! [THEN] The export is attempted and fails, and nothing is uploaded
+    EXPECT_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillOnce(Return(false));
+    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
+
+    //! [WHEN] Publishing...
+    Ret ret = m_scenario->publish();
+
+    //! [THEN] A score without audio has no web playback, so this is reported as bad data
+    EXPECT_EQ(ret.code(), int(Ret::Code::BadData));
+}
+
+TEST_F(SaveProjectScenarioTests, Publish_UploadFails_ReportsFailure)
+{
+    //! [GIVEN] A publish whose upload fails...
+    givenReachableCloud();
+    givenUserConfirmsCloudDialog();
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(true));
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+    givenUploadFinishesWith(make_ret(Ret::Code::InternalError), ValMap());
+
+    //! [WHEN] Publishing...
+    Ret ret = m_scenario->publish();
+
+    //! [THEN] The failure reaches the caller instead of being swallowed
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
+{
+    //! [GIVEN] A publish that goes through...
+    givenReachableCloud();
+    givenUserConfirmsCloudDialog();
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(true));
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+    givenUploadFinishesWith(make_ok(), ValMap());
+
+    //! [THEN] The score is uploaded
+    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(1);
+
+    //! [WHEN] Publishing...
+    Ret ret = m_scenario->publish();
+
+    EXPECT_TRUE(ret);
+}
+TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_BrokenSaveInterval_DoesNotDivideByZero)
+{
+    //! [GIVEN] A settings file whose "every N saves" interval is zero...
+    ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(true));
+    ON_CALL(*m_configuration, generateAudioTimePeriodType())
+    .WillByDefault(Return(GenerateAudioTimePeriodType::AfterCertainNumberOfSaves));
+    ON_CALL(*m_configuration, numberOfSavesToGenerateAudio()).WillByDefault(Return(0));
+
+    //! [WHEN] Deciding whether to generate audio...
+    RetVal<bool> need = needGenerateAudio(false);
+
+    //! [THEN] The decision is made without dividing by zero, and the save is not blocked
+    EXPECT_TRUE(need.ret);
+    EXPECT_TRUE(need.val);
 }
 }

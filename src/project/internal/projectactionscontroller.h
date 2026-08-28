@@ -53,8 +53,6 @@ namespace mu::project {
 class ProjectActionsController : public IProjectCommandsController, public IProjectFilesController, public muse::mi::IProjectProvider,
     public muse::Contextable, public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
 {
-    friend class ProjectActionsControllerTests;
-
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
