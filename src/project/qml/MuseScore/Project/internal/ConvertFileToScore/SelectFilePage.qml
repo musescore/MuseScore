@@ -90,7 +90,7 @@ Item {
                     var ctx = getContext("2d")
                     ctx.clearRect(0, 0, width, height)
 
-                    ctx.fillStyle = ui.theme.backgroundPrimaryColor
+                    ctx.fillStyle = ui.theme.backgroundSecondaryColor
                     tracePath(ctx, 0)
                     ctx.fill()
 
@@ -110,17 +110,18 @@ Item {
                 anchors.centerIn: parent
 
                 width: parent.width - 2 * root.contentPadding
-                spacing: 12
+                spacing: 6
 
                 StyledIconLabel {
                     Layout.alignment: Qt.AlignHCenter
 
                     iconCode: IconCode.SHARE_FILE
-                    font.pixelSize: 32
+                    font.pixelSize: 36
                 }
 
                 StyledTextLabel {
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: 2
 
                     text: qsTrc("project/convert", "Drag your file here")
                     font: ui.theme.tabBoldFont
@@ -128,6 +129,7 @@ Item {
 
                 StyledTextLabel {
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: 12
 
                     text: qsTrc("project/convert", "Use a PDF, images, or MP3 (beta)")
                     font: ui.theme.bodyFont
@@ -146,7 +148,7 @@ Item {
                     id: selectFileButton
 
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 8
+                    Layout.topMargin: 18
 
                     text: qsTrc("global", "Select")
                     accentButton: true
@@ -176,9 +178,10 @@ Item {
             visible: Boolean(root.linkPasteText)
 
             Layout.fillWidth: true
+            Layout.topMargin: 2
             Layout.preferredHeight: linkPasteColumn.implicitHeight + 2 * root.contentPadding
 
-            color: ui.theme.backgroundPrimaryColor
+            color: ui.theme.backgroundSecondaryColor
             border.width: 1
             border.color: ui.theme.strokeColor
             radius: 3
@@ -189,7 +192,7 @@ Item {
                 anchors.fill: parent
                 anchors.margins: root.contentPadding
 
-                spacing: 12
+                spacing: 8
 
                 StyledTextLabel {
                     width: parent.width
@@ -201,7 +204,7 @@ Item {
 
                 RowLayout {
                     width: parent.width
-                    spacing: 12
+                    spacing: 8
 
                     TextInputField {
                         id: linkInputField

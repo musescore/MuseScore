@@ -79,7 +79,7 @@ QHash<int, QByteArray> FileListModel::roleNames() const
 int FileListModel::fileIconCode() const
 {
     if (m_paths.isEmpty()) {
-        return int(IconCode::Code::PAGE);
+        return int(IconCode::Code::NEW_FILE);
     }
 
     const QString suffix = QFileInfo(m_paths.first()).suffix().toLower();
@@ -92,7 +92,7 @@ int FileListModel::fileIconCode() const
         return int(IconCode::Code::AUDIO);
     }
 
-    return int(IconCode::Code::PAGE);
+    return int(IconCode::Code::NEW_FILE);
 }
 
 void FileListModel::setPaths(const QStringList& paths)

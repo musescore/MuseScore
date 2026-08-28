@@ -187,7 +187,7 @@ Item {
         Rectangle {
             function focusOnFileList() {}
 
-            color: ui.theme.backgroundPrimaryColor
+            color: ui.theme.backgroundSecondaryColor
             border.width: 1
             border.color: ui.theme.strokeColor
             radius: 3

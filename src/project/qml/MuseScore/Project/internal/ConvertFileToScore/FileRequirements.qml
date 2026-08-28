@@ -71,14 +71,6 @@ Item {
         anchors.centerIn: parent
         spacing: 4
 
-        StyledIconLabel {
-            anchors.verticalCenter: parent.verticalCenter
-
-            iconCode: IconCode.INFO
-            font.pixelSize: 12
-            color: ui.theme.linkColor
-        }
-
         StyledTextLabel {
             anchors.verticalCenter: parent.verticalCenter
 
@@ -86,6 +78,14 @@ Item {
             font.family: ui.theme.bodyFont.family
             font.pixelSize: ui.theme.bodyFont.pixelSize
             font.underline: true
+            color: ui.theme.linkColor
+        }
+
+        StyledIconLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            iconCode: IconCode.INFO_FILLED
+            font.pixelSize: 10
             color: ui.theme.linkColor
         }
     }

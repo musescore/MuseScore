@@ -41,7 +41,7 @@ StyledDialogView {
     modal: true
     resizable: false
 
-    background.color: ui.theme.popupBackgroundColor
+    background.color: ui.theme.backgroundPrimaryColor
 
     property int convertType: -1
     property int currentPageIndex: 0
