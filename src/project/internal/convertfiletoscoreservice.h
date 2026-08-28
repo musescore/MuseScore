@@ -50,7 +50,7 @@ public:
 
     const ConvertConfig& config() const override;
 
-    muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) override;
+    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
 
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 

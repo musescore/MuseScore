@@ -49,6 +49,33 @@ static ConvertType convertTypeFromPath(const io::path_t& path, const ConvertConf
     return isAudioFileSuffix(ext.toLower().toStdString()) ? ConvertType::Audio2Score : ConvertType::Omr;
 }
 
+static ConvertSelection toConvertSelection(const Val& val)
+{
+    const QVariantMap map = val.toQVariant().toMap();
+    const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
+    const QString link = map.value("link").toString();
+    const QStringList pathsList = map.value("paths").toStringList();
+
+    io::paths_t paths;
+    paths.reserve(pathsList.size());
+    for (const QString& path : pathsList) {
+        paths.push_back(io::path_t(path));
+    }
+
+    ConvertSelection selection;
+    selection.convertedFileName = map.value("convertedFileName").toString();
+
+    if (type == ConvertType::Audio2Score && !link.isEmpty()) {
+        selection.input = Audio2ScoreConvertInput { link };
+    } else if (type == ConvertType::Audio2Score) {
+        selection.input = Audio2ScoreConvertInput { paths };
+    } else {
+        selection.input = OmrConvertInput { paths };
+    }
+
+    return selection;
+}
+
 void ConvertFileToScoreScenario::init()
 {
     TRACEFUNC;
@@ -75,41 +102,16 @@ const ConvertConfig& ConvertFileToScoreScenario::convertConfig() const
 
 async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert()
 {
-    return async::Promise<ConvertSelection>([this](auto resolve, auto reject) {
-        Ret authRet = ensureAuthorization();
-        if (!authRet) {
-            return reject(authRet.code(), authRet.text());
-        }
-
-        interactive()->open("musescore://project/convert/selectfiles")
-        .then<ConvertSelection>(this, [](const Val& val, auto innerResolve) {
-            QVariantMap map = val.toQVariant().toMap();
-
-            const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
-            const QString link = map.value("link").toString();
-
-            io::paths_t paths;
-            const QStringList pathsList = map.value("paths").toStringList();
-            paths.reserve(pathsList.size());
-            for (const QString& path : pathsList) {
-                paths.push_back(io::path_t(path));
-            }
-
-            ConvertSelection selection;
-            selection.convertedFileName = map.value("convertedFileName").toString();
-
-            if (type == ConvertType::Audio2Score && !link.isEmpty()) {
-                selection.input = Audio2ScoreConvertInput { link };
-            } else if (type == ConvertType::Audio2Score) {
-                selection.input = Audio2ScoreConvertInput { paths };
-            } else {
-                selection.input = OmrConvertInput { paths };
-            }
-
-            return innerResolve(selection);
-        })
-        .onResolve(this, [resolve](const ConvertSelection& selection) {
-            (void)resolve(selection);
+    return async::make_promise<ConvertSelection>([this](auto resolve, auto reject) {
+        ensureAuthorization()
+        .onResolve(this, [this, resolve, reject](const Ret&) {
+            openSelectFilesDialog()
+            .onResolve(this, [resolve](const ConvertSelection& selection) {
+                (void)resolve(selection);
+            })
+            .onReject(this, [reject](int code, const std::string& msg) {
+                (void)reject(code, msg);
+            });
         })
         .onReject(this, [reject](int code, const std::string& msg) {
             (void)reject(code, msg);
@@ -139,22 +141,27 @@ async::Promise<RetVal<ConvertType> > ConvertFileToScoreScenario::validate(const 
     });
 }
 
-Ret ConvertFileToScoreScenario::convert(const ConvertInput& input, const QString& convertedFileName)
+async::Promise<Ret> ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
 {
-    IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
-        return make_ret(Err::ConvertValidationFailed);
-    }
+    return async::make_promise<Ret>([this, input, convertedFileName](auto resolve, auto) {
+        IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
+            return resolve(make_ret(Err::ConvertValidationFailed));
+        }
 
-    IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
-        return make_ret(Err::ConvertValidationFailed);
-    }
+        IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
+            return resolve(make_ret(Err::ConvertValidationFailed));
+        }
 
-    Ret authRet = ensureAuthorization();
-    if (!authRet) {
-        return authRet;
-    }
+        ensureAuthorization()
+        .onResolve(this, [this, input, convertedFileName, resolve](const Ret&) {
+            (void)resolve(startUpload(input, convertedFileName));
+        })
+        .onReject(this, [resolve](int code, const std::string& msg) {
+            (void)resolve(Ret(code, msg));
+        });
 
-    return startUpload(input, convertedFileName);
+        return async::Promise<Ret>::dummy_result();
+    });
 }
 
 async::Channel<Ret, io::path_t> ConvertFileToScoreScenario::convertFinished() const
@@ -162,21 +169,39 @@ async::Channel<Ret, io::path_t> ConvertFileToScoreScenario::convertFinished() co
     return m_convertFinished;
 }
 
-Ret ConvertFileToScoreScenario::ensureAuthorization()
+async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
 {
-    IAuthorizationServicePtr authorizationService = museScoreComService()->authorization();
-    if (authorizationService->userAuthorized().val) {
-        return make_ok();
-    }
+    return async::make_promise<Ret>([this](auto resolve, auto reject) {
+        IAuthorizationServicePtr authorizationService = museScoreComService()->authorization();
+        if (authorizationService->userAuthorized().val) {
+            return resolve(make_ok());
+        }
 
-    std::string dialogText = muse::trc("project/convert", "Log in or create a free account on MuseScore.com to convert a file.");
+        std::string dialogText = muse::trc("project/convert", "Log in or create a free account on MuseScore.com to convert a file.");
 
-    UriQuery query("muse://cloud/requireauthorization");
-    query.addParam("text", Val(dialogText));
-    query.addParam("cloudCode", Val(authorizationService->cloudInfo().code));
-    query.addParam("publishingScore", Val(false));
+        UriQuery query("muse://cloud/requireauthorization");
+        query.addParam("text", Val(dialogText));
+        query.addParam("cloudCode", Val(authorizationService->cloudInfo().code));
+        query.addParam("publishingScore", Val(false));
 
-    return interactive()->openSync(query).ret;
+        interactive()->open(query)
+        .onResolve(this, [resolve](const Val&) {
+            (void)resolve(make_ok());
+        })
+        .onReject(this, [reject](int code, const std::string& msg) {
+            (void)reject(code, msg);
+        });
+
+        return async::Promise<Ret>::dummy_result();
+    });
+}
+
+async::Promise<ConvertSelection> ConvertFileToScoreScenario::openSelectFilesDialog()
+{
+    return interactive()->open("musescore://project/convert/selectfiles")
+           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
+        return resolve(toConvertSelection(val));
+    });
 }
 
 bool ConvertFileToScoreScenario::validateAgainstConfig(ConvertType type, const io::paths_t& paths, const ConvertConfig& config)
@@ -285,7 +310,7 @@ Ret ConvertFileToScoreScenario::startUpload(const ConvertInput& input, const QSt
         showFileProcessingDialog();
     }
 
-    return service()->convert(input, convertedFileName);
+    return service()->startConvert(input, convertedFileName);
 }
 
 void ConvertFileToScoreScenario::showFileProcessingDialog()
@@ -310,7 +335,7 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
         if (result.isButton(uploadMoreBtn)) {
             selectFilesToConvert()
             .onResolve(this, [this](const ConvertSelection& selection) {
-                convert(selection.input, selection.convertedFileName);
+                startConvert(selection.input, selection.convertedFileName);
             });
         } else if (result.isButton(goToScoresBtn)) {
             interactive()->openUrl(museScoreComService()->scoreManagerUrl());

@@ -39,7 +39,7 @@ public:
 
     virtual const ConvertConfig& config() const = 0;
 
-    virtual muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) = 0;
+    virtual muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) = 0;
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 
     virtual muse::async::Channel<int /*queueId*/, ConvertType> reviewRequested() const = 0;

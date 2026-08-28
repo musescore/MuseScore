@@ -38,6 +38,6 @@ void ConvertFileToScoreDevToolsModel::selectAndConvertFiles()
 {
     convertFileToScoreScenario()->selectFilesToConvert()
     .onResolve(this, [this](const ConvertSelection& selection) {
-        convertFileToScoreScenario()->convert(selection.input, selection.convertedFileName);
+        convertFileToScoreScenario()->startConvert(selection.input, selection.convertedFileName);
     });
 }
