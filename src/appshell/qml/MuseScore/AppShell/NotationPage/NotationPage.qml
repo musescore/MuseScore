@@ -580,7 +580,10 @@ DockPage {
             //! floated -- so it gets its own ceiling instead of the shared 520px one.
             maximumHeight: root.panelMaxDimension
 
-            minimumWidth: root.panelMinDimension
+            //! NOTE: unlike other horizontal panels, Video has an internal SplitView
+            //! (preview+transport | hit-points panel); too narrow a window makes that
+            //! split collapse/overlap, so it needs a real floor instead of panelMinDimension.
+            minimumWidth: 580
             maximumWidth: root.panelMaxDimension
 
             groupName: root.horizontalPanelsGroup

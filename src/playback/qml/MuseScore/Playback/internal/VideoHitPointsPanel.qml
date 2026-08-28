@@ -39,6 +39,8 @@ ExpandableBlank {
     // function() -> number (detected fps of the attached video, 0 if unknown)
     required property var detectFrameRate
     required property real currentVideoPositionMs
+    // function() -- stops and detaches the current video
+    required property var clearAttachedVideo
 
     required property NavigationPanel navigationPanel
     required property int navigationOrderStart
@@ -64,131 +66,241 @@ ExpandableBlank {
         width: root.width
         spacing: 8
 
-        RowLayout {
+        StyledTabBar {
+            id: tabBar
+
             Layout.fillWidth: true
-            spacing: 6
 
-            StyledTextLabel {
-                text: qsTrc("playback", "fps")
+            StyledTabButton {
+                text: qsTrc("playback", "Hit points")
+
+                navigation.name: "VideoHitPointsTab"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationOrderStart + 1
             }
 
-            TextInputField {
-                Layout.preferredWidth: 56
-                currentText: root.videoModel.frameRate.toString()
+            StyledTabButton {
+                text: qsTrc("playback", "Settings")
+
+                navigation.name: "VideoSettingsTab"
                 navigation.panel: root.navigationPanel
-                navigation.order: root.navigationOrderStart + 1
-
-                onTextEditingFinished: function(newTextValue) {
-                    var parsedValue = parseFloat(newTextValue)
-                    if (!isNaN(parsedValue)) {
-                        root.videoModel.frameRate = parsedValue
-                    }
-                }
-            }
-
-            FlatButton {
-                Layout.fillWidth: true
-                text: qsTrc("playback", "Detect")
-                enabled: root.detectFrameRate() > 0
-                navigation.panel: root.navigationPanel
-                navigation.order: root.navigationOrderStart + 2
-
-                onClicked: {
-                    var rate = root.detectFrameRate()
-                    if (rate > 0) {
-                        root.videoModel.frameRate = rate
-                    }
-                }
+                navigation.row: root.navigationOrderStart + 2
             }
         }
 
-        FlatButton {
+        StackLayout {
             Layout.fillWidth: true
-            text: qsTrc("playback", "Add hit point")
-            navigation.panel: root.navigationPanel
-            navigation.order: root.navigationOrderStart + 3
+            currentIndex: tabBar.currentIndex
 
-            onClicked: {
-                root.videoModel.addHitPoint(root.currentVideoPositionMs)
-            }
-        }
-
-        ColumnLayout {
-            Layout.fillWidth: true
-            spacing: 4
-            visible: root.videoModel.hitPoints.length > 0
-
-            RowLayout {
-                Layout.fillWidth: true
+            ColumnLayout {
                 spacing: 8
 
-                StyledTextLabel {
-                    Layout.preferredWidth: 88
-                    text: qsTrc("playback", "Timecode")
-                    font: ui.theme.bodyBoldFont
-                    maximumLineCount: 1
-                }
-
-                StyledTextLabel {
-                    Layout.preferredWidth: 56
-                    text: qsTrc("playback", "Measure")
-                    font: ui.theme.bodyBoldFont
-                    maximumLineCount: 1
-                }
-
-                StyledTextLabel {
+                FlatButton {
                     Layout.fillWidth: true
-                    text: qsTrc("playback", "Name")
-                    font: ui.theme.bodyBoldFont
-                    maximumLineCount: 1
-                }
+                    text: qsTrc("playback", "Add hit point")
+                    enabled: root.videoModel.hasVideo
+                    navigation.panel: root.navigationPanel
+                    navigation.order: root.navigationOrderStart + 3
 
-                Item {
-                    Layout.preferredWidth: 28
-                }
-            }
-
-            StyledFlickable {
-                id: hitPointsFlickable
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(hitPointsColumn.implicitHeight, 220)
-
-                contentHeight: hitPointsColumn.implicitHeight
-                interactive: contentHeight > height
-                clip: true
-                boundsBehavior: Flickable.StopAtBounds
-                readonly property bool overflowing: contentHeight > height + 1
-
-                ScrollBar.vertical: StyledScrollBar {
-                    policy: hitPointsFlickable.overflowing ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
-                    padding: 0
+                    onClicked: {
+                        root.videoModel.addHitPoint(root.currentVideoPositionMs)
+                    }
                 }
 
                 ColumnLayout {
-                    id: hitPointsColumn
-
-                    width: Math.max(0, hitPointsFlickable.width - (hitPointsFlickable.overflowing ? 12 : 0))
+                    Layout.fillWidth: true
                     spacing: 4
+                    visible: root.videoModel.hitPoints.length > 0
 
-                    Repeater {
-                        model: root.videoModel.hitPoints
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
 
-                        VideoHitPointRow {
-                            id: hitPointRow
+                        StyledTextLabel {
+                            Layout.preferredWidth: 88
+                            text: qsTrc("playback", "Timecode")
+                            font: ui.theme.bodyBoldFont
+                            maximumLineCount: 1
+                        }
 
-                            required property var modelData
-                            required property int index
+                        StyledTextLabel {
+                            Layout.preferredWidth: 56
+                            text: qsTrc("playback", "Measure")
+                            font: ui.theme.bodyBoldFont
+                            maximumLineCount: 1
+                        }
 
+                        StyledTextLabel {
                             Layout.fillWidth: true
+                            text: qsTrc("playback", "Name")
+                            font: ui.theme.bodyBoldFont
+                            maximumLineCount: 1
+                        }
 
-                            hitPoint: modelData
-                            videoModel: root.videoModel
-                            seekToVideoPositionMs: root.seekToVideoPositionMs
-                            navigationPanel: root.navigationPanel
-                            navigationOrderStart: root.navigationOrderStart + 4 + (hitPointRow.index * root.hitPointsRowStride)
+                        Item {
+                            Layout.preferredWidth: 28
                         }
                     }
+
+                    StyledFlickable {
+                        id: hitPointsFlickable
+
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: Math.min(hitPointsColumn.implicitHeight, 220)
+
+                        contentHeight: hitPointsColumn.implicitHeight
+                        interactive: contentHeight > height
+                        clip: true
+                        boundsBehavior: Flickable.StopAtBounds
+                        readonly property bool overflowing: contentHeight > height + 1
+
+                        ScrollBar.vertical: StyledScrollBar {
+                            policy: hitPointsFlickable.overflowing ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
+                            padding: 0
+                        }
+
+                        ColumnLayout {
+                            id: hitPointsColumn
+
+                            width: Math.max(0, hitPointsFlickable.width - (hitPointsFlickable.overflowing ? 12 : 0))
+                            spacing: 4
+
+                            Repeater {
+                                model: root.videoModel.hitPoints
+
+                                VideoHitPointRow {
+                                    id: hitPointRow
+
+                                    required property var modelData
+                                    required property int index
+
+                                    Layout.fillWidth: true
+
+                                    hitPoint: modelData
+                                    videoModel: root.videoModel
+                                    seekToVideoPositionMs: root.seekToVideoPositionMs
+                                    navigationPanel: root.navigationPanel
+                                    navigationOrderStart: root.navigationOrderStart + 10 + (hitPointRow.index * root.hitPointsRowStride)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                spacing: 8
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 6
+
+                    StyledTextLabel {
+                        text: qsTrc("playback", "fps")
+                    }
+
+                    TextInputField {
+                        Layout.preferredWidth: 56
+                        currentText: root.videoModel.frameRate.toString()
+                        enabled: root.videoModel.hasVideo
+                        navigation.panel: root.navigationPanel
+                        navigation.order: root.navigationOrderStart + 4
+
+                        onTextEditingFinished: function(newTextValue) {
+                            var parsedValue = parseFloat(newTextValue)
+                            if (!isNaN(parsedValue)) {
+                                root.videoModel.frameRate = parsedValue
+                            }
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.fillWidth: true
+                        text: qsTrc("playback", "Detect")
+                        enabled: root.videoModel.hasVideo && root.detectFrameRate() > 0
+                        navigation.panel: root.navigationPanel
+                        navigation.order: root.navigationOrderStart + 5
+
+                        onClicked: {
+                            var rate = root.detectFrameRate()
+                            if (rate > 0) {
+                                root.videoModel.frameRate = rate
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 6
+
+                    StyledTextLabel {
+                        text: qsTrc("playback", "Offset")
+                    }
+
+                    TextInputField {
+                        Layout.fillWidth: true
+                        currentText: root.videoModel.offsetMs.toString()
+                        enabled: root.videoModel.hasVideo
+                        navigation.panel: root.navigationPanel
+                        navigation.order: root.navigationOrderStart + 6
+
+                        onTextEditingFinished: function(newTextValue) {
+                            var parsedValue = parseInt(newTextValue, 10)
+                            if (!isNaN(parsedValue)) {
+                                root.videoModel.offsetMs = parsedValue
+                            }
+                        }
+                    }
+
+                    StyledTextLabel {
+                        text: qsTrc("playback", "ms")
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 8
+
+                    FlatButton {
+                        Layout.fillWidth: true
+                        text: qsTrc("playback", "-100 ms")
+                        enabled: root.videoModel.hasVideo
+                        navigation.panel: root.navigationPanel
+                        navigation.order: root.navigationOrderStart + 7
+
+                        onClicked: {
+                            root.videoModel.nudgeOffset(-100)
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.fillWidth: true
+                        text: qsTrc("playback", "+100 ms")
+                        enabled: root.videoModel.hasVideo
+                        navigation.panel: root.navigationPanel
+                        navigation.order: root.navigationOrderStart + 8
+
+                        onClicked: {
+                            root.videoModel.nudgeOffset(100)
+                        }
+                    }
+                }
+
+                FlatButton {
+                    Layout.fillWidth: true
+                    text: qsTrc("playback", "Clear video")
+                    enabled: root.videoModel.hasVideo
+                    navigation.panel: root.navigationPanel
+                    navigation.order: root.navigationOrderStart + 9
+
+                    onClicked: {
+                        root.clearAttachedVideo()
+                    }
+                }
+
+                Item {
+                    Layout.fillHeight: true
                 }
             }
         }
