@@ -22,8 +22,12 @@
 
 #pragma once
 
+#include <algorithm>
+#include <cmath>
 #include <memory>
 #include <vector>
+
+#include <QString>
 
 #include "async/notification.h"
 #include "global/io/path.h"
@@ -90,6 +94,27 @@ struct VideoAttachmentSettings
         return !(*this == other);
     }
 };
+
+//! NOTE Shared by the notation Timeline and the Video panel so both display the
+//! exact same SMPTE-style timecode for a given position; keep this the only
+//! implementation rather than duplicating it at each call site.
+inline QString formatVideoTimecode(int videoPositionMs, double frameRate)
+{
+    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(std::clamp(frameRate, 1.0, 240.0))));
+    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * roundedFrameRate + 0.5));
+
+    const qint64 frames = totalFrames % roundedFrameRate;
+    const qint64 totalSeconds = totalFrames / roundedFrameRate;
+    const qint64 seconds = totalSeconds % 60;
+    const qint64 minutes = (totalSeconds / 60) % 60;
+    const qint64 hours = totalSeconds / 3600;
+
+    return QString("%1:%2:%3:%4")
+           .arg(hours, 2, 10, QLatin1Char('0'))
+           .arg(minutes, 2, 10, QLatin1Char('0'))
+           .arg(seconds, 2, 10, QLatin1Char('0'))
+           .arg(frames, 2, 10, QLatin1Char('0'));
+}
 
 class IProjectVideoSettings
 {

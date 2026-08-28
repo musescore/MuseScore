@@ -1516,7 +1516,10 @@ void Timeline::hitPointMeta(Segment* seg, int* stagger, int pos)
 
         const double scoreTimeSeconds = static_cast<double>(scoreRelativeMs) / 1000.0;
         const int tick = std::max(0, score()->utime2utick(scoreTimeSeconds));
-        const Measure* measure = score()->tick2measure(Fraction::fromTicks(tick));
+        //! NOTE Resolve via the multi-measure-rest-aware measure (matching how the
+        //! notation canvas locates the same hit point), so a hit point under a
+        //! collapsed multi-measure rest still lands on that rest's Timeline column.
+        const Measure* measure = score()->tick2measureMM(Fraction::fromTicks(tick));
         if (!measure || measure->measureIndex() != currentMeasureIndex) {
             continue;
         }
@@ -3352,21 +3355,8 @@ mu::project::IProjectVideoSettingsPtr Timeline::videoSettings() const
 QString Timeline::formatVideoTimecode(int videoPositionMs) const
 {
     const mu::project::IProjectVideoSettingsPtr settings = videoSettings();
-    const double framesPerSecond = settings && settings->attachment().isValid() ? settings->attachment().frameRate : 24.0;
-    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(std::clamp(framesPerSecond, 1.0, 240.0))));
-    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * roundedFrameRate + 0.5));
-
-    const qint64 frames = totalFrames % roundedFrameRate;
-    const qint64 totalSeconds = totalFrames / roundedFrameRate;
-    const qint64 seconds = totalSeconds % 60;
-    const qint64 minutes = (totalSeconds / 60) % 60;
-    const qint64 hours = totalSeconds / 3600;
-
-    return QString("%1:%2:%3:%4")
-           .arg(hours, 2, 10, QLatin1Char('0'))
-           .arg(minutes, 2, 10, QLatin1Char('0'))
-           .arg(seconds, 2, 10, QLatin1Char('0'))
-           .arg(frames, 2, 10, QLatin1Char('0'));
+    const double frameRate = settings && settings->attachment().isValid() ? settings->attachment().frameRate : 24.0;
+    return mu::project::formatVideoTimecode(videoPositionMs, frameRate);
 }
 
 TRowLabels* Timeline::labelsColumn() const

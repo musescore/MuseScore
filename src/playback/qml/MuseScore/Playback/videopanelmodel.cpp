@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 #include <QStringList>
 
@@ -151,22 +152,7 @@ void VideoPanelModel::setHitPointTimeMs(int index, int videoPositionMs)
 
 QString VideoPanelModel::formatTimecode(int videoPositionMs) const
 {
-    videoPositionMs = std::max(0, videoPositionMs);
-    const double framesPerSecond = std::clamp(frameRate(), 1.0, 240.0);
-    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(framesPerSecond)));
-    const qint64 totalFrames = static_cast<qint64>(std::floor((videoPositionMs / 1000.0) * roundedFrameRate + 0.5));
-
-    const qint64 frames = totalFrames % roundedFrameRate;
-    const qint64 totalSeconds = totalFrames / roundedFrameRate;
-    const qint64 seconds = totalSeconds % 60;
-    const qint64 minutes = (totalSeconds / 60) % 60;
-    const qint64 hours = totalSeconds / 3600;
-
-    return QString("%1:%2:%3:%4")
-           .arg(hours, 2, 10, QLatin1Char('0'))
-           .arg(minutes, 2, 10, QLatin1Char('0'))
-           .arg(seconds, 2, 10, QLatin1Char('0'))
-           .arg(frames, 2, 10, QLatin1Char('0'));
+    return project::formatVideoTimecode(videoPositionMs, frameRate());
 }
 
 int VideoPanelModel::parseTimecodeToMs(const QString& timecode) const
@@ -201,7 +187,12 @@ int VideoPanelModel::parseTimecodeToMs(const QString& timecode) const
 
     const qint64 totalSeconds = static_cast<qint64>(hours) * 3600 + minutes * 60 + seconds;
     const qint64 totalFrames = totalSeconds * roundedFrameRate + frames;
-    return static_cast<int>(std::floor((static_cast<double>(totalFrames) * 1000.0 / roundedFrameRate) + 0.5));
+    const qint64 positionMs = static_cast<qint64>(std::floor((static_cast<double>(totalFrames) * 1000.0 / roundedFrameRate) + 0.5));
+    if (positionMs > std::numeric_limits<int>::max()) {
+        return -1;
+    }
+
+    return static_cast<int>(positionMs);
 }
 
 bool VideoPanelModel::hasVideo() const
