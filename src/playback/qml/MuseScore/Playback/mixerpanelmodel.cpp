@@ -282,6 +282,10 @@ void MixerPanelModel::clear()
 
     m_masterChannelItem = nullptr;
     for (MixerChannelItem* item : m_mixerChannelList) {
+        //! NOTE Disconnect immediately so a not-yet-destroyed item can't fire stale
+        //! controlParamsChanged/soloMuteStateChanged signals (e.g. if reloadItems()
+        //! runs again before this item's deleteLater() is processed).
+        item->disconnect();
         item->deleteLater();
     }
     m_mixerChannelList.clear();
@@ -331,6 +335,20 @@ void MixerPanelModel::setupConnections()
                 it.value()->setTitle(QString::fromStdString(name));
             }
         }
+    });
+
+    if (videoSettings()) {
+        videoSettings()->settingsChanged().onNotify(this, [this]() {
+            onVideoAttachmentChanged();
+        });
+    }
+
+    controller()->masterOutputForceMuteChanged().onNotify(this, [this]() {
+        if (!m_masterChannelItem) {
+            return;
+        }
+
+        loadOutputParams(m_masterChannelItem, effectiveMasterOutputParams());
     });
 
     configuration()->isAuxChannelVisibleChanged().onReceive(this, [this](aux_channel_idx_t index, bool visible) {
@@ -393,6 +411,35 @@ void MixerPanelModel::subscribeOnAutomationChanges()
             }
         }
     });
+}
+
+void MixerPanelModel::onVideoAttachmentChanged()
+{
+    TRACEFUNC;
+
+    bool hasVideo = videoSettings() && videoSettings()->attachment().isValid();
+    bool hadVideo = indexOf(VIDEO_TRACK_ID) != INVALID_INDEX;
+
+    if (hasVideo == hadVideo) {
+        return;
+    }
+
+    if (hasVideo) {
+        addItem(buildVideoChannelItem(), resolveVideoInsertIndex());
+    } else {
+        removeItem(VIDEO_TRACK_ID);
+    }
+}
+
+int MixerPanelModel::resolveVideoInsertIndex() const
+{
+    for (int i = 0; i < m_mixerChannelList.size(); ++i) {
+        if (m_mixerChannelList[i]->type() == MixerChannelItem::Type::Metronome) {
+            return i;
+        }
+    }
+
+    return masterChannelIndex();
 }
 
 int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newInstrumentTrackId) const
@@ -675,8 +722,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     item->setPanelSection(m_navigationSection);
     item->setTitle(muse::qtrc("playback", "Master"));
 
-    AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
-    loadOutputParams(item, outParams);
+    loadOutputParams(item, effectiveMasterOutputParams());
 
     playback()->masterSignalChanges()
     .onResolve(this, [this, item](AudioSignalChanges signalChanges) {
@@ -691,8 +737,8 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 
     connect(item, &MixerChannelItem::controlParamsChanged, this, [this](const AudioOutputParams& params) {
         AudioOutputParams playbackParams = params;
-        IProjectVideoSettingsPtr videoSettingsPtr = videoSettings();
-        if (videoSettingsPtr && videoSettingsPtr->attachment().isValid() && videoSettingsPtr->attachment().solo) {
+        playbackParams.forceMute = controller()->isMasterOutputForceMuted();
+        if (playbackParams.forceMute) {
             playbackParams.muted = true;
         }
 
@@ -753,6 +799,17 @@ void MixerPanelModel::updateOutputResourceItemCount()
     for (MixerChannelItem* item : m_mixerChannelList) {
         item->setOutputResourceItemCount(maxFxCount + 1 /* + 1 blank slot */);
     }
+}
+
+AudioOutputParams MixerPanelModel::effectiveMasterOutputParams() const
+{
+    AudioOutputParams params = audioSettings()->masterAudioOutputParams();
+    params.forceMute = controller()->isMasterOutputForceMuted();
+    if (params.forceMute) {
+        params.muted = true;
+    }
+
+    return params;
 }
 
 INotationProjectPtr MixerPanelModel::currentProject() const

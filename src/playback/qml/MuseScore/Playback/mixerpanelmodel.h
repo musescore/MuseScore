@@ -98,7 +98,9 @@ private:
 
     void subscribeOnAutomationChanges();
 
+    void onVideoAttachmentChanged();
     int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    int resolveVideoInsertIndex() const;
     int indexOf(const muse::audio::TrackId trackId) const;
 
     MixerChannelItem* buildInstrumentChannelItem(const muse::audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
@@ -113,6 +115,8 @@ private:
 
     void loadOutputParams(MixerChannelItem* item, const project::AudioOutputParams& params);
     void updateOutputResourceItemCount();
+
+    project::AudioOutputParams effectiveMasterOutputParams() const;
 
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;

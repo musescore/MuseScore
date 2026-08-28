@@ -1076,6 +1076,17 @@ mu::project::IProjectVideoSettingsPtr PlaybackController::videoSettings() const
     return globalContext()->currentProject()->videoSettings();
 }
 
+bool PlaybackController::isMasterOutputForceMuted() const
+{
+    IProjectVideoSettingsPtr videoSettingsPtr = videoSettings();
+    return videoSettingsPtr && videoSettingsPtr->attachment().isValid() && videoSettingsPtr->attachment().solo;
+}
+
+muse::async::Notification PlaybackController::masterOutputForceMuteChanged() const
+{
+    return m_masterOutputForceMuteChanged;
+}
+
 void PlaybackController::updateMasterControlParams()
 {
     if (!globalContext()->currentProject() || !playback()) {
@@ -1087,13 +1098,20 @@ void PlaybackController::updateMasterControlParams()
         return;
     }
 
+    bool forceMute = isMasterOutputForceMuted();
+
     AudioOutputParams params = audioSettingsPtr->masterAudioOutputParams();
-    IProjectVideoSettingsPtr videoSettingsPtr = videoSettings();
-    if (videoSettingsPtr && videoSettingsPtr->attachment().isValid() && videoSettingsPtr->attachment().solo) {
+    params.forceMute = forceMute;
+    if (forceMute) {
         params.muted = true;
     }
 
     playback()->setMasterControlParams(params.control());
+
+    if (m_isMasterOutputForceMuted != forceMute) {
+        m_isMasterOutputForceMuted = forceMute;
+        m_masterOutputForceMuteChanged.notify();
+    }
 }
 
 void PlaybackController::resetPlayback()

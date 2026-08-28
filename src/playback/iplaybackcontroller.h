@@ -104,6 +104,11 @@ public:
     virtual const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) = 0;
 
+    //! NOTE Whether the master output is currently force-muted because the attached video is soloed.
+    //! This is the single source of truth for that rule; it must not be re-derived elsewhere.
+    virtual bool isMasterOutputForceMuted() const = 0;
+    virtual muse::async::Notification masterOutputForceMuteChanged() const = 0;
+
     struct PlayParams {
         PlayParams() {}
 
