@@ -24,7 +24,6 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/exportprojectscenariomock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/mscmetareadermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationprojectmock.h
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/opensaveprojectscenariomock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/recentfilescontrollermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mscmetareadertests.cpp

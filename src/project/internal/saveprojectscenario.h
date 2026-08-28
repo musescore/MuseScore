@@ -40,7 +40,6 @@
 #include "progress.h"
 
 #include "iexportprojectscenario.h"
-#include "iopensaveprojectscenario.h"
 #include "iprojectconfiguration.h"
 #include "irecentfilescontroller.h"
 
@@ -57,7 +56,6 @@ public:
     muse::GlobalInject<muse::cloud::IAudioComService> audioComService;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
-    muse::ContextInject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
@@ -65,8 +63,7 @@ public:
     SaveProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
-                          bool force = false) override;
+    muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
     bool saveProjectLocally(const muse::io::path_t& path, SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
     muse::Ret saveProjectAt(const muse::rcommand::Params& params) override;
@@ -81,6 +78,11 @@ public:
 
 private:
     using BusyStatus = IProjectCommandsController::BusyStatus;
+
+    static constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
+    static constexpr int RET_CODE_CONFLICT_RESPONSE_SAVE_AS = 1235;
+    static constexpr int RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE = 1236;
+    static constexpr int RET_CODE_CONFLICT_RESPONSE_REPLACE = 1237;
 
     struct AudioFile {
         QString format;
@@ -98,6 +100,23 @@ private:
     notation::INotationInteractionPtr currentInteraction() const;
 
     void setBusy(BusyStatus status, bool isBusy);
+
+    muse::RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
+                                               SaveLocationType preselectedType = SaveLocationType::Undefined) const;
+    muse::RetVal<muse::io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const;
+    muse::RetVal<SaveLocationType> saveLocationType() const;
+    muse::RetVal<SaveLocationType> askSaveLocationType() const;
+    muse::RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const;
+    muse::RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const;
+    muse::RetVal<CloudAudioInfo> askShareAudioLocation(INotationProjectPtr project) const;
+    muse::RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const;
+    bool warnBeforePublishing(bool isPublishShare, muse::cloud::Visibility visibility) const;
+    bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const;
+    muse::Ret warnCloudNotAvailableForUploading(bool isPublishShare) const;
+    muse::Ret warnCloudNotAvailableForSharingAudio() const;
+    muse::RetVal<muse::Val> ensureAuthorization(const QString& cloudeCode, bool publishingScore, const std::string& text) const;
+    muse::Ret showCloudSaveError(const muse::Ret& ret, const CloudProjectInfo& info, bool isPublishShare, bool alreadyAttempted) const;
+    muse::Ret showAudioCloudShareError(const muse::Ret& ret) const;
 
     muse::Ret canSaveProject() const;
     muse::Ret saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
