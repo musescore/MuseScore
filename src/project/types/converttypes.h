@@ -23,10 +23,48 @@
 #pragma once
 
 #include "cloud/musescorecom/converttypes.h"
+#include "projecttypes.h"
+
+#include "global/io/path.h"
 
 namespace mu::project {
 using ConvertConfig = muse::cloud::ConvertConfig;
 using ConvertType = muse::cloud::ConvertType;
 using ConvertInput = muse::cloud::ConvertInput;
 using ReviewRating = muse::cloud::ReviewRating;
+
+enum class FileCategory {
+    Unknown,
+    Audio,
+    Pdf,
+    Image
+};
+
+inline FileCategory fileCategoryFromPath(const muse::io::path_t& path, const ConvertConfig& config)
+{
+    const QString ext = QString::fromStdString(muse::io::suffix(path)).toLower();
+    if (ext == "pdf") {
+        return FileCategory::Pdf;
+    }
+
+    //! NOTE: if config is unavailable, fall back to a best-effort guess
+    const bool isImage = !config.omr.allowedExtensions.isEmpty()
+                         ? config.omr.allowedExtensions.contains(ext)
+                         : isImageFileSuffix(ext.toStdString());
+
+    if (isImage) {
+        return FileCategory::Image;
+    }
+
+    const bool isAudio = !config.audio2score.allowedExtensions.isEmpty()
+                         ? config.audio2score.allowedExtensions.contains(ext)
+                         : isAudioFileSuffix(ext.toStdString());
+
+    return isAudio ? FileCategory::Audio : FileCategory::Unknown;
+}
+
+inline bool isSupportedExtension(const muse::io::path_t& path, const ConvertConfig& config)
+{
+    return fileCategoryFromPath(path, config) != FileCategory::Unknown;
+}
 }
