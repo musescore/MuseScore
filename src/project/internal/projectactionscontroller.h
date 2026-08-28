@@ -65,6 +65,9 @@ namespace mu::project {
 class ProjectActionsController : public IProjectCommandsController, public IProjectFilesController, public muse::mi::IProjectProvider,
     public muse::Contextable, public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
 {
+    friend class ProjectActionsControllerTests;
+
+public:
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
@@ -86,8 +89,6 @@ class ProjectActionsController : public IProjectCommandsController, public IProj
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<print::IPrintProvider> printProvider = { this };
-
-public:
 
     ProjectActionsController(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
