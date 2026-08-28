@@ -39,6 +39,5 @@ public:
     MOCK_METHOD(muse::async::Notification, projectBeingDownloadedChanged, (), (const, override));
     MOCK_METHOD(bool, isBusy, (IProjectCommandsController::BusyStatus status), (const, override));
     MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
-    MOCK_METHOD(void, showCloudOpenError, (const muse::Ret& ret), (const, override));
 };
 }
