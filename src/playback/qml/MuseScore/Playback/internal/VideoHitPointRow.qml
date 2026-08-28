@@ -51,37 +51,23 @@ RowLayout {
     spacing: 8
 
     Item {
-        Layout.preferredWidth: 108
+        Layout.preferredWidth: 88
         Layout.preferredHeight: 28
 
-        RowLayout {
+        StyledTextLabel {
             anchors.fill: parent
-            spacing: 2
+            verticalAlignment: Text.AlignVCenter
+            text: root.hitPoint.timecode
+            maximumLineCount: 1
+            color: root.colorFromInt(root.hitPoint.color)
             visible: !root.editingTimecode
 
-            StyledTextLabel {
-                Layout.fillWidth: true
-                verticalAlignment: Text.AlignVCenter
-                text: root.hitPoint.timecode
-                maximumLineCount: 1
-                color: root.colorFromInt(root.hitPoint.color)
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
 
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: root.seekToVideoPositionMs(root.hitPoint.timeMs)
-                }
-            }
-
-            FlatButton {
-                Layout.preferredWidth: 18
-                Layout.preferredHeight: 18
-                icon: IconCode.EDIT
-                buttonType: FlatButton.IconOnly
-                transparent: true
-                toolTipTitle: qsTrc("playback", "Edit timecode")
-
-                onClicked: {
+                onClicked: root.seekToVideoPositionMs(root.hitPoint.timeMs)
+                onDoubleClicked: {
                     root.editingTimecode = true
                     timecodeEditor.forceActiveFocus()
                 }
@@ -118,27 +104,16 @@ RowLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 28
 
-        RowLayout {
+        StyledTextLabel {
             anchors.fill: parent
-            spacing: 2
+            verticalAlignment: Text.AlignVCenter
+            text: root.hitPoint.label
+            maximumLineCount: 1
             visible: !root.editingLabel
 
-            StyledTextLabel {
-                Layout.fillWidth: true
-                verticalAlignment: Text.AlignVCenter
-                text: root.hitPoint.label
-                maximumLineCount: 1
-            }
-
-            FlatButton {
-                Layout.preferredWidth: 18
-                Layout.preferredHeight: 18
-                icon: IconCode.EDIT
-                buttonType: FlatButton.IconOnly
-                transparent: true
-                toolTipTitle: qsTrc("playback", "Rename hit point")
-
-                onClicked: {
+            MouseArea {
+                anchors.fill: parent
+                onDoubleClicked: {
                     root.editingLabel = true
                     labelEditor.forceActiveFocus()
                 }

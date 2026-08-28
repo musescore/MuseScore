@@ -42,7 +42,8 @@ Item {
     readonly property real previewHeightRatio: 0.42
     readonly property int controlsScrollbarReserve: 12
     readonly property int minimumControlsHeight: 168
-    readonly property int hitPointsPanelWidth: 260
+    readonly property int hitPointsPanelMinWidth: 180
+    property int hitPointsPanelWidth: 260
     readonly property int timelineFrameRate: Math.max(1, Math.round(videoModel.frameRate))
     readonly property int timelineFrameCount: videoModel.hasVideo && video.duration > 0 ? Math.floor((video.duration / 1000) * root.timelineFrameRate) + 1 : 0
 
@@ -56,6 +57,7 @@ Item {
 
     Component.onCompleted: {
         videoModel.load()
+        root.hitPointsPanelWidth = videoModel.hitPointsPanelWidth()
     }
 
     function colorFromInt(value) {
@@ -293,15 +295,15 @@ Item {
             width: Math.max(0, contentFlickable.width - (contentFlickable.overflowing ? root.controlsScrollbarReserve : 0))
             spacing: 8
 
-            GridLayout {
+            SplitView {
+                id: contentSplitView
+
                 Layout.fillWidth: true
-                columns: root.compactMode ? 1 : 2
-                columnSpacing: 12
-                rowSpacing: 8
+                orientation: root.compactMode ? Qt.Vertical : Qt.Horizontal
 
                 ColumnLayout {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignTop
+                    SplitView.fillWidth: true
+                    SplitView.fillHeight: true
                     spacing: 8
 
                     Rectangle {
@@ -348,6 +350,16 @@ Item {
 
                                 onDurationChanged: {
                                     root.syncVideoToScore(true)
+                                }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                enabled: videoModel.hasVideo
+                                cursorShape: Qt.PointingHandCursor
+
+                                onClicked: {
+                                    videoModel.toggleScorePlay()
                                 }
                             }
 
@@ -502,6 +514,7 @@ Item {
                                     required property var modelData
                                     required property int index
                                     property bool dragging: false
+                                    property bool editingLabel: false
                                     property real dragTimeMs: modelData.timeMs
                                     readonly property real displayTimeMs: dragging ? dragTimeMs : modelData.timeMs
 
@@ -521,6 +534,38 @@ Item {
                                         maximumLineCount: 1
                                         font.pixelSize: 10
                                         color: root.colorFromInt(parent.modelData.color)
+                                        visible: !hitPointMarker.editingLabel
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            anchors.margins: -4
+
+                                            onDoubleClicked: {
+                                                hitPointMarker.editingLabel = true
+                                                markerLabelEditor.forceActiveFocus()
+                                                markerLabelEditor.selectAll()
+                                            }
+                                        }
+                                    }
+
+                                    TextInputField {
+                                        id: markerLabelEditor
+
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        anchors.bottom: parent.top
+                                        anchors.bottomMargin: 1
+                                        width: 84
+                                        currentText: hitPointMarker.modelData.label
+                                        visible: hitPointMarker.editingLabel
+
+                                        onTextEditingFinished: function(newTextValue) {
+                                            videoModel.renameHitPoint(hitPointMarker.modelData.id, newTextValue)
+                                            hitPointMarker.editingLabel = false
+                                        }
+
+                                        Keys.onEscapePressed: {
+                                            hitPointMarker.editingLabel = false
+                                        }
                                     }
 
                                     MouseArea {
@@ -647,9 +692,12 @@ Item {
                 }
 
                 VideoHitPointsPanel {
-                    Layout.preferredWidth: root.compactMode ? -1 : root.hitPointsPanelWidth
-                    Layout.fillWidth: root.compactMode
-                    Layout.alignment: Qt.AlignTop
+                    id: hitPointsPanel
+
+                    SplitView.preferredWidth: root.hitPointsPanelWidth
+                    SplitView.minimumWidth: root.hitPointsPanelMinWidth
+                    SplitView.fillWidth: root.compactMode
+                    SplitView.fillHeight: true
 
                     videoModel: videoModel
                     seekToVideoPositionMs: root.seekToVideoPositionMs
@@ -657,6 +705,13 @@ Item {
                     currentVideoPositionMs: video.position
                     navigationPanel: navigationPanel
                     navigationOrderStart: root.contentNavigationPanelOrderStart + 20
+
+                    onWidthChanged: {
+                        if (!root.compactMode && width > 0) {
+                            root.hitPointsPanelWidth = width
+                            videoModel.setHitPointsPanelWidth(width)
+                        }
+                    }
                 }
             }
         }

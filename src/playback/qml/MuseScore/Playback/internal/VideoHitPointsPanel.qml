@@ -123,7 +123,7 @@ ExpandableBlank {
                 spacing: 8
 
                 StyledTextLabel {
-                    Layout.preferredWidth: 108
+                    Layout.preferredWidth: 88
                     text: qsTrc("playback", "Timecode")
                     font: ui.theme.bodyBoldFont
                     maximumLineCount: 1
