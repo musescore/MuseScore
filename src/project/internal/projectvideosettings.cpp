@@ -44,6 +44,16 @@ static void normalizeHitPoints(VideoAttachmentSettings& attachment)
         [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
         return a.timeMs < b.timeMs;
     });
+
+    int nextId = 0;
+    for (const VideoHitPointSettings& hitPoint : attachment.hitPoints) {
+        nextId = std::max(nextId, hitPoint.id);
+    }
+    for (VideoHitPointSettings& hitPoint : attachment.hitPoints) {
+        if (hitPoint.id == 0) {
+            hitPoint.id = ++nextId;
+        }
+    }
 }
 
 const VideoAttachmentSettings& ProjectVideoSettings::attachment() const
@@ -126,6 +136,9 @@ void ProjectVideoSettings::makeDefault()
 VideoHitPointSettings ProjectVideoSettings::hitPointFromJson(const QJsonObject& object) const
 {
     VideoHitPointSettings result;
+    //! NOTE Hit points saved before the "id" field existed read back as id 0;
+    //! normalizeHitPoints() backfills a real id for those on load.
+    result.id = object.value("id").toInt(0);
     result.label = object.value("label").toString();
     result.timeMs = std::max(0, object.value("timeMs").toInt());
     result.color = object.value("color").toInt(0x3B94E5);
@@ -135,6 +148,7 @@ VideoHitPointSettings ProjectVideoSettings::hitPointFromJson(const QJsonObject& 
 QJsonObject ProjectVideoSettings::hitPointToJson(const VideoHitPointSettings& hitPoint) const
 {
     QJsonObject object;
+    object["id"] = hitPoint.id;
     object["label"] = hitPoint.label.toQString();
     object["timeMs"] = hitPoint.timeMs;
     object["color"] = hitPoint.color;

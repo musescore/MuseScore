@@ -62,10 +62,14 @@ public:
     Q_INVOKABLE void clearVideo();
     Q_INVOKABLE void nudgeOffset(int deltaMs);
     Q_INVOKABLE void addHitPoint(int videoPositionMs);
-    Q_INVOKABLE void removeHitPoint(int index);
-    Q_INVOKABLE void renameHitPoint(int index, const QString& label);
-    Q_INVOKABLE void setHitPointTimeMs(int index, int videoPositionMs);
-    Q_INVOKABLE void setHitPointTimecode(int index, const QString& timecode);
+    //! NOTE hitPointId identifies a hit point by its stable VideoHitPointSettings::id
+    //! (see hitPoints()'s "id" role), not its position in the list -- the list is
+    //! re-sorted chronologically on every edit, so a position captured before the
+    //! call may no longer refer to the same hit point by the time it runs.
+    Q_INVOKABLE void removeHitPoint(int hitPointId);
+    Q_INVOKABLE void renameHitPoint(int hitPointId, const QString& label);
+    Q_INVOKABLE void setHitPointTimeMs(int hitPointId, int videoPositionMs);
+    Q_INVOKABLE void setHitPointTimecode(int hitPointId, const QString& timecode);
     Q_INVOKABLE QString formatTimecode(int videoPositionMs) const;
 
     bool hasVideo() const;
@@ -108,6 +112,7 @@ private:
     project::VideoAttachmentSettings attachment() const;
     void updateAttachment(const project::VideoAttachmentSettings& attachment);
     QVariantMap hitPointToMap(const project::VideoHitPointSettings& hitPoint) const;
+    static int indexOfHitPoint(const project::VideoAttachmentSettings& attachment, int hitPointId);
     QString musicalPositionText(int videoPositionMs) const;
     int parseTimecodeToMs(const QString& timecode) const;
     void listenCurrentProject();

@@ -42,13 +42,20 @@ enum class VideoTimecodeDisplayMode {
 
 struct VideoHitPointSettings
 {
+    //! NOTE Stable identity for this hit point, independent of its position in
+    //! hitPoints (which is re-sorted chronologically on every edit). 0 means
+    //! "not yet assigned" -- ProjectVideoSettings assigns a real one on load/set.
+    //! Callers must reference a hit point by id, never by list position, since
+    //! the position can change as a side effect of the very edit being made.
+    int id = 0;
     muse::String label;
     int timeMs = 0;
     int color = 0x3B94E5;
 
     bool operator==(const VideoHitPointSettings& other) const
     {
-        return label == other.label
+        return id == other.id
+               && label == other.label
                && timeMs == other.timeMs
                && color == other.color;
     }

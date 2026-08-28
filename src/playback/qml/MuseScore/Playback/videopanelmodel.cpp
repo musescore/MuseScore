@@ -90,10 +90,22 @@ void VideoPanelModel::addHitPoint(int videoPositionMs)
     updateAttachment(updated);
 }
 
-void VideoPanelModel::removeHitPoint(int index)
+int VideoPanelModel::indexOfHitPoint(const VideoAttachmentSettings& attachment, int hitPointId)
+{
+    for (int i = 0; i < static_cast<int>(attachment.hitPoints.size()); ++i) {
+        if (attachment.hitPoints.at(i).id == hitPointId) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+void VideoPanelModel::removeHitPoint(int hitPointId)
 {
     VideoAttachmentSettings updated = attachment();
-    if (!updated.isValid() || index < 0 || index >= static_cast<int>(updated.hitPoints.size())) {
+    const int index = indexOfHitPoint(updated, hitPointId);
+    if (!updated.isValid() || index < 0) {
         return;
     }
 
@@ -101,10 +113,11 @@ void VideoPanelModel::removeHitPoint(int index)
     updateAttachment(updated);
 }
 
-void VideoPanelModel::renameHitPoint(int index, const QString& label)
+void VideoPanelModel::renameHitPoint(int hitPointId, const QString& label)
 {
     VideoAttachmentSettings updated = attachment();
-    if (!updated.isValid() || index < 0 || index >= static_cast<int>(updated.hitPoints.size())) {
+    const int index = indexOfHitPoint(updated, hitPointId);
+    if (!updated.isValid() || index < 0) {
         return;
     }
 
@@ -120,20 +133,21 @@ void VideoPanelModel::renameHitPoint(int index, const QString& label)
     updateAttachment(updated);
 }
 
-void VideoPanelModel::setHitPointTimecode(int index, const QString& timecode)
+void VideoPanelModel::setHitPointTimecode(int hitPointId, const QString& timecode)
 {
     const int positionMs = parseTimecodeToMs(timecode);
     if (positionMs < 0) {
         return;
     }
 
-    setHitPointTimeMs(index, positionMs);
+    setHitPointTimeMs(hitPointId, positionMs);
 }
 
-void VideoPanelModel::setHitPointTimeMs(int index, int videoPositionMs)
+void VideoPanelModel::setHitPointTimeMs(int hitPointId, int videoPositionMs)
 {
     VideoAttachmentSettings updated = attachment();
-    if (!updated.isValid() || index < 0 || index >= static_cast<int>(updated.hitPoints.size())) {
+    const int index = indexOfHitPoint(updated, hitPointId);
+    if (!updated.isValid() || index < 0) {
         return;
     }
 
@@ -411,6 +425,7 @@ void VideoPanelModel::updateAttachment(const VideoAttachmentSettings& attachment
 QVariantMap VideoPanelModel::hitPointToMap(const VideoHitPointSettings& hitPoint) const
 {
     QVariantMap result;
+    result["id"] = hitPoint.id;
     result["label"] = hitPoint.label.toQString();
     result["timeMs"] = hitPoint.timeMs;
     result["timecode"] = formatTimecode(hitPoint.timeMs);

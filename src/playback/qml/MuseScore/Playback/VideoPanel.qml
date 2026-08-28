@@ -545,7 +545,7 @@ Item {
                                 }
 
                                 onReleased: {
-                                    videoModel.setHitPointTimeMs(hitPointMarker.index, hitPointMarker.dragTimeMs)
+                                    videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, hitPointMarker.dragTimeMs)
                                     hitPointMarker.dragging = false
                                 }
 
@@ -784,7 +784,7 @@ Item {
                                         navigation.order: root.contentNavigationPanelOrderStart + 12 + hitPointDelegate.index
 
                                         onTextEditingFinished: function(newTextValue) {
-                                            videoModel.setHitPointTimecode(hitPointDelegate.index, newTextValue)
+                                            videoModel.setHitPointTimecode(hitPointDelegate.modelData.id, newTextValue)
                                             hitPointDelegate.editingTimecode = false
                                         }
 
@@ -830,7 +830,7 @@ Item {
                                         navigation.order: root.contentNavigationPanelOrderStart + 11 + hitPointDelegate.index
 
                                         onTextEditingFinished: function(newTextValue) {
-                                            videoModel.renameHitPoint(hitPointDelegate.index, newTextValue)
+                                            videoModel.renameHitPoint(hitPointDelegate.modelData.id, newTextValue)
                                             hitPointDelegate.editingLabel = false
                                         }
 
@@ -849,7 +849,7 @@ Item {
                                     navigation.order: root.contentNavigationPanelOrderStart + 18 + hitPointDelegate.index
 
                                     onClicked: {
-                                        videoModel.removeHitPoint(hitPointDelegate.index)
+                                        videoModel.removeHitPoint(hitPointDelegate.modelData.id)
                                     }
                                 }
                             }
