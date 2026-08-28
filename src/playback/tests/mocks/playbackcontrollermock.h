@@ -83,6 +83,9 @@ public:
     MOCK_METHOD(void, setTrackSoloMuteState, (const engraving::InstrumentTrackId&, const SoloMuteState&),
                 (override));
 
+    MOCK_METHOD(bool, isMasterOutputForceMuted, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, masterOutputForceMuteChanged, (), (const, override));
+
     MOCK_METHOD(void, playElements, (const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool), (override));
     MOCK_METHOD(void, playNotes, (const engraving::NoteValList&, engraving::staff_idx_t, const engraving::Segment*, const PlayParams&),
                 (override));

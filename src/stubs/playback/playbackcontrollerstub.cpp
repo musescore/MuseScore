@@ -197,6 +197,17 @@ void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTr
 {
 }
 
+bool PlaybackControllerStub::isMasterOutputForceMuted() const
+{
+    return false;
+}
+
+muse::async::Notification PlaybackControllerStub::masterOutputForceMuteChanged() const
+{
+    static muse::async::Notification notification;
+    return notification;
+}
+
 void PlaybackControllerStub::playElements(const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool)
 {
 }
