@@ -112,7 +112,6 @@ GradualTempoChange::GradualTempoChange(EngravingItem* parent)
     : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoStyle);
-    setAnchor(Anchor::SEGMENT);
 
     resetProperty(Pid::LINE_VISIBLE);
     resetProperty(Pid::BEGIN_TEXT_PLACE);
@@ -128,9 +127,9 @@ GradualTempoChange* GradualTempoChange::clone() const
     return new GradualTempoChange(*this);
 }
 
-LineSegment* GradualTempoChange::createLineSegment(System* parent)
+LineSegment* GradualTempoChange::createLineSegment()
 {
-    GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this, parent);
+    GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this);
     lineSegment->setTrack(track());
     return lineSegment;
 }
@@ -352,32 +351,13 @@ TranslatableString GradualTempoChange::subtypeUserName() const
     return TConv::userName(m_tempoChangeType);
 }
 
-void GradualTempoChange::added()
-{
-    requestToRebuildTempo();
-}
-
-void GradualTempoChange::removed()
-{
-    requestToRebuildTempo();
-}
-
 Sid GradualTempoChange::defaultPosSid() const
 {
     return placeAbove() ? Sid::tempoChangePosAbove : Sid::tempoChangePosBelow;
 }
 
-void GradualTempoChange::requestToRebuildTempo()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
-}
-
-GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent)
-    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent,
+GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation)
+    : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation,
                           ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoSegmentStyle);
@@ -471,28 +451,5 @@ TempoText* GradualTempoChangeSegment::findElementToSnapAfter() const
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)
 {
-    IF_ASSERT_FAILED(tempoChange()) {
-        return;
-    }
-
     TextLineBaseSegment::endEdit(editData);
-    tempoChange()->requestToRebuildTempo();
-}
-
-void GradualTempoChangeSegment::added()
-{
-    IF_ASSERT_FAILED(tempoChange()) {
-        return;
-    }
-
-    tempoChange()->requestToRebuildTempo();
-}
-
-void GradualTempoChangeSegment::removed()
-{
-    IF_ASSERT_FAILED(tempoChange()) {
-        return;
-    }
-
-    tempoChange()->requestToRebuildTempo();
 }

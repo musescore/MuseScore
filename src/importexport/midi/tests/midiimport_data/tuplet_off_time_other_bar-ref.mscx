@@ -99,16 +99,6 @@
             <durationType>whole</durationType>
             <Note>
               <eid>H_H</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>I_I</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>
@@ -117,10 +107,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>I_I</eid>
         <voice>
           <Tuplet>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -130,22 +120,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <l1>-12</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>N_N</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>M_M</eid>
+              <Tie>
+                <startElement>H_H</startElement>
+                <endElement>M_M</endElement>
+                <eid>N_N</eid>
+                <track>0</track>
+                </Tie>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>

@@ -2,7 +2,7 @@
     "NAVIGATION": [
         {
             "command": "command://navigation/escape",
-            "sequences": ["Escape"]
+            "sequences": ["Esc"]
         },
         {
             "command": "command://navigation/next-section",
@@ -116,7 +116,7 @@
         },
         {
             "command": "command://notation/cancel",
-            "sequences": ["Escape"]
+            "sequences": ["Esc"]
         },
         {
             "command": "command://notation/undo",
@@ -250,15 +250,15 @@
     ],
     "NOTATION_TEXT_EDITING": [
         {
-            "command": "command://notation/edit-next-word",
+            "command": "command://notation/edittext-next-word",
             "sequences": ["Space"]
         },
         {
-            "command": "command://notation/edit-next-text-element",
+            "command": "command://notation/edittext-next-element",
             "sequences": ["Right"]
         },
         {
-            "command": "command://notation/edit-prev-text-element",
+            "command": "command://notation/edittext-prev-element",
             "sequences": ["Left", "Shift+Space", "Backspace"]
         }
     ]

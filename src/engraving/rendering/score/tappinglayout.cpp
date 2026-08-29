@@ -93,7 +93,7 @@ void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ld
             text = new TappingText(item);
         }
         item->setText(text);
-        text->setParent(item);
+        text->setOwnershipParent(item);
         text->setTrack(item->track());
         text->setXmlText("T");
         text->setFrameType(FrameType::CIRCLE);
@@ -120,7 +120,7 @@ void TappingLayout::updateHalfSlurs(Tapping* item, const MStyle& style, bool tab
             halfSlurAbove->setSelected(item->selected());
         }
 
-        halfSlurAbove->setParent(item);
+        halfSlurAbove->setOwnershipParent(item);
         halfSlurAbove->setIsHalfSlurAbove(true);
         halfSlurAbove->setTrack(item->track());
         halfSlurAbove->setTick(item->tick());
@@ -146,7 +146,7 @@ void TappingLayout::updateHalfSlurs(Tapping* item, const MStyle& style, bool tab
             item->setHalfSlurBelow(halfSlurBelow);
         }
 
-        halfSlurBelow->setParent(item);
+        halfSlurBelow->setOwnershipParent(item);
         halfSlurBelow->setIsHalfSlurAbove(false);
         halfSlurBelow->setTrack(item->track());
         halfSlurBelow->setTick(item->tick());
@@ -167,6 +167,10 @@ void TappingLayout::layoutHalfSlur(Tapping* item, TappingHalfSlur* slur, LayoutC
     System* system = toSystem(item->findAncestor(ElementType::SYSTEM));
     IF_ASSERT_FAILED(system) {
         return;
+    }
+
+    for (SpannerSegment* seg : slur->spannerSegments()) {
+        seg->moveToSystem(nullptr);
     }
 
     Skyline& skyline = system->staff(item->staffIdx())->skyline();
@@ -214,7 +218,7 @@ void TappingLayout::layoutRightHandTapping(Tapping* item, Tapping::LayoutData* l
             text = new TappingText(item);
         }
         item->setText(text);
-        text->setParent(item);
+        text->setOwnershipParent(item);
         text->setTrack(item->track());
         text->setXmlText("T");
         text->setAlign(Align(AlignH::LEFT, AlignV::BASELINE));

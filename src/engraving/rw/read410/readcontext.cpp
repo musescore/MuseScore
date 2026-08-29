@@ -23,6 +23,7 @@
 #include "readcontext.h"
 
 #include "dom/linkedobjects.h"
+#include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/staff.h"
 #include "dom/trill.h"

@@ -38,6 +38,9 @@ class ThemesPageModel : public QObject, public muse::Contextable, public muse::a
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
 
+    Q_PROPERTY(QStringList generalThemeCodes READ generalThemeCodes CONSTANT)
+    Q_PROPERTY(QStringList highContrastThemeCodes READ highContrastThemeCodes CONSTANT)
+
     Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
@@ -58,6 +61,8 @@ public:
     bool isFollowSystemThemeAvailable() const;
     bool isFollowSystemTheme() const;
 
+    QStringList generalThemeCodes() const;
+    QStringList highContrastThemeCodes() const;
     QVariantList generalThemes() const;
     QVariantList highContrastThemes() const;
     bool highContrastEnabled() const;

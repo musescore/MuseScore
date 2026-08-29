@@ -46,7 +46,7 @@ TEST_F(AutomationRW_Tests, RoundTrip_StaffScope)
 
     AutomationPoint explicitArrival;
     explicitArrival.value.outValue = 0.5;
-    explicitArrival.value.inValue = AutomationPoint::ExplicitArrival { explicitArrival.value.outValue, AutomationPoint::Bend::none() };
+    explicitArrival.value.inValue = AutomationPoint::ExplicitArrival { explicitArrival.value.outValue, AutomationPoint::Ease::none() };
     explicitArrival.generated = true;
 
     AutomationPoint fromPrevious;

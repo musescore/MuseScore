@@ -41,7 +41,7 @@ public:
     bool isEditAllowed(EditData&) const override;
 
     SystemText* clone() const override { return new SystemText(*this); }
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     bool canBeExcludedFromOtherParts() const override { return true; }
 

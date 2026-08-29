@@ -30,6 +30,7 @@ target_sources(notationscene PRIVATE
 
     notationcommands.h
 
+    internal/inotationviewcontroller.h
     internal/notationsceneconfiguration.cpp
     internal/notationsceneconfiguration.h
     internal/midiinputoutputcontroller.cpp

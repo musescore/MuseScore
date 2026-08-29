@@ -105,14 +105,6 @@
           <Chord>
             <eid>K_K</eid>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>1</staves>
-                  <fractions>-1/16</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>L_L</eid>
               <pitch>60</pitch>
@@ -160,41 +152,38 @@
           <Chord>
             <eid>T_T</eid>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>U_U</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>-1</staves>
-                  <fractions>1/16</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>V_V</eid>
+              <eid>U_U</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>T_T</startElement>
+        <endElement>K_K</endElement>
+        <eid>Z_Z</eid>
+        <track>4</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

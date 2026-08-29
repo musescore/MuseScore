@@ -122,12 +122,13 @@ void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ct
                     score->setSelectionChanged(true);
                 }
             }
-            s->resetExplicitParent();
+            // no need to clear the page placement: the systems are deleted below,
+            // and ~System unlinks itself from its page
         }
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
-                toMeasure(mb)->mmRest()->moveToDummy();
+                toMeasure(mb)->mmRest()->setSystem(nullptr);
             }
         }
         muse::DeleteAll(score->systems());

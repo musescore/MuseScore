@@ -64,4 +64,6 @@ public:
 
     virtual EditDataType type() { return EditDataType::ElementEditData; }
 };
+
+using ElementEditDataPtr = std::shared_ptr<ElementEditData>;
 }

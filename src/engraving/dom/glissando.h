@@ -42,7 +42,7 @@ class GlissandoSegment final : public LineSegment
     DECLARE_CLASSOF(ElementType::GLISSANDO_SEGMENT)
 
 public:
-    GlissandoSegment(Glissando* sp, System* parent);
+    GlissandoSegment(Glissando* sp);
 
     Glissando* glissando() const { return toGlissando(spanner()); }
 
@@ -78,6 +78,8 @@ public:
     Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     static Note* guessInitialNote(Chord* chord);
 
     std::optional<bool> isHarpGliss() const { return m_isHarpGliss; }
@@ -86,7 +88,7 @@ public:
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     bool allowTimeAnchor() const override { return false; }
 

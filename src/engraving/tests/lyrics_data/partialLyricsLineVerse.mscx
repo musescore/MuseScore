@@ -111,19 +111,6 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>1.</beginText>
-              <eid>+t9p05H+WZE_dUtgtdQFXUJ</eid>
-              <endings>1</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
             <eid>28VKFi2fDqK_9xUWGpjsqy</eid>
             <durationType>measure</durationType>
@@ -134,36 +121,6 @@
       <Measure>
         <eid>Xr5lOYXqQ3N_cA97Vqf75gL</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="PartialLyricsLine">
-            <PartialLyricsLine>
-              <isEndMelisma>0</isEndMelisma>
-              <eid>a396oaBKAiJ_VRT1nJG6RCJ</eid>
-              </PartialLyricsLine>
-            <next>
-              <location>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>2.</beginText>
-              <eid>4xcpnAOTAoL_n4evRtiDRJG</eid>
-              <endings>2</endings>
-              </Volta>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>3CiytIHP3RJ_ALMjoc/8kLJ</eid>
             <durationType>quarter</durationType>
@@ -191,13 +148,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Spanner type="PartialLyricsLine">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>VwNj0yokoxC_HzD3rfGZTsB</eid>
             <durationType>quarter</durationType>
@@ -217,15 +167,35 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Volta>
+        <endHookType>1</endHookType>
+        <beginText>1.</beginText>
+        <startElement>mKe/djNTwGI_s1XmcbjJpUL</startElement>
+        <endElement>mKe/djNTwGI_s1XmcbjJpUL</endElement>
+        <eid>+t9p05H+WZE_dUtgtdQFXUJ</eid>
+        <track>0</track>
+        <endings>1</endings>
+        </Volta>
+      <PartialLyricsLine>
+        <isEndMelisma>0</isEndMelisma>
+        <track2>0</track2>
+        <startTick>1/1</startTick>
+        <ticks>3/4</ticks>
+        <eid>a396oaBKAiJ_VRT1nJG6RCJ</eid>
+        <track>0</track>
+        </PartialLyricsLine>
+      <Volta>
+        <beginText>2.</beginText>
+        <startElement>Xr5lOYXqQ3N_cA97Vqf75gL</startElement>
+        <endElement>Xr5lOYXqQ3N_cA97Vqf75gL</endElement>
+        <eid>4xcpnAOTAoL_n4evRtiDRJG</eid>
+        <track>0</track>
+        <endings>2</endings>
+        </Volta>
+      </SpannerMap>
     </Score>
   </museScore>

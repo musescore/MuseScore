@@ -38,7 +38,7 @@ class PedalSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::PEDAL_SEGMENT)
 
 public:
-    PedalSegment(Pedal* sp, System* parent);
+    PedalSegment(Pedal* sp);
 
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
@@ -69,7 +69,9 @@ public:
 
     Pedal* clone() const override { return new Pedal(*this); }
 
-    LineSegment* createLineSegment(System* parent) override;
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
+    LineSegment* createLineSegment() override;
     PropertyValue propertyDefault(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 

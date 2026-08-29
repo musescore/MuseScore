@@ -72,10 +72,9 @@ void NotationPageModel::init()
         return;
     }
 
-    for (const ActionCode& actionCode : ApplicationUiActions::toggleDockActions().keys()) {
-        DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
-        dispatcher()->reg(this, actionCode, [this, dockName]() { toggleDock(dockName); });
-    }
+    commandsController()->dockToggleRequested().onReceive(this, [this](const DockName& dockName) {
+        toggleDock(dockName);
+    });
 
     dispatcher()->reg(this, NOTATION_PAGE_VIDEO_TIMECODE_OFF_CODE, [this]() {
         setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode::Off);
@@ -99,7 +98,7 @@ void NotationPageModel::init()
         scheduleUpdateExtensionsToolBarVisibility();
     });
 
-    extensionsProvider()->manifestChanged().onReceive(this, [this](const muse::extensions::Manifest&) {
+    extensionsProvider()->enabledChanged().onReceive(this, [this](const muse::Uri&) {
         scheduleUpdateExtensionsToolBarVisibility();
     });
 

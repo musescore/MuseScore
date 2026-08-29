@@ -236,6 +236,8 @@ inline static const muse::rcommand::Command ADD_OTTAVA_8VB_COMMAND("command://no
 inline static const muse::rcommand::Command ADD_DYNAMIC_COMMAND("command://notation/add-dynamic");
 inline static const muse::rcommand::Command ADD_HAIRPIN_COMMAND("command://notation/add-hairpin");
 inline static const muse::rcommand::Command ADD_HAIRPIN_REVERSE_COMMAND("command://notation/add-hairpin-reverse");
+inline static const muse::rcommand::Command INCREASE_DYNAMIC_COMMAND("command://notation/increase-dynamic");
+inline static const muse::rcommand::Command DECREASE_DYNAMIC_COMMAND("command://notation/decrease-dynamic");
 inline static const muse::rcommand::Command ADD_NOTELINE_COMMAND("command://notation/add-noteline");
 
 inline static const muse::rcommand::Command ADD_IMAGE_COMMAND("command://notation/add-image");
@@ -529,4 +531,49 @@ inline static const muse::rcommand::Command ADD_HAMMER_ON_PULL_OFF_COMMAND("comm
 
 inline static const muse::rcommand::Command GOTO_STRING_ABOVE_COMMAND("command://notation/goto-string-above");
 inline static const muse::rcommand::Command GOTO_STRING_BELOW_COMMAND("command://notation/goto-string-below");
+
+// view commands
+inline static const muse::rcommand::Command ZOOM_IN_COMMAND("command://notation/view/zoom-in");
+inline static const muse::rcommand::Command ZOOM_OUT_COMMAND("command://notation/view/zoom-out");
+inline static const muse::rcommand::Command ZOOM_TO_PAGE_WIDTH_COMMAND("command://notation/view/zoom-to-page-width");
+inline static const muse::rcommand::Command ZOOM_TO_WHOLE_PAGE_COMMAND("command://notation/view/zoom-to-whole-page");
+inline static const muse::rcommand::Command ZOOM_TO_TWO_PAGES_COMMAND("command://notation/view/zoom-to-two-pages");
+inline static const muse::rcommand::Command ZOOM_TO_100_COMMAND("command://notation/view/zoom-to-100");
+inline static const muse::rcommand::Command ZOOM_TO_PERCENT_COMMAND("command://notation/view/zoom-to-percent"); // with params
+
+inline static const muse::rcommand::Command VIEW_MODE_PAGE_COMMAND("command://notation/view/mode-page");
+inline static const muse::rcommand::Command VIEW_MODE_FLOAT_COMMAND("command://notation/view/mode-float");
+inline static const muse::rcommand::Command VIEW_MODE_CONTINUOUS_COMMAND("command://notation/view/mode-continuous");
+inline static const muse::rcommand::Command VIEW_MODE_SINGLE_COMMAND("command://notation/view/mode-single");
+
+inline static const muse::rcommand::Command NEXT_SCREEN_COMMAND("command://notation/view/next-screen");
+inline static const muse::rcommand::Command PREV_SCREEN_COMMAND("command://notation/view/prev-screen");
+inline static const muse::rcommand::Command NEXT_PAGE_COMMAND("command://notation/view/next-page");
+inline static const muse::rcommand::Command PREV_PAGE_COMMAND("command://notation/view/prev-page");
+inline static const muse::rcommand::Command TOP_OF_FIRST_PAGE_COMMAND("command://notation/view/top-of-first-page");
+inline static const muse::rcommand::Command BOTTOM_OF_LAST_PAGE_COMMAND("command://notation/view/bottom-of-last-page");
+
+inline static const muse::rcommand::Command CONTEXT_MENU_OF_SELECTION_COMMAND("command://notation/view/context-menu-of-selection");
+
+inline static const muse::rcommand::Command SHOW_SEARCH_COMMAND("command://notation/view/show-search");
+
+// piano keyboard commands
+inline static const muse::rcommand::Command PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND("command://notation/piano-keyboard/set-number-of-keys");
+
+// diagnostic commands
+inline static const muse::rcommand::Command DIAGNOSTIC_VIEW_REDRAW_COMMAND("command://notation/diagnostic/view-redraw");
+
+inline static const muse::rcommand::Command SHOW_ELEMENT_BOUNDING_RECTS_COMMAND("command://notation/diagnostic/show-element-bounding-rects");
+inline static const muse::rcommand::Command COLOR_ELEMENT_SHAPES_COMMAND("command://notation/diagnostic/color-element-shapes");
+inline static const muse::rcommand::Command SHOW_SEGMENT_SHAPES_COMMAND("command://notation/diagnostic/show-segment-shapes");
+inline static const muse::rcommand::Command COLOR_SEGMENT_SHAPES_COMMAND("command://notation/diagnostic/color-segment-shapes");
+inline static const muse::rcommand::Command SHOW_SKYLINES_COMMAND("command://notation/diagnostic/show-skylines");
+inline static const muse::rcommand::Command SHOW_SYSTEM_BOUNDING_RECTS_COMMAND("command://notation/diagnostic/show-system-bounding-rects");
+inline static const muse::rcommand::Command SHOW_ELEMENT_MASKS_COMMAND("command://notation/diagnostic/show-element-masks");
+inline static const muse::rcommand::Command SHOW_LINE_ATTACH_POINTS_COMMAND("command://notation/diagnostic/show-line-attach-points");
+inline static const muse::rcommand::Command MARK_EMPTY_STAFF_COMMAND("command://notation/diagnostic/mark-empty-staff");
+inline static const muse::rcommand::Command MARK_CORRUPTED_MEASURES_COMMAND("command://notation/diagnostic/mark-corrupted-measures");
+inline static const muse::rcommand::Command SHOW_GAP_RESTS_COMMAND("command://notation/diagnostic/show-gap-rests");
+inline static const muse::rcommand::Command SHOW_ORIGIN_AND_COMBINED_COMMAND("command://notation/diagnostic/show-origin-and-combined");
+inline static const muse::rcommand::Command CHECK_FOR_SCORE_CORRUPTIONS_COMMAND("command://notation/diagnostic/check-for-score-corruptions");
 }

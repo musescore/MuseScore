@@ -47,7 +47,6 @@
 #include "notation/inotationselection.h"
 
 #include "projecterrors.h"
-#include "projectextensionpoints.h"
 
 #include "../projectcommands.h"
 #include "rcommand/actiontocommand.h"
@@ -89,7 +88,7 @@ void ProjectActionsController::init()
     auto d = commandDispatcher();
 
     d->onRequest(this, PROJECT_NEW_COMMAND, [this]() { return newProject(); });
-    d->onRequest(this, PROJECT_OPEN_COMMAND, [this](const rcommand::CommandQuery& query) { return openProject(query); });
+    d->onRequest(this, PROJECT_OPEN_COMMAND, [this](const rcommand::Params& params) { return openProject(params); });
     d->onRequest(this, PROJECT_CLOSE_COMMAND, [this]() { return closeProject(); });
 
     d->onRequest(this, PROJECT_SAVE_COMMAND, [this]() { return saveProject(SaveMode::Save); });
@@ -97,7 +96,7 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_SAVE_A_COPY_COMMAND, [this]() { return saveProject(SaveMode::SaveCopy); });
     d->onRequest(this, PROJECT_SAVE_SELECTION_COMMAND, [this]() { return saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
     d->onRequest(this, PROJECT_SAVE_TO_CLOUD_COMMAND, [this]() { return saveProject(SaveMode::Save, SaveLocationType::Cloud); });
-    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::CommandQuery& query) { return saveProjectAt(query); });
+    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::Params& params) { return saveProjectAt(params); });
 
     d->onRequest(this, PROJECT_PUBLISH_COMMAND, [this]() { return publish(); });
     d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return sharedAudio(); });
@@ -293,10 +292,10 @@ bool ProjectActionsController::isFileSupported(const muse::io::path_t& path) con
     return false;
 }
 
-muse::Ret ProjectActionsController::openProject(const muse::rcommand::CommandQuery& query)
+muse::Ret ProjectActionsController::openProject(const muse::rcommand::Params& params)
 {
-    const QString url = query.param("url").toQString();
-    const QString displayNameOverride = query.param("display_name").toQString();
+    const QString url = params.at("url").toQString();
+    const QString displayNameOverride = params.at("display_name").toQString();
 
     Ret ret = openProject(ProjectFile(QUrl(url), displayNameOverride));
     if (!ret) {
@@ -526,8 +525,6 @@ muse::Ret ProjectActionsController::doOpenCloudProjectOffline(const muse::io::pa
 
 Ret ProjectActionsController::doFinishOpenProject()
 {
-    extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
-
     //! Show MuseSounds / MuseSampler update if need
     auto showUpdateNotification = [this]() {
         QTimer::singleShot(1000, [this]() {
@@ -797,8 +794,6 @@ muse::Ret ProjectActionsController::newProject()
 
     auto promise = interactive()->open(NEW_SCORE_URI);
     promise.onResolve(this, [this](const Val&) {
-        extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_CREATED);
-
         Ret ret = doFinishOpenProject();
 
         if (!ret) {
@@ -1060,9 +1055,9 @@ void ProjectActionsController::uploadAudioToAudioCom(const AudioFile& audio, con
     });
 }
 
-muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::CommandQuery& query)
+muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::Params& params)
 {
-    const std::string& path = query.param("path").toString();
+    const std::string& path = params.at("path").toString();
     if (!path.empty()) {
         return saveProjectAt(SaveLocation(muse::io::path_t(path)));
     }
@@ -1104,14 +1099,7 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
         return false;
     }
 
-    Ret ret = make_ok();
-    if (saveMode == SaveMode::Save) {
-        ret = extensionsProvider()->performPoint(EXEC_ONPRE_PROJECT_SAVE);
-    }
-
-    if (ret) {
-        ret = project->save(filePath, saveMode, createBackup);
-    }
+    Ret ret = project->save(filePath, saveMode, createBackup);
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -1136,10 +1124,6 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
             }
         }
         return false;
-    }
-
-    if (saveMode == SaveMode::Save) {
-        ret = extensionsProvider()->performPoint(EXEC_ONPOST_PROJECT_SAVED);
     }
 
     recentFilesController()->prependRecentFile(makeRecentFile(project));
@@ -2050,17 +2034,17 @@ async::Promise<io::path_t> ProjectActionsController::selectScoreOpeningFile() co
                                       muse::trc("project", "MuseScore files") + " (*.mscz)",
                                       muse::trc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)",
                                       muse::trc("project", "MIDI files") + " (*.mid *.midi *.kar)",
-                                      muse::trc("project", "MNX files (experimental)") + " (*.mnx *.json)",
+                                      muse::trc("project", "MNX files [experimental]") + " (*.mnx *.json)",
                                       muse::trc("project", "MuseData files") + " (*.md)",
                                       muse::trc("project", "Capella files") + " (*.cap *.capx)",
-                                      muse::trc("project", "BB files (experimental)") + " (*.mgu *.sgu)",
-                                      muse::trc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)",
-                                      muse::trc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)",
+                                      muse::trc("project", "BB files [experimental]") + " (*.mgu *.sgu)",
+                                      muse::trc("project", "Overture / Score Writer files [experimental]") + " (*.ove *.scw)",
+                                      muse::trc("project", "Bagpipe Music Writer files [experimental]") + " (*.bmw *.bww)",
                                       muse::trc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)",
-                                      muse::trc("project", "Power Tab Editor files (experimental)") + " (*.ptb)",
+                                      muse::trc("project", "Power Tab Editor files [experimental]") + " (*.ptb)",
                                       muse::trc("project", "MEI files") + " (*.mei)",
-                                      muse::trc("project", "TablEdit files (experimental)") + " (*.tef)",
-                                      muse::trc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)",
+                                      muse::trc("project", "TablEdit files [experimental]") + " (*.tef)",
+                                      muse::trc("project", "Uncompressed MuseScore folders [experimental]") + " (*.mscx)",
                                       muse::trc("project", "MuseScore developer files") + " (*.mscs)",
                                       muse::trc("project", "MuseScore backup files") + " (*.mscz~)" };
 

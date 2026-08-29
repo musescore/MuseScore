@@ -37,6 +37,8 @@ public:
 
     bool isEditAllowed(EditData&) const override { return false; }
 
+    HammerOnPullOffSegment* hopoSegment() const { return toHammerOnPullOffSegment(ownershipParent()); }
+
     Chord* startChord() const { return m_startChord; }
     Chord* endChord() const { return m_endChord; }
     void setStartChord(Chord* c) { m_startChord = c; }
@@ -69,7 +71,7 @@ class HammerOnPullOffSegment final : public SlurSegment
     DECLARE_CLASSOF(ElementType::HAMMER_ON_PULL_OFF_SEGMENT)
 
 public:
-    HammerOnPullOffSegment(System* parent);
+    HammerOnPullOffSegment(HammerOnPullOff* sp);
     HammerOnPullOffSegment(const HammerOnPullOffSegment& other);
 
     HammerOnPullOffSegment* clone() const override { return new HammerOnPullOffSegment(*this); }
@@ -113,7 +115,7 @@ class HammerOnPullOff final : public Slur
 
 public:
     HammerOnPullOff* clone() const override { return new HammerOnPullOff(*this); }
-    SlurTieSegment* newSlurTieSegment(System* parent) override { return new HammerOnPullOffSegment(parent); }
+    SlurTieSegment* newSlurTieSegment() override { return new HammerOnPullOffSegment(this); }
 
     friend class Factory;
 

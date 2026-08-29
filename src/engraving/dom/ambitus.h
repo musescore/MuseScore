@@ -83,7 +83,7 @@ public:
     void setBottomTpc(int val, bool applyLogic = true);
 
     // some utility functions
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
     SymId noteHead() const;
     double headWidth() const;
 

@@ -89,7 +89,7 @@ jobs:
     name: Backend
     needs: generate_build_number
     if: ${{ contains(inputs.platforms, 'backend') }}
-    uses: ./.github/workflows/build_backend.yml
+    uses: $/.github/workflows/build_backend.yml
     secrets: inherit
     with:
       build_mode: ${{ inputs.build_mode }}
@@ -100,7 +100,7 @@ jobs:
   linux:
     name: Linux
     needs: generate_build_number
-    uses: ./.github/workflows/build_linux.yml
+    uses: $/.github/workflows/build_linux.yml
     secrets: inherit
     with:
       platforms: ${{ inputs.platforms }}
@@ -114,7 +114,7 @@ jobs:
     name: macOS
     needs: generate_build_number
     if: ${{ contains(inputs.platforms, 'macos') }}
-    uses: ./.github/workflows/build_macos.yml
+    uses: $/.github/workflows/build_macos.yml
     secrets: inherit
     with:
       build_mode: ${{ inputs.build_mode }}
@@ -126,7 +126,7 @@ jobs:
   windows:
     name: Windows
     needs: generate_build_number
-    uses: ./.github/workflows/build_windows.yml
+    uses: $/.github/workflows/build_windows.yml
     secrets: inherit
     with:
       platforms: ${{ inputs.platforms }}

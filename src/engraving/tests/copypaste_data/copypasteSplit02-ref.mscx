@@ -125,43 +125,21 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>K_K</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>L_L</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>N_N</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>a_a</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-7/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>M_M</eid>
+              <Tie>
+                <startElement>K_K</startElement>
+                <endElement>M_M</endElement>
+                <eid>N_N</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -169,52 +147,39 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>a_a</eid>
         <voice>
           <Beam>
-            <eid>c_c</eid>
+            <eid>b_b</eid>
             <l1>32</l1>
             <l2>32</l2>
             </Beam>
           <Chord>
-            <eid>d_d</eid>
+            <eid>c_c</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>e_e</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>O_O</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>7/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>d_d</eid>
+              <Tie>
+                <startElement>M_M</startElement>
+                <endElement>d_d</endElement>
+                <eid>e_e</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Q_Q</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>P_P</eid>
+              <Tie>
+                <startElement>M_M</startElement>
+                <endElement>P_P</endElement>
+                <eid>Q_Q</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -229,10 +194,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>H_H</eid>
+            <eid>G_G</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>H_H</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>

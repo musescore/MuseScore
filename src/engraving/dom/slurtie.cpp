@@ -19,12 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "slurtie.h"
 
-#include "draw/types/pen.h"
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "../editing/elementeditdata.h"
 #include "../editing/mscoreview.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "note.h"
 #include "page.h"
@@ -42,8 +44,8 @@ namespace mu::engraving {
 //   SlurTieSegment
 //---------------------------------------------------------
 
-SlurTieSegment::SlurTieSegment(const ElementType& type, System* parent)
-    : SpannerSegment(type, parent)
+SlurTieSegment::SlurTieSegment(const ElementType& type, SlurTie* sp)
+    : SpannerSegment(type, sp)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
@@ -444,7 +446,7 @@ PropertyValue SlurTie::propertyDefault(Pid id) const
 
 void SlurTie::fixupSegments(unsigned nsegs)
 {
-    Spanner::fixupSegments(nsegs, [this](System* parent) { return newSlurTieSegment(parent); });
+    Spanner::fixupSegments(nsegs, [this]() { return newSlurTieSegment(); });
 }
 
 //---------------------------------------------------------

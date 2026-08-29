@@ -83,46 +83,35 @@
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>dive</guitarBendType>
-                  <bendStartTimeFactor>0.116667</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.583333</bendEndTimeFactor>
-                  <eid>L_L</eid>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <parentheses>both</parentheses>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>O_O</eid>
+                <eid>N_N</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>1</fret>
               <string>1</string>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <GuitarBend>
+                <guitarBendType>dive</guitarBendType>
+                <bendStartTimeFactor>0.116667</bendStartTimeFactor>
+                <bendEndTimeFactor>0.583333</bendEndTimeFactor>
+                <startElement>K_K</startElement>
+                <endElement>M_M</endElement>
+                <eid>O_O</eid>
+                <track>0</track>
+                </GuitarBend>
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>N_N</NoteEID>
+                <NoteEID>M_M</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>

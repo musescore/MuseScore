@@ -91,36 +91,26 @@
               <tpc>20</tpc>
               <fret>7</fret>
               <string>1</string>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
+              <GuitarBend>
+                <guitarBendType>dive</guitarBendType>
+                <bendStartTimeFactor>0.2</bendStartTimeFactor>
+                <bendEndTimeFactor>0.6</bendEndTimeFactor>
+                <startElement>M_M</startElement>
+                <endElement>K_K</endElement>
+                <eid>N_N</eid>
+                <track>0</track>
+                </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>dive</guitarBendType>
-                  <bendStartTimeFactor>0.2</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.6</bendEndTimeFactor>
-                  <eid>O_O</eid>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Rest>

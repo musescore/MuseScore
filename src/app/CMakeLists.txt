@@ -56,7 +56,7 @@ elseif(OS_IS_LIN)
         set(EXECUTABLE_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
     endif(MUSE_APP_INSTALL_SUFFIX)
 
-    set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
+    set(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib;${QT_INSTALL_LIBS}")
     if (BUILD_SHARED_LIBS)
         set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${SHARED_LIBS_INSTALL_DESTINATION}")
     endif(BUILD_SHARED_LIBS)
@@ -395,7 +395,17 @@ elseif(OS_IS_MAC)
             ${PROJECT_SOURCE_DIR}/fonts/leland/Leland.otf
             ${PROJECT_SOURCE_DIR}/fonts/leland/LelandText.otf
             ${PROJECT_SOURCE_DIR}/fonts/mscore-BC.ttf
-            ${PROJECT_SOURCE_DIR}/fonts/mscoreTab.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabRenaiss.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabPhalese.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabBonneuilDeVisee.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabBonneuilGaultier.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabDowland.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabLuteDidactic.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabModern.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabItalian.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabFrench.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabFrenchBaroqueHeadless.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/MuseScoreTabFrenchBaroque.ttf
             ${PROJECT_SOURCE_DIR}/fonts/mscore/MScoreText.otf
             ${PROJECT_SOURCE_DIR}/fonts/musejazz/MuseJazzText.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf

@@ -760,7 +760,7 @@ bool NotationBraille::addSlur()
             slur->setEndElement(secondChordRest);
 
             firstChordRest->score()->undoAddElement(slur);
-            SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
+            SlurSegment* ss = new SlurSegment(slur);
             ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
             if (firstChordRest == secondChordRest) {
                 ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->spatium(), 0.0));
@@ -805,7 +805,7 @@ bool NotationBraille::addLongSlur()
             slur->setEndElement(secondChordRest);
 
             firstChordRest->score()->undoAddElement(slur);
-            SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
+            SlurSegment* ss = new SlurSegment(slur);
             ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
             if (firstChordRest == secondChordRest) {
                 ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->spatium(), 0.0));

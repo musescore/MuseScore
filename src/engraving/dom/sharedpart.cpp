@@ -22,7 +22,23 @@
 #include "sharedpart.h"
 #include "score.h"
 
+#include <sstream>
+
 namespace mu::engraving {
+std::string dump(const SharedTrackMap& map)
+{
+    std::stringstream ss;
+    ss << "SharedTrackMap size: " << map.size() << " {";
+    for (auto it = map.begin(); it != map.end(); ++it) {
+        if (it != map.begin()) {
+            ss << ", ";
+        }
+        ss << it->first << ": " << it->second;
+    }
+    ss << "}";
+    return ss.str();
+}
+
 SharedPart::SharedPart(Score* score)
     : Part(score, ElementType::SHARED_PART)
 {

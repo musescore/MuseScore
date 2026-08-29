@@ -74,71 +74,47 @@
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>K_K</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>M_M</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
-            <eid>N_N</eid>
+            <eid>L_L</eid>
             </Dynamic>
           <Chord>
-            <eid>O_O</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>P_P</eid>
+              <eid>N_N</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
               <string>3</string>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>K_K</startElement>
+                <endElement>N_N</endElement>
+                <eid>O_O</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         <voice>
+          <Rest>
+            <eid>Q_Q</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <eid>R_R</eid>
             <durationType>quarter</durationType>
@@ -151,12 +127,16 @@
             <eid>T_T</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <eid>U_U</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>M_M</endElement>
+        <eid>U_U</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

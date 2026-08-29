@@ -351,7 +351,7 @@ public:
     bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
 
-    bool hasParentSegment() const { return explicitParent() && parent()->isSegment(); }
+    bool hasParentSegment() const { return ownershipParent() && parent()->isSegment(); }
     virtual bool allowTimeAnchor() const override { return hasParentSegment(); }
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;

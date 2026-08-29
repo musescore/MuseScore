@@ -181,8 +181,8 @@ void TrackList::appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet)
             Tuplet* st = toTuplet(de);
             Tuplet* dt = toTuplet(e);
             appendTuplet(st, dt);
-        } else if (de->explicitParent() && de->explicitParent()->isSegment()) {
-            Segment* seg = toSegment(de->explicitParent());
+        } else if (de->ownershipParent() && de->ownershipParent()->isSegment()) {
+            Segment* seg = toSegment(de->ownershipParent());
             for (EngravingItem* ee : seg->annotations()) {
                 bool addSysObject = ee->systemFlag() && !ee->isLinked() && ee->track() == 0 && e->track() == 0;
                 if (addSysObject || (!ee->systemFlag() && ee->track() == e->track())) {
@@ -304,7 +304,8 @@ void TrackList::append(EngravingItem* e)
                             ++idx;
                         }
                         delete element;
-                        element = 0;
+                        element = nullptr;
+                        m_clonedChord.erase(chord);
                     }
                 }
             }
@@ -315,7 +316,7 @@ void TrackList::append(EngravingItem* e)
         }
     } else {
         EngravingItem* c = e->clone();
-        c->resetExplicitParent();
+        c->moveToDummy();   // the clone is unattached until it is written back into a segment
         std::vector<EngravingItem*>::push_back(c);
     }
 }
@@ -510,7 +511,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
 {
     Score* score = measure->score();
     Tuplet* dt   = tuplet->clone();
-    dt->setParent(measure);
+    dt->setOwnershipParent(measure);
     Fraction du  = tuplet->ticks();
     if (du > rest) {
         // we must split the tuplet
@@ -540,12 +541,12 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         // create second part of split tuplet
                         dt = dt->clone();
                         dt->setGenerated(true);
-                        dt->setParent(measure);
+                        dt->setOwnershipParent(measure);
                         Tuplet* pt = dt;
                         while (parent) {
                             Tuplet* tt1 = parent->clone();
                             tt1->setGenerated(true);
-                            tt1->setParent(measure);
+                            tt1->setOwnershipParent(measure);
                             tt1->add(pt);
                             pt = tt1;
                             parent = parent->tuplet();
@@ -825,7 +826,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
 
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
-                ns->resetExplicitParent();
+                ns->moveToDummy();
                 ns->setStartElement(0);
                 ns->setEndElement(0);
                 ns->setTick(ns->tick() - stick);
@@ -992,11 +993,11 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
     }
     for (const Annotation& a : m_annotations) {
         Measure* tm = score->tick2measure(a.tick);
-        Segment* op = toSegment(a.e->explicitParent());
+        Segment* op = toSegment(a.e->ownershipParent());
         Fraction destTick = a.e->isRehearsalMark() ? tm->tick() : a.tick; // Ensure reharsal mark can only go at measure start
         Segment* s = tm->undoGetSegment(op->segmentType(), destTick);
         if (s) {
-            a.e->setParent(s);
+            a.e->setOwnershipParent(s);
             score->undoAddElement(a.e);
         }
     }
@@ -1115,7 +1116,7 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
             if (!nbl) {
                 // no suitable bar line: create a new one
                 nbl = Factory::createBarLine(seg);
-                nbl->setParent(seg);
+                nbl->setOwnershipParent(seg);
                 nbl->setTrack(bl->track());
                 // A BL in the middle of a Measure does have SpanStaff to false
                 nbl->setSpanStaff(middle ? false : bl->spanStaff());
@@ -1455,7 +1456,7 @@ void ScoreRange::restoreJumpsAndMarkers(Score* score, const Fraction& tick) cons
     {
         // We add every element as a Measure could have as many elements (even of the same type) as the users decides
         EngravingItem* ce = e->clone();
-        ce->setParent(m);
+        ce->setOwnershipParent(m);
         ce->setTrack(0);
         m->add(ce);
     };

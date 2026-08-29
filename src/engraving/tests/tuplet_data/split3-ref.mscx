@@ -144,17 +144,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>Q_Q</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>R_R</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-2/3</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -163,10 +152,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>R_R</eid>
         <voice>
           <Tuplet>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -176,23 +165,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <l1>2</l1>
             <l2>-2</l2>
             </Beam>
           <Chord>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>W_W</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>2/3</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>V_V</eid>
+              <Tie>
+                <startElement>Q_Q</startElement>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
+                <track>0</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>

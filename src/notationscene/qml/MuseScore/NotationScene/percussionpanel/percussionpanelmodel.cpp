@@ -31,6 +31,7 @@
 
 #include "ui/view/iconcodes.h"
 
+#include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 #include "engraving/dom/factory.h"
 #include "engraving/dom/utils.h"
 
@@ -541,7 +542,7 @@ void PercussionPanelModel::playPitch(int pitch)
     const NoteInputState& inputState = interaction()->noteInput()->state();
     std::shared_ptr<Chord> chord = PercussionUtilities(iocContext()).getDrumNoteForPreview(m_padListModel->drumset(), pitch);
 
-    chord->setParent(inputState.segment());
+    chord->setOwnershipParent(inputState.segment());
     chord->setTrack(inputState.track());
 
     playbackController()->playElements({ chord.get() });

@@ -218,6 +218,7 @@ public:
     virtual void beamSelectedRange() = 0;
 
     virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
+    virtual void increaseDecreaseSelectedDynamicsValues(int delta) = 0;
 
     virtual void autoFlipHairpinsType(engraving::Dynamic* selDyn) = 0;
 

@@ -336,12 +336,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     createParenGroups(item);
     ParenthesisLayout::layoutChordParentheses(item, ctx);
 
-    for (EngravingItem* e : item->el()) {
-        if (e->isChordBracket()) {
-            TLayout::layoutItem(e, ctx);
-        }
-    }
-
     fillShape(item, item->mutldata(), ctx.conf());
 }
 
@@ -447,7 +441,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         double llX         = stemX - (headWidth + extraLen) * 0.5;
         for (int i = 0; i < ledgerLines; i++) {
             LedgerLine* ldgLin = item->ledgerLines()[i];
-            ldgLin->setParent(item);
+            ldgLin->setOwnershipParent(item);
             ldgLin->setTrack(item->track());
             ldgLin->setVisible(item->visible());
             ldgLin->setLen(headWidth + extraLen);
@@ -474,7 +468,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         // set stem position (stem length is set in Chord:layoutStem() )
         if (!item->stem()) {
             Stem* stem = Factory::createStem(item);
-            stem->setParent(item);
+            stem->setOwnershipParent(item);
             stem->setGenerated(true);
             ctx.mutDom().addElement(stem);
         }
@@ -553,7 +547,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             } else {
                 item->tabDur()->setDuration(item->durationType().type(), item->dots(), tab);
             }
-            item->tabDur()->setParent(item);
+            item->tabDur()->setOwnershipParent(item);
             item->tabDur()->setRepeat(repeat);
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
             TLayout::layoutTabDurationSymbol(item->tabDur(), item->tabDur()->mutldata());
@@ -1428,7 +1422,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < ledgerLineData.size(); ++i) {
         LedgerLineData lld = ledgerLineData[i];
         LedgerLine* h = item->ledgerLines()[i];
-        h->setParent(item);
+        h->setOwnershipParent(item);
         h->setTrack(track);
         h->setVisible(lld.visible && staffVisible);
         h->setLen(lld.maxX - lld.minX);
@@ -1511,7 +1505,7 @@ bool ChordLayout::computeUpTremoloCase(const Chord* item, TremoloTwoChord* tremo
         return tremolo->up();
     }
 
-    if (!measure->explicitParent()) {
+    if (!measure->system()) {
         // this method will be called later (from Measure::layoutCrossStaff) after the
         // system is completely laid out.
         // this is necessary because otherwise there's no way to deal with cross-staff beams
@@ -1652,26 +1646,6 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
             if (e->vStaffIdx() == staffIdx) {
                 TLayout::layoutItem(e, ctx);
             }
-        }
-    }
-}
-
-static void relayoutChordBracketsAfterSegmentLayout(const std::vector<Chord*>& chords, LayoutContext& ctx)
-{
-    for (Chord* chord : chords) {
-        bool hasChordBracket = false;
-
-        for (EngravingItem* e : chord->el()) {
-            if (!e->isChordBracket()) {
-                continue;
-            }
-
-            hasChordBracket = true;
-            TLayout::layoutItem(e, ctx);
-        }
-
-        if (hasChordBracket) {
-            ChordLayout::fillShape(chord, chord->mutldata(), ctx.conf());
         }
     }
 }
@@ -2322,10 +2296,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             TLayout::layoutOrnamentCueNote(ornament, ctx);
         }
     }
-
-    // Chord brackets depend on the final layouts of all voices in the same segment and visual staff.
-    // Re-layout them after the segment elements have been laid out.
-    relayoutChordBracketsAfterSegmentLayout(posInfo.chords, ctx);
 }
 
 //---------------------------------------------------------
@@ -2622,7 +2592,7 @@ void ChordLayout::setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(note);
-        dot->setParent(note);
+        dot->setOwnershipParent(note);
         dot->setTrack(note->track());      // needed to know the staff it belongs to (and detect tablature)
         dot->setVisible(note->visible());
         ctx.mutDom().undoAddElement(dot);
@@ -3020,7 +2990,7 @@ void ChordLayout::repositionGraceNotesAfter(Segment* segment, size_t tracks)
         }
         GraceNotesGroup* gng = toGraceNotesGroup(item);
         for (Chord* chord : *gng) {
-            double offset = segment->ldata()->pos().x() - chord->parentItem()->parentItem()->ldata()->pos().x();
+            double offset = segment->ldata()->pos().x() - chord->layoutParent()->layoutParent()->ldata()->pos().x();
             // Difference between the segment they "belong" and the segment they are "appended" to.
             chord->setPos(chord->ldata()->pos().x() + offset, 0.0);
         }
@@ -3406,7 +3376,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item)
 
 bool ChordLayout::leaveSpaceForTie(const Articulation* item)
 {
-    if (!item->explicitParent() || !item->explicitParent()->isChord()) {
+    if (!item->ownershipParent() || !item->ownershipParent()->isChord()) {
         return false;
     }
 

@@ -102,16 +102,6 @@
                 <subtype>accidentalSharp</subtype>
                 <eid>N_N</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>O_O</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>34</pitch>
               <tpc>24</tpc>
               <fret>0</fret>
@@ -119,48 +109,27 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Q_Q</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>R_R</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>P_P</eid>
+              <Tie>
+                <startElement>M_M</startElement>
+                <endElement>P_P</endElement>
+                <eid>Q_Q</eid>
+                <track>0</track>
+                </Tie>
               <pitch>34</pitch>
               <tpc>24</tpc>
               <fret>0</fret>
               <string>5</string>
               </Note>
             <Note>
-              <eid>S_S</eid>
+              <eid>R_R</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>T_T</eid>
+                <eid>S_S</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>U_U</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>17</fret>
@@ -168,42 +137,29 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>W_W</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>U_U</eid>
+              <Tie>
+                <startElement>P_P</startElement>
+                <endElement>U_U</endElement>
+                <eid>V_V</eid>
+                <track>0</track>
+                </Tie>
               <pitch>34</pitch>
               <tpc>24</tpc>
               <fret>0</fret>
               <string>5</string>
               </Note>
             <Note>
-              <eid>X_X</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Y_Y</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    <notes>-1</notes>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>W_W</eid>
+              <Tie>
+                <startElement>R_R</startElement>
+                <endElement>W_W</endElement>
+                <eid>X_X</eid>
+                <track>0</track>
+                </Tie>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>17</fret>
@@ -211,18 +167,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>a_a</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    <notes>1</notes>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>Z_Z</eid>
+              <Tie>
+                <startElement>W_W</startElement>
+                <endElement>Z_Z</endElement>
+                <eid>a_a</eid>
+                <track>0</track>
+                </Tie>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>17</fret>

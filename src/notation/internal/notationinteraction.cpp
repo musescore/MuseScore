@@ -46,6 +46,8 @@
 #include "draw/painter.h"
 #include "draw/types/pen.h"
 
+#include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
+
 // TODO: Don't include from engraving/internal
 #include "engraving/internal/qmimedataadapter.h"
 
@@ -126,6 +128,7 @@
 #include "engraving/editing/textedit.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
 
@@ -1490,7 +1493,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
 
     edd.ed.dropElement = image;
     edd.ed.dragOffset = QPointF();
-    edd.ed.dropElement->setParent(nullptr);
+    edd.ed.dropElement->setOwnershipParent(nullptr);
 
     engravingRenderer()->layoutItem(edd.ed.dropElement);
 
@@ -2036,7 +2039,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(engraving::Transaction& tx, c
         el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
         if (el && el->isMeasure()) {
             edd.ed.dropElement->setTrack(staff2track(staffIdx));
-            edd.ed.dropElement->setParent(seg);
+            edd.ed.dropElement->setOwnershipParent(seg);
 
             if (applyUserOffset) {
                 edd.ed.dropElement->setOffset(offset);
@@ -2333,12 +2336,10 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         const ActionIcon* icon = toActionIcon(element);
         switch (icon->actionType()) {
         case ActionIconType::SYSTEM_LOCK: {
-            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
             EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
         case ActionIconType::PAGE_LOCK: {
-            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
             EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
             return;
         }
@@ -2394,7 +2395,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         // understand adding an articulation to another articulation as adding it to the chord it's attached to
         EngravingItem* e = sel.elements().front();
         if (e->isArticulationFamily()) {
-            if (Chord* c = toChord(toArticulation(e)->explicitParent())) {
+            if (Chord* c = toChord(toArticulation(e)->ownershipParent())) {
                 applyDropPaletteElement(score, c->notes().front(), element, modifiers);
             }
         } else {
@@ -4230,7 +4231,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     const int col = static_cast<int>(cursor->column());
     if (col > 1) {
         const String prev = cursor->extractText(row, col - 2, row, col - 1);
-        useCloseQuote = prev != String(" ");
+        useCloseQuote = !prev.isEmpty() && !prev.front().isSpace();
     }
 
     //: Means: an editing operation triggered by a keystroke
@@ -5025,7 +5026,7 @@ void NotationInteraction::repeatSelection()
 
     //! NOTE: Ideally we would use our copy-paste logic for this case, but this isn't
     //! fully compatible with list selections right now...
-    if (selection.isList()) {
+    if (selection.isList() && !selection.noteList().empty()) {
         const Fraction& firstTick = selection.tickStart();
         const Fraction& lastTick = selection.tickEnd();
         // Only "single-tick" list selections are currently supported...
@@ -5042,6 +5043,17 @@ void NotationInteraction::repeatSelection()
         }
         apply();
         return;
+    }
+
+    // If a list selection with no notes is a rest, convert to a range selection
+    if (selection.isList()) {
+        ChordRest* cr = score()->getSelectedChordRest();
+        if (!cr) {
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            checkAndShowError();
+            return;
+        }
+        score()->select(cr, SelectType::RANGE);
     }
 
     // Use copy-paste logic for range selections...
@@ -5454,7 +5466,7 @@ void NotationInteraction::toggleArticulationForSelection(SymbolId articulationSy
         // no notes, but maybe they have an articulation selected. we should use that chord
         EngravingItem* e = score()->selection().element();
         if (e && e->isArticulationFamily()) {
-            Chord* c = toChord(toArticulation(e)->explicitParent());
+            Chord* c = toChord(toArticulation(e)->ownershipParent());
             if (c) {
                 notes.insert(notes.begin(), c->notes().begin(), c->notes().end());
             }
@@ -5609,47 +5621,84 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
+void NotationInteraction::increaseDecreaseSelectedDynamicsValues(int delta)
 {
-    if (!selDyn) {
+    if (selection()->isNone()) {
         return;
     }
 
-    if (selDyn->dynamicType() == DynamicType::OTHER || selDyn->dynamicType() >= DynamicType::FP) {
+    const auto inRange = [](DynamicType type) {
+        return type >= DynamicType::PPPPP && type <= DynamicType::FFFFF;
+    };
+
+    std::map<Dynamic*, /*newType*/ DynamicType> dynamicsMap;
+
+    // Collect valid dynamics before trying anything (avoid unnecessary calls to startEdit etc)...
+    for (EngravingItem* item : selection()->elements()) {
+        if (!item->isDynamic()) {
+            continue;
+        }
+        Dynamic* dynamic = toDynamic(item);
+        DynamicType newType = static_cast<DynamicType>(static_cast<int>(dynamic->dynamicType()) + delta);
+        if (inRange(newType)) {
+            dynamicsMap.emplace(dynamic, newType);
+        }
+    }
+
+    if (dynamicsMap.empty()) {
         return;
     }
 
-    selDyn->findAdjacentHairpins();
+    startEdit(delta > 0 // positive: increase dynamics, negative: decrease dynamics
+              ? TranslatableString("undoableAction", "Increase dynamics")
+              : TranslatableString("undoableAction", "Decrease dynamics"));
 
+    for (const auto& [dynamic, newType] : dynamicsMap) {
+        dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
+        dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
+        doAutoFlipHairpinsType(dynamic);
+    }
+
+    apply();
+}
+
+void NotationInteraction::autoFlipHairpinsType(Dynamic* dynamic)
+{
+    if (!dynamic || dynamic->dynamicType() == DynamicType::OTHER || dynamic->dynamicType() >= DynamicType::FP) {
+        return;
+    }
     startEdit(TranslatableString("undoableAction", "Change hairpin type"));
+    doAutoFlipHairpinsType(dynamic);
+    apply();
+}
 
-    if (Hairpin* leftHp = selDyn->leftHairpin()) {
+void NotationInteraction::doAutoFlipHairpinsType(Dynamic* dynamic)
+{
+    dynamic->findAdjacentHairpins();
+    if (Hairpin* leftHp = dynamic->leftHairpin()) {
         const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
         if (startDyn
             && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
             && !leftHp->isLineType()) {
-            if (int(startDyn->dynamicType()) > int(selDyn->dynamicType())) {
+            if (int(startDyn->dynamicType()) > int(dynamic->dynamicType())) {
                 leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
             } else {
                 leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
             }
         }
     }
-
-    if (Hairpin* rightHp = selDyn->rightHairpin()) {
+    if (Hairpin* rightHp = dynamic->rightHairpin()) {
         const Dynamic* endDyn = rightHp->dynamicSnappedAfter();
         if (endDyn
             && !(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP)
             && !rightHp->isLineType()) {
-            if (int(endDyn->dynamicType()) > int(selDyn->dynamicType())) {
+            if (int(endDyn->dynamicType()) > int(dynamic->dynamicType())) {
                 rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
             } else {
                 rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
             }
         }
     }
-
-    apply();
 }
 
 void NotationInteraction::toggleDynamicPopup()
@@ -5668,7 +5717,7 @@ void NotationInteraction::toggleDynamicPopup()
             Measure* measure = score()->tick2measure(tick);
             Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
             Dynamic* dynamic = Factory::createDynamic(segment);
-            dynamic->setParent(segment);
+            dynamic->setOwnershipParent(segment);
             dynamic->setTrack(track);
             dynamic->setVoiceAssignment(voiceAssignment);
             score()->undoAddElement(dynamic);
@@ -6508,7 +6557,7 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
 
     if (m_editData.element && m_editData.element->isStaffText()) {
         EngravingItem* element = newSelectedElements.front();
-        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+        if (element && element->isSoundFlag() && element->ownershipParent() == m_editData.element) {
             return false;
         }
     }
@@ -6528,7 +6577,7 @@ bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*
 
     if (m_editData.element && m_editData.element->isStaffText()) {
         EngravingItem* element = newSelectedElements.front();
-        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+        if (element && element->isSoundFlag() && element->ownershipParent() == m_editData.element) {
             return false;
         }
     }
@@ -6635,7 +6684,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics = Factory::createLyrics(cr);
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
-        nextLyrics->setParent(cr);
+        nextLyrics->setOwnershipParent(cr);
         nextLyrics->setVerse(verse);
         nextLyrics->setTextStyleType(styleType);
         nextLyrics->setPlacement(placement);
@@ -6816,7 +6865,7 @@ void NotationInteraction::navigateToNextSyllable()
 
             Lyrics* toLyrics = Factory::createLyrics(initialCR);
             toLyrics->setTrack(track);
-            toLyrics->setParent(initialCR);
+            toLyrics->setOwnershipParent(initialCR);
             toLyrics->setVerse(verse);
             toLyrics->setTextStyleType(styleType);
             toLyrics->setPlacement(placement);
@@ -6892,7 +6941,7 @@ void NotationInteraction::navigateToNextSyllable()
 
         toLyrics = Factory::createLyrics(toLyricsChord);
         toLyrics->setTrack(track);
-        toLyrics->setParent(toLyricsChord);
+        toLyrics->setOwnershipParent(toLyricsChord);
 
         toLyrics->setVerse(verse);
         toLyrics->setTextStyleType(styleType);
@@ -6995,7 +7044,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     if (!lyrics) {
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
-        lyrics->setParent(cr);
+        lyrics->setOwnershipParent(cr);
         lyrics->setVerse(verse);
         lyrics->setTextStyleType(styleType);
         lyrics->setPlacement(placement);
@@ -7731,7 +7780,7 @@ void NotationInteraction::addMelisma()
     if (!toLyrics) {
         toLyrics = Factory::createLyrics(nextCR);
         toLyrics->setTrack(track);
-        toLyrics->setParent(nextCR);
+        toLyrics->setOwnershipParent(nextCR);
 
         toLyrics->setVerse(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
@@ -7815,7 +7864,7 @@ void NotationInteraction::addLyricsVerse()
 
     mu::engraving::Lyrics* lyrics = Factory::createLyrics(oldLyrics->chordRest());
     lyrics->setTrack(oldLyrics->track());
-    lyrics->setParent(oldLyrics->chordRest());
+    lyrics->setOwnershipParent(oldLyrics->chordRest());
     lyrics->setPlacement(oldLyrics->placement());
     lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, oldLyrics->propertyFlags(mu::engraving::Pid::PLACEMENT));
 
@@ -7907,7 +7956,7 @@ void NotationInteraction::addFretboardDiagram()
                 continue;
             }
 
-            if (!element->explicitParent()->isFretDiagram()) {
+            if (!element->ownershipParent()->isFretDiagram()) {
                 filteredElements.emplace_back(element);
             }
         }
@@ -7931,7 +7980,7 @@ void NotationInteraction::addFretboardDiagram()
         Harmony* harmony = toHarmony(element);
         diagram->updateDiagram(harmony->harmonyName());
 
-        diagram->setParent(harmony->parent());
+        diagram->setOwnershipParent(harmony->parent());
         score->undoAddElement(diagram);
         created.push_back(diagram);
         lastAddedDiagram = diagram;
@@ -8013,7 +8062,7 @@ mu::engraving::Harmony* NotationInteraction::createHarmony(mu::engraving::Segmen
 {
     mu::engraving::Harmony* harmony = Factory::createHarmony(score()->dummy()->segment());
     harmony->setScore(score());
-    harmony->setParent(segment);
+    harmony->setOwnershipParent(segment);
     harmony->setTrack(track);
     harmony->setHarmonyType(type);
 

@@ -67,8 +67,7 @@ void BeamLayout::layout(Beam* item, const LayoutContext& ctx)
               [](const ChordRest* a, const ChordRest* b) -> bool {
         return a->tick() < b->tick();
     });
-    System* system = item->elements().front()->measure()->system();
-    item->setParent(system);
+    System* system = item->system();
 
     std::vector<ChordRest*> crl;
 
@@ -138,7 +137,6 @@ void BeamLayout::layoutIfNeed(Beam* item, const LayoutContext& ctx)
 void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 {
     Beam::LayoutData* ldata = item->mutldata();
-    item->resetExplicitParent();  // parent is System
 
     const StaffType* staffType = item->staffType();
     item->setTab((staffType && staffType->isTabStaff()) ? staffType : nullptr);
@@ -522,7 +520,7 @@ void BeamLayout::breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx)
 
         Beam* newBeam = nullptr;
         if (nextElements.size() > 1) {
-            newBeam = Factory::createBeam(ctx.mutDom().dummyParent()->system());
+            newBeam = Factory::createBeam(ctx.mutDom().dummyParent()->score());
             newBeam->setGenerated(true);
             newBeam->setTrack(track);
         }
@@ -603,7 +601,7 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
             } else {
                 beam = a1->beam();
                 if (beam == 0 || beam->elements().front() != a1) {
-                    beam = Factory::createBeam(ctx.mutDom().dummyParent()->system());
+                    beam = Factory::createBeam(ctx.mutDom().dummyParent()->score());
                     beam->setGenerated(true);
                     beam->setTrack(mainNote->track());
                     a1->replaceBeam(beam);
@@ -777,7 +775,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 } else {
                     beam = a1->beam();
                     if (beam == 0 || beam->elements().front() != a1) {
-                        beam = Factory::createBeam(ctx.mutDom().dummyParent()->system());
+                        beam = Factory::createBeam(ctx.mutDom().dummyParent()->score());
                         beam->setGenerated(true);
                         beam->setTrack(track);
                         a1->replaceBeam(beam);

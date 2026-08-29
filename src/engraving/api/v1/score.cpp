@@ -80,7 +80,7 @@ void Score::addText(const QString& type, const QString& txt)
     }
 
     mu::engraving::Text* text = mu::engraving::Factory::createText(mb, tid);
-    text->setParent(mb);
+    text->setOwnershipParent(mb);
     text->setXmlText(txt);
     score()->undoAddElement(text);
 }

@@ -410,7 +410,7 @@ void EditNote::changeAccidental(Score* score, Note* note, AccidentalType acciden
                 score->undoRemoveElement(a);
             }
             Accidental* a1 = Factory::createAccidental(ln);
-            a1->setParent(ln);
+            a1->setOwnershipParent(ln);
             a1->setAccidentalType(accidental);
             a1->setRole(AccidentalRole::USER);
             lns->undoAddElement(a1);

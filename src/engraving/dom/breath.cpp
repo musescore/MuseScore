@@ -111,7 +111,6 @@ bool Breath::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
-        score()->setUpTempoMapLater();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -174,23 +173,5 @@ String Breath::accessibleInfo() const
 muse::TranslatableString Breath::subtypeUserName() const
 {
     return SymNames::userNameForSymId(symId());
-}
-
-void Breath::added()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
-}
-
-void Breath::removed()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
 }
 }

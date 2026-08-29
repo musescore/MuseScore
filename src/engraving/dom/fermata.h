@@ -67,7 +67,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
 
-    Segment* segment() const { return toSegment(explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
     Measure* measure() const;
     System* system() const;
     Page* page() const;
@@ -81,10 +81,6 @@ public:
     String accessibleInfo() const override;
 
     Sid defaultPosSid() const override;
-
-protected:
-    void added() override;
-    void removed() override;
 
 private:
 

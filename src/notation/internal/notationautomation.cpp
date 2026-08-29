@@ -30,7 +30,10 @@
 
 using namespace mu::notation;
 
-NotationAutomation::NotationAutomation() {}
+NotationAutomation::NotationAutomation(INotationUndoStackPtr undoStack)
+    : m_undoStack(std::move(undoStack))
+{
+}
 
 bool NotationAutomation::isAutomationModeEnabled() const
 {
@@ -58,12 +61,12 @@ AutomationDataConstPtr NotationAutomation::automationData() const
 
 void NotationAutomation::editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
 {
-    IF_ASSERT_FAILED(m_masterScore) {
+    IF_ASSERT_FAILED(m_masterScore && m_undoStack) {
         return;
     }
 
-    m_masterScore->transactionManager()->transaction(muse::TranslatableString("undoableAction", "Edit automation points"),
-                                                     [&](engraving::Transaction&) {
+    m_undoStack->transaction(muse::TranslatableString("undoableAction", "Edit automation points"),
+                             [&](engraving::Transaction&) {
         m_masterScore->editAutomationPoints(key, edits);
     });
 }

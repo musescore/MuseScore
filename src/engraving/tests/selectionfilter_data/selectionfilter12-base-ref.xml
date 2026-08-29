@@ -8,35 +8,23 @@
         <eid>C_C</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
-        <Spanner type="Glissando">
-          <Glissando>
-            <isHarpGliss>0</isHarpGliss>
-            <ticks_f>1/4</ticks_f>
-            <eid>D_D</eid>
-            <diagonal>1</diagonal>
-            </Glissando>
-          <next>
-            <location>
-              <fractions>1/4</fractions>
-              </location>
-            </next>
-          </Spanner>
         </Note>
       </Chord>
     <Chord>
-      <eid>E_E</eid>
+      <eid>D_D</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>F_F</eid>
+        <eid>E_E</eid>
         <pitch>60</pitch>
         <tpc>14</tpc>
-        <Spanner type="Glissando">
-          <prev>
-            <location>
-              <fractions>-1/4</fractions>
-              </location>
-            </prev>
-          </Spanner>
+        <Glissando>
+          <isHarpGliss>0</isHarpGliss>
+          <startElement>C_C</startElement>
+          <endElement>E_E</endElement>
+          <eid>F_F</eid>
+          <track>0</track>
+          <diagonal>1</diagonal>
+          </Glissando>
         </Note>
       </Chord>
     <Chord>
@@ -46,35 +34,23 @@
         <eid>H_H</eid>
         <pitch>67</pitch>
         <tpc>15</tpc>
-        <Spanner type="Glissando">
-          <Glissando>
-            <isHarpGliss>0</isHarpGliss>
-            <ticks_f>1/4</ticks_f>
-            <eid>I_I</eid>
-            <diagonal>1</diagonal>
-            </Glissando>
-          <next>
-            <location>
-              <fractions>1/4</fractions>
-              </location>
-            </next>
-          </Spanner>
         </Note>
       </Chord>
     <Chord>
-      <eid>J_J</eid>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>K_K</eid>
+        <eid>J_J</eid>
         <pitch>79</pitch>
         <tpc>15</tpc>
-        <Spanner type="Glissando">
-          <prev>
-            <location>
-              <fractions>-1/4</fractions>
-              </location>
-            </prev>
-          </Spanner>
+        <Glissando>
+          <isHarpGliss>0</isHarpGliss>
+          <startElement>H_H</startElement>
+          <endElement>J_J</endElement>
+          <eid>K_K</eid>
+          <track>0</track>
+          <diagonal>1</diagonal>
+          </Glissando>
         </Note>
       </Chord>
     </Staff>

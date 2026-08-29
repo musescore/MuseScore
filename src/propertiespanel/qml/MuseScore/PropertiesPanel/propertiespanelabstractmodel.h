@@ -183,6 +183,8 @@ public:
 
     virtual void requestElements();
 
+    virtual void disconnectAll();
+
     virtual void onCurrentNotationChanged();
 
     virtual void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,

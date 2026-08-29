@@ -108,6 +108,13 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
         QThread::yieldCurrentThread();
     }
 
+    //! NOTE Playback (tracks and duration) loads asynchronously; rendering before it is
+    //! ready yields 0 tracks and 0 duration ("No audio to export"). Wait for it first.
+    while (!playbackController()->isPlaybackInited()) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
     m_isCompleted = false;
     m_writeRet = muse::Ret();
 

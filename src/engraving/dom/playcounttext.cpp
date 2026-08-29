@@ -22,11 +22,11 @@
 
 #include "playcounttext.h"
 
-#include "../editing/textedit.h"
 #include "../editing/transaction/undostack.h"
 #include "../types/typesconv.h"
 
 #include "barline.h"
+#include "measure.h"
 #include "score.h"
 
 using namespace mu::engraving;
@@ -67,7 +67,8 @@ PropertyValue PlayCountText::getProperty(Pid id) const
 
 bool PlayCountText::setProperty(Pid id, const PropertyValue& v)
 {
-    Measure* m = segment()->measure();
+    Segment* s = segment();
+    Measure* m = s ? s->measure() : nullptr;
 
     switch (id) {
     case Pid::PLAY_COUNT_TEXT_SETTING:
@@ -91,7 +92,8 @@ bool PlayCountText::setProperty(Pid id, const PropertyValue& v)
 
 PropertyValue PlayCountText::propertyDefault(Pid propertyId) const
 {
-    Measure* m = segment()->measure();
+    Segment* s = segment();
+    Measure* m = s ? s->measure() : nullptr;
 
     switch (propertyId) {
     case Pid::PLAY_COUNT_TEXT_SETTING:

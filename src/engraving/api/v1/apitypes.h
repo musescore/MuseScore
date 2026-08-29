@@ -30,6 +30,7 @@
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/part.h"
@@ -1020,10 +1021,11 @@ enum class Syllabic {
 Q_ENUM_NS(Syllabic);
 
 enum class Anchor {
-    SEGMENT = int(mu::engraving::Spanner::Anchor::SEGMENT),
-    MEASURE = int(mu::engraving::Spanner::Anchor::MEASURE),
-    CHORD   = int(mu::engraving::Spanner::Anchor::CHORD),
-    NOTE    = int(mu::engraving::Spanner::Anchor::NOTE),
+    SEGMENT   = int(mu::engraving::Spanner::Anchor::SEGMENT),
+    MEASURE   = int(mu::engraving::Spanner::Anchor::MEASURE),
+    CHORD     = int(mu::engraving::Spanner::Anchor::CHORDREST), // Deprecated alias
+    CHORDREST = int(mu::engraving::Spanner::Anchor::CHORDREST),
+    NOTE      = int(mu::engraving::Spanner::Anchor::NOTE),
 };
 Q_ENUM_NS(Anchor);
 

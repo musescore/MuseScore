@@ -22,8 +22,11 @@ echo "Package MuseScore"
 trap 'echo Package failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"
-SIGN_CERTIFICATE_ENCRYPT_SECRET="''"
-SIGN_CERTIFICATE_PASSWORD="''"
+SIGN_CERTIFICATE_ENCRYPT_SECRET=""
+SIGN_CERTIFICATE_PASSWORD=""
+APPLE_TEAM_ID=""
+APPLE_USERNAME=""
+APPLE_PASSWORD=""
 
 SIGN_ARGS=""
 
@@ -31,6 +34,9 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         --signsecret) SIGN_CERTIFICATE_ENCRYPT_SECRET="$2"; shift ;;
         --signpass) SIGN_CERTIFICATE_PASSWORD="$2"; shift ;;
+        --team-id) APPLE_TEAM_ID="$2"; shift ;;
+        -u|--user) APPLE_USERNAME="$2"; shift ;;
+        -p|--password) APPLE_PASSWORD="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -39,11 +45,8 @@ done
 if [ -z "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then echo "warning: not set SIGN_CERTIFICATE_ENCRYPT_SECRET"; fi
 if [ -z "$SIGN_CERTIFICATE_PASSWORD" ]; then echo "warning: not set SIGN_CERTIFICATE_PASSWORD"; fi
 
-echo "SIGN_CERTIFICATE_ENCRYPT_SECRET: $SIGN_CERTIFICATE_ENCRYPT_SECRET"
-echo "SIGN_CERTIFICATE_PASSWORD: $SIGN_CERTIFICATE_PASSWORD"
-
 # Setup keychain for code sign
-if [ "$SIGN_CERTIFICATE_ENCRYPT_SECRET" != "''" ]; then
+if [ -n "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then
 
     7z x -y ./buildscripts/ci/macos/resources/mac_musescore.p12.enc -o./buildscripts/ci/macos/resources/ -p${SIGN_CERTIFICATE_ENCRYPT_SECRET}
 
@@ -90,7 +93,7 @@ if [ "$BUILD_MODE" == "stable" ]; then
     VOL_NAME="MuseScore-Studio-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 fi
 
-buildscripts/packaging/macOS/package.sh --app-name "$APP_NAME" --vol-name "$VOL_NAME" $SIGN_ARGS
+buildscripts/packaging/macOS/package.sh --app-name "$APP_NAME" --vol-name "$VOL_NAME" --user "$APPLE_USERNAME" --password "$APPLE_PASSWORD" --team-id "$APPLE_TEAM_ID" $SIGN_ARGS
 
 DMGFILE="$(ls applebuild/*.dmg)"
 echo "DMGFILE: $DMGFILE"

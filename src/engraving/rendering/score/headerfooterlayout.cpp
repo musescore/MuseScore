@@ -76,7 +76,7 @@ void HeaderFooterLayout::createUpdateHeaderText(LayoutContext& ctx, Page* page, 
     Text* text = page->headerText(area);
     if (!text) {
         text = Factory::createText(page, TextStyleType::HEADER);
-        text->setParent(page);
+        text->setOwnershipParent(page);
         text->setFlag(ElementFlag::MOVABLE, false);
         text->setFlag(ElementFlag::GENERATED, true); // set to disable editing
         text->setLayoutToParentWidth(true);
@@ -115,7 +115,7 @@ void HeaderFooterLayout::createUpdateFooterText(LayoutContext& ctx, Page* page, 
     Text* text = page->footerText(area);
     if (!text) {
         text = Factory::createText(page, TextStyleType::FOOTER);
-        text->setParent(page);
+        text->setOwnershipParent(page);
         text->setFlag(ElementFlag::MOVABLE, false);
         text->setFlag(ElementFlag::GENERATED, true); // set to disable editing
         text->setLayoutToParentWidth(true);

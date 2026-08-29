@@ -74,7 +74,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Full screen"),
              TranslatableString("action", "Full screen"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("about-musescore",
              mu::context::UiCtxAny,
@@ -128,14 +128,14 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Playback controls"),
              TranslatableString("action", "Show/hide playback controls"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-noteinput",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Note input"),
              TranslatableString("action", "Show/hide note input toolbar"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Vertical panels
@@ -144,35 +144,35 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Palettes"),
              TranslatableString("action", "Show/hide palettes"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-instruments",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Layout"),
              TranslatableString("action", "Show/hide layout panel"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-properties-panel",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Propert&ies"),
              TranslatableString("action", "Show/hide properties"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "S&election filter"),
              TranslatableString("action", "Show/hide selection filter"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-undo-history-panel",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&History"),
              TranslatableString("action", "Show/hide undo history"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Navigator
@@ -181,7 +181,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Navigator"),
              TranslatableString("action", "Show/hide navigator"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Braille panel
@@ -190,7 +190,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Braille"),
              TranslatableString("action", "Show/hide braille panel"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Horizontal panels
@@ -199,7 +199,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Tim&eline"),
              TranslatableString("action", "Show/hide timeline"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-mixer",
              mu::context::UiCtxProjectOpened,
@@ -207,14 +207,14 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Mixer"),
              TranslatableString("action", "Show/hide mixer"),
              IconCode::Code::MIXER,
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-piano-keyboard",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Piano &keyboard"),
              TranslatableString("action", "Show/hide piano keyboard"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-video-panel",
              mu::context::UiCtxProjectOpened,
@@ -256,13 +256,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Percussion"),
              TranslatableString("action", "Show/hide percussion panel"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-scorecmp-tool",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Score comparison tool"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Status bar
@@ -271,7 +271,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Status bar"),
              TranslatableString("action", "Show/hide status bar"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     UiAction("preference-dialog",
@@ -282,7 +282,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              )
 };
 
-ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const modularity::ContextPtr& iocCtx)
+ApplicationUiActions::ApplicationUiActions(std::shared_ptr<AppshellCommandsController> controller, const modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_controller(controller)
 {
 }

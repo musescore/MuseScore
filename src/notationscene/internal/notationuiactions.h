@@ -57,8 +57,6 @@ public:
     static int actionVoice(const muse::actions::ActionCode& actionCode);
     static SymbolId actionArticulationSymbolId(const muse::actions::ActionCode& actionCode);
 
-    static const muse::ui::ToolConfig& defaultNoteInputBarConfig();
-
 private:
     static const muse::ui::UiActionList s_actions;
     static const muse::ui::UiActionList s_undoRedoActions;

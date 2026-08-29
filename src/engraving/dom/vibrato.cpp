@@ -37,8 +37,8 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
-    : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+VibratoSegment::VibratoSegment(Vibrato* sp)
+    : LineSegment(ElementType::VIBRATO_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -131,9 +131,9 @@ static const ElementStyle vibratoSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Vibrato::createLineSegment(System* parent)
+LineSegment* Vibrato::createLineSegment()
 {
-    VibratoSegment* seg = new VibratoSegment(this, parent);
+    VibratoSegment* seg = new VibratoSegment(this);
     seg->setTrack(track());
     seg->setColor(lineColor());
     seg->initElementStyle(&vibratoSegmentStyle);

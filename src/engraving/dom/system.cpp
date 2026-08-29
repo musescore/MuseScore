@@ -27,6 +27,8 @@
 
 #include "system.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "style/style.h"
 
 #include "../editing/navigation.h"
@@ -35,7 +37,6 @@
 #include "box.h"
 #include "bracket.h"
 #include "bracketitem.h"
-#include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
 #include "measure.h"
@@ -137,9 +138,21 @@ void SysStaff::removeInstrumentName(InstrumentNameRole role)
 //   System
 //---------------------------------------------------------
 
-System::System(Page* parent)
+System::System(Score* parent)
     : EngravingItem(ElementType::SYSTEM, parent)
 {
+    // Owned by its score right away; a page only places it later
+    setOwnershipParent(parent);
+}
+
+void System::setOwnershipParent(Score* score)
+{
+    EngravingItem::setOwnershipParent(score);
+}
+
+EngravingItem* System::layoutParent() const
+{
+    return m_page;
 }
 
 //---------------------------------------------------------
@@ -148,14 +161,17 @@ System::System(Page* parent)
 
 System::~System()
 {
+    if (m_page) {
+        muse::remove(m_page->systems(), this);
+    }
     for (SpannerSegment* ss : spannerSegments()) {
         if (ss->system() == this) {
-            ss->resetExplicitParent();
+            ss->setSystem(nullptr);
         }
     }
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
         }
     }
     muse::DeleteAll(m_staves);
@@ -177,11 +193,6 @@ AccessibleItemPtr System::createAccessible()
 
 #endif
 
-void System::moveToPage(Page* parent)
-{
-    setParent(parent);
-}
-
 //---------------------------------------------------------
 ///   clear
 ///   Clear layout of System
@@ -191,13 +202,13 @@ void System::clear()
 {
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
         }
     }
     m_ml.clear();
     for (SpannerSegment* ss : m_spannerSegments) {
         if (ss->system() == this) {
-            ss->resetExplicitParent();             // assume parent() is System
+            ss->setSystem(nullptr);
         }
     }
     m_spannerSegments.clear();
@@ -211,7 +222,7 @@ void System::clear()
 void System::appendMeasure(MeasureBase* mb)
 {
     assert(!mb->isMeasure() || !(style().styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
-    mb->setParent(this);
+    mb->setSystem(this);
     m_ml.push_back(mb);
 }
 
@@ -223,7 +234,7 @@ void System::removeMeasure(MeasureBase* mb)
 {
     m_ml.erase(std::remove(m_ml.begin(), m_ml.end(), mb), m_ml.end());
     if (mb->system() == this) {
-        mb->resetExplicitParent();
+        mb->setSystem(nullptr);
     }
 }
 
@@ -239,8 +250,20 @@ void System::removeLastMeasure()
     MeasureBase* mb = m_ml.back();
     m_ml.pop_back();
     if (mb->system() == this) {
-        mb->resetExplicitParent();
+        mb->setSystem(nullptr);
     }
+}
+
+EngravingItemList System::accessibleChildren() const
+{
+    // The measures are owned by the score and the spanner segments by their spanner,
+    // but it is the system that places them, so the system is where the accessibility
+    // tree finds them.
+    EngravingItemList children = EngravingItem::accessibleChildren();
+    children.insert(children.end(), m_ml.begin(), m_ml.end());
+    children.insert(children.end(), m_spannerSegments.begin(), m_spannerSegments.end());
+
+    return children;
 }
 
 //---------------------------------------------------------
@@ -310,7 +333,7 @@ void System::setHasStaffVisibilityIndicator(bool has)
 {
     if (has && !m_staffVisibilityIndicator) {
         m_staffVisibilityIndicator = Factory::createStaffVisibilityIndicator(this);
-        m_staffVisibilityIndicator->setParent(this);
+        m_staffVisibilityIndicator->setOwnershipParent(this);
     } else if (!has && m_staffVisibilityIndicator) {
         delete m_staffVisibilityIndicator;
         m_staffVisibilityIndicator = nullptr;
@@ -488,7 +511,13 @@ void System::add(EngravingItem* el)
     }
 // LOGD("%p System::add: %p %s", this, el, el->typeName());
 
-    el->setParent(this);
+    if (el->isMeasureBase()) {
+        toMeasureBase(el)->setSystem(this);
+    } else if (el->isSpannerSegment()) {
+        toSpannerSegment(el)->setSystem(this);
+    } else if (!el->isBeam()) {   // a beam's placement is derived from its elements
+        el->setOwnershipParent(this);
+    }
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
@@ -623,11 +652,17 @@ void System::remove(EngravingItem* el)
     case ElementType::NOTELINE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
-        if (!muse::remove(m_spannerSegments, toSpannerSegment(el))) {
+    {
+        SpannerSegment* ss = toSpannerSegment(el);
+        if (!muse::remove(m_spannerSegments, ss)) {
             LOGD("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             assert(score() == el->score());
         }
-        break;
+        if (ss->system() == this) {
+            ss->setSystem(nullptr);
+        }
+    }
+    break;
     case ElementType::SYSTEM_DIVIDER:
         if (el == m_systemDividerLeft) {
             m_systemDividerLeft = 0;
@@ -725,6 +760,10 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 
 void System::scanElements(std::function<void(EngravingItem*)> func)
 {
+    if (m_pageLockIndicator) {
+        func(m_pageLockIndicator);
+    }
+
     if (vbox()) {
         return;
     }
@@ -741,10 +780,6 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
 
     if (m_staffVisibilityIndicator) {
         func(m_staffVisibilityIndicator);
-    }
-
-    if (m_pageLockIndicator) {
-        func(m_pageLockIndicator);
     }
 
     for (auto i : m_systemLockIndicators) {
@@ -776,7 +811,7 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
         }
         bool v = true;
         Spanner* spanner = ss->spanner();
-        if (spanner->anchor() == Spanner::Anchor::SEGMENT || spanner->anchor() == Spanner::Anchor::CHORD) {
+        if (spanner->anchor() == Spanner::Anchor::SEGMENT || spanner->anchor() == Spanner::Anchor::CHORDREST) {
             EngravingItem* se = spanner->startElement();
             EngravingItem* ee = spanner->endElement();
             bool v1 = true;

@@ -43,6 +43,8 @@ using namespace mu::engraving;
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
 
+static const Settings::Key DISPLAYED_DEFAULT_COLOR("engraving", "engraving/colors/displayedDefaultColor");
+static const Settings::Key INVERTED_DISPLAYED_DEFAULT_COLOR("engraving", "engraving/colors/invertedDisplayedDefaultColor");
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
 static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
 static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/frameColor");
@@ -53,8 +55,6 @@ static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinke
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
 static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fretboardDiagramsAutoUpdate");
 
-static const Settings::Key DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT("engraving", "engraving/compat/doNotSaveEIDsForBackCompat");
-
 struct VoiceColor {
     Settings::Key key;
     Color color;
@@ -63,6 +63,12 @@ struct VoiceColor {
 static VoiceColor VOICE_COLORS[VOICES + 1];
 
 static const Color UNLINKED_ITEM_COLOR = "#FF9300";
+static const Color DEFAULT_DISPLAYED_INVERTED_COLOR = "#CBCBCD";
+
+EngravingConfiguration::EngravingConfiguration()
+    : m_cachedDisplayedDefaultColor(Color::BLACK),
+    m_cachedInvertedDisplayedDefaultColor(DEFAULT_DISPLAYED_INVERTED_COLOR)
+{}
 
 void EngravingConfiguration::init()
 {
@@ -83,6 +89,27 @@ void EngravingConfiguration::init()
     settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_partStyleFilePathChanged.send(val.toPath());
     });
+
+    settings()->setDefaultValue(DISPLAYED_DEFAULT_COLOR, Val(defaultColor().toQColor()));
+    settings()->setDescription(DISPLAYED_DEFAULT_COLOR, muse::trc("engraving", "Displayed default color"));
+    settings()->setCanBeManuallyEdited(DISPLAYED_DEFAULT_COLOR, true);
+    settings()->valueChanged(DISPLAYED_DEFAULT_COLOR).onReceive(this, [this](const Val& val) {
+        const Color color = val.toQColor();
+        m_cachedDisplayedDefaultColor = color;
+        m_displayedDefaultColorChanged.send(false, color);
+    });
+    m_cachedDisplayedDefaultColor = settings()->value(DISPLAYED_DEFAULT_COLOR).toQColor();
+
+    settings()->setDefaultValue(INVERTED_DISPLAYED_DEFAULT_COLOR, Val(Color(DEFAULT_DISPLAYED_INVERTED_COLOR).toQColor()));
+    settings()->setDescription(INVERTED_DISPLAYED_DEFAULT_COLOR,
+                               muse::trc("engraving", "Displayed default color when score colors are inverted"));
+    settings()->setCanBeManuallyEdited(INVERTED_DISPLAYED_DEFAULT_COLOR, true);
+    settings()->valueChanged(INVERTED_DISPLAYED_DEFAULT_COLOR).onReceive(this, [this](const Val& val) {
+        const Color color = val.toQColor();
+        m_cachedInvertedDisplayedDefaultColor = color;
+        m_displayedDefaultColorChanged.send(true, color);
+    });
+    m_cachedInvertedDisplayedDefaultColor = settings()->value(INVERTED_DISPLAYED_DEFAULT_COLOR).toQColor();
 
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
@@ -153,10 +180,6 @@ void EngravingConfiguration::init()
     settings()->valueChanged(UNLINKED_COLOR).onReceive(nullptr, [this](const Val& val) {
         m_unlinkedColorChanged.send(Color::fromQColor(val.toQColor()));
     });
-
-    settings()->setDefaultValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(false));
-    settings()->setDescription(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, muse::trc("engraving", "Do not save EIDs"));
-    settings()->setCanBeManuallyEdited(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, false);
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -247,10 +270,32 @@ Color EngravingConfiguration::defaultColor() const
     return Color::BLACK;
 }
 
-Color EngravingConfiguration::scoreInversionColor() const
+Color EngravingConfiguration::displayedDefaultColor(bool inverted) const
 {
-    // slightly dulled white for less strain on the eyes
-    return Color(220, 220, 220);
+    if (inverted) {
+        return m_cachedInvertedDisplayedDefaultColor;
+    }
+    return m_cachedDisplayedDefaultColor;
+}
+
+void EngravingConfiguration::setDisplayedDefaultColor(Color color, bool inverted)
+{
+    if (inverted) {
+        settings()->setSharedValue(INVERTED_DISPLAYED_DEFAULT_COLOR, Val(color.toQColor()));
+    } else {
+        settings()->setSharedValue(DISPLAYED_DEFAULT_COLOR, Val(color.toQColor()));
+    }
+}
+
+muse::async::Channel<bool, Color> EngravingConfiguration::displayedDefaultColorChanged() const
+{
+    return m_displayedDefaultColorChanged;
+}
+
+void EngravingConfiguration::resetDisplayedDefaultColors()
+{
+    settings()->setSharedValue(DISPLAYED_DEFAULT_COLOR, settings()->defaultValue(DISPLAYED_DEFAULT_COLOR));
+    settings()->setSharedValue(INVERTED_DISPLAYED_DEFAULT_COLOR, settings()->defaultValue(INVERTED_DISPLAYED_DEFAULT_COLOR));
 }
 
 Color EngravingConfiguration::indicatorIconInvertedSelectionColor() const
@@ -428,16 +473,6 @@ void EngravingConfiguration::setDebuggingOptions(const DebuggingOptions& options
 muse::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
 {
     return m_debuggingOptions.notification;
-}
-
-bool EngravingConfiguration::doNotSaveEIDsForBackCompat() const
-{
-    return settings()->value(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT).toBool();
-}
-
-void EngravingConfiguration::setDoNotSaveEIDsForBackCompat(bool doNotSave)
-{
-    settings()->setSharedValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(doNotSave));
 }
 
 bool EngravingConfiguration::allowReadingImagesFromOutsideMscz() const

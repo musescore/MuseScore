@@ -23,6 +23,7 @@
 
 #include "draw/painter.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 #include "dom/engravingitem.h"
 #include "dom/barline.h"
 #include "dom/dynamic.h"
@@ -139,9 +140,7 @@ void EditModeRenderer::drawEngravingItem(const EngravingItem* item, muse::draw::
 {
     UNUSED(currentViewScaling);
 
-    Pen pen(opt.invertColors
-            ? item->configuration()->scoreInversionColor()
-            : item->configuration()->defaultColor(), 0.0);
+    Pen pen(item->configuration()->displayedDefaultColor(opt.invertColors), 0.0);
     painter->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
@@ -268,7 +267,6 @@ void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* p
     RectF r = item->canvasBoundingRect().adjusted(-m, -m, m, m);
 
     painter->drawRect(r);
-    pen = Pen(item->configuration()->defaultColor(), 0.0);
 }
 
 void EditModeRenderer::draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter)

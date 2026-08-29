@@ -25,6 +25,7 @@
 #include "serialization/json.h"
 
 #include <QBuffer>
+#include <QUrlQuery>
 
 using namespace mu::musesounds;
 using namespace muse;
@@ -54,68 +55,39 @@ static muse::UriQuery correctThumbnailSize(const UriQuery& uri)
     return UriQuery(uriStr.toStdString());
 }
 
-static QByteArray soundsRequestJson()
+static QUrl soundsRequestUrl(const QUrl& baseUrl)
 {
     QLocale locale = QLocale();
     String localeStr = locale.bcp47Name() + "-" + QLocale::territoryToCode(locale.territory());
 
-    String query = String(
-        R"(query MyQuery {
-          product_pages_configuration {
-            museScoreStudioPageSections {
-              ... on ProductPageSectionDynamic {
-                title(locale: {locale: "%1"})
-                productCards { ...CardFields }
-              }
-              ... on ProductPageSectionRegular {
-                title(locale: {locale: "%1"})
-                productCards { ...CardFields }
-              }
-            }
-          }
-        }
-        fragment CardFields on ProductCard {
-          ... on ProductCardRegular {
-            iconImageUrl
-            product(locale: {locale: "%1"}) {
-              ... on ProductBase {
-                code
-                title
-                subtitle
-              }
-              ... on ProductLibrary {
-                compatibleWith {
-                  museSoundManager
-                  museHub
-                }
-              }
-            }
-          }
-        })").arg(localeStr);
+    JsonObject variables;
+    variables["locale"] = localeStr;
 
-    JsonObject json;
-    json["query"] = query;
+    QUrlQuery query;
+    query.addQueryItem("pqId", "musescore-studio-sounds-page-v1");
+    query.addQueryItem("variables",
+                       QString::fromUtf8(JsonDocument(variables).toJson(JsonDocument::Format::Compact).toQByteArray()));
 
-    return JsonDocument(json).toJson(JsonDocument::Format::Compact).toQByteArray();
+    QUrl url = baseUrl;
+    url.setQuery(query);
+
+    return url;
 }
 
 void MuseSoundsRepository::init()
 {
     TRACEFUNC;
 
-    QUrl url = QUrl(QString::fromStdString(configuration()->soundsUri().toString()));
-    QByteArray jsonData = soundsRequestJson();
+    QUrl url = soundsRequestUrl(QUrl(QString::fromStdString(configuration()->soundsUri().toString())));
     RequestHeaders headers = configuration()->headers();
 
-    auto device = std::make_shared<QBuffer>();
-    device->setData(jsonData);
     auto receivedData = std::make_shared<QBuffer>();
 
     if (!m_networkManager) {
         m_networkManager = networkManagerCreator()->makeNetworkManager();
     }
 
-    RetVal<Progress> progress = m_networkManager->post(url, device, receivedData, headers);
+    RetVal<Progress> progress = m_networkManager->get(url, receivedData, headers);
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
         return;

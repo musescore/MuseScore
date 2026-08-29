@@ -105,6 +105,8 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
 AbstractNotationPaintView::~AbstractNotationPaintView()
 {
+    m_inputController->deinit();
+
     if (m_notation && isMainView()) {
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
         m_notation->interaction()->setGetViewRectFunc(nullptr);
@@ -142,13 +144,6 @@ void AbstractNotationPaintView::load()
     m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut, iocContext());
 
     m_continuousPanel = std::make_unique<ContinuousPanel>();
-
-    //! NOTE For diagnostic tools
-    if (!dispatcher()->isReg(this)) {
-        dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
-            scheduleRedraw();
-        });
-    }
 
     m_inputController->setReadonly(m_readonly);
     m_inputController->init();
@@ -273,15 +268,6 @@ void AbstractNotationPaintView::selectOnNavigationActive()
     }
 
     interaction->select(SelectionTarget::FirstItem);
-}
-
-bool AbstractNotationPaintView::canReceiveAction(const ActionCode& actionCode) const
-{
-    if (actionCode == "diagnostic-notationview-redraw") {
-        return true;
-    }
-
-    return hasFocus();
 }
 
 void AbstractNotationPaintView::onCurrentNotationChanged()
@@ -881,6 +867,11 @@ void AbstractNotationPaintView::hideContextMenu()
     }
 }
 
+void AbstractNotationPaintView::showSearch()
+{
+    emit showSearchRequested();
+}
+
 void AbstractNotationPaintView::showElementPopup(const ElementType& elementType)
 {
     TRACEFUNC;
@@ -998,6 +989,10 @@ void AbstractNotationPaintView::onNotationSetup()
     });
 
     notationConfiguration()->foregroundChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
+    notationConfiguration()->notationColorChanged().onNotify(this, [this]() {
         scheduleRedraw();
     });
 

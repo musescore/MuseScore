@@ -121,157 +121,126 @@
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>L_L</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/24</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>M_M</eid>
+              <eid>L_L</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c16</subtype>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <l1>-4</l1>
               <l2>-6</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <BeamMode>end</BeamMode>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/24</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Beam>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <l1>-10</l1>
             <l2>-14</l2>
             </Beam>
           <Chord>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>S_S</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/24</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>T_T</eid>
+              <eid>R_R</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c16</subtype>
-              <eid>U_U</eid>
+              <eid>S_S</eid>
               <l1>-4</l1>
               <l2>-8</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>T_T</eid>
             <BeamMode>end</BeamMode>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/24</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>W_W</eid>
+              <eid>U_U</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Beam>
-            <eid>X_X</eid>
+            <eid>V_V</eid>
             <l1>58</l1>
             <l2>56</l2>
             </Beam>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>W_W</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>Z_Z</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/24</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>a_a</eid>
+              <eid>X_X</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
-              <eid>b_b</eid>
+              <eid>Y_Y</eid>
               <l1>52</l1>
               <l2>50</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>c_c</eid>
+            <eid>Z_Z</eid>
             <BeamMode>end</BeamMode>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/24</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>d_d</eid>
+              <eid>a_a</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Rest>
-            <eid>e_e</eid>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>f_f</eid>
+            <eid>c_c</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>K_K</startElement>
+        <endElement>N_N</endElement>
+        <eid>d_d</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>Q_Q</startElement>
+        <endElement>T_T</endElement>
+        <eid>e_e</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>W_W</startElement>
+        <endElement>Z_Z</endElement>
+        <eid>f_f</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

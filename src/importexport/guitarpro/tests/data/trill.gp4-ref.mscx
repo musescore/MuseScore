@@ -80,45 +80,38 @@
             <velocity>96</velocity>
             <eid>K_K</eid>
             </Dynamic>
-          <Spanner type="Trill">
-            <Trill>
-              <subtype>trill</subtype>
-              <eid>L_L</eid>
-              <Ornament>
-                <subtype>ornamentTrill</subtype>
-                <eid>M_M</eid>
-                </Ornament>
-              </Trill>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>N_N</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>M_M</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>P_P</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Trill>
+        <subtype>trill</subtype>
+        <track2>0</track2>
+        <startTick>2/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>O_O</eid>
+        <track>0</track>
+        <Ornament>
+          <subtype>ornamentTrill</subtype>
+          <eid>P_P</eid>
+          <track>0</track>
+          </Ornament>
+        </Trill>
+      </SpannerMap>
     </Score>
   </museScore>

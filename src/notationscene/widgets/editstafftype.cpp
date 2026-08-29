@@ -214,7 +214,9 @@ void EditStaffType::enablePresets()
 
     fretFontName->setCurrentIndex(static_cast<int>(staffType.fretPresetIdx()));
     fretFontSize->setValue(staffType.fretFontSize());
-    fretY->setValue(staffType.fretFontUserY());
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    fretY->setValue(-staffType.fretFontUserY());
 }
 
 void EditStaffType::enableTextStyles()
@@ -353,7 +355,9 @@ void EditStaffType::setValues()
         }
         durFontName->setCurrentIndex(idx);
         durFontSize->setValue(staffType.durationFontSize());
-        durY->setValue(staffType.durationFontUserY());
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        durY->setValue(-staffType.durationFontUserY());
         // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
         // Above/Below, Beside/Through and minim are only used if stems-and-beams
         // but set them from stt values anyway, to ensure preset matching
@@ -431,7 +435,9 @@ void EditStaffType::durFontNameChanged(int idx)
     qreal size, yOff;
     if (mu::engraving::StaffType::tabFontData(true, idx, size, yOff)) {
         durFontSize->setValue(size);
-        durY->setValue(yOff);
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        durY->setValue(-yOff);
     }
     updatePreview();
 }
@@ -441,7 +447,9 @@ void EditStaffType::fretFontNameChanged(int idx)
     qreal size, yOff;
     if (mu::engraving::StaffType::tabFontData(false, idx, size, yOff)) {
         fretFontSize->setValue(size);
-        fretY->setValue(yOff);
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        fretY->setValue(-yOff);
     }
     updatePreview();
 }
@@ -529,14 +537,18 @@ void EditStaffType::setFromDlg()
     if (staffType.group() == mu::engraving::StaffGroup::TAB) {
         staffType.setDurationFontName(durFontName->currentText());
         staffType.setDurationFontSize(durFontSize->value());
-        staffType.setDurationFontUserY(durY->value());
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        staffType.setDurationFontUserY(-durY->value());
         staffType.setFretUseTextStyle(textStyleRadioButton->isChecked());
         if (staffType.fretUseTextStyle()) {
             staffType.setFretTextStyle(getTextStyle(textStyleComboBox->currentText()));
         } else {
             staffType.setFretPresetIdx(fretFontName->currentIndex());
             staffType.setFretFontSize(fretFontSize->value());
-            staffType.setFretFontUserY(fretY->value());
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            staffType.setFretFontUserY(-fretY->value());
         }
         staffType.setLinesThrough(linesThroughRadio->isChecked());
         staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE

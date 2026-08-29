@@ -113,43 +113,24 @@
           <Chord>
             <eid>f_f</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>g_g</eid>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>h_h</eid>
+              <eid>g_g</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
             <span>1</span>
-            <eid>i_i</eid>
+            <eid>h_h</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>j_j</eid>
+        <eid>i_i</eid>
         <voice>
           <Chord>
             <eid>B_B</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  <fractions>3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>C_C</eid>
               <pitch>74</pitch>
@@ -185,26 +166,26 @@
             </Chord>
           <BarLine>
             <span>1</span>
-            <eid>k_k</eid>
+            <eid>j_j</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>l_l</eid>
+        <eid>k_k</eid>
         <voice>
           <Rest>
-            <eid>m_m</eid>
+            <eid>l_l</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <span>1</span>
-            <eid>n_n</eid>
+            <eid>m_m</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>o_o</eid>
+        <eid>n_n</eid>
         <voice>
           <Chord>
             <eid>J_J</eid>
@@ -245,10 +226,18 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>p_p</eid>
+            <eid>o_o</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>f_f</startElement>
+        <endElement>B_B</endElement>
+        <eid>p_p</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

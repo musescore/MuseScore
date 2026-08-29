@@ -29,8 +29,10 @@
 
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
+#include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/dynamicvalues.h"
+#include "engraving/automation/tempovalues.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
@@ -39,6 +41,10 @@
 #include "notation/inotation.h"
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
+
+#include "global/async/async.h"
+#include "global/containers.h"
+#include "global/realfn.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -57,6 +63,8 @@ constexpr static qreal POLYLINE_SELECTED_CENTER_RADIUS = 3.5;
 constexpr static qreal POLYLINE_SELECTED_MIDDLE_RING_WIDTH = 1.5;
 
 constexpr static int POLYLINE_SELECTED_HOVERED_ALPHA = 127;
+constexpr static int POLYLINE_GENERATED_AREA_ALPHA = 51;
+constexpr static int POLYLINE_EDITED_AREA_ALPHA = 102;
 
 static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx)
 {
@@ -106,8 +114,42 @@ static double volumeLocalDbToLogicalDb(double localDb)
     return VOLUME_LOGICAL_CENTER_DB - diff / VOLUME_LOW_ACCURACY_STEP;
 }
 
+// Mirrors the volume fader curve above, anchored on the default tempo instead of 0dB - a plain
+// linear map would put the default tempo (120bpm) at ~12% up the lane instead of the center
+// This is a UI-only display cap - the score model still allows tempos up to Constants::MAX_TEMPO
+static constexpr double TEMPO_RANGE_MAX_BPM = 300.0;
+static const double TEMPO_LOGICAL_CENTER_BPM = mu::engraving::Constants::DEFAULT_TEMPO.toBPM().val;
+static const double TEMPO_LOCAL_CENTER_BPM = TEMPO_RANGE_MAX_BPM / 2.0;
+static const double TEMPO_HIGH_ACCURACY_STEP = (TEMPO_RANGE_MAX_BPM - TEMPO_LOCAL_CENTER_BPM)
+                                               / (TEMPO_RANGE_MAX_BPM - TEMPO_LOGICAL_CENTER_BPM);
+static const double TEMPO_LOW_ACCURACY_STEP = TEMPO_LOCAL_CENTER_BPM / TEMPO_LOGICAL_CENTER_BPM;
+
+// logical (actual) bpm -> local (linear-in-display) bpm
+static double tempoLogicalBpmToLocalBpm(double logicalBpm)
+{
+    if (logicalBpm > TEMPO_LOGICAL_CENTER_BPM) {
+        const double diff = TEMPO_RANGE_MAX_BPM - logicalBpm;
+        return TEMPO_RANGE_MAX_BPM - diff * TEMPO_HIGH_ACCURACY_STEP;
+    }
+
+    const double diff = TEMPO_LOGICAL_CENTER_BPM - logicalBpm;
+    return TEMPO_LOCAL_CENTER_BPM - diff * TEMPO_LOW_ACCURACY_STEP;
+}
+
+// local (linear-in-display) bpm -> logical (actual) bpm
+static double tempoLocalBpmToLogicalBpm(double localBpm)
+{
+    if (localBpm > TEMPO_LOCAL_CENTER_BPM) {
+        const double diff = TEMPO_RANGE_MAX_BPM - localBpm;
+        return TEMPO_RANGE_MAX_BPM - diff / TEMPO_HIGH_ACCURACY_STEP;
+    }
+
+    const double diff = TEMPO_LOCAL_CENTER_BPM - localBpm;
+    return TEMPO_LOGICAL_CENTER_BPM - diff / TEMPO_LOW_ACCURACY_STEP;
+}
+
 // Values are stored normalized [0, 1]; Dynamics rescales that into its own sub-range for display,
-// Volume additionally applies the fader curve above, other types map 1:1 onto the display range
+// Volume and Tempo additionally apply a fader curve, other types map 1:1 onto the display range
 static double automationValueToDisplay(AutomationType type, muse::real_t value)
 {
     if (type == AutomationType::Dynamics) {
@@ -122,10 +164,19 @@ static double automationValueToDisplay(AutomationType type, muse::real_t value)
         return std::clamp(display, 0.0, 1.0);
     }
 
+    if (type == AutomationType::Tempo) {
+        const double logicalBpm = mu::engraving::denormalizeTempo(value).toBPM().val;
+        const double localBpm = tempoLogicalBpmToLocalBpm(logicalBpm);
+        const double display = localBpm / TEMPO_RANGE_MAX_BPM;
+        return std::clamp(display, 0.0, 1.0);
+    }
+
     return std::clamp(static_cast<double>(value), 0.0, 1.0);
 }
 
-static muse::real_t automationValueFromDisplay(AutomationType type, double displayValue)
+// existingValue preserves Tempo values above the display cap when the drag lands back at the same clamped edge
+static muse::real_t automationValueFromDisplay(AutomationType type, double displayValue,
+                                               std::optional<muse::real_t> existingValue = std::nullopt)
 {
     if (type == AutomationType::Dynamics) {
         return DYNAMICS_DISPLAY_RANGE_MIN + displayValue * (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
@@ -136,6 +187,18 @@ static muse::real_t automationValueFromDisplay(AutomationType type, double displ
         const double logicalDb = volumeLocalDbToLogicalDb(localDb);
         const double normalized = (logicalDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
         return muse::real_t(normalized);
+    }
+
+    if (type == AutomationType::Tempo) {
+        if (existingValue && muse::RealIsEqualOrMore(displayValue, 1.0)
+            && muse::RealIsEqualOrMore(automationValueToDisplay(type, *existingValue), 1.0)) {
+            return *existingValue;
+        }
+
+        const double localBpm = displayValue * TEMPO_RANGE_MAX_BPM;
+        const double logicalBpm = tempoLocalBpmToLogicalBpm(localBpm);
+        const muse::real_t normalized = mu::engraving::normalizeTempo(mu::engraving::BeatsPerSecond::fromBPM(logicalBpm));
+        return std::clamp(normalized, mu::engraving::MIN_NORMALIZED_TEMPO, mu::engraving::MAX_NORMALIZED_TEMPO);
     }
 
     return muse::real_t(displayValue);
@@ -191,18 +254,60 @@ static std::optional<int> tickFromCanvasX(const System* system, const muse::Rect
 static AutomationCurveKey curveKeyFor(AutomationType type, const Staff* staff)
 {
     switch (type) {
+    case AutomationType::Dynamics:
+        return AutomationCurveKey::staff(type, staff->id());
+    case AutomationType::Tempo:
+        return AutomationCurveKey::global(type);
     case AutomationType::Volume:
     case AutomationType::Pan: {
         const Part* part = staff->part();
         const InstrumentTrackId trackId { part->id(), part->instrumentId() };
         return AutomationCurveKey::instrument(type, trackId);
     }
-    case AutomationType::Dynamics:
     case AutomationType::Unknown:
         break;
     }
 
-    return AutomationCurveKey::staff(type, staff->id());
+    return AutomationCurveKey();
+}
+
+static staff_idx_t firstVisibleStaffIdx(const Score* score)
+{
+    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+        if (score->staff(i)->show()) {
+            return i;
+        }
+    }
+
+    return muse::nidx;
+}
+
+static bool isStructuralChange(const mu::engraving::ScoreChanges& changes)
+{
+    if (!changes.changedObjects.empty() && !changes.isValidBoundary()) {
+        return true;
+    }
+
+    static const std::unordered_set<mu::engraving::ElementType> STRUCTURAL_TYPES {
+        mu::engraving::ElementType::MEASURE,
+        mu::engraving::ElementType::PART,
+    };
+
+    for (const mu::engraving::ElementType type : changes.changedTypes) {
+        if (muse::contains(STRUCTURAL_TYPES, type)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static qreal defaultValueFor(AutomationType type)
+{
+    if (type == AutomationType::Pan) {
+        return 0.5;
+    }
+    return 0.0;
 }
 
 NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
@@ -248,7 +353,8 @@ void NotationAutomationController::init()
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
     engravingConfiguration()->selectionColorChanged().onReceive(this, [this](voice_idx_t idx, const muse::draw::Color&) {
-        if (idx == 0) {
+        // voice 1 color is used for the centre of selected points, "all voices color" is used for the area under lines
+        if (idx == 0 || idx == mu::engraving::VOICES) {
             updatePolylinesColors();
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
@@ -287,6 +393,11 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
     }
 
     const AutomationCurveKey curveKey = curveKeyFor(currentAutomationType(), staff);
+    if (curveKey.isGlobal() && staffIdx != firstVisibleStaffIdx(score())) {
+        // Score-scoped automation is only drawn on the score's first staff
+        return nullptr;
+    }
+
     if (curveKey.trackId().has_value() && !staff->isTop()) {
         // Instrument-scoped automation is only drawn on the instrument's first staff
         return nullptr;
@@ -320,7 +431,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
     }
     polyline->setPoints(pointsForPolyline);
 
-    applyPolylineStyle(polyline);
+    applyPolylineStyle(polyline, key);
     polyline->setVisible(false);
 
     // Points can't be dragged past the system's first/last segment
@@ -343,10 +454,11 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         const bool editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
         const qreal clampedX = editRestricted ? oldPointData.qPointF.x() : std::clamp(x, minX, maxX);
 
-        const auto setPreviewPoint = [polyline, pointIdx](const QPointF& point) {
+        const auto setPreviewPoint = [this, polyline, pointIdx, key](const QPointF& point) {
             QVector<QPointF> points = polyline->points();
             points.replace(pointIdx, point);
             polyline->setPoints(points);
+            applyPolylineColorsUnderLine(polyline, key);
             polyline->update(); // TODO: pass update rect?
         };
 
@@ -385,6 +497,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         QVector<QPointF> points = polyline->points();
         points.insert(insertIdx, { x, y });
         polyline->setPoints(points);
+        applyPolylineColorsUnderLine(polyline, key);
     });
 
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointRemoved,
@@ -464,7 +577,7 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
     return points;
 }
 
-void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) const
+void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline, const SysStaffKey& key) const
 {
     IF_ASSERT_FAILED(polyline) {
         return;
@@ -472,6 +585,8 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) co
 
     polyline->setLineWidth(POLYLINE_LINE_WIDTH);
     polyline->setDrawBackground(false);
+
+    polyline->setBaselineN(defaultValueFor(currentAutomationType()));
 
     polyline->setGhostPointsEnabled(false);
     polyline->setSelectedPointsEnabled(true);
@@ -492,10 +607,10 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) co
     selected->setMiddleRingWidthHovered(POLYLINE_SELECTED_MIDDLE_RING_WIDTH);
     selected->setOutlineWidthHovered(POLYLINE_LINE_WIDTH);
 
-    applyPolylineColors(polyline);
+    applyPolylineColors(polyline, key);
 }
 
-void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline) const
+void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline, const SysStaffKey& key) const
 {
     IF_ASSERT_FAILED(polyline) {
         return;
@@ -524,6 +639,52 @@ void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline) c
     selected->setCenterColorHovered(selectionColor);
     selected->setMiddleRingColorHovered(foregroundColor);
     selected->setOutlineColorHovered(lineColor);
+
+    applyPolylineColorsUnderLine(polyline, key);
+}
+
+void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* polyline, const SysStaffKey& key) const
+{
+    IF_ASSERT_FAILED(polyline) {
+        return;
+    }
+
+    const auto pointsDataIt = m_pointsDataByStaff.find(key);
+    IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByStaff.end()) {
+        return;
+    }
+
+    // TODO: Cache these colors?
+    const QColor allVoicesColor = engravingConfiguration()->selectionColor(mu::engraving::VOICES).toQColor();
+
+    QColor generatedColor = allVoicesColor;
+    generatedColor.setAlpha(POLYLINE_GENERATED_AREA_ALPHA);
+
+    QColor editedColor = allVoicesColor;
+    editedColor.setAlpha(POLYLINE_EDITED_AREA_ALPHA);
+
+    const QVector<PointData>& pointsData = pointsDataIt->second;
+
+    QVector<QColor> colorsUnderLine;
+    colorsUnderLine.reserve(pointsData.size() + 1); // +1 for the "trailing color" (see below)
+
+    bool prevPointGenerated = true;
+    for (const PointData& pointData : pointsData) {
+        //! NOTE: The following can be null for newly created (always non-generated) points because they're not in the model yet
+        const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, pointData.tick);
+        const bool currPointGenerated = automationPoint && automationPoint->generated;
+
+        // Colors either side of an edited point should use the "edited color"...
+        const bool useEditedColor = !prevPointGenerated || !currPointGenerated;
+        colorsUnderLine.emplace_back(useEditedColor ? editedColor : generatedColor);
+
+        prevPointGenerated = currPointGenerated;
+    }
+
+    // This is the trailing color (after the last point) - it always follows the color of the last point...
+    colorsUnderLine.emplace_back(prevPointGenerated ? generatedColor : editedColor);
+
+    polyline->setColorsUnderLine(colorsUnderLine);
 }
 
 QColor NotationAutomationController::inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const
@@ -585,7 +746,7 @@ void NotationAutomationController::updatePolylinesGeometry()
         polyline->setX(staffCanvasRect.x());
         polyline->setY(staffCanvasRect.y());
 
-        applyPolylineColors(polyline);
+        applyPolylineColors(polyline, key);
     }
 }
 
@@ -598,7 +759,7 @@ void NotationAutomationController::updatePolylinesColors()
         // TODO: Staves can have multiple polylines due to horizontal frames, at the moment we're
         // providing a single polyline over the entire staff...
         PolylinePlot* polyline = *polylines.begin();
-        applyPolylineColors(polyline);
+        applyPolylineColors(polyline, key);
     }
 }
 
@@ -617,13 +778,119 @@ void NotationAutomationController::setViewMatrix(const muse::draw::Transform& vi
 void NotationAutomationController::onCurrentNotationChanged()
 {
     m_pendingChanges.clear();
+    m_pendingScoreState = PendingScoreState();
     rebuildAllPolylines();
 
     if (automationData()) {
         automationData()->changed().onReceive(this, [this](const mu::engraving::AutomationChanges& changes) {
-            onAutomationChanged(changes);
+            mergePendingChanges(changes);
+            scheduleUpdate();
         }, Asyncable::Mode::SetReplace /* FIXME */);
     }
+
+    if (score()) {
+        score()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
+            mergePendingScoreChanges(changes);
+            scheduleUpdate();
+        }, Asyncable::Mode::SetReplace /* FIXME */);
+    }
+}
+
+void NotationAutomationController::mergePendingScoreChanges(const mu::engraving::ScoreChanges& changes)
+{
+    const bool firstChange = !m_pendingScoreState.hasChanges;
+    m_pendingScoreState.hasChanges = true;
+    m_pendingScoreState.structural = m_pendingScoreState.structural || isStructuralChange(changes);
+
+    if (!changes.isValidBoundary()) {
+        m_pendingScoreState.boundary = std::nullopt;
+        return;
+    }
+    if (!firstChange && !m_pendingScoreState.boundary) {
+        return;
+    }
+
+    const TickStaffRange changeRange { changes.tickFrom, changes.tickTo, changes.staffIdxFrom, changes.staffIdxTo };
+    TickStaffRange range = m_pendingScoreState.boundary.value_or(changeRange);
+    range.tickFrom = std::min(range.tickFrom, changeRange.tickFrom);
+    range.tickTo = std::max(range.tickTo, changeRange.tickTo);
+    range.staffIdxFrom = std::min(range.staffIdxFrom, changeRange.staffIdxFrom);
+    range.staffIdxTo = std::max(range.staffIdxTo, changeRange.staffIdxTo);
+    m_pendingScoreState.boundary = range;
+}
+
+void NotationAutomationController::scheduleUpdate()
+{
+    if (m_updateScheduled) {
+        return;
+    }
+    m_updateScheduled = true;
+
+    muse::async::Async::call(this, [this]() {
+        m_updateScheduled = false;
+        processPendingChanges();
+    });
+}
+
+void NotationAutomationController::processPendingChanges()
+{
+    if (!m_pendingScoreState.hasChanges && m_pendingChanges.isEmpty()) {
+        return;
+    }
+    const PendingScoreState scoreState = m_pendingScoreState;
+    m_pendingScoreState = PendingScoreState();
+
+    const bool automationVisible = automation() && automation()->isAutomationModeEnabled();
+
+    if (scoreState.structural) {
+        if (!automationVisible) {
+            // Nothing visible right now; defer the rebuild until automation mode is enabled again
+            m_pendingChanges.isFullReset = true;
+            return;
+        }
+        rebuildAllPolylines();
+        m_pendingChanges.clear();
+        return;
+    }
+
+    if (!automationVisible) {
+        // Nothing visible right now; m_pendingChanges keeps accumulating for next time
+        return;
+    }
+
+    if (!m_pendingChanges.isEmpty()) {
+        applyAutomationChanges(m_pendingChanges);
+        m_pendingChanges.clear();
+        return;
+    }
+
+    // No automation-data change and nothing structural - just layout drift
+    // (e.g. measure widths shifted); refresh point positions using the batch's own range
+    for (const auto& [key, polylines] : m_stavesToLinesMap) {
+        IF_ASSERT_FAILED(key.isValid()) {
+            continue;
+        }
+        const Staff* staff = score()->staff(key.staffIdx);
+        if (!staff) {
+            continue;
+        }
+
+        const int systemStartTick = key.system->first()->tick().ticks();
+        const int systemEndTick = key.system->last()->endTick().ticks();
+        if (scoreState.boundary) {
+            const TickStaffRange& range = *scoreState.boundary;
+            if (staff->idx() < range.staffIdxFrom || staff->idx() > range.staffIdxTo) {
+                continue;
+            }
+            if (systemEndTick < range.tickFrom || systemStartTick > range.tickTo) {
+                continue;
+            }
+        }
+
+        updateStaffPointsInRange(key, systemStartTick, systemEndTick);
+    }
+
+    updatePolylinesGeometry();
 }
 
 void NotationAutomationController::rebuildAllPolylines()
@@ -702,17 +969,8 @@ void NotationAutomationController::updateStaffPointsInRange(const SysStaffKey& k
         points.push_back(pointData.qPointF);
     }
     polyline->setPoints(points);
+    applyPolylineColorsUnderLine(polyline, key);
     polyline->update();
-}
-
-void NotationAutomationController::onAutomationChanged(const mu::engraving::AutomationChanges& changes)
-{
-    if (!automation() || !automation()->isAutomationModeEnabled()) {
-        mergePendingChanges(changes);
-        return;
-    }
-
-    applyAutomationChanges(changes);
 }
 
 void NotationAutomationController::mergePendingChanges(const mu::engraving::AutomationChanges& changes)
@@ -735,11 +993,14 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
 
     std::set<muse::ID> affectedStaffIds;
     std::set<mu::engraving::InstrumentTrackId> affectedTrackIds;
+    bool globalAffected = false;
     for (const mu::engraving::AutomationCurveKey& key : changes.affectedKeys) {
         if (const std::optional<muse::ID> staffId = key.staffId()) {
             affectedStaffIds.insert(*staffId);
         } else if (const std::optional<mu::engraving::InstrumentTrackId> trackId = key.trackId()) {
             affectedTrackIds.insert(*trackId);
+        } else if (key.isGlobal()) {
+            globalAffected = true;
         }
     }
 
@@ -757,7 +1018,8 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
         const bool staffAffected = affectedStaffIds.find(staff->id()) != affectedStaffIds.end();
         const mu::engraving::InstrumentTrackId staffTrackId { staff->part()->id(), staff->part()->instrumentId() };
         const bool trackAffected = affectedTrackIds.find(staffTrackId) != affectedTrackIds.end();
-        if (!staffAffected && !trackAffected) {
+        const bool globalCurveAffected = globalAffected && curveKeyFor(currentAutomationType(), staff).isGlobal();
+        if (!staffAffected && !trackAffected && !globalCurveAffected) {
             continue;
         }
         const System* system = key.system;
@@ -803,7 +1065,8 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     const mu::engraving::real_t existingInValue = mu::engraving::resolveInValue(curve, existingIt);
 
     //! NOTE: Point in/out values are rescaled to the display range - higher value == lower Y...
-    const mu::engraving::real_t newValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y);
+    const mu::engraving::real_t referenceValue = pointType == PointData::PointType::IN ? existingInValue : existingPoint.value.outValue;
+    const mu::engraving::real_t newValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y, referenceValue);
 
     // STEP 4 - Update the point's value, and move it to the new tick if necessary...
 
@@ -814,14 +1077,14 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     if (!tickChanged || pointType == PointData::PointType::BOTH) {
         mu::engraving::AutomationPoint editedPoint = existingPoint;
-        const mu::engraving::AutomationPoint::Bend preservedBend
-            = mu::engraving::bend(editedPoint).value_or(mu::engraving::AutomationPoint::Bend::none());
+        const mu::engraving::AutomationPoint::Ease preservedEase
+            = mu::engraving::ease(editedPoint).value_or(mu::engraving::AutomationPoint::Ease::none());
         if (pointType == PointData::PointType::IN) {
             // The user explicitly chose this arrival value; it no longer follows whatever precedes it
-            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newValue, preservedBend };
+            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newValue, preservedEase };
         } else if (pointType == PointData::PointType::BOTH) {
             editedPoint.value.outValue = newValue;
-            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { editedPoint.value.outValue, preservedBend };
+            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { editedPoint.value.outValue, preservedEase };
         } else {
             editedPoint.value.outValue = newValue;
         }
@@ -838,19 +1101,19 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     // oldTick becomes a flat BOTH point, so its inValue is frozen to outValue at edit time (it no
     // longer live-tracks outValue if it's edited again later)
-    const mu::engraving::AutomationPoint::Bend originalBend
-        = mu::engraving::bend(existingPoint).value_or(mu::engraving::AutomationPoint::Bend::none());
+    const mu::engraving::AutomationPoint::Ease originalEase
+        = mu::engraving::ease(existingPoint).value_or(mu::engraving::AutomationPoint::Ease::none());
 
     mu::engraving::AutomationPoint updatedOldPoint = existingPoint;
     if (pointType == PointData::PointType::OUT) {
         updatedOldPoint.value.outValue = existingInValue;
     }
-    updatedOldPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { updatedOldPoint.value.outValue, originalBend };
+    updatedOldPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { updatedOldPoint.value.outValue, originalEase };
     updatedOldPoint.generated = false;
 
     mu::engraving::AutomationPoint newPoint;
     newPoint.value.outValue = newValue;
-    newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue, originalBend };
+    newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue, originalEase };
     newPoint.itemId = existingPoint.itemId;
 
     mu::engraving::AutomationPointEdits edits {
@@ -885,7 +1148,7 @@ bool NotationAutomationController::requestAddPoint(const SysStaffKey& key, qreal
     mu::engraving::AutomationPoint newPoint;
     newPoint.value.outValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y);
     newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue,
-                                                                               mu::engraving::AutomationPoint::Bend::none() };
+                                                                               mu::engraving::AutomationPoint::Ease::none() };
     newPoint.generated = false;
 
     const mu::engraving::AutomationCurveKey curveKey = curveKeyFor(currentAutomationType(), staff);

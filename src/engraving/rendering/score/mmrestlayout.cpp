@@ -110,7 +110,7 @@ void MMRestLayout::reuseExistingMMRest(LayoutContext& ctx, Measure* mmrMeasure, 
             nextLastMeasure = nextLastMeasure ? nextLastMeasure : ctx.mutDom().lastMeasure();
             const int numMeasuresInNewMMRest = nextLastMeasure->measureIndex() - nextFirstMeasure->measureIndex() + 1;
 
-            Measure* nextMMRMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
+            Measure* nextMMRMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->score());
             nextMMRMeasure->setTicks(remainingMMRDuration);
             nextMMRMeasure->setTick(nextFirstMeasure->tick());
             ctx.mutDom().undo(new ChangeMMRest(nextFirstMeasure, nextMMRMeasure));
@@ -183,7 +183,7 @@ void MMRestLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measu
     if (mmrMeasure) {
         reuseExistingMMRest(ctx, mmrMeasure, lastMeasure, len);
     } else {
-        mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
+        mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->score());
         mmrMeasure->setTicks(len);
         mmrMeasure->setTick(firstMeasure->tick());
         ctx.mutDom().undo(new ChangeMMRest(firstMeasure, mmrMeasure));
@@ -206,7 +206,7 @@ void MMRestLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measu
             mmr->setDurationType(DurationType::V_MEASURE);
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
-            mmr->setParent(chordRestSeg);
+            mmr->setOwnershipParent(chordRestSeg);
             ctx.mutDom().doUndoAddElement(mmr);
         }
     }
@@ -378,6 +378,13 @@ void MMRestLayout::changeAnnotationsParent(Segment* oldParent, Segment* newParen
         }
         if (checkVisibility && (!e->visible() || !ctx.dom().staff(e->staffIdx())->show())) {
             continue;
+        }
+
+        if (e->isInstrumentChange()) {
+            /* InstrumentChange items register their Instrument in Part::instruments(), keyed by the tick of
+             * the segment they belong to (see Segment::add/remove). Re-parenting one to a segment at a different
+             * tick would re-key that entry, making the instrument change take effect at the wrong time: */
+            DO_ASSERT_X(oldParent->tick() == newParent->tick(), "Changing InstrumentChange's parent to a different tick");
         }
 
         e->score()->undoChangeParent(e, newParent, e->staffIdx(), false);
@@ -811,7 +818,7 @@ void MMRestLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
             rr = new MMRestRange(m);
             rr->setTrack(staffIdx * VOICES);
             rr->setGenerated(true);
-            rr->setParent(m);
+            rr->setOwnershipParent(m);
             m->add(rr);
         }
         // setXmlText is reimplemented to take care of brackets

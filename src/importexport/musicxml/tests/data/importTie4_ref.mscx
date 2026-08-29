@@ -277,58 +277,36 @@ Arranged by [Arranger]</metaTag>
             <StemDirection>up</StemDirection>
             <Note>
               <eid>O_O</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>P_P</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <voices>1</voices>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>S_S</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>T_T</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>R_R</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>V_V</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>T_T</eid>
+              <Tie>
+                <startElement>R_R</startElement>
+                <endElement>T_T</endElement>
+                <eid>U_U</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -336,23 +314,21 @@ Arranged by [Arranger]</metaTag>
           </voice>
         <voice>
           <Rest>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>Y_Y</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <voices>-1</voices>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>X_X</eid>
+              <Tie>
+                <startElement>O_O</startElement>
+                <endElement>X_X</endElement>
+                <eid>Y_Y</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -372,78 +348,54 @@ Arranged by [Arranger]</metaTag>
             <StemDirection>up</StemDirection>
             <Note>
               <eid>c_c</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>d_d</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <staves>1</staves>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>e_e</eid>
+            <eid>d_d</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>f_f</eid>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>g_g</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>h_h</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <voices>1</voices>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>f_f</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>j_j</eid>
+            <eid>h_h</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
-            <eid>k_k</eid>
+            <eid>i_i</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
-            <eid>l_l</eid>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>m_m</eid>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>n_n</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <voices>-1</voices>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>l_l</eid>
+              <Tie>
+                <startElement>f_f</startElement>
+                <endElement>l_l</endElement>
+                <eid>m_m</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -458,15 +410,15 @@ Arranged by [Arranger]</metaTag>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>o_o</eid>
+            <eid>n_n</eid>
             </Clef>
           <TimeSig>
-            <eid>p_p</eid>
+            <eid>o_o</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>q_q</eid>
+            <eid>p_p</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -475,24 +427,22 @@ Arranged by [Arranger]</metaTag>
       <Measure>
         <voice>
           <Rest>
-            <eid>r_r</eid>
+            <eid>q_q</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>s_s</eid>
+            <eid>r_r</eid>
             <staffMove>-1</staffMove>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>t_t</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <staves>-1</staves>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>s_s</eid>
+              <Tie>
+                <startElement>c_c</startElement>
+                <endElement>s_s</endElement>
+                <eid>t_t</eid>
+                <track>0</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>

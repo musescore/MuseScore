@@ -71,8 +71,8 @@ static const ElementStyle glissandoElementStyle {
 //   GlissandoSegment
 //=========================================================
 
-GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
-    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+GlissandoSegment::GlissandoSegment(Glissando* sp)
+    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, ElementFlag::MOVABLE)
 {
 }
 
@@ -109,12 +109,11 @@ Glissando::Glissando(EngravingItem* parent)
 {
     initElementStyle(&glissandoElementStyle);
 
-    static const std::array<Pid, 5> propertiesToInitialise {
+    static const std::array<Pid, 4> propertiesToInitialise {
         Pid::GLISS_SHIFT,
         Pid::GLISS_EASEIN,
         Pid::GLISS_EASEOUT,
-        Pid::DIAGONAL,
-        Pid::ANCHOR
+        Pid::DIAGONAL
     };
 
     for (const Pid& pid : propertiesToInitialise) {
@@ -142,9 +141,9 @@ Glissando::Glissando(const Glissando& g)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Glissando::createLineSegment(System* parent)
+LineSegment* Glissando::createLineSegment()
 {
-    GlissandoSegment* seg = new GlissandoSegment(this, parent);
+    GlissandoSegment* seg = new GlissandoSegment(this);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
@@ -273,8 +272,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE16:
     case NoteType::GRACE32:
         // move unto parent chord and proceed to standard case
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            chord = toChord(chord->explicitParent());
+        if (chord->ownershipParent() && chord->ownershipParent()->isChord()) {
+            chord = toChord(chord->ownershipParent());
         } else {
             return 0;
         }
@@ -283,8 +282,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE8_AFTER:
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            return toChord(chord->explicitParent())->upNote();
+        if (chord->ownershipParent() && chord->ownershipParent()->isChord()) {
+            return toChord(chord->ownershipParent())->upNote();
         } else {                                // no parent or parent is not a chord?
             return nullptr;
         }
@@ -304,7 +303,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
     // standard case (NORMAL or grace before chord)
 
     // if parent not a segment, can't locate a target note
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         return 0;
     }
 
@@ -454,8 +453,6 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
         return style().styleV(Sid::glissandoText);
     case Pid::DIAGONAL:
         return true;
-    case Pid::ANCHOR:
-        return int(Spanner::Anchor::NOTE);
     default:
         break;
     }

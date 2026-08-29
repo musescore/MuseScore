@@ -178,17 +178,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>W_W</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>X_X</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-2/3</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -197,10 +186,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Y_Y</eid>
+        <eid>X_X</eid>
         <voice>
           <Tuplet>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -210,18 +199,16 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>a_a</eid>
+            <eid>Z_Z</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>b_b</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>2/3</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>a_a</eid>
+              <Tie>
+                <startElement>W_W</startElement>
+                <endElement>a_a</endElement>
+                <eid>b_b</eid>
+                <track>0</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>

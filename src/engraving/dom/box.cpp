@@ -33,6 +33,7 @@
 #include "harmony.h"
 #include "layoutbreak.h"
 #include "masterscore.h"
+#include "measure.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"
@@ -58,7 +59,7 @@ static const ElementStyle hBoxStyle {
 
 static const String FRET_BOX_DIAGRAMS_SEPARATOR = u",";
 
-Box::Box(const ElementType& type, System* parent)
+Box::Box(const ElementType& type, Score* parent)
     : MeasureBase(type, parent)
 {
 }
@@ -299,7 +300,7 @@ void Box::copyValues(Box* origin)
 //   HBox
 //---------------------------------------------------------
 
-HBox::HBox(System* parent)
+HBox::HBox(Score* parent)
     : Box(ElementType::HBOX, parent)
 {
     initElementStyle(&hBoxStyle);
@@ -384,7 +385,7 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
             break;
         }
         lb->setTrack(0);
-        lb->setParent(this);
+        lb->setOwnershipParent(this);
         score()->undoAddElement(lb);
         return lb;
     }
@@ -392,7 +393,7 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
     case ElementType::STAFF_TEXT:
     {
         Text* text = Factory::createText(this, TextStyleType::FRAME);
-        text->setParent(this);
+        text->setOwnershipParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);
         delete e;
@@ -424,7 +425,7 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
     case ElementType::TEXT:
     case ElementType::IMAGE:
     case ElementType::SYMBOL:
-        e->setParent(this);
+        e->setOwnershipParent(this);
         score()->undoAddElement(e);
         return e;
     default:
@@ -467,7 +468,7 @@ void Box::manageExclusionFromParts(bool exclude)
                     if (MeasureBase* localPrevMeasure = score->tick2measure(prevMeasure->tick())) {
                         EngravingItem* newSectionBreak = sectionBreak->linkedClone();
                         newSectionBreak->setScore(score);
-                        newSectionBreak->setParent(localPrevMeasure);
+                        newSectionBreak->setOwnershipParent(localPrevMeasure);
                         score->doUndoAddElement(newSectionBreak);
                     }
                 }
@@ -531,9 +532,10 @@ RectF HBox::drag(EditData& data)
     RectF r(canvasBoundingRect());
     double diff = data.evtDelta.x();
     double x1   = offset().x() + diff;
-    if (explicitParent()->isVBox()) {
-        VBox* vb = toVBox(explicitParent());
-        double x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
+    EngravingItem* parent = layoutParent();
+    if (parent && parent->isVBox()) {
+        VBox* vb = toVBox(parent);
+        double x2 = parent->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {
             x1 = 0.0;
         } else if (x1 > x2) {
@@ -551,7 +553,7 @@ RectF HBox::drag(EditData& data)
 
 bool HBox::isMovable() const
 {
-    return explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox());
+    return ownershipParent() && (ownershipParent()->isHBox() || ownershipParent()->isVBox());
 }
 
 //---------------------------------------------------------
@@ -605,7 +607,7 @@ PropertyValue HBox::propertyDefault(Pid id) const
 //   VBox
 //---------------------------------------------------------
 
-VBox::VBox(const ElementType& type, System* parent)
+VBox::VBox(const ElementType& type, Score* parent)
     : Box(type, parent)
 {
     initElementStyle(&boxStyle);
@@ -615,7 +617,7 @@ VBox::VBox(const ElementType& type, System* parent)
     setLineBreak(true);
 }
 
-VBox::VBox(System* parent)
+VBox::VBox(Score* parent)
     : VBox(ElementType::VBOX, parent)
 {
 }
@@ -694,7 +696,7 @@ void VBox::startDragGrip(EditData& ed)
 ///   Add new EngravingItem \a e to fret diagram box
 //---------------------------------------------------------
 
-FBox::FBox(System* parent)
+FBox::FBox(Score* parent)
     : VBox(ElementType::FBOX, parent)
 {
     resetProperty(Pid::FRET_FRAME_TEXT_SCALE);
@@ -767,7 +769,7 @@ void FBox::init()
         String newName = diagramsNamesInScore[i];
         if (!muse::contains(oldDiagramsNames, newName)) {
             FretDiagram* newDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(harmonyOrDiagramsInScore[i]);
-            newDiagram->setParent(this);
+            newDiagram->setOwnershipParent(this);
             String nameOfDiagramBeforeThis = i > 0 ? diagramsNamesInScore[i - 1] : String();
             size_t idx = computeInsertionIdx(nameOfDiagramBeforeThis);
             score()->undo(new AddFretDiagramToFretBox(newDiagram, idx));
@@ -777,7 +779,7 @@ void FBox::init()
 
 void FBox::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     if (e->isFretDiagram()) {
         addAtIdx(toFretDiagram(e), muse::nidx);
     } else {
@@ -958,13 +960,13 @@ StringList FBox::diagramsOrder() const
 //   TBox
 //---------------------------------------------------------
 
-TBox::TBox(System* parent)
+TBox::TBox(Score* parent)
     : VBox(ElementType::TBOX, parent)
 {
     resetProperty(Pid::BOX_HEIGHT);
     m_text  = Factory::createText(this, TextStyleType::FRAME);
     m_text->setLayoutToParentWidth(true);
-    m_text->setParent(this);
+    m_text->setOwnershipParent(this);
 }
 
 TBox::TBox(const TBox& tbox)
@@ -1016,7 +1018,7 @@ void TBox::add(EngravingItem* e)
         }
         m_text = toText(e);
         m_text->setLayoutToParentWidth(true);
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->added();
     } else {
         VBox::add(e);
@@ -1037,7 +1039,7 @@ void TBox::remove(EngravingItem* el)
         LOGD("TBox::remove() - replacing _text");
         m_text = Factory::createText(this, TextStyleType::FRAME);
         m_text->setLayoutToParentWidth(true);
-        m_text->setParent(this);
+        m_text->setOwnershipParent(this);
         el->removed();
     } else {
         VBox::remove(el);

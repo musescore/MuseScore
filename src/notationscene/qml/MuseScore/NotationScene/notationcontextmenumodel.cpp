@@ -37,10 +37,14 @@
 #include "notation/inotationselection.h"
 
 #include "notationscene/notationcommands.h"
+#include "palette/palettecommands.h"
+#include "instrumentsscene/instrumentscommands.h"
 
 #include "widgets/editstyleutils.h"
 
 using namespace mu::notation;
+using namespace mu::palette;
+using namespace mu::instrumentsscene;
 using namespace muse;
 using namespace muse::uicomponents;
 using namespace muse::actions;
@@ -102,9 +106,9 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
 MenuItemList NotationContextMenuModel::makePageItems()
 {
     MenuItemList items {
-        makeMenuItem("edit-style"),
-        makeMenuItem("page-settings"),
-        makeMenuItem("load-style"),
+        makeMenuItem(OPEN_EDIT_STYLE_COMMAND),
+        makeMenuItem(OPEN_PAGE_SETTINGS_COMMAND),
+        makeMenuItem(LOAD_STYLE_COMMAND),
     };
 
     return items;
@@ -113,11 +117,11 @@ MenuItemList NotationContextMenuModel::makePageItems()
 MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 {
     MenuItemList items {
-        makeMenuItem("command://notation/cut"),
-        makeMenuItem("command://notation/copy"),
-        makeMenuItem("command://notation/paste"),
-        makeMenuItem("notation-swap"),
-        makeMenuItem("command://notation/delete"),
+        makeMenuItem(CUT_COMMAND),
+        makeMenuItem(COPY_COMMAND),
+        makeMenuItem(PASTE_COMMAND),
+        makeMenuItem(COPY_PASTE_SWAP_COMMAND),
+        makeMenuItem(DELETE_COMMAND),
     };
 
     return items;
@@ -126,17 +130,17 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
     MenuItemList items = {
-        makeMenuItem("command://notation/cut"),
-        makeMenuItem("command://notation/copy"),
-        makeMenuItem("command://notation/paste"),
-        makeMenuItem("notation-swap"),
+        makeMenuItem(CUT_COMMAND),
+        makeMenuItem(COPY_COMMAND),
+        makeMenuItem(PASTE_COMMAND),
+        makeMenuItem(COPY_PASTE_SWAP_COMMAND),
     };
 
     items << makeSeparator();
 
-    MenuItem* clearItem = makeMenuItem("command://notation/delete");
+    MenuItem* clearItem = makeMenuItem(DELETE_COMMAND);
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
-    MenuItem* deleteItem = makeMenuItem("time-delete");
+    MenuItem* deleteItem = makeMenuItem(REMOVE_SELECTED_RANGE_COMMAND);
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
     items << clearItem;
     items << deleteItem;
@@ -144,18 +148,18 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeSeparator();
 
     if (isDrumsetStaff()) {
-        items << makeMenuItem("customize-kit");
+        items << makeMenuItem(OPEN_CUSTOMIZE_KIT_COMMAND);
     }
 
-    items << makeMenuItem("staff-properties");
+    items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
     if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
         items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
     }
-    items << makeMenuItem("make-into-system", TranslatableString("notation", "Create system from selection"));
+    items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
     items << makeSeparator();
-    items << makeMenuItem("measure-properties");
+    items << makeMenuItem(OPEN_MEASURE_PROPERTIES_COMMAND);
 
     return items;
 }
@@ -164,7 +168,7 @@ MenuItemList NotationContextMenuModel::makeStaffTextItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem("staff-text-properties");
+    items << makeMenuItem(OPEN_STAFF_TEXT_PROPERTIES_COMMAND);
 
     return items;
 }
@@ -173,7 +177,7 @@ MenuItemList NotationContextMenuModel::makeSystemTextItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem("system-text-properties");
+    items << makeMenuItem(OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND);
 
     return items;
 }
@@ -182,7 +186,7 @@ MenuItemList NotationContextMenuModel::makeTimeSignatureItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem("time-signature-properties");
+    items << makeMenuItem(OPEN_TIME_SIGNATURE_PROPERTIES_COMMAND);
 
     return items;
 }
@@ -191,7 +195,7 @@ MenuItemList NotationContextMenuModel::makeInstrumentNameItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem("staff-properties");
+    items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
 
     return items;
 }
@@ -207,14 +211,14 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
     items << makeSeparator();
 
     if (element) {
-        engraving::EngravingObject* parent = element->isHarmony() ? element->explicitParent() : nullptr;
+        engraving::EngravingObject* parent = element->isHarmony() ? element->ownershipParent() : nullptr;
         bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
         if (!hasLinkedFretboardDiagram) {
-            items << makeMenuItem("add-fretboard-diagram");
+            items << makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND);
         }
     }
 
-    items << makeMenuItem("realize-chord-symbols");
+    items << makeMenuItem(OPEN_REALIZECHORDSYMBOLS_COMMAND);
 
     return items;
 }
@@ -231,7 +235,7 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
     const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(element);
     if (!fretDiagram->harmony()) {
         items << makeSeparator();
-        items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
+        items << makeMenuItem(ADD_CHORD_TEXT_COMMAND, TranslatableString("notation", "Add c&hord symbol"));
     }
 
     return items;
@@ -240,15 +244,12 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 {
     MenuItemList items {
-        makeMenuItem("command://notation/copy")
+        makeMenuItem(COPY_COMMAND)
     };
 
-    MenuItem* hideItem = makeMenuItem("command://notation/delete");
-
-    ui::UiAction action = hideItem->action();
-    action.iconCode = ui::IconCode::Code::NONE;
-    action.title = TranslatableString("notation", "Hide");
-    hideItem->setAction(action);
+    MenuItem* hideItem = makeMenuItem(DELETE_COMMAND);
+    hideItem->setTitle(TranslatableString("notation", "Hide"));
+    hideItem->setIcon(ui::IconCode::Code::NONE);
 
     items << hideItem
           << makeSeparator();
@@ -269,11 +270,13 @@ MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 MenuItemList NotationContextMenuModel::makeSelectItems()
 {
     if (isSingleSelection()) {
-        return MenuItemList { makeMenuItem("select-similar"), makeMenuItem("select-similar-staff"), makeMenuItem("select-dialog") };
+        return MenuItemList { makeMenuItem(SELECT_SIMILAR_COMMAND),
+                              makeMenuItem(SELECT_SIMILAR_IN_STAFF_COMMAND),
+                              makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
     } else if (canSelectSimilarInRange()) {
-        return MenuItemList { makeMenuItem("select-similar-range"), makeMenuItem("select-dialog") };
+        return MenuItemList { makeMenuItem(SELECT_SIMILAR_IN_RANGE_COMMAND), makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
     } else if (canSelectSimilar()) {
-        return MenuItemList{ makeMenuItem("select-dialog") };
+        return MenuItemList{ makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
     }
 
     return MenuItemList();
@@ -297,7 +300,7 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 
     if (element && element->isEditable()) {
         items << makeSeparator();
-        items << makeMenuItem("command://notation/screen-edit-element");
+        items << makeMenuItem(SCREEN_EDIT_ELEMENT_COMMAND);
     }
 
     items << makeSeparator()
@@ -309,11 +312,11 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measures-after-selection", TranslatableString("notation", "After selection…")),
-        makeMenuItem("insert-measures", TranslatableString("notation", "Before selection…")),
+        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND, TranslatableString("notation", "After selection…")),
+        makeMenuItem(INSERT_MEASURES_COMMAND, TranslatableString("notation", "Before selection…")),
         makeSeparator(),
-        makeMenuItem("insert-measures-at-start-of-score", TranslatableString("notation", "At start of score…")),
-        makeMenuItem("append-measures", TranslatableString("notation", "At end of score…"))
+        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, TranslatableString("notation", "At start of score…")),
+        makeMenuItem(APPEND_MEASURES_COMMAND, TranslatableString("notation", "At end of score…"))
     };
 
     return items;
@@ -322,8 +325,8 @@ MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 MenuItemList NotationContextMenuModel::makeMoveMeasureItems()
 {
     MenuItemList items {
-        makeMenuItem("move-measure-to-prev-system", TranslatableString("notation", "To previous system")),
-        makeMenuItem("move-measure-to-next-system", TranslatableString("notation", "To next system"))
+        makeMenuItem(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND, TranslatableString("notation", "To previous system")),
+        makeMenuItem(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND, TranslatableString("notation", "To next system"))
     };
 
     return items;
@@ -333,7 +336,7 @@ MenuItemList NotationContextMenuModel::makeChangeInstrumentItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem("change-instrument");
+    items << makeMenuItem(INSTRUMENTS_CHANGE_COMMAND);
 
     return items;
 }
@@ -341,13 +344,13 @@ MenuItemList NotationContextMenuModel::makeChangeInstrumentItems()
 MenuItemList NotationContextMenuModel::makeVerticalBoxItems()
 {
     MenuItemList addMenuItems;
-    addMenuItems << makeMenuItem("frame-text");
-    addMenuItems << makeMenuItem("title-text");
-    addMenuItems << makeMenuItem("subtitle-text");
-    addMenuItems << makeMenuItem("composer-text");
-    addMenuItems << makeMenuItem("poet-text");
-    addMenuItems << makeMenuItem("part-text");
-    addMenuItems << makeMenuItem("add-image");
+    addMenuItems << makeMenuItem(ADD_FRAME_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(ADD_TITLE_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(ADD_SUBTITLE_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(ADD_COMPOSER_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(ADD_LYRICIST_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(ADD_PART_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(ADD_IMAGE_COMMAND);
 
     MenuItemList items = makeElementItems();
     items << makeSeparator();
@@ -359,8 +362,8 @@ MenuItemList NotationContextMenuModel::makeVerticalBoxItems()
 MenuItemList NotationContextMenuModel::makeHorizontalBoxItems()
 {
     MenuItemList addMenuItems;
-    addMenuItems << makeMenuItem("frame-text");
-    addMenuItems << makeMenuItem("add-image");
+    addMenuItems << makeMenuItem(ADD_FRAME_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(ADD_IMAGE_COMMAND);
 
     MenuItemList items = makeElementItems();
     items << makeSeparator();
@@ -381,14 +384,13 @@ MenuItemList NotationContextMenuModel::makeHairpinItems()
     items << makeSeparator();
 
     const engraving::Hairpin* h = toHairpinSegment(element)->hairpin();
-    ui::UiActionState snapPrevState = { true, h->snapToItemBefore() };
-    MenuItem* snapPrev = makeMenuItem("toggle-snap-to-previous");
-    snapPrev->setState(snapPrevState);
+
+    MenuItem* snapPrev = makeMenuItem(TOGGLE_SNAP_TO_PREV_COMMAND);
+    snapPrev->setChecked(h->snapToItemBefore());
     items << snapPrev;
 
-    ui::UiActionState snapNextState = { true, h->snapToItemAfter() };
-    MenuItem* snapNext = makeMenuItem("toggle-snap-to-next");
-    snapNext->setState(snapNextState);
+    MenuItem* snapNext = makeMenuItem(TOGGLE_SNAP_TO_NEXT_COMMAND);
+    snapNext->setChecked(h->snapToItemAfter());
     items << snapNext;
 
     return items;
@@ -406,9 +408,9 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
     items << makeSeparator();
 
     const engraving::GradualTempoChange* gtc = toGradualTempoChangeSegment(element)->tempoChange();
-    ui::UiActionState snapNextState = { true, gtc->snapToItemAfter() };
-    MenuItem* snapNext = makeMenuItem("toggle-snap-to-next");
-    snapNext->setState(snapNextState);
+
+    MenuItem* snapNext = makeMenuItem(TOGGLE_SNAP_TO_NEXT_COMMAND);
+    snapNext->setChecked(gtc->snapToItemAfter());
     items << snapNext;
 
     return items;
@@ -417,7 +419,7 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
 MenuItemList NotationContextMenuModel::makeTextItems()
 {
     const EngravingItem* element = currentElement();
-    if (!(element->parentItem() && element->parentItem()->isBarLine())) {
+    if (!(element->ownershipParent() && element->ownershipParent()->isBarLine())) {
         // Regular text
         return makeElementItems();
     }
@@ -443,19 +445,20 @@ MenuItemList NotationContextMenuModel::makeTextItems()
 
 MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* element)
 {
-    MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);
-    item->setState(uiActionsRegister()->actionState(item->action().code));
+    MenuItem* item = makeMenuItem(OPEN_EDIT_STYLE_COMMAND);
 
     if (element) {
         std::string pageCode = EditStyleUtils::pageCodeForElement(element).toStdString();
-
         if (!pageCode.empty()) {
+            rcommand::CommandQuery query(OPEN_EDIT_STYLE_COMMAND);
+            query.addParam("page_code", Val(pageCode));
+
             std::string subPageCode = EditStyleUtils::subPageCodeForElement(element).toStdString();
             if (!subPageCode.empty()) {
-                item->setArgs(ActionData::make_arg2<std::string, std::string>(pageCode, subPageCode));
-            } else {
-                item->setArgs(ActionData::make_arg1<std::string>(pageCode));
+                query.addParam("sub_page_code", Val(subPageCode));
             }
+
+            item->setCommandQuery(query);
         }
     }
 
@@ -493,6 +496,7 @@ MenuItemList NotationContextMenuModel::makeAutomationTypeItems()
 {
     return {
         makeAutomationTypeItem(AutomationType::Dynamics, "dynamics", TranslatableString::untranslatable("Dynamics")),
+        makeAutomationTypeItem(AutomationType::Tempo, "tempo", TranslatableString::untranslatable("Tempo")),
         makeAutomationTypeItem(AutomationType::Volume, "volume", TranslatableString::untranslatable("Volume")),
         makeAutomationTypeItem(AutomationType::Pan, "pan", TranslatableString::untranslatable("Pan")),
     };
@@ -506,15 +510,11 @@ MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, 
         return item;
     }
 
-    item->setId(QString::fromStdString("automation-type-" + queryTypeParam));
-
-    ActionQuery query(SELECT_AUTOMATION_TYPE_COMMAND.toString());
+    rcommand::CommandQuery query(SELECT_AUTOMATION_TYPE_COMMAND);
     query.addParam("type", Val(queryTypeParam));
-    item->setQuery(query);
+    item->setCommandQuery(query);
 
-    ui::UiActionState state = item->state();
-    state.checked = notationConfiguration()->currentAutomationType() == type;
-    item->setState(state);
+    item->setChecked(notationConfiguration()->currentAutomationType() == type);
 
     return item;
 }

@@ -388,14 +388,13 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                     n = n->tieFor()->endNote();
                 }
                 Tie* tie = toTie(sp);
-                tie->setParent(n);
+                tie->setOwnershipParent(n);
                 tie->setStartNote(n);
                 n->setTieFor(tie);
             } else {
-                sp->setAnchor(Spanner::Anchor::NOTE);
                 sp->setStartElement(item);
                 item->addSpannerFor(sp);
-                sp->setParent(item);
+                sp->setOwnershipParent(item);
             }
         } else if (info->isEnd()) {
             sp->setTrack2(l.track());
@@ -409,9 +408,9 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 }
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-                if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()
-                    && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);
+                if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->ownershipParent()
+                    && item->ownershipParent()->isChord()) {
+                    toChord(item->ownershipParent())->setEndsNoteAnchoredLine(true);
                 }
                 item->addSpannerBack(sp);
             }
@@ -460,7 +459,6 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
         Spanner* sp = toSpanner(info->connector());
         const Location& l = info->location();
         if (info->isStart()) {
-            sp->setAnchor(Spanner::Anchor::SEGMENT);
             sp->setTrack(l.track());
             sp->setTrack2(l.track());
             sp->setTick(l.frac());

@@ -127,16 +127,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>S_S</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>T_T</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>10</fret>
@@ -145,17 +135,16 @@
             </Chord>
           <endTuplet/>
           <Chord>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>V_V</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>U_U</eid>
+              <Tie>
+                <startElement>S_S</startElement>
+                <endElement>U_U</endElement>
+                <eid>V_V</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>10</fret>

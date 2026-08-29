@@ -226,7 +226,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         if (doBreak) {
             breakMeasure = ctx.mutState().curMeasure();
             system->removeLastMeasure();
-            ctx.mutState().curMeasure()->setParent(oldSystem);
+            ctx.mutState().curMeasure()->setSystem(oldSystem);
             while (ctx.state().prevMeasure() && ctx.state().prevMeasure()->noBreak() && system->measures().size() > 1) {
                 ctx.mutState().setTick(ctx.state().tick() - ctx.state().curMeasure()->ticks());
                 if (ctx.state().curMeasure()->isMeasure()) {
@@ -238,7 +238,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure()->prev());
 
                 system->removeLastMeasure();
-                ctx.mutState().curMeasure()->setParent(oldSystem);
+                ctx.mutState().curMeasure()->setSystem(oldSystem);
             }
 
             if (sharedTrackMapChanged) {
@@ -453,7 +453,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     bool createBrackets = false;
     for (MeasureBase* mb : system->measures()) {
         if (mb->isMeasure()) {
-            mb->setParent(system);
+            mb->setSystem(system);
             Measure* m = toMeasure(mb);
             MeasureLayout::layoutMeasureElements(m, ctx);
             MeasureLayout::layoutStaffLines(m, ctx);
@@ -531,7 +531,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
 
     SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
     lockIndicator->setTrack(0);
-    lockIndicator->setParent(system);
+    lockIndicator->setOwnershipParent(system);
     system->addSystemLockIndicator(lockIndicator);
 
     TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
@@ -553,7 +553,7 @@ void SystemLayout::layoutPageLockIndicators(System* system)
 
     PageLockIndicator* lockIndicator = Factory::createPageLockIndicator(system, lock);
     lockIndicator->setTrack(0);
-    lockIndicator->setParent(system);
+    lockIndicator->setOwnershipParent(system);
     system->setPageLockIndicator(lockIndicator);
 
     TLayout::layoutPageLockIndicator(lockIndicator, lockIndicator->mutldata());
@@ -568,7 +568,7 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
     bool isVBox = ctx.state().curMeasure()->isVBox();
     System* system = nullptr;
     if (ctx.state().systemList().empty()) {
-        system = Factory::createSystem(ctx.mutDom().dummyParent()->page());
+        system = Factory::createSystem(ctx.mutDom().dummyParent()->score());
         ctx.mutState().setSystemOldMeasure(nullptr);
     } else {
         system = muse::takeFirst(ctx.mutState().systemList());
@@ -1073,7 +1073,7 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     System* system = elementsToLayout.system;
 
     for (Parenthesis* e : elementsToLayout.parenthesis) {
-        Segment* s = toSegment(e->parentItem());
+        Segment* s = e->segment();
         if (s->isType(SegmentType::TimeSigTypes)) {
             EngravingItem* el = s->element(e->track());
             TimeSig* timeSig = el ? toTimeSig(el) : nullptr;
@@ -1485,15 +1485,23 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                     if (cr->isChord()) {
                         elements.chords.push_back(toChord(cr));
 
-                        auto collectBends = [&elements] (Chord* chord) {
+                        auto collectBends = [&elements, system] (Chord* chord) {
                             for (Note* note : chord->notes()) {
                                 for (Spanner* sp : note->spannerBack()) {
                                     if (sp->isGuitarBend()) {
                                         elements.guitarBends.push_back(toGuitarBend(sp));
                                     }
                                 }
-                                if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
-                                    elements.guitarBends.push_back(bendFor);
+
+                                for (Spanner* sp : note->spannerFor()) {
+                                    if (sp->isGuitarBend()) {
+                                        GuitarBend* bend = toGuitarBend(sp);
+                                        Note* endNote = bend->endNote();
+                                        if (bend->bendType() == GuitarBendType::SLIGHT_BEND
+                                            || (endNote && endNote->tick() >= system->endTick())) {
+                                            elements.guitarBends.push_back(bend);
+                                        }
+                                    }
                                 }
                             }
                         };
@@ -1834,7 +1842,9 @@ void SystemLayout::layoutTiesAndBends(const ElementsToLayout& elementsToLayout, 
     GuitarDiveLayout::updateDiveSequences(elementsToLayout.guitarBends, ctx);
 
     for (GuitarBend* bend : elementsToLayout.guitarBends) {
-        TLayout::layoutGuitarBend(bend, ctx);
+        /* Bends which cross a system break are collected by both systems they touch, so we
+         * lay out only the segment which belongs to this one: */
+        TLayout::layoutGuitarBend(bend, ctx, system);
     }
 }
 
@@ -1844,7 +1854,7 @@ void SystemLayout::layoutNoteAnchoredSpanners(System* system, Chord* chord)
     for (Note* note : chord->notes()) {
         for (Spanner* spanner : note->spannerFor()) {
             for (SpannerSegment* spannerSeg : spanner->spannerSegments()) {
-                spannerSeg->setSystem(system);
+                spannerSeg->moveToSystem(system);
             }
         }
     }
@@ -2539,7 +2549,7 @@ void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
 
     skylineLine.remove_if([element](ShapeElement& shapeEl) {
-        return shapeEl.item() && (element == shapeEl.item() || element == shapeEl.item()->parentItem());
+        return shapeEl.item() && (element == shapeEl.item() || element == shapeEl.item()->ownershipParent());
     });
 }
 
@@ -2550,8 +2560,11 @@ void SystemLayout::updateSkylineForElement(EngravingItem* element, const System*
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
-        if (itemInSkyline && itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
-            itemInSkyline = itemInSkyline->parentItem();
+        if (itemInSkyline && itemInSkyline->isText()) {
+            const EngravingItem* owner = itemInSkyline->ownershipParentItem();
+            if (owner && owner->isSLineSegment()) {
+                itemInSkyline = owner;
+            }
         }
         if (itemInSkyline == element) {
             shapeEl.translate(0.0, yMove);

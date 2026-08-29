@@ -49,7 +49,7 @@ public:
 
     LedgerLine* clone() const override { return new LedgerLine(*this); }
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
 
     double len() const { return m_len; }
     void setLen(double v) { m_len = v; }

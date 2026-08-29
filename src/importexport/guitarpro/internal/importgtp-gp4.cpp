@@ -47,6 +47,7 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
+#include "engraving/dom/tempotext.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
@@ -100,14 +101,24 @@ bool GuitarPro4::readMixChange(Measure* measure)
         readChar();
     }
     if (temp >= 0) {
-        if (last_segment) {
-            score->setTempo(last_segment->tick(), double(temp) / 60.0f);
-            last_segment = nullptr;
-        }
         if (temp != previousTempo) {
+            if (last_segment && last_segment->tick() != measure->tick()) {
+                bool hasTempoText = false;
+                for (EngravingItem* e : last_segment->annotations()) {
+                    hasTempoText |= e->isTempoText();
+                }
+                if (!hasTempoText) {
+                    TempoText* tt = Factory::createTempoText(last_segment);
+                    tt->setTempo(double(temp) / 60.0f);
+                    tt->setVisible(false);
+                    tt->setTrack(0);
+                    last_segment->add(tt);
+                }
+            }
             previousTempo = temp;
             setTempo(temp, measure);
         }
+        last_segment = nullptr;
         readChar();
         tempoEdited = true;
     }
@@ -337,7 +348,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             Chord* gc = Factory::createChord(score->dummy()->segment());
             gc->setTrack(note->chord()->track());
             gc->add(gn);
-            gc->setParent(note->chord());
+            gc->setOwnershipParent(note->chord());
 
             TDuration d;
             d.setVal(grace_len);
@@ -366,7 +377,6 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
                 ChordRest* cr2 = toChord(note->chord());
 
                 Slur* slur1 = Factory::createSlur(score->dummy());
-                slur1->setAnchor(Spanner::Anchor::CHORD);
                 slur1->setStartElement(cr1);
                 slur1->setEndElement(cr2);
                 slur1->setTick(cr1->tick());
@@ -931,7 +941,7 @@ bool GuitarPro4::read(IODevice* io)
                         cr = Factory::createChord(score->dummy()->segment());
                     }
                 }
-                cr->setParent(segment);
+                cr->setOwnershipParent(segment);
                 cr->setTrack(track);
                 if (lyrics) {
                     cr->add(lyrics);
@@ -951,7 +961,7 @@ bool GuitarPro4::read(IODevice* io)
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
                         setTuplet(tuplet, tuple);
-                        tuplet->setParent(measure);
+                        tuplet->setOwnershipParent(measure);
                     }
                     tuplet->setTrack(track);
                     tuplet->setBaseLen(l);
@@ -994,7 +1004,7 @@ bool GuitarPro4::read(IODevice* io)
                             if (dotted) {
                                 // there is at most one dotted note in this guitar pro version
                                 NoteDot* dot = Factory::createNoteDot(note);
-                                dot->setParent(note);
+                                dot->setOwnershipParent(note);
                                 dot->setTrack(track);                  // needed to know the staff it belongs to (and detect tablature)
                                 dot->setVisible(true);
                                 note->add(dot);
@@ -1047,7 +1057,7 @@ bool GuitarPro4::read(IODevice* io)
                 if (slide != 2) {
                     if (hasSlur && (slurs[staffIdx] == 0)) {
                         Slur* slur = Factory::createSlur(score->dummy());
-                        slur->setParent(0);
+                        slur->setOwnershipParent(0);
                         slur->setTrack(track);
                         slur->setTrack2(track);
                         slur->setTick(cr->tick());
@@ -1092,11 +1102,10 @@ bool GuitarPro4::read(IODevice* io)
                                     for (auto n : cr1->notes()) {
                                         if (n->string() == last->string()) {
                                             Glissando* s = mu::engraving::Factory::createGlissando(n);
-                                            s->setAnchor(Spanner::Anchor::NOTE);
                                             s->setStartElement(n);
                                             s->setTick(seg->tick());
                                             s->setTrack(chord->track());
-                                            s->setParent(n);
+                                            s->setOwnershipParent(n);
                                             s->setGlissandoType(GlissandoType::STRAIGHT);
                                             s->setEndElement(last);
                                             s->setTick2(chord->segment()->tick());
@@ -1172,11 +1181,10 @@ bool GuitarPro4::read(IODevice* io)
                             break;
                         }
                         Glissando* s = new Glissando(n);
-                        s->setAnchor(Spanner::Anchor::NOTE);
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());
-                        s->setParent(n);
+                        s->setOwnershipParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         s->setEndElement(nt);
                         s->setTick2(nt->chord()->segment()->tick());

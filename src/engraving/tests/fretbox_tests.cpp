@@ -27,6 +27,7 @@
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 
 #include "utils/scorerw.h"
 
@@ -61,7 +62,7 @@ public:
             diagram->updateDiagram(chord);
 
             diagram->setTrack(0);
-            diagram->setParent(segment);
+            diagram->setOwnershipParent(segment);
 
             diagram->assignNewEID();
 
@@ -92,7 +93,7 @@ public:
         diagram->updateDiagram(chord);
 
         diagram->setTrack(0);
-        diagram->setParent(segment);
+        diagram->setOwnershipParent(segment);
 
         diagram->assignNewEID();
 
