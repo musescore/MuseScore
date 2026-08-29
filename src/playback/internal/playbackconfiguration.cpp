@@ -46,8 +46,11 @@ static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/
 static const Settings::Key SOUND_PRESETS_MULTI_SELECTION_KEY(moduleName, "application/playback/soundPresetsMultiSelectionEnabled");
 
 static const Settings::Key VIDEO_HIT_POINTS_PANEL_WIDTH_KEY(moduleName, "playback/video/hitPointsPanelWidth");
-static constexpr int VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH = 260;
-static constexpr int VIDEO_HIT_POINTS_PANEL_MIN_WIDTH = 240;
+static constexpr int VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH = 320;
+//! NOTE: must fit the hit-point table's own minimum row content (timecode +
+//! measure + a usable name column + the delete button) without clipping it --
+//! see the matching QML-side note next to VideoPanel.qml's hitPointsPanelMinWidth.
+static constexpr int VIDEO_HIT_POINTS_PANEL_MIN_WIDTH = 320;
 static constexpr int VIDEO_HIT_POINTS_PANEL_MAX_WIDTH = 420;
 
 static const Settings::Key RECENT_VIDEO_FILES_KEY(moduleName, "playback/video/recentFiles");
@@ -273,6 +276,11 @@ void PlaybackConfiguration::addRecentVideoFile(const QString& path)
     }
 
     settings()->setSharedValue(RECENT_VIDEO_FILES_KEY, Val(files.join(RECENT_VIDEO_FILES_SEPARATOR).toStdString()));
+}
+
+void PlaybackConfiguration::clearRecentVideoFiles()
+{
+    settings()->setSharedValue(RECENT_VIDEO_FILES_KEY, Val(std::string()));
 }
 
 bool PlaybackConfiguration::isMixerSectionVisible(MixerSectionType sectionType) const

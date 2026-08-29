@@ -38,13 +38,59 @@ Item {
     property int contentNavigationPanelOrderStart: 0
 
     readonly property int contentMargin: 8
-    readonly property int hitPointsPanelMinWidth: 240
+    // NOTE: the button row below the video is laid out as 3 independently
+    // anchored groups (left/centerIn/right) so the middle group stays truly
+    // centered on the video regardless of how wide the outer groups are --
+    // but that means, unlike a plain RowLayout, nothing here prevents the
+    // groups from painting on top of each other if the row gets narrower than
+    // all three combined need. This floor is sized for that: left cluster
+    // (Load+Recent, ~60) + centered cluster (#, M, Rewind, Play, Stop, Loop,
+    // ~220) + right cluster (zoom out/value/presets-dropdown/zoom in, ~108),
+    // plus content margins and slack for font-metrics rounding. NOTE: whenever
+    // a button is added to/removed from any of the three clusters, this needs
+    // revisiting too -- it does NOT update itself.
+    readonly property int previewPaneMinWidth: 480
+    // NOTE: must fit the hit-point table's own minimum row content (timecode 88
+    // + measure 64 + name's own 80 floor + delete button 28, plus spacing and
+    // panel margins) without clipping the delete button -- narrower than this
+    // and VideoHitPointsPanel's clip:true (needed so a squeezed floating window
+    // can't bleed the sidebar over the video) cuts the delete icons off instead.
+    readonly property int hitPointsPanelMinWidth: 320
     readonly property int hitPointsPanelMaxWidth: 420
-    property int hitPointsPanelWidth: 260
+    property int hitPointsPanelWidth: 320
     readonly property int timelineZoomMax: 10
     property real timelineZoom: 1
     readonly property int timelineFrameRate: Math.max(1, Math.round(videoModel.frameRate))
     readonly property int timelineFrameCount: videoModel.hasVideo && video.duration > 0 ? Math.floor((video.duration / 1000) * root.timelineFrameRate) + 1 : 0
+
+    // NOTE: shared drag state (rather than each hit point's own Repeater-instance-
+    // local state) so the ruler's marker line AND the timeline's reference line for
+    // the SAME hit point move together while it's being dragged -- otherwise the
+    // timeline's line (bound to the not-yet-committed modelData.timeMs) visibly
+    // lags behind the ruler's line (bound to the live drag position) until release.
+    property int draggingHitPointId: -1
+    property real draggingHitPointTimeMs: 0
+    property bool editingZoom: false
+
+    // NOTE: when this panel is floated into its own window, the dock framework
+    // derives that window's minimum resize size from this root item's own
+    // implicitWidth/Height rather than from the DockPanel's own minimumWidth
+    // property (which only constrains the DOCKED case) -- so the floating
+    // window's floor has to be declared here, or the SplitView below can be
+    // resized narrower than its two panes' own minimums, making the sidebar
+    // cover the video. Half the current sidebar width on top of the two panes'
+    // combined minimum leaves enough slack that this shouldn't get hit in
+    // normal use, per the user's own sizing rule of thumb.
+    implicitWidth: root.previewPaneMinWidth + root.hitPointsPanelMinWidth + Math.round(root.hitPointsPanelWidth / 2)
+
+    // NOTE: the generic "monospace" family alias doesn't reliably resolve to an
+    // actual fixed-pitch font on every platform -- when it doesn't, digits with
+    // different glyph widths (e.g. "1" vs "0") make the timer's rendered text
+    // width fluctuate every frame, which reads as the numbers "dancing" even
+    // though they sit in a fixed-width container. Name a real fixed-pitch font
+    // per platform instead.
+    readonly property string monoFontFamily: Qt.platform.os === "osx" ? "Menlo"
+                                              : (Qt.platform.os === "windows" ? "Consolas" : "monospace")
 
     clip: true
 
@@ -53,10 +99,25 @@ Item {
     }
 
     readonly property int syncToleranceMs: 180
+    // NOTE: the score reports its playback position far more often (every
+    // audio-engine tick, tens of times a second) than the video's own
+    // position actually advances between updates, so a plain "drift >
+    // tolerance -> seek" check ends up re-seeking the video repeatedly
+    // during perfectly normal playback -- each of those hits the hardware
+    // decoder (VideoToolbox on macOS, similarly on other platforms) with
+    // seeks faster than it can settle, which is what was flooding the log
+    // with "Failed to seek"/decode-failure spam. Throttling how often a
+    // drift-correction seek can actually fire (below) keeps sync within
+    // syncToleranceMs on average without hammering the decoder; a forced
+    // seek (explicit user action -- offset change, hit point click, initial
+    // load) always still happens immediately, this only throttles the
+    // continuous background drift correction during ordinary playback.
+    readonly property int minResyncIntervalMs: 500
+    property real lastResyncTime: 0
 
     Component.onCompleted: {
         videoModel.load()
-        root.hitPointsPanelWidth = videoModel.hitPointsPanelWidth()
+        root.hitPointsPanelWidth = Math.max(root.hitPointsPanelMinWidth, Math.min(root.hitPointsPanelMaxWidth, videoModel.hitPointsPanelWidth()))
     }
 
     function targetVideoPositionMs() {
@@ -64,8 +125,15 @@ Item {
     }
 
     function clearAttachedVideo() {
+        // NOTE: deliberately does NOT also do `video.source = ""` here -- `source`
+        // is declaratively bound to `videoModel.videoUrl` below; an imperative
+        // assignment to a bound property permanently breaks that binding for the
+        // rest of this Video element's lifetime. That silently broke reloading a
+        // video after Clear: videoModel.videoUrl kept changing correctly, but
+        // video.source was stuck at "" forever, so nothing ever loaded again.
+        // clearVideo() clearing the attachment already drives source to empty
+        // reactively through the binding, with no need for this to help.
         video.stop()
-        video.source = ""
         Qt.callLater(videoModel.clearVideo)
     }
 
@@ -73,6 +141,30 @@ Item {
     function seekToVideoPositionMs(videoPositionMs) {
         video.seek(videoPositionMs)
         videoModel.seekScoreToVideoPositionMs(videoPositionMs)
+        scrollTimelineToPositionMs(videoPositionMs)
+    }
+
+    // Scrolls the zoomed timeline so the given position is visible -- a no-op
+    // when it already is (e.g. seeking by clicking directly on the ruler/track,
+    // which is already in view by definition). Re-centers on the position
+    // rather than just nudging it into view, since a jump usually means the
+    // user wants to look around that point (e.g. clicking a hit point in the
+    // sidebar that's currently scrolled out of view).
+    function scrollTimelineToPositionMs(videoPositionMs) {
+        if (!videoModel.hasVideo || video.duration <= 0 || timelineFlickable.contentWidth <= timelineFlickable.width) {
+            return
+        }
+
+        var targetX = (videoPositionMs / video.duration) * timelineFlickable.contentWidth
+        var viewStart = timelineFlickable.contentX
+        var viewEnd = viewStart + timelineFlickable.width
+
+        if (targetX >= viewStart && targetX <= viewEnd) {
+            return
+        }
+
+        var centeredX = targetX - (timelineFlickable.width / 2)
+        timelineFlickable.contentX = Math.max(0, Math.min(timelineFlickable.contentWidth - timelineFlickable.width, centeredX))
     }
 
     function detectedFrameRate() {
@@ -159,6 +251,82 @@ Item {
         return 16 / 9
     }
 
+    // Read-only technical info about the currently attached video, for the
+    // sidebar's Information tab -- path/duration are already tracked
+    // elsewhere in this file, the rest comes from the same video.metaData
+    // this file already reads for frame rate/aspect ratio (see
+    // detectedFrameRate()/videoAspectRatio() above), with the same
+    // defensive multi-candidate-key + try/catch approach since not every
+    // key is populated on every platform/codec.
+    function videoInfo() {
+        var info = {
+            path: videoModel.videoPath,
+            durationMs: video.duration,
+            resolutionText: "",
+            frameRate: root.detectedFrameRate(),
+            fileFormat: "",
+            videoCodec: "",
+            videoBitRate: 0,
+            audioCodec: "",
+            audioChannels: 0,
+            audioSampleRate: 0,
+            audioBitRate: 0
+        }
+
+        if (!video.metaData) {
+            return info
+        }
+
+        function stringFor(key) {
+            try {
+                if (typeof MediaMetaData !== "undefined" && video.metaData.stringValue) {
+                    var s = video.metaData.stringValue(MediaMetaData[key])
+                    if (s) {
+                        return s
+                    }
+                }
+            } catch (error) {
+                // fall through -- not every Qt version/backend exposes stringValue()
+            }
+
+            return ""
+        }
+
+        function numberFor(key) {
+            try {
+                if (typeof MediaMetaData !== "undefined" && video.metaData.value) {
+                    var n = Number(video.metaData.value(MediaMetaData[key]))
+                    if (!isNaN(n) && n > 0) {
+                        return n
+                    }
+                }
+            } catch (error) {
+                // fall through
+            }
+
+            return 0
+        }
+
+        try {
+            var size = video.metaData.resolution || video.metaData.Resolution
+            if (size && size.width > 0 && size.height > 0) {
+                info.resolutionText = size.width + " x " + size.height
+            }
+        } catch (error) {
+            // keep default
+        }
+
+        info.fileFormat = stringFor("FileFormat")
+        info.videoCodec = stringFor("VideoCodec")
+        info.videoBitRate = numberFor("VideoBitRate")
+        info.audioCodec = stringFor("AudioCodec")
+        info.audioChannels = numberFor("ChannelCount")
+        info.audioSampleRate = numberFor("SampleRate")
+        info.audioBitRate = numberFor("AudioBitRate")
+
+        return info
+    }
+
     function timelineTickHeight(frameIndex) {
         var oneSecond = root.timelineFrameRate
         if (frameIndex % (oneSecond * 60) === 0) {
@@ -242,8 +410,15 @@ Item {
         }
 
         var targetPosition = targetVideoPositionMs()
-        if (forceSeek || Math.abs(video.position - targetPosition) > syncToleranceMs) {
+        if (forceSeek) {
             video.seek(targetPosition)
+            lastResyncTime = Date.now()
+        } else if (Math.abs(video.position - targetPosition) > syncToleranceMs) {
+            var now = Date.now()
+            if (now - lastResyncTime >= minResyncIntervalMs) {
+                video.seek(targetPosition)
+                lastResyncTime = now
+            }
         }
 
         if (videoModel.scorePlaying) {
@@ -267,6 +442,38 @@ Item {
         }
     }
 
+    // Keeps the playhead visible while playing a zoomed-in timeline, without a
+    // continuous auto-scroll (fighting the user's own manual scrolling) --
+    // instead jumps by a whole viewport-width "page" once the playhead actually
+    // leaves the visible range, landing on a fixed page boundary (0, one
+    // viewport width, two viewport widths, ...) rather than re-centering, so
+    // repeated playback of the same region pages consistently.
+    Connections {
+        target: video
+
+        function onPositionChanged() {
+            root.pageTimelineToKeepPlayheadVisible()
+        }
+    }
+
+    function pageTimelineToKeepPlayheadVisible() {
+        if (!videoModel.hasVideo || video.duration <= 0 || timelineFlickable.contentWidth <= timelineFlickable.width) {
+            return
+        }
+
+        var playheadX = (video.position / video.duration) * timelineFlickable.contentWidth
+        var viewStart = timelineFlickable.contentX
+        var viewEnd = viewStart + timelineFlickable.width
+
+        if (playheadX >= viewStart && playheadX <= viewEnd) {
+            return
+        }
+
+        var page = Math.floor(playheadX / timelineFlickable.width)
+        var pagedContentX = page * timelineFlickable.width
+        timelineFlickable.contentX = Math.max(0, Math.min(timelineFlickable.contentWidth - timelineFlickable.width, pagedContentX))
+    }
+
     SplitView {
         id: contentSplitView
 
@@ -280,6 +487,22 @@ Item {
             implicitHeight: 4
 
             color: ui.theme.strokeColor
+
+            // NOTE: only capture/persist the sidebar width once the user finishes
+            // dragging (not on every intermediate width change) -- so a transient
+            // shrink caused by too little available space -- see hitPointsPanel's
+            // SplitView.preferredWidth -- never overwrites the user's real
+            // preference with a space-constrained value.
+            Connections {
+                target: resizingHandle.SplitHandle
+
+                function onPressedChanged() {
+                    if (!resizingHandle.SplitHandle.pressed && hitPointsPanel.width > 0) {
+                        root.hitPointsPanelWidth = hitPointsPanel.width
+                        videoModel.setHitPointsPanelWidth(hitPointsPanel.width)
+                    }
+                }
+            }
 
             states: [
                 State {
@@ -304,9 +527,16 @@ Item {
         Item {
             id: leftPane
 
+            // NOTE: if the floating window gets resized narrower than this pane's
+            // and the sidebar's combined minimums (the OS-level floating-window
+            // resize floor isn't reliably enforced by the underlying dock
+            // framework), clip so squeezed content is cut off at this pane's own
+            // edge instead of visually bleeding into the sidebar.
+            clip: true
+
             SplitView.fillWidth: true
             SplitView.fillHeight: true
-            SplitView.minimumWidth: 320
+            SplitView.minimumWidth: root.previewPaneMinWidth
 
             ColumnLayout {
                 anchors.fill: parent
@@ -328,59 +558,96 @@ Item {
 
                 FontMetrics {
                     id: timerFontMetrics
-                    font.family: "monospace"
+                    font.family: root.monoFontFamily
                     font.pixelSize: 20
                     font.bold: true
                 }
 
-                RowLayout {
+                Rectangle {
+                    id: timecodeOverlayBackground
+
                     anchors.top: parent.top
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: 10
+                    // NOTE: must paint above videoFrame (declared below), which
+                    // otherwise covers this row whenever the video fills the top
+                    // of previewSlot.
+                    z: 2
                     visible: videoModel.hasVideo
-                    spacing: 8
 
-                    // NOTE: each zone below has a fixed width so digits changing width
-                    // (e.g. "1" vs "0") during playback can't shift anything else --
-                    // same technique as MeasureAndBeatFields.qml (see its comment/the
-                    // linked issue #9633) applied to plain read-only labels here.
-                    Item {
-                        Layout.preferredWidth: timerFontMetrics.advanceWidth("00:00:00:00")
-                        Layout.preferredHeight: timecodeLabel.implicitHeight
+                    // NOTE: a plain translucent backdrop behind the readout --
+                    // the video underneath can be any color (including near-white),
+                    // so the light, near-white timer text needs *some* darkening
+                    // behind it to stay legible in all cases. The alpha lives in
+                    // the color itself (not this Rectangle's `opacity`), so it
+                    // only darkens the video behind it without also fading out
+                    // the fully-opaque text drawn on top of it.
+                    //
+                    // NOTE: sized from timecodeOverlayRow.width, not
+                    // .implicitWidth -- a plain Row (below) always resolves its
+                    // own width to the sum of its (visible) children's actual
+                    // width, whereas a RowLayout's implicitWidth does not
+                    // reliably reflect children sized via Layout.preferredWidth
+                    // when the RowLayout itself isn't managed by an enclosing
+                    // Layout (as was the case here before, and produced a
+                    // background narrower than the text it was meant to sit
+                    // behind). Row already grows/shrinks correctly as the
+                    // reserved timecode/measure-number width or the number of
+                    // visible zones changes, so this stays correct regardless
+                    // of video length or measure count.
+                    radius: 4
+                    color: Qt.rgba(0, 0, 0, 0.5)
+                    width: timecodeOverlayRow.width + 16
+                    height: timecodeOverlayRow.height + 6
+
+                    Row {
+                        id: timecodeOverlayRow
+
+                        anchors.centerIn: parent
+                        spacing: 8
+
+                        // NOTE: each zone below has a fixed width so digits changing width
+                        // (e.g. "1" vs "0") during playback can't shift anything else --
+                        // same technique as MeasureAndBeatFields.qml (see its comment/the
+                        // linked issue #9633) applied to plain read-only labels here.
+                        Item {
+                            width: timerFontMetrics.advanceWidth("00:00:00:00")
+                            height: timecodeLabel.implicitHeight
+
+                            StyledTextLabel {
+                                id: timecodeLabel
+                                anchors.right: parent.right
+                                text: videoModel.formatTimecode(video.position)
+                                font.family: root.monoFontFamily
+                                font.pixelSize: 20
+                                font.bold: true
+                                color: "#F0F0F0"
+                            }
+                        }
 
                         StyledTextLabel {
-                            id: timecodeLabel
-                            anchors.right: parent.right
-                            text: videoModel.formatTimecode(video.position)
-                            font.family: "monospace"
+                            text: "|"
+                            visible: musicalPositionLabel.text.length > 0
                             font.pixelSize: 20
                             font.bold: true
+                            opacity: 0.6
                             color: "#F0F0F0"
                         }
-                    }
 
-                    StyledTextLabel {
-                        text: "|"
-                        visible: musicalPositionLabel.text.length > 0
-                        font.pixelSize: 20
-                        font.bold: true
-                        opacity: 0.6
-                        color: "#F0F0F0"
-                    }
+                        Item {
+                            width: timerFontMetrics.advanceWidth("9999.9")
+                            height: musicalPositionLabel.implicitHeight
+                            visible: musicalPositionLabel.text.length > 0
 
-                    Item {
-                        Layout.preferredWidth: timerFontMetrics.advanceWidth("9999.9")
-                        Layout.preferredHeight: musicalPositionLabel.implicitHeight
-                        visible: musicalPositionLabel.text.length > 0
-
-                        StyledTextLabel {
-                            id: musicalPositionLabel
-                            anchors.left: parent.left
-                            text: videoModel.musicalPositionText(video.position)
-                            font.family: "monospace"
-                            font.pixelSize: 20
-                            font.bold: true
-                            color: "#F0F0F0"
+                            StyledTextLabel {
+                                id: musicalPositionLabel
+                                anchors.left: parent.left
+                                text: videoModel.musicalPositionText(video.position)
+                                font.family: root.monoFontFamily
+                                font.pixelSize: 20
+                                font.bold: true
+                                color: "#F0F0F0"
+                            }
                         }
                     }
                 }
@@ -408,11 +675,29 @@ Item {
                         visible: videoModel.hasVideo
 
                         onSourceChanged: {
-                            stop()
+                            // NOTE: was stop() -- stopping a freshly-set source (instead of
+                            // pausing it) left some backends never reporting duration/
+                            // rendering a frame afterward: reloading a video showed a blank
+                            // frame and the whole timeline (gated on duration > 0) stayed
+                            // hidden. pause() still resets any prior playback state without
+                            // that side effect, and is compatible with the seek() that
+                            // syncVideoToScore() below does once duration is known.
+                            pause()
                         }
 
                         onDurationChanged: {
                             root.syncVideoToScore(true)
+
+                            // NOTE: same detect-and-apply logic as the Settings
+                            // tab's "Detect" button, just run automatically once
+                            // a newly loaded video's metadata is available (that's
+                            // what duration becoming known indicates), rather than
+                            // requiring a manual click every time -- getting fps
+                            // wrong is exactly what causes video/score sync drift.
+                            var detectedRate = root.detectedFrameRate()
+                            if (detectedRate > 0) {
+                                videoModel.frameRate = detectedRate
+                            }
                         }
                     }
 
@@ -465,42 +750,304 @@ Item {
                 }
             }
 
-            RowLayout {
+            Item {
                 Layout.fillWidth: true
-                spacing: 8
+                Layout.preferredHeight: 30
 
-                FlatButton {
-                    Layout.preferredWidth: 30
-                    Layout.preferredHeight: 30
-                    enabled: videoModel.hasVideo
-                    icon: video.playbackState === MediaPlayer.PlayingState ? IconCode.PAUSE : IconCode.PLAY
-                    iconFont: ui.theme.toolbarIconsFont
-                    buttonType: FlatButton.IconOnly
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 2
+                RowLayout {
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 8
 
-                    onClicked: {
-                        videoModel.toggleScorePlay()
+                    FilePicker {
+                        id: filePicker
+
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        showPathField: false
+                        path: videoModel.videoPath
+                        dialogTitle: qsTrc("playback", "Choose video")
+                        filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
+                        buttonType: FlatButton.IconOnly
+                        toolTipTitle: qsTrc("playback", "Open video")
+                        navigation: navigationPanel
+                        navigationRowOrderStart: root.contentNavigationPanelOrderStart + 2
+
+                        onPathEdited: function(newPath) {
+                            videoModel.videoPath = newPath
+                        }
+                    }
+
+                    FlatButton {
+                        id: recentFilesButton
+
+                        Layout.preferredWidth: 22
+                        Layout.preferredHeight: 22
+                        Layout.alignment: Qt.AlignVCenter
+                        icon: IconCode.SMALL_ARROW_DOWN
+                        buttonType: FlatButton.IconOnly
+                        transparent: true
+                        toolTipTitle: qsTrc("playback", "Recently opened videos")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 5
+
+                        onClicked: {
+                            var recentFiles = videoModel.recentVideoFiles()
+                            var menuItems = recentFiles.map(function(path) {
+                                return { id: path, title: path }
+                            })
+                            if (recentFiles.length > 0) {
+                                menuItems.push({ id: "", title: "" }) // separator
+                                menuItems.push({ id: "__clearRecent__", title: qsTrc("playback", "Clear list") })
+                            }
+                            recentFilesMenu.items = menuItems
+                            recentFilesMenu.show(Qt.point(0, height))
+                        }
+
+                        ContextMenuLoader {
+                            id: recentFilesMenu
+
+                            onHandleMenuItem: function(itemId) {
+                                if (itemId === "__clearRecent__") {
+                                    videoModel.clearRecentVideoFiles()
+                                    return
+                                }
+
+                                videoModel.videoPath = itemId
+                            }
+                        }
                     }
                 }
 
-                FlatButton {
-                    Layout.preferredWidth: 30
-                    Layout.preferredHeight: 30
-                    enabled: videoModel.hasVideo
-                    text: qsTrc("playback", "M", "Mark: add a hit point at the current position")
-                    toolTipTitle: qsTrc("playback", "Add hit point at current position")
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 3
+                // NOTE: centered on this Item's full width, which matches the video
+                // preview's width above -- not on the space left over between the
+                // Load/Recent group and the zoom controls (those differ in width, so
+                // that would center this group off from the video's true midpoint).
+                RowLayout {
+                    anchors.centerIn: parent
+                    spacing: 8
 
-                    onClicked: {
-                        videoModel.addHitPoint(video.position)
+                    FlatButton {
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        enabled: videoModel.hasVideo
+                        text: qsTrc("playback", "#", "Mark: add a hit point at the current position")
+                        toolTipTitle: qsTrc("playback", "Add hit point at current position")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 6
+
+                        onClicked: {
+                            videoModel.addHitPoint(video.position)
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        enabled: videoModel.hasVideo
+                        text: qsTrc("playback", "M", "Mute the video's own audio track")
+                        accentButton: videoModel.muted
+                        toolTipTitle: qsTrc("playback", "Mute video audio")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 7
+
+                        onClicked: {
+                            videoModel.muted = !videoModel.muted
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        enabled: videoModel.hasVideo
+                        icon: IconCode.REWIND_START_FILL
+                        buttonType: FlatButton.IconOnly
+                        toolTipTitle: qsTrc("playback", "Rewind to start")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 8
+
+                        onClicked: {
+                            root.seekToVideoPositionMs(0)
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        enabled: videoModel.hasVideo
+                        icon: video.playbackState === MediaPlayer.PlayingState ? IconCode.PAUSE : IconCode.PLAY
+                        iconFont: ui.theme.toolbarIconsFont
+                        buttonType: FlatButton.IconOnly
+                        toolTipTitle: video.playbackState === MediaPlayer.PlayingState ? qsTrc("playback", "Pause") : qsTrc("playback", "Play")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 9
+
+                        onClicked: {
+                            videoModel.toggleScorePlay()
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        enabled: videoModel.hasVideo
+                        icon: IconCode.STOP
+                        iconFont: ui.theme.toolbarIconsFont
+                        buttonType: FlatButton.IconOnly
+                        toolTipTitle: qsTrc("playback", "Stop")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 10
+
+                        onClicked: {
+                            videoModel.stopScorePlayback()
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.preferredWidth: 30
+                        Layout.preferredHeight: 30
+                        enabled: videoModel.hasVideo
+                        icon: IconCode.LOOP
+                        iconFont: ui.theme.toolbarIconsFont
+                        buttonType: FlatButton.IconOnly
+                        accentButton: videoModel.loopEnabled
+                        toolTipTitle: qsTrc("playback", "Loop playback")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 11
+
+                        onClicked: {
+                            videoModel.toggleLoopPlayback()
+                        }
                     }
                 }
+
+                RowLayout {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 4
+
+                    FlatButton {
+                        Layout.preferredWidth: 24
+                        Layout.preferredHeight: 24
+                        icon: IconCode.ZOOM_OUT
+                        buttonType: FlatButton.IconOnly
+                        transparent: true
+                        // NOTE: deliberately not disabled at the zoom boundary -- disabled
+                        // buttons are dimmed via opacity, and at this icon's default tint
+                        // that dimming reads as fully invisible against a dark theme's
+                        // toolbar. The boundary is still enforced, just in the handler.
+                        enabled: videoModel.hasVideo
+                        toolTipTitle: qsTrc("playback", "Zoom out")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 12
+
+                        onClicked: {
+                            root.timelineZoom = Math.max(1, root.timelineZoom - 0.25)
+                        }
+                    }
+
+                    // NOTE: plain read-only number when not editing (no box, no "%"
+                    // sign) -- click to edit, matching the double-click-to-edit idiom
+                    // used elsewhere in this panel (hit point timecode/label).
+                    Item {
+                        Layout.preferredWidth: 32
+                        Layout.preferredHeight: 24
+
+                        StyledTextLabel {
+                            anchors.fill: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font.pixelSize: 9
+                            text: Math.round(root.timelineZoom * 100).toString()
+                            visible: !root.editingZoom
+                            enabled: videoModel.hasVideo
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+
+                                onClicked: {
+                                    root.editingZoom = true
+                                    zoomEditor.forceActiveFocus()
+                                    zoomEditor.selectAll()
+                                }
+                            }
+                        }
+
+                        TextInputField {
+                            id: zoomEditor
+
+                            anchors.fill: parent
+                            currentText: Math.round(root.timelineZoom * 100).toString()
+                            visible: root.editingZoom
+                            inputField.font.pixelSize: 9
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 13
+
+                            onTextEditingFinished: function(newTextValue) {
+                                var parsedValue = parseInt(newTextValue, 10)
+                                if (!isNaN(parsedValue) && parsedValue > 0) {
+                                    root.timelineZoom = Math.max(1, Math.min(root.timelineZoomMax, parsedValue / 100))
+                                }
+                                root.editingZoom = false
+                            }
+
+                            Keys.onEscapePressed: {
+                                root.editingZoom = false
+                            }
+                        }
+                    }
+
+                    FlatButton {
+                        id: zoomPresetsButton
+
+                        Layout.preferredWidth: 16
+                        Layout.preferredHeight: 24
+                        icon: IconCode.SMALL_ARROW_DOWN
+                        buttonType: FlatButton.IconOnly
+                        transparent: true
+                        enabled: videoModel.hasVideo
+                        toolTipTitle: qsTrc("playback", "Zoom presets")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 14
+
+                        onClicked: {
+                            zoomPresetsMenu.items = [100, 250, 500, 750].map(function(percent) {
+                                return { id: percent.toString(), title: percent + "%" }
+                            })
+                            zoomPresetsMenu.show(Qt.point(0, height))
+                        }
+
+                        ContextMenuLoader {
+                            id: zoomPresetsMenu
+
+                            onHandleMenuItem: function(itemId) {
+                                root.timelineZoom = parseInt(itemId, 10) / 100
+                            }
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.preferredWidth: 24
+                        Layout.preferredHeight: 24
+                        icon: IconCode.ZOOM_IN
+                        buttonType: FlatButton.IconOnly
+                        transparent: true
+                        enabled: videoModel.hasVideo
+                        toolTipTitle: qsTrc("playback", "Zoom in")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 15
+
+                        onClicked: {
+                            root.timelineZoom = Math.min(root.timelineZoomMax, root.timelineZoom + 0.25)
+                        }
+                    }
+                }
+            }
 
                 Item {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 76
+                    Layout.preferredHeight: 88
 
                     StyledFlickable {
                         id: timelineFlickable
@@ -532,7 +1079,10 @@ Item {
                                 anchors.right: parent.right
                                 anchors.top: parent.top
                                 height: 20
-                                color: ui.theme.backgroundSecondaryColor
+                                // NOTE: fixed dark color, not a theme token -- this strip hosts the
+                                // white hit-point badge text/lines, and under the light theme
+                                // backgroundSecondaryColor was too close to white to read against.
+                                color: "#2A2A2A"
                                 visible: videoModel.hasVideo && video.duration > 0
 
                                 MouseArea {
@@ -546,52 +1096,85 @@ Item {
                                 Repeater {
                                     model: videoModel.hitPoints
 
-                                    Rectangle {
+                                    Item {
                                         id: hitPointMarker
 
                                         required property var modelData
                                         required property int index
-                                        property bool dragging: false
+                                        readonly property bool dragging: root.draggingHitPointId === modelData.id
                                         property bool editingLabel: false
-                                        property real dragTimeMs: modelData.timeMs
+                                        readonly property real dragTimeMs: root.draggingHitPointTimeMs
                                         readonly property real displayTimeMs: dragging ? dragTimeMs : modelData.timeMs
                                         readonly property real tickX: (displayTimeMs / Math.max(video.duration, 1)) * parent.width
+                                        readonly property int labelWidth: Math.max(20, badgeLabel.implicitWidth + 8)
 
-                                        x: Math.max(0, Math.min(parent.width - width, tickX - width / 2))
-                                        y: 2
-                                        width: Math.max(20, badgeLabel.implicitWidth + 12)
-                                        height: 16
-                                        radius: height / 2
-                                        color: ui.theme.accentColor
-                                        border.width: hitPointMarker.dragging ? 2 : 0
-                                        border.color: "white"
+                                        // NOTE: clamped only by the line's own width, not the whole
+                                        // item's (line + label) width -- the line marks the exact
+                                        // hit-point time and must match the reference line in the
+                                        // timeline track below at all times, including near the very
+                                        // end. Clamping by the full item width (as this used to) kept
+                                        // the label on-screen there, but dragged the line along with
+                                        // it, desyncing it from the true time / the track's line.
+                                        x: Math.max(0, Math.min(parent.width - markerLine.width, tickX))
+                                        y: 0
+                                        width: markerLine.width + labelWidth
+                                        height: parent.height
 
-                                        StyledTextLabel {
-                                            id: badgeLabel
-                                            anchors.centerIn: parent
-                                            text: parent.modelData.label
-                                            maximumLineCount: 1
-                                            font.pixelSize: 9
-                                            font.bold: true
-                                            color: "white"
-                                            visible: !hitPointMarker.editingLabel
+                                        Rectangle {
+                                            id: markerLine
+                                            width: 2
+                                            height: parent.height
+                                            color: ui.theme.accentColor
                                         }
 
-                                        TextInputField {
-                                            id: markerLabelEditor
+                                        Rectangle {
+                                            id: markerLabelBox
+                                            // NOTE: the label -- not the line -- absorbs the edge
+                                            // clamping instead, sliding left of its normal position
+                                            // (immediately right of the line) only as much as needed to
+                                            // stay fully inside the ruler.
+                                            x: Math.min(markerLine.width,
+                                                        hitPointMarker.parent.width - hitPointMarker.x - hitPointMarker.labelWidth)
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: hitPointMarker.labelWidth
+                                            height: 16
+                                            radius: 0
+                                            color: ui.theme.accentColor
+                                            border.width: hitPointMarker.dragging ? 2 : 0
+                                            border.color: "white"
 
-                                            anchors.centerIn: parent
-                                            width: Math.max(70, parent.width)
-                                            currentText: hitPointMarker.modelData.label
-                                            visible: hitPointMarker.editingLabel
-
-                                            onTextEditingFinished: function(newTextValue) {
-                                                videoModel.renameHitPoint(hitPointMarker.modelData.id, newTextValue)
-                                                hitPointMarker.editingLabel = false
+                                            StyledTextLabel {
+                                                id: badgeLabel
+                                                anchors.centerIn: parent
+                                                text: hitPointMarker.modelData.label
+                                                maximumLineCount: 1
+                                                font.pixelSize: 8
+                                                font.bold: true
+                                                color: "white"
+                                                visible: !hitPointMarker.editingLabel
                                             }
 
-                                            Keys.onEscapePressed: {
-                                                hitPointMarker.editingLabel = false
+                                            TextInputField {
+                                                id: markerLabelEditor
+
+                                                // NOTE: left-anchored (not centerIn) so the wider edit
+                                                // field grows to the right of the marker line instead of
+                                                // straddling the badge's own (narrower) center, which
+                                                // visibly shifted it left of the line/text when editing.
+                                                anchors.left: parent.left
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                width: Math.max(70, parent.width)
+                                                currentText: hitPointMarker.modelData.label
+                                                visible: hitPointMarker.editingLabel
+
+                                                onTextEditingFinished: function(newTextValue) {
+                                                    videoModel.renameHitPoint(hitPointMarker.modelData.id, newTextValue)
+                                                    hitPointMarker.editingLabel = false
+                                                }
+
+                                                Keys.onEscapePressed: {
+                                                    hitPointMarker.editingLabel = false
+                                                }
                                             }
                                         }
 
@@ -607,12 +1190,11 @@ Item {
                                             onPressed: function(mouse) {
                                                 if (mouse.button === Qt.RightButton) {
                                                     hitPointContextMenu.show(Qt.point(mouse.x, mouse.y))
-                                                    return
                                                 }
-
-                                                var mapped = mapToItem(positionSlider, mouse.x, mouse.y)
-                                                hitPointMarker.dragging = true
-                                                hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, positionSlider.width)
+                                                // NOTE: deliberately does nothing else on press -- starting
+                                                // the drag here (as before) snapped the marker to the click
+                                                // position even for a plain click with no movement. Only
+                                                // onPositionChanged (real movement) starts an actual drag.
                                             }
 
                                             onPositionChanged: function(mouse) {
@@ -621,7 +1203,8 @@ Item {
                                                 }
 
                                                 var mapped = mapToItem(timelineTrack, mouse.x, mouse.y)
-                                                hitPointMarker.dragTimeMs = root.timelinePositionForX(mapped.x, timelineTrack.width)
+                                                root.draggingHitPointId = hitPointMarker.modelData.id
+                                                root.draggingHitPointTimeMs = root.timelinePositionForX(mapped.x, timelineTrack.width)
                                             }
 
                                             onReleased: function(mouse) {
@@ -629,13 +1212,17 @@ Item {
                                                     return
                                                 }
 
-                                                videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, hitPointMarker.dragTimeMs)
-                                                root.seekToVideoPositionMs(hitPointMarker.dragTimeMs)
-                                                hitPointMarker.dragging = false
+                                                if (root.draggingHitPointId === hitPointMarker.modelData.id) {
+                                                    videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, root.draggingHitPointTimeMs)
+                                                    root.seekToVideoPositionMs(root.draggingHitPointTimeMs)
+                                                    root.draggingHitPointId = -1
+                                                }
                                             }
 
                                             onCanceled: {
-                                                hitPointMarker.dragging = false
+                                                if (root.draggingHitPointId === hitPointMarker.modelData.id) {
+                                                    root.draggingHitPointId = -1
+                                                }
                                             }
 
                                             onDoubleClicked: function(mouse) {
@@ -687,7 +1274,48 @@ Item {
                                 anchors.top: hitPointsRuler.bottom
                                 anchors.topMargin: 2
                                 anchors.bottom: parent.bottom
-                                color: ui.theme.backgroundTertiaryColor
+                                // NOTE: fixed dark color, not a theme token -- same reasoning as
+                                // hitPointsRuler above (this hosts the fixed-light tick/second-label
+                                // canvas text, which needs a reliably dark surface under it).
+                                color: "#181818"
+
+                            // Shaded region for MuseScore's own score loop-playback range (the
+                            // main transport toolbar's Loop button), converted from score ticks to
+                            // video-timeline position the same way hit points are.
+                            Rectangle {
+                                id: loopRegion
+
+                                readonly property real startX: (videoModel.loopStartMs / Math.max(video.duration, 1)) * parent.width
+                                readonly property real endX: (videoModel.loopEndMs / Math.max(video.duration, 1)) * parent.width
+
+                                visible: videoModel.hasVideo && video.duration > 0 && videoModel.loopEnabled
+                                         && videoModel.loopEndMs > videoModel.loopStartMs
+                                x: Math.max(0, Math.min(parent.width, startX))
+                                width: Math.max(0, Math.min(parent.width, endX) - x)
+                                height: parent.height
+                                color: ui.theme.accentColor
+                                opacity: 0.18
+                            }
+
+                            // Greys out the stretch of video with no corresponding music (e.g.
+                            // the video runs longer than the score) -- reads as "nothing to
+                            // sync against here" rather than implying hit points still make
+                            // sense against real measures out there. Stays correct as measures
+                            // are added/removed since scoreEndVideoPositionMs is recomputed on
+                            // every score edit (see VideoPanelModel::listenCurrentProject()).
+                            Rectangle {
+                                id: pastScoreEndRegion
+
+                                readonly property real startX: (videoModel.scoreEndVideoPositionMs / Math.max(video.duration, 1)) * parent.width
+
+                                visible: videoModel.hasVideo && video.duration > 0 && videoModel.scoreEndVideoPositionMs >= 0
+                                         && videoModel.scoreEndVideoPositionMs < video.duration
+                                x: Math.max(0, Math.min(parent.width, startX))
+                                width: parent.width - x
+                                height: parent.height
+                                color: "#000000"
+                                opacity: 0.45
+                            }
 
                             MouseArea {
                                 anchors.fill: parent
@@ -713,8 +1341,13 @@ Item {
                                 Rectangle {
                                     required property var modelData
 
+                                    // NOTE: follow the live drag position (not the not-yet-committed
+                                    // modelData.timeMs) while this hit point is being dragged in the
+                                    // ruler above, so the two reference lines never visibly diverge.
+                                    readonly property real displayTimeMs: root.draggingHitPointId === modelData.id ? root.draggingHitPointTimeMs : modelData.timeMs
+
                                     x: Math.max(0, Math.min(parent.width - width,
-                                                             (modelData.timeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
+                                                             (displayTimeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
                                     y: 2
                                     width: 1
                                     height: parent.height - y
@@ -727,10 +1360,15 @@ Item {
                             Canvas {
                                 id: frameTickCanvas
 
+                                // NOTE: the top strip is reserved for measure numbers (drawn above
+                                // the ticks), so the ticks/second-labels below are shifted down by
+                                // that same amount rather than starting at y:0.
+                                readonly property int measureRowHeight: 12
+
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 y: 6
-                                height: 30
+                                height: 30 + measureRowHeight
                                 visible: videoModel.hasVideo && video.duration > 0
 
                                 onPaint: {
@@ -742,15 +1380,23 @@ Item {
                                         return
                                     }
 
-                                    var primaryColor = ui.theme.fontPrimaryColor.toString()
-                                    var secondaryColor = ui.theme.strokeColor.toString()
+                                    // NOTE: fixed light colors, not theme tokens -- this canvas always
+                                    // sits on the ruler/track's own background (hitPointsRuler/
+                                    // timelineTrack below), which stays dark in both the app's light
+                                    // and dark themes, so a theme-adaptive fontPrimaryColor (dark under
+                                    // the light theme) goes unreadable here. Same reasoning as the
+                                    // hardcoded "#F0F0F0" timer text over previewSlot above.
+                                    var primaryColor = "#F0F0F0"
+                                    var secondaryColor = "#F0F0F0"
+                                    var measureColor = "#FFFFFF"
+                                    var tickTop = measureRowHeight
                                     for (var i = 0; i < tickCount; ++i) {
                                         var tickWidth = root.timelineTickWidth(i)
                                         var tickHeight = root.timelineTickHeight(i)
                                         var x = Math.max(0, Math.min(width - tickWidth, (i / Math.max(tickCount - 1, 1)) * width - (tickWidth / 2)))
                                         ctx.globalAlpha = i % root.timelineFrameRate === 0 ? 0.62 : 0.24
                                         ctx.fillStyle = i % root.timelineFrameRate === 0 ? primaryColor : secondaryColor
-                                        ctx.fillRect(x, 0, tickWidth, tickHeight)
+                                        ctx.fillRect(x, tickTop, tickWidth, tickHeight)
                                     }
 
                                     var durationSeconds = Math.floor(video.duration / 1000)
@@ -759,18 +1405,29 @@ Item {
                                     ctx.fillStyle = primaryColor
                                     ctx.globalAlpha = 0.74
 
-                                    // The total duration is always shown, right-aligned at the very
-                                    // end -- reserve its space so no regular 5s-grid label (which
-                                    // may not land on a "nice" interval, especially when zoomed) can
-                                    // be drawn overlapping it.
+                                    // NOTE: no longer forces a final "total duration" label via a
+                                    // dedicated reserved-space calculation -- that broke visibly at
+                                    // some zoom levels (labels overlapping/garbled). Instead, the exact
+                                    // end position is just one more candidate through the SAME simple
+                                    // collision check as every other grid label below, so it's skipped
+                                    // like any other label would be if it doesn't fit, and shown
+                                    // otherwise -- this is also what makes the measure number for the
+                                    // score's true final measure reach the timeline, not just whatever
+                                    // measure the last 5s-aligned gridpoint happens to land on.
                                     var minLabelGap = 6
-                                    var finalLabel = root.timelineLabel(durationSeconds)
-                                    var finalLabelLeftEdge = width - ctx.measureText(finalLabel).width
-
                                     var lastLabelRightEdge = -Infinity
                                     var lastGridSecond = durationSeconds - (durationSeconds % 5)
 
-                                    for (var second = 0; second <= lastGridSecond; second += 5) {
+                                    var gridSeconds = []
+                                    for (var s = 0; s <= lastGridSecond; s += 5) {
+                                        gridSeconds.push(s)
+                                    }
+                                    if (durationSeconds !== lastGridSecond) {
+                                        gridSeconds.push(durationSeconds)
+                                    }
+
+                                    for (var gi = 0; gi < gridSeconds.length; ++gi) {
+                                        var second = gridSeconds[gi]
                                         var label = root.timelineLabel(second)
                                         var labelWidth = ctx.measureText(label).width
                                         var labelX = (second * 1000 / Math.max(video.duration, 1)) * width
@@ -782,23 +1439,60 @@ Item {
                                         if (leftEdge < lastLabelRightEdge + minLabelGap) {
                                             continue
                                         }
-                                        if (second !== lastGridSecond && rightEdge + minLabelGap > finalLabelLeftEdge) {
-                                            continue
-                                        }
 
                                         ctx.textAlign = align
+                                        ctx.fillStyle = primaryColor
+                                        ctx.globalAlpha = 0.74
                                         ctx.fillText(label, labelX, height)
                                         lastLabelRightEdge = rightEdge
                                     }
 
-                                    ctx.textAlign = "right"
-                                    ctx.fillText(finalLabel, width, height)
+                                    // Measure numbers, right above the ticks -- lets a hit point's
+                                    // timing be read against the score directly on the timeline, not
+                                    // just in the sidebar table. NOTE: each measure's label is placed
+                                    // at ITS OWN true tick-accurate position (from measurePositions()),
+                                    // not approximated to the nearest 5-second grid interval like the
+                                    // time labels above -- that approximation used to visibly desync
+                                    // this from other tick-accurate timeline elements, e.g. a measure
+                                    // label could sit up to ~2.5s away from where that measure (and so
+                                    // e.g. the loop-range shading) actually starts.
+                                    var measures = videoModel.measurePositions()
+                                    if (measures.length > 0) {
+                                        ctx.textBaseline = "top"
+                                        ctx.fillStyle = measureColor
+                                        ctx.globalAlpha = 0.85
+
+                                        // NOTE: regular "every Nth measure" step instead of a greedy
+                                        // fit-as-many-as-fit pass -- measures don't take equal screen
+                                        // width, so a greedy pass produced an irregular, unpredictable
+                                        // pattern (e.g. "M1, M3, M6, M8..."). The step shrinks as
+                                        // zooming in gives each measure more screen space, showing
+                                        // every 2nd/1st measure once there's room, rather than staying
+                                        // stuck at whatever spacing fit at the very start.
+                                        var sampleLabel = "" + measures[measures.length - 1].measureNumber
+                                        var estimatedLabelWidth = ctx.measureText(sampleLabel).width + minLabelGap
+                                        var avgPxPerMeasure = width / measures.length
+                                        var measureStep = Math.max(1, Math.ceil(estimatedLabelWidth / avgPxPerMeasure))
+
+                                        for (var mi = 0; mi < measures.length; mi += measureStep) {
+                                            var measureLabel = "" + measures[mi].measureNumber
+                                            var measureLabelX = (measures[mi].videoPositionMs / Math.max(video.duration, 1)) * width
+
+                                            ctx.textAlign = measureLabelX < 16 ? "left" : (measureLabelX > width - 16 ? "right" : "center")
+                                            ctx.fillText(measureLabel, measureLabelX, 0)
+                                        }
+
+                                        ctx.textBaseline = "bottom"
+                                    }
                                     ctx.globalAlpha = 1
                                 }
 
                                 Connections {
                                     target: videoModel
                                     function onVideoSettingsChanged() {
+                                        frameTickCanvas.requestPaint()
+                                    }
+                                    function onScoreContentChanged() {
                                         frameTickCanvas.requestPaint()
                                     }
                                 }
@@ -830,147 +1524,18 @@ Item {
                         }
                     }
                 }
-
-                RowLayout {
-                    Layout.alignment: Qt.AlignVCenter
-                    spacing: 4
-
-                    FlatButton {
-                        Layout.preferredWidth: 24
-                        Layout.preferredHeight: 24
-                        icon: IconCode.ZOOM_OUT
-                        buttonType: FlatButton.IconOnly
-                        transparent: true
-                        enabled: videoModel.hasVideo && root.timelineZoom > 1
-                        toolTipTitle: qsTrc("playback", "Zoom out timeline")
-                        navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 5
-
-                        onClicked: {
-                            root.timelineZoom = Math.max(1, root.timelineZoom - 0.25)
-                        }
-                    }
-
-                    TextInputField {
-                        Layout.preferredWidth: 44
-                        currentText: Math.round(root.timelineZoom * 100).toString()
-                        enabled: videoModel.hasVideo
-                        navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 6
-
-                        onTextEditingFinished: function(newTextValue) {
-                            var parsedValue = parseInt(newTextValue, 10)
-                            if (!isNaN(parsedValue) && parsedValue > 0) {
-                                root.timelineZoom = Math.max(1, Math.min(root.timelineZoomMax, parsedValue / 100))
-                            }
-                        }
-                    }
-
-                    StyledTextLabel {
-                        text: "%"
-                    }
-
-                    FlatButton {
-                        Layout.preferredWidth: 24
-                        Layout.preferredHeight: 24
-                        icon: IconCode.ZOOM_IN
-                        buttonType: FlatButton.IconOnly
-                        transparent: true
-                        enabled: videoModel.hasVideo && root.timelineZoom < root.timelineZoomMax
-                        toolTipTitle: qsTrc("playback", "Zoom in timeline")
-                        navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 7
-
-                        onClicked: {
-                            root.timelineZoom = Math.min(root.timelineZoomMax, root.timelineZoom + 0.25)
-                        }
-                    }
-
-                    Repeater {
-                        model: [100, 250, 500, 750]
-
-                        FlatButton {
-                            required property int modelData
-                            required property int index
-
-                            Layout.preferredHeight: 24
-                            text: modelData + "%"
-                            enabled: videoModel.hasVideo
-                            navigation.panel: navigationPanel
-                            navigation.order: root.contentNavigationPanelOrderStart + 8 + index
-
-                            onClicked: {
-                                root.timelineZoom = modelData / 100
-                            }
-                        }
-                    }
-                }
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                implicitHeight: filePicker.implicitHeight + 8
-                color: ui.theme.backgroundSecondaryColor
-                radius: 2
-
-                FilePicker {
-                    id: filePicker
-
-                    anchors.left: parent.left
-                    anchors.right: recentFilesButton.left
-                    anchors.rightMargin: 4
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.leftMargin: 4
-                    path: videoModel.videoPath
-                    dialogTitle: qsTrc("playback", "Choose video")
-                    filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
-                    buttonType: FlatButton.IconOnly
-                    navigation: navigationPanel
-                    navigationRowOrderStart: root.contentNavigationPanelOrderStart + 4
-
-                    onPathEdited: function(newPath) {
-                        videoModel.videoPath = newPath
-                    }
-                }
-
-                FlatButton {
-                    id: recentFilesButton
-
-                    anchors.right: parent.right
-                    anchors.rightMargin: 4
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 22
-                    height: 22
-                    icon: IconCode.SMALL_ARROW_DOWN
-                    buttonType: FlatButton.IconOnly
-                    transparent: true
-                    toolTipTitle: qsTrc("playback", "Recently opened videos")
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 4 + 2
-
-                    onClicked: {
-                        recentFilesMenu.items = videoModel.recentVideoFiles().map(function(path) {
-                            return { id: path, title: path }
-                        })
-                        recentFilesMenu.show(Qt.point(0, height))
-                    }
-
-                    ContextMenuLoader {
-                        id: recentFilesMenu
-
-                        onHandleMenuItem: function(itemId) {
-                            videoModel.videoPath = itemId
-                        }
-                    }
-                }
-            }
             }
         }
 
         VideoHitPointsPanel {
             id: hitPointsPanel
 
-            SplitView.preferredWidth: root.hitPointsPanelWidth
+            // NOTE: never request more than (total - leftPane's own minimum) --
+            // otherwise a stale/persisted width can force the SplitView to shrink
+            // leftPane below what it needs, which reads as the sidebar "covering"
+            // the video.
+            SplitView.preferredWidth: Math.min(root.hitPointsPanelWidth,
+                                                Math.max(root.hitPointsPanelMinWidth, contentSplitView.width - leftPane.SplitView.minimumWidth))
             SplitView.minimumWidth: root.hitPointsPanelMinWidth
             SplitView.maximumWidth: root.hitPointsPanelMaxWidth
             SplitView.fillHeight: true
@@ -980,15 +1545,9 @@ Item {
             detectFrameRate: root.detectedFrameRate
             currentVideoPositionMs: video.position
             clearAttachedVideo: root.clearAttachedVideo
+            videoInfo: root.videoInfo
             navigationPanel: navigationPanel
             navigationOrderStart: root.contentNavigationPanelOrderStart + 20
-
-            onWidthChanged: {
-                if (width > 0) {
-                    root.hitPointsPanelWidth = width
-                    videoModel.setHitPointsPanelWidth(width)
-                }
-            }
         }
     }
 

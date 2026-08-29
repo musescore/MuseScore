@@ -33,6 +33,8 @@
 #include "engraving/dom/score.h"
 #include "engraving/types/constants.h"
 
+#include "notation/inotation.h"
+
 using namespace mu::playback;
 using namespace mu::project;
 
@@ -80,7 +82,7 @@ void VideoPanelModel::addHitPoint(int videoPositionMs)
 
     VideoHitPointSettings hitPoint;
     hitPoint.timeMs = videoPositionMs;
-    hitPoint.label = muse::String(u"Hit %1").arg(static_cast<int>(updated.hitPoints.size()) + 1);
+    hitPoint.label = muse::String(u"#%1").arg(static_cast<int>(updated.hitPoints.size()) + 1);
     updated.hitPoints.push_back(hitPoint);
 
     std::sort(updated.hitPoints.begin(), updated.hitPoints.end(), [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
@@ -176,6 +178,20 @@ void VideoPanelModel::toggleScorePlay()
     }
 }
 
+void VideoPanelModel::stopScorePlayback()
+{
+    if (playbackController()) {
+        playbackController()->stop();
+    }
+}
+
+void VideoPanelModel::toggleLoopPlayback()
+{
+    if (playbackController()) {
+        playbackController()->toggleLoopPlayback();
+    }
+}
+
 void VideoPanelModel::seekScoreToVideoPositionMs(int videoPositionMs)
 {
     if (!playbackController()) {
@@ -199,6 +215,11 @@ void VideoPanelModel::setHitPointsPanelWidth(int width)
 QStringList VideoPanelModel::recentVideoFiles() const
 {
     return configuration()->recentVideoFiles();
+}
+
+void VideoPanelModel::clearRecentVideoFiles()
+{
+    configuration()->clearRecentVideoFiles();
 }
 
 int VideoPanelModel::parseTimecodeToMs(const QString& timecode) const
@@ -271,6 +292,10 @@ void VideoPanelModel::setVideoPath(const QString& path)
 
     VideoAttachmentSettings updated = attachment();
     updated.path = path;
+    //! NOTE Hit points are timed against the PREVIOUS video's own footage --
+    //! loading or reloading a video (even the same file, e.g. after re-editing
+    //! it) invalidates them, so start over rather than carrying stale ones.
+    updated.hitPoints.clear();
     updateAttachment(updated);
 
     configuration()->addRecentVideoFile(path);
@@ -434,6 +459,65 @@ int VideoPanelModel::scorePlaybackPositionMs() const
     return m_scorePlaybackPositionMs;
 }
 
+bool VideoPanelModel::loopEnabled() const
+{
+    return playbackController() && playbackController()->isLoopEnabled();
+}
+
+int VideoPanelModel::loopStartMs() const
+{
+    notation::INotationPlaybackPtr playback = notationPlayback();
+    if (!playback) {
+        return 0;
+    }
+
+    const notation::LoopBoundaries& bounds = playback->loopBoundaries();
+    if (bounds.isNull()) {
+        return 0;
+    }
+
+    const int videoPositionMs = tickToVideoPositionMs(bounds.loopInTick.ticks());
+    return videoPositionMs < 0 ? 0 : videoPositionMs;
+}
+
+int VideoPanelModel::loopEndMs() const
+{
+    notation::INotationPlaybackPtr playback = notationPlayback();
+    if (!playback) {
+        return 0;
+    }
+
+    const notation::LoopBoundaries& bounds = playback->loopBoundaries();
+    if (bounds.isNull()) {
+        return 0;
+    }
+
+    const int videoPositionMs = tickToVideoPositionMs(bounds.loopOutTick.ticks());
+    return videoPositionMs < 0 ? 0 : videoPositionMs;
+}
+
+int VideoPanelModel::tickToVideoPositionMs(int tick) const
+{
+    INotationProjectPtr project = context()->currentProject();
+    if (!project || !project->masterNotation() || !project->masterNotation()->masterScore()) {
+        return -1;
+    }
+
+    auto* score = project->masterNotation()->masterScore();
+    const double scoreTimeSeconds = score->utick2utime(tick);
+    return std::max(0, static_cast<int>(std::lround(scoreTimeSeconds * 1000.0)) + offsetMs());
+}
+
+notation::INotationPlaybackPtr VideoPanelModel::notationPlayback() const
+{
+    INotationProjectPtr project = context()->currentProject();
+    if (!project || !project->masterNotation()) {
+        return nullptr;
+    }
+
+    return project->masterNotation()->playback();
+}
+
 IProjectVideoSettingsPtr VideoPanelModel::videoSettings() const
 {
     INotationProjectPtr project = context()->currentProject();
@@ -488,16 +572,69 @@ QString VideoPanelModel::musicalPositionText(int videoPositionMs) const
     return QString("%1.%2").arg(measure->measureNumber() + 1).arg(beat);
 }
 
-void VideoPanelModel::listenCurrentProject()
+QVariantList VideoPanelModel::measurePositions() const
 {
-    IProjectVideoSettingsPtr settings = videoSettings();
-    if (!settings) {
-        return;
+    QVariantList result;
+
+    INotationProjectPtr project = context()->currentProject();
+    if (!project || !project->masterNotation() || !project->masterNotation()->masterScore()) {
+        return result;
     }
 
-    settings->settingsChanged().onNotify(this, [this]() {
-        emit videoSettingsChanged();
-    }, Asyncable::Mode::SetReplace);
+    auto* score = project->masterNotation()->masterScore();
+    for (const engraving::Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        const int videoPositionMs = tickToVideoPositionMs(measure->tick().ticks());
+        if (videoPositionMs < 0) {
+            continue;
+        }
+
+        QVariantMap entry;
+        entry["measureNumber"] = measure->measureNumber() + 1;
+        entry["videoPositionMs"] = videoPositionMs;
+        result.push_back(entry);
+    }
+
+    return result;
+}
+
+int VideoPanelModel::scoreEndVideoPositionMs() const
+{
+    INotationProjectPtr project = context()->currentProject();
+    if (!project || !project->masterNotation() || !project->masterNotation()->masterScore()) {
+        return -1;
+    }
+
+    const engraving::Measure* lastMeasure = project->masterNotation()->masterScore()->lastMeasure();
+    if (!lastMeasure) {
+        return -1;
+    }
+
+    return tickToVideoPositionMs(lastMeasure->endTick().ticks());
+}
+
+void VideoPanelModel::listenCurrentProject()
+{
+    if (IProjectVideoSettingsPtr settings = videoSettings()) {
+        settings->settingsChanged().onNotify(this, [this]() {
+            emit videoSettingsChanged();
+        }, Asyncable::Mode::SetReplace);
+    }
+
+    if (notation::INotationPlaybackPtr playback = notationPlayback()) {
+        playback->loopBoundariesChanged().onNotify(this, [this]() {
+            emit loopChanged();
+        }, Asyncable::Mode::SetReplace);
+    }
+
+    if (notation::INotationPtr notation = context()->currentNotation()) {
+        //! NOTE Measures added/removed (or otherwise re-laid-out) changes
+        //! scoreEndVideoPositionMs and every entry from measurePositions() --
+        //! this is what keeps the timeline's measure labels and "past the end
+        //! of the score" shading correct as the score is edited.
+        notation->notationChanged().onReceive(this, [this](const muse::RectF&) {
+            emit scoreContentChanged();
+        });
+    }
 }
 
 void VideoPanelModel::listenPlaybackState()
@@ -515,6 +652,12 @@ void VideoPanelModel::listenPlaybackState()
     playbackState->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
         emit playbackSyncChanged();
     });
+
+    if (playbackController()) {
+        playbackController()->loopEnabledChanged().onReceive(this, [this](bool) {
+            emit loopChanged();
+        });
+    }
 
     playbackState->playbackPositionChanged().onReceive(this, [this](muse::audio::secs_t pos) {
         const int positionMs = std::max(0, static_cast<int>(std::lround(pos * 1000.0)));

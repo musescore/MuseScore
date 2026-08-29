@@ -58,6 +58,8 @@ qt_add_qml_module(playback_qml
         soundflagsettingsmodel.h
         soundprofilesmodel.cpp
         soundprofilesmodel.h
+        videopanelcontextmenumodel.cpp
+        videopanelcontextmenumodel.h
         videopanelmodel.cpp
         videopanelmodel.h
     QML_FILES

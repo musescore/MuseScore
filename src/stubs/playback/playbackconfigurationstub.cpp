@@ -106,6 +106,10 @@ void PlaybackConfigurationStub::addRecentVideoFile(const QString&)
 {
 }
 
+void PlaybackConfigurationStub::clearRecentVideoFiles()
+{
+}
+
 bool PlaybackConfigurationStub::isMixerSectionVisible(MixerSectionType) const
 {
     return false;

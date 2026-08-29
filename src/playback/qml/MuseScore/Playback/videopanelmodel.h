@@ -32,6 +32,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "project/iprojectvideosettings.h"
+#include "notation/inotationplayback.h"
 
 #include "iplaybackcontroller.h"
 #include "iplaybackconfiguration.h"
@@ -54,6 +55,17 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
     Q_PROPERTY(QVariantList hitPoints READ hitPoints NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool scorePlaying READ scorePlaying NOTIFY playbackSyncChanged)
     Q_PROPERTY(int scorePlaybackPositionMs READ scorePlaybackPositionMs NOTIFY playbackSyncChanged)
+    //! NOTE MuseScore's own score loop-playback feature (the main transport
+    //! toolbar's Loop button) -- loopStartMs/loopEndMs are 0 when there's no
+    //! loop range set (check loopEnabled and/or hasVideo before using them).
+    Q_PROPERTY(bool loopEnabled READ loopEnabled NOTIFY loopChanged)
+    Q_PROPERTY(int loopStartMs READ loopStartMs NOTIFY loopChanged)
+    Q_PROPERTY(int loopEndMs READ loopEndMs NOTIFY loopChanged)
+    //! NOTE Video position where the score's last measure ends -- lets the
+    //! timeline grey out the stretch of video with no corresponding music
+    //! (e.g. the video runs longer than the score). -1 if there's no current
+    //! project/score.
+    Q_PROPERTY(int scoreEndVideoPositionMs READ scoreEndVideoPositionMs NOTIFY scoreContentChanged)
 
     QML_ELEMENT
 
@@ -81,10 +93,27 @@ public:
     //! e.g. "34.3" -- same format already used per-hit-point in hitPoints(). Empty
     //! string if there is no current project/score.
     Q_INVOKABLE QString musicalPositionText(int videoPositionMs) const;
+    //! NOTE One entry per measure -- {"measureNumber": int, "videoPositionMs": int} --
+    //! for drawing each measure's own label at its true tick-accurate timeline
+    //! position (approximating it to the nearest 5-second grid interval, like the
+    //! plain second/minute labels do, visibly desyncs from tick-accurate
+    //! positions elsewhere on the timeline, e.g. the loop range). Empty list if
+    //! there is no current project/score.
+    Q_INVOKABLE QVariantList measurePositions() const;
 
     //! NOTE Toggles the score's own playback; the video follows via the existing
     //! score->video sync (playbackSyncChanged), it is not driven directly here.
     Q_INVOKABLE void toggleScorePlay();
+    //! NOTE Stops the score's own playback outright (distinct from Play/Pause's
+    //! toggle) -- the video follows via the same score->video sync. Useful when
+    //! the video is shorter than the score: once the video finishes on its own,
+    //! this can stop the still-playing score without switching back to the main
+    //! MuseScore window.
+    Q_INVOKABLE void stopScorePlayback();
+    //! NOTE Toggles MuseScore's own score loop-playback feature -- the same one
+    //! the main transport toolbar's Loop button controls, not something
+    //! specific to the video panel.
+    Q_INVOKABLE void toggleLoopPlayback();
     //! NOTE Seeks the score to the position corresponding to videoPositionMs (minus
     //! the sync offset). Does not touch the video element itself -- QML seeks the
     //! video separately since it owns that QtMultimedia object.
@@ -97,6 +126,7 @@ public:
     Q_INVOKABLE void setHitPointsPanelWidth(int width);
 
     Q_INVOKABLE QStringList recentVideoFiles() const;
+    Q_INVOKABLE void clearRecentVideoFiles();
 
     bool hasVideo() const;
     QString videoPath() const;
@@ -129,9 +159,17 @@ public:
     bool scorePlaying() const;
     int scorePlaybackPositionMs() const;
 
+    bool loopEnabled() const;
+    int loopStartMs() const;
+    int loopEndMs() const;
+
+    int scoreEndVideoPositionMs() const;
+
 signals:
     void videoSettingsChanged();
     void playbackSyncChanged();
+    void loopChanged();
+    void scoreContentChanged();
 
 private:
     project::IProjectVideoSettingsPtr videoSettings() const;
@@ -140,6 +178,13 @@ private:
     QVariantMap hitPointToMap(const project::VideoHitPointSettings& hitPoint) const;
     static int indexOfHitPoint(const project::VideoAttachmentSettings& attachment, int hitPointId);
     int parseTimecodeToMs(const QString& timecode) const;
+    notation::INotationPlaybackPtr notationPlayback() const;
+    //! NOTE Uses the same score->utick2utime() conversion as musicalPositionText()'s
+    //! reverse direction (score->utime2utick()), rather than
+    //! INotationPlayback::playedTickToSec() (which is repeat-aware and, on at
+    //! least one score, produced a different -- wrong -- result for this).
+    //! Returns -1 if there's no current project/score.
+    int tickToVideoPositionMs(int tick) const;
     void listenCurrentProject();
     void listenPlaybackState();
 

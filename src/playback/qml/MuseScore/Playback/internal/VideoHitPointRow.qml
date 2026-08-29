@@ -52,6 +52,7 @@ RowLayout {
 
         StyledTextLabel {
             anchors.fill: parent
+            horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
             text: root.hitPoint.timecode
             maximumLineCount: 1
@@ -91,17 +92,20 @@ RowLayout {
     }
 
     StyledTextLabel {
-        Layout.preferredWidth: 56
+        Layout.preferredWidth: 64
+        horizontalAlignment: Text.AlignRight
         text: root.hitPoint.musicalPosition
         maximumLineCount: 1
     }
 
     Item {
         Layout.fillWidth: true
+        Layout.minimumWidth: 80
         Layout.preferredHeight: 28
 
         StyledTextLabel {
             anchors.fill: parent
+            horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             text: root.hitPoint.label
             maximumLineCount: 1

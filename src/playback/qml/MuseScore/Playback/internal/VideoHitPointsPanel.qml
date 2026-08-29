@@ -41,22 +41,39 @@ Item {
     required property real currentVideoPositionMs
     // function() -- stops and detaches the current video
     required property var clearAttachedVideo
+    // function() -> {path, durationMs, resolutionText, frameRate, fileFormat,
+    // videoCodec, videoBitRate, audioCodec, audioChannels, audioSampleRate,
+    // audioBitRate} -- technical info about the attached video, for the
+    // Information tab. Fields are "" / 0 when not available.
+    required property var videoInfo
 
     required property NavigationPanel navigationPanel
     required property int navigationOrderStart
 
     readonly property int hitPointsRowStride: 3
 
-    enabled: videoModel.hasVideo
+    // NOTE: deliberately NOT `enabled: videoModel.hasVideo` at this root level --
+    // that would also disable the tab bar itself (enabled propagates to all
+    // children), leaving no way to switch to/view the Hit points tab once a
+    // video is cleared. The controls that actually need a video already have
+    // their own hasVideo-gated `enabled` (Add hit point, fps/offset fields, etc).
     implicitHeight: contentColumn.implicitHeight + 16
+    // NOTE: if the floating window gets squeezed narrower than this panel and
+    // the video pane's combined minimums, clip so content is cut off at this
+    // panel's own edge instead of bleeding into the video pane.
+    clip: true
 
     ColumnLayout {
         id: contentColumn
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
+        // NOTE: anchored on all 4 sides (not just left/right/top) so the tab
+        // content below actually stretches to fill whatever height the
+        // SplitView gives this panel -- previously this only sized itself to
+        // its own content's natural height, leaving the rest of the panel's
+        // real (taller) height as dead space below the hit-point list.
+        anchors.fill: parent
         anchors.margins: 8
+        anchors.rightMargin: 16
         spacing: 8
 
         StyledTabBar {
@@ -79,10 +96,19 @@ Item {
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationOrderStart + 1
             }
+
+            StyledTabButton {
+                text: qsTrc("playback", "Information")
+
+                navigation.name: "VideoInformationTab"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationOrderStart + 2
+            }
         }
 
         StackLayout {
             Layout.fillWidth: true
+            Layout.fillHeight: true
             currentIndex: tabBar.currentIndex
 
             ColumnLayout {
@@ -102,6 +128,7 @@ Item {
 
                 ColumnLayout {
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
                     spacing: 4
                     visible: root.videoModel.hitPoints.length > 0
 
@@ -111,13 +138,15 @@ Item {
 
                         StyledTextLabel {
                             Layout.preferredWidth: 88
+                            horizontalAlignment: Text.AlignRight
                             text: qsTrc("playback", "Timecode")
                             font: ui.theme.bodyBoldFont
                             maximumLineCount: 1
                         }
 
                         StyledTextLabel {
-                            Layout.preferredWidth: 56
+                            Layout.preferredWidth: 64
+                            horizontalAlignment: Text.AlignRight
                             text: qsTrc("playback", "Measure")
                             font: ui.theme.bodyBoldFont
                             maximumLineCount: 1
@@ -125,6 +154,8 @@ Item {
 
                         StyledTextLabel {
                             Layout.fillWidth: true
+                            Layout.minimumWidth: 80
+                            horizontalAlignment: Text.AlignLeft
                             text: qsTrc("playback", "Name")
                             font: ui.theme.bodyBoldFont
                             maximumLineCount: 1
@@ -139,7 +170,7 @@ Item {
                         id: hitPointsFlickable
 
                         Layout.fillWidth: true
-                        Layout.preferredHeight: Math.min(hitPointsColumn.implicitHeight, 220)
+                        Layout.fillHeight: true
 
                         contentHeight: hitPointsColumn.implicitHeight
                         interactive: contentHeight > height
@@ -182,18 +213,24 @@ Item {
             }
 
             ColumnLayout {
+                id: settingsPage
+
                 spacing: 8
+
+                readonly property int settingsLabelWidth: 50
+                readonly property int settingsFieldWidth: 72
 
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 6
 
                     StyledTextLabel {
+                        Layout.preferredWidth: settingsPage.settingsLabelWidth
                         text: qsTrc("playback", "fps")
                     }
 
                     TextInputField {
-                        Layout.preferredWidth: 56
+                        Layout.preferredWidth: settingsPage.settingsFieldWidth
                         currentText: root.videoModel.frameRate.toString()
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
@@ -228,11 +265,12 @@ Item {
                     spacing: 6
 
                     StyledTextLabel {
+                        Layout.preferredWidth: settingsPage.settingsLabelWidth
                         text: qsTrc("playback", "Offset")
                     }
 
                     TextInputField {
-                        Layout.fillWidth: true
+                        Layout.preferredWidth: settingsPage.settingsFieldWidth
                         currentText: root.videoModel.offsetMs.toString()
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
@@ -249,14 +287,10 @@ Item {
                     StyledTextLabel {
                         text: qsTrc("playback", "ms")
                     }
-                }
-
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 8
 
                     FlatButton {
-                        Layout.fillWidth: true
+                        Layout.preferredWidth: 56
+                        textFont.pixelSize: 9
                         text: qsTrc("playback", "-100 ms")
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
@@ -268,7 +302,8 @@ Item {
                     }
 
                     FlatButton {
-                        Layout.fillWidth: true
+                        Layout.preferredWidth: 56
+                        textFont.pixelSize: 9
                         text: qsTrc("playback", "+100 ms")
                         enabled: root.videoModel.hasVideo
                         navigation.panel: root.navigationPanel
@@ -289,6 +324,218 @@ Item {
 
                     onClicked: {
                         root.clearAttachedVideo()
+                    }
+                }
+
+                Item {
+                    Layout.fillHeight: true
+                }
+            }
+
+            ColumnLayout {
+                id: informationPage
+
+                spacing: 8
+
+                // NOTE: recomputed whenever hasVideo changes (load/clear/swap),
+                // not on every position update -- videoInfo() reads
+                // video.metaData, which doesn't change during normal playback.
+                readonly property var info: root.videoModel.hasVideo ? root.videoInfo() : ({})
+
+                readonly property int labelWidth: 70
+
+                function durationText(ms) {
+                    if (!(ms > 0)) {
+                        return "—"
+                    }
+
+                    var totalSeconds = Math.floor(ms / 1000)
+                    var minutes = Math.floor(totalSeconds / 60)
+                    var seconds = totalSeconds % 60
+                    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+                }
+
+                function channelsText(count) {
+                    switch (count) {
+                    case 0: return "—"
+                    case 1: return qsTrc("playback", "Mono")
+                    case 2: return qsTrc("playback", "Stereo")
+                    default: return qsTrc("playback", "%1 channels").arg(count)
+                    }
+                }
+
+                function bitRateText(bitsPerSecond) {
+                    return bitsPerSecond > 0 ? Math.round(bitsPerSecond / 1000) + " kb/s" : "—"
+                }
+
+                function codecText(codec, extra) {
+                    if (!codec) {
+                        return "—"
+                    }
+
+                    return extra ? codec + " (" + extra + ")" : codec
+                }
+
+                StyledTextLabel {
+                    Layout.fillWidth: true
+                    visible: !root.videoModel.hasVideo
+                    wrapMode: Text.WordWrap
+                    opacity: 0.75
+                    text: qsTrc("playback", "No video attached")
+                }
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 6
+                    visible: root.videoModel.hasVideo
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "File")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideMiddle
+                            maximumLineCount: 1
+                            displayTruncatedTextOnHover: true
+                            text: informationPage.info.path || "—"
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "Duration")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            text: informationPage.durationText(informationPage.info.durationMs)
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "Video")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            text: informationPage.codecText(informationPage.info.videoCodec, informationPage.info.resolutionText)
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "Frame rate")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            text: informationPage.info.frameRate > 0 ? informationPage.info.frameRate + " fps" : "—"
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "Video rate")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            text: informationPage.bitRateText(informationPage.info.videoBitRate)
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "Audio")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            text: informationPage.codecText(informationPage.info.audioCodec,
+                                                             informationPage.info.audioSampleRate > 0
+                                                             ? informationPage.info.audioSampleRate + " Hz" : "")
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "Channels")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            text: informationPage.channelsText(informationPage.info.audioChannels)
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: informationPage.labelWidth
+                            horizontalAlignment: Text.AlignRight
+                            text: qsTrc("playback", "Audio rate")
+                            font: ui.theme.bodyBoldFont
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
+                            text: informationPage.bitRateText(informationPage.info.audioBitRate)
+                        }
                     }
                 }
 

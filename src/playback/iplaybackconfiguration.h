@@ -61,6 +61,7 @@ public:
     //! NOTE Most-recently-used first, capped at a small fixed size.
     virtual QStringList recentVideoFiles() const = 0;
     virtual void addRecentVideoFile(const QString& path) = 0;
+    virtual void clearRecentVideoFiles() = 0;
 
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
