@@ -830,7 +830,6 @@ Item {
                         dialogTitle: qsTrc("playback", "Choose video")
                         filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
                         buttonType: FlatButton.IconOnly
-                        toolTipTitle: qsTrc("playback", "Open video")
                         navigation: navigationPanel
                         navigationRowOrderStart: root.contentNavigationPanelOrderStart + 2
 
