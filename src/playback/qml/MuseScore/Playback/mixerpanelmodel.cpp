@@ -421,6 +421,23 @@ void MixerPanelModel::onVideoAttachmentChanged()
     bool hadVideo = indexOf(VIDEO_TRACK_ID) != INVALID_INDEX;
 
     if (hasVideo == hadVideo) {
+        //! NOTE The video attachment is still (not) present, but its volume/
+        //! balance/mute/solo may have changed from outside the mixer (e.g. the
+        //! Video panel's own volume slider) -- refresh the existing channel
+        //! item's output params so the mixer stays in sync.
+        if (hasVideo) {
+            if (MixerChannelItem* item = findChannelItem(VIDEO_TRACK_ID)) {
+                const project::VideoAttachmentSettings& attachment = videoSettings()->attachment();
+
+                AudioOutputParams outParams;
+                outParams.volume = videoVolumeToDb(attachment.volume);
+                outParams.balance = attachment.balance;
+                outParams.muted = attachment.muted;
+                outParams.solo = attachment.solo;
+                loadOutputParams(item, std::move(outParams));
+            }
+        }
+
         return;
     }
 

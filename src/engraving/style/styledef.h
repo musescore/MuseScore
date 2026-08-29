@@ -2293,7 +2293,6 @@ enum class Sid : short {
     videoHitPointLabelFontSize,
     videoHitPointLineStyle,
     videoHitPointLineTransparency,
-    videoHitPointLineColor,
 
     STYLES
 };

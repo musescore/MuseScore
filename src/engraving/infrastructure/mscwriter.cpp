@@ -452,7 +452,15 @@ bool MscWriter::XmlFileWriter::addFileData(const String& fileName, const ByteArr
     TextStream& ts = *m_stream;
     ts << "<file name=\"" << fileName << "\">\n";
     ts << "<![CDATA[";
-    ts << data;
+    // NOTE: a literal "]]>" inside data (e.g. a user-typed hit-point label
+    // ending up in videosettings.json, or any other CDATA-wrapped file here)
+    // would otherwise terminate this CDATA section early and corrupt the
+    // rest of the XML/MSCX file. Split it the standard XML way: close this
+    // CDATA section after the first "]]", then reopen a new one before the
+    // trailing ">".
+    QByteArray escaped = data.toQByteArray();
+    escaped.replace("]]>", "]]]]><![CDATA[>");
+    ts << ByteArray::fromQByteArray(escaped);
     ts << "]]>\n";
     ts << "</file>\n";
 

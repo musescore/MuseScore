@@ -41,8 +41,22 @@ static constexpr int VIDEO_SETTINGS_VERSION = 1;
 
 QString mu::project::formatVideoTimecode(int videoPositionMs, double frameRate)
 {
-    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(std::clamp(frameRate, 1.0, 240.0))));
-    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * roundedFrameRate + 0.5));
+    //! NOTE Non-drop-frame SMPTE timecode: frame footage shot at a fractional
+    //! rate (23.976, 29.97, 59.94fps...) is still labeled against its nearest
+    //! integer nominal rate (24/30/60), so the ROUNDED rate is what's used
+    //! below as the frames-per-second convention for the HH:MM:SS:FF display
+    //! (frames/seconds rollover). But which real video FRAME is showing at a
+    //! given elapsed time is a physical fact of the ACTUAL (fractional) rate --
+    //! using the rounded rate for that too (as before) made the displayed
+    //! frame number silently drift from the real one over long durations.
+    //! This does NOT implement drop-frame compensation (periodic frame-number
+    //! skipping to keep the displayed clock matching wall time at 29.97/
+    //! 59.94fps) -- that's a separate, larger feature; without it, the
+    //! displayed timecode is expected to drift from wall-clock time over long
+    //! footage at those rates, same as any other NDF timecode display.
+    const double clampedFrameRate = std::clamp(frameRate, 1.0, 240.0);
+    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(clampedFrameRate)));
+    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * clampedFrameRate + 0.5));
 
     const qint64 frames = totalFrames % roundedFrameRate;
     const qint64 totalSeconds = totalFrames / roundedFrameRate;
@@ -67,7 +81,8 @@ int mu::project::videoPositionMsForTick(const mu::engraving::Score* score, int t
     return std::max(0, static_cast<int>(std::lround(timeSeconds * 1000.0)) + offsetMs);
 }
 
-void mu::project::updateVideoAttachment(const IProjectVideoSettingsPtr& settings, const std::function<void(VideoAttachmentSettings&)>& mutate)
+void mu::project::updateVideoAttachment(const IProjectVideoSettingsPtr& settings,
+                                        const std::function<void(VideoAttachmentSettings&)>& mutate)
 {
     if (!settings || !settings->attachment().isValid()) {
         return;

@@ -31,7 +31,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
-#include "engraving/types/constants.h"
+#include "engraving/dom/utils.h"
 
 #include "notation/inotation.h"
 #include "project/iprojectvideosettings.h"
@@ -332,6 +332,13 @@ void VideoPanelModel::setOffsetMs(int offsetMs)
 
     updated.offsetMs = offsetMs;
     updateAttachment(updated);
+
+    //! NOTE loopStartMs/loopEndMs/scoreEndVideoPositionMs are all derived from
+    //! offsetMs via tickToVideoPositionMs(), but updateAttachment() only
+    //! re-emits videoSettingsChanged()/hitPointsChanged() -- explicitly notify
+    //! these offset-derived properties so QML bindings actually recompute.
+    emit loopChanged();
+    emit scoreContentChanged();
 }
 
 int VideoPanelModel::volumePercent() const
@@ -575,16 +582,19 @@ QString VideoPanelModel::musicalPositionText(int videoPositionMs) const
     }
 
     auto* score = project->masterNotation()->masterScore();
-    const double scoreTimeSeconds = std::max(0.0, static_cast<double>(videoPositionMs - offsetMs()) / 1000.0);
-    const int tick = std::max(0, score->utime2utick(scoreTimeSeconds));
-    const engraving::Measure* measure = score->tick2measure(engraving::Fraction::fromTicks(tick));
-    if (!measure) {
+    if (!score->checkHasMeasures()) {
         return QString();
     }
 
-    const int beatTicks = engraving::Constants::DIVISION;
-    const int beat = std::max(1, ((tick - measure->tick().ticks()) / beatTicks) + 1);
-    return QString("%1.%2").arg(measure->measureNumber() + 1).arg(beat);
+    const double scoreTimeSeconds = std::max(0.0, static_cast<double>(videoPositionMs - offsetMs()) / 1000.0);
+    const int tick = std::max(0, score->utime2utick(scoreTimeSeconds));
+
+    //! NOTE findBeat() derives the beat length from the actual time signature
+    //! in effect at this tick, unlike a fixed Constants::DIVISION (quarter
+    //! note) which is wrong in meters like 6/8 or 2/2.
+    const engraving::MeasureBeat measureBeat = engraving::findBeat(score, tick);
+    const int beat = std::max(1, static_cast<int>(measureBeat.beat) + 1);
+    return QString("%1.%2").arg(measureBeat.measureIndex + 1).arg(beat);
 }
 
 QVariantList VideoPanelModel::measurePositions() const
@@ -672,7 +682,7 @@ void VideoPanelModel::listenCurrentProject()
             m_lastMeasureCount = measureCount;
             m_lastScoreEndTick = scoreEndTick;
             emit scoreContentChanged();
-        });
+        }, Asyncable::Mode::SetReplace);
     }
 }
 

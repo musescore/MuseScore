@@ -450,9 +450,17 @@ Item {
 
         var targetPosition = targetVideoPositionMs()
         if (forceSeek) {
-            if (video.position !== targetPosition && Date.now() - lastResyncTime >= forceSeekDebounceMs) {
-                video.seek(targetPosition)
-                lastResyncTime = Date.now()
+            if (video.position !== targetPosition) {
+                if (Date.now() - lastResyncTime >= forceSeekDebounceMs) {
+                    video.seek(targetPosition)
+                    lastResyncTime = Date.now()
+                    pendingForceSeekTimer.stop()
+                } else {
+                    // The debounce blocked this forced seek -- don't just drop
+                    // it, retry once the debounce window has elapsed so the
+                    // video still ends up in sync with the score.
+                    pendingForceSeekTimer.restart()
+                }
             }
         } else if (Math.abs(video.position - targetPosition) > syncToleranceMs) {
             var now = Date.now()
@@ -481,6 +489,12 @@ Item {
         function onVideoSettingsChanged() {
             root.syncVideoToScore(true)
         }
+    }
+
+    Timer {
+        id: pendingForceSeekTimer
+        interval: root.forceSeekDebounceMs
+        onTriggered: root.syncVideoToScore(true)
     }
 
     // Keeps the playhead visible while playing a zoomed-in timeline, without a
@@ -1462,6 +1476,15 @@ Item {
                                         return
                                     }
 
+                                    // NOTE: a long, high-fps video at low zoom can have far more
+                                    // frame-ticks than there are horizontal pixels to draw them in --
+                                    // drawing every single one is wasted work (sub-pixel-width rects
+                                    // overwriting each other) and can freeze the UI on multi-hour
+                                    // footage. Stride through ticks so at most ~1 is drawn per pixel
+                                    // column; visually identical since ticks narrower than a pixel
+                                    // aren't distinguishable anyway.
+                                    var tickStride = Math.max(1, Math.floor(tickCount / Math.max(width, 1)))
+
                                     // NOTE: fixed light colors, not theme tokens -- this canvas always
                                     // sits on the ruler/track's own background (hitPointsRuler/
                                     // timelineTrack below), which stays dark in both the app's light
@@ -1472,7 +1495,7 @@ Item {
                                     var secondaryColor = "#F0F0F0"
                                     var measureColor = "#FFFFFF"
                                     var tickTop = measureRowHeight
-                                    for (var i = 0; i < tickCount; ++i) {
+                                    for (var i = 0; i < tickCount; i += tickStride) {
                                         var tickWidth = root.timelineTickWidth(i)
                                         var tickHeight = root.timelineTickHeight(i)
                                         var x = Math.max(0, Math.min(width - tickWidth, (i / Math.max(tickCount - 1, 1)) * width - (tickWidth / 2)))
@@ -1628,6 +1651,7 @@ Item {
             seekToVideoPositionMs: root.seekToVideoPositionMs
             detectFrameRate: root.detectedFrameRate
             currentVideoPositionMs: video.position
+            currentVideoDurationMs: video.duration
             clearAttachedVideo: root.clearAttachedVideo
             videoInfo: root.videoInfo
             navigationPanel: navigationPanel

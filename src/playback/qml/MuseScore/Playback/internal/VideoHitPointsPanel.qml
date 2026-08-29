@@ -39,6 +39,12 @@ Item {
     // function() -> number (detected fps of the attached video, 0 if unknown)
     required property var detectFrameRate
     required property real currentVideoPositionMs
+    // QtMultimedia loads video duration/metadata asynchronously, after
+    // videoModel.hasVideo already turns true -- this gives the info/
+    // detectFrameRate() bindings below an explicit, notifying dependency so
+    // they recompute once that metadata actually arrives, instead of staying
+    // frozen at whatever they read before it loaded.
+    required property real currentVideoDurationMs
     // function() -- stops and detaches the current video
     required property var clearAttachedVideo
     // function() -> {path, durationMs, resolutionText, frameRate, fileFormat,
@@ -247,7 +253,7 @@ Item {
                     FlatButton {
                         Layout.fillWidth: true
                         text: qsTrc("playback", "Detect")
-                        enabled: root.videoModel.hasVideo && root.detectFrameRate() > 0
+                        enabled: root.videoModel.hasVideo && (root.currentVideoDurationMs, root.detectFrameRate() > 0)
                         navigation.panel: root.navigationPanel
                         navigation.order: root.navigationOrderStart + 4
 
@@ -337,10 +343,14 @@ Item {
 
                 spacing: 8
 
-                // NOTE: recomputed whenever hasVideo changes (load/clear/swap),
-                // not on every position update -- videoInfo() reads
-                // video.metaData, which doesn't change during normal playback.
-                readonly property var info: root.videoModel.hasVideo ? root.videoInfo() : ({})
+                // NOTE: recomputed whenever hasVideo changes (load/clear/swap)
+                // or currentVideoDurationMs changes -- the latter is read here
+                // purely to give this binding an explicit dependency on
+                // QtMultimedia's (async) metadata load, since videoInfo() itself
+                // reads video.duration/video.metaData through a plain function
+                // call that wouldn't otherwise re-trigger this binding once
+                // hasVideo is already true.
+                readonly property var info: root.videoModel.hasVideo ? (root.currentVideoDurationMs, root.videoInfo()) : ({})
 
                 readonly property int labelWidth: 70
 

@@ -127,10 +127,8 @@ private:
     QPushButton* buttonApplyToAllParts = nullptr;
     QButtonGroup* videoHitPointLineStyle = nullptr;
     QSpinBox* videoHitPointLineTransparency = nullptr;
-    Awl::ColorLabel* videoHitPointLineColor = nullptr;
     QToolButton* resetVideoHitPointLineStyle = nullptr;
     QToolButton* resetVideoHitPointLineTransparency = nullptr;
-    QToolButton* resetVideoHitPointLineColor = nullptr;
 
     void unhandledType(const StyleWidget);
     engraving::PropertyValue getValue(engraving::Sid idx);

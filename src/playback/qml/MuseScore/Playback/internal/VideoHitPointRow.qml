@@ -67,6 +67,7 @@ RowLayout {
                 onDoubleClicked: {
                     root.editingTimecode = true
                     timecodeEditor.forceActiveFocus()
+                    timecodeEditor.selectAll()
                 }
             }
         }
@@ -116,6 +117,7 @@ RowLayout {
                 onDoubleClicked: {
                     root.editingLabel = true
                     labelEditor.forceActiveFocus()
+                    labelEditor.selectAll()
                 }
             }
         }

@@ -2275,7 +2275,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(videoHitPointLabelFontSize,                 5.0),
     styleDef(videoHitPointLineStyle,                     PropertyValue(LineType::SOLID)),
     styleDef(videoHitPointLineTransparency,              30),
-    styleDef(videoHitPointLineColor,                     PropertyValue::fromValue(Color(59, 148, 229))),
 } };
 
 #undef styleDef

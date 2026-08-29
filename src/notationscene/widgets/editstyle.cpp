@@ -300,11 +300,8 @@ void EditStyle::classBegin()
     videoHitPointLineTransparency->setRange(0, 100);
     videoHitPointLineTransparency->setSuffix(muse::qtrc("global", "%"));
 
-    videoHitPointLineColor = new Awl::ColorLabel(videoHitPointGroup);
-
     resetVideoHitPointLineStyle = new QToolButton(videoHitPointGroup);
     resetVideoHitPointLineTransparency = new QToolButton(videoHitPointGroup);
-    resetVideoHitPointLineColor = new QToolButton(videoHitPointGroup);
 
     videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Line style:"), videoHitPointGroup), 0, 0);
     videoHitPointLayout->addWidget(videoHitPointLineStyleButtons, 0, 1);
@@ -312,9 +309,6 @@ void EditStyle::classBegin()
     videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Transparency:"), videoHitPointGroup), 1, 0);
     videoHitPointLayout->addWidget(videoHitPointLineTransparency, 1, 1);
     videoHitPointLayout->addWidget(resetVideoHitPointLineTransparency, 1, 2);
-    videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Color:"), videoHitPointGroup), 2, 0);
-    videoHitPointLayout->addWidget(videoHitPointLineColor, 2, 1);
-    videoHitPointLayout->addWidget(resetVideoHitPointLineColor, 2, 2);
     videoHitPointLayout->setColumnStretch(1, 1);
     videoScoringLayout->addWidget(videoHitPointGroup);
     videoScoringLayout->addStretch(1);
@@ -1188,16 +1182,6 @@ void EditStyle::classBegin()
         setSignalMapper->setMapping(sw.widget, static_cast<int>(sw.idx));
     }
 
-    WidgetUtils::setWidgetIcon(resetVideoHitPointLineColor, IconCode::Code::UNDO);
-    connect(videoHitPointLineColor, &Awl::ColorLabel::colorChanged, this, [this](const QColor& color) {
-        setStyleValue(StyleId::videoHitPointLineColor, PropertyValue::fromValue(Color(color)));
-        resetVideoHitPointLineColor->setEnabled(!hasDefaultStyleValue(StyleId::videoHitPointLineColor));
-    });
-    connect(resetVideoHitPointLineColor, &QToolButton::clicked, this, [this]() {
-        setStyleValue(StyleId::videoHitPointLineColor, defaultStyleValue(StyleId::videoHitPointLineColor));
-        setValues();
-    });
-
     connect(setSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::valueChanged);
     connect(resetSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::resetStyleValue);
 
@@ -1502,7 +1486,7 @@ void EditStyle::retranslate()
     Score* score = globalContext()->currentNotation()->elements()->msScore();
 
     int idx = 0;
-    for (TextStyleType textStyleType : allTextStyles()) {
+    for (TextStyleType textStyleType : editableTextStyles()) {
         textStyles->item(idx)->setText(score->getTextStyleUserName(textStyleType).qTranslated());
         ++idx;
     }
@@ -2135,11 +2119,6 @@ void EditStyle::setValues()
             sw.widget->blockSignals(false);
         }
     }
-
-    videoHitPointLineColor->blockSignals(true);
-    videoHitPointLineColor->setColor(styleValue(StyleId::videoHitPointLineColor).value<Color>().toQColor());
-    videoHitPointLineColor->blockSignals(false);
-    resetVideoHitPointLineColor->setEnabled(!hasDefaultStyleValue(StyleId::videoHitPointLineColor));
 
     textStyleChanged(textStyles->currentRow());
 
