@@ -115,6 +115,35 @@ Item {
     readonly property int minResyncIntervalMs: 500
     property real lastResyncTime: 0
 
+    // NOTE: `videoSettingsChanged` fires on ANY attachment mutation, including
+    // ones with nothing to do with playback position (add/rename/retime a hit
+    // point, mute, volume...). Its handler below forces an unconditional
+    // reseek every time. That collides with e.g. the hit-point ruler drag's
+    // onReleased, which already does its own explicit seekToVideoPositionMs()
+    // to the new hit-point time immediately before setHitPointTimeMs() fires
+    // this same notification -- without a guard, that's two unthrottled
+    // video.seek() calls per release, to two different positions, and several
+    // quick release attempts (e.g. while fumbling with two overlapping
+    // hit-point labels) burst multiple such pairs with zero rate limit,
+    // reproducing the same decoder-flooding "Failed to seek" spam the
+    // drift-correction throttle above was meant to prevent. This debounce
+    // skips a forced reseek that lands right after any other seek just
+    // happened (any seek path stamps lastResyncTime) -- short enough to stay
+    // unnoticeable for genuine standalone forced cases (offset change, initial
+    // load) that aren't immediately preceded by another seek.
+    readonly property int forceSeekDebounceMs: 150
+
+    // NOTE: same flood as the drift-correction case above, different trigger --
+    // dragging across the timeline track calls seekToVideoPositionMs() on every
+    // pixel of mouse movement (onPositionChanged fires dozens of times/sec),
+    // which hammered the hardware decoder with "Failed to seek" spam just like
+    // the unthrottled background resync used to. Throttled to a shorter
+    // interval than minResyncIntervalMs since this is direct user scrubbing --
+    // needs to still feel responsive -- with a final unthrottled seek on release
+    // so the video always lands exactly on the pixel the user let go of.
+    readonly property int scrubSeekIntervalMs: 80
+    property real lastScrubSeekTime: 0
+
     Component.onCompleted: {
         videoModel.load()
         root.hitPointsPanelWidth = Math.max(root.hitPointsPanelMinWidth, Math.min(root.hitPointsPanelMaxWidth, videoModel.hitPointsPanelWidth()))
@@ -140,6 +169,7 @@ Item {
     // Seeks both the video element and the score to the given video-timeline position.
     function seekToVideoPositionMs(videoPositionMs) {
         video.seek(videoPositionMs)
+        lastResyncTime = Date.now()
         videoModel.seekScoreToVideoPositionMs(videoPositionMs)
         scrollTimelineToPositionMs(videoPositionMs)
     }
@@ -411,8 +441,10 @@ Item {
 
         var targetPosition = targetVideoPositionMs()
         if (forceSeek) {
-            video.seek(targetPosition)
-            lastResyncTime = Date.now()
+            if (video.position !== targetPosition && Date.now() - lastResyncTime >= forceSeekDebounceMs) {
+                video.seek(targetPosition)
+                lastResyncTime = Date.now()
+            }
         } else if (Math.abs(video.position - targetPosition) > syncToleranceMs) {
             var now = Date.now()
             if (now - lastResyncTime >= minResyncIntervalMs) {
@@ -1213,8 +1245,16 @@ Item {
                                                 }
 
                                                 if (root.draggingHitPointId === hitPointMarker.modelData.id) {
-                                                    videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, root.draggingHitPointTimeMs)
+                                                    // NOTE: seek BEFORE persisting the new hit-point time --
+                                                    // setHitPointTimeMs() synchronously fires settingsChanged
+                                                    // -> onVideoSettingsChanged -> syncVideoToScore(true), so if
+                                                    // that ran first, its forced reseek would fire before
+                                                    // seekToVideoPositionMs() below had a chance to stamp
+                                                    // lastResyncTime, defeating forceSeekDebounceMs and causing
+                                                    // the exact double video.seek() decoder-flood this debounce
+                                                    // was added to prevent.
                                                     root.seekToVideoPositionMs(root.draggingHitPointTimeMs)
+                                                    videoModel.setHitPointTimeMs(hitPointMarker.modelData.id, root.draggingHitPointTimeMs)
                                                     root.draggingHitPointId = -1
                                                 }
                                             }
@@ -1323,6 +1363,7 @@ Item {
                                 cursorShape: Qt.PointingHandCursor
 
                                 onPressed: function(mouse) {
+                                    root.lastScrubSeekTime = Date.now()
                                     root.seekToVideoPositionMs(root.timelinePositionForX(mouse.x, width))
                                 }
 
@@ -1331,6 +1372,16 @@ Item {
                                         return
                                     }
 
+                                    const now = Date.now()
+                                    if (now - root.lastScrubSeekTime < root.scrubSeekIntervalMs) {
+                                        return
+                                    }
+
+                                    root.lastScrubSeekTime = now
+                                    root.seekToVideoPositionMs(root.timelinePositionForX(mouse.x, width))
+                                }
+
+                                onReleased: function(mouse) {
                                     root.seekToVideoPositionMs(root.timelinePositionForX(mouse.x, width))
                                 }
                             }
