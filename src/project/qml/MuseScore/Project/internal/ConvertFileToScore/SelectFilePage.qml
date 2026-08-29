@@ -29,10 +29,7 @@ Item {
     id: root
 
     property string guidelinesUrl: ""
-    property alias linkHintText: linkPastePanel.hintText
-    property alias linkHintPlainText: linkPastePanel.hintPlainText
-    property alias maxLinkLength: linkPastePanel.maxLinkLength
-
+    property alias linkHintText: convertFromLinkPanel.hintText
     property var fileRequirements: []
 
     property NavigationSection navigationSection: null
@@ -41,7 +38,7 @@ Item {
 
     signal selectFilesRequested()
     signal filesDropped(var urls)
-    signal linkSubmitted(string link)
+    signal convertFromLinkRequested()
     signal cancelRequested()
 
     function focusOnSelect() {
@@ -175,17 +172,17 @@ Item {
             }
         }
 
-        LinkPastePanel {
-            id: linkPastePanel
+        ConvertFromLinkPanel {
+            id: convertFromLinkPanel
 
             Layout.fillWidth: true
             Layout.topMargin: 2
 
             navigationPanel: navPanel
-            firstNavigationOrder: 2
+            navigationOrder: 2
 
-            onLinkSubmitted: function(link) {
-                root.linkSubmitted(link)
+            onConvertFromLinkRequested: {
+                root.convertFromLinkRequested()
             }
         }
 
@@ -204,7 +201,7 @@ Item {
 
                     name: "UploadingGuidelines"
                     panel: navPanel
-                    order: 4
+                    order: 3
                     enabled: root.enabled && root.visible
 
                     accessible.role: MUAccessible.Button

@@ -47,13 +47,15 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(int convertType READ convertType NOTIFY convertTypeChanged)
     Q_PROPERTY(QStringList selectedPaths READ selectedPaths WRITE setSelectedPaths NOTIFY selectedPathsChanged)
     Q_PROPERTY(QString selectedLink READ selectedLink WRITE setSelectedLink NOTIFY selectedLinkChanged)
+    Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY selectedPathsChanged)
 
     Q_PROPERTY(QVariantList fileRequirements READ fileRequirements NOTIFY fileRequirementsChanged)
     Q_PROPERTY(QVariantMap convertLimits READ convertLimits NOTIFY convertTypeChanged)
     Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY convertTypeChanged)
 
     Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
-    Q_PROPERTY(QString linkHintPlainText READ linkHintPlainText CONSTANT)
+    Q_PROPERTY(QString linkPageHintText READ linkPageHintText CONSTANT)
+    Q_PROPERTY(QString linkPageHintPlainText READ linkPageHintPlainText CONSTANT)
     Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
 
     QML_ELEMENT
@@ -78,31 +80,37 @@ public:
     QString selectedLink() const;
     void setSelectedLink(const QString& link);
 
+    QString defaultSaveAsName() const;
+
     QVariantList fileRequirements() const;
     QVariantMap convertLimits() const;
     bool canSelectMultipleFiles() const;
 
     QString linkHintText() const;
-    QString linkHintPlainText() const;
+    QString linkPageHintText() const;
+    QString linkPageHintPlainText() const;
     int maxLinkLength() const;
 
     Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
     Q_INVOKABLE void selectAndValidateFiles(const QStringList& existingPaths = {});
 
+    Q_INVOKABLE QString validateFileName(const QString& name) const;
+
     Q_INVOKABLE void confirmGoingBack();
+    Q_INVOKABLE void clearSelection();
 
 signals:
     void convertTypeChanged();
     void selectedPathsChanged();
     void selectedLinkChanged();
     void fileRequirementsChanged();
-
     void validationFinished();
     void goingBackConfirmed();
 
 private:
     void setConvertType(int type);
     FileCategory selectedFileCategory() const;
+    QStringList boldLinkSources() const;
 
     QStringList selectFiles(const QStringList& existingPaths = {});
 

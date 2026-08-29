@@ -189,6 +189,15 @@ void ConvertFileToScoreModel::setSelectedLink(const QString& link)
     }
 }
 
+QString ConvertFileToScoreModel::defaultSaveAsName() const
+{
+    if (m_selectedPaths.isEmpty()) {
+        return muse::qtrc("project", "Untitled score");
+    }
+
+    return QFileInfo(m_selectedPaths.first()).completeBaseName();
+}
+
 QVariantList ConvertFileToScoreModel::fileRequirements() const
 {
     const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
@@ -299,32 +308,16 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles() const
     return allowsMultipleFiles(config.omr.maxImages);
 }
 
-static QString linkHintTextFor(const QStringList& sources)
+static QString pasteLinkHintTextFor(const QStringList& sources)
 {
     if (sources.isEmpty()) {
         return QString();
     }
 
-    return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(joinWithOr(sources));
+    return muse::qtrc("project/convert", "Paste a link from %1 (beta)").arg(joinWithOr(sources));
 }
 
-static QStringList linkSourceDisplayNames(const QStringList& allowedLinkSources)
-{
-    QStringList names;
-    for (const QString& source : allowedLinkSources) {
-        if (source.compare("youtube", Qt::CaseInsensitive) == 0) {
-            names << "Youtube";
-        } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
-            names << "Audio.com";
-        } else {
-            names << source;
-        }
-    }
-
-    return names;
-}
-
-QString ConvertFileToScoreModel::linkHintText() const
+QStringList ConvertFileToScoreModel::boldLinkSources() const
 {
     const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
 
@@ -335,18 +328,41 @@ QString ConvertFileToScoreModel::linkHintText() const
         } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
             const QString url = audioComService()->cloudInfo().url.toString();
             sources << "<b><a href=\"" + url + "\">Audio.com</a></b>";
-        } else {
-            sources << "<b>" + source + "</b>";
         }
     }
 
-    return linkHintTextFor(sources);
+    return sources;
 }
 
-QString ConvertFileToScoreModel::linkHintPlainText() const
+QString ConvertFileToScoreModel::linkHintText() const
+{
+    const QStringList sources = boldLinkSources();
+    if (sources.isEmpty()) {
+        return QString();
+    }
+
+    return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(joinWithOr(sources));
+}
+
+QString ConvertFileToScoreModel::linkPageHintText() const
+{
+    return pasteLinkHintTextFor(boldLinkSources());
+}
+
+QString ConvertFileToScoreModel::linkPageHintPlainText() const
 {
     const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
-    return linkHintTextFor(linkSourceDisplayNames(a2s.allowedLinkSources));
+
+    QStringList names;
+    for (const QString& source : a2s.allowedLinkSources) {
+        if (source.compare("youtube", Qt::CaseInsensitive) == 0) {
+            names << "Youtube";
+        } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
+            names << "Audio.com";
+        }
+    }
+
+    return pasteLinkHintTextFor(names);
 }
 
 int ConvertFileToScoreModel::maxLinkLength() const
@@ -433,6 +449,19 @@ void ConvertFileToScoreModel::selectAndValidateFiles(const QStringList& existing
     }
 }
 
+QString ConvertFileToScoreModel::validateFileName(const QString& name) const
+{
+    if (name.isEmpty()) {
+        return QString();
+    }
+
+    if (!io::isAllowedFileName(io::path_t(name))) {
+        return muse::qtrc("project/convert", "“%1” cannot be used as a file name. Please choose a different name.").arg(name);
+    }
+
+    return QString();
+}
+
 void ConvertFileToScoreModel::confirmGoingBack()
 {
     constexpr int noBtn = int(IInteractive::Button::No);
@@ -450,4 +479,10 @@ void ConvertFileToScoreModel::confirmGoingBack()
             emit goingBackConfirmed();
         }
     });
+}
+
+void ConvertFileToScoreModel::clearSelection()
+{
+    setSelectedLink(QString());
+    setSelectedPaths({});
 }

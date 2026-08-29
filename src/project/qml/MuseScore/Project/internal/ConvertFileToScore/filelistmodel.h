@@ -43,8 +43,6 @@ class FileListModel : public QAbstractListModel
     Q_PROPERTY(QString usedSizeString READ usedSizeString NOTIFY usedSizeStringChanged)
     Q_PROPERTY(bool exceedsLimits READ exceedsLimits NOTIFY exceedsLimitsChanged)
 
-    Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY pathsChanged)
-
     QML_ELEMENT
 
 public:
@@ -57,7 +55,6 @@ public:
     QStringList paths() const;
     void setPaths(const QStringList& paths);
 
-    QString defaultSaveAsName() const;
     int fileIconCode() const;
     QString combinedFilesNote() const;
 
@@ -68,12 +65,10 @@ public:
     QString usedSizeString() const;
     bool exceedsLimits() const;
 
+    Q_INVOKABLE QVariantMap get(int index);
+
     Q_INVOKABLE void removeAt(int index);
     Q_INVOKABLE void move(int from, int to);
-
-    Q_INVOKABLE QString fileName(int index) const;
-    Q_INVOKABLE QString fileSize(int index) const;
-    Q_INVOKABLE QString validateFileName(const QString& name) const;
 
 signals:
     void pathsChanged();

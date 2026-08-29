@@ -29,8 +29,10 @@ import MuseScore.Project
 Item {
     id: root
 
+    property alias saveAsName: saveAsField.currentText
+    property alias saveAsErrorText: saveAsField.errorText
+
     property var files: []
-    property string link: ""
 
     property var convertLimits: ({})
     property var fileRequirements: []
@@ -38,12 +40,10 @@ Item {
 
     property NavigationSection navigationSection: null
 
-    readonly property string saveAsNameError: fileListModel.validateFileName(saveAsField.currentText)
-
     signal cancelRequested()
     signal backRequested(bool confirm)
     signal selectMoreFilesRequested(var existingPaths)
-    signal convertRequested(var paths, string link, string convertedFileName)
+    signal convertRequested(var paths, string convertedFileName)
 
     function focusOnFileList() {
         if (filesPanelLoader.item) {
@@ -82,91 +82,31 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            sourceComponent: {
-                if (root.link) {
-                    return linkPanelComponent
-                }
-
-                return root.canSelectMultipleFiles ? multipleFilesPanelComponent : singleFilePanelComponent
-            }
+            sourceComponent: root.canSelectMultipleFiles ? multipleFilesPanelComponent : singleFilePanelComponent
         }
 
-        Column {
+        SaveAsField {
+            id: saveAsField
+
             Layout.fillWidth: true
-            spacing: 8
 
-            StyledTextLabel {
-                id: saveAsLabel
-
-                text: qsTrc("project/convert", "Save as")
-                horizontalAlignment: Text.AlignLeft
-            }
-
-            TextInputField {
-                id: saveAsField
-
-                currentText: fileListModel.defaultSaveAsName
-
-                navigation.panel: navPanel
-                navigation.order: 5
-                navigation.accessible.name: saveAsLabel.text + " " + saveAsField.currentText
-                navigation.accessible.description: root.saveAsNameError
-
-                onTextChanged: function(newTextValue) {
-                    saveAsField.currentText = newTextValue
-                }
-            }
-
-            StyledTextLabel {
-                width: parent.width
-
-                visible: Boolean(text)
-                horizontalAlignment: Text.AlignLeft
-                text: root.saveAsNameError
-            }
+            navigationPanel: navPanel
+            navigationOrder: 5
         }
 
-        ButtonBox {
+        ConvertButtonBox {
             Layout.fillWidth: true
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 2
 
-            FlatButton {
-                text: qsTrc("global", "Cancel")
+            convertEnabled: Boolean(saveAsField.currentText) && !saveAsField.errorText && !fileListModel.exceedsLimits
 
-                buttonRole: ButtonBoxModel.CustomRole
-                buttonId: ButtonBoxModel.CustomButton + 1
-                isLeftSide: true
+            onCancelRequested: root.cancelRequested()
+            onBackRequested: root.backRequested(true /*confirm*/)
 
-                onClicked: {
-                    root.cancelRequested()
-                }
-            }
-
-            FlatButton {
-                text: qsTrc("global", "Back")
-
-                buttonRole: ButtonBoxModel.BackRole
-                buttonId: ButtonBoxModel.CustomButton + 2
-
-                onClicked: {
-                    root.backRequested(true /*confirm*/)
-                }
-            }
-
-            FlatButton {
-                text: qsTrc("project/convert", "Convert")
-
-                buttonRole: ButtonBoxModel.ApplyRole
-                buttonId: ButtonBoxModel.CustomButton + 3
-
-                accentButton: true
-                enabled: Boolean(saveAsField.currentText) && !root.saveAsNameError && !fileListModel.exceedsLimits
-
-                onClicked: {
-                    root.convertRequested(root.link ? [] : fileListModel.paths, root.link, saveAsField.currentText)
-                }
+            onConvertRequested: {
+                root.convertRequested(fileListModel.paths, saveAsField.currentText)
             }
         }
     }
@@ -186,36 +126,14 @@ Item {
     }
 
     Component {
-        id: linkPanelComponent
-
-        Rectangle {
-            function focusOnFileList() {
-                saveAsField.navigation.requestActive()
-            }
-
-            color: ui.theme.backgroundSecondaryColor
-            border.width: 1
-            border.color: ui.theme.strokeColor
-            radius: 3
-
-            StyledTextLabel {
-                anchors.centerIn: parent
-                anchors.margins: 16
-                width: parent.width - 32
-
-                text: root.link
-                wrapMode: Text.Wrap
-            }
-        }
-    }
-
-    Component {
         id: singleFilePanelComponent
 
         SingleFilePanel {
+            property var item: fileListModel.get(0)
+
             navigationPanel: navPanel
-            fileName: fileListModel.fileName(0)
-            fileSize: fileListModel.fileSize(0)
+            fileName: item.fileNameRole
+            fileSize: item.fileSizeRole
             iconCode: fileListModel.fileIconCode
             fileRequirements: root.fileRequirements
 

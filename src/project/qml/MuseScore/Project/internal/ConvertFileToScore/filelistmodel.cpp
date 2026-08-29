@@ -29,7 +29,6 @@
 #include "ui/view/iconcodes.h"
 
 #include "global/dataformatter.h"
-#include "global/io/path.h"
 #include "global/translation.h"
 
 using namespace mu::project;
@@ -122,15 +121,6 @@ void FileListModel::setPaths(const QStringList& paths)
     updateUsedSizeString();
 }
 
-QString FileListModel::defaultSaveAsName() const
-{
-    if (m_paths.isEmpty()) {
-        return QString();
-    }
-
-    return QFileInfo(m_paths.first()).completeBaseName();
-}
-
 int FileListModel::fileIconCode() const
 {
     switch (m_fileCategory) {
@@ -192,6 +182,19 @@ bool FileListModel::exceedsLimits() const
     return m_exceedsLimits;
 }
 
+QVariantMap FileListModel::get(int index)
+{
+    QVariantMap result;
+
+    const QModelIndex idx = this->index(index, 0);
+    const QHash<int, QByteArray> roles = roleNames();
+    for (auto it = roles.cbegin(); it != roles.cend(); ++it) {
+        result[it.value()] = idx.data(it.key());
+    }
+
+    return result;
+}
+
 void FileListModel::removeAt(int index)
 {
     if (index < 0 || index >= m_paths.size()) {
@@ -220,37 +223,6 @@ void FileListModel::move(int from, int to)
     endMoveRows();
 
     emit pathsChanged();
-}
-
-QString FileListModel::fileName(int index) const
-{
-    if (index < 0 || index >= m_paths.size()) {
-        return QString();
-    }
-
-    return QFileInfo(m_paths.at(index)).fileName();
-}
-
-QString FileListModel::fileSize(int index) const
-{
-    if (index < 0 || index >= m_paths.size()) {
-        return QString();
-    }
-
-    return muse::DataFormatter::formatFileSize(size_t(QFileInfo(m_paths.at(index)).size()));
-}
-
-QString FileListModel::validateFileName(const QString& name) const
-{
-    if (name.isEmpty()) {
-        return QString();
-    }
-
-    if (!muse::io::isAllowedFileName(muse::io::path_t(name))) {
-        return muse::qtrc("project/convert", "“%1” cannot be used as a file name. Please choose a different name.").arg(name);
-    }
-
-    return QString();
 }
 
 void FileListModel::updateTotalSizeBytes()
