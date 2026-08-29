@@ -43,6 +43,9 @@ class QComboBox;
 class QButtonGroup;
 class QSpinBox;
 class QToolButton;
+class QGroupBox;
+class QLabel;
+class QListWidgetItem;
 
 namespace Awl {
 class ColorLabel;
@@ -125,6 +128,10 @@ private:
     std::vector<QComboBox*> verticalPlacementComboBoxes;
 
     QPushButton* buttonApplyToAllParts = nullptr;
+    QListWidgetItem* videoScoringPageListItem = nullptr;
+    QGroupBox* videoHitPointGroup = nullptr;
+    QLabel* videoHitPointLineStyleLabel = nullptr;
+    QLabel* videoHitPointLineTransparencyLabel = nullptr;
     QButtonGroup* videoHitPointLineStyle = nullptr;
     QSpinBox* videoHitPointLineTransparency = nullptr;
     QToolButton* resetVideoHitPointLineStyle = nullptr;

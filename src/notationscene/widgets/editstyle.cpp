@@ -31,6 +31,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QListWidgetItem>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickView>
@@ -270,9 +271,10 @@ void EditStyle::classBegin()
 
     const int videoScoringPageIndex = ALL_PAGE_CODES.indexOf(QStringLiteral("video-scoring"));
     pageList->insertItem(videoScoringPageIndex, muse::qtrc("notation/editstyle", "Video Scoring"));
+    videoScoringPageListItem = pageList->item(videoScoringPageIndex);
     QWidget* pageVideoScoring = new QWidget(pageStack);
     QVBoxLayout* videoScoringLayout = new QVBoxLayout(pageVideoScoring);
-    QGroupBox* videoHitPointGroup = new QGroupBox(muse::qtrc("notation/editstyle", "Video hit points"), pageVideoScoring);
+    videoHitPointGroup = new QGroupBox(muse::qtrc("notation/editstyle", "Video hit points"), pageVideoScoring);
     QGridLayout* videoHitPointLayout = new QGridLayout(videoHitPointGroup);
 
     videoHitPointLineStyle = new QButtonGroup(videoHitPointGroup);
@@ -282,31 +284,41 @@ void EditStyle::classBegin()
     videoHitPointLineStyleLayout->setSpacing(4);
 
     auto addVideoHitPointLineStyleButton
-        = [this, videoHitPointLineStyleButtons, videoHitPointLineStyleLayout](const QString& text, LineType lineType) {
+        = [this, videoHitPointLineStyleButtons, videoHitPointLineStyleLayout]
+          (const QString& text, LineType lineType, const QString& accessibleName) {
         QToolButton* button = new QToolButton(videoHitPointLineStyleButtons);
         button->setCheckable(true);
         button->setText(text);
+        button->setAccessibleName(accessibleName);
         button->setMinimumWidth(78);
         button->setAutoRaise(false);
         videoHitPointLineStyle->addButton(button, int(lineType));
         videoHitPointLineStyleLayout->addWidget(button);
     };
 
-    addVideoHitPointLineStyleButton(QStringLiteral("_____"), LineType::SOLID);
-    addVideoHitPointLineStyleButton(QStringLiteral("- - -"), LineType::DASHED);
-    addVideoHitPointLineStyleButton(QStringLiteral(". . ."), LineType::DOTTED);
+    addVideoHitPointLineStyleButton(QStringLiteral("_____"), LineType::SOLID,
+                                    muse::qtrc("notation/editstyle", "Solid"));
+    addVideoHitPointLineStyleButton(QStringLiteral("- - -"), LineType::DASHED,
+                                    muse::qtrc("notation/editstyle", "Dashed"));
+    addVideoHitPointLineStyleButton(QStringLiteral(". . ."), LineType::DOTTED,
+                                    muse::qtrc("notation/editstyle", "Dotted"));
     videoHitPointLineTransparency = new QSpinBox(videoHitPointGroup);
     videoHitPointLineTransparency->setKeyboardTracking(false);
     videoHitPointLineTransparency->setRange(0, 100);
     videoHitPointLineTransparency->setSuffix(muse::qtrc("global", "%"));
 
     resetVideoHitPointLineStyle = new QToolButton(videoHitPointGroup);
+    resetVideoHitPointLineStyle->setAccessibleName(muse::qtrc("notation/editstyle", "Reset line style"));
     resetVideoHitPointLineTransparency = new QToolButton(videoHitPointGroup);
+    resetVideoHitPointLineTransparency->setAccessibleName(muse::qtrc("notation/editstyle", "Reset transparency"));
 
-    videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Line style:"), videoHitPointGroup), 0, 0);
+    videoHitPointLineStyleLabel = new QLabel(muse::qtrc("notation/editstyle", "Line style:"), videoHitPointGroup);
+    videoHitPointLineTransparencyLabel = new QLabel(muse::qtrc("notation/editstyle", "Transparency:"), videoHitPointGroup);
+
+    videoHitPointLayout->addWidget(videoHitPointLineStyleLabel, 0, 0);
     videoHitPointLayout->addWidget(videoHitPointLineStyleButtons, 0, 1);
     videoHitPointLayout->addWidget(resetVideoHitPointLineStyle, 0, 2);
-    videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Transparency:"), videoHitPointGroup), 1, 0);
+    videoHitPointLayout->addWidget(videoHitPointLineTransparencyLabel, 1, 0);
     videoHitPointLayout->addWidget(videoHitPointLineTransparency, 1, 1);
     videoHitPointLayout->addWidget(resetVideoHitPointLineTransparency, 1, 2);
     videoHitPointLayout->setColumnStretch(1, 1);
@@ -1444,6 +1456,24 @@ void EditStyle::retranslate()
     retranslateUi(this);
 
     buttonApplyToAllParts->setText(muse::qtrc("notation/editstyle", "Apply to all parts"));
+
+    videoScoringPageListItem->setText(muse::qtrc("notation/editstyle", "Video Scoring"));
+    videoHitPointGroup->setTitle(muse::qtrc("notation/editstyle", "Video hit points"));
+    videoHitPointLineStyleLabel->setText(muse::qtrc("notation/editstyle", "Line style:"));
+    videoHitPointLineTransparencyLabel->setText(muse::qtrc("notation/editstyle", "Transparency:"));
+    resetVideoHitPointLineStyle->setAccessibleName(muse::qtrc("notation/editstyle", "Reset line style"));
+    resetVideoHitPointLineTransparency->setAccessibleName(muse::qtrc("notation/editstyle", "Reset transparency"));
+
+    static const std::vector<std::pair<int, muse::TranslatableString> > videoHitPointLineStyleAccessibleNames = {
+        { int(LineType::SOLID), muse::TranslatableString("notation/editstyle", "Solid") },
+        { int(LineType::DASHED), muse::TranslatableString("notation/editstyle", "Dashed") },
+        { int(LineType::DOTTED), muse::TranslatableString("notation/editstyle", "Dotted") },
+    };
+    for (const auto& [lineTypeId, accessibleName] : videoHitPointLineStyleAccessibleNames) {
+        if (QAbstractButton* button = videoHitPointLineStyle->button(lineTypeId)) {
+            button->setAccessibleName(accessibleName.qTranslated());
+        }
+    }
 
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         int idx = 0;
