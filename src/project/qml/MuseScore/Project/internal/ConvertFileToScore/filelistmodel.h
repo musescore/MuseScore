@@ -25,6 +25,8 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
+#include "project/types/converttypes.h"
+
 namespace mu::project {
 class FileListModel : public QAbstractListModel
 {
@@ -33,6 +35,7 @@ class FileListModel : public QAbstractListModel
     Q_PROPERTY(QStringList paths READ paths WRITE setPaths NOTIFY pathsChanged)
     Q_PROPERTY(int count READ rowCount NOTIFY pathsChanged)
     Q_PROPERTY(int fileIconCode READ fileIconCode NOTIFY pathsChanged)
+    Q_PROPERTY(QString combinedFilesNote READ combinedFilesNote NOTIFY pathsChanged)
 
     Q_PROPERTY(QVariantMap convertLimits READ convertLimits WRITE setConvertLimits NOTIFY convertLimitsChanged)
     Q_PROPERTY(int maxFileCount READ maxFileCount NOTIFY convertLimitsChanged)
@@ -56,6 +59,7 @@ public:
 
     QString defaultSaveAsName() const;
     int fileIconCode() const;
+    QString combinedFilesNote() const;
 
     QVariantMap convertLimits() const;
     void setConvertLimits(const QVariantMap& limits);
@@ -68,6 +72,7 @@ public:
     Q_INVOKABLE void move(int from, int to);
 
     Q_INVOKABLE QString fileName(int index) const;
+    Q_INVOKABLE QString fileSize(int index) const;
     Q_INVOKABLE QString validateFileName(const QString& name) const;
 
 signals:
@@ -79,7 +84,8 @@ signals:
 private:
     enum Roles {
         PathRole = Qt::UserRole + 1,
-        FileNameRole
+        FileNameRole,
+        FileSizeRole
     };
 
     qint64 maxCombinedSizeBytes() const;
@@ -89,6 +95,7 @@ private:
     void updateUsedSizeString();
 
     QStringList m_paths;
+    FileCategory m_fileCategory = FileCategory::Unknown;
     QVariantMap m_convertLimits;
     bool m_exceedsLimits = false;
     qint64 m_totalSizeBytes = 0;

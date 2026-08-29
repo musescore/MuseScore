@@ -57,6 +57,7 @@ StyledDialogView {
         onGoingBackConfirmed: {
             root.currentPageIndex = 0
             convertModel.selectedLink = ""
+            convertModel.selectedPaths = []
         }
     }
 
@@ -146,7 +147,6 @@ StyledDialogView {
             canSelectMultipleFiles: convertModel.canSelectMultipleFiles
             fileRequirements: convertModel.fileRequirements
             convertLimits: convertModel.convertLimits
-            combinedFilesNote: convertModel.combinedFilesNote
 
             onCancelRequested: root.reject()
 
@@ -156,6 +156,7 @@ StyledDialogView {
                 } else {
                     root.currentPageIndex = 0
                     convertModel.selectedLink = ""
+                    convertModel.selectedPaths = []
                 }
             }
 

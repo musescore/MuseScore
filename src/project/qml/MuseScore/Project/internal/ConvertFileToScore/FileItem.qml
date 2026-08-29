@@ -29,6 +29,7 @@ ListItemBlank {
     id: root
 
     property alias fileName: fileNameLabel.text
+    property alias fileSize: fileSizeLabel.text
     property alias iconCode: iconlabel.iconCode
     property bool selectable: false
 
@@ -43,7 +44,7 @@ ListItemBlank {
 
     mouseArea.enabled: root.visible && root.enabled && root.selectable
 
-    navigation.accessible.name: root.fileName
+    navigation.accessible.name: root.fileSize ? (root.fileName + " " + root.fileSize) : root.fileName
 
     RowLayout {
         id: contentRow
@@ -81,6 +82,12 @@ ListItemBlank {
 
             horizontalAlignment: Text.AlignLeft
             elide: Text.ElideMiddle
+        }
+
+        StyledTextLabel {
+            id: fileSizeLabel
+
+            horizontalAlignment: Text.AlignRight
         }
 
         FlatButton {

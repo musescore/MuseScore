@@ -34,7 +34,6 @@ Item {
 
     property var convertLimits: ({})
     property var fileRequirements: []
-    property string combinedFilesNote: ""
     property bool canSelectMultipleFiles: true
 
     property NavigationSection navigationSection: null
@@ -179,7 +178,6 @@ Item {
             navigationPanel: navPanel
             filesModel: fileListModel
             fileRequirements: root.fileRequirements
-            combinedFilesNote: root.combinedFilesNote
 
             onSelectMoreFilesRequested: function(existingPaths) {
                 root.selectMoreFilesRequested(existingPaths)
@@ -217,6 +215,7 @@ Item {
         SingleFilePanel {
             navigationPanel: navPanel
             fileName: fileListModel.fileName(0)
+            fileSize: fileListModel.fileSize(0)
             iconCode: fileListModel.fileIconCode
             fileRequirements: root.fileRequirements
 

@@ -33,7 +33,7 @@ StyledPopupView {
     //! NOTE: list of { title: string, items: array<string> }; content is opaque to this popup
     property var sections: []
 
-    contentWidth: 320
+    contentWidth: 220
     contentHeight: content.implicitHeight
     padding: 8
 
@@ -55,7 +55,7 @@ StyledPopupView {
 
                 required property var modelData
 
-                readonly property int itemIndent: 18
+                readonly property int itemIndent: 8
 
                 width: content.width
                 spacing: 4

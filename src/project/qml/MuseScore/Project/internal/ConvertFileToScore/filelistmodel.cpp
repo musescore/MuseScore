@@ -35,7 +35,24 @@
 using namespace mu::project;
 using namespace muse::ui;
 
-static const QStringList IMAGE_EXTENSIONS { "jpg", "jpeg", "png" };
+static FileCategory resolveFileCategory(const QStringList& paths)
+{
+    if (paths.isEmpty()) {
+        return FileCategory::Unknown;
+    }
+
+    const std::string suffix = QFileInfo(paths.first()).suffix().toLower().toStdString();
+
+    if (isImageFileSuffix(suffix)) {
+        return FileCategory::Image;
+    }
+
+    if (isAudioFileSuffix(suffix)) {
+        return FileCategory::Audio;
+    }
+
+    return FileCategory::Unknown;
+}
 
 FileListModel::FileListModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -55,6 +72,8 @@ QVariant FileListModel::data(const QModelIndex& index, int role) const
         return path;
     case FileNameRole:
         return QFileInfo(path).fileName();
+    case FileSizeRole:
+        return muse::DataFormatter::formatFileSize(size_t(QFileInfo(path).size())).toQString();
     }
 
     return QVariant();
@@ -73,7 +92,8 @@ QHash<int, QByteArray> FileListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { PathRole, "pathRole" },
-        { FileNameRole, "fileNameRole" }
+        { FileNameRole, "fileNameRole" },
+        { FileSizeRole, "fileSizeRole" }
     };
 
     return roles;
@@ -94,6 +114,8 @@ void FileListModel::setPaths(const QStringList& paths)
     m_paths = paths;
     endResetModel();
 
+    m_fileCategory = resolveFileCategory(m_paths);
+
     emit pathsChanged();
     updateTotalSizeBytes();
     updateExceedsLimits();
@@ -111,21 +133,26 @@ QString FileListModel::defaultSaveAsName() const
 
 int FileListModel::fileIconCode() const
 {
-    if (m_paths.isEmpty()) {
-        return int(IconCode::Code::NEW_FILE);
-    }
-
-    const QString suffix = QFileInfo(m_paths.first()).suffix().toLower();
-
-    if (IMAGE_EXTENSIONS.contains(suffix)) {
+    switch (m_fileCategory) {
+    case FileCategory::Image:
         return int(IconCode::Code::IMAGE_MOUNTAINS);
-    }
-
-    if (isAudioFileSuffix(suffix.toStdString())) {
+    case FileCategory::Audio:
         return int(IconCode::Code::AUDIO);
+    case FileCategory::Unknown:
+    case FileCategory::Pdf:
+        break;
     }
 
     return int(IconCode::Code::NEW_FILE);
+}
+
+QString FileListModel::combinedFilesNote() const
+{
+    if (m_fileCategory != FileCategory::Image) {
+        return QString();
+    }
+
+    return muse::qtrc("project/convert", "Images will be combined into one score in the order you upload them");
 }
 
 QVariantMap FileListModel::convertLimits() const
@@ -202,6 +229,15 @@ QString FileListModel::fileName(int index) const
     }
 
     return QFileInfo(m_paths.at(index)).fileName();
+}
+
+QString FileListModel::fileSize(int index) const
+{
+    if (index < 0 || index >= m_paths.size()) {
+        return QString();
+    }
+
+    return muse::DataFormatter::formatFileSize(size_t(QFileInfo(m_paths.at(index)).size()));
 }
 
 QString FileListModel::validateFileName(const QString& name) const

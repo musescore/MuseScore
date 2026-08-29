@@ -28,6 +28,7 @@ Rectangle {
     id: root
 
     property alias fileName: fileItem.fileName
+    property alias fileSize: fileItem.fileSize
     property alias iconCode: fileItem.iconCode
     property alias fileRequirements: fileRequirementsItem.fileRequirements
     property NavigationPanel navigationPanel: null

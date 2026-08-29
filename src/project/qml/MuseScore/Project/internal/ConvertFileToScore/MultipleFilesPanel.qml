@@ -32,7 +32,6 @@ Rectangle {
     property NavigationPanel navigationPanel: null
     property var filesModel: null
     property var fileRequirements: []
-    property alias combinedFilesNote: combinedFilesNoteLabel.text
 
     signal selectMoreFilesRequested(var existingPaths)
 
@@ -96,6 +95,7 @@ Rectangle {
 
                     required property int index
                     required property string fileNameRole
+                    required property string fileSizeRole
 
                     width: {
                         if (!ListView.view) {
@@ -139,6 +139,7 @@ Rectangle {
                         z: fileItem.dragged ? 100 : 1
 
                         fileName: dropArea.fileNameRole
+                        fileSize: dropArea.fileSizeRole
                         iconCode: root.filesModel.fileIconCode
                         selectable: root.filesModel.count > 1
                         isSelected: root.filesModel.count > 1 && fileListView.currentIndex === dropArea.index
@@ -187,11 +188,24 @@ Rectangle {
             }
         }
 
+        StyledTextLabel {
+            id: combinedFilesNoteLabel
+
+            Layout.fillWidth: true
+
+            text: root.filesModel.combinedFilesNote
+            visible: Boolean(combinedFilesNoteLabel.text)
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+        }
+
         RowLayout {
             Layout.fillWidth: true
             spacing: 12
 
             ColumnLayout {
+                Layout.alignment: Qt.AlignTop
+
                 spacing: 2
 
                 StyledTextLabel {
@@ -201,14 +215,19 @@ Rectangle {
 
                     text: root.filesModel.usedSizeString
                     horizontalAlignment: Text.AlignLeft
-                    color: ui.theme.fontSecondaryColor
+                    color: root.filesModel.exceedsLimits ? "#FA7878" : ui.theme.fontSecondaryColor
                 }
 
-                FileRequirements {
-                    fileRequirements: root.fileRequirements
+                StyledTextLabel {
+                    id: maxCountReachedLabel
 
-                    navigation.panel: root.navigationPanel
-                    navigation.order: 1
+                    visible: Boolean(maxCountReachedLabel.text)
+
+                    text: root.filesModel.maxFileCount > 0 && root.filesModel.count >= root.filesModel.maxFileCount
+                          ? qsTrc("project/convert", "Maximum files selected (%1)").arg(root.filesModel.maxFileCount)
+                          : ""
+                    horizontalAlignment: Text.AlignLeft
+                    color: ui.theme.fontSecondaryColor
                 }
             }
 
@@ -216,62 +235,65 @@ Rectangle {
                 Layout.fillWidth: true
             }
 
-            RowLayout {
+            ColumnLayout {
                 spacing: 8
 
-                FlatButton {
-                    icon: IconCode.ARROW_UP
-                    toolTipTitle: qsTrc("global", "Move up")
+                RowLayout {
+                    Layout.alignment: Qt.AlignRight
+                    spacing: 8
 
-                    enabled: fileListView.count > 1 && fileListView.currentIndex > 0
+                    FlatButton {
+                        icon: IconCode.ARROW_UP
+                        toolTipTitle: qsTrc("global", "Move up")
 
-                    navigation.panel: root.navigationPanel
-                    navigation.order: 2
+                        enabled: fileListView.count > 1 && fileListView.currentIndex > 0
 
-                    onClicked: root.moveCurrentFile(-1)
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 1
+
+                        onClicked: root.moveCurrentFile(-1)
+                    }
+
+                    FlatButton {
+                        icon: IconCode.ARROW_DOWN
+                        toolTipTitle: qsTrc("global", "Move down")
+
+                        enabled: fileListView.count > 1 && fileListView.currentIndex >= 0 && fileListView.currentIndex < root.filesModel.count - 1
+
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 2
+
+                        onClicked: root.moveCurrentFile(1)
+                    }
+
+                    FlatButton {
+                        id: selectMoreButton
+
+                        Layout.leftMargin: 4
+
+                        text: qsTrc("global", "Select more")
+                        accentButton: true
+
+                        enabled: root.filesModel.maxFileCount <= 0 || root.filesModel.count < root.filesModel.maxFileCount
+
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 3
+
+                        onClicked: {
+                            root.selectMoreFilesRequested(root.filesModel.paths)
+                        }
+                    }
                 }
 
-                FlatButton {
-                    icon: IconCode.ARROW_DOWN
-                    toolTipTitle: qsTrc("global", "Move down")
+                FileRequirements {
+                    Layout.alignment: Qt.AlignRight
 
-                    enabled: fileListView.count > 1 && fileListView.currentIndex >= 0 && fileListView.currentIndex < root.filesModel.count - 1
-
-                    navigation.panel: root.navigationPanel
-                    navigation.order: 3
-
-                    onClicked: root.moveCurrentFile(1)
-                }
-
-                FlatButton {
-                    id: selectMoreButton
-
-                    Layout.leftMargin: 4
-
-                    text: qsTrc("global", "Select more")
-                    accentButton: true
-
-                    enabled: root.filesModel.maxFileCount <= 0 || root.filesModel.count < root.filesModel.maxFileCount
+                    fileRequirements: root.fileRequirements
 
                     navigation.panel: root.navigationPanel
                     navigation.order: 4
-
-                    onClicked: {
-                        root.selectMoreFilesRequested(root.filesModel.paths)
-                    }
                 }
             }
-        }
-
-        StyledTextLabel {
-            id: combinedFilesNoteLabel
-
-            Layout.fillWidth: true
-            Layout.topMargin: 3
-
-            visible: Boolean(combinedFilesNoteLabel.text)
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
         }
     }
 }
