@@ -131,6 +131,8 @@ public:
     //! the user finishes dragging the resize handle).
     Q_INVOKABLE int hitPointsPanelWidth() const;
     Q_INVOKABLE void setHitPointsPanelWidth(int width);
+    Q_INVOKABLE bool hitPointsPanelVisible() const;
+    Q_INVOKABLE void setHitPointsPanelVisible(bool visible);
 
     Q_INVOKABLE QStringList recentVideoFiles() const;
     Q_INVOKABLE void clearRecentVideoFiles();

@@ -53,6 +53,8 @@ static constexpr int VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH = 320;
 static constexpr int VIDEO_HIT_POINTS_PANEL_MIN_WIDTH = 320;
 static constexpr int VIDEO_HIT_POINTS_PANEL_MAX_WIDTH = 420;
 
+static const Settings::Key VIDEO_HIT_POINTS_PANEL_VISIBLE_KEY(moduleName, "playback/video/hitPointsPanelVisible");
+
 static const Settings::Key RECENT_VIDEO_FILES_KEY(moduleName, "playback/video/recentFiles");
 static constexpr int RECENT_VIDEO_FILES_MAX = 5;
 static const QChar RECENT_VIDEO_FILES_SEPARATOR(u'\n');
@@ -128,6 +130,7 @@ void PlaybackConfiguration::init()
     });
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
     settings()->setDefaultValue(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY, Val(VIDEO_HIT_POINTS_PANEL_DEFAULT_WIDTH));
+    settings()->setDefaultValue(VIDEO_HIT_POINTS_PANEL_VISIBLE_KEY, Val(true));
     settings()->setDefaultValue(RECENT_VIDEO_FILES_KEY, Val(std::string()));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(true));
@@ -250,6 +253,16 @@ void PlaybackConfiguration::setVideoHitPointsPanelWidth(int width)
 {
     width = std::clamp(width, VIDEO_HIT_POINTS_PANEL_MIN_WIDTH, VIDEO_HIT_POINTS_PANEL_MAX_WIDTH);
     settings()->setSharedValue(VIDEO_HIT_POINTS_PANEL_WIDTH_KEY, Val(width));
+}
+
+bool PlaybackConfiguration::videoHitPointsPanelVisible() const
+{
+    return settings()->value(VIDEO_HIT_POINTS_PANEL_VISIBLE_KEY).toBool();
+}
+
+void PlaybackConfiguration::setVideoHitPointsPanelVisible(bool visible)
+{
+    settings()->setSharedValue(VIDEO_HIT_POINTS_PANEL_VISIBLE_KEY, Val(visible));
 }
 
 QStringList PlaybackConfiguration::recentVideoFiles() const

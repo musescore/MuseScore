@@ -97,6 +97,15 @@ void PlaybackConfigurationStub::setVideoHitPointsPanelWidth(int)
 {
 }
 
+bool PlaybackConfigurationStub::videoHitPointsPanelVisible() const
+{
+    return true;
+}
+
+void PlaybackConfigurationStub::setVideoHitPointsPanelVisible(bool)
+{
+}
+
 QStringList PlaybackConfigurationStub::recentVideoFiles() const
 {
     return {};

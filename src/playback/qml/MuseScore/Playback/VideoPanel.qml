@@ -45,11 +45,11 @@ Item {
     // groups from painting on top of each other if the row gets narrower than
     // all three combined need. This floor is sized for that: left cluster
     // (Load+Recent, ~60) + centered cluster (#, M, Rewind, Play, Stop, Loop,
-    // ~220) + right cluster (zoom out/value/presets-dropdown/zoom in, ~108),
-    // plus content margins and slack for font-metrics rounding. NOTE: whenever
-    // a button is added to/removed from any of the three clusters, this needs
-    // revisiting too -- it does NOT update itself.
-    readonly property int previewPaneMinWidth: 480
+    // ~220) + right cluster (zoom out/value/presets-dropdown/zoom in/sidebar
+    // toggle, ~136), plus content margins and slack for font-metrics rounding.
+    // NOTE: whenever a button is added to/removed from any of the three
+    // clusters, this needs revisiting too -- it does NOT update itself.
+    readonly property int previewPaneMinWidth: 510
     // NOTE: must fit the hit-point table's own minimum row content (timecode 88
     // + measure 64 + name's own 80 floor + delete button 28, plus spacing and
     // panel margins) without clipping the delete button -- narrower than this
@@ -58,6 +58,7 @@ Item {
     readonly property int hitPointsPanelMinWidth: 320
     readonly property int hitPointsPanelMaxWidth: 420
     property int hitPointsPanelWidth: 320
+    property bool hitPointsPanelVisible: true
     readonly property int timelineZoomMax: 10
     property real timelineZoom: 1
     readonly property int timelineFrameRate: Math.max(1, Math.round(videoModel.frameRate))
@@ -80,8 +81,10 @@ Item {
     // resized narrower than its two panes' own minimums, making the sidebar
     // cover the video. Half the current sidebar width on top of the two panes'
     // combined minimum leaves enough slack that this shouldn't get hit in
-    // normal use, per the user's own sizing rule of thumb.
-    implicitWidth: root.previewPaneMinWidth + root.hitPointsPanelMinWidth + Math.round(root.hitPointsPanelWidth / 2)
+    // normal use, per the user's own sizing rule of thumb. When the sidebar is
+    // hidden there's no sidebar minimum to reserve space for.
+    implicitWidth: root.previewPaneMinWidth
+                   + (root.hitPointsPanelVisible ? root.hitPointsPanelMinWidth + Math.round(root.hitPointsPanelWidth / 2) : 0)
 
     // NOTE: the generic "monospace" family alias doesn't reliably resolve to an
     // actual fixed-pitch font on every platform -- when it doesn't, digits with
@@ -147,6 +150,12 @@ Item {
     Component.onCompleted: {
         videoModel.load()
         root.hitPointsPanelWidth = Math.max(root.hitPointsPanelMinWidth, Math.min(root.hitPointsPanelMaxWidth, videoModel.hitPointsPanelWidth()))
+        root.hitPointsPanelVisible = videoModel.hitPointsPanelVisible()
+    }
+
+    function toggleHitPointsPanelVisible() {
+        root.hitPointsPanelVisible = !root.hitPointsPanelVisible
+        videoModel.setHitPointsPanelVisible(root.hitPointsPanelVisible)
     }
 
     function targetVideoPositionMs() {
@@ -1080,6 +1089,22 @@ Item {
                             root.timelineZoom = Math.min(root.timelineZoomMax, root.timelineZoom + 0.25)
                         }
                     }
+
+                    FlatButton {
+                        Layout.preferredWidth: 24
+                        Layout.preferredHeight: 24
+                        Layout.leftMargin: 4
+                        icon: root.hitPointsPanelVisible ? IconCode.CHEVRON_RIGHT : IconCode.CHEVRON_LEFT
+                        buttonType: FlatButton.IconOnly
+                        transparent: true
+                        toolTipTitle: root.hitPointsPanelVisible ? qsTrc("playback", "Hide sidebar") : qsTrc("playback", "Show sidebar")
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 16
+
+                        onClicked: {
+                            root.toggleHitPointsPanelVisible()
+                        }
+                    }
                 }
             }
 
@@ -1586,6 +1611,8 @@ Item {
 
         VideoHitPointsPanel {
             id: hitPointsPanel
+
+            visible: root.hitPointsPanelVisible
 
             // NOTE: never request more than (total - leftPane's own minimum) --
             // otherwise a stale/persisted width can force the SplitView to shrink

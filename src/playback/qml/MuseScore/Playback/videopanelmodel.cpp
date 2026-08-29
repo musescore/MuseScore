@@ -219,6 +219,16 @@ void VideoPanelModel::setHitPointsPanelWidth(int width)
     configuration()->setVideoHitPointsPanelWidth(width);
 }
 
+bool VideoPanelModel::hitPointsPanelVisible() const
+{
+    return configuration()->videoHitPointsPanelVisible();
+}
+
+void VideoPanelModel::setHitPointsPanelVisible(bool visible)
+{
+    configuration()->setVideoHitPointsPanelVisible(visible);
+}
+
 QStringList VideoPanelModel::recentVideoFiles() const
 {
     return configuration()->recentVideoFiles();
