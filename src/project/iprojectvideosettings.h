@@ -76,6 +76,7 @@ struct VideoAttachmentSettings
     bool solo = false;
     double frameRate = 24.0;
     VideoTimecodeDisplayMode timecodeDisplayMode = VideoTimecodeDisplayMode::Off;
+    bool showHitPoints = true;
     std::vector<VideoHitPointSettings> hitPoints;
 
     bool isValid() const
@@ -93,6 +94,7 @@ struct VideoAttachmentSettings
                && solo == other.solo
                && frameRate == other.frameRate
                && timecodeDisplayMode == other.timecodeDisplayMode
+               && showHitPoints == other.showHitPoints
                && hitPoints == other.hitPoints;
     }
 

@@ -45,13 +45,15 @@ static const ActionCode TOGGLE_PERCUSSION_PANEL_ACTION_CODE("toggle-percussion-p
 static const ActionCode VIDEO_TIMECODE_OFF_CODE("video-timecode-off");
 static const ActionCode VIDEO_TIMECODE_ABOVE_CODE("video-timecode-above-bars");
 static const ActionCode VIDEO_TIMECODE_BELOW_CODE("video-timecode-below-bars");
+static const ActionCode SHOW_VIDEO_HITPOINTS_CODE("show-video-hitpoints");
 
 static ActionCodeList videoTimecodeActionCodes()
 {
     return {
         VIDEO_TIMECODE_OFF_CODE,
         VIDEO_TIMECODE_ABOVE_CODE,
-        VIDEO_TIMECODE_BELOW_CODE
+        VIDEO_TIMECODE_BELOW_CODE,
+        SHOW_VIDEO_HITPOINTS_CODE
     };
 }
 
@@ -242,6 +244,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Show video timecode below bars"),
              Checkable::Yes
              ),
+    UiAction(SHOW_VIDEO_HITPOINTS_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Show video hit &points"),
+             TranslatableString("action", "Show/hide video hit points on the score"),
+             Checkable::Yes
+             ),
     UiAction(TOGGLE_PERCUSSION_PANEL_ACTION_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -359,6 +368,12 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
         }
 
         return mode == project::VideoTimecodeDisplayMode::BelowBars;
+    }
+
+    if (act.code == SHOW_VIDEO_HITPOINTS_CODE) {
+        project::INotationProjectPtr project = globalContext()->currentProject();
+        project::IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
+        return settings ? settings->attachment().showHitPoints : true;
     }
 
     QMap<ActionCode, DockName> toggleDockActions = ApplicationUiActions::toggleDockActions();

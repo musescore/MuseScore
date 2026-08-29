@@ -47,6 +47,7 @@ using namespace muse::actions;
 static const ActionCode NOTATION_PAGE_VIDEO_TIMECODE_OFF_CODE("video-timecode-off");
 static const ActionCode NOTATION_PAGE_VIDEO_TIMECODE_ABOVE_CODE("video-timecode-above-bars");
 static const ActionCode NOTATION_PAGE_VIDEO_TIMECODE_BELOW_CODE("video-timecode-below-bars");
+static const ActionCode NOTATION_PAGE_SHOW_VIDEO_HITPOINTS_CODE("show-video-hitpoints");
 
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -84,6 +85,9 @@ void NotationPageModel::init()
     });
     dispatcher()->reg(this, NOTATION_PAGE_VIDEO_TIMECODE_BELOW_CODE, [this]() {
         setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode::BelowBars);
+    });
+    dispatcher()->reg(this, NOTATION_PAGE_SHOW_VIDEO_HITPOINTS_CODE, [this]() {
+        toggleShowVideoHitPoints();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -245,6 +249,19 @@ void NotationPageModel::setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode mod
 
     updated.timecodeDisplayMode = mode;
     settings->setAttachment(updated);
+}
+
+void NotationPageModel::toggleShowVideoHitPoints()
+{
+    INotationProjectPtr project = globalContext()->currentProject();
+    IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
+    if (!settings || !settings->attachment().isValid()) {
+        return;
+    }
+
+    VideoAttachmentSettings updated = settings->attachment();
+    updated.showHitPoints = !updated.showHitPoints;
+    });
 }
 
 void NotationPageModel::scheduleUpdatePercussionPanelVisibility()

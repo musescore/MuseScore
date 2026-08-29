@@ -571,7 +571,7 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
     }
 
     const project::VideoAttachmentSettings& attachment = m_notation->project()->videoSettings()->attachment();
-    if (!attachment.isValid() || attachment.hitPoints.empty()) {
+    if (!attachment.isValid() || !attachment.showHitPoints || attachment.hitPoints.empty()) {
         return;
     }
 
@@ -639,16 +639,20 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
 
         const qreal x = markerRect.left();
         const QString label = (hitPoint.label.empty() ? String(u"Hit") : hitPoint.label).toQString();
-        const int labelWidth = std::max(qRound(18.0), labelMetrics.horizontalAdvance(label) + qRound(4.0));
-        const int labelHeight = std::max(qRound(10.0), labelMetrics.height() + qRound(2.0));
-        const QRectF labelRect(x - (labelWidth / 2.0) + labelOffsetX,
+        const QString timecodeText = project::formatVideoTimecode(hitPoint.timeMs, attachment.frameRate);
+        const QString text = label + QLatin1Char('\n') + timecodeText;
+        const int lineCount = 2;
+        const int maxLineWidth = std::max(labelMetrics.horizontalAdvance(label), labelMetrics.horizontalAdvance(timecodeText));
+        const int labelWidth = std::max(qRound(18.0), maxLineWidth + qRound(4.0));
+        const int labelHeight = std::max(qRound(10.0), labelMetrics.lineSpacing() * lineCount + qRound(2.0));
+        const QRectF labelRect(x + labelOffsetX,
                                markerRect.top() - labelHeight - 2.0 + labelOffsetY,
                                labelWidth, labelHeight);
 
         painter->setPen(markerPen);
         painter->drawLine(QPointF(x, markerRect.top()), QPointF(x, markerRect.bottom()));
         painter->setPen(QColor(static_cast<QRgb>(hitPoint.color)));
-        painter->drawText(labelRect, Qt::AlignCenter, label);
+        painter->drawText(labelRect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextDontClip, text);
     }
 
     painter->restore();

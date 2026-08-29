@@ -1369,7 +1369,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(systemTextPosition,                         AlignH::LEFT),
 
     styleDef(videoHitPointFontFace,                      "Edwin"),
-    styleDef(videoHitPointFontSize,                      60.0),
+    styleDef(videoHitPointFontSize,                      72.0),
     styleDef(videoHitPointLineSpacing,                   1.0),
     styleDef(videoHitPointFontSpatiumDependent,          false),
     styleDef(videoHitPointFontStyle,                     int(FontStyle::Normal)),

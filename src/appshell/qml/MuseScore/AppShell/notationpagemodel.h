@@ -92,6 +92,7 @@ private:
 
     void toggleDock(const QString& name);
     void setVideoTimecodeDisplayMode(project::VideoTimecodeDisplayMode mode);
+    void toggleShowVideoHitPoints();
 
     void scheduleUpdatePercussionPanelVisibility();
     void doUpdatePercussionPanelVisibility();

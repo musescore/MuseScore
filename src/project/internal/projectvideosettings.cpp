@@ -169,6 +169,7 @@ VideoAttachmentSettings ProjectVideoSettings::attachmentFromJson(const QJsonObje
         std::clamp(object.value("timecodeDisplayMode").toInt(static_cast<int>(VideoTimecodeDisplayMode::Off)),
                    static_cast<int>(VideoTimecodeDisplayMode::Off),
                    static_cast<int>(VideoTimecodeDisplayMode::BelowBars)));
+    result.showHitPoints = object.value("showHitPoints").toBool(true);
 
     const QJsonArray hitPoints = object.value("hitPoints").toArray();
     result.hitPoints.reserve(static_cast<size_t>(hitPoints.size()));
@@ -194,6 +195,7 @@ QJsonObject ProjectVideoSettings::attachmentToJson(const VideoAttachmentSettings
     object["solo"] = attachment.solo;
     object["frameRate"] = attachment.frameRate;
     object["timecodeDisplayMode"] = static_cast<int>(attachment.timecodeDisplayMode);
+    object["showHitPoints"] = attachment.showHitPoints;
 
     QJsonArray hitPoints;
     for (const VideoHitPointSettings& hitPoint : attachment.hitPoints) {
