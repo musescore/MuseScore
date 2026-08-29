@@ -221,35 +221,35 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Video"),
              TranslatableString("action", "Show/hide video panel"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction(VIDEO_TIMECODE_OFF_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Off"),
              TranslatableString("action", "Hide video timecode"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction(VIDEO_TIMECODE_ABOVE_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Above bars"),
              TranslatableString("action", "Show video timecode above bars"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction(VIDEO_TIMECODE_BELOW_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Below bars"),
              TranslatableString("action", "Show video timecode below bars"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction(SHOW_VIDEO_HITPOINTS_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Show video hit &points"),
              TranslatableString("action", "Show/hide video hit points on the score"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction(TOGGLE_PERCUSSION_PANEL_ACTION_CODE,
              mu::context::UiCtxProjectOpened,

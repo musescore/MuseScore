@@ -116,7 +116,6 @@ private:
     muse::uicomponents::MenuItemList makeLinesItems();
     muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
     muse::uicomponents::MenuItemList makeTimecodeItems();
-    muse::uicomponents::MenuItemList makeShowItems();
     muse::uicomponents::MenuItemList makeExtensionsItems();
 
     mu::notation::INotationUndoStackPtr undoStack() const;

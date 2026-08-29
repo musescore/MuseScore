@@ -318,7 +318,7 @@ MenuItem* AppMenuModel::makeViewMenu()
             makeMenuItem(DOCK_TOGGLE_NOTEINPUT_COMMAND),
             makeMenuItem(DOCK_TOGGLE_STATUSBAR_COMMAND)
         }, "menu-toolbars"),
-        makeMenu(TranslatableString("appshell/menu/view", "Video &timecode"), makeTimecodeItems(), "menu-video-timecode")
+        makeMenu(TranslatableString("appshell/menu/view", "Video &timecode"), makeTimecodeItems(), "menu-video-timecode"),
 #ifdef MUSE_MODULE_WORKSPACE
         makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
 #endif
@@ -330,6 +330,7 @@ MenuItem* AppMenuModel::makeViewMenu()
             makeMenuItem(SHOW_PAGEBORDERS_COMMAND),
             makeMenuItem(SHOW_IRREGULAR_COMMAND),
             makeMenuItem(SHOW_SOUNDFLAGS_COMMAND),
+            makeMenuItem("show-video-hitpoints"),
         }, "menu-show"),
         makeSeparator(),
         makeMenuItem(DOCK_RESTORE_DEFAULT_LAYOUT_COMMAND),
@@ -782,21 +783,6 @@ void AppMenuModel::updateTimecodeItems()
     if (timecodeMenu.isValid()) {
         timecodeMenu.setSubitems(makeTimecodeItems());
     }
-}
-
-MenuItemList AppMenuModel::makeShowItems()
-{
-    MenuItemList items {
-        makeMenuItem("show-invisible"),
-        makeMenuItem("show-unprintable"),
-        makeMenuItem("show-frames"),
-        makeMenuItem("show-pageborders"),
-        makeMenuItem("show-irregular"),
-        makeMenuItem("show-soundflags"),
-        makeMenuItem("show-video-hitpoints"),
-    };
-
-    return items;
 }
 
 MenuItemList AppMenuModel::makeExtensionsItems()
