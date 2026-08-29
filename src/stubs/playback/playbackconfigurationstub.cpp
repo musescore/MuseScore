@@ -90,7 +90,7 @@ PlaybackCursorType PlaybackConfigurationStub::cursorType() const
 
 int PlaybackConfigurationStub::videoHitPointsPanelWidth() const
 {
-    return 260;
+    return 320;
 }
 
 void PlaybackConfigurationStub::setVideoHitPointsPanelWidth(int)

@@ -237,30 +237,16 @@ void NotationPageModel::toggleDock(const QString& name)
 void NotationPageModel::setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode mode)
 {
     INotationProjectPtr project = globalContext()->currentProject();
-    IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
-    if (!settings || !settings->attachment().isValid()) {
-        return;
-    }
-
-    VideoAttachmentSettings updated = settings->attachment();
-    if (updated.timecodeDisplayMode == mode) {
-        return;
-    }
-
-    updated.timecodeDisplayMode = mode;
-    settings->setAttachment(updated);
+    updateVideoAttachment(project ? project->videoSettings() : nullptr, [mode](VideoAttachmentSettings& updated) {
+        updated.timecodeDisplayMode = mode;
+    });
 }
 
 void NotationPageModel::toggleShowVideoHitPoints()
 {
     INotationProjectPtr project = globalContext()->currentProject();
-    IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
-    if (!settings || !settings->attachment().isValid()) {
-        return;
-    }
-
-    VideoAttachmentSettings updated = settings->attachment();
-    updated.showHitPoints = !updated.showHitPoints;
+    updateVideoAttachment(project ? project->videoSettings() : nullptr, [](VideoAttachmentSettings& updated) {
+        updated.showHitPoints = !updated.showHitPoints;
     });
 }
 

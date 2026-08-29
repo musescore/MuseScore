@@ -34,6 +34,7 @@
 #include "engraving/types/constants.h"
 
 #include "notation/inotation.h"
+#include "project/iprojectvideosettings.h"
 
 using namespace mu::playback;
 using namespace mu::project;
@@ -42,6 +43,8 @@ VideoPanelModel::VideoPanelModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
+
+VideoPanelModel::~VideoPanelModel() = default;
 
 void VideoPanelModel::load()
 {
@@ -80,9 +83,20 @@ void VideoPanelModel::addHitPoint(int videoPositionMs)
 
     videoPositionMs = std::max(0, videoPositionMs);
 
+    // NOTE: derive the default label from the id the new hit point is about to
+    // be assigned (see ProjectVideoSettings::normalizeHitPoints()), not from
+    // the current list size -- size is reused after a deletion (e.g. delete
+    // "#2" out of "#1"/"#2"/"#3", add a new one: size()+1 is "#3" again,
+    // duplicating the still-present "#3"), whereas ids only ever increase and
+    // are never reused.
+    int nextId = 0;
+    for (const VideoHitPointSettings& existing : updated.hitPoints) {
+        nextId = std::max(nextId, existing.id);
+    }
+
     VideoHitPointSettings hitPoint;
     hitPoint.timeMs = videoPositionMs;
-    hitPoint.label = muse::String(u"#%1").arg(static_cast<int>(updated.hitPoints.size()) + 1);
+    hitPoint.label = muse::String(u"#%1").arg(nextId + 1);
     updated.hitPoints.push_back(hitPoint);
 
     std::sort(updated.hitPoints.begin(), updated.hitPoints.end(), [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
@@ -103,7 +117,7 @@ int VideoPanelModel::indexOfHitPoint(const VideoAttachmentSettings& attachment, 
     return -1;
 }
 
-void VideoPanelModel::removeHitPoint(int hitPointId)
+void VideoPanelModel::withHitPoint(int hitPointId, const std::function<void(VideoAttachmentSettings&, int)>& mutate)
 {
     VideoAttachmentSettings updated = attachment();
     const int index = indexOfHitPoint(updated, hitPointId);
@@ -111,28 +125,35 @@ void VideoPanelModel::removeHitPoint(int hitPointId)
         return;
     }
 
-    updated.hitPoints.erase(updated.hitPoints.begin() + index);
+    mutate(updated, index);
+
+    // NOTE: updateAttachment()/ProjectVideoSettings::setAttachment() already
+    // no-ops (and skips the settingsChanged notify) if the result is
+    // identical to what's already stored, and already re-sorts by timeMs via
+    // normalizeHitPoints() -- callers don't need to duplicate either check.
     updateAttachment(updated);
+}
+
+void VideoPanelModel::removeHitPoint(int hitPointId)
+{
+    withHitPoint(hitPointId, [](VideoAttachmentSettings& updated, int index) {
+        updated.hitPoints.erase(updated.hitPoints.begin() + index);
+    });
 }
 
 void VideoPanelModel::renameHitPoint(int hitPointId, const QString& label)
 {
-    VideoAttachmentSettings updated = attachment();
-    const int index = indexOfHitPoint(updated, hitPointId);
-    if (!updated.isValid() || index < 0) {
-        return;
-    }
-
-    const QString trimmedLabel = label.trimmed();
-    const muse::String newLabel = trimmedLabel.isEmpty()
-                                  ? muse::String(u"Hit %1").arg(index + 1)
-                                  : muse::String::fromQString(trimmedLabel);
-    if (updated.hitPoints.at(index).label == newLabel) {
-        return;
-    }
-
-    updated.hitPoints[index].label = newLabel;
-    updateAttachment(updated);
+    withHitPoint(hitPointId, [&label](VideoAttachmentSettings& updated, int index) {
+        // NOTE: fall back to the hit point's own (stable, unique, never-reused)
+        // id rather than its time-sorted list position -- the position can
+        // collide with another hit point's existing label (e.g. clearing the
+        // label of the hit point at sorted position 3 produced "Hit 3", which
+        // could already be some other hit point's default/user-set label).
+        const QString trimmedLabel = label.trimmed();
+        updated.hitPoints[index].label = trimmedLabel.isEmpty()
+                                         ? muse::String(u"Hit %1").arg(updated.hitPoints.at(index).id)
+                                         : muse::String::fromQString(trimmedLabel);
+    });
 }
 
 void VideoPanelModel::setHitPointTimecode(int hitPointId, const QString& timecode)
@@ -147,23 +168,9 @@ void VideoPanelModel::setHitPointTimecode(int hitPointId, const QString& timecod
 
 void VideoPanelModel::setHitPointTimeMs(int hitPointId, int videoPositionMs)
 {
-    VideoAttachmentSettings updated = attachment();
-    const int index = indexOfHitPoint(updated, hitPointId);
-    if (!updated.isValid() || index < 0) {
-        return;
-    }
-
-    const int positionMs = std::max(0, videoPositionMs);
-    if (updated.hitPoints.at(index).timeMs == positionMs) {
-        return;
-    }
-
-    updated.hitPoints[index].timeMs = positionMs;
-    std::sort(updated.hitPoints.begin(), updated.hitPoints.end(), [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
-        return a.timeMs < b.timeMs;
+    withHitPoint(hitPointId, [videoPositionMs](VideoAttachmentSettings& updated, int index) {
+        updated.hitPoints[index].timeMs = std::max(0, videoPositionMs);
     });
-
-    updateAttachment(updated);
 }
 
 QString VideoPanelModel::formatTimecode(int videoPositionMs) const
@@ -503,9 +510,7 @@ int VideoPanelModel::tickToVideoPositionMs(int tick) const
         return -1;
     }
 
-    auto* score = project->masterNotation()->masterScore();
-    const double scoreTimeSeconds = score->utick2utime(tick);
-    return std::max(0, static_cast<int>(std::lround(scoreTimeSeconds * 1000.0)) + offsetMs());
+    return mu::project::videoPositionMsForTick(project->masterNotation()->masterScore(), tick, offsetMs());
 }
 
 notation::INotationPlaybackPtr VideoPanelModel::notationPlayback() const
@@ -617,6 +622,12 @@ void VideoPanelModel::listenCurrentProject()
     if (IProjectVideoSettingsPtr settings = videoSettings()) {
         settings->settingsChanged().onNotify(this, [this]() {
             emit videoSettingsChanged();
+
+            const std::vector<VideoHitPointSettings>& hitPoints = attachment().hitPoints;
+            if (hitPoints != m_lastHitPoints) {
+                m_lastHitPoints = hitPoints;
+                emit hitPointsChanged();
+            }
         }, Asyncable::Mode::SetReplace);
     }
 
@@ -631,7 +642,25 @@ void VideoPanelModel::listenCurrentProject()
         //! scoreEndVideoPositionMs and every entry from measurePositions() --
         //! this is what keeps the timeline's measure labels and "past the end
         //! of the score" shading correct as the score is edited.
+        //!
+        //! notationChanged() fires on essentially every undoable edit (a note's
+        //! pitch, text, dynamics...), not just ones that actually move measure
+        //! boundaries -- re-emitting scoreContentChanged() on all of them forces
+        //! measurePositions() (an O(measure count) walk) and a timeline repaint
+        //! for edits that don't touch measure positions at all. Only re-emit
+        //! when the cheap measure-count/last-measure-end proxy actually changed.
         notation->notationChanged().onReceive(this, [this](const muse::RectF&) {
+            INotationProjectPtr project = context()->currentProject();
+            const engraving::Score* score = (project && project->masterNotation()) ? project->masterNotation()->masterScore() : nullptr;
+            const size_t measureCount = score ? score->nmeasures() : 0;
+            const int scoreEndTick = (score && score->lastMeasure()) ? score->lastMeasure()->endTick().ticks() : -1;
+
+            if (measureCount == m_lastMeasureCount && scoreEndTick == m_lastScoreEndTick) {
+                return;
+            }
+
+            m_lastMeasureCount = measureCount;
+            m_lastScoreEndTick = scoreEndTick;
             emit scoreContentChanged();
         });
     }

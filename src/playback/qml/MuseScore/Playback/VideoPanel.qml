@@ -674,7 +674,13 @@ Item {
                             StyledTextLabel {
                                 id: musicalPositionLabel
                                 anchors.left: parent.left
-                                text: videoModel.musicalPositionText(video.position)
+                                // NOTE: bound to the already-deduped/rounded score position
+                                // (playbackSyncChanged, tens of Hz at most) rather than the raw
+                                // video.position -- QtMultimedia fires positionChanged at its own
+                                // frame cadence (tens of times/sec), each of which would otherwise
+                                // redo a full tick2measure/utime2utick lookup for a label no one
+                                // can read faster than ~10Hz anyway.
+                                text: videoModel.musicalPositionText(videoModel.scorePlaybackPositionMs + videoModel.offsetMs)
                                 font.family: root.monoFontFamily
                                 font.pixelSize: 20
                                 font.bold: true

@@ -63,6 +63,18 @@ using namespace muse::actions;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
+//! NOTE Only compares the fields paintVideoHitPoints()/videoHitPointRectByTick()
+//! actually read -- volume/balance/muted/solo/path/timecodeDisplayMode changes
+//! don't affect anything this view paints, so they shouldn't trigger a
+//! full-viewport redraw.
+static bool paintVideoAttachmentFieldsEqual(const project::VideoAttachmentSettings& a, const project::VideoAttachmentSettings& b)
+{
+    return a.offsetMs == b.offsetMs
+           && a.frameRate == b.frameRate
+           && a.showHitPoints == b.showHitPoints
+           && a.hitPoints == b.hitPoints;
+}
+
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : muse::uicomponents::QuickPaintedView(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -392,6 +404,12 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     if (m_notation->project() && m_notation->project()->videoSettings()) {
         m_notation->project()->videoSettings()->settingsChanged().onNotify(this, [this]() {
+            const project::VideoAttachmentSettings& attachment = m_notation->project()->videoSettings()->attachment();
+            if (m_lastPaintedVideoAttachment && paintVideoAttachmentFieldsEqual(*m_lastPaintedVideoAttachment, attachment)) {
+                return;
+            }
+
+            m_lastPaintedVideoAttachment = std::make_unique<project::VideoAttachmentSettings>(attachment);
             scheduleRedraw();
         });
     }
@@ -681,8 +699,12 @@ muse::RectF AbstractNotationPaintView::videoHitPointRectByTick(muse::midi::tick_
     }
 
     qreal x = 0.0;
-    engraving::Segment* segment = nullptr;
-    for (segment = measure->first(engraving::SegmentType::ChordRest); segment;) {
+    engraving::Segment* segment = measure->first(engraving::SegmentType::ChordRest);
+    while (segment && !segment->visible()) {
+        segment = segment->next(engraving::SegmentType::ChordRest);
+    }
+
+    for (; segment;) {
         const Fraction t1 = segment->tick();
         const qreal x1 = segment->canvasPos().x();
         qreal x2 = 0.0;

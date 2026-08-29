@@ -34,6 +34,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
+#include "project/inotationproject_fwd.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
@@ -314,6 +315,12 @@ private:
 
     muse::RectF m_shadowNoteRect;
     muse::RectF m_previewMeasureRect;
+
+    //! NOTE videoSettings()->settingsChanged() fires for every attachment
+    //! field (volume, mute, balance...), most of which paintVideoHitPoints()
+    //! never reads; caching the fields it DOES read lets the listener skip a
+    //! full-viewport scheduleRedraw() when only an unrelated field changed.
+    std::unique_ptr<project::VideoAttachmentSettings> m_lastPaintedVideoAttachment;
 
     struct PageCache {
         const Page* page = nullptr;

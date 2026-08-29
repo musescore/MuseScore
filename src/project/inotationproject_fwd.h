@@ -33,4 +33,7 @@ using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;
 
 class IProjectVideoSettings;
 using IProjectVideoSettingsPtr = std::shared_ptr<IProjectVideoSettings>;
+
+struct VideoHitPointSettings;
+struct VideoAttachmentSettings;
 }

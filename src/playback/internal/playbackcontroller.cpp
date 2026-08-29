@@ -1647,7 +1647,17 @@ void PlaybackController::setupTracks()
 
     if (videoSettings()) {
         videoSettings()->settingsChanged().onNotify(this, [this]() {
-            updateMasterControlParams();
+            // NOTE: settingsChanged fires on ANY video-attachment mutation
+            // (renaming/retiming a hit point, volume, offset...), not just a
+            // solo toggle. updateMasterControlParams() unconditionally
+            // reapplies the *persisted* masterAudioOutputParams() to the
+            // engine, which would silently clobber a live (unsaved) Mixer
+            // master-volume/pan/mute change on every unrelated video edit.
+            // Only call it when the force-mute state this listener actually
+            // cares about has changed.
+            if (isMasterOutputForceMuted() != m_isMasterOutputForceMuted) {
+                updateMasterControlParams();
+            }
         }, Asyncable::Mode::SetReplace);
     }
 

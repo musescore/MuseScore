@@ -22,20 +22,24 @@
 
 #pragma once
 
+#include <functional>
+#include <vector>
+
 #include <QObject>
+#include <qqmlintegration.h>
 #include <QStringList>
 #include <QUrl>
 #include <QVariantList>
-#include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "project/iprojectvideosettings.h"
-#include "notation/inotationplayback.h"
+#include "modularity/ioc.h"
 
-#include "iplaybackcontroller.h"
+#include "notation/inotationplayback.h"
+#include "project/inotationproject_fwd.h"
+
 #include "iplaybackconfiguration.h"
+#include "iplaybackcontroller.h"
 
 namespace mu::playback {
 class VideoPanelModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -52,7 +56,7 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY videoSettingsChanged)
     Q_PROPERTY(double frameRate READ frameRate WRITE setFrameRate NOTIFY videoSettingsChanged)
     Q_PROPERTY(int timecodeDisplayMode READ timecodeDisplayMode WRITE setTimecodeDisplayMode NOTIFY videoSettingsChanged)
-    Q_PROPERTY(QVariantList hitPoints READ hitPoints NOTIFY videoSettingsChanged)
+    Q_PROPERTY(QVariantList hitPoints READ hitPoints NOTIFY hitPointsChanged)
     Q_PROPERTY(bool scorePlaying READ scorePlaying NOTIFY playbackSyncChanged)
     Q_PROPERTY(int scorePlaybackPositionMs READ scorePlaybackPositionMs NOTIFY playbackSyncChanged)
     //! NOTE MuseScore's own score loop-playback feature (the main transport
@@ -75,6 +79,9 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
 
 public:
     explicit VideoPanelModel(QObject* parent = nullptr);
+    //! NOTE Out-of-line (not defaulted here) since m_lastHitPoints is a
+    //! vector of a type only forward-declared in this header.
+    ~VideoPanelModel() override;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void clearVideo();
@@ -167,6 +174,7 @@ public:
 
 signals:
     void videoSettingsChanged();
+    void hitPointsChanged();
     void playbackSyncChanged();
     void loopChanged();
     void scoreContentChanged();
@@ -177,6 +185,11 @@ private:
     void updateAttachment(const project::VideoAttachmentSettings& attachment);
     QVariantMap hitPointToMap(const project::VideoHitPointSettings& hitPoint) const;
     static int indexOfHitPoint(const project::VideoAttachmentSettings& attachment, int hitPointId);
+    //! NOTE Shared lookup+guard+persist sequence for every single-hit-point
+    //! mutation (rename/retime/remove) -- looks up hitPointId, no-ops if the
+    //! attachment/hit point isn't valid, otherwise runs mutate() against the
+    //! (mutable) attachment and its index, then persists via updateAttachment().
+    void withHitPoint(int hitPointId, const std::function<void(project::VideoAttachmentSettings&, int)>& mutate);
     int parseTimecodeToMs(const QString& timecode) const;
     notation::INotationPlaybackPtr notationPlayback() const;
     //! NOTE Uses the same score->utick2utime() conversion as musicalPositionText()'s
@@ -189,5 +202,16 @@ private:
     void listenPlaybackState();
 
     int m_scorePlaybackPositionMs = 0;
+
+    //! NOTE Cheap proxy for "did measurePositions()'s output actually change"
+    //! -- see listenCurrentProject()'s notationChanged() handler.
+    size_t m_lastMeasureCount = 0;
+    int m_lastScoreEndTick = -1;
+
+    //! NOTE videoSettingsChanged fires on any attachment field mutation, but
+    //! the hitPoints Q_PROPERTY only actually needs rebuilding (and its bound
+    //! QML Repeaters only need to tear down/recreate delegates) when the hit
+    //! points themselves changed -- see listenCurrentProject().
+    std::vector<project::VideoHitPointSettings> m_lastHitPoints;
 };
 }

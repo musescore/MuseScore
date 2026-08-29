@@ -1893,7 +1893,8 @@ const std::vector<TextStyleType>& editableTextStyles()
             _editableTextStyles.push_back(type);
         }
         if (!inserted) {
-            LOGE() << "DYNAMICS text style not found; VIDEO_HIT_POINT not inserted";
+            LOGE() << "DYNAMICS text style not found; appending VIDEO_HIT_POINT at the end instead";
+            _editableTextStyles.push_back(TextStyleType::VIDEO_HIT_POINT);
         }
     }
     return _editableTextStyles;

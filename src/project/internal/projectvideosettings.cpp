@@ -23,6 +23,7 @@
 #include "projectvideosettings.h"
 
 #include <algorithm>
+#include <cmath>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -30,12 +31,52 @@
 #include <QJsonParseError>
 #include <QJsonValue>
 
+#include "engraving/dom/score.h"
 #include "types/bytearray.h"
 
 using namespace mu::project;
 using namespace muse;
 
 static constexpr int VIDEO_SETTINGS_VERSION = 1;
+
+QString mu::project::formatVideoTimecode(int videoPositionMs, double frameRate)
+{
+    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(std::clamp(frameRate, 1.0, 240.0))));
+    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * roundedFrameRate + 0.5));
+
+    const qint64 frames = totalFrames % roundedFrameRate;
+    const qint64 totalSeconds = totalFrames / roundedFrameRate;
+    const qint64 seconds = totalSeconds % 60;
+    const qint64 minutes = (totalSeconds / 60) % 60;
+    const qint64 hours = totalSeconds / 3600;
+
+    return QString("%1:%2:%3:%4")
+           .arg(hours, 2, 10, QLatin1Char('0'))
+           .arg(minutes, 2, 10, QLatin1Char('0'))
+           .arg(seconds, 2, 10, QLatin1Char('0'))
+           .arg(frames, 2, 10, QLatin1Char('0'));
+}
+
+int mu::project::videoPositionMsForTick(const mu::engraving::Score* score, int tick, int offsetMs)
+{
+    if (!score) {
+        return -1;
+    }
+
+    const double timeSeconds = score->utick2utime(tick);
+    return std::max(0, static_cast<int>(std::lround(timeSeconds * 1000.0)) + offsetMs);
+}
+
+void mu::project::updateVideoAttachment(const IProjectVideoSettingsPtr& settings, const std::function<void(VideoAttachmentSettings&)>& mutate)
+{
+    if (!settings || !settings->attachment().isValid()) {
+        return;
+    }
+
+    VideoAttachmentSettings updated = settings->attachment();
+    mutate(updated);
+    settings->setAttachment(updated);
+}
 
 static void normalizeHitPoints(VideoAttachmentSettings& attachment)
 {

@@ -33,6 +33,7 @@ set(MODULE_TEST_SRC
 set(MODULE_TEST_LINK
     Qt::Quick
     engraving
+    project
     notationscene_qml
 )
 

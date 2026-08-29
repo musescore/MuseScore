@@ -1555,9 +1555,7 @@ void Timeline::timecodeMeta(Segment* seg, int* stagger, int pos)
     }
 
     const int measureTick = seg->measure()->tick().ticks();
-    const double measureTimeSeconds = score()->utick2utime(measureTick);
-    const int measureTimeMs = static_cast<int>(std::lround(measureTimeSeconds * 1000.0));
-    const int videoPositionMs = std::max(0, measureTimeMs + attachment.offsetMs);
+    const int videoPositionMs = mu::project::videoPositionMsForTick(score(), measureTick, attachment.offsetMs);
     const int row = getMetaRow(muse::qtrc("notation/timeline", "Timecode"));
     const int x = pos + (*stagger) * _spacing;
 

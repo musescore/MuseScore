@@ -22,8 +22,7 @@
 
 #pragma once
 
-#include <algorithm>
-#include <cmath>
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -32,6 +31,10 @@
 #include "async/notification.h"
 #include "global/io/path.h"
 #include "global/types/string.h"
+
+namespace mu::engraving {
+class Score;
+}
 
 namespace mu::project {
 enum class VideoTimecodeDisplayMode {
@@ -107,23 +110,13 @@ struct VideoAttachmentSettings
 //! NOTE Shared by the notation Timeline and the Video panel so both display the
 //! exact same SMPTE-style timecode for a given position; keep this the only
 //! implementation rather than duplicating it at each call site.
-inline QString formatVideoTimecode(int videoPositionMs, double frameRate)
-{
-    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(std::clamp(frameRate, 1.0, 240.0))));
-    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * roundedFrameRate + 0.5));
+QString formatVideoTimecode(int videoPositionMs, double frameRate);
 
-    const qint64 frames = totalFrames % roundedFrameRate;
-    const qint64 totalSeconds = totalFrames / roundedFrameRate;
-    const qint64 seconds = totalSeconds % 60;
-    const qint64 minutes = (totalSeconds / 60) % 60;
-    const qint64 hours = totalSeconds / 3600;
-
-    return QString("%1:%2:%3:%4")
-           .arg(hours, 2, 10, QLatin1Char('0'))
-           .arg(minutes, 2, 10, QLatin1Char('0'))
-           .arg(seconds, 2, 10, QLatin1Char('0'))
-           .arg(frames, 2, 10, QLatin1Char('0'));
-}
+//! NOTE Same reasoning as formatVideoTimecode() above -- the notation Timeline
+//! and the Video panel both need to convert a score tick to the corresponding
+//! video-timeline position; keep this the only implementation. Returns -1 if
+//! score is null.
+int videoPositionMsForTick(const mu::engraving::Score* score, int tick, int offsetMs);
 
 class IProjectVideoSettings
 {
@@ -138,4 +131,11 @@ public:
 };
 
 using IProjectVideoSettingsPtr = std::shared_ptr<IProjectVideoSettings>;
+
+//! NOTE Shared read-modify-write helper for the common "look up the current
+//! attachment, tweak one field, persist it back" sequence -- a no-op if
+//! there's no attached video. Keep call sites (e.g. NotationPageModel's
+//! per-field setters) this thin instead of re-deriving the same
+//! guard+read+write shape at each one.
+void updateVideoAttachment(const IProjectVideoSettingsPtr& settings, const std::function<void(VideoAttachmentSettings&)>& mutate);
 }
