@@ -1087,6 +1087,26 @@ muse::async::Notification PlaybackController::masterOutputForceMuteChanged() con
     return m_masterOutputForceMuteChanged;
 }
 
+bool PlaybackController::isVideoPlaying() const
+{
+    return m_isVideoPlaying;
+}
+
+void PlaybackController::setIsVideoPlaying(bool playing)
+{
+    if (m_isVideoPlaying == playing) {
+        return;
+    }
+
+    m_isVideoPlaying = playing;
+    m_isVideoPlayingChanged.notify();
+}
+
+muse::async::Notification PlaybackController::isVideoPlayingChanged() const
+{
+    return m_isVideoPlayingChanged;
+}
+
 void PlaybackController::updateMasterControlParams()
 {
     if (!globalContext()->currentProject() || !playback()) {

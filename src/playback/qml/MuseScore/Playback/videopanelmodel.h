@@ -126,6 +126,12 @@ public:
     //! video separately since it owns that QtMultimedia object.
     Q_INVOKABLE void seekScoreToVideoPositionMs(int videoPositionMs);
 
+    //! NOTE Called from VideoPanel.qml whenever the actual Qt Multimedia video element's
+    //! playbackState changes -- forwarded to IPlaybackController so the Mixer's Video
+    //! channel meter can react to the video really playing, distinct from the score's own
+    //! transport state (they can briefly diverge, e.g. the video ending before the score).
+    Q_INVOKABLE void setVideoElementPlaying(bool playing);
+
     //! NOTE Persisted user preference for the hit-points side panel's width (not a
     //! live-bound Q_PROPERTY -- QML reads it once on load and writes it back when
     //! the user finishes dragging the resize handle).

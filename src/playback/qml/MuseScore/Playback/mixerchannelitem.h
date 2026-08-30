@@ -25,6 +25,8 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
+class QTimer;
+
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -32,6 +34,7 @@
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
 #include "iplaybackconfiguration.h"
+#include "iplaybackcontroller.h"
 
 #include "ui/qml/Muse/Ui/navigationpanel.h"
 
@@ -80,6 +83,7 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<IPlaybackController> playbackController = { this };
 
 public:
     enum class Type {
@@ -211,6 +215,12 @@ protected:
 
     bool askAboutChangingSound();
 
+    //! NOTE The Video channel isn't a real track in the audio engine (see VIDEO_TRACK_ID
+    //!      in MixerPanelModel), so there is no real signal to meter -- this fakes a
+    //!      plausible-looking level from the configured volume while video plays.
+    void setupVideoMeterAnimation();
+    void updateFakeVideoMeter();
+
     void setDisplayedVolumeLevel(float volumeLevel);
     void setDisplayedBalance(int balance);
 
@@ -240,6 +250,8 @@ protected:
 
     float m_leftChannelPressure = 0.0;
     float m_rightChannelPressure = 0.0;
+
+    QTimer* m_videoMeterTimer = nullptr;
 
     muse::ui::NavigationPanel* m_panel = nullptr;
 

@@ -509,7 +509,13 @@ Item {
         function onPositionChanged() {
             root.pageTimelineToKeepPlayheadVisible()
         }
+
+        function onPlaybackStateChanged() {
+            videoModel.setVideoElementPlaying(video.playbackState === MediaPlayer.PlayingState)
+        }
     }
+
+    Component.onDestruction: videoModel.setVideoElementPlaying(false)
 
     function pageTimelineToKeepPlayheadVisible() {
         if (!videoModel.hasVideo || video.duration <= 0 || timelineFlickable.contentWidth <= timelineFlickable.width) {

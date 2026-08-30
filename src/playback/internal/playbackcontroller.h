@@ -115,6 +115,10 @@ public:
     bool isMasterOutputForceMuted() const override;
     muse::async::Notification masterOutputForceMuteChanged() const override;
 
+    bool isVideoPlaying() const override;
+    void setIsVideoPlaying(bool playing) override;
+    muse::async::Notification isVideoPlayingChanged() const override;
+
     void playElements(const std::vector<const engraving::EngravingItem*>& elements,
                       const PlayParams& params = PlayParams(), bool isMidi = false) override;
     void playNotes(const engraving::NoteValList& notes, engraving::staff_idx_t staffIdx, const engraving::Segment* segment,
@@ -253,6 +257,9 @@ private:
     muse::async::Notification m_currentTempoChanged;
     muse::async::Notification m_masterOutputForceMuteChanged;
     bool m_isMasterOutputForceMuted = false;
+
+    muse::async::Notification m_isVideoPlayingChanged;
+    bool m_isVideoPlaying = false;
 
     muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;

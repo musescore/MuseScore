@@ -209,6 +209,13 @@ void VideoPanelModel::seekScoreToVideoPositionMs(int videoPositionMs)
     playbackController()->rewind(muse::secs_t(scoreTimeSeconds));
 }
 
+void VideoPanelModel::setVideoElementPlaying(bool playing)
+{
+    if (playbackController()) {
+        playbackController()->setIsVideoPlaying(playing);
+    }
+}
+
 int VideoPanelModel::hitPointsPanelWidth() const
 {
     return configuration()->videoHitPointsPanelWidth();

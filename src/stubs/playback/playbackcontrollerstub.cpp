@@ -208,6 +208,21 @@ muse::async::Notification PlaybackControllerStub::masterOutputForceMuteChanged()
     return notification;
 }
 
+bool PlaybackControllerStub::isVideoPlaying() const
+{
+    return false;
+}
+
+void PlaybackControllerStub::setIsVideoPlaying(bool)
+{
+}
+
+muse::async::Notification PlaybackControllerStub::isVideoPlayingChanged() const
+{
+    static muse::async::Notification notification;
+    return notification;
+}
+
 void PlaybackControllerStub::playElements(const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool)
 {
 }
