@@ -626,13 +626,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     });
 
     connect(item, &MixerChannelItem::soloMuteStateChanged, this, [this, item](const notation::INotationSoloMuteState::SoloMuteState&) {
-        AudioOutputParams playbackParams = item->outputParams();
-        playbackParams.forceMute = controller()->isMasterOutputForceMuted();
-        if (playbackParams.forceMute) {
-            playbackParams.muted = true;
-        }
-
-        playback()->setMasterControlParams(playbackParams.control());
+        playback()->setMasterControlParams(item->outputParams().control());
     });
 
     return item;
