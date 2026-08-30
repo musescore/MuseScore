@@ -491,7 +491,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="437"/>
         <source>Amateur:</source>
-        <translation>业余：</translation>
+        <translation>业余级：</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="457"/>
@@ -504,12 +504,12 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="510"/>
         <source>Professional:</source>
-        <translation>专业：</translation>
+        <translation>专业级：</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="596"/>
         <source>Interval from written to sounding pitch</source>
-        <translation>书面音高到实际音高间的音程</translation>
+        <translation>谱面音高到实际音高间的音程</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="599"/>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="947"/>
         <source>Repeat:</source>
-        <translation>重复出现：</translation>
+        <translation>重复方式：</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="963"/>
@@ -1096,7 +1096,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="82"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>谱号、调号、拍号</translation>
+        <translation>谱号、调号和拍号</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="87"/>
@@ -37815,7 +37815,7 @@ failed: %2</source>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5178"/>
         <source>Add %Ln measure(s)</source>
-        <translation><numerusform>添加%Ln小节</numerusform></translation>
+        <translation><numerusform>添加 %Ln 小节</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5265"/>
@@ -38048,7 +38048,7 @@ failed: %2</source>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6444"/>
         <source>Delete %Ln measure(s)</source>
-        <translation><numerusform>删除%Ln个小节</numerusform></translation>
+        <translation><numerusform>删除 %Ln 个小节</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6455"/>
@@ -38403,7 +38403,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="481"/>
         <source>Toggle empty staves</source>
-        <translation>空谱表切换</translation>
+        <translation>切换空谱表</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="484"/>
