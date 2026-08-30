@@ -57,6 +57,7 @@ MixerPanelSection {
                 value: content.channelItem.balance
                 stepSize: 1
                 isBalanceKnob: true
+                accentColor: content.channelItem.hasCustomColor ? content.channelItem.color : ui.theme.accentColor
                 enabled: !content.channelItem.hasBalanceAutomation
                 opacity: enabled ? 1.0 : ui.theme.itemOpacityDisabled
 

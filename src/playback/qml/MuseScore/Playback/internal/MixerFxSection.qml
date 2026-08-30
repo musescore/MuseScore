@@ -65,6 +65,8 @@ MixerPanelSection {
 
                 resourceItemModel: modelData
 
+                accentColor: content.channelItem.hasCustomColor ? content.channelItem.color : ui.theme.accentColor
+
                 navigationPanel: content.channelItem.panel
                 navigationRowStart: root.navigationRowStart + index * 3 // NOTE: 3 - because AudioResourceControl have 3 controls
                 navigationName: modelData.id

@@ -37,6 +37,7 @@ Dial {
     property bool isBalanceKnob: false
 
     property bool accentControl: true
+    property color accentColor: ui.theme.accentColor
 
     property alias mouseArea: mouseArea
 
@@ -70,7 +71,7 @@ Dial {
         readonly property real startAngle: -140 * (Math.PI/180) - Math.PI/2
         readonly property real endAngle: 140 * (Math.PI/180) - Math.PI/2
 
-        readonly property color valueArcColor: root.accentControl ? ui.theme.accentColor : Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
+        readonly property color valueArcColor: root.accentControl ? root.accentColor : Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
         readonly property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
         readonly property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
 

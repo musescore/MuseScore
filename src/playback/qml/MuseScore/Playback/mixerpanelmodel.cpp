@@ -96,6 +96,78 @@ QVariantMap MixerPanelModel::get(int index)
     return result;
 }
 
+void MixerPanelModel::selectChannel(MixerChannelItem* item, bool extendSelection, bool rangeSelection)
+{
+    if (!item) {
+        return;
+    }
+
+    const int itemIndex = m_mixerChannelList.indexOf(item);
+
+    auto isSelectable = [](const MixerChannelItem* channel) {
+        return channel->type() == MixerChannelItem::Type::PrimaryInstrument
+               || channel->type() == MixerChannelItem::Type::SecondaryInstrument;
+    };
+
+    if (rangeSelection && m_selectionAnchorIndex >= 0 && itemIndex >= 0) {
+        const int from = std::min(m_selectionAnchorIndex, itemIndex);
+        const int to = std::max(m_selectionAnchorIndex, itemIndex);
+
+        for (int i = 0; i < m_mixerChannelList.size(); ++i) {
+            MixerChannelItem* channel = m_mixerChannelList.at(i);
+            if (isSelectable(channel)) {
+                channel->setSelected(i >= from && i <= to);
+            }
+        }
+
+        return;
+    }
+
+    if (extendSelection) {
+        item->setSelected(!item->selected());
+        m_selectionAnchorIndex = itemIndex;
+        return;
+    }
+
+    for (MixerChannelItem* channel : m_mixerChannelList) {
+        if (channel != item && channel->selected()) {
+            channel->setSelected(false);
+        }
+    }
+
+    item->setSelected(true);
+    m_selectionAnchorIndex = itemIndex;
+}
+
+void MixerPanelModel::setColorForSelectedChannels(const QColor& color)
+{
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        if (item->selected()) {
+            item->setColor(color);
+        }
+    }
+}
+
+void MixerPanelModel::resetColorForSelectedChannels()
+{
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        if (item->selected()) {
+            item->setColor(QColor());
+        }
+    }
+}
+
+void MixerPanelModel::clearSelection()
+{
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        if (item->selected()) {
+            item->setSelected(false);
+        }
+    }
+
+    m_selectionAnchorIndex = -1;
+}
+
 QVariant MixerPanelModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid() || index.row() >= rowCount() || role != ChannelItemRole) {
@@ -223,6 +295,11 @@ void MixerPanelModel::addItem(MixerChannelItem* item, int index)
     updateItemsPanelsOrder();
     endInsertRows();
 
+    //! NOTE Keep the selection anchor pointing at the same channel after an insertion shifts indices.
+    if (index <= m_selectionAnchorIndex) {
+        ++m_selectionAnchorIndex;
+    }
+
     emit rowCountChanged();
 }
 
@@ -241,6 +318,14 @@ void MixerPanelModel::removeItem(const TrackId trackId)
     updateItemsPanelsOrder();
 
     endRemoveRows();
+
+    //! NOTE Keep the selection anchor pointing at the same channel after a removal shifts indices,
+    //! or invalidate it if the anchor channel itself was removed.
+    if (index == m_selectionAnchorIndex) {
+        m_selectionAnchorIndex = INVALID_INDEX;
+    } else if (index < m_selectionAnchorIndex) {
+        --m_selectionAnchorIndex;
+    }
 
     updateOutputResourceItemCount();
 
@@ -263,6 +348,10 @@ void MixerPanelModel::clear()
     m_masterChannelItem = nullptr;
     qDeleteAll(m_mixerChannelList);
     m_mixerChannelList.clear();
+
+    //! NOTE The channel list is being fully rebuilt, so any stored index would point at the wrong
+    //! (or a stale/deleted) channel.
+    m_selectionAnchorIndex = INVALID_INDEX;
 }
 
 void MixerPanelModel::setupConnections()
@@ -539,6 +628,12 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     connect(item, &MixerChannelItem::soloMuteStateChanged, this,
             [this, instrumentTrackId](const notation::INotationSoloMuteState::SoloMuteState& state) {
         controller()->setTrackSoloMuteState(instrumentTrackId, state);
+    });
+
+    connect(item, &MixerChannelItem::colorChanged, this, [this, item, instrumentTrackId]() {
+        AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentTrackId);
+        outParams.color = item->color();
+        audioSettings()->setTrackOutputParams(instrumentTrackId, outParams);
     });
 
     return item;

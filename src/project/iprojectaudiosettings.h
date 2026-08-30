@@ -24,6 +24,8 @@
 
 #include <memory>
 
+#include <QColor>
+
 #include "async/notification.h"
 #include "audio/common/audiotypes.h"
 #include "engraving/types/types.h"
@@ -44,6 +46,9 @@ struct AudioOutputParams {
     bool muted = false;
     bool forceMute = false;
 
+    //! NOTE UI-only override of the Mixer channel's title background color. Not sent to the audio engine.
+    QColor color;
+
     bool operator ==(const AudioOutputParams& other) const
     {
         return fxChain == other.fxChain
@@ -52,7 +57,8 @@ struct AudioOutputParams {
                && auxSends == other.auxSends
                && solo == other.solo
                && muted == other.muted
-               && forceMute == other.forceMute;
+               && forceMute == other.forceMute
+               && color == other.color;
     }
 
     muse::audio::ControlParams control() const

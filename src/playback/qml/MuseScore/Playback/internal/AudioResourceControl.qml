@@ -33,6 +33,8 @@ Item {
 
     property AbstractAudioResourceItem resourceItemModel
 
+    property color accentColor: ui.theme.accentColor
+
     readonly property string title: root.resourceItemModel ? root.resourceItemModel.title : ""
     readonly property bool isActive: root.resourceItemModel ? root.resourceItemModel.isActive : false
     readonly property bool isBlank: root.resourceItemModel ? root.resourceItemModel.isBlank : true
@@ -107,7 +109,7 @@ Item {
                     id: activityButtonBackground
 
                     property real backgroundOpacity: ui.theme.buttonOpacityNormal
-                    color: Utils.colorWithAlpha(root.isActive ? ui.theme.accentColor : ui.theme.buttonColor, backgroundOpacity)
+                    color: Utils.colorWithAlpha(root.isActive ? root.accentColor : ui.theme.buttonColor, backgroundOpacity)
 
                     topLeftRadius: 3
                     topRightRadius: 0
@@ -189,7 +191,7 @@ Item {
                     id: titleButtonBackground
 
                     property real backgroundOpacity: ui.theme.buttonOpacityNormal
-                    color: Utils.colorWithAlpha(root.isActive ? ui.theme.accentColor : ui.theme.buttonColor, backgroundOpacity)
+                    color: Utils.colorWithAlpha(root.isActive ? root.accentColor : ui.theme.buttonColor, backgroundOpacity)
 
                     topLeftRadius: activityLoader.visible ? 0 : 3
                     topRightRadius: selectorLoader.visible ? 0 : 3
@@ -281,7 +283,7 @@ Item {
                     id: menuButtonBackground
 
                     property real backgroundOpacity: ui.theme.buttonOpacityNormal
-                    color: Utils.colorWithAlpha(root.isActive ? ui.theme.accentColor : ui.theme.buttonColor, backgroundOpacity)
+                    color: Utils.colorWithAlpha(root.isActive ? root.accentColor : ui.theme.buttonColor, backgroundOpacity)
 
                     topLeftRadius: titleLoader.visible ? 0 : 3
                     bottomLeftRadius: topLeftRadius
