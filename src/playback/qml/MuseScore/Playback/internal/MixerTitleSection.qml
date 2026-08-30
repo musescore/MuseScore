@@ -45,11 +45,10 @@ MixerPanelSection {
             switch(channelItem.type) {
             case MixerChannelItem.PrimaryInstrument:
             case MixerChannelItem.SecondaryInstrument:
+            case MixerChannelItem.Video:
                 return ui.theme.accentColor
             case MixerChannelItem.Aux:
                 return "#63D47B"
-            case MixerChannelItem.Video:
-                return "#3B94E5"
             case MixerChannelItem.Master:
                 return "#F87BDC"
             }
