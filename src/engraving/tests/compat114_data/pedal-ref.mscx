@@ -37,6 +37,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         <BracketItem>
           <type>Brace</type>
@@ -48,6 +49,7 @@
       <Staff>
         <eid>E_E</eid>
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="piano">
@@ -197,6 +199,7 @@
         <continueText>&lt;font size=&quot;11&quot;/&gt;</continueText>
         <endTextPlace>auto</endTextPlace>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>Y_Y</eid>
         <track>0</track>

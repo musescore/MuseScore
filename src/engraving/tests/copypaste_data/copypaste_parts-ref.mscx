@@ -565,24 +565,7 @@
         <continueTextPlace>auto</continueTextPlace>
         <endTextPlace>auto</endTextPlace>
         <track2>0</track2>
-        <startTick>-1/1</startTick>
-        <ticks>1/1</ticks>
-        <eid>iB_iB</eid>
-        <track>0</track>
-        </Pedal>
-      <Ottava>
-        <subtype>8va</subtype>
-        <track2>0</track2>
-        <startTick>-1/1</startTick>
-        <ticks>1/1</ticks>
-        <eid>jB_jB</eid>
-        <track>0</track>
-        </Ottava>
-      <Pedal>
-        <endHookType>1</endHookType>
-        <continueTextPlace>auto</continueTextPlace>
-        <endTextPlace>auto</endTextPlace>
-        <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>w_w</eid>
         <track>0</track>
@@ -590,6 +573,7 @@
       <Ottava>
         <subtype>8va</subtype>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>x_x</eid>
         <track>0</track>
@@ -657,6 +641,24 @@
           <track>0</track>
           </Ornament>
         </Trill>
+      <Pedal>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>0</track2>
+        <startTick>11/4</startTick>
+        <ticks>1/1</ticks>
+        <eid>iB_iB</eid>
+        <track>0</track>
+        </Pedal>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <startTick>11/4</startTick>
+        <ticks>1/1</ticks>
+        <eid>jB_jB</eid>
+        <track>0</track>
+        </Ottava>
       <Slur>
         <startElement>9_9</startElement>
         <endElement>BB_BB</endElement>
@@ -1294,43 +1296,25 @@
           <continueTextPlace>auto</continueTextPlace>
           <endTextPlace>auto</endTextPlace>
           <track2>0</track2>
-          <startTick>-1/1</startTick>
+          <startTick>0/1</startTick>
           <ticks>1/1</ticks>
           <eid>eD_eD</eid>
-          <linkedTo>iB_iB</linkedTo>
-          <track>0</track>
-          </Pedal>
-        <Ottava>
-          <subtype>8va</subtype>
-          <track2>0</track2>
-          <startTick>-1/1</startTick>
-          <ticks>1/1</ticks>
-          <eid>fD_fD</eid>
-          <linkedTo>jB_jB</linkedTo>
-          <track>0</track>
-          </Ottava>
-        <Pedal>
-          <endHookType>1</endHookType>
-          <continueTextPlace>auto</continueTextPlace>
-          <endTextPlace>auto</endTextPlace>
-          <track2>0</track2>
-          <ticks>1/1</ticks>
-          <eid>gD_gD</eid>
           <linkedTo>w_w</linkedTo>
           <track>0</track>
           </Pedal>
         <Ottava>
           <subtype>8va</subtype>
           <track2>0</track2>
+          <startTick>0/1</startTick>
           <ticks>1/1</ticks>
-          <eid>hD_hD</eid>
+          <eid>fD_fD</eid>
           <linkedTo>x_x</linkedTo>
           <track>0</track>
           </Ottava>
         <Slur>
           <startElement>HC_HC</startElement>
           <endElement>LC_LC</endElement>
-          <eid>iD_iD</eid>
+          <eid>gD_gD</eid>
           <linkedTo>y_y</linkedTo>
           <track>0</track>
           </Slur>
@@ -1339,7 +1323,7 @@
           <beginText>1.</beginText>
           <startElement>VC_VC</startElement>
           <endElement>VC_VC</endElement>
-          <eid>jD_jD</eid>
+          <eid>hD_hD</eid>
           <linkedTo>5B_5B</linkedTo>
           <track>0</track>
           <endings>1</endings>
@@ -1351,7 +1335,7 @@
           <track2>0</track2>
           <startTick>1/1</startTick>
           <ticks>3/4</ticks>
-          <eid>kD_kD</eid>
+          <eid>iD_iD</eid>
           <linkedTo>z_z</linkedTo>
           <track>0</track>
           </HairPin>
@@ -1360,22 +1344,22 @@
           <track2>0</track2>
           <startTick>7/4</startTick>
           <ticks>1/4</ticks>
-          <eid>lD_lD</eid>
+          <eid>jD_jD</eid>
           <linkedTo>0_0</linkedTo>
           <track>0</track>
           <lineWidth>0.1488</lineWidth>
           <Ornament>
             <Chord>
-              <eid>mD_mD</eid>
+              <eid>kD_kD</eid>
               <track>0</track>
               <small>1</small>
               <Note>
-                <eid>nD_nD</eid>
+                <eid>lD_lD</eid>
                 <track>0</track>
                 <parentheses>both</parentheses>
                 <Accidental>
                   <subtype>accidentalSharp</subtype>
-                  <eid>oD_oD</eid>
+                  <eid>mD_mD</eid>
                   <track>0</track>
                   </Accidental>
                 <pitch>75</pitch>
@@ -1384,17 +1368,37 @@
                 </Note>
               <NoteParenGroup>
                 <Notes>
-                  <NoteEID>nD_nD</NoteEID>
+                  <NoteEID>lD_lD</NoteEID>
                   </Notes>
                 </NoteParenGroup>
               </Chord>
             <intervalAbove>third,major</intervalAbove>
             <subtype>ornamentTrill</subtype>
-            <eid>pD_pD</eid>
+            <eid>nD_nD</eid>
             <linkedTo>4_4</linkedTo>
             <track>0</track>
             </Ornament>
           </Trill>
+        <Pedal>
+          <endHookType>1</endHookType>
+          <continueTextPlace>auto</continueTextPlace>
+          <endTextPlace>auto</endTextPlace>
+          <track2>0</track2>
+          <startTick>11/4</startTick>
+          <ticks>1/1</ticks>
+          <eid>oD_oD</eid>
+          <linkedTo>iB_iB</linkedTo>
+          <track>0</track>
+          </Pedal>
+        <Ottava>
+          <subtype>8va</subtype>
+          <track2>0</track2>
+          <startTick>11/4</startTick>
+          <ticks>1/1</ticks>
+          <eid>pD_pD</eid>
+          <linkedTo>jB_jB</linkedTo>
+          <track>0</track>
+          </Ottava>
         <Slur>
           <startElement>4C_4C</startElement>
           <endElement>8C_8C</endElement>

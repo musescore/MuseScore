@@ -133,7 +133,7 @@ private:
 
     muse::Ret newProject();
 
-    muse::Ret openProject(const muse::rcommand::CommandQuery& query);
+    muse::Ret openProject(const muse::rcommand::Params& params);
     muse::Ret openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString());
     void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
     muse::Ret openMuseScoreUrl(const QUrl& url);
@@ -152,7 +152,7 @@ private:
 
     muse::Ret canSaveProject() const;
     muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
-    muse::Ret saveProjectAt(const muse::rcommand::CommandQuery& query);
+    muse::Ret saveProjectAt(const muse::rcommand::Params& params);
     muse::Ret saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 

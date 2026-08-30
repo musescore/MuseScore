@@ -2025,7 +2025,8 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
     double x = 0.0;
     double y = item->placeAbove() ? 0.0 : item->staff()->staffHeight(item->tick());
     const Segment* s = item->segment();
-    const EngravingItem* e = s->element(item->track());
+    const track_idx_t layoutParentTrack = s->isType(SegmentType::BarLineTypes) ? item->staffIdx() * VOICES : item->track();
+    const EngravingItem* e = s->element(layoutParentTrack);
 
     if (e) {
         LD_CONDITION(e->ldata()->isSetBbox()); // e->shape()

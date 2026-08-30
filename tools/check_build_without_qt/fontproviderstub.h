@@ -17,6 +17,10 @@ public:
     double ascent(const Font& f) const override;
     double descent(const Font& f) const override;
 
+    double underlinePos(const Font& f) const override;
+    double lineWidth(const Font& f) const override;
+    double strikeOutPos(const Font& f) const override;
+
     bool inFont(const Font& f, char32_t ucs4) const override;
 
     // Text

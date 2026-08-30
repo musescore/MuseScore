@@ -1072,6 +1072,7 @@
     <SpannerMap>
       <LetRing>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>2/4</ticks>
         <eid>dC_dC</eid>
         <track>0</track>
@@ -1079,6 +1080,7 @@
       <Vibrato>
         <subtype>guitarVibrato</subtype>
         <track2>8</track2>
+        <startTick>0/1</startTick>
         <ticks>1/4</ticks>
         <eid>eC_eC</eid>
         <track>8</track>
@@ -1088,6 +1090,7 @@
         <beginTextOffset x="0" y="0"/>
         <continueText>AH</continueText>
         <track2>16</track2>
+        <startTick>0/1</startTick>
         <ticks>5/4</ticks>
         <eid>fC_fC</eid>
         <track>16</track>
@@ -1097,6 +1100,7 @@
         <beginTextOffset x="0" y="0"/>
         <continueText>TH</continueText>
         <track2>16</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>gC_gC</eid>
         <track>16</track>

@@ -38,7 +38,6 @@ class ChordRest;
 class MStyle;
 class Score;
 class Staff;
-class XmlReader;
 
 //---------------------------------------------------------
 //   TablatureFont
@@ -66,8 +65,6 @@ struct TablatureFretFont {
     std::array<String, NUM_OF_BASSSTRING_SLASHES> slashChar;  // the char used to draw one or more '/' symbols
     std::array<String, NUM_OF_DIGITFRETS> displayDigit;       // the string to draw for digit frets
     std::array<Char, NUM_OF_LETTERFRETS> displayLetter;       // the char to use for letter frets
-
-    bool read(XmlReader&, int mscVersion);
 };
 
 enum class TabVal : char {
@@ -101,38 +98,19 @@ enum class TablatureSymbolRepeat : char {
 };
 
 struct TablatureDurationFont {
+    TablatureDurationFont();
+
     String family;                   // the family of the physical font to use
     String displayName;              // the name to display to the user
-    double defSize = 0.0;            // the default size of the font
+    double defSize = 15.0;           // the default size of the font
     double defYOffset = 0.0;         // the default Y displacement
     Spatium gridBeamWidth  = GRID_BEAM_DEF_WIDTH;       // the width of the 'grid'-style beam (in sp)
     Spatium gridStemHeight = GRID_STEM_DEF_HEIGHT;      // the height of the 'grid'-style stem (in sp)
     Spatium gridStemWidth  = GRID_STEM_DEF_WIDTH;       // the width of the 'grid'-style stem (in sp)
     // the note value with no beaming in 'grid'-style beaming
     DurationType zeroBeamLevel = DurationType::V_QUARTER;
-    Char displayDot;                 // the char to use to draw a dot
+    Char displayDot = u'l';                           // the char to use to draw a dot
     Char displayValue[int(TabVal::NUM_OF)];           // the char to use to draw a duration value
-
-    bool read(XmlReader&, int mscVersion);
-};
-
-// ready-made staff types
-// keep in sync with the _presets initialization in StaffType::initStaffTypes() and _defaultPreset
-
-enum class StaffTypes : signed char {
-    STANDARD,
-    PERC_1LINE, PERC_2LINE, PERC_3LINE, PERC_5LINE,
-    TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
-    TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
-    TAB_5SIMPLE, TAB_5COMMON, TAB_5FULL,
-    TAB_UKULELE, TAB_BALALAJKA, TAB_DULCIMER,
-    TAB_ITALIAN, TAB_FRENCH,
-    TAB_7COMMON, TAB_8COMMON, TAB_9COMMON, TAB_10COMMON,
-    TAB_7SIMPLE, TAB_8SIMPLE, TAB_9SIMPLE, TAB_10SIMPLE,
-    STAFF_TYPES,
-    // some useful shorthands:
-    PERC_DEFAULT = StaffTypes::PERC_5LINE,
-    TAB_DEFAULT = StaffTypes::TAB_6COMMON,
 };
 
 enum class ShowTiedFret : unsigned char {
@@ -158,13 +136,12 @@ class StaffType
 public:
     StaffType();
 
-    StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
-              bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible, const Color& color);
+    StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines, bool stemless,
+              bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible, const Color& color);
 
-    StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
-              bool stemless, bool genTimesig, bool invisible, const Color& color, const String& durFontName, double durFontSize,
-              double durFontUserY, double genDur, bool fretFontUseTextStyle, const String& fretFontName, double fretFontSize,
-              double fretFontUserY, TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
+    StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines, bool stemless,
+              bool genTimesig, bool invisible, const Color& color, const String& durFontName, double genDur, bool fretFontUseTextStyle,
+              const String& fretFontName, TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
               bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
     virtual ~StaffType() = default;
@@ -177,9 +154,9 @@ public:
     StaffGroup group() const { return m_group; }
     void setGroup(StaffGroup g) { m_group = g; }
     StaffTypes type() const;
-    const String& staffTypeName() const { return m_staffTypeName; }
-    const String& xmlName() const { return m_xmlName; }
-    void setXmlName(const String& val) { m_xmlName = val; }
+    void setType(StaffTypes type) { m_staffType = type; }
+    String staffTypeName() const;
+    String xmlName() const;
     String translatedGroupName() const;
 
     const StaffLabel& staffLabel() const { return m_staffLabel; }
@@ -331,12 +308,11 @@ private:
     void  setDurationMetrics();
     void  setFretMetrics();
 
-    static bool readTabConfigFile(const String& fileName);
+    static void initTabFonts();
 
     StaffGroup m_group = StaffGroup::STANDARD;
 
-    String m_xmlName;         // the name used to reference this preset in instruments.xml
-    String m_staffTypeName;            // user visible name
+    StaffTypes m_staffType = StaffTypes::STANDARD;
 
     StaffLabel m_staffLabel;
 

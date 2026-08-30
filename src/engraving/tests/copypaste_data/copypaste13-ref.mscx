@@ -26,7 +26,7 @@
       <Staff>
         <eid>N_N</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="violin">

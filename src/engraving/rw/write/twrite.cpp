@@ -1669,7 +1669,7 @@ void TWrite::writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& 
     if (item->anchor() == Spanner::Anchor::SEGMENT) {
         int t2 = static_cast<int>(item->track2()) + ctx.trackDiff();
         xml.tag("track2", t2);
-        xml.tagFraction("startTick", item->tick());
+        xml.tagFraction("startTick", item->tick(), /* default = */ Fraction(-1, 0)); // Need to be able to write start of score, so a different default is needed
         xml.tagFraction("ticks", item->ticks());
     } else if (!item->isGuitarBendHold()) {
         /* GuitarBendHold lines are regenerated during layout by GuitarBend::updateHoldLine(),

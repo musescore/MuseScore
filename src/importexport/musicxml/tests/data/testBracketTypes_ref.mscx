@@ -211,6 +211,7 @@
     <SpannerMap>
       <TextLine>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>X_X</eid>
         <track>0</track>

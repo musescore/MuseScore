@@ -22,7 +22,7 @@
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>C Trumpet</trackName>

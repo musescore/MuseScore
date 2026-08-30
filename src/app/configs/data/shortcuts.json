@@ -116,7 +116,7 @@
         },
         {
             "command": "command://notation/cancel",
-            "sequences": ["Escape"]
+            "sequences": ["Esc"]
         },
         {
             "command": "command://notation/undo",

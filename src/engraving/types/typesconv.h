@@ -227,6 +227,11 @@ public:
     static AsciiStringView toXml(StaffGroup v);
     static StaffGroup fromXml(const AsciiStringView& tag, StaffGroup def);
 
+    static const TranslatableString& userName(StaffTypes v);
+    static String translatedUserName(StaffTypes v);
+    static AsciiStringView toXml(StaffTypes v);
+    static StaffTypes fromXml(const AsciiStringView& tag, StaffTypes def);
+
     static const TranslatableString& userName(TrillType v);
     static String translatedUserName(TrillType v);
     static AsciiStringView toXml(TrillType v);

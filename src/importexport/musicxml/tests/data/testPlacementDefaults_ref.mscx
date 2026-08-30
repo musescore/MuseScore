@@ -641,6 +641,7 @@
         <subtype>0</subtype>
         <direction>up</direction>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>3/1</ticks>
         <eid>bB_bB</eid>
         <track>0</track>
