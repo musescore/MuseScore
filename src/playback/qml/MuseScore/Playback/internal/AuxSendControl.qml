@@ -31,6 +31,8 @@ Item {
 
     property AuxSendItem auxSendItemModel: null
 
+    property color accentColor: ui.theme.accentColor
+
     readonly property string title: root.auxSendItemModel ? root.auxSendItemModel.title : ""
 
     property NavigationPanel navigationPanel: null
@@ -62,6 +64,7 @@ Item {
             value: root.auxSendItemModel.audioSignalPercentage
 
             accentControl: root.auxSendItemModel.isActive
+            accentColor: root.accentColor
 
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart
@@ -106,6 +109,7 @@ Item {
             icon: bypassBtn.isHovering ? IconCode.BYPASS : IconCode.NONE
 
             accentButton: root.auxSendItemModel.isActive
+            accentColor: root.accentColor
 
             onClicked: {
                 root.auxSendItemModel.isActive = !root.auxSendItemModel.isActive

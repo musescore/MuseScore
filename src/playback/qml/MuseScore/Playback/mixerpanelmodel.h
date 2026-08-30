@@ -62,6 +62,11 @@ public:
 
     Q_INVOKABLE QVariantMap get(int index);
 
+    Q_INVOKABLE void selectChannel(mu::playback::MixerChannelItem* item, bool extendSelection, bool rangeSelection);
+    Q_INVOKABLE void setColorForSelectedChannels(const QColor& color);
+    Q_INVOKABLE void resetColorForSelectedChannels();
+    Q_INVOKABLE void clearSelection();
+
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
@@ -122,5 +127,7 @@ private:
 
     muse::ui::NavigationSection* m_navigationSection = nullptr;
     int m_navigationOrderStart = 1;
+
+    int m_selectionAnchorIndex = -1;
 };
 }

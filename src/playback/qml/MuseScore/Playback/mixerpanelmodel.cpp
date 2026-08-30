@@ -96,6 +96,78 @@ QVariantMap MixerPanelModel::get(int index)
     return result;
 }
 
+void MixerPanelModel::selectChannel(MixerChannelItem* item, bool extendSelection, bool rangeSelection)
+{
+    if (!item) {
+        return;
+    }
+
+    const int itemIndex = m_mixerChannelList.indexOf(item);
+
+    auto isSelectable = [](const MixerChannelItem* channel) {
+        return channel->type() == MixerChannelItem::Type::PrimaryInstrument
+               || channel->type() == MixerChannelItem::Type::SecondaryInstrument;
+    };
+
+    if (rangeSelection && m_selectionAnchorIndex >= 0 && itemIndex >= 0) {
+        const int from = std::min(m_selectionAnchorIndex, itemIndex);
+        const int to = std::max(m_selectionAnchorIndex, itemIndex);
+
+        for (int i = 0; i < m_mixerChannelList.size(); ++i) {
+            MixerChannelItem* channel = m_mixerChannelList.at(i);
+            if (isSelectable(channel)) {
+                channel->setSelected(i >= from && i <= to);
+            }
+        }
+
+        return;
+    }
+
+    if (extendSelection) {
+        item->setSelected(!item->selected());
+        m_selectionAnchorIndex = itemIndex;
+        return;
+    }
+
+    for (MixerChannelItem* channel : m_mixerChannelList) {
+        if (channel != item && channel->selected()) {
+            channel->setSelected(false);
+        }
+    }
+
+    item->setSelected(true);
+    m_selectionAnchorIndex = itemIndex;
+}
+
+void MixerPanelModel::setColorForSelectedChannels(const QColor& color)
+{
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        if (item->selected()) {
+            item->setColor(color);
+        }
+    }
+}
+
+void MixerPanelModel::resetColorForSelectedChannels()
+{
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        if (item->selected()) {
+            item->setColor(QColor());
+        }
+    }
+}
+
+void MixerPanelModel::clearSelection()
+{
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        if (item->selected()) {
+            item->setSelected(false);
+        }
+    }
+
+    m_selectionAnchorIndex = -1;
+}
+
 QVariant MixerPanelModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid() || index.row() >= rowCount() || role != ChannelItemRole) {
@@ -539,6 +611,12 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     connect(item, &MixerChannelItem::soloMuteStateChanged, this,
             [this, instrumentTrackId](const notation::INotationSoloMuteState::SoloMuteState& state) {
         controller()->setTrackSoloMuteState(instrumentTrackId, state);
+    });
+
+    connect(item, &MixerChannelItem::colorChanged, this, [this, item, instrumentTrackId]() {
+        AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentTrackId);
+        outParams.color = item->color();
+        audioSettings()->setTrackOutputParams(instrumentTrackId, outParams);
     });
 
     return item;

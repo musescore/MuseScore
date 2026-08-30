@@ -165,6 +165,15 @@ ColumnLayout {
             flickable.completed = true
         }
 
+        MouseArea {
+            anchors.fill: parent
+            z: -1
+
+            onClicked: {
+                mixerPanelModel.clearSelection()
+            }
+        }
+
         Row {
             id: separators
 

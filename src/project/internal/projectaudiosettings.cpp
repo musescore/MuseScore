@@ -350,6 +350,11 @@ AudioOutputParams ProjectAudioSettings::outputParamsFromJson(const QJsonObject& 
     result.volume = object.value("volumeDb").toVariant().toFloat();
     result.auxSends = auxSendsFromJson(object.value("auxSends").toArray());
 
+    const QString colorName = object.value("color").toString();
+    if (!colorName.isEmpty()) {
+        result.color = QColor(colorName);
+    }
+
     return result;
 }
 
@@ -466,6 +471,10 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const AudioOutputParams& pa
 
     if (!params.auxSends.empty()) {
         result.insert("auxSends", auxSendsToJson(params.auxSends));
+    }
+
+    if (params.color.isValid()) {
+        result.insert("color", params.color.name());
     }
 
     return result;

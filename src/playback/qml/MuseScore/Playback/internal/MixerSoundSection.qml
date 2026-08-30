@@ -55,6 +55,8 @@ MixerPanelSection {
             supportsByPassing: false
             resourceItemModel: content.channelItem.inputResourceItem ?? null
 
+            accentColor: content.channelItem.hasCustomColor ? content.channelItem.color : ui.theme.accentColor
+
             navigationPanel: content.channelItem.panel
             navigationRowStart: root.navigationRowStart
             accessibleName: content.accessibleName

@@ -63,6 +63,8 @@ MixerPanelSection {
 
                 auxSendItemModel: modelData
 
+                accentColor: content.channelItem.hasCustomColor ? content.channelItem.color : ui.theme.accentColor
+
                 navigationPanel: content.channelItem.panel
                 navigationRowStart: root.navigationRowStart + index * 2 // NOTE: 2 - because AuxSendControl has 2 controls
                 navigationName: content.accessibleName

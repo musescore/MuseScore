@@ -71,6 +71,10 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool forceMute READ forceMute NOTIFY forceMuteChanged)
 
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(bool hasCustomColor READ hasCustomColor NOTIFY colorChanged)
+    Q_PROPERTY(bool selected READ selected WRITE setSelected NOTIFY selectedChanged)
+
     Q_PROPERTY(muse::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
     QML_ELEMENT;
@@ -121,6 +125,9 @@ public:
     bool solo() const;
     bool muted() const;
     bool forceMute() const;
+    QColor color() const;
+    bool hasCustomColor() const;
+    bool selected() const;
 
     muse::ui::NavigationPanel* panel() const;
     void setPanelOrder(int panelOrder);
@@ -158,6 +165,8 @@ public slots:
     void setBalance(int balance);
     void setSolo(bool solo);
     void setMuted(bool mute);
+    void setColor(QColor color);
+    void setSelected(bool selected);
 
 signals:
     void titleChanged(QString title);
@@ -172,6 +181,8 @@ signals:
     void soloChanged();
     void mutedChanged();
     void forceMuteChanged();
+    void colorChanged();
+    void selectedChanged();
 
     void panelChanged(muse::ui::NavigationPanel* panel);
 
@@ -243,5 +254,7 @@ protected:
     muse::ui::NavigationPanel* m_panel = nullptr;
 
     bool m_outputResourceItemsLoading = false;
+
+    bool m_selected = false;
 };
 }

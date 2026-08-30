@@ -41,7 +41,14 @@ MixerPanelSection {
         width: root.channelItemWidth
         height: 22
 
+        readonly property bool isInstrument: channelItem.type === MixerChannelItem.PrimaryInstrument
+                                              || channelItem.type === MixerChannelItem.SecondaryInstrument
+
         function resolveLabelColor() {
+            if (content.isInstrument && channelItem.hasCustomColor) {
+                return channelItem.color
+            }
+
             switch(channelItem.type) {
             case MixerChannelItem.PrimaryInstrument:
             case MixerChannelItem.SecondaryInstrument:
@@ -66,8 +73,8 @@ MixerPanelSection {
         readonly property color labelColor: resolveLabelColor()
 
         color: Utils.colorWithAlpha(labelColor, resolveLabelColorOpacity())
-        border.color: labelColor
-        border.width: 1
+        border.color: channelItem.selected ? ui.theme.fontPrimaryColor : labelColor
+        border.width: channelItem.selected ? 2 : 1
 
         StyledTextLabel {
             id: textLabel
@@ -87,12 +94,59 @@ MixerPanelSection {
 
             enabled: parent.enabled
             hoverEnabled: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             onContainsMouseChanged: {
                 if (mouseArea.containsMouse && textLabel.truncated) {
                     ui.tooltip.show(mouseArea, content.channelItem.title)
                 } else {
                     ui.tooltip.hide(mouseArea)
+                }
+            }
+
+            onClicked: function(mouse) {
+                if (!content.isInstrument) {
+                    return
+                }
+
+                // Qt.ControlModifier is Cmd on macOS and Ctrl on Windows/Linux.
+                const extendSelection = (mouse.modifiers & Qt.ControlModifier) !== 0
+                const rangeSelection = (mouse.modifiers & Qt.ShiftModifier) !== 0
+
+                if (mouse.button === Qt.RightButton) {
+                    if (!content.channelItem.selected) {
+                        root.model.selectChannel(content.channelItem, false, false)
+                    }
+                    contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+                } else if (mouse.button === Qt.LeftButton) {
+                    root.model.selectChannel(content.channelItem, extendSelection, rangeSelection)
+                }
+            }
+        }
+
+        ColorPickerModel {
+            id: colorPickerModel
+
+            onColorSelected: function(color) {
+                root.model.setColorForSelectedChannels(color)
+                root.model.clearSelection()
+            }
+        }
+
+        ContextMenuLoader {
+            id: contextMenuLoader
+
+            items: [
+                { id: "editColor", title: qsTrc("playback", "Edit color…") },
+                { id: "resetColor", title: qsTrc("playback", "Reset color"), enabled: content.channelItem.hasCustomColor }
+            ]
+
+            onHandleMenuItem: function(itemId) {
+                if (itemId === "editColor") {
+                    colorPickerModel.selectColor(content.labelColor, false)
+                } else if (itemId === "resetColor") {
+                    root.model.resetColorForSelectedChannels()
+                    root.model.clearSelection()
                 }
             }
         }
