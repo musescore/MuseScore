@@ -138,7 +138,11 @@ MixerPanelSection {
 
             items: [
                 { id: "editColor", title: qsTrc("playback", "Edit color…") },
-                { id: "resetColor", title: qsTrc("playback", "Reset color"), enabled: content.channelItem.hasCustomColor }
+                //! NOTE Not scoped to content.channelItem.hasCustomColor: this may apply to a whole
+                //! multi-selection where other selected channels have a custom color even if the
+                //! right-clicked one doesn't (right-clicking an already-selected channel keeps the
+                //! multi-selection, see onClicked above).
+                { id: "resetColor", title: qsTrc("playback", "Reset color") }
             ]
 
             onHandleMenuItem: function(itemId) {

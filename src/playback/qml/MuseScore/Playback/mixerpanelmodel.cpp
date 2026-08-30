@@ -295,6 +295,11 @@ void MixerPanelModel::addItem(MixerChannelItem* item, int index)
     updateItemsPanelsOrder();
     endInsertRows();
 
+    //! NOTE Keep the selection anchor pointing at the same channel after an insertion shifts indices.
+    if (index <= m_selectionAnchorIndex) {
+        ++m_selectionAnchorIndex;
+    }
+
     emit rowCountChanged();
 }
 
@@ -313,6 +318,14 @@ void MixerPanelModel::removeItem(const TrackId trackId)
     updateItemsPanelsOrder();
 
     endRemoveRows();
+
+    //! NOTE Keep the selection anchor pointing at the same channel after a removal shifts indices,
+    //! or invalidate it if the anchor channel itself was removed.
+    if (index == m_selectionAnchorIndex) {
+        m_selectionAnchorIndex = INVALID_INDEX;
+    } else if (index < m_selectionAnchorIndex) {
+        --m_selectionAnchorIndex;
+    }
 
     updateOutputResourceItemCount();
 
@@ -335,6 +348,10 @@ void MixerPanelModel::clear()
     m_masterChannelItem = nullptr;
     qDeleteAll(m_mixerChannelList);
     m_mixerChannelList.clear();
+
+    //! NOTE The channel list is being fully rebuilt, so any stored index would point at the wrong
+    //! (or a stale/deleted) channel.
+    m_selectionAnchorIndex = INVALID_INDEX;
 }
 
 void MixerPanelModel::setupConnections()
