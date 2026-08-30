@@ -6606,6 +6606,30 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Increase dynamics</source>
+        <translation type="unfinished">Increase dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Increase selected dynamics</source>
+        <translation type="unfinished">Increase selected dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Decrease dynamics</source>
+        <translation type="unfinished">Decrease dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Decrease selected dynamics</source>
+        <translation type="unfinished">Decrease selected dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
         <source>Select to beginning of system</source>
         <translation type="unfinished">Select to beginning of system</translation>
     </message>
@@ -9652,12 +9676,14 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="1"/>
         <source>Cross-staff beaming</source>
         <translation type="unfinished">Cross-staff beaming</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
         <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="1"/>
         <source>Tuplet</source>
         <translation type="unfinished">Tuplet</translation>
     </message>
@@ -10963,8 +10989,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <name>appshell/menu/plugins</name>
     <message>
         <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
-        <source>&amp;Plugins</source>
-        <translation type="unfinished">&amp;Plugins</translation>
+        <source>E&amp;xtensions</source>
+        <translation type="unfinished">E&amp;xtensions</translation>
     </message>
 </context>
 <context>
@@ -11670,141 +11696,6 @@ Fret %1 on strings %2</translation>
         <location filename="src/notation/internal/notationaccessibility.cpp" line="1"/>
         <source>End beat: %1</source>
         <translation type="unfinished">End beat: %1</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Standard</source>
-        <translation type="unfinished">Standard</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 1 line</source>
-        <translation type="unfinished">Perc. 1 line</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 2 lines</source>
-        <translation type="unfinished">Perc. 2 lines</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 3 lines</source>
-        <translation type="unfinished">Perc. 3 lines</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 5 lines</source>
-        <translation type="unfinished">Perc. 5 lines</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. simple</source>
-        <translation type="unfinished">Tab. 6-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. common</source>
-        <translation type="unfinished">Tab. 6-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. full</source>
-        <translation type="unfinished">Tab. 6-str. full</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 4-str. simple</source>
-        <translation type="unfinished">Tab. 4-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 4-str. common</source>
-        <translation type="unfinished">Tab. 4-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 4-str. full</source>
-        <translation type="unfinished">Tab. 4-str. full</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 5-str. simple</source>
-        <translation type="unfinished">Tab. 5-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 5-str. common</source>
-        <translation type="unfinished">Tab. 5-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 5-str. full</source>
-        <translation type="unfinished">Tab. 5-str. full</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. ukulele</source>
-        <translation type="unfinished">Tab. ukulele</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. balalaika</source>
-        <translation type="unfinished">Tab. balalaika</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. dulcimer</source>
-        <translation type="unfinished">Tab. dulcimer</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. Italian</source>
-        <translation type="unfinished">Tab. 6-str. Italian</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. French</source>
-        <translation type="unfinished">Tab. 6-str. French</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 7-str. common</source>
-        <translation type="unfinished">Tab. 7-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 8-str. common</source>
-        <translation type="unfinished">Tab. 8-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 9-str. common</source>
-        <translation type="unfinished">Tab. 9-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 10-str. common</source>
-        <translation type="unfinished">Tab. 10-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 7-str. simple</source>
-        <translation type="unfinished">Tab. 7-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 8-str. simple</source>
-        <translation type="unfinished">Tab. 8-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 9-str. simple</source>
-        <translation type="unfinished">Tab. 9-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 10-str. simple</source>
-        <translation type="unfinished">Tab. 10-str. simple</translation>
     </message>
     <message>
         <location filename="src/engraving/dom/stringtunings.cpp" line="1"/>
@@ -19551,6 +19442,144 @@ Fret %1 on strings %2</translation>
         <location filename="src/engraving/types/typesconv.cpp" line="1"/>
         <source>Tablature</source>
         <translation type="unfinished">Tablature</translation>
+    </message>
+</context>
+<context>
+    <name>engraving/stafftypes</name>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Standard</source>
+        <translation type="unfinished">Standard</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 1 line</source>
+        <translation type="unfinished">Perc. 1 line</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 2 lines</source>
+        <translation type="unfinished">Perc. 2 lines</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 3 lines</source>
+        <translation type="unfinished">Perc. 3 lines</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 5 lines</source>
+        <translation type="unfinished">Perc. 5 lines</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. simple</source>
+        <translation type="unfinished">Tab. 6-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. common</source>
+        <translation type="unfinished">Tab. 6-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. full</source>
+        <translation type="unfinished">Tab. 6-str. full</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 4-str. simple</source>
+        <translation type="unfinished">Tab. 4-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 4-str. common</source>
+        <translation type="unfinished">Tab. 4-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 4-str. full</source>
+        <translation type="unfinished">Tab. 4-str. full</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 5-str. simple</source>
+        <translation type="unfinished">Tab. 5-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 5-str. common</source>
+        <translation type="unfinished">Tab. 5-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 5-str. full</source>
+        <translation type="unfinished">Tab. 5-str. full</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. ukulele</source>
+        <translation type="unfinished">Tab. ukulele</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. balalaika</source>
+        <translation type="unfinished">Tab. balalaika</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. dulcimer</source>
+        <translation type="unfinished">Tab. dulcimer</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. Italian</source>
+        <translation type="unfinished">Tab. 6-str. Italian</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. French</source>
+        <translation type="unfinished">Tab. 6-str. French</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 7-str. common</source>
+        <translation type="unfinished">Tab. 7-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 8-str. common</source>
+        <translation type="unfinished">Tab. 8-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 9-str. common</source>
+        <translation type="unfinished">Tab. 9-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 10-str. common</source>
+        <translation type="unfinished">Tab. 10-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 7-str. simple</source>
+        <translation type="unfinished">Tab. 7-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 8-str. simple</source>
+        <translation type="unfinished">Tab. 8-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 9-str. simple</source>
+        <translation type="unfinished">Tab. 9-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 10-str. simple</source>
+        <translation type="unfinished">Tab. 10-str. simple</translation>
     </message>
 </context>
 <context>
@@ -37544,6 +37573,16 @@ failed.</translation>
         <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
         <source>Increase duration</source>
         <translation type="unfinished">Increase duration</translation>
+    </message>
+    <message>
+        <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
+        <source>Increase dynamics</source>
+        <translation type="unfinished">Increase dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
+        <source>Decrease dynamics</source>
+        <translation type="unfinished">Decrease dynamics</translation>
     </message>
     <message>
         <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
