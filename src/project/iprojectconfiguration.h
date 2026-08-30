@@ -109,6 +109,14 @@ public:
         FromTemplate
     };
 
+    enum class HomeScoresPageSortMode {
+        TimeModified,
+        Name
+    };
+
+    virtual HomeScoresPageSortMode homeScoresPageSortMode() const = 0;
+    virtual void setHomeScoresPageSortMode(HomeScoresPageSortMode mode) = 0;
+
     virtual PreferredScoreCreationMode preferredScoreCreationMode() const = 0;
     virtual void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) = 0;
 

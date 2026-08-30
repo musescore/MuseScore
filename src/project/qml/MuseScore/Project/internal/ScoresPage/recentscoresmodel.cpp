@@ -29,6 +29,9 @@
 
 #include "log.h"
 
+#include <algorithm>
+#include <QCollator>
+
 using namespace muse;
 using namespace mu::project;
 
@@ -61,15 +64,13 @@ void RecentScoresModel::updateRecentScores()
 {
     const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
 
-    std::vector<QVariantMap> items;
-    items.reserve(recentScores.size());
+    struct ScoreEntry {
+        QVariantMap obj;
+        muse::DateTime lastModified;
+    };
 
-    QVariantMap addItem;
-    addItem[NAME_KEY] = muse::qtrc("project", "New score");
-    addItem[IS_CREATE_NEW_KEY] = true;
-    addItem[IS_NO_RESULTS_FOUND_KEY] = false;
-    addItem[IS_CLOUD_KEY] = false;
-    items.push_back(addItem);
+    std::vector<ScoreEntry> scoreEntries;
+    scoreEntries.reserve(recentScores.size());
 
     for (const RecentFile& file : recentScores) {
         QVariantMap obj;
@@ -80,17 +81,49 @@ void RecentScoresModel::updateRecentScores()
         RetVal<uint64_t> fileSize = fileSystem()->fileSize(file.path);
         QString fileSizeString = (fileSize.ret && fileSize.val > 0) ? DataFormatter::formatFileSize(fileSize.val).toQString() : QString();
 
+        muse::DateTime lastModified = io::FileInfo(file.path).lastModified();
+
         obj[NAME_KEY] = file.displayName(isSuffixInteresting);
         obj[PATH_KEY] = file.path.toQString();
         obj[SUFFIX_KEY] = QString::fromStdString(suffix);
         obj[FILE_SIZE_KEY] = fileSizeString;
         obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file.path);
         obj[CLOUD_SCORE_ID_KEY] = configuration()->cloudScoreIdFromPath(file.path);
-        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
+        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(lastModified.date()).toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULTS_FOUND_KEY] = false;
 
-        items.push_back(obj);
+        scoreEntries.push_back({ obj, lastModified });
+    }
+
+    if (m_sortMode == SortByName) {
+        QCollator collator;
+        collator.setNumericMode(true);
+        collator.setCaseSensitivity(Qt::CaseInsensitive);
+
+        std::stable_sort(scoreEntries.begin(), scoreEntries.end(), [&collator](const ScoreEntry& a, const ScoreEntry& b) {
+            return collator.compare(a.obj[NAME_KEY].toString(), b.obj[NAME_KEY].toString()) < 0;
+        });
+    } else {
+        // SortByTimeModified: sort by actual file mtime, not recent-files usage order,
+        // so it matches what the "Modified" column displays (open+close alone shouldn't reorder).
+        std::stable_sort(scoreEntries.begin(), scoreEntries.end(), [](const ScoreEntry& a, const ScoreEntry& b) {
+            return a.lastModified.toQDateTime() > b.lastModified.toQDateTime();
+        });
+    }
+
+    std::vector<QVariantMap> items;
+    items.reserve(scoreEntries.size() + 2);
+
+    QVariantMap addItem;
+    addItem[NAME_KEY] = muse::qtrc("project", "New score");
+    addItem[IS_CREATE_NEW_KEY] = true;
+    addItem[IS_NO_RESULTS_FOUND_KEY] = false;
+    addItem[IS_CLOUD_KEY] = false;
+    items.push_back(addItem);
+
+    for (const ScoreEntry& entry : scoreEntries) {
+        items.push_back(entry.obj);
     }
 
     QVariantMap noResultsFoundItem;
@@ -101,6 +134,23 @@ void RecentScoresModel::updateRecentScores()
     items.push_back(noResultsFoundItem);
 
     setRecentScores(items);
+}
+
+RecentScoresModel::SortMode RecentScoresModel::sortMode() const
+{
+    return m_sortMode;
+}
+
+void RecentScoresModel::setSortMode(SortMode mode)
+{
+    if (m_sortMode == mode) {
+        return;
+    }
+
+    m_sortMode = mode;
+    emit sortModeChanged();
+
+    updateRecentScores();
 }
 
 QList<int> RecentScoresModel::nonScoreItemIndices() const
