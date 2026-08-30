@@ -10590,35 +10590,35 @@
         <source>Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.</source>
         <comment>glockenspiel description</comment>
         <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Piyano tuşları gibi dizilmiş, akortlu metal çubuklar. Tokmaklarla çalınır. Yazılı halinden iki oktav daha tiz ses çıkarır.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3577"/>
         <source>Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.</source>
         <comment>xylophone description</comment>
         <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Piyano tuşları gibi düzenlenmiş, bazen altında rezonatör tüpleri bulunan, akortlu ahşap çubuklar. Tokmaklarla çalınır. Yazılı halinden bir oktav daha tiz ses çıkarır.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3595"/>
         <source>Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</source>
         <comment>vibraphone description</comment>
         <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Rezonatör tüpleri ve uzatma pedalıyla piyano tuşları gibi düzenlenmiş, akortlu alüminyum çubuklar. Bazıları, tremolo oluşturmak için rezonatörleri hızla açıp kapatan değişken hızlı elektrik motorlarına sahiptir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3622"/>
         <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
         <comment>marimba description</comment>
         <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Piyano tuşları gibi düzenlenmiş akortlu ahşap çubukların altında rezonatör bulunur. Tokmaklarla çalınır. Ksilofona göre daha pes ve yumuşak tınlar; yazıldığı gibi ses verir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3631"/>
         <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
         <comment>marimba-single description</comment>
         <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Piyano tuşları gibi düzenlenmiş akortlu ahşap çubukların altında rezonatör bulunur. Tokmaklarla çalınır. Ksilofona göre daha pes ve yumuşak tınlar; yazıldığı gibi ses verir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
@@ -10737,98 +10737,98 @@
         <source>Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.</source>
         <comment>celesta description</comment>
         <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bell-piano. Temel olarak, uzatma pedallı ve tuşlarla çalınan bir glockenspiel türüdür. Yazılandan bir oktav tiz ses verir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5040"/>
         <source>Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.</source>
         <comment>clavichord description</comment>
         <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Metal tellere vuran ve aynı zamanda telin uzunluğunu (dolayısıyla ses perdesini) belirleyen küçük metal parçalara (tanjant) sahiptir. İfade gücü yüksek, ancak sesi oldukça zayıftır.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5049"/>
         <source>Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.</source>
         <comment>clavinet description</comment>
         <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Elektrikle güçlendirilmiş tellere sahip klavikord. Bu sayede ses karakteri değişir ve ses yüksekliği sınırlaması ortadan kalkar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5058"/>
         <source>Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.</source>
         <comment>harpsichord description</comment>
         <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Telleri tırnaklarla çeker, böylece piyanoya kıyasla daha sert bir tını ve daha dar bir gürlük aralığı elde edilir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5067"/>
         <source>Small harpsichord with only one string per key, which limits the dynamic range and timbre.</source>
         <comment>virginal description</comment>
         <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tuş başına yalnızca bir teli bulunan, bu nedenle gürlük aralığı ve tınısı sınırlı olan küçük bir klavsen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5076"/>
         <source>Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Elektriksel olarak güçlendirilmiş tellere, kamışlara veya diyapozona sahip piyano. (Ya da elektrikli piyano gibi ses çıkaracak şekilde yapılandırılmış dijital bir piyano.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5085"/>
         <source>Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.</source>
         <comment>grand-piano description</comment>
         <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daha büyük yatay bir kasaya sahiptir; bu sayede duvar piyanosuna kıyasla daha zengin bir ses ve daha hassas tuşe kontrolü sağlayabilir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5094"/>
         <source>Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Genellikle barlar, country müziği ve müzikhollerle ilişkilendirilen, (akordu çok bozuk) honky-tonk tarzı bir duvar piyanosu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5103"/>
         <source>Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.</source>
         <comment>piano description</comment>
         <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Duvar veya kuyruklu piyano. Tellerine bir çekiçle vurulması sayesinde geniş bir gürlük aralığı sağlar. Notalar, pedal yardımıyla uzatılabilir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5112"/>
         <source>Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Teller yerine metal çubuklar barındıran ve çelestaya benzer bir mekanizma kullanan küçük bir piyano. Genellikle pedalları bulunmaz ve başlangıçta çocuklar için tasarlanmıştır.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5121"/>
         <source>Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.</source>
         <comment>upright-piano description</comment>
         <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daha küçük dikey bir kasaya sahiptir, bu da onu kuyruklu piyanoya kıyasla daha kompakt hale getirir. Genellikle provalarda veya daha rahat ortamlardaki performanslarda kullanılır.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5541"/>
         <source>Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).</source>
         <comment>electric-guitar description</comment>
         <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tellerin sesi elektriksel olarak yükseltilen, yekpare gövdeli gitar (dizek notasyonu: 8li alttan işaretli sol açkısıyladır).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5562"/>
         <source>Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).</source>
         <comment>electric-guitar-treble-clef description</comment>
         <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tellerin sesi elektriksel olarak yükseltilen yekpare gövdeli gitar (dizek notasyonu, standart sol açkısıyladır).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5621"/>
         <source>Solid-body guitar with electrically amplified strings (tablature).</source>
         <comment>electric-guitar-tablature description</comment>
         <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tellerin sesi elektriksel olarak yükseltilen, yekpare gövdeli gitar (tablatür).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6253"/>
