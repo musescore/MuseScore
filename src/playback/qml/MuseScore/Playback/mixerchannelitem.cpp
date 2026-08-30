@@ -75,7 +75,10 @@ MixerChannelItem::MixerChannelItem(QObject* parent, Type type, bool outputOnly, 
     m_panel->componentComplete();
 
     connect(this, &MixerChannelItem::mutedChanged, this, [this]() {
-        if (muted()) {
+        //!NOTE Video channels reset their pressure via updateTimerState() in
+        //!     setupVideoMeterAnimation() instead, since that also covers the
+        //!     non-mute reasons (video not playing) the meter needs to go dark for.
+        if (m_type != Type::Video && muted()) {
             resetAudioChannelsVolumePressure();
         }
     });

@@ -1162,6 +1162,8 @@ void PlaybackController::resetPlayback()
     m_isPlaybackInited = false;
     m_playbackInited.send(m_isPlaybackInited);
 
+    setIsVideoPlaying(false);
+
     m_player = nullptr;
     globalContext()->setCurrentPlayer(nullptr);
 
