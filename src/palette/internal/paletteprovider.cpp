@@ -29,6 +29,14 @@
 #include <QMimeData>
 #include <QStandardPaths>
 
+#include "global/translation.h"
+#include "global/io/path.h"
+#include "global/types/uri.h"
+
+#include "uicomponents/qml/Muse/UiComponents/fuzzyfilter.h"
+#include "uicomponents/qml/Muse/UiComponents/fuzzyscoresorter.h"
+#include "uicomponents/qml/Muse/UiComponents/sortfilterproxymodel.h"
+
 #include "engraving/dom/mscore.h"
 
 #include "notation/inotation.h"
@@ -36,13 +44,9 @@
 
 #include "palettecreator.h"
 
-#include "io/path.h"
-
-#include "translation.h"
-#include "types/uri.h"
-
 #include "app_config.h"
 
+using namespace Qt::StringLiterals;
 using namespace muse;
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -607,12 +611,25 @@ void PaletteProvider::init()
 
     m_masterPaletteModel = new PaletteTreeModel(PaletteCreator(iocContext()).newMasterPaletteTree(), iocContext(), this);
 
-    m_searchFilterModel = new QSortFilterProxyModel(this);
-    m_searchFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    m_searchFilterModel->setFilterRole(Qt::ToolTipRole);
-    m_searchFilterModel->setRecursiveFilteringEnabled(true);
-    // accept row if its parent is accepted by filter: necessary to be able to search by palette name
-    m_searchFilterModel->setAutoAcceptChildRows(true);
+    {
+        m_fuzzyFilter = new uicomponents::FuzzyFilter(this);
+        m_fuzzyFilter->setRoleName(u"toolTip"_s);
+
+        auto* sorter = new uicomponents::FuzzyScoreSorter(this);
+        sorter->setFuzzyFilter(m_fuzzyFilter);
+        sorter->setEnabled(true);
+
+        auto* searchFilterModel = new uicomponents::SortFilterProxyModel(this);
+        QQmlListProperty<uicomponents::Filter> filters = searchFilterModel->filters();
+        filters.append(&filters, m_fuzzyFilter);
+        QQmlListProperty<uicomponents::Sorter> sorters = searchFilterModel->sorters();
+        sorters.append(&sorters, sorter);
+        searchFilterModel->setRecursiveFilteringEnabled(true);
+        // accept row if its parent is accepted by filter: necessary to be able to search by palette name
+        searchFilterModel->setAutoAcceptChildRows(true);
+
+        m_searchFilterModel = searchFilterModel;
+    }
 
     m_visibilityFilterModel = new QSortFilterProxyModel(this);
     m_visibilityFilterModel->setFilterRole(PaletteTreeModel::VisibleRole);
@@ -641,7 +658,7 @@ void PaletteProvider::setFilter(const QString& filter)
     // speed up the search in certain other scenarios,
     // e.g. when deleting search characters (going from fewer to more search results).
     m_searchFilterModel->setSourceModel(nullptr);
-    m_searchFilterModel->setFilterFixedString(filter);
+    m_fuzzyFilter->setFuzzyPattern(filter);
     if (!filter.isEmpty()) {
         m_searchFilterModel->setSourceModel(m_masterPaletteModel);
     }
