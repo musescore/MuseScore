@@ -36,8 +36,15 @@ ConvertFileToScoreDevToolsModel::ConvertFileToScoreDevToolsModel(QObject* parent
 
 void ConvertFileToScoreDevToolsModel::selectAndConvertFiles()
 {
-    convertFileToScoreScenario()->selectFilesToConvert()
-    .onResolve(this, [this](const ConvertSelection& selection) {
-        convertFileToScoreScenario()->startConvert(selection.input, selection.convertedFileName);
+    convertFileToScoreScenario()->checkConvertIsAllowed()
+    .onResolve(this, [this](const Ret& ret) {
+        if (!ret) {
+            return;
+        }
+
+        convertFileToScoreScenario()->selectFilesToConvert()
+        .onResolve(this, [this](const ConvertSelection& selection) {
+            convertFileToScoreScenario()->startConvert(selection.input, selection.convertedFileName);
+        });
     });
 }

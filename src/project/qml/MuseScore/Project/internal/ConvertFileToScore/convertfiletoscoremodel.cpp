@@ -416,37 +416,40 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
     return paths;
 }
 
-void ConvertFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
+bool ConvertFileToScoreModel::selectAndValidateFiles(const QStringList& existingPaths)
+{
+    QStringList files = selectFiles(existingPaths);
+    if (files.isEmpty()) {
+        return false;
+    }
+
+    return validateAndApplyFiles(existingPaths + files);
+}
+
+bool ConvertFileToScoreModel::validateAndApplyFiles(const QStringList& pathsOrUrls)
 {
     io::paths_t ioPaths;
     ioPaths.reserve(pathsOrUrls.size());
 
-    QStringList normalizedPaths;
-    normalizedPaths.reserve(pathsOrUrls.size());
+    QStringList localPaths;
+    localPaths.reserve(pathsOrUrls.size());
 
     for (const QString& pathOrUrl : pathsOrUrls) {
         QString path = localPath(pathOrUrl);
         ioPaths.push_back(io::path_t(path));
-        normalizedPaths << path;
+        localPaths << path;
     }
 
-    convertFileToScoreScenario()->validate(ioPaths).onResolve(this, [this, normalizedPaths](const RetVal<ConvertType>& result) {
-        if (result.ret) {
-            setSelectedPaths(normalizedPaths);
-            setSelectedLink(QString());
-            setConvertType(int(result.val));
-
-            emit validationFinished();
-        }
-    });
-}
-
-void ConvertFileToScoreModel::selectAndValidateFiles(const QStringList& existingPaths)
-{
-    QStringList files = selectFiles(existingPaths);
-    if (!files.isEmpty()) {
-        validateFiles(existingPaths + files);
+    RetVal<ConvertType> result = convertFileToScoreScenario()->validate(ioPaths);
+    if (!result.ret) {
+        return false;
     }
+
+    setSelectedPaths(localPaths);
+    setSelectedLink(QString());
+    setConvertType(int(result.val));
+
+    return true;
 }
 
 QString ConvertFileToScoreModel::validateFileName(const QString& name) const

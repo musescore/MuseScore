@@ -91,8 +91,8 @@ public:
     QString linkPageHintPlainText() const;
     int maxLinkLength() const;
 
-    Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
-    Q_INVOKABLE void selectAndValidateFiles(const QStringList& existingPaths = {});
+    Q_INVOKABLE bool validateAndApplyFiles(const QStringList& pathsOrUrls);
+    Q_INVOKABLE bool selectAndValidateFiles(const QStringList& existingPaths = {});
 
     Q_INVOKABLE QString validateFileName(const QString& name) const;
 
@@ -104,7 +104,6 @@ signals:
     void selectedPathsChanged();
     void selectedLinkChanged();
     void fileRequirementsChanged();
-    void validationFinished();
     void goingBackConfirmed();
 
 private:

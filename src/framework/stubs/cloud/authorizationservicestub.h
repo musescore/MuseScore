@@ -40,5 +40,6 @@ public:
     CloudInfo cloudInfo() const override;
 
     Ret checkCloudIsAvailable() const override;
+    async::Promise<Ret> checkCloudIsAvailableAsync() const override;
 };
 }

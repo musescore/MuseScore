@@ -48,12 +48,6 @@ StyledDialogView {
     ConvertFileToScoreModel {
         id: convertModel
 
-        onValidationFinished: {
-            if (root.currentPageIndex === 0) {
-                root.currentPageIndex = 1
-            }
-        }
-
         onGoingBackConfirmed: {
             root.currentPageIndex = 0
             convertModel.clearSelection()
@@ -131,10 +125,16 @@ StyledDialogView {
 
             onCancelRequested: root.reject()
 
-            onSelectFilesRequested: convertModel.selectAndValidateFiles()
+            onSelectFilesRequested: {
+                if (convertModel.selectAndValidateFiles()) {
+                    root.currentPageIndex = 1
+                }
+            }
 
             onFilesDropped: function(urls) {
-                convertModel.validateFiles(urls)
+                if (convertModel.validateAndApplyFiles(urls)) {
+                    root.currentPageIndex = 1
+                }
             }
 
             onConvertFromLinkRequested: {

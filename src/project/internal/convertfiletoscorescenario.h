@@ -49,18 +49,20 @@ public:
 
     const ConvertConfig& convertConfig() const override;
 
-    muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
-    muse::async::Promise<muse::RetVal<ConvertType> > validate(const muse::io::paths_t& paths) override;
+    muse::async::Promise<muse::Ret> checkConvertIsAllowed() override;
 
-    muse::async::Promise<muse::Ret> startConvert(const ConvertInput& input, const QString& convertedFileName) override;
+    muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
+    muse::RetVal<ConvertType> validate(const muse::io::paths_t& paths) override;
+
+    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
 private:
     muse::async::Promise<muse::Ret> ensureAuthorization();
-    muse::async::Promise<ConvertSelection> openSelectFilesDialog();
 
     bool validateAgainstConfig(const muse::io::paths_t& paths, const ConvertConfig& config);
 
+    void showCloudIsNotAvailableError();
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError();
@@ -69,7 +71,6 @@ private:
     void showTooManyAudioFilesError(int maxFiles);
     void showTooManyImagesError(int maxImages);
 
-    muse::Ret startUpload(const ConvertInput& input, const QString& convertedFileName);
     void showFileProcessingDialog();
     void showScoreReadyNotification(const muse::io::path_t& path);
 

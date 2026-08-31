@@ -88,69 +88,72 @@ const ConvertConfig& ConvertFileToScoreScenario::convertConfig() const
     return service()->config();
 }
 
-async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert()
+async::Promise<Ret> ConvertFileToScoreScenario::checkConvertIsAllowed()
 {
-    return async::make_promise<ConvertSelection>([this](auto resolve, auto reject) {
-        ensureAuthorization()
-        .onResolve(this, [this, resolve, reject](const Ret&) {
-            openSelectFilesDialog()
-            .onResolve(this, [resolve](const ConvertSelection& selection) {
-                (void)resolve(selection);
+    return async::make_promise<Ret>([this](auto resolve, auto reject) {
+        museScoreComService()->authorization()->checkCloudIsAvailableAsync()
+        .onResolve(this, [this, resolve, reject](const Ret& ret) {
+            if (!ret) {
+                showCloudIsNotAvailableError();
+                (void)resolve(ret);
+                return;
+            }
+
+            ensureAuthorization()
+            .onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
             })
             .onReject(this, [reject](int code, const std::string& msg) {
                 (void)reject(code, msg);
             });
-        })
-        .onReject(this, [reject](int code, const std::string& msg) {
-            (void)reject(code, msg);
-        });
-
-        return async::Promise<ConvertSelection>::dummy_result();
-    });
-}
-
-async::Promise<RetVal<ConvertType> > ConvertFileToScoreScenario::validate(const io::paths_t& paths)
-{
-    return async::Promise<RetVal<ConvertType> >([this, paths](auto resolve, auto) {
-        if (paths.empty()) {
-            return resolve(RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed)));
-        }
-
-        //! NOTE: config is a client-side sanity check only; if it hasn't been fetched yet, fall back
-        //! to letting the server enforce its own limits rather than blocking the conversion
-        const ConvertConfig& config = service()->config();
-        const ConvertType type = fileCategoryFromPath(paths.front(), config) == FileCategory::Audio
-                                 ? ConvertType::Audio2Score : ConvertType::Omr;
-
-        if (!validateAgainstConfig(paths, config)) {
-            return resolve(RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed)));
-        }
-
-        return resolve(RetVal<ConvertType>::make_ok(type));
-    });
-}
-
-async::Promise<Ret> ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
-{
-    return async::make_promise<Ret>([this, input, convertedFileName](auto resolve, auto) {
-        IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
-            return resolve(make_ret(Err::ConvertValidationFailed));
-        }
-
-        IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
-            return resolve(make_ret(Err::ConvertValidationFailed));
-        }
-
-        ensureAuthorization()
-        .onResolve(this, [this, input, convertedFileName, resolve](const Ret&) {
-            (void)resolve(startUpload(input, convertedFileName));
-        })
-        .onReject(this, [resolve](int code, const std::string& msg) {
-            (void)resolve(Ret(code, msg));
         });
 
         return async::Promise<Ret>::dummy_result();
     });
+}
+
+async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert()
+{
+    return interactive()->open("musescore://project/convert/selectfiles")
+           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
+        return resolve(toConvertSelection(val));
+    });
+}
+
+RetVal<ConvertType> ConvertFileToScoreScenario::validate(const io::paths_t& paths)
+{
+    if (paths.empty()) {
+        return RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed));
+    }
+
+    //! NOTE: config is a client-side sanity check only; if it hasn't been fetched yet, fall back
+    //! to letting the server enforce its own limits rather than blocking the conversion
+    const ConvertConfig& config = service()->config();
+    const ConvertType type = fileCategoryFromPath(paths.front(), config) == FileCategory::Audio
+                             ? ConvertType::Audio2Score : ConvertType::Omr;
+
+    if (!validateAgainstConfig(paths, config)) {
+        return RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed));
+    }
+
+    return RetVal<ConvertType>::make_ok(type);
+}
+
+Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
+{
+    IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
+        return make_ret(Err::ConvertValidationFailed);
+    }
+
+    IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
+        return make_ret(Err::ConvertValidationFailed);
+    }
+
+    if (configuration()->showConvertFileProcessingDialog()) {
+        showFileProcessingDialog();
+    }
+
+    return service()->startConvert(input, convertedFileName);
 }
 
 async::Channel<Ret, io::path_t> ConvertFileToScoreScenario::convertFinished() const
@@ -182,14 +185,6 @@ async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
         });
 
         return async::Promise<Ret>::dummy_result();
-    });
-}
-
-async::Promise<ConvertSelection> ConvertFileToScoreScenario::openSelectFilesDialog()
-{
-    return interactive()->open("musescore://project/convert/selectfiles")
-           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
-        return resolve(toConvertSelection(val));
     });
 }
 
@@ -256,6 +251,14 @@ bool ConvertFileToScoreScenario::validateAgainstConfig(const io::paths_t& paths,
     return true;
 }
 
+void ConvertFileToScoreScenario::showCloudIsNotAvailableError()
+{
+    interactive()->error(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
+                         muse::trc("project/convert",
+                                   "An internet connection is required to convert a file. Please check your internet connection or try again later."),
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
 void ConvertFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)
 {
     QString size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes));
@@ -313,15 +316,6 @@ void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
                          { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
-Ret ConvertFileToScoreScenario::startUpload(const ConvertInput& input, const QString& convertedFileName)
-{
-    if (configuration()->showConvertFileProcessingDialog()) {
-        showFileProcessingDialog();
-    }
-
-    return service()->startConvert(input, convertedFileName);
-}
-
 void ConvertFileToScoreScenario::showFileProcessingDialog()
 {
     constexpr int uploadMoreBtn = int(IInteractive::Button::CustomButton) + 1;
@@ -342,9 +336,16 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
         configuration()->setShowConvertFileProcessingDialog(result.showAgain());
 
         if (result.isButton(uploadMoreBtn)) {
-            selectFilesToConvert()
-            .onResolve(this, [this](const ConvertSelection& selection) {
-                startConvert(selection.input, selection.convertedFileName);
+            checkConvertIsAllowed()
+            .onResolve(this, [this](const Ret& ret) {
+                if (!ret) {
+                    return;
+                }
+
+                selectFilesToConvert()
+                .onResolve(this, [this](const ConvertSelection& selection) {
+                    startConvert(selection.input, selection.convertedFileName);
+                });
             });
         } else if (result.isButton(goToScoresBtn)) {
             interactive()->openUrl(museScoreComService()->scoreManagerUrl());
