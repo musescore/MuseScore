@@ -43,9 +43,6 @@ DockWindow {
     onPageLoaded: {
         console.log("WindowContent::onPageLoaded")
 
-        //! NOTE The window content is ready now, remove the startup transparency (see AppWindow)
-        root.window.opacity = 1.0
-
         interactiveProvider.onPageOpened()
     }
 

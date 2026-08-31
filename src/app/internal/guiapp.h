@@ -45,6 +45,7 @@ private:
     void showContextSplash(const muse::modularity::ContextPtr& ctxId) override;
     QString mainWindowQmlPath(const QString& platform) const override;
     void doStartupScenario(const muse::modularity::ContextPtr& ctxId) override;
+    void showMainWindowAndCloseSplash(const muse::modularity::ContextPtr& ctxId);
 
     appshell::SplashScreen* m_splashScreen = nullptr;
 };
