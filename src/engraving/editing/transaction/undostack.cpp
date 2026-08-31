@@ -262,10 +262,18 @@ void UndoableTransaction::cleanup(bool wasDone)
 
 void UndoableTransaction::unwind(bool cleanUp)
 {
+    // Undo everything first, without freeing: commands pushed later (e.g. AddElement for a part's linked
+    // clone) may still be referenced by earlier commands' undo() (e.g. Link::undo()):
+    std::vector<UndoableCommand*> undoneCommands;
+    undoneCommands.reserve(m_commands.size());
     while (!m_commands.empty()) {
         UndoableCommand* command = muse::takeLast(m_commands);
         LOG_UNDO() << "unwind: " << command->name();
         command->undo();
+        undoneCommands.push_back(command);
+    }
+    // Now we can free everything:
+    for (UndoableCommand* command : undoneCommands) {
         if (cleanUp) {
             command->cleanup(false);
         }
