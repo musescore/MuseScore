@@ -61,6 +61,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 #include "engraving/types/symid.h"
+#include "engraving/dom/capo.h"
 
 #include "guitarprodrumset.h"
 #include "utils.h"
@@ -579,7 +580,6 @@ bool GuitarPro5::readTracks()
 
         int frets        = readInt();
         int capo         = readInt();
-        part->setCapoFret(capo);
         /*int color        =*/ readInt();
 
         skip(version > 500 ? 49 : 44);
@@ -650,10 +650,19 @@ bool GuitarPro5::readTracks()
 
         if (capo > 0 && !engravingConfiguration()->guitarProImportExperimental()) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(s);
-            st->setPlainText(u"Capo. fret " + String::number(capo));
-            st->setTrack(i * VOICES);
-            s->add(st);
+            const size_t track = i * VOICES;
+
+            CapoParams params;
+            params.active = true;
+            params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
+            params.fretPosition = capo;
+
+            Capo* capoEl = Factory::createCapo(score->dummy()->segment());
+            capoEl->setTrack(track);
+            capoEl->setParams(params);
+            s->add(capoEl);
+
+            staff->insertCapoParams({ 0, 1 }, params, true);
         }
 
         InstrChannel* ch = instr->channel(0);
@@ -1126,7 +1135,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
         gnote->setString(note->string());
         auto sd = note->part()->instrument()->stringData();
-        gnote->setFret(grace_pitch - sd->stringList().at(sd->stringList().size() - note->string() - 1).pitch);
+        gnote->setFret(fret);
         if (transition == 0) {
             // no transition
         } else if (transition == 1) {
@@ -1472,7 +1481,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
         note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setDeadNote(true);
     }
-    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber + note->part()->capoFret(), nullptr);
+    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, staff, note->tick());
     note->setFret(fretNumber);
     note->setString(string);
     note->setPitch(pitch);
