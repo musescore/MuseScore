@@ -150,17 +150,24 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>T_T</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>U_U</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>R_R</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>T_T</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>U_U</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

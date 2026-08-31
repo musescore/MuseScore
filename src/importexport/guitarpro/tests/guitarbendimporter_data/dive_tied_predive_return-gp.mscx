@@ -182,13 +182,20 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>b_b</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>c_c</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>a_a</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>b_b</eid>
+            <eid>d_d</eid>
             <durationType>half</durationType>
             <Note>
               <eid>X_X</eid>
@@ -202,7 +209,7 @@
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>a_a</startElement>
                 <endElement>X_X</endElement>
-                <eid>c_c</eid>
+                <eid>e_e</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
