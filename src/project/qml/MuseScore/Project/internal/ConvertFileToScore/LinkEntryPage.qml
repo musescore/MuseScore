@@ -33,6 +33,7 @@ Item {
 
     property string hintText: ""
     property string hintPlainText: ""
+    property string audioComUrl: ""
     property int maxLinkLength: 0
 
     property NavigationSection navigationSection: null
@@ -43,16 +44,8 @@ Item {
     signal backRequested()
     signal convertRequested(string link, string convertedFileName)
 
-    function focusOnFileList() {
+    function focusOnDefault() {
         linkInputField.navigation.requestActive()
-    }
-
-    NavigationPanel {
-        id: navPanel
-        name: "LinkEntryPage"
-        section: root.navigationSection
-        order: 1
-        enabled: root.enabled && root.visible
     }
 
     ColumnLayout {
@@ -75,11 +68,34 @@ Item {
                 spacing: 12
 
                 StyledTextLabel {
+                    id: hintLabel
+
                     Layout.fillWidth: true
 
                     text: root.hintText
                     font: ui.theme.bodyFont
                     horizontalAlignment: Text.AlignHCenter
+
+                    NavigationControl {
+                        id: audioComNavCtrl
+
+                        name: "AudioComLink"
+                        panel: linkPanel
+                        order: 1
+                        enabled: Boolean(root.audioComUrl) && root.enabled && root.visible
+
+                        accessible.role: MUAccessible.Button
+                        accessible.name: "Audio.com"
+                        accessible.visualItem: hintLabel
+
+                        onTriggered: {
+                            Qt.openUrlExternally(root.audioComUrl)
+                        }
+                    }
+
+                    NavigationFocusBorder {
+                        navigationCtrl: audioComNavCtrl
+                    }
                 }
 
                 TextInputField {
@@ -93,7 +109,13 @@ Item {
                     hint: "https://"
                     maximumLength: root.maxLinkLength > 0 ? root.maxLinkLength : 32767
 
-                    navigation.panel: navPanel
+                    navigation.panel: NavigationPanel {
+                        id: linkPanel
+                        name: "LinkEntryPage"
+                        section: root.navigationSection
+                        order: 1
+                        enabled: root.enabled && root.visible
+                    }
                     navigation.order: 0
                     navigation.accessible.name: qsTrc("project/convert", "Link") + " " + linkInputField.currentText
                     navigation.accessible.description: root.hintPlainText
@@ -119,15 +141,20 @@ Item {
 
             Layout.fillWidth: true
 
-            navigationPanel: navPanel
-            navigationOrder: 1
+            navigationPanel: NavigationPanel {
+                name: "LinkEntryPageSaveAs"
+                section: root.navigationSection
+                order: 2
+                enabled: root.enabled && root.visible
+            }
+            navigationOrder: 0
         }
 
         ConvertButtonBox {
             Layout.fillWidth: true
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 2
+            navigationPanel.order: 3
 
             convertEnabled: Boolean(linkInputField.trimmedText) && Boolean(saveAsField.currentText) && !saveAsField.errorText
 

@@ -35,6 +35,10 @@ Column {
 
     spacing: 8
 
+    function focusOnInput() {
+        input.navigation.requestActive()
+    }
+
     StyledTextLabel {
         id: label
 

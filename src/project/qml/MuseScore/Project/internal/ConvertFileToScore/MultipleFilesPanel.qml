@@ -35,10 +35,6 @@ Rectangle {
 
     signal selectMoreFilesRequested(var existingPaths)
 
-    function focusOnFileList() {
-        selectMoreButton.navigation.requestActive()
-    }
-
     function moveCurrentFile(delta) {
         var index = fileListView.currentIndex
         root.filesModel.move(index, index + delta)

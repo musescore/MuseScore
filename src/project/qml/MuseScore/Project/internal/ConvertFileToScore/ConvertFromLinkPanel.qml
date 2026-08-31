@@ -29,6 +29,7 @@ Rectangle {
     id: root
 
     property string hintText: ""
+    property string audioComUrl: ""
 
     property NavigationPanel navigationPanel: null
     property int navigationOrder: 0
@@ -55,11 +56,34 @@ Rectangle {
         spacing: 12
 
         StyledTextLabel {
+            id: hintLabel
+
             Layout.fillWidth: true
 
             text: root.hintText
             font: ui.theme.bodyFont
             horizontalAlignment: Text.AlignHCenter
+
+            NavigationControl {
+                id: audioComNavCtrl
+
+                name: "AudioComLink"
+                panel: root.navigationPanel
+                order: root.navigationOrder + 1
+                enabled: Boolean(root.audioComUrl) && root.enabled && root.visible
+
+                accessible.role: MUAccessible.Button
+                accessible.name: "Audio.com"
+                accessible.visualItem: hintLabel
+
+                onTriggered: {
+                    Qt.openUrlExternally(root.audioComUrl)
+                }
+            }
+
+            NavigationFocusBorder {
+                navigationCtrl: audioComNavCtrl
+            }
         }
 
         FlatButton {

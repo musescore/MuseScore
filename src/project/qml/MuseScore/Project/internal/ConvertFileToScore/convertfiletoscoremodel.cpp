@@ -350,6 +350,16 @@ QString ConvertFileToScoreModel::linkHintText() const
     return QString();
 }
 
+QString ConvertFileToScoreModel::audioComUrl() const
+{
+    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
+    if (!a2s.allowedLinkSources.testFlag(cloud::LinkSource::AudioCom)) {
+        return QString();
+    }
+
+    return audioComService()->cloudInfo().url.toString();
+}
+
 QString ConvertFileToScoreModel::linkPageHintText() const
 {
     return pasteLinkHintTextFor(boldLinkSources());

@@ -37,10 +37,6 @@ Rectangle {
 
     signal removeRequested()
 
-    function focusOnFileList() {
-        fileItem.navigation.requestActive()
-    }
-
     color: ui.theme.backgroundSecondaryColor
     border.width: 1
     border.color: ui.theme.strokeColor

@@ -45,10 +45,8 @@ Item {
     signal selectMoreFilesRequested(var existingPaths)
     signal convertRequested(var paths, string convertedFileName)
 
-    function focusOnFileList() {
-        if (filesPanelLoader.item) {
-            filesPanelLoader.item.focusOnFileList()
-        }
+    function focusOnDefault() {
+        saveAsField.focusOnInput()
     }
 
     FileListModel {
@@ -90,15 +88,20 @@ Item {
 
             Layout.fillWidth: true
 
-            navigationPanel: navPanel
-            navigationOrder: 5
+            navigationPanel: NavigationPanel {
+                name: "SelectedFilesPageSaveAs"
+                section: root.navigationSection
+                order: 2
+                enabled: root.enabled && root.visible
+            }
+            navigationOrder: 0
         }
 
         ConvertButtonBox {
             Layout.fillWidth: true
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 2
+            navigationPanel.order: 3
 
             convertEnabled: Boolean(saveAsField.currentText) && !saveAsField.errorText && !fileListModel.exceedsLimits
 

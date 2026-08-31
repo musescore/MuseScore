@@ -59,13 +59,13 @@ StyledDialogView {
         root.hide()
     }
 
-    onNavigationActivateRequested: {
-        if (root.currentPageIndex === 0) {
-            pageLoader.item.focusOnSelect()
-        } else if (pageLoader.item.focusOnFileList) {
-            pageLoader.item.focusOnFileList()
+    function focusOnPageDefault() {
+        if (pageLoader.item && pageLoader.item.focusOnDefault) {
+            pageLoader.item.focusOnDefault()
         }
     }
+
+    onNavigationActivateRequested: root.focusOnPageDefault()
 
     ColumnLayout {
         anchors.fill: parent
@@ -111,6 +111,12 @@ StyledDialogView {
 
                 return linkEntryPageComponent
             }
+
+            onLoaded: {
+                if (root.isOpened) {
+                    root.focusOnPageDefault()
+                }
+            }
         }
     }
 
@@ -120,6 +126,7 @@ StyledDialogView {
         SelectFilePage {
             guidelinesUrl: convertModel.guidelinesUrl
             linkHintText: convertModel.linkHintText
+            audioComUrl: convertModel.audioComUrl
             fileRequirements: convertModel.fileRequirements
             navigationSection: root.navigationSection
 
@@ -184,6 +191,7 @@ StyledDialogView {
             saveAsErrorText: convertModel.validateFileName(saveAsName)
             hintText: convertModel.linkPageHintText
             hintPlainText: convertModel.linkPageHintPlainText
+            audioComUrl: convertModel.audioComUrl
             maxLinkLength: convertModel.maxLinkLength
             navigationSection: root.navigationSection
 

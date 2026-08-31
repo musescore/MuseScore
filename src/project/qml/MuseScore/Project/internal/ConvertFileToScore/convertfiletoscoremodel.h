@@ -54,6 +54,7 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY convertTypeChanged)
 
     Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
+    Q_PROPERTY(QString audioComUrl READ audioComUrl CONSTANT)
     Q_PROPERTY(QString linkPageHintText READ linkPageHintText CONSTANT)
     Q_PROPERTY(QString linkPageHintPlainText READ linkPageHintPlainText CONSTANT)
     Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
@@ -87,6 +88,7 @@ public:
     bool canSelectMultipleFiles() const;
 
     QString linkHintText() const;
+    QString audioComUrl() const;
     QString linkPageHintText() const;
     QString linkPageHintPlainText() const;
     int maxLinkLength() const;
