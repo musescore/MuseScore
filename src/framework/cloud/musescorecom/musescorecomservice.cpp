@@ -423,6 +423,20 @@ static RetVal<SignedMsczUrl> parseSignedMsczUrl(const QByteArray& data)
     return RetVal<SignedMsczUrl>::make_ok(result);
 }
 
+static LinkSource linkSourceFromApiString(const QString& str)
+{
+    if (str.compare("youtube", Qt::CaseInsensitive) == 0) {
+        return LinkSource::YouTube;
+    }
+
+    if (str.compare("audio_com", Qt::CaseInsensitive) == 0) {
+        return LinkSource::AudioCom;
+    }
+
+    LOGW() << "Unknown link source: \"" << str << "\"";
+    return LinkSource::NoSources;
+}
+
 static RetVal<ConvertConfig> parseConvertConfig(const QByteArray& data)
 {
     QJsonParseError err;
@@ -461,7 +475,7 @@ static RetVal<ConvertConfig> parseConvertConfig(const QByteArray& data)
     }
     result.audio2score.maxLinkLength = audio2scoreObj.value("max_link_length").toInt();
     for (const QJsonValue& source : audio2scoreObj.value("allowed_link_sources").toArray()) {
-        result.audio2score.allowedLinkSources.push_back(source.toString());
+        result.audio2score.allowedLinkSources.setFlag(linkSourceFromApiString(source.toString()));
     }
 
     return RetVal<ConvertConfig>::make_ok(result);

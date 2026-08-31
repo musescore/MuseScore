@@ -48,11 +48,12 @@ public:
     void init();
 
     const ConvertConfig& convertConfig() const override;
-
     muse::async::Promise<muse::Ret> checkConvertIsAllowed() override;
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
-    muse::RetVal<ConvertType> validate(const muse::io::paths_t& paths) override;
+
+    muse::RetVal<ConvertType> validateFiles(const muse::io::paths_t& paths) override;
+    muse::Ret validateLink(const QUrl& link) override;
 
     muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
@@ -66,6 +67,7 @@ private:
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError();
+    void showUnsupportedLinkError(LinkSources sources);
     void showMixedFileTypesError();
     void showMultiplePdfFilesError();
     void showTooManyAudioFilesError(int maxFiles);

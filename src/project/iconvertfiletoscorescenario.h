@@ -30,6 +30,8 @@
 
 #include "types/converttypes.h"
 
+class QUrl;
+
 namespace mu::project {
 struct ConvertSelection {
     ConvertInput input;
@@ -44,11 +46,12 @@ public:
     virtual ~IConvertFileToScoreScenario() = default;
 
     virtual const ConvertConfig& convertConfig() const = 0;
-
     virtual muse::async::Promise<muse::Ret> checkConvertIsAllowed() = 0;
 
     virtual muse::async::Promise<ConvertSelection> selectFilesToConvert() = 0;
-    virtual muse::RetVal<ConvertType> validate(const muse::io::paths_t& paths) = 0;
+
+    virtual muse::RetVal<ConvertType> validateFiles(const muse::io::paths_t& paths) = 0;
+    virtual muse::Ret validateLink(const QUrl& link) = 0;
 
     virtual muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) = 0;
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;

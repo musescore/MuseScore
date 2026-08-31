@@ -91,7 +91,7 @@ void ConvertFileToScoreService::init()
         m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
         m_config.audio2score.maxFiles = 1;
         m_config.audio2score.maxLinkLength = 2048;
-        m_config.audio2score.allowedLinkSources = { "youtube", "audio_com" };
+        m_config.audio2score.allowedLinkSources = LinkSource::YouTube | LinkSource::AudioCom;
     }
     //! ---------------------------------------------------------------------------------
 

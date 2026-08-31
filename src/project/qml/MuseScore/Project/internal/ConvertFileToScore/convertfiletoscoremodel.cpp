@@ -42,18 +42,6 @@ static QString localPath(const QString& pathOrUrl)
     return pathOrUrl;
 }
 
-static QString joinWithOr(QStringList items)
-{
-    if (items.size() <= 1) {
-        return items.join(QString());
-    }
-
-    const QString last = items.takeLast();
-    const QString beforeLastSeparator = items.size() > 1 ? QString(", ") : QString(" ");
-
-    return items.join(", ") + beforeLastSeparator + muse::qtrc("global", "or") + " " + last;
-}
-
 static QString formatsText(const QStringList& extensions)
 {
     QStringList upperExtensions;
@@ -62,7 +50,7 @@ static QString formatsText(const QStringList& extensions)
         upperExtensions << ext.toUpper();
     }
 
-    return joinWithOr(upperExtensions);
+    return upperExtensions.join(", ");
 }
 
 static QString maxFileSizeText(qint64 maxFileSizeBytes)
@@ -106,6 +94,19 @@ static QStringList resolveExtensions(const QStringList& paths)
     }
 
     return extensions;
+}
+
+static QString pasteLinkHintTextFor(const QStringList& sources)
+{
+    if (sources.size() >= 2) {
+        return muse::qtrc("project/convert", "Paste a link from %1 or %2 (beta)").arg(sources.at(0), sources.at(1));
+    }
+
+    if (sources.size() == 1) {
+        return muse::qtrc("project/convert", "Paste a link from %1 (beta)").arg(sources.at(0));
+    }
+
+    return QString();
 }
 
 ConvertFileToScoreModel::ConvertFileToScoreModel(QObject* parent)
@@ -308,27 +309,17 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles() const
     return allowsMultipleFiles(config.omr.maxImages);
 }
 
-static QString pasteLinkHintTextFor(const QStringList& sources)
-{
-    if (sources.isEmpty()) {
-        return QString();
-    }
-
-    return muse::qtrc("project/convert", "Paste a link from %1 (beta)").arg(joinWithOr(sources));
-}
-
 QStringList ConvertFileToScoreModel::boldLinkSources() const
 {
     const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
 
     QStringList sources;
-    for (const QString& source : a2s.allowedLinkSources) {
-        if (source.compare("youtube", Qt::CaseInsensitive) == 0) {
-            sources << "<b>Youtube</b>";
-        } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
-            const QString url = audioComService()->cloudInfo().url.toString();
-            sources << "<b><a href=\"" + url + "\">Audio.com</a></b>";
-        }
+    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::YouTube)) {
+        sources << "<b>YouTube</b>";
+    }
+    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::AudioCom)) {
+        const QString url = audioComService()->cloudInfo().url.toString();
+        sources << "<b><a href=\"" + url + "\">Audio.com</a></b>";
     }
 
     return sources;
@@ -337,11 +328,16 @@ QStringList ConvertFileToScoreModel::boldLinkSources() const
 QString ConvertFileToScoreModel::linkHintText() const
 {
     const QStringList sources = boldLinkSources();
-    if (sources.isEmpty()) {
-        return QString();
+
+    if (sources.size() >= 2) {
+        return muse::qtrc("project/convert", "Or paste a link from %1 or %2 (beta)").arg(sources.at(0), sources.at(1));
     }
 
-    return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(joinWithOr(sources));
+    if (sources.size() == 1) {
+        return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(sources.at(0));
+    }
+
+    return QString();
 }
 
 QString ConvertFileToScoreModel::linkPageHintText() const
@@ -354,12 +350,11 @@ QString ConvertFileToScoreModel::linkPageHintPlainText() const
     const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
 
     QStringList names;
-    for (const QString& source : a2s.allowedLinkSources) {
-        if (source.compare("youtube", Qt::CaseInsensitive) == 0) {
-            names << "Youtube";
-        } else if (source.compare("audio_com", Qt::CaseInsensitive) == 0) {
-            names << "Audio.com";
-        }
+    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::YouTube)) {
+        names << "YouTube";
+    }
+    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::AudioCom)) {
+        names << "Audio.com";
     }
 
     return pasteLinkHintTextFor(names);
@@ -440,7 +435,7 @@ bool ConvertFileToScoreModel::validateAndApplyFiles(const QStringList& pathsOrUr
         localPaths << path;
     }
 
-    RetVal<ConvertType> result = convertFileToScoreScenario()->validate(ioPaths);
+    RetVal<ConvertType> result = convertFileToScoreScenario()->validateFiles(ioPaths);
     if (!result.ret) {
         return false;
     }
@@ -450,6 +445,11 @@ bool ConvertFileToScoreModel::validateAndApplyFiles(const QStringList& pathsOrUr
     setConvertType(int(result.val));
 
     return true;
+}
+
+bool ConvertFileToScoreModel::validateLink(const QString& link) const
+{
+    return convertFileToScoreScenario()->validateLink(QUrl(link)).success();
 }
 
 QString ConvertFileToScoreModel::validateFileName(const QString& name) const

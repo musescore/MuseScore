@@ -24,6 +24,7 @@
 #include <optional>
 
 #include <QFileInfo>
+#include <QUrl>
 
 #include "actions/actiontypes.h"
 
@@ -120,7 +121,7 @@ async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConver
     });
 }
 
-RetVal<ConvertType> ConvertFileToScoreScenario::validate(const io::paths_t& paths)
+RetVal<ConvertType> ConvertFileToScoreScenario::validateFiles(const io::paths_t& paths)
 {
     if (paths.empty()) {
         return RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed));
@@ -137,6 +138,40 @@ RetVal<ConvertType> ConvertFileToScoreScenario::validate(const io::paths_t& path
     }
 
     return RetVal<ConvertType>::make_ok(type);
+}
+
+Ret ConvertFileToScoreScenario::validateLink(const QUrl& link)
+{
+    //! NOTE: config is a client-side sanity check only; if it hasn't been fetched yet, fall back
+    //! to a best-effort guess covering all known sources
+    const ConvertConfig& config = service()->config();
+    const LinkSources sources = config.audio2score.allowedLinkSources
+                                ? config.audio2score.allowedLinkSources
+                                : LinkSource::YouTube | LinkSource::AudioCom;
+
+    if (!link.isValid()) {
+        const QString err = link.errorString();
+        if (!err.isEmpty()) {
+            LOGW() << "Invalid link: " << err;
+        }
+        showUnsupportedLinkError(sources);
+        return make_ret(Err::ConvertValidationFailed);
+    }
+
+    const QString host = link.host().toLower();
+
+    if (sources.testFlag(LinkSource::YouTube)
+        && (host == "youtube.com" || host.endsWith(".youtube.com") || host == "youtu.be")) {
+        return make_ok();
+    }
+
+    if (sources.testFlag(LinkSource::AudioCom)
+        && (host == "audio.com" || host.endsWith(".audio.com"))) {
+        return make_ok();
+    }
+
+    showUnsupportedLinkError(sources);
+    return make_ret(Err::ConvertValidationFailed);
 }
 
 Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
@@ -282,6 +317,21 @@ void ConvertFileToScoreScenario::showUnsupportedFormatError()
 {
     interactive()->error(muse::trc("project/convert", "This file type is not compatible"),
                          muse::trc("project/convert", "Make sure you’ve selected a PDF, image or MP3 file."),
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showUnsupportedLinkError(LinkSources sources)
+{
+    std::string text;
+    if (sources.testFlag(LinkSource::YouTube) && sources.testFlag(LinkSource::AudioCom)) {
+        text = muse::trc("project/convert", "Make sure you’re using a valid link from YouTube or Audio.com.");
+    } else if (sources.testFlag(LinkSource::YouTube)) {
+        text = muse::trc("project/convert", "Make sure you’re using a valid link from YouTube.");
+    } else if (sources.testFlag(LinkSource::AudioCom)) {
+        text = muse::trc("project/convert", "Make sure you’re using a valid link from Audio.com.");
+    }
+
+    interactive()->error(muse::trc("project/convert", "Please use a compatible URL"), text,
                          { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 

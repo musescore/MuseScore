@@ -95,6 +95,7 @@ public:
     Q_INVOKABLE bool selectAndValidateFiles(const QStringList& existingPaths = {});
 
     Q_INVOKABLE QString validateFileName(const QString& name) const;
+    Q_INVOKABLE bool validateLink(const QString& link) const;
 
     Q_INVOKABLE void confirmGoingBack();
     Q_INVOKABLE void clearSelection();

@@ -32,6 +32,8 @@ using ConvertConfig = muse::cloud::ConvertConfig;
 using ConvertType = muse::cloud::ConvertType;
 using ConvertInput = muse::cloud::ConvertInput;
 using ReviewRating = muse::cloud::ReviewRating;
+using LinkSource = muse::cloud::LinkSource;
+using LinkSources = muse::cloud::LinkSources;
 
 enum class FileCategory {
     Unknown,

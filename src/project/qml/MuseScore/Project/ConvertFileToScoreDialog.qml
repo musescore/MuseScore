@@ -194,6 +194,10 @@ StyledDialogView {
             }
 
             onConvertRequested: function(link, convertedFileName) {
+                if (!convertModel.validateLink(link)) {
+                    return
+                }
+
                 convertModel.selectedLink = link
                 root.finish(convertModel.convertType, [], link, convertedFileName)
             }
