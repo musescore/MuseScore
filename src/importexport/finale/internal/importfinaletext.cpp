@@ -1063,10 +1063,6 @@ void FinaleParser::importTextExpressions()
                     Segment* seg = measure->findSegmentR(SegmentType::ChordRest, rTick);     // why is this needed
 
                     Shape staffShape = shapeForTextExpressionY(seg, expr->track());
-                    staffShape.removeTypes({ ElementType::FERMATA, ElementType::ARTICULATION, ElementType::ARPEGGIO });
-                    staffShape.remove_if([expr](ShapeElement& shapeEl) {
-                            return !shapeEl.item() || shapeEl.item()->voice() != expr->voice();
-                        });
                     double entryY = expr->pagePos().y() + staffShape.top() - evpuToLocalDouble(expressionDef->yAdjustEntry, expr);
 
                     SystemCmper sc = m_doc->calcSystemFromMeasure(m_currentMusxPartId, exprAssign->getCmper())->getCmper();
