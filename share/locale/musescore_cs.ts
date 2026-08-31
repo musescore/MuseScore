@@ -1006,7 +1006,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1362"/>
         <source>&lt; Reset to template</source>
-        <translation>&lt; Nastavit znovu podle šablony</translation>
+        <translation>&lt; Obnovit podle šablony</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1385"/>
@@ -5866,7 +5866,7 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload MuseSampler</source>
-        <translation>Nahrát Muse Sampler znovu</translation>
+        <translation>Znovu nahrát Muse Sampler</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updateuiactions.cpp" line="36"/>
@@ -9568,12 +9568,12 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="200"/>
         <source>Reload playback cache</source>
-        <translation>Nahrát znovu vyrovnávací paměť přehrávání</translation>
+        <translation>Obnovit mezipaměť přehrávání</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="208"/>
         <source>Clear online sounds cache for this score</source>
-        <translation>Vymazat vyrovnávací paměť internetových zvukových knihoven pro tento notový zápis</translation>
+        <translation>Vymazat mezipaměť internetových zvukových knihoven pro tento notový zápis</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/playbacktoolbarmodel.cpp" line="117"/>
@@ -20547,7 +20547,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/PluginsPage.qml" line="153"/>
         <source>Reload plugins</source>
-        <translation>Nahrát znovu přídavné moduly</translation>
+        <translation>Znovu nahrát přídavné moduly</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="112"/>
@@ -21282,7 +21282,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="129"/>
         <source>Don’t ask again</source>
-        <translation>Neptat se znovu</translation>
+        <translation>Znovu se neptat</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="180"/>
@@ -25098,7 +25098,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="75"/>
         <source>Reset measure numbers for new section</source>
-        <translation>Nové číslování taktů pro každý hudební oddíl</translation>
+        <translation>Obnovit číslování taktů pro nový hudební oddíl</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="85"/>
@@ -33943,7 +33943,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FoldersSection.qml" line="86"/>
         <source>Rescan VST3 plugins</source>
-        <translation>Vyhledat znovu přídavné moduly VST3</translation>
+        <translation>Znovu vyhledat přídavné moduly VST3</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="30"/>

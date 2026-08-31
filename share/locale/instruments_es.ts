@@ -10500,7 +10500,7 @@ Afinada en Do.</translation>
         <source>4 Cello Pans</source>
         <comment>cello-steel-drums-four shortName</comment>
         <extracomment>shortName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>4 tambores de acero cello</translation>
+        <translation>4 Tambores de acero cello</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3541"/>
