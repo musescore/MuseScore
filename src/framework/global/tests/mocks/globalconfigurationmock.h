@@ -39,6 +39,7 @@ public:
     MOCK_METHOD(io::path_t, userDataPath, (), (const, override));
     MOCK_METHOD(io::path_t, homePath, (), (const, override));
     MOCK_METHOD(io::path_t, downloadsPath, (), (const, override));
+    MOCK_METHOD(io::path_t, documentsPath, (), (const, override));
     MOCK_METHOD(io::path_t, genericDataPath, (), (const, override));
 
     MOCK_METHOD(bool, useFactorySettings, (), (const, override));

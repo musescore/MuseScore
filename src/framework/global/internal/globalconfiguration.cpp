@@ -134,6 +134,12 @@ io::path_t GlobalConfiguration::downloadsPath() const
     return p;
 }
 
+io::path_t GlobalConfiguration::documentsPath() const
+{
+    static io::path_t p = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    return p;
+}
+
 io::path_t GlobalConfiguration::genericDataPath() const
 {
     static io::path_t p = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);

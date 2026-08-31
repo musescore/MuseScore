@@ -413,13 +413,17 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
     io::paths_t files;
     if (multiple) {
         files = interactive()->selectOpeningFilesSync(muse::trc("project/convert", "Choose file"),
-                                                      configuration()->defaultOpenProjectsPath(), filters);
+                                                      configuration()->defaultConvertFilePath(), filters);
     } else {
         io::path_t file = interactive()->selectOpeningFileSync(muse::trc("project/convert", "Choose file"),
-                                                               configuration()->defaultOpenProjectsPath(), filters);
+                                                               configuration()->defaultConvertFilePath(), filters);
         if (!file.empty()) {
             files.push_back(file);
         }
+    }
+
+    if (!files.empty()) {
+        configuration()->setLastOpenedConvertFilePath(io::dirpath(files.back()));
     }
 
     QStringList paths;

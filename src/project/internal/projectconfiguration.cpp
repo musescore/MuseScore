@@ -43,6 +43,7 @@ static const std::string module_name("project");
 static const Settings::Key COMPAT_RECENT_FILES_DATA(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key LAST_OPENED_PROJECTS_PATH(module_name, "application/paths/lastOpenedProjectsPath");
+static const Settings::Key LAST_OPENED_CONVERT_FILE_PATH(module_name, "application/paths/lastOpenedConvertFilePath");
 static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/paths/lastSavedProjectsPath");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
@@ -256,6 +257,21 @@ muse::io::path_t ProjectConfiguration::defaultOpenProjectsPath() const
 
     if (dir.empty()) {
         dir = defaultUserProjectsPath();
+    }
+
+    return dir;
+}
+
+void ProjectConfiguration::setLastOpenedConvertFilePath(const muse::io::path_t& path)
+{
+    settings()->setSharedValue(LAST_OPENED_CONVERT_FILE_PATH, Val(path));
+}
+
+muse::io::path_t ProjectConfiguration::defaultConvertFilePath() const
+{
+    muse::io::path_t dir = settings()->value(LAST_OPENED_CONVERT_FILE_PATH).toPath();
+    if (dir.empty()) {
+        dir = globalConfiguration()->documentsPath();
     }
 
     return dir;
