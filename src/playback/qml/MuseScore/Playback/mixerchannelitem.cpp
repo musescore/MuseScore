@@ -702,10 +702,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
 
         actions::ActionQuery aq(VSTFX_EDITOR_ACTION);
 
-        if (m_type != Type::Master) {
-            aq.addParam(TRACK_ID_KEY, Val(m_trackId));
-        }
-
+        aq.addParam(TRACK_ID_KEY, Val(m_trackId));
         aq.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
         aq.addParam(CHAIN_ORDER_KEY, Val(newItem->params().chainOrder));
 
