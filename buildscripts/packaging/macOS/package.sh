@@ -117,15 +117,13 @@ COMPRESSED_DMG_NAME="${VOL_NAME}.dmg"
 rm -f "applebuild/${COMPRESSED_DMG_NAME}"
 
 # Tip: increase the size if error on copy
-hdiutil create -size 650m -fs HFS+ -volname "${VOL_NAME}" "applebuild/${DMG_NAME}"
+hdiutil create -size 800m -fs APFS -volname "${VOL_NAME}" "applebuild/${DMG_NAME}"
 
 # Mount the disk image
-hdiutil attach "applebuild/${DMG_NAME}"
-
-# Obtain device information
-DEVS=$(hdiutil attach "applebuild/${DMG_NAME}" | cut -f 1)
-DEV=$(echo $DEVS | cut -f 1 -d ' ')
-VOLUME=$(mount | grep ${DEV} | cut -f 3 -d ' ')
+VOLUME="/Volumes/${VOL_NAME}"
+ATTACH_OUTPUT=$(hdiutil attach "applebuild/${DMG_NAME}" -mountpoint "${VOLUME}")
+echo "${ATTACH_OUTPUT}"
+DEV=$(echo "${ATTACH_OUTPUT}" | head -n1 | awk '{print $1}')
 
 # copy in the application bundle
 cp -Rp ${APP_PATH} "${VOLUME}/${APP_NAME}.app"
@@ -175,9 +173,13 @@ mv "${VOLUME}/Pictures" "${VOLUME}/.Pictures"
 
 echo "Unmount"
 for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
-    # Unmount the disk image
-    hdiutil detach $DEV
-    if [ $? -eq 0 ]; then
+    # Detach by device: a failed eject can leave the image attached with the
+    # mountpoint already gone
+    if hdiutil detach "${DEV}"; then
+        break
+    fi
+    if ! hdiutil info | grep -qE "^${DEV}(s[0-9]+)?[[:space:]]"; then
+        echo "Disk image is already detached"
         break
     fi
     if [ $i -eq 20 ]; then
@@ -189,7 +191,7 @@ for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
 done
 
 # Convert the disk image to read-only
-hdiutil convert "applebuild/${DMG_NAME}" -format UDBZ -o "applebuild/${COMPRESSED_DMG_NAME}"
+hdiutil convert "applebuild/${DMG_NAME}" -format ULFO -o "applebuild/${COMPRESSED_DMG_NAME}"
 
 if $DO_SIGN; then
     echo "Codesign DMG"

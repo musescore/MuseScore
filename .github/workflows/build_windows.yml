@@ -260,7 +260,7 @@ jobs:
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_MUSE_AUTH_TOKEN }}
       run: |
-        APP_BIN=$(pwd)/build.release/MuseScore5.pdb
+        APP_BIN=$(pwd)/build.release/MuseScoreStudio5.pdb
         cmake -DAPP_BIN=${APP_BIN} \
               -DSENTRY_URL=https://sentry.musescore.com \
               -DSENTRY_ORG=sentry \
