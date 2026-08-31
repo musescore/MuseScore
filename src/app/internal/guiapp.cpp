@@ -1,5 +1,8 @@
 #include "guiapp.h"
 
+#include <QQuickWindow>
+#include <QTimer>
+
 #include "modularity/ioc.h"
 #include "appshell/internal/istartupscenario.h"
 #include "dockwindow/idockwindowprovider.h"
@@ -130,17 +133,50 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
         auto dockWindowProvider = muse::modularity::ioc(ctxId)->resolve<muse::dock::IDockWindowProvider>("app");
         muse::dock::IDockWindow* dockWindow = dockWindowProvider ? dockWindowProvider->window() : nullptr;
         if (dockWindow) {
-            dockWindow->currentPageChanged().onNotify(this, [this, dockWindow]() {
+            dockWindow->currentPageChanged().onNotify(this, [this, ctxId, dockWindow]() {
                 dockWindow->currentPageChanged().disconnect(this);
 
-                QMetaObject::invokeMethod(qApp, [this]() {
-                    closeSplash();
+                QMetaObject::invokeMethod(qApp, [this, ctxId]() {
+                    showMainWindowAndCloseSplash(ctxId);
                 }, Qt::QueuedConnection);
             });
+        } else {
+            //! NOTE No dock window - no page loading to wait for
+            showMainWindowAndCloseSplash(ctxId);
         }
 
         startupScenario->runAfterSplashScreen();
     }, Qt::QueuedConnection);
+}
+
+void MuseScoreGuiApp::showMainWindowAndCloseSplash(const muse::modularity::ContextPtr& ctxId)
+{
+    auto it = m_windows.find(ctxId->id);
+    QQuickWindow* window = it != m_windows.end() ? it->second : nullptr;
+    if (!window) {
+        closeSplash();
+        return;
+    }
+
+    //! NOTE Close the splash only after the window has rendered its first frame,
+    //! so that the empty window is never visible
+    auto conn = std::make_shared<QMetaObject::Connection>();
+    *conn = QObject::connect(window, &QQuickWindow::frameSwapped, qApp, [this, conn]() {
+        QObject::disconnect(*conn);
+        closeSplash();
+    }, Qt::QueuedConnection);
+
+    //! NOTE Safety net for the case when the window never renders a frame;
+    //! long enough so that it cannot fire before the first frame of a healthy startup
+    static constexpr int SPLASH_CLOSE_TIMEOUT_MS = 10000;
+    QTimer::singleShot(SPLASH_CLOSE_TIMEOUT_MS, qApp, [this]() {
+        if (m_splashScreen) {
+            LOGW() << "the main window has not rendered any frame, closing the splash screen forcibly";
+            closeSplash();
+        }
+    });
+
+    window->setVisible(true);
 }
 
 void MuseScoreGuiApp::closeSplash()

@@ -47,11 +47,6 @@ ApplicationWindow {
 
     visible: false
 
-    //! NOTE The window must be shown early,
-    //! but should not be visible until the first page has loaded,
-    //! so it starts fully transparent; WindowContent restores the opacity.
-    opacity: 0
-
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
