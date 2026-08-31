@@ -6212,16 +6212,12 @@ void MusicXmlParserPass2::clef(const String& partId, Measure* measure, const Fra
             line = m_e.readInt();
         } else if (m_e.name() == "clef-octave-change") {
             i = m_e.readInt();
-            if (i && !(c == "F" || c == "G" || c == "C")) {
-                LOGD("clef-octave-change only implemented for F and G key");          // TODO
-            }
         } else {
             skipLogCurrElem();
         }
     }
 
-    //some software (Primus) don't include line and assume some default
-    // it's permitted by MusicXML 2.0 XSD
+    // some software (Primus) don't include line and assume some default
     if (line == -1) {
         if (c == u"G") {
             line = 2;
@@ -6258,22 +6254,18 @@ void MusicXmlParserPass2::clef(const String& partId, Measure* measure, const Fra
         clef = ClefType::F15_MB;
     } else if (c == u"F" && i == 0 && line == 5) {
         clef = ClefType::F_C;
-    } else if (c == u"C") {
-        if (line == 5) {
-            clef = ClefType::C5;
-        } else if (line == 4) {
-            if (i == -1) {
-                clef = ClefType::C4_8VB;
-            } else {
-                clef = ClefType::C4;
-            }
-        } else if (line == 3) {
-            clef = ClefType::C3;
-        } else if (line == 2) {
-            clef = ClefType::C2;
-        } else if (line == 1) {
-            clef = ClefType::C1;
-        }
+    } else if (c == u"C" && i == 0 && line == 5) {
+        clef = ClefType::C5;
+    } else if (c == u"C" && i == 0 && line == 4) {
+        clef = ClefType::C4;
+    } else if (c == u"C" && i == -1 && line == 4) {
+        clef = ClefType::C4_8VB;
+    } else if (c == u"C" && i == 0 && line == 3) {
+        clef = ClefType::C3;
+    } else if (c == u"C" && i == 0 && line == 2) {
+        clef = ClefType::C2;
+    } else if (c == u"C" && i == 0 && line == 1) {
+        clef = ClefType::C1;
     } else if (c == u"percussion") {
         clef = ClefType::PERC;
         if (m_hasDrumset) {
@@ -6283,7 +6275,7 @@ void MusicXmlParserPass2::clef(const String& partId, Measure* measure, const Fra
         clef = ClefType::TAB;
         st= StaffTypes::TAB_DEFAULT;
     } else {
-        LOGD("clef: unknown clef <sign=%s line=%d oct ch=%d>", muPrintable(c), line, i);      // TODO
+        LOGD("clef: unknown clef <sign=%s line=%d oct ch=%d>", muPrintable(c), line, i);
     }
 
     Part* part = m_pass1.getPart(partId);
