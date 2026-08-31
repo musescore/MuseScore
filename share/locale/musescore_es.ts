@@ -952,7 +952,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1062"/>
         <source>Beside staff</source>
-        <translation>Fuera del pentagrama</translation>
+        <translation>Junto al pentagrama</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1069"/>
@@ -1198,7 +1198,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="172"/>
         <source>Bends &amp; dives</source>
-        <translation>Bends y descensos de tono</translation>
+        <translation>Bends y dives</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="177"/>
@@ -4258,7 +4258,7 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="348"/>
         <source>Layout stretch factor</source>
-        <translation>Factor de anchura en maquetación</translation>
+        <translation>Factor de expansión en maquetación</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="351"/>
@@ -7728,32 +7728,32 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1470"/>
         <source>&amp;Decrease layout stretch</source>
-        <translation>Reducir anchura</translation>
+        <translation>Re&amp;ducir el factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1471"/>
         <source>Decrease layout stretch</source>
-        <translation>Disminuir ancho de maquetación</translation>
+        <translation>Disminuir el factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1476"/>
         <source>&amp;Increase layout stretch</source>
-        <translation>Aumentar anchura</translation>
+        <translation>Aumentar factor de expans&amp;ión</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1477"/>
         <source>Increase layout stretch</source>
-        <translation>Aumentar ancho de maquetación</translation>
+        <translation>Aumentar el factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1482"/>
         <source>&amp;Reset layout stretch</source>
-        <translation>&amp;Restablecer anchura</translation>
+        <translation>&amp;Restablecer el factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1483"/>
         <source>Reset layout stretch</source>
-        <translation>Restablecer ancho de maquetación</translation>
+        <translation>Restablecer factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1488"/>
@@ -13341,7 +13341,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1766"/>
         <source>Bends &amp; Dives</source>
-        <translation> Bends y descensos</translation>
+        <translation> Bends y dives</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1768"/>
@@ -16940,7 +16940,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="232"/>
         <source>time stretch</source>
-        <translation>Estiramiento temporal</translation>
+        <translation>Ajuste de tiempo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="233"/>
@@ -16980,7 +16980,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="241"/>
         <source>time signature stretch</source>
-        <translation>Estiramiento de la indicación de compás</translation>
+        <translation>Ajuste de la indicación de compás</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
@@ -21730,7 +21730,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="62"/>
         <source>F0</source>
-        <translation>Fa9</translation>
+        <translation>Fa0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="63"/>
@@ -25713,7 +25713,7 @@ anacrusa</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="58"/>
         <source>Bend/dive</source>
-        <translation>Estiramiento/descenso de tono</translation>
+        <translation>Bend/dive</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="283"/>
@@ -33700,7 +33700,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="49"/>
         <source>Fader</source>
-        <translation>Fader</translation>
+        <translation>Fader (control deslizante)</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="50"/>
@@ -38025,12 +38025,12 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6320"/>
         <source>Increase layout stretch</source>
-        <translation>Aumentar ancho de maquetación</translation>
+        <translation>Aumentar factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6321"/>
         <source>Decrease layout stretch</source>
-        <translation>Disminuir ancho de maquetación</translation>
+        <translation>Disminuir factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6344"/>
@@ -38115,7 +38115,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6533"/>
         <source>Reset layout stretch</source>
-        <translation>Restablecer ancho de maquetación</translation>
+        <translation>Restablecer factor de expansión</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6540"/>
