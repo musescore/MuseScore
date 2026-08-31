@@ -71,10 +71,12 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <StaffText>
+          <Capo>
+            <transposeMode>2</transposeMode>
             <eid>J_J</eid>
-            <text>Capo. fret 1</text>
-            </StaffText>
+            <style>staff</style>
+            <text>Capo 1</text>
+            </Capo>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
