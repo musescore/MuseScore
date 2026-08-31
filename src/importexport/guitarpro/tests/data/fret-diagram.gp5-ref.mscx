@@ -63,10 +63,13 @@
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
-          <StaffText>
+          <Capo>
+            <fretPosition>6</fretPosition>
+            <transposeMode>2</transposeMode>
             <eid>H_H</eid>
-            <text>Capo. fret 6</text>
-            </StaffText>
+            <style>staff</style>
+            <text>Capo 6</text>
+            </Capo>
           <Tempo>
             <tempo>1.683333</tempo>
             <eid>I_I</eid>
