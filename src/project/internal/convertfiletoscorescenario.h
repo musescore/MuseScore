@@ -52,8 +52,11 @@ public:
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
 
+    bool isFileSupported(const muse::io::path_t& path) const override;
     muse::RetVal<ConvertType> validateFiles(const muse::io::paths_t& paths) override;
     muse::Ret validateLink(const QUrl& link) override;
+
+    void convertFiles(const muse::io::paths_t& paths) override;
 
     muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
@@ -62,6 +65,7 @@ private:
     muse::async::Promise<muse::Ret> ensureAuthorization();
 
     bool validateAgainstConfig(const muse::io::paths_t& paths, const ConvertConfig& config);
+    void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
 
     void showCloudIsNotAvailableError();
     void showFileTooLargeError(qint64 maxFileSizeBytes);

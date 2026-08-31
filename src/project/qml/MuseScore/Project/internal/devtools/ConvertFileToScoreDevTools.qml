@@ -37,8 +37,36 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.margins: 12
+        anchors.leftMargin: 56
 
         text: "Convert files"
+        accentButton: true
         onClicked: model.selectAndConvertFiles()
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: 56
+
+        color: "transparent"
+        border.color: ui.theme.strokeColor
+        border.width: 1
+
+        StyledTextLabel {
+            anchors.centerIn: parent
+            text: "Drop file here to convert"
+            font: ui.theme.largeBodyBoldFont
+        }
+
+        DropArea {
+            anchors.fill: parent
+
+            onDropped: function(drop) {
+                if (drop.hasUrls) {
+                    var urls = drop.urls.map(function(url) { return url.toString() })
+                    model.filesDropped(urls)
+                }
+            }
+        }
     }
 }

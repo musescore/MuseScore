@@ -119,6 +119,10 @@ const ConvertConfig& ConvertFileToScoreService::config() const
 
 Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const QString& convertedFileName)
 {
+    IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
+        return make_ret(Err::ConvertValidationFailed);
+    }
+
     IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
         return make_ret(Err::ConvertValidationFailed);
     }

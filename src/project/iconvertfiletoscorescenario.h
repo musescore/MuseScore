@@ -45,15 +45,31 @@ class IConvertFileToScoreScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IConvertFileToScoreScenario() = default;
 
+    //! Server-provided limits (file size, formats, etc) for client-side validation
     virtual const ConvertConfig& convertConfig() const = 0;
+
+    //! Checks cloud availability and, if needed, prompts the user to log in
     virtual muse::async::Promise<muse::Ret> checkConvertIsAllowed() = 0;
 
+    //! Opens the file/link picker dialog and resolves with the user's selection
     virtual muse::async::Promise<ConvertSelection> selectFilesToConvert() = 0;
 
+    //! Whether the given file can be converted
+    virtual bool isFileSupported(const muse::io::path_t& path) const = 0;
+
+    //! Checks the given files against the server's config limits and determines their convert type
     virtual muse::RetVal<ConvertType> validateFiles(const muse::io::paths_t& paths) = 0;
+
+    //! Checks that the given link is from a supported source
     virtual muse::Ret validateLink(const QUrl& link) = 0;
 
+    //! Entry point for converting files picked outside the dialog, e.g. via drag-and-drop
+    virtual void convertFiles(const muse::io::paths_t& paths) = 0;
+
+    //! Sends the conversion request to the server and shows the processing dialog
     virtual muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) = 0;
+
+    //! Emits the result once the server-side conversion completes
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 };
 

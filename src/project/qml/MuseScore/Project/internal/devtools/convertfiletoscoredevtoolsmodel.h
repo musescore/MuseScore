@@ -25,22 +25,21 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
-#include "async/asyncable.h"
-
 #include "modularity/ioc.h"
-#include "project/iconvertfiletoscorescenario.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::project {
-class ConvertFileToScoreDevToolsModel : public QObject, public muse::async::Asyncable, public muse::Contextable
+class ConvertFileToScoreDevToolsModel : public QObject, public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT
 
-    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit ConvertFileToScoreDevToolsModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void selectAndConvertFiles();
+    Q_INVOKABLE void filesDropped(const QStringList& urls);
 };
 }

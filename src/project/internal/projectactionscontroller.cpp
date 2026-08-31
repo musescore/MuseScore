@@ -91,6 +91,7 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
     dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
     dispatcher()->reg(this, "file-import-audio-to-score", this, &ProjectActionsController::importAudioToScore);
+    dispatcher()->reg(this, "file-convert-to-score", this, &ProjectActionsController::convertFileToScore);
 
     dispatcher()->reg(this, "print", this, &ProjectActionsController::printScore);
 
@@ -134,6 +135,7 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
             "file-open",
             "file-import-pdf",
             "file-import-audio-to-score",
+            "file-convert-to-score",
             "continue-last-session",
             "clear-recent",
         };
@@ -1856,6 +1858,26 @@ void ProjectActionsController::importPdf()
 void ProjectActionsController::importAudioToScore()
 {
     interactive()->openUrl("https://musescore.com/upload?format=audio2score");
+}
+
+void ProjectActionsController::convertFileToScore(const ActionData& args)
+{
+    if (!args.empty()) {
+        convertFileToScoreScenario()->convertFiles(args.arg<muse::io::paths_t>(0));
+        return;
+    }
+
+    convertFileToScoreScenario()->checkConvertIsAllowed()
+    .onResolve(this, [this](const Ret& ret) {
+        if (!ret) {
+            return;
+        }
+
+        convertFileToScoreScenario()->selectFilesToConvert()
+        .onResolve(this, [this](const ConvertSelection& selection) {
+            convertFileToScoreScenario()->startConvert(selection.input, selection.convertedFileName);
+        });
+    });
 }
 
 void ProjectActionsController::clearRecentScores()

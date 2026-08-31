@@ -64,9 +64,4 @@ inline FileCategory fileCategoryFromPath(const muse::io::path_t& path, const Con
 
     return isAudio ? FileCategory::Audio : FileCategory::Unknown;
 }
-
-inline bool isSupportedExtension(const muse::io::path_t& path, const ConvertConfig& config)
-{
-    return fileCategoryFromPath(path, config) != FileCategory::Unknown;
-}
 }
