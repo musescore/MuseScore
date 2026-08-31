@@ -194,7 +194,7 @@ Item {
                 id: guidelinesItem
 
                 Layout.fillWidth: true
-                implicitHeight: guidelinesLabel.implicitHeight
+                implicitHeight: guidelinesRow.implicitHeight
 
                 NavigationControl {
                     id: guidelinesNavCtrl
@@ -217,14 +217,29 @@ Item {
                     navigationCtrl: guidelinesNavCtrl
                 }
 
-                StyledTextLabel {
-                    id: guidelinesLabel
+                Row {
+                    id: guidelinesRow
 
-                    anchors.fill: parent
+                    spacing: 4
 
-                    text: "<a href=\"" + root.guidelinesUrl + "\">" + qsTrc("project/convert", "Uploading guidelines") + "</a>"
-                    font: ui.theme.bodyFont
-                    horizontalAlignment: Text.AlignLeft
+                    StyledTextLabel {
+                        id: guidelinesLabel
+
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        text: "<a href=\"" + root.guidelinesUrl + "\">" + qsTrc("project/convert", "Uploading guidelines") + "</a>"
+                        font: ui.theme.bodyFont
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    StyledIconLabel {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: 1
+
+                        iconCode: IconCode.OPEN_LINK
+                        font.pixelSize: guidelinesLabel.font.pixelSize + 2
+                        color: ui.theme.linkColor
+                    }
                 }
             }
 

@@ -102,6 +102,15 @@ Item {
                         linkInputField.currentText = newTextValue
                     }
                 }
+
+                StyledTextLabel {
+                    Layout.fillWidth: true
+
+                    text: qsTrc("project/convert", "Recommended for solo arrangements only")
+                    font: ui.theme.bodyFont
+                    color: ui.theme.fontSecondaryColor
+                    horizontalAlignment: Text.AlignHCenter
+                }
             }
         }
 

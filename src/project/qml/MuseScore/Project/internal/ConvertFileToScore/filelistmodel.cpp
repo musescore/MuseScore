@@ -118,7 +118,7 @@ void FileListModel::setPaths(const QStringList& paths)
     emit pathsChanged();
     updateTotalSizeBytes();
     updateExceedsLimits();
-    updateUsedSizeString();
+    updateUsedSizeLabel();
 }
 
 int FileListModel::fileIconCode() const
@@ -138,11 +138,11 @@ int FileListModel::fileIconCode() const
 
 QString FileListModel::combinedFilesNote() const
 {
-    if (m_fileCategory != FileCategory::Image) {
+    if (m_fileCategory != FileCategory::Image || m_paths.size() <= 1) {
         return QString();
     }
 
-    return muse::qtrc("project/convert", "Images will be combined into one score in the order you upload them");
+    return muse::qtrc("project/convert", "Images will be combined into one score in the order shown here");
 }
 
 QVariantMap FileListModel::convertLimits() const
@@ -159,7 +159,7 @@ void FileListModel::setConvertLimits(const QVariantMap& limits)
     m_convertLimits = limits;
     emit convertLimitsChanged();
     updateExceedsLimits();
-    updateUsedSizeString();
+    updateUsedSizeLabel();
 }
 
 int FileListModel::maxFileCount() const
@@ -172,9 +172,9 @@ qint64 FileListModel::maxCombinedSizeBytes() const
     return m_convertLimits.value("maxCombinedSizeBytes", 0).toLongLong();
 }
 
-QString FileListModel::usedSizeString() const
+QString FileListModel::usedSizeLabel() const
 {
-    return m_usedSizeString;
+    return m_usedSizeLabel;
 }
 
 bool FileListModel::exceedsLimits() const
@@ -208,7 +208,7 @@ void FileListModel::removeAt(int index)
     emit pathsChanged();
     updateTotalSizeBytes();
     updateExceedsLimits();
-    updateUsedSizeString();
+    updateUsedSizeLabel();
 }
 
 void FileListModel::move(int from, int to)
@@ -257,21 +257,21 @@ void FileListModel::updateExceedsLimits()
     emit exceedsLimitsChanged();
 }
 
-void FileListModel::updateUsedSizeString()
+void FileListModel::updateUsedSizeLabel()
 {
     const qint64 maxBytes = maxCombinedSizeBytes();
 
-    QString sizeString;
-    if (maxBytes > 0) {
+    QString label;
+    if (maxBytes > 0 && m_totalSizeBytes >= maxBytes * 0.75) { // only show once 75% of the limit is used
         const QString totalSize = muse::DataFormatter::formatFileSize(size_t(m_totalSizeBytes));
         const QString maxSize = muse::DataFormatter::formatFileSize(size_t(maxBytes));
-        sizeString = muse::qtrc("project/convert", "%1/%2 used").arg(totalSize, maxSize);
+        label = muse::qtrc("project/convert", "%1/%2 used").arg(totalSize, maxSize);
     }
 
-    if (m_usedSizeString == sizeString) {
+    if (m_usedSizeLabel == label) {
         return;
     }
 
-    m_usedSizeString = sizeString;
-    emit usedSizeStringChanged();
+    m_usedSizeLabel = label;
+    emit usedSizeLabelChanged();
 }

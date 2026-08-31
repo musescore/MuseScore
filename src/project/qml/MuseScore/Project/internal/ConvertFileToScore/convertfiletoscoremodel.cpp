@@ -83,6 +83,11 @@ static bool isPdf(const QString& extOrPath)
     return extOrPath.compare("pdf", Qt::CaseInsensitive) == 0 || extOrPath.endsWith(".pdf", Qt::CaseInsensitive);
 }
 
+static bool isJpeg(const QString& extOrPath)
+{
+    return extOrPath.compare("jpeg", Qt::CaseInsensitive) == 0 || extOrPath.endsWith(".jpeg", Qt::CaseInsensitive);
+}
+
 static QStringList resolveExtensions(const QStringList& paths)
 {
     QStringList extensions;
@@ -220,16 +225,20 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
             pdfItems << muse::qtrc("project/convert", "%1 pages max").arg(omr.maxPages);
         }
 
-        if (!pdfItems.isEmpty()) {
-            result << requirementsSection(muse::qtrc("project/convert", "PDF"), pdfItems);
-        }
+        pdfItems << muse::qtrc("project/convert", "1 file per conversion");
+        result << requirementsSection(muse::qtrc("project/convert", "PDF"), pdfItems);
     }
 
     if (category == FileCategory::Unknown || category == FileCategory::Image) {
         QStringList imageExtensions;
         for (const QString& ext : omr.allowedExtensions) {
-            if (!isPdf(ext)) {
-                imageExtensions << ext;
+            if (isPdf(ext)) {
+                continue;
+            }
+
+            QString normalizedExt = isJpeg(ext) ? "jpg" : ext;
+            if (!imageExtensions.contains(normalizedExt, Qt::CaseInsensitive)) {
+                imageExtensions << normalizedExt;
             }
         }
 
@@ -264,12 +273,13 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
         }
 
         if (a2s.maxFiles == 1) {
-            a2sItems << muse::qtrc("project/convert", "1 file per upload");
+            a2sItems << muse::qtrc("project/convert", "1 file per conversion");
         } else if (a2s.maxFiles > 1) {
-            a2sItems << muse::qtrc("project/convert", "%1 files per upload").arg(a2s.maxFiles);
+            a2sItems << muse::qtrc("project/convert", "%1 files per conversion").arg(a2s.maxFiles);
         }
 
         if (!a2sItems.empty()) {
+            a2sItems << muse::qtrc("project/convert", "Recommended for solo arrangements only");
             result << requirementsSection(muse::qtrc("project/convert", "Audio"), a2sItems);
         }
     }

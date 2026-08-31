@@ -209,25 +209,25 @@ Rectangle {
                 spacing: 2
 
                 StyledTextLabel {
-                    id: usedSizeLabel
-
-                    visible: Boolean(usedSizeLabel.text)
-
-                    text: root.filesModel.usedSizeString
-                    horizontalAlignment: Text.AlignLeft
-                    color: root.filesModel.exceedsLimits ? "#FA7878" : ui.theme.fontSecondaryColor
-                }
-
-                StyledTextLabel {
                     id: maxCountReachedLabel
 
                     visible: Boolean(maxCountReachedLabel.text)
 
-                    text: root.filesModel.maxFileCount > 0 && root.filesModel.count >= root.filesModel.maxFileCount
-                          ? qsTrc("project/convert", "Maximum files selected (%1)").arg(root.filesModel.maxFileCount)
+                    text: root.filesModel.maxFileCount > 0 && root.filesModel.count > 1
+                          ? qsTrc("project/convert", "%1/%2 max files").arg(root.filesModel.count).arg(root.filesModel.maxFileCount)
                           : ""
                     horizontalAlignment: Text.AlignLeft
                     color: ui.theme.fontSecondaryColor
+                }
+
+                StyledTextLabel {
+                    id: usedSizeLabel
+
+                    visible: Boolean(usedSizeLabel.text)
+
+                    text: root.filesModel.usedSizeLabel
+                    horizontalAlignment: Text.AlignLeft
+                    color: root.filesModel.exceedsLimits ? "#FA7878" : ui.theme.fontSecondaryColor
                 }
             }
 
