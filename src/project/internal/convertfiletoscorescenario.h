@@ -51,17 +51,23 @@ public:
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
     muse::async::Promise<muse::RetVal<ConvertType> > validate(const muse::io::paths_t& paths) override;
-    muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) override;
 
+    muse::async::Promise<muse::Ret> startConvert(const ConvertInput& input, const QString& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
 private:
-    muse::Ret ensureAuthorization();
+    muse::async::Promise<muse::Ret> ensureAuthorization();
+    muse::async::Promise<ConvertSelection> openSelectFilesDialog();
 
-    bool validateAgainstConfig(ConvertType type, const muse::io::paths_t& paths, const ConvertConfig& config);
+    bool validateAgainstConfig(const muse::io::paths_t& paths, const ConvertConfig& config);
+
     void showFileTooLargeError(qint64 maxFileSizeBytes);
-    void showUnsupportedFormatError(const QStringList& allowedExtensions);
-    void showFileValidationError(const std::string& title, const std::string& text);
+    void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
+    void showUnsupportedFormatError();
+    void showMixedFileTypesError();
+    void showMultiplePdfFilesError();
+    void showTooManyAudioFilesError(int maxFiles);
+    void showTooManyImagesError(int maxImages);
 
     muse::Ret startUpload(const ConvertInput& input, const QString& convertedFileName);
     void showFileProcessingDialog();

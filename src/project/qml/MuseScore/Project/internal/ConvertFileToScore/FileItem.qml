@@ -29,8 +29,13 @@ ListItemBlank {
     id: root
 
     property alias fileName: fileNameLabel.text
+    property alias fileSize: fileSizeLabel.text
     property alias iconCode: iconlabel.iconCode
     property bool selectable: false
+
+    property alias removeButtonNavigation: removeButton.navigation
+
+    signal removeButtonNavigationActivated()
 
     implicitHeight: 32
 
@@ -39,35 +44,72 @@ ListItemBlank {
 
     mouseArea.enabled: root.visible && root.enabled && root.selectable
 
+    navigation.accessible.name: root.fileSize ? (root.fileName + " " + root.fileSize) : root.fileName
+
     RowLayout {
+        id: contentRow
+
         anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
-        spacing: 8
+        anchors.leftMargin: 8
+        anchors.rightMargin: 8
+        spacing: 4
+
+        readonly property int iconSize: 24
+        readonly property int iconFontSize: 14
 
         StyledIconLabel {
+            Layout.preferredWidth: contentRow.iconSize
+            Layout.preferredHeight: contentRow.iconSize
+
             iconCode: IconCode.TOOLBAR_GRIP
+            font.pixelSize: contentRow.iconFontSize
             visible: root.selectable
         }
 
         StyledIconLabel {
             id: iconlabel
+
+            Layout.preferredWidth: contentRow.iconSize
+            Layout.preferredHeight: contentRow.iconSize
+
+            font.pixelSize: contentRow.iconFontSize
         }
 
         StyledTextLabel {
             id: fileNameLabel
             Layout.fillWidth: true
+            Layout.leftMargin: 2
 
             horizontalAlignment: Text.AlignLeft
             elide: Text.ElideMiddle
         }
 
+        StyledTextLabel {
+            id: fileSizeLabel
+
+            horizontalAlignment: Text.AlignRight
+        }
+
         FlatButton {
+            id: removeButton
+
             icon: IconCode.DELETE_TANK
+            toolTipTitle: qsTrc("global", "Remove")
             transparent: true
-            isNarrow: true
+
+            navigation.accessible.name: removeButton.toolTipTitle + " " + root.fileName
 
             onClicked: root.removeSelectionRequested()
+
+            Connections {
+                target: removeButton.navigation
+
+                function onActiveChanged(active) {
+                    if (active) {
+                        root.removeButtonNavigationActivated()
+                    }
+                }
+            }
         }
     }
 }

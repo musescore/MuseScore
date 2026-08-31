@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
 import Muse.Ui
@@ -51,8 +52,8 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 16
-        spacing: 12
+        anchors.margins: 20
+        spacing: 18
 
         Rectangle {
             Layout.fillWidth: true
@@ -67,10 +68,25 @@ Rectangle {
                 id: fileListView
 
                 anchors.fill: parent
-                anchors.margins: 16
+                anchors.topMargin: 12
+                anchors.leftMargin: 12
+                anchors.bottomMargin: 12
+                anchors.rightMargin: (fileListView.ScrollBar.vertical && fileListView.ScrollBar.vertical.visible) ? 6 : 12
 
-                spacing: 8
+                spacing: 4
                 topMargin: root.filesModel.count === 1 ? Math.max(0, (fileListView.height - 40) / 2) : 0
+
+                property int scrollBarGap: 8
+
+                navigation.section: root.navigationPanel.section
+                navigation.order: 0
+                navigation.direction: NavigationPanel.Both
+                accessible.name: qsTrc("project/convert", "Selected files")
+
+                ScrollBar.vertical: StyledScrollBar {
+                    thickness: fileListView.scrollBarThickness
+                    policy: ScrollBar.AlwaysOn
+                }
 
                 model: root.filesModel
 
@@ -79,8 +95,23 @@ Rectangle {
 
                     required property int index
                     required property string fileNameRole
+                    required property string fileSizeRole
 
-                    width: ListView.view ? ListView.view.width : 0
+                    width: {
+                        if (!ListView.view) {
+                            return 0
+                        }
+
+                        var scrollBar = fileListView.ScrollBar.vertical
+                        if (!scrollBar.visible) {
+                            return ListView.view.width
+                        }
+
+                        //! NOTE: scrollBar.width includes its own leftPadding, which is invisible
+                        //! hit-area rather than a visible gap, so it doesn't count towards scrollBarGap
+                        var scrollBarHandleLeft = scrollBar.width - scrollBar.leftPadding
+                        return ListView.view.width - scrollBarHandleLeft - fileListView.scrollBarGap
+                    }
                     height: fileItem.height
 
                     keys: [ "SelectedFilesListItem" ]
@@ -108,12 +139,25 @@ Rectangle {
                         z: fileItem.dragged ? 100 : 1
 
                         fileName: dropArea.fileNameRole
+                        fileSize: dropArea.fileSizeRole
                         iconCode: root.filesModel.fileIconCode
                         selectable: root.filesModel.count > 1
                         isSelected: root.filesModel.count > 1 && fileListView.currentIndex === dropArea.index
 
                         navigation.panel: fileListView.navigation
-                        navigation.order: dropArea.index
+                        navigation.row: dropArea.index
+                        navigation.column: 0
+
+                        onNavigationActivated: fileListView.currentIndex = dropArea.index
+
+                        removeButtonNavigation.panel: fileListView.navigation
+                        removeButtonNavigation.row: dropArea.index
+                        removeButtonNavigation.column: 1
+
+                        onRemoveButtonNavigationActivated: {
+                            fileListView.currentIndex = dropArea.index
+                            fileListView.positionViewAtIndex(dropArea.index, ListView.Contain)
+                        }
 
                         Drag.active: fileItem.dragged
                         Drag.source: fileItem
@@ -144,54 +188,112 @@ Rectangle {
             }
         }
 
-        Row {
-            Layout.alignment: Qt.AlignRight
-            spacing: 8
+        StyledTextLabel {
+            id: combinedFilesNoteLabel
 
-            FlatButton {
-                id: selectMoreButton
+            Layout.fillWidth: true
 
-                text: qsTrc("global", "Select more")
-                accentButton: true
+            text: root.filesModel.combinedFilesNote
+            visible: Boolean(combinedFilesNoteLabel.text)
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+        }
 
-                navigation.panel: root.navigationPanel
-                navigation.order: 1
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 12
 
-                onClicked: {
-                    root.selectMoreFilesRequested(root.filesModel.paths())
+            ColumnLayout {
+                Layout.alignment: Qt.AlignTop
+
+                spacing: 2
+
+                StyledTextLabel {
+                    id: usedSizeLabel
+
+                    visible: Boolean(usedSizeLabel.text)
+
+                    text: root.filesModel.usedSizeString
+                    horizontalAlignment: Text.AlignLeft
+                    color: root.filesModel.exceedsLimits ? "#FA7878" : ui.theme.fontSecondaryColor
+                }
+
+                StyledTextLabel {
+                    id: maxCountReachedLabel
+
+                    visible: Boolean(maxCountReachedLabel.text)
+
+                    text: root.filesModel.maxFileCount > 0 && root.filesModel.count >= root.filesModel.maxFileCount
+                          ? qsTrc("project/convert", "Maximum files selected (%1)").arg(root.filesModel.maxFileCount)
+                          : ""
+                    horizontalAlignment: Text.AlignLeft
+                    color: ui.theme.fontSecondaryColor
                 }
             }
 
-            FlatButton {
-                icon: IconCode.ARROW_UP
-
-                enabled: fileListView.count > 1 && fileListView.currentIndex > 0
-
-                navigation.panel: root.navigationPanel
-                navigation.order: 2
-
-                onClicked: root.moveCurrentFile(-1)
+            Item {
+                Layout.fillWidth: true
             }
 
-            FlatButton {
-                icon: IconCode.ARROW_DOWN
+            ColumnLayout {
+                spacing: 8
 
-                enabled: fileListView.count > 1 && fileListView.currentIndex >= 0 && fileListView.currentIndex < root.filesModel.count - 1
+                RowLayout {
+                    Layout.alignment: Qt.AlignRight
+                    spacing: 8
 
-                navigation.panel: root.navigationPanel
-                navigation.order: 3
+                    FlatButton {
+                        icon: IconCode.ARROW_UP
+                        toolTipTitle: qsTrc("global", "Move up")
 
-                onClicked: root.moveCurrentFile(1)
+                        enabled: fileListView.count > 1 && fileListView.currentIndex > 0
+
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 1
+
+                        onClicked: root.moveCurrentFile(-1)
+                    }
+
+                    FlatButton {
+                        icon: IconCode.ARROW_DOWN
+                        toolTipTitle: qsTrc("global", "Move down")
+
+                        enabled: fileListView.count > 1 && fileListView.currentIndex >= 0 && fileListView.currentIndex < root.filesModel.count - 1
+
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 2
+
+                        onClicked: root.moveCurrentFile(1)
+                    }
+
+                    FlatButton {
+                        id: selectMoreButton
+
+                        Layout.leftMargin: 4
+
+                        text: qsTrc("global", "Select more")
+                        accentButton: true
+
+                        enabled: root.filesModel.maxFileCount <= 0 || root.filesModel.count < root.filesModel.maxFileCount
+
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 3
+
+                        onClicked: {
+                            root.selectMoreFilesRequested(root.filesModel.paths)
+                        }
+                    }
+                }
+
+                FileRequirements {
+                    Layout.alignment: Qt.AlignRight
+
+                    fileRequirements: root.fileRequirements
+
+                    navigation.panel: root.navigationPanel
+                    navigation.order: 4
+                }
             }
-        }
-
-        FileRequirements {
-            Layout.alignment: Qt.AlignRight
-
-            fileRequirements: root.fileRequirements
-
-            navigation.panel: root.navigationPanel
-            navigation.order: 4
         }
     }
 }

@@ -41,21 +41,14 @@ StyledDialogView {
     modal: true
     resizable: false
 
-    background.color: ui.theme.popupBackgroundColor
+    background.color: ui.theme.backgroundPrimaryColor
 
-    property int convertType: -1
     property int currentPageIndex: 0
-    property var selectedPaths: []
-    property string selectedLink: ""
 
     ConvertFileToScoreModel {
         id: convertModel
 
-        onValidationFinished: function(type, paths) {
-            root.convertType = type
-            root.selectedPaths = paths
-            root.selectedLink = ""
-
+        onValidationFinished: {
             if (root.currentPageIndex === 0) {
                 root.currentPageIndex = 1
             }
@@ -63,7 +56,7 @@ StyledDialogView {
 
         onGoingBackConfirmed: {
             root.currentPageIndex = 0
-            root.selectedLink = ""
+            convertModel.clearSelection()
         }
     }
 
@@ -72,17 +65,10 @@ StyledDialogView {
         root.hide()
     }
 
-    function selectAndValidateFiles(existingPaths) {
-        var files = convertModel.selectFiles(existingPaths)
-        if (files.length > 0) {
-            convertModel.validateFiles(existingPaths.concat(files))
-        }
-    }
-
     onNavigationActivateRequested: {
         if (root.currentPageIndex === 0) {
             pageLoader.item.focusOnSelect()
-        } else {
+        } else if (pageLoader.item.focusOnFileList) {
             pageLoader.item.focusOnFileList()
         }
     }
@@ -102,7 +88,9 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
 
-                text: qsTrc("project/convert", "Convert a file to score")
+                text: root.currentPageIndex === 2
+                      ? qsTrc("project/convert", "Convert audio to score (beta)")
+                      : qsTrc("project/convert", "Convert a file to score")
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -120,7 +108,15 @@ StyledDialogView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            sourceComponent: root.currentPageIndex === 0 ? selectFilePageComponent : selectedFilesPageComponent
+            sourceComponent: {
+                if (root.currentPageIndex === 0) {
+                    return selectFilePageComponent
+                } else if (root.currentPageIndex === 1) {
+                    return selectedFilesPageComponent
+                }
+
+                return linkEntryPageComponent
+            }
         }
     }
 
@@ -128,25 +124,21 @@ StyledDialogView {
         id: selectFilePageComponent
 
         SelectFilePage {
-            guidelinesLinkText: convertModel.guidelinesLinkText
-            linkPasteText: convertModel.linkPasteText
-            maxLinkLength: convertModel.maxLinkLength
+            guidelinesUrl: convertModel.guidelinesUrl
+            linkHintText: convertModel.linkHintText
             fileRequirements: convertModel.fileRequirements
             navigationSection: root.navigationSection
 
             onCancelRequested: root.reject()
 
-            onSelectFilesRequested: root.selectAndValidateFiles([])
+            onSelectFilesRequested: convertModel.selectAndValidateFiles()
 
             onFilesDropped: function(urls) {
                 convertModel.validateFiles(urls)
             }
 
-            onLinkSubmitted: function(link) {
-                root.convertType = 1 // audio2score
-                root.selectedPaths = []
-                root.selectedLink = link
-                root.currentPageIndex = 1
+            onConvertFromLinkRequested: {
+                root.currentPageIndex = 2
             }
         }
     }
@@ -155,11 +147,13 @@ StyledDialogView {
         id: selectedFilesPageComponent
 
         SelectedFilesPage {
+            saveAsName: convertModel.defaultSaveAsName
+            saveAsErrorText: convertModel.validateFileName(saveAsName)
             navigationSection: root.navigationSection
-            files: root.selectedPaths
-            link: root.selectedLink
-            canSelectMultipleFiles: convertModel.canSelectMultipleFiles(root.convertType, root.selectedPaths)
+            files: convertModel.selectedPaths
+            canSelectMultipleFiles: convertModel.canSelectMultipleFiles
             fileRequirements: convertModel.fileRequirements
+            convertLimits: convertModel.convertLimits
 
             onCancelRequested: root.reject()
 
@@ -168,16 +162,40 @@ StyledDialogView {
                     convertModel.confirmGoingBack()
                 } else {
                     root.currentPageIndex = 0
-                    root.selectedLink = ""
+                    convertModel.clearSelection()
                 }
             }
 
-            onConvertRequested: function(paths, link, convertedFileName) {
-                root.finish(root.convertType, paths, link, convertedFileName)
+            onConvertRequested: function(paths, convertedFileName) {
+                root.finish(convertModel.convertType, paths, "", convertedFileName)
             }
 
             onSelectMoreFilesRequested: function(existingPaths) {
-                root.selectAndValidateFiles(existingPaths)
+                convertModel.selectAndValidateFiles(existingPaths)
+            }
+        }
+    }
+
+    Component {
+        id: linkEntryPageComponent
+
+        LinkEntryPage {
+            saveAsName: convertModel.defaultSaveAsName
+            saveAsErrorText: convertModel.validateFileName(saveAsName)
+            hintText: convertModel.linkPageHintText
+            hintPlainText: convertModel.linkPageHintPlainText
+            maxLinkLength: convertModel.maxLinkLength
+            navigationSection: root.navigationSection
+
+            onCancelRequested: root.reject()
+
+            onBackRequested: {
+                root.currentPageIndex = 0
+            }
+
+            onConvertRequested: function(link, convertedFileName) {
+                convertModel.selectedLink = link
+                root.finish(convertModel.convertType, [], link, convertedFileName)
             }
         }
     }

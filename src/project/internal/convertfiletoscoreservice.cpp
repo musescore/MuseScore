@@ -81,7 +81,7 @@ void ConvertFileToScoreService::init()
 
     //! TODO: remove once the config is reliably available; fills in dummy data for local testing
     if (m_config.omr.allowedExtensions.isEmpty()) {
-        m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "tiff" };
+        m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "jpeg" };
         m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
         m_config.omr.maxPages = 50;
         m_config.omr.maxImages = 15;
@@ -117,7 +117,7 @@ const ConvertConfig& ConvertFileToScoreService::config() const
     return m_config;
 }
 
-Ret ConvertFileToScoreService::convert(const ConvertInput& input, const QString& convertedFileName)
+Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const QString& convertedFileName)
 {
     IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
         return make_ret(Err::ConvertValidationFailed);

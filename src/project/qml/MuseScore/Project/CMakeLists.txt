@@ -68,12 +68,17 @@ qt_add_qml_module(project_qml
         ExportDialog.qml
         ConvertFileToScoreDialog.qml
         internal/ConvertFileToScore/SelectFilePage.qml
+        internal/ConvertFileToScore/LinkPastePanel.qml
+        internal/ConvertFileToScore/ConvertFromLinkPanel.qml
+        internal/ConvertFileToScore/LinkEntryPage.qml
         internal/ConvertFileToScore/SelectedFilesPage.qml
         internal/ConvertFileToScore/MultipleFilesPanel.qml
         internal/ConvertFileToScore/SingleFilePanel.qml
         internal/ConvertFileToScore/FileItem.qml
         internal/ConvertFileToScore/FileRequirements.qml
         internal/ConvertFileToScore/FileRequirementsPopup.qml
+        internal/ConvertFileToScore/ConvertButtonBox.qml
+        internal/ConvertFileToScore/SaveAsField.qml
         internal/devtools/ConvertFileToScoreDevTools.qml
         internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml

@@ -47,8 +47,8 @@ public:
 
     virtual muse::async::Promise<ConvertSelection> selectFilesToConvert() = 0;
     virtual muse::async::Promise<muse::RetVal<ConvertType> > validate(const muse::io::paths_t& paths) = 0;
-    virtual muse::Ret convert(const ConvertInput& input, const QString& convertedFileName) = 0;
 
+    virtual muse::async::Promise<muse::Ret> startConvert(const ConvertInput& input, const QString& convertedFileName) = 0;
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 };
 

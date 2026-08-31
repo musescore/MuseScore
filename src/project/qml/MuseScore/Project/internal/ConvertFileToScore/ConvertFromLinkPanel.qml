@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -27,52 +28,54 @@ import Muse.UiComponents
 Rectangle {
     id: root
 
-    property alias fileName: fileItem.fileName
-    property alias fileSize: fileItem.fileSize
-    property alias iconCode: fileItem.iconCode
-    property alias fileRequirements: fileRequirementsItem.fileRequirements
+    property string hintText: ""
+
     property NavigationPanel navigationPanel: null
+    property int navigationOrder: 0
 
-    readonly property int sideMargin: 32
+    signal convertFromLinkRequested()
 
-    signal removeRequested()
+    readonly property int contentPadding: 24
 
-    function focusOnFileList() {
-        fileItem.navigation.requestActive()
-    }
+    visible: Boolean(root.hintText)
+
+    implicitHeight: contentColumn.implicitHeight + 2 * root.contentPadding
 
     color: ui.theme.backgroundSecondaryColor
     border.width: 1
     border.color: ui.theme.strokeColor
     radius: 3
 
-    Column {
+    ColumnLayout {
+        id: contentColumn
+
         anchors.centerIn: parent
-        width: parent.width - 2 * root.sideMargin
-        spacing: 16
 
-        FileItem {
-            id: fileItem
-            width: parent.width
+        width: parent.width - 2 * root.contentPadding
+        spacing: 12
 
-            selectable: false
+        StyledTextLabel {
+            Layout.fillWidth: true
 
-            navigation.panel: root.navigationPanel
-            navigation.order: 1
-
-            removeButtonNavigation.panel: root.navigationPanel
-            removeButtonNavigation.order: 2
-
-            onRemoveSelectionRequested: root.removeRequested()
+            text: root.hintText
+            font: ui.theme.bodyFont
+            horizontalAlignment: Text.AlignHCenter
         }
 
-        FileRequirements {
-            id: fileRequirementsItem
+        FlatButton {
+            id: convertFromLinkButton
 
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
+
+            text: qsTrc("project/convert", "Convert from link")
+            accentButton: true
 
             navigation.panel: root.navigationPanel
-            navigation.order: 3
+            navigation.order: root.navigationOrder
+
+            onClicked: {
+                root.convertFromLinkRequested()
+            }
         }
     }
 }

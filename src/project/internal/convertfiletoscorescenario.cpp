@@ -21,12 +21,13 @@
  */
 #include "convertfiletoscorescenario.h"
 
+#include <optional>
+
 #include <QFileInfo>
 
 #include "actions/actiontypes.h"
 
 #include "project/projecterrors.h"
-#include "project/types/projecttypes.h"
 
 #include "global/dataformatter.h"
 #include "global/io/path.h"
@@ -36,17 +37,31 @@ using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
 
-static ConvertType convertTypeFromPath(const io::path_t& path, const ConvertConfig& config)
+static ConvertSelection toConvertSelection(const Val& val)
 {
-    const QString ext = QFileInfo(path.toQString()).suffix();
+    const QVariantMap map = val.toQVariant().toMap();
+    const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
+    const QString link = map.value("link").toString();
+    const QStringList pathsList = map.value("paths").toStringList();
 
-    if (!config.audio2score.allowedExtensions.isEmpty()) {
-        return config.audio2score.allowedExtensions.contains(ext, Qt::CaseInsensitive)
-               ? ConvertType::Audio2Score : ConvertType::Omr;
+    io::paths_t paths;
+    paths.reserve(pathsList.size());
+    for (const QString& path : pathsList) {
+        paths.push_back(io::path_t(path));
     }
 
-    //! NOTE: config unavailable, fall back to a best-effort guess
-    return isAudioFileSuffix(ext.toLower().toStdString()) ? ConvertType::Audio2Score : ConvertType::Omr;
+    ConvertSelection selection;
+    selection.convertedFileName = map.value("convertedFileName").toString();
+
+    if (type == ConvertType::Audio2Score && !link.isEmpty()) {
+        selection.input = Audio2ScoreConvertInput { link };
+    } else if (type == ConvertType::Audio2Score) {
+        selection.input = Audio2ScoreConvertInput { paths };
+    } else {
+        selection.input = OmrConvertInput { paths };
+    }
+
+    return selection;
 }
 
 void ConvertFileToScoreScenario::init()
@@ -75,41 +90,16 @@ const ConvertConfig& ConvertFileToScoreScenario::convertConfig() const
 
 async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert()
 {
-    return async::Promise<ConvertSelection>([this](auto resolve, auto reject) {
-        Ret authRet = ensureAuthorization();
-        if (!authRet) {
-            return reject(authRet.code(), authRet.text());
-        }
-
-        interactive()->open("musescore://project/convert/selectfiles")
-        .then<ConvertSelection>(this, [](const Val& val, auto innerResolve) {
-            QVariantMap map = val.toQVariant().toMap();
-
-            const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
-            const QString link = map.value("link").toString();
-
-            io::paths_t paths;
-            const QStringList pathsList = map.value("paths").toStringList();
-            paths.reserve(pathsList.size());
-            for (const QString& path : pathsList) {
-                paths.push_back(io::path_t(path));
-            }
-
-            ConvertSelection selection;
-            selection.convertedFileName = map.value("convertedFileName").toString();
-
-            if (type == ConvertType::Audio2Score && !link.isEmpty()) {
-                selection.input = Audio2ScoreConvertInput { link };
-            } else if (type == ConvertType::Audio2Score) {
-                selection.input = Audio2ScoreConvertInput { paths };
-            } else {
-                selection.input = OmrConvertInput { paths };
-            }
-
-            return innerResolve(selection);
-        })
-        .onResolve(this, [resolve](const ConvertSelection& selection) {
-            (void)resolve(selection);
+    return async::make_promise<ConvertSelection>([this](auto resolve, auto reject) {
+        ensureAuthorization()
+        .onResolve(this, [this, resolve, reject](const Ret&) {
+            openSelectFilesDialog()
+            .onResolve(this, [resolve](const ConvertSelection& selection) {
+                (void)resolve(selection);
+            })
+            .onReject(this, [reject](int code, const std::string& msg) {
+                (void)reject(code, msg);
+            });
         })
         .onReject(this, [reject](int code, const std::string& msg) {
             (void)reject(code, msg);
@@ -129,9 +119,10 @@ async::Promise<RetVal<ConvertType> > ConvertFileToScoreScenario::validate(const 
         //! NOTE: config is a client-side sanity check only; if it hasn't been fetched yet, fall back
         //! to letting the server enforce its own limits rather than blocking the conversion
         const ConvertConfig& config = service()->config();
-        const ConvertType type = convertTypeFromPath(paths.front(), config);
+        const ConvertType type = fileCategoryFromPath(paths.front(), config) == FileCategory::Audio
+                                 ? ConvertType::Audio2Score : ConvertType::Omr;
 
-        if (!validateAgainstConfig(type, paths, config)) {
+        if (!validateAgainstConfig(paths, config)) {
             return resolve(RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed)));
         }
 
@@ -139,22 +130,27 @@ async::Promise<RetVal<ConvertType> > ConvertFileToScoreScenario::validate(const 
     });
 }
 
-Ret ConvertFileToScoreScenario::convert(const ConvertInput& input, const QString& convertedFileName)
+async::Promise<Ret> ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
 {
-    IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
-        return make_ret(Err::ConvertValidationFailed);
-    }
+    return async::make_promise<Ret>([this, input, convertedFileName](auto resolve, auto) {
+        IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
+            return resolve(make_ret(Err::ConvertValidationFailed));
+        }
 
-    IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
-        return make_ret(Err::ConvertValidationFailed);
-    }
+        IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
+            return resolve(make_ret(Err::ConvertValidationFailed));
+        }
 
-    Ret authRet = ensureAuthorization();
-    if (!authRet) {
-        return authRet;
-    }
+        ensureAuthorization()
+        .onResolve(this, [this, input, convertedFileName, resolve](const Ret&) {
+            (void)resolve(startUpload(input, convertedFileName));
+        })
+        .onReject(this, [resolve](int code, const std::string& msg) {
+            (void)resolve(Ret(code, msg));
+        });
 
-    return startUpload(input, convertedFileName);
+        return async::Promise<Ret>::dummy_result();
+    });
 }
 
 async::Channel<Ret, io::path_t> ConvertFileToScoreScenario::convertFinished() const
@@ -162,78 +158,99 @@ async::Channel<Ret, io::path_t> ConvertFileToScoreScenario::convertFinished() co
     return m_convertFinished;
 }
 
-Ret ConvertFileToScoreScenario::ensureAuthorization()
+async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
 {
-    IAuthorizationServicePtr authorizationService = museScoreComService()->authorization();
-    if (authorizationService->userAuthorized().val) {
-        return make_ok();
-    }
+    return async::make_promise<Ret>([this](auto resolve, auto reject) {
+        IAuthorizationServicePtr authorizationService = museScoreComService()->authorization();
+        if (authorizationService->userAuthorized().val) {
+            return resolve(make_ok());
+        }
 
-    std::string dialogText = muse::trc("project/convert", "Log in or create a free account on MuseScore.com to convert a file.");
+        std::string dialogText = muse::trc("project/convert", "Log in or create a free account on MuseScore.com to convert a file.");
 
-    UriQuery query("muse://cloud/requireauthorization");
-    query.addParam("text", Val(dialogText));
-    query.addParam("cloudCode", Val(authorizationService->cloudInfo().code));
-    query.addParam("publishingScore", Val(false));
+        UriQuery query("muse://cloud/requireauthorization");
+        query.addParam("text", Val(dialogText));
+        query.addParam("cloudCode", Val(authorizationService->cloudInfo().code));
+        query.addParam("publishingScore", Val(false));
 
-    return interactive()->openSync(query).ret;
+        interactive()->open(query)
+        .onResolve(this, [resolve](const Val&) {
+            (void)resolve(make_ok());
+        })
+        .onReject(this, [reject](int code, const std::string& msg) {
+            (void)reject(code, msg);
+        });
+
+        return async::Promise<Ret>::dummy_result();
+    });
 }
 
-bool ConvertFileToScoreScenario::validateAgainstConfig(ConvertType type, const io::paths_t& paths, const ConvertConfig& config)
+async::Promise<ConvertSelection> ConvertFileToScoreScenario::openSelectFilesDialog()
 {
+    return interactive()->open("musescore://project/convert/selectfiles")
+           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
+        return resolve(toConvertSelection(val));
+    });
+}
+
+bool ConvertFileToScoreScenario::validateAgainstConfig(const io::paths_t& paths, const ConvertConfig& config)
+{
+    std::optional<FileCategory> firstCategory;
+    qint64 totalSizeBytes = 0;
+
     for (const io::path_t& path : paths) {
-        if (convertTypeFromPath(path, config) != type) {
-            showFileValidationError("Conversion failed", "All files must be of the same type");
+        if (!isSupportedExtension(path, config)) {
+            showUnsupportedFormatError();
             return false;
         }
+
+        const FileCategory category = fileCategoryFromPath(path, config);
+        if (!firstCategory) {
+            firstCategory = category;
+        } else if (category != firstCategory) {
+            showMixedFileTypesError();
+            return false;
+        }
+
+        const qint64 fileSizeBytes = QFileInfo(path.toQString()).size();
+
+        if (category == FileCategory::Audio
+            && config.audio2score.maxFileSizeBytes > 0 && fileSizeBytes > config.audio2score.maxFileSizeBytes) {
+            showFileTooLargeError(config.audio2score.maxFileSizeBytes);
+            return false;
+        }
+
+        totalSizeBytes += fileSizeBytes;
     }
 
-    if (type == ConvertType::Audio2Score) {
+    if (firstCategory == FileCategory::Pdf && paths.size() > 1) {
+        showMultiplePdfFilesError();
+        return false;
+    }
+
+    if (firstCategory == FileCategory::Audio) {
         if (config.audio2score.maxFiles > 0 && int(paths.size()) > config.audio2score.maxFiles) {
-            std::string text = "Only up to " + std::to_string(config.audio2score.maxFiles)
-                               + " audio file(s) can be converted at a time";
-            showFileValidationError("Conversion failed", text);
+            showTooManyAudioFilesError(config.audio2score.maxFiles);
             return false;
-        }
-
-        for (const io::path_t& path : paths) {
-            QFileInfo info(path.toQString());
-
-            if (!config.audio2score.allowedExtensions.isEmpty()
-                && !config.audio2score.allowedExtensions.contains(info.suffix(), Qt::CaseInsensitive)) {
-                showUnsupportedFormatError(config.audio2score.allowedExtensions);
-                return false;
-            }
-
-            if (config.audio2score.maxFileSizeBytes > 0 && info.size() > config.audio2score.maxFileSizeBytes) {
-                showFileTooLargeError(config.audio2score.maxFileSizeBytes);
-                return false;
-            }
         }
 
         return true;
     }
 
     if (config.omr.maxImages > 0 && paths.size() > 1 && int(paths.size()) > config.omr.maxImages) {
-        std::string text = "Only up to " + std::to_string(config.omr.maxImages)
-                           + " image(s) can be converted at a time";
-        showFileValidationError("Conversion failed", text);
+        showTooManyImagesError(config.omr.maxImages);
         return false;
     }
 
-    for (const io::path_t& path : paths) {
-        QFileInfo info(path.toQString());
-
-        if (!config.omr.allowedExtensions.isEmpty()
-            && !config.omr.allowedExtensions.contains(info.suffix(), Qt::CaseInsensitive)) {
-            showUnsupportedFormatError(config.omr.allowedExtensions);
-            return false;
-        }
-
-        if (config.omr.maxFileSizeBytes > 0 && info.size() > config.omr.maxFileSizeBytes) {
+    //! NOTE: maxFileSizeBytes is a combined budget across all selected images
+    //! (or the single file's own size, for a PDF)
+    if (config.omr.maxFileSizeBytes > 0 && totalSizeBytes > config.omr.maxFileSizeBytes) {
+        if (firstCategory == FileCategory::Image) {
+            showCombinedImageSizeTooLargeError(config.omr.maxFileSizeBytes);
+        } else {
             showFileTooLargeError(config.omr.maxFileSizeBytes);
-            return false;
         }
+        return false;
     }
 
     return true;
@@ -244,33 +261,56 @@ void ConvertFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)
     QString size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes));
     std::string text = muse::qtrc("project/convert", "The maximum file size is %1. Reduce the size of your file and try again.")
                        .arg(size).toStdString();
-    showFileValidationError(muse::trc("project/convert", "This file is too large"), text);
+    interactive()->error(muse::trc("project/convert", "This file is too large"), text,
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
-void ConvertFileToScoreScenario::showUnsupportedFormatError(const QStringList& allowedExtensions)
+void ConvertFileToScoreScenario::showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes)
 {
-    QStringList upperExtensions;
-    upperExtensions.reserve(allowedExtensions.size());
-    for (const QString& ext : allowedExtensions) {
-        upperExtensions << ext.toUpper();
-    }
-
-    std::string text = "Make sure the file you're uploading is a " + upperExtensions.join(", ").toStdString() + ".";
-    showFileValidationError("This file type is not compatible", text);
+    QString size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes));
+    std::string text = muse::qtrc("project/convert",
+                                  "The maximum combined file size for all images is %1. Choose a smaller file or remove some images to continue.")
+                       .arg(size).toStdString();
+    interactive()->error(muse::trc("project/convert", "Maximum file size exceeded"), text,
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
-void ConvertFileToScoreScenario::showFileValidationError(const std::string& title, const std::string& text)
+void ConvertFileToScoreScenario::showUnsupportedFormatError()
 {
-    IInteractive::ButtonData guidelinesBtn(IInteractive::Button::CustomButton,
-                                           muse::trc("project/convert", "Uploading guidelines"));
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    interactive()->error(muse::trc("project/convert", "This file type is not compatible"),
+                         muse::trc("project/convert", "Make sure you’ve selected a PDF, image or MP3 file."),
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
+}
 
-    interactive()->error(title, text, { guidelinesBtn, okBtn }, okBtn.btn)
-    .onResolve(this, [this, guidelinesBtn](const IInteractive::Result& res) {
-        if (res.isButton(guidelinesBtn.btn)) {
-            interactive()->openUrl(configuration()->scoreUploadingGuidelinesUrl());
-        }
-    });
+void ConvertFileToScoreScenario::showMixedFileTypesError()
+{
+    interactive()->error(muse::trc("project/convert", "Please select files of the same type"),
+                         muse::trc("project/convert",
+                                   "Per conversion, you may select either one MP3 file, one PDF file, or multiple image files."),
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showMultiplePdfFilesError()
+{
+    interactive()->error(muse::trc("project/convert", "Please select a single PDF file"),
+                         muse::trc("project/convert", "Only one PDF file can be converted at a time."),
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showTooManyAudioFilesError(int maxFiles)
+{
+    std::string text = muse::qtrc("project/convert", "You can convert up to %1 audio files at a time. Remove some files and try again.")
+                       .arg(maxFiles).toStdString();
+    interactive()->error(muse::trc("project/convert", "Too many files selected"), text,
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
+{
+    std::string text = muse::qtrc("project/convert", "You can convert up to %1 images at a time. Remove some images and try again.")
+                       .arg(maxImages).toStdString();
+    interactive()->error(muse::trc("project/convert", "Too many images selected"), text,
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 Ret ConvertFileToScoreScenario::startUpload(const ConvertInput& input, const QString& convertedFileName)
@@ -279,7 +319,7 @@ Ret ConvertFileToScoreScenario::startUpload(const ConvertInput& input, const QSt
         showFileProcessingDialog();
     }
 
-    return service()->convert(input, convertedFileName);
+    return service()->startConvert(input, convertedFileName);
 }
 
 void ConvertFileToScoreScenario::showFileProcessingDialog()
@@ -304,7 +344,7 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
         if (result.isButton(uploadMoreBtn)) {
             selectFilesToConvert()
             .onResolve(this, [this](const ConvertSelection& selection) {
-                convert(selection.input, selection.convertedFileName);
+                startConvert(selection.input, selection.convertedFileName);
             });
         } else if (result.isButton(goToScoresBtn)) {
             interactive()->openUrl(museScoreComService()->scoreManagerUrl());

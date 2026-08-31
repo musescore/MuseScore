@@ -45,6 +45,17 @@ Item {
         }
     }
 
+    function accessibleRequirementsText() {
+        var parts = []
+
+        for (var i = 0; i < root.fileRequirements.length; ++i) {
+            var section = root.fileRequirements[i]
+            parts.push(section.title + ": " + section.items.join(", "))
+        }
+
+        return parts.join(". ")
+    }
+
     NavigationControl {
         id: navCtrl
 
@@ -53,6 +64,7 @@ Item {
 
         accessible.role: MUAccessible.Button
         accessible.name: qsTrc("project/convert", "File requirements")
+        accessible.description: root.accessibleRequirementsText()
         accessible.visualItem: root
         accessible.enabled: navCtrl.enabled
 
@@ -71,14 +83,6 @@ Item {
         anchors.centerIn: parent
         spacing: 4
 
-        StyledIconLabel {
-            anchors.verticalCenter: parent.verticalCenter
-
-            iconCode: IconCode.INFO
-            font.pixelSize: 12
-            color: ui.theme.linkColor
-        }
-
         StyledTextLabel {
             anchors.verticalCenter: parent.verticalCenter
 
@@ -86,6 +90,14 @@ Item {
             font.family: ui.theme.bodyFont.family
             font.pixelSize: ui.theme.bodyFont.pixelSize
             font.underline: true
+            color: ui.theme.linkColor
+        }
+
+        StyledIconLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            iconCode: IconCode.INFO_FILLED
+            font.pixelSize: 10
             color: ui.theme.linkColor
         }
     }

@@ -355,4 +355,13 @@ inline bool isAudioFileSuffix(const std::string& suffix)
 
     return muse::contains(audioSuffixes, suffix);
 }
+
+inline bool isImageFileSuffix(const std::string& suffix)
+{
+    static const std::unordered_set<std::string> imageSuffixes {
+        "png", "jpg", "jpeg",
+    };
+
+    return muse::contains(imageSuffixes, suffix);
+}
 }
