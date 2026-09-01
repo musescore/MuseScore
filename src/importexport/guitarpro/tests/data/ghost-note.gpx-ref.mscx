@@ -88,21 +88,28 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>L_L</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>M_M</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>K_K</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>L_L</eid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>M_M</eid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <eid>N_N</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>O_O</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

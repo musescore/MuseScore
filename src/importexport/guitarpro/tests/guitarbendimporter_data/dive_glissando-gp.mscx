@@ -115,18 +115,25 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>P_P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>Q_Q</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>O_O</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Beam>
-            <eid>P_P</eid>
+            <eid>R_R</eid>
             <l1>24</l1>
             <l2>22</l2>
             </Beam>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
@@ -141,16 +148,16 @@
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>O_O</startElement>
                 <endElement>L_L</endElement>
-                <eid>R_R</eid>
+                <eid>T_T</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>V_V</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               <fret>15</fret>
@@ -158,20 +165,20 @@
               <Glissando>
                 <text></text>
                 <startElement>L_L</startElement>
-                <endElement>T_T</endElement>
-                <eid>U_U</eid>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
                 <track>0</track>
                 <diagonal>1</diagonal>
                 </Glissando>
               </Note>
             </Chord>
           <Rest>
-            <eid>V_V</eid>
+            <eid>X_X</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>W_W</eid>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -179,9 +186,9 @@
       </Staff>
     <SpannerMap>
       <Slur>
-        <startElement>Q_Q</startElement>
-        <endElement>S_S</endElement>
-        <eid>X_X</eid>
+        <startElement>S_S</startElement>
+        <endElement>U_U</endElement>
+        <eid>Z_Z</eid>
         <track>0</track>
         </Slur>
       </SpannerMap>

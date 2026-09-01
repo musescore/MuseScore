@@ -106,28 +106,35 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>O_O</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>P_P</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>M_M</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <eid>P_P</eid>
+            <eid>R_R</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>S_S</eid>
         <voice>
           <Chord>
-            <eid>R_R</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>U_U</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -135,10 +142,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>T_T</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>W_W</eid>
               <parentheses>both</parentheses>
               <pitch>62</pitch>
               <tpc>16</tpc>
@@ -148,23 +155,30 @@
                 <guitarBendType>bend</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                <startElement>S_S</startElement>
-                <endElement>U_U</endElement>
-                <eid>V_V</eid>
+                <startElement>U_U</startElement>
+                <endElement>W_W</endElement>
+                <eid>X_X</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>Y_Y</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>Z_Z</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>U_U</NoteEID>
+                <NoteEID>W_W</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>W_W</eid>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>b_b</eid>
               <parentheses>both</parentheses>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -174,89 +188,47 @@
                 <guitarBendType>bend</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.25</bendEndTimeFactor>
-                <startElement>U_U</startElement>
-                <endElement>X_X</endElement>
-                <eid>Y_Y</eid>
+                <startElement>W_W</startElement>
+                <endElement>b_b</endElement>
+                <eid>c_c</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>d_d</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>e_e</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>X_X</NoteEID>
+                <NoteEID>b_b</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <eid>a_a</eid>
+            <eid>g_g</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>h_h</eid>
         <voice>
           <Chord>
-            <eid>c_c</eid>
+            <eid>i_i</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>j_j</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
               </Note>
-            </Chord>
-          <Chord>
-            <eid>e_e</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>f_f</eid>
-              <parentheses>both</parentheses>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              <GuitarBend>
-                <guitarBendType>bend</guitarBendType>
-                <bendStartTimeFactor>0</bendStartTimeFactor>
-                <bendEndTimeFactor>0.25</bendEndTimeFactor>
-                <startElement>d_d</startElement>
-                <endElement>f_f</endElement>
-                <eid>g_g</eid>
-                <track>0</track>
-                </GuitarBend>
-              </Note>
-            <NoteParenGroup>
-              <Notes>
-                <NoteEID>f_f</NoteEID>
-                </Notes>
-              </NoteParenGroup>
-            </Chord>
-          <Chord>
-            <eid>h_h</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>i_i</eid>
-              <parentheses>both</parentheses>
-              <Tie>
-                <startElement>f_f</startElement>
-                <endElement>i_i</endElement>
-                <eid>j_j</eid>
-                <track>0</track>
-                </Tie>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              </Note>
-            <NoteParenGroup>
-              <Notes>
-                <NoteEID>i_i</NoteEID>
-                </Notes>
-              </NoteParenGroup>
             </Chord>
           <Chord>
             <eid>k_k</eid>
@@ -264,10 +236,43 @@
             <Note>
               <eid>l_l</eid>
               <parentheses>both</parentheses>
-              <Tie>
-                <startElement>i_i</startElement>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              <GuitarBend>
+                <guitarBendType>bend</guitarBendType>
+                <bendStartTimeFactor>0</bendStartTimeFactor>
+                <bendEndTimeFactor>0.25</bendEndTimeFactor>
+                <startElement>j_j</startElement>
                 <endElement>l_l</endElement>
                 <eid>m_m</eid>
+                <track>0</track>
+                </GuitarBend>
+              </Note>
+            <NoteParenGroup>
+              <Parenthesis>
+                <eid>n_n</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>o_o</eid>
+                </Parenthesis>
+              <Notes>
+                <NoteEID>l_l</NoteEID>
+                </Notes>
+              </NoteParenGroup>
+            </Chord>
+          <Chord>
+            <eid>p_p</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>q_q</eid>
+              <parentheses>both</parentheses>
+              <Tie>
+                <startElement>l_l</startElement>
+                <endElement>q_q</endElement>
+                <eid>r_r</eid>
                 <track>0</track>
                 </Tie>
               <pitch>62</pitch>
@@ -276,8 +281,45 @@
               <string>1</string>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>s_s</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>t_t</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>l_l</NoteEID>
+                <NoteEID>q_q</NoteEID>
+                </Notes>
+              </NoteParenGroup>
+            </Chord>
+          <Chord>
+            <eid>u_u</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>v_v</eid>
+              <parentheses>both</parentheses>
+              <Tie>
+                <startElement>q_q</startElement>
+                <endElement>v_v</endElement>
+                <eid>w_w</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            <NoteParenGroup>
+              <Parenthesis>
+                <eid>x_x</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>y_y</eid>
+                </Parenthesis>
+              <Notes>
+                <NoteEID>v_v</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>

@@ -171,16 +171,23 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>iIlSB4LQ97P_iIlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>jIlSB4LQ97P_jIlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>FnxFxecIhwM_/8Z5xhXCfuO</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>iIlSB4LQ97P_iIlSB4LQ97P</eid>
+            <eid>kIlSB4LQ97P_kIlSB4LQ97P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>jIlSB4LQ97P_jIlSB4LQ97P</eid>
+              <eid>lIlSB4LQ97P_lIlSB4LQ97P</eid>
               <parentheses>both</parentheses>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -188,8 +195,15 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>mIlSB4LQ97P_mIlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>nIlSB4LQ97P_nIlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>jIlSB4LQ97P_jIlSB4LQ97P</NoteEID>
+                <NoteEID>lIlSB4LQ97P_lIlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -221,21 +235,21 @@
               </TremoloSingleChord>
             </Chord>
           <Chord>
-            <eid>kIlSB4LQ97P_kIlSB4LQ97P</eid>
+            <eid>oIlSB4LQ97P_oIlSB4LQ97P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>lIlSB4LQ97P_lIlSB4LQ97P</eid>
+              <eid>pIlSB4LQ97P_pIlSB4LQ97P</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
-              <eid>mIlSB4LQ97P_mIlSB4LQ97P</eid>
+              <eid>qIlSB4LQ97P_qIlSB4LQ97P</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r32</subtype>
-              <eid>nIlSB4LQ97P_nIlSB4LQ97P</eid>
+              <eid>rIlSB4LQ97P_rIlSB4LQ97P</eid>
               </TremoloSingleChord>
             </Chord>
           <Rest>
@@ -275,23 +289,23 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>oIlSB4LQ97P_oIlSB4LQ97P</eid>
+            <eid>sIlSB4LQ97P_sIlSB4LQ97P</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <eid>pIlSB4LQ97P_pIlSB4LQ97P</eid>
+              <eid>tIlSB4LQ97P_tIlSB4LQ97P</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
-              <eid>qIlSB4LQ97P_qIlSB4LQ97P</eid>
+              <eid>uIlSB4LQ97P_uIlSB4LQ97P</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>withx</head>
               </Note>
             </Chord>
           <Rest>
-            <eid>rIlSB4LQ97P_rIlSB4LQ97P</eid>
+            <eid>vIlSB4LQ97P_vIlSB4LQ97P</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -343,12 +357,26 @@
               <tpc>17</tpc>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>wIlSB4LQ97P_wIlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>xIlSB4LQ97P_xIlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>0b3xdwlID2F_lE9ZJSjrm3O</NoteEID>
                 <NoteEID>ZNCtP8KEtVL_8Q08arUSHjK</NoteEID>
                 </Notes>
               </NoteParenGroup>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>yIlSB4LQ97P_yIlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>zIlSB4LQ97P_zIlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>VNqmebd+ofP_0xyw3HP9W4H</NoteEID>
                 <NoteEID>trrHu3W2RhJ_tCmSx2UkxVE</NoteEID>
@@ -357,43 +385,57 @@
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>sIlSB4LQ97P_sIlSB4LQ97P</eid>
+            <eid>0IlSB4LQ97P_0IlSB4LQ97P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>tIlSB4LQ97P_tIlSB4LQ97P</eid>
+              <eid>1IlSB4LQ97P_1IlSB4LQ97P</eid>
               <parentheses>both</parentheses>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <Note>
-              <eid>uIlSB4LQ97P_uIlSB4LQ97P</eid>
+              <eid>2IlSB4LQ97P_2IlSB4LQ97P</eid>
               <parentheses>both</parentheses>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <Note>
-              <eid>vIlSB4LQ97P_vIlSB4LQ97P</eid>
+              <eid>3IlSB4LQ97P_3IlSB4LQ97P</eid>
               <parentheses>both</parentheses>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <Note>
-              <eid>wIlSB4LQ97P_wIlSB4LQ97P</eid>
+              <eid>4IlSB4LQ97P_4IlSB4LQ97P</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>5IlSB4LQ97P_5IlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>6IlSB4LQ97P_6IlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>tIlSB4LQ97P_tIlSB4LQ97P</NoteEID>
-                <NoteEID>uIlSB4LQ97P_uIlSB4LQ97P</NoteEID>
+                <NoteEID>1IlSB4LQ97P_1IlSB4LQ97P</NoteEID>
+                <NoteEID>2IlSB4LQ97P_2IlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>7IlSB4LQ97P_7IlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>8IlSB4LQ97P_8IlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>vIlSB4LQ97P_vIlSB4LQ97P</NoteEID>
+                <NoteEID>3IlSB4LQ97P_3IlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -426,16 +468,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>xIlSB4LQ97P_xIlSB4LQ97P</eid>
+            <eid>9IlSB4LQ97P_9IlSB4LQ97P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>yIlSB4LQ97P_yIlSB4LQ97P</eid>
+              <eid>+IlSB4LQ97P_+IlSB4LQ97P</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <head>triangle-up</head>
               </Note>
             <Note>
-              <eid>zIlSB4LQ97P_zIlSB4LQ97P</eid>
+              <eid>/IlSB4LQ97P_/IlSB4LQ97P</eid>
               <pitch>86</pitch>
               <tpc>16</tpc>
               </Note>
@@ -462,15 +504,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>0IlSB4LQ97P_0IlSB4LQ97P</eid>
+            <eid>AJlSB4LQ97P_AJlSB4LQ97P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>1IlSB4LQ97P_1IlSB4LQ97P</eid>
+              <eid>BJlSB4LQ97P_BJlSB4LQ97P</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
-              <eid>2IlSB4LQ97P_2IlSB4LQ97P</eid>
+              <eid>CJlSB4LQ97P_CJlSB4LQ97P</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <head>triangle-up</head>
@@ -501,24 +543,38 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>DJlSB4LQ97P_DJlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>EJlSB4LQ97P_EJlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>xSeIF5GSGDH_50j5/Y//e5N</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>3IlSB4LQ97P_3IlSB4LQ97P</eid>
+            <eid>FJlSB4LQ97P_FJlSB4LQ97P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>4IlSB4LQ97P_4IlSB4LQ97P</eid>
+              <eid>GJlSB4LQ97P_GJlSB4LQ97P</eid>
               <parentheses>both</parentheses>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>HJlSB4LQ97P_HJlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>IJlSB4LQ97P_IJlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>4IlSB4LQ97P_4IlSB4LQ97P</NoteEID>
+                <NoteEID>GJlSB4LQ97P_GJlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -528,15 +584,15 @@
         <eid>mt/BFUiNG+O_8EVBTn9xdl</eid>
         <voice>
           <Chord>
-            <eid>5IlSB4LQ97P_5IlSB4LQ97P</eid>
+            <eid>JJlSB4LQ97P_JJlSB4LQ97P</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>6IlSB4LQ97P_6IlSB4LQ97P</eid>
+              <eid>KJlSB4LQ97P_KJlSB4LQ97P</eid>
               <parentheses>both</parentheses>
               <Tie>
-                <startElement>4IlSB4LQ97P_4IlSB4LQ97P</startElement>
-                <endElement>6IlSB4LQ97P_6IlSB4LQ97P</endElement>
-                <eid>7IlSB4LQ97P_7IlSB4LQ97P</eid>
+                <startElement>GJlSB4LQ97P_GJlSB4LQ97P</startElement>
+                <endElement>KJlSB4LQ97P_KJlSB4LQ97P</endElement>
+                <eid>LJlSB4LQ97P_LJlSB4LQ97P</eid>
                 <track>0</track>
                 </Tie>
               <pitch>76</pitch>
@@ -544,21 +600,28 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>MJlSB4LQ97P_MJlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>NJlSB4LQ97P_NJlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>6IlSB4LQ97P_6IlSB4LQ97P</NoteEID>
+                <NoteEID>KJlSB4LQ97P_KJlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>8IlSB4LQ97P_8IlSB4LQ97P</eid>
+            <eid>OJlSB4LQ97P_OJlSB4LQ97P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>9IlSB4LQ97P_9IlSB4LQ97P</eid>
+              <eid>PJlSB4LQ97P_PJlSB4LQ97P</eid>
               <parentheses>both</parentheses>
               <Tie>
-                <startElement>6IlSB4LQ97P_6IlSB4LQ97P</startElement>
-                <endElement>9IlSB4LQ97P_9IlSB4LQ97P</endElement>
-                <eid>+IlSB4LQ97P_+IlSB4LQ97P</eid>
+                <startElement>KJlSB4LQ97P_KJlSB4LQ97P</startElement>
+                <endElement>PJlSB4LQ97P_PJlSB4LQ97P</endElement>
+                <eid>QJlSB4LQ97P_QJlSB4LQ97P</eid>
                 <track>0</track>
                 </Tie>
               <pitch>76</pitch>
@@ -566,17 +629,24 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>RJlSB4LQ97P_RJlSB4LQ97P</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>SJlSB4LQ97P_SJlSB4LQ97P</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>9IlSB4LQ97P_9IlSB4LQ97P</NoteEID>
+                <NoteEID>PJlSB4LQ97P_PJlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>/IlSB4LQ97P_/IlSB4LQ97P</eid>
+            <eid>TJlSB4LQ97P_TJlSB4LQ97P</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>AJlSB4LQ97P_AJlSB4LQ97P</eid>
+            <eid>UJlSB4LQ97P_UJlSB4LQ97P</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -618,15 +688,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>BJlSB4LQ97P_BJlSB4LQ97P</eid>
+            <eid>VJlSB4LQ97P_VJlSB4LQ97P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>CJlSB4LQ97P_CJlSB4LQ97P</eid>
+              <eid>WJlSB4LQ97P_WJlSB4LQ97P</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
-              <eid>DJlSB4LQ97P_DJlSB4LQ97P</eid>
+              <eid>XJlSB4LQ97P_XJlSB4LQ97P</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>

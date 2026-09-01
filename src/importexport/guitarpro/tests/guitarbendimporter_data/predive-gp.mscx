@@ -90,19 +90,26 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>L_L</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>M_M</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>K_K</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>O_O</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>N_N</eid>
+                <eid>P_P</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>12</tpc>
@@ -113,18 +120,18 @@
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>K_K</startElement>
-                <endElement>M_M</endElement>
-                <eid>O_O</eid>
+                <endElement>O_O</endElement>
+                <eid>Q_Q</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Rest>
-            <eid>P_P</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

@@ -114,16 +114,23 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>Q_Q</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>R_R</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>P_P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>T_T</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>4</fret>
@@ -133,13 +140,13 @@
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>P_P</startElement>
-                <endElement>R_R</endElement>
-                <eid>S_S</eid>
+                <endElement>T_T</endElement>
+                <eid>U_U</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>V_V</eid>
               <pitch>83</pitch>
               <tpc>19</tpc>
               <head>diamond</head>
@@ -149,7 +156,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>U_U</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -163,7 +170,7 @@
         <track2>0</track2>
         <startTick>0/1</startTick>
         <ticks>1/2</ticks>
-        <eid>V_V</eid>
+        <eid>X_X</eid>
         <track>0</track>
         </HarmonicMark>
       </SpannerMap>
