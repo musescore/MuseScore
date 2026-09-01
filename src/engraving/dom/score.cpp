@@ -4025,6 +4025,7 @@ EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool next) const
     if (!currentMeasureBase) {
         return el;
     }
+    track_idx_t track = el->isChordRest() ? trackZeroVoice(el->track()) : 0;
 
     // Next Section of Score
     if (next) {
@@ -4032,7 +4033,7 @@ EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool next) const
         if (!destination) {
             return el;
         }
-        return getScoreElementOfMeasureBase(destination->next());
+        return getScoreElementOfMeasureBase(destination->next(), track);
     }
 
     // Previous Section of Score
@@ -4044,14 +4045,14 @@ EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool next) const
 
     if (currentSegment) {
         MeasureBase* firstBreak = destination;
-        el = getScoreElementOfMeasureBase(destination->next());
+        el = getScoreElementOfMeasureBase(destination->next(), track);
         if (el && el->isChordRest() && (toChordRest(el)->segment() == currentSegment)) {
             if (firstBreak == score()->first()) {
                 el = firstBreak;
             } else if ((destination = getNextPrevSectionBreak(destination, false))) {
                 bool isFallbackSentinel = (destination == score()->first());
                 bool isRealBreak = !destination->sectionBreak() && !isFallbackSentinel;
-                el = isRealBreak ? destination : getScoreElementOfMeasureBase(destination->next());
+                el = isRealBreak ? destination : getScoreElementOfMeasureBase(destination->next(), track);
             }
         }
     }
@@ -4060,14 +4061,14 @@ EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool next) const
     if (score()->first() == currentMeasureBase) {
         return el;
     }
-    el = getScoreElementOfMeasureBase(destination->next());
+    el = getScoreElementOfMeasureBase(destination->next(), track);
     if (!el) {
         return el;
     }
     if (el->findMeasureBase() == currentMeasureBase) {
         destination = getNextPrevSectionBreak(destination, false);
         if (destination) {
-            el = destination->sectionBreak() ? getScoreElementOfMeasureBase(destination->next()) : el;
+            el = destination->sectionBreak() ? getScoreElementOfMeasureBase(destination->next(), track) : el;
         }
     }
     return el;
@@ -4122,7 +4123,7 @@ MeasureBase* Score::getNextPrevSectionBreak(MeasureBase* mb, bool dir) const
 //    MeasureBase
 //---------------------------------------------------------
 
-EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
+EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb, track_idx_t track = 0) const
 {
     EngravingItem* el { nullptr };
     ChordRest* cr { nullptr };
@@ -4135,7 +4136,7 @@ EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
             if (style().styleB(Sid::createMultiMeasureRests) && currentMeasure->hasMMRest()) {
                 currentMeasure = currentMeasure->coveringMMRestOrThis();
             }
-            if ((cr = currentMeasure->first()->nextChordRest(0, false))) {
+            if ((cr = currentMeasure->first()->nextChordRest(track, false))) {
                 el = cr;
             }
         }
