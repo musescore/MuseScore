@@ -299,6 +299,18 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Previous system"),
              TranslatableString("action", "Go to previous system")
              ),
+    UiAction("next-section",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Next section"),
+             TranslatableString("action", "Go to next section")
+             ),
+    UiAction("prev-section",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Previous section"),
+             TranslatableString("action", "Go to previous section")
+             ),
     UiAction("select-next-chord",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

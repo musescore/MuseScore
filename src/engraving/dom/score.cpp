@@ -4050,7 +4050,8 @@ EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool next) const
                 el = firstBreak;
             } else if ((destination = getNextPrevSectionBreak(destination, false))) {
                 bool isFallbackSentinel = (destination == score()->first());
-                el = (!destination->sectionBreak() && !isFallbackSentinel) ? destination : getScoreElementOfMeasureBase(destination->next());
+                bool isRealBreak = !destination->sectionBreak() && !isFallbackSentinel;
+                el = isRealBreak ? destination : getScoreElementOfMeasureBase(destination->next());
             }
         }
     }

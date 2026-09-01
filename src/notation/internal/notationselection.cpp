@@ -244,6 +244,12 @@ void NotationSelection::select(SelectionTarget target)
     case SelectionTarget::PrevSystem:
         moveSelection(MoveDirection::Left, MoveSelectionType::System);
         break;
+    case SelectionTarget::NextSection:
+        moveSelection(MoveDirection::Right, MoveSelectionType::Section);
+        break;
+    case SelectionTarget::PrevSection:
+        moveSelection(MoveDirection::Left, MoveSelectionType::Section);
+        break;
     case SelectionTarget::AboveStaff:
         moveSelection(MoveDirection::Up, MoveSelectionType::Track);
         break;
@@ -486,6 +492,7 @@ void NotationSelection::moveSelection(MoveDirection d, MoveSelectionType type)
         case MoveSelectionType::Track:     return QString("track");
         case MoveSelectionType::Frame:     return QString("frame");
         case MoveSelectionType::System:    return QString("system");
+        case MoveSelectionType::Section:   return QString("section");
         case MoveSelectionType::String:   return QString();
         }
         return QString();
