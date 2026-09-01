@@ -35,6 +35,7 @@
 namespace mu::project {
 class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public muse::async::Asyncable, public muse::Contextable
 {
+public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
