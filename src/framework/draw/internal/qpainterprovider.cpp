@@ -117,6 +117,7 @@ void QPainterProvider::setCompositionMode(CompositionMode mode)
         switch (mode) {
         case CompositionMode::SourceOver: return QPainter::CompositionMode_SourceOver;
         case CompositionMode::HardLight: return QPainter::CompositionMode_HardLight;
+        case CompositionMode::SourceIn: return QPainter::CompositionMode_SourceIn;
         }
         return QPainter::CompositionMode_SourceOver;
     };
