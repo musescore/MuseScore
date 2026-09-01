@@ -114,7 +114,7 @@ private:
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const;
     muse::Ret warnCloudNotAvailableForUploading(bool isPublishShare) const;
     muse::Ret warnCloudNotAvailableForSharingAudio() const;
-    muse::RetVal<muse::Val> ensureAuthorization(const QString& cloudeCode, bool publishingScore, const std::string& text) const;
+    muse::RetVal<muse::Val> ensureAuthorization(const QString& cloudCode, bool publishingScore, const std::string& text) const;
     muse::Ret showCloudSaveError(const muse::Ret& ret, const CloudProjectInfo& info, bool isPublishShare, bool alreadyAttempted) const;
     muse::Ret showAudioCloudShareError(const muse::Ret& ret) const;
 

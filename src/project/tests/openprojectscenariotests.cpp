@@ -247,10 +247,10 @@ protected:
 TEST_F(OpenProjectScenarioTests, OpenProject_LocalFileUrl_OpensThatFile)
 {
     //! [GIVEN] A local file...
-    ProjectFile file(QUrl::fromLocalFile("/scores/symphony.mscz"));
+    ProjectFile file(QUrl::fromLocalFile("/score.mscz"));
 
     //! [THEN] It is loaded and becomes the current score
-    EXPECT_CALL(*m_project, load(io::path_t("/scores/symphony.mscz"), _, _)).Times(1);
+    EXPECT_CALL(*m_project, load(io::path_t("/score.mscz"), _, _)).Times(1);
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(1);
 
     //! [WHEN] Opening it...
@@ -276,8 +276,8 @@ TEST_F(OpenProjectScenarioTests, OpenProject_MuseScoreUrlThatIsNotAScore_IsRejec
 
 TEST_F(OpenProjectScenarioTests, OpenProject_ForeignUrl_IsRejected)
 {
-    //! [GIVEN] A url of a scheme the app knows nothing about...
-    ProjectFile file(QUrl("https://example.com/score.mscz"));
+    //! [GIVEN] A url that is neither a local file nor a musescore:// link...
+    ProjectFile file(QUrl("foreign-url"));
 
     //! [THEN] Nothing is loaded
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
@@ -291,14 +291,14 @@ TEST_F(OpenProjectScenarioTests, OpenProject_ForeignUrl_IsRejected)
 TEST_F(OpenProjectScenarioTests, OpenProject_NothingGiven_AsksTheUserForAFile)
 {
     //! [GIVEN] No file named, and a user who picks one...
-    const io::path_t picked = "/scores/picked.mscz";
+    const io::path_t picked = "dir/picked.mscz";
     ON_CALL(*m_interactive, selectOpeningFile(_, _, _))
     .WillByDefault([picked](const std::string&, const io::path_t&, const std::vector<std::string>&) {
         return async::make_promise<io::path_t>([picked](auto resolve, auto) { return resolve(picked); });
     });
 
     //! [THEN] The chosen file is opened, and its folder is remembered for next time
-    EXPECT_CALL(*m_configuration, setLastOpenedProjectsPath(io::path_t("/scores"))).Times(1);
+    EXPECT_CALL(*m_configuration, setLastOpenedProjectsPath(io::path_t("dir"))).Times(1);
     EXPECT_CALL(*m_project, load(picked, _, _)).Times(1);
 
     //! [WHEN] Opening without naming a file...
@@ -329,14 +329,14 @@ TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpenHere_JustShowsIt)
 {
     //! [GIVEN] The very score that is already open in this window...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
-    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("/scores/symphony.mscz")));
+    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("score.mscz")));
 
     //! [THEN] It is not loaded again and no second window is opened
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
     EXPECT_CALL(*m_multiwindows, openNewWindow(_)).Times(0);
 
     //! [WHEN] Opening it again...
-    Ret ret = openProject("/scores/symphony.mscz");
+    Ret ret = openProject("score.mscz");
 
     EXPECT_TRUE(ret);
 }
@@ -347,11 +347,11 @@ TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpenElsewhere_RaisesThatWind
     ON_CALL(*m_multiwindows, isProjectAlreadyOpened(_)).WillByDefault(Return(true));
 
     //! [THEN] That window is brought forward instead of loading a second copy
-    EXPECT_CALL(*m_multiwindows, activateWindowWithProject(io::path_t("/scores/symphony.mscz"))).Times(1);
+    EXPECT_CALL(*m_multiwindows, activateWindowWithProject(io::path_t("score.mscz"))).Times(1);
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = openProject("/scores/symphony.mscz");
+    Ret ret = openProject("score.mscz");
 
     EXPECT_TRUE(ret);
 }
@@ -360,14 +360,14 @@ TEST_F(OpenProjectScenarioTests, OpenProject_ThisWindowIsTaken_OpensANewWindow)
 {
     //! [GIVEN] A different score already open in this window...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
-    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("/scores/other.mscz")));
+    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     //! [THEN] The new score gets a window of its own, and this one is left alone
-    EXPECT_CALL(*m_multiwindows, openNewWindow(QStringList { "/scores/symphony.mscz" })).Times(1);
+    EXPECT_CALL(*m_multiwindows, openNewWindow(QStringList { "score.mscz" })).Times(1);
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = openProject("/scores/symphony.mscz");
+    Ret ret = openProject("score.mscz");
 
     EXPECT_TRUE(ret);
 }
@@ -376,14 +376,14 @@ TEST_F(OpenProjectScenarioTests, OpenProject_NewWindowWithDisplayName_PassesTheN
 {
     //! [GIVEN] A different score already open in this window...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
-    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("/scores/other.mscz")));
+    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     //! [THEN] The display name travels to the new window, so the title is not lost
-    const QStringList expected { "/scores/symphony.mscz", "--score-display-name-override", "Cloud title" };
+    const QStringList expected { "score.mscz", "--score-display-name-override", "Cloud title" };
     EXPECT_CALL(*m_multiwindows, openNewWindow(expected)).Times(1);
 
     //! [WHEN] Opening it with a display name...
-    openProject("/scores/symphony.mscz", "Cloud title");
+    openProject("score.mscz", "Cloud title");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_EmptyPath_IsRefused)
@@ -395,7 +395,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_EmptyPath_IsRefused)
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = openProject("/scores/symphony.mscz");
+    Ret ret = openProject("score.mscz");
 
     EXPECT_FALSE(ret);
 }
@@ -415,7 +415,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreAndCloudReachable_Downloa
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
-    openProject("/cloud/42.mscz");
+    openProject("cloud-42.mscz");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOffline_OpensTheLocalCopy)
@@ -427,11 +427,11 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOffline_OpensTheLocalCopy
     ON_CALL(*m_fileSystem, exists(_)).WillByDefault(Return(true));
 
     //! [THEN] The local copy is opened so the user can keep working offline
-    EXPECT_CALL(*m_project, load(io::path_t("/cloud/42.mscz"), _, _)).Times(1);
+    EXPECT_CALL(*m_project, load(io::path_t("cloud-42.mscz"), _, _)).Times(1);
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
 
     //! [WHEN] Opening it...
-    openProject("/cloud/42.mscz");
+    openProject("cloud-42.mscz");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOfflineAndNotOnDisk_ReportsTheNetwork)
@@ -447,7 +447,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOfflineAndNotOnDisk_Repor
     EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = openProject("/cloud/42.mscz");
+    Ret ret = openProject("cloud-42.mscz");
 
     EXPECT_EQ(ret.code(), int(cloud::Err::NetworkError));
 }
@@ -460,10 +460,10 @@ TEST_F(OpenProjectScenarioTests, OpenProject_LegacyCloudScore_IsOpenedAsAnOrdina
 
     //! [THEN] It is loaded straight from disk, without consulting the cloud at all
     EXPECT_CALL(*m_authorization, checkCloudIsAvailable()).Times(0);
-    EXPECT_CALL(*m_project, load(io::path_t("/scores/legacy.mscz"), _, _)).Times(1);
+    EXPECT_CALL(*m_project, load(io::path_t("legacy.mscz"), _, _)).Times(1);
 
     //! [WHEN] Opening it...
-    openProject("/scores/legacy.mscz");
+    openProject("legacy.mscz");
 }
 
 // ─── One open at a time ──────────────────────────────────────────────────────
@@ -477,12 +477,12 @@ TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpening_RefusesToStartAgain)
         if (nested.valid()) {
             return p;
         }
-        nested = openProject("/scores/other.mscz");
+        nested = openProject("other.mscz");
         return p;
     });
 
     //! [WHEN] Opening a score...
-    openProject("/scores/symphony.mscz");
+    openProject("score.mscz");
 
     //! [THEN] The re-entrant call is refused
     EXPECT_EQ(nested.code(), int(Ret::Code::Busy));
@@ -494,14 +494,14 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FromCommandParams_UsesUrlAndDisplay
 {
     //! [GIVEN] An "open" command carrying a file url and a display name...
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
-    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("/scores/other.mscz")));
+    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     rcommand::Params params;
-    params["url"] = Val(QUrl::fromLocalFile("/scores/symphony.mscz").toString().toStdString());
+    params["url"] = Val(QUrl::fromLocalFile("/score.mscz").toString().toStdString());
     params["display_name"] = Val("Cloud title");
 
     //! [THEN] Both reach the new window
-    const QStringList expected { "/scores/symphony.mscz", "--score-display-name-override", "Cloud title" };
+    const QStringList expected { "/score.mscz", "--score-display-name-override", "Cloud title" };
     EXPECT_CALL(*m_multiwindows, openNewWindow(expected)).Times(1);
 
     //! [WHEN] Handling the command...
@@ -677,7 +677,7 @@ TEST_F(OpenProjectScenarioTests, OpenScoreUrl_WindowIsTaken_OpensANewWindowWithT
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
     .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
-    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("/scores/other.mscz")));
+    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     //! [THEN] The link and its title go to a new window
     const QStringList expected { "musescore://open-score/42", "--score-display-name-override", "Cloud title" };
@@ -714,7 +714,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserAgrees
     EXPECT_CALL(*m_project, load(_, ::testing::Field(&OpenParams::forceMode, true), _)).Times(1);
 
     //! [WHEN] Opening it...
-    openProject("/scores/ancient.mscz");
+    openProject("ancient.mscz");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserDeclines_GivesUp)
@@ -730,7 +730,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserDeclin
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = openProject("/scores/ancient.mscz");
+    Ret ret = openProject("ancient.mscz");
 
     EXPECT_FALSE(ret);
 }
@@ -748,7 +748,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileFromANewerVersion_RetriesOnlyIf
     EXPECT_CALL(*m_project, load(_, ::testing::Field(&OpenParams::forceMode, true), _)).Times(1);
 
     //! [WHEN] Opening it...
-    openProject("/scores/future.mscz");
+    openProject("future.mscz");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_FileFromANewerVersionAndCheckingIsOn_GivesUp)
@@ -762,7 +762,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileFromANewerVersionAndCheckingIsO
     EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
 
     //! [WHEN] Opening it...
-    openProject("/scores/future.mscz");
+    openProject("future.mscz");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_CorruptedFileAndUserAgrees_LoadsItForcibly)
@@ -778,7 +778,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CorruptedFileAndUserAgrees_LoadsItF
     EXPECT_CALL(*m_project, load(_, ::testing::Field(&OpenParams::forceMode, true), _)).Times(1);
 
     //! [WHEN] Opening it...
-    openProject("/scores/broken.mscz");
+    openProject("broken.mscz");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_CriticallyCorruptedFile_IsNeverRetried)
@@ -792,7 +792,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CriticallyCorruptedFile_IsNeverRetr
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Opening it...
-    Ret ret = openProject("/scores/ruined.mscz");
+    Ret ret = openProject("ruined.mscz");
 
     EXPECT_FALSE(ret);
 }
@@ -808,7 +808,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_UnreadableFile_IsReportedAndNotRetr
     EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
 
     //! [WHEN] Opening it...
-    Ret ret = openProject("/scores/missing.mscz");
+    Ret ret = openProject("missing.mscz");
 
     EXPECT_FALSE(ret);
 }
@@ -825,7 +825,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_UserCancelledTheLoad_AsksNothingFur
     EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
 
     //! [WHEN] Opening it...
-    openProject("/scores/symphony.mscz");
+    openProject("score.mscz");
 }
 
 // ─── Unsaved work from a previous session ────────────────────────────────────
@@ -835,16 +835,16 @@ TEST_F(OpenProjectScenarioTests, OpenProject_HasAnAutosave_LoadsItAndKeepsTheOri
     //! [GIVEN] A score with unsaved changes left over from a crash...
     ON_CALL(*m_autoSaver, projectHasUnsavedChanges(_)).WillByDefault(Return(true));
     ON_CALL(*m_autoSaver, projectAutoSavePath(_))
-    .WillByDefault(Return(io::path_t("/scores/symphony.mscz,")));
+    .WillByDefault(Return(io::path_t("score.mscz,")));
 
     //! [THEN] The autosave is what gets read, but the score keeps pointing at the real file
     //! and is marked unsaved, so the user is not fooled into thinking it is on disk
-    EXPECT_CALL(*m_project, load(io::path_t("/scores/symphony.mscz,"), _, _)).Times(1);
-    EXPECT_CALL(*m_project, setPath(io::path_t("/scores/symphony.mscz"))).Times(1);
+    EXPECT_CALL(*m_project, load(io::path_t("score.mscz,"), _, _)).Times(1);
+    EXPECT_CALL(*m_project, setPath(io::path_t("score.mscz"))).Times(1);
     EXPECT_CALL(*m_project, markAsUnsaved()).Times(1);
 
     //! [WHEN] Opening it...
-    openProject("/scores/symphony.mscz");
+    openProject("score.mscz");
 }
 
 TEST_F(OpenProjectScenarioTests, OpenProject_AutosaveOfANeverSavedScore_OpensAsNewlyCreated)
@@ -857,7 +857,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_AutosaveOfANeverSavedScore_OpensAsN
     EXPECT_CALL(*m_recentFiles, prependRecentFile(_)).Times(0);
 
     //! [WHEN] Opening it...
-    openProject("/scores/untitled.mscz");
+    openProject("untitled.mscz");
 }
 // ─── Can the app open this at all ────────────────────────────────────────────
 
@@ -868,7 +868,7 @@ TEST_F(OpenProjectScenarioTests, IsFileSupported_MuseScoreFile_IsAccepted)
     EXPECT_CALL(*m_readers, reader(_)).Times(0);
 
     //! [WHEN] Asking whether it can be opened...
-    EXPECT_TRUE(m_scenario->isFileSupported(io::path_t("/scores/symphony.mscz")));
+    EXPECT_TRUE(m_scenario->isFileSupported(io::path_t("score.mscz")));
 }
 
 TEST_F(OpenProjectScenarioTests, IsFileSupported_ForeignFormatWithAReader_IsAccepted)
@@ -878,7 +878,7 @@ TEST_F(OpenProjectScenarioTests, IsFileSupported_ForeignFormatWithAReader_IsAcce
     .WillByDefault(Return(std::make_shared<NiceMock<NotationReaderMock> >()));
 
     //! [WHEN] Asking whether it can be opened...
-    EXPECT_TRUE(m_scenario->isFileSupported(io::path_t("/scores/tune.mid")));
+    EXPECT_TRUE(m_scenario->isFileSupported(io::path_t("tune.mid")));
 }
 
 TEST_F(OpenProjectScenarioTests, IsFileSupported_UnknownFormat_IsRefused)
@@ -887,7 +887,7 @@ TEST_F(OpenProjectScenarioTests, IsFileSupported_UnknownFormat_IsRefused)
     ON_CALL(*m_readers, reader(_)).WillByDefault(Return(nullptr));
 
     //! [WHEN] Asking whether it can be opened...
-    EXPECT_FALSE(m_scenario->isFileSupported(io::path_t("/scores/notes.txt")));
+    EXPECT_FALSE(m_scenario->isFileSupported(io::path_t("notes.txt")));
 }
 
 TEST_F(OpenProjectScenarioTests, IsUrlSupported_LocalFile_DefersToTheFileCheck)
@@ -897,8 +897,8 @@ TEST_F(OpenProjectScenarioTests, IsUrlSupported_LocalFile_DefersToTheFileCheck)
 
     //! [WHEN] Asking about the url...
     //! [THEN] The answer is the same as for the file itself
-    EXPECT_FALSE(m_scenario->isUrlSupported(QUrl::fromLocalFile("/scores/notes.txt")));
-    EXPECT_TRUE(m_scenario->isUrlSupported(QUrl::fromLocalFile("/scores/symphony.mscz")));
+    EXPECT_FALSE(m_scenario->isUrlSupported(QUrl::fromLocalFile("/notes.txt")));
+    EXPECT_TRUE(m_scenario->isUrlSupported(QUrl::fromLocalFile("/score.mscz")));
 }
 
 TEST_F(OpenProjectScenarioTests, IsUrlSupported_OpenScoreLink_IsAccepted)
@@ -917,9 +917,9 @@ TEST_F(OpenProjectScenarioTests, IsUrlSupported_OtherMuseScoreLink_IsRefused)
 
 TEST_F(OpenProjectScenarioTests, IsUrlSupported_ForeignScheme_IsRefused)
 {
-    //! [GIVEN] A url of a scheme the app knows nothing about...
+    //! [GIVEN] A url that is neither a local file nor a musescore:// link...
     //! [WHEN] Asking about it...
-    EXPECT_FALSE(m_scenario->isUrlSupported(QUrl("https://example.com/score.mscz")));
+    EXPECT_FALSE(m_scenario->isUrlSupported(QUrl("foreign-url")));
 }
 TEST_F(OpenProjectScenarioTests, DownloadCloudScore_AlreadySignedIn_DoesNotAskToLogIn)
 {

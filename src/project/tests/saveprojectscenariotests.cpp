@@ -29,6 +29,7 @@
 #include "project/internal/saveprojectscenario.h"
 #include "project/projecterrors.h"
 
+#include "cloud/clouderrors.h"
 #include "cloud/qml/Muse/Cloud/enums.h"
 
 #include "cloud/tests/mocks/audiocomservicemock.h"
@@ -157,11 +158,26 @@ protected:
         return m_scenario->needGenerateAudio(isPublic);
     }
 
+    static ::testing::Matcher<const UriQuery&> IsDialog(const std::string& uri)
+    {
+        return ::testing::Truly([uri](const UriQuery& q) {
+            return q.uri().toString() == uri;
+        });
+    }
+
     static ::testing::Matcher<const UriQuery&> IsLoginDialog()
     {
-        return ::testing::Truly([](const UriQuery& q) {
-            return q.uri().toString() == "muse://cloud/requireauthorization";
-        });
+        return IsDialog("muse://cloud/requireauthorization");
+    }
+
+    static ::testing::Matcher<const UriQuery&> IsSaveToCloudDialog()
+    {
+        return IsDialog("musescore://project/savetocloud");
+    }
+
+    static ::testing::Matcher<const UriQuery&> IsAudioGenerationSettingsDialog()
+    {
+        return IsDialog("musescore://project/audiogenerationsettings");
     }
 
     //! The account is signed in, so nothing is asked.
@@ -302,13 +318,18 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ExistingCloudScore_SavesWithoutAski
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     m_cloudInfo.name = "Symphony";
-    m_cloudInfo.sourceUrl = QUrl("https://musescore.com/scores/42");
+    m_cloudInfo.sourceUrl = QUrl("score-42");
+
+    const io::path_t path = "project.mscz";
+    ON_CALL(*m_project, path()).WillByDefault(Return(path));
 
     //! [THEN] The save location is not asked for; the score keeps the cloud details it already had,
-    //! and is still written to disk so that the work survives until the connection returns
+    //! and is still written to its own file so that the work survives until the connection returns
     EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
-    EXPECT_CALL(*m_project, setCloudInfo(::testing::Field(&CloudProjectInfo::sourceUrl, m_cloudInfo.sourceUrl))).Times(1);
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
+    EXPECT_CALL(*m_project, setCloudInfo(::testing::AllOf(
+                                             ::testing::Field(&CloudProjectInfo::name, QString("Symphony")),
+                                             ::testing::Field(&CloudProjectInfo::sourceUrl, m_cloudInfo.sourceUrl)))).Times(1);
+    EXPECT_CALL(*m_project, save(path, SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it...
     saveProject(SaveMode::Save);
@@ -355,7 +376,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_LocalScoreToCloud_AsksForSaveLocati
     givenReachableCloud();
     ON_CALL(*m_interactive, openSync(_))
     .WillByDefault(Return(RetVal<Val>(make_ret(Ret::Code::Cancel))));
-    EXPECT_CALL(*m_interactive, openSync(_)).Times(1);
+    EXPECT_CALL(*m_interactive, openSync(IsSaveToCloudDialog())).Times(1);
 
     //! [WHEN] Saving it to the cloud...
     saveProject(SaveMode::Save, SaveLocationType::Cloud);
@@ -382,12 +403,13 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ChosenLocalLocation_IsUsedAsGiven)
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
     //! [GIVEN] ...and a user who picks a local file for it
-    const io::path_t chosen = "/scores/chosen.mscz";
+    const io::path_t chosen = "chosen.mscz";
     givenUserPicksLocalFile(chosen);
+    ON_CALL(*m_project, path()).WillByDefault(Return(chosen));
 
-    //! [THEN] The score lands exactly where the user pointed
+    //! [THEN] The score lands exactly where the user pointed, and that file is the one remembered
     EXPECT_CALL(*m_project, save(chosen, SaveMode::Save, true)).Times(1);
-    EXPECT_CALL(*m_recentFiles, prependRecentFile(_)).Times(1);
+    EXPECT_CALL(*m_recentFiles, prependRecentFile(RecentFile(chosen))).Times(1);
 
     //! [WHEN] Saving it...
     Ret ret = saveProject(SaveMode::Save);
@@ -414,6 +436,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ChosenCloudLocation_IsAppliedToTheP
     ON_CALL(*m_interactive, openSync(_)).WillByDefault(Return(RetVal<Val>::make_ok(Val::fromQVariant(answer))));
 
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
     givenUploadFinishesWith(make_ok(), ValMap());
 
     std::vector<CloudProjectInfo> stored;
@@ -421,8 +444,8 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ChosenCloudLocation_IsAppliedToTheP
         stored.push_back(i);
     });
 
-    //! [THEN] The score is written to disk on the way to the cloud
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(::testing::AtLeast(1));
+    //! [THEN] The score is written to the path reserved for cloud scores on the way to the cloud
+    EXPECT_CALL(*m_project, save(io::path_t("cloud.mscz"), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it...
     saveProject(SaveMode::Save);
@@ -439,9 +462,9 @@ TEST_F(SaveProjectScenarioTests, SaveProject_Forced_SkipsTheCanSaveCheck)
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
 
-    //! [THEN] The corruption check is not consulted at all, and the score is written
+    //! [THEN] The corruption check is not consulted at all, and the score is written back over itself
     EXPECT_CALL(*m_project, canSave()).Times(0);
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t(), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it with force...
     saveProject(SaveMode::Save, SaveLocationType::Undefined, true /*force*/);
@@ -457,6 +480,25 @@ TEST_F(SaveProjectScenarioTests, SaveProject_NoOpenScore_IsRefusedInsteadOfCrash
 
     //! [WHEN] A save is requested anyway, as the command path allows...
     Ret ret = saveProject(SaveMode::Save);
+
+    //! [THEN] It is refused with a clear reason
+    EXPECT_EQ(ret.code(), int(Err::NoProjectError));
+}
+
+TEST_F(SaveProjectScenarioTests, ShareAudio_NoOpenScore_IsRefusedInsteadOfCrashing)
+{
+    //! [GIVEN] A reachable cloud, so that the sharing gets as far as needing the score...
+    givenReachableCloud();
+
+    //! [GIVEN] ...and no score open at all
+    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
+
+    //! [THEN] Nothing is asked and nothing is uploaded
+    EXPECT_CALL(*m_interactive, openSync(IsSaveToCloudDialog())).Times(0);
+    EXPECT_CALL(*m_audioComService, uploadAudio(_, _, _, _, _, _)).Times(0);
+
+    //! [WHEN] Sharing the audio anyway, as the menu allows...
+    Ret ret = m_scenario->shareAudio();
 
     //! [THEN] It is refused with a clear reason
     EXPECT_EQ(ret.code(), int(Err::NoProjectError));
@@ -514,12 +556,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_AlreadySaving_RefusesToStartA
 
     ON_CALL(*m_project, save(_, _, _))
     .WillByDefault([this, &nested](const io::path_t&, SaveMode, bool) {
-        nested = m_scenario->saveProject(io::path_t("/scores/other.mscz"));
+        nested = m_scenario->saveProject(io::path_t("other.mscz"));
         return make_ok();
     });
 
     //! [WHEN] Saving to an explicit path...
-    bool ok = m_scenario->saveProject(io::path_t("/scores/explicit.mscz"));
+    bool ok = m_scenario->saveProject(io::path_t("explicit.mscz"));
 
     //! [THEN] The outer save succeeds and the re-entrant one is refused
     EXPECT_TRUE(ok);
@@ -529,7 +571,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_AlreadySaving_RefusesToStartA
 TEST_F(SaveProjectScenarioTests, SaveProjectToPath_PathGiven_WritesThereWithoutAsking)
 {
     //! [GIVEN] An explicit destination...
-    const io::path_t path = "/scores/explicit.mscz";
+    const io::path_t path = "explicit.mscz";
 
     //! [THEN] It is used as is, and nothing is asked
     EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
@@ -563,7 +605,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_WriteFails_ReportsFailure)
     ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
 
     //! [WHEN] Saving it to an explicit path...
-    bool ok = m_scenario->saveProject(io::path_t("/scores/explicit.mscz"));
+    bool ok = m_scenario->saveProject(io::path_t("explicit.mscz"));
 
     //! [THEN] The failure is reported, so that the close and quit flows can stop
     EXPECT_FALSE(ok);
@@ -574,11 +616,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_WriteFails_ReportsFailure)
 TEST_F(SaveProjectScenarioTests, SaveProjectAt_LocalLocation_WritesToTheGivenPath)
 {
     //! [GIVEN] A local destination...
-    const io::path_t path = "/scores/symphony.mscz";
+    const io::path_t path = "score.mscz";
+    ON_CALL(*m_project, path()).WillByDefault(Return(path));
 
-    //! [THEN] The score is written exactly there, and the file is remembered
+    //! [THEN] The score is written exactly there, and that file is remembered
     EXPECT_CALL(*m_project, save(path, SaveMode::Save, true)).Times(1);
-    EXPECT_CALL(*m_recentFiles, prependRecentFile(_)).Times(1);
+    EXPECT_CALL(*m_recentFiles, prependRecentFile(RecentFile(path))).Times(1);
 
     //! [WHEN] Saving to it...
     Ret ret = saveProjectAt(SaveLocation(path));
@@ -595,7 +638,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_WriteFails_DoesNotRememberTheFile
     EXPECT_CALL(*m_recentFiles, prependRecentFile(_)).Times(0);
 
     //! [WHEN] Saving it...
-    Ret ret = saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
+    Ret ret = saveProjectAt(SaveLocation(io::path_t("score.mscz")));
 
     EXPECT_FALSE(ret);
 }
@@ -609,7 +652,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_ScoreCannotBeSaved_DoesNotWrite)
     EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
 
     //! [WHEN] Saving it...
-    Ret ret = saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
+    Ret ret = saveProjectAt(SaveLocation(io::path_t("score.mscz")));
 
     EXPECT_FALSE(ret);
 }
@@ -620,10 +663,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_Forced_WritesWithoutCheckingCanSa
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
 
     //! [THEN] Forcing the save bypasses the check and writes anyway
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("score.mscz"), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it with force...
-    saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")), SaveMode::Save, true /*force*/);
+    saveProjectAt(SaveLocation(io::path_t("score.mscz")), SaveMode::Save, true /*force*/);
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectAt_UndefinedLocation_Fails)
@@ -642,10 +685,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_FromCommandParams_UsesTheGivenPat
 {
     //! [GIVEN] A "save at" command carrying a path...
     rcommand::Params params;
-    params["path"] = Val("/scores/from-command.mscz");
+    params["path"] = Val("from-command.mscz");
 
     //! [THEN] The score is written there
-    EXPECT_CALL(*m_project, save(io::path_t("/scores/from-command.mscz"), SaveMode::Save, true)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("from-command.mscz"), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Handling the command...
     Ret ret = saveProjectAt(params);
@@ -682,10 +725,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedScoreAndUserAgrees_Write
     .WillByDefault(Return(IInteractive::Result(SAVE_ANYWAY_BTN_ID)));
 
     //! [THEN] The score is written despite the corruption
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("corrupted.mscz"), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it locally...
-    saveProjectAt(SaveLocation(io::path_t("/scores/corrupted.mscz")));
+    saveProjectAt(SaveLocation(io::path_t("corrupted.mscz")));
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedOnOpeningAndCloudTarget_DoesNotWrite)
@@ -707,7 +750,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedOnOpeningAndCloudTarget_
 TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndRetry_RewritesWithoutABackup)
 {
     //! [GIVEN] A write that corrupts the file, and a user who chooses "Try again"...
-    const io::path_t path = "/scores/symphony.mscz";
+    const io::path_t path = "score.mscz";
     ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
     .WillByDefault(Return(IInteractive::Result(RETRY_SAVE_BTN_ID)));
 
@@ -739,24 +782,25 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndSaveAs_Ask
     EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving it, then letting the deferred call run...
-    saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
+    saveProjectAt(SaveLocation(io::path_t("score.mscz")));
     drainDeferredCalls();
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndCancel_DoesNotRetry)
 {
     //! [GIVEN] A write that corrupts the file, and a user who cancels...
+    const io::path_t path = "score.mscz";
     ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
     .WillByDefault(Return(IInteractive::Result(int(IInteractive::Button::Cancel))));
 
     //! [THEN] The write is attempted exactly once, and nothing is retried
-    EXPECT_CALL(*m_project, save(_, _, _))
+    EXPECT_CALL(*m_project, save(path, SaveMode::Save, true))
     .Times(1)
     .WillOnce(Return(make_ret(Err::CorruptionUponSavingError)));
     EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
 
     //! [WHEN] Saving it, then letting any deferred call run...
-    Ret ret = saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
+    Ret ret = saveProjectAt(SaveLocation(path));
     drainDeferredCalls();
 
     EXPECT_FALSE(ret);
@@ -772,7 +816,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_OrdinaryFailure_WarnsTheUser
     EXPECT_CALL(*m_interactive, errorSync(_, _, _, _, _, _)).Times(0);
 
     //! [WHEN] Saving it...
-    saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
+    saveProjectAt(SaveLocation(io::path_t("score.mscz")));
 }
 
 // ─── Saving to the cloud ─────────────────────────────────────────────────────
@@ -782,9 +826,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_CloudUnreachable_SavesLocall
     //! [GIVEN] An unreachable cloud...
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
+    ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
 
     //! [THEN] The score is written to disk and nothing is uploaded
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("cloud.mscz"), SaveMode::Save, true)).Times(1);
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Saving it to the cloud...
@@ -798,12 +843,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyACloudProject_WritesT
 {
     //! [GIVEN] A score that already lives in the cloud and has a local file of its own...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(true));
-    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("/cloud/existing.mscz")));
+    ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("project.mscz")));
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     //! [THEN] It is written back over that same file
-    EXPECT_CALL(*m_project, save(io::path_t("/cloud/existing.mscz"), SaveMode::Save, true)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("project.mscz"), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it to the cloud...
     saveProjectToCloud(CloudProjectInfo(), SaveMode::Save);
@@ -813,12 +858,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotACloudProjectYet_WritesTo
 {
     //! [GIVEN] A score that is going to the cloud for the first time...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
-    ON_CALL(*m_configuration, cloudProjectSavingPath(_)).WillByDefault(Return(io::path_t("/cloud/new.mscz")));
+    ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
     ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     //! [THEN] It is written to the path reserved for cloud scores, not to wherever it was before
-    EXPECT_CALL(*m_project, save(io::path_t("/cloud/new.mscz"), SaveMode::Save, true)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("cloud.mscz"), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it to the cloud...
     saveProjectToCloud(CloudProjectInfo(), SaveMode::Save);
@@ -832,10 +877,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInst
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
 
-    givenUserPicksLocalFile(io::path_t("/local/instead.mscz"));
+    givenUserPicksLocalFile(io::path_t("instead.mscz"));
 
     //! [THEN] The score goes to the chosen local file, the preference is remembered, and nothing is uploaded
-    EXPECT_CALL(*m_project, save(io::path_t("/local/instead.mscz"), SaveMode::Save, true)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("instead.mscz"), SaveMode::Save, true)).Times(1);
     EXPECT_CALL(*m_configuration, setLastUsedSaveLocationType(SaveLocationType::Local)).Times(1);
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
@@ -889,10 +934,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_TextBeingEdited_CommitsTheTextFir
     //! [THEN] The text is committed before anything is written, so the edit is not lost
     ::testing::Sequence seq;
     EXPECT_CALL(*m_interaction, endEditText()).InSequence(seq);
-    EXPECT_CALL(*m_project, save(_, _, _)).InSequence(seq);
+    EXPECT_CALL(*m_project, save(io::path_t("score.mscz"), SaveMode::Save, true)).InSequence(seq);
 
     //! [WHEN] Saving it...
-    saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
+    saveProjectAt(SaveLocation(io::path_t("score.mscz")));
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectAt_NoTextBeingEdited_WritesStraightAway)
@@ -902,10 +947,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_NoTextBeingEdited_WritesStraightA
 
     //! [THEN] Nothing is committed
     EXPECT_CALL(*m_interaction, endEditText()).Times(0);
-    EXPECT_CALL(*m_project, save(_, _, _)).Times(1);
+    EXPECT_CALL(*m_project, save(io::path_t("score.mscz"), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it...
-    saveProjectAt(SaveLocation(io::path_t("/scores/symphony.mscz")));
+    saveProjectAt(SaveLocation(io::path_t("score.mscz")));
 }
 
 // ─── Up-to-date cloud details before uploading ───────────────────────────────
@@ -915,10 +960,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb_Asks
     //! [GIVEN] A cloud score that has meanwhile been made public on the site...
     givenReachableCloud();
 
+    const QUrl sourceUrl("score-42");
+
     cloud::ScoreInfo remote;
     remote.title = "Renamed on the web";
     remote.visibility = cloud::Visibility::Public;
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<const QUrl&>()))
+    ON_CALL(*m_museScoreComService, downloadScoreInfo(sourceUrl))
     .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
 
     //! [GIVEN] ...and a user who declines the warning
@@ -931,21 +978,23 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb_Asks
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
-    info.sourceUrl = QUrl("https://musescore.com/scores/42");
+    info.sourceUrl = sourceUrl;
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::Save));
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_RemoteInfoUnavailable_KeepsTheLastKnownDetails)
 {
     //! [GIVEN] A cloud score whose remote details cannot be fetched...
+    const QUrl sourceUrl("score-42");
+
     givenReachableCloud();
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<const QUrl&>()))
+    ON_CALL(*m_museScoreComService, downloadScoreInfo(sourceUrl))
     .WillByDefault(Return(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))));
 
     CloudProjectInfo info;
     info.name = "Locally known name";
     info.visibility = cloud::Visibility::Private;
-    info.sourceUrl = QUrl("https://musescore.com/scores/42");
+    info.sourceUrl = sourceUrl;
 
     //! [THEN] The save carries on with the name and visibility we already had
     EXPECT_CALL(*m_project, setCloudInfo(::testing::AllOf(
@@ -965,8 +1014,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UploadSucceeds_CountsTheSave
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
 
     ValMap result;
-    result["sourceUrl"] = Val("https://musescore.com/scores/99");
-    result["editUrl"] = Val("https://musescore.com/scores/99/edit");
+    result["sourceUrl"] = Val("score-99");
+    result["editUrl"] = Val("score-99-edit");
     result["revisionId"] = Val(7);
 
     givenUploadFinishesWith(make_ok(), result);
@@ -976,12 +1025,14 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UploadSucceeds_CountsTheSave
         stored.push_back(i);
     });
 
-    //! [THEN] The score is uploaded once
-    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(1);
+    //! [THEN] The score is uploaded once, under the name and visibility it carries
+    EXPECT_CALL(*m_museScoreComService,
+                uploadScore(_, QString("Symphony"), cloud::Visibility::Private, QUrl("score-99"), 0)).Times(1);
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
-    info.sourceUrl = QUrl("https://musescore.com/scores/99");
+    info.name = "Symphony";
+    info.sourceUrl = QUrl("score-99");
     saveProjectToCloud(info, SaveMode::SaveAs);
 
     //! [THEN] The revision the server came back with is stored on the project
@@ -1009,7 +1060,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UploadFails_ReportsTheError)
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
-    info.sourceUrl = QUrl("https://musescore.com/scores/99");
+    info.sourceUrl = QUrl("score-99");
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::SaveAs));
 }
 
@@ -1024,7 +1075,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ProjectCannotBeSerialised_Do
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
-    info.sourceUrl = QUrl("https://musescore.com/scores/99");
+    info.sourceUrl = QUrl("score-99");
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::SaveAs));
 }
 
@@ -1041,7 +1092,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AudioCannotBeRendered_DoesNo
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
     info.visibility = cloud::Visibility::Public;
-    info.sourceUrl = QUrl("https://musescore.com/scores/99");
+    info.sourceUrl = QUrl("score-99");
     EXPECT_FALSE(saveProjectToCloud(info, SaveMode::SaveAs));
 }
 
@@ -1063,7 +1114,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyUploading_DoesNotStar
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
-    info.sourceUrl = QUrl("https://musescore.com/scores/99");
+    info.sourceUrl = QUrl("score-99");
     saveProjectToCloud(info, SaveMode::SaveAs);
 
     //! [THEN] The re-entrant call really happened...
@@ -1071,6 +1122,55 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyUploading_DoesNotStar
 
     //! [THEN] ...and reported success without doing anything, so the caller does not retry
     EXPECT_TRUE(nested);
+}
+
+TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ConflictRetry_LeavesTheFirstUploadDisconnected)
+{
+    //! [GIVEN] A reachable cloud where the first upload hits a conflict and the retry goes through...
+    givenReachableCloud();
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+
+    const ProgressPtr firstUpload = std::make_shared<Progress>();
+    const ProgressPtr retriedUpload = std::make_shared<Progress>();
+    const auto started = std::make_shared<int>(0);
+
+    ON_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _))
+    .WillByDefault([firstUpload, retriedUpload, started](DevicePtr, const QString&, cloud::Visibility, const QUrl&, int) {
+        const bool isFirst = (*started)++ == 0;
+        const ProgressPtr progress = isFirst ? firstUpload : retriedUpload;
+        const Ret ret = isFirst ? make_ret(cloud::Err::Status409_Conflict) : make_ok();
+
+        QTimer::singleShot(0, [progress, ret]() {
+            ProgressResult res;
+            res.ret = ret;
+            res.val = Val(ValMap());
+            progress->finish(res);
+        });
+
+        return progress;
+    });
+
+    //! [GIVEN] ...because the user answers the conflict dialog with "Publish as new score"
+    static constexpr int PUBLISH_AS_NEW_SCORE_BTN_ID = int(IInteractive::Button::CustomButton) + 4;
+    ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
+    .WillByDefault(Return(IInteractive::Result(PUBLISH_AS_NEW_SCORE_BTN_ID)));
+
+    //! [THEN] Both uploads are started, and the conflict is reported exactly once
+    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(2);
+    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(1);
+
+    //! [WHEN] Saving it to the cloud...
+    CloudProjectInfo info;
+    info.sourceUrl = QUrl("score-99");
+    saveProjectToCloud(info, SaveMode::SaveAs);
+
+    //! [WHEN] ...and the upload that was retried reports again afterwards
+    ProgressResult stale;
+    stale.ret = make_ret(cloud::Err::Status409_Conflict);
+    firstUpload->finish(stale);
+
+    //! [THEN] Nothing listens to it any more: the retry replaced it, and its handler wrote to a
+    //! stack frame that is now gone
 }
 
 // ─── Whether an mp3 is generated for the cloud ───────────────────────────────
@@ -1140,7 +1240,7 @@ TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_SettingsNeverShown_AsksBefore
     ON_CALL(*m_configuration, generateAudioTimePeriodType()).WillByDefault(Return(GenerateAudioTimePeriodType::Never));
 
     //! [THEN] The settings dialog is opened before the decision is made
-    EXPECT_CALL(*m_interactive, openSync(::testing::An<const UriQuery&>())).Times(1);
+    EXPECT_CALL(*m_interactive, openSync(IsAudioGenerationSettingsDialog())).Times(1);
 
     //! [WHEN] Deciding whether to generate audio for a private upload...
     needGenerateAudio(false);
@@ -1169,7 +1269,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedScoreAndUserReverts_Reop
     EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
 
     //! [WHEN] Saving it locally, then letting the confirmation resolve...
-    saveProjectAt(SaveLocation(io::path_t("/scores/corrupted.mscz")));
+    saveProjectAt(SaveLocation(io::path_t("corrupted.mscz")));
     drainDeferredCalls();
 }
 
@@ -1191,7 +1291,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_RevertIsConfirmedWithNo_ChangesAr
     EXPECT_CALL(*m_openScenario, revertToLastSaved()).Times(0);
 
     //! [WHEN] Saving it locally, then letting the confirmation resolve...
-    saveProjectAt(SaveLocation(io::path_t("/scores/corrupted.mscz")));
+    saveProjectAt(SaveLocation(io::path_t("corrupted.mscz")));
     drainDeferredCalls();
 }
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadySignedIn_DoesNotAskToLogIn)
@@ -1203,11 +1303,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadySignedIn_DoesNotAskTo
 
     //! [THEN] The login dialog is not shown, and the upload goes ahead
     EXPECT_CALL(*m_interactive, openSync(IsLoginDialog())).Times(0);
-    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_museScoreComService,
+                uploadScore(_, QString(), cloud::Visibility::Private, QUrl("score-99"), 0)).Times(1);
 
     //! [WHEN] Saving to the cloud...
     CloudProjectInfo info;
-    info.sourceUrl = QUrl("https://musescore.com/scores/99");
+    info.sourceUrl = QUrl("score-99");
     saveProjectToCloud(info, SaveMode::SaveAs);
 }
 // ─── Publishing ──────────────────────────────────────────────────────────────
@@ -1218,8 +1319,9 @@ TEST_F(SaveProjectScenarioTests, Publish_AudioCannotBeRendered_ReportsFailure)
     givenReachableCloud();
     givenUserConfirmsCloudDialog();
 
-    //! [THEN] The export is attempted and fails, and nothing is uploaded
-    EXPECT_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillOnce(Return(false));
+    //! [THEN] The export of the current score is attempted and fails, and nothing is uploaded
+    EXPECT_CALL(*m_exportScenario, exportScores(notation::INotationPtrList { m_notation }, _,
+                                                INotationWriter::UnitType::PER_PART, false)).WillOnce(Return(false));
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Publishing...
@@ -1249,13 +1351,14 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
 {
     //! [GIVEN] A publish that goes through...
     givenReachableCloud();
-    givenUserConfirmsCloudDialog();
+    givenUserConfirmsCloudDialog("Published score");
     ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(true));
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
     givenUploadFinishesWith(make_ok(), ValMap());
 
-    //! [THEN] The score is uploaded
-    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(1);
+    //! [THEN] The score is uploaded as a new one, under the name given in the dialog
+    EXPECT_CALL(*m_museScoreComService,
+                uploadScore(_, QString("Published score"), cloud::Visibility::Private, QUrl(), 0)).Times(1);
 
     //! [WHEN] Publishing...
     Ret ret = m_scenario->publish();
