@@ -2428,7 +2428,7 @@ void NotationActionController::addDynamic()
     if (!interaction) {
         return;
     }
-    interaction->toggleDynamicPopup(true);
+    interaction->toggleDynamicPopup();
 }
 
 void NotationActionController::addImage()

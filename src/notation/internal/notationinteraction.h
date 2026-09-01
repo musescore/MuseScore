@@ -184,6 +184,7 @@ public:
 
     // Grip edit
     bool isGripEditStarted() const override;
+    bool isStartEndGripSelected() const override;
     bool isHitGrip(const muse::PointF& pos) const override;
     void startEditGrip(const muse::PointF& pos) override;
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
@@ -241,7 +242,7 @@ public:
 
     void autoFlipHairpinsType(engraving::Dynamic* dynamic) override;
 
-    void toggleDynamicPopup(bool allowAnyGrip=false) override;
+    void toggleDynamicPopup() override;
     bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
     void moveMeasureToPrevSystem() override;

@@ -170,6 +170,7 @@ public:
     virtual void startEditGrip(const muse::PointF& pos) = 0;
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
     virtual void endEditGrip() = 0;
+    virtual bool isStartEndGripSelected() const = 0;
 
     virtual bool isEditingElement() const = 0;
     virtual muse::async::Notification isEditingElementChanged() const = 0;
@@ -222,7 +223,7 @@ public:
 
     virtual void autoFlipHairpinsType(engraving::Dynamic* selDyn) = 0;
 
-    virtual void toggleDynamicPopup(bool allowAnyGrip=false) = 0;
+    virtual void toggleDynamicPopup() = 0;
     virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
     virtual void moveMeasureToPrevSystem() = 0;

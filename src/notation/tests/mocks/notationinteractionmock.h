@@ -121,6 +121,7 @@ public:
 
     MOCK_METHOD(muse::async::Channel<ScoreConfigType>, scoreConfigChanged, (), (const, override));
     MOCK_METHOD(bool, isGripEditStarted, (), (const, override));
+    MOCK_METHOD(bool, isStartEndGripSelected, (), (const, override));
     MOCK_METHOD(bool, isHitGrip, (const muse::PointF&), (const, override));
     MOCK_METHOD(void, startEditGrip, (const muse::PointF&), (override));
     MOCK_METHOD(void, startEditGrip, (EngravingItem*, mu::engraving::Grip), (override));
@@ -176,7 +177,7 @@ public:
 
     MOCK_METHOD(void, autoFlipHairpinsType, (engraving::Dynamic * selDyn), (override));
 
-    MOCK_METHOD(void, toggleDynamicPopup, (bool allowAnyGrip), (override));
+    MOCK_METHOD(void, toggleDynamicPopup, (), (override));
     MOCK_METHOD(bool, toggleLayoutBreakAvailable, (), (const, override));
     MOCK_METHOD(void, toggleLayoutBreak, (LayoutBreakType), (override));
     MOCK_METHOD(void, moveMeasureToPrevSystem, (), (override));
