@@ -155,8 +155,7 @@ FileCategory ConvertFileToScoreModel::selectedFileCategory() const
         return FileCategory::Unknown;
     }
 
-    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
-    return fileCategoryFromPath(io::path_t(m_selectedPaths.first()), config);
+    return fileCategoryFromPath(io::path_t(m_selectedPaths.first()));
 }
 
 QStringList ConvertFileToScoreModel::selectedPaths() const
@@ -206,7 +205,7 @@ QString ConvertFileToScoreModel::defaultSaveAsName() const
 
 QVariantList ConvertFileToScoreModel::fileRequirements() const
 {
-    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+    const ConvertConfig& config = convertFileToScoreScenario()->config();
     const cloud::OmrConfig& omr = config.omr;
     const cloud::Audio2ScoreConfig& a2s = config.audio2score;
 
@@ -289,7 +288,7 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
 
 QVariantMap ConvertFileToScoreModel::convertLimits() const
 {
-    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+    const ConvertConfig& config = convertFileToScoreScenario()->config();
 
     QVariantMap result;
 
@@ -306,7 +305,7 @@ QVariantMap ConvertFileToScoreModel::convertLimits() const
 
 bool ConvertFileToScoreModel::canSelectMultipleFiles() const
 {
-    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+    const ConvertConfig& config = convertFileToScoreScenario()->config();
 
     if (m_convertType == ConvertType::Audio2Score) {
         return allowsMultipleFiles(config.audio2score.maxFiles);
@@ -321,7 +320,7 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles() const
 
 QStringList ConvertFileToScoreModel::boldLinkSources() const
 {
-    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
+    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->config().audio2score;
 
     QStringList sources;
     if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::YouTube)) {
@@ -352,7 +351,7 @@ QString ConvertFileToScoreModel::linkHintText() const
 
 QString ConvertFileToScoreModel::audioComUrl() const
 {
-    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
+    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->config().audio2score;
     if (!a2s.allowedLinkSources.testFlag(cloud::LinkSource::AudioCom)) {
         return QString();
     }
@@ -367,7 +366,7 @@ QString ConvertFileToScoreModel::linkPageHintText() const
 
 QString ConvertFileToScoreModel::linkPageHintPlainText() const
 {
-    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->convertConfig().audio2score;
+    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->config().audio2score;
 
     QStringList names;
     if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::YouTube)) {
@@ -382,12 +381,12 @@ QString ConvertFileToScoreModel::linkPageHintPlainText() const
 
 int ConvertFileToScoreModel::maxLinkLength() const
 {
-    return convertFileToScoreScenario()->convertConfig().audio2score.maxLinkLength;
+    return convertFileToScoreScenario()->config().audio2score.maxLinkLength;
 }
 
 QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPaths)
 {
-    const ConvertConfig& config = convertFileToScoreScenario()->convertConfig();
+    const ConvertConfig& config = convertFileToScoreScenario()->config();
 
     QStringList extensions = existingPaths.isEmpty()
                              ? config.omr.allowedExtensions + config.audio2score.allowedExtensions
@@ -459,14 +458,14 @@ bool ConvertFileToScoreModel::validateAndApplyFiles(const QStringList& pathsOrUr
         localPaths << path;
     }
 
-    RetVal<ConvertType> result = convertFileToScoreScenario()->validateFiles(ioPaths);
+    RetVal<ConvertFilesValidation> result = convertFileToScoreScenario()->validateFiles(ioPaths);
     if (!result.ret) {
         return false;
     }
 
     setSelectedPaths(localPaths);
     setSelectedLink(QString());
-    setConvertType(int(result.val));
+    setConvertType(int(result.val.type));
 
     return true;
 }

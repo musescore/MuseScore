@@ -25,7 +25,7 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
-#include "project/types/converttypes.h"
+#include "project/types/filecategory.h"
 
 namespace mu::project {
 class FileListModel : public QAbstractListModel

@@ -50,8 +50,11 @@ public:
 
     const ConvertConfig& config() const override;
 
-    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
+    bool isFileSupported(const muse::io::path_t& path) const override;
+    muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) const override;
+    muse::Ret validateLink(const QUrl& link) const override;
 
+    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
     muse::async::Channel<int, ConvertType> reviewRequested() const override;

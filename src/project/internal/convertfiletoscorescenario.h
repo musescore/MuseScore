@@ -47,13 +47,13 @@ public:
 
     void init();
 
-    const ConvertConfig& convertConfig() const override;
+    const ConvertConfig& config() const override;
     muse::async::Promise<muse::Ret> checkConvertIsAllowed() override;
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
 
     bool isFileSupported(const muse::io::path_t& path) const override;
-    muse::RetVal<ConvertType> validateFiles(const muse::io::paths_t& paths) override;
+    muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) override;
     muse::Ret validateLink(const QUrl& link) override;
 
     void convertFiles(const muse::io::paths_t& paths) override;
@@ -64,14 +64,15 @@ public:
 private:
     muse::async::Promise<muse::Ret> ensureAuthorization();
 
-    bool validateAgainstConfig(const muse::io::paths_t& paths, const ConvertConfig& config);
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
+
+    void showValidationError(const muse::Ret& ret);
 
     void showCloudIsNotAvailableError();
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError();
-    void showUnsupportedLinkError(LinkSources sources);
+    void showUnsupportedLinkError();
     void showMixedFileTypesError();
     void showMultiplePdfFilesError();
     void showTooManyAudioFilesError(int maxFiles);

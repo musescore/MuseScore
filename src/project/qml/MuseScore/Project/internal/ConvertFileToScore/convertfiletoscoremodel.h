@@ -35,6 +35,7 @@
 
 #include "project/iprojectconfiguration.h"
 #include "project/iconvertfiletoscorescenario.h"
+#include "project/types/filecategory.h"
 
 namespace mu::project {
 class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, public muse::Contextable

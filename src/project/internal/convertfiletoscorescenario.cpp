@@ -21,8 +21,6 @@
  */
 #include "convertfiletoscorescenario.h"
 
-#include <optional>
-
 #include <QFileInfo>
 #include <QUrl>
 
@@ -31,17 +29,11 @@
 #include "project/projecterrors.h"
 
 #include "global/dataformatter.h"
-#include "global/io/path.h"
 #include "global/log.h"
 
 using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
-
-static bool isSupportedExtension(const muse::io::path_t& path, const ConvertConfig& config)
-{
-    return fileCategoryFromPath(path, config) != FileCategory::Unknown;
-}
 
 static ConvertSelection toConvertSelection(const Val& val)
 {
@@ -89,7 +81,7 @@ void ConvertFileToScoreScenario::init()
     });
 }
 
-const ConvertConfig& ConvertFileToScoreScenario::convertConfig() const
+const ConvertConfig& ConvertFileToScoreScenario::config() const
 {
     return service()->config();
 }
@@ -128,60 +120,27 @@ async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConver
 
 bool ConvertFileToScoreScenario::isFileSupported(const io::path_t& path) const
 {
-    return isSupportedExtension(path, service()->config());
+    return service()->isFileSupported(path);
 }
 
-RetVal<ConvertType> ConvertFileToScoreScenario::validateFiles(const io::paths_t& paths)
+RetVal<ConvertFilesValidation> ConvertFileToScoreScenario::validateFiles(const io::paths_t& paths)
 {
-    if (paths.empty()) {
-        return RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed));
+    RetVal<ConvertFilesValidation> result = service()->validateFiles(paths);
+    if (!result.ret) {
+        showValidationError(result.ret);
     }
 
-    //! NOTE: config is a client-side sanity check only; if it hasn't been fetched yet, fall back
-    //! to letting the server enforce its own limits rather than blocking the conversion
-    const ConvertConfig& config = service()->config();
-    const ConvertType type = fileCategoryFromPath(paths.front(), config) == FileCategory::Audio
-                             ? ConvertType::Audio2Score : ConvertType::Omr;
-
-    if (!validateAgainstConfig(paths, config)) {
-        return RetVal<ConvertType>::make_ret(make_ret(Err::ConvertValidationFailed));
-    }
-
-    return RetVal<ConvertType>::make_ok(type);
+    return result;
 }
 
 Ret ConvertFileToScoreScenario::validateLink(const QUrl& link)
 {
-    //! NOTE: config is a client-side sanity check only; if it hasn't been fetched yet, fall back
-    //! to a best-effort guess covering all known sources
-    const ConvertConfig& config = service()->config();
-    const LinkSources sources = config.audio2score.allowedLinkSources
-                                ? config.audio2score.allowedLinkSources
-                                : LinkSource::YouTube | LinkSource::AudioCom;
-
-    if (!link.isValid()) {
-        const QString err = link.errorString();
-        if (!err.isEmpty()) {
-            LOGW() << "Invalid link: " << err;
-        }
-        showUnsupportedLinkError(sources);
-        return make_ret(Err::ConvertValidationFailed);
+    Ret ret = service()->validateLink(link);
+    if (!ret) {
+        showUnsupportedLinkError();
     }
 
-    const QString host = link.host().toLower();
-
-    if (sources.testFlag(LinkSource::YouTube)
-        && (host == "youtube.com" || host.endsWith(".youtube.com") || host == "youtu.be")) {
-        return make_ok();
-    }
-
-    if (sources.testFlag(LinkSource::AudioCom)
-        && (host == "audio.com" || host.endsWith(".audio.com"))) {
-        return make_ok();
-    }
-
-    showUnsupportedLinkError(sources);
-    return make_ret(Err::ConvertValidationFailed);
+    return ret;
 }
 
 void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
@@ -192,36 +151,12 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
             return;
         }
 
-        RetVal<ConvertType> validation = validateFiles(paths);
+        RetVal<ConvertFilesValidation> validation = validateFiles(paths);
         if (!validation.ret) {
             return;
         }
 
-        confirmConvert(paths, validation.val);
-    });
-}
-
-void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, ConvertType type)
-{
-    constexpr int proceedBtn = int(IInteractive::Button::CustomButton) + 1;
-
-    IInteractive::ButtonData cancel = interactive()->buttonData(IInteractive::Button::Cancel);
-    IInteractive::ButtonData proceed(proceedBtn, muse::trc("global", "Proceed"), /*accent*/ true);
-
-    interactive()->question(muse::trc("project/convert", "Would you like to convert this file to a score?"),
-                            muse::trc("project/convert",
-                                      "This file needs to be converted online before it can be edited. Would you like to proceed?"),
-                            { cancel, proceed }, proceedBtn)
-    .onResolve(this, [this, paths, type, proceedBtn](const IInteractive::Result& result) {
-        if (!result.isButton(proceedBtn)) {
-            return;
-        }
-
-        ConvertInput input = type == ConvertType::Audio2Score
-                             ? ConvertInput(Audio2ScoreConvertInput { paths })
-                             : ConvertInput(OmrConvertInput { paths });
-
-        startConvert(input, QFileInfo(paths.front().toQString()).completeBaseName());
+        confirmConvert(paths, validation.val.type);
     });
 }
 
@@ -271,67 +206,62 @@ async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
     });
 }
 
-bool ConvertFileToScoreScenario::validateAgainstConfig(const io::paths_t& paths, const ConvertConfig& config)
+void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, ConvertType type)
 {
-    std::optional<FileCategory> firstCategory;
-    qint64 totalSizeBytes = 0;
+    constexpr int proceedBtn = int(IInteractive::Button::CustomButton) + 1;
 
-    for (const io::path_t& path : paths) {
-        if (!isSupportedExtension(path, config)) {
-            showUnsupportedFormatError();
-            return false;
+    IInteractive::ButtonData cancel = interactive()->buttonData(IInteractive::Button::Cancel);
+    IInteractive::ButtonData proceed(proceedBtn, muse::trc("global", "Proceed"), /*accent*/ true);
+
+    interactive()->question(muse::trc("project/convert", "Would you like to convert this file to a score?"),
+                            muse::trc("project/convert",
+                                      "This file needs to be converted online before it can be edited. Would you like to proceed?"),
+                            { cancel, proceed }, proceedBtn)
+    .onResolve(this, [this, paths, type, proceedBtn](const IInteractive::Result& result) {
+        if (!result.isButton(proceedBtn)) {
+            return;
         }
 
-        const FileCategory category = fileCategoryFromPath(path, config);
-        if (!firstCategory) {
-            firstCategory = category;
-        } else if (category != firstCategory) {
-            showMixedFileTypesError();
-            return false;
-        }
+        ConvertInput input = type == ConvertType::Audio2Score
+                             ? ConvertInput(Audio2ScoreConvertInput { paths })
+                             : ConvertInput(OmrConvertInput { paths });
 
-        const qint64 fileSizeBytes = QFileInfo(path.toQString()).size();
+        startConvert(input, QFileInfo(paths.front().toQString()).completeBaseName());
+    });
+}
 
-        if (category == FileCategory::Audio
-            && config.audio2score.maxFileSizeBytes > 0 && fileSizeBytes > config.audio2score.maxFileSizeBytes) {
-            showFileTooLargeError(config.audio2score.maxFileSizeBytes);
-            return false;
-        }
+void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
+{
+    const ConvertConfig& config = service()->config();
 
-        totalSizeBytes += fileSizeBytes;
-    }
-
-    if (firstCategory == FileCategory::Pdf && paths.size() > 1) {
+    switch (static_cast<Err>(ret.code())) {
+    case Err::ConvertUnsupportedFormat:
+        showUnsupportedFormatError();
+        break;
+    case Err::ConvertMixedFileTypes:
+        showMixedFileTypesError();
+        break;
+    case Err::ConvertMultiplePdfFiles:
         showMultiplePdfFilesError();
-        return false;
-    }
-
-    if (firstCategory == FileCategory::Audio) {
-        if (config.audio2score.maxFiles > 0 && int(paths.size()) > config.audio2score.maxFiles) {
-            showTooManyAudioFilesError(config.audio2score.maxFiles);
-            return false;
-        }
-
-        return true;
-    }
-
-    if (config.omr.maxImages > 0 && paths.size() > 1 && int(paths.size()) > config.omr.maxImages) {
+        break;
+    case Err::ConvertAudioFileTooLarge:
+        showFileTooLargeError(config.audio2score.maxFileSizeBytes);
+        break;
+    case Err::ConvertFileTooLarge:
+        showFileTooLargeError(config.omr.maxFileSizeBytes);
+        break;
+    case Err::ConvertCombinedImageTooLarge:
+        showCombinedImageSizeTooLargeError(config.omr.maxFileSizeBytes);
+        break;
+    case Err::ConvertTooManyAudioFiles:
+        showTooManyAudioFilesError(config.audio2score.maxFiles);
+        break;
+    case Err::ConvertTooManyImages:
         showTooManyImagesError(config.omr.maxImages);
-        return false;
+        break;
+    default:
+        break;
     }
-
-    //! NOTE: maxFileSizeBytes is a combined budget across all selected images
-    //! (or the single file's own size, for a PDF)
-    if (config.omr.maxFileSizeBytes > 0 && totalSizeBytes > config.omr.maxFileSizeBytes) {
-        if (firstCategory == FileCategory::Image) {
-            showCombinedImageSizeTooLargeError(config.omr.maxFileSizeBytes);
-        } else {
-            showFileTooLargeError(config.omr.maxFileSizeBytes);
-        }
-        return false;
-    }
-
-    return true;
 }
 
 void ConvertFileToScoreScenario::showCloudIsNotAvailableError()
@@ -368,8 +298,11 @@ void ConvertFileToScoreScenario::showUnsupportedFormatError()
                          { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
-void ConvertFileToScoreScenario::showUnsupportedLinkError(LinkSources sources)
+void ConvertFileToScoreScenario::showUnsupportedLinkError()
 {
+    const LinkSources configured = service()->config().audio2score.allowedLinkSources;
+    const LinkSources sources = configured ? configured : (LinkSource::YouTube | LinkSource::AudioCom);
+
     std::string text;
     if (sources.testFlag(LinkSource::YouTube) && sources.testFlag(LinkSource::AudioCom)) {
         text = muse::trc("project/convert", "Make sure you’re using a valid link from YouTube or Audio.com.");

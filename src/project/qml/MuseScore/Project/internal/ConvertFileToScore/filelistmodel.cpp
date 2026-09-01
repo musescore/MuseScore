@@ -24,7 +24,7 @@
 
 #include <QFileInfo>
 
-#include "project/types/projecttypes.h"
+#include "project/types/filecategory.h"
 
 #include "ui/view/iconcodes.h"
 

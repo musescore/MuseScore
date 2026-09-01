@@ -46,7 +46,7 @@ public:
     virtual ~IConvertFileToScoreScenario() = default;
 
     //! Server-provided limits (file size, formats, etc) for client-side validation
-    virtual const ConvertConfig& convertConfig() const = 0;
+    virtual const ConvertConfig& config() const = 0;
 
     //! Checks cloud availability and, if needed, prompts the user to log in
     virtual muse::async::Promise<muse::Ret> checkConvertIsAllowed() = 0;
@@ -57,8 +57,8 @@ public:
     //! Whether the given file can be converted
     virtual bool isFileSupported(const muse::io::path_t& path) const = 0;
 
-    //! Checks the given files against the server's config limits and determines their convert type
-    virtual muse::RetVal<ConvertType> validateFiles(const muse::io::paths_t& paths) = 0;
+    //! Checks the given files against the server's config limits and determines their convert type and category
+    virtual muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) = 0;
 
     //! Checks that the given link is from a supported source
     virtual muse::Ret validateLink(const QUrl& link) = 0;
