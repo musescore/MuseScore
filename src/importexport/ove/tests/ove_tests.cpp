@@ -24,6 +24,8 @@
 
 #include "engraving/tests/utils/scorerw.h"
 
+#include "engraving/dom/measure.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
