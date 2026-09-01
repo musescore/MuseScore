@@ -187,6 +187,25 @@ void StringData::fretChords(Chord* chord) const
         bFretting = false;
     };
 
+    Chord* prevChord = chord->prev(); 
+
+    // might be a good idea to store the chords we've already seen before
+    
+    if (prevChord) {
+
+    } else { 
+        // this should only trigger in the case of the very first chord in the score
+        // but we should probably have this also trigger in the case where we're waiting
+        // for a very long period of time (>= 1 bars) before playing again 
+
+        // we want the string as low and as close to the start of the fretboard as possible
+        // prioritize close to the start of the fretboard 
+
+        // we can use a scoring for potential candidates, much higher score for closer to
+        // start of the fretboard, a bit higher for being on a lower string, then we pick
+        // the best candidate 
+    }
+
     int strings = static_cast<int>(this->strings());
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
 
