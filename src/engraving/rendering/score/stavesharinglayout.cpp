@@ -672,12 +672,14 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
 bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack,
                                           StaveSharingContext& ctx)
 {
+    const bool allowVoiceCrossing = ctx.style.styleB(Sid::allowVoiceCrossing);
+
     for (Segment* segment : ctx.crSegments) {
         if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
             return false;
         }
 
-        if (ctx.style.styleB(Sid::allowVoiceCrossing)) {
+        if (allowVoiceCrossing) {
             continue;
         }
         ChordRest* cr1 = toChordRest(segment->element(prevTrack));
