@@ -217,6 +217,11 @@ muse::Ret SaveProjectScenario::shareAudio(const AudioFile& existingAudio)
     };
 
     auto project = currentNotationProject();
+    if (!project) {
+        LOGW() << "no current project";
+        return make_ret(Err::NoProjectError);
+    }
+
     RetVal<CloudAudioInfo> retVal = askShareAudioLocation(project);
     if (!retVal.ret) {
         return retVal.ret;
@@ -620,22 +625,24 @@ Ret SaveProjectScenario::uploadProject(const CloudProjectInfo& info, const Audio
     // The method must not return until the saving is complete, to prevent the app from being quit prematurely
     QEventLoop eventLoop;
 
-    m_uploadingProjectProgress = museScoreComService()->uploadScore(projectData, info.name, info.visibility, info.sourceUrl,
-                                                                    info.revisionId);
+    ProgressPtr progress = museScoreComService()->uploadScore(projectData, info.name, info.visibility, info.sourceUrl,
+                                                              info.revisionId);
+    m_uploadingProjectProgress = progress;
+
     showUploadProgressDialog();
     LOGD() << "Uploading project started";
 
-    m_uploadingProjectProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+    progress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         if (total > 0) {
             LOGD() << "Uploading project progress: " << current << " / " << total << " bytes";
         }
     });
 
-    m_uploadingProjectProgress->finished().onReceive(this, [this, project, info, audio, openEditUrl, publishMode,
-                                                            isFirstSave, &ret, &eventLoop](const ProgressResult& res) {
+    progress->finished().onReceive(this, [this, project, info, audio, openEditUrl, publishMode,
+                                          isFirstSave, &ret, &eventLoop, &progress](const ProgressResult& res) {
         DEFER {
-            m_uploadingProjectProgress->progressChanged().disconnect(this);
-            m_uploadingProjectProgress->finished().disconnect(this);
+            progress->progressChanged().disconnect(this);
+            progress->finished().disconnect(this);
             eventLoop.quit();
         };
 
@@ -1523,14 +1530,14 @@ Ret SaveProjectScenario::warnCloudNotAvailableForSharingAudio() const
     return make_ret(Ret::Code::Cancel);
 }
 
-muse::RetVal<Val> SaveProjectScenario::ensureAuthorization(const QString& cloudeCode, bool publishingScore,
+muse::RetVal<Val> SaveProjectScenario::ensureAuthorization(const QString& cloudCode, bool publishingScore,
                                                            const std::string& text) const
 {
-    IF_ASSERT_FAILED(cloudeCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE || cloudeCode == muse::cloud::AUDIO_COM_CLOUD_CODE) {
+    IF_ASSERT_FAILED(cloudCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE || cloudCode == muse::cloud::AUDIO_COM_CLOUD_CODE) {
         return muse::RetVal<Val>::make_ret(Err::UnknownError);
     }
 
-    bool isMuseScoreCom = cloudeCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE;
+    bool isMuseScoreCom = cloudCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE;
     bool userAuthorized = isMuseScoreCom ? museScoreComService()->authorization()->userAuthorized().val
                           : audioComService()->authorization()->userAuthorized().val;
 
@@ -1540,7 +1547,7 @@ muse::RetVal<Val> SaveProjectScenario::ensureAuthorization(const QString& cloude
 
     UriQuery query("muse://cloud/requireauthorization");
     query.addParam("text", Val(text));
-    query.addParam("cloudCode", Val(cloudeCode));
+    query.addParam("cloudCode", Val(cloudCode));
     query.addParam("publishingScore", Val(publishingScore));
     return interactive()->openSync(query);
 }
