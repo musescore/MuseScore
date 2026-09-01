@@ -34,7 +34,7 @@ StyledDialogView {
 
     title: qsTrc("project/convert", "Convert file to score")
 
-    contentHeight: 502
+    contentHeight: 560
     contentWidth: 616
     margins: 0
 

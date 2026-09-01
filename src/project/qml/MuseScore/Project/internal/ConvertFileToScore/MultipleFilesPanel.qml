@@ -52,13 +52,14 @@ Rectangle {
         spacing: 18
 
         Rectangle {
+            id: fileListBackground
+
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             color: ui.theme.backgroundPrimaryColor
-            border.width: 1
-            border.color: ui.theme.strokeColor
             radius: 3
+            clip: true
 
             StyledListView {
                 id: fileListView
@@ -68,6 +69,8 @@ Rectangle {
                 anchors.leftMargin: 12
                 anchors.bottomMargin: 12
                 anchors.rightMargin: (fileListView.ScrollBar.vertical && fileListView.ScrollBar.vertical.visible) ? 6 : 12
+
+                clip: false
 
                 spacing: 4
                 topMargin: root.filesModel.count === 1 ? Math.max(0, (fileListView.height - 40) / 2) : 0
@@ -182,6 +185,15 @@ Rectangle {
                     }
                 }
             }
+
+            Rectangle {
+                anchors.fill: parent
+
+                color: "transparent"
+                border.width: 1
+                border.color: ui.theme.strokeColor
+                radius: fileListBackground.radius
+            }
         }
 
         StyledTextLabel {
@@ -236,7 +248,7 @@ Rectangle {
 
                 RowLayout {
                     Layout.alignment: Qt.AlignRight
-                    spacing: 8
+                    spacing: 0
 
                     FlatButton {
                         icon: IconCode.ARROW_UP
@@ -251,6 +263,8 @@ Rectangle {
                     }
 
                     FlatButton {
+                        Layout.leftMargin: 4
+
                         icon: IconCode.ARROW_DOWN
                         toolTipTitle: qsTrc("global", "Move down")
 
@@ -265,7 +279,7 @@ Rectangle {
                     FlatButton {
                         id: selectMoreButton
 
-                        Layout.leftMargin: 4
+                        Layout.leftMargin: 12
 
                         text: qsTrc("global", "Select more")
                         accentButton: true
