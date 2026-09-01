@@ -27,7 +27,8 @@
 namespace muse::draw {
 enum class CompositionMode {
     SourceOver,
-    HardLight
+    HardLight,
+    SourceIn
 };
 
 enum class PolygonMode {
