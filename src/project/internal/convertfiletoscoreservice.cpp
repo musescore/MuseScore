@@ -22,13 +22,18 @@
 #include "convertfiletoscoreservice.h"
 
 #include <algorithm>
+#include <optional>
 
 #include <QFile>
+#include <QFileInfo>
+#include <QUrl>
 
 #include "project/projecterrors.h"
+#include "project/types/filecategory.h"
 
 #include "global/serialization/json.h"
 #include "global/io/ioretcodes.h"
+#include "global/io/path.h"
 #include "global/log.h"
 
 using namespace mu::project;
@@ -36,6 +41,30 @@ using namespace muse;
 using namespace muse::cloud;
 
 static constexpr int MAX_CONSECUTIVE_POLL_FAILURES = 5;
+
+static FileCategory resolveFileCategory(const io::path_t& path, const ConvertConfig& config)
+{
+    const QString ext = QString::fromStdString(muse::io::suffix(path));
+    if (ext == "pdf") {
+        return FileCategory::Pdf;
+    }
+
+    if (config.omr.allowedExtensions.contains(ext)) {
+        return FileCategory::Image;
+    }
+
+    if (config.audio2score.allowedExtensions.contains(ext)) {
+        return FileCategory::Audio;
+    }
+
+    //! NOTE: config is a client-side sanity check only; if it hasn't been fully fetched yet, fall back
+    //! to a best-effort guess rather than blocking the conversion
+    if (!config.omr.allowedExtensions.isEmpty() && !config.audio2score.allowedExtensions.isEmpty()) {
+        return FileCategory::Unknown;
+    }
+
+    return fileCategoryFromSuffix(ext.toStdString());
+}
 
 static std::string errorCodeToString(ConvertErrorCode code)
 {
@@ -91,7 +120,7 @@ void ConvertFileToScoreService::init()
         m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
         m_config.audio2score.maxFiles = 1;
         m_config.audio2score.maxLinkLength = 2048;
-        m_config.audio2score.allowedLinkSources = { "youtube", "audio_com" };
+        m_config.audio2score.allowedLinkSources = LinkSource::YouTube | LinkSource::AudioCom;
     }
     //! ---------------------------------------------------------------------------------
 
@@ -117,8 +146,101 @@ const ConvertConfig& ConvertFileToScoreService::config() const
     return m_config;
 }
 
+bool ConvertFileToScoreService::isFileSupported(const io::path_t& path) const
+{
+    return resolveFileCategory(path, m_config) != FileCategory::Unknown;
+}
+
+RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io::paths_t& paths) const
+{
+    if (paths.empty()) {
+        return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertValidationFailed));
+    }
+
+    std::optional<FileCategory> firstCategory;
+    qint64 totalSizeBytes = 0;
+
+    for (const io::path_t& path : paths) {
+        const FileCategory category = resolveFileCategory(path, m_config);
+        if (category == FileCategory::Unknown) {
+            return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertUnsupportedFormat));
+        }
+
+        if (!firstCategory) {
+            firstCategory = category;
+        } else if (category != firstCategory) {
+            return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertMixedFileTypes));
+        }
+
+        const qint64 fileSizeBytes = QFileInfo(path.toQString()).size();
+
+        if (category == FileCategory::Audio
+            && m_config.audio2score.maxFileSizeBytes > 0 && fileSizeBytes > m_config.audio2score.maxFileSizeBytes) {
+            return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertAudioFileTooLarge));
+        }
+
+        totalSizeBytes += fileSizeBytes;
+    }
+
+    if (firstCategory == FileCategory::Pdf && paths.size() > 1) {
+        return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertMultiplePdfFiles));
+    }
+
+    if (firstCategory == FileCategory::Audio) {
+        if (m_config.audio2score.maxFiles > 0 && int(paths.size()) > m_config.audio2score.maxFiles) {
+            return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyAudioFiles));
+        }
+
+        return RetVal<ConvertFilesValidation>::make_ok(ConvertFilesValidation { ConvertType::Audio2Score, FileCategory::Audio });
+    }
+
+    if (m_config.omr.maxImages > 0 && paths.size() > 1 && int(paths.size()) > m_config.omr.maxImages) {
+        return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyImages));
+    }
+
+    //! NOTE: maxFileSizeBytes is a combined budget across all selected images
+    //! (or the single file's own size, for a PDF)
+    if (m_config.omr.maxFileSizeBytes > 0 && totalSizeBytes > m_config.omr.maxFileSizeBytes) {
+        if (firstCategory == FileCategory::Image) {
+            return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertCombinedImageTooLarge));
+        }
+        return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertFileTooLarge));
+    }
+
+    return RetVal<ConvertFilesValidation>::make_ok(ConvertFilesValidation { ConvertType::Omr, *firstCategory });
+}
+
+Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
+{
+    const LinkSources sources = m_config.audio2score.allowedLinkSources
+                                ? m_config.audio2score.allowedLinkSources
+                                : LinkSource::YouTube | LinkSource::AudioCom;
+
+    if (!link.isValid()) {
+        return make_ret(Err::ConvertUnsupportedLink, link.errorString().toStdString());
+    }
+
+    const QString host = link.host().toLower();
+
+    if (sources.testFlag(LinkSource::YouTube)
+        && (host == "youtube.com" || host.endsWith(".youtube.com") || host == "youtu.be")) {
+        return make_ok();
+    }
+
+    if (sources.testFlag(LinkSource::AudioCom)
+        && (host == "audio.com" || host.endsWith(".audio.com"))) {
+        return make_ok();
+    }
+
+    return make_ret(Err::ConvertUnsupportedLink);
+}
+
 Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const QString& convertedFileName)
 {
+    IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
+        return make_ret(Err::ConvertValidationFailed);
+    }
+
     IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedFileName))) {
         return make_ret(Err::ConvertValidationFailed);
     }

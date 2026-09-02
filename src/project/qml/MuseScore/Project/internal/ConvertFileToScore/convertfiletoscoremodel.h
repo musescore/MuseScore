@@ -35,6 +35,7 @@
 
 #include "project/iprojectconfiguration.h"
 #include "project/iconvertfiletoscorescenario.h"
+#include "project/types/filecategory.h"
 
 namespace mu::project {
 class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, public muse::Contextable
@@ -54,6 +55,7 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY convertTypeChanged)
 
     Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
+    Q_PROPERTY(QString audioComUrl READ audioComUrl CONSTANT)
     Q_PROPERTY(QString linkPageHintText READ linkPageHintText CONSTANT)
     Q_PROPERTY(QString linkPageHintPlainText READ linkPageHintPlainText CONSTANT)
     Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
@@ -87,14 +89,16 @@ public:
     bool canSelectMultipleFiles() const;
 
     QString linkHintText() const;
+    QString audioComUrl() const;
     QString linkPageHintText() const;
     QString linkPageHintPlainText() const;
     int maxLinkLength() const;
 
-    Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
-    Q_INVOKABLE void selectAndValidateFiles(const QStringList& existingPaths = {});
+    Q_INVOKABLE bool validateAndApplyFiles(const QStringList& pathsOrUrls);
+    Q_INVOKABLE bool selectAndValidateFiles(const QStringList& existingPaths = {});
 
     Q_INVOKABLE QString validateFileName(const QString& name) const;
+    Q_INVOKABLE bool validateLink(const QString& link) const;
 
     Q_INVOKABLE void confirmGoingBack();
     Q_INVOKABLE void clearSelection();
@@ -104,7 +108,6 @@ signals:
     void selectedPathsChanged();
     void selectedLinkChanged();
     void fileRequirementsChanged();
-    void validationFinished();
     void goingBackConfirmed();
 
 private:

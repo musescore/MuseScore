@@ -54,6 +54,9 @@ public:
     MOCK_METHOD(muse::io::path_t, defaultUserProjectsPath, (), (const, override));
     MOCK_METHOD(muse::io::path_t, defaultOpenProjectsPath, (), (const, override));
 
+    MOCK_METHOD(muse::io::path_t, defaultConvertFilePath, (), (const, override));
+    MOCK_METHOD(void, setLastOpenedConvertFilePath, (const muse::io::path_t&), (override));
+
     MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
 

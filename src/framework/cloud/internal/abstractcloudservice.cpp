@@ -336,30 +336,45 @@ const AccountInfo& AbstractCloudService::accountInfo() const
 
 Ret AbstractCloudService::checkCloudIsAvailable() const
 {
-    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, nullptr, m_serverConfig.headers);
-    if (!progress.ret) {
-        return progress.ret;
-    }
-
     Ret ret = make_ok();
     QEventLoop loop;
 
-    progress.val.finished().onReceive(this, [&ret, &loop](const ProgressResult& res) {
-        ret = res.ret;
+    checkCloudIsAvailableAsync().onResolve(this, [&ret, &loop](const Ret& r) {
+        ret = r;
         loop.quit();
     });
 
-    QTimer timer;
-    timer.setSingleShot(true);
-    QObject::connect(&timer, &QTimer::timeout, [&progress]() {
-        progress.val.cancel();
-    });
-    timer.start(5000);
-
     loop.exec();
-    timer.stop();
 
     return ret;
+}
+
+Promise<Ret> AbstractCloudService::checkCloudIsAvailableAsync() const
+{
+    return make_promise<Ret>([this](auto resolve) {
+        RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, nullptr, m_serverConfig.headers);
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
+
+        Progress progressVal = progress.val;
+
+        QTimer* timer = new QTimer();
+        timer->setSingleShot(true);
+        QObject::connect(timer, &QTimer::timeout, [progressVal]() mutable {
+            progressVal.cancel();
+        });
+
+        progressVal.finished().onReceive(this, [resolve, timer](const ProgressResult& res) {
+            timer->stop();
+            timer->deleteLater();
+            (void)resolve(res.ret);
+        });
+
+        timer->start(5000);
+
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 void AbstractCloudService::setAccountInfo(const AccountInfo& info)

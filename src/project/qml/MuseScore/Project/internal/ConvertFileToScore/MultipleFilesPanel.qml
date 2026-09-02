@@ -35,10 +35,6 @@ Rectangle {
 
     signal selectMoreFilesRequested(var existingPaths)
 
-    function focusOnFileList() {
-        selectMoreButton.navigation.requestActive()
-    }
-
     function moveCurrentFile(delta) {
         var index = fileListView.currentIndex
         root.filesModel.move(index, index + delta)
@@ -56,13 +52,14 @@ Rectangle {
         spacing: 18
 
         Rectangle {
+            id: fileListBackground
+
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             color: ui.theme.backgroundPrimaryColor
-            border.width: 1
-            border.color: ui.theme.strokeColor
             radius: 3
+            clip: true
 
             StyledListView {
                 id: fileListView
@@ -72,6 +69,8 @@ Rectangle {
                 anchors.leftMargin: 12
                 anchors.bottomMargin: 12
                 anchors.rightMargin: (fileListView.ScrollBar.vertical && fileListView.ScrollBar.vertical.visible) ? 6 : 12
+
+                clip: false
 
                 spacing: 4
                 topMargin: root.filesModel.count === 1 ? Math.max(0, (fileListView.height - 40) / 2) : 0
@@ -186,6 +185,15 @@ Rectangle {
                     }
                 }
             }
+
+            Rectangle {
+                anchors.fill: parent
+
+                color: "transparent"
+                border.width: 1
+                border.color: ui.theme.strokeColor
+                radius: fileListBackground.radius
+            }
         }
 
         StyledTextLabel {
@@ -209,25 +217,25 @@ Rectangle {
                 spacing: 2
 
                 StyledTextLabel {
-                    id: usedSizeLabel
-
-                    visible: Boolean(usedSizeLabel.text)
-
-                    text: root.filesModel.usedSizeString
-                    horizontalAlignment: Text.AlignLeft
-                    color: root.filesModel.exceedsLimits ? "#FA7878" : ui.theme.fontSecondaryColor
-                }
-
-                StyledTextLabel {
                     id: maxCountReachedLabel
 
                     visible: Boolean(maxCountReachedLabel.text)
 
-                    text: root.filesModel.maxFileCount > 0 && root.filesModel.count >= root.filesModel.maxFileCount
-                          ? qsTrc("project/convert", "Maximum files selected (%1)").arg(root.filesModel.maxFileCount)
+                    text: root.filesModel.maxFileCount > 0 && root.filesModel.count > 1
+                          ? qsTrc("project/convert", "%1/%2 max files").arg(root.filesModel.count).arg(root.filesModel.maxFileCount)
                           : ""
                     horizontalAlignment: Text.AlignLeft
                     color: ui.theme.fontSecondaryColor
+                }
+
+                StyledTextLabel {
+                    id: usedSizeLabel
+
+                    visible: Boolean(usedSizeLabel.text)
+
+                    text: root.filesModel.usedSizeLabel
+                    horizontalAlignment: Text.AlignLeft
+                    color: root.filesModel.exceedsLimits ? "#FA7878" : ui.theme.fontSecondaryColor
                 }
             }
 
@@ -240,7 +248,7 @@ Rectangle {
 
                 RowLayout {
                     Layout.alignment: Qt.AlignRight
-                    spacing: 8
+                    spacing: 0
 
                     FlatButton {
                         icon: IconCode.ARROW_UP
@@ -255,6 +263,8 @@ Rectangle {
                     }
 
                     FlatButton {
+                        Layout.leftMargin: 4
+
                         icon: IconCode.ARROW_DOWN
                         toolTipTitle: qsTrc("global", "Move down")
 
@@ -269,7 +279,7 @@ Rectangle {
                     FlatButton {
                         id: selectMoreButton
 
-                        Layout.leftMargin: 4
+                        Layout.leftMargin: 12
 
                         text: qsTrc("global", "Select more")
                         accentButton: true

@@ -44,6 +44,15 @@ enum class Err {
     MalformedOpenScoreUrl,
 
     ConvertValidationFailed,
+    ConvertUnsupportedFormat,
+    ConvertMixedFileTypes,
+    ConvertMultiplePdfFiles,
+    ConvertAudioFileTooLarge,
+    ConvertFileTooLarge,
+    ConvertCombinedImageTooLarge,
+    ConvertTooManyAudioFiles,
+    ConvertTooManyImages,
+    ConvertUnsupportedLink,
     ConvertProcessingFailed,
     DownloadLinkExpired,
 };

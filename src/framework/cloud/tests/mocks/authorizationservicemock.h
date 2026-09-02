@@ -19,27 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include <QObject>
-#include <qqmlintegration.h>
+#include <gmock/gmock.h>
 
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "cloud/iauthorizationservice.h"
 
-namespace mu::project {
-class ConvertFileToScoreDevToolsModel : public QObject, public muse::Contextable
+namespace muse::cloud {
+class AuthorizationServiceMock : public IAuthorizationService
 {
-    Q_OBJECT
-    QML_ELEMENT
-
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-
 public:
-    explicit ConvertFileToScoreDevToolsModel(QObject* parent = nullptr);
+    MOCK_METHOD(void, signUp, (), (override));
+    MOCK_METHOD(void, signIn, (), (override));
+    MOCK_METHOD(void, signOut, (), (override));
 
-    Q_INVOKABLE void selectAndConvertFiles();
-    Q_INVOKABLE void filesDropped(const QStringList& urls);
+    MOCK_METHOD(RetVal<Val>, ensureAuthorization, (bool, const std::string&), (override));
+
+    MOCK_METHOD(ValCh<bool>, userAuthorized, (), (const, override));
+    MOCK_METHOD(const AccountInfo&, accountInfo, (), (const, override));
+
+    MOCK_METHOD(CloudInfo, cloudInfo, (), (const, override));
+
+    MOCK_METHOD(Ret, checkCloudIsAvailable, (), (const, override));
+    MOCK_METHOD(async::Promise<Ret>, checkCloudIsAvailableAsync, (), (const, override));
 };
 }

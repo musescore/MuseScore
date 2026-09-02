@@ -21,6 +21,8 @@
  */
 #include "exportprojectscenario.h"
 
+#include "project/types/filecategory.h"
+
 #include "global/io/fileinfo.h"
 #include "global/io/filestream.h"
 

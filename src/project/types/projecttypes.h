@@ -22,16 +22,13 @@
 
 #pragma once
 
-#include <unordered_set>
 #include <variant>
 
 #include <QString>
 #include <QUrl>
 
-#include "containers.h"
 #include "io/path.h"
 #include "progress.h"
-#include "log.h"
 
 #include "projectmeta.h"
 
@@ -345,23 +342,5 @@ inline std::vector<MigrationType> allMigrationTypes()
     };
 
     return types;
-}
-
-inline bool isAudioFileSuffix(const std::string& suffix)
-{
-    static const std::unordered_set<std::string> audioSuffixes {
-        "mp3", "wav", "ogg", "flac", "aac",
-    };
-
-    return muse::contains(audioSuffixes, suffix);
-}
-
-inline bool isImageFileSuffix(const std::string& suffix)
-{
-    static const std::unordered_set<std::string> imageSuffixes {
-        "png", "jpg", "jpeg",
-    };
-
-    return muse::contains(imageSuffixes, suffix);
 }
 }

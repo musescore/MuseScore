@@ -34,7 +34,7 @@ StyledDialogView {
 
     title: qsTrc("project/convert", "Convert file to score")
 
-    contentHeight: 502
+    contentHeight: 560
     contentWidth: 616
     margins: 0
 
@@ -48,12 +48,6 @@ StyledDialogView {
     ConvertFileToScoreModel {
         id: convertModel
 
-        onValidationFinished: {
-            if (root.currentPageIndex === 0) {
-                root.currentPageIndex = 1
-            }
-        }
-
         onGoingBackConfirmed: {
             root.currentPageIndex = 0
             convertModel.clearSelection()
@@ -65,13 +59,13 @@ StyledDialogView {
         root.hide()
     }
 
-    onNavigationActivateRequested: {
-        if (root.currentPageIndex === 0) {
-            pageLoader.item.focusOnSelect()
-        } else if (pageLoader.item.focusOnFileList) {
-            pageLoader.item.focusOnFileList()
+    function focusOnPageDefault() {
+        if (pageLoader.item && pageLoader.item.focusOnDefault) {
+            pageLoader.item.focusOnDefault()
         }
     }
+
+    onNavigationActivateRequested: root.focusOnPageDefault()
 
     ColumnLayout {
         anchors.fill: parent
@@ -117,6 +111,12 @@ StyledDialogView {
 
                 return linkEntryPageComponent
             }
+
+            onLoaded: {
+                if (root.isOpened) {
+                    root.focusOnPageDefault()
+                }
+            }
         }
     }
 
@@ -126,15 +126,22 @@ StyledDialogView {
         SelectFilePage {
             guidelinesUrl: convertModel.guidelinesUrl
             linkHintText: convertModel.linkHintText
+            audioComUrl: convertModel.audioComUrl
             fileRequirements: convertModel.fileRequirements
             navigationSection: root.navigationSection
 
             onCancelRequested: root.reject()
 
-            onSelectFilesRequested: convertModel.selectAndValidateFiles()
+            onSelectFilesRequested: {
+                if (convertModel.selectAndValidateFiles()) {
+                    root.currentPageIndex = 1
+                }
+            }
 
             onFilesDropped: function(urls) {
-                convertModel.validateFiles(urls)
+                if (convertModel.validateAndApplyFiles(urls)) {
+                    root.currentPageIndex = 1
+                }
             }
 
             onConvertFromLinkRequested: {
@@ -184,6 +191,7 @@ StyledDialogView {
             saveAsErrorText: convertModel.validateFileName(saveAsName)
             hintText: convertModel.linkPageHintText
             hintPlainText: convertModel.linkPageHintPlainText
+            audioComUrl: convertModel.audioComUrl
             maxLinkLength: convertModel.maxLinkLength
             navigationSection: root.navigationSection
 
@@ -194,6 +202,10 @@ StyledDialogView {
             }
 
             onConvertRequested: function(link, convertedFileName) {
+                if (!convertModel.validateLink(link)) {
+                    return
+                }
+
                 convertModel.selectedLink = link
                 root.finish(convertModel.convertType, [], link, convertedFileName)
             }

@@ -25,9 +25,11 @@
 
 #include "async/channel.h"
 #include "io/path.h"
-#include "types/ret.h"
+#include "types/retval.h"
 
 #include "types/converttypes.h"
+
+class QUrl;
 
 namespace mu::project {
 class IConvertFileToScoreService : MODULE_CONTEXT_INTERFACE
@@ -37,11 +39,25 @@ class IConvertFileToScoreService : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IConvertFileToScoreService() = default;
 
+    //! Server-provided limits (file size, formats, etc) for client-side validation
     virtual const ConvertConfig& config() const = 0;
 
+    //! Whether the given file can be converted
+    virtual bool isFileSupported(const muse::io::path_t& path) const = 0;
+
+    //! Checks the given files against the server's config limits and determines their convert type and category
+    virtual muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) const = 0;
+
+    //! Checks that the given link is from a supported source
+    virtual muse::Ret validateLink(const QUrl& link) const = 0;
+
+    //! Sends the conversion request to the server
     virtual muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) = 0;
+
+    //! Emits the result once the server-side conversion completes
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
 
+    //! Emitted once a converted score is ready and awaiting a quality review
     virtual muse::async::Channel<int /*queueId*/, ConvertType> reviewRequested() const = 0;
     virtual void submitReview(int queueId, ReviewRating rating) = 0;
 };

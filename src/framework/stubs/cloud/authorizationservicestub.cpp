@@ -62,3 +62,10 @@ Ret AuthorizationServiceStub::checkCloudIsAvailable() const
 {
     return muse::make_ret(Ret::Code::NotSupported);
 }
+
+async::Promise<Ret> AuthorizationServiceStub::checkCloudIsAvailableAsync() const
+{
+    return async::make_promise<Ret>([](auto resolve) {
+        return resolve(muse::make_ret(Ret::Code::NotSupported));
+    });
+}

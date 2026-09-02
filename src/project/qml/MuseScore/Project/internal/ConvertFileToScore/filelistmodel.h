@@ -25,7 +25,7 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
-#include "project/types/converttypes.h"
+#include "project/types/filecategory.h"
 
 namespace mu::project {
 class FileListModel : public QAbstractListModel
@@ -40,7 +40,7 @@ class FileListModel : public QAbstractListModel
     Q_PROPERTY(QVariantMap convertLimits READ convertLimits WRITE setConvertLimits NOTIFY convertLimitsChanged)
     Q_PROPERTY(int maxFileCount READ maxFileCount NOTIFY convertLimitsChanged)
 
-    Q_PROPERTY(QString usedSizeString READ usedSizeString NOTIFY usedSizeStringChanged)
+    Q_PROPERTY(QString usedSizeLabel READ usedSizeLabel NOTIFY usedSizeLabelChanged)
     Q_PROPERTY(bool exceedsLimits READ exceedsLimits NOTIFY exceedsLimitsChanged)
 
     QML_ELEMENT
@@ -62,7 +62,7 @@ public:
     void setConvertLimits(const QVariantMap& limits);
 
     int maxFileCount() const;
-    QString usedSizeString() const;
+    QString usedSizeLabel() const;
     bool exceedsLimits() const;
 
     Q_INVOKABLE QVariantMap get(int index);
@@ -74,7 +74,7 @@ signals:
     void pathsChanged();
     void convertLimitsChanged();
     void exceedsLimitsChanged();
-    void usedSizeStringChanged();
+    void usedSizeLabelChanged();
 
 private:
     enum Roles {
@@ -87,13 +87,13 @@ private:
 
     void updateTotalSizeBytes();
     void updateExceedsLimits();
-    void updateUsedSizeString();
+    void updateUsedSizeLabel();
 
     QStringList m_paths;
     FileCategory m_fileCategory = FileCategory::Unknown;
     QVariantMap m_convertLimits;
     bool m_exceedsLimits = false;
     qint64 m_totalSizeBytes = 0;
-    QString m_usedSizeString;
+    QString m_usedSizeLabel;
 };
 }

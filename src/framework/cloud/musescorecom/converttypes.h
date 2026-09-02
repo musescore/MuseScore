@@ -32,6 +32,7 @@
 #include <QUrl>
 
 #include "global/logstream.h"
+#include "global/types/flags.h"
 #include "io/path.h"
 
 namespace muse::cloud {
@@ -95,6 +96,14 @@ static const std::string CONVERT_ERROR_CODE_KEY("errorCode");
 
 static const qint64 MAX_CONVERT_FILE_SIZE_BYTES = 1024LL * 1024 * 1024; // 1 GB
 
+enum class LinkSource {
+    NoSources = 0x0,
+    YouTube = 0x1,
+    AudioCom = 0x2
+};
+DECLARE_FLAGS(LinkSources, LinkSource)
+DECLARE_OPERATORS_FOR_FLAGS(LinkSources)
+
 struct OmrConfig {
     qint64 maxFileSizeBytes = 0;
     int maxPages = 0;
@@ -107,7 +116,7 @@ struct Audio2ScoreConfig {
     int maxFiles = 0;
     QStringList allowedExtensions;
     int maxLinkLength = 0;
-    QStringList allowedLinkSources;
+    LinkSources allowedLinkSources;
 };
 
 struct ConvertConfig {

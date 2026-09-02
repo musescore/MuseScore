@@ -54,6 +54,9 @@ public:
     muse::io::path_t defaultUserProjectsPath() const override;
     muse::io::path_t defaultOpenProjectsPath() const override;
 
+    muse::io::path_t defaultConvertFilePath() const override;
+    void setLastOpenedConvertFilePath(const muse::io::path_t& path) override;
+
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 

@@ -30,6 +30,7 @@ Item {
 
     property string guidelinesUrl: ""
     property alias linkHintText: convertFromLinkPanel.hintText
+    property alias audioComUrl: convertFromLinkPanel.audioComUrl
     property var fileRequirements: []
 
     property NavigationSection navigationSection: null
@@ -41,16 +42,8 @@ Item {
     signal convertFromLinkRequested()
     signal cancelRequested()
 
-    function focusOnSelect() {
+    function focusOnDefault() {
         selectFileButton.navigation.requestActive()
-    }
-
-    NavigationPanel {
-        id: navPanel
-        name: "SelectFilePage"
-        section: root.navigationSection
-        order: 1
-        enabled: root.enabled && root.visible
     }
 
     ColumnLayout {
@@ -138,7 +131,13 @@ Item {
 
                     fileRequirements: root.fileRequirements
 
-                    navigation.panel: navPanel
+                    navigation.panel: NavigationPanel {
+                        id: navPanel
+                        name: "SelectFilePage"
+                        section: root.navigationSection
+                        order: 1
+                        enabled: root.enabled && root.visible
+                    }
                     navigation.order: 1
                 }
 
@@ -178,8 +177,13 @@ Item {
             Layout.fillWidth: true
             Layout.topMargin: 2
 
-            navigationPanel: navPanel
-            navigationOrder: 2
+            navigationPanel: NavigationPanel {
+                name: "SelectFilePageLink"
+                section: root.navigationSection
+                order: 2
+                enabled: root.enabled && root.visible
+            }
+            navigationOrder: 0
 
             onConvertFromLinkRequested: {
                 root.convertFromLinkRequested()
@@ -194,14 +198,20 @@ Item {
                 id: guidelinesItem
 
                 Layout.fillWidth: true
-                implicitHeight: guidelinesLabel.implicitHeight
+                implicitHeight: guidelinesRow.implicitHeight
 
                 NavigationControl {
                     id: guidelinesNavCtrl
 
                     name: "UploadingGuidelines"
-                    panel: navPanel
-                    order: 3
+                    panel: NavigationPanel {
+                        id: bottomPanel
+                        name: "SelectFilePageBottom"
+                        section: root.navigationSection
+                        order: 3
+                        enabled: root.enabled && root.visible
+                    }
+                    order: 1
                     enabled: root.enabled && root.visible
 
                     accessible.role: MUAccessible.Button
@@ -217,22 +227,36 @@ Item {
                     navigationCtrl: guidelinesNavCtrl
                 }
 
-                StyledTextLabel {
-                    id: guidelinesLabel
+                Row {
+                    id: guidelinesRow
 
-                    anchors.fill: parent
+                    spacing: 4
 
-                    text: "<a href=\"" + root.guidelinesUrl + "\">" + qsTrc("project/convert", "Uploading guidelines") + "</a>"
-                    font: ui.theme.bodyFont
-                    horizontalAlignment: Text.AlignLeft
+                    StyledTextLabel {
+                        id: guidelinesLabel
+
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        text: "<a href=\"" + root.guidelinesUrl + "\">" + qsTrc("project/convert", "Uploading guidelines") + "</a>"
+                        font: ui.theme.bodyFont
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    StyledIconLabel {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: 1
+
+                        iconCode: IconCode.OPEN_LINK
+                        font.pixelSize: guidelinesLabel.font.pixelSize + 2
+                        color: ui.theme.linkColor
+                    }
                 }
             }
 
             ButtonBox {
                 buttons: [ButtonBoxModel.Cancel]
 
-                navigationPanel.section: root.navigationSection
-                navigationPanel.order: 4
+                navigationPanel: bottomPanel
 
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {

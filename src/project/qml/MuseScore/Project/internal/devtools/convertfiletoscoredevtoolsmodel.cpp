@@ -22,8 +22,9 @@
 
 #include "convertfiletoscoredevtoolsmodel.h"
 
+#include <QUrl>
+
 #include "actions/actiontypes.h"
-#include "project/projecterrors.h"
 
 using namespace mu::project;
 using namespace muse;
@@ -36,8 +37,16 @@ ConvertFileToScoreDevToolsModel::ConvertFileToScoreDevToolsModel(QObject* parent
 
 void ConvertFileToScoreDevToolsModel::selectAndConvertFiles()
 {
-    convertFileToScoreScenario()->selectFilesToConvert()
-    .onResolve(this, [this](const ConvertSelection& selection) {
-        convertFileToScoreScenario()->startConvert(selection.input, selection.convertedFileName);
-    });
+    dispatcher()->dispatch("file-convert-to-score");
+}
+
+void ConvertFileToScoreDevToolsModel::filesDropped(const QStringList& urls)
+{
+    io::paths_t paths;
+    paths.reserve(urls.size());
+    for (const QString& url : urls) {
+        paths.push_back(io::path_t(QUrl(url).toLocalFile()));
+    }
+
+    dispatcher()->dispatch("file-convert-to-score", ActionData::make_arg1<io::paths_t>(paths));
 }

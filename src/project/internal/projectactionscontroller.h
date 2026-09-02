@@ -39,6 +39,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "iexportprojectscenario.h"
+#include "iconvertfiletoscorescenario.h"
 #include "inotationreadersregister.h"
 #include "iopensaveprojectscenario.h"
 #include "imscmetareader.h"
@@ -70,6 +71,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::ContextInject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
@@ -195,6 +197,7 @@ private:
 
     void importPdf();
     void importAudioToScore();
+    void convertFileToScore(const muse::actions::ActionData& args);
 
     void clearRecentScores();
 

@@ -106,6 +106,15 @@ muse::io::path_t ProjectConfigurationStub::defaultOpenProjectsPath() const
     return muse::io::path_t();
 }
 
+muse::io::path_t ProjectConfigurationStub::defaultConvertFilePath() const
+{
+    return muse::io::path_t();
+}
+
+void ProjectConfigurationStub::setLastOpenedConvertFilePath(const muse::io::path_t&)
+{
+}
+
 bool ProjectConfigurationStub::shouldAskSaveLocationType() const
 {
     return false;

@@ -78,6 +78,7 @@ public:
     const AccountInfo& accountInfo() const override;
 
     Ret checkCloudIsAvailable() const override;
+    async::Promise<Ret> checkCloudIsAvailableAsync() const override;
 
 private slots:
     void onUserAuthorized();

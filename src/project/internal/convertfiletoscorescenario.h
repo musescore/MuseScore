@@ -35,6 +35,7 @@
 namespace mu::project {
 class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public muse::async::Asyncable, public muse::Contextable
 {
+public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
@@ -47,29 +48,37 @@ public:
 
     void init();
 
-    const ConvertConfig& convertConfig() const override;
+    const ConvertConfig& config() const override;
+    muse::async::Promise<muse::Ret> checkConvertIsAllowed() override;
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
-    muse::async::Promise<muse::RetVal<ConvertType> > validate(const muse::io::paths_t& paths) override;
 
-    muse::async::Promise<muse::Ret> startConvert(const ConvertInput& input, const QString& convertedFileName) override;
+    bool isFileSupported(const muse::io::path_t& path) const override;
+    muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) override;
+    muse::Ret validateLink(const QUrl& link) override;
+
+    void convertFiles(const muse::io::paths_t& paths) override;
+
+    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
 private:
     muse::async::Promise<muse::Ret> ensureAuthorization();
-    muse::async::Promise<ConvertSelection> openSelectFilesDialog();
 
-    bool validateAgainstConfig(const muse::io::paths_t& paths, const ConvertConfig& config);
+    void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
 
+    void showValidationError(const muse::Ret& ret);
+
+    void showCloudIsNotAvailableError();
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError();
+    void showUnsupportedLinkError();
     void showMixedFileTypesError();
     void showMultiplePdfFilesError();
     void showTooManyAudioFilesError(int maxFiles);
     void showTooManyImagesError(int maxImages);
 
-    muse::Ret startUpload(const ConvertInput& input, const QString& convertedFileName);
     void showFileProcessingDialog();
     void showScoreReadyNotification(const muse::io::path_t& path);
 
