@@ -5128,6 +5128,247 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     checkAndShowError();
 }
 
+static Segment* endSegmentForRange(Score* score, const Fraction& endTick)
+{
+    if (Segment* endSegment = score->tick2segmentMM(
+            endTick, true, SegmentType::ChordRest)) {
+        return endSegment;
+    }
+
+    return score->tick2leftSegment(
+        endTick, true, SegmentType::ChordRest);
+}
+
+void NotationInteraction::pasteDynamics()
+{
+    const Selection& sel = score()->selection();
+
+    // Validate selection
+    if (sel.isNone()) {
+        return;  // Case 1: nothing selected
+    }
+
+    if (sel.isRange()) {
+        // Case 5 & 6: Range selection (single or multiple staffs) - VALID
+    } else if (sel.isList() && sel.elements().size() == 1) {
+        // Case 2: Single element selected
+        EngravingItem* el = sel.element();
+        if (!el || (!el->isNote() && !el->isRest()
+                    && el->type() != ElementType::DYNAMIC)) {
+            return;  // Case 3: not a chord/rest/dynamic
+        }
+    } else if (sel.isList() && sel.elements().size() > 1) {
+        return;  // Case 4: Multiple element list selection - INVALID
+    } else {
+        return;  // Any other case
+    }
+
+    // Get clipboard MIME data and extract duration
+    const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
+    if (!mimeData) {
+        return;
+    }
+
+    Fraction sourceDuration = extractClipboardDuration(mimeData);
+    if (sourceDuration.isZero()) {
+        return;
+    }
+
+    size_t sourceStaffCount = 1;
+
+    if (mimeData->hasFormat(QString::fromLatin1(mimeStaffListFormat))) {
+        const QByteArray data = mimeData->data(
+            QString::fromLatin1(mimeStaffListFormat));
+        XmlReader reader(muse::ByteArray(data.data(), data.size()));
+
+        if (reader.readNextStartElement() && reader.name() == "StaffList") {
+            sourceStaffCount = static_cast<size_t>(
+                reader.intAttribute("staves", 1));
+        }
+    }
+
+    // Determine starting tick and staff range based on selection type
+    Fraction startTick;
+    staff_idx_t staffStart, staffEnd;
+
+    if (sel.isRange()) {
+        startTick = sel.startSegment()->tick();
+        staffStart = sel.staffStart();
+        staffEnd = sel.staffEnd();
+    } else {
+        // Single element selection
+        EngravingItem* el = sel.element();
+        if (el->isNote()) {
+            el = toNote(el)->chord();
+        }
+
+        if (el->isChord() || el->isRest()) {
+            startTick = toChordRest(el)->tick();
+            staffStart = el->staffIdx();
+            staffEnd = staffStart + 1;
+        } else if (el->type() == ElementType::DYNAMIC) {
+            // For annotations like Dynamic, find the segment that contains it
+            EngravingObject* parentObj = el->parent();
+            if (parentObj) {
+                EngravingItem* parent = dynamic_cast<EngravingItem*>(parentObj);
+                if (parent && parent->isSegment()) {
+                    startTick = toSegment(parent)->tick();
+                } else {
+                    return;  // Can't determine tick from dynamic
+                }
+            } else {
+                return;  // No parent found
+            }
+            staffStart = el->staffIdx();
+            staffEnd = staffStart + 1;
+        } else {
+            return;
+        }
+    }
+
+    if (staffEnd == staffStart + 1 && sourceStaffCount > 1) {
+        staffEnd = std::min(
+            staffStart + sourceStaffCount,
+            score()->nstaves());
+    }
+
+    startEdit(TranslatableString("undoableAction", "Paste Dynamics"));
+
+    Segment* startSegment = sel.isRange()
+                            ? sel.startSegment()
+                            : score()->tick2segmentMM(startTick);
+    // For each staff in range, clear dynamics and paste
+    for (staff_idx_t staff = staffStart; staff < staffEnd; ++staff) {
+        clearDynamicsInRange(startSegment, sourceDuration, staff);
+    }
+
+    // Now paste from clipboard
+    QMimeDataAdapter ma(mimeData);
+    bool succeeded = true;
+
+    if (sel.isRange() && staffEnd - staffStart > 1) {
+        Segment* startSegment = sel.startSegment();
+        Segment* endSegment = sel.endSegment();
+
+        for (staff_idx_t staff = staffStart; staff < staffEnd; ++staff) {
+            score()->selection().setRange(startSegment, endSegment, staff, staff + 1);
+
+            QMimeDataAdapter ma(mimeData);
+            succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(),
+                                     score(), &ma, nullptr, Fraction(1, 1),
+                                     rw::PasteMode::DynamicsOnly)
+                        && succeeded;
+        }
+    } else {
+        QMimeDataAdapter ma(mimeData);
+        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(),
+                                 score(), &ma, nullptr, Fraction(1, 1),
+                                 rw::PasteMode::DynamicsOnly);
+    }
+    if (succeeded && sel.isRange()) {
+        score()->selection().updateSelectedElements();
+
+        Segment* selectionStart = score()->tick2segmentMM(
+            startTick, true, SegmentType::ChordRest);
+        Segment* selectionEnd = endSegmentForRange(
+            score(), startTick + sourceDuration);
+
+        if (selectionStart && selectionEnd) {
+            score()->selection().setRange(
+                selectionStart, selectionEnd, staffStart, staffEnd);
+        }
+    }
+    m_editData.element = nullptr;
+
+    if (succeeded) {
+        apply();
+    } else {
+        rollback();
+    }
+
+    checkAndShowError();
+}
+
+Fraction NotationInteraction::extractClipboardDuration(const QMimeData* mimeData)
+{
+    // Check for staff list format (range selection)
+    if (mimeData->hasFormat(QString::fromLatin1(mimeStaffListFormat))) {
+        QByteArray qdata = mimeData->data(QString::fromLatin1(mimeStaffListFormat));
+        muse::ByteArray data(qdata.data(), qdata.size());
+        XmlReader reader(data);
+
+        if (reader.readNextStartElement() && reader.name() == "StaffList") {
+            if (reader.hasAttribute("len")) {
+                return Fraction::fromString(reader.attribute("len"));
+            }
+        }
+        return Fraction();
+    }
+
+    // Check for single symbol format
+    if (mimeData->hasFormat(QString::fromLatin1(mimeSymbolFormat))) {
+        QByteArray qdata = mimeData->data(QString::fromLatin1(mimeSymbolFormat));
+        muse::ByteArray data(qdata.data(), qdata.size());
+        PointF dragOffset;
+        Fraction duration(1, 4);
+        EngravingItem::readMimeData(score(), data, &dragOffset, &duration);
+        return duration;
+    }
+
+    // Check for symbol list format
+    if (mimeData->hasFormat(QString::fromLatin1(mimeSymbolListFormat))) {
+        QByteArray qdata = mimeData->data(QString::fromLatin1(mimeSymbolListFormat));
+        muse::ByteArray data(qdata.data(), qdata.size());
+        // For symbol list, we need to parse and calculate total duration
+        // This is more complex; for now return a default
+        // TODO: implement full symbol list duration extraction
+        return Fraction();
+    }
+
+    return Fraction();
+}
+
+void NotationInteraction::clearDynamicsInRange(Segment* startSegment,
+                                               const Fraction& duration,
+                                               staff_idx_t staffIdx)
+{
+    IF_ASSERT_FAILED(startSegment) {
+        return;
+    }
+
+    const Fraction startTick = startSegment->tick();
+    const Fraction endTick = startTick + duration;
+    const track_idx_t track = staffIdx * VOICES;
+
+    for (Segment* segment = startSegment;
+         segment && segment->tick() < endTick;
+         segment = segment->next1()) {
+        const auto dynamics = segment->findAnnotations(
+            ElementType::DYNAMIC, track, track);
+
+        for (EngravingItem* dynamic : dynamics) {
+            score()->undoRemoveElement(dynamic);
+        }
+    }
+
+    std::vector<Hairpin*> hairpinsToRemove;
+    for (const auto& interval : score()->spannerMap().findOverlapping(
+             startTick.ticks(), endTick.ticks())) {
+        Spanner* spanner = interval.value;
+
+        if (spanner->isHairpin()
+            && spanner->staffIdx() == staffIdx
+            && spanner->tick() >= startTick
+            && spanner->tick() < endTick) {
+            hairpinsToRemove.push_back(toHairpin(spanner));
+        }
+    }
+
+    for (Hairpin* hairpin : hairpinsToRemove) {
+        score()->undoRemoveElement(hairpin);
+    }
+}
+
 void NotationInteraction::pasteIntoTextEdit()
 {
     const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();

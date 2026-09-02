@@ -342,6 +342,7 @@ inline static const muse::rcommand::Command PASTE_COMMAND("command://notation/pa
 inline static const muse::rcommand::Command PASTE_HALF_COMMAND("command://notation/paste-half");
 inline static const muse::rcommand::Command PASTE_DOUBLE_COMMAND("command://notation/paste-double");
 inline static const muse::rcommand::Command PASTE_SPECIAL_COMMAND("command://notation/paste-special");
+inline static const muse::rcommand::Command PASTE_DYNAMICS_COMMAND("command://notation/paste-dynamics");
 inline static const muse::rcommand::Command DELETE_COMMAND("command://notation/delete");
 
 // move commands

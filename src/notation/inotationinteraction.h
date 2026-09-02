@@ -193,6 +193,7 @@ public:
     virtual void repeatSelection() = 0;
     virtual void copyLyrics() = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;
+    virtual void pasteDynamics() = 0;
     virtual void swapSelection() = 0;
     virtual void deleteSelection() = 0;
     virtual void flipSelection() = 0;
