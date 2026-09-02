@@ -519,6 +519,9 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::SHARED_PART_ENABLED,                 P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "sharedPartEnabled",               QT_TRANSLATE_NOOP("engraving/propertyName", "shared part enabled") },
 
+    { Pid::PLAYBACK_START_OFFSET,               P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "playbackStartOffset",             QT_TRANSLATE_NOOP("engraving/propertyName", "playback start offset") },
+    { Pid::PLAYBACK_DURATION_OFFSET,            P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "playbackDurationOffset",          QT_TRANSLATE_NOOP("engraving/propertyName", "playback duration offset") },
+
     { Pid::END,                                 P_TYPE::INT,                       PropertyGroup::NONE,       false, "++end++",                         nullptr }
 };
 /* *INDENT-ON* */

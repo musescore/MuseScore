@@ -128,6 +128,26 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
         return;
     }
 
+    if (note->playbackStartOffset() != 0 || note->playbackDurationOffset() != 0) {
+        // playbackStartOffset()/playbackDurationOffset() are ticks relative to the note's own
+        // nominal position - apply them on top of ctx's nominal tick range rather than
+        // recomputing from the chord's own tick()/ticks(). The chord's tick()/ticks() are its
+        // notated position/duration, which for a grace note or a note inside a repeated section
+        // is NOT the same as when/how long it actually plays - ctx.nominalPositionStartTick/
+        // nominalPositionEndTick already reflect that (see GraceChordCtx::buildCtx), whereas
+        // chord->tick() would collapse a grace note's "before the beat" timing back to the
+        // principal note's tick.
+        const int nominalStartTick = ctx.nominalPositionStartTick;
+        const int nominalEndTick = ctx.nominalPositionEndTick + note->playbackDurationOffset();
+        const int effectiveStartTick = std::max(0, nominalStartTick + note->playbackStartOffset());
+        const int effectiveDurationTicks = std::max(1, nominalEndTick - effectiveStartTick);
+
+        auto effectiveTnD = timestampAndDurationFromStartAndDurationTicks(ctx.score, effectiveStartTick, effectiveDurationTicks,
+                                                                          ctx.positionTickOffset);
+        noteCtx.timestamp = effectiveTnD.timestamp;
+        noteCtx.duration = effectiveTnD.duration;
+    }
+
     const Tie* tieFor = note->tieFor();
     if (tieFor && tieFor->playSpanner()) {
         if (tieFor->isPartialTie()) {
