@@ -49,17 +49,17 @@ static FileCategory resolveFileCategory(const io::path_t& path, const ConvertCon
         return FileCategory::Pdf;
     }
 
-    if (config.omr.allowedExtensions.contains(ext)) {
+    if (config.omr.images.allowedExtensions.contains(ext)) {
         return FileCategory::Image;
     }
 
-    if (config.audio2score.allowedExtensions.contains(ext)) {
+    if (config.audio2score.file.allowedExtensions.contains(ext)) {
         return FileCategory::Audio;
     }
 
     //! NOTE: config is a client-side sanity check only; if it hasn't been fully fetched yet, fall back
     //! to a best-effort guess rather than blocking the conversion
-    if (!config.omr.allowedExtensions.isEmpty() && !config.audio2score.allowedExtensions.isEmpty()) {
+    if (!config.omr.images.allowedExtensions.isEmpty() && !config.audio2score.file.allowedExtensions.isEmpty()) {
         return FileCategory::Unknown;
     }
 
@@ -103,15 +103,17 @@ void ConvertFileToScoreService::init()
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
 
     //! NOTE: fallback is used if fetchConfig() fails
-    m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "jpeg" };
-    m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
-    m_config.omr.maxPages = 50;
-    m_config.omr.maxImages = 15;
-    m_config.audio2score.allowedExtensions = { "mp3" };
-    m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
-    m_config.audio2score.maxFiles = 1;
-    m_config.audio2score.maxLinkLength = 2048;
-    m_config.audio2score.allowedLinkSources = LinkSource::YouTube | LinkSource::AudioCom;
+    m_config.omr.pdf.maxFileSizeBytes = 78643200;
+    m_config.omr.pdf.maxFiles = 1;
+    m_config.omr.pdf.maxPages = 50;
+    m_config.omr.images.allowedExtensions = { "jpeg", "jpg", "png" };
+    m_config.omr.images.maxFileSizeBytes = 78643200;
+    m_config.omr.images.maxFiles = 15;
+    m_config.audio2score.file.allowedExtensions = { "mp3" };
+    m_config.audio2score.file.maxFileSizeBytes = 52428800;
+    m_config.audio2score.file.maxFiles = 1;
+    m_config.audio2score.link.maxLength = 2048;
+    m_config.audio2score.link.allowedSources = LinkSource::YouTube | LinkSource::AudioCom;
 
     //! NOTE: prefetch and cache convert config
     museScoreComService()->convert()->fetchConfig().onResolve(this, [this](const RetVal<ConvertConfig>& config) {
@@ -167,32 +169,36 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
         const qint64 fileSizeBytes = static_cast<qint64>(fileSizeResult.val);
 
         if (category == FileCategory::Audio
-            && m_config.audio2score.maxFileSizeBytes > 0 && fileSizeBytes > m_config.audio2score.maxFileSizeBytes) {
+            && m_config.audio2score.file.maxFileSizeBytes > 0 && fileSizeBytes > m_config.audio2score.file.maxFileSizeBytes) {
             return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertAudioFileTooLarge));
         }
 
         totalSizeBytes += fileSizeBytes;
     }
 
-    if (firstCategory == FileCategory::Pdf && paths.size() > 1) {
+    if (firstCategory == FileCategory::Pdf
+        && m_config.omr.pdf.maxFiles > 0 && int(paths.size()) > m_config.omr.pdf.maxFiles) {
         return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertMultiplePdfFiles));
     }
 
     if (firstCategory == FileCategory::Audio) {
-        if (m_config.audio2score.maxFiles > 0 && int(paths.size()) > m_config.audio2score.maxFiles) {
+        if (m_config.audio2score.file.maxFiles > 0 && int(paths.size()) > m_config.audio2score.file.maxFiles) {
             return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyAudioFiles));
         }
 
         return RetVal<ConvertFilesValidation>::make_ok(ConvertFilesValidation { ConvertType::Audio2Score, FileCategory::Audio });
     }
 
-    if (m_config.omr.maxImages > 0 && paths.size() > 1 && int(paths.size()) > m_config.omr.maxImages) {
+    if (m_config.omr.images.maxFiles > 0 && paths.size() > 1 && int(paths.size()) > m_config.omr.images.maxFiles) {
         return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyImages));
     }
 
     //! NOTE: maxFileSizeBytes is a combined budget across all selected images
     //! (or the single file's own size, for a PDF)
-    if (m_config.omr.maxFileSizeBytes > 0 && totalSizeBytes > m_config.omr.maxFileSizeBytes) {
+    const qint64 maxFileSizeBytes = firstCategory == FileCategory::Image
+                                    ? m_config.omr.images.maxFileSizeBytes
+                                    : m_config.omr.pdf.maxFileSizeBytes;
+    if (maxFileSizeBytes > 0 && totalSizeBytes > maxFileSizeBytes) {
         if (firstCategory == FileCategory::Image) {
             return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertCombinedImageTooLarge));
         }
@@ -204,8 +210,8 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
 
 Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
 {
-    const LinkSources sources = m_config.audio2score.allowedLinkSources
-                                ? m_config.audio2score.allowedLinkSources
+    const LinkSources sources = m_config.audio2score.link.allowedSources
+                                ? m_config.audio2score.link.allowedSources
                                 : LinkSource::YouTube | LinkSource::AudioCom;
 
     if (!link.isValid()) {

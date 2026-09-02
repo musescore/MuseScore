@@ -23,7 +23,6 @@
 #pragma once
 
 #include <memory>
-#include <optional>
 
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
@@ -98,7 +97,5 @@ private:
     async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
 
     async::Promise<Ret> doUpload(const ConvertInput& input, ProgressPtr progress);
-
-    std::optional<ConvertConfig> m_cachedConfig;
 };
 }

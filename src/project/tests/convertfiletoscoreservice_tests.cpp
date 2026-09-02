@@ -72,16 +72,18 @@ async::Promise<T> resolvedPromise(const T& val)
 //! NOTE: the hardcoded values ConvertFileToScoreService::init() falls back to
 void expectFallbackConfig(const ConvertConfig& config)
 {
-    EXPECT_EQ(config.omr.allowedExtensions, QStringList({ "pdf", "png", "jpg", "jpeg" }));
-    EXPECT_EQ(config.omr.maxFileSizeBytes, 30LL * 1024 * 1024);
-    EXPECT_EQ(config.omr.maxPages, 50);
-    EXPECT_EQ(config.omr.maxImages, 15);
-    EXPECT_EQ(config.audio2score.allowedExtensions, QStringList({ "mp3" }));
-    EXPECT_EQ(config.audio2score.maxFileSizeBytes, 30LL * 1024 * 1024);
-    EXPECT_EQ(config.audio2score.maxFiles, 1);
-    EXPECT_EQ(config.audio2score.maxLinkLength, 2048);
-    EXPECT_TRUE(config.audio2score.allowedLinkSources.testFlag(LinkSource::YouTube));
-    EXPECT_TRUE(config.audio2score.allowedLinkSources.testFlag(LinkSource::AudioCom));
+    EXPECT_EQ(config.omr.pdf.maxFileSizeBytes, 78643200);
+    EXPECT_EQ(config.omr.pdf.maxFiles, 1);
+    EXPECT_EQ(config.omr.pdf.maxPages, 50);
+    EXPECT_EQ(config.omr.images.allowedExtensions, QStringList({ "jpeg", "jpg", "png" }));
+    EXPECT_EQ(config.omr.images.maxFileSizeBytes, 78643200);
+    EXPECT_EQ(config.omr.images.maxFiles, 15);
+    EXPECT_EQ(config.audio2score.file.allowedExtensions, QStringList({ "mp3" }));
+    EXPECT_EQ(config.audio2score.file.maxFileSizeBytes, 52428800);
+    EXPECT_EQ(config.audio2score.file.maxFiles, 1);
+    EXPECT_EQ(config.audio2score.link.maxLength, 2048);
+    EXPECT_TRUE(config.audio2score.link.allowedSources.testFlag(LinkSource::YouTube));
+    EXPECT_TRUE(config.audio2score.link.allowedSources.testFlag(LinkSource::AudioCom));
 }
 
 //! NOTE: a promise that never resolves, for tests that don't care about the outcome
@@ -134,8 +136,8 @@ protected:
     static ConvertConfig testConfig()
     {
         ConvertConfig config;
-        config.omr.allowedExtensions = { "pdf", "png", "jpg", "jpeg" };
-        config.audio2score.allowedExtensions = { "mp3" };
+        config.omr.images.allowedExtensions = { "png", "jpg", "jpeg" };
+        config.audio2score.file.allowedExtensions = { "mp3" };
         return config;
     }
 
@@ -194,15 +196,17 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Init_FetchConfigSucceeds_Overwrite
 {
     // [GIVEN] fetchConfig() resolving with a server-provided config, distinct in every field from the fallback
     ConvertConfig serverConfig;
-    serverConfig.omr.allowedExtensions = { "tif" };
-    serverConfig.omr.maxFileSizeBytes = 111;
-    serverConfig.omr.maxPages = 7;
-    serverConfig.omr.maxImages = 99;
-    serverConfig.audio2score.allowedExtensions = { "wav" };
-    serverConfig.audio2score.maxFileSizeBytes = 222;
-    serverConfig.audio2score.maxFiles = 3;
-    serverConfig.audio2score.maxLinkLength = 333;
-    serverConfig.audio2score.allowedLinkSources = LinkSource::AudioCom;
+    serverConfig.omr.pdf.maxFileSizeBytes = 111;
+    serverConfig.omr.pdf.maxFiles = 4;
+    serverConfig.omr.pdf.maxPages = 7;
+    serverConfig.omr.images.allowedExtensions = { "tif" };
+    serverConfig.omr.images.maxFileSizeBytes = 112;
+    serverConfig.omr.images.maxFiles = 99;
+    serverConfig.audio2score.file.allowedExtensions = { "wav" };
+    serverConfig.audio2score.file.maxFileSizeBytes = 222;
+    serverConfig.audio2score.file.maxFiles = 3;
+    serverConfig.audio2score.link.maxLength = 333;
+    serverConfig.audio2score.link.allowedSources = LinkSource::AudioCom;
     ON_CALL(*m_convertService, fetchConfig())
     .WillByDefault(Invoke([serverConfig] {
         return resolvedPromise<RetVal<ConvertConfig> >(RetVal<ConvertConfig>::make_ok(serverConfig));
@@ -214,16 +218,18 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Init_FetchConfigSucceeds_Overwrite
 
     // [THEN] The fetched config fully replaces the fallback
     const ConvertConfig& config = m_service->config();
-    EXPECT_EQ(config.omr.allowedExtensions, QStringList({ "tif" }));
-    EXPECT_EQ(config.omr.maxFileSizeBytes, 111);
-    EXPECT_EQ(config.omr.maxPages, 7);
-    EXPECT_EQ(config.omr.maxImages, 99);
-    EXPECT_EQ(config.audio2score.allowedExtensions, QStringList({ "wav" }));
-    EXPECT_EQ(config.audio2score.maxFileSizeBytes, 222);
-    EXPECT_EQ(config.audio2score.maxFiles, 3);
-    EXPECT_EQ(config.audio2score.maxLinkLength, 333);
-    EXPECT_TRUE(config.audio2score.allowedLinkSources.testFlag(LinkSource::AudioCom));
-    EXPECT_FALSE(config.audio2score.allowedLinkSources.testFlag(LinkSource::YouTube));
+    EXPECT_EQ(config.omr.pdf.maxFileSizeBytes, 111);
+    EXPECT_EQ(config.omr.pdf.maxFiles, 4);
+    EXPECT_EQ(config.omr.pdf.maxPages, 7);
+    EXPECT_EQ(config.omr.images.allowedExtensions, QStringList({ "tif" }));
+    EXPECT_EQ(config.omr.images.maxFileSizeBytes, 112);
+    EXPECT_EQ(config.omr.images.maxFiles, 99);
+    EXPECT_EQ(config.audio2score.file.allowedExtensions, QStringList({ "wav" }));
+    EXPECT_EQ(config.audio2score.file.maxFileSizeBytes, 222);
+    EXPECT_EQ(config.audio2score.file.maxFiles, 3);
+    EXPECT_EQ(config.audio2score.link.maxLength, 333);
+    EXPECT_TRUE(config.audio2score.link.allowedSources.testFlag(LinkSource::AudioCom));
+    EXPECT_FALSE(config.audio2score.link.allowedSources.testFlag(LinkSource::YouTube));
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Init_FetchConfigFails_KeepsFallbackConfig)
@@ -311,8 +317,10 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_MixedCategories_Mixe
 
 TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_MultiplePdfFiles_MultiplePdfFiles)
 {
-    // [GIVEN] A populated config, supporting pdf
-    setConfig(testConfig());
+    // [GIVEN] A configured maximum PDF file count
+    ConvertConfig config = testConfig();
+    config.omr.pdf.maxFiles = 1;
+    setConfig(config);
 
     // [WHEN] Validating two PDF files
     RetVal<ConvertFilesValidation> result = m_service->validateFiles(io::paths_t { "/some/a.pdf", "/some/b.pdf" });
@@ -368,7 +376,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_AudioFileTooLarge_Sh
 {
     // [GIVEN] A configured maximum audio file size, and a file exceeding it
     ConvertConfig config = testConfig();
-    config.audio2score.maxFileSizeBytes = 100;
+    config.audio2score.file.maxFileSizeBytes = 100;
     setConfig(config);
 
     ON_CALL(*m_fileSystem, fileSize(io::path_t("/some/file.mp3")))
@@ -386,7 +394,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_TooManyAudioFiles_To
 {
     // [GIVEN] A configured maximum audio file count
     ConvertConfig config = testConfig();
-    config.audio2score.maxFiles = 1;
+    config.audio2score.file.maxFiles = 1;
     setConfig(config);
 
     // [WHEN] Validating more files than allowed
@@ -401,7 +409,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_TooManyImages_TooMan
 {
     // [GIVEN] A configured maximum image count
     ConvertConfig config = testConfig();
-    config.omr.maxImages = 2;
+    config.omr.images.maxFiles = 2;
     setConfig(config);
 
     // [WHEN] Validating more images than allowed
@@ -416,7 +424,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_CombinedImageTooLarg
 {
     // [GIVEN] A configured maximum combined image size, exceeded by the combined file sizes
     ConvertConfig config = testConfig();
-    config.omr.maxFileSizeBytes = 100;
+    config.omr.images.maxFileSizeBytes = 100;
     setConfig(config);
 
     ON_CALL(*m_fileSystem, fileSize(_))
@@ -434,7 +442,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_PdfTooLarge_FileTooL
 {
     // [GIVEN] A configured maximum OMR file size, and a PDF exceeding it
     ConvertConfig config = testConfig();
-    config.omr.maxFileSizeBytes = 100;
+    config.omr.pdf.maxFileSizeBytes = 100;
     setConfig(config);
 
     ON_CALL(*m_fileSystem, fileSize(_))
@@ -484,7 +492,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_YouTubeOnlyConfig_Rej
 {
     // [GIVEN] A config only allowing YouTube links
     ConvertConfig config;
-    config.audio2score.allowedLinkSources = LinkSource::YouTube;
+    config.audio2score.link.allowedSources = LinkSource::YouTube;
     setConfig(config);
 
     // [WHEN] Validating an Audio.com link
@@ -498,7 +506,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_AudioComOnlyConfig_Re
 {
     // [GIVEN] A config only allowing Audio.com links
     ConvertConfig config;
-    config.audio2score.allowedLinkSources = LinkSource::AudioCom;
+    config.audio2score.link.allowedSources = LinkSource::AudioCom;
     setConfig(config);
 
     // [WHEN] Validating a YouTube link

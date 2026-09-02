@@ -98,22 +98,41 @@ enum class LinkSource {
 DECLARE_FLAGS(LinkSources, LinkSource)
 DECLARE_OPERATORS_FOR_FLAGS(LinkSources)
 
-struct OmrConfig {
+struct OmrPdfConfig {
     qint64 maxFileSizeBytes = 0;
+    int maxFiles = 0;
     int maxPages = 0;
-    int maxImages = 0;
-    QStringList allowedExtensions;
 };
 
-struct Audio2ScoreConfig {
+struct OmrImagesConfig {
     qint64 maxFileSizeBytes = 0;
     int maxFiles = 0;
     QStringList allowedExtensions;
-    int maxLinkLength = 0;
-    LinkSources allowedLinkSources;
+};
+
+struct OmrConfig {
+    OmrPdfConfig pdf;
+    OmrImagesConfig images;
+};
+
+struct Audio2ScoreFileConfig {
+    qint64 maxFileSizeBytes = 0;
+    int maxFiles = 0;
+    QStringList allowedExtensions;
+};
+
+struct Audio2ScoreLinkConfig {
+    int maxLength = 0;
+    LinkSources allowedSources;
+};
+
+struct Audio2ScoreConfig {
+    Audio2ScoreFileConfig file;
+    Audio2ScoreLinkConfig link;
 };
 
 struct ConvertConfig {
+    int version = 0;
     OmrConfig omr;
     Audio2ScoreConfig audio2score;
 };

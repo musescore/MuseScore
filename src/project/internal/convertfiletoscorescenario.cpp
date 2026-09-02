@@ -245,19 +245,19 @@ void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
         showMultiplePdfFilesError();
         break;
     case Err::ConvertAudioFileTooLarge:
-        showFileTooLargeError(config.audio2score.maxFileSizeBytes);
+        showFileTooLargeError(config.audio2score.file.maxFileSizeBytes);
         break;
     case Err::ConvertFileTooLarge:
-        showFileTooLargeError(config.omr.maxFileSizeBytes);
+        showFileTooLargeError(config.omr.pdf.maxFileSizeBytes);
         break;
     case Err::ConvertCombinedImageTooLarge:
-        showCombinedImageSizeTooLargeError(config.omr.maxFileSizeBytes);
+        showCombinedImageSizeTooLargeError(config.omr.images.maxFileSizeBytes);
         break;
     case Err::ConvertTooManyAudioFiles:
-        showTooManyAudioFilesError(config.audio2score.maxFiles);
+        showTooManyAudioFilesError(config.audio2score.file.maxFiles);
         break;
     case Err::ConvertTooManyImages:
-        showTooManyImagesError(config.omr.maxImages);
+        showTooManyImagesError(config.omr.images.maxFiles);
         break;
     default:
         break;
@@ -300,7 +300,7 @@ void ConvertFileToScoreScenario::showUnsupportedFormatError()
 
 void ConvertFileToScoreScenario::showUnsupportedLinkError()
 {
-    const LinkSources configured = service()->config().audio2score.allowedLinkSources;
+    const LinkSources configured = service()->config().audio2score.link.allowedSources;
     const LinkSources sources = configured ? configured : (LinkSource::YouTube | LinkSource::AudioCom);
 
     std::string text;

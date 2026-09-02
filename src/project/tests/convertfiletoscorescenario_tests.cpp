@@ -317,12 +317,12 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Bad_SubmitsB
 TEST_F(Project_ConvertFileToScoreScenarioTest, Config_DelegatesToService)
 {
     // [GIVEN] A service-provided config
-    m_config.omr.maxImages = 42;
+    m_config.omr.images.maxFiles = 42;
 
     // [WHEN] Reading the scenario's config
     // [THEN] It is the same object the service returns
     EXPECT_EQ(&m_scenario->config(), &m_config);
-    EXPECT_EQ(m_scenario->config().omr.maxImages, 42);
+    EXPECT_EQ(m_scenario->config().omr.images.maxFiles, 42);
 }
 
 // ==================================================
@@ -507,8 +507,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_MultiplePdfFiles_Sh
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_AudioFileTooLarge_ShowsDialog)
 {
     // [GIVEN] A configured maximum audio file size
-    m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
-    const QString size = DataFormatter::formatFileSize(size_t(m_config.audio2score.maxFileSizeBytes));
+    m_config.audio2score.file.maxFileSizeBytes = 30LL * 1024 * 1024;
+    const QString size = DataFormatter::formatFileSize(size_t(m_config.audio2score.file.maxFileSizeBytes));
     const std::string text = muse::qtrc("project/convert", "The maximum file size is %1. Reduce the size of your file and try again.")
                              .arg(size).toStdString();
 
@@ -518,8 +518,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_AudioFileTooLarge_S
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_FileTooLarge_ShowsDialog)
 {
     // [GIVEN] A configured maximum OMR file size
-    m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
-    const QString size = DataFormatter::formatFileSize(size_t(m_config.omr.maxFileSizeBytes));
+    m_config.omr.pdf.maxFileSizeBytes = 30LL * 1024 * 1024;
+    const QString size = DataFormatter::formatFileSize(size_t(m_config.omr.pdf.maxFileSizeBytes));
     const std::string text = muse::qtrc("project/convert", "The maximum file size is %1. Reduce the size of your file and try again.")
                              .arg(size).toStdString();
 
@@ -529,8 +529,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_FileTooLarge_ShowsD
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_CombinedImageTooLarge_ShowsDialog)
 {
     // [GIVEN] A configured maximum combined image size
-    m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
-    const QString size = DataFormatter::formatFileSize(size_t(m_config.omr.maxFileSizeBytes));
+    m_config.omr.images.maxFileSizeBytes = 30LL * 1024 * 1024;
+    const QString size = DataFormatter::formatFileSize(size_t(m_config.omr.images.maxFileSizeBytes));
     const std::string text = muse::qtrc("project/convert",
                                         "The maximum combined file size for all images is %1. Choose a smaller file or remove some images to continue.")
                              .arg(size).toStdString();
@@ -541,10 +541,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_CombinedImageTooLar
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_TooManyAudioFiles_ShowsDialog)
 {
     // [GIVEN] A configured maximum audio file count
-    m_config.audio2score.maxFiles = 3;
+    m_config.audio2score.file.maxFiles = 3;
     const std::string text = muse::qtrc("project/convert",
                                         "You can convert up to %1 audio files at a time. Remove some files and try again.")
-                             .arg(m_config.audio2score.maxFiles).toStdString();
+                             .arg(m_config.audio2score.file.maxFiles).toStdString();
 
     expectValidateFilesShowsError(Err::ConvertTooManyAudioFiles, muse::trc("project/convert", "Too many files selected"), text);
 }
@@ -552,9 +552,9 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_TooManyAudioFiles_S
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_TooManyImages_ShowsDialog)
 {
     // [GIVEN] A configured maximum image count
-    m_config.omr.maxImages = 15;
+    m_config.omr.images.maxFiles = 15;
     const std::string text = muse::qtrc("project/convert", "You can convert up to %1 images at a time. Remove some images and try again.")
-                             .arg(m_config.omr.maxImages).toStdString();
+                             .arg(m_config.omr.images.maxFiles).toStdString();
 
     expectValidateFilesShowsError(Err::ConvertTooManyImages, muse::trc("project/convert", "Too many images selected"), text);
 }
@@ -583,7 +583,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Success_NoDialog)
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_BothSources)
 {
     // [GIVEN] Both link sources are allowed, but the service rejects the link
-    m_config.audio2score.allowedLinkSources = LinkSource::YouTube | LinkSource::AudioCom;
+    m_config.audio2score.link.allowedSources = LinkSource::YouTube | LinkSource::AudioCom;
     const QUrl link("https://link.xyz");
     ON_CALL(*m_service, validateLink(link))
     .WillByDefault(Return(make_ret(Err::ConvertUnsupportedLink)));
@@ -610,7 +610,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_UnsetSourcesFallsBackToBoth)
 {
     // [GIVEN] No link sources are configured, and the service rejects the link
-    m_config.audio2score.allowedLinkSources = LinkSources();
+    m_config.audio2score.link.allowedSources = LinkSources();
     const QUrl link("https://link.xyz");
     ON_CALL(*m_service, validateLink(link))
     .WillByDefault(Return(make_ret(Err::ConvertUnsupportedLink)));
@@ -637,7 +637,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_YouTubeOnly)
 {
     // [GIVEN] Only YouTube is allowed, and the service rejects the link
-    m_config.audio2score.allowedLinkSources = LinkSource::YouTube;
+    m_config.audio2score.link.allowedSources = LinkSource::YouTube;
     const QUrl link("https://link.xyz");
     ON_CALL(*m_service, validateLink(link))
     .WillByDefault(Return(make_ret(Err::ConvertUnsupportedLink)));
@@ -664,7 +664,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_AudioComOnly)
 {
     // [GIVEN] Only Audio.com is allowed, and the service rejects the link
-    m_config.audio2score.allowedLinkSources = LinkSource::AudioCom;
+    m_config.audio2score.link.allowedSources = LinkSource::AudioCom;
     const QUrl link("https://link.xyz");
     ON_CALL(*m_service, validateLink(link))
     .WillByDefault(Return(make_ret(Err::ConvertUnsupportedLink)));
