@@ -1177,6 +1177,28 @@ NoteHeadScheme TConv::fromXml(const AsciiStringView& tag, NoteHeadScheme def)
     return findTypeByXmlTag<NoteHeadScheme>(NOTEHEAD_SCHEMES, tag, def);
 }
 
+static const std::vector<Item<InstrumentLabelVisibility> > INSTRUMENT_LABEL_VISIBILITIES = {
+    { InstrumentLabelVisibility::AUTO,  "auto",  muse::TranslatableString("engraving", "Auto") },
+    { InstrumentLabelVisibility::LONG,  "long",  muse::TranslatableString("engraving", "Long") },
+    { InstrumentLabelVisibility::SHORT, "short", muse::TranslatableString("engraving", "Short") },
+    { InstrumentLabelVisibility::HIDE,  "hide",  muse::TranslatableString("engraving", "Hide") }
+};
+
+String TConv::translatedUserName(InstrumentLabelVisibility v)
+{
+    return findCapitalizedUserNameByType(INSTRUMENT_LABEL_VISIBILITIES, v).translated();
+}
+
+AsciiStringView TConv::toXml(InstrumentLabelVisibility v)
+{
+    return findXmlTagByType<InstrumentLabelVisibility>(INSTRUMENT_LABEL_VISIBILITIES, v);
+}
+
+InstrumentLabelVisibility TConv::fromXml(const AsciiStringView& tag, InstrumentLabelVisibility def)
+{
+    return findTypeByXmlTag<InstrumentLabelVisibility>(INSTRUMENT_LABEL_VISIBILITIES, tag, def);
+}
+
 static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_NORMAL,           "normal",         muse::TranslatableString("engraving/noteheadgroup", "Normal") },
     { NoteHeadGroup::HEAD_CROSS,            "cross",          muse::TranslatableString("engraving/noteheadgroup", "Cross") },
