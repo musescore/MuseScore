@@ -860,7 +860,8 @@ enum class IntervalType : unsigned char {
 enum class InstrumentLabelVisibility : unsigned char {
     LONG,
     SHORT,
-    HIDE
+    HIDE,
+    AUTO
 };
 
 struct OrnamentInterval
