@@ -219,7 +219,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
     EXPECT_TRUE(forwardedRet);
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_NoNotificationButStillForwards)
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNotificationAndForwards)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
@@ -228,22 +228,105 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_NoNotificationButSti
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    // [THEN] No notification is shown for a failed conversion
-    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
+    constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    Ret ret = make_ret(Err::ConvertProcessingFailed);
+    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, QString("My Score"));
+
+    const std::string title = muse::trc("project/convert", "Error processing score");
+    const std::string text = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
+                             .arg("My Score").toStdString();
+
+    // [THEN] The "convert failed" notification is shown
+    EXPECT_CALL(*m_interactive,
+                error(title, TextIs(text), ButtonIdsAre({ dismissBtn, tryAgainBtn }), dismissBtn,
+                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise();
+    }));
 
     bool forwarded = false;
     Ret forwardedRet;
-    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& r, const io::path_t&) {
         forwarded = true;
-        forwardedRet = ret;
+        forwardedRet = r;
     });
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(make_ret(Err::ConvertProcessingFailed), io::path_t());
+    convertFinished.send(ret, io::path_t());
 
     // [THEN] The failure is still forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
     EXPECT_FALSE(forwardedRet);
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsConvert)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, io::path_t> convertFinished;
+    async::Channel<ConvertType, int> reviewRequested;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
+    m_scenario->init();
+
+    constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
+
+    // [GIVEN] The user clicks "Try again" on the failure dialog
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault(Invoke([tryAgainBtn](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(tryAgainBtn));
+    }));
+
+    // [GIVEN] The user re-selects a file to convert
+    const QVariantMap selectionMap {
+        { "type", int(ConvertType::Omr) },
+        { "paths", QStringList { "/some/file.xyz" } },
+        { "convertedFileName", QString("file") }
+    };
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([selectionMap](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(selectionMap));
+    }));
+
+    // [THEN] Conversion is restarted with the newly selected file
+    EXPECT_CALL(*m_service, startConvert(Truly([](const ConvertInput& input) {
+        return convertTypeOf(input) == ConvertType::Omr && convertPathsOf(input) == io::paths_t { "/some/file.xyz" };
+    }), QString("file")))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] The service reports a failed conversion
+    convertFinished.send(make_ret(Err::ConvertProcessingFailed), io::path_t());
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotRestartConvert)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, io::path_t> convertFinished;
+    async::Channel<ConvertType, int> reviewRequested;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
+    m_scenario->init();
+
+    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    // [GIVEN] The user dismisses the failure dialog
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault(Invoke([dismissBtn](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(dismissBtn));
+    }));
+
+    // [THEN] No new conversion is started
+    EXPECT_CALL(*m_interactive, open(_)).Times(0);
+    EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
+
+    // [WHEN] The service reports a failed conversion
+    convertFinished.send(make_ret(Err::ConvertProcessingFailed), io::path_t());
+
+    pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Good_SubmitsGoodRating)
@@ -465,21 +548,13 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_Success_NoDialog)
     EXPECT_EQ(result.val.category, FileCategory::Pdf);
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_ValidationFailedCode_NoDialog)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_ValidationFailedCode_ShowsUnknownErrorDialog)
 {
-    // [GIVEN] The service reports a generic validation failure (e.g. no files selected)
-    const io::paths_t paths {};
-    ON_CALL(*m_service, validateFiles(paths))
-    .WillByDefault(Return(RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertValidationFailed))));
-
-    // [THEN] No dialog is shown for this code, since it's not routed to any specific one
-    EXPECT_CALL(*m_interactive, error(_, _, _, _, _, _)).Times(0);
-
-    // [WHEN] Validating the files
-    RetVal<ConvertFilesValidation> result = m_scenario->validateFiles(paths);
-
-    // [THEN] Validation fails
-    EXPECT_FALSE(result.ret);
+    // [GIVEN] The service reports a generic validation failure , which isn't
+    // routed to any specific dialog, and so falls back to the generic "unknown error" one
+    expectValidateFilesShowsError(Err::ConvertValidationFailed,
+                                  muse::trc("project/convert", "Something went wrong"),
+                                  muse::trc("project/convert", "Check your internet connection and try again."));
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_UnsupportedFormat_ShowsDialog)
@@ -898,4 +973,31 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_NoProcessingDialog_W
     // [WHEN] Starting the conversion
     const OmrConvertInput input { io::paths_t { "/some/file.xyz" } };
     m_scenario->startConvert(input, "file");
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_Failure_ShowsUnknownError)
+{
+    // [GIVEN] The service fails to start the conversion
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ret(Err::ConvertProcessingFailed)));
+
+    const std::string title = muse::trc("project/convert", "Something went wrong");
+    const std::string text = muse::trc("project/convert", "Check your internet connection and try again.");
+
+    // [THEN] The generic "unknown error" dialog is shown, and no processing dialog is shown
+    EXPECT_CALL(*m_interactive,
+                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise();
+    }));
+    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
+
+    // [WHEN] Starting the conversion
+    const OmrConvertInput input { io::paths_t { "/some/file.xyz" } };
+    Ret ret = m_scenario->startConvert(input, "file");
+
+    // [THEN] It fails
+    EXPECT_FALSE(ret);
 }

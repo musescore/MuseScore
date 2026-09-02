@@ -70,7 +70,7 @@ void ConvertFileToScoreScenario::init()
         if (ret) {
             showScoreReadyNotification(path);
         } else {
-            LOGE() << ret.text();
+            showConvertFailedNotification(ret);
         }
 
         m_convertFinished.send(ret, path);
@@ -164,7 +164,8 @@ Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QS
 {
     Ret ret = service()->startConvert(input, convertedFileName);
     if (!ret) {
-        // return ret; // TODO: always fails right now
+        showUnknownError();
+        return ret;
     }
 
     if (configuration()->showConvertFileProcessingDialog()) {
@@ -260,6 +261,7 @@ void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
         showTooManyImagesError(config.omr.images.maxFiles);
         break;
     default:
+        showUnknownError();
         break;
     }
 }
@@ -269,6 +271,13 @@ void ConvertFileToScoreScenario::showCloudIsNotAvailableError()
     interactive()->error(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
                          muse::trc("project/convert",
                                    "An internet connection is required to convert a file. Please check your internet connection or try again later."),
+                         { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showUnknownError()
+{
+    interactive()->error(muse::trc("project/convert", "Something went wrong"),
+                         muse::trc("project/convert", "Check your internet connection and try again."),
                          { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
@@ -403,6 +412,40 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
         if (result.isButton(openScoreBtn)) {
             dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(path.toQUrl()));
         }
+    });
+}
+
+void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
+{
+    constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+    IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("project/convert", "Try again"), /*accent*/ true);
+
+    QString fileName = ret.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString());
+    std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
+                      .arg(fileName).toStdString();
+
+    //! TODO: replace with toast
+    interactive()->error(muse::trc("project/convert", "Error processing score"), msg,
+                         { dismiss, tryAgain }, dismissBtn)
+    .onResolve(this, [this, tryAgainBtn](const IInteractive::Result& result) {
+        if (!result.isButton(tryAgainBtn)) {
+            return;
+        }
+
+        checkConvertIsAllowed()
+        .onResolve(this, [this](const Ret& allowedRet) {
+            if (!allowedRet) {
+                return;
+            }
+
+            selectFilesToConvert()
+            .onResolve(this, [this](const ConvertSelection& selection) {
+                startConvert(selection.input, selection.convertedFileName);
+            });
+        });
     });
 }
 
