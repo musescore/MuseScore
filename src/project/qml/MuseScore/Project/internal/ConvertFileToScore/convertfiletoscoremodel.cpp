@@ -488,6 +488,25 @@ QString ConvertFileToScoreModel::validateFileName(const QString& name) const
     return QString();
 }
 
+void ConvertFileToScoreModel::confirmCancel()
+{
+    constexpr int noBtn = int(IInteractive::Button::No);
+    constexpr int yesBtn = int(IInteractive::Button::Yes);
+
+    IInteractive::ButtonData stay(noBtn, muse::trc("project/convert", "No, stay here"));
+    IInteractive::ButtonData cancel(yesBtn, muse::trc("project/convert", "Yes, cancel"), /*accent*/ true);
+
+    interactive()->question(
+        muse::trc("project/convert", "Are you sure you want to cancel?"),
+        muse::trc("project/convert", "Your current selection will be lost."),
+        { stay, cancel }, noBtn, IInteractive::WithIcon)
+    .onResolve(this, [this, yesBtn](const IInteractive::Result& result) {
+        if (result.isButton(yesBtn)) {
+            emit cancelConfirmed();
+        }
+    });
+}
+
 void ConvertFileToScoreModel::confirmGoingBack()
 {
     constexpr int noBtn = int(IInteractive::Button::No);

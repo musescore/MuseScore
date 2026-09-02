@@ -96,6 +96,7 @@ ListItemBlank {
             icon: IconCode.DELETE_TANK
             toolTipTitle: qsTrc("global", "Remove")
             transparent: true
+            hoverHitColor: ui.theme.strokeColor
 
             navigation.accessible.name: removeButton.toolTipTitle + " " + root.fileName
 

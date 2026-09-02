@@ -34,6 +34,7 @@ Rectangle {
     property var fileRequirements: []
 
     signal selectMoreFilesRequested(var existingPaths)
+    signal removeLastFileRequested()
 
     function moveCurrentFile(delta) {
         var index = fileListView.currentIndex
@@ -170,7 +171,13 @@ Rectangle {
                         mouseArea.onReleased: fileItem.Drag.drop()
 
                         onClicked: fileListView.currentIndex = dropArea.index
-                        onRemoveSelectionRequested: root.filesModel.removeAt(dropArea.index)
+                        onRemoveSelectionRequested: {
+                            if (root.filesModel.count === 1) {
+                                root.removeLastFileRequested()
+                            } else {
+                                root.filesModel.removeAt(dropArea.index)
+                            }
+                        }
 
                         onDraggedChanged: {
                             if (fileItem.dragged) {

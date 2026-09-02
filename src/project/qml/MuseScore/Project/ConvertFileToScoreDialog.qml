@@ -44,9 +44,15 @@ StyledDialogView {
     background.color: ui.theme.backgroundPrimaryColor
 
     property int currentPageIndex: 0
+    property bool skipCloseConfirmation: false
 
     ConvertFileToScoreModel {
         id: convertModel
+
+        onCancelConfirmed: {
+            root.skipCloseConfirmation = true
+            root.reject()
+        }
 
         onGoingBackConfirmed: {
             root.currentPageIndex = 0
@@ -55,6 +61,7 @@ StyledDialogView {
     }
 
     function finish(type, paths, link, convertedFileName) {
+        root.skipCloseConfirmation = true
         root.ret = { errcode: 0, value: { type: type, paths: paths, link: link, convertedFileName: convertedFileName } }
         root.hide()
     }
@@ -66,6 +73,15 @@ StyledDialogView {
     }
 
     onNavigationActivateRequested: root.focusOnPageDefault()
+
+    onAboutToClose: function(closeEvent) {
+        if (root.currentPageIndex === 0 || root.skipCloseConfirmation) {
+            return
+        }
+
+        closeEvent.accepted = false
+        convertModel.confirmCancel()
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -162,16 +178,9 @@ StyledDialogView {
             fileRequirements: convertModel.fileRequirements
             convertLimits: convertModel.convertLimits
 
-            onCancelRequested: root.reject()
+            onCancelRequested: convertModel.confirmCancel()
 
-            onBackRequested: function(confirm) {
-                if (confirm) {
-                    convertModel.confirmGoingBack()
-                } else {
-                    root.currentPageIndex = 0
-                    convertModel.clearSelection()
-                }
-            }
+            onBackRequested: convertModel.confirmGoingBack()
 
             onConvertRequested: function(paths, convertedFileName) {
                 root.finish(convertModel.convertType, paths, "", convertedFileName)
@@ -195,11 +204,9 @@ StyledDialogView {
             maxLinkLength: convertModel.maxLinkLength
             navigationSection: root.navigationSection
 
-            onCancelRequested: root.reject()
+            onCancelRequested: convertModel.confirmCancel()
 
-            onBackRequested: {
-                root.currentPageIndex = 0
-            }
+            onBackRequested: convertModel.confirmGoingBack()
 
             onConvertRequested: function(link, convertedFileName) {
                 if (!convertModel.validateLink(link)) {

@@ -486,7 +486,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_UnsupportedFormat_S
 {
     expectValidateFilesShowsError(Err::ConvertUnsupportedFormat,
                                   muse::trc("project/convert", "This file type is not compatible"),
-                                  muse::trc("project/convert", "Make sure you’ve selected a PDF, image or MP3 file."));
+                                  muse::trc("project/convert", "Make sure you’re importing a suitable PDF, image or MP3 file."));
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_MixedFileTypes_ShowsDialog)
@@ -730,7 +730,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationF
     .WillByDefault(Return(RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertUnsupportedFormat))));
 
     const std::string title = muse::trc("project/convert", "This file type is not compatible");
-    const std::string text = muse::trc("project/convert", "Make sure you’ve selected a PDF, image or MP3 file.");
+    const std::string text = muse::trc("project/convert", "Make sure you’re importing a suitable PDF, image or MP3 file.");
 
     // [THEN] The validation error is shown, but neither confirmation nor conversion is attempted
     EXPECT_CALL(*m_interactive,

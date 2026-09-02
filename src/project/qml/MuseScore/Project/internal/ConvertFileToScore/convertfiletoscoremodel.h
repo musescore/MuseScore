@@ -100,6 +100,7 @@ public:
     Q_INVOKABLE QString validateFileName(const QString& name) const;
     Q_INVOKABLE bool validateLink(const QString& link) const;
 
+    Q_INVOKABLE void confirmCancel();
     Q_INVOKABLE void confirmGoingBack();
     Q_INVOKABLE void clearSelection();
 
@@ -108,6 +109,7 @@ signals:
     void selectedPathsChanged();
     void selectedLinkChanged();
     void fileRequirementsChanged();
+    void cancelConfirmed();
     void goingBackConfirmed();
 
 private:
