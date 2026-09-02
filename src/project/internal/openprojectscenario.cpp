@@ -856,5 +856,6 @@ muse::RetVal<Val> OpenProjectScenario::ensureAuthorization() const
     UriQuery query("muse://cloud/requireauthorization");
     query.addParam("text", Val(dialogText));
     query.addParam("cloudCode", Val(muse::cloud::MUSESCORE_COM_CLOUD_CODE));
+    query.addParam("publishingScore", Val(false));
     return interactive()->openSync(query);
 }

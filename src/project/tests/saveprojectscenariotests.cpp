@@ -1365,6 +1365,48 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
 
     EXPECT_TRUE(ret);
 }
+
+TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
+{
+    //! [GIVEN] A reachable cloud whose login dialog is answered with "Save to computer"...
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+
+    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
+    givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
+
+    givenUserPicksLocalFile(io::path_t("instead.mscz"));
+
+    //! [THEN] The score goes to the chosen local file, the preference is remembered, and nothing is published
+    EXPECT_CALL(*m_project, save(io::path_t("instead.mscz"), SaveMode::Save, true)).Times(1);
+    EXPECT_CALL(*m_configuration, setLastUsedSaveLocationType(SaveLocationType::Local)).Times(1);
+    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
+
+    //! [WHEN] Publishing...
+    Ret ret = m_scenario->publish();
+
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(SaveProjectScenarioTests, Publish_LocalPathCancelled_WritesNothing)
+{
+    //! [GIVEN] A user who picks "Save to computer" and then cancels the file dialog...
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+
+    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
+    givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
+
+    givenUserCancelsTheSaveDialog();
+
+    //! [THEN] Nothing is written anywhere and nothing is published
+    EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
+    EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
+
+    //! [WHEN] Publishing...
+    Ret ret = m_scenario->publish();
+
+    EXPECT_FALSE(ret);
+}
+
 TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_BrokenSaveInterval_DoesNotDivideByZero)
 {
     //! [GIVEN] A settings file whose "every N saves" interval is zero...
