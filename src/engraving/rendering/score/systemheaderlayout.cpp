@@ -1129,6 +1129,23 @@ String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const 
     }
 }
 
+Part* SystemHeaderLayout::originPartForStaff(staff_idx_t staffIdx, const SharedTrackMap& trackMap,
+                                             const std::vector<Part*>& originParts)
+{
+    if (originParts.empty()) {
+        return nullptr;
+    }
+
+    Score* score = originParts.front()->score();
+    for (auto [originTrack, sharedTrack] : trackMap) {
+        if (track2staff(sharedTrack) == staffIdx && track2voice(sharedTrack) == 0) {
+            return score->staff(track2staff(originTrack))->part();
+        }
+    }
+
+    return nullptr;
+}
+
 String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap,
                                                      const std::vector<Part*>& originParts)
 {
@@ -1145,8 +1162,8 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     int verticalLimit = style.styleI(Sid::instrumentNumeralsVerticalThreshold);
     int hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
 
-    std::vector<Instrument*> instrumentsMappedToFirstVoice;
-    std::vector<Instrument*> instrumentsMappedToSecondVoice;
+    std::vector<const Instrument*> instrumentsMappedToFirstVoice;
+    std::vector<const Instrument*> instrumentsMappedToSecondVoice;
     for (auto [originTrack, sharedTrack] : trackMap) {
         if (track2staff(sharedTrack) == staffIdx) {
             if (track2voice(sharedTrack) == 0) {
@@ -1165,10 +1182,10 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         actualOrientation = orientation;
         break;
     case SharedLabelOrientation::HORIZONTAL:
-        actualOrientation = totInstrumentCount > horizontalLimit ? SharedLabelOrientation::VOICE : orientation;
+        actualOrientation = totInstrumentCount > size_t(horizontalLimit) ? SharedLabelOrientation::VOICE : orientation;
         break;
     case SharedLabelOrientation::VERTICAL:
-        actualOrientation = totInstrumentCount > verticalLimit ? SharedLabelOrientation::VOICE : orientation;
+        actualOrientation = totInstrumentCount > size_t(verticalLimit) ? SharedLabelOrientation::VOICE : orientation;
         break;
     default: // should not happen, but don't leave actualOrientation uninitialized
         ASSERT_X("Unexpected SharedLabelOrientation value: " << static_cast<int>(orientation));
@@ -1181,7 +1198,7 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         instrumentsMappedToFirstVoice.insert(instrumentsMappedToFirstVoice.end(),
                                              instrumentsMappedToSecondVoice.begin(), instrumentsMappedToSecondVoice.end());
         std::sort(instrumentsMappedToFirstVoice.begin(), instrumentsMappedToFirstVoice.end(),
-                  [](Instrument* a, Instrument* b) { return a->number() < b->number(); });
+                  [](const Instrument* a, const Instrument* b) { return a->number() < b->number(); });
 
         String result;
 
@@ -1205,11 +1222,11 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     return result;
 }
 
-String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle)
+String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle)
 {
     String result;
 
-    for (Instrument* instr : instruments) {
+    for (const Instrument* instr : instruments) {
         if (!result.empty()) {
             result += '\n';
         }
@@ -1224,7 +1241,7 @@ String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrumen
     return result;
 }
 
-String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle,
+String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle,
                                                   bool trailingDotMultiple, int hyphenLimit)
 {
     String result;
@@ -1237,11 +1254,11 @@ String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<Instrument*>
             result += '.';
         }
 
-        Instrument* instr = instruments[i];
+        const Instrument* instr = instruments[i];
         int startNumber = instr->number();
         int curNumber = startNumber;
         for (size_t j = i + 1; j < instruments.size(); ++j) {
-            Instrument* nextInstr = instruments[j];
+            const Instrument* nextInstr = instruments[j];
             int nextNumber = nextInstr->number();
             if (nextNumber == curNumber + 1) {
                 curNumber = nextNumber;
@@ -1415,8 +1432,7 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
     }
 
     const Instrument* instr = sharedPart->instrument();
-    bool useGroup = useGroupNames(instr->group(), ctx);
-    String formattedSharedStavesName = formattedGroupName(system, sharedPart, tick);
+    bool useGroup = useGroupNames(instr->group(), ctx) && sharedPart->isSameInstrumentsAtTick(tick);
 
     const SharedTrackMap& trackMap = sharedPart->trackMapAtTick(tick);
     const std::vector<Part*> originParts = sharedPart->originParts();
@@ -1435,14 +1451,17 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
 
     for (size_t relStaffIdx = 0; relStaffIdx < sharedPart->nstaves(); ++relStaffIdx) {
         size_t globalStaffIdx = startStaffIdx + relStaffIdx;
+        Part* originPart = originPartForStaff(globalStaffIdx, trackMap, originParts);
+        String staffGroupName = formattedGroupName(system, originPart ? originPart : sharedPart, tick);
+
         if (useGroup) {
             if (relStaffIdx == 0) {
-                updateName(system, globalStaffIdx, ctx, formattedSharedStavesName, type, InstrumentNameRole::PART);
+                updateName(system, globalStaffIdx, ctx, staffGroupName, type, InstrumentNameRole::PART);
             }
 
             updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::SHARED_STAFF);
         } else {
-            updateName(system, globalStaffIdx, ctx, formattedSharedStavesName, type, InstrumentNameRole::SHARED_STAFF);
+            updateName(system, globalStaffIdx, ctx, staffGroupName, type, InstrumentNameRole::SHARED_STAFF);
         }
 
         String staffLabel = formattedSharedStaffLabel(globalStaffIdx, trackMap, originParts);

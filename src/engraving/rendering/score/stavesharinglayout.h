@@ -68,6 +68,8 @@ private:
 
     static bool isEmpty(track_idx_t track, StaveSharingContext& ctx);
 
+    static bool sameInstrument(track_idx_t prevTrack, track_idx_t nextTrack, const Fraction& tick, StaveSharingContext& ctx);
+
     static bool isUnison(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
     static bool canGoToSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx, const TrackGroup& curTrackGroup,
                                  std::unordered_set<Note*>& localUnisonNotes);
@@ -95,6 +97,8 @@ private:
     static void makeStaveSharingLabels(StaveSharingContext& ctx);
     static bool unisonNoteNeedsLabel(Note* unisonNote, bool& isForNewSystem, StaveSharingContext& ctx);
     static String formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, bool isForNewSystem, const StaveSharingContext& ctx);
+    static String formatInstrumentChangeLable(const InstrumentChange* originChange, const InstrumentChange* sharedChange,
+                                              const StaveSharingContext& ctx);
 
     static void manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems, track_idx_t startOriginTrack,
                                                           track_idx_t endOriginTrack, const SharedTrackMap& trackMap);

@@ -132,7 +132,7 @@ StaveSharingGroups EditStaveSharing::computeGroups(Score* score)
     StaveSharingGroups staveSharingGroups;
 
     auto excludePart = [](Part* part) {
-        if (part->instruments().size() > 1 || part->nstaves() > 1 || part->isSharedPart()) {
+        if (part->nstaves() > 1 || part->isSharedPart()) {
             return true;
         }
 

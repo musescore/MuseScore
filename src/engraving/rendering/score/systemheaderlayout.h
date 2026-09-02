@@ -53,8 +53,8 @@ public:
     static void setGroupBracketsHorizontalPos(System* system);
     static void setInstrumentNames(System* system, LayoutContext& ctx);
 
-    static String formatSharedVoiceLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle, bool trailingDotMultiple,
-                                         int hyphenLimit);
+    static String formatSharedVoiceLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle,
+                                         bool trailingDotMultiple, int hyphenLimit);
 
 private:
     static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
@@ -74,7 +74,8 @@ private:
     static String formattedGroupName(System* system, Part* part, const Fraction& tick);
 
     static String formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
-    static String formatVerticalSharedLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle);
+    static Part* originPartForStaff(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
+    static String formatVerticalSharedLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle);
 
     static String& resolveTokens(String& str, const String& name, const String& transposition, const String& number);
     static bool showNames(LayoutContext& ctx);

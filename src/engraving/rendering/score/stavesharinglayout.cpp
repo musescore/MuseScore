@@ -28,6 +28,7 @@
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
+#include "dom/instrchange.h"
 #include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/part.h"
@@ -244,9 +245,30 @@ bool StaveSharingLayout::isEmpty(track_idx_t track, StaveSharingContext& ctx)
     return true;
 }
 
+bool StaveSharingLayout::sameInstrument(track_idx_t prevTrack, track_idx_t nextTrack, const Fraction& tick, StaveSharingContext& ctx)
+{
+    const Staff* nextStaff = ctx.layoutCtx.dom().staff(track2staff(nextTrack));
+    const Staff* prevStaff = ctx.layoutCtx.dom().staff(track2staff(prevTrack));
+
+    const Part* nextPart = nextStaff ? nextStaff->part() : nullptr;
+    const Part* prevPart = prevStaff ? prevStaff->part() : nullptr;
+
+    const Instrument* nextInstrument = nextPart ? nextPart->instrument(tick) : nullptr;
+    const Instrument* prevInstrument = prevPart ? prevPart->instrument(tick) : nullptr;
+    if (!nextInstrument || !prevInstrument) {
+        return false;
+    }
+
+    return nextInstrument->id() == prevInstrument->id();
+}
+
 bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx)
 {
     for (Segment* segment : ctx.crSegments) {
+        if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
+            return false;
+        }
+
         ChordRest* cr1 = toChordRest(segment->element(prevTrack));
         ChordRest* cr2 = toChordRest(segment->element(nextTrack));
         if (bool(cr1) != bool(cr2)) {
@@ -342,6 +364,9 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
     std::vector<Note*> potentialUnisonNotes;
 
     for (Segment* segment : ctx.crSegments) {
+        if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
+            return false;
+        }
         ChordRest* cr1 = toChordRest(segment->element(prevTrack));
         ChordRest* cr2 = toChordRest(segment->element(nextTrack));
         if (bool(cr1) != bool(cr2)) {
@@ -464,6 +489,11 @@ bool StaveSharingLayout::checkAnnotationsForSameVoice(Segment* segment, track_id
     std::multimap<ElementType, EngravingItem*> annotationsOnNextTrack;
 
     for (EngravingItem* annotation : segment->annotations()) {
+        if (annotation->isInstrumentChange()) {
+            // Instrument change labels should not prevent combining
+            continue;
+        }
+
         if (annotation->track() == prevTrack) {
             annotationsOnPrevTrack.insert({ annotation->type(), annotation });
         } else if (annotation->track() == nextTrack) {
@@ -642,11 +672,16 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
 bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack,
                                           StaveSharingContext& ctx)
 {
-    if (ctx.style.styleB(Sid::allowVoiceCrossing)) {
-        return true;
-    }
+    const bool allowVoiceCrossing = ctx.style.styleB(Sid::allowVoiceCrossing);
 
     for (Segment* segment : ctx.crSegments) {
+        if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
+            return false;
+        }
+
+        if (allowVoiceCrossing) {
+            continue;
+        }
         ChordRest* cr1 = toChordRest(segment->element(prevTrack));
         ChordRest* cr2 = toChordRest(segment->element(nextTrack));
         if (cr1 && cr2 && cr1->isChord() && cr2->isChord()) {
@@ -1123,7 +1158,7 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                     continue;
                 }
 
-                if (item->isTextBase() && toTextBase(item)->xmlText() != toTextBase(originItem)->xmlText()) {
+                if (!item->isInstrumentChange() && item->isTextBase() && toTextBase(item)->xmlText() != toTextBase(originItem)->xmlText()) {
                     continue;
                 }
 
@@ -1141,6 +1176,14 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
             EngravingItem::connectSharedItem(sharedItem, originItem);
 
             sharedAnnotations.push_back(sharedItem);
+
+            if (sharedItem->isInstrumentChange()) {
+                InstrumentChange* originChange = toInstrumentChange(originItem);
+                InstrumentChange* sharedChange = toInstrumentChange(sharedItem);
+                String text = formatInstrumentChangeLable(originChange, sharedChange, ctx);
+
+                sharedChange->setXmlText(text);
+            }
         }
     }
 
@@ -1307,7 +1350,7 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
 
     std::vector<track_idx_t> originTracks;
     originTracks.reserve(originUnisonsCount);
-    std::vector<Instrument*> originInstruments;
+    std::vector<const Instrument*> originInstruments;
     originInstruments.reserve(originUnisonsCount);
     std::vector<track_idx_t> tracksMappedToThisStave;
     tracksMappedToThisStave.reserve(originUnisonsCount);
@@ -1357,6 +1400,44 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
     }
 
     return result;
+}
+
+String StaveSharingLayout::formatInstrumentChangeLable(const InstrumentChange* originChange, const InstrumentChange* sharedChange,
+                                                       const StaveSharingContext& ctx)
+{
+    // Prefix the number to the string shown
+    // TODO make these editable by the user
+    const MStyle& style = ctx.style;
+
+    if (sharedChange->originItems().empty() || !style.styleB(Sid::staveSharingInstrChangePlayerNum)) {
+        return originChange->xmlText();
+    }
+
+    bool trailingDotSingle;
+    bool trailingDotMultiple;
+    int hyphenLimit;
+    if (style.styleB(Sid::sharedOnStaffNumeralsFollowInstrumentNumerals)) {
+        trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(
+            Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
+    } else {
+        trailingDotSingle = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::sharedOnStaffNumeralsHyphenEnable)
+                      ? style.styleI(Sid::sharedOnStaffNumeralsHyphenThreshold) : INT_MAX;
+    }
+
+    String prefix;
+    std::vector<const Instrument*> originInstruments;
+    for (const EngravingItem* originChange : sharedChange->originItems()) {
+        const Part* originPart = originChange->part();
+        originInstruments.push_back(originPart->instrument());
+    }
+    prefix = SystemHeaderLayout::formatSharedVoiceLabel(originInstruments, trailingDotSingle, trailingDotMultiple,
+                                                        hyphenLimit);
+
+    return prefix + u" " + originChange->xmlText();
 }
 
 void StaveSharingLayout::manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems,

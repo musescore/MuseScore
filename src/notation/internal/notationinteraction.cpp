@@ -2159,6 +2159,19 @@ bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* inst
     async::Promise<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
     templ.onResolve(this, [this, instrumentChange, &loop, &result](const InstrumentTemplate& val) {
         Instrument newInstrument = Instrument::fromTemplate(&val);
+
+        // If switching back to the part's original instrument, restore its player number
+        if (Part* part = instrumentChange->part()) {
+            const Instrument* baseInstrument = part->instrument();
+            if (baseInstrument && baseInstrument->id() == newInstrument.id()) {
+                InstrumentLabel& newLabel = newInstrument.instrumentLabel();
+                const InstrumentLabel& baseLabel = baseInstrument->instrumentLabel();
+                newLabel.setNumber(baseLabel.number());
+                newLabel.setShowNumberLong(baseLabel.showNumberLong());
+                newLabel.setShowNumberShort(baseLabel.showNumberShort());
+            }
+        }
+
         instrumentChange->setInit(true);
         instrumentChange->setupInstrument(&newInstrument);
 

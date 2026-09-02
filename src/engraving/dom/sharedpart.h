@@ -53,6 +53,8 @@ public:
     void setTrackMapAtTick(const SharedTrackMap& map, const Fraction& tick);
     void removeMapsBetweenTicks(const Fraction& startTick, const Fraction& endTick);
 
+    bool isSameInstrumentsAtTick(const Fraction& tick);
+
     bool isSameInstruments() const { return m_isSameInstruments; }
 
 private:
