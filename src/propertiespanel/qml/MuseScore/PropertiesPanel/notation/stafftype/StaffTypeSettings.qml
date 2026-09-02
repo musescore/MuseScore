@@ -287,5 +287,14 @@ Column {
             navigation.panel: root.navigationPanel
             navigation.row: instrumentLabelVisibility.navigationRowEnd + 6
         }
+
+        PropertyCheckBox {
+            text: qsTrc("propertiespanel", "Enable group names")
+            propertyItem: root.model ? root.model.shouldEnableGroupNames : null
+
+            navigation.name: "EnableGroupNamesCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 7
+        }
     }
 }

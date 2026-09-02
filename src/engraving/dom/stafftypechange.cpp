@@ -28,6 +28,7 @@
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
+#include "part.h"
 
 using namespace mu::engraving;
 
@@ -108,6 +109,11 @@ PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
         return m_staffType->genTimesig();
     case Pid::STAFF_GEN_KEYSIG:
         return m_staffType->genKeysig();
+    case Pid::STAFF_ENABLE_GROUP_NAMES: {
+        const Part* p = part();
+        const Instrument* instr = p ? p->instrument(tick()) : nullptr;
+        return instr ? instr->instrumentLabel().allowGroupName() : true;
+    }
     case Pid::MAG:
         return m_staffType->userMag();
     case Pid::SMALL:
@@ -167,6 +173,14 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STAFF_GEN_KEYSIG:
         m_staffType->setGenKeysig(v.toBool());
         break;
+    case Pid::STAFF_ENABLE_GROUP_NAMES: {
+        Part* p = part();
+        Instrument* instr = p ? p->instrument(tick()) : nullptr;
+        if (instr) {
+            instr->instrumentLabel().setAllowGroupName(v.toBool());
+        }
+    }
+    break;
     case Pid::MAG: {
         double _spatium = spatium();
         m_staffType->setUserMag(v.toDouble());
@@ -241,6 +255,8 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_GEN_TIMESIG:
         return true;
     case Pid::STAFF_GEN_KEYSIG:
+        return true;
+    case Pid::STAFF_ENABLE_GROUP_NAMES:
         return true;
     case Pid::MAG:
         return 1.0;

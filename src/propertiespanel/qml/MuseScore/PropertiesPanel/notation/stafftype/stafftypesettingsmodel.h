@@ -50,6 +50,7 @@ class StaffTypeSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldGenerateClefs READ shouldGenerateClefs CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldGenerateTimeSignatures READ shouldGenerateTimeSignatures CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldGenerateKeySignatures READ shouldGenerateKeySignatures CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldEnableGroupNames READ shouldEnableGroupNames CONSTANT)
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * staffLongName READ staffLongName CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * staffShortName READ staffShortName CONSTANT)
@@ -79,6 +80,7 @@ public:
     PropertyItem* shouldGenerateClefs() const;
     PropertyItem* shouldGenerateTimeSignatures() const;
     PropertyItem* shouldGenerateKeySignatures() const;
+    PropertyItem* shouldEnableGroupNames() const;
 
     PropertyItem* staffLongName() const;
     PropertyItem* staffShortName() const;
@@ -102,6 +104,7 @@ private:
     PropertyItem* m_shouldGenerateClefs = nullptr;
     PropertyItem* m_shouldGenerateTimeSignatures = nullptr;
     PropertyItem* m_shouldGenerateKeySignatures = nullptr;
+    PropertyItem* m_shouldEnableGroupNames = nullptr;
 
     PropertyItem* m_staffLongName = nullptr;
     PropertyItem* m_staffShortName = nullptr;
