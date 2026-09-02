@@ -148,8 +148,8 @@ protected:
 
         // [THEN] The scenario shows the matching error dialog
         EXPECT_CALL(*m_interactive,
-                    error(expectedTitle, TextIs(expectedText), ButtonIdsAre({ int(IInteractive::Button::Ok) }),
-                          int(IInteractive::Button::NoButton), IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                    warning(expectedTitle, TextIs(expectedText), ButtonIdsAre({ int(IInteractive::Button::Ok) }),
+                            int(IInteractive::Button::NoButton), IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
         .Times(1)
         .WillOnce(Invoke([](auto&&...) {
             return resolvedResultPromise();
@@ -240,8 +240,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 
     // [THEN] The "convert failed" notification is shown
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ dismissBtn, tryAgainBtn }), dismissBtn,
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ dismissBtn, tryAgainBtn }), dismissBtn,
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -274,7 +274,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
 
     // [GIVEN] The user clicks "Try again" on the failure dialog
-    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
     .WillByDefault(Invoke([tryAgainBtn](auto&&...) {
         return resolvedResultPromise(IInteractive::Result(tryAgainBtn));
     }));
@@ -314,7 +314,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
     // [GIVEN] The user dismisses the failure dialog
-    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
     .WillByDefault(Invoke([dismissBtn](auto&&...) {
         return resolvedResultPromise(IInteractive::Result(dismissBtn));
     }));
@@ -426,8 +426,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, CheckConvertIsAllowed_ShowsError_
 
     // [THEN] The "cloud unavailable" error is shown
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -537,7 +537,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_Success_NoDialog)
     .WillByDefault(Return(RetVal<ConvertFilesValidation>::make_ok(validation)));
 
     // [THEN] No error dialog is shown
-    EXPECT_CALL(*m_interactive, error(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
 
     // [WHEN] Validating the files
     RetVal<ConvertFilesValidation> result = m_scenario->validateFiles(paths);
@@ -646,7 +646,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Success_NoDialog)
     .WillByDefault(Return(make_ok()));
 
     // [THEN] No error dialog is shown
-    EXPECT_CALL(*m_interactive, error(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
 
     // [WHEN] Validating the link
     Ret ret = m_scenario->validateLink(link);
@@ -668,8 +668,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 
     // [THEN] The error dialog mentions both sources
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -695,8 +695,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 
     // [THEN] The error dialog falls back to mentioning both sources
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -722,8 +722,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 
     // [THEN] The error dialog mentions YouTube only
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -749,8 +749,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 
     // [THEN] The error dialog mentions Audio.com only
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -781,8 +781,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
 
     // [THEN] The "cloud unavailable" error is shown, but neither validation, confirmation, nor conversion is attempted
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -809,8 +809,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationF
 
     // [THEN] The validation error is shown, but neither confirmation nor conversion is attempted
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
@@ -986,8 +986,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_Failure_ShowsUnknown
 
     // [THEN] The generic "unknown error" dialog is shown, and no processing dialog is shown
     EXPECT_CALL(*m_interactive,
-                error(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                      IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();

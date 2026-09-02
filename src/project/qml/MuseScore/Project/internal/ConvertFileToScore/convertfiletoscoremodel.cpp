@@ -395,7 +395,7 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
 
     QStringList extensions = existingPaths.isEmpty()
                              ? QStringList { "pdf" } + config.omr.images.allowedExtensions + config.audio2score.file.allowedExtensions
-                             : resolveExtensions(existingPaths);
+    : resolveExtensions(existingPaths);
 
     if (extensions.isEmpty()) {
         extensions = { "pdf", "jpg", "jpeg", "png", "mp3" }; // fallback
@@ -429,8 +429,8 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
         break;
     case FileCategory::Unknown:
         multiple = allowsMultipleFiles(config.omr.pdf.maxFiles)
-                  || allowsMultipleFiles(config.omr.images.maxFiles)
-                  || allowsMultipleFiles(config.audio2score.file.maxFiles);
+                   || allowsMultipleFiles(config.omr.images.maxFiles)
+                   || allowsMultipleFiles(config.audio2score.file.maxFiles);
         break;
     }
 
