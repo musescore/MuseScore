@@ -37,11 +37,11 @@
 namespace mu::project {
 class ConvertFileToScoreService : public IConvertFileToScoreService, public muse::async::Asyncable, public muse::Contextable
 {
+public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
 
-public:
     explicit ConvertFileToScoreService(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 

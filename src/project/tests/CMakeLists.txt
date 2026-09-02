@@ -25,7 +25,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/convertfiletoscoreservicemock.h
     ${CMAKE_CURRENT_LIST_DIR}/mscmetareadertests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/convertfiletoscorescenariotest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/convertfiletoscorescenario_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/convertfiletoscoreservice_tests.cpp
 )
 
 set(MODULE_TEST_DATA_ROOT "${CMAKE_CURRENT_LIST_DIR}/data")
