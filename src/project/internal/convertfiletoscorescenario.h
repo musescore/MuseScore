@@ -82,7 +82,7 @@ private:
     void showFileProcessingDialog();
     void showScoreReadyNotification(const muse::io::path_t& path);
 
-    void askReviewRating(int queueId);
+    void askReviewRating(ConvertType type, int queueId);
 
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
 };

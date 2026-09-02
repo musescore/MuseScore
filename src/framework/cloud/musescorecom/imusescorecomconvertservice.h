@@ -43,7 +43,8 @@ namespace muse::cloud {
 /// 3. As soon as the status is AwaitingReview or Done, the MSCZ is already
 ///    available: call fetchMsczUrl() then downloadConvertedScore() to get the score
 /// 4. Rating the recognition quality (submitReview(), once AwaitingReview) is optional
-///    and does not gate the download above
+///    and does not gate the download above; submitReviewComment() may attach a
+///    comment afterwards, once the review has been submitted
 /// 5. Keep polling fetchQueue() until the status is Failed, or the item disappears
 ///    from the queue (which should be treated the same as Done)
 class IMuseScoreComConvertService : MODULE_CONTEXT_INTERFACE
@@ -61,7 +62,9 @@ public:
     virtual async::Promise<RetVal<ConvertQueueList> > fetchQueue() = 0;
     virtual async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ConvertType type, int id) = 0;
 
-    virtual async::Promise<RetVal<ConvertResult> > submitReview(int id, ReviewRating review, const QString& reason = QString()) = 0;
+    virtual async::Promise<RetVal<ConvertResult> > submitReview(ConvertType type, int id, ReviewRating review,
+                                                                const QString& comment = QString()) = 0;
+    virtual async::Promise<RetVal<ConvertResult> > submitReviewComment(ConvertType type, int id, const QString& comment) = 0;
 };
 using IMuseScoreComConvertServicePtr = std::shared_ptr<IMuseScoreComConvertService>;
 }

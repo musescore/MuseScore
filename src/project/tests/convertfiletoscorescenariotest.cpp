@@ -182,7 +182,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<int, ConvertType> reviewRequested;
+    async::Channel<ConvertType, int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -223,7 +223,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_NoNotificationButSti
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<int, ConvertType> reviewRequested;
+    async::Channel<ConvertType, int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -250,7 +250,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Good_Submits
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<int, ConvertType> reviewRequested;
+    async::Channel<ConvertType, int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -269,11 +269,11 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Good_Submits
         return resolvedResultPromise(IInteractive::Result(goodBtn));
     }));
 
-    EXPECT_CALL(*m_service, submitReview(42, ReviewRating::Good))
+    EXPECT_CALL(*m_service, submitReview(ConvertType::Omr, 42, ReviewRating::Good, QString()))
     .Times(1);
 
     // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(42, ConvertType::Omr);
+    reviewRequested.send(ConvertType::Omr, 42);
 
     pumpEvents();
 }
@@ -282,7 +282,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Bad_SubmitsB
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<int, ConvertType> reviewRequested;
+    async::Channel<ConvertType, int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -301,11 +301,11 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Bad_SubmitsB
         return resolvedResultPromise(IInteractive::Result(badBtn));
     }));
 
-    EXPECT_CALL(*m_service, submitReview(7, ReviewRating::Bad))
+    EXPECT_CALL(*m_service, submitReview(ConvertType::Audio2Score, 7, ReviewRating::Bad, QString()))
     .Times(1);
 
     // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(7, ConvertType::Audio2Score);
+    reviewRequested.send(ConvertType::Audio2Score, 7);
 
     pumpEvents();
 }

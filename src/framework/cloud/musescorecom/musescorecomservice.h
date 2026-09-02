@@ -74,7 +74,9 @@ public:
     async::Promise<RetVal<ConvertQueueList> > fetchQueue() override;
     async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ConvertType type, int id) override;
 
-    async::Promise<RetVal<ConvertResult> > submitReview(int id, ReviewRating review, const QString& reason = QString()) override;
+    async::Promise<RetVal<ConvertResult> > submitReview(ConvertType type, int id, ReviewRating review,
+                                                        const QString& comment = QString()) override;
+    async::Promise<RetVal<ConvertResult> > submitReviewComment(ConvertType type, int id, const QString& comment) override;
 
 private:
     ServerConfig serverConfig() const override;
@@ -83,7 +85,6 @@ private:
     async::Promise<Ret> updateTokens() override;
 
     network::RequestHeaders headers() const;
-    network::RequestHeaders convertHeaders() const;
 
     void doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished);
 

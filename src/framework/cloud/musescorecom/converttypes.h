@@ -76,19 +76,13 @@ enum class ConvertErrorCode {
     UnsupportedFormat,
     FileTooLarge,
     TooManyFiles,
+    FileOrLinkRequired,
+    InvalidLink,
     RateLimited,
     MsczNotReady,
-    MetaLocked,
     NoNeedReview,
-    SearchRequired,
-    InvalidInput,
-    InvalidFileType,
-    InvalidFormat,
-    FileProcessingError,
-    ModelExecutionError,
-    ConversionError,
-    ResourceNotFound,
-    InternalServerError,
+    ReviewRequired,
+    CommentRequired,
 };
 
 //! NOTE: key for ConvertErrorCode stored in Ret::data

@@ -73,19 +73,13 @@ static std::string errorCodeToString(ConvertErrorCode code)
     case ConvertErrorCode::UnsupportedFormat: return "This file format is not supported";
     case ConvertErrorCode::FileTooLarge: return "The file is too large";
     case ConvertErrorCode::TooManyFiles: return "Too many files were provided";
+    case ConvertErrorCode::FileOrLinkRequired: return "A file or a link is required";
+    case ConvertErrorCode::InvalidLink: return "The provided link is invalid";
     case ConvertErrorCode::RateLimited: return "Too many conversion requests, please try again later";
     case ConvertErrorCode::MsczNotReady: return "The score is not ready yet";
-    case ConvertErrorCode::MetaLocked: return "The score information can no longer be changed";
     case ConvertErrorCode::NoNeedReview: return "This score does not require a review";
-    case ConvertErrorCode::SearchRequired: return "A song search is required";
-    case ConvertErrorCode::InvalidInput: return "The provided input is invalid";
-    case ConvertErrorCode::InvalidFileType: return "The file type is invalid";
-    case ConvertErrorCode::InvalidFormat: return "The file format is invalid";
-    case ConvertErrorCode::FileProcessingError: return "The file could not be processed";
-    case ConvertErrorCode::ModelExecutionError: return "The conversion model failed to run";
-    case ConvertErrorCode::ConversionError: return "The file could not be converted";
-    case ConvertErrorCode::ResourceNotFound: return "The requested resource was not found";
-    case ConvertErrorCode::InternalServerError: return "A server error occurred";
+    case ConvertErrorCode::ReviewRequired: return "A review must be submitted first";
+    case ConvertErrorCode::CommentRequired: return "A comment is required";
     }
     return std::string();
 }
@@ -108,32 +102,25 @@ void ConvertFileToScoreService::init()
 
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
 
-    //! TODO: remove once the config is reliably available; fills in dummy data for local testing
-    if (m_config.omr.allowedExtensions.isEmpty()) {
-        m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "jpeg" };
-        m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
-        m_config.omr.maxPages = 50;
-        m_config.omr.maxImages = 15;
-    }
-    if (m_config.audio2score.allowedExtensions.isEmpty()) {
-        m_config.audio2score.allowedExtensions = { "mp3" };
-        m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
-        m_config.audio2score.maxFiles = 1;
-        m_config.audio2score.maxLinkLength = 2048;
-        m_config.audio2score.allowedLinkSources = LinkSource::YouTube | LinkSource::AudioCom;
-    }
-    //! ---------------------------------------------------------------------------------
+    //! NOTE: fallback is used if fetchConfig() fails
+    m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "jpeg" };
+    m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
+    m_config.omr.maxPages = 50;
+    m_config.omr.maxImages = 15;
+    m_config.audio2score.allowedExtensions = { "mp3" };
+    m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
+    m_config.audio2score.maxFiles = 1;
+    m_config.audio2score.maxLinkLength = 2048;
+    m_config.audio2score.allowedLinkSources = LinkSource::YouTube | LinkSource::AudioCom;
 
-    /* TODO
     //! NOTE: prefetch and cache convert config
     museScoreComService()->convert()->fetchConfig().onResolve(this, [this](const RetVal<ConvertConfig>& config) {
         if (!config.ret) {
-            LOGW() << "Could not prefetch convert config: " << config.ret.toString();
+            LOGE() << "Could not prefetch convert config: " << config.ret.toString();
         } else {
             m_config = config.val;
         }
     });
-    */
 }
 
 void ConvertFileToScoreService::resumeConvert()
@@ -274,17 +261,31 @@ async::Channel<Ret, io::path_t> ConvertFileToScoreService::convertFinished() con
     return m_convertFinished;
 }
 
-async::Channel<int, ConvertType> ConvertFileToScoreService::reviewRequested() const
+async::Channel<ConvertType, int> ConvertFileToScoreService::reviewRequested() const
 {
     return m_reviewRequested;
 }
 
-void ConvertFileToScoreService::submitReview(int queueId, ReviewRating rating)
+void ConvertFileToScoreService::submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment)
 {
-    museScoreComService()->convert()->submitReview(queueId, rating)
-    .onResolve(this, [queueId](const RetVal<ConvertResult>& submitRes) {
+    IF_ASSERT_FAILED(rating == ReviewRating::Bad || comment.isEmpty()) {
+        return;
+    }
+
+    museScoreComService()->convert()->submitReview(type, queueId, rating, comment)
+    .onResolve(this, [type, queueId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
-            LOGE() << "Could not submit the review for conversion " << queueId << ": " << submitRes.ret.toString();
+            LOGE() << "Could not submit the review for conversion " << convertLogId(queueId, type) << ": " << submitRes.ret.toString();
+        }
+    });
+}
+
+void ConvertFileToScoreService::submitReviewComment(ConvertType type, int queueId, const QString& comment)
+{
+    museScoreComService()->convert()->submitReviewComment(type, queueId, comment)
+    .onResolve(this, [type, queueId](const RetVal<ConvertResult>& submitRes) {
+        if (!submitRes.ret) {
+            LOGE() << "Could not submit the comment for conversion " << convertLogId(queueId, type) << ": " << submitRes.ret.toString();
         }
     });
 }
@@ -455,7 +456,7 @@ void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
     case ConvertStatus::AwaitingReview:
         //! NOTE: the MSCZ is already available at this point; the review rating doesn't gate the download
         downloadIfNotAlready(item.type, item.id);
-        m_reviewRequested.send(item.id, item.type);
+        m_reviewRequested.send(item.type, item.id);
         break;
     case ConvertStatus::Done:
         downloadIfNotAlready(item.type, item.id);

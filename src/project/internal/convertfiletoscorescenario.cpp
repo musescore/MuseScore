@@ -76,8 +76,8 @@ void ConvertFileToScoreScenario::init()
         m_convertFinished.send(ret, path);
     });
 
-    service()->reviewRequested().onReceive(this, [this](int queueId, ConvertType) {
-        askReviewRating(queueId);
+    service()->reviewRequested().onReceive(this, [this](ConvertType type, int queueId) {
+        askReviewRating(type, queueId);
     });
 }
 
@@ -406,7 +406,7 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
     });
 }
 
-void ConvertFileToScoreScenario::askReviewRating(int queueId)
+void ConvertFileToScoreScenario::askReviewRating(ConvertType type, int queueId)
 {
     static constexpr int goodBtn = int(IInteractive::Button::CustomButton) + 1;
     static constexpr int badBtn = int(IInteractive::Button::CustomButton) + 2;
@@ -420,8 +420,8 @@ void ConvertFileToScoreScenario::askReviewRating(int queueId)
         muse::trc("project/convert", "We’re always improving our score conversion accuracy. Let us know how we did with this one."),
         { good, bad }, goodBtn);
 
-    promise.onResolve(this, [this, queueId](const IInteractive::Result& res) {
+    promise.onResolve(this, [this, queueId, type](const IInteractive::Result& res) {
         ReviewRating rating = res.isButton(goodBtn) ? ReviewRating::Good : ReviewRating::Bad;
-        service()->submitReview(queueId, rating);
+        service()->submitReview(type, queueId, rating);
     });
 }
