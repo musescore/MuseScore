@@ -189,6 +189,19 @@ muse::Ret SaveProjectScenario::publish()
     auto project = currentNotationProject();
 
     RetVal<CloudProjectInfo> info = askPublishLocation(project);
+    if (info.ret.code() == RET_CODE_CHANGE_SAVE_LOCATION_TYPE) {
+        RetVal<muse::io::path_t> path = askLocalPath(project, SaveMode::Save);
+        if (!path.ret) {
+            LOGE() << path.ret.toString();
+            return path.ret;
+        }
+
+        saveProjectLocally(path.val, SaveMode::Save);
+        configuration()->setLastUsedSaveLocationType(SaveLocationType::Local);
+
+        return make_ok();
+    }
+
     if (!info.ret) {
         return info.ret;
     }
