@@ -108,12 +108,6 @@
           <text>Example 8.4</text>
           </Text>
         <Text>
-          <eid>RcKz9Bd/MWI_DEMnijTnDmD</eid>
-          <style>subtitle</style>
-          <size>9</size>
-          <text><font size="9"/>CAVEAT: Currently MuseScore doesn’t double the braille triplet sign for a run<br/>of four or more triplets of equal duration. Instead, each triplet gets its own sign.</text>
-          </Text>
-        <Text>
           <eid>fowuO0u30zM_/lnpbgQBHAF</eid>
           <style>composer</style>
           <text>BANA Music Braille Code 2015</text>
