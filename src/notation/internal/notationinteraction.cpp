@@ -7016,12 +7016,14 @@ void NotationInteraction::navigateToNextSyllable()
         }
     }
 
-    bool newLyrics = (toLyrics == 0);
-    if (!toLyrics || hasPrecedingRepeat) {
+    const bool startIncomingPartialDash = hasPrecedingRepeat && !fromLyrics
+                                          && !prevPartialLyricsLine && lyrics->xmlText().empty();
+
+    const bool newLyrics = !toLyrics || startIncomingPartialDash;
+    if (newLyrics) {
         /* Don't advance the cursor when starting an incoming partial dash after a repeat,
          * i.e. when there is no adjacent preceding syllable to dash from: */
-        ChordRest* toLyricsChord = hasPrecedingRepeat && !fromLyrics && !prevPartialLyricsLine
-                                   && lyrics->xmlText().empty() ? initialCR : cr;
+        ChordRest* toLyricsChord = startIncomingPartialDash ? initialCR : cr;
 
         toLyrics = Factory::createLyrics(toLyricsChord);
         toLyrics->setTrack(track);
