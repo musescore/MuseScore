@@ -91,6 +91,7 @@ private:
     void markDownloaded(int queueId);
     void clearDownloading(int queueId);
     void finishConvert(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());
+    void failConvert(muse::Ret ret, ConvertType type, int queueId, const QString& convertedFileName);
 
     ConvertConfig m_config;
 
