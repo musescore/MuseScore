@@ -301,10 +301,17 @@ bool Paste::repeatListSelection(Transaction& tx, Score* score)
     std::unordered_set<const Chord*> foundChords;
 
     // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
-    // new notes have been created we can call cmdAddParentheses on each group...
+    // new notes have been created we can call cmdAddParentheses on each group then set their offset & visibility
     // Use a vector of pairs to preserve insertion order
     using NoteList = std::vector<Note*>;
-    std::vector<std::pair<const Parenthesis*, NoteList> > parenEntries;
+    struct ParenGroup {
+        NoteList notes;
+        bool leftVisible = true;
+        bool rightVisible = true;
+        PointF leftOffset;
+        PointF rightOffset;
+    };
+    std::vector<std::pair<const Parenthesis*, ParenGroup> > parenEntries;
 
     for (Note* n : notes) {
         if (n->isGrace() || n->incomingPartialTie() || n->outgoingPartialTie()) {
@@ -339,6 +346,8 @@ bool Paste::repeatListSelection(Transaction& tx, Score* score)
             continue;
         }
 
+        newNote->undoChangeProperty(Pid::VISIBLE, n->visible());
+
         Chord* newChord = newNote->chord();
 
         newChord->updateArticulations(sourceChord->articulationSymbolIds());
@@ -353,8 +362,13 @@ bool Paste::repeatListSelection(Transaction& tx, Score* score)
 
         toSelect.push_back(newNote);
 
-        const Parenthesis* leftParen = n->parenthesisInfo() ? n->parenthesisInfo()->leftParen() : nullptr;
+        const NoteParenthesisInfo* parenInfo = n->parenthesisInfo();
+        const Parenthesis* leftParen = parenInfo ? parenInfo->leftParen() : nullptr;
         if (!leftParen) {
+            continue;
+        }
+        const Parenthesis* rightParen = parenInfo->rightParen();
+        IF_ASSERT_FAILED(rightParen) {
             continue;
         }
 
@@ -373,19 +387,48 @@ bool Paste::repeatListSelection(Transaction& tx, Score* score)
         }
 
         auto search = std::find_if(parenEntries.begin(), parenEntries.end(),
-                                   [leftParen](const std::pair<const Parenthesis*, NoteList>& p) {
+                                   [leftParen](const std::pair<const Parenthesis*, ParenGroup>& p) {
             return p.first == leftParen;
         });
         if (search != parenEntries.end()) {
-            search->second.insert(search->second.end(), notesForParen.begin(), notesForParen.end());
+            NoteList& nl = search->second.notes;
+            nl.insert(nl.end(), notesForParen.begin(), notesForParen.end());
             continue;
         }
 
-        parenEntries.emplace_back(leftParen, std::move(notesForParen));
+        ParenGroup group;
+        group.notes = std::move(notesForParen);
+        group.leftVisible = leftParen->visible();
+        group.rightVisible = rightParen->visible();
+        group.leftOffset = leftParen->offset();
+        group.rightOffset = rightParen->offset();
+        parenEntries.emplace_back(leftParen, std::move(group));
     }
 
-    for (auto& [paren, noteList] : parenEntries) {
-        EditParentheses::addParenthesesToNotes(tx, noteList);
+    for (auto& [paren, group] : parenEntries) {
+        EditParentheses::addParenthesesToNotes(tx, group.notes);
+
+        // Restore the original parentheses' visibility and offset on each newly-created pair...
+        std::unordered_set<const Parenthesis*> processedParens;
+        for (Note* note : group.notes) {
+            const NoteParenthesisInfo* newParenInfo = note->parenthesisInfo();
+            Parenthesis* newLeftParen = newParenInfo ? newParenInfo->leftParen() : nullptr;
+            if (!newLeftParen || muse::contains(processedParens, static_cast<const Parenthesis*>(newLeftParen))) {
+                continue;
+            }
+            processedParens.insert(newLeftParen);
+
+            newLeftParen->undoSetVisible(group.leftVisible);
+            newLeftParen->undoChangeProperty(Pid::OFFSET, group.leftOffset);
+
+            Parenthesis* newRightParen = newParenInfo->rightParen();
+            IF_ASSERT_FAILED(newRightParen) {
+                continue;
+            }
+
+            newRightParen->undoSetVisible(group.rightVisible);
+            newRightParen->undoChangeProperty(Pid::OFFSET, group.rightOffset);
+        }
     }
 
     score->select(toSelect, SelectType::ADD);

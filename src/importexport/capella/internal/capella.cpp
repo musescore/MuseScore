@@ -769,10 +769,13 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             }
             // LOGD("clef %hhd off %d", clef, off);
 
-            static int keyOffsets[15] = {
+            static std::array<int, 15> keyOffsets = {
                 /*   -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7 */
                 /* */ 7, 4, 1, 5, 2, 6, 3, 0, 4, 1, 5, 2, 6, 3, 0
             };
+            if (int(key) + 7 >= int(keyOffsets.size())) {
+                throw Capella::Error::BAD_FORMAT;
+            }
             off += keyOffsets[int(key) + 7];
 
             for (const CNote& n : o->notes) {
@@ -1196,6 +1199,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         CAPELLA_TRACE("System:");
         for (CapStaff* cstaff : csys->staves) {
             CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
+            if (!cl) {
+                throw Capella::Error::BAD_FORMAT;
+            }
             CAPELLA_TRACE("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
                           qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
                           qPrintable(cl->intermediateName), qPrintable(cl->intermediateAbbrev),
@@ -1233,6 +1239,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     Part* part = 0;
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         CapStaffLayout* cl = cap->staffLayout(staffIdx);
+        if (!cl) {
+            throw Capella::Error::BAD_FORMAT;
+        }
         // CAPELLA_TRACE("MIDI staff %d program %d", staffIdx, cl->sound);
 
         // create a new part if necessary
@@ -1366,6 +1375,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
             CAPELLA_TRACE("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
             int staffIdx = cstaff->iLayout;
+            if (!score->staff(staffIdx)) {
+                continue;
+            }
             for (CapVoice* cvoice : cstaff->voices) {
                 Fraction tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
                 if (tick > mtick) {
@@ -1472,9 +1484,12 @@ void TextObj::read()
 {
     BasicRectObj::read();
     unsigned size = cap->readUnsigned();
+    cap->verifyLength(size);
     std::vector<char> vtxt(size + 1);
     char* txt = vtxt.data();
-    cap->read(txt, size);
+    if (!cap->read(txt, size)) {
+        throw Capella::Error::BAD_FORMAT;
+    }
     txt[size] = 0;
     text = QString(txt);
     // CAPELLA_TRACE("read textObj len %d <%s>", size, txt);
@@ -1558,9 +1573,12 @@ void MetafileObj::read()
 {
     BasicRectObj::read();
     unsigned size = cap->readUnsigned();
+    cap->verifyLength(size);
     std::vector<char> vEnhMetaFileBits(size);
     char* enhMetaFileBits = vEnhMetaFileBits.data();
-    cap->read(enhMetaFileBits, size);
+    if (!cap->read(enhMetaFileBits, size)) {
+        throw Capella::Error::BAD_FORMAT;
+    }
     // CAPELLA_TRACE("MetaFileObj::read %d bytes", size);
 }
 
@@ -2038,6 +2056,17 @@ bool Capella::read(void* p, qint64 len)
 }
 
 //---------------------------------------------------------
+//   verifyLength
+//---------------------------------------------------------
+
+void Capella::verifyLength(unsigned len) const
+{
+    if (len > f->bytesAvailable()) {
+        throw Capella::Error::BAD_FORMAT;
+    }
+}
+
+//---------------------------------------------------------
 //   readByte
 //---------------------------------------------------------
 
@@ -2142,8 +2171,12 @@ int Capella::readInt()
 char* Capella::readString()
 {
     unsigned len = readUnsigned();
+    verifyLength(len);
     char* buffer = new char[static_cast<size_t>(len) + 1];
-    read(buffer, len);
+    if (!read(buffer, len)) {
+        delete[] buffer;
+        throw Capella::Error::BAD_FORMAT;
+    }
     buffer[len] = 0;
     return buffer;
 }
@@ -2733,6 +2766,14 @@ QPointF Capella::readPoint()
     return QPointF(double(x), double(y));
 }
 
+CapStaffLayout* Capella::staffLayout(int idx)
+{
+    if (idx < 0 || idx >= _staffLayouts.size()) {
+        return nullptr;
+    }
+    return _staffLayouts[idx];
+}
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -2832,6 +2873,8 @@ Err importCapella(MasterScore* score, const QString& name)
     Capella cf;
     try {
         cf.read(&fp);
+        fp.close();
+        convertCapella(score, &cf, false);
     }
     catch (Capella::Error errNo) {
         if (!MScore::noGui) {
@@ -2843,8 +2886,6 @@ Err importCapella(MasterScore* score, const QString& name)
         // avoid another error message box
         return Err::NoError;
     }
-    fp.close();
-    convertCapella(score, &cf, false);
     return Err::NoError;
 }
 }

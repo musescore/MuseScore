@@ -26,6 +26,7 @@
       <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
       <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
       <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
+      <fretFrets>5</fretFrets>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
       <slurEndWidth>0.0625</slurEndWidth>

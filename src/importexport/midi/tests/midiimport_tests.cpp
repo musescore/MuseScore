@@ -149,7 +149,7 @@ protected:
     }
 
     void importThenCompareWithRef(const char* file);
-    std::unique_ptr<engraving::MasterScore> importMidi(const String& fileName);
+    std::unique_ptr<engraving::MasterScore> importMidi(const String& fileName, engraving::Err* err = nullptr);
 
     String midiFilePath(const char* file)
     {
@@ -173,13 +173,33 @@ void MidiImportTests::importThenCompareWithRef(const char* file)
     EXPECT_TRUE(engraving::ScoreComp::saveCompareScore(score.get(), outPath, refPath));
 }
 
-std::unique_ptr<engraving::MasterScore> MidiImportTests::importMidi(const String& fileName)
+std::unique_ptr<engraving::MasterScore> MidiImportTests::importMidi(const String& fileName, engraving::Err* err)
 {
-    const auto doImportMidi = [](engraving::MasterScore* score, const io::path_t& path) -> mu::engraving::Err {
-        return mu::iex::midi::importMidi(score, path.toQString());
+    const auto doImportMidi = [err](engraving::MasterScore* score, const io::path_t& path) -> mu::engraving::Err {
+        const engraving::Err rv = mu::iex::midi::importMidi(score, path.toQString());
+        if (err) {
+            *err = rv;
+        }
+        return rv;
     };
 
     return std::unique_ptr<engraving::MasterScore> { engraving::ScoreRW::readScore(fileName, true, doImportMidi) };
+}
+
+//! NOTE Counts every note head in the score, across all staves and voices.
+static size_t noteCount(const engraving::Score* score)
+{
+    size_t count = 0;
+    for (const engraving::Segment* seg = score->firstSegment(engraving::SegmentType::ChordRest); seg;
+         seg = seg->next1(engraving::SegmentType::ChordRest)) {
+        for (const engraving::EngravingItem* item : seg->elist()) {
+            if (item && item->isChord()) {
+                count += engraving::toChord(item)->notes().size();
+            }
+        }
+    }
+
+    return count;
 }
 
 TEST_F(MidiImportTests, m1) {
@@ -1490,4 +1510,92 @@ TEST_F(MidiImportTests, tupletTickSetCorrectly)
         << "Tuplet tick must not be 0: tuplet is in measure 2, not measure 1";
     EXPECT_EQ(firstTuplet->tick(), firstTuplet->elements().front()->tick())
         << "Tuplet tick must match first element tick";
+}
+
+// SysEx length guard in MidiFile::readEvent() (midishared/midifile.cpp)
+//
+// A SysEx event (status 0xf0 or 0xf7) is read as:
+//
+//     int len = getvl();
+//     if (len < 1) {                    // used to be: if (len == -1)
+//         return false;
+//     }
+//     dataLen = len;
+//     std::vector<unsigned char> data(len + 1);
+//     read(data.data(), len);
+//     if (data[len - 1] != 0xf7) { ... }
+//
+// With the old `len == -1` test:
+//   * len == 0 passed the check, allocated a 1-byte buffer, read nothing into
+//     it and then evaluated data[len - 1] == data[-1], reading one byte in
+//     front of the heap allocation;
+//   * getvl() accumulates into a signed int and shifts left by 7 per
+//     continuation byte, so it can also return negative values other than -1
+//     (e.g. the five bytes ff ff ff ff 00 wrap to -128).  Those reached
+//     `std::vector<unsigned char> data(len + 1)` with a negative size, which
+//     converts to a huge size_t and throws std::length_error.  importMidi()
+//     only catches QString, so the exception escaped the importer entirely.
+//
+// Both fixtures below are src/importexport/midi/tests/midiimport_data/m1.mid
+// (format 1, 2 tracks, division 480) with a SysEx event spliced into track 1
+// at file offset 0x2c.  0x2c is an event boundary: it is the start of the
+// 7th event of the first MTrk chunk (the "note on 0x48" that follows three
+// complete note-on/note-off pairs for pitches 0x43, 0x45 and 0x47).  The MTrk
+// length field at offset 0x12 is grown by the number of inserted bytes, so the
+// chunk still ends exactly where the second MTrk chunk begins and no earlier
+// container check can reject the file - the SysEx guard is the first code that
+// sees the bad length.
+//
+// Note that importMidi() ignores the bool returned by MidiFile::read(), so a
+// rejected event does not produce an error code: the import still succeeds,
+// but MidiFile::readTrack() bails out at the bad event and no further track is
+// read.  The imported score is therefore truncated to the three notes that
+// precede the spliced-in SysEx, on a single staff, and that truncation is what
+// these tests pin down.  Before the fix the events after the SysEx were parsed
+// as well, giving 2 staves and 7 notes (in the runs that did not die in the
+// out-of-bounds access first).
+
+// zero-length SysEx: 3 bytes inserted at 0x2c, "00 f0 00"
+//   00  delta time 0
+//   f0  SysEx status byte, takes the `me == 0xf0` branch of readEvent()
+//   00  variable-length length field == 0, which used to reach data[-1]
+// MTrk length field at 0x12: 0x0000002f (47) -> 0x00000032 (50)
+TEST_F(MidiImportTests, sysexZeroLength) {
+    engraving::Err err = engraving::Err::UnknownError;
+    std::unique_ptr<engraving::MasterScore> score = importMidi(midiFilePath("sysex_zero_len"), &err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, engraving::Err::NoError);
+
+    // track parsing stops at the rejected SysEx event
+    EXPECT_EQ(score->nstaves(), 1);
+    EXPECT_EQ(noteCount(score.get()), 3);
+}
+
+// negative-length SysEx: 7 bytes inserted at 0x2c, "00 f0 ff ff ff ff 00"
+//   00              delta time 0
+//   f0              SysEx status byte
+//   ff ff ff ff 00  variable-length length field; getvl() wraps this to -128
+// MTrk length field at 0x12: 0x0000002f (47) -> 0x00000036 (54)
+TEST_F(MidiImportTests, sysexNegativeLength) {
+    engraving::Err err = engraving::Err::UnknownError;
+    std::unique_ptr<engraving::MasterScore> score = importMidi(midiFilePath("sysex_negative_len"), &err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, engraving::Err::NoError);
+
+    // track parsing stops at the rejected SysEx event
+    EXPECT_EQ(score->nstaves(), 1);
+    EXPECT_EQ(noteCount(score.get()), 3);
+}
+
+// baseline: the same file without the spliced-in SysEx event imports in full,
+// so the counts above really are the effect of the guard and not of some other
+// property of m1.mid
+TEST_F(MidiImportTests, sysexGuardBaseline) {
+    engraving::Err err = engraving::Err::UnknownError;
+    std::unique_ptr<engraving::MasterScore> score = importMidi(midiFilePath("m1"), &err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, engraving::Err::NoError);
+
+    EXPECT_EQ(score->nstaves(), 2);
+    EXPECT_EQ(noteCount(score.get()), 7);
 }

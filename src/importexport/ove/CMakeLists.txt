@@ -37,3 +37,7 @@ target_link_libraries(iex_ove PRIVATE
     engraving
     Qt::Core5Compat
 )
+
+if (MUE_BUILD_IMPORTEXPORT_TESTS)
+    add_subdirectory(tests)
+endif()

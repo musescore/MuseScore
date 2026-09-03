@@ -479,7 +479,13 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
             readShort();
         }
     }
+
+    if (staff < 0 || staff >= static_cast<int>(curTrack->infos.size())) {
+        LOGE() << "Invalid staff index";
+        return;
+    }
     curTrack->infos[staff].notes_count += itemCount;
+
     beat.mmrest = (itemCount == 0) ? multiBarRest : 1;
     beat.vibrato = (((data1 & 0x08) != 0) || ((data1 & 0x10) != 0));
     beat.grace = (data3 & 0x01) != 0;
@@ -667,6 +673,24 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
             }
             bool has_hammer = false;
             for (const auto& n : beat.notes) {
+                if (n.str < 0 || static_cast<size_t>(n.str) >= tiedNotes.size()) {
+                    LOGE() << "string index out of range, skipping note";
+                    continue;
+                }
+
+                const std::vector<int>& trackStrings = curTrack->infos[staff].strings;
+                if (trackStrings.empty()) {
+                    LOGE() << "track has no strings, skipping note";
+                    continue;
+                }
+
+                const StringData* sd = score->staff(staff)->part()->instrument()->stringData();
+                const int k = std::max(int(trackStrings.size()) - n.str - 1, 0);
+                if (!sd || static_cast<size_t>(k) >= sd->stringList().size()) {
+                    LOGE() << "string data missing for note pitch";
+                    continue;
+                }
+
                 auto note = Factory::createNote(chord);
                 chord->add(note);
                 if (n.dead) {
@@ -702,8 +726,6 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 tiedNotes[n.str] = note;
                 note->setFret(n.value);
                 note->setString(n.str);
-                const StringData* sd = score->staff(staff)->part()->instrument()->stringData();
-                int k     = std::max(int(curTrack->infos[staff].strings.size()) - n.str - 1, 0);
                 int pitch = sd->stringList().at(k).pitch + n.value;         //getPitch(n.str, n.value, 0);
                 note->setPitch(pitch);
                 note->setTpcFromPitch();
@@ -880,13 +902,18 @@ void PowerTab::addToScore(ptSection& sec)
         nvec.resize(10);
         memset(nvec.data(), 0, sizeof(Note*) * 10);
     }
+
+    if (sec.beats.size() > static_cast<size_t>(staves)) {
+        LOGE() << "Found more beat lists than staves, some beat lists will be skipped";
+    }
+
     //std::vector<tBeatList>
     while (true) {
         bool empty = true;
         while (int(sec.beats.size()) < staves) {
             sec.beats.push_back({});
         }
-        for (unsigned int i = 0; i < sec.beats.size(); ++i) {
+        for (unsigned int i = 0; i < sec.beats.size() && i < tiedNotes.size(); ++i) {
             fillMeasure(sec.beats[i], measure, i, tiedNotes[i]);
             if (sec.beats[i].size() && i < unsigned(staffInc)) {
                 empty = false;

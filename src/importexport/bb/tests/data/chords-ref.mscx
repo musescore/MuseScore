@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="5.00">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <chordsXmlFile>1</chordsXmlFile>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -20,13 +21,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <eid>C_C</eid>
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -36,666 +38,920 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Chord Test1</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <eid>H_H</eid>
+            <concertKey>0</concertKey>
             </KeySig>
           <Harmony>
-            <root>14</root>
-            <extension>2</extension>
-            <name>Maj</name>
+            <harmonyInfo>
+              <extension>2</extension>
+              <name>Maj</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>I_I</eid>
             </Harmony>
           <Rest>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>K_K</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>3</extension>
-            <name>5b</name>
+            <harmonyInfo>
+              <extension>3</extension>
+              <name>5b</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>L_L</eid>
             </Harmony>
           <Rest>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>N_N</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>4</extension>
-            <name>+</name>
+            <harmonyInfo>
+              <extension>4</extension>
+              <name>+</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>O_O</eid>
             </Harmony>
           <Rest>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>Q_Q</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>5</extension>
-            <name>6</name>
+            <harmonyInfo>
+              <extension>5</extension>
+              <name>6</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>R_R</eid>
             </Harmony>
           <Rest>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>T_T</eid>
         <LayoutBreak>
+          <eid>U_U</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>6</extension>
-            <name>Maj7</name>
+            <harmonyInfo>
+              <extension>6</extension>
+              <name>Maj7</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>V_V</eid>
             </Harmony>
           <Rest>
+            <eid>W_W</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>X_X</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>7</extension>
-            <name>Maj9</name>
+            <harmonyInfo>
+              <extension>7</extension>
+              <name>Maj9</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>Y_Y</eid>
             </Harmony>
           <Rest>
+            <eid>Z_Z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>a_a</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>8</extension>
-            <name>Maj9#11</name>
+            <harmonyInfo>
+              <extension>8</extension>
+              <name>Maj9#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>b_b</eid>
             </Harmony>
           <Rest>
+            <eid>c_c</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>d_d</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>9</extension>
-            <name>Maj13#11</name>
+            <harmonyInfo>
+              <extension>9</extension>
+              <name>Maj13#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>e_e</eid>
             </Harmony>
           <Rest>
+            <eid>f_f</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>g_g</eid>
         <LayoutBreak>
+          <eid>h_h</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>10</extension>
-            <name>Maj13</name>
+            <harmonyInfo>
+              <extension>10</extension>
+              <name>Maj13</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>i_i</eid>
             </Harmony>
           <Rest>
+            <eid>j_j</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>k_k</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>13</extension>
-            <name>Maj7#5</name>
+            <harmonyInfo>
+              <extension>13</extension>
+              <name>Maj7#5</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>l_l</eid>
             </Harmony>
           <Rest>
+            <eid>m_m</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>n_n</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>14</extension>
-            <name>69</name>
+            <harmonyInfo>
+              <extension>14</extension>
+              <name>69</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>o_o</eid>
             </Harmony>
           <Rest>
+            <eid>p_p</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>q_q</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>15</extension>
-            <name>2</name>
+            <harmonyInfo>
+              <extension>15</extension>
+              <name>2</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>r_r</eid>
             </Harmony>
           <Rest>
+            <eid>s_s</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>t_t</eid>
         <LayoutBreak>
+          <eid>u_u</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>16</extension>
-            <name>m</name>
+            <harmonyInfo>
+              <extension>16</extension>
+              <name>m</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>v_v</eid>
             </Harmony>
           <Rest>
+            <eid>w_w</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>x_x</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>17</extension>
-            <name>m+</name>
+            <harmonyInfo>
+              <extension>17</extension>
+              <name>m+</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>y_y</eid>
             </Harmony>
           <Rest>
+            <eid>z_z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>0_0</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>18</extension>
-            <name>mMaj7</name>
+            <harmonyInfo>
+              <extension>18</extension>
+              <name>mMaj7</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>1_1</eid>
             </Harmony>
           <Rest>
+            <eid>2_2</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>3_3</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>19</extension>
-            <name>m7</name>
+            <harmonyInfo>
+              <extension>19</extension>
+              <name>m7</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>4_4</eid>
             </Harmony>
           <Rest>
+            <eid>5_5</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>6_6</eid>
         <LayoutBreak>
+          <eid>7_7</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>20</extension>
-            <name>m9</name>
+            <harmonyInfo>
+              <extension>20</extension>
+              <name>m9</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>8_8</eid>
             </Harmony>
           <Rest>
+            <eid>9_9</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>+_+</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>21</extension>
-            <name>m11</name>
+            <harmonyInfo>
+              <extension>21</extension>
+              <name>m11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>/_/</eid>
             </Harmony>
           <Rest>
+            <eid>AB_AB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>BB_BB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>22</extension>
-            <name>m13</name>
+            <harmonyInfo>
+              <extension>22</extension>
+              <name>m13</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>CB_CB</eid>
             </Harmony>
           <Rest>
+            <eid>DB_DB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>EB_EB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>23</extension>
-            <name>m6</name>
+            <harmonyInfo>
+              <extension>23</extension>
+              <name>m6</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>FB_FB</eid>
             </Harmony>
           <Rest>
+            <eid>GB_GB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>HB_HB</eid>
         <LayoutBreak>
+          <eid>IB_IB</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>24</extension>
-            <name>m#5</name>
+            <harmonyInfo>
+              <extension>24</extension>
+              <name>m#5</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>JB_JB</eid>
             </Harmony>
           <Rest>
+            <eid>KB_KB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>LB_LB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>25</extension>
-            <name>m7#5</name>
+            <harmonyInfo>
+              <extension>25</extension>
+              <name>m7#5</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>MB_MB</eid>
             </Harmony>
           <Rest>
+            <eid>NB_NB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>OB_OB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>26</extension>
-            <name>m69</name>
+            <harmonyInfo>
+              <extension>26</extension>
+              <name>m69</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>PB_PB</eid>
             </Harmony>
           <Rest>
+            <eid>QB_QB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>RB_RB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>28</extension>
-            <name>Maj7Lyd</name>
+            <harmonyInfo>
+              <extension>28</extension>
+              <name>Maj7Lyd</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>SB_SB</eid>
             </Harmony>
           <Rest>
+            <eid>TB_TB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>UB_UB</eid>
         <LayoutBreak>
+          <eid>VB_VB</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>29</extension>
-            <name>Maj7b5</name>
+            <harmonyInfo>
+              <extension>29</extension>
+              <name>Maj7b5</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>WB_WB</eid>
             </Harmony>
           <Rest>
+            <eid>XB_XB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>YB_YB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>32</extension>
-            <name>m7b5</name>
+            <harmonyInfo>
+              <extension>32</extension>
+              <name>m7b5</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>ZB_ZB</eid>
             </Harmony>
           <Rest>
+            <eid>aB_aB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>bB_bB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>33</extension>
-            <name>dim</name>
+            <harmonyInfo>
+              <extension>33</extension>
+              <name>dim</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>cB_cB</eid>
             </Harmony>
           <Rest>
+            <eid>dB_dB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>eB_eB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>34</extension>
-            <name>m9b5</name>
+            <harmonyInfo>
+              <extension>34</extension>
+              <name>m9b5</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>fB_fB</eid>
             </Harmony>
           <Rest>
+            <eid>gB_gB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>hB_hB</eid>
         <LayoutBreak>
+          <eid>iB_iB</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>40</extension>
-            <name>5</name>
+            <harmonyInfo>
+              <extension>40</extension>
+              <name>5</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>jB_jB</eid>
             </Harmony>
           <Rest>
+            <eid>kB_kB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>lB_lB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>56</extension>
-            <name>7+</name>
+            <harmonyInfo>
+              <extension>56</extension>
+              <name>7+</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>mB_mB</eid>
             </Harmony>
           <Rest>
+            <eid>nB_nB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>oB_oB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>57</extension>
-            <name>9+</name>
+            <harmonyInfo>
+              <extension>57</extension>
+              <name>9+</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>pB_pB</eid>
             </Harmony>
           <Rest>
+            <eid>qB_qB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>rB_rB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>58</extension>
-            <name>13+</name>
+            <harmonyInfo>
+              <extension>58</extension>
+              <name>13+</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>sB_sB</eid>
             </Harmony>
           <Rest>
+            <eid>tB_tB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>uB_uB</eid>
         <LayoutBreak>
+          <eid>vB_vB</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>64</extension>
-            <name>7</name>
+            <harmonyInfo>
+              <extension>64</extension>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>wB_wB</eid>
             </Harmony>
           <Rest>
+            <eid>xB_xB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>yB_yB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>65</extension>
-            <name>13</name>
+            <harmonyInfo>
+              <extension>65</extension>
+              <name>13</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>zB_zB</eid>
             </Harmony>
           <Rest>
+            <eid>0B_0B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1B_1B</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>66</extension>
-            <name>7b13</name>
+            <harmonyInfo>
+              <extension>66</extension>
+              <name>7b13</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>2B_2B</eid>
             </Harmony>
           <Rest>
+            <eid>3B_3B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>4B_4B</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>67</extension>
-            <name>7#11</name>
+            <harmonyInfo>
+              <extension>67</extension>
+              <name>7#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>5B_5B</eid>
             </Harmony>
           <Rest>
+            <eid>6B_6B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>7B_7B</eid>
         <LayoutBreak>
+          <eid>8B_8B</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>74</extension>
-            <name>13#11</name>
+            <harmonyInfo>
+              <extension>74</extension>
+              <name>13#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>9B_9B</eid>
             </Harmony>
           <Rest>
+            <eid>+B_+B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>/B_/B</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>75</extension>
-            <name>9#11b13</name>
+            <harmonyInfo>
+              <extension>75</extension>
+              <name>9#11b13</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>AC_AC</eid>
             </Harmony>
           <Rest>
+            <eid>BC_BC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>CC_CC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>76</extension>
-            <name>7b9</name>
+            <harmonyInfo>
+              <extension>76</extension>
+              <name>7b9</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>DC_DC</eid>
             </Harmony>
           <Rest>
+            <eid>EC_EC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>FC_FC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>77</extension>
-            <name>13b9</name>
+            <harmonyInfo>
+              <extension>77</extension>
+              <name>13b9</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>GC_GC</eid>
             </Harmony>
           <Rest>
+            <eid>HC_HC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>IC_IC</eid>
         <LayoutBreak>
+          <eid>JC_JC</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>85</extension>
-            <name>9#11</name>
+            <harmonyInfo>
+              <extension>85</extension>
+              <name>9#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>KC_KC</eid>
             </Harmony>
           <Rest>
+            <eid>LC_LC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>MC_MC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>74</extension>
-            <name>13#11</name>
+            <harmonyInfo>
+              <extension>74</extension>
+              <name>13#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>NC_NC</eid>
             </Harmony>
           <Rest>
+            <eid>OC_OC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>PC_PC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>75</extension>
-            <name>9#11b13</name>
+            <harmonyInfo>
+              <extension>75</extension>
+              <name>9#11b13</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>QC_QC</eid>
             </Harmony>
           <Rest>
+            <eid>RC_RC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>SC_SC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>76</extension>
-            <name>7b9</name>
+            <harmonyInfo>
+              <extension>76</extension>
+              <name>7b9</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>TC_TC</eid>
             </Harmony>
           <Rest>
+            <eid>UC_UC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>VC_VC</eid>
         <LayoutBreak>
+          <eid>WC_WC</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>77</extension>
-            <name>13b9</name>
+            <harmonyInfo>
+              <extension>77</extension>
+              <name>13b9</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>XC_XC</eid>
             </Harmony>
           <Rest>
+            <eid>YC_YC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>ZC_ZC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>78</extension>
-            <name>7b9b13</name>
+            <harmonyInfo>
+              <extension>78</extension>
+              <name>7b9b13</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>aC_aC</eid>
             </Harmony>
           <Rest>
+            <eid>bC_bC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>cC_cC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>79</extension>
-            <name>7b9#11</name>
+            <harmonyInfo>
+              <extension>79</extension>
+              <name>7b9#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>dC_dC</eid>
             </Harmony>
           <Rest>
+            <eid>eC_eC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>fC_fC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <extension>80</extension>
-            <name>13b9#11</name>
+            <harmonyInfo>
+              <extension>80</extension>
+              <name>13b9#11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>gC_gC</eid>
             </Harmony>
           <Rest>
+            <eid>hC_hC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

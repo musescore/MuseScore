@@ -165,6 +165,11 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>yRgzR/V25YF_Tku6zcAZnyJ</eid>
+                <visible>0</visible>
+                </Parenthesis>
               <Notes>
                 <NoteIdx>0</NoteIdx>
                 </Notes>
@@ -304,6 +309,11 @@
                 </Notes>
               </NoteParenGroup>
             <NoteParenGroup>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>CCPZdFtFMtJ_gjLQHc0qTQN</eid>
+                <offset x="0" y="-1"/>
+                </Parenthesis>
               <Notes>
                 <NoteIdx>2</NoteIdx>
                 <NoteIdx>3</NoteIdx>
@@ -397,6 +407,15 @@
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>O7LRFJxysqF_cOZG3+QxWFC</eid>
+                <visible>0</visible>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>X4i0SitYwMN_Qoh4rTO1vMC</eid>
+                <offset x="0.5" y="-1"/>
+                </Parenthesis>
               <Notes>
                 <NoteIdx>0</NoteIdx>
                 </Notes>

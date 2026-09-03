@@ -29,6 +29,7 @@
       <chordSymbolBFontSize>22</chordSymbolBFontSize>
       <nashvilleNumberFontFace>Palatino,serif</nashvilleNumberFontFace>
       <nashvilleNumberFontSize>22</nashvilleNumberFontSize>
+      <fretFrets>5</fretFrets>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
       <concertPitch>1</concertPitch>

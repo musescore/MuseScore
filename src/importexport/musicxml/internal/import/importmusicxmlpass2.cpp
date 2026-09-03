@@ -2966,17 +2966,19 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     for (auto& harmony : delayedHarmony) {
         HarmonyDesc harmonyDesc = harmony.second;
         Fraction tick = Fraction::fromTicks(harmony.first);
-        if (harmonyDesc.m_fretDiagram) {
-            harmonyDesc.m_fretDiagram->setTrack(harmonyDesc.m_track);
+        if (FretDiagram* fd = harmonyDesc.m_fretDiagram) {
+            fd->setTrack(harmonyDesc.m_track);
             Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-            harmonyDesc.m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
-            s->add(harmonyDesc.m_fretDiagram);
-        }
-
-        if (harmonyDesc.m_harmony) {
-            harmonyDesc.m_harmony->setTrack(harmonyDesc.m_track);
+            if (Harmony* harmony = harmonyDesc.m_harmony) {
+                harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+                harmony->setTrack(harmonyDesc.m_track);
+                fd->add(harmony);
+            }
+            s->add(fd);
+        } else if (Harmony* harmony = harmonyDesc.m_harmony) {
+            harmony->setTrack(harmonyDesc.m_track);
             Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-            s->add(harmonyDesc.m_harmony);
+            s->add(harmony);
         }
     }
 
@@ -7761,7 +7763,9 @@ FretDiagram* MusicXmlParserPass2::frame()
             int val = m_e.readInt();
             if (val > 0) {
                 fd->setProperty(Pid::FRET_FRETS, val);
-                fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED);
+                if (val != fd->propertyDefault(Pid::FRET_FRETS).toInt()) {
+                    fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED);
+                }
             } else {
                 m_logger->logError(String(u"FretDiagram::readMusicXml: illegal frame-fret %1").arg(val), &m_e);
             }

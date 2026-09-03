@@ -27,6 +27,7 @@
       <chordSymbolBFontSize>11.9365</chordSymbolBFontSize>
       <nashvilleNumberFontFace>Plantin MT Std</nashvilleNumberFontFace>
       <nashvilleNumberFontSize>11.9365</nashvilleNumberFontSize>
+      <fretFrets>5</fretFrets>
       <slurEndWidth>0.07</slurEndWidth>
       <tieEndWidth>0.07</tieEndWidth>
       <tupletFontFace>Plantin MT Std</tupletFontFace>

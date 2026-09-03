@@ -1555,8 +1555,8 @@ bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg)
     }
     const MasterScore* master = firstSeg->masterScore();
 
-    Measure* firstMeasure = firstSeg->measure();
-    Measure* secondMeasure = secondSeg->measure();
+    const Measure* firstMeasure = firstSeg->measure();
+    const Measure* secondMeasure = secondSeg->measure();
 
     if (firstMeasure == secondMeasure) {
         return true;
@@ -1572,8 +1572,11 @@ bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg)
         secondMasterMeasure = secondMasterMeasure->coveringMMRestOrThis();
     }
 
-    Score* score = firstSeg->score();
+    IF_ASSERT_FAILED(firstMasterMeasure && secondMasterMeasure) {
+        return false;
+    }
 
+    const Score* score = firstSeg->score();
     const RepeatList& repeatList = score->repeatList(true, false);
 
     std::vector<const Measure*> measures;

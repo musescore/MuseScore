@@ -25,6 +25,8 @@
 #include "engraving/tests/utils/scorecomp.h"
 #include "engraving/tests/utils/scorerw.h"
 
+#include "engraving/dom/stafftext.h"
+
 #include "importexport/tabledit/internal/tableditreader.h"
 
 using namespace mu::engraving;
@@ -35,6 +37,7 @@ class TablEdit_Tests : public ::testing::Test
 {
 public:
     void tefReadTest(const char* file);
+    MasterScore* tefRead(const char* file, Err& err);
 };
 
 //---------------------------------------------------------
@@ -56,6 +59,24 @@ void TablEdit_Tests::tefReadTest(const char* file)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", TABLEDIT_DIR + fileName + u".mscx"));
     delete score;
+}
+
+//---------------------------------------------------------
+//   tefRead
+//   read a TablEdit file and report the importer's error code
+//   (ScoreRW::readScore() returns nullptr if the error code is not NoError,
+//   and a laid out score otherwise)
+//---------------------------------------------------------
+
+MasterScore* TablEdit_Tests::tefRead(const char* file, Err& err)
+{
+    auto importFunc = [&err](MasterScore* score, const muse::io::path_t& path) -> Err {
+        mu::iex::tabledit::TablEditReader tablEditReader;
+        err = tablEditReader.import(score, path);
+        return err;
+    };
+
+    return ScoreRW::readScore(TABLEDIT_DIR + String::fromUtf8(file) + u".tef", false, importFunc);
 }
 
 TEST_F(TablEdit_Tests, tef_bass) {
@@ -251,4 +272,170 @@ TEST_F(TablEdit_Tests, tef_voices) {
 
 TEST_F(TablEdit_Tests, tef_voices_multi_part) {
     tefReadTest("voices_multi_part");
+}
+
+//---------------------------------------------------------
+//   malformed input fix tests
+//
+//   The fixtures used below are minimal byte patches of existing valid test
+//   files, each one crafted to reach a specific guard in importtef.cpp.
+//   The patch is documented in the test comment as
+//   "<source file> @<offset>: <old> -> <new>".
+//---------------------------------------------------------
+
+struct TefCounts {
+    size_t measures { 0 };
+    size_t chords { 0 };
+    size_t notes { 0 };
+    size_t rests { 0 };
+    size_t staffTexts { 0 };
+};
+
+static TefCounts tefCount(Score* score)
+{
+    TefCounts counts;
+    counts.measures = score->nmeasures();
+    for (Segment* segment = score->firstSegment(SegmentType::All); segment; segment = segment->next1()) {
+        for (EngravingItem* annotation : segment->annotations()) {
+            if (annotation->isStaffText()) {
+                ++counts.staffTexts;
+            }
+        }
+        for (track_idx_t track = 0; track < score->ntracks(); ++track) {
+            EngravingItem* element = segment->element(track);
+            if (!element) {
+                continue;
+            }
+            if (element->isChord()) {
+                ++counts.chords;
+                counts.notes += toChord(element)->notes().size();
+            } else if (element->isRest()) {
+                ++counts.rests;
+            }
+        }
+    }
+    return counts;
+}
+
+static std::vector<std::string> tefStaffTexts(Score* score)
+{
+    std::vector<std::string> result;
+    for (Segment* segment = score->firstSegment(SegmentType::All); segment; segment = segment->next1()) {
+        for (EngravingItem* annotation : segment->annotations()) {
+            if (annotation->isStaffText()) {
+                result.push_back(toStaffText(annotation)->plainText().toStdString());
+            }
+        }
+    }
+    std::sort(result.begin(), result.end());
+    return result;
+}
+
+//---------------------------------------------------------
+//   tef_invalid_text_marker_index
+//   fix 960fbb7ee9 / 592d6d8f2c: out of range text marker index
+//
+//   fixture: staff_text_1.tef (1 text, 1 text marker with index 0)
+//   patch: @0x379 (byte2 of the 0x39 text marker record, holding the low byte
+//          of the text index): 0x00 -> 0x05
+//   -> createTexts() finds index 5 while tefTexts holds a single entry
+//---------------------------------------------------------
+
+TEST_F(TablEdit_Tests, tef_invalid_text_marker_index) {
+    Err err { Err::NoError };
+    MasterScore* base = tefRead("staff_text_1", err);
+    ASSERT_TRUE(base);
+    EXPECT_EQ(err, Err::NoError);
+    const TefCounts baseCounts { tefCount(base) };
+    EXPECT_EQ(baseCounts.staffTexts, 1);
+    delete base;
+
+    err = Err::NoError;
+    MasterScore* score = tefRead("invalid_text_marker_index", err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, Err::NoError);
+    const TefCounts counts { tefCount(score) };
+    // the invalid text marker is dropped, the rest of the score is unaffected
+    EXPECT_EQ(counts.staffTexts, 0);
+    EXPECT_EQ(counts.measures, baseCounts.measures);
+    EXPECT_EQ(counts.chords, baseCounts.chords);
+    EXPECT_EQ(counts.notes, baseCounts.notes);
+    delete score;
+}
+
+//---------------------------------------------------------
+//   tef_invalid_measure_denominator
+//   fix 8263d9ad41: measure with denominator zero
+//
+//   fixture: gaps_1.tef (3 measures of 4/4, one note in each measure at
+//            positions 48, 64 and 128)
+//   patch a: @0x139 (denominator byte of the third measure record): 0x04 -> 0x00
+//   patch b: @0x383 (byte1 of the note record at position 128, i.e. the note in
+//            the measure removed by patch a): 0x04 -> 0x3a, a marker value that
+//            is neither a note/rest (<= 0x33) nor a text marker (0x39), so
+//            readTefContents() ignores the record.
+//            Patch b is needed because a note outside every measure makes
+//            MeasureHandler::measureIndex() return muse::nidx, after which
+//            sumPreviousGaps(nidx) walks off the end of its gap vectors and
+//            throws std::out_of_range. That defect is unrelated to the fixes
+//            under test and would mask the result of this test.
+//   -> readTefMeasures() rejects the corrupt measure record, the score is
+//      created with the 2 remaining measures
+//---------------------------------------------------------
+
+TEST_F(TablEdit_Tests, tef_invalid_measure_denominator) {
+    Err err { Err::NoError };
+    MasterScore* base = tefRead("gaps_1", err);
+    ASSERT_TRUE(base);
+    EXPECT_EQ(err, Err::NoError);
+    const TefCounts baseCounts { tefCount(base) };
+    EXPECT_EQ(baseCounts.measures, 3);
+    delete base;
+
+    err = Err::NoError;
+    MasterScore* score = tefRead("invalid_measure_denominator", err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, Err::NoError);
+    const TefCounts counts { tefCount(score) };
+    // one measure record less, and (because of patch b) one note less
+    EXPECT_EQ(counts.measures, 2);
+    EXPECT_EQ(counts.chords, baseCounts.chords - 2);   // 2: one per linked staff
+    EXPECT_EQ(counts.notes, baseCounts.notes - 2);
+    delete score;
+}
+
+//---------------------------------------------------------
+//   tef_invalid_text_zero_size
+//   fix 7594b2a0b9: utf8 text with size zero
+//
+//   fixture: staff_text_2.tef (4 texts "Part 1", "P1 M2", "Part 2", "P2 M2",
+//            4 text markers using index 0 to 3)
+//   patch: the texts table @0x11d is rewritten in place, keeping 4 texts but
+//          giving text[0] size 0 (so it has neither payload nor terminating
+//          NUL); the 7 bytes that become free at the end of the table are
+//          zero filled. The table stays inside its own block: every other
+//          block is reached by an absolute seek, so nothing else moves.
+//   -> readUtf8Text() reads a size of 0 and must not consume the (absent)
+//      terminating NUL, otherwise the texts that follow are read one byte off
+//---------------------------------------------------------
+
+TEST_F(TablEdit_Tests, tef_invalid_text_zero_size) {
+    Err err { Err::NoError };
+    MasterScore* base = tefRead("staff_text_2", err);
+    ASSERT_TRUE(base);
+    EXPECT_EQ(err, Err::NoError);
+    const std::vector<std::string> baseTexts { tefStaffTexts(base) };
+    const std::vector<std::string> expectedBaseTexts { "P1 M2", "P2 M2", "Part 1", "Part 2" };
+    EXPECT_EQ(baseTexts, expectedBaseTexts);
+    delete base;
+
+    err = Err::NoError;
+    MasterScore* score = tefRead("invalid_text_zero_size", err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, Err::NoError);
+    // text[0] is empty, the three texts after it are still read correctly
+    const std::vector<std::string> texts { tefStaffTexts(score) };
+    const std::vector<std::string> expectedTexts { "", "P1 M2", "P2 M2", "Part 2" };
+    EXPECT_EQ(texts, expectedTexts);
+    delete score;
 }
