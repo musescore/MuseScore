@@ -256,13 +256,11 @@ PointF Trill::trillLinePos(const SLine* line, Grip grip, System** system)
         return PointF(x, 0.0);
     }
 
-    Segment* graceNoteSeg = segment->preAppendedItem(line->track2()) ? segment : nullptr;
     Segment* clefSeg = segment->isClefType() ? segment : nullptr;
     Fraction curTick = segment->tick();
     while (true) {
         Segment* prevSeg = mmRest ? segment->prev1MM() : segment->prev1();
         if (prevSeg && prevSeg->tick() == curTick) {
-            graceNoteSeg = prevSeg->preAppendedItem(line->track2()) ? prevSeg : graceNoteSeg;
             clefSeg = prevSeg->isClefType() ? prevSeg : clefSeg;
             segment = prevSeg;
         } else {
@@ -282,19 +280,17 @@ PointF Trill::trillLinePos(const SLine* line, Grip grip, System** system)
     }
 
     // Stop line before grace notes
-    if (graceNoteSeg) {
-        const EngravingItem* preAppendedItem = graceNoteSeg->preAppendedItem(line->track2());
-        if (preAppendedItem && preAppendedItem->isGraceNotesGroup()) {
-            // get x position of leftmost grace note
-            const Chord* leftMostGraceChord = nullptr;
-            const GraceNotesGroup* graceGroup = toGraceNotesGroup(preAppendedItem);
-            for (const Chord* graceChord : *graceGroup) {
-                leftMostGraceChord = leftMostGraceChord
-                                     && leftMostGraceChord->x() < graceChord->x() ? leftMostGraceChord : graceChord;
-            }
-            if (leftMostGraceChord) {
-                graceOffset = segment->pageX() - leftMostGraceChord->pageX();
-            }
+    if (const EngravingItem* preAppendedItem = segment->preAppendedItem(line->track2());
+        preAppendedItem&& preAppendedItem->isGraceNotesGroup()) {
+        // get x position of leftmost grace note
+        const Chord* leftMostGraceChord = nullptr;
+        const GraceNotesGroup* graceGroup = toGraceNotesGroup(preAppendedItem);
+        for (const Chord* graceChord : *graceGroup) {
+            leftMostGraceChord = leftMostGraceChord
+                                 && leftMostGraceChord->x() < graceChord->x() ? leftMostGraceChord : graceChord;
+        }
+        if (leftMostGraceChord) {
+            graceOffset = segment->pageX() - leftMostGraceChord->pageX();
         }
     }
 
