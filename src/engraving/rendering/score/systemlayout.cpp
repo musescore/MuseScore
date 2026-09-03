@@ -2545,7 +2545,9 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
 void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System* system)
 {
     Skyline& skyline = system->staff(element->staffIdx())->skyline();
-    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up() : element->placeAbove();
+    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up()
+                   : element->isLyricsLineSegment() ? toLyricsLineSegment(element)->lyricsPlaceAbove()
+                   : element->placeAbove();
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
 
     skylineLine.remove_if([element](ShapeElement& shapeEl) {
@@ -2556,7 +2558,9 @@ void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System
 void SystemLayout::updateSkylineForElement(EngravingItem* element, const System* system, double yMove)
 {
     Skyline& skyline = system->staff(element->staffIdx())->skyline();
-    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up() : element->placeAbove();
+    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up()
+                   : element->isLyricsLineSegment() ? toLyricsLineSegment(element)->lyricsPlaceAbove()
+                   : element->placeAbove();
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
@@ -2574,15 +2578,79 @@ void SystemLayout::updateSkylineForElement(EngravingItem* element, const System*
 
 void SystemLayout::centerElementsBetweenStaves(const System* system)
 {
-    std::vector<EngravingItem*> centeredItems;
+    staff_idx_t nStaves = system->staves().size();
+    std::vector<CenterableItems> itemsByStaff(nStaves);
+    std::vector<MMRest*> mmRestsToCenter;
+
+    collectCenterableItems(system, itemsByStaff, mmRestsToCenter);
+
+    for (MMRest* mmrest : mmRestsToCenter) {
+        centerMMRestBetweenStaves(mmrest, system);
+    }
+
+    const double minHorizontalClearance = system->style().styleAbsolute(Sid::skylineMinHorizontalClearance);
+    std::vector<EngravingItem*> centeredItems; // will be populated by centerItemsBetweenStaves
+
+    for (staff_idx_t staffIdx = 0; staffIdx < nStaves; ++staffIdx) {
+        for (bool above : { true, false }) {
+            const std::vector<CenterableItem>& items = above ? itemsByStaff[staffIdx].above : itemsByStaff[staffIdx].below;
+            if (items.empty()) {
+                continue;
+            }
+
+            /* We center lyrics as a single block so that the verses will not lose their alignment. Other items
+             * join the block if they are vertically stacked with the lyrics. Items which aren't (e.g. a dynamic
+             * with no lyrics above it) are centered individually, against their own space above and below. */
+            Shape lyricsShape(Shape::Type::Composite);
+            for (const CenterableItem& centerableItem : items) {
+                if (centerableItem.isLyrics) {
+                    lyricsShape.add(centerableItem.shape);
+                }
+            }
+
+            std::vector<CenterableItem> block;
+            for (const CenterableItem& centerableItem : items) {
+                if (centerableItem.isLyrics || shapesStackVertically(centerableItem.shape, lyricsShape, minHorizontalClearance)) {
+                    block.push_back(centerableItem);
+                } else {
+                    centerItemsBetweenStaves({ centerableItem }, staffIdx, above, system, centeredItems, minHorizontalClearance);
+                }
+            }
+
+            if (!block.empty()) {
+                centerItemsBetweenStaves(block, staffIdx, above, system, centeredItems, minHorizontalClearance);
+            }
+        }
+    }
+
+    AlignmentLayout::alignStaffCenteredItems(centeredItems, system);
+}
+
+void SystemLayout::collectCenterableItems(const System* system, std::vector<CenterableItems>& itemsByStaff,
+                                          std::vector<MMRest*>& mmRestsToCenter)
+{
+    const double systemX = system->pageX();
+
+    auto addItem = [&](EngravingItem* item, Shape shape, bool above, bool isLyrics) {
+        staff_idx_t staffIdx = item->staffIdx();
+        const SysStaff* sysStaff = staffIdx < itemsByStaff.size() ? system->staff(staffIdx) : nullptr;
+        if (!sysStaff || !sysStaff->show()) {
+            return;
+        }
+        shape.remove_if([](ShapeElement& shapeEl) { return shapeEl.ignoreForLayout(); });
+        CenterableItems& bucket = itemsByStaff[staffIdx];
+        (above ? bucket.above : bucket.below).push_back(CenterableItem { item, std::move(shape), isLyrics });
+    };
 
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
-        if (spannerSeg->isHairpinSegment() && elementShouldBeCenteredBetweenStaves(spannerSeg, system)) {
-            centerElementBetweenStaves(spannerSeg, system);
-            centeredItems.push_back(spannerSeg);
-        } else if (spannerSeg->isWhammyBarSegment() && whammyBarShouldBeCenteredBetweenStaves(toWhammyBarSegment(spannerSeg), system)) {
-            centerElementBetweenStaves(spannerSeg, system);
-            centeredItems.push_back(spannerSeg);
+        if ((spannerSeg->isHairpinSegment() && elementShouldBeCenteredBetweenStaves(spannerSeg, system, spannerSeg->placeAbove()))
+            || (spannerSeg->isWhammyBarSegment() && whammyBarShouldBeCenteredBetweenStaves(toWhammyBarSegment(spannerSeg), system))) {
+            addItem(spannerSeg, spannerSeg->shape().translate(spannerSeg->pos()), spannerSeg->placeAbove(), false);
+        } else if (spannerSeg->isLyricsLineSegment()) {
+            bool above = toLyricsLineSegment(spannerSeg)->lyricsPlaceAbove();
+            if (elementShouldBeCenteredBetweenStaves(spannerSeg, system, above)) {
+                addItem(spannerSeg, spannerSeg->shape().translate(spannerSeg->pos()), above, true);
+            }
         }
     }
 
@@ -2591,21 +2659,54 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
             continue;
         }
         for (const Segment& seg : toMeasure(mb)->segments()) {
-            for (EngravingItem* item : seg.elist()) {
-                if (item && item->isMMRest() && mmRestShouldBeCenteredBetweenStaves(toMMRest(item), system)) {
-                    centerMMRestBetweenStaves(toMMRest(item), system);
+            if (seg.isChordRestType()) {
+                for (EngravingItem* item : seg.elist()) {
+                    if (!item) {
+                        continue;
+                    }
+                    if (item->isMMRest()) {
+                        if (mmRestShouldBeCenteredBetweenStaves(toMMRest(item), system)) {
+                            mmRestsToCenter.push_back(toMMRest(item));
+                        }
+                    } else if (item->isChordRest()) {
+                        for (Lyrics* lyrics : toChordRest(item)->lyrics()) {
+                            bool above = lyrics->placeAbove();
+                            if (!elementShouldBeCenteredBetweenStaves(lyrics, system, above)) {
+                                continue;
+                            }
+                            addItem(lyrics, lyrics->shape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff())),
+                                    above, true);
+                        }
+                    }
                 }
             }
             for (EngravingItem* item : seg.annotations()) {
-                if ((item->isDynamic() || item->isExpression()) && elementShouldBeCenteredBetweenStaves(item, system)) {
-                    centerElementBetweenStaves(item, system);
-                    centeredItems.push_back(item);
+                if ((item->isDynamic() || item->isExpression()) && elementShouldBeCenteredBetweenStaves(item, system, item->placeAbove())) {
+                    addItem(item, item->ldata()->shape().translated(PointF(item->pageX() - systemX, item->y())),
+                            item->placeAbove(), false);
                 }
             }
         }
     }
+}
 
-    AlignmentLayout::alignStaffCenteredItems(centeredItems, system);
+bool SystemLayout::shapesStackVertically(const Shape& shape1, const Shape& shape2, double minHorizontalClearance)
+{
+    for (const ShapeElement& shapeEl1 : shape1.elements()) {
+        if (shapeEl1.height() <= 0.0) {
+            continue;
+        }
+        for (const ShapeElement& shapeEl2 : shape2.elements()) {
+            if (shapeEl2.height() <= 0.0) {
+                continue;
+            }
+            if (intersects(shapeEl1.left(), shapeEl1.right(), shapeEl2.left(), shapeEl2.right(), minHorizontalClearance)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
@@ -2652,7 +2753,7 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
     }
 }
 
-bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system)
+bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system, bool placeAbove)
 {
     if (item->offset().y() != item->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
         // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
@@ -2664,39 +2765,35 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         return false;
     }
 
-    bool centerStyle = item->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
-    AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
-    if (itemPart->nstaves() <= 1 || centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
-        return false;
-    }
-
-    if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
-        return false;
-    }
-
     const Staff* thisStaff = item->staff();
-    const std::vector<Staff*>& partStaves = itemPart->staves();
-    IF_ASSERT_FAILED(partStaves.size() > 0) {
-        return false;
-    }
-
-    if ((thisStaff == partStaves.front() && item->placeAbove()) || (thisStaff == partStaves.back() && item->placeBelow())) {
-        return false;
-    }
-
     staff_idx_t thisIdx = thisStaff->idx();
-    if (item->placeAbove()) {
-        IF_ASSERT_FAILED(thisIdx > 0) {
+    staff_idx_t nextIdx = placeAbove ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
+    if (nextIdx == muse::nidx) {
+        return false;
+    }
+
+    if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
+        bool centerStyle = item->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
+        AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
+        if (centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
+            return false;
+        }
+        if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
+            return false;
+        }
+        if (!(centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument())) {
             return false;
         }
     }
 
-    staff_idx_t nextIdx = item->placeAbove() ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
-    if (nextIdx == muse::nidx || !muse::contains(partStaves, item->score()->staff(nextIdx))) {
-        return false;
+    const Staff* nextStaff = item->score()->staff(nextIdx);
+    if (nextStaff->part() == itemPart) {
+        return true;
     }
 
-    return centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument();
+    // If the staves are not of the same part, only allow centering if they are both vocal parts:
+    return itemPart->instrument(item->tick())->isVocalInstrument()
+           && nextStaff->part()->instrument(item->tick())->isVocalInstrument();
 }
 
 bool SystemLayout::mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system)
@@ -2758,68 +2855,104 @@ bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element,
     return false;
 }
 
-void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const System* system)
+void SystemLayout::centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above,
+                                            const System* system, std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance)
 {
-    bool isAbove = element->placeAbove();
-    staff_idx_t thisIdx = element->staffIdx();
-    if (isAbove) {
-        IF_ASSERT_FAILED(thisIdx > 0) {
-            return;
-        }
-    }
-    staff_idx_t nextIdx = isAbove ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
-    IF_ASSERT_FAILED(nextIdx != muse::nidx) {
-        return;
-    }
-
-    SysStaff* thisStaff = system->staff(thisIdx);
-    SysStaff* nextStaff = system->staff(nextIdx);
-
+    staff_idx_t nextStaffIdx = above ? system->prevVisibleStaff(staffIdx) : system->nextVisibleStaff(staffIdx);
+    SysStaff* thisStaff = system->staff(staffIdx);
+    SysStaff* nextStaff = system->staff(nextStaffIdx);
     IF_ASSERT_FAILED(thisStaff && nextStaff) {
         return;
     }
 
-    double elementXinSystemCoord = element->pageX() - system->pageX();
-    const double minHorizontalClearance = system->style().styleAbsolute(Sid::skylineMinHorizontalClearance);
+    SkylineLine& skylineOfThisStaff = above ? thisStaff->skyline().north() : thisStaff->skyline().south();
 
-    Shape elementShape = element->ldata()->shape()
-                         .translated(PointF(elementXinSystemCoord, element->y()))
-                         .adjust(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
-    elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
+    auto skylineOfThisStaffFor = [&skylineOfThisStaff](const EngravingItem* item, const std::unordered_set<const EngravingItem*>& ignore) {
+        return skylineOfThisStaff.getFilteredCopy([item, &ignore](const ShapeElement& shapeEl) {
+            const EngravingItem* shapeItem = shapeEl.item();
+            return shapeItem && (shapeItem->isAccidental()
+                                 || Autoplace::itemsShouldIgnoreEachOther(item, shapeItem)
+                                 || muse::contains(ignore, shapeItem)
+                                 || muse::contains(ignore, const_cast<const EngravingItem*>(shapeItem->ownershipParentItem())));
+        });
+    };
 
-    const SkylineLine& skylineOfThisStaff = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
+    auto shapeOf = [minHorizontalClearance](const CenterableItem& centerableItem) {
+        Shape shape = centerableItem.shape;
+        shape.adjust(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
+        return shape;
+    };
 
-    if (elementHasAnotherStackedOutside(element, elementShape, skylineOfThisStaff)) {
+    double yStaffDiff = nextStaff->y() - thisStaff->y();
+    SkylineLine nextSkyline = above ? nextStaff->skyline().south() : nextStaff->skyline().north();
+    nextSkyline.translateY(yStaffDiff);
+
+    double blockSpaceAbove = DBL_MAX;
+    double blockSpaceBelow = DBL_MAX;
+
+    std::unordered_set<const EngravingItem*> blockItems;
+    for (const CenterableItem& centerableItem : block) {
+        blockItems.insert(centerableItem.item);
+    }
+
+    // Measure how far the block can move as one rigid unit
+    for (const CenterableItem& centerableItem : block) {
+        Shape itemShape = shapeOf(centerableItem);
+        if (itemShape.empty()) {
+            continue;
+        }
+
+        /* Filter out the blockItems from the skyline: the other members move with this
+         * item, so they must not constrain it. */
+        SkylineLine thisSkyline = skylineOfThisStaffFor(centerableItem.item, blockItems);
+
+        // An item with something not belonging to the block stacked outside it has no gap to be centered in:
+        if (elementHasAnotherStackedOutside(centerableItem.item, itemShape, thisSkyline)) {
+            // If one item of the block cannot be centered, then none can:
+            return;
+        }
+
+        double minDist = centerableItem.item->absoluteFromSpatium(centerableItem.item->minDistance());
+        blockSpaceAbove = std::min(blockSpaceAbove,
+                                   (above ? nextSkyline : thisSkyline).verticalClearanceBelow(itemShape) - minDist);
+        blockSpaceBelow = std::min(blockSpaceBelow,
+                                   (above ? thisSkyline : nextSkyline).verticalClearanceAbove(itemShape) - minDist);
+    }
+
+    if (blockSpaceAbove == DBL_MAX || blockSpaceBelow == DBL_MAX) {
         return;
     }
 
-    SkylineLine thisSkyline = skylineOfThisStaff.getFilteredCopy([element](const ShapeElement& shEl) {
-        const EngravingItem* shapeItem = shEl.item();
-        if (!shapeItem) {
-            return false;
+    double yMove = 0.5 * (blockSpaceBelow - blockSpaceAbove);
+
+    // Move the items
+    for (const CenterableItem& centerableItem : block) {
+        centerableItem.item->mutldata()->moveY(yMove);
+        updateSkylineForElement(centerableItem.item, system, yMove);
+        centeredItems.push_back(centerableItem.item);
+    }
+
+    // Update staffCenteringInfo
+    for (const CenterableItem& centerableItem : block) {
+        EngravingItem* item = centerableItem.item;
+        Shape itemShape = shapeOf(centerableItem);
+        if (itemShape.empty()) {
+            continue;
         }
-        return shapeItem->isAccidental() || Autoplace::itemsShouldIgnoreEachOther(element, shapeItem);
-    });
+        itemShape.translate(PointF(0.0, yMove));
 
-    double yStaffDiff = nextStaff->y() - thisStaff->y();
-    SkylineLine nextSkyline = isAbove ? nextStaff->skyline().south() : nextStaff->skyline().north();
-    nextSkyline.translateY(yStaffDiff);
+        /* Re-compute with new positions after updating skyline. staffCenteringInfo records
+         * how much each item may still move on its own (not as part of the block), which is
+         * what AlignmentLayout::alignStaffCenteredItems uses. So here the other block members
+         * are allowed to constrain the item's skyline: */
+        SkylineLine thisSkyline = skylineOfThisStaffFor(item, {});
 
-    double elementMinDist = element->absoluteFromSpatium(element->minDistance());
-    double availSpaceAbove = (isAbove ? nextSkyline.verticalClaranceBelow(elementShape) : thisSkyline.verticalClaranceBelow(elementShape))
-                             - elementMinDist;
-    double availSpaceBelow = (isAbove ? thisSkyline.verticalClearanceAbove(elementShape) : nextSkyline.verticalClearanceAbove(elementShape))
-                             - elementMinDist;
+        double minDist = item->absoluteFromSpatium(item->minDistance());
+        double availSpaceAbove = (above ? nextSkyline : thisSkyline).verticalClearanceBelow(itemShape) - minDist;
+        double availSpaceBelow = (above ? thisSkyline : nextSkyline).verticalClearanceAbove(itemShape) - minDist;
 
-    double yMove = 0.5 * (availSpaceBelow - availSpaceAbove);
-
-    element->mutldata()->moveY(yMove);
-
-    availSpaceAbove += yMove;
-    availSpaceBelow -= yMove;
-    element->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
-
-    updateSkylineForElement(element, system, yMove);
+        item->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
+    }
 }
 
 void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* system)
