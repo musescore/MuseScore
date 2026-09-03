@@ -58,4 +58,25 @@ public:
 private:
     std::shared_ptr<muse::draw::Pixmap> createThumbnail(Score* score);
 };
+
+/* Multimeasure rest layout information is only generated for visible parts, so before
+ * serializing we must unhide every hidden part and relayout, then rollback the change
+ * once everything has been written. This RAII wrapper does that, then rolls back
+ * on destruction. Must be created and destroyed on the thread that owns the score
+ * because mutating and re-laying out a score is not thread safe, so it cannot happen
+ * while the excerpts are being serialised in parallel.
+ */
+class UnhidePartsForWrite
+{
+public:
+    UnhidePartsForWrite(Score* score);
+    UnhidePartsForWrite(const UnhidePartsForWrite&) = delete;
+    UnhidePartsForWrite& operator=(const UnhidePartsForWrite&) = delete;
+    ~UnhidePartsForWrite();
+
+    void rollback();
+
+private:
+    Score* m_score = nullptr;
+};
 }
