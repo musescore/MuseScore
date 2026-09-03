@@ -127,9 +127,17 @@ public:
     struct PitchStruct {
         int pitch = 0;
         int tpc2 = 0;
+        // Sounding displacement, in cents, relative to the integer MIDI pitch.
+        // This value is invariant under transposition.
+        double centOffset = 0.0;
         engraving::AccidentalType accidType = engraving::AccidentalType::NONE;
         engraving::AccidentalBracket accidBracket = engraving::AccidentalBracket::NONE;
         engraving::AccidentalRole accidRole = engraving::AccidentalRole::AUTO;
+    };
+
+    struct AccidentalSemantics {
+        int semitoneOffset = 0;
+        double centOffset = 0.0;
     };
 
     /**
@@ -150,8 +158,8 @@ public:
     static engraving::AccidentalType accidFromMEI(const libmei::data_ACCIDENTAL_WRITTEN meiAccid, bool& warning);
     static libmei::data_ACCIDENTAL_WRITTEN accidToMEI(const engraving::AccidentalType accid);
 
-    static engraving::AccidentalVal accidGesFromMEI(const libmei::data_ACCIDENTAL_GESTURAL meiAccid, bool& warning);
-    static libmei::data_ACCIDENTAL_GESTURAL accidGesToMEI(const engraving::AccidentalVal accid);
+    static AccidentalSemantics accidGesFromMEI(const libmei::data_ACCIDENTAL_GESTURAL meiAccid, bool& warning);
+    static libmei::data_ACCIDENTAL_GESTURAL accidGesToMEI(const AccidentalSemantics& accid, bool& warning);
 
     static engraving::ArticulationAnchor anchorFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
     static libmei::data_STAFFREL anchorToMEI(engraving::ArticulationAnchor anchor);
