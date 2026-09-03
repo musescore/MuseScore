@@ -168,6 +168,8 @@ void EditDuration::extendToNextNote(Transaction& tx, Score* score)
     Fraction endTick = selection.tickEnd();
     const staff_idx_t startStaff = selection.staffStart();
     const staff_idx_t endStaff = selection.staffEnd();
+    Box* startBox = selection.startBox();
+    Box* endBox = selection.endBox();
 
     std::vector<EngravingItem*> toSelect;
     const bool wasRangeSelection = selection.isRange();
@@ -239,7 +241,7 @@ void EditDuration::extendToNextNote(Transaction& tx, Score* score)
     }
 
     if (wasRangeSelection) {
-        selection.setRangeTicks(startTick, endTick, startStaff, endStaff);
+        selection.setRangeTicks(startTick, endTick, startStaff, endStaff, startBox, endBox);
         selection.updateSelectedElements();
     } else {
         for (EngravingItem* ei : toSelect) {

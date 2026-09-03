@@ -42,6 +42,7 @@ class MeasureBase;
 class Chord;
 class Tuplet;
 class GuitarBend;
+class Box;
 
 //---------------------------------------------------------
 //   ElementPattern
@@ -152,10 +153,19 @@ public:
 
     Segment* startSegment() const { return m_startSegment; }
     Segment* endSegment() const { return m_endSegment; }
-    void setStartSegment(Segment* s) { m_startSegment = s; }
-    void setEndSegment(Segment* s) { m_endSegment = s; }
-    void setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd);
-    void setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd);
+    void setStartSegment(Segment* s);
+    void setEndSegment(Segment* s);
+
+    void setStartBox(Box* box);
+    void setEndBox(Box* box);
+    Box* startBox() const { return m_startBox; }
+    Box* endBox() const { return m_endBox; }
+
+    void setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd, Box* startBox = nullptr,
+                  Box* endBox = nullptr);
+    void setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd, Box* startBox = nullptr,
+                       Box* endBox = nullptr);
+
     Segment* activeSegment() const { return m_activeSegment; }
     void setActiveSegment(Segment* s) { m_activeSegment = s; }
     ChordRest* activeCR() const;
@@ -172,9 +182,10 @@ public:
     void setActiveTrack(track_idx_t v) { m_activeTrack = v; }
     bool canCopy() const;
     void updateSelectedElements();
-    bool measureRange(Measure** m1, Measure** m2) const;
+    bool measureBaseRange(MeasureBase** mb1, MeasureBase** mb2) const;
     void extendRangeSelection(ChordRest* cr);
-    void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick);
+    void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick,
+                              Box* box = nullptr);
     bool rangeContainsMultiNoteChords() const;
 
 private:
@@ -193,14 +204,20 @@ private:
     ChordRest* firstChordRestInRange(track_idx_t preferredTrack = muse::nidx) const;
     ChordRest* lastChordRestInRange(track_idx_t preferredTrack = muse::nidx) const;
 
+    void validateBoxesAndSegments(); // Checks that the Boxes/segments match (asserts and clears the Box if not)
+
     Score* m_score = nullptr;
     SelState m_state = SelState::NONE;
     std::vector<EngravingItem*> m_el;            // valid in mode SelState::LIST
 
     staff_idx_t m_staffStart = 0;            // valid if selState is SelState::RANGE
     staff_idx_t m_staffEnd = 0;
+
     Segment* m_startSegment = nullptr;
     Segment* m_endSegment = nullptr; // next segment after selection
+
+    Box* m_startBox = nullptr;
+    Box* m_endBox = nullptr; // the last Box included in the selection
 
     Fraction m_plannedTick1 { -1, 1 };   // Will be actually selected on updateSelectedElements() call.
     Fraction m_plannedTick2 { -1, 1 };   // Used by setRangeTicks() to restore proper selection after

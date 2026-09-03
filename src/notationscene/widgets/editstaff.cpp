@@ -527,11 +527,11 @@ void EditStaff::initStaff()
     Staff* staff = context.staff;
 
     if (interaction && !element) {
-        INotationSelectionPtr selection = interaction->selection();
+        const INotationSelectionPtr selection = interaction->selection();
         if (selection->isRange()) {
-            INotationSelectionRangePtr range = selection->range();
-            element = range->measureRange().endMeasure;
-            staff = element->score()->staff(range->endStaffIndex() - 1);
+            const INotationSelectionRangePtr range = selection->range();
+            element = range->measureBaseRange().endMeasureBase;
+            staff = element ? element->score()->staff(range->endStaffIndex() - 1) : nullptr;
         }
     }
 
@@ -544,8 +544,8 @@ void EditStaff::initStaff()
         tick = mu::engraving::toChordRest(element)->tick();
     } else if (element->isNote()) {
         tick = mu::engraving::toNote(element)->chord()->tick();
-    } else if (element->isMeasure()) {
-        tick = mu::engraving::toMeasure(element)->tick();
+    } else if (element->isMeasureBase()) {
+        tick = mu::engraving::toMeasureBase(element)->tick();
     } else if (element->isInstrumentName()) {
         const mu::engraving::System* system = mu::engraving::toSystem(mu::engraving::toInstrumentName(element)->ownershipParent());
         const Measure* measure = system ? system->firstMeasure() : nullptr;
