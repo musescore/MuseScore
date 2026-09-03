@@ -5251,8 +5251,11 @@ void NotationInteraction::mirrorNotes()
 
 void NotationInteraction::toggleTieForSelection()
 {
-    // Calls `startEdit` internally
+    startEdit(TranslatableString("undoableAction", "Toggle tie"));
+
     Tie* newTie = mu::engraving::EditTie::cmdToggleTie(score());
+
+    apply();
 
     notifyAboutNotationChanged();
     m_selection->selectionChanged().notify();
@@ -5264,8 +5267,11 @@ void NotationInteraction::toggleTieForSelection()
 
 void NotationInteraction::addLaissezVibToSelection()
 {
-    // Calls `startEdit` internally
+    startEdit(TranslatableString("undoableAction", "Toggle laissez-vibrer"));
+
     mu::engraving::EditTie::cmdToggleLaissezVib(score());
+
+    apply();
 
     notifyAboutNotationChanged();
     m_selection->selectionChanged().notify();
