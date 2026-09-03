@@ -519,7 +519,10 @@ void ConvertFileToScoreModel::confirmCancel()
     constexpr int yesBtn = int(IInteractive::Button::Yes);
 
     IInteractive::ButtonData stay(noBtn, muse::trc("project/convert", "No, stay here"));
+    stay.role = IInteractive::ButtonRole::RejectRole;
+
     IInteractive::ButtonData cancel(yesBtn, muse::trc("project/convert", "Yes, cancel"), /*accent*/ true);
+    cancel.role = IInteractive::ButtonRole::AcceptRole;
 
     interactive()->question(
         muse::trc("project/convert", "Are you sure you want to cancel?"),
@@ -538,7 +541,10 @@ void ConvertFileToScoreModel::confirmGoingBack()
     constexpr int yesBtn = int(IInteractive::Button::Yes);
 
     IInteractive::ButtonData stay(noBtn, muse::trc("project/convert", "No, stay here"));
+    stay.role = IInteractive::ButtonRole::RejectRole;
+
     IInteractive::ButtonData goBack(yesBtn, muse::trc("project/convert", "Yes, go back"), /*accent*/ true);
+    goBack.role = IInteractive::ButtonRole::AcceptRole;
 
     interactive()->question(
         muse::trc("project/convert", "Are you sure you want to go back?"),

@@ -212,7 +212,10 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
     constexpr int proceedBtn = int(IInteractive::Button::CustomButton) + 1;
 
     IInteractive::ButtonData cancel = interactive()->buttonData(IInteractive::Button::Cancel);
+    cancel.role = IInteractive::ButtonRole::RejectRole;
+
     IInteractive::ButtonData proceed(proceedBtn, muse::trc("global", "Proceed"), /*accent*/ true);
+    proceed.role = IInteractive::ButtonRole::AcceptRole;
 
     interactive()->question(muse::trc("project/convert", "Would you like to convert this file to a score?"),
                             muse::trc("project/convert",
@@ -358,10 +361,10 @@ void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
 
 void ConvertFileToScoreScenario::showFileProcessingDialog()
 {
-    constexpr int uploadMoreBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int convertMoreBtn = int(IInteractive::Button::CustomButton) + 1;
     constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
 
-    IInteractive::ButtonData uploadMore(uploadMoreBtn, muse::trc("project/convert", "Upload more"));
+    IInteractive::ButtonData convertMore(convertMoreBtn, muse::trc("project/convert", "Convert more"));
     IInteractive::ButtonData goToScores(goToScoresBtn, muse::trc("project/convert", "Go to scores"));
     IInteractive::ButtonData ok = interactive()->buttonData(IInteractive::Button::Ok);
 
@@ -370,12 +373,12 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
                                 "You can check the status of the score in Home > Scores.");
 
     interactive()->info(muse::trc("project/convert", "Your score is being processed"), msg,
-                        { uploadMore, goToScores, ok }, static_cast<int>(IInteractive::Button::Ok),
+                        { convertMore, goToScores, ok }, static_cast<int>(IInteractive::Button::Ok),
                         IInteractive::Option::WithDontShowAgainCheckBox)
-    .onResolve(this, [this, uploadMoreBtn, goToScoresBtn](const IInteractive::Result& result) {
+    .onResolve(this, [this, convertMoreBtn, goToScoresBtn](const IInteractive::Result& result) {
         configuration()->setShowConvertFileProcessingDialog(result.showAgain());
 
-        if (result.isButton(uploadMoreBtn)) {
+        if (result.isButton(convertMoreBtn)) {
             checkConvertIsAllowed()
             .onResolve(this, [this](const Ret& ret) {
                 if (!ret) {
@@ -388,7 +391,7 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
                 });
             });
         } else if (result.isButton(goToScoresBtn)) {
-            interactive()->openUrl(museScoreComService()->scoreManagerUrl());
+            interactive()->open("musescore://home?section=scores");
         }
     });
 }
@@ -399,7 +402,10 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
     IInteractive::ButtonData openScore(openScoreBtn, muse::trc("project/convert", "Open score"), /*accent*/ true);
+    openScore.role = IInteractive::ButtonRole::AcceptRole;
+
     IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+    dismiss.role = IInteractive::ButtonRole::RejectRole;
 
     QString scoreName = QFileInfo(path.toQString()).completeBaseName();
     std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
@@ -421,7 +427,10 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
     IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+    dismiss.role = IInteractive::ButtonRole::RejectRole;
+
     IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("project/convert", "Try again"), /*accent*/ true);
+    tryAgain.role = IInteractive::ButtonRole::AcceptRole;
 
     QString fileName = ret.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString());
     std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")

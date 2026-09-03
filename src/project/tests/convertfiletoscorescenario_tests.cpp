@@ -933,7 +933,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_ShowsProcessingDialo
     ON_CALL(*m_service, startConvert(_, _))
     .WillByDefault(Return(make_ok()));
 
-    constexpr int uploadMoreBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int convertMoreBtn = int(IInteractive::Button::CustomButton) + 1;
     constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
 
     const std::string title = muse::trc("project/convert", "Your score is being processed");
@@ -943,7 +943,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_ShowsProcessingDialo
 
     // [THEN] The processing dialog is shown
     EXPECT_CALL(*m_interactive,
-                info(title, TextIs(text), ButtonIdsAre({ uploadMoreBtn, goToScoresBtn, int(IInteractive::Button::Ok) }),
+                info(title, TextIs(text), ButtonIdsAre({ convertMoreBtn, goToScoresBtn, int(IInteractive::Button::Ok) }),
                      int(IInteractive::Button::Ok), IInteractive::Options(IInteractive::Option::WithDontShowAgainCheckBox),
                      std::string()))
     .Times(1)
@@ -957,6 +957,36 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_ShowsProcessingDialo
 
     // [THEN] It delegates to the service and succeeds
     EXPECT_TRUE(ret);
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_GoToScores_OpensHomeScoresPage)
+{
+    // [GIVEN] The processing dialog is enabled in the config
+    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
+    .WillByDefault(Return(true));
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    // [GIVEN] The user clicks "Go to scores" in the processing dialog
+    ON_CALL(*m_interactive, info(_, _, _, _, _, _))
+    .WillByDefault(Invoke([goToScoresBtn](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(goToScoresBtn));
+    }));
+
+    // [THEN] The app navigates to Home > Scores page
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://home?section=scores")))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedValPromise();
+    }));
+
+    // [WHEN] Starting the conversion
+    const OmrConvertInput input { io::paths_t { "/some/file.xyz" } };
+    m_scenario->startConvert(input, "file");
+
+    pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_NoProcessingDialog_WhenDisabled)

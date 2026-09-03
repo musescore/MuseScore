@@ -127,7 +127,7 @@ int FileListModel::fileIconCode() const
     case FileCategory::Image:
         return int(IconCode::Code::IMAGE_MOUNTAINS);
     case FileCategory::Audio:
-        return int(IconCode::Code::AUDIO);
+        return int(IconCode::Code::MUSIC_NOTES);
     case FileCategory::Unknown:
     case FileCategory::Pdf:
         break;
