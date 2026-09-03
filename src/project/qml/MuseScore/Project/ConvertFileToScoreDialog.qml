@@ -43,6 +43,10 @@ StyledDialogView {
 
     background.color: ui.theme.backgroundPrimaryColor
 
+    //! NOTE: paths pre-selected outside the dialog, e.g. via drag-and-drop onto the app window
+    property var initialPaths: []
+    property int initialConvertType: 0
+
     property int currentPageIndex: 0
     property bool skipCloseConfirmation: false
 
@@ -57,6 +61,14 @@ StyledDialogView {
         onGoingBackConfirmed: {
             root.currentPageIndex = 0
             convertModel.clearSelection()
+        }
+    }
+
+    Component.onCompleted: {
+        convertModel.load(root.initialPaths, root.initialConvertType)
+
+        if (root.initialPaths.length > 0) {
+            root.currentPageIndex = 1
         }
     }
 

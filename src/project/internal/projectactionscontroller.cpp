@@ -1862,22 +1862,8 @@ void ProjectActionsController::importAudioToScore()
 
 void ProjectActionsController::convertFileToScore(const ActionData& args)
 {
-    if (!args.empty()) {
-        convertFileToScoreScenario()->convertFiles(args.arg<muse::io::paths_t>(0));
-        return;
-    }
-
-    convertFileToScoreScenario()->checkConvertIsAllowed()
-    .onResolve(this, [this](const Ret& ret) {
-        if (!ret) {
-            return;
-        }
-
-        convertFileToScoreScenario()->selectFilesToConvert()
-        .onResolve(this, [this](const ConvertSelection& selection) {
-            convertFileToScoreScenario()->startConvert(selection.input, selection.convertedFileName);
-        });
-    });
+    muse::io::paths_t paths = args.empty() ? muse::io::paths_t() : args.arg<muse::io::paths_t>(0);
+    convertFileToScoreScenario()->convertFiles(paths);
 }
 
 void ProjectActionsController::clearRecentScores()

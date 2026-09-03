@@ -389,6 +389,13 @@ int ConvertFileToScoreModel::maxLinkLength() const
     return convertFileToScoreScenario()->config().audio2score.link.maxLength;
 }
 
+void ConvertFileToScoreModel::load(const QStringList& paths, int type)
+{
+    setSelectedLink(QString());
+    setSelectedPaths(paths);
+    setConvertType(type);
+}
+
 QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPaths)
 {
     const ConvertConfig& config = convertFileToScoreScenario()->config();

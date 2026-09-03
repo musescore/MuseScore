@@ -49,23 +49,23 @@ public:
     void init();
 
     const ConvertConfig& config() const override;
-    muse::async::Promise<muse::Ret> checkConvertIsAllowed() override;
-
-    muse::async::Promise<ConvertSelection> selectFilesToConvert() override;
 
     bool isFileSupported(const muse::io::path_t& path) const override;
     muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) override;
     muse::Ret validateLink(const QUrl& link) override;
 
-    void convertFiles(const muse::io::paths_t& paths) override;
-
-    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
+    void convertFiles(const muse::io::paths_t& paths = {}) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
 private:
+    muse::async::Promise<muse::Ret> checkConvertIsAllowed();
     muse::async::Promise<muse::Ret> ensureAuthorization();
 
+    muse::async::Promise<ConvertSelection> selectFilesToConvert(const muse::io::paths_t& paths = {}, ConvertType type = ConvertType::Omr);
+
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
+
+    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName);
 
     void showValidationError(const muse::Ret& ret);
 
