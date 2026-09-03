@@ -116,6 +116,8 @@ void AddElement::undo()
         score->removeElement(element);
     }
 
+    EngravingItem::disconnectAllOriginItems(element);
+
     endUndoRedo(true);
 }
 
@@ -285,6 +287,8 @@ void RemoveElement::redo()
     } else if (element->isKeySig()) {
         score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
     }
+
+    EngravingItem::disconnectAllOriginItems(element);
 }
 
 const char* RemoveElement::name() const
