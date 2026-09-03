@@ -58,6 +58,12 @@ ChordLine::ChordLine(const ChordLine& cl)
     m_lengthX = cl.m_lengthX;
     m_lengthY = cl.m_lengthY;
     m_note = cl.m_note;
+
+    /* The manually edited shape is "given" data which happens to live in the layout
+     * data, and EngravingItem's copy constructor doesn't copy that. Without this, an edited
+     * chordline is invisible in newly created parts: m_modified is true, so the layout won't
+     * regenerate the path, but the path itself is empty. */
+    mutldata()->path = cl.ldata()->path;
 }
 
 //---------------------------------------------------------
@@ -317,6 +323,7 @@ bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
     switch (propertyId) {
     case Pid::PATH:
         mutldata()->path = val.value<PainterPath>();
+        setModified(true);
         break;
     case Pid::CHORD_LINE_TYPE:
         setChordLineType(ChordLineType(val.toInt()));
