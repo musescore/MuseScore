@@ -240,11 +240,12 @@ void RepeatList::updateTempo()
     for (RepeatSegment* s : *this) {
         s->utick      = utick;
         s->utime      = t;
-        double ct      = tl->tick2time(s->tick);
+        double ct     = tl->tick2time(s->tick);
         s->timeOffset = t - ct;
         int len       = s->len();
         utick        += len;
         t            += tl->tick2time(s->tick + len) - ct;
+        t            += s->pause;
     }
 }
 
