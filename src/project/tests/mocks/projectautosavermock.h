@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,16 +22,18 @@
 
 #pragma once
 
-#include "modularity/imoduleinterface.h"
+#include <gmock/gmock.h>
+
+#include "project/iprojectautosaver.h"
 
 namespace mu::project {
-class IProjectFilesController : MODULE_CONTEXT_INTERFACE
+class ProjectAutoSaverMock : public IProjectAutoSaver
 {
-    INTERFACE_ID(IProjectFilesController)
-
 public:
-    virtual ~IProjectFilesController() = default;
-
-    virtual bool closeOpenedProject(bool goToHome = true) = 0;
+    MOCK_METHOD(bool, projectHasUnsavedChanges, (const muse::io::path_t& projectPath), (const, override));
+    MOCK_METHOD(void, removeProjectUnsavedChanges, (const muse::io::path_t& projectPath), (override));
+    MOCK_METHOD(bool, isAutosaveOfNewlyCreatedProject, (const muse::io::path_t& projectPath), (const, override));
+    MOCK_METHOD(muse::io::path_t, projectOriginalPath, (const muse::io::path_t& projectAutoSavePath), (const, override));
+    MOCK_METHOD(muse::io::path_t, projectAutoSavePath, (const muse::io::path_t& projectPath), (const, override));
 };
 }

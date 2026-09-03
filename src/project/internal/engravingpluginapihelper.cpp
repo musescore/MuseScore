@@ -57,7 +57,7 @@ Score* EngravingPluginAPIHelper::readScore(const QString& name)
 {
     const muse::io::path_t path(name);
     const ProjectFile file(path);
-    const Ret ret = projectFilesController()->openProject(file);
+    const Ret ret = openProjectScenario()->openProject(file);
 
     if (ret.success() && globalContext()->currentNotation()) {
         return globalContext()->currentNotation()->elements()->msScore();

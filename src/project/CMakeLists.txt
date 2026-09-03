@@ -81,9 +81,12 @@ target_sources(project PRIVATE
     internal/exporttype.h
     internal/exportprojectscenario.cpp
     internal/exportprojectscenario.h
-    internal/iopensaveprojectscenario.h
-    internal/opensaveprojectscenario.cpp
-    internal/opensaveprojectscenario.h
+    iopenprojectscenario.h
+    isaveprojectscenario.h
+    internal/openprojectscenario.cpp
+    internal/openprojectscenario.h
+    internal/saveprojectscenario.cpp
+    internal/saveprojectscenario.h
     internal/recentfilescontroller.cpp
     internal/recentfilescontroller.h
     internal/mscmetareader.cpp

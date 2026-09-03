@@ -29,6 +29,7 @@
 #include "iprojectfilescontroller.h"
 #include "iexportprojectscenario.h"
 #include "inotationwritersregister.h"
+#include "iopenprojectscenario.h"
 
 namespace mu::project {
 class EngravingPluginAPIHelper : public engraving::IEngravingPluginAPIHelper, public muse::Contextable
@@ -36,6 +37,7 @@ class EngravingPluginAPIHelper : public engraving::IEngravingPluginAPIHelper, pu
     muse::GlobalInject<INotationWritersRegister> writers;
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IProjectFilesController> projectFilesController = { this };
+    muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
 
 public:

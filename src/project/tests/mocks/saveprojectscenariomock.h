@@ -22,29 +22,21 @@
 
 #pragma once
 
-#include "global/modularity/imoduleinterface.h"
-#include "global/async/notification.h"
+#include <gmock/gmock.h>
 
-#include "types/projecttypes.h"
+#include "project/isaveprojectscenario.h"
 
 namespace mu::project {
-class IProjectCommandsController : MODULE_CONTEXT_INTERFACE
+class SaveProjectScenarioMock : public ISaveProjectScenario
 {
-    INTERFACE_ID(IProjectCommandsController)
-
 public:
-    virtual ~IProjectCommandsController() = default;
-
-    virtual bool hasProject() const = 0;
-    virtual muse::async::Notification hasProjectChanged() const = 0;
-
-    virtual bool needSave() const = 0;
-    virtual muse::async::Notification needSaveChanged() const = 0;
-
-    virtual bool isBusy(BusyStatus status) const = 0;
-    virtual muse::async::Notification busyChanged() const = 0;
-
-    virtual bool hasSelection() const = 0;
-    virtual muse::async::Notification hasSelectionChanged() const = 0;
+    MOCK_METHOD(muse::Ret, saveProject, (SaveMode saveMode, SaveLocationType saveLocationType, bool force), (override));
+    MOCK_METHOD(bool, saveProject, (const muse::io::path_t& path), (override));
+    MOCK_METHOD(bool, saveProjectLocally, (const muse::io::path_t& path, SaveMode saveMode, bool createBackup), (override));
+    MOCK_METHOD(muse::Ret, saveProjectAt, (const muse::rcommand::Params& params), (override));
+    MOCK_METHOD(muse::Ret, publish, (), (override));
+    MOCK_METHOD(muse::Ret, shareAudio, (), (override));
+    MOCK_METHOD(bool, isBusy, (BusyStatus status), (const, override));
+    MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
 };
 }
