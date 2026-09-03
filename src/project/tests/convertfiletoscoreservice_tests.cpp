@@ -29,6 +29,7 @@
 #include "project/projecterrors.h"
 
 #include "cloud/clouderrors.h"
+#include "network/networkerrors.h"
 
 #include "global/async/processevents.h"
 #include "global/modularity/ioc.h"
@@ -160,6 +161,23 @@ protected:
                                    : ConvertInput(Audio2ScoreConvertInput { paths });
 
         m_service->startConvert(input, convertedFileName);
+
+        uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(queueId) } })));
+        pumpEvents();
+    }
+
+    //! NOTE: uploads the given file and resolves with queueId, triggering a fresh poll
+    //! (watch() always re-polls all watched items) without touching the fetchQueue mock,
+    //! which the caller owns - lets a test drive N polls without waiting on the real QTimer
+    void uploadAndResolve(int queueId, const QString& convertedFileName, const io::paths_t& paths)
+    {
+        auto uploadProgress = std::make_shared<Progress>();
+        EXPECT_CALL(*m_convertService, upload(Truly([paths](const ConvertInput& input) {
+            return convertPathsOf(input) == paths;
+        })))
+        .WillOnce(Return(uploadProgress));
+
+        m_service->startConvert(OmrConvertInput { paths }, convertedFileName);
 
         uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(queueId) } })));
         pumpEvents();
@@ -754,6 +772,240 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ExpiredDownloadLink_ForwardsF
     ASSERT_TRUE(received);
     EXPECT_FALSE(receivedRet);
     EXPECT_EQ(receivedRet.code(), int(mu::project::Err::DownloadLinkExpired));
+}
+
+// ==================================================
+// retry logic (poll / download failures)
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NonRetryableFetchFailure_FinishesImmediatelyWithError)
+{
+    // [GIVEN] Checking the queue status fails with a permanent (non-retryable) error
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(
+            RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::Status401_AuthorizationRequired)));
+    }));
+
+    bool received = false;
+    Ret receivedRet;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        received = true;
+        receivedRet = ret;
+    });
+
+    // [WHEN] Starting the conversion, triggering the first poll
+    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
+
+    // [THEN] Polling gives up on the first attempt, forwarding the permanent error
+    ASSERT_TRUE(received);
+    EXPECT_FALSE(receivedRet);
+    EXPECT_EQ(receivedRet.code(), int(muse::cloud::Err::Status401_AuthorizationRequired));
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWatchingItemForNextPoll)
+{
+    // [GIVEN] The first status check fails with a transient network error;
+    // the second succeeds, reporting the originally watched item as awaiting review
+    const int otherQueueId = TEST_QUEUE_ID + 1;
+
+    ConvertQueueItem watchedItem;
+    watchedItem.id = TEST_QUEUE_ID;
+    watchedItem.type = ConvertType::Omr;
+    watchedItem.status = ConvertStatus::AwaitingReview;
+
+    ConvertQueueItem otherItem;
+    otherItem.id = otherQueueId;
+    otherItem.type = ConvertType::Omr;
+    otherItem.status = ConvertStatus::Processing;
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .Times(2)
+    .WillOnce(Invoke([] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(
+            RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
+    }))
+    .WillOnce(Invoke([watchedItem, otherItem] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { watchedItem,
+                                                                                                               otherItem }));
+    }));
+
+    ON_CALL(*m_convertService, fetchMsczUrl(_, _))
+    .WillByDefault(Invoke([] {
+        return pendingPromise<RetVal<SignedMsczUrl> >();
+    }));
+
+    bool received = false;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const io::path_t&) {
+        received = true;
+    });
+
+    bool reviewRequested = false;
+    int reviewQueueId = 0;
+    m_service->reviewRequested().onReceive(nullptr, [&](ConvertType, int queueId) {
+        reviewRequested = true;
+        reviewQueueId = queueId;
+    });
+
+    // [WHEN] Starting the first conversion - its poll fails with a retryable error
+    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
+
+    // [THEN] Nothing is finished yet, the item was not dropped from the watch list
+    EXPECT_FALSE(received);
+
+    // [AND WHEN] Starting an unrelated conversion triggers a second poll, batching the original item in again
+    uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
+
+    // [THEN] The originally watched item is processed on the retried poll
+    EXPECT_TRUE(reviewRequested);
+    EXPECT_EQ(reviewQueueId, TEST_QUEUE_ID);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ConsecutiveRetryableFetchFailures_GivesUpAfterMaxAttempts)
+{
+    // [GIVEN] Every status check fails with a transient network error. MAX_CONSECUTIVE_POLL_FAILURES
+    // (see convertfiletoscoreservice.h) is 7, so the 7th attempt should be the last one
+    const int maxAttempts = 7;
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .Times(maxAttempts)
+    .WillRepeatedly(Invoke([] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(
+            RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
+    }));
+
+    bool received = false;
+    Ret receivedRet;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        received = true;
+        receivedRet = ret;
+    });
+
+    // [WHEN] Starting a new conversion re-triggers polling, each attempt failing
+    for (int i = 0; i < maxAttempts; ++i) {
+        uploadAndResolve(TEST_QUEUE_ID + i, QString("Score %1").arg(i),
+                         { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
+
+        if (i < maxAttempts - 1) {
+            EXPECT_FALSE(received);
+        }
+    }
+
+    // [THEN] Polling gives up after the max number of consecutive failures, forwarding the last error
+    ASSERT_TRUE(received);
+    EXPECT_FALSE(receivedRet);
+    EXPECT_EQ(receivedRet.code(), int(muse::cloud::Err::NetworkError));
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_ResetsConsecutiveFailureCount)
+{
+    // [GIVEN] A pattern of failures with an intervening success: 3 failures, then a success, then
+    // 5 more failures - never 6 CONSECUTIVE failures, so polling should never give up
+    ConvertQueueItem processingItem;
+    processingItem.id = TEST_QUEUE_ID;
+    processingItem.type = ConvertType::Omr;
+    processingItem.status = ConvertStatus::Processing;
+
+    auto failure = [] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(
+            RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
+    };
+    auto success = [processingItem] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { processingItem }));
+    };
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .Times(9)
+    .WillOnce(Invoke(failure))
+    .WillOnce(Invoke(failure))
+    .WillOnce(Invoke(failure))
+    .WillOnce(Invoke(success))
+    .WillOnce(Invoke(failure))
+    .WillOnce(Invoke(failure))
+    .WillOnce(Invoke(failure))
+    .WillOnce(Invoke(failure))
+    .WillOnce(Invoke(failure));
+
+    bool received = false;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const io::path_t&) {
+        received = true;
+    });
+
+    // [WHEN] Triggering 9 polls in a row
+    for (int i = 0; i < 9; ++i) {
+        uploadAndResolve(TEST_QUEUE_ID, QString("Score %1").arg(i),
+                         { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
+    }
+
+    // [THEN] Polling never gave up, since no 6 failures happened consecutively
+    EXPECT_FALSE(received);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, DownloadScore_RetryableFailure_RetriesAndSucceedsOnNextPoll)
+{
+    // [GIVEN] The queue reports the conversion as done on both polls, and fetching the download URL always succeeds
+    ConvertQueueItem doneItem;
+    doneItem.id = TEST_QUEUE_ID;
+    doneItem.type = ConvertType::Omr;
+    doneItem.status = ConvertStatus::Done;
+
+    const int otherQueueId = TEST_QUEUE_ID + 1;
+    ConvertQueueItem otherItem;
+    otherItem.id = otherQueueId;
+    otherItem.type = ConvertType::Omr;
+    otherItem.status = ConvertStatus::Processing;
+
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([doneItem, otherItem] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { doneItem, otherItem }));
+    }));
+
+    SignedMsczUrl url;
+    url.id = TEST_QUEUE_ID;
+    url.type = ConvertType::Omr;
+    url.url = QUrl("https://link.xyz/score.mscz");
+    url.expiresInSeconds = 60;
+    ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillByDefault(Invoke([url] {
+        return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
+    }));
+
+    // [AND GIVEN] The actual download fails with a transient error the first time, succeeds the second
+    auto failingDownload = std::make_shared<Progress>();
+    auto succeedingDownload = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, downloadConvertedScore(_, _))
+    .Times(2)
+    .WillOnce(Return(failingDownload))
+    .WillOnce(Return(succeedingDownload));
+
+    ON_CALL(*m_fileSystem, makePath(_))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_fileSystem, writeFile(_, _))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_configuration, convertedScoresPath())
+    .WillByDefault(Return(io::path_t("/scores")));
+    ON_CALL(*m_configuration, uniqueFileNameAddition(_, _, _))
+    .WillByDefault(Return(std::string()));
+
+    bool received = false;
+    Ret receivedRet;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        received = true;
+        receivedRet = ret;
+    });
+
+    // [WHEN] Starting the conversion - the first poll's download fails partway through
+    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
+    failingDownload->finish(make_ret(muse::network::Err::NetworkError));
+    EXPECT_FALSE(received);
+
+    // [AND WHEN] Starting an unrelated conversion triggers a second poll, retrying the download
+    uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
+    succeedingDownload->finish(ProgressResult::make_ok(Val()));
+
+    // [THEN] The retried download succeeds and the conversion finishes
+    ASSERT_TRUE(received);
+    EXPECT_TRUE(receivedRet);
 }
 
 // ==================================================

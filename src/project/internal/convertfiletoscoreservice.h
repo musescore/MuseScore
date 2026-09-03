@@ -62,6 +62,10 @@ public:
     void submitReviewComment(ConvertType type, int queueId, const QString& comment) override;
 
 private:
+    static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
+    static constexpr int MAX_RETRY_INTERVAL_MS = 30 * 60000;
+    static constexpr int MAX_CONSECUTIVE_POLL_FAILURES = 7; // gives up after ~1 hour
+
     enum class DownloadStatus {
         NotStarted,
         Downloading
@@ -76,6 +80,7 @@ private:
 
     void watch(int queueId, ConvertType type, const QString& convertedFileName);
     void poll();
+    void giveUpPolling(const muse::Ret& ret);
 
     void loadWatchedItems();
     void saveWatchedItems();
@@ -96,9 +101,10 @@ private:
     ConvertConfig m_config;
 
     QTimer m_timer;
+    int m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
+    int m_pollFailureCount = 0;
     std::unordered_map<int /*queueId*/, WatchedItem> m_watchedItems;
     bool m_pollInProgress = false;
-    int m_pollFailureCount = 0;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
     muse::async::Channel<ConvertType, int> m_reviewRequested;
 };

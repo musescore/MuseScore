@@ -30,6 +30,9 @@
 #include "project/types/filecategory.h"
 #include "project/projecterrors.h"
 
+#include "network/networkerrors.h"
+#include "cloud/clouderrors.h"
+
 #include "global/serialization/json.h"
 #include "global/types/bytearray.h"
 #include "global/io/path.h"
@@ -40,7 +43,26 @@ using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
 
-static constexpr int MAX_CONSECUTIVE_POLL_FAILURES = 5;
+static bool isRetryableError(const Ret& ret)
+{
+    switch (static_cast<muse::network::Err>(ret.code())) {
+    case muse::network::Err::Timeout:
+    case muse::network::Err::NetworkError:
+        return true;
+    default: break;
+    }
+
+    switch (static_cast<muse::cloud::Err>(ret.code())) {
+    case muse::cloud::Err::NetworkError:
+    case muse::cloud::Err::Status429_RateLimitExceeded:
+    case muse::cloud::Err::Status500_InternalServerError:
+    case muse::cloud::Err::UnknownStatusCode:
+        return true;
+    default: break;
+    }
+
+    return false;
+}
 
 static FileCategory resolveFileCategory(const io::path_t& path, const ConvertConfig& config)
 {
@@ -98,7 +120,7 @@ void ConvertFileToScoreService::init()
 {
     TRACEFUNC;
 
-    m_timer.setInterval(1 * 60000); // poll once a minute
+    m_timer.setInterval(MIN_RETRY_INTERVAL_MS); // poll once a minute
 
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
 
@@ -330,24 +352,26 @@ void ConvertFileToScoreService::poll()
         m_pollInProgress = false;
 
         if (!result.ret) {
-            ++m_pollFailureCount;
-
-            if (m_pollFailureCount < MAX_CONSECUTIVE_POLL_FAILURES) {
+            if (isRetryableError(result.ret) && ++m_pollFailureCount < MAX_CONSECUTIVE_POLL_FAILURES) {
+                //! NOTE: the first retry is likely just a stale pooled connection the server closed
+                //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
+                if (m_pollFailureCount > 1) {
+                    m_pollIntervalMs = std::min(m_pollIntervalMs * 2, MAX_RETRY_INTERVAL_MS);
+                    m_timer.setInterval(m_pollIntervalMs);
+                }
+                LOGW() << "Could not check the conversion status, retrying in " << m_pollIntervalMs / 1000
+                       << "s (attempt " << m_pollFailureCount << "/" << MAX_CONSECUTIVE_POLL_FAILURES
+                       << "): " << result.ret.toString();
                 return;
             }
 
-            LOGE() << "Could not check the conversion status after " << MAX_CONSECUTIVE_POLL_FAILURES
-                   << " attempts, giving up on " << m_watchedItems.size() << " pending conversion(s): " << result.ret.toString();
-
-            m_timer.stop();
-            m_watchedItems.clear();
-            m_pollFailureCount = 0;
-            saveWatchedItems();
-            finishConvert(result.ret);
+            giveUpPolling(result.ret);
             return;
         }
 
         m_pollFailureCount = 0;
+        m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
+        m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
 
         for (auto it = m_watchedItems.begin(); it != m_watchedItems.end();) {
             const int queueId = it->first;
@@ -383,6 +407,17 @@ void ConvertFileToScoreService::poll()
 
         saveWatchedItems();
     });
+}
+
+void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
+{
+    LOGE() << "Could not check the conversion status, stopping polling for now, "
+           << m_watchedItems.size() << " pending conversion(s) remain watched: " << ret.toString();
+
+    m_timer.stop();
+    m_pollFailureCount = 0;
+    m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
+    finishConvert(ret);
 }
 
 void ConvertFileToScoreService::loadWatchedItems()
@@ -474,13 +509,13 @@ void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
         break;
     case ConvertStatus::Failed: {
         const QString convertedFileName = convertedFileNameFor(item.id);
-        const std::string errString = errorCodeToString(item.errorCode);
 
-        LOGE() << "Conversion failed for \"" << convertedFileName << "\": "
-               << item << ", errorCode: " << errString;
-
-        Ret ret = make_ret(Err::ConvertProcessingFailed, errString);
+        Ret ret = make_ret(Err::ConvertProcessingFailed);
+        ret.setText("Conversion failed for \"" + convertedFileName.toStdString() + "\": " + errorCodeToString(item.errorCode));
         ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
+
+        LOGE() << ret.toString();
+
         finishConvert(ret);
         break;
     }
@@ -522,6 +557,13 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
         const QString convertedFileName = convertedFileNameFor(queueId);
 
         if (!urlInfo.ret) {
+            if (isRetryableError(urlInfo.ret)) {
+                LOGW() << "Could not fetch the converted score " << convertLogId(convertedFileName, queueId, type)
+                       << ", will retry on next poll: " << urlInfo.ret.toString();
+                clearDownloading(queueId);
+                return;
+            }
+
             Ret ret = urlInfo.ret;
             ret.setText("Could not fetch the converted score: " + ret.text());
             failConvert(ret, type, queueId, convertedFileName);
@@ -560,6 +602,13 @@ void ConvertFileToScoreService::downloadScoreAndFinish(const SignedMsczUrl& urlI
         const QString convertedFileName = convertedFileNameFor(urlInfo.id);
 
         if (!res.ret) {
+            if (isRetryableError(res.ret)) {
+                LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, urlInfo.id, urlInfo.type)
+                       << ", will retry on next poll: " << res.ret.toString();
+                clearDownloading(urlInfo.id);
+                return;
+            }
+
             Ret ret = res.ret;
             ret.setText("Could not download the converted score: " + ret.text());
             failConvert(ret, urlInfo.type, urlInfo.id, convertedFileName);
