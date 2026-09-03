@@ -99,6 +99,10 @@ if (MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
 endif()
 
+if (MUSE_MODULE_TOAST)
+    add_subdirectory(toast)
+endif()
+
 if (MUSE_MODULE_TOURS)
     add_subdirectory(tours)
 endif()

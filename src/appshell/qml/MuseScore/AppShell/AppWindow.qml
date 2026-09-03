@@ -26,6 +26,7 @@ import QtQuick.Controls
 import Muse.Ui
 import Muse.Shortcuts
 import Muse.Tours
+import Muse.Toast
 
 import MuseScore.AppShell
 
@@ -81,6 +82,10 @@ ApplicationWindow {
         id: windowContentItem
         anchors.fill: parent
     }
+
+    // ToastProvider {
+    //     id: toastProvider
+    // }
 
     function showMinimizedWithSavePreviousState() {
         bridge.showMinimizedWithSavePreviousState()
