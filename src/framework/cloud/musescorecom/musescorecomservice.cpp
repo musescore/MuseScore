@@ -57,7 +57,7 @@ static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + 
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
 static const QUrl MUSESCORECOM_CONVERT_CONFIG_URL("https://musescore.com/static/musescore/studio/upload-config.json");
-static const QUrl MUSESCORECOM_CONVERT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert");
+static const QUrl MUSESCORECOM_CONVERT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/convert");
 static const QUrl MUSESCORECOM_CONVERT_QUEUE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/queue");
 static const QUrl MUSESCORECOM_CONVERT_MSCZ_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/mscz");
 static const QUrl MUSESCORECOM_CONVERT_REVIEW_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/review");
@@ -320,6 +320,14 @@ static ConvertErrorCode convertErrorCodeFromApiString(const QString& str)
         return ConvertErrorCode::ReviewRequired;
     } else if (str == "comment_required") {
         return ConvertErrorCode::CommentRequired;
+    } else if (str == "mu_status_various_file_issues") {
+        return ConvertErrorCode::VariousFileIssues;
+    } else if (str == "mu_status_too_complex") {
+        return ConvertErrorCode::TooComplex;
+    } else if (str == "mu_status_dont_recognize_notes") {
+        return ConvertErrorCode::DontRecognizeNotes;
+    } else if (str == "mu_status_general_failure") {
+        return ConvertErrorCode::GeneralFailure;
     }
 
     return ConvertErrorCode::Unknown;
@@ -403,8 +411,6 @@ static RetVal<SignedMsczUrl> parseSignedMsczUrl(const QByteArray& data)
     QJsonObject obj = doc.object();
 
     SignedMsczUrl result;
-    result.id = obj.value("id").toInt();
-    result.type = convertTypeFromApiString(obj.value("type").toString());
     result.url = QUrl(obj.value("url").toString());
     result.expiresInSeconds = obj.value("expires_in").toInt();
 
@@ -505,11 +511,14 @@ static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const C
         multiPart->append(linkPart);
     }
 
+    QMimeDatabase mimeDb;
     for (const std::shared_ptr<QFile>& file : files) {
+        const QString fileName = file->fileName();
+        const QString baseName = QFileInfo(fileName).fileName();
         QHttpPart filePart;
-        filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+        filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant(mimeDb.mimeTypeForFile(fileName).name()));
         QString contentDisposition
-            = QString("form-data; name=\"files[]\"; filename=\"%1\"").arg(sanitizeContentDispositionFilename(QFileInfo(*file).fileName()));
+            = QString("form-data; name=\"files[]\"; filename=\"%1\"").arg(sanitizeContentDispositionFilename(baseName));
         filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
         filePart.setBodyDevice(file.get());
         multiPart->append(filePart);
@@ -518,28 +527,38 @@ static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const C
     return multiPart;
 }
 
-static QByteArray makeReviewRequestBody(ConvertType type, int id, ReviewRating review, const QString& comment)
+static void addFormPart(const QHttpMultiPartPtr& multiPart, const QString& name, const QString& value)
 {
-    QJsonObject obj;
-    obj["type"] = convertTypeToApiString(type);
-    obj["id"] = id;
-    obj["review"] = int(review);
-
-    if (review == ReviewRating::Bad && !comment.isEmpty()) {
-        obj["reason"] = comment;
-    }
-
-    return QJsonDocument(obj).toJson(QJsonDocument::Compact);
+    QHttpPart part;
+    part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(QString("form-data; name=\"%1\"").arg(name)));
+    part.setBody(value.toUtf8());
+    multiPart->append(part);
 }
 
-static QByteArray makeCommentRequestBody(ConvertType type, int id, const QString& comment)
+static QHttpMultiPartPtr makeMultiPartForReview(ConvertType type, int id, ReviewRating review, const QString& comment)
 {
-    QJsonObject obj;
-    obj["type"] = convertTypeToApiString(type);
-    obj["id"] = id;
-    obj["comment"] = comment;
+    auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
 
-    return QJsonDocument(obj).toJson(QJsonDocument::Compact);
+    addFormPart(multiPart, "type", convertTypeToApiString(type));
+    addFormPart(multiPart, "id", QString::number(id));
+    addFormPart(multiPart, "review", QString::number(int(review)));
+
+    if (review == ReviewRating::Bad && !comment.isEmpty()) {
+        addFormPart(multiPart, "reason", comment);
+    }
+
+    return multiPart;
+}
+
+static QHttpMultiPartPtr makeMultiPartForComment(ConvertType type, int id, const QString& comment)
+{
+    auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
+
+    addFormPart(multiPart, "type", convertTypeToApiString(type));
+    addFormPart(multiPart, "id", QString::number(id));
+    addFormPart(multiPart, "comment", comment);
+
+    return multiPart;
 }
 
 MuseScoreComService::MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent)
@@ -1098,7 +1117,7 @@ ProgressPtr MuseScoreComService::downloadConvertedScore(const SignedMsczUrl& url
     ProgressPtr progress = std::make_shared<Progress>();
     progress->start();
 
-    IF_ASSERT_FAILED(urlInfo.isValid()) {
+    IF_ASSERT_FAILED(urlInfo.url.isValid()) {
         progress->finish(make_ret(Err::InvalidData));
         return progress;
     }
@@ -1194,14 +1213,9 @@ Promise<RetVal<ConvertResult> > MuseScoreComService::submitReview(ConvertType ty
             return resolve(RetVal<ConvertResult>::make_ret(url.ret));
         }
 
-        auto bodyDevice = std::make_shared<QBuffer>();
-        bodyDevice->setData(makeReviewRequestBody(type, id, review, comment));
-
-        RequestHeaders headers = this->headers();
-        headers.rawHeaders["Content-Type"] = "application/json";
-
+        auto multiPart = makeMultiPartForReview(type, id, review, comment);
         auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->post(url.val, DevicePtr(bodyDevice), receivedData, headers);
+        RetVal<Progress> progress = m_networkManager->post(url.val, multiPart, receivedData, headers());
         if (!progress.ret) {
             return resolve(RetVal<ConvertResult>::make_ret(progress.ret));
         }
@@ -1230,14 +1244,9 @@ Promise<RetVal<ConvertResult> > MuseScoreComService::submitReviewComment(Convert
             return resolve(RetVal<ConvertResult>::make_ret(url.ret));
         }
 
-        auto bodyDevice = std::make_shared<QBuffer>();
-        bodyDevice->setData(makeCommentRequestBody(type, id, comment));
-
-        RequestHeaders headers = this->headers();
-        headers.rawHeaders["Content-Type"] = "application/json";
-
+        auto multiPart = makeMultiPartForComment(type, id, comment);
         auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->post(url.val, DevicePtr(bodyDevice), receivedData, headers);
+        RetVal<Progress> progress = m_networkManager->post(url.val, multiPart, receivedData, headers());
         if (!progress.ret) {
             return resolve(RetVal<ConvertResult>::make_ret(progress.ret));
         }

@@ -102,6 +102,10 @@ static std::string errorCodeToString(ConvertErrorCode code)
     case ConvertErrorCode::NoNeedReview: return "This score does not require a review";
     case ConvertErrorCode::ReviewRequired: return "A review must be submitted first";
     case ConvertErrorCode::CommentRequired: return "A comment is required";
+    case ConvertErrorCode::VariousFileIssues: return "Invalid format or file type";
+    case ConvertErrorCode::TooComplex: return "The file is too large or there is a problem with access to this file";
+    case ConvertErrorCode::DontRecognizeNotes: return "Invalid file, could not recognize notes";
+    case ConvertErrorCode::GeneralFailure: return "Something went wrong";
     }
     return std::string();
 }
@@ -581,37 +585,37 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
             return;
         }
 
-        downloadScoreAndFinish(urlInfo.val);
+        downloadScoreAndFinish(type, queueId, urlInfo.val);
     });
 }
 
-void ConvertFileToScoreService::downloadScoreAndFinish(const SignedMsczUrl& urlInfo)
+void ConvertFileToScoreService::downloadScoreAndFinish(ConvertType type, int queueId, const SignedMsczUrl& urlInfo)
 {
     const io::path_t dir = configuration()->convertedScoresPath();
     Ret ret = fileSystem()->makePath(dir);
     if (!ret) {
         ret.setText("Could not create the directory for the converted score: " + ret.text());
-        failConvert(ret, urlInfo.type, urlInfo.id, convertedFileNameFor(urlInfo.id));
+        failConvert(ret, type, queueId, convertedFileNameFor(queueId));
         return;
     }
 
     auto scoreData = std::make_shared<QBuffer>();
     ProgressPtr progress = museScoreComService()->convert()->downloadConvertedScore(urlInfo, scoreData);
 
-    progress->finished().onReceive(this, [this, urlInfo, dir, scoreData](const ProgressResult& res) {
-        const QString convertedFileName = convertedFileNameFor(urlInfo.id);
+    progress->finished().onReceive(this, [this, type, queueId, dir, scoreData](const ProgressResult& res) {
+        const QString convertedFileName = convertedFileNameFor(queueId);
 
         if (!res.ret) {
             if (isRetryableError(res.ret)) {
-                LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, urlInfo.id, urlInfo.type)
+                LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, queueId, type)
                        << ", will retry on next poll: " << res.ret.toString();
-                clearDownloading(urlInfo.id);
+                clearDownloading(queueId);
                 return;
             }
 
             Ret ret = res.ret;
             ret.setText("Could not download the converted score: " + ret.text());
-            failConvert(ret, urlInfo.type, urlInfo.id, convertedFileName);
+            failConvert(ret, type, queueId, convertedFileName);
             return;
         }
 
@@ -624,11 +628,11 @@ void ConvertFileToScoreService::downloadScoreAndFinish(const SignedMsczUrl& urlI
         Ret ret = fileSystem()->writeFile(path, byteArray);
         if (!ret) {
             ret.setText("Could not save the converted score: " + ret.text());
-            failConvert(ret, urlInfo.type, urlInfo.id, convertedFileName);
+            failConvert(ret, type, queueId, convertedFileName);
             return;
         }
 
-        markDownloaded(urlInfo.id);
+        markDownloaded(queueId);
         finishConvert(make_ok(), path);
     });
 }

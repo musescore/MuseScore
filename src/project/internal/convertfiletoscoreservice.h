@@ -92,7 +92,7 @@ private:
 
     void downloadIfNotAlready(ConvertType type, int queueId);
     void fetchScoreUrlAndDownload(ConvertType type, int queueId);
-    void downloadScoreAndFinish(const muse::cloud::SignedMsczUrl& urlInfo);
+    void downloadScoreAndFinish(ConvertType type, int queueId, const muse::cloud::SignedMsczUrl& urlInfo);
     void markDownloaded(int queueId);
     void clearDownloading(int queueId);
     void finishConvert(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());

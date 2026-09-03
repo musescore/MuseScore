@@ -83,6 +83,10 @@ enum class ConvertErrorCode {
     NoNeedReview,
     ReviewRequired,
     CommentRequired,
+    VariousFileIssues,
+    TooComplex,
+    DontRecognizeNotes,
+    GeneralFailure,
 };
 
 //! NOTE: key for ConvertErrorCode stored in Ret::data
@@ -177,8 +181,6 @@ struct ConvertResult {
     int id = 0;
     ConvertType type = ConvertType::Omr;
     ConvertStatus status = ConvertStatus::Processing;
-
-    bool isValid() const { return id > 0; }
 };
 
 struct ConvertQueueItem {
@@ -191,19 +193,13 @@ struct ConvertQueueItem {
     QDateTime createdAt;
     QDateTime updatedAt;
     ConvertErrorCode errorCode = ConvertErrorCode::Unknown;
-
-    bool isValid() const { return id > 0; }
 };
 
 using ConvertQueueList = std::vector<ConvertQueueItem>;
 
 struct SignedMsczUrl {
-    int id = 0;
-    ConvertType type = ConvertType::Omr;
     QUrl url;
     int expiresInSeconds = 0;
-
-    bool isValid() const { return id > 0 && url.isValid(); }
 };
 
 //! NOTE: must be in sync with the musescore.com API
@@ -215,13 +211,17 @@ enum class ReviewRating {
 
 inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::cloud::ConvertQueueItem& item)
 {
+    auto dateTimeToString = [](const QDateTime& dateTime) {
+        return dateTime.toSecsSinceEpoch() > 0 ? dateTime.toString(Qt::ISODate) : QString("unknown");
+    };
+
     s << "id: " << item.id
       << ", filename: \"" << item.filename << "\""
       << ", link: \"" << item.link << "\""
       << ", type: " << muse::cloud::convertTypeToString(item.type)
       << ", status: " << muse::cloud::convertStatusToString(item.status)
       << ", scoreId: " << item.scoreId
-      << ", createdAt: " << item.createdAt.toString(Qt::ISODate)
-      << ", updatedAt: " << item.updatedAt.toString(Qt::ISODate);
+      << ", createdAt: " << dateTimeToString(item.createdAt)
+      << ", updatedAt: " << dateTimeToString(item.updatedAt);
     return s;
 }

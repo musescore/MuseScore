@@ -623,8 +623,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_DownloadsAndFinish
     ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
     .WillByDefault(Invoke([] {
         SignedMsczUrl url;
-        url.id = TEST_QUEUE_ID;
-        url.type = ConvertType::Omr;
         url.url = QUrl("https://link.xyz/score.mscz");
         url.expiresInSeconds = 60;
         return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
@@ -748,8 +746,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ExpiredDownloadLink_ForwardsF
     ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
     .WillByDefault(Invoke([] {
         SignedMsczUrl url;
-        url.id = TEST_QUEUE_ID;
-        url.type = ConvertType::Omr;
         url.url = QUrl("https://link.xyz/score.mscz");
         url.expiresInSeconds = 0;
         return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
@@ -961,8 +957,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, DownloadScore_RetryableFailure_Ret
     }));
 
     SignedMsczUrl url;
-    url.id = TEST_QUEUE_ID;
-    url.type = ConvertType::Omr;
     url.url = QUrl("https://link.xyz/score.mscz");
     url.expiresInSeconds = 60;
     ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
