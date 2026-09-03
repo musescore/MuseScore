@@ -38,7 +38,8 @@ public:
     MOCK_METHOD(muse::Ret, startConvert, (const ConvertInput&, const QString&), (override));
     MOCK_METHOD((muse::async::Channel<muse::Ret, muse::io::path_t>), convertFinished, (), (const, override));
 
-    MOCK_METHOD((muse::async::Channel<int, ConvertType>), reviewRequested, (), (const, override));
-    MOCK_METHOD(void, submitReview, (int, ReviewRating), (override));
+    MOCK_METHOD((muse::async::Channel<ConvertType, int>), reviewRequested, (), (const, override));
+    MOCK_METHOD(void, submitReview, (ConvertType, int, ReviewRating, const QString&), (override));
+    MOCK_METHOD(void, submitReviewComment, (ConvertType, int, const QString&), (override));
 };
 }

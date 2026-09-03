@@ -51,8 +51,8 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY selectedPathsChanged)
 
     Q_PROPERTY(QVariantList fileRequirements READ fileRequirements NOTIFY fileRequirementsChanged)
-    Q_PROPERTY(QVariantMap convertLimits READ convertLimits NOTIFY convertTypeChanged)
-    Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY convertTypeChanged)
+    Q_PROPERTY(QVariantMap convertLimits READ convertLimits NOTIFY fileRequirementsChanged)
+    Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY fileRequirementsChanged)
 
     Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
     Q_PROPERTY(QString audioComUrl READ audioComUrl CONSTANT)
@@ -100,6 +100,7 @@ public:
     Q_INVOKABLE QString validateFileName(const QString& name) const;
     Q_INVOKABLE bool validateLink(const QString& link) const;
 
+    Q_INVOKABLE void confirmCancel();
     Q_INVOKABLE void confirmGoingBack();
     Q_INVOKABLE void clearSelection();
 
@@ -108,10 +109,12 @@ signals:
     void selectedPathsChanged();
     void selectedLinkChanged();
     void fileRequirementsChanged();
+    void cancelConfirmed();
     void goingBackConfirmed();
 
 private:
     void setConvertType(int type);
+
     FileCategory selectedFileCategory() const;
     QStringList boldLinkSources() const;
 

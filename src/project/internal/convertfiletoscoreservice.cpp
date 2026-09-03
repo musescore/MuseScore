@@ -24,16 +24,16 @@
 #include <algorithm>
 #include <optional>
 
-#include <QFile>
-#include <QFileInfo>
+#include <QBuffer>
 #include <QUrl>
 
-#include "project/projecterrors.h"
 #include "project/types/filecategory.h"
+#include "project/projecterrors.h"
 
 #include "global/serialization/json.h"
-#include "global/io/ioretcodes.h"
+#include "global/types/bytearray.h"
 #include "global/io/path.h"
+#include "global/io/ioretcodes.h"
 #include "global/log.h"
 
 using namespace mu::project;
@@ -49,17 +49,17 @@ static FileCategory resolveFileCategory(const io::path_t& path, const ConvertCon
         return FileCategory::Pdf;
     }
 
-    if (config.omr.allowedExtensions.contains(ext)) {
+    if (config.omr.images.allowedExtensions.contains(ext)) {
         return FileCategory::Image;
     }
 
-    if (config.audio2score.allowedExtensions.contains(ext)) {
+    if (config.audio2score.file.allowedExtensions.contains(ext)) {
         return FileCategory::Audio;
     }
 
     //! NOTE: config is a client-side sanity check only; if it hasn't been fully fetched yet, fall back
     //! to a best-effort guess rather than blocking the conversion
-    if (!config.omr.allowedExtensions.isEmpty() && !config.audio2score.allowedExtensions.isEmpty()) {
+    if (!config.omr.images.allowedExtensions.isEmpty() && !config.audio2score.file.allowedExtensions.isEmpty()) {
         return FileCategory::Unknown;
     }
 
@@ -73,19 +73,13 @@ static std::string errorCodeToString(ConvertErrorCode code)
     case ConvertErrorCode::UnsupportedFormat: return "This file format is not supported";
     case ConvertErrorCode::FileTooLarge: return "The file is too large";
     case ConvertErrorCode::TooManyFiles: return "Too many files were provided";
+    case ConvertErrorCode::FileOrLinkRequired: return "A file or a link is required";
+    case ConvertErrorCode::InvalidLink: return "The provided link is invalid";
     case ConvertErrorCode::RateLimited: return "Too many conversion requests, please try again later";
     case ConvertErrorCode::MsczNotReady: return "The score is not ready yet";
-    case ConvertErrorCode::MetaLocked: return "The score information can no longer be changed";
     case ConvertErrorCode::NoNeedReview: return "This score does not require a review";
-    case ConvertErrorCode::SearchRequired: return "A song search is required";
-    case ConvertErrorCode::InvalidInput: return "The provided input is invalid";
-    case ConvertErrorCode::InvalidFileType: return "The file type is invalid";
-    case ConvertErrorCode::InvalidFormat: return "The file format is invalid";
-    case ConvertErrorCode::FileProcessingError: return "The file could not be processed";
-    case ConvertErrorCode::ModelExecutionError: return "The conversion model failed to run";
-    case ConvertErrorCode::ConversionError: return "The file could not be converted";
-    case ConvertErrorCode::ResourceNotFound: return "The requested resource was not found";
-    case ConvertErrorCode::InternalServerError: return "A server error occurred";
+    case ConvertErrorCode::ReviewRequired: return "A review must be submitted first";
+    case ConvertErrorCode::CommentRequired: return "A comment is required";
     }
     return std::string();
 }
@@ -108,32 +102,27 @@ void ConvertFileToScoreService::init()
 
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
 
-    //! TODO: remove once the config is reliably available; fills in dummy data for local testing
-    if (m_config.omr.allowedExtensions.isEmpty()) {
-        m_config.omr.allowedExtensions = { "pdf", "png", "jpg", "jpeg" };
-        m_config.omr.maxFileSizeBytes = 30LL * 1024 * 1024;
-        m_config.omr.maxPages = 50;
-        m_config.omr.maxImages = 15;
-    }
-    if (m_config.audio2score.allowedExtensions.isEmpty()) {
-        m_config.audio2score.allowedExtensions = { "mp3" };
-        m_config.audio2score.maxFileSizeBytes = 30LL * 1024 * 1024;
-        m_config.audio2score.maxFiles = 1;
-        m_config.audio2score.maxLinkLength = 2048;
-        m_config.audio2score.allowedLinkSources = LinkSource::YouTube | LinkSource::AudioCom;
-    }
-    //! ---------------------------------------------------------------------------------
+    //! NOTE: fallback is used if fetchConfig() fails
+    m_config.omr.pdf.maxFileSizeBytes = 78643200;
+    m_config.omr.pdf.maxFiles = 1;
+    m_config.omr.pdf.maxPages = 50;
+    m_config.omr.images.allowedExtensions = { "jpeg", "jpg", "png" };
+    m_config.omr.images.maxFileSizeBytes = 78643200;
+    m_config.omr.images.maxFiles = 15;
+    m_config.audio2score.file.allowedExtensions = { "mp3" };
+    m_config.audio2score.file.maxFileSizeBytes = 52428800;
+    m_config.audio2score.file.maxFiles = 1;
+    m_config.audio2score.link.maxLength = 2048;
+    m_config.audio2score.link.allowedSources = LinkSource::YouTube | LinkSource::AudioCom;
 
-    /* TODO
     //! NOTE: prefetch and cache convert config
     museScoreComService()->convert()->fetchConfig().onResolve(this, [this](const RetVal<ConvertConfig>& config) {
         if (!config.ret) {
-            LOGW() << "Could not prefetch convert config: " << config.ret.toString();
+            LOGE() << "Could not prefetch convert config: " << config.ret.toString();
         } else {
             m_config = config.val;
         }
     });
-    */
 }
 
 void ConvertFileToScoreService::resumeConvert()
@@ -172,35 +161,44 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
             return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertMixedFileTypes));
         }
 
-        const qint64 fileSizeBytes = QFileInfo(path.toQString()).size();
+        const RetVal<uint64_t> fileSizeResult = fileSystem()->fileSize(path);
+        if (!fileSizeResult.ret) {
+            return RetVal<ConvertFilesValidation>::make_ret(fileSizeResult.ret);
+        }
+
+        const qint64 fileSizeBytes = static_cast<qint64>(fileSizeResult.val);
 
         if (category == FileCategory::Audio
-            && m_config.audio2score.maxFileSizeBytes > 0 && fileSizeBytes > m_config.audio2score.maxFileSizeBytes) {
+            && m_config.audio2score.file.maxFileSizeBytes > 0 && fileSizeBytes > m_config.audio2score.file.maxFileSizeBytes) {
             return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertAudioFileTooLarge));
         }
 
         totalSizeBytes += fileSizeBytes;
     }
 
-    if (firstCategory == FileCategory::Pdf && paths.size() > 1) {
+    if (firstCategory == FileCategory::Pdf
+        && m_config.omr.pdf.maxFiles > 0 && int(paths.size()) > m_config.omr.pdf.maxFiles) {
         return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertMultiplePdfFiles));
     }
 
     if (firstCategory == FileCategory::Audio) {
-        if (m_config.audio2score.maxFiles > 0 && int(paths.size()) > m_config.audio2score.maxFiles) {
+        if (m_config.audio2score.file.maxFiles > 0 && int(paths.size()) > m_config.audio2score.file.maxFiles) {
             return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyAudioFiles));
         }
 
         return RetVal<ConvertFilesValidation>::make_ok(ConvertFilesValidation { ConvertType::Audio2Score, FileCategory::Audio });
     }
 
-    if (m_config.omr.maxImages > 0 && paths.size() > 1 && int(paths.size()) > m_config.omr.maxImages) {
+    if (m_config.omr.images.maxFiles > 0 && paths.size() > 1 && int(paths.size()) > m_config.omr.images.maxFiles) {
         return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyImages));
     }
 
     //! NOTE: maxFileSizeBytes is a combined budget across all selected images
     //! (or the single file's own size, for a PDF)
-    if (m_config.omr.maxFileSizeBytes > 0 && totalSizeBytes > m_config.omr.maxFileSizeBytes) {
+    const qint64 maxFileSizeBytes = firstCategory == FileCategory::Image
+                                    ? m_config.omr.images.maxFileSizeBytes
+                                    : m_config.omr.pdf.maxFileSizeBytes;
+    if (maxFileSizeBytes > 0 && totalSizeBytes > maxFileSizeBytes) {
         if (firstCategory == FileCategory::Image) {
             return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertCombinedImageTooLarge));
         }
@@ -212,8 +210,8 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
 
 Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
 {
-    const LinkSources sources = m_config.audio2score.allowedLinkSources
-                                ? m_config.audio2score.allowedLinkSources
+    const LinkSources sources = m_config.audio2score.link.allowedSources
+                                ? m_config.audio2score.link.allowedSources
                                 : LinkSource::YouTube | LinkSource::AudioCom;
 
     if (!link.isValid()) {
@@ -248,8 +246,8 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const QSt
     const ConvertType type = convertTypeOf(input);
     ProgressPtr progress = museScoreComService()->convert()->upload(input);
 
-    progress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        LOGI() << "Uploading: " << current << "/" << total;
+    progress->progressChanged().onReceive(this, [convertedFileName](int64_t current, int64_t total, const std::string&) {
+        LOGI() << "Uploading for convert \"" << convertedFileName << "\": " << current << "/" << total;
     });
 
     progress->finished().onReceive(this, [this, type, convertedFileName](const ProgressResult& res) {
@@ -274,17 +272,31 @@ async::Channel<Ret, io::path_t> ConvertFileToScoreService::convertFinished() con
     return m_convertFinished;
 }
 
-async::Channel<int, ConvertType> ConvertFileToScoreService::reviewRequested() const
+async::Channel<ConvertType, int> ConvertFileToScoreService::reviewRequested() const
 {
     return m_reviewRequested;
 }
 
-void ConvertFileToScoreService::submitReview(int queueId, ReviewRating rating)
+void ConvertFileToScoreService::submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment)
 {
-    museScoreComService()->convert()->submitReview(queueId, rating)
-    .onResolve(this, [queueId](const RetVal<ConvertResult>& submitRes) {
+    IF_ASSERT_FAILED(rating == ReviewRating::Bad || comment.isEmpty()) {
+        return;
+    }
+
+    museScoreComService()->convert()->submitReview(type, queueId, rating, comment)
+    .onResolve(this, [type, queueId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
-            LOGE() << "Could not submit the review for conversion " << queueId << ": " << submitRes.ret.toString();
+            LOGE() << "Could not submit the review for conversion " << convertLogId(queueId, type) << ": " << submitRes.ret.toString();
+        }
+    });
+}
+
+void ConvertFileToScoreService::submitReviewComment(ConvertType type, int queueId, const QString& comment)
+{
+    museScoreComService()->convert()->submitReviewComment(type, queueId, comment)
+    .onResolve(this, [type, queueId](const RetVal<ConvertResult>& submitRes) {
+        if (!submitRes.ret) {
+            LOGE() << "Could not submit the comment for conversion " << convertLogId(queueId, type) << ": " << submitRes.ret.toString();
         }
     });
 }
@@ -338,8 +350,8 @@ void ConvertFileToScoreService::poll()
         m_pollFailureCount = 0;
 
         for (auto it = m_watchedItems.begin(); it != m_watchedItems.end();) {
-            int queueId = it->first;
-            ConvertType type = it->second.type;
+            const int queueId = it->first;
+            const ConvertType type = it->second.type;
 
             auto found = std::find_if(result.val.begin(), result.val.end(), [queueId](const ConvertQueueItem& item) {
                 return item.id == queueId;
@@ -455,18 +467,19 @@ void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
     case ConvertStatus::AwaitingReview:
         //! NOTE: the MSCZ is already available at this point; the review rating doesn't gate the download
         downloadIfNotAlready(item.type, item.id);
-        m_reviewRequested.send(item.id, item.type);
+        m_reviewRequested.send(item.type, item.id);
         break;
     case ConvertStatus::Done:
         downloadIfNotAlready(item.type, item.id);
         break;
     case ConvertStatus::Failed: {
         const QString convertedFileName = convertedFileNameFor(item.id);
+        const std::string errString = errorCodeToString(item.errorCode);
 
         LOGE() << "Conversion failed for \"" << convertedFileName << "\": "
-               << item << ", errorCode: " << errorCodeToString(item.errorCode);
+               << item << ", errorCode: " << errString;
 
-        Ret ret = make_ret(Err::ConvertProcessingFailed, errorCodeToString(item.errorCode));
+        Ret ret = make_ret(Err::ConvertProcessingFailed, errString);
         ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
         finishConvert(ret);
         break;
@@ -509,12 +522,9 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
         const QString convertedFileName = convertedFileNameFor(queueId);
 
         if (!urlInfo.ret) {
-            LOGE() << "Could not fetch the converted score " << convertLogId(convertedFileName, queueId, type)
-                   << ": " << urlInfo.ret.toString();
             Ret ret = urlInfo.ret;
-            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
-            clearDownloading(queueId);
-            finishConvert(ret);
+            ret.setText("Could not fetch the converted score: " + ret.text());
+            failConvert(ret, type, queueId, convertedFileName);
             return;
         }
 
@@ -536,36 +546,36 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
 void ConvertFileToScoreService::downloadScoreAndFinish(const SignedMsczUrl& urlInfo)
 {
     const io::path_t dir = configuration()->convertedScoresPath();
-    fileSystem()->makePath(dir);
-
-    const QString convertedFileName = convertedFileNameFor(urlInfo.id);
-    const io::path_t baseName = io::escapeFileName(io::path_t(convertedFileName));
-    const std::string addition = configuration()->uniqueFileNameAddition(baseName, dir, "mscz");
-    const io::path_t path = dir.appendingComponent(baseName + addition).appendingSuffix("mscz");
-
-    auto scoreFile = std::make_shared<QFile>(path.toQString());
-
-    if (!scoreFile->open(QIODevice::WriteOnly)) {
-        Ret ret = make_ret(Err::FileCreateError, std::string("Could not create a file for the converted score"));
-        ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
-        LOGE() << "Could not create a file for the converted score " << convertLogId(convertedFileName, urlInfo.id, urlInfo.type)
-               << ": " << ret.toString();
-        clearDownloading(urlInfo.id);
-        finishConvert(ret);
+    Ret ret = fileSystem()->makePath(dir);
+    if (!ret) {
+        ret.setText("Could not create the directory for the converted score: " + ret.text());
+        failConvert(ret, urlInfo.type, urlInfo.id, convertedFileNameFor(urlInfo.id));
         return;
     }
 
-    ProgressPtr progress = museScoreComService()->convert()->downloadConvertedScore(urlInfo, scoreFile);
+    auto scoreData = std::make_shared<QBuffer>();
+    ProgressPtr progress = museScoreComService()->convert()->downloadConvertedScore(urlInfo, scoreData);
 
-    progress->finished().onReceive(this, [=](const ProgressResult& res) {
+    progress->finished().onReceive(this, [this, urlInfo, dir, scoreData](const ProgressResult& res) {
+        const QString convertedFileName = convertedFileNameFor(urlInfo.id);
+
         if (!res.ret) {
-            LOGE() << "Could not download the converted score " << convertLogId(convertedFileName, urlInfo.id, urlInfo.type)
-                   << ": " << res.ret.toString();
-            scoreFile->remove();
             Ret ret = res.ret;
-            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
-            clearDownloading(urlInfo.id);
-            finishConvert(ret);
+            ret.setText("Could not download the converted score: " + ret.text());
+            failConvert(ret, urlInfo.type, urlInfo.id, convertedFileName);
+            return;
+        }
+
+        const io::path_t baseName = io::escapeFileName(io::path_t(convertedFileName));
+        const std::string addition = configuration()->uniqueFileNameAddition(baseName, dir, "mscz");
+        const io::path_t path = dir.appendingComponent(baseName + addition).appendingSuffix("mscz");
+        const QByteArray data = scoreData->data();
+        const ByteArray byteArray = ByteArray::fromQByteArrayNoCopy(data);
+
+        Ret ret = fileSystem()->writeFile(path, byteArray);
+        if (!ret) {
+            ret.setText("Could not save the converted score: " + ret.text());
+            failConvert(ret, urlInfo.type, urlInfo.id, convertedFileName);
             return;
         }
 
@@ -593,4 +603,12 @@ void ConvertFileToScoreService::clearDownloading(int queueId)
 void ConvertFileToScoreService::finishConvert(const Ret& ret, const io::path_t& path)
 {
     m_convertFinished.send(ret, path);
+}
+
+void ConvertFileToScoreService::failConvert(Ret ret, ConvertType type, int queueId, const QString& convertedFileName)
+{
+    LOGE() << ret.toString() << " " << convertLogId(convertedFileName, queueId, type);
+    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
+    clearDownloading(queueId);
+    finishConvert(ret);
 }

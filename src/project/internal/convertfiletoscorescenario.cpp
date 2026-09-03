@@ -70,14 +70,14 @@ void ConvertFileToScoreScenario::init()
         if (ret) {
             showScoreReadyNotification(path);
         } else {
-            LOGE() << ret.text();
+            showConvertFailedNotification(ret);
         }
 
         m_convertFinished.send(ret, path);
     });
 
-    service()->reviewRequested().onReceive(this, [this](int queueId, ConvertType) {
-        askReviewRating(queueId);
+    service()->reviewRequested().onReceive(this, [this](ConvertType type, int queueId) {
+        askReviewRating(type, queueId);
     });
 }
 
@@ -164,7 +164,8 @@ Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QS
 {
     Ret ret = service()->startConvert(input, convertedFileName);
     if (!ret) {
-        // return ret; // TODO: always fails right now
+        showUnknownError();
+        return ret;
     }
 
     if (configuration()->showConvertFileProcessingDialog()) {
@@ -245,31 +246,39 @@ void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
         showMultiplePdfFilesError();
         break;
     case Err::ConvertAudioFileTooLarge:
-        showFileTooLargeError(config.audio2score.maxFileSizeBytes);
+        showFileTooLargeError(config.audio2score.file.maxFileSizeBytes);
         break;
     case Err::ConvertFileTooLarge:
-        showFileTooLargeError(config.omr.maxFileSizeBytes);
+        showFileTooLargeError(config.omr.pdf.maxFileSizeBytes);
         break;
     case Err::ConvertCombinedImageTooLarge:
-        showCombinedImageSizeTooLargeError(config.omr.maxFileSizeBytes);
+        showCombinedImageSizeTooLargeError(config.omr.images.maxFileSizeBytes);
         break;
     case Err::ConvertTooManyAudioFiles:
-        showTooManyAudioFilesError(config.audio2score.maxFiles);
+        showTooManyAudioFilesError(config.audio2score.file.maxFiles);
         break;
     case Err::ConvertTooManyImages:
-        showTooManyImagesError(config.omr.maxImages);
+        showTooManyImagesError(config.omr.images.maxFiles);
         break;
     default:
+        showUnknownError();
         break;
     }
 }
 
 void ConvertFileToScoreScenario::showCloudIsNotAvailableError()
 {
-    interactive()->error(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
-                         muse::trc("project/convert",
-                                   "An internet connection is required to convert a file. Please check your internet connection or try again later."),
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
+                           muse::trc("project/convert",
+                                     "An internet connection is required to convert a file. Please check your internet connection or try again later."),
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showUnknownError()
+{
+    interactive()->warning(muse::trc("project/convert", "Something went wrong"),
+                           muse::trc("project/convert", "Check your internet connection and try again."),
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)
@@ -277,8 +286,8 @@ void ConvertFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)
     QString size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes));
     std::string text = muse::qtrc("project/convert", "The maximum file size is %1. Reduce the size of your file and try again.")
                        .arg(size).toStdString();
-    interactive()->error(muse::trc("project/convert", "This file is too large"), text,
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "This file is too large"), text,
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes)
@@ -287,20 +296,20 @@ void ConvertFileToScoreScenario::showCombinedImageSizeTooLargeError(qint64 maxFi
     std::string text = muse::qtrc("project/convert",
                                   "The maximum combined file size for all images is %1. Choose a smaller file or remove some images to continue.")
                        .arg(size).toStdString();
-    interactive()->error(muse::trc("project/convert", "Maximum file size exceeded"), text,
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "Maximum file size exceeded"), text,
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showUnsupportedFormatError()
 {
-    interactive()->error(muse::trc("project/convert", "This file type is not compatible"),
-                         muse::trc("project/convert", "Make sure you’ve selected a PDF, image or MP3 file."),
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "This file type is not compatible"),
+                           muse::trc("project/convert", "Make sure you’re importing a suitable PDF, image or MP3 file."),
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showUnsupportedLinkError()
 {
-    const LinkSources configured = service()->config().audio2score.allowedLinkSources;
+    const LinkSources configured = service()->config().audio2score.link.allowedSources;
     const LinkSources sources = configured ? configured : (LinkSource::YouTube | LinkSource::AudioCom);
 
     std::string text;
@@ -312,39 +321,39 @@ void ConvertFileToScoreScenario::showUnsupportedLinkError()
         text = muse::trc("project/convert", "Make sure you’re using a valid link from Audio.com.");
     }
 
-    interactive()->error(muse::trc("project/convert", "Please use a compatible URL"), text,
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "Please use a compatible URL"), text,
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showMixedFileTypesError()
 {
-    interactive()->error(muse::trc("project/convert", "Please select files of the same type"),
-                         muse::trc("project/convert",
-                                   "Per conversion, you may select either one MP3 file, one PDF file, or multiple image files."),
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "Please select files of the same type"),
+                           muse::trc("project/convert",
+                                     "Per conversion, you may select either one MP3 file, one PDF file, or multiple image files."),
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showMultiplePdfFilesError()
 {
-    interactive()->error(muse::trc("project/convert", "Please select a single PDF file"),
-                         muse::trc("project/convert", "Only one PDF file can be converted at a time."),
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "Please select a single PDF file"),
+                           muse::trc("project/convert", "Only one PDF file can be converted at a time."),
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showTooManyAudioFilesError(int maxFiles)
 {
     std::string text = muse::qtrc("project/convert", "You can convert up to %1 audio files at a time. Remove some files and try again.")
                        .arg(maxFiles).toStdString();
-    interactive()->error(muse::trc("project/convert", "Too many files selected"), text,
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "Too many files selected"), text,
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
 {
     std::string text = muse::qtrc("project/convert", "You can convert up to %1 images at a time. Remove some images and try again.")
                        .arg(maxImages).toStdString();
-    interactive()->error(muse::trc("project/convert", "Too many images selected"), text,
-                         { interactive()->buttonData(IInteractive::Button::Ok) });
+    interactive()->warning(muse::trc("project/convert", "Too many images selected"), text,
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showFileProcessingDialog()
@@ -406,7 +415,41 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
     });
 }
 
-void ConvertFileToScoreScenario::askReviewRating(int queueId)
+void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
+{
+    constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+    IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("project/convert", "Try again"), /*accent*/ true);
+
+    QString fileName = ret.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString());
+    std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
+                      .arg(fileName).toStdString();
+
+    //! TODO: replace with toast
+    interactive()->warning(muse::trc("project/convert", "Error processing score"), msg,
+                           { dismiss, tryAgain }, dismissBtn)
+    .onResolve(this, [this, tryAgainBtn](const IInteractive::Result& result) {
+        if (!result.isButton(tryAgainBtn)) {
+            return;
+        }
+
+        checkConvertIsAllowed()
+        .onResolve(this, [this](const Ret& allowedRet) {
+            if (!allowedRet) {
+                return;
+            }
+
+            selectFilesToConvert()
+            .onResolve(this, [this](const ConvertSelection& selection) {
+                startConvert(selection.input, selection.convertedFileName);
+            });
+        });
+    });
+}
+
+void ConvertFileToScoreScenario::askReviewRating(ConvertType type, int queueId)
 {
     static constexpr int goodBtn = int(IInteractive::Button::CustomButton) + 1;
     static constexpr int badBtn = int(IInteractive::Button::CustomButton) + 2;
@@ -420,8 +463,8 @@ void ConvertFileToScoreScenario::askReviewRating(int queueId)
         muse::trc("project/convert", "We’re always improving our score conversion accuracy. Let us know how we did with this one."),
         { good, bad }, goodBtn);
 
-    promise.onResolve(this, [this, queueId](const IInteractive::Result& res) {
+    promise.onResolve(this, [this, queueId, type](const IInteractive::Result& res) {
         ReviewRating rating = res.isButton(goodBtn) ? ReviewRating::Good : ReviewRating::Bad;
-        service()->submitReview(queueId, rating);
+        service()->submitReview(type, queueId, rating);
     });
 }

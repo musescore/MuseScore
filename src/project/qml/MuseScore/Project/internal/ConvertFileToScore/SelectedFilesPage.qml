@@ -41,7 +41,7 @@ Item {
     property NavigationSection navigationSection: null
 
     signal cancelRequested()
-    signal backRequested(bool confirm)
+    signal backRequested()
     signal selectMoreFilesRequested(var existingPaths)
     signal convertRequested(var paths, string convertedFileName)
 
@@ -54,12 +54,6 @@ Item {
 
         paths: root.files
         convertLimits: root.convertLimits
-
-        onCountChanged: {
-            if (fileListModel.count === 0) {
-                root.backRequested(false /*confirm*/)
-            }
-        }
     }
 
     NavigationPanel {
@@ -106,7 +100,7 @@ Item {
             convertEnabled: Boolean(saveAsField.currentText) && !saveAsField.errorText && !fileListModel.exceedsLimits
 
             onCancelRequested: root.cancelRequested()
-            onBackRequested: root.backRequested(true /*confirm*/)
+            onBackRequested: root.backRequested()
 
             onConvertRequested: {
                 root.convertRequested(fileListModel.paths, saveAsField.currentText)
@@ -125,6 +119,8 @@ Item {
             onSelectMoreFilesRequested: function(existingPaths) {
                 root.selectMoreFilesRequested(existingPaths)
             }
+
+            onRemoveLastFileRequested: root.backRequested()
         }
     }
 
@@ -140,9 +136,7 @@ Item {
             iconCode: fileListModel.fileIconCode
             fileRequirements: root.fileRequirements
 
-            onRemoveRequested: {
-                fileListModel.removeAt(0)
-            }
+            onRemoveRequested: root.backRequested()
         }
     }
 }

@@ -78,11 +78,6 @@ static bool allowsMultipleFiles(int maxCount)
     return maxCount <= 0 || maxCount > 1;
 }
 
-static bool isPdf(const QString& extOrPath)
-{
-    return extOrPath.compare("pdf", Qt::CaseInsensitive) == 0 || extOrPath.endsWith(".pdf", Qt::CaseInsensitive);
-}
-
 static bool isJpeg(const QString& extOrPath)
 {
     return extOrPath.compare("jpeg", Qt::CaseInsensitive) == 0 || extOrPath.endsWith(".jpeg", Qt::CaseInsensitive);
@@ -216,25 +211,26 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
     if (category == FileCategory::Unknown || category == FileCategory::Pdf) {
         QStringList pdfItems;
 
-        if (omr.maxFileSizeBytes > 0) {
-            pdfItems << maxFileSizeText(omr.maxFileSizeBytes);
+        if (omr.pdf.maxFileSizeBytes > 0) {
+            pdfItems << maxFileSizeText(omr.pdf.maxFileSizeBytes);
         }
 
-        if (omr.maxPages > 0) {
-            pdfItems << muse::qtrc("project/convert", "%1 pages max").arg(omr.maxPages);
+        if (omr.pdf.maxPages > 0) {
+            pdfItems << muse::qtrc("project/convert", "%1 pages max").arg(omr.pdf.maxPages);
         }
 
-        pdfItems << muse::qtrc("project/convert", "1 file per conversion");
+        if (omr.pdf.maxFiles == 1) {
+            pdfItems << muse::qtrc("project/convert", "1 file per conversion");
+        } else if (omr.pdf.maxFiles > 1) {
+            pdfItems << muse::qtrc("project/convert", "%1 files per conversion").arg(omr.pdf.maxFiles);
+        }
+
         result << requirementsSection(muse::qtrc("project/convert", "PDF"), pdfItems);
     }
 
     if (category == FileCategory::Unknown || category == FileCategory::Image) {
         QStringList imageExtensions;
-        for (const QString& ext : omr.allowedExtensions) {
-            if (isPdf(ext)) {
-                continue;
-            }
-
+        for (const QString& ext : omr.images.allowedExtensions) {
             QString normalizedExt = isJpeg(ext) ? "jpg" : ext;
             if (!imageExtensions.contains(normalizedExt, Qt::CaseInsensitive)) {
                 imageExtensions << normalizedExt;
@@ -247,12 +243,12 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
             imageItems << formatsText(imageExtensions);
         }
 
-        if (omr.maxFileSizeBytes > 0) {
-            imageItems << maxCombinedFileSizeText(omr.maxFileSizeBytes);
+        if (omr.images.maxFileSizeBytes > 0) {
+            imageItems << maxCombinedFileSizeText(omr.images.maxFileSizeBytes);
         }
 
-        if (omr.maxImages > 0) {
-            imageItems << muse::qtrc("project/convert", "Max %1 images").arg(omr.maxImages);
+        if (omr.images.maxFiles > 0) {
+            imageItems << muse::qtrc("project/convert", "Max %1 images").arg(omr.images.maxFiles);
         }
 
         if (!imageItems.isEmpty()) {
@@ -263,18 +259,18 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
     if (category == FileCategory::Unknown || category == FileCategory::Audio) {
         QStringList a2sItems;
 
-        if (!a2s.allowedExtensions.empty()) {
-            a2sItems << muse::qtrc("project/convert", "%1 format").arg(formatsText(a2s.allowedExtensions));
+        if (!a2s.file.allowedExtensions.empty()) {
+            a2sItems << muse::qtrc("project/convert", "%1 format").arg(formatsText(a2s.file.allowedExtensions));
         }
 
-        if (a2s.maxFileSizeBytes > 0) {
-            a2sItems << maxFileSizeText(a2s.maxFileSizeBytes);
+        if (a2s.file.maxFileSizeBytes > 0) {
+            a2sItems << maxFileSizeText(a2s.file.maxFileSizeBytes);
         }
 
-        if (a2s.maxFiles == 1) {
+        if (a2s.file.maxFiles == 1) {
             a2sItems << muse::qtrc("project/convert", "1 file per conversion");
-        } else if (a2s.maxFiles > 1) {
-            a2sItems << muse::qtrc("project/convert", "%1 files per conversion").arg(a2s.maxFiles);
+        } else if (a2s.file.maxFiles > 1) {
+            a2sItems << muse::qtrc("project/convert", "%1 files per conversion").arg(a2s.file.maxFiles);
         }
 
         if (!a2sItems.empty()) {
@@ -289,15 +285,22 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
 QVariantMap ConvertFileToScoreModel::convertLimits() const
 {
     const ConvertConfig& config = convertFileToScoreScenario()->config();
-
     QVariantMap result;
 
-    if (m_convertType == ConvertType::Audio2Score) {
-        result["maxFileCount"] = config.audio2score.maxFiles;
-        result["maxCombinedSizeBytes"] = config.audio2score.maxFileSizeBytes;
-    } else {
-        result["maxFileCount"] = config.omr.maxImages;
-        result["maxCombinedSizeBytes"] = config.omr.maxFileSizeBytes;
+    switch (selectedFileCategory()) {
+    case FileCategory::Audio:
+        result["maxFileCount"] = config.audio2score.file.maxFiles;
+        result["maxCombinedSizeBytes"] = config.audio2score.file.maxFileSizeBytes;
+        break;
+    case FileCategory::Pdf:
+        result["maxFileCount"] = config.omr.pdf.maxFiles;
+        result["maxCombinedSizeBytes"] = config.omr.pdf.maxFileSizeBytes;
+        break;
+    case FileCategory::Image:
+    case FileCategory::Unknown:
+        result["maxFileCount"] = config.omr.images.maxFiles;
+        result["maxCombinedSizeBytes"] = config.omr.images.maxFileSizeBytes;
+        break;
     }
 
     return result;
@@ -307,26 +310,28 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles() const
 {
     const ConvertConfig& config = convertFileToScoreScenario()->config();
 
-    if (m_convertType == ConvertType::Audio2Score) {
-        return allowsMultipleFiles(config.audio2score.maxFiles);
+    switch (selectedFileCategory()) {
+    case FileCategory::Audio:
+        return allowsMultipleFiles(config.audio2score.file.maxFiles);
+    case FileCategory::Pdf:
+        return allowsMultipleFiles(config.omr.pdf.maxFiles);
+    case FileCategory::Image:
+    case FileCategory::Unknown:
+        return allowsMultipleFiles(config.omr.images.maxFiles);
     }
 
-    if (selectedFileCategory() == FileCategory::Pdf) {
-        return false;
-    }
-
-    return allowsMultipleFiles(config.omr.maxImages);
+    return false;
 }
 
 QStringList ConvertFileToScoreModel::boldLinkSources() const
 {
-    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->config().audio2score;
+    const cloud::Audio2ScoreLinkConfig& link = convertFileToScoreScenario()->config().audio2score.link;
 
     QStringList sources;
-    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::YouTube)) {
+    if (link.allowedSources.testFlag(cloud::LinkSource::YouTube)) {
         sources << "<b>YouTube</b>";
     }
-    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::AudioCom)) {
+    if (link.allowedSources.testFlag(cloud::LinkSource::AudioCom)) {
         const QString url = audioComService()->cloudInfo().url.toString();
         sources << "<b><a href=\"" + url + "\">Audio.com</a></b>";
     }
@@ -351,8 +356,8 @@ QString ConvertFileToScoreModel::linkHintText() const
 
 QString ConvertFileToScoreModel::audioComUrl() const
 {
-    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->config().audio2score;
-    if (!a2s.allowedLinkSources.testFlag(cloud::LinkSource::AudioCom)) {
+    const cloud::Audio2ScoreLinkConfig& link = convertFileToScoreScenario()->config().audio2score.link;
+    if (!link.allowedSources.testFlag(cloud::LinkSource::AudioCom)) {
         return QString();
     }
 
@@ -366,13 +371,13 @@ QString ConvertFileToScoreModel::linkPageHintText() const
 
 QString ConvertFileToScoreModel::linkPageHintPlainText() const
 {
-    const cloud::Audio2ScoreConfig& a2s = convertFileToScoreScenario()->config().audio2score;
+    const cloud::Audio2ScoreLinkConfig& link = convertFileToScoreScenario()->config().audio2score.link;
 
     QStringList names;
-    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::YouTube)) {
+    if (link.allowedSources.testFlag(cloud::LinkSource::YouTube)) {
         names << "YouTube";
     }
-    if (a2s.allowedLinkSources.testFlag(cloud::LinkSource::AudioCom)) {
+    if (link.allowedSources.testFlag(cloud::LinkSource::AudioCom)) {
         names << "Audio.com";
     }
 
@@ -381,7 +386,7 @@ QString ConvertFileToScoreModel::linkPageHintPlainText() const
 
 int ConvertFileToScoreModel::maxLinkLength() const
 {
-    return convertFileToScoreScenario()->config().audio2score.maxLinkLength;
+    return convertFileToScoreScenario()->config().audio2score.link.maxLength;
 }
 
 QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPaths)
@@ -389,8 +394,8 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
     const ConvertConfig& config = convertFileToScoreScenario()->config();
 
     QStringList extensions = existingPaths.isEmpty()
-                             ? config.omr.allowedExtensions + config.audio2score.allowedExtensions
-                             : resolveExtensions(existingPaths);
+                             ? QStringList { "pdf" } + config.omr.images.allowedExtensions + config.audio2score.file.allowedExtensions
+    : resolveExtensions(existingPaths);
 
     if (extensions.isEmpty()) {
         extensions = { "pdf", "jpg", "jpeg", "png", "mp3" }; // fallback
@@ -407,7 +412,27 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
         muse::trc("project/convert", "All files") + " (*)"
     };
 
-    const bool multiple = allowsMultipleFiles(config.omr.maxImages) || allowsMultipleFiles(config.audio2score.maxFiles);
+    const FileCategory category = existingPaths.isEmpty()
+                                  ? FileCategory::Unknown
+                                  : fileCategoryFromPath(io::path_t(existingPaths.first()));
+
+    bool multiple = false;
+    switch (category) {
+    case FileCategory::Pdf:
+        multiple = allowsMultipleFiles(config.omr.pdf.maxFiles);
+        break;
+    case FileCategory::Image:
+        multiple = allowsMultipleFiles(config.omr.images.maxFiles);
+        break;
+    case FileCategory::Audio:
+        multiple = allowsMultipleFiles(config.audio2score.file.maxFiles);
+        break;
+    case FileCategory::Unknown:
+        multiple = allowsMultipleFiles(config.omr.pdf.maxFiles)
+                   || allowsMultipleFiles(config.omr.images.maxFiles)
+                   || allowsMultipleFiles(config.audio2score.file.maxFiles);
+        break;
+    }
 
     io::paths_t files;
     if (multiple) {
@@ -486,6 +511,25 @@ QString ConvertFileToScoreModel::validateFileName(const QString& name) const
     }
 
     return QString();
+}
+
+void ConvertFileToScoreModel::confirmCancel()
+{
+    constexpr int noBtn = int(IInteractive::Button::No);
+    constexpr int yesBtn = int(IInteractive::Button::Yes);
+
+    IInteractive::ButtonData stay(noBtn, muse::trc("project/convert", "No, stay here"));
+    IInteractive::ButtonData cancel(yesBtn, muse::trc("project/convert", "Yes, cancel"), /*accent*/ true);
+
+    interactive()->question(
+        muse::trc("project/convert", "Are you sure you want to cancel?"),
+        muse::trc("project/convert", "Your current selection will be lost."),
+        { stay, cancel }, noBtn, IInteractive::WithIcon)
+    .onResolve(this, [this, yesBtn](const IInteractive::Result& result) {
+        if (result.isButton(yesBtn)) {
+            emit cancelConfirmed();
+        }
+    });
 }
 
 void ConvertFileToScoreModel::confirmGoingBack()

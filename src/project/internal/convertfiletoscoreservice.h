@@ -37,11 +37,11 @@
 namespace mu::project {
 class ConvertFileToScoreService : public IConvertFileToScoreService, public muse::async::Asyncable, public muse::Contextable
 {
+public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
 
-public:
     explicit ConvertFileToScoreService(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
@@ -57,8 +57,9 @@ public:
     muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
 
-    muse::async::Channel<int, ConvertType> reviewRequested() const override;
-    void submitReview(int queueId, ReviewRating rating) override;
+    muse::async::Channel<ConvertType, int> reviewRequested() const override;
+    void submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment = QString()) override;
+    void submitReviewComment(ConvertType type, int queueId, const QString& comment) override;
 
 private:
     enum class DownloadStatus {
@@ -90,6 +91,7 @@ private:
     void markDownloaded(int queueId);
     void clearDownloading(int queueId);
     void finishConvert(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());
+    void failConvert(muse::Ret ret, ConvertType type, int queueId, const QString& convertedFileName);
 
     ConvertConfig m_config;
 
@@ -98,6 +100,6 @@ private:
     bool m_pollInProgress = false;
     int m_pollFailureCount = 0;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
-    muse::async::Channel<int, ConvertType> m_reviewRequested;
+    muse::async::Channel<ConvertType, int> m_reviewRequested;
 };
 }

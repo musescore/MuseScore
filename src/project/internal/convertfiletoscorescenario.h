@@ -70,6 +70,7 @@ private:
     void showValidationError(const muse::Ret& ret);
 
     void showCloudIsNotAvailableError();
+    void showUnknownError();
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError();
@@ -81,8 +82,9 @@ private:
 
     void showFileProcessingDialog();
     void showScoreReadyNotification(const muse::io::path_t& path);
+    void showConvertFailedNotification(const muse::Ret& ret);
 
-    void askReviewRating(int queueId);
+    void askReviewRating(ConvertType type, int queueId);
 
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
 };

@@ -23,7 +23,6 @@
 #pragma once
 
 #include <memory>
-#include <optional>
 
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
@@ -74,7 +73,9 @@ public:
     async::Promise<RetVal<ConvertQueueList> > fetchQueue() override;
     async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ConvertType type, int id) override;
 
-    async::Promise<RetVal<ConvertResult> > submitReview(int id, ReviewRating review, const QString& reason = QString()) override;
+    async::Promise<RetVal<ConvertResult> > submitReview(ConvertType type, int id, ReviewRating review,
+                                                        const QString& comment = QString()) override;
+    async::Promise<RetVal<ConvertResult> > submitReviewComment(ConvertType type, int id, const QString& comment) override;
 
 private:
     ServerConfig serverConfig() const override;
@@ -83,7 +84,6 @@ private:
     async::Promise<Ret> updateTokens() override;
 
     network::RequestHeaders headers() const;
-    network::RequestHeaders convertHeaders() const;
 
     void doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished);
 
@@ -97,7 +97,5 @@ private:
     async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
 
     async::Promise<Ret> doUpload(const ConvertInput& input, ProgressPtr progress);
-
-    std::optional<ConvertConfig> m_cachedConfig;
 };
 }
