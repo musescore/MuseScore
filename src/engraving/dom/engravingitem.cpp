@@ -1405,6 +1405,19 @@ void EngravingItem::disconnectAllOriginItems(EngravingItem* sharedItem)
     sharedItem->m_layoutData->m_originItems.clear();
 }
 
+void EngravingItem::disconnectSharedTree(EngravingItem* item)
+{
+    auto disconnect = [](EngravingItem* item) {
+        if (EngravingItem* sharedItem = item->sharedItem()) {
+            disconnectSharedItem(sharedItem, item);
+        }
+
+        disconnectAllOriginItems(item);
+    };
+
+    item->scanElements(disconnect);
+}
+
 bool EngravingItem::isBefore(const EngravingItem* item) const
 {
     if (!item) {
