@@ -82,6 +82,10 @@ s_builtInArticulationsValues = {
     { u"accent", { 1.2, 100 } },
     { u"marcato", { 1.44, 100 } },
     { u"sforzato", { 1.69, 100 } },
+    { u"sforzatoStaccato", { 1.2, 50 } },
+    { u"sforzatoTenuto", { 1.2, 100 } },
+    { u"marcatoStaccato", { 1.44, 50 } },
+    { u"marcatoTenuto", { 1.44, 100 } },
 };
 
 struct CollectNoteParams {
