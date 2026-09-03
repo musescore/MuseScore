@@ -119,8 +119,7 @@ StyledListView {
             x = 0
             opacity = 1
 
-            // TODO: fix navigation
-            // toastNavSec.requestPriority()
+            toastNavSec.requestPriority()
         }
 
         Component.onDestruction: {

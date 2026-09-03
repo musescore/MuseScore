@@ -53,6 +53,7 @@ public:
                                                   const std::string& controlName) const = 0;
 
     virtual void setDefaultNavigationControl(INavigationControl* control) = 0;
+    virtual void setPrioritySection(INavigationSection* section) = 0;
 
     virtual async::Notification navigationChanged() const = 0;
 

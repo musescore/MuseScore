@@ -85,6 +85,8 @@ ApplicationWindow {
 
     ToastProvider {
         id: toastProvider
+
+        navigationOrder: 100000
     }
 
     function showMinimizedWithSavePreviousState() {
