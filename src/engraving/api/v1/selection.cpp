@@ -107,6 +107,8 @@ bool Selection::select(EngravingItem* elWrapper, bool add)
 ///   \param endTick end tick of selection, excluded from selection
 ///   \param startStaff start staff index, included in selection
 ///   \param endStaff end staff index, excluded from selection
+///   \param startBox the Box at startTick to be included in selection
+///   \param endBox the Box at endTick to be included in selection
 ///   \return \p true on success, \p false if selection
 ///   cannot be changed, e.g. due to the ongoing operation
 ///   on a score (like dragging elements) or incorrect
@@ -114,7 +116,8 @@ bool Selection::select(EngravingItem* elWrapper, bool add)
 ///   \since MuseScore 3.5
 //---------------------------------------------------------
 
-bool Selection::selectRange(int startTick, int endTick, int startStaff, int endStaff)
+bool Selection::selectRange(int startTick, int endTick, int startStaff, int endStaff,
+                            apiv1::MeasureBase* startBox, apiv1::MeasureBase* endBox)
 {
     if (!checkSelectionIsNotLocked()) {
         return false;
@@ -136,10 +139,30 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
+    mu::engraving::Box* startBoxUnwrapped = nullptr;
+    if (mu::engraving::EngravingItem* startBoxItem = startBox ? startBox->element() : nullptr) {
+        startBoxUnwrapped = startBoxItem->isBox() ? toBox(startBoxItem) : nullptr;
+        if (!startBoxUnwrapped) {
+            LOGW() << "startBox has incorrect type";
+        }
+    }
+
+    mu::engraving::Box* endBoxUnwrapped = nullptr;
+    if (mu::engraving::EngravingItem* endBoxItem = endBox ? endBox->element() : nullptr) {
+        endBoxUnwrapped = endBoxItem->isBox() ? toBox(endBoxItem) : nullptr;
+        if (!endBoxUnwrapped) {
+            LOGW() << "endBox has incorrect type";
+        }
+    }
+
     if (segEnd && m_selection->score()->undoStack()->hasActiveTransaction()) {
-        m_selection->setRangeTicks(segStart->tick(), segEnd->tick(), startStaff, endStaff);
+        m_selection->setRangeTicks(segStart->tick(), segEnd->tick(),
+                                   startStaff, endStaff,
+                                   startBoxUnwrapped, endBoxUnwrapped);
     } else {
-        m_selection->setRange(segStart, segEnd, startStaff, endStaff);
+        m_selection->setRange(segStart, segEnd,
+                              startStaff, endStaff,
+                              startBoxUnwrapped, endBoxUnwrapped);
     }
 
     return true;
