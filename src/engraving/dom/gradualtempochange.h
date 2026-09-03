@@ -36,7 +36,7 @@ class GradualTempoChange : public TextLineBase
     DECLARE_CLASSOF(ElementType::GRADUAL_TEMPO_CHANGE)
 
 public:
-    GradualTempoChange(EngravingItem* parent);
+    GradualTempoChange(DummyParentOr<EngravingItem> parent);
 
     GradualTempoChange* clone() const override;
 

@@ -7182,7 +7182,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (m->tick().isZero()) {
             //KeySigEvent kse;
             //kse.setKey(Key::C);
-            KeySig* ks = Factory::createKeySig(m_score->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(m_score->dummy());
             if (p->staff(0)->isTabStaff(Fraction(0, 1))) {
                 ks->setVisible(false);
             }

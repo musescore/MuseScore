@@ -275,7 +275,7 @@ void Measure::fillGap(const Fraction& rtickStart, const Fraction& len, track_idx
 
     Fraction curTick = tick() + actualTicks(rtickStart, nullptr, stretch);
     for (TDuration d : durationList) {
-        Rest* rest = Factory::createRest(score()->dummy()->segment());
+        Rest* rest = Factory::createRest(score()->dummy());
         rest->setTicks(d.isMeasure() ? ticks() * stretch : d.fraction());
         rest->setDurationType(d);
         rest->setTrack(track);

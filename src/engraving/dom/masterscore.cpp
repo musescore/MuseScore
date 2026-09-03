@@ -845,7 +845,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         // undoAddCR adds rest to linked staves as well
         for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             size_t track = staffIdx * VOICES;
-            Rest* rest = Factory::createRest(dummy()->segment(), TDuration(DurationType::V_MEASURE));
+            Rest* rest = Factory::createRest(dummy(), TDuration(DurationType::V_MEASURE));
             Fraction timeStretch(staff(staffIdx)->timeStretch(masterMeasure->tick()));
             rest->setTicks(masterMeasure->ticks() * timeStretch);
             rest->setTrack(track);

@@ -580,13 +580,12 @@ void CustomizeKitDialog::updateExample()
     int v         = m_editedDrumset.voice(pitch);
     DirectionV dir = m_editedDrumset.stemDirection(pitch);
     bool up = (DirectionV::UP == dir) || (DirectionV::AUTO == dir && line > 4);
-    std::shared_ptr<Chord> chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    std::shared_ptr<Chord> chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy());
     chord->setDurationType(DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setTrack(v);
     chord->setIsUiItem(true);
     Note* note = Factory::createNote(chord.get());
-    note->setOwnershipParent(chord.get());
     note->setTrack(v);
     note->setPitch(pitch);
     note->setTpcFromPitch();
@@ -597,7 +596,6 @@ void CustomizeKitDialog::updateExample()
     note->mutldata()->cachedNoteheadSym.set_value(static_cast<SymId>(quarterCmb->currentData().toInt()));
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
-    stem->setOwnershipParent(chord.get());
     stem->setBaseLength(up ? -3.0_sp : 3.0_sp);
     engravingRenderer()->layoutItem(stem);
     chord->add(stem);

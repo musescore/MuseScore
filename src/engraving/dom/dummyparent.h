@@ -19,55 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_DUMMYELEMENT_H
-#define MU_ENGRAVING_DUMMYELEMENT_H
+#pragma once
 
-#include "../dom/engravingitem.h"
+#include "engravingobject.h"
 
 namespace mu::engraving {
 enum class Pid : short;
 
 class RootItem;
-}
+class Score;
 
-namespace mu::engraving::compat {
-class DummyElement : public EngravingItem
+//! The parent an object has while it is not attached to anything. It is not part of
+//! the score and nothing is laid out in it - it is not even an item; it only keeps
+//! unattached objects reachable, and heads the accessibility tree they form.
+class DummyParent : public EngravingObject
 {
-    OBJECT_ALLOCATOR(engraving, DummyElement)
+    OBJECT_ALLOCATOR(engraving, DummyParent)
 public:
-    DummyElement(EngravingObject* parent);
-    ~DummyElement();
+    DummyParent(Score* score);
+    ~DummyParent();
 
     void init();
 
-    RootItem* rootItem();
-    Page* page();
-    System* system();
-    Measure* measure();
-    Segment* segment();
-    Chord* chord();
-    Note* note();
-    BracketItem* bracketItem();
-
-    EngravingItem* clone() const override;
+    RootItem* rootItem() const { return m_root; }
 
     PropertyValue getProperty(Pid) const override { return PropertyValue(); }
     bool setProperty(Pid, const PropertyValue&) override { return false; }
 
 private:
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    AccessibleItemPtr createAccessible() override;
-#endif
-
     RootItem* m_root = nullptr;
-    Page* m_page = nullptr;
-    System* m_system = nullptr;
-    Measure* m_measure = nullptr;
-    Segment* m_segment = nullptr;
-    Chord* m_chord = nullptr;
-    Note* m_note = nullptr;
-    BracketItem* m_bracketItem = nullptr;
 };
 }
-
-#endif // MU_ENGRAVING_DUMMYELEMENT_H

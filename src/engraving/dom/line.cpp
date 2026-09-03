@@ -869,7 +869,7 @@ void LineSegment::undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, 
 //   SLine
 //---------------------------------------------------------
 
-SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
+SLine::SLine(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);

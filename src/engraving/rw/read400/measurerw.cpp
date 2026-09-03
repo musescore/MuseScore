@@ -48,6 +48,7 @@
 #include "../dom/staff.h"
 #include "../dom/stafflines.h"
 #include "../dom/stafftext.h"
+#include "../dom/system.h"
 #include "../dom/systemdivider.h"
 #include "../dom/timesig.h"
 #include "../dom/tuplet.h"
@@ -80,7 +81,6 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         Staff* staff = ctx.staff(n);
         MStaff* s = new MStaff;
         s->setLines(Factory::createStaffLines(measure));
-        s->lines()->setOwnershipParent(measure);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(measure->tick()));
         measure->mstaves().push_back(s);
@@ -171,7 +171,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         } else if (tag == "measureRepeatCount") {
             measure->setMeasureRepeatCount(e.readInt(), staffIdx);
         } else if (tag == "SystemDivider") {
-            SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
+            SystemDivider* sd = new SystemDivider(ctx.dummy());
             TRead::read(sd, e, ctx);
             //! TODO Looks like a bug.
             //! The SystemDivider parent must be System
@@ -230,7 +230,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             LOGD() << "read midi tick";
             ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
         } else if (tag == "BarLine") {
-            BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
+            BarLine* barLine = Factory::createBarLine(ctx.dummy());
             barLine->setTrack(ctx.track());
             TRead::read(barLine, e, ctx);
             //
@@ -263,7 +263,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 fermata = nullptr;
             }
         } else if (tag == "Chord") {
-            Chord* chord = Factory::createChord(ctx.dummy()->segment());
+            Chord* chord = Factory::createChord(ctx.dummy());
             chord->setTrack(ctx.track());
             TRead::read(chord, e, ctx);
             if (startingBeam) {
@@ -297,7 +297,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
                 MMRest* mmr = Factory::createMMRest(segment);
                 mmr->setTrack(ctx.track());
-                mmr->setOwnershipParent(segment);
                 TRead::read(mmr, e, ctx);
                 segment->add(mmr);
                 ctx.incTick(mmr->actualTicks());
@@ -352,7 +351,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             segment->add(mr);
             ctx.incTick(measure->ticks());
         } else if (tag == "Clef") {
-            Clef* clef = Factory::createClef(ctx.dummy()->segment());
+            Clef* clef = Factory::createClef(ctx.dummy());
             clef->setTrack(ctx.track());
             TRead::read(clef, e, ctx);
             clef->setGenerated(false);
@@ -394,7 +393,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             segment->add(clef);
             clef->setIsHeader(header);
         } else if (tag == "TimeSig") {
-            TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
+            TimeSig* ts = Factory::createTimeSig(ctx.dummy());
             ts->setTrack(ctx.track());
             TRead::read(ts, e, ctx);
             // if time sig not at beginning of measure => courtesy time sig
@@ -417,7 +416,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 }
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
+            KeySig* ks = Factory::createKeySig(ctx.dummy());
             ks->setTrack(ctx.track());
             TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
@@ -569,7 +568,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 }
             }
         } else if (tag == "Fermata") {
-            fermata = Factory::createFermata(ctx.dummy()->segment());
+            fermata = Factory::createFermata(ctx.dummy());
             fermata->setTrack(ctx.track());
             fermata->setPlacement(fermata->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
             TRead::read(fermata, e, ctx);
@@ -590,7 +589,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             tuplet = Factory::createTuplet(measure);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
-            tuplet->setOwnershipParent(measure);
             TRead::read(tuplet, e, ctx);
             if (oldTuplet) {
                 oldTuplet->add(tuplet);
@@ -627,7 +625,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             segment = measure->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);
             TRead::read(range, e, ctx);
-            range->setOwnershipParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(ctx.track()));
             segment->add(range);
         } else {

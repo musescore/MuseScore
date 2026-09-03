@@ -58,6 +58,7 @@
 #include "../editing/navigation.h"
 
 #include "chord.h"
+#include "dummyparent.h"
 #include "factory.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
@@ -67,6 +68,7 @@
 #include "page.h"
 #include "parenthesis.h"
 #include "part.h"
+#include "rootitem.h"
 #include "score.h"
 #include "segment.h"
 #include "shape.h"
@@ -168,18 +170,17 @@ void EngravingItem::setAccessibleEnabled(bool enabled)
 
 EngravingItem* EngravingItem::accessibleParentItem() const
 {
-    EngravingItem* p = layoutParent();
-    if (p) {
+    if (EngravingItem* p = layoutParent()) {
         return p;
     }
 
-    // fall back to the raw parent, so that e.g. palette items reach the dummy
-    EngravingObject* raw = parent();
-    if (raw && raw->isEngravingItem()) {
-        return toEngravingItem(raw);
+    if (ownershipParent()) {
+        // attached to something, but not placed anywhere: in neither tree
+        return nullptr;
     }
 
-    return nullptr;
+    // not attached to anything: head of the tree those objects form
+    return score() && score()->dummy() ? score()->dummy()->rootItem() : nullptr;
 }
 
 EngravingItemList EngravingItem::accessibleChildren() const
@@ -200,26 +201,6 @@ EngravingItem* EngravingItem::ownershipParentItem() const
 EngravingItem* EngravingItem::layoutParent() const
 {
     return ownershipParentItem();
-}
-
-static void collectChildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)
-{
-    for (EngravingObject* ch : item->children()) {
-        if (ch->isEngravingItem()) {
-            list.push_back(toEngravingItem(ch));
-
-            if (all) {
-                collectChildrenItems(ch, list, all);
-            }
-        }
-    }
-}
-
-EngravingItemList EngravingItem::childrenItems(bool all) const
-{
-    EngravingItemList list;
-    collectChildrenItems(this, list, all);
-    return list;
 }
 
 const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
@@ -2559,7 +2540,6 @@ void EngravingItem::setHasLeftParenthesis(bool v, bool addToLinked, bool generat
     if (v) {
         if (!m_leftParenthesis) {
             Parenthesis* paren = Factory::createParenthesis(this);
-            paren->setOwnershipParent(this);
             paren->setTrack(track());
             paren->setDirection(DirectionH::LEFT);
             paren->setGenerated(generated);
@@ -2588,7 +2568,6 @@ void EngravingItem::setHasRightParenthesis(bool v, bool addToLinked, bool genera
     if (v) {
         if (!m_rightParenthesis) {
             Parenthesis* paren = Factory::createParenthesis(this);
-            paren->setOwnershipParent(this);
             paren->setTrack(track());
             paren->setDirection(DirectionH::RIGHT);
             paren->setGenerated(generated);

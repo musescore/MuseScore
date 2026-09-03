@@ -150,7 +150,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
         int strokeup = readUInt8();                // up stroke length
         int strokedown = readUInt8();                // down stroke length
 
-        Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
+        Arpeggio* a = Factory::createArpeggio(score->dummy());
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
             if (strokeup < 7) {
@@ -257,7 +257,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
 
     // check if a note is supposed to be accented, and give it the sforzato type
     if (noteBits & NOTE_SFORZATO) {             // 0x40
-        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
+        Articulation* art = Factory::createArticulation(note->score()->dummy());
         art->setSymId(SymId::articAccentAbove);
         if (!EditChord::toggleArticulation(note->score(), note, art)) {
             delete art;
@@ -331,7 +331,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             } else if (duration == 3) {
                 grace_len = Constants::DIVISION / 4;       //16th
             }
-            Note* gn = Factory::createNote(score->dummy()->chord());
+            Note* gn = Factory::createNote(score->dummy());
 
             if (fret == 255) {
                 gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
@@ -346,7 +346,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
-            Chord* gc = Factory::createChord(score->dummy()->segment());
+            Chord* gc = Factory::createChord(score->dummy());
             gc->setTrack(note->chord()->track());
             gc->add(gn);
             gc->setOwnershipParent(note->chord());
@@ -917,7 +917,7 @@ bool GuitarPro4::read(IODevice* io)
 
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    lyrics = Factory::createLyrics(score->dummy()->chord());
+                    lyrics = Factory::createLyrics(score->dummy());
                     auto str = readDelphiString();
                     //TODO-ws                   str.erase(std::remove_if(str.begin(), str.end(), [](char c){return c == '_'; }), str.end());
                     lyrics->setPlainText(str);
@@ -926,7 +926,7 @@ bool GuitarPro4::read(IODevice* io)
                 if (gpLyrics.beatCounter >= gpLyrics.fromBeat && static_cast<size_t>(gpLyrics.lyricTrack) == staffIdx + 1) {
                     size_t index = gpLyrics.beatCounter - gpLyrics.fromBeat;
                     if (index < gpLyrics.lyrics.size()) {
-                        lyrics = Factory::createLyrics(score->dummy()->chord());
+                        lyrics = Factory::createLyrics(score->dummy());
                         lyrics->setPlainText(gpLyrics.lyrics[index]);
                     }
                 }
@@ -951,10 +951,10 @@ bool GuitarPro4::read(IODevice* io)
                         delete cr;
                         cr = 0;
                     }
-                    cr = Factory::createRest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy());
                 } else {
                     if (!segment->cr(track)) {
-                        cr = Factory::createChord(score->dummy()->segment());
+                        cr = Factory::createChord(score->dummy());
                     }
                 }
                 cr->setOwnershipParent(segment);
@@ -1020,7 +1020,6 @@ bool GuitarPro4::read(IODevice* io)
                             if (dotted) {
                                 // there is at most one dotted note in this guitar pro version
                                 NoteDot* dot = Factory::createNoteDot(note);
-                                dot->setOwnershipParent(note);
                                 dot->setTrack(track);                  // needed to know the staff it belongs to (and detect tablature)
                                 dot->setVisible(true);
                                 note->add(dot);
@@ -1121,7 +1120,6 @@ bool GuitarPro4::read(IODevice* io)
                                             s->setStartElement(n);
                                             s->setTick(seg->tick());
                                             s->setTrack(chord->track());
-                                            s->setOwnershipParent(n);
                                             s->setGlissandoType(GlissandoType::STRAIGHT);
                                             s->setEndElement(last);
                                             s->setTick2(chord->segment()->tick());
@@ -1200,7 +1198,6 @@ bool GuitarPro4::read(IODevice* io)
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());
-                        s->setOwnershipParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         s->setEndElement(nt);
                         s->setTick2(nt->chord()->segment()->tick());

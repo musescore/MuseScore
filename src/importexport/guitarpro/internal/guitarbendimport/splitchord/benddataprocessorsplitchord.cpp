@@ -103,7 +103,7 @@ static void createSplitDurationBends(const BendDataContextSplitChord& bendDataCt
                     currentChord->setDurationType(currentChordDuration);
                 } else {
                     curSegment = currentMeasure->getSegment(SegmentType::ChordRest, currentActualTick);
-                    currentChord = Factory::createChord(score->dummy()->segment());
+                    currentChord = Factory::createChord(score->dummy());
                     currentChord->setTrack(track);
                     currentChord->setTicks(currentChordDuration);
                     currentChord->setDurationType(currentChordDuration);

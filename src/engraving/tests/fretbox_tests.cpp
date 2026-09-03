@@ -56,7 +56,7 @@ public:
         for (const String& chord : chords) {
             Segment* segment = measure->first(SegmentType::ChordRest);
 
-            FretDiagram* diagram = Factory::createFretDiagram(score->dummy()->segment());
+            FretDiagram* diagram = Factory::createFretDiagram(score->dummy());
 
             diagram->setHarmony(chord);
             diagram->updateDiagram(chord);
@@ -87,7 +87,7 @@ public:
 
         Segment* segment = measure->first(SegmentType::ChordRest);
 
-        FretDiagram* diagram = Factory::createFretDiagram(score->dummy()->segment());
+        FretDiagram* diagram = Factory::createFretDiagram(score->dummy());
 
         diagram->setHarmony(chord);
         diagram->updateDiagram(chord);

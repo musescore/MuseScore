@@ -45,7 +45,7 @@ static const ElementStyle lyricsLineElementStyle {
     { Sid::lyricsDashLineThickness, Pid::LINE_WIDTH }
 };
 
-LyricsLine::LyricsLine(EngravingItem* parent)
+LyricsLine::LyricsLine(DummyParentOr<EngravingItem> parent)
     : SLine(ElementType::LYRICSLINE, parent)
 {
     setDiagonal(false);
@@ -53,7 +53,7 @@ LyricsLine::LyricsLine(EngravingItem* parent)
     m_nextLyrics = 0;
 }
 
-LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
+LyricsLine::LyricsLine(const ElementType& type, DummyParentOr<EngravingItem> parent, ElementFlags f)
     : SLine(type, parent, f)
 {
     setDiagonal(false);
@@ -222,7 +222,7 @@ EngravingObject* LyricsLineSegment::propertyDelegate(Pid propertyId) const
 //=========================================================
 //   PartialLyricsLine
 //=========================================================
-PartialLyricsLine::PartialLyricsLine(EngravingItem* parent)
+PartialLyricsLine::PartialLyricsLine(DummyParentOr<EngravingItem> parent)
     : LyricsLine(ElementType::PARTIAL_LYRICSLINE, parent)
 {
     setGenerated(false);
@@ -402,7 +402,7 @@ Lyrics* PartialLyricsLine::findAdjacentLyricsOrDefault() const
     }
 
     // If there are no adjacent lyrics, create dummy lyrics using the odd lyrics text style to get font information
-    Lyrics* dummyLyr = Factory::createLyrics(toChordRest(score()->dummy()->chord()));
+    Lyrics* dummyLyr = Factory::createLyrics(score()->dummy());
     dummyLyr->setTextStyleType(TextStyleType::LYRICS_ODD);
     return dummyLyr;
 }

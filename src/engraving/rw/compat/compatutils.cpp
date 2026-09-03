@@ -357,8 +357,7 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
     for (Articulation* oldOrnament : oldOrnaments) {
         Chord* parentChord = toChord(oldOrnament->chordRest());
 
-        Ornament* newOrnament = Factory::createOrnament(score->dummy()->chord());
-        newOrnament->setOwnershipParent(parentChord);
+        Ornament* newOrnament = Factory::createOrnament(parentChord);
         newOrnament->setTrack(oldOrnament->track());
         newOrnament->setSymId(oldOrnament->symId());
         newOrnament->setPos(oldOrnament->pos());
@@ -404,8 +403,7 @@ void CompatUtils::replaceOldWithNewExpressions(MasterScore* score)
     for (StaffText* oldExpression : oldExpressions) {
         Segment* parentSegment = oldExpression->segment();
 
-        Expression* newExpression = Factory::createExpression(score->dummy()->segment());
-        newExpression->setOwnershipParent(parentSegment);
+        Expression* newExpression = Factory::createExpression(parentSegment);
         newExpression->setTrack(oldExpression->track());
         newExpression->setXmlText(oldExpression->xmlText());
         newExpression->mapPropertiesFromOldExpressions(oldExpression);
@@ -484,13 +482,12 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
         auto components = mu::engraving::splitArticulations({ combinedArtic->symId() });
         Chord* parentChord = toChord(combinedArtic->chordRest());
         for (SymId id : components) {
-            Articulation* newArtic = Factory::createArticulation(masterScore->dummy()->chord());
+            Articulation* newArtic = Factory::createArticulation(parentChord);
             newArtic->setSymId(id);
             if (parentChord->hasArticulation(newArtic)) {
                 delete newArtic;
                 continue;
             }
-            newArtic->setOwnershipParent(parentChord);
             newArtic->setTrack(combinedArtic->track());
             newArtic->setPos(combinedArtic->pos());
             newArtic->setDirection(combinedArtic->direction());
@@ -838,7 +835,6 @@ NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
     Note* endNote = toNote(textLine->endElement());
 
     NoteLine* noteLine = Factory::createNoteLine(startNote);
-    noteLine->setOwnershipParent(startNote);
     noteLine->setStartElement(startNote);
     noteLine->setTrack(textLine->track());
     noteLine->setTick(textLine->tick());
@@ -967,7 +963,6 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
         parentChord->remove(oldArtic);
 
         LaissezVib* lv = Factory::createLaissezVib(parentNote);
-        lv->setOwnershipParent(parentNote);
         parentNote->add(lv);
 
         delete oldArtic;

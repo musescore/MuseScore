@@ -52,7 +52,6 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "compat/dummyelement.h"
 
 #include "iengravingfont.h"
 #include "types/translatablestring.h"
@@ -65,6 +64,7 @@
 #include "capo.h"
 #include "chord.h"
 #include "clef.h"
+#include "dummyparent.h"
 #include "excerpt.h"
 #include "factory.h"
 #include "glissando.h"
@@ -91,6 +91,7 @@
 #include "rehearsalmark.h"
 #include "repeatlist.h"
 #include "rest.h"
+#include "rootitem.h"
 #include "scoreorder.h"
 #include "segment.h"
 #include "select.h"
@@ -180,8 +181,11 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     m_fileDivision = Constants::DIVISION;
     m_style = DefaultStyle::defaultStyle();
 
-    m_rootItem = new RootItem(this);
+    m_rootItem = new RootItem(this, RootItem::Kind::Score);
     m_rootItem->init();
+
+    m_dummy = new DummyParent(this);
+    m_dummy->init();
 
     createPaddingTable();
 
@@ -295,6 +299,10 @@ Score::~Score()
 
     delete m_rootItem;
     m_rootItem = nullptr;
+
+    // last: everything that is deleted above may park children on it on its way out
+    delete m_dummy;
+    m_dummy = nullptr;
 }
 
 muse::async::Channel<LoopBoundaryType, unsigned> Score::loopBoundaryTickChanged() const
@@ -359,14 +367,19 @@ bool Score::isPaletteScore() const
     return this == paletteScore();
 }
 
-static void onBracketItemDestruction(const Score* score, const BracketItem* item)
+//! A bracket is a rendering of its bracket item, rebuilt from it on every layout, so
+//! one whose item is gone has nothing left to represent.
+static void onBracketItemDestruction(Score* score, const BracketItem* item)
 {
-    BracketItem* dummy = score->dummy()->bracketItem();
-
-    for (const System* system : score->systems()) {
-        for (Bracket* bracket : system->brackets()) {
+    for (System* system : score->systems()) {
+        std::vector<Bracket*>& brackets = system->brackets();
+        for (auto it = brackets.begin(); it != brackets.end();) {
+            Bracket* bracket = *it;
             if (bracket && bracket->bracketItem() == item) {
-                bracket->setBracketItem(dummy);
+                it = brackets.erase(it);
+                delete bracket;
+            } else {
+                ++it;
             }
         }
     }
@@ -1915,7 +1928,6 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     Clef* clef = Factory::createClef(seg);
     clef->setClefType(ClefType::F);
     clef->setTrack((staffIdx + 1) * VOICES);
-    clef->setOwnershipParent(seg);
     clef->setIsHeader(true);
     undoAddElement(clef);
 
@@ -2332,7 +2344,6 @@ void Score::adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km)
 
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             KeySig* keysig = Factory::createKeySig(s);
-            keysig->setOwnershipParent(s);
             keysig->setTrack(staffIdx * VOICES);
             keysig->setKeySigEvent(key);
             doUndoAddElement(keysig);

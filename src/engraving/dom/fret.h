@@ -269,7 +269,7 @@ public:
 private:
     friend class Factory;
 
-    FretDiagram(Segment* parent = nullptr);
+    FretDiagram(DummyParentOr<Segment> parent);
     FretDiagram(const FretDiagram&);
 
     void readHarmonyToDiagramFile(const muse::io::path_t& filePath) const;

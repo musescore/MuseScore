@@ -23,6 +23,7 @@
 #include "tuplethandler.h"
 
 #include "engraving/dom/factory.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/types/fraction.h"
 
@@ -75,7 +76,6 @@ void TupletHandler::addCr(Measure* measure, ChordRest* cr)
     if (inTuplet && !tuplet) {
         tuplet = Factory::createTuplet(measure);
         LOGN("new tuplet %p cr ticks %d/%d", tuplet, cr->ticks().numerator(), cr->ticks().denominator());
-        tuplet->setOwnershipParent(measure);
         tuplet->setTrack(cr->track());
         tuplet->setTick(cr->tick());
         tuplet->setRatio({ 3, 2 });

@@ -987,7 +987,6 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
             Note* note = Factory::createNote(chord);
             // the note needs to know the properties of the track it belongs to
             note->setTrack(chord->track());
-            note->setOwnershipParent(chord);
             readNote(note, e, ctx);
             chord->add(note);
         } else if (tag == "Attribute" || tag == "Articulation") {
@@ -1530,7 +1529,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             lastTick = ctx.tick();
         } else if (tag == "BarLine") {
-            BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
+            BarLine* barLine = Factory::createBarLine(ctx.dummy());
             barLine->setTrack(ctx.track());
             // initialize span properties with values from staff
             barLine->resetProperty(Pid::BARLINE_SPAN_FROM);
@@ -1589,7 +1588,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(st, ctx.tick());
             segment->add(barLine);
         } else if (tag == "Chord") {
-            Chord* chord = Factory::createChord(m->getSegment(SegmentType::ChordRest, ctx.tick()));
+            // where the chord belongs is only known once it has been read: a grace note
+            // goes on the chord it decorates rather than on a segment of its own, and
+            // reading moves the tick the segment is looked up by
+            Chord* chord = Factory::createChord(ctx.score()->dummy());
             chord->setTrack(ctx.track());
             readChord(m, chord, e, ctx);
             if (!chord->segment()) {
@@ -1651,7 +1653,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             if (m->isMMRest()) {
                 segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
                 MMRest* mmr = Factory::createMMRest(segment);
-                mmr->setOwnershipParent(segment);
                 mmr->setTrack(ctx.track());
                 read400::TRead::read(mmr, e, ctx);
                 mmr->setTicks(m->ticks());
@@ -1659,7 +1660,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
             } else {
-                Rest* rest = Factory::createRest(ctx.score()->dummy()->segment());
+                Rest* rest = Factory::createRest(ctx.score()->dummy());
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
@@ -1725,7 +1726,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             e.readNext();
         } else if (tag == "Slur") {
-            Slur* sl = Factory::createSlur(m);
+            Slur* sl = Factory::createSlur(ctx.score()->dummy());
             sl->setTick(ctx.tick());
             Read206::readSlur206(e, ctx, sl);
             //
@@ -1844,7 +1845,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 m->setTimesig(ts->sig() / timeStretch);
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
+            KeySig* ks = Factory::createKeySig(ctx.dummy());
             ks->setTrack(ctx.track());
             read400::TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
@@ -1854,7 +1855,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment->add(ks);
             staff->setKey(curTick, ks->keySigEvent());
         } else if (tag == "Lyrics") {
-            Lyrics* l = Factory::createLyrics(ctx.dummy()->chord());
+            Lyrics* l = Factory::createLyrics(ctx.dummy());
             l->setTrack(ctx.track());
 
             int iEndTick = 0;                 // used for backward compatibility
@@ -2076,7 +2077,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
-            tuplet->setOwnershipParent(m);
             readTuplet(tuplet, e, ctx);
             ctx.addTuplet(tupletId, tuplet);
         } else if (tag == "startRepeat") {
@@ -2128,7 +2128,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             MeasureNumber* noText = new MeasureNumber(m);
             readText114(e, ctx, noText, m);
             noText->setTrack(ctx.track());
-            noText->setOwnershipParent(m);
             m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "multiMeasureRest") {
             m->setMMRestCount(e.readInt());
@@ -2774,7 +2773,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         if (tag == "Staff") {
             readStaffContent(masterScore, e, ctx);
         } else if (tag == "KeySig") {                 // not supported
-            KeySig* ks = Factory::createKeySig(masterScore->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(masterScore->dummy());
             read400::TRead::read(ks, e, ctx);
             delete ks;
         } else if (tag == "siglist") {
@@ -2886,7 +2885,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             } else if (tag == "Pedal") {
                 readPedal114(e, ctx, toPedal(s));
             } else if (tag == "Trill") {
-                Ornament* ornament = Factory::createOrnament(score->dummy()->chord());
+                Ornament* ornament = Factory::createOrnament(score->dummy());
                 toTrill(s)->setOrnament(ornament);
                 Read206::readTrill206(e, ctx, toTrill(s));
             } else {
@@ -2983,7 +2982,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
                 KeySigEvent ke = i->second;
                 KeySig* ks = Factory::createKeySig(seg);
                 ks->setKeySigEvent(ke);
-                ks->setOwnershipParent(seg);
                 ks->setTrack(track);
                 ks->setGenerated(false);
                 seg->add(ks);
@@ -3118,7 +3116,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             continue;
         }
 
-        TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
+        TempoText* tt = Factory::createTempoText(masterScore->dummy());
         tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
         tt->setTempo(tempo);
         tt->setTrack(0);
@@ -3223,7 +3221,7 @@ void Read114::pasteSymbols(XmlReader&, ChordRest*)
     UNREACHABLE;
 }
 
-void Read114::readTremoloCompat(TremoloCompat*, XmlReader&)
+void Read114::readTremoloCompat(TremoloCompat*, Score*, XmlReader&)
 {
     UNREACHABLE;
 }

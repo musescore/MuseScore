@@ -41,7 +41,7 @@ public:
         Additional
     };
 
-    RehearsalMark(Segment* parent);
+    RehearsalMark(DummyParentOr<Segment> parent);
 
     bool isEditAllowed(EditData&) const override;
     bool allowTimeAnchor() const override { return false; }

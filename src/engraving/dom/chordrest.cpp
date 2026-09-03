@@ -77,7 +77,7 @@ namespace mu::engraving {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(const ElementType& type, Segment* parent)
+ChordRest::ChordRest(const ElementType& type, DummyParentOr<Segment> parent)
     : DurationElement(type, parent)
 {
     m_staffMove    = 0;
@@ -314,7 +314,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 
         Segment* seg = segment();
         score()->undoRemoveElement(this);
-        Chord* chord = Factory::createChord(score()->dummy()->segment());
+        Chord* chord = Factory::createChord(score()->dummy());
         chord->setTrack(track());
         chord->setDurationType(durationType());
         chord->setTicks(ticks());

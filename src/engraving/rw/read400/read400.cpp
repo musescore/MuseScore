@@ -716,7 +716,6 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Clef* clef = Factory::createClef(segment);
                     TRead::read(clef, e, ctx);
                     clef->setTrack(ctx.track());
-                    clef->setOwnershipParent(segment);
                     score->undoChangeElement(segment->element(ctx.track()), clef);
                 } else if (tag == "Breath") {
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
@@ -729,7 +728,6 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     breath->setTrack(ctx.track());
                     breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
                     TRead::read(breath, e, ctx);
-                    breath->setOwnershipParent(segment);
                     score->undoChangeElement(segment->element(ctx.track()), breath);
                 } else if (tag == "Beam") {
                     Beam* beam = Factory::createBeam(score);
@@ -947,7 +945,6 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         el->setTrack(trackZeroVoice(destTrack));
                         TRead::read(el, e, ctx);
                         el->setTrack(trackZeroVoice(destTrack));
-                        el->setOwnershipParent(harmSegm);
                         score->undoAddElement(el);
                     }
                 } else if (tag == "Dynamic") {
@@ -960,7 +957,6 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                     d->setTrack(destTrack);
                     TRead::read(d, e, ctx);
                     d->setTrack(destTrack);
-                    d->setOwnershipParent(destCR->segment());
                     score->undoAddElement(d);
                 } else if (tag == "HairPin") {
                     if (destTrack >= maxTrack) {
@@ -968,7 +964,7 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         e.skipCurrentElement();
                         continue;
                     }
-                    Hairpin* h = Factory::createHairpin(score->dummy()->segment());
+                    Hairpin* h = Factory::createHairpin(score->dummy());
                     h->setTrack(destTrack);
                     TRead::read(h, e, ctx);
                     h->setTrack(destTrack);
@@ -1000,7 +996,6 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         Articulation* el = Factory::createArticulation(cr);
                         TRead::read(el, e, ctx);
                         el->setTrack(destTrack);
-                        el->setOwnershipParent(cr);
                         if (!el->isFermata() && cr->isRest()) {
                             delete el;
                         } else {
@@ -1122,7 +1117,6 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         el->setTrack(destTrack);
                         TRead::read(el, e, ctx);
                         el->setTrack(destTrack);
-                        el->setOwnershipParent(cr);
                         score->undoAddElement(el);
                     } else {
                         LOGD("PasteSymbols: element %s not handled", tag.ascii());
@@ -1134,7 +1128,7 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
     }                                     // inner while readNextstartElement()
 }                                         // pasteSymbolList()
 
-void Read400::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
+void Read400::readTremoloCompat(compat::TremoloCompat*, Score*, XmlReader&)
 {
     UNREACHABLE;
 }

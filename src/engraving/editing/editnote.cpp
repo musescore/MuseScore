@@ -167,7 +167,7 @@ void EditNote::toggleOrnament(Score* score, SymId attr)
                     continue;
                 }
             }
-            Ornament* na = Factory::createOrnament(score->dummy()->chord());
+            Ornament* na = Factory::createOrnament(score->dummy());
             na->setSymId(attr);
             if (!EditChord::toggleArticulation(score, el, na)) {
                 delete na;
@@ -410,7 +410,6 @@ void EditNote::changeAccidental(Score* score, Note* note, AccidentalType acciden
                 score->undoRemoveElement(a);
             }
             Accidental* a1 = Factory::createAccidental(ln);
-            a1->setOwnershipParent(ln);
             a1->setAccidentalType(accidental);
             a1->setRole(AccidentalRole::USER);
             lns->undoAddElement(a1);

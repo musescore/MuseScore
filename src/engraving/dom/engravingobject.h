@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <type_traits>
 #include <vector>
 
 #include "global/allocator.h"
@@ -59,6 +60,7 @@ class ChordRest;
 class Clef;
 class Capo;
 class DeadSlapped;
+class DummyParent;
 class DurationElement;
 class Dynamic;
 class Expression;
@@ -210,6 +212,42 @@ enum class Pid : short;
 enum class PropertyFlags : char;
 
 using EngravingObjectList = std::vector<EngravingObject*>;
+using EngravingItemList = std::vector<EngravingItem*>;
+
+//! Parameter type for a parent that is either a real parent of one of the given types,
+//! or the dummy, i.e. no parent at all. It holds nothing but the pointer and makes no
+//! difference at runtime; the point is that "not attached to anything" has to be said
+//! rather than slipped in as a pointer of the wrong kind.
+//!
+//! Best-effort only: it narrows what a call site can pass, it does not prove anything.
+template<typename ... ParentTypes>
+class DummyParentOr
+{
+public:
+    template<typename T, std::enable_if_t<std::is_same_v<T, DummyParent>
+                                          || (std::is_base_of_v<ParentTypes, T> || ...), int> = 0>
+    DummyParentOr(T* parent)
+        : m_parent(parent) {}
+
+    operator EngravingObject*() const {
+        return m_parent;
+    }
+
+    //! The parent as one of the accepted types, or null when it is the dummy - i.e.
+    //! when there is no parent to speak to yet.
+    template<typename T>
+    T* as() const;
+
+private:
+    EngravingObject* m_parent = nullptr;
+};
+
+//! The given parent if there is one, the dummy otherwise.
+template<typename T>
+DummyParentOr<T> parentOrDummy(T* parent, DummyParent* dummy)
+{
+    return parent ? DummyParentOr<T>(parent) : DummyParentOr<T>(dummy);
+}
 
 class EngravingObject
 {
@@ -235,13 +273,14 @@ public:
     EngravingObject* parent() const;
 
     void setOwnershipParent(EngravingObject* p);
-    //! The parent this object has explicitly been attached to via setOwnershipParent().
-    //! Null while the object is merely constructed with a context parent, or parked on the dummy.
+    //! The parent this object is attached to. Null while it is parked on the dummy,
+    //! i.e. not attached to anything.
     EngravingObject* ownershipParent() const;
     void moveToDummy();
 
     const EngravingObjectList& children() const { return m_children; }
 
+    EngravingItemList childrenItems(bool all = false) const;
     std::vector<EngravingItem*> getChildren(bool includeInvisible = true) const;
     virtual void scanElements(std::function<void(EngravingItem*)>) {}
 
@@ -315,7 +354,6 @@ private:
     ElementType m_type = ElementType::INVALID;
 
     EngravingObject* m_parent = nullptr;
-    bool m_isParentExplicitlySet = false;
     EngravingObjectList m_children;
 
 public:
@@ -595,6 +633,13 @@ public:
 
     bool isIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
 };
+
+template<typename ... ParentTypes>
+template<typename T>
+T* DummyParentOr<ParentTypes...>::as() const
+{
+    return m_parent && !m_parent->isType(ElementType::DUMMY) ? static_cast<T*>(m_parent) : nullptr;
+}
 
 //---------------------------------------------------
 // safe casting of EngravingObject

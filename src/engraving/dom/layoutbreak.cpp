@@ -47,7 +47,7 @@ static const ElementStyle sectionBreakStyle {
 //   LayoutBreak
 //---------------------------------------------------------
 
-LayoutBreak::LayoutBreak(MeasureBase* parent)
+LayoutBreak::LayoutBreak(DummyParentOr<MeasureBase> parent)
     : EngravingItem(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM)
 {
     m_pause = 0.;
@@ -77,7 +77,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     m_showCourtesy           = lb.m_showCourtesy;
 }
 
-void LayoutBreak::setOwnershipParent(MeasureBase* parent)
+void LayoutBreak::setOwnershipParent(DummyParentOr<MeasureBase> parent)
 {
     EngravingItem::setOwnershipParent(parent);
 }

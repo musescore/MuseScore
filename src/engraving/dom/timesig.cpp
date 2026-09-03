@@ -52,7 +52,7 @@ static const ElementStyle tsStyle {
 //    Layout() is static and called in setSig().
 //---------------------------------------------------------
 
-TimeSig::TimeSig(Segment* parent)
+TimeSig::TimeSig(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE | ElementFlag::PLACE_ABOVE)
 {
     initElementStyle(&tsStyle);
@@ -65,7 +65,7 @@ TimeSig::TimeSig(Segment* parent)
     setMinDistance(0.5_sp); // TODO: style
 }
 
-void TimeSig::setOwnershipParent(Segment* parent)
+void TimeSig::setOwnershipParent(DummyParentOr<Segment> parent)
 {
     EngravingItem::setOwnershipParent(parent);
 }

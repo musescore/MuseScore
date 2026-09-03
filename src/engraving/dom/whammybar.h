@@ -57,7 +57,7 @@ class WhammyBar final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::WHAMMY_BAR)
 
 public:
-    WhammyBar(EngravingItem* parent);
+    WhammyBar(DummyParentOr<EngravingItem> parent);
 
     WhammyBar* clone() const override { return new WhammyBar(*this); }
 

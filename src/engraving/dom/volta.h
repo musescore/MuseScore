@@ -65,7 +65,7 @@ public:
         OPEN, CLOSED
     };
 
-    Volta(EngravingItem* parent);
+    Volta(DummyParentOr<EngravingItem> parent);
 
     Volta* clone() const override { return new Volta(*this); }
 

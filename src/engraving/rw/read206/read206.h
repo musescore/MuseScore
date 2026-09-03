@@ -65,7 +65,7 @@ public:
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
-    void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) override;
+    void readTremoloCompat(compat::TremoloCompat* item, Score* score, XmlReader& xml) override;
 
     static void readTimeSigMap(TimeSigMap* map, XmlReader& xml, read400::ReadContext& ctx);
 

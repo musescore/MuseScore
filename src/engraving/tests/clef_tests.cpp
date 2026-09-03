@@ -66,7 +66,7 @@ TEST_F(Engraving_ClefTests, clef2)
         Measure* m = score->firstMeasure();
         m = m->nextMeasure();
         m = m->nextMeasure();
-        TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+        TimeSig* ts = Factory::createTimeSig(score->dummy());
         ts->setSig(Fraction(2, 4));
         EditTimeSig::addTimeSig(tx, score, m, 0, ts, false);
     });

@@ -149,7 +149,7 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
         int strokeup = readUInt8();                // up stroke length
         int strokedown = readUInt8();                // down stroke length
 
-        Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
+        Arpeggio* a = Factory::createArpeggio(score->dummy());
         // representation is different in guitar pro 5 - the up/down order below is correct
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
@@ -287,10 +287,10 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 delete cr;
                 cr = 0;
             }
-            cr = Factory::createRest(score->dummy()->segment());
+            cr = Factory::createRest(score->dummy());
         } else {
             if (!cr) {
-                cr = Factory::createChord(score->dummy()->segment());
+                cr = Factory::createChord(score->dummy());
             }
         }
         cr->setOwnershipParent(segment);
@@ -310,7 +310,6 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 tuplet = Factory::createTuplet(measure);
                 tuplets[track2] = tuplet;
                 setTuplet(tuplet, tuple);
-                tuplet->setOwnershipParent(measure);
             }
             tuplet->setTrack(cr->track());
             tuplet->setBaseLen(l);
@@ -344,7 +343,6 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 if (dotted) {
                     // there is at most one dotted note in this guitar pro version
                     NoteDot* dot = Factory::createNoteDot(note);
-                    dot->setOwnershipParent(note);
                     dot->setTrack(track);            // needed to know the staff it belongs to (and detect tablature)
                     dot->setVisible(true);
                     note->add(dot);
@@ -751,7 +749,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                 auto cr = seg->cr(gpLyrics.lyricTrack);
                 if (cr) {
                     if (str[0] != '-') {
-                        Lyrics* lyr = Factory::createLyrics(score->dummy()->chord());
+                        Lyrics* lyr = Factory::createLyrics(score->dummy());
 
                         std::string text;
                         auto pos = str.find('-');
@@ -1041,7 +1039,6 @@ bool GuitarPro5::read(IODevice* io)
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);
             tun->setTrack(staff2track(s->idx()));
-            tun->setOwnershipParent(seg);
             seg->add(tun);
 
             auto tuning = utils::standardTuningFor(p->instrument()->channel(0)->program(), (int)sd.strings());
@@ -1104,7 +1101,6 @@ bool GuitarPro5::read(IODevice* io)
                     sym->setSym(SymId::segnoSerpent2);
                 }
 
-                sym->setOwnershipParent(measure);
                 sym->setTrack(0);
                 segment->add(sym);
                 auto iter = counter.find(articulations[i]);
@@ -1123,7 +1119,6 @@ bool GuitarPro5::read(IODevice* io)
                     "D.D.S. al Fine", "Da Coda", "Da Doppia Coda"
                 };
                 st->setPlainText(String::fromAscii(text[i - 4]));
-                st->setOwnershipParent(s);
                 st->setTrack(0);
                 auto iter = counter.find(articulations[i]);
                 if (iter == counter.end()) {
@@ -1254,25 +1249,25 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
         if (slideKind & SLIDE_OUT_DOWN) {
             slideKind &= ~SLIDE_OUT_DOWN;
-            sld = Factory::createChordLine(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy());
             slideType = ChordLineType::FALL;
         }
         // slide out upwards (doit)
         if (slideKind & SLIDE_OUT_UP) {
             slideKind &= ~SLIDE_OUT_UP;
-            sld = Factory::createChordLine(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy());
             slideType = ChordLineType::DOIT;
         }
         // slide in from below (plop)
         if (slideKind & SLIDE_IN_BELOW) {
             slideKind &= ~SLIDE_IN_BELOW;
-            sld = Factory::createChordLine(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy());
             slideType = ChordLineType::PLOP;
         }
         // slide in from above (scoop)
         if (slideKind & SLIDE_IN_ABOVE) {
             slideKind &= ~SLIDE_IN_ABOVE;
-            sld = Factory::createChordLine(score->dummy()->chord());
+            sld = Factory::createChordLine(score->dummy());
             slideType = ChordLineType::SCOOP;
         }
 
@@ -1517,7 +1512,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
 
     // check if a note is supposed to be accented, and give it the marcato type
     if (noteBits & NOTE_MARCATO) {
-        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
+        Articulation* art = Factory::createArticulation(note->score()->dummy());
         art->setSymId(SymId::articMarcatoAbove);
         if (!EditChord::toggleArticulation(note->score(), note, art)) {
             delete art;
@@ -1525,7 +1520,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
     }
     // check if a note is supposed to be accented, and give it the sforzato type
     else if (noteBits & NOTE_SFORZATO) {
-        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
+        Articulation* art = Factory::createArticulation(note->score()->dummy());
         art->setSymId(SymId::articAccentAbove);
         note->add(art);
         if (!EditChord::toggleArticulation(note->score(), note, art)) {
@@ -1606,7 +1601,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                         if (m_tremolosInChords.find(chord2) != m_tremolosInChords.end()) {
                             TremoloType type = m_tremolosInChords.at(chord2);
                             DO_ASSERT(!isTremoloTwoChord(type));
-                            TremoloSingleChord* t = Factory::createTremoloSingleChord(score->dummy()->chord());
+                            TremoloSingleChord* t = Factory::createTremoloSingleChord(score->dummy());
                             t->setTremoloType(type);
                             chord->add(t);
                             muse::remove(m_tremolosInChords, chord2);
@@ -1746,7 +1741,6 @@ void GuitarPro5::addGlissandos()
         gliss->setStartElement(currentStart);
         gliss->setTick(currentStart->tick());
         gliss->setTrack(currentStart->track());
-        gliss->setOwnershipParent(currentStart);
         gliss->setGlissandoType(GlissandoType::STRAIGHT);
         gliss->setGlissandoShift(true);
         gliss->setEndElement(endNote);

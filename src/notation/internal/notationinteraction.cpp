@@ -51,7 +51,6 @@
 // TODO: Don't include from engraving/internal
 #include "engraving/internal/qmimedataadapter.h"
 
-#include "engraving/compat/dummyelement.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/anchors.h"
@@ -61,6 +60,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/dummyparent.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
@@ -576,7 +576,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 
     if (inputState.rest()) {
         Score* s = score()->paletteScore() ? score()->paletteScore() : score();
-        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(s->dummy()->segment(), params.duration.type());
+        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(s->dummy(), params.duration.type());
         rest->setTicks(params.duration.fraction());
         symNotehead = rest->getSymbol(params.duration.type(), 0, staff->lines(position.segment->tick()));
         shadowNote.setState(symNotehead, params.duration, true, params.position.beyondScore);
@@ -2513,14 +2513,14 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
                 switch (elementType) {
                 case mu::engraving::ElementType::CLEF:
                 {
-                    mu::engraving::Clef* oclef = engraving::Factory::createClef(score->dummy()->segment());
+                    mu::engraving::Clef* oclef = engraving::Factory::createClef(score->dummy());
                     oclef->setClefType(staff->clef(tick2));
                     oelement = oclef;
                     break;
                 }
                 case mu::engraving::ElementType::KEYSIG:
                 {
-                    mu::engraving::KeySig* okeysig = engraving::Factory::createKeySig(score->dummy()->segment());
+                    mu::engraving::KeySig* okeysig = engraving::Factory::createKeySig(score->dummy());
                     okeysig->setKeySigEvent(staff->keySigEvent(tick2));
                     Key ck = okeysig->concertKey();
                     okeysig->setKey(ck);
@@ -2529,7 +2529,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
                 }
                 case mu::engraving::ElementType::TIMESIG:
                 {
-                    mu::engraving::TimeSig* otimesig = engraving::Factory::createTimeSig(score->dummy()->segment());
+                    mu::engraving::TimeSig* otimesig = engraving::Factory::createTimeSig(score->dummy());
                     otimesig->setFrom(staff->timeSig(tick2));
                     oelement = otimesig;
                     break;
@@ -5730,7 +5730,6 @@ void NotationInteraction::toggleDynamicPopup()
             Measure* measure = score()->tick2measure(tick);
             Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
             Dynamic* dynamic = Factory::createDynamic(segment);
-            dynamic->setOwnershipParent(segment);
             dynamic->setTrack(track);
             dynamic->setVoiceAssignment(voiceAssignment);
             score()->undoAddElement(dynamic);
@@ -6878,7 +6877,6 @@ void NotationInteraction::navigateToNextSyllable()
 
             Lyrics* toLyrics = Factory::createLyrics(initialCR);
             toLyrics->setTrack(track);
-            toLyrics->setOwnershipParent(initialCR);
             toLyrics->setVerse(verse);
             toLyrics->setTextStyleType(styleType);
             toLyrics->setPlacement(placement);
@@ -6954,7 +6952,6 @@ void NotationInteraction::navigateToNextSyllable()
 
         toLyrics = Factory::createLyrics(toLyricsChord);
         toLyrics->setTrack(track);
-        toLyrics->setOwnershipParent(toLyricsChord);
 
         toLyrics->setVerse(verse);
         toLyrics->setTextStyleType(styleType);
@@ -7057,7 +7054,6 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     if (!lyrics) {
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
-        lyrics->setOwnershipParent(cr);
         lyrics->setVerse(verse);
         lyrics->setTextStyleType(styleType);
         lyrics->setPlacement(placement);
@@ -7793,8 +7789,6 @@ void NotationInteraction::addMelisma()
     if (!toLyrics) {
         toLyrics = Factory::createLyrics(nextCR);
         toLyrics->setTrack(track);
-        toLyrics->setOwnershipParent(nextCR);
-
         toLyrics->setVerse(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         toLyrics->setTextStyleType(styleType);
@@ -7877,7 +7871,6 @@ void NotationInteraction::addLyricsVerse()
 
     mu::engraving::Lyrics* lyrics = Factory::createLyrics(oldLyrics->chordRest());
     lyrics->setTrack(oldLyrics->track());
-    lyrics->setOwnershipParent(oldLyrics->chordRest());
     lyrics->setPlacement(oldLyrics->placement());
     lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, oldLyrics->propertyFlags(mu::engraving::Pid::PLACEMENT));
 
@@ -7987,7 +7980,7 @@ void NotationInteraction::addFretboardDiagram()
     std::vector<engraving::FretDiagram*> created;
 
     for (EngravingItem* element : filteredElements) {
-        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
+        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy());
         diagram->setTrack(element->track());
 
         Harmony* harmony = toHarmony(element);
@@ -8073,7 +8066,7 @@ mu::engraving::Harmony* NotationInteraction::findHarmonyInSegment(const mu::engr
 mu::engraving::Harmony* NotationInteraction::createHarmony(mu::engraving::Segment* segment, track_idx_t track,
                                                            mu::engraving::HarmonyType type) const
 {
-    mu::engraving::Harmony* harmony = Factory::createHarmony(score()->dummy()->segment());
+    mu::engraving::Harmony* harmony = Factory::createHarmony(score()->dummy());
     harmony->setScore(score());
     harmony->setOwnershipParent(segment);
     harmony->setTrack(track);

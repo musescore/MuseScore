@@ -60,7 +60,7 @@ public:
     std::vector<LineF> dragAnchorLines() const override;
 
 protected:
-    BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);
+    BSymbol(const ElementType& type, EngravingObject* parent, ElementFlags f = ElementFlag::NOTHING);
     BSymbol(const BSymbol&);
 
 private:
