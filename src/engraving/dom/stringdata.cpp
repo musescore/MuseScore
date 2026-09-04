@@ -190,8 +190,11 @@ void StringData::fretChords(Chord* chord) const
     Chord* prevChord = chord->prev(); 
 
     // might be a good idea to store the chords we've already seen before
-    
     if (prevChord) {
+        // we look at all candidates for the bass note of the chord 
+        // compute their distances to the bass note of the previous chord 
+        
+        
 
     } else { 
         // this should only trigger in the case of the very first chord in the score
@@ -210,6 +213,7 @@ void StringData::fretChords(Chord* chord) const
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
 
     // we need the notes sorted in order of string (from highest to lowest) and then pitch
+    // looping backwards effectively does the reverse, we go from lower -> highest 
     std::map<int, Note*> sortedNotes;
     int count = 0;
     // if chord parent is not a segment, the chord is special (usually a grace chord):
@@ -217,6 +221,9 @@ void StringData::fretChords(Chord* chord) const
     if (!chord->ownershipParent()->isSegment()) {
         sortChordNotes(sortedNotes, chord, &count);
     } else {
+        // we go through all the different chord objects present at a given tick
+        // this accounts for playing different rhythms at the same time 
+
         // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
         Segment* seg = chord->segment();
         track_idx_t trk;
@@ -261,6 +268,7 @@ void StringData::fretChords(Chord* chord) const
         }
     }
 
+    // main assignment loop 
     // scan chord notes from highest, matching with strings from the highest
     for (const auto& p : sortedNotes) {
         Note* note = p.second;
@@ -273,6 +281,7 @@ void StringData::fretChords(Chord* chord) const
         if (skipDeadNotes && note->deadNote()) {
             continue;
         }
+
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
             const CapoParams& capo = note->staff()->capo(note->tick());
@@ -299,6 +308,7 @@ void StringData::fretChords(Chord* chord) const
             }
         }
 
+        // just fixing things after in the case we play two notes on the same string at the same time (?)
         // if the note string (either original or newly assigned) is also used by another note
         if (note->displayFret() == Note::DisplayFretOption::NoHarmonic && bUsed[nNewString] > 1) {
             // attempt to find a suitable string, from topmost
@@ -441,6 +451,7 @@ int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick, int stri
 
 bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret, const CapoParams& capo) const
 {
+    // string and fret are overwritten by this function, their previous values are irrelevant
     int strings = static_cast<int>(m_stringTable.size());
     if (strings < 1) {
         return false;
