@@ -27,35 +27,55 @@ import Muse.UiComponents
 BaseSection {
     id: root
 
-    title: qsTrc("preferences", "Automatic update check")
+    title: qsTrc("preferences", "Automatic updates")
 
     property bool isAppUpdatable: true
-    property alias needCheckForNewAppVersion: needCheckBox.checked
+    property alias needCheckForNewAppVersion: needCheckEnable.checked
+    property alias autoDownloadNewAppVersion: autoDownloadCheckBox.checked
     property string museScorePrivacyPolicyUrl
 
     signal needCheckForNewAppVersionChangeRequested(bool check)
+    signal autoDownloadNewAppVersionChangeRequested(bool download)
 
-    CheckBox {
-        id: needCheckBox
+    ToggleButton {
+        id: needCheckEnable
         width: parent.width
 
-        text: qsTrc("preferences", "Check to see if a new version of MuseScore Studio is available")
+        text: qsTrc("preferences", "Check automatically for updates to MuseScore Studio is available")
 
         visible: root.isAppUpdatable
 
-        navigation.name: "NeedCheckBox"
+        navigation.name: "NeedCheckEnableButton"
         navigation.panel: root.navigation
         navigation.row: 0
 
-        onClicked: {
+        onToggled: {
             root.needCheckForNewAppVersionChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: autoDownloadCheckBox
+        width: parent.width
+
+        text: qsTrc("preferences", "Download updates in the background")
+
+        visible: root.isAppUpdatable
+        enabled: needCheckEnable.checked
+
+        navigation.name: "AutoDownloadCheckBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onClicked: {
+            root.autoDownloadNewAppVersionChangeRequested(!checked)
         }
     }
 
     StyledTextLabel {
         width: parent.width
 
-        text: qsTrc("preferences", "Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our <a href=\"%1\">privacy policy</a> for more info.")
+        text: qsTrc("preferences", "Checking for updates requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our <a href=\"%1\">privacy policy</a> for more info.")
               .arg(root.museScorePrivacyPolicyUrl)
               .replace("\n", "<br>")
 
