@@ -40,6 +40,8 @@
 #include "defer.h"
 #include "log.h"
 
+#include <QThread>
+
 using namespace muse;
 using namespace muse::actions;
 using namespace muse::async;
@@ -50,6 +52,7 @@ using namespace mu::notation;
 using namespace mu::playback;
 
 static const ActionCode PLAY_CODE("play");
+static const ActionCode STEP_PLAY_CODE("step-play");
 static const ActionCode PLAY_FROM_SELECTION("play-from-selection");
 static const ActionCode PAUSE_CODE("pause");
 static const ActionCode STOP_CODE("stop");
@@ -107,6 +110,7 @@ PlaybackController::~PlaybackController() = default;
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, [this]() { PlaybackController::togglePlay(); });
+    dispatcher()->reg(this, STEP_PLAY_CODE, [this]() { PlaybackController::toggleStepPlayMode(); });
     dispatcher()->reg(this, PLAY_FROM_SELECTION, [this]() { PlaybackController::playFromSelection(); });
     dispatcher()->reg(this, PAUSE_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
     dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
@@ -232,6 +236,143 @@ Notification PlaybackController::isPlayingChanged() const
 void PlaybackController::reset()
 {
     stop();
+}
+
+// function for step play back
+void PlaybackController::stepPlayAndAdvance()
+{
+    if (!m_notation || !notationPlayback() || !currentPlayer()) {
+        return;
+    }
+
+    const engraving::MasterScore* score = m_masterNotation ? m_masterNotation->masterScore() : nullptr;
+
+    if (!score) {
+        return;
+    }
+
+    // 1. End active element editing
+    if (interaction()) {
+        interaction()->endEditElement();
+    }
+
+    // 2. Determine initial tick position
+    muse::midi::tick_t startTick = m_currentTick;
+
+    if (isPlaying() || isPaused()) {
+        const secs_t currentSecs = currentPlayer()->playbackPosition();
+        startTick = score->utime2utick(currentSecs);
+    } else {
+        auto sel = selection();
+        if (sel && !sel->isNone() && !sel->elements().empty() && sel->elements().front()) {
+            startTick = sel->elements().front()->tick().ticks();
+        } else if (sel && sel->lastElementHit()) {
+            startTick = sel->lastElementHit()->tick().ticks();
+        }
+    }
+
+    const engraving::Fraction currentFraction = engraving::Fraction::fromTicks(startTick);
+
+    // 3. Step to next ChordRest segment
+    const engraving::Segment* nextSegment = score->tick2rightSegment(currentFraction);
+
+    if (nextSegment && nextSegment->tick() <= currentFraction) {
+        nextSegment = nextSegment->nextCR();
+    } else if (nextSegment && nextSegment->segmentType() != engraving::SegmentType::ChordRest) {
+        nextSegment = nextSegment->nextCR();
+    }
+
+    if (!nextSegment) {
+        return;
+    }
+
+    const engraving::Fraction targetFraction = nextSegment->tick();
+    const muse::midi::tick_t targetTick = targetFraction.ticks();
+
+    // 4. Collect playable elements grouped BY TRACK
+    std::unordered_map<int, std::vector<const engraving::EngravingItem*> > currentTrackMap;
+    std::vector<engraving::EngravingItem*> itemsToSelect;
+
+    for (size_t track = 0; track < score->ntracks(); ++track) {
+        const int trackId = static_cast<int>(track);
+        const engraving::EngravingItem* item = nextSegment->element(trackId);
+
+        if (!item) {
+            continue;
+        }
+
+        if (const auto* chord = dynamic_cast<const engraving::Chord*>(item)) {
+            for (const auto* note : chord->notes()) {
+                if (note && note->isPlayable()) {
+                    currentTrackMap[trackId].push_back(note);
+                    itemsToSelect.push_back(const_cast<engraving::Note*>(note));
+                }
+            }
+        } else if (item->isPlayable()) {
+            currentTrackMap[trackId].push_back(item);
+            itemsToSelect.push_back(const_cast<engraving::EngravingItem*>(item));
+        }
+    }
+
+    if (currentTrackMap.empty()) {
+        return;
+    }
+
+    // 5. Highlight all target elements
+    if (!itemsToSelect.empty() && interaction()) {
+        interaction()->select(itemsToSelect);
+    }
+
+    // 6. Map tick to actual playback seconds and seek
+    secs_t targetSecs = 0.0;
+    const RetVal<muse::midi::tick_t> playedTick = notationPlayback()->playPositionTickByRawTick(targetTick);
+
+    if (playedTick.ret) {
+        targetSecs = playedTickToSecs(playedTick.val);
+    } else {
+        targetSecs = score->utick2utime(targetTick);
+    }
+
+    m_currentTick = targetTick;
+    seek(targetSecs);
+
+    // 7. Retain previous step notes grouped by their trackId
+    static std::map<int, std::vector<const engraving::EngravingItem*> > previousTrackMap;
+    // DEBUG LOG
+
+    // --- PHASE 1: Kill previous notes channel-by-channel ---
+    if (!previousTrackMap.empty()) {
+        PlayParams killParams;
+        killParams.duration = 1;       // 1 microsecond = immediate Note-OFF
+        killParams.flushSound = false; // Do not purge sound buffers, send direct Note-OFF
+
+        // Loop through each tracked channel from the previous step explicitly
+        for (const auto& [trackId, elements] : previousTrackMap) {
+            if (!elements.empty()) {
+                playElements(elements, killParams);
+            }
+        }
+        previousTrackMap.clear();
+    }
+
+    // Pauses the current thread for 500ms
+    QThread::msleep(200);
+
+    // --- PHASE 2: Play current step notes per track ---
+    PlayParams playParams;
+    playParams.duration = 10000000; // 10 seconds sustain
+    playParams.flushSound = false;
+
+    for (const auto& [trackId, elements] : currentTrackMap) {
+        if (!elements.empty()) {
+            playElements(elements, playParams);
+        }
+    }
+
+    // --- PHASE 3: Store currentTrackMap into previousTrackMap for next step ---
+    for (const auto& [trackId, elements] : currentTrackMap) {
+        previousTrackMap[trackId] = elements;
+    }
 }
 
 void PlaybackController::seekRawTick(const midi::tick_t tick, const bool flushSound)
@@ -611,8 +752,25 @@ void PlaybackController::onSelectionChanged()
     updateSoloMuteStates();
 }
 
+void PlaybackController::toggleStepPlayMode()
+{
+    m_isStepPlayMode = !m_isStepPlayMode;
+    notifyActionCheckedChanged(ActionCode("step-play"));
+}
+
+bool PlaybackController::isStepPlayModeEnabled() const
+{
+    return m_isStepPlayMode;
+}
+
 void PlaybackController::togglePlay(bool showErrors)
 {
+    // If step play mode is toggled on, redirect Spacebar to stepPlayAndAdvance()
+    if (m_isStepPlayMode) {
+        stepPlayAndAdvance();
+        return;
+    }
+
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
         return;
@@ -1568,6 +1726,7 @@ bool PlaybackController::actionChecked(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isChecked {
         { LOOP_CODE, isLoopEnabled() },
+        { STEP_PLAY_CODE, m_isStepPlayMode },
         { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
         { INPUT_WRITTEN_PITCH, notationConfiguration()->midiUseWrittenPitch().val },
         { INPUT_SOUNDING_PITCH, !notationConfiguration()->midiUseWrittenPitch().val },

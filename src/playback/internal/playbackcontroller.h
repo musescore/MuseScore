@@ -43,6 +43,8 @@
 #include "../iplaybackconfiguration.h"
 #include "../isoundprofilesrepository.h"
 
+#include <vector>
+
 namespace mu::playback {
 class OnlineSoundsController;
 class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable,
@@ -62,6 +64,10 @@ public:
     ~PlaybackController() override;
 
     void init();
+
+    void stepPlayAndAdvance();
+    void toggleStepPlayMode();
+    bool isStepPlayModeEnabled() const;
 
     bool isPlayAllowed() const override;
     muse::async::Notification isPlayAllowedChanged() const override;
@@ -134,6 +140,8 @@ public:
 
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
+    std::vector<const engraving::EngravingItem*> m_activeStepElements;
+    bool m_isStepPlayMode = false;
 
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
