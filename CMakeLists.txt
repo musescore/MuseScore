@@ -168,6 +168,7 @@ set(APP_BUILTIN_WORKSPACES_DIR "${CMAKE_CURRENT_LIST_DIR}/share/workspaces")
 # === Compile ===
 option(MUSE_GENERATE_COMPILE_COMMANDS "Generate compile commands" OFF)
 option(MUSE_COMPILE_USE_UNITY "Use unity build" ON)
+option(MUSE_COMPILE_USE_PCH "Use precompiled headers." ON) # the app owns this option, see musescore/muse_framework#254
 option(MUSE_COMPILE_USE_COMPILER_CACHE "Try to use compiler cache: tries ccache, sccache, buildcache in that order. Use COMPILER_CACHE_PROGRAM to specify a specific compiler cache program." ON)
 option(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 
