@@ -72,6 +72,7 @@ private slots:
     void showClefChanged();
     void showTimeSigChanged();
     void showBarlinesChanged();
+    void instrumentLabelVisibilityChanged(int index);
     void gotoNextStaff();
     void gotoPreviousStaff();
     void invisibleChanged();
