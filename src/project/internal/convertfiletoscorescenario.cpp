@@ -381,26 +381,16 @@ void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
 
 void ConvertFileToScoreScenario::showFileProcessingDialog()
 {
-    constexpr int convertMoreBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
+    interactive()->open("musescore://project/convert/processing")
+    .onResolve(this, [this](const Val& val) {
+        const QVariantMap map = val.toQVariant().toMap();
+        const QString action = map.value("action").toString();
 
-    IInteractive::ButtonData convertMore(convertMoreBtn, muse::trc("project/convert", "Convert more"));
-    IInteractive::ButtonData goToScores(goToScoresBtn, muse::trc("project/convert", "Go to scores"));
-    IInteractive::ButtonData ok = interactive()->buttonData(IInteractive::Button::Ok);
+        configuration()->setShowConvertFileProcessingDialog(map.value("showAgain").toBool());
 
-    std::string msg = muse::trc("project/convert",
-                                "We’ll notify you once the score is ready to open. "
-                                "You can check the status of the score in Home > Scores.");
-
-    interactive()->info(muse::trc("project/convert", "Your score is being processed"), msg,
-                        { convertMore, goToScores, ok }, static_cast<int>(IInteractive::Button::Ok),
-                        IInteractive::Option::WithDontShowAgainCheckBox)
-    .onResolve(this, [this, convertMoreBtn, goToScoresBtn](const IInteractive::Result& result) {
-        configuration()->setShowConvertFileProcessingDialog(result.showAgain());
-
-        if (result.isButton(convertMoreBtn)) {
+        if (action == "convertMore") {
             convertFiles();
-        } else if (result.isButton(goToScoresBtn)) {
+        } else if (action == "goToScores") {
             interactive()->open("musescore://home?section=scores");
         }
     });

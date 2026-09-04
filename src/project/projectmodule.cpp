@@ -118,6 +118,7 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore.Project", "MigrationDialog");
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore.Project", "ProjectPropertiesDialog");
         ir->registerQmlUri(Uri("musescore://project/convert/selectfiles"), "MuseScore.Project", "ConvertFileToScoreDialog");
+        ir->registerQmlUri(Uri("musescore://project/convert/processing"), "MuseScore.Project", "ConvertFileProcessingDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore.Project", "UploadProgressDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore.Project", "ProjectUploadedDialog");
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");

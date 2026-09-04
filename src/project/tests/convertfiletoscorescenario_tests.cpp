@@ -848,22 +848,11 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsProcess
         return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
     }));
 
-    constexpr int convertMoreBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
-
-    const std::string title = muse::trc("project/convert", "Your score is being processed");
-    const std::string text = muse::trc("project/convert",
-                                       "We’ll notify you once the score is ready to open. "
-                                       "You can check the status of the score in Home > Scores.");
-
     // [THEN] The processing dialog is shown
-    EXPECT_CALL(*m_interactive,
-                info(title, TextIs(text), ButtonIdsAre({ convertMoreBtn, goToScoresBtn, int(IInteractive::Button::Ok) }),
-                     int(IInteractive::Button::Ok), IInteractive::Options(IInteractive::Option::WithDontShowAgainCheckBox),
-                     std::string()))
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/processing")))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
-        return resolvedResultPromise();
+        return resolvedValPromise();
     }));
 
     // [WHEN] Converting with no pre-selected files
@@ -886,12 +875,11 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_O
         return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
     }));
 
-    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
-
     // [GIVEN] The user clicks "Go to scores" in the processing dialog
-    ON_CALL(*m_interactive, info(_, _, _, _, _, _))
-    .WillByDefault(Invoke([goToScoresBtn](auto&&...) {
-        return resolvedResultPromise(IInteractive::Result(goToScoresBtn));
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/processing")))
+    .WillByDefault(Invoke([](auto&&...) {
+        QVariantMap result { { "action", QString("goToScores") }, { "showAgain", true } };
+        return resolvedValPromise(Val::fromQVariant(result));
     }));
 
     // [THEN] The app navigates to Home > Scores page
@@ -900,6 +888,71 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_O
     .WillOnce(Invoke([](auto&&...) {
         return resolvedValPromise();
     }));
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_DontShowAgain_UpdatesConfig)
+{
+    // [GIVEN] The processing dialog is enabled in the config
+    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
+    .WillByDefault(Return(true));
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    // [GIVEN] The user checks "Don't show again" and dismisses the processing dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/processing")))
+    .WillByDefault(Invoke([](auto&&...) {
+        QVariantMap result { { "action", QString() }, { "showAgain", false } };
+        return resolvedValPromise(Val::fromQVariant(result));
+    }));
+
+    // [THEN] The preference is persisted
+    EXPECT_CALL(*m_configuration, setShowConvertFileProcessingDialog(false))
+    .Times(1);
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ProcessingDialogDismissed_DoesNotChangeConfig)
+{
+    // [GIVEN] The processing dialog is enabled in the config
+    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
+    .WillByDefault(Return(true));
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    // [GIVEN] The user closes the processing dialog without clicking a button (e.g. Escape),
+    //! so the dialog's promise rejects instead of resolving
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/processing")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return async::make_promise<Val>([](auto resolve, auto reject) {
+            (void)resolve;
+            return reject(int(Ret::Code::Cancel), std::string());
+        });
+    }));
+
+    // [THEN] The "show again" preference is left untouched
+    EXPECT_CALL(*m_configuration, setShowConvertFileProcessingDialog(_))
+    .Times(0);
 
     // [WHEN] Converting with no pre-selected files
     m_scenario->convertFiles();
@@ -922,7 +975,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_NoProcessing
     }));
 
     // [THEN] No processing dialog is shown
-    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/processing"))).Times(0);
 
     // [WHEN] Converting with no pre-selected files
     m_scenario->convertFiles();
