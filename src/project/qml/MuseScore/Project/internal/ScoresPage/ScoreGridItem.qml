@@ -37,6 +37,7 @@ FocusScope {
     property string thumbnailUrl: ""
     property bool isCreateNew: false
     property bool isNoResultsFound: false
+    property bool isProcessing: false
     property bool isCloud: false
     property int cloudScoreId: 0
 
@@ -50,7 +51,8 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        accessible.name: root.name
+        //: %1 is the name of the score being converted
+        accessible.name: root.isProcessing ? qsTrc("project", "Processing %1").arg(root.name) : root.name
 
         onActiveChanged: function(active) {
             if (active) {
@@ -65,7 +67,7 @@ FocusScope {
         id: mouseArea
         anchors.fill: parent
 
-        enabled: root.enabled
+        enabled: root.enabled && !root.isProcessing
         hoverEnabled: true
 
         onClicked: {
@@ -99,6 +101,10 @@ FocusScope {
                     sourceComponent: {
                         if (root.isCreateNew) {
                             return addComp
+                        }
+
+                        if (root.isProcessing) {
+                            return processingComp
                         }
 
                         if (root.isNoResultsFound) {
@@ -258,7 +264,7 @@ FocusScope {
 
                 font.capitalization: Font.AllUppercase
 
-                visible: !root.isCreateNew && !root.isNoResultsFound
+                visible: !root.isCreateNew && !root.isNoResultsFound && !root.isProcessing
             }
         }
     }
@@ -277,6 +283,19 @@ FocusScope {
 
                 font.pixelSize: 50
                 color: "black"
+            }
+        }
+    }
+
+    Component {
+        id: processingComp
+
+        Rectangle {
+            anchors.fill: parent
+            color: "white"
+
+            StyledBusyIndicator {
+                anchors.centerIn: parent
             }
         }
     }

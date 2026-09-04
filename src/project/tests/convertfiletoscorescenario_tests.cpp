@@ -271,7 +271,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
     Ret ret = make_ret(Err::ConvertProcessingFailed);
-    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, QString("My Score"));
+    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
 
     const std::string title = muse::trc("project/convert", "Error processing score");
     const std::string text = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
@@ -332,11 +332,13 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     // [THEN] Conversion is restarted with the newly selected file
     EXPECT_CALL(*m_service, startConvert(Truly([](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Omr && convertPathsOf(input) == io::paths_t { "/some/file.xyz" };
-    }), QString("file")))
+    }), muse::String(u"file")))
     .WillOnce(Return(make_ok()));
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(make_ret(Err::ConvertProcessingFailed), io::path_t());
+    Ret ret = make_ret(Err::ConvertProcessingFailed);
+    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
+    convertFinished.send(ret, io::path_t());
 
     pumpEvents();
 }
@@ -1053,7 +1055,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsOmrCo
     // [THEN] The conversion is started as an OMR conversion of the given paths
     EXPECT_CALL(*m_service, startConvert(Truly([&](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Omr && convertPathsOf(input) == paths;
-    }), QString("file")))
+    }), muse::String(u"file")))
     .WillOnce(Return(make_ok()));
 
     // [WHEN] Converting files
@@ -1102,7 +1104,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsAudio
     // [THEN] The conversion is started as an Audio2Score conversion of the given paths
     EXPECT_CALL(*m_service, startConvert(Truly([&](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Audio2Score && convertPathsOf(input) == paths;
-    }), QString("song")))
+    }), muse::String(u"song")))
     .WillOnce(Return(make_ok()));
 
     // [WHEN] Converting files

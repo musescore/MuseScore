@@ -160,6 +160,7 @@ Item {
                 thumbnailUrl: score.thumbnailUrl ?? ""
                 isCreateNew: score.isCreateNew
                 isNoResultsFound: score.isNoResultsFound
+                isProcessing: score.isProcessing ?? false
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
@@ -167,7 +168,7 @@ Item {
                 onClicked: {
                     if (isCreateNew) {
                         root.createNewScoreRequested()
-                    } else if (!isNoResultsFound) {
+                    } else if (!isNoResultsFound && !isProcessing) {
                         root.openScoreRequested(score.path, score.name)
                     }
                 }

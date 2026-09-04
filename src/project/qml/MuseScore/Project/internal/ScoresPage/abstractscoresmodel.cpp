@@ -33,6 +33,7 @@ const QString AbstractScoresModel::THUMBNAIL_URL_KEY("thumbnailUrl");
 const QString AbstractScoresModel::TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString AbstractScoresModel::IS_CREATE_NEW_KEY("isCreateNew");
 const QString AbstractScoresModel::IS_NO_RESULTS_FOUND_KEY("isNoResultsFound");
+const QString AbstractScoresModel::IS_PROCESSING_KEY("isProcessing");
 const QString AbstractScoresModel::IS_CLOUD_KEY("isCloud");
 const QString AbstractScoresModel::CLOUD_SCORE_ID_KEY("scoreId");
 const QString AbstractScoresModel::CLOUD_VISIBILITY_KEY("cloudVisibility");
@@ -55,6 +56,7 @@ QVariant AbstractScoresModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case NameRole: return item[NAME_KEY];
     case IsNoResultsFoundRole: return item[IS_NO_RESULTS_FOUND_KEY];
+    case IsProcessingRole: return item[IS_PROCESSING_KEY];
     case ScoreRole: return item;
     }
 
@@ -71,6 +73,7 @@ QHash<int, QByteArray> AbstractScoresModel::roleNames() const
     static const QHash<int, QByteArray> ROLE_NAMES {
         { NameRole, NAME_KEY.toUtf8() },
         { IsNoResultsFoundRole, IS_NO_RESULTS_FOUND_KEY.toUtf8() },
+        { IsProcessingRole, IS_PROCESSING_KEY.toUtf8() },
         { ScoreRole, "score" }
     };
 

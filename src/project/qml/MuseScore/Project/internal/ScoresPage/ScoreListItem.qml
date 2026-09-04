@@ -41,7 +41,11 @@ ListItemBlank {
 
     implicitHeight: 64
 
-    navigation.accessible.name: root.score.name ?? ""
+    navigation.accessible.name: {
+        const name = root.score.name ?? ""
+        //: %1 is the name of the score being converted
+        return (root.score.isProcessing ?? false) ? qsTrc("project", "Processing %1").arg(name) : name
+    }
     navigation.onActiveChanged: {
         if (navigation.active) {
             root.scrollIntoView()
@@ -66,15 +70,34 @@ ListItemBlank {
                 Layout.preferredWidth: 30
                 Layout.preferredHeight: 40
 
-                sourceComponent: ScoreThumbnail {
-                    path: root.score.path ?? ""
-                    suffix: root.score.suffix ?? ""
-                    thumbnailUrl: root.score.thumbnailUrl ?? ""
-                }
+                sourceComponent: Boolean(root.score.isProcessing) ? processingComp : scoreThumbnailComp
 
                 layer.enabled: ui.isEffectsAllowed
                 layer.effect: RoundedCornersEffect {
                     radius: 2
+                }
+            }
+
+            Component {
+                id: scoreThumbnailComp
+
+                ScoreThumbnail {
+                    path: root.score.path ?? ""
+                    suffix: root.score.suffix ?? ""
+                    thumbnailUrl: root.score.thumbnailUrl ?? ""
+                }
+            }
+
+            Component {
+                id: processingComp
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "white"
+
+                    StyledBusyIndicator {
+                        anchors.centerIn: parent
+                    }
                 }
             }
 
