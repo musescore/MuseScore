@@ -42,7 +42,13 @@ public:
         autoplaceMeasureElement(item, ldata, item->placeAbove(), add);
     }
 
-    static void autoplaceSpannerSegment(const SpannerSegment* item, SpannerSegment::LayoutData* ldata, double spatium);
+    static void autoplaceSpannerSegment(const SpannerSegment* item, SpannerSegment::LayoutData* ldata);
+
+    static double distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
+                                     double minSkylineHorizontalClearance, double minDistance);
+
+    static void doAutoplaceElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, const System* system, bool above, bool add,
+                                   double minSkylineHorizontalClearance, double spatium);
 
     static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
 };
