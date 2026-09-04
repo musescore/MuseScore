@@ -44,6 +44,16 @@ void RecentScoresModel::load()
     recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
         updateRecentScores();
     });
+
+    convertFileToScoreService()->fileNamesBeingConvertedChanged().onNotify(this, [this]() {
+        updateRecentScores();
+    });
+
+    convertFileToScoreService()->convertFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
+        if (ret) {
+            recentFilesController()->prependRecentFile(RecentFile(path));
+        }
+    });
 }
 
 void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
@@ -60,16 +70,28 @@ void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 void RecentScoresModel::updateRecentScores()
 {
     const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
+    const StringList processingFiles = convertFileToScoreService()->fileNamesBeingConverted();
 
     std::vector<QVariantMap> items;
-    items.reserve(recentScores.size());
+    items.reserve(recentScores.size() + processingFiles.size() + 2);
 
     QVariantMap addItem;
     addItem[NAME_KEY] = muse::qtrc("project", "New score");
     addItem[IS_CREATE_NEW_KEY] = true;
     addItem[IS_NO_RESULTS_FOUND_KEY] = false;
+    addItem[IS_PROCESSING_KEY] = false;
     addItem[IS_CLOUD_KEY] = false;
     items.push_back(addItem);
+
+    for (const String& fileName : processingFiles) {
+        QVariantMap obj;
+        obj[NAME_KEY] = fileName.toQString();
+        obj[IS_CREATE_NEW_KEY] = false;
+        obj[IS_NO_RESULTS_FOUND_KEY] = false;
+        obj[IS_PROCESSING_KEY] = true;
+        obj[IS_CLOUD_KEY] = false;
+        items.push_back(obj);
+    }
 
     for (const RecentFile& file : recentScores) {
         QVariantMap obj;
@@ -89,6 +111,7 @@ void RecentScoresModel::updateRecentScores()
         obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULTS_FOUND_KEY] = false;
+        obj[IS_PROCESSING_KEY] = false;
 
         items.push_back(obj);
     }
@@ -97,6 +120,7 @@ void RecentScoresModel::updateRecentScores()
     noResultsFoundItem[NAME_KEY] = "";
     noResultsFoundItem[IS_CREATE_NEW_KEY] = false;
     noResultsFoundItem[IS_NO_RESULTS_FOUND_KEY] = true;
+    noResultsFoundItem[IS_PROCESSING_KEY] = false;
     noResultsFoundItem[IS_CLOUD_KEY] = false;
     items.push_back(noResultsFoundItem);
 

@@ -54,8 +54,11 @@ public:
     muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) const override;
     muse::Ret validateLink(const QUrl& link) const override;
 
-    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) override;
+    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedFileName) override;
     muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
+
+    muse::StringList fileNamesBeingConverted() const override;
+    muse::async::Notification fileNamesBeingConvertedChanged() const override;
 
     muse::async::Channel<ConvertType, int> reviewRequested() const override;
     void submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment = QString()) override;
@@ -73,19 +76,19 @@ private:
 
     struct WatchedItem {
         ConvertType type = ConvertType::Omr;
-        QString convertedFileName;
+        muse::String convertedFileName;
         DownloadStatus downloadStatus = DownloadStatus::NotStarted;
         muse::cloud::ConvertStatus lastHandledStatus = muse::cloud::ConvertStatus::Unknown;
     };
 
-    void watch(int queueId, ConvertType type, const QString& convertedFileName);
+    void watch(int queueId, ConvertType type, const muse::String& convertedFileName);
     void poll();
     void giveUpPolling(const muse::Ret& ret);
 
     void loadWatchedItems();
     void saveWatchedItems();
 
-    QString convertedFileNameFor(int queueId) const;
+    muse::String convertedFileNameFor(int queueId) const;
 
     void onStatusChanged(const muse::cloud::ConvertQueueItem& item);
     bool shouldHandle(int queueId, muse::cloud::ConvertStatus status);
@@ -96,7 +99,7 @@ private:
     void markDownloaded(int queueId);
     void clearDownloading(int queueId);
     void finishConvert(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());
-    void failConvert(muse::Ret ret, ConvertType type, int queueId, const QString& convertedFileName);
+    void failConvert(muse::Ret ret, ConvertType type, int queueId, const muse::String& convertedFileName);
 
     ConvertConfig m_config;
 
@@ -107,5 +110,6 @@ private:
     bool m_pollInProgress = false;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
     muse::async::Channel<ConvertType, int> m_reviewRequested;
+    muse::async::Notification m_fileNamesBeingConvertedChanged;
 };
 }

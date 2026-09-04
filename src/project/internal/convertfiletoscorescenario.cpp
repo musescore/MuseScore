@@ -76,8 +76,9 @@ void ConvertFileToScoreScenario::init()
         m_convertFinished.send(ret, path);
     });
 
-    service()->reviewRequested().onReceive(this, [this](ConvertType type, int queueId) {
-        askReviewRating(type, queueId);
+    service()->reviewRequested().onReceive(this, [this](ConvertType, int) {
+        // TODO: Temporarily disabled to prevent dialog spam until we replace it with a toast
+        // askReviewRating(type, queueId);
     });
 }
 
@@ -238,7 +239,7 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
     });
 }
 
-Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
+Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedFileName)
 {
     Ret ret = service()->startConvert(input, convertedFileName);
     if (!ret) {
@@ -380,26 +381,16 @@ void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
 
 void ConvertFileToScoreScenario::showFileProcessingDialog()
 {
-    constexpr int convertMoreBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
+    interactive()->open("musescore://project/convert/processing")
+    .onResolve(this, [this](const Val& val) {
+        const QVariantMap map = val.toQVariant().toMap();
+        const QString action = map.value("action").toString();
 
-    IInteractive::ButtonData convertMore(convertMoreBtn, muse::trc("project/convert", "Convert more"));
-    IInteractive::ButtonData goToScores(goToScoresBtn, muse::trc("project/convert", "Go to scores"));
-    IInteractive::ButtonData ok = interactive()->buttonData(IInteractive::Button::Ok);
+        configuration()->setShowConvertFileProcessingDialog(map.value("showAgain").toBool());
 
-    std::string msg = muse::trc("project/convert",
-                                "We’ll notify you once the score is ready to open. "
-                                "You can check the status of the score in Home > Scores.");
-
-    interactive()->info(muse::trc("project/convert", "Your score is being processed"), msg,
-                        { convertMore, goToScores, ok }, static_cast<int>(IInteractive::Button::Ok),
-                        IInteractive::Option::WithDontShowAgainCheckBox)
-    .onResolve(this, [this, convertMoreBtn, goToScoresBtn](const IInteractive::Result& result) {
-        configuration()->setShowConvertFileProcessingDialog(result.showAgain());
-
-        if (result.isButton(convertMoreBtn)) {
+        if (action == "convertMore") {
             convertFiles();
-        } else if (result.isButton(goToScoresBtn)) {
+        } else if (action == "goToScores") {
             interactive()->open("musescore://home?section=scores");
         }
     });
@@ -432,6 +423,11 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
 
 void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
 {
+    muse::String fileName = ret.data<muse::String>(CONVERT_FAILED_FILE_NAME_KEY, muse::String());
+    if (fileName.isEmpty()) {
+        return;
+    }
+
     constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
@@ -441,9 +437,8 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("global", "Try again"), /*accent*/ true);
     tryAgain.role = IInteractive::ButtonRole::AcceptRole;
 
-    QString fileName = ret.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString());
     std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
-                      .arg(fileName).toStdString();
+                      .arg(fileName.toQString()).toStdString();
 
     //! TODO: replace with toast
     interactive()->warning(muse::trc("project/convert", "Error processing score"), msg,

@@ -213,12 +213,16 @@ Item {
                         implicitHeight: view.rowHeight
                         columnSpacing: view.columnSpacing
 
+                        mouseArea.enabled: !Boolean(score.isProcessing)
+
                         navigation.panel: navPanel
                         navigation.row: index + 1
                         navigation.column: 0
 
                         onClicked: {
-                            root.openScoreRequested(score.path, score.name)
+                            if (!Boolean(score.isProcessing)) {
+                                root.openScoreRequested(score.path, score.name)
+                            }
                         }
                     }
                 }

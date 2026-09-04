@@ -30,6 +30,7 @@
 
 #include "iprojectconfiguration.h"
 #include "irecentfilescontroller.h"
+#include "iconvertfiletoscoreservice.h"
 #include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 
@@ -40,6 +41,7 @@ class RecentScoresModel : public AbstractScoresModel, public muse::async::Asynca
     QML_ELEMENT
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
+    muse::ContextInject<IConvertFileToScoreService> convertFileToScoreService = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:

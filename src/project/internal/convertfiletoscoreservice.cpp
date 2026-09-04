@@ -115,7 +115,7 @@ static std::string convertLogId(int queueId, ConvertType type)
     return std::to_string(queueId) + " (type: " + convertTypeToString(type) + ")";
 }
 
-static std::string convertLogId(const QString& convertedFileName, int queueId, ConvertType type)
+static std::string convertLogId(const muse::String& convertedFileName, int queueId, ConvertType type)
 {
     return "\"" + convertedFileName.toStdString() + "\" (conversion " + convertLogId(queueId, type) + ")";
 }
@@ -259,7 +259,7 @@ Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
     return make_ret(Err::ConvertUnsupportedLink);
 }
 
-Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const QString& convertedFileName)
+Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const muse::String& convertedFileName)
 {
     IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
         return make_ret(Err::ConvertValidationFailed);
@@ -298,6 +298,23 @@ async::Channel<Ret, io::path_t> ConvertFileToScoreService::convertFinished() con
     return m_convertFinished;
 }
 
+muse::StringList ConvertFileToScoreService::fileNamesBeingConverted() const
+{
+    muse::StringList result;
+    result.reserve(m_watchedItems.size());
+
+    for (const auto& pair : m_watchedItems) {
+        result.push_back(pair.second.convertedFileName);
+    }
+
+    return result;
+}
+
+async::Notification ConvertFileToScoreService::fileNamesBeingConvertedChanged() const
+{
+    return m_fileNamesBeingConvertedChanged;
+}
+
 async::Channel<ConvertType, int> ConvertFileToScoreService::reviewRequested() const
 {
     return m_reviewRequested;
@@ -327,10 +344,11 @@ void ConvertFileToScoreService::submitReviewComment(ConvertType type, int queueI
     });
 }
 
-void ConvertFileToScoreService::watch(int queueId, ConvertType type, const QString& convertedFileName)
+void ConvertFileToScoreService::watch(int queueId, ConvertType type, const muse::String& convertedFileName)
 {
     m_watchedItems.insert_or_assign(queueId, WatchedItem { type, convertedFileName, DownloadStatus::NotStarted });
     saveWatchedItems();
+    m_fileNamesBeingConvertedChanged.notify();
 
     if (!m_timer.isActive()) {
         m_timer.start();
@@ -377,6 +395,8 @@ void ConvertFileToScoreService::poll()
         m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
         m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
 
+        bool watchedItemsErased = false;
+
         for (auto it = m_watchedItems.begin(); it != m_watchedItems.end();) {
             const int queueId = it->first;
             const ConvertType type = it->second.type;
@@ -392,6 +412,7 @@ void ConvertFileToScoreService::poll()
                 //! until its download actually resolves, so a crash mid-download can be resumed
                 if (found->status == ConvertStatus::Failed) {
                     it = m_watchedItems.erase(it);
+                    watchedItemsErased = true;
                 } else {
                     ++it;
                 }
@@ -410,6 +431,10 @@ void ConvertFileToScoreService::poll()
         }
 
         saveWatchedItems();
+
+        if (watchedItemsErased) {
+            m_fileNamesBeingConvertedChanged.notify();
+        }
     });
 }
 
@@ -450,7 +475,7 @@ void ConvertFileToScoreService::loadWatchedItems()
         const JsonObject obj = array.at(i).toObject();
         const int queueId = obj.value("id").toInt();
         const ConvertType type = static_cast<ConvertType>(obj.value("type").toInt());
-        const QString convertedFileName = QString::fromStdString(obj.value("convertedFileName").toStdString());
+        const muse::String convertedFileName = muse::String::fromStdString(obj.value("convertedFileName").toStdString());
 
         m_watchedItems.insert_or_assign(queueId, WatchedItem { type, convertedFileName, DownloadStatus::NotStarted });
     }
@@ -458,6 +483,7 @@ void ConvertFileToScoreService::loadWatchedItems()
     if (!m_watchedItems.empty()) {
         m_timer.start();
         poll();
+        m_fileNamesBeingConvertedChanged.notify();
     }
 }
 
@@ -485,10 +511,10 @@ void ConvertFileToScoreService::saveWatchedItems()
     }
 }
 
-QString ConvertFileToScoreService::convertedFileNameFor(int queueId) const
+muse::String ConvertFileToScoreService::convertedFileNameFor(int queueId) const
 {
     auto it = m_watchedItems.find(queueId);
-    return it != m_watchedItems.end() ? it->second.convertedFileName : QString();
+    return it != m_watchedItems.end() ? it->second.convertedFileName : muse::String();
 }
 
 void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
@@ -512,7 +538,7 @@ void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
         downloadIfNotAlready(item.type, item.id);
         break;
     case ConvertStatus::Failed: {
-        const QString convertedFileName = convertedFileNameFor(item.id);
+        const muse::String convertedFileName = convertedFileNameFor(item.id);
 
         Ret ret = make_ret(Err::ConvertProcessingFailed);
         ret.setText("Conversion failed for \"" + convertedFileName.toStdString() + "\": " + errorCodeToString(item.errorCode));
@@ -558,7 +584,7 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
 {
     museScoreComService()->convert()->fetchMsczUrl(type, queueId)
     .onResolve(this, [this, type, queueId](const RetVal<SignedMsczUrl>& urlInfo) {
-        const QString convertedFileName = convertedFileNameFor(queueId);
+        const muse::String convertedFileName = convertedFileNameFor(queueId);
 
         if (!urlInfo.ret) {
             if (isRetryableError(urlInfo.ret)) {
@@ -581,6 +607,7 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
                    << ": " << ret.toString();
             m_watchedItems.erase(queueId);
             saveWatchedItems();
+            m_fileNamesBeingConvertedChanged.notify();
             finishConvert(ret);
             return;
         }
@@ -603,7 +630,7 @@ void ConvertFileToScoreService::downloadScoreAndFinish(ConvertType type, int que
     ProgressPtr progress = museScoreComService()->convert()->downloadConvertedScore(urlInfo, scoreData);
 
     progress->finished().onReceive(this, [this, type, queueId, dir, scoreData](const ProgressResult& res) {
-        const QString convertedFileName = convertedFileNameFor(queueId);
+        const muse::String convertedFileName = convertedFileNameFor(queueId);
 
         if (!res.ret) {
             if (isRetryableError(res.ret)) {
@@ -642,6 +669,7 @@ void ConvertFileToScoreService::markDownloaded(int queueId)
     //! NOTE: the download is done, stop watching
     m_watchedItems.erase(queueId);
     saveWatchedItems();
+    m_fileNamesBeingConvertedChanged.notify();
 }
 
 void ConvertFileToScoreService::clearDownloading(int queueId)
@@ -658,7 +686,7 @@ void ConvertFileToScoreService::finishConvert(const Ret& ret, const io::path_t& 
     m_convertFinished.send(ret, path);
 }
 
-void ConvertFileToScoreService::failConvert(Ret ret, ConvertType type, int queueId, const QString& convertedFileName)
+void ConvertFileToScoreService::failConvert(Ret ret, ConvertType type, int queueId, const muse::String& convertedFileName)
 {
     LOGE() << ret.toString() << " " << convertLogId(convertedFileName, queueId, type);
     ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
