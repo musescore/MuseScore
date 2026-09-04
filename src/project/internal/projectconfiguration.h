@@ -98,6 +98,9 @@ public:
     HomeScoresPageViewType homeScoresPageViewType() const override;
     void setHomeScoresPageViewType(HomeScoresPageViewType type) override;
 
+    HomeScoresPageSortMode homeScoresPageSortMode() const override;
+    void setHomeScoresPageSortMode(HomeScoresPageSortMode mode) override;
+
     QColor templatePreviewBackgroundColor() const override;
     muse::async::Notification templatePreviewBackgroundChanged() const override;
 
