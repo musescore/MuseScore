@@ -74,7 +74,6 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
             ChordRest* ncr = toChordRest(maybeLinkedClone(ocr));
             ncr->setScore(destScore);
             ncr->setTrack(dstTrack);
-            crMap.add(ocr, ncr);
 
             //Don't clone gaps to a first voice
             if (!(ncr->track() % VOICES) && ncr->isRest()) {
@@ -129,6 +128,10 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                     continue;
                 }
             }
+
+            // Only map ChordRests that actually survive into the destination score - a skipped full-measure
+            // rest above must never be found as a spanner endpoint, since it is never added anywhere.
+            crMap.add(ocr, ncr);
 
             auto cloneChord = [&](Chord* oldChord, Chord* newChord) {
                 size_t n = oldChord->notes().size();
