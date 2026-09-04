@@ -1358,8 +1358,8 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
         writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
     }
 
-    writeItemProperties(item, xml, ctx);
     writeProperty(item, xml, Pid::TEXT_STYLE);
+    writeItemProperties(item, xml, ctx);
 
     for (const StyledProperty& spp : *item->styledProperties()) {
         if (!item->isStyled(spp.pid)) {
