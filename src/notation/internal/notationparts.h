@@ -111,6 +111,7 @@ protected:
     void apply();
     void rollback();
 
+    virtual void onPartsAdded(const std::vector<Part*>& parts);
     virtual void onPartsRemoved(const std::vector<Part*>& parts);
 
 private:

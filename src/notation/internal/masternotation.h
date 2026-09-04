@@ -57,9 +57,9 @@ public:
 
     const ExcerptNotationList& excerpts() const override;
     muse::async::Notification excerptsChanged() const override;
-    const ExcerptNotationList& potentialExcerpts() const override;
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
+    void deinitExcerpts(const ExcerptNotationList& excerpts) override;
     void setExcerpts(const ExcerptNotationList& excerpts) override;
     void resetExcerpt(IExcerptNotationPtr& excerptNotation) override;
     void sortExcerpts(ExcerptNotationList& excerpts) override;
@@ -81,11 +81,10 @@ private:
 
     void initAfterSettingScore(const engraving::MasterScore* score, bool disablePlayback = false);
 
-    void initExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
+    void createExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<engraving::Excerpt*>& excerpts);
     void doSetExcerpts(const ExcerptNotationList& excerpts);
     void updateExcerpts();
-    void updatePotentialExcerpts() const;
     void unloadExcerpts(ExcerptNotationList& excerpts);
 
     bool containsExcerpt(const engraving::Excerpt* excerpt) const;
@@ -103,14 +102,6 @@ private:
     INotationPlaybackPtr m_notationPlayback = nullptr;
     INotationAutomationPtr m_notationAutomation = nullptr;
     muse::async::Notification m_hasPartsChanged;
-
-    mutable ExcerptNotationList m_potentialExcerpts;
-
-    // When the user first removes instruments (`Parts`) and then adds new ones,
-    // the new ones might have the same ID as the removed ones. In this case,
-    // we need to regenerate potential excerpts, even though for all part IDs a
-    // potential excerpt already exists.
-    mutable bool m_potentialExcerptsForcedDirty = false;
 };
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;

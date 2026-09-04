@@ -264,9 +264,9 @@ void MasterScore::setTempoTimelineOverride(std::optional<TempoTimeline> timeline
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex, size_t index)
+void MasterScore::addExcerpt(Excerpt* ex, size_t index, bool initIfNeeded)
 {
-    if (!ex->inited()) {
+    if (initIfNeeded && !ex->inited()) {
         initParts(ex);
     }
 

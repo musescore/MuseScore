@@ -35,6 +35,8 @@ class Read500 : public rw::IReader
 public:
 
     muse::Ret readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* data) override;
+    muse::Ret readExcerptScoreFile(Excerpt* excerpt, MasterScore* masterScore, const muse::ByteArray& excerptData,
+                                   const muse::String& fileName, rw::ReadInOutData* out, const ApplyStyleFn& applyStyleFn) override;
 
     static bool readScoreTag(Score* score, XmlReader& e, ReadContext& ctx);
 
