@@ -2903,7 +2903,7 @@ void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item,
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
@@ -3108,7 +3108,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
     }
 
     if (item->autoplace()) {
-        Autoplace::autoplaceSpannerSegment(item, ldata, item->spatium());
+        Autoplace::autoplaceSpannerSegment(item, ldata);
     }
 }
 
@@ -3298,7 +3298,7 @@ void TLayout::layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx)
@@ -3821,7 +3821,7 @@ void TLayout::layoutLetRingSegment(LetRingSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutLineSegment(LineSegment* item, LayoutContext& ctx)
@@ -4357,7 +4357,7 @@ void TLayout::layoutOttavaSegment(OttavaSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockIndicator::LayoutData* ldata)
@@ -4433,7 +4433,7 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
@@ -4473,7 +4473,7 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
         ldata->setShape(sh);
     }
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutPickScrapeSegment(PickScrapeSegment* item, LayoutContext& ctx)
@@ -4481,7 +4481,7 @@ void TLayout::layoutPickScrapeSegment(PickScrapeSegment* item, LayoutContext& ct
     LAYOUT_CALL_ITEM(item);
     PickScrapeSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* ldata)
@@ -4555,7 +4555,7 @@ void TLayout::layoutRasgueadoSegment(RasgueadoSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::LayoutData* ldata)
@@ -5809,7 +5809,7 @@ void TLayout::layoutTextLineSegment(TextLineSegment* item, LayoutContext& ctx)
     TextLineSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 // Extends lines to fill the corner between them.
@@ -6527,7 +6527,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
         }
     }
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::fillTrillSegmentShape(const TrillSegment* item, TrillSegment::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -6630,7 +6630,7 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
         break;
     }
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutVibrato(Vibrato* item, LayoutContext& ctx)
@@ -6673,7 +6673,7 @@ void TLayout::layoutVoltaSegment(VoltaSegment* item, LayoutContext& ctx)
         Shape sh = recalculateTextLineBaseSegmentShape(item);
         ldata->setShape(sh);
     }
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx)
@@ -6682,7 +6682,7 @@ void TLayout::layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx)
     WhammyBarSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, HammerOnPullOff, TappingHalfSlur, Volta>;
