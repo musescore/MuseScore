@@ -368,7 +368,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Good_SubmitsGoodRating)
+TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Good_SubmitsGoodRating)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
@@ -400,7 +400,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Good_Submits
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_ReviewRequested_Bad_SubmitsBadRating)
+TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Bad_SubmitsBadRating)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;

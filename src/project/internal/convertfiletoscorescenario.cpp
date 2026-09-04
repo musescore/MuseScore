@@ -76,8 +76,9 @@ void ConvertFileToScoreScenario::init()
         m_convertFinished.send(ret, path);
     });
 
-    service()->reviewRequested().onReceive(this, [this](ConvertType type, int queueId) {
-        askReviewRating(type, queueId);
+    service()->reviewRequested().onReceive(this, [this](ConvertType, int) {
+        // TODO: Temporarily disabled to prevent dialog spam until we replace it with a toast
+        // askReviewRating(type, queueId);
     });
 }
 
