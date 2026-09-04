@@ -446,6 +446,25 @@ const TextStyle harpPedalTextDiagramTextStyle {
     { Sid::harpPedalTextDiagramOffset, Sid::harpPedalTextDiagramOffset }
 };
 
+const TextStyle jianpuNumberTextStyle {
+    { {
+        { TextStylePropertyType::FontFace,             Sid::jianpuNumberFontFace,                   Pid::FONT_FACE },
+        { TextStylePropertyType::FontSize,             Sid::jianpuNumberFontSize,                   Pid::FONT_SIZE },
+        { TextStylePropertyType::LineSpacing,          Sid::jianpuNumberLineSpacing,                Pid::TEXT_LINE_SPACING },
+        { TextStylePropertyType::SizeSpatiumDependent, Sid::jianpuNumberFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
+        { TextStylePropertyType::FontStyle,            Sid::jianpuNumberFontStyle,                  Pid::FONT_STYLE },
+        { TextStylePropertyType::Color,                Sid::jianpuNumberColor,                      Pid::COLOR },
+        { TextStylePropertyType::TextAlign,            Sid::jianpuNumberAlign,                      Pid::ALIGN },
+        { TextStylePropertyType::FrameType,            Sid::jianpuNumberFrameType,                  Pid::FRAME_TYPE },
+        { TextStylePropertyType::FramePadding,         Sid::jianpuNumberFramePadding,               Pid::FRAME_PADDING },
+        { TextStylePropertyType::FrameWidth,           Sid::jianpuNumberFrameWidth,                 Pid::FRAME_WIDTH },
+        { TextStylePropertyType::FrameRound,           Sid::jianpuNumberFrameRound,                 Pid::FRAME_ROUND },
+        { TextStylePropertyType::FrameBorderColor,     Sid::jianpuNumberFrameFgColor,               Pid::FRAME_FG_COLOR },
+        { TextStylePropertyType::FrameFillColor,       Sid::jianpuNumberFrameBgColor,               Pid::FRAME_BG_COLOR },
+    } },
+    { Sid::jianpuNumberOffset, Sid::jianpuNumberOffset }
+};
+
 const TextStyle longInstrumentTextStyle {
     { {
         { TextStylePropertyType::FontFace,             Sid::longInstrumentFontFace,                 Pid::FONT_FACE },
@@ -1737,6 +1756,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::FRET_DIAGRAM_FRET_NUMBER: return &fretDiagramFretNumberStyle;
     case TextStyleType::HARP_PEDAL_DIAGRAM: return &harpPedalDiagramTextStyle;
     case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: return &harpPedalTextDiagramTextStyle;
+    case TextStyleType::JIANPU_NUMBER: return &jianpuNumberTextStyle;
 
     case TextStyleType::TEXTLINE: return &textLineTextStyle;
     case TextStyleType::SYSTEM_TEXTLINE: return &systemTextLineTextStyle;

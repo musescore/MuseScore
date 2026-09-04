@@ -640,6 +640,12 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::TAPPING_TEXT, "TappingText",
           TranslatableString("engraving", "tapping text(s)", nullptr, 1),
           TranslatableString("engraving", "Tapping text(s)", nullptr, 1) },
+    Item{ ElementType::OCTAVE_DOT, "OctaveDot",
+          TranslatableString("engraving", "octave dot"),
+          TranslatableString("engraving", "Octave dot") },
+    Item{ ElementType::DURATION_LINE, "DurationLine",
+          TranslatableString("engraving", "duration line"),
+          TranslatableString("engraving", "Duration line") },
     Item{ ElementType::ROOT_ITEM, "RootItem",
           TranslatableString::untranslatable("root item"),
           TranslatableString::untranslatable("Root item") },
@@ -1790,6 +1796,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  muse::TranslatableString("engraving", "Harp pedal diagram") },
     { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", muse::TranslatableString("engraving", "Harp pedal text diagram") },
     { TextStyleType::ARTICULATION, "articulation", muse::TranslatableString("engraving", "Articulation") },
+    { TextStyleType::JIANPU_NUMBER, "jianpu_number", muse::TranslatableString("engraving", "Jianpu number") },
 
     { TextStyleType::TEXTLINE,          "textline",             muse::TranslatableString("engraving", "Text line") },
     { TextStyleType::SYSTEM_TEXTLINE,   "system_textline",      muse::TranslatableString("engraving", "System text line") },
@@ -3243,8 +3250,9 @@ StaffGroup TConv::fromXml(const AsciiStringView& tag, StaffGroup def)
     return findTypeByXmlTag<StaffGroup>(STAFFGROUP_TYPES, tag, def);
 }
 
-static const std::array<Item<StaffTypes>, 27> STAFFTYPES_ITEMS = { {
+static const std::array<Item<StaffTypes>, 28> STAFFTYPES_ITEMS = { {
     { StaffTypes::STANDARD,      "stdNormal",      muse::TranslatableString("engraving/stafftypes", "Standard") },
+    { StaffTypes::JIANPU,        "stdJianpu",      muse::TranslatableString("engraving/stafftypes", "Jianpu") },
     { StaffTypes::PERC_1LINE,    "perc1Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 1 line") },
     { StaffTypes::PERC_2LINE,    "perc2Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 2 lines") },
     { StaffTypes::PERC_3LINE,    "perc3Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 3 lines") },
