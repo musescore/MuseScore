@@ -195,8 +195,6 @@ private:
 
     void moveProject(INotationProjectPtr project, const muse::io::path_t& newPath, bool replace);
 
-    void importPdf();
-    void importAudioToScore();
     void convertFileToScore(const muse::actions::ActionData& args);
 
     void clearRecentScores();

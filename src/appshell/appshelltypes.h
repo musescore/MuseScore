@@ -25,8 +25,13 @@
 
 #include <QString>
 
+#include "global/types/uri.h"
+
 namespace mu::appshell {
 using DockName = QString;
+
+inline const muse::Uri HOME_URI("musescore://home");
+inline const muse::Uri NOTATION_URI("musescore://notation");
 
 // Panels:
 static const DockName PALETTES_PANEL_NAME("palettesPanel");
