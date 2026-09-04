@@ -212,7 +212,7 @@ void FretCanvas::draw(QPainter* painter)
             if (finger == 0) {
                 continue;
             }
-            QString fingerS = QString::number(finger);
+            QString fingerS = mu::engraving::FretDiagram::fingeringToString(finger).toQString();
             double width = fontMetrics.width(fingerS);
             double xOff = -0.5 * width;
             double fingerX = (m_diagram->strings() - i - 1) * stringDist + xOff;
