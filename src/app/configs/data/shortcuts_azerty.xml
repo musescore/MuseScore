@@ -621,12 +621,12 @@
     <seq>Ctrl+D</seq>
     </SC>
   <SC>
-    <key>add-hairpin</key>
-    <seq>Shift+,</seq>
+    <key>add-hairpin</key><!-- crescendo -->
+    <seq>&lt;</seq>
     </SC>
   <SC>
-    <key>add-hairpin-reverse</key>
-    <seq>Shift+.</seq>
+    <key>add-hairpin-reverse</key><!-- diminuendo -->
+    <seq>&gt;</seq>
     </SC>
   <SC>
     <key>increase-dynamic</key>
@@ -788,8 +788,8 @@
     <seq>Ctrl+Alt+4</seq>
     </SC>
   <SC>
-    <key>voice-assignment-all-in-instrument</key>
-    <seq>Ctrl+Alt+0</seq>
+    <key>voice-assignment-all-in-instrument</key><!-- avoid collision with 'stretch+', '}' ('Ctrl+Alt+0' or rather "AltGr+0') on German keyboards -->
+    <seq>Ctrl+Alt+5</seq>
     </SC>
   <SC>
     <key>voice-assignment-all-in-staff</key>
