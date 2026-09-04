@@ -239,7 +239,7 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
     });
 }
 
-Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
+Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedFileName)
 {
     Ret ret = service()->startConvert(input, convertedFileName);
     if (!ret) {
@@ -423,6 +423,11 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
 
 void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
 {
+    muse::String fileName = ret.data<muse::String>(CONVERT_FAILED_FILE_NAME_KEY, muse::String());
+    if (fileName.isEmpty()) {
+        return;
+    }
+
     constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
@@ -432,9 +437,8 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("global", "Try again"), /*accent*/ true);
     tryAgain.role = IInteractive::ButtonRole::AcceptRole;
 
-    QString fileName = ret.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString());
     std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
-                      .arg(fileName).toStdString();
+                      .arg(fileName.toQString()).toStdString();
 
     //! TODO: replace with toast
     interactive()->warning(muse::trc("project/convert", "Error processing score"), msg,

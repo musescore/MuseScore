@@ -554,14 +554,14 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadFails_ForwardsF
 
     // [WHEN] Starting the conversion
     const io::paths_t paths { "/some/path/file.pdf" };
-    Ret ret = m_service->startConvert(OmrConvertInput { paths }, "My Score");
+    Ret ret = m_service->startConvert(OmrConvertInput { paths }, u"My Score");
     EXPECT_TRUE(ret);
 
     // [THEN] The failure is forwarded synchronously, carrying the intended file name
     uploadProgress->finish(make_ret(Ret::Code::UnknownError, std::string("network error")));
     ASSERT_TRUE(received);
     EXPECT_FALSE(receivedRet);
-    EXPECT_EQ(receivedRet.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString()), QString("My Score"));
+    EXPECT_EQ(receivedRet.data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"My Score");
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_PersistsWatchedItemAndPolls)
@@ -600,12 +600,100 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     }));
 
     // [WHEN] Starting the conversion
-    Ret ret = m_service->startConvert(OmrConvertInput { paths }, "My Score");
+    Ret ret = m_service->startConvert(OmrConvertInput { paths }, u"My Score");
     EXPECT_TRUE(ret);
 
     uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
 
     EXPECT_TRUE(savedExpectedEntry);
+}
+
+// ==================================================
+// fileNamesBeingConverted() / fileNamesBeingConvertedChanged()
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_Initially_Empty)
+{
+    EXPECT_TRUE(m_service->fileNamesBeingConverted().empty());
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterStartConvert_ContainsFileNameAndFiresChanged)
+{
+    // [GIVEN] The upload succeeds, and polling is left pending (the item stays watched)
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_fileSystem, writeFile(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    auto uploadProgress = std::make_shared<Progress>();
+    const io::paths_t paths { "/some/path/file.pdf" };
+    ON_CALL(*m_convertService, upload(_))
+    .WillByDefault(Return(uploadProgress));
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    bool changed = false;
+    m_service->fileNamesBeingConvertedChanged().onNotify(nullptr, [&] {
+        changed = true;
+    });
+
+    // [WHEN] Starting the conversion and letting the upload resolve
+    m_service->startConvert(OmrConvertInput { paths }, u"My Score");
+    uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+
+    // [THEN] The file being converted is reported, and the change is signaled
+    EXPECT_TRUE(changed);
+    ASSERT_EQ(m_service->fileNamesBeingConverted().size(), 1u);
+    EXPECT_EQ(m_service->fileNamesBeingConverted().front(), u"My Score");
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterSuccessfulDownload_NoLongerContainsFileName)
+{
+    // [GIVEN] The queue reports the conversion as done, and the download succeeds
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::Done;
+
+    ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillByDefault(Invoke([] {
+        SignedMsczUrl url;
+        url.url = QUrl("https://link.xyz/score.mscz");
+        url.expiresInSeconds = 60;
+        return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
+    }));
+
+    auto downloadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, downloadConvertedScore(_, _))
+    .WillByDefault(Return(downloadProgress));
+
+    ON_CALL(*m_fileSystem, makePath(_))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_fileSystem, writeFile(_, _))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_configuration, convertedScoresPath())
+    .WillByDefault(Return(io::path_t("/scores")));
+    ON_CALL(*m_configuration, uniqueFileNameAddition(_, _, _))
+    .WillByDefault(Return(std::string()));
+
+    // [WHEN] Uploading and polling the status
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+
+    ASSERT_EQ(m_service->fileNamesBeingConverted().size(), 1u);
+
+    bool changed = false;
+    m_service->fileNamesBeingConvertedChanged().onNotify(nullptr, [&] {
+        changed = true;
+    });
+
+    // [AND WHEN] The download completes
+    downloadProgress->finish(ProgressResult::make_ok(Val()));
+
+    // [THEN] The file is no longer reported as being converted
+    EXPECT_TRUE(changed);
+    EXPECT_TRUE(m_service->fileNamesBeingConverted().empty());
 }
 
 // ==================================================
@@ -732,7 +820,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessi
     ASSERT_TRUE(received);
     EXPECT_FALSE(receivedRet);
     EXPECT_EQ(receivedRet.code(), int(mu::project::Err::ConvertProcessingFailed));
-    EXPECT_EQ(receivedRet.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString()), QString("My Score"));
+    EXPECT_EQ(receivedRet.data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"My Score");
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ExpiredDownloadLink_ForwardsFailure)

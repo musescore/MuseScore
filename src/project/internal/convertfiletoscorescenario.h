@@ -65,7 +65,7 @@ private:
 
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
 
-    muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName);
+    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedFileName);
 
     void showValidationError(const muse::Ret& ret);
 
