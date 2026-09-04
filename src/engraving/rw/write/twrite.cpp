@@ -1323,7 +1323,12 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(item);
+    XmlWriter::Attributes attributes;
+    if (ctx.clipboardmode()) {
+        attributes.push_back({ "copyTick", item->tick().toString() });
+    }
+
+    xml.startElement(item, attributes);
     writeProperty(item, xml, Pid::DYNAMIC_TYPE);
     writeProperty(item, xml, Pid::VELOCITY);
     writeProperty(item, xml, Pid::AVOID_BARLINES);

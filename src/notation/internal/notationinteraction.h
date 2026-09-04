@@ -212,6 +212,7 @@ public:
     void copyLyrics() override;
     void repeatSelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
+    void pasteDynamics() override;
     void swapSelection() override;
     void deleteSelection() override;
     void flipSelection() override;
@@ -389,6 +390,9 @@ private:
                                    Qt::KeyboardModifiers modifiers = {});
     void applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
                                     Qt::KeyboardModifiers modifiers = {});
+
+    Fraction extractClipboardDuration(const QMimeData* mimeData);
+    void clearDynamicsInRange(Segment* startSegment, const Fraction& duration, staff_idx_t staffIdx);
 
     bool doDropStandard(mu::engraving::Transaction& tx);
     bool doDropTextBaseAndSymbols(mu::engraving::Transaction& tx, const muse::PointF& pos, bool applyUserOffset);

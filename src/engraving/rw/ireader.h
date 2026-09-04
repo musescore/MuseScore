@@ -54,6 +54,10 @@ struct TremoloCompat;
 
 namespace mu::engraving::rw {
 struct ReadInOutData;
+enum class PasteMode {
+    Default,
+    DynamicsOnly
+};
 class IReader
 {
 public:
@@ -95,7 +99,19 @@ public:
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
     virtual bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) = 0;
+    virtual bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff,
+                            Fraction scale, PasteMode mode)
+    {
+        (void)mode;
+        return pasteStaff(e, dst, dstStaff, scale);
+    }
+
     virtual void pasteSymbols(XmlReader& e, ChordRest* dst) = 0;
+    virtual void pasteSymbols(XmlReader& e, ChordRest* dst, PasteMode mode)
+    {
+        (void)mode;
+        pasteSymbols(e, dst);
+    }
 
     // compat
     virtual void readTremoloCompat(engraving::compat::TremoloCompat* item, XmlReader& xml) = 0;
