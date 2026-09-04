@@ -138,7 +138,7 @@ void MusicXmlNotePitch::pitch(muse::XmlStreamReader& e)
         if (e.name() == "alter") {
             const String alter = e.readText();
             bool ok;
-            m_alter = MusicXmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
+            m_alter = MusicXmlSupport::stringToInt(alter, &ok);
             if (!ok || m_alter < -3 || m_alter > 3) {
                 m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
