@@ -174,11 +174,27 @@ private:
 
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2, LayoutContext& ctx);
 
-    static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
+    struct CenterableItem {
+        EngravingItem* item = nullptr;
+        // In system coordinates: x relative to the system, y relative to the staff.
+        Shape shape;
+        bool isLyrics = false;
+    };
+
+    struct CenterableItems {
+        std::vector<CenterableItem> above;
+        std::vector<CenterableItem> below;
+    };
+
+    static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system, bool placeAbove);
     static bool mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system);
     static bool whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system);
     static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine);
-    static void centerElementBetweenStaves(EngravingItem* element, const System* system);
+    static bool shapesStackVertically(const Shape& shape1, const Shape& shape2, double minHorizontalClearance);
+    static void collectCenterableItems(const System* system, std::vector<CenterableItems>& itemsByStaff,
+                                       std::vector<MMRest*>& mmRestsToCenter);
+    static void centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above, const System* system,
+                                         std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance);
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
