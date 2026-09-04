@@ -90,7 +90,8 @@ public:
     /// \endcond
 
     Q_INVOKABLE bool select(apiv1::EngravingItem* e, bool add = false);
-    Q_INVOKABLE bool selectRange(int startTick, int endTick, int startStaff, int endStaff);
+    Q_INVOKABLE bool selectRange(int startTick, int endTick, int startStaff, int endStaff, apiv1::MeasureBase* startBox = nullptr,
+                                 apiv1::MeasureBase* endBox = nullptr);
     Q_INVOKABLE bool deselect(apiv1::EngravingItem* e);
     Q_INVOKABLE bool clear();
 };

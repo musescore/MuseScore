@@ -686,6 +686,7 @@ public:
     MeasureBase* first() const;
     MeasureBase* firstMM() const;
     MeasureBase* last()  const;
+    std::vector<MeasureBase*> measureBasesAtTick(const Fraction& tick) const;
     Measure* firstMeasure() const;
     Measure* firstMeasureMM() const;
     Measure* lastMeasure() const;
@@ -914,6 +915,7 @@ private:
 
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
+    bool tryExtendRangeSelectionToElem(EngravingItem* e);
 
     void rebuildTimeSigMap(Measure* m);
 

@@ -33,12 +33,14 @@ public:
     MOCK_METHOD(engraving::staff_idx_t, startStaffIndex, (), (const, override));
     MOCK_METHOD(engraving::Segment*, rangeStartSegment, (), (const, override));
     MOCK_METHOD(engraving::Fraction, startTick, (), (const, override));
+    MOCK_METHOD(engraving::Box*, rangeStartBox, (), (const, override));
 
     MOCK_METHOD(engraving::staff_idx_t, endStaffIndex, (), (const, override));
     MOCK_METHOD(engraving::Segment*, rangeEndSegment, (), (const, override));
     MOCK_METHOD(engraving::Fraction, endTick, (), (const, override));
+    MOCK_METHOD(engraving::Box*, rangeEndBox, (), (const, override));
 
-    MOCK_METHOD(MeasureRange, measureRange, (), (const, override));
+    MOCK_METHOD(MeasureBaseRange, measureBaseRange, (), (const, override));
 
     MOCK_METHOD(std::vector<const engraving::Part*>, selectedParts, (), (const, override));
 
