@@ -40,195 +40,124 @@ using namespace mu::engraving::rendering::score;
 
 void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
 {
-    DO_ASSERT(autoplaceAppliesToType(item->type()));
+    const Segment* segment = toSegment(item->findAncestor(ElementType::SEGMENT));
+    const Measure* measure = segment ? segment->measure() : nullptr;
+    const System* system = measure ? measure->system() : nullptr;
+    IF_ASSERT_FAILED(system) {
+        return;
+    }
+    LD_CONDITION(segment->ldata()->isSetPos());
+    LD_CONDITION(measure->ldata()->isSetPos());
 
+    const double spatium = item->style().spatium() * item->staff()->staffMag(item);
     // TODO: proper item-to-item table for horizontal clearance in skyline
     const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleAbsolute(
         Sid::skylineMinHorizontalClearance) * item->mag();
 
-    if (item->autoplace() && item->ownershipParent()) {
-        const Segment* s = toSegment(item->findAncestor(ElementType::SEGMENT));
-        IF_ASSERT_FAILED(s) {
-            return;
-        }
-
-        const Measure* m = s->measure();
-
-        LD_CONDITION(ldata->isSetPos());
-        LD_CONDITION(m->ldata()->isSetPos());
-        LD_CONDITION(s->ldata()->isSetPos());
-
-        double sp = item->style().spatium();
-        staff_idx_t si = item->effectiveStaffIdx();
-
-        // if there's no good staff for this object, obliterate it
-        ldata->setIsSkipDraw(si == muse::nidx);
-        const_cast<EngravingItem*>(item)->setSelectable(!ldata->isSkipDraw());
-        if (ldata->isSkipDraw()) {
-            return;
-        }
-
-        double mag = item->staff()->staffMag(item);
-        sp *= mag;
-        double minDistance = item->minDistance().val() * sp;
-
-        SysStaff* ss = m->system()->staff(si);
-        Shape shape = item->ldata()->shape().translate(item->systemPos() - item->offset());
-
-        // Adjust bbox Y pos for staffType offset
-        shape.translate(item->staffOffset());
-
-        SkylineLine& staffSkyline = above ? ss->skyline().north() : ss->skyline().south();
-
-        SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
-            const EngravingItem* skylineItem = shapeEl.item();
-            if (!skylineItem) {
-                return false;
-            }
-            return itemsShouldIgnoreEachOther(item, skylineItem);
-        });
-
-        if (filteredSkyline.elements().empty()) {
-            if (add && item->addToSkyline()) {
-                staffSkyline.add(shape.translated(item->offset()));
-            }
-            return;
-        }
-
-        double d = above ? filteredSkyline.minDistanceToShapeAbove(shape, minSkylineHorizontalClearance)
-                   : filteredSkyline.minDistanceToShapeBelow(shape, minSkylineHorizontalClearance);
-
-        if (d > -minDistance) {
-            double yd = d + minDistance;
-            if (above) {
-                yd *= -1.0;
-            }
-            ldata->moveY(yd);
-            shape.translate(PointF(0.0, yd));
-        }
-
-        if (add && item->addToSkyline()) {
-            staffSkyline.add(shape.translated(item->offset()));
-        }
-    }
+    doAutoplaceElement(item, ldata, system, above, add, minSkylineHorizontalClearance, spatium);
 }
 
 void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
 {
-    // If this fires, item's type is missing from the true set of autoplaceAppliesToType()
-    DO_ASSERT(autoplaceAppliesToType(item->type()));
-
-    if (item->autoplace() && item->ownershipParent()) {
-        const Measure* m = toMeasure(item->ownershipParent());
-
-        LD_CONDITION(ldata->isSetPos());
-        LD_CONDITION(ldata->isSetBbox());
-        LD_CONDITION(m->ldata()->isSetPos());
-
-        staff_idx_t si = item->effectiveStaffIdx();
-
-        // if there's no good staff for this object, obliterate it
-        ldata->setIsSkipDraw(si == muse::nidx);
-        const_cast<EngravingItem*>(item)->setSelectable(!ldata->isSkipDraw());
-        if (ldata->isSkipDraw()) {
-            return;
-        }
-
-        double sp = item->style().spatium();
-        double minDistance = item->minDistance().val() * sp;
-
-        SysStaff* ss = m->system()->staff(si);
-        // shape rather than bbox is good for tuplets especially
-        Shape sh = item->shape().translate(m->pos() + item->ldata()->pos() + item->staffOffset());
-
-        SkylineLine sk(!above);
-        SkylineLine& staffSkyline = above ? ss->skyline().north() : ss->skyline().south();
-
-        SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
-            const EngravingItem* skylineItem = shapeEl.item();
-            if (!skylineItem) {
-                return false;
-            }
-            return itemsShouldIgnoreEachOther(item, skylineItem);
-        });
-
-        double d;
-        if (above) {
-            sk.add(sh);
-            d = sk.minDistance(filteredSkyline);
-        } else {
-            sk.add(sh);
-            d = filteredSkyline.minDistance(sk);
-        }
-        minDistance *= item->staff()->staffMag(item);
-        if (d > -minDistance) {
-            double yd = d + minDistance;
-            if (above) {
-                yd *= -1.0;
-            }
-            ldata->moveY(yd);
-            sh.translateY(yd);
-        }
-        if (add && item->addToSkyline()) {
-            staffSkyline.add(sh.translated(item->offset()));
-        }
+    const Measure* measure = toMeasure(item->ownershipParent());
+    const System* system = measure ? measure->system() : nullptr;
+    IF_ASSERT_FAILED(system) {
+        return;
     }
+    LD_CONDITION(measure->ldata()->isSetPos());
+
+    const double spatium = item->style().spatium() * item->staff()->staffMag(item);
+    // TODO: check this value for measure-owned items
+    // const double minSkylineHorizontalClearance = item->isMeasureNumber() ? 0.0 : item->style().styleAbsolute(
+    // Sid::skylineMinHorizontalClearance) * item->mag();
+    const double minSkylineHorizontalClearance = 0.0;
+    doAutoplaceElement(item, ldata, system, above, add, minSkylineHorizontalClearance, spatium);
 }
 
-void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata, double sp)
+void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata)
 {
-    // If this fires, item's type is missing from the true set of autoplaceAppliesToType()
-    DO_ASSERT(autoplaceAppliesToType(item->type()));
-
     if (item->spanner()->anchor() == Spanner::Anchor::NOTE) {
         return;
     }
+    const System* system = item->system();
+    IF_ASSERT_FAILED(system) {
+        return;
+    }
+    const double mag = !item->systemFlag() && !item->spanner()->systemFlag() ? item->staff()->staffMag(item->spanner()->tick()) : 1.0;
+    const double spatium = item->style().spatium() * mag;
 
-    if (item->autoplace()) {
-        if (!item->systemFlag() && !item->spanner()->systemFlag()) {
-            sp *= item->staff()->staffMag(item->spanner()->tick());
-        }
-        double md = item->minDistance().val() * sp;
-        bool above = item->spanner()->placeAbove();
-        SkylineLine sl(!above);
-        Shape sh = item->shape();
-        sl.add(sh.translate(item->ldata()->pos()));
-        double yd = 0.0;
-        staff_idx_t stfIdx = item->effectiveStaffIdx();
-        if (stfIdx == muse::nidx) {
-            ldata->setIsSkipDraw(true);
-            return;
-        } else {
-            ldata->setIsSkipDraw(false);
-        }
-        const System* system = item->system();
-        IF_ASSERT_FAILED(system) {
-            return;
-        }
-        const Skyline& staffSkyline = system->staff(stfIdx)->skyline();
-        const SkylineLine& skyline = above ? staffSkyline.north() : staffSkyline.south();
-        SkylineLine filteredSkyline = skyline.getFilteredCopy([item](const ShapeElement& shapeEl){
-            const EngravingItem* skylineItem = shapeEl.item();
-            if (!skylineItem) {
-                return false;
-            }
-            return itemsShouldIgnoreEachOther(item, skylineItem);
-        });
+    const bool above = item->spanner()->placeAbove();
+    doAutoplaceElement(item, ldata, system, above, /* add = */ false, /* minSkylineHorizontalClearance = */ 0.0, spatium);
+}
 
-        if (above) {
-            double d = sl.minDistance(filteredSkyline);
-            if (d > -md) {
-                yd = -(d + md);
-            }
-        } else {
-            double d =  filteredSkyline.minDistance(sl);
-            if (d > -md) {
-                yd = d + md;
-            }
+double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
+                                     double minSkylineHorizontalClearance, double minDistance)
+{
+    const SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
+        const EngravingItem* skylineItem = shapeEl.item();
+        if (!skylineItem) {
+            return false;
         }
-        if (!RealIsNull(yd)) {
-            ldata->moveY(yd);
-        }
+        return itemsShouldIgnoreEachOther(item, skylineItem);
+    });
+
+    if (filteredSkyline.elements().empty()) {
+        return 0.0;
+    }
+
+    const double d = above ? filteredSkyline.minDistanceToShapeAbove(shape, minSkylineHorizontalClearance)
+                     : filteredSkyline.minDistanceToShapeBelow(shape, minSkylineHorizontalClearance);
+
+    if (!(d > -minDistance)) {
+        return 0.0;
+    }
+
+    const double yd = (d + minDistance) * (above ? -1.0 : 1.0);
+
+    return yd;
+}
+
+void Autoplace::doAutoplaceElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, const System* system, bool above, bool add,
+                                   double minSkylineHorizontalClearance, double spatium)
+{
+    DO_ASSERT(autoplaceAppliesToType(item->type()));
+    IF_ASSERT_FAILED(system) {
+        return;
+    }
+
+    if (!item->autoplace() || !item->ownershipParent()) {
+        return;
+    }
+
+    const staff_idx_t staffIdx = item->effectiveStaffIdx();
+    if (staffIdx == muse::nidx) {
+        return;
+    }
+
+    LD_CONDITION(ldata->isSetPos());
+    LD_CONDITION(ldata->isSetBbox());
+
+    const double minDistance = item->minDistance().toAbsolute(spatium);
+
+    SysStaff* sysStaff = system->staff(staffIdx);
+    SkylineLine& staffSkyline = above ? sysStaff->skyline().north() : sysStaff->skyline().south();
+    // TODO [J.M] staffOffset will be applied twice for spanner segments.
+    // We really need to sort out staffOffset and have it applied as early and infrequently as possible. Can't keep up with ~30 callsites
+    // Shape shape = item->ldata()->shape().translate(item->systemPos() - item->offset() + item->staffOffset());
+    Shape shape = item->ldata()->shape();
+    if (item->isSpannerSegment()) {
+        shape.translate(item->ldata()->pos());
+    } else {
+        shape.translate(item->systemPos() - item->offset() + item->staffOffset());
+    }
+
+    const double yd = distanceToMoveItem(item, staffSkyline, shape, above, minSkylineHorizontalClearance, minDistance);
+
+    ldata->moveY(yd);
+    shape.translateY(yd);
+
+    if (add && item->addToSkyline()) {
+        staffSkyline.add(shape.translated(item->offset()));
     }
 }
 
