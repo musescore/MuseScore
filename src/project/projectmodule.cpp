@@ -155,5 +155,5 @@ void ProjectModule::onDelayedInit()
 {
     //! NOTE: resuming polling can show dialogs (errors, review prompts), so it must wait
     //! until the main window is up rather than running during onInit()
-    // m_convertFileToScoreService->resumeConvert();
+    m_convertFileToScoreService->resumeConvert();
 }

@@ -228,6 +228,7 @@ Rectangle {
 
                     visible: Boolean(maxCountReachedLabel.text)
 
+                    //: %1 is the number of files currently selected, %2 is the maximum allowed, e.g. "3/5 max files"
                     text: root.filesModel.maxFileCount > 0 && root.filesModel.count > 1
                           ? qsTrc("project/convert", "%1/%2 max files").arg(root.filesModel.count).arg(root.filesModel.maxFileCount)
                           : ""

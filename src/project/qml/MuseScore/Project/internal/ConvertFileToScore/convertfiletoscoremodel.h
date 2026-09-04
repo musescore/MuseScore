@@ -94,6 +94,8 @@ public:
     QString linkPageHintPlainText() const;
     int maxLinkLength() const;
 
+    Q_INVOKABLE void load(const QStringList& paths, int type);
+
     Q_INVOKABLE bool validateAndApplyFiles(const QStringList& pathsOrUrls);
     Q_INVOKABLE bool selectAndValidateFiles(const QStringList& existingPaths = {});
 

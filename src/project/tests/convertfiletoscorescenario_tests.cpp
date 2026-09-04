@@ -39,6 +39,15 @@
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
 
+namespace muse {
+// Teach GoogleTest how to print UriQuery so failure diffs are readable
+// instead of a raw byte dump
+inline void PrintTo(const UriQuery& q, std::ostream* os)
+{
+    *os << q.toString();
+}
+}
+
 using namespace ::testing;
 using namespace mu::project;
 using namespace muse;
@@ -69,6 +78,17 @@ async::Promise<Val> resolvedValPromise(const Val& val = Val())
     return resolvedPromise<Val>(val);
 }
 
+//! NOTE: for dialogs whose resolution isn't relevant to the test -- resolving with an empty
+//! Val would otherwise cascade into unrelated (and unmocked) downstream calls
+async::Promise<Val> pendingValPromise()
+{
+    return async::make_promise<Val>([](auto resolve, auto reject) {
+        (void)resolve;
+        (void)reject;
+        return async::Promise<Val>::dummy_result();
+    });
+}
+
 async::Promise<IInteractive::Result> resolvedResultPromise(const IInteractive::Result& result = IInteractive::Result())
 {
     return resolvedPromise<IInteractive::Result>(result);
@@ -93,6 +113,16 @@ Matcher<const IInteractive::ButtonDatas&> ButtonIdsAre(const std::vector<int>& e
         }
         return true;
     });
+}
+
+//! NOTE: shared by the ConvertFiles_NoPaths_* tests, which resolve the picker with a single OMR file
+QVariantMap pickedOmrFileSelection()
+{
+    return {
+        { "type", int(ConvertType::Omr) },
+        { "paths", QStringList { "/some/file.xyz" } },
+        { "convertedFileName", QString("file") }
+    };
 }
 }
 
@@ -127,6 +157,15 @@ protected:
         .WillByDefault(Invoke([](IInteractive::Button b) {
             return IInteractive::ButtonData(b, "");
         }));
+
+        //! NOTE: safe fallback for dialogs a test doesn't stub itself -- these mocks have no
+        //! usable default return value, so an unstubbed call would otherwise throw
+        ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
+        .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
+        ON_CALL(*m_interactive, info(_, _, _, _, _, _))
+        .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
+        ON_CALL(*m_interactive, question(_, _, _, _, _, _))
+        .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
 
         ON_CALL(*m_authorization, userAuthorized())
         .WillByDefault(Return(ValCh<bool> { true, {} }));
@@ -409,106 +448,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Config_DelegatesToService)
 }
 
 // ==================================================
-// checkConvertIsAllowed()
-// ==================================================
-
-TEST_F(Project_ConvertFileToScoreScenarioTest, CheckConvertIsAllowed_ShowsError_WhenCloudUnavailable)
-{
-    // [GIVEN] The cloud is unavailable
-    ON_CALL(*m_authorization, checkCloudIsAvailableAsync())
-    .WillByDefault(Invoke([] {
-        return resolvedPromise<Ret>(Ret(false));
-    }));
-
-    const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
-    const std::string text = muse::trc("project/convert",
-                                       "An internet connection is required to convert a file. Please check your internet connection or try again later.");
-
-    // [THEN] The "cloud unavailable" error is shown
-    EXPECT_CALL(*m_interactive,
-                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
-    .WillOnce(Invoke([](auto&&...) {
-        return resolvedResultPromise();
-    }));
-
-    bool resolved = false;
-    Ret capturedRet;
-
-    // [WHEN] Checking whether converting is allowed
-    m_scenario->checkConvertIsAllowed().onResolve(nullptr, [&](const Ret& ret) {
-        resolved = true;
-        capturedRet = ret;
-    });
-
-    pumpEvents();
-
-    // [THEN] It resolves with a failure
-    EXPECT_TRUE(resolved);
-    EXPECT_FALSE(capturedRet);
-}
-
-TEST_F(Project_ConvertFileToScoreScenarioTest, CheckConvertIsAllowed_Resolves_WhenAlreadyAuthorized)
-{
-    // [GIVEN] The cloud is available and the user is already authorized (default SetUp state)
-
-    // [THEN] No authorization dialog is shown
-    EXPECT_CALL(*m_interactive, open(_)).Times(0);
-
-    bool resolved = false;
-    Ret capturedRet;
-
-    // [WHEN] Checking whether converting is allowed
-    m_scenario->checkConvertIsAllowed().onResolve(nullptr, [&](const Ret& ret) {
-        resolved = true;
-        capturedRet = ret;
-    });
-
-    pumpEvents();
-
-    // [THEN] It resolves successfully
-    EXPECT_TRUE(resolved);
-    EXPECT_TRUE(capturedRet);
-}
-
-TEST_F(Project_ConvertFileToScoreScenarioTest, CheckConvertIsAllowed_PromptsAuthorization_WhenNotAuthorized)
-{
-    // [GIVEN] The cloud is available but the user isn't authorized
-    ON_CALL(*m_authorization, userAuthorized())
-    .WillByDefault(Return(ValCh<bool> { false, {} }));
-
-    const std::string dialogText = muse::trc("project/convert", "Log in or create a free account on MuseScore.com to convert a file.");
-
-    UriQuery expectedQuery("muse://cloud/requireauthorization");
-    expectedQuery.addParam("text", Val(dialogText));
-    expectedQuery.addParam("cloudCode", Val(QString()));
-    expectedQuery.addParam("publishingScore", Val(false));
-
-    // [THEN] The authorization dialog is opened, and the user completes it
-    EXPECT_CALL(*m_interactive, open(expectedQuery))
-    .Times(1)
-    .WillOnce(Invoke([](auto&&...) {
-        return resolvedValPromise();
-    }));
-
-    bool resolved = false;
-    Ret capturedRet;
-
-    // [WHEN] Checking whether converting is allowed
-    m_scenario->checkConvertIsAllowed().onResolve(nullptr, [&](const Ret& ret) {
-        resolved = true;
-        capturedRet = ret;
-    });
-
-    pumpEvents();
-
-    // [THEN] It resolves successfully
-    EXPECT_TRUE(resolved);
-    EXPECT_TRUE(capturedRet);
-}
-
-// ==================================================
 // isFileSupported()
 // ==================================================
 
@@ -767,6 +706,87 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 // convertFiles()
 // ==================================================
 
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsError_WhenCloudUnavailable)
+{
+    // [GIVEN] The cloud is unavailable
+    ON_CALL(*m_authorization, checkCloudIsAvailableAsync())
+    .WillByDefault(Invoke([] {
+        return resolvedPromise<Ret>(Ret(false));
+    }));
+
+    const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
+    const std::string text = muse::trc("project/convert",
+                                       "An internet connection is required to convert a file. Please check your internet connection or try again later.");
+
+    // [THEN] The "cloud unavailable" error is shown
+    EXPECT_CALL(*m_interactive,
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise();
+    }));
+
+    // [THEN] The picker is never opened
+    EXPECT_CALL(*m_interactive, open(_)).Times(0);
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_OpensPicker_WhenAlreadyAuthorized)
+{
+    // [GIVEN] The cloud is available and the user is already authorized (default SetUp state)
+
+    // [THEN] No authorization dialog is shown, and the flow proceeds to open the picker
+    EXPECT_CALL(*m_interactive, open(UriQuery("muse://cloud/requireauthorization"))).Times(0);
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return pendingValPromise();
+    }));
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_PromptsAuthorization_WhenNotAuthorized)
+{
+    // [GIVEN] The cloud is available but the user isn't authorized
+    ON_CALL(*m_authorization, userAuthorized())
+    .WillByDefault(Return(ValCh<bool> { false, {} }));
+
+    const std::string dialogText = muse::trc("project/convert", "Log in or create a free account on MuseScore.com to convert a file.");
+
+    UriQuery expectedAuthQuery("muse://cloud/requireauthorization");
+    expectedAuthQuery.addParam("text", Val(dialogText));
+    expectedAuthQuery.addParam("cloudCode", Val(QString()));
+    expectedAuthQuery.addParam("publishingScore", Val(false));
+
+    // [THEN] The authorization dialog is opened, and the user completes it
+    EXPECT_CALL(*m_interactive, open(expectedAuthQuery))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedValPromise();
+    }));
+
+    // [THEN] Once authorized, the flow proceeds to open the picker
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return pendingValPromise();
+    }));
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
 {
     // [GIVEN] The cloud is unavailable
@@ -799,15 +819,133 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationFails)
 {
-    // [GIVEN] The service rejects the files
+    // [GIVEN] The service rejects the files (the exact error dialog per code is covered by the validateFiles() tests)
     const io::paths_t paths { "/some/file.xyz" };
     ON_CALL(*m_service, validateFiles(paths))
     .WillByDefault(Return(RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertUnsupportedFormat))));
 
-    const std::string title = muse::trc("project/convert", "This file type is not compatible");
-    const std::string text = muse::trc("project/convert", "Make sure you’re importing a suitable PDF, image or MP3 file.");
+    // [THEN] Neither confirmation nor conversion is attempted
+    EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
 
-    // [THEN] The validation error is shown, but neither confirmation nor conversion is attempted
+    // [WHEN] Converting files
+    m_scenario->convertFiles(paths);
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsProcessingDialog_WhenEnabled)
+{
+    // [GIVEN] The processing dialog is enabled in the config
+    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
+    .WillByDefault(Return(true));
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    constexpr int convertMoreBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    const std::string title = muse::trc("project/convert", "Your score is being processed");
+    const std::string text = muse::trc("project/convert",
+                                       "We’ll notify you once the score is ready to open. "
+                                       "You can check the status of the score in Home > Scores.");
+
+    // [THEN] The processing dialog is shown
+    EXPECT_CALL(*m_interactive,
+                info(title, TextIs(text), ButtonIdsAre({ convertMoreBtn, goToScoresBtn, int(IInteractive::Button::Ok) }),
+                     int(IInteractive::Button::Ok), IInteractive::Options(IInteractive::Option::WithDontShowAgainCheckBox),
+                     std::string()))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise();
+    }));
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_OpensHomeScoresPage)
+{
+    // [GIVEN] The processing dialog is enabled in the config
+    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
+    .WillByDefault(Return(true));
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
+
+    // [GIVEN] The user clicks "Go to scores" in the processing dialog
+    ON_CALL(*m_interactive, info(_, _, _, _, _, _))
+    .WillByDefault(Invoke([goToScoresBtn](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(goToScoresBtn));
+    }));
+
+    // [THEN] The app navigates to Home > Scores page
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://home?section=scores")))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedValPromise();
+    }));
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_NoProcessingDialog_WhenDisabled)
+{
+    // [GIVEN] The processing dialog is disabled in the config
+    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
+    .WillByDefault(Return(false));
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    // [THEN] No processing dialog is shown
+    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_ShowsUnknownError)
+{
+    // [GIVEN] The service fails to start the conversion
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ret(Err::ConvertProcessingFailed)));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    const std::string title = muse::trc("project/convert", "Something went wrong");
+    const std::string text = muse::trc("project/convert", "Check your internet connection and try again.");
+
+    // [THEN] The generic "unknown error" dialog is shown, and no processing dialog is shown
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
@@ -815,11 +953,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationF
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
-    EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
-    EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
+    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
 
-    // [WHEN] Converting files
-    m_scenario->convertFiles(paths);
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
 
     pumpEvents();
 }
@@ -843,6 +980,21 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsOmrCo
                          IInteractive::Options(), std::string()))
     .WillOnce(Invoke([proceedBtn](auto&&...) {
         return resolvedResultPromise(IInteractive::Result(proceedBtn));
+    }));
+
+    // [GIVEN] The file-specific step opens with the dropped file pre-selected, and the user converts it
+    UriQuery expectedQuery("musescore://project/convert/selectfiles");
+    expectedQuery.addParam("initialPaths", Val(ValList { Val(paths.front()) }));
+    expectedQuery.addParam("initialConvertType", Val(ConvertType::Omr));
+
+    const QVariantMap selectionMap {
+        { "type", int(ConvertType::Omr) },
+        { "paths", QStringList { "/some/path/file.xyz" } },
+        { "convertedFileName", QString("file") }
+    };
+    EXPECT_CALL(*m_interactive, open(expectedQuery))
+    .WillOnce(Invoke([selectionMap](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(selectionMap));
     }));
 
     // [THEN] The conversion is started as an OMR conversion of the given paths
@@ -879,6 +1031,21 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsAudio
         return resolvedResultPromise(IInteractive::Result(proceedBtn));
     }));
 
+    // [GIVEN] The file-specific step opens with the dropped file pre-selected, and the user converts it
+    UriQuery expectedQuery("musescore://project/convert/selectfiles");
+    expectedQuery.addParam("initialPaths", Val(ValList { Val(paths.front()) }));
+    expectedQuery.addParam("initialConvertType", Val(ConvertType::Audio2Score));
+
+    const QVariantMap selectionMap {
+        { "type", int(ConvertType::Audio2Score) },
+        { "paths", QStringList { "/some/path/song.xyz" } },
+        { "convertedFileName", QString("song") }
+    };
+    EXPECT_CALL(*m_interactive, open(expectedQuery))
+    .WillOnce(Invoke([selectionMap](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(selectionMap));
+    }));
+
     // [THEN] The conversion is started as an Audio2Score conversion of the given paths
     EXPECT_CALL(*m_service, startConvert(Truly([&](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Audio2Score && convertPathsOf(input) == paths;
@@ -912,92 +1079,12 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UserCancelsConfirm_D
         return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::Cancel)));
     }));
 
-    // [THEN] The conversion is not started
+    // [THEN] The file-specific step is never opened, and the conversion is not started
+    EXPECT_CALL(*m_interactive, open(_)).Times(0);
     EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
 
     // [WHEN] Converting files
     m_scenario->convertFiles(paths);
 
     pumpEvents();
-}
-
-// ==================================================
-// startConvert()
-// ==================================================
-
-TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_ShowsProcessingDialog_WhenEnabled)
-{
-    // [GIVEN] The processing dialog is enabled in the config
-    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
-    .WillByDefault(Return(true));
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
-
-    constexpr int uploadMoreBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
-
-    const std::string title = muse::trc("project/convert", "Your score is being processed");
-    const std::string text = muse::trc("project/convert",
-                                       "We’ll notify you once the score is ready to open. "
-                                       "You can check the status of the score in Home > Scores.");
-
-    // [THEN] The processing dialog is shown
-    EXPECT_CALL(*m_interactive,
-                info(title, TextIs(text), ButtonIdsAre({ uploadMoreBtn, goToScoresBtn, int(IInteractive::Button::Ok) }),
-                     int(IInteractive::Button::Ok), IInteractive::Options(IInteractive::Option::WithDontShowAgainCheckBox),
-                     std::string()))
-    .Times(1)
-    .WillOnce(Invoke([](auto&&...) {
-        return resolvedResultPromise();
-    }));
-
-    // [WHEN] Starting the conversion
-    const OmrConvertInput input { io::paths_t { "/some/file.xyz" } };
-    Ret ret = m_scenario->startConvert(input, "file");
-
-    // [THEN] It delegates to the service and succeeds
-    EXPECT_TRUE(ret);
-}
-
-TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_NoProcessingDialog_WhenDisabled)
-{
-    // [GIVEN] The processing dialog is disabled in the config
-    ON_CALL(*m_configuration, showConvertFileProcessingDialog())
-    .WillByDefault(Return(false));
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
-
-    // [THEN] No processing dialog is shown
-    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
-
-    // [WHEN] Starting the conversion
-    const OmrConvertInput input { io::paths_t { "/some/file.xyz" } };
-    m_scenario->startConvert(input, "file");
-}
-
-TEST_F(Project_ConvertFileToScoreScenarioTest, StartConvert_Failure_ShowsUnknownError)
-{
-    // [GIVEN] The service fails to start the conversion
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ret(Err::ConvertProcessingFailed)));
-
-    const std::string title = muse::trc("project/convert", "Something went wrong");
-    const std::string text = muse::trc("project/convert", "Check your internet connection and try again.");
-
-    // [THEN] The generic "unknown error" dialog is shown, and no processing dialog is shown
-    EXPECT_CALL(*m_interactive,
-                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
-                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
-    .WillOnce(Invoke([](auto&&...) {
-        return resolvedResultPromise();
-    }));
-    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
-
-    // [WHEN] Starting the conversion
-    const OmrConvertInput input { io::paths_t { "/some/file.xyz" } };
-    Ret ret = m_scenario->startConvert(input, "file");
-
-    // [THEN] It fails
-    EXPECT_FALSE(ret);
 }

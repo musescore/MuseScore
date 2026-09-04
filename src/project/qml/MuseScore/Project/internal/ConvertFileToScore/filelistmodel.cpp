@@ -127,7 +127,7 @@ int FileListModel::fileIconCode() const
     case FileCategory::Image:
         return int(IconCode::Code::IMAGE_MOUNTAINS);
     case FileCategory::Audio:
-        return int(IconCode::Code::AUDIO);
+        return int(IconCode::Code::MUSIC_NOTES);
     case FileCategory::Unknown:
     case FileCategory::Pdf:
         break;
@@ -265,6 +265,7 @@ void FileListModel::updateUsedSizeLabel()
     if (maxBytes > 0 && m_totalSizeBytes >= maxBytes * 0.75) { // only show once 75% of the limit is used
         const QString totalSize = muse::DataFormatter::formatFileSize(size_t(m_totalSizeBytes));
         const QString maxSize = muse::DataFormatter::formatFileSize(size_t(maxBytes));
+        //: %1 and %2 are pre-formatted file sizes including units, e.g. "15 MB/20 MB used"
         label = muse::qtrc("project/convert", "%1/%2 used").arg(totalSize, maxSize);
     }
 

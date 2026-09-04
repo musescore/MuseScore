@@ -86,38 +86,6 @@ const ConvertConfig& ConvertFileToScoreScenario::config() const
     return service()->config();
 }
 
-async::Promise<Ret> ConvertFileToScoreScenario::checkConvertIsAllowed()
-{
-    return async::make_promise<Ret>([this](auto resolve, auto reject) {
-        museScoreComService()->authorization()->checkCloudIsAvailableAsync()
-        .onResolve(this, [this, resolve, reject](const Ret& ret) {
-            if (!ret) {
-                showCloudIsNotAvailableError();
-                (void)resolve(ret);
-                return;
-            }
-
-            ensureAuthorization()
-            .onResolve(this, [resolve](const Ret& ret) {
-                (void)resolve(ret);
-            })
-            .onReject(this, [reject](int code, const std::string& msg) {
-                (void)reject(code, msg);
-            });
-        });
-
-        return async::Promise<Ret>::dummy_result();
-    });
-}
-
-async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert()
-{
-    return interactive()->open("musescore://project/convert/selectfiles")
-           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
-        return resolve(toConvertSelection(val));
-    });
-}
-
 bool ConvertFileToScoreScenario::isFileSupported(const io::path_t& path) const
 {
     return service()->isFileSupported(path);
@@ -151,6 +119,14 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
             return;
         }
 
+        if (paths.empty()) {
+            selectFilesToConvert()
+            .onResolve(this, [this](const ConvertSelection& selection) {
+                startConvert(selection.input, selection.convertedFileName);
+            });
+            return;
+        }
+
         RetVal<ConvertFilesValidation> validation = validateFiles(paths);
         if (!validation.ret) {
             return;
@@ -160,24 +136,33 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
     });
 }
 
-Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
-{
-    Ret ret = service()->startConvert(input, convertedFileName);
-    if (!ret) {
-        showUnknownError();
-        return ret;
-    }
-
-    if (configuration()->showConvertFileProcessingDialog()) {
-        showFileProcessingDialog();
-    }
-
-    return ret;
-}
-
 async::Channel<Ret, io::path_t> ConvertFileToScoreScenario::convertFinished() const
 {
     return m_convertFinished;
+}
+
+async::Promise<Ret> ConvertFileToScoreScenario::checkConvertIsAllowed()
+{
+    return async::make_promise<Ret>([this](auto resolve, auto reject) {
+        museScoreComService()->authorization()->checkCloudIsAvailableAsync()
+        .onResolve(this, [this, resolve, reject](const Ret& ret) {
+            if (!ret) {
+                showCloudIsNotAvailableError();
+                (void)resolve(ret);
+                return;
+            }
+
+            ensureAuthorization()
+            .onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            })
+            .onReject(this, [reject](int code, const std::string& msg) {
+                (void)reject(code, msg);
+            });
+        });
+
+        return async::Promise<Ret>::dummy_result();
+    });
 }
 
 async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
@@ -207,12 +192,35 @@ async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
     });
 }
 
+async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert(const io::paths_t& paths, ConvertType type)
+{
+    UriQuery query("musescore://project/convert/selectfiles");
+
+    if (!paths.empty()) {
+        ValList pathsList;
+        pathsList.reserve(paths.size());
+        for (const io::path_t& path : paths) {
+            pathsList.push_back(Val(path));
+        }
+        query.addParam("initialPaths", Val(pathsList));
+        query.addParam("initialConvertType", Val(type));
+    }
+
+    return interactive()->open(query)
+           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
+        return resolve(toConvertSelection(val));
+    });
+}
+
 void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, ConvertType type)
 {
     constexpr int proceedBtn = int(IInteractive::Button::CustomButton) + 1;
 
     IInteractive::ButtonData cancel = interactive()->buttonData(IInteractive::Button::Cancel);
+    cancel.role = IInteractive::ButtonRole::RejectRole;
+
     IInteractive::ButtonData proceed(proceedBtn, muse::trc("global", "Proceed"), /*accent*/ true);
+    proceed.role = IInteractive::ButtonRole::AcceptRole;
 
     interactive()->question(muse::trc("project/convert", "Would you like to convert this file to a score?"),
                             muse::trc("project/convert",
@@ -223,12 +231,26 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
             return;
         }
 
-        ConvertInput input = type == ConvertType::Audio2Score
-                             ? ConvertInput(Audio2ScoreConvertInput { paths })
-                             : ConvertInput(OmrConvertInput { paths });
-
-        startConvert(input, QFileInfo(paths.front().toQString()).completeBaseName());
+        selectFilesToConvert(paths, type)
+        .onResolve(this, [this](const ConvertSelection& selection) {
+            startConvert(selection.input, selection.convertedFileName);
+        });
     });
+}
+
+Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const QString& convertedFileName)
+{
+    Ret ret = service()->startConvert(input, convertedFileName);
+    if (!ret) {
+        showUnknownError();
+        return ret;
+    }
+
+    if (configuration()->showConvertFileProcessingDialog()) {
+        showFileProcessingDialog();
+    }
+
+    return ret;
 }
 
 void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
@@ -358,10 +380,10 @@ void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
 
 void ConvertFileToScoreScenario::showFileProcessingDialog()
 {
-    constexpr int uploadMoreBtn = int(IInteractive::Button::CustomButton) + 1;
+    constexpr int convertMoreBtn = int(IInteractive::Button::CustomButton) + 1;
     constexpr int goToScoresBtn = int(IInteractive::Button::CustomButton) + 2;
 
-    IInteractive::ButtonData uploadMore(uploadMoreBtn, muse::trc("project/convert", "Upload more"));
+    IInteractive::ButtonData convertMore(convertMoreBtn, muse::trc("project/convert", "Convert more"));
     IInteractive::ButtonData goToScores(goToScoresBtn, muse::trc("project/convert", "Go to scores"));
     IInteractive::ButtonData ok = interactive()->buttonData(IInteractive::Button::Ok);
 
@@ -370,25 +392,15 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
                                 "You can check the status of the score in Home > Scores.");
 
     interactive()->info(muse::trc("project/convert", "Your score is being processed"), msg,
-                        { uploadMore, goToScores, ok }, static_cast<int>(IInteractive::Button::Ok),
+                        { convertMore, goToScores, ok }, static_cast<int>(IInteractive::Button::Ok),
                         IInteractive::Option::WithDontShowAgainCheckBox)
-    .onResolve(this, [this, uploadMoreBtn, goToScoresBtn](const IInteractive::Result& result) {
+    .onResolve(this, [this, convertMoreBtn, goToScoresBtn](const IInteractive::Result& result) {
         configuration()->setShowConvertFileProcessingDialog(result.showAgain());
 
-        if (result.isButton(uploadMoreBtn)) {
-            checkConvertIsAllowed()
-            .onResolve(this, [this](const Ret& ret) {
-                if (!ret) {
-                    return;
-                }
-
-                selectFilesToConvert()
-                .onResolve(this, [this](const ConvertSelection& selection) {
-                    startConvert(selection.input, selection.convertedFileName);
-                });
-            });
+        if (result.isButton(convertMoreBtn)) {
+            convertFiles();
         } else if (result.isButton(goToScoresBtn)) {
-            interactive()->openUrl(museScoreComService()->scoreManagerUrl());
+            interactive()->open("musescore://home?section=scores");
         }
     });
 }
@@ -399,7 +411,10 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
     IInteractive::ButtonData openScore(openScoreBtn, muse::trc("project/convert", "Open score"), /*accent*/ true);
-    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+    openScore.role = IInteractive::ButtonRole::AcceptRole;
+
+    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("global", "Dismiss"));
+    dismiss.role = IInteractive::ButtonRole::RejectRole;
 
     QString scoreName = QFileInfo(path.toQString()).completeBaseName();
     std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
@@ -420,8 +435,11 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
-    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
-    IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("project/convert", "Try again"), /*accent*/ true);
+    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("global", "Dismiss"));
+    dismiss.role = IInteractive::ButtonRole::RejectRole;
+
+    IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("global", "Try again"), /*accent*/ true);
+    tryAgain.role = IInteractive::ButtonRole::AcceptRole;
 
     QString fileName = ret.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString());
     std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
@@ -431,21 +449,9 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     interactive()->warning(muse::trc("project/convert", "Error processing score"), msg,
                            { dismiss, tryAgain }, dismissBtn)
     .onResolve(this, [this, tryAgainBtn](const IInteractive::Result& result) {
-        if (!result.isButton(tryAgainBtn)) {
-            return;
+        if (result.isButton(tryAgainBtn)) {
+            convertFiles();
         }
-
-        checkConvertIsAllowed()
-        .onResolve(this, [this](const Ret& allowedRet) {
-            if (!allowedRet) {
-                return;
-            }
-
-            selectFilesToConvert()
-            .onResolve(this, [this](const ConvertSelection& selection) {
-                startConvert(selection.input, selection.convertedFileName);
-            });
-        });
     });
 }
 
@@ -454,7 +460,9 @@ void ConvertFileToScoreScenario::askReviewRating(ConvertType type, int queueId)
     static constexpr int goodBtn = int(IInteractive::Button::CustomButton) + 1;
     static constexpr int badBtn = int(IInteractive::Button::CustomButton) + 2;
 
+    //: Button to rate the quality of a converted score as good
     IInteractive::ButtonData good(goodBtn, muse::trc("project/convert", "Good"), /*accent*/ true);
+    //: Button to rate the quality of a converted score as bad
     IInteractive::ButtonData bad(badBtn, muse::trc("project/convert", "Bad"));
 
     //! TODO: replace with toast
