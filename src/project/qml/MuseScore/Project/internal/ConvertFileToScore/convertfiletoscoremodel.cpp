@@ -56,12 +56,14 @@ static QString formatsText(const QStringList& extensions)
 static QString maxFileSizeText(qint64 maxFileSizeBytes)
 {
     QString size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes));
+    //: %1 is a pre-formatted file size including units, e.g. "20 MB max"; shown as a short label/badge
     return muse::qtrc("project/convert", "%1 max").arg(size);
 }
 
 static QString maxCombinedFileSizeText(qint64 maxFileSizeBytes)
 {
     QString size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes));
+    //: %1 is a pre-formatted file size including units, e.g. "20 MB max combined"; shown as a short label/badge
     return muse::qtrc("project/convert", "%1 max combined").arg(size);
 }
 
@@ -99,10 +101,12 @@ static QStringList resolveExtensions(const QStringList& paths)
 static QString pasteLinkHintTextFor(const QStringList& sources)
 {
     if (sources.size() >= 2) {
+        //: %1 and %2 are source names, e.g. "YouTube"; may include HTML markup (bold/link) depending on where this text is shown
         return muse::qtrc("project/convert", "Paste a link from %1 or %2 (beta)").arg(sources.at(0), sources.at(1));
     }
 
     if (sources.size() == 1) {
+        //: %1 is a source name, e.g. "YouTube"; may include HTML markup (bold/link) depending on where this text is shown
         return muse::qtrc("project/convert", "Paste a link from %1 (beta)").arg(sources.at(0));
     }
 
@@ -216,6 +220,7 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
         }
 
         if (omr.pdf.maxPages > 0) {
+            //: %1 is the maximum number of pages; shown as a short label/badge, e.g. "20 pages max"
             pdfItems << muse::qtrc("project/convert", "%1 pages max").arg(omr.pdf.maxPages);
         }
 
@@ -260,6 +265,7 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
         QStringList a2sItems;
 
         if (!a2s.file.allowedExtensions.empty()) {
+            //: %1 is one or more file format names, e.g. "MP3 format" or "MP3, WAV format"
             a2sItems << muse::qtrc("project/convert", "%1 format").arg(formatsText(a2s.file.allowedExtensions));
         }
 
@@ -344,10 +350,12 @@ QString ConvertFileToScoreModel::linkHintText() const
     const QStringList sources = boldLinkSources();
 
     if (sources.size() >= 2) {
+        //: %1 and %2 are source names, e.g. "YouTube", with HTML markup (bold/link)
         return muse::qtrc("project/convert", "Or paste a link from %1 or %2 (beta)").arg(sources.at(0), sources.at(1));
     }
 
     if (sources.size() == 1) {
+        //: %1 is a source name, e.g. "YouTube", with HTML markup (bold/link)
         return muse::qtrc("project/convert", "Or paste a link from %1 (beta)").arg(sources.at(0));
     }
 
@@ -415,8 +423,8 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
     }
 
     const std::vector<std::string> filters {
-        muse::trc("project/convert", "Supported files") + " (" + patterns.join(' ').toStdString() + ")",
-        muse::trc("project/convert", "All files") + " (*)"
+        muse::trc("project", "All supported files") + " (" + patterns.join(' ').toStdString() + ")",
+        muse::trc("project", "All") + " (*)"
     };
 
     const FileCategory category = existingPaths.isEmpty()
@@ -443,10 +451,10 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
 
     io::paths_t files;
     if (multiple) {
-        files = interactive()->selectOpeningFilesSync(muse::trc("project/convert", "Choose file"),
+        files = interactive()->selectOpeningFilesSync(muse::trc("ui", "Choose file"),
                                                       configuration()->defaultConvertFilePath(), filters);
     } else {
-        io::path_t file = interactive()->selectOpeningFileSync(muse::trc("project/convert", "Choose file"),
+        io::path_t file = interactive()->selectOpeningFileSync(muse::trc("ui", "Choose file"),
                                                                configuration()->defaultConvertFilePath(), filters);
         if (!file.empty()) {
             files.push_back(file);

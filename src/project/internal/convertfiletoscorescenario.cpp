@@ -413,7 +413,7 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& pa
     IInteractive::ButtonData openScore(openScoreBtn, muse::trc("project/convert", "Open score"), /*accent*/ true);
     openScore.role = IInteractive::ButtonRole::AcceptRole;
 
-    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("global", "Dismiss"));
     dismiss.role = IInteractive::ButtonRole::RejectRole;
 
     QString scoreName = QFileInfo(path.toQString()).completeBaseName();
@@ -435,10 +435,10 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
     constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
 
-    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("project/convert", "Dismiss"));
+    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("global", "Dismiss"));
     dismiss.role = IInteractive::ButtonRole::RejectRole;
 
-    IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("project/convert", "Try again"), /*accent*/ true);
+    IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("global", "Try again"), /*accent*/ true);
     tryAgain.role = IInteractive::ButtonRole::AcceptRole;
 
     QString fileName = ret.data<QString>(CONVERT_FAILED_FILE_NAME_KEY, QString());
@@ -460,7 +460,9 @@ void ConvertFileToScoreScenario::askReviewRating(ConvertType type, int queueId)
     static constexpr int goodBtn = int(IInteractive::Button::CustomButton) + 1;
     static constexpr int badBtn = int(IInteractive::Button::CustomButton) + 2;
 
+    //: Button to rate the quality of a converted score as good
     IInteractive::ButtonData good(goodBtn, muse::trc("project/convert", "Good"), /*accent*/ true);
+    //: Button to rate the quality of a converted score as bad
     IInteractive::ButtonData bad(badBtn, muse::trc("project/convert", "Bad"));
 
     //! TODO: replace with toast
