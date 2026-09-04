@@ -471,3 +471,58 @@ Changelog
 
 9 February 2021 (Daniel Spreadbury) Bravura Text 1.393
 – Corrected style name of Bravura Text to 'Regular' from incorrect 'Normal'
+
+30 March 2021 (Daniel Spreadbury) Bravura 1.394
+– Fixed U+1D123 (bass clef with 8 above) and U+1D124 (bass clef with 8 below).
+– Fixed tesselation of wiggleArpeggioUp (U+EAA9) and wiggleArpeggioUpArrow (U+EAAD).
+
+16 September 2022 (Daniel Spreadbury) Bravura 1.395
+– Revised design for noteheads in 'Technique noteheads' range (U+EE70–U+EE73).
+
+11 October 2024 (Daniel Spreadbury) Bravura 1.396
+– Added kerning pairs for 'Tuplets' range (U+E880–U+E88A).
+
+1 July 2025 (Daniel Spreadbury) Bravura 1.453
+– Improve the appearance of U+E0D7 (noteheadDiamondDoubleWhole) and U+E0D8 (noteheadDiamondWhole).
+– Added 'Tuplets supplement' range (U+EF10-U+EF1F) with italic and roman parentheses and square brackets for tuplet digits.
+
+2 July 2025 (Daniel Spreadbury) Bravura 1.454
+– Added stylistic alternates for new 'Tuplets supplement' range.
+
+29 July 2025 (Daniel Spreadbury) Bravura 1.455
+– Added stylistic alternate for U+E830 guitarVibratoBarScoop.
+
+22 October 2025 (Daniel Spreadbury) Bravura 1.456
+– Tweak to U+E000 (brace) to make it more similar to appearance prior to v1.451.
+
+6 August 2026 (Daniel Spreadbury) Bravura 1.480
+– Bravura is now built from UFO sources, which can be found at https://github.com/w3c-cg/smufl.
+– Bravura and Bravura Text are now generated using a new pipeline from UFO to OTF using fontmake and otfautohint.
+– ss05 stylistic set removed, its five oversized notehead glyphs (noteheadDoubleWhole, noteheadDoubleWholeSquare, noteheadWhole, noteheadHalf, noteheadBlack) merged into ss08.
+– Bravura Text's ~15,500 "combining staff position" ligatures previously overflowed the Private Use Area, spilling all the way up to U+13285 and colliding with other Unicode blocks; they now live entirely within U+F0000–U+F3CBF, Plane 15's Supplementary Private Use Area-A.
+– Version number corrected from the originally-released 1.4900 to 1.480, since head.fontRevision cannot actually represent a 4-digit fraction.
+
+7 August 2026 (Daniel Spreadbury) Bravura 1.481
+– timeSigFractionalSlash (U+E08E) is now scaled to the same size as the time signature digits (#48)
+– Adjusted the glyphs in the 'Barlines' range to match the metadata values in engravingDefaults (#55)
+– Replaced the Sagittal accidental glyphs (U+E300–U+E40B) with corrected versions supplied by the Sagittal notation community, fixing incorrect advance widths and glyph orientations (#52, #53)
+– Correct class assignment for remaining glyphs in 'Fingering' and 'Fingering supplement' ranges (#58)
+– Correct vertical registration for accidentalCombiningLower31Schisma (U+E2EC) and accidentalCombiningRaise31Schisma (U+E2ED) (#64)
+– .notdef glyph now has a standard placeholder glyph design (#66)
+– Added stem up/down anchor points to noteheadDoubleWhole (U+E0A0) and noteheadDoubleWholeSquare (U+E0A1), which can be used if these noteheads are used to draw longas (#67)
+– Corrected vertical position of gClefTurned (U+E074) so its "hot spot" still passes through y=0 (#68)
+– Added thinThickBarlineSeparation to engraving defaults (#69)
+– Shortened caesuraSingleStroke (U+E4D7) to a single space, rather than two (#74)
+– Corrected orientation of accSagittal35LargeDiesisUp (U+E30E) (#75)
+– Corrected orientation of accidentalCombiningLower23Limit29LimitComma (U+E2EA) and accidentalCombiningRaise23Limit29LimitComma (U+E2EB) (#76)
+– Corrected the scaling of csymMinor (U+E874) in Bravura Text (#80)
+– Extended Helmholtz-Ellis accidentals (U+EE50–U+EE5F) were too large relative to other accidentals in Bravura; this has now been fixed (#82)
+– Corrected appearance of articMarcatoBelowSmall and articMarcatoStaccatoBelowSmall, which should be turned rather than flipped (#96)
+– Corrected appearance of gClef8vbCClef (U+E056) (#98)
+– Made the diamond noteheads (U+E0D7, U+E0D9–U+E0DE) more substantial in size, better matching Behind Bars guidance and improving legibility (#95)
+
+24 August 2026 (Daniel Spreadbury) Bravura 1.482
+– Corrected the scaling of csymParensLeftTall, csymParensRightTall, csymBracketLeftTall, csymBracketRightTall, csymParensLeftVeryTall, csymParensRightVeryTall, csymAlteredBassSlash, and csymDiagonalArrangementSlash in Bravura Text, which had incorrectly picked up the same scaling as csymMinor (U+E874) in 1.481 (#80)
+– Reduced the size of the diamond noteheads (U+E0D7, U+E0D9–U+E0DE), which were too large following the change made in 1.481 (#95)
+– Added the 'accidentals' class to the Extended Helmholtz-Ellis accidentals supplement (U+EE50–U+EE59) and to accidentalHabaFlatThreeQuarterTonesLower (#322)
+– Corrected the documented range for optionalGlyphs in the specification (#320)
