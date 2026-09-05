@@ -4447,6 +4447,11 @@ bool NotationInteraction::isGripEditStarted() const
     return m_editData.element && m_editData.curGrip != mu::engraving::Grip::NO_GRIP;
 }
 
+bool NotationInteraction::isStartEndGripSelected() const
+{
+    return m_editData.element && (m_editData.curGrip == mu::engraving::Grip::START || m_editData.curGrip == mu::engraving::Grip::END);
+}
+
 static int findGrip(const std::vector<muse::RectF>& grips, const muse::PointF& canvasPos)
 {
     if (grips.empty()) {
@@ -5716,58 +5721,53 @@ void NotationInteraction::doAutoFlipHairpinsType(Dynamic* dynamic)
 
 void NotationInteraction::toggleDynamicPopup()
 {
+    LOGD() << "toggleDynamicPopup()";
     EngravingItem* el = selection()->element();
     if (!el) {
         return;
     }
-
-    if (el->isHairpinSegment()) {
-        HairpinSegment* hairpinSeg = toHairpinSegment(el);
-        Hairpin* hairpin = hairpinSeg->hairpin();
-
-        auto addDynamic = [this](Fraction tick, track_idx_t track, VoiceAssignment voiceAssignment) {
-            startEdit(TranslatableString("undoableAction", "Add dynamic"));
-            Measure* measure = score()->tick2measure(tick);
-            Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
-            Dynamic* dynamic = Factory::createDynamic(segment);
-            dynamic->setOwnershipParent(segment);
-            dynamic->setTrack(track);
-            dynamic->setVoiceAssignment(voiceAssignment);
-            score()->undoAddElement(dynamic);
-            apply();
-            startEditText(dynamic);
-        };
-
-        switch (m_editData.curGrip) {
-        case Grip::START:
-            if (EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore()) {
-                // If there is already a dynamic, select it instead of opening an empty popup
-                select({ startDynOrExp });
-                if (startDynOrExp->isDynamic()) {
-                    autoFlipHairpinsType(toDynamic(startDynOrExp));
-                }
-            } else {
-                addDynamic(hairpin->tick(), hairpin->track(), hairpin->voiceAssignment());
-            }
-            break;
-        case Grip::END:
-            if (EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter()) {
-                // If there is already a dynamic, select it instead of opening an empty popup
-                select({ endDynOrExp });
-                if (endDynOrExp->isDynamic()) {
-                    autoFlipHairpinsType(toDynamic(endDynOrExp));
-                }
-            } else {
-                addDynamic(hairpin->tick2(), hairpin->track2(), hairpin->voiceAssignment());
-            }
-            break;
-        default:
-            break;
-        }
+    if (!el->isHairpinSegment()) {
+        addTextToItem(TextStyleType::DYNAMICS, el);
         return;
     }
 
-    addTextToItem(TextStyleType::DYNAMICS, el);
+    HairpinSegment* hairpinSeg = toHairpinSegment(el);
+    Hairpin* hairpin = hairpinSeg->hairpin();
+
+    auto addDynamic = [this](Fraction tick, track_idx_t track, VoiceAssignment voiceAssignment) {
+        startEdit(TranslatableString("undoableAction", "Add dynamic"));
+        Measure* measure = score()->tick2measure(tick);
+        Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
+        Dynamic* dynamic = Factory::createDynamic(segment);
+        dynamic->setOwnershipParent(segment);
+        dynamic->setTrack(track);
+        dynamic->setVoiceAssignment(voiceAssignment);
+        score()->undoAddElement(dynamic);
+        apply();
+        startEditText(dynamic);
+    };
+    // if the selected grip is at the left end, place the dynamic at the start
+    if (m_editData.curGrip == Grip::START || (m_editData.curGrip == Grip::APERTURE && hairpin->isDecrescendo())) {
+        if (EngravingItem* startDynOrExp = hairpinSeg->findElementToSnapBefore()) {
+            // If there is already a dynamic, select it instead of opening an empty popup
+            select({ startDynOrExp });
+            if (startDynOrExp->isDynamic()) {
+                autoFlipHairpinsType(toDynamic(startDynOrExp));
+            }
+        } else {
+            addDynamic(hairpin->tick(), hairpin->track(), hairpin->voiceAssignment());
+        }
+    } else {
+        if (EngravingItem* endDynOrExp = hairpinSeg->findElementToSnapAfter()) {
+            // If there is already a dynamic, select it instead of opening an empty popup
+            select({ endDynOrExp });
+            if (endDynOrExp->isDynamic()) {
+                autoFlipHairpinsType(toDynamic(endDynOrExp));
+            }
+        } else {
+            addDynamic(hairpin->tick2(), hairpin->track2(), hairpin->voiceAssignment());
+        }
+    }
 }
 
 bool NotationInteraction::toggleLayoutBreakAvailable() const

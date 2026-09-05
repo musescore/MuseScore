@@ -184,6 +184,7 @@ public:
 
     // Grip edit
     bool isGripEditStarted() const override;
+    bool isStartEndGripSelected() const override;
     bool isHitGrip(const muse::PointF& pos) const override;
     void startEditGrip(const muse::PointF& pos) override;
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
