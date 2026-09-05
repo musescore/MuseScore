@@ -2658,7 +2658,8 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         const size_t totalNotesInChord = chord->notes().size();
         for (size_t noteIdx = 0; noteIdx < totalNotesInChord; ++noteIdx) {
             Note* note = chord->notes().at(noteIdx);
-            if (!note || !score->selectionFilter().canSelectNoteIdx(noteIdx, totalNotesInChord, rangeContainsMultiNoteChords)) {
+            if (!note || (element->isArticulation() && toArticulation(element)->symId() != SymId::stringsHarmonic && note->tieBack())
+                || !score->selectionFilter().canSelectNoteIdx(noteIdx, totalNotesInChord, rangeContainsMultiNoteChords)) {
                 continue;
             }
             applyDropPaletteElement(score, note, element, modifiers);
@@ -5483,6 +5484,15 @@ void NotationInteraction::toggleArticulationForSelection(SymbolId articulationSy
             if (c) {
                 notes.insert(notes.begin(), c->notes().begin(), c->notes().end());
             }
+        }
+    }
+
+    if (selection()->isRange() && articulationSymbolId != SymbolId::stringsHarmonic) {
+        muse::remove_if(notes, [](const Note* note) {
+            return note->tieBack();
+        });
+        if (notes.empty()) {
+            return;
         }
     }
 
