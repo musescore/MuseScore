@@ -20,7 +20,7 @@
     <metaTag name="workTitle"></metaTag>
     <Order id="choir">
       <name>Choir</name>
-      <instrument id="alto">
+      <instrument id="bass">
         <family id="voices">Voices</family>
         </instrument>
       <instrument id="soprano">
@@ -113,21 +113,21 @@ LEAD</longName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <defaultConcertClef>G</defaultConcertClef>
-        <defaultTransposingClef>F8va</defaultTransposingClef>
+        <defaultConcertClef>G8vb</defaultConcertClef>
+        <defaultTransposingClef>F</defaultTransposingClef>
         <mergeMatchingRests>on</mergeMatchingRests>
         </Staff>
       <trackName>BARITONE BASS</trackName>
-      <Instrument id="alto">
+      <Instrument id="bass">
         <longName>BARI
 BASS</longName>
         <shortName>B/B</shortName>
         <trackName>Baritone/Bass</trackName>
-        <minPitchP>51</minPitchP>
-        <maxPitchP>81</maxPitchP>
-        <minPitchA>51</minPitchA>
-        <maxPitchA>77</maxPitchA>
-        <instrumentId>voice.alto</instrumentId>
+        <minPitchP>41</minPitchP>
+        <maxPitchP>65</maxPitchP>
+        <minPitchA>43</minPitchA>
+        <maxPitchA>64</maxPitchA>
+        <instrumentId>voice.bass</instrumentId>
         <clef>F</clef>
         <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
@@ -187,7 +187,7 @@ BASS</longName>
         <height>10</height>
         <Text>
           <style>title</style>
-          <text>Barbershop Quartet (Women)</text>
+          <text>Barbershop Ensemble (SATB)</text>
           </Text>
         </VBox>
       <Measure>
