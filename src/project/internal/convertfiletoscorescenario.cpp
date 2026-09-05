@@ -364,16 +364,16 @@ void ConvertFileToScoreScenario::showMultiplePdfFilesError()
 
 void ConvertFileToScoreScenario::showTooManyAudioFilesError(int maxFiles)
 {
-    std::string text = muse::qtrc("project/convert", "You can convert up to %1 audio files at a time. Remove some files and try again.")
-                       .arg(maxFiles).toStdString();
+    std::string text = muse::qtrc("project/convert", "You can convert up to %n audio file(s) at a time. Remove some files and try again.",
+                                  nullptr, maxFiles).toStdString();
     interactive()->warning(muse::trc("project/convert", "Too many files selected"), text,
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
 void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
 {
-    std::string text = muse::qtrc("project/convert", "You can convert up to %1 images at a time. Remove some images and try again.")
-                       .arg(maxImages).toStdString();
+    std::string text = muse::qtrc("project/convert", "You can convert up to %n image(s) at a time. Remove some images and try again.",
+                                  nullptr, maxImages).toStdString();
     interactive()->warning(muse::trc("project/convert", "Too many images selected"), text,
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
