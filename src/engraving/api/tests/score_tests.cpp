@@ -29,6 +29,7 @@
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/ornament.h"
 #include "engraving/dom/scoreorder.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
@@ -48,6 +49,36 @@ class Engraving_ApiScoreTests : public ::testing::Test
 {
 public:
 };
+
+//---------------------------------------------------------
+//   testOrnamentCueNoteChord
+//---------------------------------------------------------
+
+/// Verifies that the Ornament API exposes populated and null cue-note chords.
+TEST_F(Engraving_ApiScoreTests, testOrnamentCueNoteChord)
+{
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    Chord* parentChord = Factory::createChord(score->dummy()->segment());
+    Ornament* ornament = Factory::createOrnament(parentChord);
+    Chord* cueNoteChord = Factory::createChord(score->dummy()->segment());
+    ornament->setCueNoteChord(cueNoteChord);
+
+    apiv1::Ornament apiOrnament(ornament, apiv1::Ownership::SCORE);
+    apiv1::Chord* apiCueNoteChord = apiOrnament.cueNoteChord();
+
+    ASSERT_NE(apiCueNoteChord, nullptr);
+    EXPECT_EQ(apiCueNoteChord->chord(), cueNoteChord);
+
+    delete apiCueNoteChord;
+
+    ornament->setCueNoteChord(nullptr);
+    EXPECT_EQ(apiOrnament.cueNoteChord(), nullptr);
+
+    delete cueNoteChord;
+    delete ornament;
+    delete parentChord;
+    delete score;
+}
 
 //---------------------------------------------------------
 //   testReplaceInstrumentAtDomLevel
