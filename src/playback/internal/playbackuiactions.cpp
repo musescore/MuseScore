@@ -43,6 +43,14 @@ const UiActionList PlaybackUiActions::s_mainActions = {
              TranslatableString("action", "Play"),
              IconCode::Code::PLAY
              ),
+    UiAction(STEP_PLAY_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Step Play Mode"),
+             TranslatableString("action", "Toggle step play mode for spacebar"),
+             IconCode::Code::REWIND_END_FILL,
+             Checkable::Yes // <-- Add Checkable::Yes here
+             ),
     UiAction(PLAY_FROM_SELECTION_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -334,6 +342,7 @@ const muse::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()
         config.items = {
             { "rewind", true },
             { "play", true },
+            { "step-play", true },
             { "loop", true },
             { "loop-in", true },
             { "loop-out", true },
