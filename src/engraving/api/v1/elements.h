@@ -2271,6 +2271,9 @@ class Ornament : public EngravingItem
     Q_PROPERTY(bool hasIntervalBelow READ hasIntervalBelow)
     /// Whether this ornament displays a cue note.
     Q_PROPERTY(bool showCueNote READ showCueNote)
+    /// The chord containing this ornament's displayed cue note, if one exists.
+    /// \since MuseScore 5.0
+    Q_PROPERTY(apiv1::Chord * cueNoteChord READ cueNoteChord)
     /// The accidental for the interval above the attached note.
     Q_PROPERTY(apiv1::EngravingItem * accidentalAbove READ accidentalAbove)
     /// The accidental for the interval below the attached note.
@@ -2281,13 +2284,22 @@ public:
     Ornament(mu::engraving::Ornament* o = nullptr, Ownership own = Ownership::SCORE)
         : EngravingItem(o, own) {}
 
+    /// Returns the underlying engraving ornament.
     mu::engraving::Ornament* ornament() { return toOrnament(e); }
+    /// Returns the underlying engraving ornament.
     const mu::engraving::Ornament* ornament() const { return toOrnament(e); }
 
+    /// Returns whether this ornament has an interval above the attached note.
     bool hasIntervalAbove() const { return ornament()->hasIntervalAbove(); }
+    /// Returns whether this ornament has an interval below the attached note.
     bool hasIntervalBelow() const { return ornament()->hasIntervalBelow(); }
+    /// Returns whether this ornament displays a cue note.
     bool showCueNote() { return ornament()->showCueNote(); }
+    /// Returns the chord containing the displayed cue note, if one exists.
+    Chord* cueNoteChord() const { return wrap<Chord>(ornament()->cueNoteChord()); }
+    /// Returns the accidental for the interval above the attached note.
     EngravingItem* accidentalAbove() const { return wrap<EngravingItem>(ornament()->accidentalAbove()); }
+    /// Returns the accidental for the interval below the attached note.
     EngravingItem* accidentalBelow() const { return wrap<EngravingItem>(ornament()->accidentalBelow()); }
     /// \endcond
 };
