@@ -20,10 +20,10 @@
     <metaTag name="workTitle"></metaTag>
     <Order id="choir">
       <name>Choir</name>
-      <instrument id="bass">
+      <instrument id="alto">
         <family id="voices">Voices</family>
         </instrument>
-      <instrument id="tenor">
+      <instrument id="soprano">
         <family id="voices">Voices</family>
         </instrument>
       <soloists/>
@@ -40,21 +40,20 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <defaultClef>G8vb</defaultClef>
         <mergeMatchingRests>on</mergeMatchingRests>
         <bracket type="0" span="2" col="0"/>
         </Staff>
       <trackName>TENOR LEAD</trackName>
-      <Instrument id="tenor">
+      <Instrument id="soprano">
         <longName>TENOR
 LEAD</longName>
         <shortName>T/L</shortName>
         <trackName>Tenor/Lead</trackName>
-        <minPitchP>48</minPitchP>
-        <maxPitchP>72</maxPitchP>
-        <minPitchA>48</minPitchA>
-        <maxPitchA>69</maxPitchA>
-        <instrumentId>voice.tenor</instrumentId>
+        <minPitchP>56</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>56</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.soprano</instrumentId>
         <clef>G8vb</clef>
         <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
@@ -114,21 +113,21 @@ LEAD</longName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <defaultConcertClef>G8vb</defaultConcertClef>
-        <defaultTransposingClef>F</defaultTransposingClef>
+        <defaultConcertClef>G</defaultConcertClef>
+        <defaultTransposingClef>F8va</defaultTransposingClef>
         <mergeMatchingRests>on</mergeMatchingRests>
         </Staff>
       <trackName>BARITONE BASS</trackName>
-      <Instrument id="bass">
+      <Instrument id="alto">
         <longName>BARI
 BASS</longName>
         <shortName>B/B</shortName>
         <trackName>Baritone/Bass</trackName>
-        <minPitchP>41</minPitchP>
-        <maxPitchP>65</maxPitchP>
-        <minPitchA>43</minPitchA>
-        <maxPitchA>64</maxPitchA>
-        <instrumentId>voice.bass</instrumentId>
+        <minPitchP>51</minPitchP>
+        <maxPitchP>81</maxPitchP>
+        <minPitchA>51</minPitchA>
+        <maxPitchA>77</maxPitchA>
+        <instrumentId>voice.alto</instrumentId>
         <clef>F</clef>
         <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
@@ -188,7 +187,7 @@ BASS</longName>
         <height>10</height>
         <Text>
           <style>title</style>
-          <text>Barbershop Quartet (Men)</text>
+          <text>Barbershop Ensemble (SSAA)</text>
           </Text>
         </VBox>
       <Measure>
