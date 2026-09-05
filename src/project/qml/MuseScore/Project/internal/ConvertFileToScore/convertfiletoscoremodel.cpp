@@ -220,14 +220,12 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
         }
 
         if (omr.pdf.maxPages > 0) {
-            //: %1 is the maximum number of pages; shown as a short label/badge, e.g. "20 pages max"
-            pdfItems << muse::qtrc("project/convert", "%1 pages max").arg(omr.pdf.maxPages);
+            //: %n is the maximum number of pages; shown as a short label/badge, e.g. "20 pages max"
+            pdfItems << muse::qtrc("project/convert", "%n page(s) max.", nullptr, omr.pdf.maxPages);
         }
 
-        if (omr.pdf.maxFiles == 1) {
-            pdfItems << muse::qtrc("project/convert", "1 file per conversion");
-        } else if (omr.pdf.maxFiles > 1) {
-            pdfItems << muse::qtrc("project/convert", "%1 files per conversion").arg(omr.pdf.maxFiles);
+        if (omr.pdf.maxFiles > 0) {
+            pdfItems << muse::qtrc("project/convert", "%n file(s) per conversion", nullptr, omr.pdf.maxFiles);
         }
 
         result << requirementsSection(muse::qtrc("project/convert", "PDF"), pdfItems);
@@ -253,7 +251,7 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
         }
 
         if (omr.images.maxFiles > 0) {
-            imageItems << muse::qtrc("project/convert", "Max %1 images").arg(omr.images.maxFiles);
+            imageItems << muse::qtrc("project/convert", "Max. %n image(s)", nullptr, omr.images.maxFiles);
         }
 
         if (!imageItems.isEmpty()) {
@@ -273,10 +271,8 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
             a2sItems << maxFileSizeText(a2s.file.maxFileSizeBytes);
         }
 
-        if (a2s.file.maxFiles == 1) {
-            a2sItems << muse::qtrc("project/convert", "1 file per conversion");
-        } else if (a2s.file.maxFiles > 1) {
-            a2sItems << muse::qtrc("project/convert", "%1 files per conversion").arg(a2s.file.maxFiles);
+        if (a2s.file.maxFiles > 0) {
+            a2sItems << muse::qtrc("project/convert", "%n file(s) per conversion", nullptr, a2s.file.maxFiles);
         }
 
         if (!a2sItems.empty()) {
