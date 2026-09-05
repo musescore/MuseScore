@@ -22,7 +22,9 @@
 
 #include "stringdata.h"
 
+#include <cstdlib> 
 #include <map>
+#include <utility>
 
 #include "defer.h"
 
@@ -167,6 +169,46 @@ int StringData::fret(int pitch, int string, const Staff* staff, const Fraction& 
 }
 
 //---------------------------------------------------------
+//   getBassNote
+//    Returns the lowest pitched note in a given chord
+//
+//    Chord's downNote method will not necessarily work since
+//    it is based off the line/string and not just pitch
+//---------------------------------------------------------
+Note* StringData::getBassNote(const Chord* chord) {
+    Note* bassNote = nullptr; 
+
+    for (Note* n : chord->notes()) {
+        if (!bassNote || n->pitch() < bassNote->pitch()) {
+            bassNote = n;
+        }
+    }
+
+    return bassNote; 
+}
+
+//---------------------------------------------------------
+//   allCandidateFrettings
+//    Returns all possible places on the fretboard that we can play a note 
+//    with a given pitch and given pitchOffset. 
+//
+//    Will return a vector of integer pairs containing the string number and
+//    fret number respectively. 
+//---------------------------------------------------------
+std::vector<std::pair<int, int>> StringData::allCandidateFrettings(int pitch, int pitchOffset) const {
+    std::vector<std::pair<int, int>> candidateFrettings; 
+    int strings = static_cast<int>(m_stringTable.size()); 
+    
+    for (int visualStringNumber = 0; visualStringNumber < strings; ++visualStringNumber) {
+        int fretNumber = fret(pitch, visualStringNumber, pitchOffset); 
+
+        if (fretNumber != INVALID_FRET_INDEX) candidateFrettings.push_back({visualStringNumber, fretNumber}); 
+    }
+
+    return candidateFrettings; 
+}
+
+//---------------------------------------------------------
 //   fretChords
 //    Assigns fretting to all the notes of each chord in the same segment of chord
 //    re-using existing fretting wherever possible
@@ -188,14 +230,50 @@ void StringData::fretChords(Chord* chord) const
     };
 
     Chord* prevChord = chord->prev(); 
+    Note* prevBassNote = getBassNote(prevChord); 
 
-    // might be a good idea to store the chords we've already seen before
-    if (prevChord) {
+    // TODO:  good idea to store the chords we've already seen before
+    if (prevChord && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX) {
         // we look at all candidates for the bass note of the chord 
         // compute their distances to the bass note of the previous chord 
-        
-        
+        // pick the "closest" one to minimize hand movement 
+        std::pair<int, int> prevFretting = {prevBassNote->string(), prevBassNote->fret()}; 
 
+        Note* desiredBassNote = getBassNote(chord); 
+        std::vector<std::pair<int, int>> candidates = allCandidateFrettings(desiredBassNote->pitch(), pitchOffsetAt(chord->staff(), chord->tick())); 
+        
+        int minDistance = INT_MAX; 
+        std::pair<int, int> bestFretting = {INVALID_STRING_INDEX, INVALID_FRET_INDEX}; 
+
+        // TODO: suppose the instrument has m strings 
+        // if chord contains m notes, bass note should be on lowest string 
+        // if chord contains m - 1 notes, bass note should be on either the lowest string or the second lowest string 
+        // so on and so forth 
+
+        // we can exit early by skipping a candidate if the above conditions are not satisifed, as it's thus not possible to play the chord 
+        // with the given bass note 
+        // this holds true for any real tuning of the instrument 
+
+        for (std::pair<int, int> fretting : candidates) {
+            // TODO: handle case of open string being playable, horizontal distance is essentially 0
+            int horizontalDistance = std::abs(fretting.second - prevFretting.second);
+
+            // TODO: prefer vertical jumps of one or two strings, but afterwards vertical jump should be penalized heavily 
+            // deals with the case of playing octaves, for example 
+            int verticalDistance = std::abs(fretting.first - prevFretting.first);
+            
+            // TODO: glissando should always be dealt with using a slide on the same string 
+            // sliding means that we need to ensure that the ending note is somewhere we can slide to on that given string 
+
+            int distance = horizontalDistance + verticalDistance; 
+            if (distance < minDistance) { // update with the new fretting 
+                minDistance = distance; 
+                bestFretting = fretting; 
+            }
+        }
+
+        // in case all candidates are unplayable 
+        if (bestFretting.first == INVALID_STRING_INDEX && bestFretting.second == INVALID_FRET_INDEX) setFretConflict(true); 
     } else { 
         // this should only trigger in the case of the very first chord in the score
         // but we should probably have this also trigger in the case where we're waiting
@@ -486,7 +564,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
         // look for a suitable string, starting from the highest
         // NOTE: this assumes there are always enough frets to fill
         // the interval between any fretted string and the next
-        for (int i = strings - 1; i >= 0; i--) {
+        for (int i = 0; i < strings; i++) {
             instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
                 *string = strings - i - 1;
