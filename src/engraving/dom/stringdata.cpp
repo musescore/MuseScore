@@ -170,12 +170,9 @@ int StringData::fret(int pitch, int string, const Staff* staff, const Fraction& 
 
 //---------------------------------------------------------
 //   getBassNote
-//    Returns the lowest pitched note in a given chord
-//
-//    Chord's downNote method will not necessarily work since
-//    it is based off the line/string and not just pitch
+//    Returns the lowest pitched note in a given voicing of a chord. 
 //---------------------------------------------------------
-Note* StringData::getBassNote(const Chord* chord) {
+Note* StringData::getBassNote(const Chord* chord) const {
     Note* bassNote = nullptr; 
 
     for (Note* n : chord->notes()) {
@@ -185,6 +182,99 @@ Note* StringData::getBassNote(const Chord* chord) {
     }
 
     return bassNote; 
+}
+
+//---------------------------------------------------------
+//   getBassNoteOfVoicings
+//    Returns the lowest pitched note across all voicings at a given tick
+//    given a const pointer to a Chord object. Uses getBassNote as a helper function. 
+//
+//    Chord's downNote method will not necessarily work since
+//    it is based off the line/string and not just pitch. 
+//---------------------------------------------------------
+Note* StringData::getBassNoteOfVoicings(const Chord* chord) const {
+    Note* bassNote = nullptr; 
+
+    // helper lambda function for evaluating pitch 
+    void considerChord = [&](const Chord* c) {
+        Note* candidate = getBassNote(c);
+        if (candidate && (!bassNote || candidate->pitch() < bassNote->pitch())) {
+            bassNote = candidate;
+        }
+    };
+
+    // loop through all voices in a given segment, find the lowest pitched (bass) note 
+    if (chord->ownerShipParent()->isSegment()) {
+        Segment* seg = chord->segment(); 
+        track_idx_t trkFrom = (chord->track() / VOICES) * VOICES; 
+        track_idx_t trkTo = trkFrom + VOICES; 
+
+        for (track_idx_t trk = trkFrom; trk < trkTo; ++trk) {
+            EngravingItem* ch = seg->elist().at(trk); 
+            if (ch && ch->isChord()) considerChord(chord); 
+        }
+    } else {
+        considerChord(chord); 
+    }
+
+    return bassNote; 
+}
+
+//---------------------------------------------------------
+//   scoreFrettingCandidate
+//    Takes in a const reference to the previous fretting pair (string #, fret #)
+//    and a const reference to the candidate fretting pair (string #, fret #) as 
+//    well as a const pointer to the chord. 
+//
+//    Outputs the score for a given candidate in such a way that 
+//    candidates that are easier for the player to move their fingers to are prioritized. 
+//    What counts as 'easier' is based off a set of heuristics, but the general idea 
+//    is to minimize the distance we'll be moving in total across all ticks. 
+//---------------------------------------------------------
+int StringData::scoreFrettingCandidate(const std::pair<int, int>& prevBassNote, const std::pair<int, int>& candidate, const Chord* chord) {
+    // TODO: suppose the instrument has m strings 
+    // if chord contains m notes, bass note should be on lowest string 
+    // if chord contains m - 1 notes, bass note should be on either the lowest string or the second lowest string 
+    // so on and so forth 
+
+    int strings = static_cast<int>(this->strings());
+
+    // we can exit early by skipping a candidate if the above conditions are not satisifed, as it's thus not possible to play the chord 
+    // with the given bass note 
+    // this holds true for any real tuning of the instrument 
+
+    // TODO: handle case of open string being playable, horizontal distance is essentially 0
+    int horizontalDistance = std::abs(fretting.second - prevFretting.second);
+
+    // TODO: prefer vertical jumps of one or two strings, but afterwards vertical jump should be penalized heavily 
+    // deals with the case of playing octaves, for example 
+    int verticalDistance = std::abs(fretting.first - prevFretting.first);
+    
+    // TODO: glissando should always be dealt with using a slide on the same string 
+    // sliding means that we need to ensure that the ending note is somewhere we can slide to on that given string 
+
+    return horizontalDistance + verticalDistance; 
+
+    // TODO: 
+    // Sorting by "closest in pitch to the bass note first" means the note nearest the bass gets first pick of nearby strings, and notes further away in pitch get whatever's left. 
+    // An alternative would be processing in the original chord order, or by absolute pitch (high to low). may want to experiment with which produces more natural-looking shapes, 
+    // since this affects which note "wins" a contested nearby string when two candidates would otherwise want the same one.
+}
+
+//---------------------------------------------------------
+//   assignRemainingNotesAroundBass
+//      Frets the other notes frets based off the bass note
+//      Takes in a const pointer to a chord, a pointer to the bassNote, and a pair containing
+//      the string number and fret number respectively. 
+//
+//      Doesn't return anything, instead persists changes to each note object within the chord. 
+//---------------------------------------------------------
+void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, std::pair<int, int>& fretting) {
+    int strings = static_cast<int>(this->strings()); 
+    std::vector<bool> used(strings, false);
+    
+    used[fretting.first] = true; 
+    
 }
 
 //---------------------------------------------------------
@@ -230,7 +320,7 @@ void StringData::fretChords(Chord* chord) const
     };
 
     Chord* prevChord = chord->prev(); 
-    Note* prevBassNote = getBassNote(prevChord); 
+    Note* prevBassNote = prevChord ? getBassNoteOfVoicings(prevChord) : nullptr;
 
     // TODO:  good idea to store the chords we've already seen before
     if (prevChord && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX) {
@@ -239,41 +329,29 @@ void StringData::fretChords(Chord* chord) const
         // pick the "closest" one to minimize hand movement 
         std::pair<int, int> prevFretting = {prevBassNote->string(), prevBassNote->fret()}; 
 
-        Note* desiredBassNote = getBassNote(chord); 
+        Note* desiredBassNote = getBassNoteOfVoicings(chord); 
         std::vector<std::pair<int, int>> candidates = allCandidateFrettings(desiredBassNote->pitch(), pitchOffsetAt(chord->staff(), chord->tick())); 
         
-        int minDistance = INT_MAX; 
+        // bestScore represents the minimum possible score a candidate can have 
+        // the candidate with the 'lowest' score has the best score here
+        int bestScore = INT_MAX; 
         std::pair<int, int> bestFretting = {INVALID_STRING_INDEX, INVALID_FRET_INDEX}; 
 
-        // TODO: suppose the instrument has m strings 
-        // if chord contains m notes, bass note should be on lowest string 
-        // if chord contains m - 1 notes, bass note should be on either the lowest string or the second lowest string 
-        // so on and so forth 
-
-        // we can exit early by skipping a candidate if the above conditions are not satisifed, as it's thus not possible to play the chord 
-        // with the given bass note 
-        // this holds true for any real tuning of the instrument 
-
         for (std::pair<int, int> fretting : candidates) {
-            // TODO: handle case of open string being playable, horizontal distance is essentially 0
-            int horizontalDistance = std::abs(fretting.second - prevFretting.second);
-
-            // TODO: prefer vertical jumps of one or two strings, but afterwards vertical jump should be penalized heavily 
-            // deals with the case of playing octaves, for example 
-            int verticalDistance = std::abs(fretting.first - prevFretting.first);
-            
-            // TODO: glissando should always be dealt with using a slide on the same string 
-            // sliding means that we need to ensure that the ending note is somewhere we can slide to on that given string 
-
-            int distance = horizontalDistance + verticalDistance; 
-            if (distance < minDistance) { // update with the new fretting 
-                minDistance = distance; 
+            int score = scoreFrettingCandidate(prevFretting, candidate, chord); 
+            if (score < bestScore) { // update with the new fretting 
+                bestScore = score; 
                 bestFretting = fretting; 
             }
         }
 
-        // in case all candidates are unplayable 
-        if (bestFretting.first == INVALID_STRING_INDEX && bestFretting.second == INVALID_FRET_INDEX) setFretConflict(true); 
+        // persist changes for bass note 
+        if (bestFretting.first != INVALID_STRING_INDEX) {
+            desiredBassNote->undoChangeProperty(Pid::STRING, bestFretting.first);
+            desiredBassNote->undoChangeProperty(Pid::FRET, bestFretting.second);
+        } else {
+            desiredBassNote->setFretConflict(true);
+        }
     } else { 
         // this should only trigger in the case of the very first chord in the score
         // but we should probably have this also trigger in the case where we're waiting
