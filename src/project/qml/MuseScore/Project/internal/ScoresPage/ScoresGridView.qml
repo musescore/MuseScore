@@ -33,6 +33,7 @@ Item {
     property string searchText
 
     property bool isNoResultsMessageAllowed: true
+    property bool canRemoveFromRecent: false
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
@@ -43,6 +44,7 @@ Item {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal removeFromRecentRequested(var scorePath)
 
     clip: true
 
@@ -161,6 +163,7 @@ Item {
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
+                canRemoveFromRecent: root.canRemoveFromRecent && !score.isCreateNew && !score.isNoResultsFound
 
                 onClicked: {
                     if (isCreateNew) {
@@ -168,6 +171,10 @@ Item {
                     } else if (!isNoResultsFound) {
                         root.openScoreRequested(score.path, score.name)
                     }
+                }
+
+                onRemoveFromRecentRequested: {
+                    root.removeFromRecentRequested(score.path)
                 }
             }
         }

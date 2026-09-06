@@ -115,6 +115,28 @@ void RecentFilesController::moveRecentFile(const muse::io::path_t& before, const
     }
 }
 
+void RecentFilesController::removeRecentFile(const muse::io::path_t& path)
+{
+    if (path.empty()) {
+        return;
+    }
+
+    RecentFilesList newList;
+    newList.reserve(m_recentFilesList.size());
+
+    for (const RecentFile& file : m_recentFilesList) {
+        if (file.path != path) {
+            newList.push_back(file);
+        }
+    }
+
+    if (newList.size() == m_recentFilesList.size()) {
+        return;
+    }
+
+    setRecentFilesList(newList, true);
+}
+
 void RecentFilesController::clearRecentFiles()
 {
     setRecentFilesList({}, true);

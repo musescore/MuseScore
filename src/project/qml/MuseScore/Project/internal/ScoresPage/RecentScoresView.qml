@@ -49,6 +49,7 @@ ScoresView {
             searchText: root.searchText
 
             isNoResultsMessageAllowed: false // provided by the model instead
+            canRemoveFromRecent: true
 
             backgroundColor: root.backgroundColor
             sideMargin: root.sideMargin
@@ -64,6 +65,10 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
+            }
+
+            onRemoveFromRecentRequested: function(scorePath) {
+                recentScoresModel.removeRecentScore(scorePath)
             }
         }
     }
@@ -83,6 +88,7 @@ ScoresView {
             sideMargin: root.sideMargin
 
             showNewScoreItem: true
+            canRemoveFromRecent: true
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrder
@@ -95,6 +101,10 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
+            }
+
+            onRemoveFromRecentRequested: function(scorePath) {
+                recentScoresModel.removeRecentScore(scorePath)
             }
 
             columns: [

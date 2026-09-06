@@ -38,6 +38,9 @@ ListItemBlank {
     property real itemInset: 12
     property real columnSpacing: 44
     property alias showBottomBorder: bottomBorder.visible
+    property bool canRemoveFromRecent: false
+
+    signal removeFromRecentRequested()
 
     implicitHeight: 64
 
@@ -45,6 +48,33 @@ ListItemBlank {
     navigation.onActiveChanged: {
         if (navigation.active) {
             root.scrollIntoView()
+        }
+    }
+
+    mouseArea.acceptedButtons: root.canRemoveFromRecent
+                               ? (Qt.LeftButton | Qt.RightButton)
+                               : Qt.LeftButton
+
+    onClicked: function(mouse) {
+        if (root.canRemoveFromRecent && mouse && mouse.button === Qt.RightButton) {
+            contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+        }
+    }
+
+    ContextMenuLoader {
+        id: contextMenuLoader
+
+        items: [
+            {
+                id: "remove-from-recent",
+                title: qsTrc("project", "Remove from recent")
+            }
+        ]
+
+        onHandleMenuItem: function(itemId) {
+            if (itemId === "remove-from-recent") {
+                root.removeFromRecentRequested()
+            }
         }
     }
 

@@ -44,6 +44,7 @@ public:
 
     virtual void prependRecentFile(const RecentFile& file) = 0;
     virtual void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) = 0;
+    virtual void removeRecentFile(const muse::io::path_t& path) = 0;
     virtual void clearRecentFiles() = 0;
 
     virtual muse::async::Promise<QPixmap> thumbnail(const muse::io::path_t& filePath) const = 0;

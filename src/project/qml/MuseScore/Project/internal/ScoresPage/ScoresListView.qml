@@ -35,6 +35,8 @@ Item {
     property alias showNewScoreItem: newScoreItem.visible
     property string searchText
 
+    property bool canRemoveFromRecent: false
+
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
 
@@ -44,6 +46,7 @@ Item {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal removeFromRecentRequested(var scorePath)
 
     component ColumnItem : QtObject {
         property string header
@@ -210,13 +213,22 @@ Item {
                         itemInset: view.itemInset
                         implicitHeight: view.rowHeight
                         columnSpacing: view.columnSpacing
+                        canRemoveFromRecent: root.canRemoveFromRecent
 
                         navigation.panel: navPanel
                         navigation.row: index + 1
                         navigation.column: 0
 
-                        onClicked: {
+                        onClicked: function(mouse) {
+                            if (mouse && mouse.button === Qt.RightButton) {
+                                return
+                            }
+
                             root.openScoreRequested(score.path, score.name)
+                        }
+
+                        onRemoveFromRecentRequested: {
+                            root.removeFromRecentRequested(score.path)
                         }
                     }
                 }

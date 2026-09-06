@@ -39,10 +39,12 @@ FocusScope {
     property bool isNoResultsFound: false
     property bool isCloud: false
     property int cloudScoreId: 0
+    property bool canRemoveFromRecent: false
 
     property alias navigation: navCtrl
 
     signal clicked()
+    signal removeFromRecentRequested()
 
     NavigationControl {
         id: navCtrl
@@ -67,9 +69,34 @@ FocusScope {
 
         enabled: root.enabled
         hoverEnabled: true
+        acceptedButtons: root.canRemoveFromRecent
+                         ? (Qt.LeftButton | Qt.RightButton)
+                         : Qt.LeftButton
 
-        onClicked: {
+        onClicked: function(mouse) {
+            if (mouse.button === Qt.RightButton) {
+                contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+                return
+            }
+
             root.clicked()
+        }
+
+        ContextMenuLoader {
+            id: contextMenuLoader
+
+            items: [
+                {
+                    id: "remove-from-recent",
+                    title: qsTrc("project", "Remove from recent")
+                }
+            ]
+
+            onHandleMenuItem: function(itemId) {
+                if (itemId === "remove-from-recent") {
+                    root.removeFromRecentRequested()
+                }
+            }
         }
     }
 

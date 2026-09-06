@@ -47,6 +47,8 @@ public:
 
     void load() override;
 
+    Q_INVOKABLE void removeRecentScore(const QString& scorePath);
+
     QList<int> nonScoreItemIndices() const override;
 
 private:
