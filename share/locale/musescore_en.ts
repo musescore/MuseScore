@@ -26237,6 +26237,11 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="src/notationscene/qml/MuseScore/NotationScene/styledialog/StaveSharingPage.qml" line="1"/>
+        <source>Show player numerals for instrument changes</source>
+        <translation type="unfinished">Show player numerals for instrument changes</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/styledialog/StaveSharingPage.qml" line="1"/>
         <source>Instrument labels on staff</source>
         <translation type="unfinished">Instrument labels on staff</translation>
     </message>
