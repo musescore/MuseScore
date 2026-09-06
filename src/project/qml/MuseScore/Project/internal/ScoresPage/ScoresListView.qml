@@ -120,6 +120,8 @@ Item {
                 }
             }
 
+            canRemoveFromRecent: false
+
             onClicked: root.createNewScoreRequested()
         }
 
@@ -214,6 +216,9 @@ Item {
                         implicitHeight: view.rowHeight
                         columnSpacing: view.columnSpacing
                         canRemoveFromRecent: root.canRemoveFromRecent
+                                             && !(score.isCreateNew ?? false)
+                                             && !(score.isNoResultsFound ?? false)
+                                             && !(score.isCloud ?? false)
 
                         navigation.panel: navPanel
                         navigation.row: index + 1
@@ -228,6 +233,9 @@ Item {
                         }
 
                         onRemoveFromRecentRequested: {
+                            if ((score.isCreateNew ?? false) || (score.isNoResultsFound ?? false) || (score.isCloud ?? false)) {
+                                return
+                            }
                             root.removeFromRecentRequested(score.path)
                         }
                     }

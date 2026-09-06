@@ -163,7 +163,7 @@ Item {
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
-                canRemoveFromRecent: root.canRemoveFromRecent && !score.isCreateNew && !score.isNoResultsFound
+                canRemoveFromRecent: root.canRemoveFromRecent && !score.isCreateNew && !score.isNoResultsFound && !score.isCloud
 
                 onClicked: {
                     if (isCreateNew) {
@@ -174,6 +174,9 @@ Item {
                 }
 
                 onRemoveFromRecentRequested: {
+                    if (isCreateNew || isNoResultsFound || isCloud) {
+                        return
+                    }
                     root.removeFromRecentRequested(score.path)
                 }
             }

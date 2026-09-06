@@ -47,6 +47,13 @@ public:
 
     void load() override;
 
+    /**
+     * @brief Remove a recent score from the Home “New & recent” list.
+     * @param scorePath Absolute path of the score, as provided by the QML item.
+     *
+     * No-op if @p scorePath is empty or identifies a cloud project.
+     * Local recent files are forwarded to @ref IRecentFilesController::removeRecentFile().
+     */
     Q_INVOKABLE void removeRecentScore(const QString& scorePath);
 
     QList<int> nonScoreItemIndices() const override;

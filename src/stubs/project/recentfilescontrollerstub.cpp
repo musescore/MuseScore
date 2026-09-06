@@ -43,6 +43,9 @@ void RecentFilesControllerStub::moveRecentFile(const muse::io::path_t&, const Re
 {
 }
 
+/**
+ * @brief Stub; recent-file removal is a no-op in this build configuration.
+ */
 void RecentFilesControllerStub::removeRecentFile(const muse::io::path_t&)
 {
 }

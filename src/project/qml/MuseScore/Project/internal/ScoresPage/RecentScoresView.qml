@@ -37,6 +37,13 @@ ScoresView {
         recentScoresModel.load()
     }
 
+    function requestRemoveFromRecent(scorePath) {
+        if (!scorePath) {
+            return
+        }
+        recentScoresModel.removeRecentScore(scorePath)
+    }
+
     sourceComponent: root.viewType === ScoresPageModel.List ? listComp : gridComp
 
     Component {
@@ -68,7 +75,7 @@ ScoresView {
             }
 
             onRemoveFromRecentRequested: function(scorePath) {
-                recentScoresModel.removeRecentScore(scorePath)
+                root.requestRemoveFromRecent(scorePath)
             }
         }
     }
@@ -104,7 +111,7 @@ ScoresView {
             }
 
             onRemoveFromRecentRequested: function(scorePath) {
-                recentScoresModel.removeRecentScore(scorePath)
+                root.requestRemoveFromRecent(scorePath)
             }
 
             columns: [

@@ -46,9 +46,21 @@ void RecentScoresModel::load()
     });
 }
 
+/**
+ * @brief QML entry point for “Remove from recent”; ignores empty and cloud paths.
+ */
 void RecentScoresModel::removeRecentScore(const QString& scorePath)
 {
-    recentFilesController()->removeRecentFile(muse::io::path_t(scorePath));
+    if (scorePath.isEmpty()) {
+        return;
+    }
+
+    const muse::io::path_t path(scorePath);
+    if (configuration()->isCloudProject(path)) {
+        return;
+    }
+
+    recentFilesController()->removeRecentFile(path);
 }
 
 void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)

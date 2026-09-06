@@ -44,6 +44,14 @@ public:
 
     virtual void prependRecentFile(const RecentFile& file) = 0;
     virtual void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) = 0;
+
+    /**
+     * @brief Remove a single entry from the recent-files list.
+     * @param path Absolute path of the recent file to remove.
+     *
+     * No-op if @p path is empty or not present in the list.
+     * Implementations persist the updated list and notify listeners when an entry is removed.
+     */
     virtual void removeRecentFile(const muse::io::path_t& path) = 0;
     virtual void clearRecentFiles() = 0;
 

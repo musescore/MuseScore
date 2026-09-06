@@ -35,6 +35,11 @@ public:
 
     void prependRecentFile(const RecentFile& file) override;
     void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) override;
+
+    /**
+     * @brief Stub implementation of recent-file removal; does nothing.
+     * @param path Absolute path of the recent file that would be removed.
+     */
     void removeRecentFile(const muse::io::path_t& path) override;
     void clearRecentFiles() override;
 

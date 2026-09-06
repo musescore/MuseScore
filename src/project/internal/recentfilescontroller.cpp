@@ -115,6 +115,9 @@ void RecentFilesController::moveRecentFile(const muse::io::path_t& before, const
     }
 }
 
+/**
+ * @brief Remove @p path from the in-memory recent-files list and persist the result.
+ */
 void RecentFilesController::removeRecentFile(const muse::io::path_t& path)
 {
     if (path.empty()) {

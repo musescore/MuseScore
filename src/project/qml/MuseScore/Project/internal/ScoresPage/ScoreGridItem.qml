@@ -93,7 +93,7 @@ FocusScope {
             ]
 
             onHandleMenuItem: function(itemId) {
-                if (itemId === "remove-from-recent") {
+                if (itemId === "remove-from-recent" && root.canRemoveFromRecent) {
                     root.removeFromRecentRequested()
                 }
             }

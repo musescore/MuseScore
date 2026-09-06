@@ -53,6 +53,14 @@ public:
 
     void prependRecentFile(const RecentFile& file) override;
     void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) override;
+
+    /**
+     * @brief Remove a single entry from the persisted recent-files list.
+     * @param path Absolute path of the recent file to remove.
+     *
+     * No-op if @p path is empty or not present. When an entry is removed, the
+     * updated list is saved and @ref recentFilesListChanged() is notified.
+     */
     void removeRecentFile(const muse::io::path_t& path) override;
     void clearRecentFiles() override;
 
