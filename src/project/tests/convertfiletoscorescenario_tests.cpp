@@ -557,8 +557,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_TooManyAudioFiles_S
     // [GIVEN] A configured maximum audio file count
     m_config.audio2score.file.maxFiles = 3;
     const std::string text = muse::qtrc("project/convert",
-                                        "You can convert up to %1 audio files at a time. Remove some files and try again.")
-                             .arg(m_config.audio2score.file.maxFiles).toStdString();
+                                        "You can convert up to %n audio file(s) at a time. Remove some files and try again.",
+                                        nullptr, m_config.audio2score.file.maxFiles).toStdString();
 
     expectValidateFilesShowsError(Err::ConvertTooManyAudioFiles, muse::trc("project/convert", "Too many files selected"), text);
 }
@@ -567,8 +567,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_TooManyImages_Shows
 {
     // [GIVEN] A configured maximum image count
     m_config.omr.images.maxFiles = 15;
-    const std::string text = muse::qtrc("project/convert", "You can convert up to %1 images at a time. Remove some images and try again.")
-                             .arg(m_config.omr.images.maxFiles).toStdString();
+    const std::string text = muse::qtrc("project/convert", "You can convert up to %n image(s) at a time. Remove some images and try again.",
+                                        nullptr, m_config.omr.images.maxFiles).toStdString();
 
     expectValidateFilesShowsError(Err::ConvertTooManyImages, muse::trc("project/convert", "Too many images selected"), text);
 }
