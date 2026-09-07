@@ -290,24 +290,41 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 void StartAudioController::stopAudioProcessing()
 {
 #ifndef Q_OS_WASM
-    m_rpcChannel->send(rpc::make_request(Method::EngineDeinit), [this](const Msg&) {
+    bool isEngineDeinited = false;
+
+    //! NOTE Stop waiting for the engine to start: below we process the RPC channel,
+    //! and a still pending EngineRunning would send EngineInit in the middle of the shutdown
+    m_isEngineRunning.ch.disconnect(this);
+
+    m_rpcChannel->send(rpc::make_request(Method::EngineDeinit), [this, &isEngineDeinited](const Msg&) {
+        isEngineDeinited = true;
+
         if (m_isAudioStarted.val) {
             m_isAudioStarted.set(false);
         }
     });
 
+    int attemptsLimit = 100;
+    int attempt = 0;
+
     do {
+        ++attempt;
+
         // Ensure that RPC process() is called at least once
         m_rpcChannel->process();
 
-        if (!m_isAudioStarted.val) {
+        if (isEngineDeinited) {
             break;
         }
 
         std::this_thread::yield();
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(10ms);
-    } while (m_isAudioStarted.val);
+    } while (!isEngineDeinited && attempt <= attemptsLimit);
+
+    if (attempt >= attemptsLimit) {
+        LOGE() << "Engine deinit failed because of number of attempts exceeded";
+    }
 
     audioDriverController()->close();
 
