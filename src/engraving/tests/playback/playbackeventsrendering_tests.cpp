@@ -2924,7 +2924,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
     timestamp_t fourthMeasureTime = thirdMeasureTime + HALF_NOTE_DURATION + QUARTER_NOTE_DURATION
                                     + 3000000 + QUARTER_NOTE_DURATION;
 
-    timestamp_t fifthMeasureTime = fourthMeasureTime + (WHOLE_NOTE_DURATION + 5000000) * 2; // repeat
+    timestamp_t fifthMeasureTime = fourthMeasureTime + WHOLE_NOTE_DURATION * 2 + 5000000; // repeat: only final iteration carries the section-break pause
 
     std::vector<TimestampAndDuration> expectedTnDList {
         // 1st measure (no notes)
@@ -2939,8 +2939,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
         { thirdMeasureTime + HALF_NOTE_DURATION + QUARTER_NOTE_DURATION + 3000000, QUARTER_NOTE_DURATION },
 
         // 4th measure (whole note inside repeat + section break)
-        { fourthMeasureTime, WHOLE_NOTE_DURATION }, // + 5s pause (section break)
-        { fourthMeasureTime + WHOLE_NOTE_DURATION + 5000000, WHOLE_NOTE_DURATION }, // repeat
+        { fourthMeasureTime, WHOLE_NOTE_DURATION }, // no extra pause (non-final segment)
+        { fourthMeasureTime + WHOLE_NOTE_DURATION, WHOLE_NOTE_DURATION }, // final iteration carries the 5s section-break pause
 
         // 5th measure
         { fifthMeasureTime, HALF_NOTE_DURATION },
