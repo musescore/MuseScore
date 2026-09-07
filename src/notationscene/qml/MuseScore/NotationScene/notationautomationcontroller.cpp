@@ -795,16 +795,8 @@ void NotationAutomationController::onCurrentNotationChanged()
         }, Asyncable::Mode::SetReplace /* FIXME */);
     }
 
-    if (const INotationPtr notation = currentNotation()) {
-        // Switching between Page/Continuous view completely re-flows the systems and does not
-        // go through changesChannel() - without this, the cached polylines keep referencing
-        // stale System* objects, so they end up misaligned with the staves and stop tracking
-        // the notation on scroll.
-        mu::notation::INotation* thisNotation = notation.get();
-        notation->viewModeChanged().onNotify(this, [this, thisNotation]() {
-            if (thisNotation != currentNotation().get()) {
-                return;
-            }
+    if (currentNotation()) {
+        currentNotation()->viewModeChanged().onNotify(this, [this]() {
             rebuildAllPolylines();
         }, Asyncable::Mode::SetReplace /* FIXME */);
     }
