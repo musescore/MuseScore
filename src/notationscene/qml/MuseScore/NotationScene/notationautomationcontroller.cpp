@@ -794,6 +794,12 @@ void NotationAutomationController::onCurrentNotationChanged()
             scheduleUpdate();
         }, Asyncable::Mode::SetReplace /* FIXME */);
     }
+
+    if (currentNotation()) {
+        currentNotation()->viewModeChanged().onNotify(this, [this]() {
+            rebuildAllPolylines();
+        }, Asyncable::Mode::SetReplace /* FIXME */);
+    }
 }
 
 void NotationAutomationController::mergePendingScoreChanges(const mu::engraving::ScoreChanges& changes)
