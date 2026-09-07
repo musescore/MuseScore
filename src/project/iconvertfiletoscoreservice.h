@@ -24,6 +24,7 @@
 #include "modularity/imoduleinterface.h"
 
 #include "async/channel.h"
+#include "async/notification.h"
 #include "io/path.h"
 #include "types/retval.h"
 
@@ -52,10 +53,14 @@ public:
     virtual muse::Ret validateLink(const QUrl& link) const = 0;
 
     //! Sends the conversion request to the server
-    virtual muse::Ret startConvert(const ConvertInput& input, const QString& convertedFileName) = 0;
+    virtual muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedFileName) = 0;
 
     //! Emits the result once the server-side conversion completes
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
+
+    //! Names of the files currently being converted server-side (queued, processing, or downloading)
+    virtual muse::StringList fileNamesBeingConverted() const = 0;
+    virtual muse::async::Notification fileNamesBeingConvertedChanged() const = 0;
 
     //! Emitted once a converted score is ready and awaiting a quality review
     virtual muse::async::Channel<ConvertType, int /*queueId*/> reviewRequested() const = 0;
