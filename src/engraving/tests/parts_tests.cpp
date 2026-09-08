@@ -1394,7 +1394,7 @@ TEST_F(Engraving_PartsTests, staffStyles)
 
 TEST_F(Engraving_PartsTests, crossMeasureUpwardGlissExcerpt)
 {
-    MasterScore* master = ScoreRW::readScore(u"../../../vtest/scores/gliss-6.mscz");
+    MasterScore* master = ScoreRW::readScore(PARTS_DATA_DIR + u"cross-measure-gliss.mscx");
     ASSERT_TRUE(master);
     const Note* original = toChord(master->firstMeasure()->firstChordRest(4))->upNote();
     ASSERT_EQ(original->pitch(), 48);
@@ -1402,14 +1402,8 @@ TEST_F(Engraving_PartsTests, crossMeasureUpwardGlissExcerpt)
     ASSERT_EQ(toNote(original->spannerFor().front()->endElement())->pitch(), 84);
     ASSERT_EQ(original->spannerFor().front()->endElement()->findMeasure(), master->firstMeasure()->nextMeasure());
     ASSERT_EQ(original->spannerFor().front()->endElement()->track(), 0u);
-    Score* part = master->createScore();
-    Excerpt* excerpt = new Excerpt(master);
-    excerpt->setExcerptScore(part);
-    part->setExcerpt(excerpt);
-    master->excerpts().push_back(excerpt);
-    excerpt->setName(u"Harp");
-    excerpt->setParts({ master->parts().front() });
-    Excerpt::createExcerpt(excerpt);
+    Score* part = TestUtils::createPart(master, 0);
+    ASSERT_TRUE(part);
     part->doLayout();
     const Note* cloned = toChord(part->firstMeasure()->firstChordRest(4))->upNote();
     ASSERT_EQ(cloned->spannerFor().size(), 1u);
