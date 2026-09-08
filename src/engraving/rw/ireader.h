@@ -21,15 +21,20 @@
  */
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <variant>
 
+#include "global/types/bytearray.h"
+#include "global/types/string.h"
 #include "types/ret.h"
 
 #include "../types/types.h"
 #include "xmlreader.h"
 
 namespace mu::engraving {
+class Excerpt;
+class MasterScore;
 class Score;
 class EngravingItem;
 
@@ -60,6 +65,14 @@ public:
     virtual ~IReader() = default;
 
     virtual muse::Ret readScoreFile(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
+
+    /// Read an excerpt from raw data. If the excerpt is uninitialised (no full score),
+    /// populates the Excerpt with name/parts/tracks only. If it is a regular excerpt,
+    /// creates a Score, calls applyStyleFn so the caller can apply the style, then reads
+    /// the full score content.
+    using ApplyStyleFn = std::function<void (Score*)>;
+    virtual muse::Ret readExcerptScoreFile(Excerpt* excerpt, MasterScore* masterScore, const muse::ByteArray& excerptData,
+                                           const muse::String& fileName, rw::ReadInOutData* out, const ApplyStyleFn& applyStyleFn);
 
     using Supported = std::variant<std::monostate,
                                    Accidental*,

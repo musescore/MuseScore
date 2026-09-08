@@ -22,7 +22,10 @@
 
 #include <gtest/gtest.h>
 
+#include <filesystem>
+
 #include "io/fileinfo.h"
+#include "io/file.h"
 
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
@@ -42,15 +45,27 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 
+#include "engraving/editing/editexcerpt.h"
 #include "engraving/editing/editmeasurerepeat.h"
 #include "engraving/editing/editvoice.h"
 #include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
+
+#include "engraving/infrastructure/mscreader.h"
+#include "engraving/infrastructure/mscwriter.h"
+#include "engraving/rw/compat/compatutils.h"
+#include "engraving/rw/mscloader.h"
+#include "engraving/rw/mscsaver.h"
+#include "engraving/rw/xmlreader.h"
+#include "serialization/xmlstreamwriter.h"
+#include "io/buffer.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
 static const String PARTS_DATA_DIR("parts_data/");
 
@@ -1391,3 +1406,746 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+//---------------------------------------------------------
+//   uninitializedExcerptProperties
+///   Test that an Excerpt without excerptScore can store properties
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, uninitializedExcerptProperties)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create excerpt without initializing (no excerptScore)
+    Excerpt* excerpt = new Excerpt(score);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr);
+
+    // Set properties on uninitialized excerpt
+    String testName = u"My Custom Part Name";
+    excerpt->setName(testName);
+
+    // Verify properties are stored
+    EXPECT_EQ(excerpt->name(), testName);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr);  // Still no score
+
+    // Add parts to excerpt
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+
+    // Verify parts are stored
+    EXPECT_EQ(excerpt->parts().size(), 1u);
+    EXPECT_EQ(excerpt->parts().front(), part);
+
+    delete excerpt;
+    delete score;
+}
+
+//---------------------------------------------------------
+//   renamePotentialExcerpt
+///   Test that renaming a potential excerpt (not yet opened)
+///   persists correctly after save/reload
+///   This tests the fix for: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, renamePotentialExcerpt)
+{
+    // This test verifies that excerpt names are preserved through save/reload.
+    //
+    // Background (Issue #31656): In the Parts dialog, each instrument shows
+    // as an excerpt that can be renamed before being opened. Uninitialised
+    // excerpts are saved in a minimal format so custom names persist.
+    //
+    // This test uses an initialized excerpt as a baseline.
+
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create and initialize an excerpt with a custom name
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+
+    String newName = u"My Renamed Part";
+    excerpt->setName(newName);
+
+    // Initialize (creates excerptScore) - this is currently required for save
+    score->initAndAddExcerpt(excerpt, true);
+
+    EXPECT_NE(excerpt->excerptScore(), nullptr);
+    EXPECT_EQ(excerpt->name(), newName);
+
+    // Save (using .mscx since ScoreRW::saveScore writes raw XML, not ZIP)
+    String tempFile = String::fromStdString(
+        (std::filesystem::temp_directory_path() / "part-rename-potential-test.mscx").string());
+    bool saveOk = ScoreRW::saveScore(score, tempFile);
+    EXPECT_TRUE(saveOk) << "Failed to save score";
+
+    // Check file was created
+    std::error_code ec;
+    bool fileExists = std::filesystem::exists(std::filesystem::path(tempFile.toStdString()), ec);
+    EXPECT_TRUE(fileExists) << "Save file was not created";
+
+    if (fileExists) {
+        auto fileSize = std::filesystem::file_size(std::filesystem::path(tempFile.toStdString()), ec);
+        EXPECT_GT(fileSize, 0u) << "Save file is empty";
+    }
+
+    delete score;
+
+    if (saveOk && fileExists) {
+        MasterScore* reloadedScore = ScoreRW::readScore(tempFile, true);  // true = absolute path
+        ASSERT_TRUE(reloadedScore) << "Failed to reload score";
+
+        // Verify excerpt was saved and name preserved
+        ASSERT_FALSE(reloadedScore->excerpts().empty()) << "No excerpts in reloaded score";
+        Excerpt* loadedExcerpt = reloadedScore->excerpts().back();
+        EXPECT_EQ(loadedExcerpt->name(), newName);
+
+        delete reloadedScore;
+    }
+
+    std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}
+
+//---------------------------------------------------------
+//   saveUninitExcerpt
+///   Test that uninitialised excerpts can be saved and loaded
+///   using MSCZ format (the container format that supports multiple excerpts)
+///   Related: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, saveUninitExcerpt)
+{
+    using namespace muse::io;
+    using namespace mu::engraving::rw;
+
+    // Load a score
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create an uninitialised excerpt (no excerptScore, just like "potential excerpts" in Parts dialog)
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    excerpt->setInitialPartId(part->id());
+
+    // Set a custom name - this is what we're primarily testing persists
+    String customName = u"My Custom Uninitialised Part";
+    excerpt->setName(customName, false);
+
+    // Add excerpt to score without initializing (uninitialised, no excerptScore created)
+    score->addExcerpt(excerpt, muse::nidx, false);
+
+    // Verify it's an uninitialised excerpt (no excerptScore)
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be uninitialised (no excerptScore)";
+    ASSERT_EQ(excerpt->name(), customName);
+
+    // Save to MSCZ using MscSaver
+    String tempFile = String::fromStdString(
+        (std::filesystem::temp_directory_path() / "uninit-excerpt-test.mscz").string());
+
+    // Clean up any existing file
+    if (File::exists(tempFile)) {
+        File::remove(tempFile);
+    }
+
+    {
+        ByteArray msczData;
+        {
+            Buffer buf(&msczData);
+            MscWriter::Params writerParams;
+            writerParams.device = &buf;
+            writerParams.filePath = tempFile;
+            writerParams.mode = MscIoMode::Zip;
+
+            MscWriter mscWriter(writerParams);
+            mscWriter.open();
+
+            MscSaver saver(score->iocContext());
+            bool saveOk = saver.writeMscz(score, mscWriter, false);  // no thumbnail
+            ASSERT_TRUE(saveOk) << "Failed to save score with uninitialised excerpt";
+        }
+
+        File file(tempFile);
+        ASSERT_TRUE(file.open(IODevice::WriteOnly)) << "Failed to open temp file for writing";
+        file.write(msczData);
+    }
+
+    delete score;
+
+    // Load back the score
+    MasterScore* reloadedScore = ScoreRW::readScore(tempFile, true);  // true = absolute path
+    ASSERT_TRUE(reloadedScore) << "Failed to reload score";
+
+    // Verify the uninitialised excerpt was restored
+    ASSERT_EQ(reloadedScore->excerpts().size(), 1u) << "Should have one excerpt";
+    Excerpt* loadedExcerpt = reloadedScore->excerpts().front();
+
+    // The key test: name should be preserved
+    EXPECT_EQ(loadedExcerpt->name(), customName) << "Excerpt name should persist";
+
+    // It should still be uninitialised (no excerptScore)
+    EXPECT_EQ(loadedExcerpt->excerptScore(), nullptr) << "Excerpt should still be uninitialised after reload";
+
+    // Parts should be restored (by ID matching)
+    EXPECT_EQ(loadedExcerpt->parts().size(), 1u) << "Parts should be restored";
+    if (!loadedExcerpt->parts().empty()) {
+        // Verify it references the correct part from the reloaded score
+        Part* loadedPart = loadedExcerpt->parts().front();
+        EXPECT_TRUE(std::find(reloadedScore->parts().begin(), reloadedScore->parts().end(), loadedPart)
+                    != reloadedScore->parts().end()) << "Excerpt part should be in score's parts";
+    }
+
+    // initialPartId should be preserved
+    EXPECT_TRUE(loadedExcerpt->initialPartId().isValid()) << "initialPartId should be preserved";
+
+    delete reloadedScore;
+
+    // Verify that uninitialised excerpts don't have extra files and XML is minimal
+    {
+        File tempFileIn(tempFile);
+        ASSERT_TRUE(tempFileIn.open(IODevice::ReadOnly));
+        ByteArray fileData = tempFileIn.readAll();
+        Buffer readBuf(&fileData);
+
+        MscReader::Params readerParams;
+        readerParams.device = &readBuf;
+        readerParams.filePath = tempFile;
+        readerParams.mode = MscIoMode::Zip;
+
+        MscReader mscReader(readerParams);
+        ASSERT_TRUE(mscReader.open()) << "Failed to open MscReader for verification";
+
+        // Get the excerpt file names from the archive
+        std::vector<String> excerptFiles = mscReader.excerptFileNames();
+        ASSERT_EQ(excerptFiles.size(), 1u) << "Should have one excerpt file";
+
+        // Uninitialised excerpts should NOT have viewsettings.json or audiosettings.json
+        path_t excerptPath = u"Excerpts/" + excerptFiles.front() + u"/";
+        ByteArray viewSettings = mscReader.readViewSettingsJsonFile(excerptPath);
+        ByteArray audioSettings = mscReader.readAudioSettingsJsonFile(excerptPath);
+
+        EXPECT_TRUE(viewSettings.empty()) << "Uninitialised excerpt should not have viewsettings.json";
+        EXPECT_TRUE(audioSettings.empty()) << "Uninitialised excerpt should not have audiosettings.json";
+
+        // Verify the excerpt XML is minimal (initialised marker, no measures, staves, etc.)
+        ByteArray excerptData = mscReader.readExcerptFile(excerptFiles.front());
+        ASSERT_FALSE(excerptData.empty()) << "Excerpt file should exist";
+
+        String excerptXml = String::fromUtf8(excerptData);
+
+        // Uninitialised excerpt should have initialised=false marker and essential elements
+        EXPECT_TRUE(excerptXml.contains(u"<initialised>")) << "Should have initialised marker";
+        EXPECT_TRUE(excerptXml.contains(u"<name>")) << "Should have name element";
+        EXPECT_TRUE(excerptXml.contains(u"<initialPartId>")) << "Should have initialPartId element";
+
+        // Should NOT have full score content (measures, staves, parts with full data)
+        EXPECT_FALSE(excerptXml.contains(u"<Staff>")) << "Uninitialised excerpt should not have Staff element";
+        EXPECT_FALSE(excerptXml.contains(u"<Measure>")) << "Uninitialised excerpt should not have Measure element";
+        EXPECT_FALSE(excerptXml.contains(u"<vBox>")) << "Uninitialised excerpt should not have vBox element";
+
+        // Verify file size is small (uninitialised should be < 1KB, full excerpt would be > 10KB)
+        EXPECT_LT(excerptData.size(), 1024u) << "Uninitialised excerpt XML should be small (< 1KB)";
+    }
+
+    // Cleanup - comment out for debugging
+    std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}
+
+//---------------------------------------------------------
+//   uninitExcerptAfterInitDeinit
+///   Test that uninitialised excerpts remain uninitialised after being
+///   temporarily initialized (e.g., for export) and then deinitialized.
+///   This simulates the export flow where excerpts are initialized for
+///   rendering but should return to uninitialised state after export.
+///   Related: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, uninitExcerptAfterInitDeinit)
+{
+    using namespace muse::io;
+    using namespace mu::engraving::rw;
+
+    // Load a score
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create an uninitialised excerpt
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    excerpt->setInitialPartId(part->id());
+
+    String customName = u"Init Deinit Test Part";
+    excerpt->setName(customName, false);
+
+    // Add as uninitialised excerpt
+    score->addExcerpt(excerpt, muse::nidx, false);
+
+    // Verify it's uninitialised
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should start as uninitialised";
+
+    // Initialize the excerpt (simulates what export does)
+    score->initExcerpt(excerpt);
+    ASSERT_NE(excerpt->excerptScore(), nullptr) << "Excerpt should be initialized after initExcerpt";
+    EXPECT_TRUE(excerpt->inited()) << "Excerpt should be marked as inited";
+
+    // Deinitialize the excerpt (simulates what happens after export)
+    Score* excerptScore = excerpt->excerptScore();
+    excerpt->setExcerptScore(nullptr);
+    excerpt->setInited(false);
+    delete excerptScore;
+
+    // Verify it's back to uninitialised
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be uninitialised after deinit";
+    EXPECT_FALSE(excerpt->inited()) << "Excerpt should not be marked as inited after deinit";
+
+    // Save to MSCZ
+    String tempFile = String::fromStdString(
+        (std::filesystem::temp_directory_path() / "init-deinit-test.mscz").string());
+
+    if (File::exists(tempFile)) {
+        File::remove(tempFile);
+    }
+
+    {
+        ByteArray msczData;
+        {
+            Buffer buf(&msczData);
+            MscWriter::Params writerParams;
+            writerParams.device = &buf;
+            writerParams.filePath = tempFile;
+            writerParams.mode = MscIoMode::Zip;
+
+            MscWriter mscWriter(writerParams);
+            mscWriter.open();
+
+            MscSaver saver(score->iocContext());
+            bool saveOk = saver.writeMscz(score, mscWriter, false);
+            ASSERT_TRUE(saveOk) << "Failed to save score";
+        }
+
+        File file(tempFile);
+        ASSERT_TRUE(file.open(IODevice::WriteOnly)) << "Failed to open temp file for writing";
+        file.write(msczData);
+    }
+
+    delete score;
+
+    // Verify the saved file has uninitialised excerpt
+    {
+        File tempFileIn(tempFile);
+        ASSERT_TRUE(tempFileIn.open(IODevice::ReadOnly));
+        ByteArray fileData = tempFileIn.readAll();
+        Buffer readBuf(&fileData);
+
+        MscReader::Params readerParams;
+        readerParams.device = &readBuf;
+        readerParams.filePath = tempFile;
+        readerParams.mode = MscIoMode::Zip;
+
+        MscReader mscReader(readerParams);
+        ASSERT_TRUE(mscReader.open()) << "Failed to open MscReader";
+
+        std::vector<String> excerptFiles = mscReader.excerptFileNames();
+        ASSERT_EQ(excerptFiles.size(), 1u) << "Should have one excerpt file";
+
+        ByteArray excerptData = mscReader.readExcerptFile(excerptFiles.front());
+        ASSERT_FALSE(excerptData.empty()) << "Excerpt file should exist";
+
+        String excerptXml = String::fromUtf8(excerptData);
+
+        // Should be uninitialised (small size, initialised=false marker, no full content)
+        EXPECT_TRUE(excerptXml.contains(u"<initialised>")) << "Should have initialised marker";
+        EXPECT_FALSE(excerptXml.contains(u"<Staff>")) << "Should not have Staff element";
+        EXPECT_FALSE(excerptXml.contains(u"<Measure>")) << "Should not have Measure element";
+        EXPECT_LT(excerptData.size(), 1024u) << "Uninitialised excerpt should be small (< 1KB)";
+    }
+
+    // Reload and verify
+    MasterScore* reloadedScore = ScoreRW::readScore(tempFile, true);
+    ASSERT_TRUE(reloadedScore) << "Failed to reload score";
+
+    ASSERT_EQ(reloadedScore->excerpts().size(), 1u) << "Should have one excerpt";
+    Excerpt* loadedExcerpt = reloadedScore->excerpts().front();
+
+    EXPECT_EQ(loadedExcerpt->name(), customName) << "Name should be preserved";
+    EXPECT_EQ(loadedExcerpt->excerptScore(), nullptr) << "Should still be uninitialised after reload";
+
+    delete reloadedScore;
+    std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}
+
+//---------------------------------------------------------
+//   compatCreateUninitExcerpts
+///   Test that the compat migration creates uninitialised excerpts
+///   for parts that don't have associated excerpts yet.
+///   Related: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, compatCreateUninitExcerpts)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    size_t numParts = score->parts().size();
+    ASSERT_GT(numParts, 0u) << "Score should have at least one part";
+
+    // Score is version 5.00 and has no excerpts initially
+    ASSERT_TRUE(score->excerpts().empty()) << "Fresh score should have no excerpts";
+
+    // Run the compat migration manually
+    mu::engraving::compat::CompatUtils::createUninitExcerptsForParts(score);
+
+    // Should have created one uninitialised excerpt per part
+    ASSERT_EQ(score->excerpts().size(), numParts) << "Should have one excerpt per part";
+
+    for (size_t i = 0; i < numParts; ++i) {
+        Excerpt* excerpt = score->excerpts().at(i);
+        Part* part = score->parts().at(i);
+
+        // Each excerpt should be uninitialised (no excerptScore)
+        EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be uninitialised";
+
+        // Each excerpt should reference the correct part
+        EXPECT_EQ(excerpt->initialPartId(), part->id()) << "Excerpt should reference its part";
+        EXPECT_EQ(excerpt->parts().size(), 1u) << "Excerpt should have one part";
+        if (!excerpt->parts().empty()) {
+            EXPECT_EQ(excerpt->parts().front(), part) << "Excerpt's part should match score's part";
+        }
+
+        // Name should be set from part name
+        EXPECT_FALSE(excerpt->name().empty()) << "Excerpt should have a name";
+    }
+
+    // Running migration again should not create duplicates
+    mu::engraving::compat::CompatUtils::createUninitExcerptsForParts(score);
+    EXPECT_EQ(score->excerpts().size(), numParts) << "Running migration twice should not create duplicates";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   uninitExcerptRenameUndoable
+///   Test that renaming an uninitialised excerpt via ChangeExcerptTitle
+///   on the master score undo stack is undoable.
+///   This covers the mechanism used by ExcerptNotation::undoSetName
+///   when score() is null (no excerptScore yet).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, uninitExcerptRenameUndoable)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create an uninitialised excerpt (no excerptScore)
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    const String originalName = u"Original Name";
+    excerpt->setName(originalName);
+    score->masterScore()->excerpts().push_back(excerpt);
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt must be uninitialised";
+
+    // Rename via master score undo stack (same mechanism as ExcerptNotation::undoSetName)
+    const String newName = u"Renamed Part";
+    EditData ed;
+    score->startCmd(TranslatableString::untranslatable("Rename part"));
+    score->undo(new ChangeExcerptTitle(excerpt, newName));
+    score->endCmd();
+
+    EXPECT_EQ(excerpt->name(), newName) << "Name should be updated after rename";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should still be uninitialised after rename";
+
+    // Undo: name should revert
+    score->undoStack()->undo(&ed);
+    EXPECT_EQ(excerpt->name(), originalName) << "Name should revert after undo";
+
+    // Redo: name should come back
+    score->undoStack()->redo();
+    EXPECT_EQ(excerpt->name(), newName) << "Name should be restored after redo";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   reinitExcerptScoreUpdated
+///   Test the underlying mechanism of resetExcerpt():
+///   deleteExcerpt() + initAndAddExcerpt() leaves the new
+///   excerpt properly initialised with a fresh score.
+///   This exercises the engraving-level half of Bug 1
+///   (ExcerptNotation::reinit() must also call setScore(nullptr)
+///   before init() so the notation layer picks up the new score).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, reinitExcerptScoreUpdated)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create and initialise an excerpt
+    Excerpt* oldExcerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    oldExcerpt->parts().push_back(part);
+    oldExcerpt->setName(u"Old Part");
+    score->initAndAddExcerpt(oldExcerpt, false);
+
+    ASSERT_TRUE(oldExcerpt->inited()) << "Excerpt must be initialised";
+    Score* oldScore = oldExcerpt->excerptScore();
+    ASSERT_NE(oldScore, nullptr) << "Old excerpt must have a score";
+
+    // Simulate resetExcerpt(): delete old, create new
+    score->startCmd(TranslatableString::untranslatable("Reset part"));
+    score->deleteExcerpt(oldExcerpt);
+
+    Excerpt* newExcerpt = new Excerpt(*oldExcerpt, false);
+    score->initAndAddExcerpt(newExcerpt, false);
+    score->endCmd();
+
+    ASSERT_TRUE(newExcerpt->inited()) << "New excerpt must be initialised";
+    Score* newScore = newExcerpt->excerptScore();
+    ASSERT_NE(newScore, nullptr) << "New excerpt must have a score";
+    EXPECT_NE(newScore, oldScore) << "New score must be a different object from the old one";
+
+    // Old excerpt should no longer be in the master list
+    const auto& excerpts = score->excerpts();
+    bool oldStillPresent = std::find(excerpts.begin(), excerpts.end(), oldExcerpt) != excerpts.end();
+    EXPECT_FALSE(oldStillPresent) << "Old excerpt should not be in the master list after deleteExcerpt";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   deleteInitedExcerptIsUndoable
+///   Test that deleteExcerpt() on an initialised excerpt is
+///   undoable: after undo the excerpt is restored with its
+///   score intact.  This covers the undo path used by
+///   onPartsRemoved() for initialised excerpts (Bug 2 fix).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, deleteInitedExcerptIsUndoable)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create and initialise an excerpt
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    excerpt->setName(u"Part A");
+    score->initAndAddExcerpt(excerpt, false);
+    ASSERT_TRUE(excerpt->inited());
+    ASSERT_NE(excerpt->excerptScore(), nullptr);
+
+    const size_t countBefore = score->excerpts().size();
+
+    // Delete it (goes through undo stack via RemoveExcerpt)
+    score->startCmd(TranslatableString::untranslatable("Remove part"));
+    score->deleteExcerpt(excerpt);
+    score->endCmd();
+
+    EXPECT_EQ(score->excerpts().size(), countBefore - 1) << "Excerpt should be removed after deleteExcerpt";
+
+    // Undo: excerpt comes back
+    EditData ed;
+    score->undoStack()->undo(&ed);
+
+    EXPECT_EQ(score->excerpts().size(), countBefore) << "Excerpt should be restored after undo";
+    bool restored = std::find(score->excerpts().begin(), score->excerpts().end(), excerpt) != score->excerpts().end();
+    EXPECT_TRUE(restored) << "The same excerpt object should be back in the list";
+    EXPECT_TRUE(excerpt->inited()) << "Restored excerpt should still be initialised";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   reorderUninitExcerptStaysUninit
+///   Test that moving an uninitialised excerpt within the
+///   master score's list does not initialise it.
+///   This covers the engraving half of Bug 3 (setExcerpts()
+///   must not call initExcerpt() during a reorder).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, reorderUninitExcerptStaysUninit)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Add two uninitialised excerpts
+    Excerpt* excerptA = new Excerpt(score);
+    excerptA->parts().push_back(score->parts().at(0));
+    excerptA->setName(u"Part A");
+    score->addExcerpt(excerptA, muse::nidx, /*initIfNeeded=*/ false);
+
+    Excerpt* excerptB = new Excerpt(score);
+    if (score->parts().size() > 1) {
+        excerptB->parts().push_back(score->parts().at(1));
+    } else {
+        excerptB->parts().push_back(score->parts().at(0));
+    }
+    excerptB->setName(u"Part B");
+    score->addExcerpt(excerptB, muse::nidx, /*initIfNeeded=*/ false);
+
+    ASSERT_EQ(excerptA->excerptScore(), nullptr) << "A must start uninitialised";
+    ASSERT_EQ(excerptB->excerptScore(), nullptr) << "B must start uninitialised";
+
+    // Reorder: move A to position 1 (swap)
+    std::vector<Excerpt*>& list = score->excerpts();
+    size_t idxA = muse::indexOf(list, excerptA);
+    muse::moveItem(list, idxA, 1);
+
+    // Both must still be uninitialised — reordering must not trigger initExcerpt
+    EXPECT_EQ(excerptA->excerptScore(), nullptr) << "A must still be uninitialised after reorder";
+    EXPECT_EQ(excerptB->excerptScore(), nullptr) << "B must still be uninitialised after reorder";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   loadedExcerptsAreInited
+///   Test that excerpts read from a file are marked as
+///   inited so that isInited() returns true.
+///   Covers the mscloader.cpp fix (Bug 4): without it,
+///   Excerpt::inited() was always false for loaded files,
+///   disabling Reset and other isInited()-gated actions.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, loadedExcerptsAreInited)
+{
+    // input-from-parts.mscz has four fully-initialised excerpts (Flute, Oboe, etc.)
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"input-from-parts.mscz");
+    ASSERT_TRUE(score);
+    ASSERT_FALSE(score->excerpts().empty()) << "File must contain excerpts";
+
+    for (Excerpt* excerpt : score->excerpts()) {
+        EXPECT_TRUE(excerpt->inited())
+            << "Loaded excerpt '" << excerpt->name().toStdString() << "' must have inited() == true";
+        EXPECT_NE(excerpt->excerptScore(), nullptr)
+            << "Loaded excerpt '" << excerpt->name().toStdString() << "' must have a score";
+    }
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   addUninitExcerptUndoRedoPreservesUninitState
+///   Test that AddExcerpt(initIfNeeded=false) preserves the
+///   uninitialised state across undo/redo.
+///   Covers the m_initIfNeeded flag added to AddExcerpt and
+///   RemoveExcerpt in commit 925b296ecb.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, addUninitExcerptUndoRedoPreservesUninitState)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    const size_t countBefore = score->excerpts().size();
+
+    Excerpt* excerpt = new Excerpt(score);
+    excerpt->parts().push_back(score->parts().front());
+    excerpt->setName(u"Uninit Part");
+
+    // Add as uninitialised via undo stack
+    score->startCmd(TranslatableString::untranslatable("Add uninit excerpt"));
+    score->undo(new AddExcerpt(excerpt, /*initIfNeeded=*/ false));
+    score->endCmd();
+
+    ASSERT_EQ(score->excerpts().size(), countBefore + 1);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must be uninitialised after add";
+
+    // Undo: excerpt removed
+    EditData ed;
+    score->undoStack()->undo(&ed);
+    EXPECT_EQ(score->excerpts().size(), countBefore) << "Excerpt must be gone after undo";
+
+    // Redo: excerpt comes back still uninitialised
+    score->undoStack()->redo();
+    ASSERT_EQ(score->excerpts().size(), countBefore + 1);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must still be uninitialised after redo";
+    EXPECT_FALSE(excerpt->inited()) << "inited() must be false after redo";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   removeUninitExcerptIsUndoable
+///   Test that removing an uninitialised excerpt via
+///   RemoveExcerpt is undoable and restores it as uninitialised.
+///   Covers the onPartsRemoved() change in commit 84a40cbb86.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, removeUninitExcerptIsUndoable)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Add an uninitialised excerpt
+    Excerpt* excerpt = new Excerpt(score);
+    excerpt->parts().push_back(score->parts().front());
+    excerpt->setName(u"Uninit Part");
+    score->addExcerpt(excerpt, muse::nidx, /*initIfNeeded=*/ false);
+    ASSERT_EQ(excerpt->excerptScore(), nullptr);
+
+    const size_t countBefore = score->excerpts().size();
+
+    // Remove it via undo command (same path as onPartsRemoved)
+    score->startCmd(TranslatableString::untranslatable("Remove uninit excerpt"));
+    score->undo(new RemoveExcerpt(excerpt));
+    score->endCmd();
+
+    EXPECT_EQ(score->excerpts().size(), countBefore - 1) << "Excerpt must be removed";
+
+    // Undo: comes back uninitialised
+    EditData ed;
+    score->undoStack()->undo(&ed);
+
+    EXPECT_EQ(score->excerpts().size(), countBefore) << "Excerpt must be restored";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must be restored as uninitialised";
+    EXPECT_FALSE(excerpt->inited()) << "inited() must remain false after undo";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   renameUninitExcerptViaUndoScore
+///   Test that renaming an uninitialised excerpt using the
+///   master score's undo stack (as replaceInstrument does)
+///   is undoable.
+///   Covers the replaceInstrument() fix in commit 925b296ecb.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, renameUninitExcerptViaUndoScore)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    Excerpt* excerpt = new Excerpt(score);
+    excerpt->parts().push_back(score->parts().front());
+    const String originalName = u"Original";
+    excerpt->setName(originalName);
+    score->addExcerpt(excerpt, muse::nidx, /*initIfNeeded=*/ false);
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Must start uninitialised";
+
+    // Rename via master score undo stack (same path as replaceInstrument for uninit excerpts)
+    const String newName = u"Renamed";
+    score->startCmd(TranslatableString::untranslatable("Rename uninit excerpt"));
+    score->undo(new ChangeExcerptTitle(excerpt, newName));
+    score->endCmd();
+
+    EXPECT_EQ(excerpt->name(), newName) << "Name must be updated";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must still be uninitialised after rename";
+
+    // Undo: name reverts
+    EditData ed;
+    score->undoStack()->undo(&ed);
+    EXPECT_EQ(excerpt->name(), originalName) << "Name must revert after undo";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must still be uninitialised after undo";
+
+    // Redo: name comes back
+    score->undoStack()->redo();
+    EXPECT_EQ(excerpt->name(), newName) << "Name must be restored after redo";
+
+    delete score;
+}

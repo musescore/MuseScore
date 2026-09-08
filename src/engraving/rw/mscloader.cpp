@@ -33,6 +33,7 @@
 #include "../dom/masterscore.h"
 #include "../dom/excerpt.h"
 #include "../dom/imageStore.h"
+#include "../dom/part.h"
 
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/internal/automationrw.h"
@@ -157,25 +158,10 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
     if (ret && masterScore->mscVersion() >= 400 && mscReader.isContainer()) {
         std::vector<String> excerptFileNames = mscReader.excerptFileNames();
         for (const String& excerptFileName : excerptFileNames) {
-            Score* partScore = masterScore->createScore();
-
-            compat::ReadStyleHook::setupDefaultStyle(partScore);
-
-            Excerpt* ex = new Excerpt(masterScore);
-            ex->setExcerptScore(partScore);
-            ex->setFileName(excerptFileName);
-
-            ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
-            auto excerptStyleBuf = Buffer::opened(IODevice::ReadOnly, &excerptStyleData);
-            partScore->style().read(&excerptStyleBuf);
-
             ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
 
-            XmlReader xml(excerptData);
-            xml.setDocName(excerptFileName);
-
-            ReadInOutData partReadInData;
-            partReadInData.links = inOut->links;
+            Excerpt* ex = new Excerpt(masterScore);
+            ex->setFileName(excerptFileName);
 
             RetVal<IReaderPtr> reader = makeReader(masterScore->mscVersion(), ignoreVersionError);
             if (!reader.ret) {
@@ -183,26 +169,42 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
                 break;
             }
 
-            ret = reader.val->readScoreFile(partScore, xml, &partReadInData);
+            ReadInOutData partReadInData;
+            partReadInData.links = inOut->links;
+
+            // Style callback: applied between Score creation and content reading
+            auto applyStyleFn = [&mscReader, &excerptFileName](Score* partScore) {
+                compat::ReadStyleHook::setupDefaultStyle(partScore);
+                ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
+                auto excerptStyleBuf = Buffer::opened(IODevice::ReadOnly, &excerptStyleData);
+                partScore->style().read(&excerptStyleBuf);
+            };
+
+            ret = reader.val->readExcerptScoreFile(ex, masterScore, excerptData,
+                                                   excerptFileName, &partReadInData,
+                                                   applyStyleFn);
             if (!ret) {
                 break;
             }
 
-            Excerpt::linkMeasures(partScore, masterScore);
-
-            if (ex->name().empty()) {
-                // If no excerpt name tag was found while reading, try the "partName" meta tag
-                const String nameFromMeta = partScore->metaTag(u"partName");
+            // For regular excerpts, set name from meta if needed
+            if (ex->excerptScore() && ex->name().empty()) {
+                const String nameFromMeta = ex->excerptScore()->metaTag(u"partName");
 
                 if (nameFromMeta.empty()) {
-                    // If that's also empty, fall back to the filename
                     ex->setName(excerptFileName, /*saveAndNotify=*/ false);
                 } else {
                     ex->setName(nameFromMeta, /*saveAndNotify=*/ false);
                 }
             }
 
-            masterScore->addExcerpt(ex);
+            bool isUninit = !ex->excerptScore();
+            masterScore->addExcerpt(ex, muse::nidx, !isUninit);
+
+            // Mark as inited after addExcerpt() so initParts() runs first
+            if (!isUninit) {
+                ex->setInited(true);
+            }
         }
     }
 

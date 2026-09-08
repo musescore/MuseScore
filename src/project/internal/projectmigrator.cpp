@@ -216,6 +216,9 @@ bool ProjectMigrator::applyLelandStyle(mu::engraving::MasterScore* score)
     muse::io::File styleFile(LELAND_STYLE_PATH);
     mu::engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
+        if (!excerpt->excerptScore()) {
+            continue;
+        }
         if (!mu::engraving::EditStyle::loadStyle(tx, excerpt->excerptScore(), styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
@@ -229,6 +232,9 @@ bool ProjectMigrator::applyEdwinStyle(mu::engraving::MasterScore* score)
     muse::io::File styleFile(EDWIN_STYLE_PATH);
     mu::engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
+        if (!excerpt->excerptScore()) {
+            continue;
+        }
         if (!mu::engraving::EditStyle::loadStyle(tx, excerpt->excerptScore(), styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }

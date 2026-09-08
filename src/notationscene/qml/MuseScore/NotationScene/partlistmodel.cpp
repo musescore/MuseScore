@@ -70,8 +70,6 @@ void PartListModel::load()
     }
 
     ExcerptNotationList excerpts = masterNotation->excerpts();
-    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
-    excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
 
     masterNotation->sortExcerpts(excerpts);
 
