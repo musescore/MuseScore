@@ -21,6 +21,7 @@
  */
 
 #include <gtest/gtest.h>
+#include "engraving/dom/rest.h"
 
 #include "io/fileinfo.h"
 
@@ -1391,3 +1392,49 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+TEST_F(Engraving_PartsTests, deleteLinkedRestsRemovesEmptySegments)
+{
+    for (bool fromPart : { false, true }) {
+        SCOPED_TRACE(fromPart);
+        MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"delete-linked-rests.mscx");
+        ASSERT_TRUE(score);
+        Score* part = TestUtils::createPart(score);
+        ASSERT_TRUE(part);
+        auto check = [&](size_t expected) {
+            for (Score* s : { static_cast<Score*>(score), part }) {
+                size_t count = 0;
+                for (Segment* segment = s->firstMeasure()->first(SegmentType::ChordRest); segment;
+                     segment = segment->next(SegmentType::ChordRest)) {
+                    EXPECT_FALSE(segment->empty());
+                    EngravingItem* item = segment->element(0);
+                    EXPECT_TRUE(item && item->isRest());
+                    if (item && item->isRest()) {
+                        EXPECT_EQ(toRest(item)->ticks(), expected == 1 ? Fraction(1, 1) : Fraction(1, 4));
+                    }
+                    ++count;
+                }
+                EXPECT_EQ(count, expected);
+            }
+        };
+        check(4);
+        Score* owner = fromPart ? part : score;
+        score->startCmd(TranslatableString::untranslatable("Delete linked rests"));
+        owner->select(owner->firstMeasure(), SelectType::SINGLE, 0);
+        owner->cmdDeleteSelection();
+        score->endCmd();
+        check(1);
+        score->undoRedo(true, nullptr);
+        check(4);
+        score->undoRedo(false, nullptr);
+        check(1);
+        ASSERT_TRUE(ScoreRW::saveScore(score, u"delete-linked-rests-test.mscx"));
+        delete score;
+        score = ScoreRW::readScore(u"delete-linked-rests-test.mscx", true);
+        ASSERT_TRUE(score);
+        ASSERT_EQ(score->excerpts().size(), 1u);
+        part = score->excerpts().front()->excerptScore();
+        check(1);
+        delete score;
+    }
+}
