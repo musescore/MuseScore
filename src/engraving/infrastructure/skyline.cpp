@@ -220,7 +220,7 @@ double SkylineLine::verticalClearanceAbove(const Shape& shapeAbove) const
     return shapeAbove.verticalClearance(m_shape);
 }
 
-double SkylineLine::verticalClaranceBelow(const Shape& shapeBelow) const
+double SkylineLine::verticalClearanceBelow(const Shape& shapeBelow) const
 {
     return m_shape.verticalClearance(shapeBelow);
 }
