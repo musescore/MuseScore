@@ -623,6 +623,41 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     EXPECT_TRUE(savedExpectedEntry);
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_PersistsAudio2ScoreType)
+{
+    // [GIVEN] The upload succeeds for an Audio2Score conversion
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+
+    auto uploadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, upload(_))
+    .WillByDefault(Return(uploadProgress));
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    bool savedExpectedType = false;
+    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/pending.json"), _))
+    .WillOnce(Invoke([&](const io::path_t&, const ByteArray& data) {
+        std::string err;
+        JsonDocument json = JsonDocument::fromJson(data, &err);
+        if (json.isArray() && json.rootArray().size() == 1) {
+            JsonObject obj = json.rootArray().at(0).toObject();
+            savedExpectedType = obj.value("type").toInt() == int(ConvertType::Audio2Score);
+        }
+        return make_ok();
+    }));
+
+    // [WHEN] Starting an Audio2Score conversion
+    const io::paths_t paths { "/some/path/file.mp3" };
+    m_service->startConvert(Audio2ScoreConvertInput { paths }, u"My Song");
+    uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+
+    // [THEN] The persisted type is Audio2Score
+    EXPECT_TRUE(savedExpectedType);
+}
+
 // ==================================================
 // fileNamesBeingConverted() / fileNamesBeingConvertedChanged()
 // ==================================================
@@ -709,6 +744,46 @@ TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterSucce
     // [THEN] The file is no longer reported as being converted
     EXPECT_TRUE(changed);
     EXPECT_TRUE(m_service->fileNamesBeingConverted().empty());
+}
+
+// ==================================================
+// resumeConvert() / loadWatchedItems()
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatchedItem)
+{
+    // [GIVEN] A previously persisted pending conversion
+    JsonObject obj;
+    obj["id"] = TEST_QUEUE_ID;
+    obj["type"] = int(ConvertType::Audio2Score);
+    obj["convertedFileName"] = "My Score";
+
+    JsonArray array;
+    array << obj;
+    JsonDocument json(array);
+
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
+
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    bool changed = false;
+    m_service->fileNamesBeingConvertedChanged().onNotify(nullptr, [&] {
+        changed = true;
+    });
+
+    // [WHEN] Resuming
+    m_service->resumeConvert();
+
+    // [THEN] The persisted item is restored and reported as being converted, and polling resumes
+    EXPECT_TRUE(changed);
+    ASSERT_EQ(m_service->fileNamesBeingConverted().size(), 1u);
+    EXPECT_EQ(m_service->fileNamesBeingConverted().front(), u"My Score");
 }
 
 // ==================================================
@@ -986,6 +1061,134 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ItemDroppedFromQueue_TreatedA
 
     // [WHEN] Uploading, then polling an empty queue
     deliverQueueStatus({}, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ItemDroppedFromQueue_DownloadRetryableFailure_RetriesOnNextPoll)
+{
+    // [GIVEN] The item is never present in the queue (already finished server-side and removed
+    // before it was ever observed), while an unrelated item stays in the queue across both polls
+    const int otherQueueId = TEST_QUEUE_ID + 1;
+    ConvertQueueItem otherItem;
+    otherItem.id = otherQueueId;
+    otherItem.type = ConvertType::Omr;
+    otherItem.status = ConvertStatus::Processing;
+
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([otherItem] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { otherItem }));
+    }));
+
+    SignedMsczUrl url;
+    url.url = QUrl("https://link.xyz/score.mscz");
+    url.expiresInSeconds = 60;
+    ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillByDefault(Invoke([url] {
+        return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
+    }));
+
+    // [GIVEN] The actual download fails with a transient error the first time, succeeds the second
+    auto failingDownload = std::make_shared<Progress>();
+    auto succeedingDownload = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, downloadConvertedScore(_, _))
+    .Times(2)
+    .WillOnce(Return(failingDownload))
+    .WillOnce(Return(succeedingDownload));
+
+    ON_CALL(*m_fileSystem, makePath(_))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_fileSystem, writeFile(_, _))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_configuration, convertedScoresPath())
+    .WillByDefault(Return(io::path_t("/scores")));
+    ON_CALL(*m_configuration, uniqueFileNameAddition(_, _, _))
+    .WillByDefault(Return(std::string()));
+
+    bool received = false;
+    Ret receivedRet;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        received = true;
+        receivedRet = ret;
+    });
+
+    // [WHEN] Starting the conversion - the first poll already reports an empty queue for it,
+    // so it's immediately treated as done and its download starts, but fails transiently
+    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
+    failingDownload->finish(make_ret(muse::network::Err::NetworkError));
+    EXPECT_FALSE(received);
+
+    // [WHEN] Starting an unrelated conversion triggers a second poll; the original item is
+    // still absent from the queue, but must still be retried rather than forgotten
+    uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
+    succeedingDownload->finish(ProgressResult::make_ok(Val()));
+
+    // [THEN] The retried download succeeds and the conversion finishes
+    ASSERT_TRUE(received);
+    EXPECT_TRUE(receivedRet);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCrossMatch)
+{
+    // [GIVEN] An Omr item and an Audio2Score item happen to share the same numeric id
+    // (each type has its own id sequence server-side, so collisions are possible)
+    JsonObject omrObj;
+    omrObj["id"] = TEST_QUEUE_ID;
+    omrObj["type"] = int(ConvertType::Omr);
+    omrObj["convertedFileName"] = "Omr Score";
+
+    JsonObject audioObj;
+    audioObj["id"] = TEST_QUEUE_ID;
+    audioObj["type"] = int(ConvertType::Audio2Score);
+    audioObj["convertedFileName"] = "Audio Score";
+
+    JsonArray array;
+    array << omrObj << audioObj;
+    JsonDocument json(array);
+
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
+    ON_CALL(*m_fileSystem, writeFile(_, _))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] The queue reports the Omr item as failed; the Audio2Score item has already
+    // dropped out of the queue (finished) and must not be mistaken for the failed Omr one
+    ConvertQueueItem failedOmrItem;
+    failedOmrItem.id = TEST_QUEUE_ID;
+    failedOmrItem.type = ConvertType::Omr;
+    failedOmrItem.status = ConvertStatus::Failed;
+    failedOmrItem.errorCode = ConvertErrorCode::FileTooLarge;
+
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([failedOmrItem] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { failedOmrItem }));
+    }));
+
+    // [THEN] Only the Audio2Score item's URL is fetched (correctly treated as done, dropped
+    // from the queue); the failed Omr item is never mistaken for it, or vice versa
+    EXPECT_CALL(*m_convertService, fetchMsczUrl(ConvertType::Audio2Score, TEST_QUEUE_ID))
+    .Times(1)
+    .WillOnce(Invoke([] {
+        return pendingPromise<RetVal<SignedMsczUrl> >();
+    }));
+    EXPECT_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .Times(0);
+
+    Ret receivedRet;
+    int receivedCount = 0;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        receivedRet = ret;
+        ++receivedCount;
+    });
+
+    // [WHEN] Resuming loads both items and triggers a poll
+    m_service->resumeConvert();
+    pumpEvents();
+
+    // [THEN] Exactly one failure is reported, and it's for the Omr file, not the Audio2Score one
+    ASSERT_EQ(receivedCount, 1);
+    EXPECT_FALSE(receivedRet);
+    EXPECT_EQ(receivedRet.data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"Omr Score");
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessingFailure)

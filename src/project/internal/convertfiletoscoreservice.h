@@ -23,7 +23,7 @@
 
 #include <functional>
 #include <memory>
-#include <unordered_map>
+#include <vector>
 
 #include <QObject>
 #include <QTimer>
@@ -71,8 +71,8 @@ public:
     void retryPolling() override;
 
     muse::async::Channel<ConvertType, int> reviewRequested() const override;
-    void submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment = QString()) override;
-    void submitReviewComment(ConvertType type, int queueId, const QString& comment) override;
+    void submitReview(ConvertType type, int itemId, ReviewRating rating, const QString& comment = QString()) override;
+    void submitReviewComment(ConvertType type, int itemId, const QString& comment) override;
 
 private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
@@ -88,44 +88,57 @@ private:
     };
 
     struct WatchedItem {
+        int id = 0;
         ConvertType type = ConvertType::Omr;
         muse::String convertedFileName;
+        muse::cloud::ConvertStatus convertStatus = muse::cloud::ConvertStatus::Unknown;
         DownloadStatus downloadStatus = DownloadStatus::NotStarted;
-        muse::cloud::ConvertStatus lastHandledStatus = muse::cloud::ConvertStatus::Unknown;
+
+        bool operator==(const WatchedItem& other) const
+        {
+            return id == other.id
+                   && type == other.type
+                   && convertedFileName == other.convertedFileName
+                   && convertStatus == other.convertStatus
+                   && downloadStatus == other.downloadStatus;
+        }
     };
 
-    void watch(int queueId, ConvertType type, const muse::String& convertedFileName);
+    void watch(ConvertType type, int itemId, const muse::String& convertedFileName);
     void poll();
-    void giveUpPolling(const muse::Ret& ret);
     void resetPollState();
+    void handlePollFailure(const muse::Ret& ret);
+    void giveUpPolling(const muse::Ret& ret);
+    void updateWatchedItems(const muse::cloud::ConvertQueueList& queue);
 
     void loadWatchedItems();
     void saveWatchedItems();
 
-    muse::String convertedFileNameFor(int queueId) const;
+    std::vector<WatchedItem>::iterator findWatchedItem(ConvertType type, int itemId);
+    void eraseWatchedItem(ConvertType type, int itemId);
 
-    void onStatusChanged(const muse::cloud::ConvertQueueItem& item);
-    bool shouldHandle(int queueId, muse::cloud::ConvertStatus status);
+    void handleItem(WatchedItem& item, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode);
 
-    void downloadIfNotAlready(ConvertType type, int queueId);
-    void fetchScoreUrlAndDownload(ConvertType type, int queueId);
-    void downloadScoreAndFinish(ConvertType type, int queueId, const muse::cloud::SignedMsczUrl& urlInfo);
+    void downloadIfNotAlready(WatchedItem& item);
+    void fetchScoreUrlAndDownload(ConvertType type, int itemId, const muse::String& convertedFileName);
+    void downloadScoreAndFinish(ConvertType type, int itemId, const muse::String& convertedFileName,
+                                const muse::cloud::SignedMsczUrl& urlInfo);
     void writeConvertedScore(const muse::String& convertedFileName, const std::shared_ptr<QBuffer>& scoreData,
                              std::function<void(const muse::RetVal<muse::io::path_t>&)> onFinished);
     void makePathWithRetry(const muse::io::path_t& dir, int attempt, std::function<void(const muse::Ret&)> onFinished);
     void writeFileWithRetry(const muse::io::path_t& path, const std::shared_ptr<QBuffer>& scoreData, int attempt,
                             std::function<void(const muse::Ret&)> onFinished);
-    void markDownloaded(int queueId);
-    void clearDownloading(int queueId);
+    void markDownloaded(ConvertType type, int itemId);
+    void clearDownloading(ConvertType type, int itemId);
     void finishConvert(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());
-    void failConvert(muse::Ret ret, ConvertType type, int queueId, const muse::String& convertedFileName);
+    void failConvert(muse::Ret ret, ConvertType type, int itemId, const muse::String& convertedFileName);
 
     ConvertConfig m_config;
 
     QTimer m_timer;
     int m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
     int m_pollFailureCount = 0;
-    std::unordered_map<int /*queueId*/, WatchedItem> m_watchedItems;
+    std::vector<WatchedItem> m_watchedItems;
     bool m_pollInProgress = false;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
     muse::async::Channel<ConvertType, int> m_reviewRequested;

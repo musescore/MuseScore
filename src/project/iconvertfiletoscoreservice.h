@@ -69,9 +69,9 @@ public:
     virtual void retryPolling() = 0;
 
     //! Emitted once a converted score is ready and awaiting a quality review
-    virtual muse::async::Channel<ConvertType, int /*queueId*/> reviewRequested() const = 0;
-    virtual void submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment = QString()) = 0;
-    virtual void submitReviewComment(ConvertType type, int queueId, const QString& comment) = 0;
+    virtual muse::async::Channel<ConvertType, int /*itemId*/> reviewRequested() const = 0;
+    virtual void submitReview(ConvertType type, int itemId, ReviewRating rating, const QString& comment = QString()) = 0;
+    virtual void submitReviewComment(ConvertType type, int itemId, const QString& comment) = 0;
 };
 
 using IConvertFileToScoreServicePtr = std::shared_ptr<IConvertFileToScoreService>;
