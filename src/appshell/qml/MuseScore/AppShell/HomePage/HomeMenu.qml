@@ -135,7 +135,7 @@ Item {
             Layout.fillWidth: true
             Layout.margins: 8
 
-            visible: hasReadyUpdate && !root.iconsOnly
+            visible: (hasReadyUpdate || hasCompletedUpdate) && !root.iconsOnly
         }
     }
 }

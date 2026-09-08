@@ -63,6 +63,8 @@ class GeneralPreferencesModel : public QObject, public muse::Contextable, public
 
     Q_PROPERTY(
         bool needCheckForNewAppVersion READ needCheckForNewAppVersion WRITE setNeedCheckForNewAppVersion NOTIFY needCheckForNewAppVersionChanged)
+    Q_PROPERTY(
+        bool autoDownloadNewAppVersion READ autoDownloadNewAppVersion WRITE setAutoDownloadNewAppVersion NOTIFY autoDownloadNewAppVersionChanged)
 
     muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
@@ -96,6 +98,7 @@ public:
     void setShowWelcomeDialog(bool show);
 
     bool needCheckForNewAppVersion() const;
+    bool autoDownloadNewAppVersion() const;
     Q_INVOKABLE bool isAppUpdatable() const;
     Q_INVOKABLE QString museScorePrivacyPolicyUrl() const;
 
@@ -108,6 +111,7 @@ public slots:
     void setCurrentStartupMode(int mode);
     void setStartupScorePath(const QString& scorePath);
     void setNeedCheckForNewAppVersion(bool value);
+    void setAutoDownloadNewAppVersion(bool value);
 
 signals:
     void languagesChanged(QVariantList languages);
@@ -125,6 +129,7 @@ signals:
     void showWelcomeDialogChanged();
 
     void needCheckForNewAppVersionChanged(bool value);
+    void autoDownloadNewAppVersionChanged(bool value);
 
 private:
     muse::Progress m_languageUpdateProgress;

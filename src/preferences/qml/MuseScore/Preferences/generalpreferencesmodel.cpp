@@ -283,6 +283,21 @@ void GeneralPreferencesModel::setNeedCheckForNewAppVersion(bool value)
     emit needCheckForNewAppVersionChanged(value);
 }
 
+bool GeneralPreferencesModel::autoDownloadNewAppVersion() const
+{
+    return updateConfiguration()->autoDownloadEnabled();
+}
+
+void GeneralPreferencesModel::setAutoDownloadNewAppVersion(bool value)
+{
+    if (value == autoDownloadNewAppVersion()) {
+        return;
+    }
+
+    updateConfiguration()->setAutoDownloadEnabled(value);
+    emit autoDownloadNewAppVersionChanged(value);
+}
+
 QString GeneralPreferencesModel::museScorePrivacyPolicyUrl() const
 {
     return QString::fromStdString(updateConfiguration()->privacyPolicyUrl());
