@@ -160,6 +160,7 @@
 #include "dom/factory.h"
 
 #include "editing/editchord.h"
+#include "editing/navigation.h"
 
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
