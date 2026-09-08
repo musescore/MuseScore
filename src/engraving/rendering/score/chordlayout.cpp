@@ -3461,6 +3461,10 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(note->shape().translate(note->pos()));
     }
 
+    if (item->tabDur() && item->tabDur()->addToSkyline()) {
+        shape.add(item->tabDur()->shape().translate(item->tabDur()->pos()));
+    }
+
     for (const NoteParenthesisInfo* parenInfo : item->noteParentheses()) {
         Parenthesis* leftParen = parenInfo->leftParen();
         Parenthesis* rightParen = parenInfo->rightParen();

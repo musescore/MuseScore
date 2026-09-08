@@ -1259,6 +1259,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         GraceNotesGroup& graceAfter = chord->graceNotesAfter();
         TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
         TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
+        if (TabDurationSymbol* symbol = chord->tabDur()) {
+            TLayout::layoutTabDurationSymbol2(symbol, symbol->mutldata());
+            ChordLayout::fillShape(chord, chord->mutldata());
+        }
     }
 
     for (ChordRest* cr : elementsToLayout.chordRests) {
