@@ -471,6 +471,11 @@ void EditPageLocks::removePageLocksContainingMMRests(Transaction& tx, Score* sco
 {
     std::vector<const RangeLock*> allLocks = score->pageLocks()->allLocks(); // copy
     for (const RangeLock* lock : allLocks) {
+        if ((lock->startMB()->isMeasure() && toMeasure(lock->startMB())->isMMRest())
+            || (lock->endMB()->isMeasure() && toMeasure(lock->endMB())->isMMRest())) {
+            undoRemovePageLock(tx, lock);
+            continue;
+        }
         for (MeasureBase* mb = lock->startMB(); mb; mb = mb->next()) {
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
                 undoRemovePageLock(tx, lock);
