@@ -639,69 +639,75 @@ TEST_F(Engraving_TabTransposeTests, sameStringTransposeKeepsStringsWithFretAbove
 
 TEST_F(Engraving_TabTransposeTests, bendFretsSurviveExcerptLayoutAndTranspose)
 {
-    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"../../../vtest/scores/vibrato-2.mscz"));
-    ASSERT_TRUE(score);
-    setFrettingFlags(false, false);
-    score->doLayout();
+    for (bool preferSameString : { false, true }) {
+        for (bool allowNegativeFrets : { false, true }) {
+            SCOPED_TRACE(preferSameString);
+            SCOPED_TRACE(allowNegativeFrets);
+            setFrettingFlags(preferSameString, allowNegativeFrets);
+            std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"../../../vtest/scores/vibrato-2.mscz"));
+            ASSERT_TRUE(score);
+            score->doLayout();
 
-    Score* part = score->createScore();
-    Excerpt* excerpt = new Excerpt(score.get());
-    excerpt->setExcerptScore(part);
-    part->setExcerpt(excerpt);
-    score->excerpts().push_back(excerpt);
-    excerpt->setName(u"Guitar");
-    excerpt->setParts({ score->parts().front() });
-    Excerpt::createExcerpt(excerpt);
+            Score* part = score->createScore();
+            Excerpt* excerpt = new Excerpt(score.get());
+            excerpt->setExcerptScore(part);
+            part->setExcerpt(excerpt);
+            score->excerpts().push_back(excerpt);
+            excerpt->setName(u"Guitar");
+            excerpt->setParts({ score->parts().front() });
+            Excerpt::createExcerpt(excerpt);
 
-    std::array<std::array<Note*, 3>, 2> chains {};
-    const std::array<Score*, 2> scores { score.get(), part };
-    for (size_t i = 0; i < scores.size(); ++i) {
-        Note* end = nullptr;
-        for (Segment& segment : scores[i]->firstMeasure()->segments()) {
-            EngravingItem* item = segment.element(4);
-            if (item && item->isChord() && toChord(item)->upNote()->pitch() == 62) {
-                ASSERT_EQ(end, nullptr);
-                end = toChord(item)->upNote();
+            std::array<std::array<Note*, 3>, 2> chains {};
+            const std::array<Score*, 2> scores { score.get(), part };
+            for (size_t i = 0; i < scores.size(); ++i) {
+                Note* end = nullptr;
+                for (Segment& segment : scores[i]->firstMeasure()->segments()) {
+                    EngravingItem* item = segment.element(4);
+                    if (item && item->isChord() && toChord(item)->upNote()->pitch() == 62) {
+                        ASSERT_EQ(end, nullptr);
+                        end = toChord(item)->upNote();
+                    }
+                }
+                ASSERT_TRUE(end);
+                ASSERT_TRUE(end->bendBack());
+                Note* middle = end->bendBack()->startNote();
+                ASSERT_TRUE(middle);
+                ASSERT_TRUE(middle->bendBack());
+                Note* start = middle->bendBack()->startNote();
+                ASSERT_TRUE(start);
+                chains[i] = { start, middle, end };
             }
+
+            auto checkFrets = [&](int semitones) {
+                const std::array<int, 3> pitches { 59, 60, 62 };
+                for (const auto& chain : chains) {
+                    for (size_t i = 0; i < chain.size(); ++i) {
+                        EXPECT_EQ(chain[i]->pitch(), pitches[i] + semitones);
+                        EXPECT_EQ(chain[i]->string(), 1);
+                        EXPECT_EQ(chain[i]->fret(), semitones);
+                    }
+                }
+            };
+
+            score->doLayout();
+            part->doLayout();
+            checkFrets(0);
+
+            // Bend starts must still refret when transposed; continuation notes share that fret.
+            transposeScore(score.get(), 2);
+            part->doLayout();
+            checkFrets(2);
+
+            EditData editData;
+            score->transactionManager()->undoRedo(true, &editData);
+            score->doLayout();
+            part->doLayout();
+            checkFrets(0);
+
+            score->transactionManager()->undoRedo(false, &editData);
+            score->doLayout();
+            part->doLayout();
+            checkFrets(2);
         }
-        ASSERT_TRUE(end);
-        ASSERT_TRUE(end->bendBack());
-        Note* middle = end->bendBack()->startNote();
-        ASSERT_TRUE(middle);
-        ASSERT_TRUE(middle->bendBack());
-        Note* start = middle->bendBack()->startNote();
-        ASSERT_TRUE(start);
-        chains[i] = { start, middle, end };
     }
-
-    auto checkFrets = [&](int semitones) {
-        const std::array<int, 3> pitches { 59, 60, 62 };
-        for (const auto& chain : chains) {
-            for (size_t i = 0; i < chain.size(); ++i) {
-                EXPECT_EQ(chain[i]->pitch(), pitches[i] + semitones);
-                EXPECT_EQ(chain[i]->string(), 1);
-                EXPECT_EQ(chain[i]->fret(), semitones);
-            }
-        }
-    };
-
-    score->doLayout();
-    part->doLayout();
-    checkFrets(0);
-
-    // Bend starts must still refret when transposed; continuation notes share that fret.
-    transposeScore(score.get(), 2);
-    part->doLayout();
-    checkFrets(2);
-
-    EditData editData;
-    score->transactionManager()->undoRedo(true, &editData);
-    score->doLayout();
-    part->doLayout();
-    checkFrets(0);
-
-    score->transactionManager()->undoRedo(false, &editData);
-    score->doLayout();
-    part->doLayout();
-    checkFrets(2);
 }
