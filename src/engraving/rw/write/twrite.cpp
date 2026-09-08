@@ -2555,6 +2555,7 @@ void TWrite::write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
+    writeProperty(item, xml, Pid::NOTELINE_PLACEMENT);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
