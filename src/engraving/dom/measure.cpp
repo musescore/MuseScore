@@ -836,6 +836,13 @@ void Measure::add(EngravingItem* e)
         }
         seg->setOwnershipParent(this);
         m_segments.insert(seg, s);
+        if (seg->isTimeSigType()) {
+            for (EngravingItem* item : seg->elist()) {
+                if (item && item->isTimeSig()) {
+                    item->staff()->addTimeSig(toTimeSig(item));
+                }
+            }
+        }
         //
         // update measure flags
         //
@@ -946,6 +953,13 @@ void Measure::remove(EngravingItem* e)
     case ElementType::SEGMENT:
     {
         Segment* s = toSegment(e);
+        if (s->isTimeSigType()) {
+            for (EngravingItem* item : s->elist()) {
+                if (item && item->isTimeSig()) {
+                    item->staff()->removeTimeSig(toTimeSig(item));
+                }
+            }
+        }
         m_segments.remove(s);
         //
         // update measure flags
