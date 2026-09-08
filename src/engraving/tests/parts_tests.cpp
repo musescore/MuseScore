@@ -37,6 +37,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/noteline.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
@@ -1391,3 +1392,69 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+TEST_F(Engraving_PartsTests, noteLinePlacement)
+{
+    auto noteLines = [](Score* score) {
+        std::vector<NoteLine*> lines;
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            for (Segment& segment : measure->segments()) {
+                for (EngravingItem* item : segment.elist()) {
+                    if (!item || !item->isChord()) {
+                        continue;
+                    }
+                    for (Note* note : toChord(item)->notes()) {
+                        for (Spanner* spanner : note->spannerFor()) {
+                            if (spanner->isNoteLine()) {
+                                lines.push_back(toNoteLine(spanner));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return lines;
+    };
+
+    for (bool resetPlacement : { false, true }) {
+        SCOPED_TRACE(resetPlacement);
+        MasterScore* score = ScoreRW::readScore(u"../../../vtest/scores/note-line.mscz");
+        ASSERT_TRUE(score);
+        const auto lines = noteLines(score);
+        ASSERT_EQ(lines.size(), 4);
+        const NoteLineEndPlacement expected = resetPlacement ? NoteLineEndPlacement::OFFSET_ENDS : NoteLineEndPlacement::LEFT_EDGE;
+        for (NoteLine* line : lines) {
+            ASSERT_EQ(line->lineEndPlacement(), NoteLineEndPlacement::LEFT_EDGE);
+            if (resetPlacement) {
+                line->resetProperty(Pid::NOTELINE_PLACEMENT);
+            }
+            EXPECT_EQ(line->lineEndPlacement(), expected);
+            NoteLine* cloned = line->clone();
+            EXPECT_EQ(cloned->lineEndPlacement(), expected);
+            delete cloned;
+        }
+
+        Score* part = TestUtils::createPart(score);
+        ASSERT_TRUE(part);
+        const auto partLines = noteLines(part);
+        ASSERT_EQ(partLines.size(), 4);
+        for (NoteLine* line : partLines) {
+            EXPECT_EQ(line->lineEndPlacement(), expected);
+        }
+
+        const String filename(u"noteLinePlacement.mscx");
+        ASSERT_TRUE(ScoreRW::saveScore(score, filename));
+        delete score;
+        score = ScoreRW::readScore(filename, true);
+        ASSERT_TRUE(score);
+        ASSERT_EQ(score->excerpts().size(), 1);
+        for (Score* restored : score->scoreList()) {
+            const auto restoredLines = noteLines(restored);
+            ASSERT_EQ(restoredLines.size(), 4);
+            for (NoteLine* line : restoredLines) {
+                EXPECT_EQ(line->lineEndPlacement(), expected);
+            }
+        }
+        delete score;
+    }
+}

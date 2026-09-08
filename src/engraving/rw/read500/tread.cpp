@@ -433,6 +433,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
 
     case P_TYPE::CLEF_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ClefType::G));
+    case P_TYPE::NOTELINE_PLACEMENT_TYPE:
+        return NoteLineEndPlacement(e.readInt());
     case P_TYPE::CLEF_TO_BARLINE_POS:
         return ClefToBarlinePosition(e.readInt());
 
@@ -3514,7 +3516,16 @@ void TRead::read(NoteHead* h, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(NoteLine* nl, XmlReader& xml, ReadContext& ctx)
 {
-    TRead::read(toTextLineBase(nl), xml, ctx);
+    nl->eraseSpannerSegments();
+    while (xml.readNextStartElement()) {
+        if (!readProperty(nl, xml.name(), xml, ctx, Pid::NOTELINE_PLACEMENT)
+            && !readProperties(toTextLineBase(nl), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+    if (ctx.mscVersion() < 470) {
+        compat::CompatUtils::setTextLineTextPositionFromAlign(nl);
+    }
 }
 
 void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
