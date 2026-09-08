@@ -34,6 +34,10 @@
 #include "ipaletteprovider.h"
 #include "palettemodel.h"
 
+namespace muse::uicomponents {
+class FuzzyFilter;
+}
+
 namespace mu::palette {
 class AbstractPaletteController;
 class PaletteProvider;
@@ -315,6 +319,7 @@ private:
 
     QSortFilterProxyModel* m_visibilityFilterModel = nullptr;
     QSortFilterProxyModel* m_searchFilterModel = nullptr;
+    muse::uicomponents::FuzzyFilter* m_fuzzyFilter = nullptr;
 
     QAbstractItemModel* m_mainPalette = nullptr; // visible userPalette entries
     // PaletteTreeModel* poolPalette; // masterPalette entries not yet added to mainPalette
