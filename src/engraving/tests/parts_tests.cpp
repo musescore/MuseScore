@@ -1391,3 +1391,33 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+TEST_F(Engraving_PartsTests, crossMeasureUpwardGlissExcerpt)
+{
+    MasterScore* master = ScoreRW::readScore(u"../../../vtest/scores/gliss-6.mscz");
+    ASSERT_TRUE(master);
+    const Note* original = toChord(master->firstMeasure()->firstChordRest(4))->upNote();
+    ASSERT_EQ(original->pitch(), 48);
+    ASSERT_EQ(original->spannerFor().size(), 1u);
+    ASSERT_EQ(toNote(original->spannerFor().front()->endElement())->pitch(), 84);
+    ASSERT_EQ(original->spannerFor().front()->endElement()->findMeasure(), master->firstMeasure()->nextMeasure());
+    ASSERT_EQ(original->spannerFor().front()->endElement()->track(), 0u);
+    Score* part = master->createScore();
+    Excerpt* excerpt = new Excerpt(master);
+    excerpt->setExcerptScore(part);
+    part->setExcerpt(excerpt);
+    master->excerpts().push_back(excerpt);
+    excerpt->setName(u"Harp");
+    excerpt->setParts({ master->parts().front() });
+    Excerpt::createExcerpt(excerpt);
+    part->doLayout();
+    const Note* cloned = toChord(part->firstMeasure()->firstChordRest(4))->upNote();
+    ASSERT_EQ(cloned->spannerFor().size(), 1u);
+    EXPECT_EQ(cloned->spannerFor().front()->endElement()->track(), 0u);
+    EXPECT_EQ(cloned->pitch(), 48);
+    EXPECT_EQ(cloned->spannerFor().front()->startElement(), cloned);
+    EXPECT_EQ(cloned->spannerFor().front()->endElement()->score(), part);
+    EXPECT_EQ(cloned->spannerFor().front()->endElement()->findMeasure(), part->firstMeasure()->nextMeasure());
+    EXPECT_EQ(toNote(cloned->spannerFor().front()->endElement())->pitch(), 84);
+    delete master;
+}
