@@ -3711,6 +3711,7 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
 
 void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick)
 {
+    DO_ASSERT(staff->score() == this);
     if (!key.forInstrumentChange()) {
         KeyList* kl = staff->keyList();
         int nextTick = kl->nextKeyTick(tick.ticks());

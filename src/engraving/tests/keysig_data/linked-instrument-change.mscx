@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<museScore version="5.00">
+  <Score>
+    <Division>480</Division>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched"><name>stdNormal</name></StaffType>
+      </Staff>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <trackName>Flute</trackName>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel><program value="73"/></Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Rest><durationType>half</durationType></Rest>
+          <KeySig><concertKey>1</concertKey></KeySig>
+          <Rest><durationType>half</durationType></Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <concertKey>1</concertKey>
+            <actualKey>3</actualKey>
+            <forInstrumentChange>1</forInstrumentChange>
+          </KeySig>
+          <InstrumentChange>
+            <Instrument id="clarinet">
+              <longName>B-flat Clarinet</longName>
+              <trackName>B-flat Clarinet</trackName>
+              <transposeDiatonic>-1</transposeDiatonic>
+              <transposeChromatic>-2</transposeChromatic>
+              <instrumentId>wind.reed.clarinet.bflat</instrumentId>
+              <Channel><program value="71"/></Channel>
+            </Instrument>
+            <init>1</init>
+            <text>To B-flat Clarinet</text>
+          </InstrumentChange>
+          <Rest><durationType>measure</durationType><duration>4/4</duration></Rest>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>

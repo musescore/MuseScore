@@ -22,16 +22,6 @@
 
 #include <gtest/gtest.h>
 
-#include "global/defer.h"
-#include "global/io/buffer.h"
-#include "global/io/file.h"
-#include "engraving/rw/mscsaver.h"
-#include "engraving/dom/mscore.h"
-#include "engraving/dom/excerpt.h"
-#include "engraving/dom/keysig.h"
-#include "engraving/editing/editkeysig.h"
-#include "engraving/editing/transaction/transaction.h"
-
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/masterscore.h"
@@ -56,7 +46,6 @@ class Engraving_InstrumentChangeTests : public ::testing::Test
 public:
     MasterScore* test_pre(const char16_t* p);
     void test_post(MasterScore* score, const char16_t* p);
-    void checkLinkedKeys(bool remove);
 };
 
 MasterScore* Engraving_InstrumentChangeTests::test_pre(const char16_t* p)
@@ -154,96 +143,4 @@ TEST_F(Engraving_InstrumentChangeTests, testCopy)
     score->undoAddElement(nic);
     score->doLayout();
     test_post(score, u"copy");
-}
-
-void Engraving_InstrumentChangeTests::checkLinkedKeys(bool remove)
-{
-    for (bool fromExcerpt : { false, true }) {
-        SCOPED_TRACE(fromExcerpt);
-        const String input = remove ? u"linked-key-delete.mscz" : u"linked-key-change.mscz";
-        std::unique_ptr<MasterScore> score(ScoreRW::readScore(INSTRUMENTCHANGE_DATA_DIR + input));
-        ASSERT_TRUE(score);
-        ASSERT_EQ(score->excerpts().size(), 1u);
-        Score* excerpt = score->excerpts().front()->excerptScore();
-        Score* owner = fromExcerpt ? excerpt : score.get();
-        const Fraction changeTick = score->firstMeasure()->nextMeasure()->tick();
-        const Key initial = remove ? Key::G : Key::C;
-        const Key expected = remove ? Key::C : Key::G;
-        auto check = [changeTick](MasterScore* master, Key expectedKey) {
-            for (Score* target : { static_cast<Score*>(master), master->excerpts().front()->excerptScore() }) {
-                const KeySigEvent event = target->staff(0)->keySigEvent(changeTick);
-                EXPECT_EQ(event.concertKey(), expectedKey);
-                EXPECT_TRUE(event.forInstrumentChange());
-                Segment* segment = target->tick2measure(changeTick)->findSegment(SegmentType::KeySig, changeTick);
-                ASSERT_TRUE(segment);
-                EngravingItem* item = segment->element(0);
-                ASSERT_TRUE(item && item->isKeySig());
-                EXPECT_EQ(toKeySig(item)->keySigEvent().concertKey(), expectedKey);
-            }
-        };
-        check(score.get(), initial);
-        if (remove) {
-            Segment* segment = owner->firstMeasure()->findSegment(SegmentType::KeySig, Fraction(1, 2));
-            ASSERT_TRUE(segment);
-            KeySig* key = toKeySig(segment->element(0));
-            ASSERT_TRUE(key);
-            ASSERT_FALSE(key->forInstrumentChange());
-            ASSERT_EQ(key->linkList().size(), 2u);
-            owner->select(key, SelectType::SINGLE, 0);
-            score->startCmd(TranslatableString::untranslatable("Delete preceding key"));
-            owner->cmdDeleteSelection();
-            EXPECT_EQ(MScore::_error, MsError::MS_NO_ERROR);
-            score->endCmd();
-        } else {
-            KeySigEvent key;
-            key.setConcertKey(Key::G);
-            score->startCmd(TranslatableString::untranslatable("Change preceding key"));
-            EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), owner, owner->staff(0), Fraction(0,
-                                                                                                                                    1),
-                                         key);
-            score->endCmd();
-        }
-        check(score.get(), expected);
-        score->undoRedo(true, nullptr);
-        check(score.get(), initial);
-        score->undoRedo(false, nullptr);
-        check(score.get(), expected);
-        ASSERT_TRUE(score->sanityCheck());
-
-        const String fileName = String(u"linked-key-%1-%2.mscz").arg(remove).arg(fromExcerpt);
-        auto buffer = muse::io::Buffer::opened(muse::io::IODevice::WriteOnly);
-        MscWriter::Params params;
-        params.device = &buffer;
-        params.filePath = fileName;
-        params.mode = MscIoMode::Zip;
-        MscWriter writer(params);
-        ASSERT_TRUE(writer.open());
-        {
-            // Write production MSCZ excerpts separately, without test-mode inline excerpts.
-            const bool testMode = MScore::testMode;
-            DEFER { MScore::testMode = testMode;
-            };
-            MScore::testMode = false;
-            ASSERT_TRUE(MscSaver(score->iocContext()).writeMscz(score.get(), writer, false));
-        }
-        writer.close();
-        ASSERT_FALSE(writer.hasError());
-        ASSERT_TRUE(muse::io::File::writeFile(fileName, buffer.data()));
-        score.reset();
-        score.reset(ScoreRW::readScore(fileName, true));
-        ASSERT_TRUE(score);
-        ASSERT_EQ(score->excerpts().size(), 1u);
-        EXPECT_TRUE(score->sanityCheck());
-        check(score.get(), expected);
-    }
-}
-
-TEST_F(Engraving_InstrumentChangeTests, linkedPrecedingKeyChange)
-{
-    checkLinkedKeys(false);
-}
-
-TEST_F(Engraving_InstrumentChangeTests, linkedPrecedingKeyDeletion)
-{
-    checkLinkedKeys(true);
 }
