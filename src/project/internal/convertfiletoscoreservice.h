@@ -21,8 +21,11 @@
  */
 #pragma once
 
+#include <functional>
+#include <memory>
 #include <unordered_map>
 
+#include <QObject>
 #include <QTimer>
 
 #include "async/asyncable.h"
@@ -34,16 +37,20 @@
 #include "project/iconvertfiletoscoreservice.h"
 #include "project/iprojectconfiguration.h"
 
+class QBuffer;
+
 namespace mu::project {
-class ConvertFileToScoreService : public IConvertFileToScoreService, public muse::async::Asyncable, public muse::Contextable
+class ConvertFileToScoreService : public QObject, public IConvertFileToScoreService, public muse::async::Asyncable, public muse::Contextable
 {
+    Q_OBJECT
+
 public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
 
-    explicit ConvertFileToScoreService(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    explicit ConvertFileToScoreService(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr)
+        : QObject(parent), muse::Contextable(iocCtx) {}
 
     void init();
     void resumeConvert();
@@ -68,6 +75,9 @@ private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
     static constexpr int MAX_RETRY_INTERVAL_MS = 30 * 60000;
     static constexpr int MAX_CONSECUTIVE_POLL_FAILURES = 7; // gives up after ~1 hour
+
+    static constexpr int MAX_FS_RETRY_ATTEMPTS = 5;
+    static constexpr int FS_RETRY_INTERVAL_MS = 100;
 
     enum class DownloadStatus {
         NotStarted,
@@ -96,6 +106,11 @@ private:
     void downloadIfNotAlready(ConvertType type, int queueId);
     void fetchScoreUrlAndDownload(ConvertType type, int queueId);
     void downloadScoreAndFinish(ConvertType type, int queueId, const muse::cloud::SignedMsczUrl& urlInfo);
+    void writeConvertedScore(const muse::String& convertedFileName, const std::shared_ptr<QBuffer>& scoreData,
+                             std::function<void(const muse::RetVal<muse::io::path_t>&)> onFinished);
+    void makePathWithRetry(const muse::io::path_t& dir, int attempt, std::function<void(const muse::Ret&)> onFinished);
+    void writeFileWithRetry(const muse::io::path_t& path, const std::shared_ptr<QBuffer>& scoreData, int attempt,
+                            std::function<void(const muse::Ret&)> onFinished);
     void markDownloaded(int queueId);
     void clearDownloading(int queueId);
     void finishConvert(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());

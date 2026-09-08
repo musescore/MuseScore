@@ -21,8 +21,11 @@
  */
 #include <gmock/gmock.h>
 
+#include <chrono>
+#include <functional>
 #include <thread>
 
+#include <QCoreApplication>
 #include <QUrl>
 
 #include "project/internal/convertfiletoscoreservice.h"
@@ -37,6 +40,7 @@
 #include "global/types/val.h"
 #include "global/types/bytearray.h"
 #include "global/serialization/json.h"
+#include "global/io/ioretcodes.h"
 
 #include "mocks/projectconfigurationmock.h"
 #include "global/tests/mocks/filesystemmock.h"
@@ -56,6 +60,17 @@ void pumpEvents(int iterations = 10)
     const std::thread::id thisThId = std::this_thread::get_id();
     for (int i = 0; i < iterations; ++i) {
         muse::async::processMessages(thisThId);
+    }
+}
+
+//! NOTE: FS write/makePath retries are scheduled via QTimer::singleShot, which (unlike
+//! pumpEvents() above) needs the real Qt event loop pumped and real time to actually pass
+void waitUntil(const std::function<bool()>& pred, int timeoutMs = 2000)
+{
+    const std::chrono::steady_clock::time_point deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeoutMs);
+    while (!pred() && std::chrono::steady_clock::now() < deadline) {
+        QCoreApplication::processEvents();
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 
@@ -749,6 +764,182 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_DownloadsAndFinish
     EXPECT_TRUE(receivedRet);
     EXPECT_TRUE(receivedPath.hasSuffix("mscz"));
     EXPECT_NE(receivedPath.toStdString().find("scores"), std::string::npos);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Download_WriteFileFailsThenSucceeds_RetriesAndFinishesSuccessfully)
+{
+    // [GIVEN] The queue reports the conversion as done
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::Done;
+
+    ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillByDefault(Invoke([] {
+        SignedMsczUrl url;
+        url.url = QUrl("https://link.xyz/score.mscz");
+        url.expiresInSeconds = 60;
+        return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
+    }));
+
+    auto downloadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, downloadConvertedScore(_, _))
+    .WillByDefault(Return(downloadProgress));
+
+    ON_CALL(*m_fileSystem, makePath(_))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] saveWatchedItems() persists to its own file, unrelated to the converted score itself
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/pending.json"), _))
+    .Times(AnyNumber())
+    .WillRepeatedly(Return(make_ok()));
+
+    ON_CALL(*m_configuration, convertedScoresPath())
+    .WillByDefault(Return(io::path_t("/scores")));
+    ON_CALL(*m_configuration, uniqueFileNameAddition(_, _, _))
+    .WillByDefault(Return(std::string()));
+
+    // [GIVEN] Writing the file fails twice with a transient FS error, then succeeds
+    EXPECT_CALL(*m_fileSystem, writeFile(Truly([](const io::path_t& path) { return path.hasSuffix("mscz"); }), _))
+    .Times(3)
+    .WillOnce(Return(make_ret(io::Err::FSWriteError)))
+    .WillOnce(Return(make_ret(io::Err::FSWriteError)))
+    .WillOnce(Return(make_ok()));
+
+    bool received = false;
+    Ret receivedRet;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        received = true;
+        receivedRet = ret;
+    });
+
+    // [WHEN] Uploading and polling the status, then letting the download complete
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+    downloadProgress->finish(ProgressResult::make_ok(Val()));
+
+    // [THEN] The transient FS failures are retried in place (via a QTimer, hence the wait), and the
+    // conversion still finishes successfully
+    waitUntil([&] { return received; });
+    ASSERT_TRUE(received);
+    EXPECT_TRUE(receivedRet);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Download_WriteFileFailsPermanently_FailsConversionAfterMaxRetries)
+{
+    // [GIVEN] The queue reports the conversion as done
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::Done;
+
+    ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillByDefault(Invoke([] {
+        SignedMsczUrl url;
+        url.url = QUrl("https://link.xyz/score.mscz");
+        url.expiresInSeconds = 60;
+        return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
+    }));
+
+    auto downloadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, downloadConvertedScore(_, _))
+    .WillByDefault(Return(downloadProgress));
+
+    ON_CALL(*m_fileSystem, makePath(_))
+    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] saveWatchedItems() persists to its own file, unrelated to the converted score itself
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/pending.json"), _))
+    .Times(AnyNumber())
+    .WillRepeatedly(Return(make_ok()));
+
+    ON_CALL(*m_configuration, convertedScoresPath())
+    .WillByDefault(Return(io::path_t("/scores")));
+    ON_CALL(*m_configuration, uniqueFileNameAddition(_, _, _))
+    .WillByDefault(Return(std::string()));
+
+    // [GIVEN] Writing the file always fails. MAX_FS_RETRY_ATTEMPTS (see convertfiletoscoreservice.h)
+    // is 5, so the 5th attempt should be the last one
+    const int maxAttempts = 5;
+    EXPECT_CALL(*m_fileSystem, writeFile(Truly([](const io::path_t& path) { return path.hasSuffix("mscz"); }), _))
+    .Times(maxAttempts)
+    .WillRepeatedly(Return(make_ret(io::Err::FSWriteError)));
+
+    bool received = false;
+    Ret receivedRet;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        received = true;
+        receivedRet = ret;
+    });
+
+    // [WHEN] Uploading and polling the status, then letting the download complete
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+    downloadProgress->finish(ProgressResult::make_ok(Val()));
+
+    // [THEN] The conversion is reported as failed once the retries (via QTimer, hence the wait) are exhausted
+    waitUntil([&] { return received; });
+    ASSERT_TRUE(received);
+    EXPECT_FALSE(receivedRet);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Download_MakePathFailsPermanently_FailsConversionWithoutWritingFile)
+{
+    // [GIVEN] The queue reports the conversion as done
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::Done;
+
+    ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillByDefault(Invoke([] {
+        SignedMsczUrl url;
+        url.url = QUrl("https://link.xyz/score.mscz");
+        url.expiresInSeconds = 60;
+        return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
+    }));
+
+    auto downloadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, downloadConvertedScore(_, _))
+    .WillByDefault(Return(downloadProgress));
+
+    // [GIVEN] Creating the destination directory always fails. MAX_FS_RETRY_ATTEMPTS (see
+    // convertfiletoscoreservice.h) is 5, so the 5th attempt should be the last one
+    const int maxAttempts = 5;
+    EXPECT_CALL(*m_fileSystem, makePath(_))
+    .Times(maxAttempts)
+    .WillRepeatedly(Return(make_ret(io::Err::FSMakingError)));
+
+    // [GIVEN] saveWatchedItems() persists to its own file, unrelated to the converted score itself
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/pending.json"), _))
+    .Times(AnyNumber())
+    .WillRepeatedly(Return(make_ok()));
+
+    ON_CALL(*m_configuration, convertedScoresPath())
+    .WillByDefault(Return(io::path_t("/scores")));
+
+    // [THEN] The file is never written, since the directory could never be created
+    EXPECT_CALL(*m_fileSystem, writeFile(Truly([](const io::path_t& path) { return path.hasSuffix("mscz"); }), _)).Times(0);
+
+    bool received = false;
+    Ret receivedRet;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+        received = true;
+        receivedRet = ret;
+    });
+
+    // [WHEN] Uploading and polling the status, then letting the download complete
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+    downloadProgress->finish(ProgressResult::make_ok(Val()));
+
+    // [THEN] The conversion is reported as failed once the retries (via QTimer, hence the wait) are exhausted
+    waitUntil([&] { return received; });
+    ASSERT_TRUE(received);
+    EXPECT_FALSE(receivedRet);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReview_EmitsReviewRequestedAndDownloads)

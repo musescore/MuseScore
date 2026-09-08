@@ -618,18 +618,10 @@ void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int q
 
 void ConvertFileToScoreService::downloadScoreAndFinish(ConvertType type, int queueId, const SignedMsczUrl& urlInfo)
 {
-    const io::path_t dir = configuration()->convertedScoresPath();
-    Ret ret = fileSystem()->makePath(dir);
-    if (!ret) {
-        ret.setText("Could not create the directory for the converted score: " + ret.text());
-        failConvert(ret, type, queueId, convertedFileNameFor(queueId));
-        return;
-    }
-
     auto scoreData = std::make_shared<QBuffer>();
     ProgressPtr progress = museScoreComService()->convert()->downloadConvertedScore(urlInfo, scoreData);
 
-    progress->finished().onReceive(this, [this, type, queueId, dir, scoreData](const ProgressResult& res) {
+    progress->finished().onReceive(this, [this, type, queueId, scoreData](const ProgressResult& res) {
         const muse::String convertedFileName = convertedFileNameFor(queueId);
 
         if (!res.ret) {
@@ -646,21 +638,100 @@ void ConvertFileToScoreService::downloadScoreAndFinish(ConvertType type, int que
             return;
         }
 
-        const io::path_t baseName = io::escapeFileName(io::path_t(convertedFileName));
-        const std::string addition = configuration()->uniqueFileNameAddition(baseName, dir, "mscz");
-        const io::path_t path = dir.appendingComponent(baseName + addition).appendingSuffix("mscz");
-        const QByteArray data = scoreData->data();
-        const ByteArray byteArray = ByteArray::fromQByteArrayNoCopy(data);
-
-        Ret ret = fileSystem()->writeFile(path, byteArray);
-        if (!ret) {
-            ret.setText("Could not save the converted score: " + ret.text());
-            failConvert(ret, type, queueId, convertedFileName);
+        if (m_watchedItems.find(queueId) == m_watchedItems.end()) {
+            //! NOTE: the item was already removed (e.g. reported as Failed) while this download
+            //! was in progress - discard the result rather than reporting a contradictory outcome
+            LOGW() << "Conversion " << convertLogId(convertedFileName, queueId, type)
+                   << " was already removed while its download was in progress, discarding the result";
             return;
         }
 
-        markDownloaded(queueId);
-        finishConvert(make_ok(), path);
+        writeConvertedScore(convertedFileName, scoreData, [this, type, queueId, convertedFileName](const RetVal<io::path_t>& writeResult) {
+            if (!writeResult.ret) {
+                failConvert(writeResult.ret, type, queueId, convertedFileName);
+                return;
+            }
+
+            //! NOTE: re-check rather than trusting the earlier lookup - the map may have
+            //! changed while the (possibly retried) write was in progress
+            if (m_watchedItems.find(queueId) == m_watchedItems.end()) {
+                LOGW() << "Conversion " << convertLogId(convertedFileName, queueId, type)
+                       << " was already removed while its write was in progress, discarding the result";
+                return;
+            }
+
+            markDownloaded(queueId);
+            finishConvert(make_ok(), writeResult.val);
+        });
+    });
+}
+
+void ConvertFileToScoreService::writeConvertedScore(const muse::String& convertedFileName, const std::shared_ptr<QBuffer>& scoreData,
+                                                    std::function<void(const RetVal<io::path_t>&)> onFinished)
+{
+    const io::path_t dir = configuration()->convertedScoresPath();
+
+    makePathWithRetry(dir, 0, [this, dir, convertedFileName, scoreData, onFinished](const Ret& ret) {
+        if (!ret) {
+            onFinished(RetVal<io::path_t>::make_ret(ret));
+            return;
+        }
+
+        const io::path_t baseName = io::escapeFileName(io::path_t(convertedFileName));
+        const std::string addition = configuration()->uniqueFileNameAddition(baseName, dir, "mscz");
+        const io::path_t path = dir.appendingComponent(baseName + addition).appendingSuffix("mscz");
+
+        writeFileWithRetry(path, scoreData, 0, [onFinished, path](const Ret& ret) {
+            onFinished(ret ? RetVal<io::path_t>::make_ok(path) : RetVal<io::path_t>::make_ret(ret));
+        });
+    });
+}
+
+void ConvertFileToScoreService::makePathWithRetry(const io::path_t& dir, int attempt, std::function<void(const Ret&)> onFinished)
+{
+    Ret ret = fileSystem()->makePath(dir);
+    if (ret) {
+        onFinished(ret);
+        return;
+    }
+
+    if (attempt + 1 == MAX_FS_RETRY_ATTEMPTS) {
+        LOGE() << "Could not create the directory for converted scores \"" << dir << "\", giving up: " << ret.toString();
+        onFinished(ret);
+        return;
+    }
+
+    LOGW() << "Could not create the directory for converted scores \"" << dir
+           << "\", retrying (attempt " << (attempt + 1) << "/" << MAX_FS_RETRY_ATTEMPTS << "): " << ret.toString();
+
+    QTimer::singleShot(FS_RETRY_INTERVAL_MS, this, [this, dir, attempt, onFinished]() {
+        makePathWithRetry(dir, attempt + 1, onFinished);
+    });
+}
+
+void ConvertFileToScoreService::writeFileWithRetry(const io::path_t& path, const std::shared_ptr<QBuffer>& scoreData, int attempt,
+                                                   std::function<void(const Ret&)> onFinished)
+{
+    //! NOTE: a no-copy view - scoreData is kept alive via capture for as long as retries are needed
+    const ByteArray byteArray = ByteArray::fromQByteArrayNoCopy(scoreData->data());
+
+    Ret ret = fileSystem()->writeFile(path, byteArray);
+    if (ret) {
+        onFinished(ret);
+        return;
+    }
+
+    if (attempt + 1 == MAX_FS_RETRY_ATTEMPTS) {
+        LOGE() << "Could not save the converted score \"" << path << "\", giving up: " << ret.toString();
+        onFinished(ret);
+        return;
+    }
+
+    LOGW() << "Could not save the converted score \"" << path
+           << "\", retrying (attempt " << (attempt + 1) << "/" << MAX_FS_RETRY_ATTEMPTS << "): " << ret.toString();
+
+    QTimer::singleShot(FS_RETRY_INTERVAL_MS, this, [this, path, scoreData, attempt, onFinished]() {
+        writeFileWithRetry(path, scoreData, attempt + 1, onFinished);
     });
 }
 
