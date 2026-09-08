@@ -62,6 +62,12 @@ public:
     virtual muse::StringList fileNamesBeingConverted() const = 0;
     virtual muse::async::Notification fileNamesBeingConvertedChanged() const = 0;
 
+    //! Emitted whenever checking the conversion status fails
+    virtual muse::async::Channel<PollingFailure> pollingFailed() const = 0;
+
+    //! Resumes polling for any still-pending items - e.g. in response to the user pressing "Retry"
+    virtual void retryPolling() = 0;
+
     //! Emitted once a converted score is ready and awaiting a quality review
     virtual muse::async::Channel<ConvertType, int /*queueId*/> reviewRequested() const = 0;
     virtual void submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment = QString()) = 0;

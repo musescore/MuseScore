@@ -41,6 +41,9 @@ public:
     MOCK_METHOD(muse::StringList, fileNamesBeingConverted, (), (const, override));
     MOCK_METHOD(muse::async::Notification, fileNamesBeingConvertedChanged, (), (const, override));
 
+    MOCK_METHOD((muse::async::Channel<PollingFailure>), pollingFailed, (), (const, override));
+    MOCK_METHOD(void, retryPolling, (), (override));
+
     MOCK_METHOD((muse::async::Channel<ConvertType, int>), reviewRequested, (), (const, override));
     MOCK_METHOD(void, submitReview, (ConvertType, int, ReviewRating, const QString&), (override));
     MOCK_METHOD(void, submitReviewComment, (ConvertType, int, const QString&), (override));

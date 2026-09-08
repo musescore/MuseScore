@@ -26,6 +26,9 @@
 
 #include "filecategory.h"
 
+#include "types/ret.h"
+#include "types/secs.h"
+
 namespace mu::project {
 using ConvertConfig = muse::cloud::ConvertConfig;
 using ConvertType = muse::cloud::ConvertType;
@@ -37,5 +40,13 @@ using LinkSources = muse::cloud::LinkSources;
 struct ConvertFilesValidation {
     ConvertType type = ConvertType::Omr;
     FileCategory category = FileCategory::Unknown;
+};
+
+struct PollingFailure {
+    muse::Ret ret;
+    int attempt = 0;
+    int maxAttempts = 0;
+    muse::secs_t nextInterval;
+    bool gaveUp = false;
 };
 }

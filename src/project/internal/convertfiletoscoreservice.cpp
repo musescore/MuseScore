@@ -315,6 +315,11 @@ async::Notification ConvertFileToScoreService::fileNamesBeingConvertedChanged() 
     return m_fileNamesBeingConvertedChanged;
 }
 
+async::Channel<PollingFailure> ConvertFileToScoreService::pollingFailed() const
+{
+    return m_pollingFailed;
+}
+
 async::Channel<ConvertType, int> ConvertFileToScoreService::reviewRequested() const
 {
     return m_reviewRequested;
@@ -374,16 +379,18 @@ void ConvertFileToScoreService::poll()
         m_pollInProgress = false;
 
         if (!result.ret) {
-            if (isRetryableError(result.ret) && ++m_pollFailureCount < MAX_CONSECUTIVE_POLL_FAILURES) {
+            if (isRetryableError(result.ret) && ++m_pollFailureCount < MAX_POLL_RETRY_ATTEMPTS) {
                 //! NOTE: the first retry is likely just a stale pooled connection the server closed
                 //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
                 if (m_pollFailureCount > 1) {
                     m_pollIntervalMs = std::min(m_pollIntervalMs * 2, MAX_RETRY_INTERVAL_MS);
                     m_timer.setInterval(m_pollIntervalMs);
                 }
-                LOGW() << "Could not check the conversion status, retrying in " << m_pollIntervalMs / 1000
-                       << "s (attempt " << m_pollFailureCount << "/" << MAX_CONSECUTIVE_POLL_FAILURES
+                const secs_t intervalSecs(m_pollIntervalMs / 1000.0);
+                LOGW() << "Could not check the conversion status, retrying in " << intervalSecs.raw()
+                       << "s (attempt " << m_pollFailureCount << "/" << MAX_POLL_RETRY_ATTEMPTS
                        << "): " << result.ret.toString();
+                m_pollingFailed.send(PollingFailure { result.ret, m_pollFailureCount, MAX_POLL_RETRY_ATTEMPTS, intervalSecs, false });
                 return;
             }
 
@@ -391,9 +398,7 @@ void ConvertFileToScoreService::poll()
             return;
         }
 
-        m_pollFailureCount = 0;
-        m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
-        m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
+        resetPollState();
 
         bool watchedItemsErased = false;
 
@@ -443,10 +448,26 @@ void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
     LOGE() << "Could not check the conversion status, stopping polling for now, "
            << m_watchedItems.size() << " pending conversion(s) remain watched: " << ret.toString();
 
+    const int count = m_pollFailureCount;
+
     m_timer.stop();
+    resetPollState();
+
+    m_pollingFailed.send(PollingFailure { ret, count, MAX_POLL_RETRY_ATTEMPTS, secs_t(0), true });
+}
+
+void ConvertFileToScoreService::retryPolling()
+{
+    resetPollState();
+    m_timer.start();
+    poll();
+}
+
+void ConvertFileToScoreService::resetPollState()
+{
     m_pollFailureCount = 0;
     m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
-    finishConvert(ret);
+    m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
 }
 
 void ConvertFileToScoreService::loadWatchedItems()

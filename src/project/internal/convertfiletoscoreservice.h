@@ -67,14 +67,17 @@ public:
     muse::StringList fileNamesBeingConverted() const override;
     muse::async::Notification fileNamesBeingConvertedChanged() const override;
 
+    muse::async::Channel<PollingFailure> pollingFailed() const override;
+    void retryPolling() override;
+
     muse::async::Channel<ConvertType, int> reviewRequested() const override;
     void submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment = QString()) override;
     void submitReviewComment(ConvertType type, int queueId, const QString& comment) override;
 
 private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
-    static constexpr int MAX_RETRY_INTERVAL_MS = 30 * 60000;
-    static constexpr int MAX_CONSECUTIVE_POLL_FAILURES = 7; // gives up after ~1 hour
+    static constexpr int MAX_RETRY_INTERVAL_MS = 10 * 60000;
+    static constexpr int MAX_POLL_RETRY_ATTEMPTS = 5; // gives up after ~15 minutes
 
     static constexpr int MAX_FS_RETRY_ATTEMPTS = 5;
     static constexpr int FS_RETRY_INTERVAL_MS = 100;
@@ -94,6 +97,7 @@ private:
     void watch(int queueId, ConvertType type, const muse::String& convertedFileName);
     void poll();
     void giveUpPolling(const muse::Ret& ret);
+    void resetPollState();
 
     void loadWatchedItems();
     void saveWatchedItems();
@@ -126,5 +130,6 @@ private:
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
     muse::async::Channel<ConvertType, int> m_reviewRequested;
     muse::async::Notification m_fileNamesBeingConvertedChanged;
+    muse::async::Channel<PollingFailure> m_pollingFailed;
 };
 }

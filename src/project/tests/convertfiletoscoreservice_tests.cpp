@@ -1062,20 +1062,19 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NonRetryableFetchFailure_Fini
             RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::Status401_AuthorizationRequired)));
     }));
 
-    bool received = false;
-    Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
-        received = true;
-        receivedRet = ret;
+    bool gaveUp = false;
+    Ret gaveUpRet;
+    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
+        gaveUp = failure.gaveUp;
+        gaveUpRet = failure.ret;
     });
 
     // [WHEN] Starting the conversion, triggering the first poll
     uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
 
     // [THEN] Polling gives up on the first attempt, forwarding the permanent error
-    ASSERT_TRUE(received);
-    EXPECT_FALSE(receivedRet);
-    EXPECT_EQ(receivedRet.code(), int(muse::cloud::Err::Status401_AuthorizationRequired));
+    ASSERT_TRUE(gaveUp);
+    EXPECT_EQ(gaveUpRet.code(), int(muse::cloud::Err::Status401_AuthorizationRequired));
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWatchingItemForNextPoll)
@@ -1138,9 +1137,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ConsecutiveRetryableFetchFailures_GivesUpAfterMaxAttempts)
 {
-    // [GIVEN] Every status check fails with a transient network error. MAX_CONSECUTIVE_POLL_FAILURES
-    // (see convertfiletoscoreservice.h) is 7, so the 7th attempt should be the last one
-    const int maxAttempts = 7;
+    // [GIVEN] Every status check fails with a transient network error. MAX_POLL_RETRY_ATTEMPTS
+    // (see convertfiletoscoreservice.h) is 5, so the 5th attempt should be the last one
+    const int maxAttempts = 5;
 
     EXPECT_CALL(*m_convertService, fetchQueue())
     .Times(maxAttempts)
@@ -1149,11 +1148,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ConsecutiveRetryableFetchFail
             RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
     }));
 
-    bool received = false;
-    Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
-        received = true;
-        receivedRet = ret;
+    bool gaveUp = false;
+    Ret gaveUpRet;
+    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
+        gaveUp = failure.gaveUp;
+        gaveUpRet = failure.ret;
     });
 
     // [WHEN] Starting a new conversion re-triggers polling, each attempt failing
@@ -1162,20 +1161,94 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ConsecutiveRetryableFetchFail
                          { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
 
         if (i < maxAttempts - 1) {
-            EXPECT_FALSE(received);
+            EXPECT_FALSE(gaveUp);
         }
     }
 
     // [THEN] Polling gives up after the max number of consecutive failures, forwarding the last error
+    ASSERT_TRUE(gaveUp);
+    EXPECT_EQ(gaveUpRet.code(), int(muse::cloud::Err::NetworkError));
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_ReportsPollingFailedNotGivingUp)
+{
+    // [GIVEN] The status check fails with a transient network error
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(
+            RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
+    }));
+
+    bool received = false;
+    PollingFailure failure;
+    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& f) {
+        received = true;
+        failure = f;
+    });
+
+    // [WHEN] Starting the conversion, triggering the first poll
+    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
+
+    // [THEN] The first failure is reported as still retrying, at the normal (non-backed-off) interval
     ASSERT_TRUE(received);
-    EXPECT_FALSE(receivedRet);
-    EXPECT_EQ(receivedRet.code(), int(muse::cloud::Err::NetworkError));
+    EXPECT_FALSE(failure.gaveUp);
+    EXPECT_EQ(failure.attempt, 1);
+    EXPECT_EQ(failure.maxAttempts, 5);
+    EXPECT_DOUBLE_EQ(failure.nextInterval.raw(), 60.0);
+    EXPECT_EQ(failure.ret.code(), int(muse::cloud::Err::NetworkError));
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_AfterGivingUp_ResumesPolling)
+{
+    // [GIVEN] Polling has given up after MAX_POLL_RETRY_ATTEMPTS consecutive failures
+    const int maxAttempts = 5;
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .Times(maxAttempts)
+    .WillRepeatedly(Invoke([] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(
+            RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
+    }));
+
+    bool gaveUp = false;
+    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
+        gaveUp = failure.gaveUp;
+    });
+
+    for (int i = 0; i < maxAttempts; ++i) {
+        uploadAndResolve(TEST_QUEUE_ID + i, QString("Score %1").arg(i),
+                         { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
+    }
+    ASSERT_TRUE(gaveUp);
+
+    // [THEN] Calling retryPolling() checks the status again
+    bool polledAgain = false;
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .Times(1)
+    .WillOnce(Invoke([&] {
+        polledAgain = true;
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    // [WHEN] Retrying polling
+    m_service->retryPolling();
+
+    EXPECT_TRUE(polledAgain);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_NoPendingItems_DoesNotPoll)
+{
+    // [THEN] The status is never checked
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(0);
+
+    // [WHEN] Retrying polling with nothing being converted
+    m_service->retryPolling();
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_ResetsConsecutiveFailureCount)
 {
     // [GIVEN] A pattern of failures with an intervening success: 3 failures, then a success, then
-    // 5 more failures - never 6 CONSECUTIVE failures, so polling should never give up
+    // 4 more failures - never 5 CONSECUTIVE failures, so polling should never give up
     ConvertQueueItem processingItem;
     processingItem.id = TEST_QUEUE_ID;
     processingItem.type = ConvertType::Omr;
@@ -1190,7 +1263,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_R
     };
 
     EXPECT_CALL(*m_convertService, fetchQueue())
-    .Times(9)
+    .Times(8)
     .WillOnce(Invoke(failure))
     .WillOnce(Invoke(failure))
     .WillOnce(Invoke(failure))
@@ -1198,22 +1271,21 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_R
     .WillOnce(Invoke(failure))
     .WillOnce(Invoke(failure))
     .WillOnce(Invoke(failure))
-    .WillOnce(Invoke(failure))
     .WillOnce(Invoke(failure));
 
-    bool received = false;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const io::path_t&) {
-        received = true;
+    bool gaveUp = false;
+    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
+        gaveUp = failure.gaveUp;
     });
 
-    // [WHEN] Triggering 9 polls in a row
-    for (int i = 0; i < 9; ++i) {
+    // [WHEN] Triggering 8 polls in a row
+    for (int i = 0; i < 8; ++i) {
         uploadAndResolve(TEST_QUEUE_ID, QString("Score %1").arg(i),
                          { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
     }
 
-    // [THEN] Polling never gave up, since no 6 failures happened consecutively
-    EXPECT_FALSE(received);
+    // [THEN] Polling never gave up, since no 5 failures happened consecutively
+    EXPECT_FALSE(gaveUp);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, DownloadScore_RetryableFailure_RetriesAndSucceedsOnNextPoll)
