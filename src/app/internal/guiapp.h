@@ -6,6 +6,7 @@
 #include "ui/internal/guiapplication.h"
 #include "../cmdoptions.h"
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "appshell/iappshellconfiguration.h"
@@ -16,7 +17,7 @@
 class QQuickWindow;
 
 namespace mu::app {
-class MuseScoreGuiApp : public muse::ui::GuiApplication
+class MuseScoreGuiApp : public muse::ui::GuiApplication, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
@@ -26,6 +27,7 @@ public:
     MuseScoreGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
 
     void showSplash() override;
+    void closeSplash() override;
 
 private:
 
@@ -43,6 +45,7 @@ private:
     void showContextSplash(const muse::modularity::ContextPtr& ctxId) override;
     QString mainWindowQmlPath(const QString& platform) const override;
     void doStartupScenario(const muse::modularity::ContextPtr& ctxId) override;
+    void showMainWindowAndCloseSplash(const muse::modularity::ContextPtr& ctxId);
 
     appshell::SplashScreen* m_splashScreen = nullptr;
 };
