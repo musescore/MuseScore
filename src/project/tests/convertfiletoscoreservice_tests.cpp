@@ -786,6 +786,89 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatche
     EXPECT_EQ(m_service->fileNamesBeingConverted().front(), u"My Score");
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemAlreadyDownloaded_SendsReviewRequested)
+{
+    // [GIVEN] A persisted item that was already downloaded and awaiting review before the app closed
+    JsonObject obj;
+    obj["id"] = TEST_QUEUE_ID;
+    obj["type"] = int(ConvertType::Omr);
+    obj["convertStatus"] = int(ConvertStatus::AwaitingReview);
+    obj["convertedFileName"] = "My Score";
+    obj["downloadedScorePath"] = "/scores/My Score.mscz";
+
+    JsonArray array;
+    array << obj;
+    JsonDocument json(array);
+
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
+
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    // [THEN] No download is attempted - the score is already on disk
+    EXPECT_CALL(*m_convertService, fetchMsczUrl(_, _)).Times(0);
+
+    bool reviewRequested = false;
+    ConvertType reviewType = ConvertType::Audio2Score;
+    int reviewQueueId = 0;
+    io::path_t reviewPath;
+    m_service->reviewRequested().onReceive(nullptr, [&](ConvertType type, int queueId, const io::path_t& path) {
+        reviewRequested = true;
+        reviewType = type;
+        reviewQueueId = queueId;
+        reviewPath = path;
+    });
+
+    // [WHEN] Resuming
+    m_service->resumeConvert();
+
+    // [THEN] The review is requested immediately, carrying the previously downloaded score's path
+    ASSERT_TRUE(reviewRequested);
+    EXPECT_EQ(reviewType, ConvertType::Omr);
+    EXPECT_EQ(reviewQueueId, TEST_QUEUE_ID);
+    EXPECT_EQ(reviewPath, io::path_t("/scores/My Score.mscz"));
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemNotYetDownloaded_DoesNotSendReviewRequested)
+{
+    // [GIVEN] A persisted item that was awaiting review, but never got a chance to download before the app closed
+    JsonObject obj;
+    obj["id"] = TEST_QUEUE_ID;
+    obj["type"] = int(ConvertType::Omr);
+    obj["convertStatus"] = int(ConvertStatus::AwaitingReview);
+    obj["convertedFileName"] = "My Score";
+
+    JsonArray array;
+    array << obj;
+    JsonDocument json(array);
+
+    ON_CALL(*m_configuration, pendingConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
+
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    bool reviewRequested = false;
+    m_service->reviewRequested().onReceive(nullptr, [&](ConvertType, int, const io::path_t&) {
+        reviewRequested = true;
+    });
+
+    // [WHEN] Resuming
+    m_service->resumeConvert();
+
+    // [THEN] No review is requested yet - there's no downloaded score to review
+    EXPECT_FALSE(reviewRequested);
+}
+
 // ==================================================
 // polling / download pipeline (via startConvert())
 // ==================================================
@@ -1017,7 +1100,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Download_MakePathFailsPermanently_
     EXPECT_FALSE(receivedRet);
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReview_EmitsReviewRequestedAndDownloads)
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReview_DownloadsButDoesNotRequestReviewYet)
 {
     // [GIVEN] The queue reports the conversion as awaiting review
     ConvertQueueItem item;
@@ -1033,21 +1116,66 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReview_EmitsReviewReq
     }));
 
     bool reviewRequested = false;
-    ConvertType reviewType = ConvertType::Audio2Score;
-    int reviewQueueId = 0;
-    m_service->reviewRequested().onReceive(nullptr, [&](ConvertType type, int queueId) {
+    m_service->reviewRequested().onReceive(nullptr, [&](ConvertType, int, const io::path_t&) {
         reviewRequested = true;
-        reviewType = type;
-        reviewQueueId = queueId;
     });
 
     // [WHEN] Uploading and polling the status
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
-    // [THEN] A review is requested for the finished conversion
+    // [THEN] No review is requested yet - the score hasn't finished downloading
+    EXPECT_FALSE(reviewRequested);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReview_EmitsReviewRequestedOnlyAfterDownloadCompletes)
+{
+    // [GIVEN] The queue reports the conversion as awaiting review
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::AwaitingReview;
+
+    ON_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillByDefault(Invoke([] {
+        SignedMsczUrl url;
+        url.url = QUrl("https://link.xyz/score.mscz");
+        url.expiresInSeconds = 60;
+        return resolvedPromise<RetVal<SignedMsczUrl> >(RetVal<SignedMsczUrl>::make_ok(url));
+    }));
+
+    auto downloadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, downloadConvertedScore(_, _))
+    .WillByDefault(Return(downloadProgress));
+
+    ON_CALL(*m_fileSystem, makePath(_))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_fileSystem, writeFile(_, _))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_configuration, convertedScoresPath())
+    .WillByDefault(Return(io::path_t("/scores")));
+    ON_CALL(*m_configuration, uniqueFileNameAddition(_, _, _))
+    .WillByDefault(Return(std::string()));
+
+    bool reviewRequested = false;
+    ConvertType reviewType = ConvertType::Audio2Score;
+    int reviewQueueId = 0;
+    io::path_t reviewPath;
+    m_service->reviewRequested().onReceive(nullptr, [&](ConvertType type, int queueId, const io::path_t& path) {
+        reviewRequested = true;
+        reviewType = type;
+        reviewQueueId = queueId;
+        reviewPath = path;
+    });
+
+    // [WHEN] Uploading and polling the status, then letting the download complete
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+    downloadProgress->finish(ProgressResult::make_ok(Val()));
+
+    // [THEN] The review is now requested, carrying the downloaded score's path
     ASSERT_TRUE(reviewRequested);
     EXPECT_EQ(reviewType, ConvertType::Omr);
     EXPECT_EQ(reviewQueueId, TEST_QUEUE_ID);
+    EXPECT_FALSE(reviewPath.empty());
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ItemDroppedFromQueue_TreatedAsDoneAndDownloads)
@@ -1307,8 +1435,10 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
                                                                                                                otherItem }));
     }));
 
-    ON_CALL(*m_convertService, fetchMsczUrl(_, _))
-    .WillByDefault(Invoke([] {
+    // [THEN] The originally watched item's download is attempted once the retried poll processes it
+    EXPECT_CALL(*m_convertService, fetchMsczUrl(ConvertType::Omr, TEST_QUEUE_ID))
+    .Times(1)
+    .WillOnce(Invoke([] {
         return pendingPromise<RetVal<SignedMsczUrl> >();
     }));
 
@@ -1317,14 +1447,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
         received = true;
     });
 
-    bool reviewRequested = false;
-    int reviewQueueId = 0;
-    m_service->reviewRequested().onReceive(nullptr, [&](ConvertType, int queueId) {
-        reviewRequested = true;
-        reviewQueueId = queueId;
-    });
-
-    // [WHEN] Starting the first conversion - its poll fails with a retryable error
+    // [WHEN] Starting the first conversion - its poll fails with a transient network error
     uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
 
     // [THEN] Nothing is finished yet, the item was not dropped from the watch list
@@ -1332,10 +1455,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
 
     // [AND WHEN] Starting an unrelated conversion triggers a second poll, batching the original item in again
     uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
-
-    // [THEN] The originally watched item is processed on the retried poll
-    EXPECT_TRUE(reviewRequested);
-    EXPECT_EQ(reviewQueueId, TEST_QUEUE_ID);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ConsecutiveRetryableFetchFailures_GivesUpAfterMaxAttempts)

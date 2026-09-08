@@ -68,8 +68,8 @@ public:
     //! Resumes polling for any still-pending items - e.g. in response to the user pressing "Retry"
     virtual void retryPolling() = 0;
 
-    //! Emitted once a converted score is ready and awaiting a quality review
-    virtual muse::async::Channel<ConvertType, int /*itemId*/> reviewRequested() const = 0;
+    //! Emitted once a converted score has been downloaded and is awaiting a quality review
+    virtual muse::async::Channel<ConvertType, int /*itemId*/, muse::io::path_t> reviewRequested() const = 0;
     virtual void submitReview(ConvertType type, int itemId, ReviewRating rating, const QString& comment = QString()) = 0;
     virtual void submitReviewComment(ConvertType type, int itemId, const QString& comment) = 0;
 };
