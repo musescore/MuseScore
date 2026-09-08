@@ -1134,9 +1134,10 @@ void Score::deleteItem(EngravingItem* el)
             EditKeySig::undoChangeKeySig(tx, this, k->staff(), k->tick(), ke);
         }
         for (size_t i = 0; i < k->part()->nstaves(); i++) {
-            Staff* staff = k->part()->staff(i);
-            KeySigEvent e = staff->keySigEvent(k->tick());
-            updateInstrumentChangeTranspositions(e, staff, k->tick());
+            for (Staff* staff : k->part()->staff(i)->staffList()) {
+                KeySigEvent e = staff->keySigEvent(k->tick());
+                staff->score()->updateInstrumentChangeTranspositions(e, staff, k->tick());
+            }
         }
     }
     break;
