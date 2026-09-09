@@ -375,13 +375,15 @@ void NotationAutomationController::buildAndAddPolylinesForSystem(const System* s
 
 void NotationAutomationController::buildAndAddPolylinesForStaff(const System* system, staff_idx_t staffIdx)
 {
-    IF_ASSERT_FAILED(system && m_linesParent && score()) {
+    IF_ASSERT_FAILED(score() && system && staffIdx != muse::nidx) {
         return;
     }
 
     const Staff* staff = score()->staff(staffIdx);
-    const SysStaff* sysStaff = system->staff(staffIdx);
-    if (!staff || !sysStaff || !staff->isPrimaryStaff()) {
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+    if (!staff->isPrimaryStaff()) {
         return;
     }
 
@@ -396,21 +398,41 @@ void NotationAutomationController::buildAndAddPolylinesForStaff(const System* sy
         return;
     }
 
-    const int systemStartTick = system->first()->tick().ticks();
-    const int systemEndTick = system->last()->endTick().ticks();
+    // TODO: Not this (split regions depending on horizontal boxes)...
+    const Segment* startSeg = system->firstMeasure() ? system->firstMeasure()->first(mu::engraving::SegmentType::Duration) : nullptr;
+    const Segment* endSeg = lastSegmentOfSystem(system);
+    IF_ASSERT_FAILED(startSeg && endSeg) {
+        return;
+    }
 
-    const Measure* firstMeasure = system->firstMeasure();
-    const Segment* firstSeg = firstMeasure ? firstMeasure->first(mu::engraving::SegmentType::Duration) : nullptr;
-    const Segment* lastSeg = lastSegmentOfSystem(system);
+    buildAndAddPolylineForStaffRegion(system, staffIdx, startSeg, endSeg);
+}
 
-    // TODO: Staves can have multiple polylines due to horizontal frames, at the moment we're
-    // providing a single polyline over the entire staff...
+void NotationAutomationController::buildAndAddPolylineForStaffRegion(const System* system, staff_idx_t staffIdx,
+                                                                     const Segment* startSeg, const Segment* endSeg)
+{
+    IF_ASSERT_FAILED(score() && system && staffIdx != muse::nidx && startSeg && endSeg && m_linesParent) {
+        return;
+    }
+
+    const int startTick = startSeg->tick().ticks();
+    const int endTick = endSeg->tick().ticks() + endSeg->ticks().ticks();
+
+    const Staff* staff = score()->staff(staffIdx);
+    const SysStaff* sysStaff = system->staff(staffIdx);
+    IF_ASSERT_FAILED(staff && sysStaff) {
+        return;
+    }
+    if (!staff->isPrimaryStaff()) {
+        return;
+    }
+
     PolylinePlot* polyline = new PolylinePlot(m_linesParent);
 
     const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-    const QVector<PointData> pointsData = pointsDataInStaff(staff, staffCanvasRect, systemStartTick, systemEndTick);
+    const QVector<PointData> pointsData = pointsDataInStaff(staff, staffCanvasRect, startTick, endTick);
 
-    const PolylineKey key(system, staffIdx, systemStartTick); // TODO: As above - more complicated than simply the system start tick
+    const PolylineKey key(system, staffIdx, startTick);
     m_polylinesDataMap.emplace(key, PolylineData(polyline, pointsData));
 
     //! NOTE: There can't be a 1-to-1 match between the number of points in the automation model and
@@ -427,9 +449,9 @@ void NotationAutomationController::buildAndAddPolylinesForStaff(const System* sy
     applyPolylineStyle(polyline, key);
     polyline->setVisible(false);
 
-    // Points can't be dragged past the system's first/last segment
-    const qreal minX = firstSeg ? (firstSeg->canvasX() - staffCanvasRect.x()) / staffCanvasRect.width() : 0.0;
-    const qreal maxX = lastSeg ? (lastSeg->canvasX() + lastSeg->width() - staffCanvasRect.x()) / staffCanvasRect.width() : 1.0;
+    // Points can't be dragged past the region's first/last segment
+    const qreal minX = (startSeg->canvasX() - staffCanvasRect.x()) / staffCanvasRect.width();
+    const qreal maxX = (endSeg->canvasX() + endSeg->width() - staffCanvasRect.x()) / staffCanvasRect.width();
 
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointMoved,
                      [this, key, polyline, minX, maxX](int pointIdx, qreal x, qreal y, bool completed) {
