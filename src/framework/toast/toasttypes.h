@@ -26,11 +26,36 @@
 namespace muse::toast {
 enum class ToastActionCode {
     None = 0,
+
+    Dismiss,
+    TryAgain,
+
     Custom,
 };
+
 struct ToastAction {
     std::string text;
-    ToastActionCode code = ToastActionCode::None;
+    int code = int(ToastActionCode::None);
     bool accent = false;
+
+    ToastAction() = default;
+    ToastAction(const std::string& text, int code, bool accent = false)
+        : text(text), code(code), accent(accent) {}
+    ToastAction(const std::string& text, ToastActionCode code, bool accent = false)
+        : text(text), code(int(code)), accent(accent) {}
+};
+
+struct ToastResult {
+    ToastResult() = default;
+    ToastResult(int actionCode)
+        : m_code(actionCode) {}
+
+    ToastActionCode standardCode() const { return static_cast<ToastActionCode>(m_code); }
+    int actionCode() const { return m_code; }
+    bool isCode(int code) const { return code == m_code; }
+    bool isCode(ToastActionCode code) const { return int(code) == m_code; }
+
+private:
+    int m_code = int(ToastActionCode::None);
 };
 }

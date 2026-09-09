@@ -72,8 +72,8 @@ void ToastTestsModel::showToastWithAction(const QString& title, const QString& m
         true,
     {
         { "Open info dialog", ToastActionCode::Custom },
-    }).onResolve(this, [this](ToastActionCode actionCode) {
-        if (actionCode == ToastActionCode::Custom) {
+    }).onResolve(this, [this](const ToastResult& result) {
+        if (result.isCode(ToastActionCode::Custom)) {
             interactive()->info("Info Dialog", "Info dialog action triggered from toast");
         }
     });

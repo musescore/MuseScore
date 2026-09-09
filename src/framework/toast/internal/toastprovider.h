@@ -41,13 +41,13 @@ class ToastProvider : public IToastProvider, public muse::async::Asyncable
 public:
     ~ToastProvider() override;
 
-    muse::async::Promise<ToastActionCode> show(ToastItem item) override;
+    muse::async::Promise<ToastResult> show(ToastItem item) override;
 
     muse::async::Channel <std::shared_ptr<ToastItem> > toastAdded() const override;
     muse::async::Channel<int> toastDismissed() const override;
 
     void dismissToast(int id) override;
-    void executeAction(int id, ToastActionCode actionCode) override;
+    void executeAction(int id, int actionCode) override;
 
     void pauseToast(int id) override;
     void resumeToast(int id) override;
@@ -56,7 +56,7 @@ private:
     void cleanup(int id);
     void checkProgress(int id);
     void checkTimer(int id);
-    void resolveToast(int id, ToastActionCode actionCode);
+    void resolveToast(int id, int actionCode);
 
     std::vector<std::shared_ptr<ToastItem> > m_toasts;
 
@@ -64,6 +64,6 @@ private:
     muse::async::Channel<int> m_toastDismissed;
 
     std::map<int, QTimer*> m_progressTimers;
-    std::map<int, muse::async::Promise<ToastActionCode>::Resolve> m_resolvers;
+    std::map<int, muse::async::Promise<ToastResult>::Resolve> m_resolvers;
 };
 }

@@ -32,9 +32,9 @@ ToastProvider::~ToastProvider()
     }
 }
 
-muse::async::Promise<ToastActionCode> ToastProvider::show(ToastItem item)
+muse::async::Promise<ToastResult> ToastProvider::show(ToastItem item)
 {
-    return muse::async::make_promise<ToastActionCode>([this, item](auto resolve, auto) {
+    return muse::async::make_promise<ToastResult>([this, item](auto resolve, auto) {
         int id = item.id();
         m_toasts.emplace_back(std::make_shared<ToastItem>(item));
         m_toastAdded.send(m_toasts.back());
@@ -44,7 +44,7 @@ muse::async::Promise<ToastActionCode> ToastProvider::show(ToastItem item)
         checkProgress(id);
         checkTimer(id);
 
-        return muse::async::Promise<ToastActionCode>::dummy_result();
+        return muse::async::Promise<ToastResult>::dummy_result();
     }, muse::async::PromiseType::AsyncByBody);
 }
 
@@ -71,7 +71,7 @@ void ToastProvider::dismissToast(int id)
     }
 }
 
-void ToastProvider::executeAction(int id, ToastActionCode actionCode)
+void ToastProvider::executeAction(int id, int actionCode)
 {
     resolveToast(id, actionCode);
     dismissToast(id);
@@ -117,7 +117,7 @@ void ToastProvider::cleanup(int id)
 
     auto resolverIt = m_resolvers.find(id);
     if (resolverIt != m_resolvers.end()) {
-        resolveToast(id, ToastActionCode::None);
+        resolveToast(id, int(ToastActionCode::None));
     }
 }
 
@@ -172,7 +172,8 @@ void ToastProvider::checkTimer(int id)
             timer->setSingleShot(false);
             timer->start();
             timer->callOnTimeout([this, item, timeoutMs, interval]() {
-                double currentProgress = item->currentProgress() + ((static_cast<double>(interval) / static_cast<double>(timeoutMs)) * 100.0);
+                double currentProgress = item->currentProgress()
+                                         + ((static_cast<double>(interval) / static_cast<double>(timeoutMs)) * 100.0);
                 item->setCurrentProgress(currentProgress);
                 if (currentProgress >= 100.0) {
                     dismissToast(item->id());
@@ -184,12 +185,12 @@ void ToastProvider::checkTimer(int id)
     }
 }
 
-void ToastProvider::resolveToast(int id, ToastActionCode actionCode)
+void ToastProvider::resolveToast(int id, int actionCode)
 {
     auto promiseIt = m_resolvers.find(id);
     if (promiseIt != m_resolvers.end()) {
         auto resolve = std::move(promiseIt->second);
         m_resolvers.erase(promiseIt);
-        (void)resolve(actionCode);
+        (void)resolve(ToastResult(actionCode));
     }
 }
