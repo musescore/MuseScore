@@ -32,6 +32,7 @@
 #include "engraving/dom/textbase.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
+#include "engraving/types/typesconv.h"
 
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/compat/tremolocompat.h"
@@ -44,6 +45,30 @@
 using namespace muse;
 using namespace mu::palette;
 using namespace mu::engraving;
+
+static ElementPtr makeParenthesesActionIcon()
+{
+    const muse::actions::ActionCode code = "add-parentheses";
+    auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
+    icon->setActionType(ActionIconType::PARENTHESES);
+    icon->setAction(code, 0);
+    return icon;
+}
+
+static ElementPtr makeElementFromMimeData(const QByteArray& data)
+{
+    PointF dragOffset;
+    Fraction duration(1, 4);
+    muse::ByteArray byteArray = ByteArray::fromQByteArrayNoCopy(data);
+    XmlReader typeReader(byteArray);
+    const ElementType type = EngravingItem::readType(typeReader, &dragOffset, &duration);
+
+    if (type == ElementType::PARENTHESIS) {
+        return makeParenthesesActionIcon();
+    }
+
+    return ElementPtr(EngravingItem::readMimeData(gpaletteScore, byteArray, &dragOffset, &duration));
+}
 
 static bool needsStaff(ElementPtr e)
 {
@@ -323,9 +348,7 @@ PaletteCellPtr PaletteCell::fromMimeData(const QByteArray& data, const muse::mod
 
 PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const muse::modularity::ContextPtr& iocCtx)
 {
-    PointF dragOffset;
-    Fraction duration(1, 4);
-    ElementPtr element(EngravingItem::readMimeData(gpaletteScore, ByteArray::fromQByteArrayNoCopy(data), &dragOffset, &duration));
+    ElementPtr element = makeElementFromMimeData(data);
 
     if (!element) {
         return nullptr;
@@ -344,7 +367,10 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const mu
         }
     }
 
-    const String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyPlainText() : element->translatedTypeUserName();
+    String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyPlainText() : element->translatedTypeUserName();
+    if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::PARENTHESES) {
+        name = TConv::capitalizedUserName(ElementType::ACCIDENTAL).translated();
+    }
 
     return std::make_shared<PaletteCell>(iocCtx, element, name);
 }
