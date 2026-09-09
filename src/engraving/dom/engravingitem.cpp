@@ -1526,11 +1526,14 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
     PlacementV newPlacement = PlacementV::BELOW;
 
     DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
+    const bool directionIsAuto = internalDirectionProperty == DirectionV::AUTO && styledDirection == DirectionV::AUTO;
+    const bool centerBetweenStaves = getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON;
+
     if (internalDirectionProperty != DirectionV::AUTO) {
         newPlacement = internalDirectionProperty == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
     } else if (styledDirection != DirectionV::AUTO) {
         newPlacement = styledDirection == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
-    } else if (part()->nstaves() > 1 && getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON) {
+    } else if (centerBetweenStaves && part()->nstaves() > 1) {
         bool isOnLastStaffOfInstrument = staffIdx() == part()->staves().back()->idx();
         newPlacement = isOnLastStaffOfInstrument ? PlacementV::ABOVE : PlacementV::BELOW;
     } else {
@@ -1570,6 +1573,15 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
             }
         } else {
             newPlacement = voice() % 2 ? PlacementV::BELOW : PlacementV::ABOVE;
+        }
+    }
+
+    if (directionIsAuto && centerBetweenStaves) {
+        /* If the preferred side has no staff to center against but the other side has one, place
+         * the item on that side instead. If neither side has one, leave the placement alone: */
+        const bool preferAbove = newPlacement == PlacementV::ABOVE;
+        if (!staffToCenterAgainst(preferAbove) && staffToCenterAgainst(!preferAbove)) {
+            newPlacement = preferAbove ? PlacementV::BELOW : PlacementV::ABOVE;
         }
     }
 
