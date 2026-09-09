@@ -326,7 +326,7 @@ void ConvertFileToScoreScenario::showCombinedImageSizeTooLargeError(qint64 maxFi
 void ConvertFileToScoreScenario::showUnsupportedFormatError()
 {
     interactive()->warning(muse::trc("project/convert", "This file type is not compatible"),
-                           muse::trc("project/convert", "Make sure you’re importing a suitable PDF, image or MP3 file."),
+                           muse::trc("project/convert", "Make sure you’re importing a suitable PDF, image or audio file."),
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
@@ -352,7 +352,7 @@ void ConvertFileToScoreScenario::showMixedFileTypesError()
 {
     interactive()->warning(muse::trc("project/convert", "Please select files of the same type"),
                            muse::trc("project/convert",
-                                     "Per conversion, you may select either one MP3 file, one PDF file, or multiple image files."),
+                                     "Per conversion, you may select either one audio file, one PDF file, or multiple image files."),
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 

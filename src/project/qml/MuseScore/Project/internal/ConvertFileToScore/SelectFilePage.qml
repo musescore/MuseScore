@@ -122,7 +122,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.topMargin: 12
 
-                    text: qsTrc("project/convert", "Use a PDF, images, or MP3 (beta)")
+                    text: qsTrc("project/convert", "Use a PDF, images, or an audio file (beta)")
                     font: ui.theme.bodyFont
                 }
 
