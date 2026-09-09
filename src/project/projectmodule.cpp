@@ -28,7 +28,8 @@
 #include "internal/engravingpluginapihelper.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
-#include "internal/opensaveprojectscenario.h"
+#include "internal/openprojectscenario.h"
+#include "internal/saveprojectscenario.h"
 #include "internal/exportprojectscenario.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
@@ -128,7 +129,8 @@ void ProjectContext::registerExports()
     ioc()->registerExport<IProjectCommandsController>(mname, m_actionsController);
     ioc()->registerExport<IProjectFilesController>(mname, m_actionsController);
     ioc()->registerExport<mi::IProjectProvider>(mname, m_actionsController);
-    ioc()->registerExport<IOpenSaveProjectScenario>(mname, new OpenSaveProjectScenario(iocContext()));
+    ioc()->registerExport<IOpenProjectScenario>(mname, new OpenProjectScenario(iocContext()));
+    ioc()->registerExport<ISaveProjectScenario>(mname, new SaveProjectScenario(iocContext()));
     ioc()->registerExport<IExportProjectScenario>(mname, new ExportProjectScenario(iocContext()));
     ioc()->registerExport<IRecentFilesController>(mname, m_recentFilesController);
     ioc()->registerExport<ITemplatesRepository>(mname, new TemplatesRepository());

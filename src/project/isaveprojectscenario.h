@@ -22,29 +22,32 @@
 
 #pragma once
 
-#include "global/modularity/imoduleinterface.h"
-#include "global/async/notification.h"
+#include "modularity/imoduleinterface.h"
+#include "async/notification.h"
+#include "io/path.h"
+#include "rcommand/commandtypes.h"
 
 #include "types/projecttypes.h"
+#include "types/savelocation.h"
 
 namespace mu::project {
-class IProjectCommandsController : MODULE_CONTEXT_INTERFACE
+class ISaveProjectScenario : MODULE_CONTEXT_INTERFACE
 {
-    INTERFACE_ID(IProjectCommandsController)
+    INTERFACE_ID(ISaveProjectScenario)
 
 public:
-    virtual ~IProjectCommandsController() = default;
+    virtual ~ISaveProjectScenario() = default;
 
-    virtual bool hasProject() const = 0;
-    virtual muse::async::Notification hasProjectChanged() const = 0;
+    virtual muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
+                                  bool force = false) = 0;
+    virtual bool saveProject(const muse::io::path_t& path = muse::io::path_t()) = 0;
+    virtual bool saveProjectLocally(const muse::io::path_t& path, SaveMode saveMode = SaveMode::Save, bool createBackup = true) = 0;
+    virtual muse::Ret saveProjectAt(const muse::rcommand::Params& params) = 0;
 
-    virtual bool needSave() const = 0;
-    virtual muse::async::Notification needSaveChanged() const = 0;
+    virtual muse::Ret publish() = 0;
+    virtual muse::Ret shareAudio() = 0;
 
     virtual bool isBusy(BusyStatus status) const = 0;
     virtual muse::async::Notification busyChanged() const = 0;
-
-    virtual bool hasSelection() const = 0;
-    virtual muse::async::Notification hasSelectionChanged() const = 0;
 };
 }

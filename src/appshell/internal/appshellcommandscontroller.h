@@ -40,6 +40,7 @@
 #include "iappshellconfiguration.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectfilescontroller.h"
+#include "project/iopenprojectscenario.h"
 #include "update/iappupdateservice.h"
 #include "audio/main/isoundfontinstallscenario.h"
 #include "istartupscenario.h"
@@ -70,6 +71,7 @@ class AppshellCommandsController : public QObject, public IAppshellCommandsContr
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
+    muse::ContextInject<project::IOpenProjectScenario> openProjectScenario = { this };
     muse::ContextInject<muse::update::IAppUpdateService> appUpdateService = { this };
     muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };

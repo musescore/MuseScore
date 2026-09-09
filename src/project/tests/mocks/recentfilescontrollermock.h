@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,16 +22,21 @@
 
 #pragma once
 
-#include "modularity/imoduleinterface.h"
+#include <gmock/gmock.h>
+
+#include "project/irecentfilescontroller.h"
 
 namespace mu::project {
-class IProjectFilesController : MODULE_CONTEXT_INTERFACE
+class RecentFilesControllerMock : public IRecentFilesController
 {
-    INTERFACE_ID(IProjectFilesController)
-
 public:
-    virtual ~IProjectFilesController() = default;
+    MOCK_METHOD(const RecentFilesList&, recentFilesList, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, recentFilesListChanged, (), (const, override));
 
-    virtual bool closeOpenedProject(bool goToHome = true) = 0;
+    MOCK_METHOD(void, prependRecentFile, (const RecentFile& file), (override));
+    MOCK_METHOD(void, moveRecentFile, (const muse::io::path_t& before, const RecentFile& after), (override));
+    MOCK_METHOD(void, clearRecentFiles, (), (override));
+
+    MOCK_METHOD(muse::async::Promise<QPixmap>, thumbnail, (const muse::io::path_t& filePath), (const, override));
 };
 }

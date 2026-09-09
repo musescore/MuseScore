@@ -145,7 +145,7 @@ bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
             const QFileOpenEvent* openEvent = static_cast<const QFileOpenEvent*>(event);
             const QUrl url = openEvent->url();
 
-            if (projectFilesController()->isUrlSupported(url)) {
+            if (openProjectScenario()->isUrlSupported(url)) {
                 if (startupScenario()->startupCompleted()) {
                     dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
                 } else {
@@ -198,7 +198,7 @@ QWindow* AppshellCommandsController::qWindow() const
 
 AppshellCommandsController::DragTarget AppshellCommandsController::dragTarget(const QUrl& url) const
 {
-    if (projectFilesController()->isUrlSupported(url)) {
+    if (openProjectScenario()->isUrlSupported(url)) {
         return DragTarget::ProjectFile;
     } else if (url.isLocalFile()) {
         muse::io::path_t filePath = url.toLocalFile();
@@ -245,7 +245,7 @@ bool AppshellCommandsController::onDropEvent(QDropEvent* event)
         switch (target) {
         case DragTarget::ProjectFile: {
             async::Async::call(this, [this, url]() {
-                    Ret ret = projectFilesController()->openProject(url);
+                    Ret ret = openProjectScenario()->openProject(url);
                     if (!ret) {
                         LOGE() << ret.toString();
                     }
