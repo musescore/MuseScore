@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "toast/itoastservice.h"
 
 #include "context/iglobalcontext.h"
 
@@ -47,6 +48,7 @@ class ConvertFileToScoreScenario : public QObject, public IConvertFileToScoreSce
 public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::GlobalInject<muse::toast::IToastService> toastService;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;

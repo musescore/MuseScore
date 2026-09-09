@@ -83,9 +83,9 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
-    // ToastProvider {
-    //     id: toastProvider
-    // }
+    ToastProvider {
+        id: toastProvider
+    }
 
     function showMinimizedWithSavePreviousState() {
         bridge.showMinimizedWithSavePreviousState()

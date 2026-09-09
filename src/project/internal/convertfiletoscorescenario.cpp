@@ -441,24 +441,19 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
 
 void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& path)
 {
-    constexpr int openScoreBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
-
-    IInteractive::ButtonData openScore(openScoreBtn, muse::trc("project/convert", "Open score"), /*accent*/ true);
-    openScore.role = IInteractive::ButtonRole::AcceptRole;
-
-    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("global", "Dismiss"));
-    dismiss.role = IInteractive::ButtonRole::RejectRole;
+    constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
 
     QString scoreName = QFileInfo(path.toQString()).completeBaseName();
     std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
                       .arg(scoreName).toStdString();
 
-    //! TODO: replace with toast
-    interactive()->info(muse::trc("project/convert", "Your score is ready!"), msg,
-                        { dismiss, openScore }, dismissBtn, IInteractive::Option::WithIcon)
-    .onResolve(this, [this, path, openScoreBtn](const IInteractive::Result& result) {
-        if (result.isButton(openScoreBtn)) {
+    toastService()->show(muse::trc("project/convert", "Your score is ready!"), msg,
+                         muse::ui::IconCode::Code::TICK_FILLED, true,
+    {
+        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
+        { muse::trc("project/convert", "Open score"), openScoreBtn, /*accent*/ true },
+    }).onResolve(this, [this, path, openScoreBtn](const toast::ToastResult& result) {
+        if (result.isCode(openScoreBtn)) {
             dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(path.toQUrl()));
         }
     });
@@ -471,23 +466,16 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
         return;
     }
 
-    constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
-
-    IInteractive::ButtonData dismiss(dismissBtn, muse::trc("global", "Dismiss"));
-    dismiss.role = IInteractive::ButtonRole::RejectRole;
-
-    IInteractive::ButtonData tryAgain(tryAgainBtn, muse::trc("global", "Try again"), /*accent*/ true);
-    tryAgain.role = IInteractive::ButtonRole::AcceptRole;
-
     std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
                       .arg(fileName.toQString()).toStdString();
 
-    //! TODO: replace with toast
-    interactive()->warning(muse::trc("project/convert", "Error processing score"), msg,
-                           { dismiss, tryAgain }, dismissBtn)
-    .onResolve(this, [this, tryAgainBtn](const IInteractive::Result& result) {
-        if (result.isButton(tryAgainBtn)) {
+    toastService()->show(muse::trc("project/convert", "Error processing score"), msg,
+                         muse::ui::IconCode::Code::ERROR_FILLED, true,
+    {
+        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
+        { muse::trc("global", "Try again"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+    }).onResolve(this, [this](const toast::ToastResult& result) {
+        if (result.isCode(toast::ToastActionCode::TryAgain)) {
             convertFiles();
         }
     });
@@ -495,22 +483,20 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
 
 void ConvertFileToScoreScenario::askReviewRating(ConvertType type, int queueId)
 {
-    static constexpr int goodBtn = int(IInteractive::Button::CustomButton) + 1;
-    static constexpr int badBtn = int(IInteractive::Button::CustomButton) + 2;
+    static constexpr int goodBtn = int(toast::ToastActionCode::Custom) + 1;
+    static constexpr int badBtn = int(toast::ToastActionCode::Custom) + 2;
 
-    //: Button to rate the quality of a converted score as good
-    IInteractive::ButtonData good(goodBtn, muse::trc("project/convert", "Good"), /*accent*/ true);
-    //: Button to rate the quality of a converted score as bad
-    IInteractive::ButtonData bad(badBtn, muse::trc("project/convert", "Bad"));
-
-    //! TODO: replace with toast
-    auto promise = interactive()->question(
+    toastService()->show(
         muse::trc("project/convert", "How does your score look?"),
         muse::trc("project/convert", "We’re always improving our score conversion accuracy. Let us know how we did with this one."),
-        { good, bad }, goodBtn);
-
-    promise.onResolve(this, [this, queueId, type](const IInteractive::Result& res) {
-        ReviewRating rating = res.isButton(goodBtn) ? ReviewRating::Good : ReviewRating::Bad;
+        muse::ui::IconCode::Code::NONE, true,
+    {
+        //: Button to rate the quality of a converted score as good
+        { muse::trc("project/convert", "Good"), goodBtn, /*accent*/ true, muse::ui::IconCode::Code::LIKE },
+        //: Button to rate the quality of a converted score as bad
+        { muse::trc("project/convert", "Bad"), badBtn, /*accent*/ false, muse::ui::IconCode::Code::DISLIKE },
+    }).onResolve(this, [this, queueId, type](const toast::ToastResult& result) {
+        ReviewRating rating = result.isCode(goodBtn) ? ReviewRating::Good : ReviewRating::Bad;
         service()->submitReview(type, queueId, rating);
     });
 }
