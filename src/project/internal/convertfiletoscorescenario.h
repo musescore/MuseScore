@@ -21,10 +21,16 @@
  */
 #pragma once
 
+#include <map>
+
+#include <QObject>
+
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+
+#include "context/iglobalcontext.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
@@ -33,18 +39,21 @@
 #include "project/iconvertfiletoscoreservice.h"
 
 namespace mu::project {
-class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public muse::async::Asyncable, public muse::Contextable
+class ConvertFileToScoreScenario : public QObject, public IConvertFileToScoreScenario, public muse::async::Asyncable,
+    public muse::Contextable
 {
+    Q_OBJECT
+
 public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<IConvertFileToScoreService> service = { this };
 
 public:
-    explicit ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    explicit ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
 
     void init();
 
@@ -85,7 +94,9 @@ private:
     void showConvertFailedNotification(const muse::Ret& ret);
 
     void askReviewRating(ConvertType type, int queueId);
+    void checkPendingReview();
 
     muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
+    std::map<muse::io::path_t, std::pair<ConvertType, int /*queueId*/> > m_pendingReviews;
 };
 }

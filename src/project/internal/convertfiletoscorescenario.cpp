@@ -22,6 +22,7 @@
 #include "convertfiletoscorescenario.h"
 
 #include <QFileInfo>
+#include <QTimer>
 #include <QUrl>
 
 #include "actions/actiontypes.h"
@@ -34,6 +35,9 @@
 using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
+
+//! NOTE: gives the user a moment to land on the score before prompting for a review
+static constexpr int REVIEW_PROMPT_DELAY_MS = 10000;
 
 static ConvertSelection toConvertSelection(const Val& val)
 {
@@ -62,6 +66,11 @@ static ConvertSelection toConvertSelection(const Val& val)
     return selection;
 }
 
+ConvertFileToScoreScenario::ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx, QObject* parent)
+    : QObject(parent), muse::Contextable(iocCtx)
+{
+}
+
 void ConvertFileToScoreScenario::init()
 {
     TRACEFUNC;
@@ -76,9 +85,43 @@ void ConvertFileToScoreScenario::init()
         m_convertFinished.send(ret, path);
     });
 
-    service()->reviewRequested().onReceive(this, [this](ConvertType, int) {
-        // TODO: Temporarily disabled to prevent dialog spam until we replace it with a toast
-        // askReviewRating(type, queueId);
+    service()->reviewRequested().onReceive(this, [this](ConvertType type, int queueId, const io::path_t& path) {
+        m_pendingReviews[path] = { type, queueId };
+        checkPendingReview();
+    });
+
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        checkPendingReview();
+    });
+}
+
+void ConvertFileToScoreScenario::checkPendingReview()
+{
+    INotationProjectPtr project = globalContext()->currentProject();
+    if (!project) {
+        return;
+    }
+
+    auto it = m_pendingReviews.find(project->path());
+    if (it == m_pendingReviews.end()) {
+        return;
+    }
+
+    const ConvertType type = it->second.first;
+    const int queueId = it->second.second;
+    const io::path_t path = it->first;
+
+    QTimer::singleShot(REVIEW_PROMPT_DELAY_MS, this, [this, type, queueId, path]() {
+        INotationProjectPtr currentProject = globalContext()->currentProject();
+        if (!currentProject || currentProject->path() != path) {
+            return;
+        }
+
+        if (m_pendingReviews.erase(path) == 0) {
+            return;
+        }
+
+        askReviewRating(type, queueId);
     });
 }
 

@@ -38,6 +38,7 @@
 #include "actions/tests/mocks/actionsdispatchermock.h"
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
+#include "context/tests/mocks/globalcontextmock.h"
 
 namespace muse {
 // Teach GoogleTest how to print UriQuery so failure diffs are readable
@@ -140,12 +141,14 @@ protected:
         m_configuration = std::make_shared<NiceMock<ProjectConfigurationMock> >();
         m_museScoreComService = std::make_shared<NiceMock<MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<AuthorizationServiceMock> >();
+        m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
 
         m_scenario->service.set(m_service);
         m_scenario->interactive.set(m_interactive);
         m_scenario->dispatcher.set(m_dispatcher);
         m_scenario->configuration.set(m_configuration);
         m_scenario->museScoreComService.set(m_museScoreComService);
+        m_scenario->globalContext.set(m_globalContext);
 
         ON_CALL(*m_museScoreComService, authorization())
         .WillByDefault(Return(m_authorization));
@@ -208,6 +211,7 @@ protected:
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<MuseScoreComServiceMock> m_museScoreComService;
     std::shared_ptr<AuthorizationServiceMock> m_authorization;
+    std::shared_ptr<context::GlobalContextMock> m_globalContext;
 
     ConvertConfig m_config;
 };
@@ -221,7 +225,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int> reviewRequested;
+    async::Channel<ConvertType, int, io::path_t> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -262,7 +266,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int> reviewRequested;
+    async::Channel<ConvertType, int, io::path_t> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -305,7 +309,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int> reviewRequested;
+    async::Channel<ConvertType, int, io::path_t> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -347,7 +351,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int> reviewRequested;
+    async::Channel<ConvertType, int, io::path_t> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -374,7 +378,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Goo
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int> reviewRequested;
+    async::Channel<ConvertType, int, io::path_t> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -397,7 +401,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Goo
     .Times(1);
 
     // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(ConvertType::Omr, 42);
+    reviewRequested.send(ConvertType::Omr, 42, io::path_t("/some/path/My Score.mscz"));
 
     pumpEvents();
 }
@@ -406,7 +410,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Bad
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int> reviewRequested;
+    async::Channel<ConvertType, int, io::path_t> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -429,7 +433,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Bad
     .Times(1);
 
     // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(ConvertType::Audio2Score, 7);
+    reviewRequested.send(ConvertType::Audio2Score, 7, io::path_t("/some/path/My Score.mscz"));
 
     pumpEvents();
 }

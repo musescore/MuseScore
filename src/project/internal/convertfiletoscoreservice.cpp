@@ -110,14 +110,14 @@ static std::string errorCodeToString(ConvertErrorCode code)
     return std::string();
 }
 
-static std::string convertLogId(int queueId, ConvertType type)
+static std::string convertLogId(ConvertType type, int itemId)
 {
-    return std::to_string(queueId) + " (type: " + convertTypeToString(type) + ")";
+    return std::to_string(itemId) + " (type: " + convertTypeToString(type) + ")";
 }
 
-static std::string convertLogId(const muse::String& convertedFileName, int queueId, ConvertType type)
+static std::string convertLogId(const muse::String& convertedFileName, ConvertType type, int itemId)
 {
-    return "\"" + convertedFileName.toStdString() + "\" (conversion " + convertLogId(queueId, type) + ")";
+    return "\"" + convertedFileName.toStdString() + "\" (conversion " + convertLogId(type, itemId) + ")";
 }
 
 void ConvertFileToScoreService::init()
@@ -154,6 +154,23 @@ void ConvertFileToScoreService::init()
 void ConvertFileToScoreService::resumeConvert()
 {
     loadWatchedItems();
+
+    if (m_watchedItems.empty()) {
+        return;
+    }
+
+    LOGI() << "Resuming " << m_watchedItems.size() << " pending conversion(s)";
+
+    m_timer.start();
+    m_fileNamesBeingConvertedChanged.notify();
+
+    for (const WatchedItem& item : m_watchedItems) {
+        if (item.convertStatus == ConvertStatus::AwaitingReview && !item.downloadedScorePath.empty()) {
+            m_reviewRequested.send(item.type, item.id, item.downloadedScorePath);
+        }
+    }
+
+    poll();
 }
 
 const ConvertConfig& ConvertFileToScoreService::config() const
@@ -286,8 +303,8 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
             return;
         }
 
-        const int queueId = res.val.toMap()["id"].toInt();
-        watch(queueId, type, convertedFileName);
+        const int itemId = res.val.toMap()["id"].toInt();
+        watch(type, itemId, convertedFileName);
     });
 
     return make_ok();
@@ -298,13 +315,22 @@ async::Channel<Ret, io::path_t> ConvertFileToScoreService::convertFinished() con
     return m_convertFinished;
 }
 
+bool ConvertFileToScoreService::isPending(const WatchedItem& item)
+{
+    //! NOTE: an AwaitingReview item that's already downloaded is just waiting on the user
+    //! to submit a review - not "being converted" anymore
+    return item.convertStatus != ConvertStatus::AwaitingReview || item.downloadedScorePath.empty();
+}
+
 muse::StringList ConvertFileToScoreService::fileNamesBeingConverted() const
 {
     muse::StringList result;
     result.reserve(m_watchedItems.size());
 
-    for (const auto& pair : m_watchedItems) {
-        result.push_back(pair.second.convertedFileName);
+    for (const WatchedItem& item : m_watchedItems) {
+        if (isPending(item)) {
+            result.push_back(item.convertedFileName);
+        }
     }
 
     return result;
@@ -315,38 +341,52 @@ async::Notification ConvertFileToScoreService::fileNamesBeingConvertedChanged() 
     return m_fileNamesBeingConvertedChanged;
 }
 
-async::Channel<ConvertType, int> ConvertFileToScoreService::reviewRequested() const
+async::Channel<PollingFailure> ConvertFileToScoreService::pollingFailed() const
+{
+    return m_pollingFailed;
+}
+
+void ConvertFileToScoreService::retryPolling()
+{
+    resetPollState();
+    m_timer.start();
+    poll();
+}
+
+async::Channel<ConvertType, int, io::path_t> ConvertFileToScoreService::reviewRequested() const
 {
     return m_reviewRequested;
 }
 
-void ConvertFileToScoreService::submitReview(ConvertType type, int queueId, ReviewRating rating, const QString& comment)
+void ConvertFileToScoreService::submitReview(ConvertType type, int itemId, ReviewRating rating, const QString& comment)
 {
     IF_ASSERT_FAILED(rating == ReviewRating::Bad || comment.isEmpty()) {
         return;
     }
 
-    museScoreComService()->convert()->submitReview(type, queueId, rating, comment)
-    .onResolve(this, [type, queueId](const RetVal<ConvertResult>& submitRes) {
+    museScoreComService()->convert()->submitReview(type, itemId, rating, comment)
+    .onResolve(this, [type, itemId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
-            LOGE() << "Could not submit the review for conversion " << convertLogId(queueId, type) << ": " << submitRes.ret.toString();
+            LOGE() << "Could not submit the review for conversion " << convertLogId(type, itemId) << ": " << submitRes.ret.toString();
         }
     });
 }
 
-void ConvertFileToScoreService::submitReviewComment(ConvertType type, int queueId, const QString& comment)
+void ConvertFileToScoreService::submitReviewComment(ConvertType type, int itemId, const QString& comment)
 {
-    museScoreComService()->convert()->submitReviewComment(type, queueId, comment)
-    .onResolve(this, [type, queueId](const RetVal<ConvertResult>& submitRes) {
+    museScoreComService()->convert()->submitReviewComment(type, itemId, comment)
+    .onResolve(this, [type, itemId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
-            LOGE() << "Could not submit the comment for conversion " << convertLogId(queueId, type) << ": " << submitRes.ret.toString();
+            LOGE() << "Could not submit the comment for conversion " << convertLogId(type, itemId) << ": " << submitRes.ret.toString();
         }
     });
 }
 
-void ConvertFileToScoreService::watch(int queueId, ConvertType type, const muse::String& convertedFileName)
+void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::String& convertedFileName)
 {
-    m_watchedItems.insert_or_assign(queueId, WatchedItem { type, convertedFileName, DownloadStatus::NotStarted });
+    LOGI() << "Watching conversion " << convertLogId(convertedFileName, type, itemId);
+
+    m_watchedItems.push_back(WatchedItem { itemId, type, convertedFileName });
     saveWatchedItems();
     m_fileNamesBeingConvertedChanged.notify();
 
@@ -374,68 +414,40 @@ void ConvertFileToScoreService::poll()
         m_pollInProgress = false;
 
         if (!result.ret) {
-            if (isRetryableError(result.ret) && ++m_pollFailureCount < MAX_CONSECUTIVE_POLL_FAILURES) {
-                //! NOTE: the first retry is likely just a stale pooled connection the server closed
-                //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
-                if (m_pollFailureCount > 1) {
-                    m_pollIntervalMs = std::min(m_pollIntervalMs * 2, MAX_RETRY_INTERVAL_MS);
-                    m_timer.setInterval(m_pollIntervalMs);
-                }
-                LOGW() << "Could not check the conversion status, retrying in " << m_pollIntervalMs / 1000
-                       << "s (attempt " << m_pollFailureCount << "/" << MAX_CONSECUTIVE_POLL_FAILURES
-                       << "): " << result.ret.toString();
-                return;
-            }
-
-            giveUpPolling(result.ret);
+            handlePollFailure(result.ret);
             return;
         }
 
-        m_pollFailureCount = 0;
-        m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
-        m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
-
-        bool watchedItemsErased = false;
-
-        for (auto it = m_watchedItems.begin(); it != m_watchedItems.end();) {
-            const int queueId = it->first;
-            const ConvertType type = it->second.type;
-
-            auto found = std::find_if(result.val.begin(), result.val.end(), [queueId](const ConvertQueueItem& item) {
-                return item.id == queueId;
-            });
-
-            if (found != result.val.end()) {
-                onStatusChanged(*found);
-
-                //! NOTE: Done doesn't erase the item yet - it stays watched (and persisted)
-                //! until its download actually resolves, so a crash mid-download can be resumed
-                if (found->status == ConvertStatus::Failed) {
-                    it = m_watchedItems.erase(it);
-                    watchedItemsErased = true;
-                } else {
-                    ++it;
-                }
-                continue;
-            }
-
-            //! NOTE: a finished entity drops out of the queue entirely rather than
-            //! reporting a final "done" status, per the OMR/A2S API contract
-            ConvertQueueItem doneItem;
-            doneItem.id = queueId;
-            doneItem.type = type;
-            doneItem.status = ConvertStatus::Done;
-            onStatusChanged(doneItem);
-
-            ++it;
-        }
-
-        saveWatchedItems();
-
-        if (watchedItemsErased) {
-            m_fileNamesBeingConvertedChanged.notify();
-        }
+        resetPollState();
+        updateWatchedItems(result.val);
     });
+}
+
+void ConvertFileToScoreService::resetPollState()
+{
+    m_pollFailureCount = 0;
+    m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
+    m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
+}
+
+void ConvertFileToScoreService::handlePollFailure(const Ret& ret)
+{
+    if (isRetryableError(ret) && ++m_pollFailureCount < MAX_POLL_RETRY_ATTEMPTS) {
+        //! NOTE: the first retry is likely just a stale pooled connection the server closed
+        //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
+        if (m_pollFailureCount > 1) {
+            m_pollIntervalMs = std::min(m_pollIntervalMs * 2, MAX_RETRY_INTERVAL_MS);
+            m_timer.setInterval(m_pollIntervalMs);
+        }
+        const secs_t intervalSecs(m_pollIntervalMs / 1000.0);
+        LOGW() << "Could not check the conversion status, retrying in " << intervalSecs.raw()
+               << "s (attempt " << m_pollFailureCount << "/" << MAX_POLL_RETRY_ATTEMPTS
+               << "): " << ret.toString();
+        m_pollingFailed.send(PollingFailure { ret, m_pollFailureCount, MAX_POLL_RETRY_ATTEMPTS, intervalSecs, false });
+        return;
+    }
+
+    giveUpPolling(ret);
 }
 
 void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
@@ -443,15 +455,51 @@ void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
     LOGE() << "Could not check the conversion status, stopping polling for now, "
            << m_watchedItems.size() << " pending conversion(s) remain watched: " << ret.toString();
 
+    const int count = m_pollFailureCount;
+
     m_timer.stop();
-    m_pollFailureCount = 0;
-    m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
-    finishConvert(ret);
+    resetPollState();
+
+    m_pollingFailed.send(PollingFailure { ret, count, MAX_POLL_RETRY_ATTEMPTS, secs_t(0), true });
+}
+
+void ConvertFileToScoreService::updateWatchedItems(const ConvertQueueList& queue)
+{
+    const std::vector<WatchedItem> previousWatchedItems = m_watchedItems;
+
+    for (auto it = m_watchedItems.begin(); it != m_watchedItems.end();) {
+        WatchedItem& item = *it;
+
+        auto found = std::find_if(queue.begin(), queue.end(), [&item](const ConvertQueueItem& queueItem) {
+            return queueItem.id == item.id && queueItem.type == item.type;
+        });
+
+        //! NOTE: normally a Done item still reports its status while queued, but it may
+        //! be dropped from the queue automatically at some point afterwards - treat that as Done too
+        const ConvertStatus status = found != queue.end() ? found->status : ConvertStatus::Done;
+        const ConvertErrorCode errorCode = found != queue.end() ? found->errorCode : ConvertErrorCode::Unknown;
+
+        handleItem(item, status, errorCode);
+
+        if (status == ConvertStatus::Failed
+            || (status == ConvertStatus::Done && !item.downloadedScorePath.empty())) {
+            it = m_watchedItems.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    if (m_watchedItems != previousWatchedItems) {
+        saveWatchedItems();
+        m_fileNamesBeingConvertedChanged.notify();
+    }
 }
 
 void ConvertFileToScoreService::loadWatchedItems()
 {
     TRACEFUNC;
+
+    m_watchedItems.clear();
 
     RetVal<ByteArray> data = fileSystem()->readFile(configuration()->pendingConvertsJsonPath());
     if (!data.ret || data.val.empty()) {
@@ -471,19 +519,17 @@ void ConvertFileToScoreService::loadWatchedItems()
     }
 
     const JsonArray array = json.rootArray();
+    m_watchedItems.reserve(array.size());
+
     for (size_t i = 0; i < array.size(); ++i) {
         const JsonObject obj = array.at(i).toObject();
-        const int queueId = obj.value("id").toInt();
+        const int itemId = obj.value("id").toInt();
         const ConvertType type = static_cast<ConvertType>(obj.value("type").toInt());
         const muse::String convertedFileName = muse::String::fromStdString(obj.value("convertedFileName").toStdString());
+        const ConvertStatus convertStatus = static_cast<ConvertStatus>(obj.value("convertStatus").toInt());
+        const io::path_t downloadedScorePath = obj.value("downloadedScorePath").toStdString();
 
-        m_watchedItems.insert_or_assign(queueId, WatchedItem { type, convertedFileName, DownloadStatus::NotStarted });
-    }
-
-    if (!m_watchedItems.empty()) {
-        m_timer.start();
-        poll();
-        m_fileNamesBeingConvertedChanged.notify();
+        m_watchedItems.push_back(WatchedItem { itemId, type, convertedFileName, convertStatus, false, downloadedScorePath });
     }
 }
 
@@ -492,13 +538,18 @@ void ConvertFileToScoreService::saveWatchedItems()
     TRACEFUNC;
 
     JsonArray array;
-    for (const auto& pair : m_watchedItems) {
+    for (const WatchedItem& item : m_watchedItems) {
         JsonObject obj;
-        obj["id"] = pair.first;
-        obj["type"] = static_cast<int>(pair.second.type);
+        obj["id"] = item.id;
+        obj["type"] = static_cast<int>(item.type);
+        obj["convertStatus"] = static_cast<int>(item.convertStatus);
 
-        if (!pair.second.convertedFileName.isEmpty()) {
-            obj["convertedFileName"] = pair.second.convertedFileName.toStdString();
+        if (!item.convertedFileName.isEmpty()) {
+            obj["convertedFileName"] = item.convertedFileName.toStdString();
+        }
+
+        if (!item.downloadedScorePath.empty()) {
+            obj["downloadedScorePath"] = item.downloadedScorePath.toStdString();
         }
 
         array << obj;
@@ -511,38 +562,49 @@ void ConvertFileToScoreService::saveWatchedItems()
     }
 }
 
-muse::String ConvertFileToScoreService::convertedFileNameFor(int queueId) const
+std::vector<ConvertFileToScoreService::WatchedItem>::iterator ConvertFileToScoreService::findWatchedItem(ConvertType type, int itemId)
 {
-    auto it = m_watchedItems.find(queueId);
-    return it != m_watchedItems.end() ? it->second.convertedFileName : muse::String();
+    return std::find_if(m_watchedItems.begin(), m_watchedItems.end(), [type, itemId](const WatchedItem& item) {
+        return item.type == type && item.id == itemId;
+    });
 }
 
-void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
+void ConvertFileToScoreService::eraseWatchedItem(ConvertType type, int itemId)
 {
-    if (!shouldHandle(item.id, item.status)) {
-        return;
+    auto it = findWatchedItem(type, itemId);
+    if (it != m_watchedItems.end()) {
+        m_watchedItems.erase(it);
     }
+}
 
-    LOGI() << "Conversion status changed: " << item;
+void ConvertFileToScoreService::handleItem(WatchedItem& item, ConvertStatus status, ConvertErrorCode errorCode)
+{
+    const bool statusChanged = item.convertStatus != status;
+    if (statusChanged) {
+        LOGI() << "Conversion status changed: " << convertLogId(item.convertedFileName, item.type, item.id)
+               << " -> " << convertStatusToString(status);
+    }
+    item.convertStatus = status;
 
-    switch (item.status) {
+    switch (status) {
     case ConvertStatus::Processing:
     case ConvertStatus::Unknown:
         break;
     case ConvertStatus::AwaitingReview:
         //! NOTE: the MSCZ is already available at this point; the review rating doesn't gate the download
-        downloadIfNotAlready(item.type, item.id);
-        m_reviewRequested.send(item.type, item.id);
+        downloadIfNotAlready(item);
         break;
     case ConvertStatus::Done:
-        downloadIfNotAlready(item.type, item.id);
+        downloadIfNotAlready(item);
         break;
     case ConvertStatus::Failed: {
-        const muse::String convertedFileName = convertedFileNameFor(item.id);
+        if (!statusChanged) {
+            return;
+        }
 
         Ret ret = make_ret(Err::ConvertProcessingFailed);
-        ret.setText("Conversion failed for \"" + convertedFileName.toStdString() + "\": " + errorCodeToString(item.errorCode));
-        ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
+        ret.setText("Conversion failed for \"" + item.convertedFileName.toStdString() + "\": " + errorCodeToString(errorCode));
+        ret.setData(CONVERT_FAILED_FILE_NAME_KEY, item.convertedFileName);
 
         LOGE() << ret.toString();
 
@@ -552,132 +614,196 @@ void ConvertFileToScoreService::onStatusChanged(const ConvertQueueItem& item)
     }
 }
 
-bool ConvertFileToScoreService::shouldHandle(int queueId, ConvertStatus status)
+void ConvertFileToScoreService::downloadIfNotAlready(WatchedItem& item)
 {
-    auto it = m_watchedItems.find(queueId);
-    if (it == m_watchedItems.end()) {
-        return true;
+    if (item.isDownloading || !item.downloadedScorePath.empty()) {
+        return;
     }
 
-    if (it->second.lastHandledStatus == status) {
-        return false;
-    }
-
-    it->second.lastHandledStatus = status;
-    return true;
+    item.isDownloading = true;
+    fetchScoreUrlAndDownload(item.type, item.id, item.convertedFileName);
 }
 
-void ConvertFileToScoreService::downloadIfNotAlready(ConvertType type, int queueId)
+void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int itemId, const muse::String& convertedFileName)
 {
-    auto it = m_watchedItems.find(queueId);
-    if (it != m_watchedItems.end()) {
-        if (it->second.downloadStatus != DownloadStatus::NotStarted) {
-            return;
-        }
-        it->second.downloadStatus = DownloadStatus::Downloading;
-    }
-
-    fetchScoreUrlAndDownload(type, queueId);
-}
-
-void ConvertFileToScoreService::fetchScoreUrlAndDownload(ConvertType type, int queueId)
-{
-    museScoreComService()->convert()->fetchMsczUrl(type, queueId)
-    .onResolve(this, [this, type, queueId](const RetVal<SignedMsczUrl>& urlInfo) {
-        const muse::String convertedFileName = convertedFileNameFor(queueId);
-
+    museScoreComService()->convert()->fetchMsczUrl(type, itemId)
+    .onResolve(this, [this, type, itemId, convertedFileName](const RetVal<SignedMsczUrl>& urlInfo) {
         if (!urlInfo.ret) {
             if (isRetryableError(urlInfo.ret)) {
-                LOGW() << "Could not fetch the converted score " << convertLogId(convertedFileName, queueId, type)
+                LOGW() << "Could not fetch the converted score " << convertLogId(convertedFileName, type, itemId)
                        << ", will retry on next poll: " << urlInfo.ret.toString();
-                clearDownloading(queueId);
+                clearDownloading(type, itemId);
                 return;
             }
 
             Ret ret = urlInfo.ret;
             ret.setText("Could not fetch the converted score: " + ret.text());
-            failConvert(ret, type, queueId, convertedFileName);
+            failConvert(ret, type, itemId, convertedFileName);
             return;
         }
 
         if (urlInfo.val.expiresInSeconds <= 0) {
             Ret ret = make_ret(Err::DownloadLinkExpired, std::string("The download link has already expired"));
             ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
-            LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, queueId, type)
+            LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, type, itemId)
                    << ": " << ret.toString();
-            m_watchedItems.erase(queueId);
+            eraseWatchedItem(type, itemId);
             saveWatchedItems();
             m_fileNamesBeingConvertedChanged.notify();
             finishConvert(ret);
             return;
         }
 
-        downloadScoreAndFinish(type, queueId, urlInfo.val);
+        downloadScoreAndFinish(type, itemId, convertedFileName, urlInfo.val);
     });
 }
 
-void ConvertFileToScoreService::downloadScoreAndFinish(ConvertType type, int queueId, const SignedMsczUrl& urlInfo)
+void ConvertFileToScoreService::downloadScoreAndFinish(ConvertType type, int itemId, const muse::String& convertedFileName,
+                                                       const SignedMsczUrl& urlInfo)
 {
-    const io::path_t dir = configuration()->convertedScoresPath();
-    Ret ret = fileSystem()->makePath(dir);
-    if (!ret) {
-        ret.setText("Could not create the directory for the converted score: " + ret.text());
-        failConvert(ret, type, queueId, convertedFileNameFor(queueId));
-        return;
-    }
-
     auto scoreData = std::make_shared<QBuffer>();
     ProgressPtr progress = museScoreComService()->convert()->downloadConvertedScore(urlInfo, scoreData);
 
-    progress->finished().onReceive(this, [this, type, queueId, dir, scoreData](const ProgressResult& res) {
-        const muse::String convertedFileName = convertedFileNameFor(queueId);
-
+    progress->finished().onReceive(this, [this, type, itemId, convertedFileName, scoreData](const ProgressResult& res) {
         if (!res.ret) {
             if (isRetryableError(res.ret)) {
-                LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, queueId, type)
+                LOGW() << "Could not download the converted score " << convertLogId(convertedFileName, type, itemId)
                        << ", will retry on next poll: " << res.ret.toString();
-                clearDownloading(queueId);
+                clearDownloading(type, itemId);
                 return;
             }
 
             Ret ret = res.ret;
             ret.setText("Could not download the converted score: " + ret.text());
-            failConvert(ret, type, queueId, convertedFileName);
+            failConvert(ret, type, itemId, convertedFileName);
+            return;
+        }
+
+        if (findWatchedItem(type, itemId) == m_watchedItems.end()) {
+            //! NOTE: the item was already removed (e.g. reported as Failed) while this download
+            //! was in progress - discard the result rather than reporting a contradictory outcome
+            LOGW() << "Conversion " << convertLogId(convertedFileName, type, itemId)
+                   << " was already removed while its download was in progress, discarding the result";
+            return;
+        }
+
+        writeConvertedScore(convertedFileName, scoreData, [this, type, itemId, convertedFileName](const RetVal<io::path_t>& writeResult) {
+            onWriteFinished(type, itemId, convertedFileName, writeResult);
+        });
+    });
+}
+
+void ConvertFileToScoreService::writeConvertedScore(const muse::String& convertedFileName, const std::shared_ptr<QBuffer>& scoreData,
+                                                    std::function<void(const RetVal<io::path_t>&)> onFinished)
+{
+    const io::path_t dir = configuration()->convertedScoresPath();
+
+    makePathWithRetry(dir, 0, [this, dir, convertedFileName, scoreData, onFinished](const Ret& ret) {
+        if (!ret) {
+            onFinished(RetVal<io::path_t>::make_ret(ret));
             return;
         }
 
         const io::path_t baseName = io::escapeFileName(io::path_t(convertedFileName));
         const std::string addition = configuration()->uniqueFileNameAddition(baseName, dir, "mscz");
         const io::path_t path = dir.appendingComponent(baseName + addition).appendingSuffix("mscz");
-        const QByteArray data = scoreData->data();
-        const ByteArray byteArray = ByteArray::fromQByteArrayNoCopy(data);
 
-        Ret ret = fileSystem()->writeFile(path, byteArray);
-        if (!ret) {
-            ret.setText("Could not save the converted score: " + ret.text());
-            failConvert(ret, type, queueId, convertedFileName);
-            return;
-        }
-
-        markDownloaded(queueId);
-        finishConvert(make_ok(), path);
+        writeFileWithRetry(path, scoreData, 0, [onFinished, path](const Ret& ret) {
+            onFinished(ret ? RetVal<io::path_t>::make_ok(path) : RetVal<io::path_t>::make_ret(ret));
+        });
     });
 }
 
-void ConvertFileToScoreService::markDownloaded(int queueId)
+void ConvertFileToScoreService::onWriteFinished(ConvertType type, int itemId, const muse::String& convertedFileName,
+                                                const RetVal<io::path_t>& writeResult)
 {
-    //! NOTE: the download is done, stop watching
-    m_watchedItems.erase(queueId);
+    if (!writeResult.ret) {
+        failConvert(writeResult.ret, type, itemId, convertedFileName);
+        return;
+    }
+
+    //! NOTE: re-lookup rather than reusing an iterator from before the (possibly retried) write -
+    //! the vector may have changed while the write was in progress
+    auto watched = findWatchedItem(type, itemId);
+    if (watched == m_watchedItems.end()) {
+        LOGW() << "Conversion " << convertLogId(convertedFileName, type, itemId)
+               << " was already removed while its write was in progress, discarding the result";
+        return;
+    }
+
+    watched->isDownloading = false;
+    watched->downloadedScorePath = writeResult.val;
+    const bool requestReview = watched->convertStatus == ConvertStatus::AwaitingReview;
+
+    //! NOTE: keep watching an AwaitingReview item even after it's downloaded, so the
+    //! review can be re-requested on resume if the app closes before it's submitted
+    if (watched->convertStatus == ConvertStatus::Done) {
+        m_watchedItems.erase(watched);
+    }
+
     saveWatchedItems();
+
     m_fileNamesBeingConvertedChanged.notify();
+    finishConvert(make_ok(), writeResult.val);
+
+    if (requestReview) {
+        m_reviewRequested.send(type, itemId, writeResult.val);
+    }
 }
 
-void ConvertFileToScoreService::clearDownloading(int queueId)
+void ConvertFileToScoreService::makePathWithRetry(const io::path_t& dir, int attempt, std::function<void(const Ret&)> onFinished)
 {
-    auto it = m_watchedItems.find(queueId);
-    if (it != m_watchedItems.end() && it->second.downloadStatus == DownloadStatus::Downloading) {
-        it->second.downloadStatus = DownloadStatus::NotStarted;
-        it->second.lastHandledStatus = ConvertStatus::Unknown;
+    Ret ret = fileSystem()->makePath(dir);
+    if (ret) {
+        onFinished(ret);
+        return;
+    }
+
+    if (attempt + 1 == MAX_FS_RETRY_ATTEMPTS) {
+        LOGE() << "Could not create the directory for converted scores \"" << dir << "\", giving up: " << ret.toString();
+        onFinished(ret);
+        return;
+    }
+
+    LOGW() << "Could not create the directory for converted scores \"" << dir
+           << "\", retrying (attempt " << (attempt + 1) << "/" << MAX_FS_RETRY_ATTEMPTS << "): " << ret.toString();
+
+    QTimer::singleShot(FS_RETRY_INTERVAL_MS, this, [this, dir, attempt, onFinished]() {
+        makePathWithRetry(dir, attempt + 1, onFinished);
+    });
+}
+
+void ConvertFileToScoreService::writeFileWithRetry(const io::path_t& path, const std::shared_ptr<QBuffer>& scoreData, int attempt,
+                                                   std::function<void(const Ret&)> onFinished)
+{
+    //! NOTE: a no-copy view - scoreData is kept alive via capture for as long as retries are needed
+    const ByteArray byteArray = ByteArray::fromQByteArrayNoCopy(scoreData->data());
+
+    Ret ret = fileSystem()->writeFile(path, byteArray);
+    if (ret) {
+        onFinished(ret);
+        return;
+    }
+
+    if (attempt + 1 == MAX_FS_RETRY_ATTEMPTS) {
+        LOGE() << "Could not save the converted score \"" << path << "\", giving up: " << ret.toString();
+        onFinished(ret);
+        return;
+    }
+
+    LOGW() << "Could not save the converted score \"" << path
+           << "\", retrying (attempt " << (attempt + 1) << "/" << MAX_FS_RETRY_ATTEMPTS << "): " << ret.toString();
+
+    QTimer::singleShot(FS_RETRY_INTERVAL_MS, this, [this, path, scoreData, attempt, onFinished]() {
+        writeFileWithRetry(path, scoreData, attempt + 1, onFinished);
+    });
+}
+
+void ConvertFileToScoreService::clearDownloading(ConvertType type, int itemId)
+{
+    auto it = findWatchedItem(type, itemId);
+    if (it != m_watchedItems.end()) {
+        it->isDownloading = false;
     }
 }
 
@@ -686,10 +812,10 @@ void ConvertFileToScoreService::finishConvert(const Ret& ret, const io::path_t& 
     m_convertFinished.send(ret, path);
 }
 
-void ConvertFileToScoreService::failConvert(Ret ret, ConvertType type, int queueId, const muse::String& convertedFileName)
+void ConvertFileToScoreService::failConvert(Ret ret, ConvertType type, int itemId, const muse::String& convertedFileName)
 {
-    LOGE() << ret.toString() << " " << convertLogId(convertedFileName, queueId, type);
+    LOGE() << ret.toString() << " " << convertLogId(convertedFileName, type, itemId);
     ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedFileName);
-    clearDownloading(queueId);
+    clearDownloading(type, itemId);
     finishConvert(ret);
 }
