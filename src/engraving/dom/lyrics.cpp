@@ -53,7 +53,7 @@ static const ElementStyle lyricsElementStyle {
 //   Lyrics
 //---------------------------------------------------------
 
-Lyrics::Lyrics(ChordRest* parent)
+Lyrics::Lyrics(DummyParentOr<ChordRest> parent)
     : TextBase(ElementType::LYRICS, parent, TextStyleType::LYRICS_ODD, ElementFlag::ON_STAFF)
 {
     m_separator  = 0;

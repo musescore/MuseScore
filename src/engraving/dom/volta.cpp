@@ -100,7 +100,7 @@ EngravingObject* VoltaSegment::propertyDelegate(Pid pid) const
 //   Volta
 //---------------------------------------------------------
 
-Volta::Volta(EngravingItem* parent)
+Volta::Volta(DummyParentOr<EngravingItem> parent)
     : TextLineBase(ElementType::VOLTA, parent, ElementFlag::SYSTEM)
 {
     setPlacement(PlacementV::ABOVE);

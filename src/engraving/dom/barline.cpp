@@ -84,7 +84,7 @@ String BarLine::translatedUserTypeName(BarLineType t)
 //   BarLine
 //---------------------------------------------------------
 
-BarLine::BarLine(Segment* parent)
+BarLine::BarLine(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::BAR_LINE, parent)
 {
     setHeight(4 * spatium());   // for use in palettes
@@ -109,7 +109,7 @@ BarLine::~BarLine()
     muse::DeleteAll(m_el);
 }
 
-void BarLine::setOwnershipParent(Segment* parent)
+void BarLine::setOwnershipParent(DummyParentOr<Segment> parent)
 {
     EngravingItem::setOwnershipParent(parent);
 }

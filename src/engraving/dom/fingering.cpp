@@ -51,14 +51,14 @@ static const ElementStyle fingeringStyle {
 //      EngravingItem(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
 
-Fingering::Fingering(Note* parent, TextStyleType tid, ElementFlags ef)
+Fingering::Fingering(DummyParentOr<Note> parent, TextStyleType tid, ElementFlags ef)
     : TextBase(ElementType::FINGERING, parent, tid, ef)
 {
     setPlacement(PlacementV::ABOVE);
     initElementStyle(&fingeringStyle);
 }
 
-Fingering::Fingering(Note* parent, ElementFlags ef)
+Fingering::Fingering(DummyParentOr<Note> parent, ElementFlags ef)
     : Fingering(parent, TextStyleType::FINGERING, ef)
 {
 }

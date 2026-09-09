@@ -111,7 +111,7 @@ class Ottava final : public TextLineBase
     DECLARE_CLASSOF(ElementType::OTTAVA)
 
 public:
-    Ottava(EngravingItem* parent);
+    Ottava(DummyParentOr<EngravingItem> parent);
     Ottava(const Ottava&);
 
     Ottava* clone() const override { return new Ottava(*this); }

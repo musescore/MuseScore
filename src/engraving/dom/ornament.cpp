@@ -40,7 +40,7 @@
 
 using namespace mu::engraving;
 
-Ornament::Ornament(ChordRest* parent)
+Ornament::Ornament(DummyParentOr<ChordRest> parent)
     : Articulation(parent, ElementType::ORNAMENT)
 {
     _intervalAbove = DEFAULT_ORNAMENT_INTERVAL;

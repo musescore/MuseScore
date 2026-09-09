@@ -53,7 +53,7 @@ void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)
         Harmony* harmony = toHarmony(s1->findAnnotation(ElementType::HARMONY, 0, 0));
         EXPECT_TRUE(harmony);
 
-        FretDiagram* diagram = Factory::createFretDiagram(score->dummy()->segment());
+        FretDiagram* diagram = Factory::createFretDiagram(score->dummy());
         EXPECT_TRUE(diagram);
         diagram->updateDiagram(harmony->harmonyName());
         String pattern = diagram->patternFromDiagram();
@@ -84,7 +84,7 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
 TEST_F(Engraving_FretDiagramTests, enharmonicFallbackRootAndBass)
 {
     MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
-    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+    FretDiagram* fd = Factory::createFretDiagram(score->dummy());
 
     // Root fallback: Fbdim7 -> Edim7 (Fb->E)
     ASSERT_FALSE(fd->patternsFromHarmony(String(u"Edim7")).empty());

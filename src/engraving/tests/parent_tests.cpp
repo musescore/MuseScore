@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/compat/dummyelement.h"
+#include "engraving/dom/dummyparent.h"
 
 #include "engraving/dom/beam.h"
 #include "engraving/dom/box.h"
@@ -39,6 +39,8 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/system.h"
+
+#include "engraving/style/style.h"
 
 #include "utils/scorerw.h"
 
@@ -107,10 +109,8 @@ public:
 // score-editing API, because the parent link itself is what is under test.
 // ---------------------------------------------------------------------------
 
-//! A freshly constructed item is not attached to anything: the constructor
-//! argument only supplies context (above all, the score). It does leave the item
-//! in that parent's child list, but the item does not report it as its parent.
-TEST_F(Engraving_ParentTests, newItemIsNotAttached)
+//! An item is attached to the parent it is constructed with.
+TEST_F(Engraving_ParentTests, newItemIsAttachedToItsConstructorParent)
 {
     Segment* segment = someSegment();
     ASSERT_TRUE(segment);
@@ -121,6 +121,23 @@ TEST_F(Engraving_ParentTests, newItemIsNotAttached)
 
     EXPECT_EQ(dynamic->parent(), segment);
     EXPECT_TRUE(isChildOf(dynamic, segment));
+
+    EXPECT_EQ(dynamic->ownershipParent(), segment);
+    EXPECT_EQ(dynamic->ownershipParentItem(), segment);
+    EXPECT_EQ(dynamic->layoutParent(), segment);
+
+    delete dynamic;
+}
+
+//! Constructing an item with the dummy means it is not attached to anything yet.
+TEST_F(Engraving_ParentTests, newItemOnTheDummyIsNotAttached)
+{
+    Dynamic* dynamic = Factory::createDynamic(m_score->dummy(), false /*isAccessibleEnabled*/);
+
+    EXPECT_EQ(dynamic->score(), m_score);
+
+    EXPECT_EQ(dynamic->parent(), m_score->dummy());
+    EXPECT_TRUE(isChildOf(dynamic, m_score->dummy()));
 
     EXPECT_EQ(dynamic->ownershipParent(), nullptr);
     EXPECT_EQ(dynamic->ownershipParentItem(), nullptr);
@@ -135,8 +152,6 @@ TEST_F(Engraving_ParentTests, attachingAndDetaching)
     ASSERT_TRUE(segment);
 
     Dynamic* dynamic = Factory::createDynamic(segment, false /*isAccessibleEnabled*/);
-
-    dynamic->setOwnershipParent(segment);
 
     EXPECT_EQ(dynamic->parent(), segment);
     EXPECT_EQ(dynamic->ownershipParent(), segment);
@@ -166,7 +181,6 @@ TEST_F(Engraving_ParentTests, deletingOwnerParksChildrenOnDummy)
 
     Chord* chord = Factory::createChord(segment, false /*isAccessibleEnabled*/);
     Note* note = Factory::createNote(chord, false /*isAccessibleEnabled*/);
-    note->setOwnershipParent(chord);
     ASSERT_EQ(note->ownershipParent(), chord);
 
     delete chord;
@@ -177,22 +191,21 @@ TEST_F(Engraving_ParentTests, deletingOwnerParksChildrenOnDummy)
     delete note;
 }
 
-//! Accessibility walks the layout hierarchy, but unattached items (e.g. palette
-//! items) must still reach the dummy so that they get an accessible ancestor.
-TEST_F(Engraving_ParentTests, accessibleParentFallsBackToTheDummy)
+//! Accessibility walks the layout hierarchy, but unattached items are not placed in
+//! it: they form a tree of their own, headed by the dummy's root item.
+TEST_F(Engraving_ParentTests, accessibleParentFallsBackToTheDummysRoot)
 {
     Segment* segment = someSegment();
     ASSERT_TRUE(segment);
 
     Dynamic* dynamic = Factory::createDynamic(segment, false /*isAccessibleEnabled*/);
 
-    dynamic->setOwnershipParent(segment);
     EXPECT_EQ(dynamic->accessibleParentItem(), segment);
 
     dynamic->moveToDummy();
 
     EXPECT_EQ(dynamic->layoutParent(), nullptr);
-    EXPECT_EQ(dynamic->accessibleParentItem(), m_score->dummy());
+    EXPECT_EQ(dynamic->accessibleParentItem(), m_score->dummy()->rootItem());
 
     delete dynamic;
 }
@@ -285,7 +298,7 @@ TEST_F(Engraving_ParentTests, deletingASegmentUnplacesItFromItsSystem)
     ASSERT_FALSE(m_score->systems().empty());
     System* system = m_score->systems().front();
 
-    Hairpin* hairpin = Factory::createHairpin(m_score->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setTrack(0);
     hairpin->setTrack2(0);
 
@@ -308,7 +321,7 @@ TEST_F(Engraving_ParentTests, deletingASpannerDeletesItsSegments)
 {
     const size_t dummyChildrenBefore = m_score->dummy()->children().size();
 
-    Hairpin* hairpin = Factory::createHairpin(m_score->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setTrack(0);
     hairpin->setTrack2(0);
 
@@ -449,6 +462,37 @@ TEST_F(Engraving_ParentTests, ancestorWalksAgreeWithAttachment)
     EXPECT_GT(checkedChordRests, 0u);
 }
 
+//! A multi-measure rest takes the measures it covers off their system, leaving them
+//! attached to the score but placed nowhere. Neither tree holds them then: the score's
+//! tree reaches items through their placement, and the dummy's tree only holds what is
+//! not attached to anything.
+TEST_F(Engraving_ParentTests, aMeasureThatIsPlacedNowhereIsInNeitherTree)
+{
+    m_score->startCmd(TranslatableString::untranslatable("Engraving parent tests"));
+    // enough empty measures at the end for a multi-measure rest to be made of them
+    for (int i = 0; i < 4; ++i) {
+        m_score->insertMeasure();
+    }
+    m_score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    m_score->setLayoutAll();
+    m_score->endCmd();
+
+    size_t unplacedMeasures = 0;
+
+    for (MeasureBase* measure = m_score->first(); measure; measure = measure->next()) {
+        if (measure->system()) {
+            EXPECT_EQ(measure->accessibleParentItem(), measure->system());
+            continue;
+        }
+
+        ++unplacedMeasures;
+        EXPECT_EQ(measure->accessibleParentItem(), nullptr)
+            << "a " << measure->typeName() << " that is placed nowhere names a parent that cannot list it";
+    }
+
+    EXPECT_GT(unplacedMeasures, 0u) << "no multi-measure rest was made, so nothing was left unplaced";
+}
+
 //! The accessibility tree mirrors the visual hierarchy, and a screen reader walks it in
 //! both directions, so the two directions have to agree: the parent an item names must
 //! list that item, and every item a parent lists must name that parent back. Keeping
@@ -495,7 +539,7 @@ TEST_F(Engraving_ParentTests, accessibilityTreeAgreesInBothDirections)
     EXPECT_GT(checkedItems, 0u);
 
     // Downwards: whatever a parent lists must name it back. This is the direction a
-    // screen reader descends, starting from the root item.
+    // screen reader descends, starting from a root item.
     constexpr int MAX_DEPTH = 64;
     size_t checkedChildren = 0;
 
@@ -511,7 +555,13 @@ TEST_F(Engraving_ParentTests, accessibilityTreeAgreesInBothDirections)
         }
     };
 
-    checkChildren(m_score->rootItem(), 0);
+    auto checkTree = [&](const EngravingItem* root, const char* what) {
+        const size_t before = checkedChildren;
+        checkChildren(root, 0);
+        EXPECT_GT(checkedChildren, before) << "nothing is reachable through the " << what << " root";
+    };
 
-    EXPECT_GT(checkedChildren, 0u);
+    checkTree(m_score->rootItem(), "score");
+    // the objects that are not in the score are reached through the other root
+    checkTree(m_score->dummy()->rootItem(), "dummy");
 }

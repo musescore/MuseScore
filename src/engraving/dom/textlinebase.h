@@ -140,7 +140,7 @@ class TextLineBase : public SLine
     M_PROPERTY(bool,       textSizeSpatiumDependent, setTextSizeSpatiumDependent)
 
 public:
-    TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    TextLineBase(const ElementType& type, EngravingObject* parent, ElementFlags = ElementFlag::NOTHING);
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 

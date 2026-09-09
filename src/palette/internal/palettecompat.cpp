@@ -126,7 +126,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         }
 
         Articulation* oldOrnament = toArticulation(item);
-        Ornament* newOrnament = Factory::createOrnament((ChordRest*)(paletteScore->dummy()->chord()));
+        Ornament* newOrnament = Factory::createOrnament((ChordRest*)(paletteScore->dummy()));
         newOrnament->setSymId(oldOrnament->symId());
         cell->element.reset(newOrnament);
         return;
@@ -134,7 +134,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
 
     if (item->isStaffText() && toStaffText(item)->textStyleType() == TextStyleType::EXPRESSION) {
         StaffText* oldExpression = toStaffText(item);
-        Expression* newExpression = Factory::createExpression(paletteScore->dummy()->segment());
+        Expression* newExpression = Factory::createExpression(paletteScore->dummy());
         if (oldExpression->xmlText() == "Expression") {
             newExpression->setXmlText("expression");
         } else {
@@ -187,7 +187,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
             return;
         }
 
-        FretDiagram* newFretDiagram = Factory::createFretDiagram(paletteScore->dummy()->segment());
+        FretDiagram* newFretDiagram = Factory::createFretDiagram(paletteScore->dummy());
 
         if (harmonyName.empty()) {
             newFretDiagram->clear();
@@ -205,7 +205,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
     }
 
     if (item->isInstrumentChange()) {
-        InstrumentChange* newInstrumentChange = Factory::createInstrumentChange(paletteScore->dummy()->segment());
+        InstrumentChange* newInstrumentChange = Factory::createInstrumentChange(paletteScore->dummy());
         newInstrumentChange->setXmlText(QT_TRANSLATE_NOOP("palette", "Change instr."));
 
         cell->element.reset(newInstrumentChange);
@@ -298,7 +298,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 
     if (!containsWhammyBar) {
-        auto whammyBar = Factory::makeWhammyBar(paletteScore->dummy()->segment());
+        auto whammyBar = Factory::makeWhammyBar(paletteScore->dummy());
         int defaultPosition = std::min(3, guitarPalette.cellsCount());
         guitarPalette.insertElement(defaultPosition, whammyBar, QT_TRANSLATE_NOOP("palette", "Whammy bar"),
                                     0.8)->setElementTranslated(true);
@@ -322,11 +322,11 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
 
     if (!containsTapping) {
         int defaultPosition = std::min(30, guitarPalette.cellsCount());
-        auto lhTapping = Factory::makeTapping(paletteScore->dummy()->chord());
+        auto lhTapping = Factory::makeTapping(paletteScore->dummy());
         lhTapping->setHand(TappingHand::LEFT);
         guitarPalette.insertElement(defaultPosition, lhTapping, QT_TRANSLATE_NOOP("palette", "Left-hand tapping"), 1.0);
 
-        auto rhTapping = Factory::makeTapping(paletteScore->dummy()->chord());
+        auto rhTapping = Factory::makeTapping(paletteScore->dummy());
         rhTapping->setHand(TappingHand::RIGHT);
         guitarPalette.insertElement(defaultPosition + 1, rhTapping, QT_TRANSLATE_NOOP("palette", "Right-hand tapping"), 1.0);
     }
@@ -338,14 +338,14 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 
     if (!containsCapo) {
-        auto capo = Factory::makeCapo(paletteScore->dummy()->segment());
+        auto capo = Factory::makeCapo(paletteScore->dummy());
         capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
         int defaultPosition = std::min(40, guitarPalette.cellsCount());
         guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"), 0.9)->setElementTranslated(true);
     }
 
     if (!containsStringTunings) {
-        auto stringTunings = Factory::makeStringTunings(paletteScore->dummy()->segment());
+        auto stringTunings = Factory::makeStringTunings(paletteScore->dummy());
         stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
         stringTunings->initTextStyleType(TextStyleType::STRING_TUNINGS);
         int defaultPosition = std::min(41, guitarPalette.cellsCount());
@@ -431,7 +431,7 @@ void PaletteCompat::addNewFretboardDiagramItems(Palette& fretboardDiagramPalette
     }
 
     if (!containsBlankItem) {
-        auto fret = Factory::makeFretDiagram(paletteScore->dummy()->segment());
+        auto fret = Factory::makeFretDiagram(paletteScore->dummy());
         fret->clear();
         fretboardDiagramPalette.insertElement(0, fret, muse::TranslatableString("palette", "Blank"));
     }
@@ -452,7 +452,7 @@ void PaletteCompat::addNewRepeatItems(Palette& repeatPalette, engraving::Score* 
     }
 
     if (!containsToCodaSym) {
-        auto marker = Factory::makeMarker(paletteScore->dummy()->measure());
+        auto marker = Factory::makeMarker(paletteScore->dummy());
         marker->setMarkerType(MarkerType::TOCODASYM);
         marker->styleChanged();
         repeatPalette.insertElement(5, marker, TConv::userName(MarkerType::TOCODASYM));
@@ -488,7 +488,7 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette, engraving::Score* 
 
     if (!containsNoBreak) {
         int defaultPosition = std::min(3, layoutPalette.cellsCount());
-        auto lb = Factory::makeLayoutBreak(paletteScore->dummy()->measure());
+        auto lb = Factory::makeLayoutBreak(paletteScore->dummy());
         lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
         layoutPalette.insertElement(defaultPosition, lb, TConv::userName(LayoutBreakType::NOBREAK));
     }
@@ -520,7 +520,7 @@ void PaletteCompat::addChordBrackets(Palette& palette, engraving::Score* palette
                                      QT_TRANSLATE_NOOP("palette", "Chord bracket (play with right hand)") };
     for (int i = 0; i < 3; ++i) {
         DirectionV hookPos = DirectionV(i);
-        auto c = Factory::makeChordBracket(paletteScore->dummy()->chord());
+        auto c = Factory::makeChordBracket(paletteScore->dummy());
         c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
         if (position != muse::nidx) {
             palette.insertElement(position + i, c, names[i]);

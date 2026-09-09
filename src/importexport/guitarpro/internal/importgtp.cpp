@@ -425,7 +425,7 @@ void GuitarPro::addTextArticulation(Note* note, ArticulationTextType type)
     }
 
     if (Chord* ch = toChord(note->parent())) {
-        Articulation* art = mu::engraving::Factory::createArticulation(score->dummy()->chord());
+        Articulation* art = mu::engraving::Factory::createArticulation(score->dummy());
         art->setTextType(type);
         ch->add(art);
     }
@@ -1141,7 +1141,7 @@ bool GuitarPro1::read(IODevice* io)
                 }
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    lyrics = Factory::createLyrics(score->dummy()->chord());
+                    lyrics = Factory::createLyrics(score->dummy());
                     lyrics->setPlainText(readDelphiString());
                 }
                 if (beatBits & BEAT_EFFECTS) {
@@ -1158,9 +1158,9 @@ bool GuitarPro1::read(IODevice* io)
                 Fraction l = len2fraction(len);
                 ChordRest* cr;
                 if (strings) {
-                    cr = Factory::createChord(score->dummy()->segment());
+                    cr = Factory::createChord(score->dummy());
                 } else {
-                    cr = Factory::createRest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy());
                 }
                 cr->setTrack(track);
                 if (lyrics) {
@@ -1336,7 +1336,6 @@ void GuitarPro::createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr)
 {
     if (hasSlur && (slurs[staffIdx] == 0)) {
         Slur* slur = Factory::createSlur(score->dummy());
-        slur->setOwnershipParent(0);
         slur->setTrack(cr->track());
         slur->setTrack2(cr->track());
         slur->setTick(cr->tick());
@@ -1655,7 +1654,7 @@ bool GuitarPro2::read(IODevice* io)
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
                     String txt = readDelphiString();
-                    lyrics = Factory::createLyrics(score->dummy()->chord());
+                    lyrics = Factory::createLyrics(score->dummy());
                     lyrics->setPlainText(txt);
                 }
                 if (beatBits & BEAT_EFFECTS) {
@@ -1672,9 +1671,9 @@ bool GuitarPro2::read(IODevice* io)
                 Fraction l = len2fraction(len);
                 ChordRest* cr;
                 if (strings) {
-                    cr = Factory::createChord(score->dummy()->segment());
+                    cr = Factory::createChord(score->dummy());
                 } else {
-                    cr = Factory::createRest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy());
                 }
                 cr->setTrack(track);
                 if (lyrics) {
@@ -1696,7 +1695,6 @@ bool GuitarPro2::read(IODevice* io)
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
                         setTuplet(tuplet, tuple);
-                        tuplet->setOwnershipParent(measure);
                     }
                     tuplet->setTrack(track);
                     tuplet->setBaseLen(l);
@@ -1844,7 +1842,7 @@ GuitarPro::ReadNoteResult GuitarPro1::readNote(int string, Note* note)
             } else if (duration == 3) {
                 grace_len = Constants::DIVISION / 4;       //16th
             }
-            Note* gn = Factory::createNote(score->dummy()->chord());
+            Note* gn = Factory::createNote(score->dummy());
 
             if (fret == 255) {
                 gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
@@ -1864,7 +1862,7 @@ GuitarPro::ReadNoteResult GuitarPro1::readNote(int string, Note* note)
                 gc = note->chord()->graceNotes().front();
             }
             if (!gc) {
-                gc = Factory::createChord(score->dummy()->segment());
+                gc = Factory::createChord(score->dummy());
                 TDuration d;
                 d.setVal(grace_len);
                 if (grace_len == Constants::DIVISION / 6) {
@@ -2429,7 +2427,7 @@ bool GuitarPro3::read(IODevice* io)
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
                     String txt = readDelphiString();
-                    Lyrics* lyrics2 = Factory::createLyrics(score->dummy()->chord());
+                    Lyrics* lyrics2 = Factory::createLyrics(score->dummy());
                     lyrics2->setPlainText(txt);
                 }
                 int beatEffects = 0;
@@ -2453,7 +2451,7 @@ bool GuitarPro3::read(IODevice* io)
                 // if (!pause || strings)
                 if (strings) {
                     if (!segment->cr(track)) {
-                        cr = Factory::createChord(score->dummy()->segment());
+                        cr = Factory::createChord(score->dummy());
                     }
                 } else {
                     if (segment->cr(track)) {
@@ -2461,7 +2459,7 @@ bool GuitarPro3::read(IODevice* io)
                         delete cr;
                         cr = 0;
                     }
-                    cr = Factory::createRest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy());
                 }
 
                 cr->setTrack(track);
@@ -2484,7 +2482,6 @@ bool GuitarPro3::read(IODevice* io)
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
                         setTuplet(tuplet, tuple);
-                        tuplet->setOwnershipParent(measure);
                     }
                     tuplet->setTrack(track);
                     tuplet->setBaseLen(l);
@@ -2518,7 +2515,6 @@ bool GuitarPro3::read(IODevice* io)
                         if (dotted) {
                             NoteDot* dot = Factory::createNoteDot(note);
                             // there is at most one dotted note in this guitar pro version - set 0 index
-                            dot->setOwnershipParent(note);
                             dot->setTrack(track);                // needed to know the staff it belongs to (and detect tablature)
                             dot->setVisible(true);
                             note->add(dot);
@@ -2655,7 +2651,6 @@ bool GuitarPro3::read(IODevice* io)
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());
-                        s->setOwnershipParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         s->setEndElement(nt);
                         s->setTick2(cr->segment()->tick());
@@ -2694,7 +2689,7 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
         int strokeup = readUInt8();                // up stroke length
         int strokedown = readUInt8();                // down stroke length
 
-        Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
+        Arpeggio* a = Factory::createArpeggio(score->dummy());
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
         } else if (strokedown > 0) {
@@ -2783,7 +2778,6 @@ void GuitarPro::addTunings()
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);
             tun->setTrack(staff2track(s->idx()));
-            tun->setOwnershipParent(seg);
             seg->add(tun);
             // Instrument string data should be set to the standard
             tuning = utils::standardTuningFor(p->instrument()->channel(0)->program(), (int)sd.strings());

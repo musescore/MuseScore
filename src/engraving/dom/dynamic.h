@@ -59,7 +59,7 @@ public:
         const char* name = nullptr;
     };
 
-    Dynamic(Segment* parent);
+    Dynamic(DummyParentOr<Segment> parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
     Segment* segment() const { return (Segment*)ownershipParent(); }

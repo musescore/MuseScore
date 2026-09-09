@@ -107,7 +107,7 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 //   Pedal
 //---------------------------------------------------------
 
-Pedal::Pedal(EngravingItem* parent)
+Pedal::Pedal(DummyParentOr<EngravingItem> parent)
     : TextLineBase(ElementType::PEDAL, parent)
 {
     initElementStyle(&pedalStyle);

@@ -34,7 +34,7 @@ static const ElementStyle STAFF_STYLE {
     { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
 };
 
-StaffText::StaffText(Segment* parent, TextStyleType tid)
+StaffText::StaffText(DummyParentOr<Segment> parent, TextStyleType tid)
     : StaffTextBase(ElementType::STAFF_TEXT, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&STAFF_STYLE);

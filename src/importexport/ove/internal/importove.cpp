@@ -1578,7 +1578,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 
             cr = measure->findChord(Fraction::fromTicks(tick), noteTrack);
             if (cr == 0) {
-                cr = Factory::createChord(m_score->dummy()->segment());
+                cr = Factory::createChord(m_score->dummy());
                 cr->setTrack(noteTrack);
 
                 // grace
@@ -1772,7 +1772,6 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                     tuplet->setBaseLen(duration);
                     tuplet->setTick(Fraction::fromTicks(tick));
-                    tuplet->setOwnershipParent(measure);
                     // measure->add(tuplet);
                 }
             }
@@ -2092,7 +2091,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
         ovebase::Lyric* oveLyric = static_cast<ovebase::Lyric*>(lyrics[i]);
         int tick = m_mtt->getTick(measure->measureNumber(), oveLyric->getTick());
 
-        Lyrics* lyric = Factory::createLyrics(m_score->dummy()->chord());
+        Lyrics* lyric = Factory::createLyrics(m_score->dummy());
         lyric->setVerse(oveLyric->getVerse());
         lyric->setPlainText(oveLyric->getLyric());
         lyric->setTrack(track);
@@ -2129,7 +2128,7 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
         ovebase::Harmony* harmonyPtr = static_cast<ovebase::Harmony*>(harmonies[i]);
         int absTick = m_mtt->getTick(measure->measureNumber(), harmonyPtr->getTick());
 
-        Harmony* harmony = Factory::createHarmony(m_score->dummy()->segment());
+        Harmony* harmony = Factory::createHarmony(m_score->dummy());
         HarmonyInfo* info = new HarmonyInfo(measure->score());
 
         // TODO - does this need to be key-aware?
@@ -2535,7 +2534,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
             MeasureToTick::unitToTick(wedgePtr->stop()->getOffset(), m_ove->getQuarter()));
 
         if (absTick2 > absTick) {
-            Hairpin* hp = Factory::createHairpin(m_score->dummy()->segment());
+            Hairpin* hp = Factory::createHairpin(m_score->dummy());
 
             hp->setHairpinType(OveWedgeType_To_Type(wedgePtr->getWedgeType()));
             // hp->setYoff(wedgePtr->getYOffset());

@@ -42,7 +42,7 @@ TEST_F(Engraving_DynamicTests, test1)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Dynamic* dynamic = new Dynamic(score->dummy()->segment());
+    Dynamic* dynamic = new Dynamic(score->dummy());
     dynamic->setDynamicType(DynamicType(1));
 
     Dynamic* d;

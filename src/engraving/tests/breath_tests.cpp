@@ -57,7 +57,7 @@ TEST_F(Engraving_BreathTests, breath)
         score->cmdSelectAll();
         for (EngravingItem* e : score->selection().elements()) {
             EditData dd(0);
-            Breath* b = Factory::createBreath(score->dummy()->segment());
+            Breath* b = Factory::createBreath(score->dummy());
             b->setSymId(SymId::breathMarkComma);
             dd.dropElement = b;
             if (e->acceptDrop(dd)) {

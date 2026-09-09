@@ -64,7 +64,7 @@ bool Engraving_TupletTests::createTuplet(int n, ChordRest* cr)
         fr    *= Fraction(1, 2);
     }
 
-    Tuplet* tuplet = Factory::createTuplet(cr->score()->dummy()->measure());
+    Tuplet* tuplet = Factory::createTuplet(cr->score()->dummy());
     tuplet->setRatio(ratio);
 
     //
@@ -124,7 +124,7 @@ void Engraving_TupletTests::split(const char16_t* p1, const char16_t* p2)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m         = score->firstMeasure();
-    TimeSig* ts        = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts        = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving tuplet tests"), [&](Transaction& tx) {

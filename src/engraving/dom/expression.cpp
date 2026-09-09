@@ -36,7 +36,7 @@ static const ElementStyle expressionStyle {
     { Sid::snapToDynamics, Pid::SNAP_TO_DYNAMICS },
 };
 
-Expression::Expression(Segment* parent)
+Expression::Expression(DummyParentOr<Segment> parent)
     : TextBase(ElementType::EXPRESSION, parent, TextStyleType::EXPRESSION, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&expressionStyle);

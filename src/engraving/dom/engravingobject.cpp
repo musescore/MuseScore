@@ -22,6 +22,8 @@
 
 #include "engravingobject.h"
 
+#include <algorithm>
+
 #include "global/containers.h"
 
 #include "../editing/addremoveelement.h"
@@ -32,6 +34,7 @@
 #include "types/typesconv.h"
 
 #include "bracketitem.h"
+#include "dummyparent.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"
@@ -56,6 +59,8 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         assert(parent);
     }
 
+    // The parent an object is constructed with is its parent: it is attached to it
+    // right away. Passing the dummy means it is not attached to anything yet.
     doSetParent(parent);
     if (m_parent) {
         doSetScore(m_parent->score());
@@ -78,7 +83,6 @@ EngravingObject::EngravingObject(const EngravingObject& se)
     m_type = se.m_type;
     doSetParent(se.m_parent);
     m_score = se.m_score;
-    m_isParentExplicitlySet = se.m_isParentExplicitlySet;
     m_elementStyle = se.m_elementStyle;
     if (m_elementStyle) {
         size_t n = m_elementStyle->size();
@@ -112,7 +116,7 @@ EngravingObject::~EngravingObject()
         bool canMoveToDummy = !this->isType(ElementType::ROOT_ITEM)
                               && !this->isType(ElementType::DUMMY)
                               && !this->isType(ElementType::SCORE)
-                              && score()->rootItem() && score()->rootItem()->dummy();
+                              && score()->dummy();
 
         // copy because moveToDummy might modify children
         EngravingObjectList children = m_children;
@@ -187,6 +191,26 @@ void EngravingObject::moveToDummy()
     }
 }
 
+static void collectChildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)
+{
+    for (EngravingObject* ch : item->children()) {
+        if (ch->isEngravingItem()) {
+            list.push_back(toEngravingItem(ch));
+
+            if (all) {
+                collectChildrenItems(ch, list, all);
+            }
+        }
+    }
+}
+
+EngravingItemList EngravingObject::childrenItems(bool all) const
+{
+    EngravingItemList list;
+    collectChildrenItems(this, list, all);
+    return list;
+}
+
 EngravingItemList EngravingObject::getChildren(bool includeInvisible) const
 {
     EngravingItemList childrenList;
@@ -235,7 +259,16 @@ void EngravingObject::removeChild(EngravingObject* o)
         return;
     }
     o->m_parent = nullptr;
-    muse::remove(m_children, o);
+
+    // Search from the back: a child is most often unparented shortly after it was added,
+    // so it still sits at the end of the list. That matters for the dummy, whose child
+    // list is long-lived and large - it holds every object that has no owner, which
+    // includes all beams and spanners. Laying out goldberg.mscx walks 59M list entries
+    // searching from the front, and 65k searching from the back. Order is preserved.
+    auto it = std::find(m_children.rbegin(), m_children.rend(), o);
+    if (it != m_children.rend()) {
+        m_children.erase(std::next(it).base());
+    }
 }
 
 EngravingObject* EngravingObject::parent() const
@@ -245,7 +278,7 @@ EngravingObject* EngravingObject::parent() const
 
 EngravingObject* EngravingObject::ownershipParent() const
 {
-    if (!m_isParentExplicitlySet) {
+    if (!m_parent || m_parent->isType(ElementType::DUMMY)) {
         return nullptr;
     }
     return m_parent;
@@ -266,8 +299,6 @@ void EngravingObject::setOwnershipParent(EngravingObject* p)
     if (m_parent) {
         doSetScore(m_parent->score());
     }
-
-    m_isParentExplicitlySet = p && !p->isType(ElementType::DUMMY);
 }
 
 Score* EngravingObject::score() const

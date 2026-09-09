@@ -600,7 +600,6 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         }
 
         Note* note = Factory::createNote(chord);
-        note->setOwnershipParent(chord);
         note->setTrack(chord->track());
         note->setNval(nval, tick);
         undoAddElement(note);
@@ -609,7 +608,6 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             Accidental* a = Factory::createAccidental(note);
             a->setAccidentalType(m_is.accidentalType());
             a->setRole(AccidentalRole::USER);
-            a->setOwnershipParent(note);
             undoAddElement(a);
         }
         if (on->tieBack() && prevTied) {
@@ -623,7 +621,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
         Tie* tieFor = on->tieFor();
         if (tieFor) {
-            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()->note()) : Factory::createTie(this->dummy());
+            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()) : Factory::createTie(this->dummy());
             tie->setStartNote(note);
             tie->setTick(note->tick());
             tie->setTrack(note->track());
@@ -663,7 +661,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
 Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 {
-    Chord* chord = Factory::createChord(this->dummy()->segment());
+    Chord* chord = Factory::createChord(this->dummy());
     Note* note = Factory::createNote(chord);
 
     // allow grace notes to be added to other grace notes
@@ -766,7 +764,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
     }
 
-    GuitarBend* bend = new GuitarBend(score()->dummy()->note());
+    GuitarBend* bend = new GuitarBend(score()->dummy());
     bend->setTick(chord->tick());
     bend->setTrack(chord->track());
 
@@ -954,19 +952,19 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             Note* note = nullptr;
             Tie* addTie = nullptr;
             if (isRest) {
-                nr = ncr = Factory::createRest(this->dummy()->segment());
+                nr = ncr = Factory::createRest(this->dummy());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
                 ncr->setTicks(d.isMeasure() ? measure->ticks() * timeStretch : d.fraction());
             } else {
-                nr = note = Factory::createNote(this->dummy()->chord());
+                nr = note = Factory::createNote(this->dummy());
 
                 if (tie) {
                     tie->setEndNote(note);
                     note->setTieBack(tie);
                     addTie = tie;
                 }
-                Chord* chord = Factory::createChord(this->dummy()->segment());
+                Chord* chord = Factory::createChord(this->dummy());
                 chord->setTrack(track);
                 chord->setDurationType(d);
                 chord->setTicks(d.fraction());

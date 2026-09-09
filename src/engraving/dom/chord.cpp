@@ -281,7 +281,7 @@ std::vector<int> Chord::noteDistances() const
 //   Chord
 //---------------------------------------------------------
 
-Chord::Chord(Segment* parent)
+Chord::Chord(DummyParentOr<Segment> parent)
     : ChordRest(ElementType::CHORD, parent)
 {
     m_stem             = 0;
@@ -1042,7 +1042,7 @@ void Chord::resizeLedgerLinesTo(size_t newSize)
     int ledgerLineCountDiff = static_cast<int>(newSize - m_ledgerLines.size());
     if (ledgerLineCountDiff > 0) {
         for (int i = 0; i < ledgerLineCountDiff; ++i) {
-            m_ledgerLines.push_back(new LedgerLine(score()->dummy()));
+            m_ledgerLines.push_back(new LedgerLine(this));
         }
     } else {
         for (int i = 0; i < std::abs(ledgerLineCountDiff); ++i) {
@@ -1087,7 +1087,6 @@ bool Chord::shouldHaveHook() const
 void Chord::createStem()
 {
     Stem* stem = Factory::createStem(this);
-    stem->setOwnershipParent(this);
     stem->setGenerated(true);
     //! score()->undoAddElement calls add(), which assigns this created stem to _stem
     score()->doUndoAddElement(stem);
@@ -1109,7 +1108,6 @@ void Chord::removeStem()
 void Chord::createHook()
 {
     Hook* hook = new Hook(this);
-    hook->setOwnershipParent(this);
     hook->setGenerated(true);
     score()->doUndoAddElement(hook);
 }
@@ -1784,7 +1782,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
             }
             auto splitSyms = splitArticulations({ artic->symId() });
             for (const SymId& id : splitSyms) {
-                Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
+                Articulation* newArticulation = Factory::createArticulation(score()->dummy());
                 newArticulation->setSymId(id);
                 newArticulation->setAnchor(artic->anchor());
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, artic->propertyFlags(Pid::ARTICULATION_ANCHOR));
@@ -1871,7 +1869,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
     } else {
         // add articulations from newArtics that are not found in m_articulations
         for (const SymId& id : newArtics) {
-            Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
+            Articulation* newArticulation = Factory::createArticulation(score()->dummy());
             newArticulation->setSymId(id);
             if (overallAnchor != ArticulationAnchor::AUTO) {
                 newArticulation->setAnchor(overallAnchor);
@@ -2797,8 +2795,8 @@ Note* Chord::firstGraceOrNote()
 // GRACE NOTES
 //---------------------------------
 
-GraceNotesGroup::GraceNotesGroup(Chord* c)
-    : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c) {}
+GraceNotesGroup::GraceNotesGroup(DummyParentOr<Chord> c)
+    : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c.as<Chord>()) {}
 
 void GraceNotesGroup::setPos(double x, double y)
 {

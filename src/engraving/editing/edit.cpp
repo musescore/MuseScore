@@ -277,7 +277,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
         return nullptr;
     }
 
-    Tuplet* tuplet = Factory::createTuplet(this->dummy()->measure());
+    Tuplet* tuplet = Factory::createTuplet(measure);
     tuplet->setRatio(_ratio);
 
     tuplet->setNumberType(numberType);
@@ -299,7 +299,6 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     tuplet->setTrack(destinationChordRest->track());
     tuplet->setTick(destinationChordRest->tick());
-    tuplet->setOwnershipParent(measure);
 
     if (ot) {
         tuplet->setTuplet(ot);
@@ -335,7 +334,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 Rest* Score::addRest(const Fraction& tick, track_idx_t track, TDuration d, Tuplet* tuplet)
 {
     Measure* measure = tick2measure(tick);
-    Rest* rest = Factory::createRest(this->dummy()->segment(), d);
+    Rest* rest = Factory::createRest(this->dummy(), d);
     if (d.type() == DurationType::V_MEASURE) {
         rest->setTicks(measure->stretchedLen(staff(track2staff(track))));
     } else {
@@ -360,7 +359,6 @@ Rest* Score::addRest(Segment* s, track_idx_t track, TDuration d, Tuplet* tuplet)
         rest->setTicks(d.fraction());
     }
     rest->setTrack(track);
-    rest->setOwnershipParent(s);
     rest->setTuplet(tuplet);
     undoAddCR(rest, tick2measure(s->tick()), s->tick());
     return rest;
@@ -382,7 +380,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
         return 0;
     }
 
-    Chord* chord = Factory::createChord(this->dummy()->segment());
+    Chord* chord = Factory::createChord(this->dummy());
     chord->setTuplet(tuplet);
     chord->setTrack(oc->track());
     chord->setDurationType(d);
@@ -649,7 +647,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
 
         textBox = Factory::createText(frame, type);
-        textBox->setOwnershipParent(frame);
         undoAddElement(textBox);
         break;
     }
@@ -658,7 +655,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             break;
         }
         textBox = Factory::createText(destinationElement, type);
-        textBox->setOwnershipParent(destinationElement);
         undoAddElement(textBox);
         break;
     }
@@ -668,7 +664,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             break;
         }
         textBox = Factory::createRehearsalMark(chordRest->segment());
-        textBox->setOwnershipParent(chordRest->segment());
         textBox->setTrack(0);
         RehearsalMark* r = toRehearsalMark(textBox);
         textBox->setXmlText(EditRehearsalMark::createRehearsalMarkText(this, r));
@@ -680,7 +675,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createStaffText(dummy()->segment(), TextStyleType::STAFF);
+        textBox = Factory::createStaffText(dummy(), TextStyleType::STAFF);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -689,7 +684,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createSystemText(dummy()->segment(), TextStyleType::SYSTEM);
+        textBox = Factory::createSystemText(dummy(), TextStyleType::SYSTEM);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -698,7 +693,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createDynamic(dummy()->segment());
+        textBox = Factory::createDynamic(dummy());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -707,7 +702,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createExpression(dummy()->segment());
+        textBox = Factory::createExpression(dummy());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -716,7 +711,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createInstrumentChange(dummy()->segment());
+        textBox = Factory::createInstrumentChange(dummy());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -725,7 +720,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createSticking(dummy()->segment());
+        textBox = Factory::createSticking(dummy());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -746,7 +741,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         textBox = Factory::createFingering(toNote(destinationElement), type);
         textBox->setTrack(destinationElement->track());
-        textBox->setOwnershipParent(destinationElement);
         undoAddElement(textBox);
         break;
     }
@@ -773,7 +767,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         Harmony* harmony = Factory::createHarmony(newParent);
         harmony->setTrack(track);
-        harmony->setOwnershipParent(newParent);
 
         static const std::map<TextStyleType, HarmonyType> harmonyTypes = {
             { TextStyleType::HARMONY_A, HarmonyType::STANDARD },
@@ -818,7 +811,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         // Also check how many partial lines there are
         Lyrics* lyrics = Factory::createLyrics(chordRest);
         lyrics->setTrack(chordRest->track());
-        lyrics->setOwnershipParent(chordRest);
         lyrics->setProperty(Pid::VERSE, no);
 
         textBox = lyrics;
@@ -884,7 +876,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
 
         TempoText* tempoText = Factory::createTempoText(chordRest->segment());
-        tempoText->setOwnershipParent(chordRest->segment());
         tempoText->setTrack(0);
         tempoText->setXmlText(text);
         tempoText->setFollowText(true);
@@ -900,7 +891,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createHarpPedalDiagram(this->dummy()->segment());
+        textBox = Factory::createHarpPedalDiagram(this->dummy());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -1043,7 +1034,6 @@ void Score::addNoteLine()
     }
 
     NoteLine* line = Factory::createNoteLine(startNote);
-    line->setOwnershipParent(startNote);
     line->setStartElement(startNote);
     line->setTick(startNote->chord()->tick());
     line->setEndElement(endNote);
@@ -1161,14 +1151,11 @@ void Score::deleteItem(EngravingItem* el)
 
         // replace with rest
         if (chord->noteType() == NoteType::NORMAL) {
-            Rest* rest = Factory::createRest(this->dummy()->segment(), chord->durationType());
-            rest->setDurationType(chord->durationType());
-            rest->setTicks(chord->ticks());
-
-            rest->setTrack(el->track());
-            rest->setOwnershipParent(chord->ownershipParent());
-
             Segment* segment = chord->segment();
+            Rest* rest = Factory::createRest(segment, chord->durationType());
+            rest->setTicks(chord->ticks());
+            rest->setTrack(el->track());
+
             undoAddCR(rest, segment->measure(), segment->tick());
 
             Tuplet* tuplet = chord->tuplet();
@@ -1201,12 +1188,11 @@ void Score::deleteItem(EngravingItem* el)
     {
         MeasureRepeat* mr = toMeasureRepeat(el);
         removeChordRest(mr, false);
-        Rest* rest = Factory::createRest(this->dummy()->segment());
+        Segment* segment = mr->segment();
+        Rest* rest = Factory::createRest(segment);
         rest->setDurationType(DurationType::V_MEASURE);
         rest->setTicks(mr->measure()->stretchedLen(mr->staff()));
         rest->setTrack(mr->track());
-        rest->setOwnershipParent(mr->ownershipParent());
-        Segment* segment = mr->segment();
         undoAddCR(rest, segment->measure(), segment->tick());
 
         // tell measures they're not part of measure repeat group anymore
@@ -1319,7 +1305,7 @@ void Score::deleteItem(EngravingItem* el)
 
                     Fraction curTick = stick;
                     for (const TDuration& d : dList) {
-                        Rest* rr = Factory::createRest(this->dummy()->segment());
+                        Rest* rr = Factory::createRest(this->dummy());
                         rr->setTicks(d.fraction());
                         rr->setDurationType(d);
                         rr->setTrack(track);
@@ -1697,7 +1683,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
                 TimeSig* nts = Factory::createTimeSig(s);
                 nts->setTrack(staffIdx * VOICES);
-                nts->setOwnershipParent(s);
                 nts->setFrom(lastDeletedForThisStaff);
                 nts->setStretch(nts->sig() / mAfterSel->timesig());
                 score->undoAddElement(nts);
@@ -1742,7 +1727,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 KeySig* nks = (KeySig*)s->element(staff2track(staffIdx));
                 if (!nks) {
                     nks = Factory::createKeySig(s);
-                    nks->setOwnershipParent(s);
                     nks->setTrack(staffIdx * VOICES);
                     nks->setKeySigEvent(nkse);
                     score->undoAddElement(nks);
@@ -2550,7 +2534,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
 
     ChordRest* cr;
     if (ocr->isChord()) {
-        cr = Factory::createChord(this->dummy()->segment());
+        cr = Factory::createChord(this->dummy());
         toChord(cr)->setStemDirection(toChord(ocr)->stemDirection());
         for (Note* oldNote : toChord(ocr)->notes()) {
             Note* note = Factory::createNote(toChord(cr));
@@ -2560,7 +2544,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
             cr->add(note);
         }
     } else {
-        cr = Factory::createRest(this->dummy()->segment());
+        cr = Factory::createRest(this->dummy());
     }
 
     int actualNotes = an.numerator() / an.denominator();
@@ -2577,7 +2561,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
 
     for (int i = 0; i < (actualNotes - 1); ++i) {
         tick += ticks;
-        Rest* rest = Factory::createRest(this->dummy()->segment());
+        Rest* rest = Factory::createRest(this->dummy());
         rest->setTuplet(tuplet);
         rest->setTrack(track);
         rest->setDurationType(tuplet->baseLen());
@@ -3428,7 +3412,6 @@ void Score::undoUpdatePlayCountText(Measure* m)
         if (!topPlayCountText) {
             topPlayCountText = Factory::createPlayCountText(endBarSeg);
             topPlayCountText->setTrack(0);
-            topPlayCountText->setOwnershipParent(endBarSeg);
             topPlayCountText->setSelected(topBl->selected());
             undoAddElement(topPlayCountText);
         }
@@ -3577,7 +3560,6 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     BarLine* lbl = toBarLine(lsegment->element(ltrack));
                     if (!lbl) {
                         lbl = Factory::createBarLine(lsegment);
-                        lbl->setOwnershipParent(lsegment);
                         lbl->setTrack(ltrack);
                         lbl->setSpanStaff(lstaff->barLineSpan());
                         lbl->setSpanFrom(lstaff->barLineFrom());

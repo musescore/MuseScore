@@ -7,7 +7,7 @@ static const ElementStyle chordBracketStyle {
     { Sid::chordBracketHookLen, Pid::BRACKET_HOOK_LEN },
 };
 
-ChordBracket::ChordBracket(Chord* parent)
+ChordBracket::ChordBracket(DummyParentOr<Chord> parent)
     : Arpeggio(parent, ElementType::CHORD_BRACKET)
 {
     setArpeggioType(ArpeggioType::BRACKET);

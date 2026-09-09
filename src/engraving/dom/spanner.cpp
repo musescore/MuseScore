@@ -52,7 +52,6 @@ namespace mu::engraving {
 SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, ElementFlags f)
     : EngravingItem(type, sp, f)
 {
-    setOwnershipParent(sp);
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
@@ -84,6 +83,19 @@ void SpannerSegment::setOwnershipParent(Spanner* spanner)
 EngravingItem* SpannerSegment::layoutParent() const
 {
     return m_system;
+}
+
+EngravingItem* SpannerSegment::accessibleParentItem() const
+{
+    // Not placed on a system yet, so it is the spanner that lists it;
+    // see Spanner::accessibleChildren().
+    if (!m_system) {
+        if (EngravingItem* owner = ownershipParentItem()) {
+            return owner;
+        }
+    }
+
+    return EngravingItem::accessibleParentItem();
 }
 
 //---------------------------------------------------------
@@ -443,7 +455,7 @@ TranslatableString SpannerSegment::subtypeUserName() const
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(const ElementType& type, EngravingItem* parent, ElementFlags f)
+Spanner::Spanner(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
 }

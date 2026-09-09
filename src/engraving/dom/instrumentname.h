@@ -46,7 +46,7 @@ class InstrumentName final : public TextBase
     DECLARE_CLASSOF(ElementType::INSTRUMENT_NAME)
 
 public:
-    InstrumentName(System*);
+    InstrumentName(DummyParentOr<System>);
 
     InstrumentName* clone() const override { return new InstrumentName(*this); }
 

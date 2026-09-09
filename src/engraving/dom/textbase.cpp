@@ -1547,7 +1547,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType tid, ElementFlags f)
+TextBase::TextBase(const ElementType& type, EngravingObject* parent, TextStyleType tid, ElementFlags f)
     : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
     m_textLineSpacing        = 1.0;
@@ -1564,7 +1564,7 @@ TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType
     m_cursor->init();
 }
 
-TextBase::TextBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
+TextBase::TextBase(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : TextBase(type, parent, TextStyleType::DEFAULT, f)
 {
 }

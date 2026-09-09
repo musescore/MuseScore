@@ -43,7 +43,7 @@ namespace mu::engraving {
 //   ChordLine
 //---------------------------------------------------------
 
-ChordLine::ChordLine(Chord* parent)
+ChordLine::ChordLine(DummyParentOr<Chord> parent)
     : EngravingItem(ElementType::CHORDLINE, parent, ElementFlag::MOVABLE)
 {
 }

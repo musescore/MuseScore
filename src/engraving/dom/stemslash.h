@@ -55,7 +55,7 @@ public:
 private:
 
     friend class Factory;
-    StemSlash(Chord* parent = 0);
+    StemSlash(DummyParentOr<Chord> parent);
 };
 } // namespace mu::engraving
 #endif

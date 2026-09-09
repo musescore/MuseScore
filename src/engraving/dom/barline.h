@@ -86,7 +86,7 @@ public:
 
     BarLine& operator=(const BarLine&) = delete;
 
-    void setOwnershipParent(Segment* parent);
+    void setOwnershipParent(DummyParentOr<Segment> parent);
 
     BarLine* clone() const override { return new BarLine(*this); }
     PointF canvasPos() const override;      ///< position in canvas coordinates
@@ -172,7 +172,7 @@ public:
 private:
 
     friend class Factory;
-    BarLine(Segment* parent);
+    BarLine(DummyParentOr<Segment> parent);
     BarLine(const BarLine&);
 
     bool m_spanStaff = false;         // span barline to next staff if true

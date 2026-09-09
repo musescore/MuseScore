@@ -221,7 +221,7 @@ double TieSegment::dottedWidth() const
 //   Tie
 //---------------------------------------------------------
 
-Tie::Tie(const ElementType& type, EngravingItem* parent)
+Tie::Tie(const ElementType& type, EngravingObject* parent)
     : SlurTie(type, parent)
 {
 }
@@ -371,7 +371,7 @@ const TieJumpPointList* Tie::tieJumpPoints() const
     return startNote() ? startNote()->tieJumpPoints() : nullptr;
 }
 
-Tie::Tie(EngravingItem* parent)
+Tie::Tie(EngravingObject* parent)
     : SlurTie(ElementType::TIE, parent)
 {
 }
@@ -516,11 +516,10 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
         return;
     }
 
-    Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(score->dummy()->note());
+    Tie* newTie = addPartialTie ? Factory::createPartialTie(startNote) : Factory::createTie(startNote);
 
     score->undoRemoveElement(oldTie);
 
-    newTie->setOwnershipParent(startNote);
     newTie->setStartNote(startNote);
     newTie->setTick(startNote->tick());
     newTie->setTrack(startNote->track());

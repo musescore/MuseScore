@@ -56,7 +56,7 @@ class TimeSig final : public EngravingItem
 
 public:
 
-    void setOwnershipParent(Segment* parent);
+    void setOwnershipParent(DummyParentOr<Segment> parent);
 
     String ssig() const;
     void setSSig(const String&);
@@ -149,7 +149,7 @@ protected:
 private:
 
     friend class Factory;
-    TimeSig(Segment* parent = 0);
+    TimeSig(DummyParentOr<Segment> parent);
 
     String m_numeratorString;       // calculated from actualSig() if !customText
     String m_denominatorString;

@@ -115,7 +115,7 @@ static const ElementStyle dynamicsStyle {
 //   Dynamic
 //---------------------------------------------------------
 
-Dynamic::Dynamic(Segment* parent)
+Dynamic::Dynamic(DummyParentOr<Segment> parent)
     : TextBase(ElementType::DYNAMIC, parent, TextStyleType::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_velocity    = -1;

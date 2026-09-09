@@ -74,7 +74,7 @@ public:
 private:
 
     friend class Factory;
-    StaffState(EngravingItem* parent);
+    StaffState(DummyParentOr<EngravingItem> parent);
     StaffState(const StaffState&);
 
     StaffStateType m_staffStateType = StaffStateType::INVISIBLE;

@@ -48,11 +48,11 @@
 #include "../editing/cmd.h"
 
 #include "chordlist.h"
+#include "dummyparent.h"
 #include "guitarbend.h"
 #include "input.h"
 #include "mscore.h"
 #include "property.h"
-#include "rootitem.h"
 #include "scoreorder.h"
 #include "segment.h"
 #include "select.h"
@@ -125,6 +125,7 @@ class RehearsalMark;
 class RepeatList;
 struct RepeatSegmentInfo;
 class Rest;
+class RootItem;
 class Score;
 class IEngravingFont;
 class Segment;
@@ -302,7 +303,7 @@ public:
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
     RootItem* rootItem() const { return m_rootItem; }
-    compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
+    DummyParent* dummy() const { return m_dummy; }
 
     ShadowNote* shadowNote() const;
 
@@ -1005,6 +1006,7 @@ private:
     SelectionFilter m_selectionFilter;
 
     RootItem* m_rootItem = nullptr;
+    DummyParent* m_dummy = nullptr;
     LayoutOptions m_layoutOptions;
 
     muse::async::Channel<EngravingItem*> m_elementDestroyed;

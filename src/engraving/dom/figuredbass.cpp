@@ -644,7 +644,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 //   F I G U R E D   B A S S
 //---------------------------------------------------------
 
-FiguredBass::FiguredBass(Segment* parent)
+FiguredBass::FiguredBass(DummyParentOr<Segment> parent)
     : TextBase(ElementType::FIGURED_BASS, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&figuredBassStyle);
@@ -973,7 +973,6 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
     if (fb == 0) {                            // no FB at segment: create new
         fb = Factory::createFiguredBass(seg);
         fb->setTrack(track);
-        fb->setOwnershipParent(seg);
 
         // locate next SegChordRest in the same staff to estimate presumed duration of element
         endTick = Fraction::max();

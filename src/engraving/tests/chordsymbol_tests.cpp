@@ -136,7 +136,6 @@ TEST_F(Engraving_ChordSymbolTests, testAddLink)
     Harmony* harmony = new Harmony(cr->segment());
     harmony->setHarmony(u"C7");
     harmony->setTrack(cr->track());
-    harmony->setOwnershipParent(cr->segment());
     score->undoAddElement(harmony);
     score->doLayout();
     test_post(score, u"add-link");
@@ -150,7 +149,6 @@ TEST_F(Engraving_ChordSymbolTests, testAddPart)
     Harmony* harmony = new Harmony(cr->segment());
     harmony->setHarmony(u"C7");
     harmony->setTrack(cr->track());
-    harmony->setOwnershipParent(cr->segment());
     score->undoAddElement(harmony);
     score->doLayout();
     test_post(score, u"add-part");

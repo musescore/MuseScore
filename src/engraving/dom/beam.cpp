@@ -34,6 +34,7 @@
 #include "chord.h"
 #include "groups.h"
 #include "measure.h"
+#include "rootitem.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -81,9 +82,7 @@ EngravingItem* Beam::accessibleParentItem() const
 {
     // The system a beam is drawn on does not own it and cannot list it, so in the
     // accessibility tree the beam stays where it is parked: on the dummy.
-    EngravingObject* parent = this->parent();
-
-    return parent && parent->isEngravingItem() ? toEngravingItem(parent) : nullptr;
+    return score()->dummy()->rootItem();
 }
 
 //---------------------------------------------------------

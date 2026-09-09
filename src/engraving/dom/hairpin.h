@@ -106,7 +106,7 @@ class Hairpin final : public TextLineBase
     DECLARE_CLASSOF(ElementType::HAIRPIN)
 
 public:
-    Hairpin(EngravingItem* parent);
+    Hairpin(DummyParentOr<EngravingItem> parent);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
 

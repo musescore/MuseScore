@@ -57,7 +57,7 @@ class LetRing final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::LET_RING)
 
 public:
-    LetRing(EngravingItem* parent);
+    LetRing(DummyParentOr<EngravingItem> parent);
 
     LetRing* clone() const override { return new LetRing(*this); }
 

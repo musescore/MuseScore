@@ -1537,7 +1537,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyAtDomLevel)
 {
     // [GIVEN] A score and a FretDiagram with no harmony
     MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+    FretDiagram* fd = Factory::createFretDiagram(score->dummy());
 
     EXPECT_EQ(fd->harmony(), nullptr);
     EXPECT_EQ(fd->harmonyPlainText(), String());
@@ -1564,7 +1564,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
 {
     // [GIVEN] A score with a FretDiagram carrying a chord symbol
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
     domFd->setHarmony(u"Fdim7");
 
     // Construct the wrapper through the public dispatcher so that
@@ -1615,7 +1615,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
     // FretDiagram::dot(s) returns a placeholder Dot(fret=0) when no dot is set,
     // so we check fret values rather than vector emptiness.
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
 
     apiv1::FretDiagram* apiFd
         = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
@@ -1658,7 +1658,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
 {
     // [GIVEN] A score and an empty FretDiagram, wrapped via the API
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
 
     apiv1::FretDiagram* apiFd
         = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
@@ -1696,7 +1696,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetBarreApi)
 {
     // [GIVEN] A score and an empty FretDiagram, wrapped via the API
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
 
     apiv1::FretDiagram* apiFd
         = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
@@ -1737,7 +1737,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
 {
     // [GIVEN] A score and a FretDiagram populated with a dot and a marker
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
     domFd->setDot(0, 3);
     domFd->setMarker(1, FretMarkerType::CROSS);
 
@@ -1780,7 +1780,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramGettersApi)
 {
     // [GIVEN] A FretDiagram populated with known content
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
 
     // Set a dot on string 0 fret 3, a marker on string 1, and a barre at fret 2
     domFd->setDot(0, 3);

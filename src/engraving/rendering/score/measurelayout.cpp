@@ -598,7 +598,6 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
                 measureNumber = new MeasureNumber(m);
                 measureNumber->setTrack(staff2track(staffIdx));
                 measureNumber->setGenerated(true);
-                measureNumber->setOwnershipParent(m);
                 m->add(measureNumber);
             }
 
@@ -785,7 +784,6 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
             }
         } else {
             bl = Factory::createBarLine(seg);
-            bl->setOwnershipParent(seg);
             bl->setTrack(track);
             bl->setGenerated(true);
             bl->setSpanStaff(staff->barLineSpan());
@@ -923,7 +921,6 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
             const Staff* staff = ctx.dom().staff(staffIdx);
             if (!barLine) {
                 barLine = Factory::createBarLine(barlineSeg);
-                barLine->setOwnershipParent(barlineSeg);
                 barLine->setTrack(track);
                 barLine->setGenerated(true);
                 barLine->setSpanStaff(staff->barLineSpan());
@@ -1105,7 +1102,6 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
             courtesyTimeSig = Factory::createTimeSig(courtesySigSeg);
             courtesyTimeSig->setTrack(track);
             courtesyTimeSig->setGenerated(true);
-            courtesyTimeSig->setOwnershipParent(courtesySigSeg);
             courtesyTimeSig->setIsCourtesy(true);
             courtesySigSeg->add(courtesyTimeSig);
         }
@@ -1230,7 +1226,6 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
             courtesyKeySig = Factory::createKeySig(courtesySigSeg);
             courtesyKeySig->setTrack(track);
             courtesyKeySig->setGenerated(true);
-            courtesyKeySig->setOwnershipParent(courtesySigSeg);
             courtesyKeySig->setIsCourtesy(true);
             courtesySigSeg->add(courtesyKeySig);
         }
@@ -1344,7 +1339,6 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
             courtesyClef->setTrack(track);
             courtesyClef->setGenerated(true);
             courtesyClef->setSmall(true);
-            courtesyClef->setOwnershipParent(courtesyClefSeg);
             courtesyClef->setClefType(actualClef->clefType());
             courtesyClef->setIsCourtesy(true);
             courtesyClefSeg->add(courtesyClef);
@@ -1788,7 +1782,6 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
             clef = Factory::createClef(cSegment);
             clef->setTrack(track);
             clef->setGenerated(true);
-            clef->setOwnershipParent(cSegment);
             clef->setIsHeader(true);
             clef->setShowCourtesy(showCourtesy);
             cSegment->add(clef);
@@ -1858,7 +1851,6 @@ Segment* MeasureLayout::addHeaderKeySig(Measure* m, bool isFirstKeysig, const St
             keysig = Factory::createKeySig(kSegment);
             keysig->setTrack(track);
             keysig->setGenerated(true);
-            keysig->setOwnershipParent(kSegment);
             kSegment->add(keysig);
         }
         keysig->setKeySigEvent(keyIdx);
@@ -2082,7 +2074,6 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
                 bl = Factory::createBarLine(s);
                 bl->setTrack(track);
                 bl->setGenerated(true);
-                bl->setOwnershipParent(s);
                 bl->setBarLineType(BarLineType::NORMAL);
                 bl->setSpanStaff(true);
                 s->add(bl);

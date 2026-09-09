@@ -44,7 +44,7 @@ using namespace mu::engraving;
 //   Ambitus
 //---------------------------------------------------------
 
-Ambitus::Ambitus(Segment* parent)
+Ambitus::Ambitus(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::AMBITUS, parent, ElementFlag::ON_STAFF)
 {
     m_noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
@@ -59,8 +59,6 @@ Ambitus::Ambitus(Segment* parent)
 
     m_topAccidental = Factory::createAccidental(this, false);
     m_bottomAccidental = Factory::createAccidental(this, false);
-    m_topAccidental->setOwnershipParent(this);
-    m_bottomAccidental->setOwnershipParent(this);
 }
 
 Ambitus::Ambitus(const Ambitus& a)

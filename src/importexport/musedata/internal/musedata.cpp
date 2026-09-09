@@ -315,7 +315,7 @@ void MuseData::readNote(Part* part, QStringView s)
         }
     }
 
-    Chord* chord = Factory::createChord(score->dummy()->segment());
+    Chord* chord = Factory::createChord(score->dummy());
     chordRest = chord;
     chord->setTrack(gstaff * VOICES);
     chord->setStemDirection(dir);
@@ -499,7 +499,7 @@ void MuseData::readRest(Part* part, QStringView s)
 
     TDuration d;
     d.setVal(ticks.ticks());
-    Rest* rest = Factory::createRest(score->dummy()->segment(), d);
+    Rest* rest = Factory::createRest(score->dummy(), d);
     rest->setTicks(d.fraction());
     chordRest  = rest;
     rest->setTrack(gstaff * VOICES);
