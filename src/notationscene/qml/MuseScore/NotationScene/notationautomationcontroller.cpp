@@ -360,46 +360,40 @@ void NotationAutomationController::init()
     }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
-NotationAutomationController::PolylinesDataMap NotationAutomationController::createPolylinesForSystem(const System* system)
+void NotationAutomationController::buildAndAddPolylinesForSystem(const System* system)
 {
-    PolylinesDataMap map;
     IF_ASSERT_FAILED(system && m_linesParent && score()) {
-        return map;
+        return;
     }
 
     staff_idx_t staffIdx = system->firstVisibleStaff();
     while (staffIdx != muse::nidx) {
-        const PolylinesDataMap staffMap = createPolylinesForStaff(system, staffIdx);
-        map.insert(staffMap.begin(), staffMap.end());
+        buildAndAddPolylinesForStaff(system, staffIdx);
         staffIdx = system->nextVisibleStaff(staffIdx);
     }
-
-    return map;
 }
 
-NotationAutomationController::PolylinesDataMap NotationAutomationController::createPolylinesForStaff(const System* system,
-                                                                                                     staff_idx_t staffIdx)
+void NotationAutomationController::buildAndAddPolylinesForStaff(const System* system, staff_idx_t staffIdx)
 {
-    PolylinesDataMap map;
     IF_ASSERT_FAILED(system && m_linesParent && score()) {
-        return map;
+        return;
     }
 
     const Staff* staff = score()->staff(staffIdx);
     const SysStaff* sysStaff = system->staff(staffIdx);
     if (!staff || !sysStaff || !staff->isPrimaryStaff()) {
-        return map;
+        return;
     }
 
     const AutomationCurveKey curveKey = curveKeyFor(currentAutomationType(), staff);
     if (curveKey.isGlobal() && staffIdx != firstVisibleStaffIdx(score())) {
         // Score-scoped automation is only drawn on the score's first staff
-        return map;
+        return;
     }
 
     if (curveKey.trackId().has_value() && !staff->isTop()) {
         // Instrument-scoped automation is only drawn on the instrument's first staff
-        return map;
+        return;
     }
 
     const int systemStartTick = system->first()->tick().ticks();
@@ -417,7 +411,7 @@ NotationAutomationController::PolylinesDataMap NotationAutomationController::cre
     const QVector<PointData> pointsData = pointsDataInStaff(staff, staffCanvasRect, systemStartTick, systemEndTick);
 
     const PolylineKey key(system, staffIdx, systemStartTick); // TODO: As above - more complicated than simply the system start tick
-    map.emplace(key, PolylineData(polyline, pointsData));
+    m_polylinesDataMap.emplace(key, PolylineData(polyline, pointsData));
 
     //! NOTE: There can't be a 1-to-1 match between the number of points in the automation model and
     //! points on the polyline. A point with equal in/out values (i.e. a "BOTH" point) is represented
@@ -430,7 +424,7 @@ NotationAutomationController::PolylinesDataMap NotationAutomationController::cre
     }
     polyline->setPoints(pointsForPolyline);
 
-    applyPolylineStyle(polyline, key); // TODO: Now causes an assert because the map hasn't been prepared yet...
+    applyPolylineStyle(polyline, key);
     polyline->setVisible(false);
 
     // Points can't be dragged past the system's first/last segment
@@ -526,8 +520,6 @@ NotationAutomationController::PolylinesDataMap NotationAutomationController::cre
         }
         requestRemovePoint(pointsData.at(pointIdx), key);
     });
-
-    return map;
 }
 
 QVector<NotationAutomationController::PointData> NotationAutomationController::pointsDataInStaff(const mu::engraving::Staff* staff,
@@ -921,7 +913,7 @@ void NotationAutomationController::rebuildAllPolylines()
     }
 
     for (const System* system : score()->systems()) {
-        m_polylinesDataMap.merge(createPolylinesForSystem(system));
+        buildAndAddPolylinesForSystem(system);
     }
 
     updatePolylinesGeometry();
