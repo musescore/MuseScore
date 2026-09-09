@@ -33,6 +33,7 @@ static const std::string module_name("braille");
 static const Settings::Key BRAILLE_STATUS(module_name, "score/braille/status");
 static const Settings::Key BRAILLE_TABLE(module_name, "score/braille/table");
 static const Settings::Key BRAILLE_INTERVAL_DIRECTION(module_name, "score/braille/intervalDirection");
+static const Settings::Key BRAILLE_VOICE_ORDER(module_name, "score/braille/voiceOrder");
 
 void BrailleConfiguration::init()
 {
@@ -47,6 +48,10 @@ void BrailleConfiguration::init()
     settings()->setDefaultValue(BRAILLE_INTERVAL_DIRECTION, Val(BrailleIntervalDirection::Auto));
     settings()->valueChanged(BRAILLE_INTERVAL_DIRECTION).onReceive(this, [this](const Val&) {
         m_intervalDirectionChanged.notify();
+    });
+    settings()->setDefaultValue(BRAILLE_VOICE_ORDER, Val(BrailleVoiceOrder::Auto));
+    settings()->valueChanged(BRAILLE_VOICE_ORDER).onReceive(this, [this](const Val&) {
+        m_voiceOrderChanged.notify();
     });
 }
 
@@ -78,6 +83,21 @@ BrailleIntervalDirection BrailleConfiguration::intervalDirection() const
 void BrailleConfiguration::setIntervalDirection(const BrailleIntervalDirection direction)
 {
     settings()->setSharedValue(BRAILLE_INTERVAL_DIRECTION, Val(direction));
+}
+
+muse::async::Notification BrailleConfiguration::voiceOrderChanged() const
+{
+    return m_voiceOrderChanged;
+}
+
+BrailleVoiceOrder BrailleConfiguration::voiceOrder() const
+{
+    return settings()->value(BRAILLE_VOICE_ORDER).toEnum<BrailleVoiceOrder>();
+}
+
+void BrailleConfiguration::setVoiceOrder(const BrailleVoiceOrder order)
+{
+    settings()->setSharedValue(BRAILLE_VOICE_ORDER, Val(order));
 }
 
 muse::async::Notification BrailleConfiguration::brailleTableChanged() const

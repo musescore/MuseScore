@@ -59,7 +59,7 @@ muse::Ret BrailleWriter::write(notation::INotationPtr notation, muse::io::IODevi
     QBuffer buf(&qdata);
     buf.open(QIODevice::WriteOnly);
 
-    Ret ret = Braille(score).write(buf);
+    Ret ret = Braille(score, mu::braille::BrailleIntervalDirection::Auto, mu::braille::BrailleVoiceOrder::Auto).write(buf);
     if (ret) {
         ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
         destinationDevice.write(data);

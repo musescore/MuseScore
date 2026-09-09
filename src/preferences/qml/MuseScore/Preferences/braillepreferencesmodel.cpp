@@ -44,6 +44,10 @@ void BraillePreferencesModel::load()
         emit intervalDirectionChanged(intervalDirection());
     });
 
+    brailleConfiguration()->voiceOrderChanged().onNotify(this, [this]() {
+        emit voiceOrderChanged(voiceOrder());
+    });
+
     brailleConfiguration()->brailleTableChanged().onNotify(this, [this]() {
         emit brailleTableChanged(brailleTable());
     });
@@ -62,6 +66,11 @@ QString BraillePreferencesModel::brailleTable() const
 int BraillePreferencesModel::intervalDirection() const
 {
     return static_cast<int>(brailleConfiguration()->intervalDirection());
+}
+
+int BraillePreferencesModel::voiceOrder() const
+{
+    return static_cast<int>(brailleConfiguration()->voiceOrder());
 }
 
 QStringList BraillePreferencesModel::brailleTables() const
@@ -86,6 +95,27 @@ QVariantList BraillePreferencesModel::intervalDirections() const
             //: Braille chord interval direction: down (descending)
             { "text", muse::qtrc("preferences", "Down") },
             { "value", static_cast<int>(BrailleIntervalDirection::Down) },
+        },
+    };
+}
+
+QVariantList BraillePreferencesModel::voiceOrders() const
+{
+    return QVariantList {
+        QVariantMap {
+            //: Braille voice order: automatic (based on clef)
+            { "text", muse::qtrc("preferences", "Auto") },
+            { "value", static_cast<int>(BrailleVoiceOrder::Auto) },
+        },
+        QVariantMap {
+            //: Braille voice order: up (lowest voice first, then ascending)
+            { "text", muse::qtrc("preferences", "Up") },
+            { "value", static_cast<int>(BrailleVoiceOrder::Up) },
+        },
+        QVariantMap {
+            //: Braille voice order: down (highest voice first, then descending)
+            { "text", muse::qtrc("preferences", "Down") },
+            { "value", static_cast<int>(BrailleVoiceOrder::Down) },
         },
     };
 }
@@ -118,4 +148,14 @@ void BraillePreferencesModel::setIntervalDirection(int direction)
 
     brailleConfiguration()->setIntervalDirection(static_cast<BrailleIntervalDirection>(direction));
     emit intervalDirectionChanged(direction);
+}
+
+void BraillePreferencesModel::setVoiceOrder(int order)
+{
+    if (order == voiceOrder()) {
+        return;
+    }
+
+    brailleConfiguration()->setVoiceOrder(static_cast<BrailleVoiceOrder>(order));
+    emit voiceOrderChanged(order);
 }
