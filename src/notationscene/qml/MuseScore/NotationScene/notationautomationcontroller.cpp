@@ -360,16 +360,16 @@ void NotationAutomationController::init()
     }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
-NotationAutomationController::PolylinesMap NotationAutomationController::createPolylinesForSystem(const System* system)
+NotationAutomationController::PolylinesDataMap NotationAutomationController::createPolylinesForSystem(const System* system)
 {
-    PolylinesMap map;
+    PolylinesDataMap map;
     IF_ASSERT_FAILED(system && m_linesParent && score()) {
         return map;
     }
 
     staff_idx_t staffIdx = system->firstVisibleStaff();
     while (staffIdx != muse::nidx) {
-        const PolylinesMap staffMap = createPolylinesForStaff(system, staffIdx);
+        const PolylinesDataMap staffMap = createPolylinesForStaff(system, staffIdx);
         map.insert(staffMap.begin(), staffMap.end());
         staffIdx = system->nextVisibleStaff(staffIdx);
     }
@@ -377,9 +377,10 @@ NotationAutomationController::PolylinesMap NotationAutomationController::createP
     return map;
 }
 
-NotationAutomationController::PolylinesMap NotationAutomationController::createPolylinesForStaff(const System* system, staff_idx_t staffIdx)
+NotationAutomationController::PolylinesDataMap NotationAutomationController::createPolylinesForStaff(const System* system,
+                                                                                                     staff_idx_t staffIdx)
 {
-    PolylinesMap map;
+    PolylinesDataMap map;
     IF_ASSERT_FAILED(system && m_linesParent && score()) {
         return map;
     }
@@ -416,7 +417,7 @@ NotationAutomationController::PolylinesMap NotationAutomationController::createP
     const QVector<PointData> pointsData = pointsDataInStaff(staff, staffCanvasRect, systemStartTick, systemEndTick);
 
     const PolylineKey key(system, staffIdx, systemStartTick); // TODO: As above - more complicated than simply the system start tick
-    m_pointsDataByPolyline[key] = pointsData;
+    map.emplace(key, PolylineData(polyline, pointsData));
 
     //! NOTE: There can't be a 1-to-1 match between the number of points in the automation model and
     //! points on the polyline. A point with equal in/out values (i.e. a "BOTH" point) is represented
@@ -429,7 +430,7 @@ NotationAutomationController::PolylinesMap NotationAutomationController::createP
     }
     polyline->setPoints(pointsForPolyline);
 
-    applyPolylineStyle(polyline, key);
+    applyPolylineStyle(polyline, key); // TODO: Now causes an assert because the map hasn't been prepared yet...
     polyline->setVisible(false);
 
     // Points can't be dragged past the system's first/last segment
@@ -442,12 +443,17 @@ NotationAutomationController::PolylinesMap NotationAutomationController::createP
             return;
         }
 
-        const auto pointsDataIt = m_pointsDataByPolyline.find(key);
-        IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByPolyline.end() && pointIdx < pointsDataIt->second.size()) {
+        const auto mapIt = m_polylinesDataMap.find(key);
+        IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
             return;
         }
 
-        const PointData& oldPointData = pointsDataIt->second[pointIdx];
+        const QVector<PointData>& pointsData = mapIt->second.pointsData;
+        IF_ASSERT_FAILED(pointIdx < pointsData.size()) {
+            return;
+        }
+
+        const PointData& oldPointData = pointsData[pointIdx];
         const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, oldPointData.tick);
         const bool editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
         const qreal clampedX = editRestricted ? oldPointData.qPointF.x() : std::clamp(x, minX, maxX);
@@ -485,7 +491,13 @@ NotationAutomationController::PolylinesMap NotationAutomationController::createP
             return;
         }
 
-        QVector<PointData>& pointsData = m_pointsDataByPolyline[key];
+        const auto mapIt = m_polylinesDataMap.find(key);
+        IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
+            return;
+        }
+
+        QVector<PointData>& pointsData = mapIt->second.pointsData;
+
         int insertIdx = 0;
         while (insertIdx < pointsData.size() && pointsData.at(insertIdx).tick < *tick) {
             ++insertIdx;
@@ -503,15 +515,17 @@ NotationAutomationController::PolylinesMap NotationAutomationController::createP
         if (!completed) {
             return;
         }
-        const auto pointsDataIt = m_pointsDataByPolyline.find(key);
-        IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByPolyline.end() && pointIdx >= 0 && pointIdx < pointsDataIt->second.size()) {
+        const auto mapIt = m_polylinesDataMap.find(key);
+        IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
             return;
         }
-        requestRemovePoint(pointsDataIt->second.at(pointIdx), key);
-    });
 
-    // TODO: As above (there will be more than one polyline)...
-    map.emplace(key, polyline);
+        const QVector<PointData>& pointsData = mapIt->second.pointsData;
+        IF_ASSERT_FAILED(pointIdx >= 0 && pointIdx < pointsData.size()) {
+            return;
+        }
+        requestRemovePoint(pointsData.at(pointIdx), key);
+    });
 
     return map;
 }
@@ -646,12 +660,8 @@ void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline, c
 
 void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* polyline, const PolylineKey& key) const
 {
-    IF_ASSERT_FAILED(polyline) {
-        return;
-    }
-
-    const auto pointsDataIt = m_pointsDataByPolyline.find(key);
-    IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByPolyline.end()) {
+    const auto mapIt = m_polylinesDataMap.find(key);
+    IF_ASSERT_FAILED(polyline && mapIt != m_polylinesDataMap.end()) {
         return;
     }
 
@@ -664,7 +674,7 @@ void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* po
     QColor editedColor = allVoicesColor;
     editedColor.setAlpha(POLYLINE_EDITED_AREA_ALPHA);
 
-    const QVector<PointData>& pointsData = pointsDataIt->second;
+    const QVector<PointData>& pointsData = mapIt->second.pointsData;
 
     QVector<QColor> colorsUnderLine;
     colorsUnderLine.reserve(pointsData.size() + 1); // +1 for the "trailing color" (see below)
@@ -719,7 +729,8 @@ void NotationAutomationController::updatePolylinesGeometry()
 {
     const bool visible = automation() && automation()->isAutomationModeEnabled();
 
-    for (const auto& [key, polyline] : m_polylinesMap) {
+    for (const auto& [key, data] : m_polylinesDataMap) {
+        PolylinePlot* polyline = data.polyline;
         IF_ASSERT_FAILED(key.isValid() && polyline) {
             continue;
         }
@@ -750,7 +761,8 @@ void NotationAutomationController::updatePolylinesGeometry()
 
 void NotationAutomationController::updatePolylinesColors()
 {
-    for (const auto& [key, polyline] : m_polylinesMap) {
+    for (const auto& [key, data] : m_polylinesDataMap) {
+        PolylinePlot* polyline = data.polyline;
         IF_ASSERT_FAILED(key.isValid() && polyline) {
             continue;
         }
@@ -867,7 +879,7 @@ void NotationAutomationController::processPendingChanges()
 
     // No automation-data change and nothing structural - just layout drift
     // (e.g. measure widths shifted); refresh point positions using the batch's own range
-    for (const auto& [key, polyline] : m_polylinesMap) {
+    for (const auto& [key, data] : m_polylinesDataMap) {
         IF_ASSERT_FAILED(key.isValid()) {
             continue;
         }
@@ -898,11 +910,10 @@ void NotationAutomationController::processPendingChanges()
 void NotationAutomationController::rebuildAllPolylines()
 {
     // TODO: More efficient if we don't clear/recreate the polylines every time...
-    for (const auto& [staff, polyline] : m_polylinesMap) {
-        delete polyline;
+    for (const auto& [key, data] : m_polylinesDataMap) {
+        delete data.polyline;
     }
-    m_polylinesMap.clear();
-    m_pointsDataByPolyline.clear();
+    m_polylinesDataMap.clear();
 
     if (!score()) {
         // Happens on close...
@@ -910,7 +921,7 @@ void NotationAutomationController::rebuildAllPolylines()
     }
 
     for (const System* system : score()->systems()) {
-        m_polylinesMap.merge(createPolylinesForSystem(system));
+        m_polylinesDataMap.merge(createPolylinesForSystem(system));
     }
 
     updatePolylinesGeometry();
@@ -918,12 +929,12 @@ void NotationAutomationController::rebuildAllPolylines()
 
 void NotationAutomationController::updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo)
 {
-    auto mapIt = m_polylinesMap.find(key);
-    IF_ASSERT_FAILED(key.isValid() && mapIt != m_polylinesMap.end()) {
+    auto mapIt = m_polylinesDataMap.find(key);
+    IF_ASSERT_FAILED(key.isValid() && mapIt != m_polylinesDataMap.end()) {
         return;
     }
 
-    PolylinePlot* polyline = mapIt->second;
+    PolylinePlot* polyline = mapIt->second.polyline;
     IF_ASSERT_FAILED(polyline) {
         return;
     }
@@ -937,7 +948,7 @@ void NotationAutomationController::updateStaffPointsInRange(const PolylineKey& k
     const muse::RectF staffCanvasRect = sysStaff->bbox().translated(key.system->canvasPos());
     const QVector<PointData> newRangeData = pointsDataInStaff(staff, staffCanvasRect, tickFrom, tickTo);
 
-    QVector<PointData>& pointsData = m_pointsDataByPolyline[key];
+    QVector<PointData>& pointsData = mapIt->second.pointsData;
 
     int firstIdx = 0;
     while (firstIdx < pointsData.size() && pointsData.at(firstIdx).tick < tickFrom) {
@@ -1011,7 +1022,7 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
     // Only touch the staves that were actually affected and whose system overlaps the changed tick
     // range, and only recompute points within that range, rather than the whole score or even the
     // whole staff
-    for (const auto& [key, polyline] : m_polylinesMap) {
+    for (const auto& [key, data] : m_polylinesDataMap) {
         IF_ASSERT_FAILED(key.isValid()) {
             continue;
         }

@@ -24,7 +24,6 @@
 
 #include <map>
 #include <optional>
-#include <unordered_set>
 #include <vector>
 #include <QPointF>
 #include <QQuickItem>
@@ -103,8 +102,6 @@ private:
         }
     };
 
-    using PolylinesMap = std::map<const PolylineKey, muse::uicomponents::PolylinePlot*>;
-
     struct PointData {
         enum class PointType : unsigned char {
             UNKNOWN,
@@ -118,7 +115,12 @@ private:
         PointType pointType = PointType::UNKNOWN;
     };
 
-    using PointsDataMap = std::map<PolylineKey, QVector<PointData> >;
+    struct PolylineData {
+        muse::uicomponents::PolylinePlot* polyline = nullptr;
+        QVector<PointData> pointsData;
+    };
+
+    using PolylinesDataMap = std::map<const PolylineKey, PolylineData>;
 
     struct TickStaffRange {
         int tickFrom = -1;
@@ -133,8 +135,8 @@ private:
         std::optional<TickStaffRange> boundary;
     };
 
-    PolylinesMap createPolylinesForSystem(const System* system);
-    PolylinesMap createPolylinesForStaff(const System* system, staff_idx_t staffIdx);
+    PolylinesDataMap createPolylinesForSystem(const System* system);
+    PolylinesDataMap createPolylinesForStaff(const System* system, staff_idx_t staffIdx);
     QVector<PointData> pointsDataInStaff(const mu::engraving::Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick,
                                          int endTick) const;
 
@@ -173,8 +175,7 @@ private:
     mu::engraving::Score* score() const;
 
     QQuickItem* m_linesParent = nullptr;
-    PolylinesMap m_polylinesMap;
-    PointsDataMap m_pointsDataByPolyline;
+    PolylinesDataMap m_polylinesDataMap;
     muse::draw::Transform m_viewMatrix;
     mu::engraving::AutomationChanges m_pendingChanges;
     PendingScoreState m_pendingScoreState;
