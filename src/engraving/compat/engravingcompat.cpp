@@ -37,6 +37,8 @@
 #include "dom/staff.h"
 #include "dom/system.h"
 #include "editing/editchord.h"
+#include "editing/reset.h"
+#include "editing/transaction/transaction.h"
 #include "rw/compat/compatutils.h"
 
 using namespace mu::engraving;
@@ -343,6 +345,14 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     int mscVersion = score->mscVersion();
 
+    if (score->mscVersion() < 300) {
+        needRelayout |= resetAllElementsPositions(score);
+    }
+
+    if (score->mscVersion() <= 206) {
+        needRelayout |= resetAllCrossBeams(score);
+    }
+
     if (mscVersion < 470) {
         needRelayout |= setLyricLineVisibility(score);
     }
@@ -421,5 +431,29 @@ bool EngravingCompat::setLyricLineVisibility(MasterScore* masterScore)
     }
 
     return needRelayout;
+}
+
+bool EngravingCompat::resetAllElementsPositions(MasterScore* score)
+{
+    for (Score* score : score->scoreList()) {
+        Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+        Reset::resetAllPositions(tx, score);
+    }
+    return true;
+}
+
+static void resetBeamOffset(EngravingItem* e)
+{
+    if (e->isBeam() && toBeam(e)->fullCross()) {
+        e->reset();
+    }
+}
+
+bool EngravingCompat::resetAllCrossBeams(MasterScore* score)
+{
+    for (Score* score : score->scoreList()) {
+        score->scanElements(resetBeamOffset);
+    }
+    return true;
 }
 } // namespace mu::engraving::compat

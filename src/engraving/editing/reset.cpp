@@ -297,5 +297,5 @@ void Reset::resetAllPositions(Transaction&, Score* score)
 {
     TRACEFUNC;
 
-    score->resetAutoplace();
+    score->scanElements(resetElementPosition);
 }
