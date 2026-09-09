@@ -67,37 +67,43 @@ public:
 private:
     // Necessary since SysStaff doesn't hold a reference to its system, which is needed
     // for calculating a SysStaff's relative position...
-    struct SysStaffKey {
+    struct PolylineKey {
         const System* system = nullptr;
         const staff_idx_t staffIdx = muse::nidx;
+        const int startTick = -1;
 
         bool isValid() const
         {
-            return system && !system->measures().empty() && staffIdx != muse::nidx;
+            return system && !system->measures().empty() && staffIdx != muse::nidx && startTick != -1;
         }
 
-        bool operator==(const SysStaffKey& k) const
+        bool operator==(const PolylineKey& k) const
         {
             IF_ASSERT_FAILED(isValid() && k.isValid()) {
                 return false;
             }
-            return system == k.system && staffIdx == k.staffIdx;
+            return system == k.system && staffIdx == k.staffIdx && startTick == k.startTick;
         }
 
-        bool operator<(const SysStaffKey& k) const
+        bool operator<(const PolylineKey& k) const
         {
             IF_ASSERT_FAILED(isValid() && k.isValid()) {
                 return false;
             }
-            if (system == k.system) {
+            if (system != k.system) {
+                // On different systems...
+                return system->first()->index() < k.system->first()->index();
+            }
+            if (staffIdx != k.staffIdx) {
+                // On different staves...
                 return staffIdx < k.staffIdx;
             }
-            return system->first()->index() < k.system->first()->index();
+            // On same staff...
+            return startTick < k.startTick;
         }
     };
 
-    using PolylinesSet = std::unordered_set<muse::uicomponents::PolylinePlot*>;
-    using SysStaffToPolylinesMap = std::map<const SysStaffKey, const PolylinesSet>;
+    using PolylinesMap = std::map<const PolylineKey, muse::uicomponents::PolylinePlot*>;
 
     struct PointData {
         enum class PointType : unsigned char {
@@ -112,7 +118,7 @@ private:
         PointType pointType = PointType::UNKNOWN;
     };
 
-    using PointsDataMap = std::map<SysStaffKey, QVector<PointData> >;
+    using PointsDataMap = std::map<PolylineKey, QVector<PointData> >;
 
     struct TickStaffRange {
         int tickFrom = -1;
@@ -127,17 +133,17 @@ private:
         std::optional<TickStaffRange> boundary;
     };
 
-    SysStaffToPolylinesMap createPolylinesForSystem(const System* system);
-    muse::uicomponents::PolylinePlot* createPolylineForStaff(const System* system, staff_idx_t staffIdx);
+    PolylinesMap createPolylinesForSystem(const System* system);
+    PolylinesMap createPolylinesForStaff(const System* system, staff_idx_t staffIdx);
     QVector<PointData> pointsDataInStaff(const mu::engraving::Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick,
                                          int endTick) const;
 
     mu::engraving::AutomationType currentAutomationType() const;
 
-    void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
-    void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
+    void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline, const PolylineKey& key) const;
+    void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline, const PolylineKey& key) const;
     // TODO: apply within a range? (for efficiency)
-    void applyPolylineColorsUnderLine(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
+    void applyPolylineColorsUnderLine(muse::uicomponents::PolylinePlot* polyline, const PolylineKey& key) const;
 
     QColor inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const;
 
@@ -146,7 +152,7 @@ private:
     void onCurrentNotationChanged();
     void rebuildAllPolylines();
 
-    void updateStaffPointsInRange(const SysStaffKey& key, int tickFrom, int tickTo);
+    void updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo);
 
     void mergePendingChanges(const mu::engraving::AutomationChanges& changes);
     void mergePendingScoreChanges(const mu::engraving::ScoreChanges& changes);
@@ -154,12 +160,12 @@ private:
     void processPendingChanges();
     void applyAutomationChanges(const mu::engraving::AutomationChanges& changes);
 
-    bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
-    bool requestAddPoint(const SysStaffKey& key, qreal x, qreal y);
-    bool requestRemovePoint(const PointData& pointData, const SysStaffKey& key);
+    bool requestEditPoint(const PointData& oldPointData, const PolylineKey& key, qreal x, qreal y);
+    bool requestAddPoint(const PolylineKey& key, qreal x, qreal y);
+    bool requestRemovePoint(const PointData& pointData, const PolylineKey& key);
     void editAutomationPoints(const mu::engraving::AutomationCurveKey& key, mu::engraving::AutomationPointEdits& edits);
 
-    const mu::engraving::AutomationPoint* automationPointAt(const SysStaffKey& key, int tick) const;
+    const mu::engraving::AutomationPoint* automationPointAt(const PolylineKey& key, int tick) const;
 
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
@@ -167,8 +173,8 @@ private:
     mu::engraving::Score* score() const;
 
     QQuickItem* m_linesParent = nullptr;
-    SysStaffToPolylinesMap m_stavesToLinesMap;
-    PointsDataMap m_pointsDataByStaff;
+    PolylinesMap m_polylinesMap;
+    PointsDataMap m_pointsDataByPolyline;
     muse::draw::Transform m_viewMatrix;
     mu::engraving::AutomationChanges m_pendingChanges;
     PendingScoreState m_pendingScoreState;
