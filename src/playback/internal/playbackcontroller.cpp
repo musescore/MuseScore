@@ -1325,18 +1325,28 @@ ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& in
                                                      bool rebuildVolume, bool rebuildPan)
 {
     ControlParams control = outParams.control();
+
+    const INotationAutomationPtr automation = m_masterNotation ? m_masterNotation->automation() : nullptr;
+    const AutomationDataConstPtr automationData = automation ? automation->automationData() : nullptr;
+
+    //! NOTE Only trust the cached automated control params while an automation curve is actually
+    //! driving this track; otherwise a stale cache entry (e.g. seeded at load time) would keep
+    //! overriding manual volume/pan changes made in the Mixer whenever this is called with
+    //! rebuildVolume/rebuildPan == false (e.g. on solo/mute toggles).
     const auto it = m_automatedControlParamsCache.find(instrumentTrackId);
-    if (it != m_automatedControlParamsCache.end()) {
-        control.volume = it->second.volume;
-        control.balance = it->second.balance;
+    if (it != m_automatedControlParamsCache.end() && automationData && instrumentTrackId.isValid()) {
+        if (!automationData->curve(AutomationCurveKey::instrument(AutomationType::Volume, instrumentTrackId)).empty()) {
+            control.volume = it->second.volume;
+        }
+        if (!automationData->curve(AutomationCurveKey::instrument(AutomationType::Pan, instrumentTrackId)).empty()) {
+            control.balance = it->second.balance;
+        }
     }
 
     if (!rebuildVolume && !rebuildPan) {
         return control;
     }
 
-    const INotationAutomationPtr automation = m_masterNotation ? m_masterNotation->automation() : nullptr;
-    const AutomationDataConstPtr automationData = automation ? automation->automationData() : nullptr;
     if (!automationData || !instrumentTrackId.isValid()) {
         m_automatedControlParamsCache.erase(instrumentTrackId);
         return outParams.control();

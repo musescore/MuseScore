@@ -272,6 +272,11 @@ void MixerChannelItem::loadInputParams(const AudioInputParams& newParams)
 
 void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
 {
+    //! NOTE Deliberately not touching solo/muted/forceMute here: those are owned by
+    //! INotationSoloMuteState (or, for aux tracks, IProjectAudioSettings::auxSoloMuteState)
+    //! and by PlaybackController's live force-mute computation, and are always default-false
+    //! on an AudioOutputParams fetched from IProjectAudioSettings. Applying them here would
+    //! clobber the solo/mute state already loaded via loadSoloMuteState().
     if (!muse::RealIsEqual(m_outParams.volume, newParams.volume)) {
         m_outParams.volume = newParams.volume;
         if (!m_hasVolumeAutomation) {
@@ -284,21 +289,6 @@ void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
         if (!m_hasBalanceAutomation) {
             setDisplayedBalance(m_outParams.balance.raw() * BALANCE_SCALING_FACTOR);
         }
-    }
-
-    if (m_outParams.solo != newParams.solo) {
-        m_outParams.solo = newParams.solo;
-        emit soloChanged();
-    }
-
-    if (m_outParams.muted != newParams.muted) {
-        m_outParams.muted = newParams.muted;
-        emit mutedChanged();
-    }
-
-    if (m_outParams.forceMute != newParams.forceMute) {
-        m_outParams.forceMute = newParams.forceMute;
-        emit forceMuteChanged();
     }
 
     loadOutputResourceItems(newParams.fxChain);
