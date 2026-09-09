@@ -75,6 +75,53 @@ void ImportPreferencesModel::load()
     musicXmlConfiguration()->needAskAboutApplyingNewStyleChanged().onReceive(this, [this](bool val) {
         emit needAskAboutApplyingNewStyleChanged(val);
     });
+
+    encoreConfiguration()->importPageLayoutChanged().onReceive(this, [this](bool val) {
+        emit encoreImportPageLayoutChanged(val);
+    });
+
+    encoreConfiguration()->importPageBreaksChanged().onReceive(this, [this](bool val) {
+        emit encoreImportPageBreaksChanged(val);
+    });
+
+    encoreConfiguration()->importSystemLocksChanged().onReceive(this, [this](bool val) {
+        emit encoreImportSystemLocksChanged(val);
+    });
+
+    encoreConfiguration()->importStaffSizeChanged().onReceive(this, [this](bool val) {
+        emit encoreImportStaffSizeChanged(val);
+    });
+
+    encoreConfiguration()->importTempoTextSemanticChanged().onReceive(this, [this](bool val) {
+        emit encoreImportTempoTextSemanticChanged(val);
+    });
+
+    encoreConfiguration()->importUnsupportedArticulationsAsTextChanged().onReceive(this, [this](bool val) {
+        emit encoreImportUnsupportedArticulationsAsTextChanged(val);
+    });
+
+    encoreConfiguration()->firstMeasureIsPickupChanged().onReceive(this, [this](bool val) {
+        emit encoreFirstMeasureIsPickupChanged(val);
+    });
+
+    encoreConfiguration()->mergeVoicesChanged().onReceive(this, [this](bool val) {
+        emit encoreMergeVoicesChanged(val);
+    });
+
+    encoreConfiguration()->instrumentSearchModeChanged().onReceive(this, [this](iex::enc::InstrumentSearchMode val) {
+        emit encoreInstrumentSearchModeChanged(static_cast<int>(val));
+    });
+    encoreConfiguration()->tablatureImportModeChanged().onReceive(this, [this](iex::enc::TablatureImportMode val) {
+        emit encoreTablatureImportModeChanged(static_cast<int>(val));
+    });
+
+    encoreConfiguration()->underfillMeasureStrategyChanged().onReceive(this, [this](iex::enc::UnderfillStrategy val) {
+        emit encoreUnderfillStrategyChanged(static_cast<int>(val));
+    });
+
+    encoreConfiguration()->overfillMeasureStrategyChanged().onReceive(this, [this](iex::enc::OverfillStrategy val) {
+        emit encoreOverfillStrategyChanged(static_cast<int>(val));
+    });
 }
 
 QVariantList ImportPreferencesModel::charsets() const
@@ -277,4 +324,224 @@ void ImportPreferencesModel::setMnxRequireExactSchemaValidation(bool value)
 
     mnxConfiguration()->setMnxRequireExactSchemaValidation(value);
     emit mnxRequireExactSchemaValidationChanged(value);
+}
+
+QVariantList ImportPreferencesModel::encoreInstrumentSearchModeModel() const
+{
+    return {
+        QVariantMap { { "title", muse::qtrc("preferences", "Try Name first, then MIDI") },
+            { "value", static_cast<int>(iex::enc::InstrumentSearchMode::NameAndMidi) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Use MIDI program only") },
+            { "value", static_cast<int>(iex::enc::InstrumentSearchMode::MidiOnly) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Set Grand Piano for all staves") },
+            { "value", static_cast<int>(iex::enc::InstrumentSearchMode::Piano) } },
+    };
+}
+
+QVariantList ImportPreferencesModel::encoreUnderfillStrategyModel() const
+{
+    QVariantList result = {
+        QVariantMap { { "title", muse::qtrc("preferences", "Reduce measure time (irregular)") },
+            { "value", static_cast<int>(iex::enc::UnderfillStrategy::IrregularMeasure) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Fill with rests") },
+            { "value", static_cast<int>(iex::enc::UnderfillStrategy::VisibleRests) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Fill with invisible rests") },
+            { "value", static_cast<int>(iex::enc::UnderfillStrategy::InvisibleRests) } }
+    };
+
+    return result;
+}
+
+QVariantList ImportPreferencesModel::encoreOverfillStrategyModel() const
+{
+    QVariantList result = {
+        QVariantMap { { "title", muse::qtrc("preferences", "Enlarge measure time (irregular)") },
+            { "value", static_cast<int>(iex::enc::OverfillStrategy::IrregularMeasure) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Remove last notes") },
+            { "value", static_cast<int>(iex::enc::OverfillStrategy::Truncate) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Stretch last notes") },
+            { "value", static_cast<int>(iex::enc::OverfillStrategy::StretchLastNote) } }
+    };
+
+    return result;
+}
+
+QVariantList ImportPreferencesModel::encoreTablatureImportModeModel() const
+{
+    return {
+        QVariantMap { { "title", muse::qtrc("preferences", "Link tablature to its notation staff") },
+            { "value", static_cast<int>(iex::enc::TablatureImportMode::Linked) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Keep tablature as a separate staff") },
+            { "value", static_cast<int>(iex::enc::TablatureImportMode::Separate) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Ignore tablature staves") },
+            { "value", static_cast<int>(iex::enc::TablatureImportMode::Ignore) } },
+    };
+}
+
+bool ImportPreferencesModel::encoreImportPageLayout() const
+{
+    return encoreConfiguration()->importPageLayout();
+}
+
+void ImportPreferencesModel::setEncoreImportPageLayout(bool value)
+{
+    if (value == encoreImportPageLayout()) {
+        return;
+    }
+
+    encoreConfiguration()->setImportPageLayout(value);
+}
+
+bool ImportPreferencesModel::encoreImportPageBreaks() const
+{
+    return encoreConfiguration()->importPageBreaks();
+}
+
+void ImportPreferencesModel::setEncoreImportPageBreaks(bool value)
+{
+    if (value == encoreImportPageBreaks()) {
+        return;
+    }
+
+    encoreConfiguration()->setImportPageBreaks(value);
+}
+
+bool ImportPreferencesModel::encoreImportSystemLocks() const
+{
+    return encoreConfiguration()->importSystemLocks();
+}
+
+void ImportPreferencesModel::setEncoreImportSystemLocks(bool value)
+{
+    if (value == encoreImportSystemLocks()) {
+        return;
+    }
+
+    encoreConfiguration()->setImportSystemLocks(value);
+}
+
+bool ImportPreferencesModel::encoreImportStaffSize() const
+{
+    return encoreConfiguration()->importStaffSize();
+}
+
+void ImportPreferencesModel::setEncoreImportStaffSize(bool value)
+{
+    if (value == encoreImportStaffSize()) {
+        return;
+    }
+
+    encoreConfiguration()->setImportStaffSize(value);
+}
+
+bool ImportPreferencesModel::encoreImportTempoTextSemantic() const
+{
+    return encoreConfiguration()->importTempoTextSemantic();
+}
+
+void ImportPreferencesModel::setEncoreImportTempoTextSemantic(bool value)
+{
+    if (value == encoreImportTempoTextSemantic()) {
+        return;
+    }
+
+    encoreConfiguration()->setImportTempoTextSemantic(value);
+}
+
+bool ImportPreferencesModel::encoreImportUnsupportedArticulationsAsText() const
+{
+    return encoreConfiguration()->importUnsupportedArticulationsAsText();
+}
+
+void ImportPreferencesModel::setEncoreImportUnsupportedArticulationsAsText(bool value)
+{
+    if (value == encoreImportUnsupportedArticulationsAsText()) {
+        return;
+    }
+
+    encoreConfiguration()->setImportUnsupportedArticulationsAsText(value);
+}
+
+int ImportPreferencesModel::encoreInstrumentSearchMode() const
+{
+    return static_cast<int>(encoreConfiguration()->instrumentSearchMode());
+}
+
+void ImportPreferencesModel::setEncoreInstrumentSearchMode(int value)
+{
+    if (value == encoreInstrumentSearchMode()) {
+        return;
+    }
+
+    encoreConfiguration()->setInstrumentSearchMode(static_cast<iex::enc::InstrumentSearchMode>(value));
+}
+
+int ImportPreferencesModel::encoreTablatureImportMode() const
+{
+    return static_cast<int>(encoreConfiguration()->tablatureImportMode());
+}
+
+void ImportPreferencesModel::setEncoreTablatureImportMode(int value)
+{
+    if (value == encoreTablatureImportMode()) {
+        return;
+    }
+
+    encoreConfiguration()->setTablatureImportMode(static_cast<iex::enc::TablatureImportMode>(value));
+}
+
+int ImportPreferencesModel::encoreUnderfillStrategy() const
+{
+    return static_cast<int>(encoreConfiguration()->underfillMeasureStrategy());
+}
+
+void ImportPreferencesModel::setEncoreUnderfillStrategy(int value)
+{
+    if (value == encoreUnderfillStrategy()) {
+        return;
+    }
+
+    encoreConfiguration()->setUnderfillMeasureStrategy(static_cast<iex::enc::UnderfillStrategy>(value));
+}
+
+int ImportPreferencesModel::encoreOverfillStrategy() const
+{
+    return static_cast<int>(encoreConfiguration()->overfillMeasureStrategy());
+}
+
+void ImportPreferencesModel::setEncoreOverfillStrategy(int value)
+{
+    if (value == encoreOverfillStrategy()) {
+        return;
+    }
+
+    encoreConfiguration()->setOverfillMeasureStrategy(static_cast<iex::enc::OverfillStrategy>(value));
+}
+
+bool ImportPreferencesModel::encoreFirstMeasureIsPickup() const
+{
+    return encoreConfiguration()->firstMeasureIsPickup();
+}
+
+void ImportPreferencesModel::setEncoreFirstMeasureIsPickup(bool value)
+{
+    if (value == encoreFirstMeasureIsPickup()) {
+        return;
+    }
+
+    encoreConfiguration()->setFirstMeasureIsPickup(value);
+}
+
+bool ImportPreferencesModel::encoreMergeVoices() const
+{
+    return encoreConfiguration()->mergeVoices();
+}
+
+void ImportPreferencesModel::setEncoreMergeVoices(bool value)
+{
+    if (value == encoreMergeVoices()) {
+        return;
+    }
+
+    encoreConfiguration()->setMergeVoices(value);
 }
