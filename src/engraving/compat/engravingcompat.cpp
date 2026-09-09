@@ -43,6 +43,8 @@
 #include "dom/tapping.h"
 #include "editing/editchord.h"
 #include "rendering/iscorerenderer.h"
+#include "editing/reset.h"
+#include "editing/transaction/transaction.h"
 #include "rw/compat/compatutils.h"
 #include "types/types.h"
 
@@ -355,6 +357,14 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
     bool needRelayout = false;
 
     int mscVersion = score->mscVersion();
+
+    if (score->mscVersion() < 300) {
+        needRelayout |= resetAllElementsPositions(score);
+    }
+
+    if (score->mscVersion() <= 206) {
+        needRelayout |= resetAllCrossBeams(score);
+    }
 
     if (mscVersion < 470) {
         needRelayout |= setLyricLineVisibility(score);
@@ -714,5 +724,29 @@ void AlignmentMigration500::migrateHopoLetterAlignment(MasterScore* masterScore)
             }
         }
     }
+}
+
+bool EngravingCompat::resetAllElementsPositions(MasterScore* score)
+{
+    for (Score* score : score->scoreList()) {
+        Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+        Reset::resetAllPositions(tx, score);
+    }
+    return true;
+}
+
+static void resetBeamOffset(EngravingItem* e)
+{
+    if (e->isBeam() && toBeam(e)->fullCross()) {
+        e->reset();
+    }
+}
+
+bool EngravingCompat::resetAllCrossBeams(MasterScore* score)
+{
+    for (Score* score : score->scoreList()) {
+        score->scanElements(resetBeamOffset);
+    }
+    return true;
 }
 } // namespace mu::engraving::compat

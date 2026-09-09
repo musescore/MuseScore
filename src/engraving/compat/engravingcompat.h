@@ -52,6 +52,9 @@ private:
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
     static bool setLyricLineVisibility(MasterScore* masterScore);
+
+    static bool resetAllElementsPositions(MasterScore* score);
+    static bool resetAllCrossBeams(MasterScore* score);
 };
 
 class AlignmentMigration500
