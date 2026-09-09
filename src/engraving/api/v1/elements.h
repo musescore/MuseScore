@@ -1428,6 +1428,11 @@ class Note : public EngravingItem
     /// The tuning of this note, in cents.
     API_PROPERTY_T(qreal,  tuning,        TUNING)
 
+    /// The start time offset for playback, in ticks.
+    API_PROPERTY_T(int, playbackStartOffset, PLAYBACK_START_OFFSET)
+    /// The duration offset for playback, in ticks.
+    API_PROPERTY_T(int, playbackDurationOffset, PLAYBACK_DURATION_OFFSET)
+
     /// For notes on non-tab staves: the line this note is on.
     API_PROPERTY_T(int,    line,          LINE)
     /// For notes on non-tab staves: Whether this note is

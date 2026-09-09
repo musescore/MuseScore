@@ -42,7 +42,7 @@ ExpandableBlank {
     width: parent.width
 
     contentItemComponent: Column {
-        property int navigationRowEnd: tuningsSection.navigationRowEnd
+        property int navigationRowEnd: playbackDurationOffsetSection.navigationRowEnd
 
         spacing: 12
 
@@ -84,6 +84,49 @@ ExpandableBlank {
 
                 titleText: qsTrc("propertiespanel", "Tuning (cents)")
                 propertyItem: root.model ? root.model.tuning : null
+            }
+        }
+
+        Item {
+            height: childrenRect.height
+            width: root.width
+
+            SpinBoxPropertyView {
+                id: playbackStartOffsetSection
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 2
+
+                navigationName: "PlaybackStartOffset"
+                navigationPanel: root.navigation.panel
+                navigationRowStart: tuningsSection.navigationRowEnd + 1
+
+                titleText: qsTrc("propertiespanel", "Start offset")
+                propertyItem: root.model ? root.model.playbackStartOffset : null
+
+                step: 1
+                decimals: 0
+                maxValue: 1920
+                minValue: -1920
+            }
+
+            SpinBoxPropertyView {
+                id: playbackDurationOffsetSection
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 2
+                anchors.right: parent.right
+
+                navigationName: "PlaybackDurationOffset"
+                navigationPanel: root.navigation.panel
+                navigationRowStart: playbackStartOffsetSection.navigationRowEnd + 1
+
+                titleText: qsTrc("propertiespanel", "Duration offset")
+                propertyItem: root.model ? root.model.playbackDurationOffset : null
+
+                step: 1
+                decimals: 0
+                maxValue: 1920
+                minValue: -1920
             }
         }
     }
