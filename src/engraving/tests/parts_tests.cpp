@@ -1391,3 +1391,27 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+TEST_F(Engraving_PartsTests, crossMeasureUpwardGlissExcerpt)
+{
+    MasterScore* master = ScoreRW::readScore(PARTS_DATA_DIR + u"cross-measure-gliss.mscx");
+    ASSERT_TRUE(master);
+    const Note* original = toChord(master->firstMeasure()->firstChordRest(4))->upNote();
+    ASSERT_EQ(original->pitch(), 48);
+    ASSERT_EQ(original->spannerFor().size(), 1u);
+    ASSERT_EQ(toNote(original->spannerFor().front()->endElement())->pitch(), 84);
+    ASSERT_EQ(original->spannerFor().front()->endElement()->findMeasure(), master->firstMeasure()->nextMeasure());
+    ASSERT_EQ(original->spannerFor().front()->endElement()->track(), 0u);
+    Score* part = TestUtils::createPart(master, 0);
+    ASSERT_TRUE(part);
+    part->doLayout();
+    const Note* cloned = toChord(part->firstMeasure()->firstChordRest(4))->upNote();
+    ASSERT_EQ(cloned->spannerFor().size(), 1u);
+    EXPECT_EQ(cloned->spannerFor().front()->endElement()->track(), 0u);
+    EXPECT_EQ(cloned->pitch(), 48);
+    EXPECT_EQ(cloned->spannerFor().front()->startElement(), cloned);
+    EXPECT_EQ(cloned->spannerFor().front()->endElement()->score(), part);
+    EXPECT_EQ(cloned->spannerFor().front()->endElement()->findMeasure(), part->firstMeasure()->nextMeasure());
+    EXPECT_EQ(toNote(cloned->spannerFor().front()->endElement())->pitch(), 84);
+    delete master;
+}
