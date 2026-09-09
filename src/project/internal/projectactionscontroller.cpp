@@ -89,8 +89,6 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-share-audio", this, &ProjectActionsController::shareAudio);
 
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
-    dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
-    dispatcher()->reg(this, "file-import-audio-to-score", this, &ProjectActionsController::importAudioToScore);
     dispatcher()->reg(this, "file-convert-to-score", this, &ProjectActionsController::convertFileToScore);
 
     dispatcher()->reg(this, "print", this, &ProjectActionsController::printScore);
@@ -133,8 +131,6 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
         static const std::unordered_set<ActionCode> DONT_REQUIRE_OPEN_PROJECT {
             "file-new",
             "file-open",
-            "file-import-pdf",
-            "file-import-audio-to-score",
             "file-convert-to-score",
             "continue-last-session",
             "clear-recent",
@@ -1848,16 +1844,6 @@ void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const m
     }
 
     interactive()->error(title, body);
-}
-
-void ProjectActionsController::importPdf()
-{
-    interactive()->openUrl("https://musescore.com/import");
-}
-
-void ProjectActionsController::importAudioToScore()
-{
-    interactive()->openUrl("https://musescore.com/upload?format=audio2score");
 }
 
 void ProjectActionsController::convertFileToScore(const ActionData& args)

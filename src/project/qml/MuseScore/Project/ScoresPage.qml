@@ -351,6 +351,7 @@ FocusScope {
                 navigation.panel: navBottomPanel
                 navigation.column: 2
 
+                accentButton: true
                 text: qsTrc("project", "New")
 
                 onClicked: {
@@ -359,9 +360,21 @@ FocusScope {
             }
 
             FlatButton {
-                navigation.name: "Open other Score"
+                navigation.name: "ConvertFileToScore"
                 navigation.panel: navBottomPanel
                 navigation.column: 3
+
+                text: qsTrc("project", "Convert…")
+
+                onClicked: {
+                    scoresPageModel.convertFileToScore()
+                }
+            }
+
+            FlatButton {
+                navigation.name: "Open other Score"
+                navigation.panel: navBottomPanel
+                navigation.column: 4
 
                 text: qsTrc("project", "Open other…")
 
