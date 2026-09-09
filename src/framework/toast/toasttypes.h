@@ -23,6 +23,8 @@
 
 #include <string>
 
+#include "ui/view/iconcodes.h"
+
 namespace muse::toast {
 enum class ToastActionCode {
     None = 0,
@@ -37,12 +39,15 @@ struct ToastAction {
     std::string text;
     int code = int(ToastActionCode::None);
     bool accent = false;
+    muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE;
 
     ToastAction() = default;
-    ToastAction(const std::string& text, int code, bool accent = false)
-        : text(text), code(code), accent(accent) {}
-    ToastAction(const std::string& text, ToastActionCode code, bool accent = false)
-        : text(text), code(int(code)), accent(accent) {}
+    ToastAction(const std::string& text, int code, bool accent = false,
+                muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE)
+        : text(text), code(code), accent(accent), icon(icon) {}
+    ToastAction(const std::string& text, ToastActionCode code, bool accent = false,
+                muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE)
+        : text(text), code(int(code)), accent(accent), icon(icon) {}
 };
 
 struct ToastResult {
