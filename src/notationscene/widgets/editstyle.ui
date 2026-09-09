@@ -11213,6 +11213,29 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="6" column="0" colspan="2">
+                  <widget class="QCheckBox" name="lyricsAutoCenterBetweenStaves">
+                   <property name="accessibleName">
+                    <string>Center between staves automatically</string>
+                   </property>
+                   <property name="text">
+                    <string>Center between staves automatically</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="2">
+                  <widget class="QToolButton" name="resetLyricsAutoCenterBetweenStaves">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Center between staves automatically'</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </item>
               </layout>
@@ -14061,6 +14084,8 @@ followed by dashes</string>
   <tabstop>resetLyricsLineHeight</tabstop>
   <tabstop>lyricsAvoidBarlines</tabstop>
   <tabstop>resetLyricsAvoidBarlines</tabstop>
+  <tabstop>lyricsAutoCenterBetweenStaves</tabstop>
+  <tabstop>resetLyricsAutoCenterBetweenStaves</tabstop>
   <tabstop>lyricsMinTopDistance</tabstop>
   <tabstop>resetLyricsMinTopDistance</tabstop>
   <tabstop>lyricsMinBottomDistance</tabstop>

@@ -140,6 +140,7 @@ enum class Sid : short {
     lyricsMelismaMinLength,
     lyricsDashPosAtStartOfSystem,
     lyricsAvoidBarlines,
+    lyricsAutoCenterBetweenStaves,
     lyricsLimitDashCount,
     lyricsMaxDashCount,
     lyricsCenterDashedSyllables,
