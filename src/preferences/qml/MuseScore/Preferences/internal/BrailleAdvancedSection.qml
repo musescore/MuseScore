@@ -34,8 +34,11 @@ BaseSection {
     property var directions: null
     property int intervalDirection: -1
 
+    property alias signDoubling: signDoublingBox.checked
+
     signal brailleTableChangeRequested(string table)
     signal intervalDirectionChangeRequested(int direction)
+    signal signDoublingChangeRequested(bool enabled)
 
     ComboBoxWithTitle {
         title: qsTrc("preferences", "Braille table for lyrics")
@@ -66,6 +69,21 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.intervalDirectionChangeRequested(newValue);
+        }
+    }
+
+    CheckBox {
+        id: signDoublingBox
+        width: parent.width
+
+        text: qsTrc("preferences", "Double repeated Braille signs")
+
+        navigation.name: "SignDoublingBox"
+        navigation.panel: root.navigation
+        navigation.row: 3
+
+        onClicked: {
+            root.signDoublingChangeRequested(!checked);
         }
     }
 }

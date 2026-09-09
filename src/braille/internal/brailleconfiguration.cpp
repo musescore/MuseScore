@@ -33,6 +33,7 @@ static const std::string module_name("braille");
 static const Settings::Key BRAILLE_STATUS(module_name, "score/braille/status");
 static const Settings::Key BRAILLE_TABLE(module_name, "score/braille/table");
 static const Settings::Key BRAILLE_INTERVAL_DIRECTION(module_name, "score/braille/intervalDirection");
+static const Settings::Key BRAILLE_SIGN_DOUBLING(module_name, "score/braille/signDoubling");
 
 void BrailleConfiguration::init()
 {
@@ -47,6 +48,10 @@ void BrailleConfiguration::init()
     settings()->setDefaultValue(BRAILLE_INTERVAL_DIRECTION, Val(BrailleIntervalDirection::Auto));
     settings()->valueChanged(BRAILLE_INTERVAL_DIRECTION).onReceive(this, [this](const Val&) {
         m_intervalDirectionChanged.notify();
+    });
+    settings()->setDefaultValue(BRAILLE_SIGN_DOUBLING, Val(true));
+    settings()->valueChanged(BRAILLE_SIGN_DOUBLING).onReceive(this, [this](const Val&) {
+        m_signDoublingChanged.notify();
     });
 }
 
@@ -93,6 +98,21 @@ QString BrailleConfiguration::brailleTable() const
 void BrailleConfiguration::setBrailleTable(const QString& table)
 {
     settings()->setSharedValue(BRAILLE_TABLE, Val(table));
+}
+
+muse::async::Notification BrailleConfiguration::signDoublingChanged() const
+{
+    return m_signDoublingChanged;
+}
+
+bool BrailleConfiguration::signDoubling() const
+{
+    return settings()->value(BRAILLE_SIGN_DOUBLING).toBool();
+}
+
+void BrailleConfiguration::setSignDoubling(const bool enabled)
+{
+    settings()->setSharedValue(BRAILLE_SIGN_DOUBLING, Val(enabled));
 }
 
 QStringList BrailleConfiguration::brailleTableList() const
