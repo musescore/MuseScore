@@ -192,6 +192,7 @@ QVariant ToastListModel::data(const QModelIndex& index, int role) const
         for (auto& action : toast->actions()) {
             QVariantMap actionMap;
             actionMap.insert("text", QString::fromStdString(action.text));
+            actionMap.insert("accent", action.accent);
             actionsList.append(actionMap);
         }
         return actionsList;

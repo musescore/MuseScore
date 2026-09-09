@@ -227,6 +227,7 @@ Item {
 
                     FlatButton {
                         text: root.actions[index].text
+                        accentButton: root.actions[index].accent
                         height: root.actionButtonHeight
                         minWidth: root.actionButtonMinWidth
                         margins: root.actionButtonMargins

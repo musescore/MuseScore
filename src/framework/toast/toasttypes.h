@@ -31,5 +31,6 @@ enum class ToastActionCode {
 struct ToastAction {
     std::string text;
     ToastActionCode code = ToastActionCode::None;
+    bool accent = false;
 };
 }
