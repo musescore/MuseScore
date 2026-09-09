@@ -183,7 +183,7 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: centerStavesSection
 
-        visible: root.model && root.model.isMultiStaffInstrument
+        visible: root.model && root.model.isStaveCenteringApplicable
         enabled: root.model && root.model.isStaveCenteringAvailable
 
         titleText: qsTrc("propertiespanel", "Center between staves")

@@ -2762,10 +2762,7 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         return false;
     }
 
-    const Staff* thisStaff = item->staff();
-    staff_idx_t thisIdx = thisStaff->idx();
-    staff_idx_t nextIdx = placeAbove ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
-    if (nextIdx == muse::nidx) {
+    if (!item->staffToCenterAgainst(placeAbove, system)) {
         return false;
     }
 
@@ -2783,14 +2780,7 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         }
     }
 
-    const Staff* nextStaff = item->score()->staff(nextIdx);
-    if (nextStaff->part() == itemPart) {
-        return true;
-    }
-
-    // If the staves are not of the same part, only allow centering if they are both vocal parts:
-    return itemPart->instrument(item->tick())->isVocalInstrument()
-           && nextStaff->part()->instrument(item->tick())->isVocalInstrument();
+    return true;
 }
 
 bool SystemLayout::mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system)
