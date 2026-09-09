@@ -152,6 +152,7 @@ private:
     void rebuildAllPolylines();
     void buildAndAddPolylinesForSystem(const System* system);
     void buildAndAddPolylinesForStaff(const System* system, staff_idx_t staffIdx);
+    void buildAndAddPolylineForStaffRegion(const System* system, staff_idx_t staffIdx, const Segment* startSeg, const Segment* endSeg);
 
     void updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo);
 
