@@ -42,7 +42,9 @@
 #include "dom/system.h"
 #include "dom/tapping.h"
 #include "editing/editchord.h"
+#include "rendering/iscorerenderer.h"
 #include "rw/compat/compatutils.h"
+#include "types/types.h"
 
 using namespace mu::engraving;
 
@@ -364,6 +366,7 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     if (mscVersion < 500) {
         migrateOffset500(score);
+        migrateOffsetAfterAutoplace(score);
         AlignmentMigration500::migrateSnappedItemAlignment(score);
         AlignmentMigration500::migrateSameItemTypeAlignment(score);
         AlignmentMigration500::migrateHopoLetterAlignment(score);
@@ -372,6 +375,68 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     if (needRelayout) {
         score->update();
+    }
+}
+
+static void doMigrateOffsetAfterAutoplace(EngravingItem* item)
+{
+    // Before 5.0, item's were autoplaced from their offset position
+    // After 5.0, offset is applied after autoplace
+
+    // We can't fix the offset for some types.
+    // These are types where layout is spread out in multiple steps and cannot be accurately calculated with one TLayout::layoutItem call.
+    if (item->generated() || !item->autoplace() || !autoplaceAppliesToType(item->type()) || muse::RealIsNull(item->offset().y())
+        || item->isRest()
+        || item->isLyrics()
+        || item->isLyricsLineSegment()
+        || item->isArticulationFamily()
+        || item->isFingering()) {
+        return;
+    }
+
+    // Initial position
+    PointF pushedPos = item->ldata()->pos();
+
+    // Calculate item's position without autoplace
+    PropertyFlags autoplacePf = item->propertyFlags(Pid::AUTOPLACE);
+    PropertyFlags restorePf = autoplacePf == PropertyFlags::STYLED ? PropertyFlags::UNSTYLED : autoplacePf;
+    item->undoChangeProperty(Pid::AUTOPLACE, false, restorePf);
+
+    item->mutldata()->setPos(PointF());
+    item->renderer()->layoutItem(item);
+    PointF originPos = item->ldata()->pos();
+
+    if (autoplacePf == PropertyFlags::STYLED) {
+        item->undoResetProperty(Pid::AUTOPLACE);
+    } else {
+        item->undoChangeProperty(Pid::AUTOPLACE, true, autoplacePf);
+    }
+
+    // The difference is the amount autoplace moves the item
+    const double difference = pushedPos.y() - originPos.y();
+    if (muse::RealIsNull(difference)) {
+        // No difference, no need to change the offset
+        return;
+    }
+
+    PropertyFlags offsetPf = item->propertyFlags(Pid::OFFSET);
+    if (offsetPf == PropertyFlags::STYLED) {
+        offsetPf = PropertyFlags::UNSTYLED;
+    }
+
+    // Compensate for
+    PointF newOffset = item->offset();
+    newOffset.ry() -= difference;
+
+    newOffset.ry() = item->placeAbove() ? std::min(newOffset.y(), 0.0) : std::max(newOffset.y(), 0.0);
+
+    item->undoChangeProperty(Pid::OFFSET, newOffset, offsetPf);
+}
+
+void EngravingCompat::migrateOffsetAfterAutoplace(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        score->scanElements(doMigrateOffsetAfterAutoplace);
     }
 }
 
