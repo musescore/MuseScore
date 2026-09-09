@@ -118,9 +118,12 @@ void GeneralSettingsModel::loadProperties()
     updateAreGeneralPropertiesAvailable();
 }
 
-void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
+void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
 {
     loadProperties(changedPropertyIdSet);
+
+    m_appearanceSettingsModel->onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
+    m_playbackProxyModel->onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
 }
 
 void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
