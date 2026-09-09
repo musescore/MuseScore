@@ -27,6 +27,7 @@ import QtQuick
 import Muse.Ui
 import Muse.UiComponents
 import Muse.Dock
+import Muse.Toast
 import MuseScore.Project
 
 DockPage {
@@ -45,6 +46,7 @@ DockPage {
         case "mpe": root.central = mpeComponent; break
         case "extensions": root.central = extensionsComp; break
         case "navigation": root.central = keynavComp; break
+        case "toasts": root.central = toastsComp; break
         }
     }
 
@@ -76,7 +78,8 @@ DockPage {
                         { "name": "corruptscore", "title": "Corrupt score" },
                         { "name": "mpe", "title": "MPE" },
                         { "name": "extensions", "title": "Extensions" },
-                        { "name": "navigation", "title": "KeyNav" }
+                        { "name": "navigation", "title": "KeyNav" },
+                        { "name": "toasts", "title": "Toasts" }
                     ]
 
                     onSelected: function(name) {
@@ -135,5 +138,11 @@ DockPage {
         id: keynavComp
 
         KeyNavExample {}
+    }
+
+    Component {
+        id: toastsComp
+
+        ToastNotificationTests {}
     }
 }
