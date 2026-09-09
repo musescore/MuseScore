@@ -2766,6 +2766,10 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         return false;
     }
 
+    if (item->isLyrics() || item->isLyricsLineSegment()) {
+        return item->style().styleB(Sid::lyricsAutoCenterBetweenStaves);
+    }
+
     if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
         bool centerStyle = item->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
         AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
