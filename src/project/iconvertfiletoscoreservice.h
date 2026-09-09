@@ -53,12 +53,12 @@ public:
     virtual muse::Ret validateLink(const QUrl& link) const = 0;
 
     //! Sends the conversion request to the server
-    virtual muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedFileName) = 0;
+    virtual muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName) = 0;
 
-    //! Emits the result once the server-side conversion completes
-    virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
+    //! Emits the final result of a conversion (upload or processing failure, or success with ScoreInfo)
+    virtual muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const = 0;
 
-    //! Names of the files currently being converted server-side (queued, processing, or downloading)
+    //! Names of the files currently being converted server-side (queued or processing)
     virtual muse::StringList fileNamesBeingConverted() const = 0;
     virtual muse::async::Notification fileNamesBeingConvertedChanged() const = 0;
 
@@ -68,10 +68,10 @@ public:
     //! Resumes polling for any still-pending items - e.g. in response to the user pressing "Retry"
     virtual void retryPolling() = 0;
 
-    //! Emitted once a converted score has been downloaded and is awaiting a quality review
-    virtual muse::async::Channel<ConvertType, int /*itemId*/, muse::io::path_t> reviewRequested() const = 0;
-    virtual void submitReview(ConvertType type, int itemId, ReviewRating rating, const QString& comment = QString()) = 0;
-    virtual void submitReviewComment(ConvertType type, int itemId, const QString& comment) = 0;
+    //! Emitted once a converted score is ready and awaiting a quality review
+    virtual muse::async::Channel<int /*scoreId*/> reviewRequested() const = 0;
+    virtual void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) = 0;
+    virtual void submitReviewComment(int scoreId, const QString& comment) = 0;
 };
 
 using IConvertFileToScoreServicePtr = std::shared_ptr<IConvertFileToScoreService>;

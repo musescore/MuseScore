@@ -144,7 +144,7 @@ QVariantMap pickedOmrFileSelection()
     return {
         { "type", int(ConvertType::Omr) },
         { "paths", QStringList { "/some/file.xyz" } },
-        { "convertedFileName", QString("file") }
+        { "convertedScoreName", QString("file") }
     };
 }
 }
@@ -251,13 +251,16 @@ protected:
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotificationAndForwards)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int, io::path_t> reviewRequested;
+    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    const io::path_t path = "/some/path/My Score.xyz";
+    ScoreInfo scoreInfo;
+    scoreInfo.id = 555;
+    scoreInfo.title = "My Score";
+
     constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
 
     const std::string title = muse::trc("project/convert", "Your score is ready!");
@@ -275,24 +278,55 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
 
     bool forwarded = false;
     Ret forwardedRet;
-    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& ret, const io::path_t&) {
+    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
         forwarded = true;
         forwardedRet = ret;
     });
 
     // [WHEN] The service reports a successful conversion
-    convertFinished.send(make_ok(), path);
+    convertFinished.send(make_ok(), scoreInfo);
 
     // [THEN] The result is forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
     EXPECT_TRUE(forwardedRet);
 }
 
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_DispatchesOpenScoreUrl)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<int> reviewRequested;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
+    m_scenario->init();
+
+    ScoreInfo scoreInfo;
+    scoreInfo.id = 555;
+    scoreInfo.title = "My Score";
+
+    // [GIVEN] The user clicks "Open score" on the ready notification
+    constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
+    ON_CALL(*m_toastService, show(_, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedToastResultPromise(toast::ToastResult(openScoreBtn));
+    }));
+
+    // [THEN] The score is opened via the cloud open-score URL, not a local path
+    EXPECT_CALL(*m_dispatcher, dispatch(actions::ActionCode("file-open"), Truly([](const actions::ActionData& data) {
+        return data.arg<QUrl>(0) == QUrl("musescore://open-score/555");
+    })))
+    .Times(1);
+
+    // [WHEN] The service reports a successful conversion
+    convertFinished.send(make_ok(), scoreInfo);
+    pumpEvents();
+}
+
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNotificationAndForwards)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int, io::path_t> reviewRequested;
+    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -315,13 +349,13 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 
     bool forwarded = false;
     Ret forwardedRet;
-    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& r, const io::path_t&) {
+    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& r, const ScoreInfo&) {
         forwarded = true;
         forwardedRet = r;
     });
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(ret, io::path_t());
+    convertFinished.send(ret, ScoreInfo());
 
     // [THEN] The failure is still forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
@@ -331,8 +365,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsConvert)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int, io::path_t> reviewRequested;
+    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -347,7 +381,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     const QVariantMap selectionMap {
         { "type", int(ConvertType::Omr) },
         { "paths", QStringList { "/some/file.xyz" } },
-        { "convertedFileName", QString("file") }
+        { "convertedScoreName", QString("file") }
     };
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
     .WillByDefault(Invoke([selectionMap](auto&&...) {
@@ -363,7 +397,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     // [WHEN] The service reports a failed conversion
     Ret ret = make_ret(Err::ConvertProcessingFailed);
     ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
-    convertFinished.send(ret, io::path_t());
+    convertFinished.send(ret, ScoreInfo());
 
     pumpEvents();
 }
@@ -371,8 +405,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotRestartConvert)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int, io::path_t> reviewRequested;
+    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -388,7 +422,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
     EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(make_ret(Err::ConvertProcessingFailed), io::path_t());
+    convertFinished.send(make_ret(Err::ConvertProcessingFailed), ScoreInfo());
 
     pumpEvents();
 }
@@ -396,8 +430,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
 TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Good_SubmitsGoodRating)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int, io::path_t> reviewRequested;
+    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -416,11 +450,11 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Goo
         return resolvedToastResultPromise(toast::ToastResult(goodBtn));
     }));
 
-    EXPECT_CALL(*m_service, submitReview(ConvertType::Omr, 42, ReviewRating::Good, QString()))
+    EXPECT_CALL(*m_service, submitReview(555, ReviewRating::Good, QString()))
     .Times(1);
 
     // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(ConvertType::Omr, 42, io::path_t("/some/path/My Score.mscz"));
+    reviewRequested.send(555);
 
     pumpEvents();
 }
@@ -428,8 +462,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Goo
 TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Bad_SubmitsBadRating)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, io::path_t> convertFinished;
-    async::Channel<ConvertType, int, io::path_t> reviewRequested;
+    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
@@ -448,11 +482,11 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Bad
         return resolvedToastResultPromise(toast::ToastResult(badBtn));
     }));
 
-    EXPECT_CALL(*m_service, submitReview(ConvertType::Audio2Score, 7, ReviewRating::Bad, QString()))
+    EXPECT_CALL(*m_service, submitReview(555, ReviewRating::Bad, QString()))
     .Times(1);
 
     // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(ConvertType::Audio2Score, 7, io::path_t("/some/path/My Score.mscz"));
+    reviewRequested.send(555);
 
     pumpEvents();
 }
@@ -1068,7 +1102,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsOmrCo
     const QVariantMap selectionMap {
         { "type", int(ConvertType::Omr) },
         { "paths", QStringList { "/some/path/file.xyz" } },
-        { "convertedFileName", QString("file") }
+        { "convertedScoreName", QString("file") }
     };
     EXPECT_CALL(*m_interactive, open(expectedQuery))
     .WillOnce(Invoke([selectionMap](auto&&...) {
@@ -1117,7 +1151,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsAudio
     const QVariantMap selectionMap {
         { "type", int(ConvertType::Audio2Score) },
         { "paths", QStringList { "/some/path/song.xyz" } },
-        { "convertedFileName", QString("song") }
+        { "convertedScoreName", QString("song") }
     };
     EXPECT_CALL(*m_interactive, open(expectedQuery))
     .WillOnce(Invoke([selectionMap](auto&&...) {

@@ -36,7 +36,7 @@ public:
     MOCK_METHOD(muse::Ret, validateLink, (const QUrl&), (const, override));
 
     MOCK_METHOD(muse::Ret, startConvert, (const ConvertInput&, const muse::String&), (override));
-    MOCK_METHOD((muse::async::Channel<muse::Ret, muse::io::path_t>), convertFinished, (), (const, override));
+    MOCK_METHOD((muse::async::Channel<muse::Ret, ScoreInfo>), convertFinished, (), (const, override));
 
     MOCK_METHOD(muse::StringList, fileNamesBeingConverted, (), (const, override));
     MOCK_METHOD(muse::async::Notification, fileNamesBeingConvertedChanged, (), (const, override));
@@ -44,8 +44,8 @@ public:
     MOCK_METHOD((muse::async::Channel<PollingFailure>), pollingFailed, (), (const, override));
     MOCK_METHOD(void, retryPolling, (), (override));
 
-    MOCK_METHOD((muse::async::Channel<ConvertType, int, muse::io::path_t>), reviewRequested, (), (const, override));
-    MOCK_METHOD(void, submitReview, (ConvertType, int, ReviewRating, const QString&), (override));
-    MOCK_METHOD(void, submitReviewComment, (ConvertType, int, const QString&), (override));
+    MOCK_METHOD((muse::async::Channel<int>), reviewRequested, (), (const, override));
+    MOCK_METHOD(void, submitReview, (int, ReviewRating, const QString&), (override));
+    MOCK_METHOD(void, submitReviewComment, (int, const QString&), (override));
 };
 }

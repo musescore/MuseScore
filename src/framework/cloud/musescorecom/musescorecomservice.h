@@ -68,10 +68,8 @@ public:
     async::Promise<RetVal<ConvertConfig> > fetchConfig() override;
 
     ProgressPtr upload(const ConvertInput& input) override;
-    ProgressPtr downloadConvertedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData) override;
 
     async::Promise<RetVal<ConvertQueueList> > fetchQueue() override;
-    async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ConvertType type, int id) override;
 
     async::Promise<RetVal<ConvertResult> > submitReview(ConvertType type, int id, ReviewRating review,
                                                         const QString& comment = QString()) override;

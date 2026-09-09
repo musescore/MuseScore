@@ -23,6 +23,7 @@
 #pragma once
 
 #include "cloud/musescorecom/converttypes.h"
+#include "cloud/cloudtypes.h"
 
 #include "filecategory.h"
 
@@ -36,6 +37,7 @@ using ConvertInput = muse::cloud::ConvertInput;
 using ReviewRating = muse::cloud::ReviewRating;
 using LinkSource = muse::cloud::LinkSource;
 using LinkSources = muse::cloud::LinkSources;
+using ScoreInfo = muse::cloud::ScoreInfo;
 
 struct ConvertFilesValidation {
     ConvertType type = ConvertType::Omr;
@@ -46,7 +48,7 @@ struct PollingFailure {
     muse::Ret ret;
     int attempt = 0;
     int maxAttempts = 0;
-    muse::secs_t nextInterval;
+    muse::secs_t nextInterval = 0.;
     bool gaveUp = false;
 };
 }

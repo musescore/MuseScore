@@ -48,12 +48,6 @@ void RecentScoresModel::load()
     convertFileToScoreService()->fileNamesBeingConvertedChanged().onNotify(this, [this]() {
         updateRecentScores();
     });
-
-    convertFileToScoreService()->convertFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
-        if (ret) {
-            recentFilesController()->prependRecentFile(RecentFile(path));
-        }
-    });
 }
 
 void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)

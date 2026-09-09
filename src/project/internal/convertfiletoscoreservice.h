@@ -21,23 +21,20 @@
  */
 #pragma once
 
-#include <functional>
-#include <memory>
+#include <optional>
 #include <vector>
 
 #include <QObject>
 #include <QTimer>
 
+#include "project/iconvertfiletoscoreservice.h"
+
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "io/ifilesystem.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
-
-#include "project/iconvertfiletoscoreservice.h"
+#include "io/ifilesystem.h"
 #include "project/iprojectconfiguration.h"
-
-class QBuffer;
 
 namespace mu::project {
 class ConvertFileToScoreService : public QObject, public IConvertFileToScoreService, public muse::async::Asyncable, public muse::Contextable
@@ -61,8 +58,8 @@ public:
     muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) const override;
     muse::Ret validateLink(const QUrl& link) const override;
 
-    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedFileName) override;
-    muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
+    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName) override;
+    muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const override;
 
     muse::StringList fileNamesBeingConverted() const override;
     muse::async::Notification fileNamesBeingConvertedChanged() const override;
@@ -70,67 +67,51 @@ public:
     muse::async::Channel<PollingFailure> pollingFailed() const override;
     void retryPolling() override;
 
-    muse::async::Channel<ConvertType, int, muse::io::path_t> reviewRequested() const override;
-    void submitReview(ConvertType type, int itemId, ReviewRating rating, const QString& comment = QString()) override;
-    void submitReviewComment(ConvertType type, int itemId, const QString& comment) override;
+    muse::async::Channel<int> reviewRequested() const override;
+    void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) override;
+    void submitReviewComment(int scoreId, const QString& comment) override;
 
 private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
     static constexpr int MAX_RETRY_INTERVAL_MS = 10 * 60000;
     static constexpr int MAX_POLL_RETRY_ATTEMPTS = 5; // gives up after ~15 minutes
 
-    static constexpr int MAX_FS_RETRY_ATTEMPTS = 5;
-    static constexpr int FS_RETRY_INTERVAL_MS = 100;
-
     struct WatchedItem {
         int id = 0;
         ConvertType type = ConvertType::Omr;
-        muse::String convertedFileName;
-        muse::cloud::ConvertStatus convertStatus = muse::cloud::ConvertStatus::Unknown;
-        bool isDownloading = false;
-        muse::io::path_t downloadedScorePath;
+        muse::cloud::ConvertStatus status = muse::cloud::ConvertStatus::Unknown;
+        std::optional<int> scoreId; //! NOTE: set once the score is ready and reported (Done/AwaitingReview)
+        muse::String convertedScoreName;
 
         bool operator==(const WatchedItem& other) const
         {
             return id == other.id
                    && type == other.type
-                   && convertedFileName == other.convertedFileName
-                   && convertStatus == other.convertStatus
-                   && isDownloading == other.isDownloading
-                   && downloadedScorePath == other.downloadedScorePath;
+                   && status == other.status
+                   && scoreId == other.scoreId
+                   && convertedScoreName == other.convertedScoreName;
         }
     };
 
-    void watch(ConvertType type, int itemId, const muse::String& convertedFileName);
+    void loadWatchedItems();
+    void saveWatchedItems();
+
+    void watch(ConvertType type, int itemId, const muse::String& convertedScoreName);
     void poll();
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);
     void giveUpPolling(const muse::Ret& ret);
     void updateWatchedItems(const muse::cloud::ConvertQueueList& queue);
 
-    void loadWatchedItems();
-    void saveWatchedItems();
+    void handleItem(WatchedItem& item, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode,
+                    std::optional<int> scoreId);
+    void reportReady(WatchedItem& item, muse::cloud::ConvertStatus status, int scoreId);
 
-    std::vector<WatchedItem>::iterator findWatchedItem(ConvertType type, int itemId);
-    void eraseWatchedItem(ConvertType type, int itemId);
+    void finishConvert(const muse::Ret& ret, const ScoreInfo& scoreInfo = ScoreInfo());
 
-    void handleItem(WatchedItem& item, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode);
+    WatchedItem* findWatchedItemByScoreId(int scoreId);
+
     static bool isPending(const WatchedItem& item);
-
-    void downloadIfNotAlready(WatchedItem& item);
-    void fetchScoreUrlAndDownload(ConvertType type, int itemId, const muse::String& convertedFileName);
-    void downloadScoreAndFinish(ConvertType type, int itemId, const muse::String& convertedFileName,
-                                const muse::cloud::SignedMsczUrl& urlInfo);
-    void writeConvertedScore(const muse::String& convertedFileName, const std::shared_ptr<QBuffer>& scoreData,
-                             std::function<void(const muse::RetVal<muse::io::path_t>&)> onFinished);
-    void onWriteFinished(ConvertType type, int itemId, const muse::String& convertedFileName,
-                         const muse::RetVal<muse::io::path_t>& writeResult);
-    void makePathWithRetry(const muse::io::path_t& dir, int attempt, std::function<void(const muse::Ret&)> onFinished);
-    void writeFileWithRetry(const muse::io::path_t& path, const std::shared_ptr<QBuffer>& scoreData, int attempt,
-                            std::function<void(const muse::Ret&)> onFinished);
-    void clearDownloading(ConvertType type, int itemId);
-    void finishConvert(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());
-    void failConvert(muse::Ret ret, ConvertType type, int itemId, const muse::String& convertedFileName);
 
     ConvertConfig m_config;
 
@@ -139,9 +120,10 @@ private:
     int m_pollFailureCount = 0;
     std::vector<WatchedItem> m_watchedItems;
     bool m_pollInProgress = false;
-    muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
-    muse::async::Channel<ConvertType, int, muse::io::path_t> m_reviewRequested;
-    muse::async::Notification m_fileNamesBeingConvertedChanged;
+
     muse::async::Channel<PollingFailure> m_pollingFailed;
+    muse::async::Notification m_fileNamesBeingConvertedChanged;
+    muse::async::Channel<muse::Ret, ScoreInfo> m_convertFinished;
+    muse::async::Channel<int> m_reviewRequested;
 };
 }

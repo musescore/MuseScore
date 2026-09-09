@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -29,7 +30,6 @@
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
-#include <QUrl>
 
 #include "global/logstream.h"
 #include "global/types/flags.h"
@@ -189,18 +189,13 @@ struct ConvertQueueItem {
     ConvertStatus status = ConvertStatus::Processing;
     QString filename;
     QString link; //! audio2score only
-    int scoreId = 0;
+    std::optional<int> scoreId; //! set once the score is ready (AwaitingReview/Done)
     QDateTime createdAt;
     QDateTime updatedAt;
     ConvertErrorCode errorCode = ConvertErrorCode::Unknown;
 };
 
 using ConvertQueueList = std::vector<ConvertQueueItem>;
-
-struct SignedMsczUrl {
-    QUrl url;
-    int expiresInSeconds = 0;
-};
 
 //! NOTE: must be in sync with the musescore.com API
 enum class ReviewRating {
@@ -220,7 +215,7 @@ inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::clo
       << ", link: \"" << item.link << "\""
       << ", type: " << muse::cloud::convertTypeToString(item.type)
       << ", status: " << muse::cloud::convertStatusToString(item.status)
-      << ", scoreId: " << item.scoreId
+      << ", scoreId: " << (item.scoreId ? QString::number(*item.scoreId) : QString("none"))
       << ", createdAt: " << dateTimeToString(item.createdAt)
       << ", updatedAt: " << dateTimeToString(item.updatedAt);
     return s;

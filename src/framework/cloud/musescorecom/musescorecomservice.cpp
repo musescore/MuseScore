@@ -59,7 +59,6 @@ static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + 
 static const QUrl MUSESCORECOM_CONVERT_CONFIG_URL("https://musescore.com/static/musescore/studio/upload-config.json");
 static const QUrl MUSESCORECOM_CONVERT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/convert");
 static const QUrl MUSESCORECOM_CONVERT_QUEUE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/queue");
-static const QUrl MUSESCORECOM_CONVERT_MSCZ_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/mscz");
 static const QUrl MUSESCORECOM_CONVERT_REVIEW_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/review");
 static const QUrl MUSESCORECOM_CONVERT_COMMENT_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/comment");
 
@@ -389,7 +388,10 @@ static RetVal<ConvertQueueList> parseConvertQueueList(const QByteArray& data)
         item.status = convertStatusFromApiString(itemObj.value("status").toString());
         item.filename = itemObj.value("filename").toString();
         item.link = itemObj.value("link").toString();
-        item.scoreId = itemObj.value("score_id").toInt();
+        const QJsonValue scoreIdVal = itemObj.value("score_id");
+        if (scoreIdVal.isDouble()) {
+            item.scoreId = scoreIdVal.toInt();
+        }
         item.createdAt = QDateTime::fromSecsSinceEpoch(itemObj.value("created_at").toInteger());
         item.updatedAt = QDateTime::fromSecsSinceEpoch(itemObj.value("updated_at").toInteger());
         item.errorCode = convertErrorCodeFromApiString(itemObj.value("error_code").toString());
@@ -398,23 +400,6 @@ static RetVal<ConvertQueueList> parseConvertQueueList(const QByteArray& data)
     }
 
     return RetVal<ConvertQueueList>::make_ok(result);
-}
-
-static RetVal<SignedMsczUrl> parseSignedMsczUrl(const QByteArray& data)
-{
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        return RetVal<SignedMsczUrl>::make_ret((int)Ret::Code::InternalError, err.errorString().toStdString());
-    }
-
-    QJsonObject obj = doc.object();
-
-    SignedMsczUrl result;
-    result.url = QUrl(obj.value("url").toString());
-    result.expiresInSeconds = obj.value("expires_in").toInt();
-
-    return RetVal<SignedMsczUrl>::make_ok(result);
 }
 
 static LinkSource linkSourceFromApiString(const QString& str)
@@ -1110,37 +1095,6 @@ Promise<Ret> MuseScoreComService::doUpload(const ConvertInput& input, ProgressPt
     });
 }
 
-ProgressPtr MuseScoreComService::downloadConvertedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData)
-{
-    TRACEFUNC;
-
-    ProgressPtr progress = std::make_shared<Progress>();
-    progress->start();
-
-    IF_ASSERT_FAILED(urlInfo.url.isValid()) {
-        progress->finish(make_ret(Err::InvalidData));
-        return progress;
-    }
-
-    //! NOTE: urlInfo.url is already a signed URL, so it must be
-    //! requested as-is, without going through prepareUrlForRequest
-    RetVal<Progress> getProgress = m_networkManager->get(urlInfo.url, scoreData, headers());
-    if (!getProgress.ret) {
-        progress->finish(getProgress.ret);
-        return progress;
-    }
-
-    getProgress.val.progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& msg) {
-        progress->progress(current, total, msg);
-    });
-
-    getProgress.val.finished().onReceive(this, [this, progress](const ProgressResult& res) {
-        progress->finish(uploadingDownloadingRetFromRawRet(res.ret));
-    });
-
-    return progress;
-}
-
 Promise<RetVal<ConvertQueueList> > MuseScoreComService::fetchQueue()
 {
     return Promise<RetVal<ConvertQueueList> >([this](auto resolve, auto) {
@@ -1168,40 +1122,6 @@ Promise<RetVal<ConvertQueueList> > MuseScoreComService::fetchQueue()
         });
 
         return Promise<RetVal<ConvertQueueList> >::dummy_result();
-    });
-}
-
-Promise<RetVal<SignedMsczUrl> > MuseScoreComService::fetchMsczUrl(ConvertType type, int id)
-{
-    return Promise<RetVal<SignedMsczUrl> >([this, type, id](auto resolve, auto) {
-        QVariantMap params;
-        params["id"] = id;
-        params["type"] = convertTypeToApiString(type);
-
-        RetVal<QUrl> msczUrl = prepareUrlForRequest(MUSESCORECOM_CONVERT_MSCZ_API_URL, params);
-        if (!msczUrl.ret) {
-            return resolve(RetVal<SignedMsczUrl>::make_ret(msczUrl.ret));
-        }
-
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->get(msczUrl.val, receivedData, headers());
-        if (!progress.ret) {
-            return resolve(RetVal<SignedMsczUrl>::make_ret(progress.ret));
-        }
-
-        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
-            if (!res.ret) {
-                printServerReply(*receivedData);
-                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
-                appendServerErrorCode(ret, receivedData->data());
-                (void)resolve(RetVal<SignedMsczUrl>::make_ret(ret));
-                return;
-            }
-
-            (void)resolve(parseSignedMsczUrl(receivedData->data()));
-        });
-
-        return Promise<RetVal<SignedMsczUrl> >::dummy_result();
     });
 }
 

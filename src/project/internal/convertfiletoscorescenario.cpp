@@ -21,7 +21,6 @@
  */
 #include "convertfiletoscorescenario.h"
 
-#include <QFileInfo>
 #include <QTimer>
 #include <QUrl>
 
@@ -53,7 +52,7 @@ static ConvertSelection toConvertSelection(const Val& val)
     }
 
     ConvertSelection selection;
-    selection.convertedFileName = map.value("convertedFileName").toString();
+    selection.convertedScoreName = map.value("convertedScoreName").toString();
 
     if (type == ConvertType::Audio2Score && !link.isEmpty()) {
         selection.input = Audio2ScoreConvertInput { link };
@@ -75,18 +74,18 @@ void ConvertFileToScoreScenario::init()
 {
     TRACEFUNC;
 
-    service()->convertFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
+    service()->convertFinished().onReceive(this, [this](const Ret& ret, const ScoreInfo& scoreInfo) {
         if (ret) {
-            showScoreReadyNotification(path);
+            showScoreReadyNotification(scoreInfo);
         } else {
             showConvertFailedNotification(ret);
         }
 
-        m_convertFinished.send(ret, path);
+        m_convertFinished.send(ret, scoreInfo);
     });
 
-    service()->reviewRequested().onReceive(this, [this](ConvertType type, int queueId, const io::path_t& path) {
-        m_pendingReviews[path] = { type, queueId };
+    service()->reviewRequested().onReceive(this, [this](int scoreId) {
+        m_pendingReviews[configuration()->cloudProjectPath(scoreId)] = scoreId;
         checkPendingReview();
     });
 
@@ -107,11 +106,10 @@ void ConvertFileToScoreScenario::checkPendingReview()
         return;
     }
 
-    const ConvertType type = it->second.first;
-    const int queueId = it->second.second;
+    const int scoreId = it->second;
     const io::path_t path = it->first;
 
-    QTimer::singleShot(REVIEW_PROMPT_DELAY_MS, this, [this, type, queueId, path]() {
+    QTimer::singleShot(REVIEW_PROMPT_DELAY_MS, this, [this, scoreId, path]() {
         INotationProjectPtr currentProject = globalContext()->currentProject();
         if (!currentProject || currentProject->path() != path) {
             return;
@@ -121,7 +119,7 @@ void ConvertFileToScoreScenario::checkPendingReview()
             return;
         }
 
-        askReviewRating(type, queueId);
+        askReviewRating(scoreId);
     });
 }
 
@@ -166,7 +164,7 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
         if (paths.empty()) {
             selectFilesToConvert()
             .onResolve(this, [this](const ConvertSelection& selection) {
-                startConvert(selection.input, selection.convertedFileName);
+                startConvert(selection.input, selection.convertedScoreName);
             });
             return;
         }
@@ -180,7 +178,7 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
     });
 }
 
-async::Channel<Ret, io::path_t> ConvertFileToScoreScenario::convertFinished() const
+async::Channel<Ret, ScoreInfo> ConvertFileToScoreScenario::convertFinished() const
 {
     return m_convertFinished;
 }
@@ -277,14 +275,14 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
 
         selectFilesToConvert(paths, type)
         .onResolve(this, [this](const ConvertSelection& selection) {
-            startConvert(selection.input, selection.convertedFileName);
+            startConvert(selection.input, selection.convertedScoreName);
         });
     });
 }
 
-Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedFileName)
+Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
 {
-    Ret ret = service()->startConvert(input, convertedFileName);
+    Ret ret = service()->startConvert(input, convertedScoreName);
     if (!ret) {
         showUnknownError();
         return ret;
@@ -439,22 +437,22 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
     });
 }
 
-void ConvertFileToScoreScenario::showScoreReadyNotification(const io::path_t& path)
+void ConvertFileToScoreScenario::showScoreReadyNotification(const ScoreInfo& scoreInfo)
 {
     constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
 
-    QString scoreName = QFileInfo(path.toQString()).completeBaseName();
     std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
-                      .arg(scoreName).toStdString();
+                      .arg(scoreInfo.title).toStdString();
 
     toastService()->show(muse::trc("project/convert", "Your score is ready!"), msg,
                          muse::ui::IconCode::Code::TICK_FILLED, true,
     {
         { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
         { muse::trc("project/convert", "Open score"), openScoreBtn, /*accent*/ true },
-    }).onResolve(this, [this, path, openScoreBtn](const toast::ToastResult& result) {
+    }).onResolve(this, [this, scoreInfo, openScoreBtn](const toast::ToastResult& result) {
         if (result.isCode(openScoreBtn)) {
-            dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(path.toQUrl()));
+            const QUrl url(QString("musescore://open-score/%1").arg(scoreInfo.id));
+            dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
         }
     });
 }
@@ -481,7 +479,7 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     });
 }
 
-void ConvertFileToScoreScenario::askReviewRating(ConvertType type, int queueId)
+void ConvertFileToScoreScenario::askReviewRating(int scoreId)
 {
     static constexpr int goodBtn = int(toast::ToastActionCode::Custom) + 1;
     static constexpr int badBtn = int(toast::ToastActionCode::Custom) + 2;
@@ -495,8 +493,8 @@ void ConvertFileToScoreScenario::askReviewRating(ConvertType type, int queueId)
         { muse::trc("project/convert", "Good"), goodBtn, /*accent*/ true, muse::ui::IconCode::Code::LIKE },
         //: Button to rate the quality of a converted score as bad
         { muse::trc("project/convert", "Bad"), badBtn, /*accent*/ false, muse::ui::IconCode::Code::DISLIKE },
-    }).onResolve(this, [this, queueId, type](const toast::ToastResult& result) {
+    }).onResolve(this, [this, scoreId](const toast::ToastResult& result) {
         ReviewRating rating = result.isCode(goodBtn) ? ReviewRating::Good : ReviewRating::Bad;
-        service()->submitReview(type, queueId, rating);
+        service()->submitReview(scoreId, rating);
     });
 }
