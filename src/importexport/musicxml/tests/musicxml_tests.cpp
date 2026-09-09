@@ -1024,6 +1024,9 @@ TEST_F(MusicXml_Tests, multiMeasureRest3) {
 TEST_F(MusicXml_Tests, multiMeasureRest4) {
     musicXmlIoTestRef("testMultiMeasureRest4");
 }
+TEST_F(MusicXml_Tests, multipleDynamics) {
+    musicXmlImportTestRef("testMultipleDynamics");
+}
 TEST_F(MusicXml_Tests, multipleNotations) {
     musicXmlIoTestRef("testMultipleNotations");
 }
