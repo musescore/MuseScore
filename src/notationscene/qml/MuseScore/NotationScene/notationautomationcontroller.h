@@ -120,8 +120,6 @@ private:
         QVector<PointData> pointsData;
     };
 
-    using PolylinesDataMap = std::map<const PolylineKey, PolylineData>;
-
     struct TickStaffRange {
         int tickFrom = -1;
         int tickTo = -1;
@@ -135,8 +133,6 @@ private:
         std::optional<TickStaffRange> boundary;
     };
 
-    PolylinesDataMap createPolylinesForSystem(const System* system);
-    PolylinesDataMap createPolylinesForStaff(const System* system, staff_idx_t staffIdx);
     QVector<PointData> pointsDataInStaff(const mu::engraving::Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick,
                                          int endTick) const;
 
@@ -152,7 +148,10 @@ private:
     void updatePolylinesGeometry();
     void updatePolylinesColors();
     void onCurrentNotationChanged();
+
     void rebuildAllPolylines();
+    void buildAndAddPolylinesForSystem(const System* system);
+    void buildAndAddPolylinesForStaff(const System* system, staff_idx_t staffIdx);
 
     void updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo);
 
@@ -175,7 +174,7 @@ private:
     mu::engraving::Score* score() const;
 
     QQuickItem* m_linesParent = nullptr;
-    PolylinesDataMap m_polylinesDataMap;
+    std::map<PolylineKey, PolylineData> m_polylinesDataMap;
     muse::draw::Transform m_viewMatrix;
     mu::engraving::AutomationChanges m_pendingChanges;
     PendingScoreState m_pendingScoreState;
