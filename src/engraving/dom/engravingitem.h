@@ -707,6 +707,12 @@ public:
 
     virtual bool isBefore(const EngravingItem* item) const;
 
+    /** The staff this item would be centered against if it were centered between staves, or
+     * nullptr if there is none. `system` limits the search to the staves visible on that
+     * system; if null, the system this item is laid out on is used.
+     */
+    const Staff* staffToCenterAgainst(bool above, const System* system = nullptr) const;
+
     //! --- Old Interface ---
     void setbbox(const RectF& r) { mutldata()->setBbox(r); }
     double height() const { return ldata()->bbox().height(); }

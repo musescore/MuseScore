@@ -41,6 +41,9 @@ class ModelWithVoiceAndPositionOptions : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * centerBetweenStaves READ centerBetweenStaves CONSTANT)
     Q_PROPERTY(bool isMultiStaffInstrument READ isMultiStaffInstrument WRITE setIsMultiStaffInstrument NOTIFY isMultiStaffInstrumentChanged)
     Q_PROPERTY(
+        bool isStaveCenteringApplicable READ isStaveCenteringApplicable WRITE setIsStaveCenteringApplicable NOTIFY
+        isStaveCenteringApplicableChanged)
+    Q_PROPERTY(
         bool isStaveCenteringAvailable READ isStaveCenteringAvailable WRITE setIsStaveCenteringAvailable NOTIFY
         isStaveCenteringAvailableChanged)
 
@@ -64,6 +67,7 @@ public:
     PropertyItem* voice() const;
     PropertyItem* centerBetweenStaves() const;
     bool isMultiStaffInstrument() const;
+    bool isStaveCenteringApplicable() const;
     bool isStaveCenteringAvailable() const;
 
     Q_INVOKABLE void changeVoice(int voice);
@@ -77,15 +81,17 @@ public:
 
 public slots:
     void setIsMultiStaffInstrument(bool v);
+    void setIsStaveCenteringApplicable(bool v);
     void setIsStaveCenteringAvailable(bool v);
 
 signals:
     void isMultiStaffInstrumentChanged(bool isMultiStaffInstrument);
+    void isStaveCenteringApplicableChanged(bool isStaveCenteringApplicable);
     void isStaveCenteringAvailableChanged(bool isStaveCenteringAvailable);
 
 private:
     void updateIsMultiStaffInstrument();
-    void updateIsStaveCenteringAvailable();
+    void updateStaveCenteringFlags();
 
 private:
     PropertyItem* m_voiceBasedPosition = nullptr;
@@ -93,6 +99,7 @@ private:
     PropertyItem* m_voice = nullptr;
     PropertyItem* m_centerBetweenStaves = nullptr;
     bool m_isMultiStaffInstrument = false;
+    bool m_isStaveCenteringApplicable = false;
     bool m_isStaveCenteringAvailable = false;
 };
 }

@@ -1429,6 +1429,56 @@ bool EngravingItem::isBefore(const EngravingItem* item) const
     return toSegment(thisSeg)->goesBefore(toSegment(otherSeg));
 }
 
+const Staff* EngravingItem::staffToCenterAgainst(bool above, const System* system) const
+{
+    const Part* thisPart = part();
+    const Staff* thisStaff = staff();
+    if (!thisPart || !thisStaff) {
+        return nullptr;
+    }
+
+    const Fraction itemTick = tick();
+    const Instrument* thisPartInstrument = thisPart->instrument(itemTick);
+    const bool participatesInStaffCentering = thisPart->nstaves() > 1 || (thisPartInstrument && thisPartInstrument->isVocalInstrument());
+    if (!participatesInStaffCentering) {
+        return nullptr;
+    }
+
+    if (!system) {
+        if (isSpanner()) {
+            const Segment* startSeg = toSpanner(this)->startSegment();
+            system = startSeg ? startSeg->measure()->system() : nullptr;
+        } else {
+            system = toSystem(findAncestor(ElementType::SYSTEM));
+        }
+    }
+
+    if (!system) {
+        return nullptr;
+    }
+
+    const staff_idx_t thisIdx = thisStaff->idx();
+    const staff_idx_t otherIdx = above ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
+    if (otherIdx == muse::nidx) {
+        return nullptr;
+    }
+
+    const Staff* otherStaff = score()->staff(otherIdx);
+    if (!otherStaff) {
+        return nullptr;
+    }
+
+    if (otherStaff->part() == thisPart) {
+        return otherStaff;
+    }
+
+    // If the staves are not of the same part, only allow centering if they are both vocal parts:
+    const bool bothVocal = thisPartInstrument->isVocalInstrument()
+                           && otherStaff->part()->instrument(itemTick)->isVocalInstrument();
+
+    return bothVocal ? otherStaff : nullptr;
+}
+
 bool EngravingItem::appliesToAllVoicesInInstrument() const
 {
     return hasVoiceAssignmentProperties()
