@@ -28,6 +28,7 @@
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
+#include "part.h"
 
 using namespace mu::engraving;
 
@@ -100,12 +101,19 @@ PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
         return m_staffType->stemless();
     case Pid::HEAD_SCHEME:
         return m_staffType->noteHeadScheme();
+    case Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY:
+        return m_staffType->instrumentLabelVisibility();
     case Pid::STAFF_GEN_CLEF:
         return m_staffType->genClef();
     case Pid::STAFF_GEN_TIMESIG:
         return m_staffType->genTimesig();
     case Pid::STAFF_GEN_KEYSIG:
         return m_staffType->genKeysig();
+    case Pid::STAFF_ENABLE_GROUP_NAMES: {
+        const Part* p = part();
+        const Instrument* instr = p ? p->instrument(tick()) : nullptr;
+        return instr ? instr->instrumentLabel().allowGroupName() : true;
+    }
     case Pid::MAG:
         return m_staffType->userMag();
     case Pid::SMALL:
@@ -153,6 +161,9 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::HEAD_SCHEME:
         m_staffType->setNoteHeadScheme(v.value<NoteHeadScheme>());
         break;
+    case Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY:
+        m_staffType->setInstrumentLabelVisibility(v.value<InstrumentLabelVisibility>());
+        break;
     case Pid::STAFF_GEN_CLEF:
         m_staffType->setGenClef(v.toBool());
         break;
@@ -162,6 +173,14 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STAFF_GEN_KEYSIG:
         m_staffType->setGenKeysig(v.toBool());
         break;
+    case Pid::STAFF_ENABLE_GROUP_NAMES: {
+        Part* p = part();
+        Instrument* instr = p ? p->instrument(tick()) : nullptr;
+        if (instr) {
+            instr->instrumentLabel().setAllowGroupName(v.toBool());
+        }
+    }
+    break;
     case Pid::MAG: {
         double _spatium = spatium();
         m_staffType->setUserMag(v.toDouble());
@@ -229,11 +248,15 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
         return false;
     case Pid::HEAD_SCHEME:
         return NoteHeadScheme::HEAD_NORMAL;
+    case Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY:
+        return InstrumentLabelVisibility::AUTO;
     case Pid::STAFF_GEN_CLEF:
         return true;
     case Pid::STAFF_GEN_TIMESIG:
         return true;
     case Pid::STAFF_GEN_KEYSIG:
+        return true;
+    case Pid::STAFF_ENABLE_GROUP_NAMES:
         return true;
     case Pid::MAG:
         return 1.0;

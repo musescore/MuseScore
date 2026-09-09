@@ -30,6 +30,7 @@ class Factory;
 class System;
 class Transaction;
 enum class BracketType : signed char;
+enum class InstrumentNameType : char;
 
 //---------------------------------------------------------
 //   @@ Bracket
@@ -59,6 +60,9 @@ public:
     size_t firstStaff() const { return m_firstStaff; }
     size_t lastStaff() const { return m_lastStaff; }
     void setStaffSpan(size_t a, size_t b);
+
+    InstrumentNameType labelType() const { return m_labelType; }
+    void setLabelType(InstrumentNameType t) { m_labelType = t; }
 
     SymId braceSymbol() const { return m_braceSymbol; }
     void setBraceSymbol(const SymId& sym) { m_braceSymbol = sym; }
@@ -130,6 +134,8 @@ private:
 
     size_t m_firstStaff = 0;
     size_t m_lastStaff = 0;
+
+    InstrumentNameType m_labelType;
 
     SymId m_braceSymbol = SymId::noSym;
 

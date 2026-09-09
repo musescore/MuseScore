@@ -60,12 +60,14 @@ void StaffTypeSettingsModel::createProperties()
     m_color = buildPropertyItem(mu::engraving::Pid::STAFF_COLOR);
 
     m_noteheadSchemeType = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
+    m_instrumentLabelVisibility = buildPropertyItem(mu::engraving::Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY);
     m_isStemless = buildPropertyItem(mu::engraving::Pid::STAFF_STEMLESS);
     m_shouldShowBarlines = buildPropertyItem(mu::engraving::Pid::STAFF_SHOW_BARLINES);
     m_shouldShowLedgerLines = buildPropertyItem(mu::engraving::Pid::STAFF_SHOW_LEDGERLINES);
     m_shouldGenerateClefs = buildPropertyItem(mu::engraving::Pid::STAFF_GEN_CLEF);
     m_shouldGenerateTimeSignatures = buildPropertyItem(mu::engraving::Pid::STAFF_GEN_TIMESIG);
     m_shouldGenerateKeySignatures = buildPropertyItem(mu::engraving::Pid::STAFF_GEN_KEYSIG);
+    m_shouldEnableGroupNames = buildPropertyItem(mu::engraving::Pid::STAFF_ENABLE_GROUP_NAMES);
 
     m_staffLongName = buildPropertyItem(mu::engraving::Pid::STAFF_LONG_NAME);
     m_staffShortName = buildPropertyItem(mu::engraving::Pid::STAFF_SHORT_NAME);
@@ -99,12 +101,14 @@ void StaffTypeSettingsModel::loadProperties()
     loadPropertyItem(m_color);
 
     loadPropertyItem(m_noteheadSchemeType);
+    loadPropertyItem(m_instrumentLabelVisibility);
     loadPropertyItem(m_isStemless);
     loadPropertyItem(m_shouldShowBarlines);
     loadPropertyItem(m_shouldShowLedgerLines);
     loadPropertyItem(m_shouldGenerateClefs);
     loadPropertyItem(m_shouldGenerateTimeSignatures);
     loadPropertyItem(m_shouldGenerateKeySignatures);
+    loadPropertyItem(m_shouldEnableGroupNames);
 
     loadPropertyItem(m_staffLongName);
     loadPropertyItem(m_staffShortName);
@@ -155,6 +159,11 @@ PropertyItem* StaffTypeSettingsModel::noteheadSchemeType() const
     return m_noteheadSchemeType;
 }
 
+PropertyItem* StaffTypeSettingsModel::instrumentLabelVisibility() const
+{
+    return m_instrumentLabelVisibility;
+}
+
 PropertyItem* StaffTypeSettingsModel::isStemless() const
 {
     return m_isStemless;
@@ -183,6 +192,11 @@ PropertyItem* StaffTypeSettingsModel::shouldGenerateTimeSignatures() const
 PropertyItem* StaffTypeSettingsModel::shouldGenerateKeySignatures() const
 {
     return m_shouldGenerateKeySignatures;
+}
+
+PropertyItem* StaffTypeSettingsModel::shouldEnableGroupNames() const
+{
+    return m_shouldEnableGroupNames;
 }
 
 PropertyItem* StaffTypeSettingsModel::staffLongName() const

@@ -43,12 +43,14 @@ class StaffTypeSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * color READ color CONSTANT)
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * noteheadSchemeType READ noteheadSchemeType CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * instrumentLabelVisibility READ instrumentLabelVisibility CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * isStemless READ isStemless CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldShowBarlines READ shouldShowBarlines CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldShowLedgerLines READ shouldShowLedgerLines CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldGenerateClefs READ shouldGenerateClefs CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldGenerateTimeSignatures READ shouldGenerateTimeSignatures CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldGenerateKeySignatures READ shouldGenerateKeySignatures CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldEnableGroupNames READ shouldEnableGroupNames CONSTANT)
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * staffLongName READ staffLongName CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * staffShortName READ staffShortName CONSTANT)
@@ -71,12 +73,14 @@ public:
     PropertyItem* color() const;
 
     PropertyItem* noteheadSchemeType() const;
+    PropertyItem* instrumentLabelVisibility() const;
     PropertyItem* isStemless() const;
     PropertyItem* shouldShowBarlines() const;
     PropertyItem* shouldShowLedgerLines() const;
     PropertyItem* shouldGenerateClefs() const;
     PropertyItem* shouldGenerateTimeSignatures() const;
     PropertyItem* shouldGenerateKeySignatures() const;
+    PropertyItem* shouldEnableGroupNames() const;
 
     PropertyItem* staffLongName() const;
     PropertyItem* staffShortName() const;
@@ -93,12 +97,14 @@ private:
     PropertyItem* m_color = nullptr;
 
     PropertyItem* m_noteheadSchemeType = nullptr;
+    PropertyItem* m_instrumentLabelVisibility = nullptr;
     PropertyItem* m_isStemless = nullptr;
     PropertyItem* m_shouldShowBarlines = nullptr;
     PropertyItem* m_shouldShowLedgerLines = nullptr;
     PropertyItem* m_shouldGenerateClefs = nullptr;
     PropertyItem* m_shouldGenerateTimeSignatures = nullptr;
     PropertyItem* m_shouldGenerateKeySignatures = nullptr;
+    PropertyItem* m_shouldEnableGroupNames = nullptr;
 
     PropertyItem* m_staffLongName = nullptr;
     PropertyItem* m_staffShortName = nullptr;

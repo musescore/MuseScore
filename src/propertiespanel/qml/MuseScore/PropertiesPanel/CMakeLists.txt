@@ -234,6 +234,7 @@ qt_add_qml_module(propertiespanel_qml
         types/noteheadtypes.h
         types/ornamenttypes.h
         types/slurtietypes.h
+        types/stafftypelabeltypes.h
         types/texttypes.h
         types/tremolobartypes.h
         types/tremolotypes.h

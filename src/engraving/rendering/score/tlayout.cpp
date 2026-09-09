@@ -1561,7 +1561,7 @@ void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata
     double minHeight = bracketHeight - 6 * textPadding;
 
     if (textOrientation == Orientation::HORIZONTAL) {
-        text->setXmlText(item->system()->ldata()->useLongNames() ? bracketItem->longName() : bracketItem->shortName());
+        text->setXmlText(item->labelType() == InstrumentNameType::LONG ? bracketItem->longName() : bracketItem->shortName());
         layoutText(text, text->mutldata());
     } else {
         text->setXmlText(bracketItem->longName());

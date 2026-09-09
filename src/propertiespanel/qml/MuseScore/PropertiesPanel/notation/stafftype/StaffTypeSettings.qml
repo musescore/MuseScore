@@ -213,6 +213,22 @@ Column {
         ]
     }
 
+    DropdownPropertyView {
+        id: instrumentLabelVisibility
+        titleText: qsTrc("propertiespanel", "Instrument label visibility")
+        propertyItem: root.model ? root.model.instrumentLabelVisibility : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: noteHeadScheme.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("propertiespanel", "Auto"), value: InstrumentLabel.VISIBILITY_AUTO },
+            { text: qsTrc("propertiespanel", "Long"), value: InstrumentLabel.VISIBILITY_LONG },
+            { text: qsTrc("propertiespanel", "Short"), value: InstrumentLabel.VISIBILITY_SHORT },
+            { text: qsTrc("propertiespanel", "Hide"), value: InstrumentLabel.VISIBILITY_HIDE }
+        ]
+    }
+
     Column {
         spacing: 6
 
@@ -224,7 +240,7 @@ Column {
 
             navigation.name: "StremlessCheckBox"
             navigation.panel: root.navigationPanel
-            navigation.row: noteHeadScheme.navigationRowEnd + 1
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 1
         }
 
         PropertyCheckBox {
@@ -233,7 +249,7 @@ Column {
 
             navigation.name: "ShowBarlinesCheckBox"
             navigation.panel: root.navigationPanel
-            navigation.row: noteHeadScheme.navigationRowEnd + 2
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 2
         }
 
         PropertyCheckBox {
@@ -242,7 +258,7 @@ Column {
 
             navigation.name: "ShowLedgerLinesCheckBox"
             navigation.panel: root.navigationPanel
-            navigation.row: noteHeadScheme.navigationRowEnd + 3
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 3
         }
 
         PropertyCheckBox {
@@ -251,7 +267,7 @@ Column {
 
             navigation.name: "GenerateClefsCheckBox"
             navigation.panel: root.navigationPanel
-            navigation.row: noteHeadScheme.navigationRowEnd + 4
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 4
         }
 
         PropertyCheckBox {
@@ -260,7 +276,7 @@ Column {
 
             navigation.name: "GenerateTimeSignaturesCheckBox"
             navigation.panel: root.navigationPanel
-            navigation.row: noteHeadScheme.navigationRowEnd + 5
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 5
         }
 
         PropertyCheckBox {
@@ -269,7 +285,16 @@ Column {
 
             navigation.name: "GenerateKeySignaturesCheckBox"
             navigation.panel: root.navigationPanel
-            navigation.row: noteHeadScheme.navigationRowEnd + 6
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 6
+        }
+
+        PropertyCheckBox {
+            text: qsTrc("propertiespanel", "Enable group names")
+            propertyItem: root.model ? root.model.shouldEnableGroupNames : null
+
+            navigation.name: "EnableGroupNamesCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: instrumentLabelVisibility.navigationRowEnd + 7
         }
     }
 }

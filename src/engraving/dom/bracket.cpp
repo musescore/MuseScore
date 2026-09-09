@@ -25,6 +25,7 @@
 #include "types/typesconv.h"
 
 #include "bracketitem.h"
+#include "instrumentname.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -47,6 +48,7 @@ Bracket::Bracket(EngravingItem* parent)
     m_ay1          = 0;
     m_firstStaff  = 0;
     m_lastStaff   = 0;
+    m_labelType   = InstrumentNameType::LONG;
     m_bi          = 0;
     m_braceSymbol = SymId::noSym;
     m_magx        = 1.;
