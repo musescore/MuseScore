@@ -39,7 +39,9 @@ public:
     static bool readScoreTag(Score* score, XmlReader& e, ReadContext& ctx);
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
+    bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale, rw::PasteMode mode) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
+    void pasteSymbols(XmlReader& e, ChordRest* dst, rw::PasteMode mode) override;
     void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) override;
 
 private:

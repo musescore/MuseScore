@@ -25,7 +25,7 @@
 
 #include "../xmlreader.h"
 #include "readcontext.h"
-
+#include "../ireader.h"
 #include "../../dom/property.h"
 
 namespace mu::engraving {
@@ -394,7 +394,7 @@ public:
     static void readSystemLocks(Score* score, XmlReader& e);
     static void readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx);
 
-    static void readScoreSpanners(Score* score, XmlReader& e, ReadContext& ctx);
+    static void readScoreSpanners(Score* score, XmlReader& e, ReadContext& ctx, rw::PasteMode mode = rw::PasteMode::Default);
 
     static void readItemEID(EngravingObject* item, XmlReader& xml, ReadContext& ctx);
     static void readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx);

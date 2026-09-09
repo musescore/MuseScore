@@ -113,6 +113,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        PASTE_DYNAMICS_COMMAND,
+        TranslatableString("action", "Paste &dynamics"),
+        TranslatableString("action", "Paste dynamics"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         DELETE_COMMAND,
         TranslatableString("action", "De&lete"),
         TranslatableString("action", "Delete the current notation element"),
