@@ -38,8 +38,7 @@ public:
     MOCK_METHOD(muse::Ret, startConvert, (const ConvertInput&, const muse::String&), (override));
     MOCK_METHOD((muse::async::Channel<muse::Ret, ScoreInfo>), convertFinished, (), (const, override));
 
-    MOCK_METHOD(muse::StringList, fileNamesBeingConverted, (), (const, override));
-    MOCK_METHOD(muse::async::Notification, fileNamesBeingConvertedChanged, (), (const, override));
+    MOCK_METHOD(muse::ValNt<WatchedScoreList>, watchedScores, (), (const, override));
 
     MOCK_METHOD((muse::async::Channel<PollingFailure>), pollingFailed, (), (const, override));
     MOCK_METHOD(void, retryPolling, (), (override));

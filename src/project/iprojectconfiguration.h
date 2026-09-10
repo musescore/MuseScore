@@ -180,7 +180,7 @@ public:
     virtual bool showConvertFileProcessingDialog() const = 0;
     virtual void setShowConvertFileProcessingDialog(bool show) = 0;
 
-    virtual muse::io::path_t pendingConvertsJsonPath() const = 0;
+    virtual muse::io::path_t watchedConvertsJsonPath() const = 0;
 };
 }
 

@@ -58,9 +58,8 @@ public:
     //! Emits the final result of a conversion (upload or processing failure, or success with ScoreInfo)
     virtual muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const = 0;
 
-    //! Names of the files currently being converted server-side (queued or processing)
-    virtual muse::StringList fileNamesBeingConverted() const = 0;
-    virtual muse::async::Notification fileNamesBeingConvertedChanged() const = 0;
+    //! All pending/reviewable conversions from the server's convert queue
+    virtual muse::ValNt<WatchedScoreList> watchedScores() const = 0;
 
     //! Emitted whenever checking the conversion status fails
     virtual muse::async::Channel<PollingFailure> pollingFailed() const = 0;

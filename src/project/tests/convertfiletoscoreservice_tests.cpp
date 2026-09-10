@@ -595,8 +595,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadFails_ForwardsF
 TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_PersistsWatchedItemAndPolls)
 {
     // [GIVEN] The upload succeeds with queue id TEST_QUEUE_ID
-    ON_CALL(*m_configuration, pendingConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
 
     auto uploadProgress = std::make_shared<Progress>();
     const io::paths_t paths { "/some/path/file.pdf" };
@@ -614,7 +614,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     }));
 
     bool savedExpectedEntry = false;
-    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/pending.json"), _))
+    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/watched.json"), _))
     .WillOnce(Invoke([&](const io::path_t&, const ByteArray& data) {
         std::string err;
         JsonDocument json = JsonDocument::fromJson(data, &err);
@@ -639,8 +639,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
 TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_PersistsAudio2ScoreType)
 {
     // [GIVEN] The upload succeeds for an Audio2Score conversion
-    ON_CALL(*m_configuration, pendingConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
 
     auto uploadProgress = std::make_shared<Progress>();
     ON_CALL(*m_convertService, upload(_))
@@ -651,7 +651,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     }));
 
     bool savedExpectedType = false;
-    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/pending.json"), _))
+    EXPECT_CALL(*m_fileSystem, writeFile(io::path_t("/watched.json"), _))
     .WillOnce(Invoke([&](const io::path_t&, const ByteArray& data) {
         std::string err;
         JsonDocument json = JsonDocument::fromJson(data, &err);
@@ -672,19 +672,19 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
 }
 
 // ==================================================
-// fileNamesBeingConverted() / fileNamesBeingConvertedChanged()
+// watchedScores()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_Initially_Empty)
+TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_Initially_Empty)
 {
-    EXPECT_TRUE(m_service->fileNamesBeingConverted().empty());
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterStartConvert_ContainsFileNameAndFiresChanged)
+TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterStartConvert_ContainsScoreAndFiresChanged)
 {
     // [GIVEN] The upload succeeds, and polling is left pending (the item stays watched)
-    ON_CALL(*m_configuration, pendingConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/pending.json")));
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
     ON_CALL(*m_fileSystem, writeFile(_, _))
     .WillByDefault(Return(make_ok()));
 
@@ -698,7 +698,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterStart
     }));
 
     bool changed = false;
-    m_service->fileNamesBeingConvertedChanged().onNotify(nullptr, [&] {
+    m_service->watchedScores().notification.onNotify(nullptr, [&] {
         changed = true;
     });
 
@@ -706,13 +706,14 @@ TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterStart
     m_service->startConvert(OmrConvertInput { paths }, u"My Score");
     uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
 
-    // [THEN] The file being converted is reported, and the change is signaled
+    // [THEN] The score being converted is reported, and the change is signaled
     EXPECT_TRUE(changed);
-    ASSERT_EQ(m_service->fileNamesBeingConverted().size(), 1u);
-    EXPECT_EQ(m_service->fileNamesBeingConverted().front(), u"My Score");
+    const WatchedScoreList watchedScores = m_service->watchedScores().val;
+    ASSERT_EQ(watchedScores.size(), 1u);
+    EXPECT_EQ(watchedScores.front().name, u"My Score");
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterDone_NoLongerContainsFileName)
+TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterDone_NoLongerContainsScore)
 {
     // [GIVEN] The queue reports the conversion as done, with its scoreId
     ConvertQueueItem item;
@@ -725,7 +726,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterDone_
     .WillByDefault(Invoke([] { return okScoreInfo(555); }));
 
     bool changed = false;
-    m_service->fileNamesBeingConvertedChanged().onNotify(nullptr, [&] {
+    m_service->watchedScores().notification.onNotify(nullptr, [&] {
         changed = true;
     });
 
@@ -734,11 +735,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, FileNamesBeingConverted_AfterDone_
 
     // [THEN] The item is reported ready and immediately erased, so it's no longer being converted
     EXPECT_TRUE(changed);
-    EXPECT_TRUE(m_service->fileNamesBeingConverted().empty());
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
 // ==================================================
-// resumeConvert() / loadWatchedItems()
+// resumeConvert()
 // ==================================================
 
 TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatchedItem)
@@ -753,9 +754,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatche
     array << obj;
     JsonDocument json(array);
 
-    ON_CALL(*m_configuration, pendingConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/pending.json")));
-    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
     .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
 
     ON_CALL(*m_convertService, fetchQueue())
@@ -764,7 +765,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatche
     }));
 
     bool changed = false;
-    m_service->fileNamesBeingConvertedChanged().onNotify(nullptr, [&] {
+    m_service->watchedScores().notification.onNotify(nullptr, [&] {
         changed = true;
     });
 
@@ -773,8 +774,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatche
 
     // [THEN] The persisted item is restored and reported as being converted, and polling resumes
     EXPECT_TRUE(changed);
-    ASSERT_EQ(m_service->fileNamesBeingConverted().size(), 1u);
-    EXPECT_EQ(m_service->fileNamesBeingConverted().front(), u"My Score");
+    const WatchedScoreList watchedScores = m_service->watchedScores().val;
+    ASSERT_EQ(watchedScores.size(), 1u);
+    EXPECT_EQ(watchedScores.front().name, u"My Score");
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemWithScoreId_SendsReviewRequested)
@@ -791,9 +793,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemWi
     array << obj;
     JsonDocument json(array);
 
-    ON_CALL(*m_configuration, pendingConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/pending.json")));
-    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
     .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
 
     ON_CALL(*m_convertService, fetchQueue())
@@ -829,9 +831,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemWi
     array << obj;
     JsonDocument json(array);
 
-    ON_CALL(*m_configuration, pendingConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/pending.json")));
-    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
     .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
 
     ON_CALL(*m_convertService, fetchQueue())
@@ -1036,9 +1038,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
     array << omrObj << audioObj;
     JsonDocument json(array);
 
-    ON_CALL(*m_configuration, pendingConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/pending.json")));
-    ON_CALL(*m_fileSystem, readFile(io::path_t("/pending.json")))
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
     .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
     ON_CALL(*m_fileSystem, writeFile(_, _))
     .WillByDefault(Return(make_ok()));
@@ -1060,7 +1062,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
     ON_CALL(*m_convertService, fetchQueue())
     .WillByDefault(Invoke([failedOmrItem, doneAudioItem] {
         return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { failedOmrItem,
-                                                                                                                doneAudioItem }));
+                                                                                                               doneAudioItem }));
     }));
 
     ON_CALL(*m_museScoreComService, downloadScoreInfo(999))

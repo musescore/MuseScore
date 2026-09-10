@@ -45,7 +45,7 @@ void RecentScoresModel::load()
         updateRecentScores();
     });
 
-    convertFileToScoreService()->fileNamesBeingConvertedChanged().onNotify(this, [this]() {
+    convertFileToScoreService()->watchedScores().notification.onNotify(this, [this]() {
         updateRecentScores();
     });
 }
@@ -64,10 +64,10 @@ void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 void RecentScoresModel::updateRecentScores()
 {
     const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
-    const StringList processingFiles = convertFileToScoreService()->fileNamesBeingConverted();
+    const WatchedScoreList watchedScores = convertFileToScoreService()->watchedScores().val;
 
     std::vector<QVariantMap> items;
-    items.reserve(recentScores.size() + processingFiles.size() + 2);
+    items.reserve(recentScores.size() + watchedScores.size() + 2);
 
     QVariantMap addItem;
     addItem[NAME_KEY] = muse::qtrc("project", "New score");
@@ -77,9 +77,13 @@ void RecentScoresModel::updateRecentScores()
     addItem[IS_CLOUD_KEY] = false;
     items.push_back(addItem);
 
-    for (const String& fileName : processingFiles) {
+    for (const WatchedScore& watchedScore : watchedScores) {
+        if (watchedScore.convertStatus != ConvertStatus::Processing) {
+            continue;
+        }
+
         QVariantMap obj;
-        obj[NAME_KEY] = fileName.toQString();
+        obj[NAME_KEY] = watchedScore.name.toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULTS_FOUND_KEY] = false;
         obj[IS_PROCESSING_KEY] = true;

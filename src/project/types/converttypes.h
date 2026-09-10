@@ -22,7 +22,9 @@
 
 #pragma once
 
+#include <optional>
 #include <variant>
+#include <vector>
 
 #include <QUrl>
 
@@ -32,12 +34,14 @@
 #include "cloud/cloudtypes.h"
 
 #include "global/io/path.h"
+#include "global/types/string.h"
 #include "global/types/secs.h"
 #include "global/types/ret.h"
 
 namespace mu::project {
 using ConvertConfig = muse::cloud::ConvertConfig;
 using ConvertType = muse::cloud::ConvertType;
+using ConvertStatus = muse::cloud::ConvertStatus;
 using ReviewRating = muse::cloud::ReviewRating;
 using LinkSource = muse::cloud::LinkSource;
 using LinkSources = muse::cloud::LinkSources;
@@ -91,4 +95,22 @@ struct PollingFailure {
     muse::secs_t nextInterval = 0.;
     bool gaveUp = false;
 };
+
+struct WatchedScore {
+    int convertId = 0;
+    ConvertType convertType = ConvertType::Omr;
+    ConvertStatus convertStatus = ConvertStatus::Unknown;
+    std::optional<int> scoreId; //! set once the score is ready and reported (Done/AwaitingReview)
+    muse::String name;
+
+    bool operator==(const WatchedScore& other) const
+    {
+        return convertId == other.convertId
+               && convertType == other.convertType
+               && convertStatus == other.convertStatus
+               && scoreId == other.scoreId
+               && name == other.name;
+    }
+};
+using WatchedScoreList = std::vector<WatchedScore>;
 }

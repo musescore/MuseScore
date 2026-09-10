@@ -174,7 +174,7 @@ public:
     bool showConvertFileProcessingDialog() const override;
     void setShowConvertFileProcessingDialog(bool show) override;
 
-    muse::io::path_t pendingConvertsJsonPath() const override;
+    muse::io::path_t watchedConvertsJsonPath() const override;
 
 private:
     muse::io::path_t appTemplatesPath() const;

@@ -154,7 +154,7 @@ public:
     MOCK_METHOD(bool, showConvertFileProcessingDialog, (), (const, override));
     MOCK_METHOD(void, setShowConvertFileProcessingDialog, (bool), (override));
 
-    MOCK_METHOD(muse::io::path_t, pendingConvertsJsonPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, watchedConvertsJsonPath, (), (const, override));
 };
 }
 
