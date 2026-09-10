@@ -203,14 +203,14 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>frame</style>
+          <eid>F_F</eid>
           <text>îèéààéà</text>
           </Text>
         <Text>
+          <style>frame</style>
           <eid>G_G</eid>
           <offset x="55" y="0.5"/>
-          <style>frame</style>
           <text>éééàè</text>
           </Text>
         </VBox>
@@ -220,14 +220,14 @@
         <boxAutoSize>0</boxAutoSize>
         <eid>H_H</eid>
         <Text>
-          <eid>I_I</eid>
           <style>frame</style>
+          <eid>I_I</eid>
           <text>êêàééééç*éô</text>
           </Text>
         <Text>
+          <style>frame</style>
           <eid>J_J</eid>
           <offset x="55" y="0.5"/>
-          <style>frame</style>
           <text>àéùééé</text>
           </Text>
         </VBox>

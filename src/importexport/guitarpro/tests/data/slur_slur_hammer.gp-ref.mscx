@@ -167,9 +167,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>a_a</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>b_b</eid>
           <track>0</track>
@@ -182,9 +182,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>d_d</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>e_e</eid>
           <track>0</track>

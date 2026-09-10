@@ -134,14 +134,14 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>T_T</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <HammerOnPullOffText idx="1">
+            <style>hammer_on_pull_off</style>
             <eid>U_U</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>V_V</eid>
           <track>0</track>

@@ -571,13 +571,13 @@
         <height>10</height>
         <eid>R_R</eid>
         <Text>
-          <eid>S_S</eid>
           <style>title</style>
+          <eid>S_S</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>T_T</eid>
           <style>composer</style>
+          <eid>T_T</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>

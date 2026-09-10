@@ -149,8 +149,8 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>H_H</eid>
             <style>harp_pedal_text_diagram</style>
+            <eid>H_H</eid>
             <text>E<sym>csymAccidentalNatural</sym> F<sym>csymAccidentalNatural</sym> G<sym>csymAccidentalNatural</sym> A<sym>csymAccidentalNatural</sym> <br/>D<sym>csymAccidentalNatural</sym> C<sym>csymAccidentalNatural</sym> B<sym>csymAccidentalNatural</sym> </text>
             </HarpPedalDiagram>
           <Rest>
@@ -174,8 +174,8 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>K_K</eid>
             <style>harp_pedal_text_diagram</style>
+            <eid>K_K</eid>
             <text>F<sym>csymAccidentalSharp</sym> <br/>C<sym>csymAccidentalSharp</sym> </text>
             </HarpPedalDiagram>
           <Rest>
@@ -199,8 +199,8 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>N_N</eid>
             <style>harp_pedal_text_diagram</style>
+            <eid>N_N</eid>
             <text>F<sym>csymAccidentalSharp</sym> <br/>C<sym>csymAccidentalSharp</sym> </text>
             </HarpPedalDiagram>
           <Rest>
@@ -224,8 +224,8 @@
               <string name="5">2</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>Q_Q</eid>
             <style>harp_pedal_text_diagram</style>
+            <eid>Q_Q</eid>
             <text>G<sym>csymAccidentalSharp</sym> <br/></text>
             </HarpPedalDiagram>
           <Rest>

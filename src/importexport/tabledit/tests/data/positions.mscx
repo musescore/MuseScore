@@ -81,8 +81,8 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>Positions</text>
           </Text>
         </VBox>

@@ -56,8 +56,8 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>tied_bend_tieBack_regression</text>
           </Text>
         </VBox>

@@ -122,18 +122,18 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text><font size="22"/>Text Quirk Inference</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Henry Ives</text>
           </Text>
         </VBox>
@@ -391,8 +391,8 @@
       <Measure>
         <eid>7_7</eid>
         <Marker>
-          <eid>8_8</eid>
           <style>repeat_left</style>
+          <eid>8_8</eid>
           <text><sym>segno</sym></text>
           <label>segno</label>
           <markerType>segno</markerType>
@@ -493,8 +493,8 @@
       <Measure>
         <eid>PB_PB</eid>
         <Jump>
-          <eid>QB_QB</eid>
           <style>repeat_right</style>
+          <eid>QB_QB</eid>
           <text><b>D.<sym>segno</sym>. al Coda</b></text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
@@ -744,8 +744,8 @@
       <Measure>
         <eid>BC_BC</eid>
         <Marker>
-          <eid>CC_CC</eid>
           <style>repeat_right</style>
+          <eid>CC_CC</eid>
           <text><b>To Coda <sym>coda</sym></b></text>
           <label>coda</label>
           <markerType>coda</markerType>
@@ -829,8 +829,8 @@
       <Measure>
         <eid>SC_SC</eid>
         <Marker>
-          <eid>TC_TC</eid>
           <style>repeat_left</style>
+          <eid>TC_TC</eid>
           <text><b><sym>coda</sym> Coda</b></text>
           <label>codab</label>
           <markerType>codab</markerType>

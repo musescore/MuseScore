@@ -173,13 +173,13 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>testInferSegnoII</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>composer</style>
+          <eid>G_G</eid>
           <text>James M</text>
           </Text>
         </VBox>
@@ -300,8 +300,8 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <eid>f_f</eid>
           <style>repeat_left</style>
+          <eid>f_f</eid>
           <text>segno I</text>
           <label>segno</label>
           <markerType>segno</markerType>
@@ -410,8 +410,8 @@
       <Measure>
         <eid>0_0</eid>
         <Marker>
-          <eid>1_1</eid>
           <style>repeat_right</style>
+          <eid>1_1</eid>
           <text>To coda I<br/><sym>coda</sym></text>
           <label>coda</label>
           <markerType>coda</markerType>
@@ -746,8 +746,8 @@
       <Measure>
         <eid>5B_5B</eid>
         <Marker>
-          <eid>6B_6B</eid>
           <style>repeat_left</style>
+          <eid>6B_6B</eid>
           <text><sym>segno</sym> <sym>segno</sym></text>
           <label>segnoii</label>
           <markerType>segno</markerType>
@@ -864,8 +864,8 @@
       <Measure>
         <eid>RC_RC</eid>
         <Marker>
-          <eid>SC_SC</eid>
           <style>repeat_right</style>
+          <eid>SC_SC</eid>
           <text>To coda II<br/><sym>coda</sym><sym>coda</sym></text>
           <label>codaii</label>
           <markerType>coda</markerType>
@@ -1110,8 +1110,8 @@
       <Measure>
         <eid>DD_DD</eid>
         <Jump>
-          <eid>ED_ED</eid>
           <style>repeat_right</style>
+          <eid>ED_ED</eid>
           <text>D.S. I (no repeats) al Coda I</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
@@ -1445,8 +1445,8 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <eid>HE_HE</eid>
           <style>repeat_left</style>
+          <eid>HE_HE</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>
@@ -1576,8 +1576,8 @@
       <Measure>
         <eid>hE_hE</eid>
         <Jump>
-          <eid>iE_iE</eid>
           <style>repeat_right</style>
+          <eid>iE_iE</eid>
           <text>D.S.S al Coda II</text>
           <jumpTo>segnoii</jumpTo>
           <playUntil>codaii</playUntil>
@@ -1711,8 +1711,8 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <eid>+E_+E</eid>
           <style>repeat_left</style>
+          <eid>+E_+E</eid>
           <text>Coda II<br/><sym>coda</sym><sym>coda</sym></text>
           <label>codabii</label>
           <markerType>codab</markerType>

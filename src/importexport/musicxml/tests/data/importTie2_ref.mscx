@@ -237,8 +237,8 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>poet</style>
+          <eid>G_G</eid>
           <align>left,top</align>
           <text><font size="12"/>Score</text>
           </Text>

@@ -134,18 +134,18 @@
         <height>10</height>
         <eid>G_G</eid>
         <Text>
-          <eid>H_H</eid>
           <style>title</style>
+          <eid>H_H</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>subtitle</style>
+          <eid>I_I</eid>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>composer</style>
+          <eid>J_J</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
@@ -1355,26 +1355,26 @@
           <eid>nD_nD</eid>
           <linkedTo>G_G</linkedTo>
           <Text>
+            <style>title</style>
             <eid>oD_oD</eid>
             <linkedTo>H_H</linkedTo>
-            <style>title</style>
             <text>Untitled score</text>
             </Text>
           <Text>
+            <style>subtitle</style>
             <eid>pD_pD</eid>
             <linkedTo>I_I</linkedTo>
-            <style>subtitle</style>
             <text>Subtitle</text>
             </Text>
           <Text>
+            <style>composer</style>
             <eid>qD_qD</eid>
             <linkedTo>J_J</linkedTo>
-            <style>composer</style>
             <text>Composer / arranger</text>
             </Text>
           <Text>
-            <eid>rD_rD</eid>
             <style>instrument_excerpt</style>
+            <eid>rD_rD</eid>
             <text>Flute</text>
             </Text>
           </VBox>
@@ -2095,26 +2095,26 @@
           <eid>qF_qF</eid>
           <linkedTo>G_G</linkedTo>
           <Text>
+            <style>title</style>
             <eid>rF_rF</eid>
             <linkedTo>H_H</linkedTo>
-            <style>title</style>
             <text>Untitled score</text>
             </Text>
           <Text>
+            <style>subtitle</style>
             <eid>sF_sF</eid>
             <linkedTo>I_I</linkedTo>
-            <style>subtitle</style>
             <text>Subtitle</text>
             </Text>
           <Text>
+            <style>composer</style>
             <eid>tF_tF</eid>
             <linkedTo>J_J</linkedTo>
-            <style>composer</style>
             <text>Composer / arranger</text>
             </Text>
           <Text>
-            <eid>uF_uF</eid>
             <style>instrument_excerpt</style>
+            <eid>uF_uF</eid>
             <text>Oboe</text>
             </Text>
           </VBox>

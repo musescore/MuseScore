@@ -512,13 +512,13 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Gold on the Ceiling</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>The Black Keys<br/>El Camino</text>
           </Text>
         </VBox>

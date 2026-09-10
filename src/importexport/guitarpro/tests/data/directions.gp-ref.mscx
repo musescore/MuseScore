@@ -54,8 +54,8 @@
       <Measure>
         <eid>E_E</eid>
         <Marker>
-          <eid>F_F</eid>
           <style>repeat_right</style>
+          <eid>F_F</eid>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
@@ -111,8 +111,8 @@
       <Measure>
         <eid>Q_Q</eid>
         <Jump>
-          <eid>R_R</eid>
           <style>repeat_right</style>
+          <eid>R_R</eid>
           <text>D.C.</text>
           <jumpTo>start</jumpTo>
           <playUntil>end</playUntil>
@@ -163,8 +163,8 @@
       <Measure>
         <eid>b_b</eid>
         <Jump>
-          <eid>c_c</eid>
           <style>repeat_right</style>
+          <eid>c_c</eid>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>coda</playUntil>
@@ -215,8 +215,8 @@
       <Measure>
         <eid>m_m</eid>
         <Jump>
-          <eid>n_n</eid>
           <style>repeat_right</style>
+          <eid>n_n</eid>
           <text>D.C. al Doppia Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>varcoda</playUntil>
@@ -267,8 +267,8 @@
       <Measure>
         <eid>x_x</eid>
         <Jump>
-          <eid>y_y</eid>
           <style>repeat_right</style>
+          <eid>y_y</eid>
           <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
           <playUntil>fine</playUntil>
@@ -301,8 +301,8 @@
       <Measure>
         <eid>4_4</eid>
         <Jump>
-          <eid>5_5</eid>
           <style>repeat_right</style>
+          <eid>5_5</eid>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
@@ -335,8 +335,8 @@
       <Measure>
         <eid>/_/</eid>
         <Jump>
-          <eid>AB_AB</eid>
           <style>repeat_right</style>
+          <eid>AB_AB</eid>
           <text>D.S. al Doppia Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>varcoda</playUntil>
@@ -369,8 +369,8 @@
       <Measure>
         <eid>GB_GB</eid>
         <Jump>
-          <eid>HB_HB</eid>
           <style>repeat_right</style>
+          <eid>HB_HB</eid>
           <text>D.S. al Fine</text>
           <jumpTo>segno</jumpTo>
           <playUntil>fine</playUntil>
@@ -403,8 +403,8 @@
       <Measure>
         <eid>NB_NB</eid>
         <Jump>
-          <eid>OB_OB</eid>
           <style>repeat_right</style>
+          <eid>OB_OB</eid>
           <text>Dal Doppio Segno</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>end</playUntil>
@@ -450,8 +450,8 @@
       <Measure>
         <eid>XB_XB</eid>
         <Jump>
-          <eid>YB_YB</eid>
           <style>repeat_right</style>
+          <eid>YB_YB</eid>
           <text>D.D.S. al Coda</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>coda</playUntil>
@@ -497,8 +497,8 @@
       <Measure>
         <eid>hB_hB</eid>
         <Jump>
-          <eid>iB_iB</eid>
           <style>repeat_right</style>
+          <eid>iB_iB</eid>
           <text>D.D.S. al Doppia Coda</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>varcoda</playUntil>
@@ -544,8 +544,8 @@
       <Measure>
         <eid>rB_rB</eid>
         <Jump>
-          <eid>sB_sB</eid>
           <style>repeat_right</style>
+          <eid>sB_sB</eid>
           <text>D.D.S. al Fine</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>fine</playUntil>
@@ -578,8 +578,8 @@
       <Measure>
         <eid>yB_yB</eid>
         <Marker>
-          <eid>zB_zB</eid>
           <style>repeat_right</style>
+          <eid>zB_zB</eid>
           <text>Da Coda</text>
           <label>coda</label>
           <markerType>dacoda</markerType>
@@ -611,8 +611,8 @@
       <Measure>
         <eid>5B_5B</eid>
         <Marker>
-          <eid>6B_6B</eid>
           <style>repeat_right</style>
+          <eid>6B_6B</eid>
           <text>Da Doppia Coda</text>
           <label>coda</label>
           <markerType>dadblcoda</markerType>
@@ -644,8 +644,8 @@
       <Measure>
         <eid>AC_AC</eid>
         <Marker>
-          <eid>BC_BC</eid>
           <style>repeat_left</style>
+          <eid>BC_BC</eid>
           <text><sym>segno</sym></text>
           <label>segno</label>
           <markerType>segno</markerType>
@@ -677,8 +677,8 @@
       <Measure>
         <eid>HC_HC</eid>
         <Marker>
-          <eid>IC_IC</eid>
           <style>repeat_left</style>
+          <eid>IC_IC</eid>
           <text><sym>segnoSerpent1</sym></text>
           <label>varsegno</label>
           <markerType>varsegno</markerType>
@@ -697,8 +697,8 @@
       <Measure>
         <eid>LC_LC</eid>
         <Marker>
-          <eid>MC_MC</eid>
           <style>repeat_left</style>
+          <eid>MC_MC</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>
@@ -717,8 +717,8 @@
       <Measure>
         <eid>PC_PC</eid>
         <Marker>
-          <eid>QC_QC</eid>
           <style>repeat_left</style>
+          <eid>QC_QC</eid>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
           <markerType>varcoda</markerType>

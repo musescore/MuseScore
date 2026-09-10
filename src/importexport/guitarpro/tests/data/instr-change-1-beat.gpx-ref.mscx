@@ -55,23 +55,23 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Hey You</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>Rock<br/>Pink Floyd<br/>The Wall</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Music by Roger Waters</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>poet</style>
+          <eid>I_I</eid>
           <text>Words by Roger Waters</text>
           </Text>
         </VBox>
@@ -109,8 +109,8 @@
               <string>71</string>
               <string>76</string>
               </StringData>
-            <eid>O_O</eid>
             <style>string_tunings</style>
+            <eid>O_O</eid>
             <text/>
             </StringTunings>
           <Chord>

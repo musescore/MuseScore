@@ -120,13 +120,13 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>H_H</eid>
         <Text>
-          <eid>I_I</eid>
           <style>title</style>
+          <eid>I_I</eid>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>subtitle</style>
+          <eid>J_J</eid>
           <text>measure</text>
           </Text>
         </VBox>
@@ -434,18 +434,18 @@
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>y_y</eid>
           <Text>
-            <eid>z_z</eid>
             <style>title</style>
+            <eid>z_z</eid>
             <text>Test</text>
             </Text>
           <Text>
-            <eid>0_0</eid>
             <style>subtitle</style>
+            <eid>0_0</eid>
             <text>measure</text>
             </Text>
           <Text>
-            <eid>1_1</eid>
             <style>instrument_excerpt</style>
+            <eid>1_1</eid>
             <text>Piano</text>
             </Text>
           </VBox>
@@ -705,18 +705,18 @@
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>WB_WB</eid>
           <Text>
-            <eid>XB_XB</eid>
             <style>title</style>
+            <eid>XB_XB</eid>
             <text>Test</text>
             </Text>
           <Text>
-            <eid>YB_YB</eid>
             <style>subtitle</style>
+            <eid>YB_YB</eid>
             <text>measure</text>
             </Text>
           <Text>
-            <eid>ZB_ZB</eid>
             <style>instrument_excerpt</style>
+            <eid>ZB_ZB</eid>
             <text>Flute</text>
             </Text>
           </VBox>

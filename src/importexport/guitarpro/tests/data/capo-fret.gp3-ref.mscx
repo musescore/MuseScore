@@ -55,8 +55,8 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Test</text>
           </Text>
         </VBox>
@@ -76,8 +76,8 @@
             </TimeSig>
           <Capo>
             <transposeMode>2</transposeMode>
-            <eid>J_J</eid>
             <style>staff</style>
+            <eid>J_J</eid>
             <text>Capo 1</text>
             </Capo>
           <Dynamic>
@@ -101,8 +101,8 @@
               <string>59</string>
               <string>62</string>
               </StringData>
-            <eid>M_M</eid>
             <style>string_tunings</style>
+            <eid>M_M</eid>
             <text/>
             </StringTunings>
           <Chord>

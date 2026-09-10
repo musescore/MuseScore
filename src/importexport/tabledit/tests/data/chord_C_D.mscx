@@ -80,8 +80,8 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>Chords C and G</text>
           </Text>
         </VBox>

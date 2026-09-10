@@ -45,18 +45,18 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Jumps</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
@@ -88,8 +88,8 @@
       <Measure>
         <eid>N_N</eid>
         <Jump>
-          <eid>O_O</eid>
           <style>repeat_right</style>
+          <eid>O_O</eid>
           <text>D.C. al Doppia Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>varcoda</playUntil>
@@ -138,8 +138,8 @@
       <Measure>
         <eid>X_X</eid>
         <Marker>
-          <eid>Y_Y</eid>
           <style>repeat_left</style>
+          <eid>Y_Y</eid>
           <text><sym>segno</sym></text>
           <label>segno</label>
           <markerType>segno</markerType>
@@ -173,8 +173,8 @@
       <Measure>
         <eid>e_e</eid>
         <Marker>
-          <eid>f_f</eid>
           <style>repeat_right</style>
+          <eid>f_f</eid>
           <text>To Coda</text>
           <label>coda</label>
           <markerType>coda</markerType>
@@ -208,8 +208,8 @@
       <Measure>
         <eid>l_l</eid>
         <Jump>
-          <eid>m_m</eid>
           <style>repeat_right</style>
+          <eid>m_m</eid>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
@@ -244,8 +244,8 @@
       <Measure>
         <eid>s_s</eid>
         <Marker>
-          <eid>t_t</eid>
           <style>repeat_left</style>
+          <eid>t_t</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>

@@ -63,8 +63,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Double articulations</text>
           </Text>
         </VBox>
@@ -1917,13 +1917,13 @@
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>VG_VG</eid>
           <Text>
-            <eid>WG_WG</eid>
             <style>title</style>
+            <eid>WG_WG</eid>
             <text>Double articulations</text>
             </Text>
           <Text>
-            <eid>XG_XG</eid>
             <style>instrument_excerpt</style>
+            <eid>XG_XG</eid>
             <text>Piano</text>
             </Text>
           </VBox>

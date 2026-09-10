@@ -335,18 +335,18 @@
         <height>10</height>
         <eid>f_f</eid>
         <Text>
-          <eid>g_g</eid>
           <style>title</style>
+          <eid>g_g</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>h_h</eid>
           <style>subtitle</style>
+          <eid>h_h</eid>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>i_i</eid>
           <style>composer</style>
+          <eid>i_i</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
