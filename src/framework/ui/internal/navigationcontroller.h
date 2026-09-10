@@ -73,6 +73,7 @@ public:
                                           const std::string& controlName) const override;
 
     void setDefaultNavigationControl(INavigationControl* control) override;
+    void setPrioritySection(INavigationSection* section) override;
 
     void resetNavigation() override;
 
@@ -141,6 +142,12 @@ private:
     void doActivateFirst();
     void doActivateLast();
 
+    INavigationSection* takePrioritySection(const INavigationSection* activeSec);
+
+    void saveLastActiveControl(INavigationSection* sect);
+    void restoreLastActiveControl(INavigationSection* sect);
+    INavigationControl* takeLastActiveControl();
+
     void resetIfNeed(QObject* watched);
 
     std::set<INavigationSection*> m_sections;
@@ -148,6 +155,8 @@ private:
     async::Notification m_highlightChanged;
 
     INavigationControl* m_defaultNavigationControl = nullptr;
+    INavigationSection* m_prioritySection = nullptr;
+    INavigationControl* m_lastActiveControl = nullptr;
 
     bool m_isHighlight = false;
 

@@ -175,6 +175,13 @@ void NavigationSection::requestActive(INavigationPanel* panel, INavigationContro
     }
 }
 
+void NavigationSection::requestPriority()
+{
+    if (navigationController()) {
+        navigationController()->setPrioritySection(this);
+    }
+}
+
 INavigationSection::Type NavigationSection::type() const
 {
     return static_cast<INavigationSection::Type>(m_type);
