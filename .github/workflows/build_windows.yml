@@ -200,7 +200,7 @@ jobs:
     #   - name: Setup ccache
     #     run: |
     #       choco install -y ccache
-    #       bash ./buildscripts/ci/tools/setup_ccache_config.sh
+    #       bash ./muse/buildscripts/ci/tools/setup_ccache_config.sh
 
     - parallel:
       - name: Install Qt
@@ -390,7 +390,7 @@ jobs:
     #   - name: Setup ccache
     #     run: |
     #       choco install -y ccache
-    #       bash ./buildscripts/ci/tools/setup_ccache_config.sh
+    #       bash ./muse/buildscripts/ci/tools/setup_ccache_config.sh
 
     - parallel:
       - name: Install Qt
