@@ -317,10 +317,27 @@ int RepeatList::utime2utick(double secs) const
 {
     size_t repeatSegmentsCount = size();
     unsigned ii = (m_idx2 < repeatSegmentsCount) && (secs >= at(m_idx2)->utime) ? m_idx2 : 0;
+
     for (unsigned i = ii; i < repeatSegmentsCount; ++i) {
-        if ((secs >= at(i)->utime) && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
+        const RepeatSegment* segment = at(i);
+
+        if ((secs >= segment->utime)
+            && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
             m_idx2 = i;
-            return m_score->tempomap()->time2tick(secs - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
+
+            const double segmentEndTime
+                = segment->utime
+                  + m_score->tempomap()->tick2time(segment->endTick())
+                  - m_score->tempomap()->tick2time(segment->tick);
+
+            if (!muse::RealIsNull(segment->pause)
+                && secs >= segmentEndTime
+                && secs < segmentEndTime + segment->pause) {
+                return segment->utick + segment->len() - 1;
+            }
+
+            return m_score->tempomap()->time2tick(secs - segment->timeOffset)
+                   + (segment->utick - segment->tick);
         }
     }
 
