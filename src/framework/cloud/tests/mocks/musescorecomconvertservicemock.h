@@ -31,7 +31,7 @@ class MuseScoreComConvertServiceMock : public IMuseScoreComConvertService
 public:
     MOCK_METHOD(async::Promise<RetVal<ConvertConfig> >, fetchConfig, (), (override));
 
-    MOCK_METHOD(ProgressPtr, upload, (const ConvertInput&), (override));
+    MOCK_METHOD(ProgressPtr, upload, (const ConvertUploadDataPtr&), (override));
 
     MOCK_METHOD(async::Promise<RetVal<ConvertQueueList> >, fetchQueue, (), (override));
 

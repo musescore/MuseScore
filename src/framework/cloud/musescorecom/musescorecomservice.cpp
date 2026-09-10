@@ -23,8 +23,6 @@
 #include "musescorecomservice.h"
 
 #include <QBuffer>
-#include <QFile>
-#include <QFileInfo>
 #include <QHttpMultiPart>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -478,9 +476,7 @@ static QString sanitizeContentDispositionFilename(const QString& fileName)
     return sanitized;
 }
 
-using ConvertFileList = std::vector<std::shared_ptr<QFile> >;
-
-static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const ConvertFileList& files, const QString& link)
+static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const ConvertFileDataList& files, const QUrl& link)
 {
     auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
 
@@ -492,20 +488,21 @@ static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const C
     if (!link.isEmpty()) {
         QHttpPart linkPart;
         linkPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"link\""));
-        linkPart.setBody(link.toUtf8());
+        linkPart.setBody(link.toString().toUtf8());
         multiPart->append(linkPart);
     }
 
     QMimeDatabase mimeDb;
-    for (const std::shared_ptr<QFile>& file : files) {
-        const QString fileName = file->fileName();
-        const QString baseName = QFileInfo(fileName).fileName();
+    for (const ConvertFileData& file : files) {
+        const QString fileName = file.fileName.toQString();
         QHttpPart filePart;
         filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant(mimeDb.mimeTypeForFile(fileName).name()));
         QString contentDisposition
-            = QString("form-data; name=\"files[]\"; filename=\"%1\"").arg(sanitizeContentDispositionFilename(baseName));
+            = QString("form-data; name=\"files[]\"; filename=\"%1\"").arg(sanitizeContentDispositionFilename(fileName));
         filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
-        filePart.setBodyDevice(file.get());
+        // NOTE: safe to avoid copying the bytes since the caller keeps ConvertUploadData alive
+        // (via a shared_ptr) for the whole async upload, not just this synchronous setup
+        filePart.setBody(file.data.toQByteArrayNoCopy());
         multiPart->append(filePart);
     }
 
@@ -1008,13 +1005,13 @@ Promise<RetVal<ConvertConfig> > MuseScoreComService::fetchConfig()
     });
 }
 
-ProgressPtr MuseScoreComService::upload(const ConvertInput& input)
+ProgressPtr MuseScoreComService::upload(const ConvertUploadDataPtr& data)
 {
     ProgressPtr progress = std::make_shared<Progress>();
     progress->start();
 
-    executeAsyncRequest([this, input, progress]() {
-        return doUpload(input, progress);
+    executeAsyncRequest([this, data, progress]() {
+        return doUpload(data, progress);
     }).onResolve(this, [progress](const Ret& ret) {
         if (progress->isStarted()) {
             progress->finish(ret);
@@ -1024,36 +1021,17 @@ ProgressPtr MuseScoreComService::upload(const ConvertInput& input)
     return progress;
 }
 
-Promise<Ret> MuseScoreComService::doUpload(const ConvertInput& input, ProgressPtr progress)
+Promise<Ret> MuseScoreComService::doUpload(const ConvertUploadDataPtr& data, ProgressPtr progress)
 {
     TRACEFUNC;
 
-    return make_promise<Ret>([this, input, progress](auto resolve, auto) {
+    return make_promise<Ret>([this, data, progress](auto resolve, auto) {
         RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_CONVERT_UPLOAD_API_URL);
         if (!uploadUrl.ret) {
             return resolve(uploadUrl.ret);
         }
 
-        const ConvertType type = convertTypeOf(input);
-        const QString link = convertLinkOf(input);
-
-        ConvertFileList files;
-        for (const io::path_t& path : convertPathsOf(input)) {
-            auto file = std::make_shared<QFile>(path.toQString());
-            if (!file->open(QIODevice::ReadOnly)) {
-                return resolve(make_ret(Err::InvalidData));
-            }
-
-            if (file->size() > MAX_CONVERT_FILE_SIZE_BYTES) {
-                Ret ret = make_ret(Err::Status422_ValidationFailed);
-                ret.setData(CONVERT_ERROR_CODE_KEY, ConvertErrorCode::FileTooLarge);
-                return resolve(ret);
-            }
-
-            files.push_back(file);
-        }
-
-        auto multiPart = makeMultiPartForConvertUpload(type, files, link);
+        auto multiPart = makeMultiPartForConvertUpload(data->type, data->files, data->link);
         auto receivedData = std::make_shared<QBuffer>();
 
         RetVal<Progress> uploadProgress = m_networkManager->post(uploadUrl.val, multiPart, receivedData, headers());
@@ -1065,9 +1043,7 @@ Promise<Ret> MuseScoreComService::doUpload(const ConvertInput& input, ProgressPt
             progress->progress(current, total, msg);
         });
 
-        //! NOTE: files must stay alive (and open) until the request finishes,
-        //! since multiPart's file parts hold raw pointers into them
-        uploadProgress.val.finished().onReceive(this, [this, files, receivedData, resolve, progress](const ProgressResult& res) {
+        uploadProgress.val.finished().onReceive(this, [this, data, receivedData, resolve, progress](const ProgressResult& res) {
             if (!res.ret) {
                 printServerReply(*receivedData);
                 Ret ret = uploadingDownloadingRetFromRawRet(res.ret);

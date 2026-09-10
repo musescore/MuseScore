@@ -67,7 +67,7 @@ public:
     // IMuseScoreComConvertService
     async::Promise<RetVal<ConvertConfig> > fetchConfig() override;
 
-    ProgressPtr upload(const ConvertInput& input) override;
+    ProgressPtr upload(const ConvertUploadDataPtr& data) override;
 
     async::Promise<RetVal<ConvertQueueList> > fetchQueue() override;
 
@@ -94,6 +94,6 @@ private:
 
     async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
 
-    async::Promise<Ret> doUpload(const ConvertInput& input, ProgressPtr progress);
+    async::Promise<Ret> doUpload(const ConvertUploadDataPtr& data, ProgressPtr progress);
 };
 }

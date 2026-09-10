@@ -55,7 +55,7 @@ static ConvertSelection toConvertSelection(const Val& val)
     selection.convertedScoreName = map.value("convertedScoreName").toString();
 
     if (type == ConvertType::Audio2Score && !link.isEmpty()) {
-        selection.input = Audio2ScoreConvertInput { link };
+        selection.input = Audio2ScoreConvertInput { QUrl(link) };
     } else if (type == ConvertType::Audio2Score) {
         selection.input = Audio2ScoreConvertInput { paths };
     } else {

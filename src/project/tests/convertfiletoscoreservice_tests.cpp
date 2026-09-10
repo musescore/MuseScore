@@ -107,6 +107,21 @@ async::Promise<T> pendingPromise()
         return async::Promise<T>::dummy_result();
     });
 }
+
+bool uploadDataMatchesPaths(const ConvertUploadData& data, const io::paths_t& paths)
+{
+    if (data.files.size() != paths.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < paths.size(); ++i) {
+        if (data.files[i].fileName != io::filename(paths[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
 }
 
 namespace mu::project {
@@ -131,6 +146,9 @@ protected:
 
         ON_CALL(*m_fileSystem, fileSize(_))
         .WillByDefault(Return(RetVal<uint64_t>::make_ok(1024)));
+
+        ON_CALL(*m_fileSystem, readFile(_))
+        .WillByDefault(Return(RetVal<ByteArray>::make_ok(ByteArray())));
     }
 
     void setConfig(const ConvertConfig& config)
@@ -182,8 +200,8 @@ protected:
     void uploadAndResolve(int queueId, const QString& convertedScoreName, const io::paths_t& paths)
     {
         auto uploadProgress = std::make_shared<Progress>();
-        EXPECT_CALL(*m_convertService, upload(Truly([paths](const ConvertInput& input) {
-            return convertPathsOf(input) == paths;
+        EXPECT_CALL(*m_convertService, upload(Truly([paths](const ConvertUploadDataPtr& data) {
+            return uploadDataMatchesPaths(*data, paths);
         })))
         .WillOnce(Return(uploadProgress));
 
@@ -583,8 +601,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     auto uploadProgress = std::make_shared<Progress>();
     const io::paths_t paths { "/some/path/file.pdf" };
 
-    EXPECT_CALL(*m_convertService, upload(Truly([&](const ConvertInput& input) {
-        return convertTypeOf(input) == ConvertType::Omr && convertPathsOf(input) == paths;
+    EXPECT_CALL(*m_convertService, upload(Truly([&](const ConvertUploadDataPtr& data) {
+        return data->type == ConvertType::Omr && uploadDataMatchesPaths(*data, paths);
     })))
     .WillOnce(Return(uploadProgress));
 

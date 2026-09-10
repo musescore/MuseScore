@@ -51,7 +51,7 @@ public:
 
     virtual async::Promise<RetVal<ConvertConfig> > fetchConfig() = 0;
 
-    virtual ProgressPtr upload(const ConvertInput& input) = 0;
+    virtual ProgressPtr upload(const ConvertUploadDataPtr& data) = 0;
 
     virtual async::Promise<RetVal<ConvertQueueList> > fetchQueue() = 0;
 

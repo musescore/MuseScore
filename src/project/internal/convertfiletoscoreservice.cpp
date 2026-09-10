@@ -22,6 +22,7 @@
 #include "convertfiletoscoreservice.h"
 
 #include <algorithm>
+#include <memory>
 #include <optional>
 
 #include <QUrl>
@@ -277,7 +278,10 @@ Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
 
 Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
 {
-    IF_ASSERT_FAILED(!convertPathsOf(input).empty() || !convertLinkOf(input).isEmpty()) {
+    const io::paths_t paths = convertPathsOf(input);
+    const QUrl link = convertLinkOf(input);
+
+    IF_ASSERT_FAILED(!paths.empty() || link.isValid()) {
         return make_ret(Err::ConvertValidationFailed);
     }
 
@@ -285,8 +289,20 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
         return make_ret(Err::ConvertValidationFailed);
     }
 
+    ConvertFileDataList files;
+    files.reserve(paths.size());
+    for (const io::path_t& path : paths) {
+        RetVal<ByteArray> fileData = fileSystem()->readFile(path);
+        if (!fileData.ret) {
+            return fileData.ret;
+        }
+
+        files.push_back(ConvertFileData { std::move(fileData.val), io::filename(path) });
+    }
+
     const ConvertType type = convertTypeOf(input);
-    ProgressPtr progress = museScoreComService()->convert()->upload(input);
+    auto data = std::make_shared<const ConvertUploadData>(ConvertUploadData { type, std::move(files), link });
+    ProgressPtr progress = museScoreComService()->convert()->upload(data);
 
     progress->progressChanged().onReceive(this, [convertedScoreName](int64_t current, int64_t total, const std::string&) {
         LOGI() << "Uploading for convert \"" << convertedScoreName << "\": " << current << "/" << total;
