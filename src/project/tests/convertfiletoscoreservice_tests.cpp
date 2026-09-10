@@ -44,6 +44,7 @@
 #include "global/tests/mocks/filesystemmock.h"
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/musescorecomconvertservicemock.h"
+#include "multiwindows/tests/mocks/multiwindowsprovidermock.h"
 
 using namespace ::testing;
 using namespace mu::project;
@@ -136,10 +137,12 @@ protected:
         m_convertService = std::make_shared<NiceMock<MuseScoreComConvertServiceMock> >();
         m_fileSystem = std::make_shared<NiceMock<muse::io::FileSystemMock> >();
         m_configuration = std::make_shared<NiceMock<ProjectConfigurationMock> >();
+        m_multiWindowsProvider = std::make_shared<NiceMock<muse::mi::MultiWindowsProviderMock> >();
 
         m_service->museScoreComService.set(m_museScoreComService);
         m_service->fileSystem.set(m_fileSystem);
         m_service->configuration.set(m_configuration);
+        m_service->multiwindowsProvider.set(m_multiWindowsProvider);
 
         ON_CALL(*m_museScoreComService, convert())
         .WillByDefault(Return(m_convertService));
@@ -216,6 +219,7 @@ protected:
     std::shared_ptr<MuseScoreComConvertServiceMock> m_convertService;
     std::shared_ptr<muse::io::FileSystemMock> m_fileSystem;
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
+    std::shared_ptr<muse::mi::MultiWindowsProviderMock> m_multiWindowsProvider;
 };
 }
 

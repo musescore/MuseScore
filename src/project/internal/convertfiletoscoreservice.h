@@ -34,6 +34,7 @@
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "io/ifilesystem.h"
+#include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectconfiguration.h"
 
 namespace mu::project {
@@ -45,6 +46,7 @@ public:
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
 
     explicit ConvertFileToScoreService(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr)
         : QObject(parent), muse::Contextable(iocCtx) {}
@@ -100,6 +102,7 @@ private:
     int m_pollFailureCount = 0;
     std::vector<WatchedScore> m_watchedScores;
     bool m_pollInProgress = false;
+    bool m_isSaving = false;
 
     muse::async::Channel<PollingFailure> m_pollingFailed;
     muse::async::Notification m_watchedScoresChanged;

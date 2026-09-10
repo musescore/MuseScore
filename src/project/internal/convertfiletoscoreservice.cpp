@@ -32,6 +32,7 @@
 
 #include "network/networkerrors.h"
 #include "cloud/clouderrors.h"
+#include "multiwindows/resourcelockguard.h"
 
 #include "global/serialization/json.h"
 #include "global/types/bytearray.h"
@@ -110,6 +111,8 @@ static std::string errorCodeToString(ConvertErrorCode code)
     return std::string();
 }
 
+static const std::string WATCHED_CONVERTS_RESOURCE_NAME("WATCHED_CONVERTS");
+
 static std::string convertLogId(ConvertType type, int itemId)
 {
     return std::to_string(itemId) + " (type: " + convertTypeToString(type) + ")";
@@ -147,6 +150,18 @@ void ConvertFileToScoreService::init()
             LOGE() << "Could not prefetch convert config: " << config.ret.toString();
         } else {
             m_config = config.val;
+        }
+    });
+
+    multiwindowsProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+        if (resourceName == WATCHED_CONVERTS_RESOURCE_NAME && !m_isSaving) {
+            loadWatchedScores();
+
+            if (!m_watchedScores.empty() && !m_timer.isActive()) {
+                m_timer.start();
+            }
+
+            m_watchedScoresChanged.notify();
         }
     });
 }
@@ -402,7 +417,12 @@ void ConvertFileToScoreService::loadWatchedScores()
 
     m_watchedScores.clear();
 
-    RetVal<ByteArray> data = fileSystem()->readFile(configuration()->watchedConvertsJsonPath());
+    RetVal<ByteArray> data;
+    {
+        muse::mi::ReadResourceLockGuard resource_guard(multiwindowsProvider(), WATCHED_CONVERTS_RESOURCE_NAME);
+        data = fileSystem()->readFile(configuration()->watchedConvertsJsonPath());
+    }
+
     if (!data.ret || data.val.empty()) {
         if (!data.ret && data.ret.code() != static_cast<int>(io::Err::FSNotExist)) {
             LOGE() << "Could not read the pending conversions file: " << data.ret;
@@ -457,10 +477,16 @@ void ConvertFileToScoreService::saveWatchedScores()
     }
 
     JsonDocument json(array);
-    Ret ret = fileSystem()->writeFile(configuration()->watchedConvertsJsonPath(), json.toJson());
-    if (!ret) {
-        LOGE() << "Could not save the pending conversions list: " << ret.toString();
+
+    m_isSaving = true;
+    {
+        muse::mi::WriteResourceLockGuard resource_guard(multiwindowsProvider(), WATCHED_CONVERTS_RESOURCE_NAME);
+        Ret ret = fileSystem()->writeFile(configuration()->watchedConvertsJsonPath(), json.toJson());
+        if (!ret) {
+            LOGE() << "Could not save the pending conversions list: " << ret.toString();
+        }
     }
+    m_isSaving = false;
 }
 
 void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::String& convertedScoreName)
