@@ -107,6 +107,7 @@ qt_add_qml_module(project_qml
         internal/ScoresPage/CloudScoresView.qml
         internal/ScoresPage/RecentScoresView.qml
         internal/ScoresPage/ScoreGridItem.qml
+        internal/ScoresPage/ScoreItemMenuButton.qml
         internal/ScoresPage/ScoreListItem.qml
         internal/ScoresPage/ScoresGridView.qml
         internal/ScoresPage/ScoresListView.qml
