@@ -62,7 +62,7 @@ jobs:
       - name: Setup ccache
         run: |
           sudo apt-get install -y ccache
-          bash ./buildscripts/ci/tools/setup_ccache_config.sh
+          bash ./muse/buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
