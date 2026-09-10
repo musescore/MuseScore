@@ -41,9 +41,19 @@ inline int timestampToTick(const Score* score, const muse::mpe::timestamp_t time
     return score->repeatList().utime2utick(timestamp / 1000000.f);
 }
 
-inline muse::mpe::duration_t pauseUs(const Score* score, const int tick)
+inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const int tickPositionOffset)
 {
     double secs = score->tempomap()->pauseSecs(tick);
+
+    const int utick = tick + tickPositionOffset;
+    const RepeatList& repeatList = score->repeatList();
+    for (const RepeatSegment* segment : repeatList) {
+        if (segment != repeatList.back() && segment->utick + segment->len() == utick) {
+            secs += segment->pause;
+            break;
+        }
+    }
+
     return muse::RealIsNull(secs) ? 0 : secs* 1000000;
 }
 
@@ -52,7 +62,7 @@ inline muse::mpe::duration_t durationFromStartAndEndTick(const Score* score, con
 {
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick + tickPositionOffset);
     muse::mpe::timestamp_t endTimestamp = timestampFromTicks(score, endTick + tickPositionOffset);
-    muse::mpe::duration_t pause = pauseUs(score, endTick);
+    muse::mpe::duration_t pause = pauseUs(score, endTick, tickPositionOffset);
 
     return endTimestamp - startTimestamp - pause;
 }
@@ -70,7 +80,7 @@ inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationT
     int startTickWithOffset = startTick + tickPositionOffset;
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTickWithOffset);
     muse::mpe::timestamp_t endTimestamp = timestampFromTicks(score, startTickWithOffset + durationTicks);
-    muse::mpe::duration_t pause = pauseUs(score, startTick + durationTicks);
+    muse::mpe::duration_t pause = pauseUs(score, startTick + durationTicks, tickPositionOffset);
     muse::mpe::duration_t duration = endTimestamp - startTimestamp - pause;
 
     return { startTimestamp, duration };
