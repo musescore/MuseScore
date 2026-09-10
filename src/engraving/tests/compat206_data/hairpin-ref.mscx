@@ -90,8 +90,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>crescendo-2</text>
           </Text>
         </VBox>
@@ -709,13 +709,13 @@
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>2B_2B</eid>
           <Text>
-            <eid>3B_3B</eid>
             <style>title</style>
+            <eid>3B_3B</eid>
             <text>crescendo-2</text>
             </Text>
           <Text>
-            <eid>4B_4B</eid>
             <style>instrument_excerpt</style>
+            <eid>4B_4B</eid>
             <text>Piano</text>
             </Text>
           </VBox>

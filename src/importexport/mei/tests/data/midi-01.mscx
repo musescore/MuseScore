@@ -110,13 +110,13 @@
         <height>10</height>
         <eid>K_K</eid>
         <Text>
-          <eid>L_L</eid>
           <style>title</style>
+          <eid>L_L</eid>
           <text>MIDI test</text>
           </Text>
         <Text>
-          <eid>M_M</eid>
           <style>composer</style>
+          <eid>M_M</eid>
           <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>

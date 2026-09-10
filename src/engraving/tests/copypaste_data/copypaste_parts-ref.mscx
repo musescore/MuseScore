@@ -773,8 +773,8 @@
           <eid>BC_BC</eid>
           <linkedTo>yB_yB</linkedTo>
           <Text>
-            <eid>CC_CC</eid>
             <style>instrument_excerpt</style>
+            <eid>CC_CC</eid>
             <text>Flute</text>
             </Text>
           </VBox>

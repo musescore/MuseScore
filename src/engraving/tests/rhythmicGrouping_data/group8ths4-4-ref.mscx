@@ -134,8 +134,8 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>I_I</eid>
             <style>instrument_change</style>
+            <eid>I_I</eid>
             <text>Simplify tied eighth notes to indicate rhythm in 4/4<br/>N = 1 eighth note</text>
             </StaffText>
           <Chord>
@@ -196,8 +196,8 @@
         <eid>V_V</eid>
         <voice>
           <StaffText>
-            <eid>W_W</eid>
             <style>instrument_change</style>
+            <eid>W_W</eid>
             <text>N = 2</text>
             </StaffText>
           <Chord>
@@ -299,8 +299,8 @@
         <eid>s_s</eid>
         <voice>
           <StaffText>
-            <eid>t_t</eid>
             <style>instrument_change</style>
+            <eid>t_t</eid>
             <text>N = 3</text>
             </StaffText>
           <Chord>
@@ -408,8 +408,8 @@
         <eid>EB_EB</eid>
         <voice>
           <StaffText>
-            <eid>FB_FB</eid>
             <style>instrument_change</style>
+            <eid>FB_FB</eid>
             <text>N = 4</text>
             </StaffText>
           <Chord>
@@ -538,8 +538,8 @@
         <eid>hB_hB</eid>
         <voice>
           <StaffText>
-            <eid>iB_iB</eid>
             <style>instrument_change</style>
+            <eid>iB_iB</eid>
             <text>N = 5</text>
             </StaffText>
           <Chord>
@@ -677,8 +677,8 @@
         <eid>AC_AC</eid>
         <voice>
           <StaffText>
-            <eid>BC_BC</eid>
             <style>instrument_change</style>
+            <eid>BC_BC</eid>
             <text>N = 6</text>
             </StaffText>
           <Chord>
@@ -766,8 +766,8 @@
         <eid>UC_UC</eid>
         <voice>
           <StaffText>
-            <eid>VC_VC</eid>
             <style>instrument_change</style>
+            <eid>VC_VC</eid>
             <text>N = 7</text>
             </StaffText>
           <Chord>
@@ -835,8 +835,8 @@
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>kC_kC</eid>
             <style>instrument_change</style>
+            <eid>kC_kC</eid>
             <text>N = 8</text>
             </StaffText>
           <Chord>

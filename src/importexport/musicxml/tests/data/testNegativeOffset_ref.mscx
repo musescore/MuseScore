@@ -133,18 +133,18 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text><font size="22"/>Negative Offset</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>subtitle</style>
+          <eid>H_H</eid>
           <text><font size="16"/>Musescore Testcase</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>composer</style>
+          <eid>I_I</eid>
           <text>Henry Ives</text>
           </Text>
         </VBox>

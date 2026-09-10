@@ -160,8 +160,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>H_H</eid>
         <Text>
-          <eid>I_I</eid>
           <style>title</style>
+          <eid>I_I</eid>
           <text>voices</text>
           </Text>
         </VBox>
@@ -1120,14 +1120,14 @@
           <eid>uC_uC</eid>
           <linkedTo>H_H</linkedTo>
           <Text>
+            <style>title</style>
             <eid>vC_vC</eid>
             <linkedTo>I_I</linkedTo>
-            <style>title</style>
             <text>voices</text>
             </Text>
           <Text>
-            <eid>wC_wC</eid>
             <style>instrument_excerpt</style>
+            <eid>wC_wC</eid>
             <text>Piano</text>
             </Text>
           </VBox>
@@ -1760,14 +1760,14 @@
           <eid>RE_RE</eid>
           <linkedTo>H_H</linkedTo>
           <Text>
+            <style>title</style>
             <eid>SE_SE</eid>
             <linkedTo>I_I</linkedTo>
-            <style>title</style>
             <text>voices</text>
             </Text>
           <Text>
-            <eid>TE_TE</eid>
             <style>instrument_excerpt</style>
+            <eid>TE_TE</eid>
             <text>Trombone</text>
             </Text>
           </VBox>
@@ -2153,14 +2153,14 @@
           <eid>OF_OF</eid>
           <linkedTo>H_H</linkedTo>
           <Text>
+            <style>title</style>
             <eid>PF_PF</eid>
             <linkedTo>I_I</linkedTo>
-            <style>title</style>
             <text>voices</text>
             </Text>
           <Text>
-            <eid>QF_QF</eid>
             <style>instrument_excerpt</style>
+            <eid>QF_QF</eid>
             <text>Trombone</text>
             </Text>
           </VBox>

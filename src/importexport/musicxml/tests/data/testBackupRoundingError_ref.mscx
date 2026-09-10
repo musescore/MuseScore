@@ -109,13 +109,13 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>Backup Rounding Error</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>subtitle</style>
+          <eid>H_H</eid>
           <text>MuseScore testfile</text>
           </Text>
         </VBox>

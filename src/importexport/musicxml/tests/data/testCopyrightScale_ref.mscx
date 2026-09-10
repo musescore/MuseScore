@@ -124,8 +124,8 @@ copyright copyright</metaTag>
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <size>2.3</size>
           <align>right,top</align>
           <text><font size="2.3"/>Title title title title title title title title title title title title title title title title title title title title title title title</text>

@@ -111,8 +111,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>G_G</eid>
         <Text>
-          <eid>H_H</eid>
           <style>title</style>
+          <eid>H_H</eid>
           <text>Style Score</text>
           </Text>
         </VBox>
@@ -379,9 +379,9 @@
           <eid>v_v</eid>
           <linkedTo>G_G</linkedTo>
           <Text>
+            <style>title</style>
             <eid>w_w</eid>
             <linkedTo>H_H</linkedTo>
-            <style>title</style>
             <text>Style Score</text>
             </Text>
           </VBox>
@@ -585,9 +585,9 @@
           <eid>OB_OB</eid>
           <linkedTo>G_G</linkedTo>
           <Text>
+            <style>title</style>
             <eid>PB_PB</eid>
             <linkedTo>H_H</linkedTo>
-            <style>title</style>
             <text>Style Score</text>
             </Text>
           </VBox>

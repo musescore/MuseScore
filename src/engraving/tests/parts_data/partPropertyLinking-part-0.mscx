@@ -43,8 +43,8 @@
         <eid>O_O</eid>
         <linkedTo>E_E</linkedTo>
         <Text>
-          <eid>P_P</eid>
           <style>instrument_excerpt</style>
+          <eid>P_P</eid>
           <text>Flute</text>
           </Text>
         </VBox>

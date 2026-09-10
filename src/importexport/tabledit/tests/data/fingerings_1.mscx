@@ -120,8 +120,8 @@
             <Note>
               <eid>O_O</eid>
               <Fingering>
-                <eid>P_P</eid>
                 <style>guitar_fingering_lh</style>
+                <eid>P_P</eid>
                 <text>0</text>
                 </Fingering>
               <pitch>40</pitch>
@@ -136,8 +136,8 @@
             <Note>
               <eid>R_R</eid>
               <Fingering>
-                <eid>S_S</eid>
                 <style>guitar_fingering_lh</style>
+                <eid>S_S</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>41</pitch>
@@ -156,8 +156,8 @@
                 <eid>V_V</eid>
                 </Accidental>
               <Fingering>
-                <eid>W_W</eid>
                 <style>guitar_fingering_lh</style>
+                <eid>W_W</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>42</pitch>
@@ -172,8 +172,8 @@
             <Note>
               <eid>Y_Y</eid>
               <Fingering>
-                <eid>Z_Z</eid>
                 <style>guitar_fingering_lh</style>
+                <eid>Z_Z</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>43</pitch>
@@ -192,8 +192,8 @@
                 <eid>c_c</eid>
                 </Accidental>
               <Fingering>
-                <eid>d_d</eid>
                 <style>guitar_fingering_lh</style>
+                <eid>d_d</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>44</pitch>
@@ -231,8 +231,8 @@
             <Note>
               <eid>k_k</eid>
               <Fingering>
-                <eid>l_l</eid>
                 <style>guitar_fingering_rh</style>
+                <eid>l_l</eid>
                 <text>p</text>
                 </Fingering>
               <pitch>40</pitch>
@@ -247,8 +247,8 @@
             <Note>
               <eid>n_n</eid>
               <Fingering>
-                <eid>o_o</eid>
                 <style>guitar_fingering_rh</style>
+                <eid>o_o</eid>
                 <text>i</text>
                 </Fingering>
               <pitch>41</pitch>
@@ -267,8 +267,8 @@
                 <eid>r_r</eid>
                 </Accidental>
               <Fingering>
-                <eid>s_s</eid>
                 <style>guitar_fingering_rh</style>
+                <eid>s_s</eid>
                 <text>m</text>
                 </Fingering>
               <pitch>42</pitch>
@@ -283,8 +283,8 @@
             <Note>
               <eid>u_u</eid>
               <Fingering>
-                <eid>v_v</eid>
                 <style>guitar_fingering_rh</style>
+                <eid>v_v</eid>
                 <text>a</text>
                 </Fingering>
               <pitch>43</pitch>
@@ -303,8 +303,8 @@
                 <eid>y_y</eid>
                 </Accidental>
               <Fingering>
-                <eid>z_z</eid>
                 <style>guitar_fingering_rh</style>
+                <eid>z_z</eid>
                 <text>c</text>
                 </Fingering>
               <pitch>44</pitch>
@@ -348,9 +348,9 @@
               <eid>5_5</eid>
               <linkedTo>O_O</linkedTo>
               <Fingering>
+                <style>guitar_fingering_lh</style>
                 <eid>6_6</eid>
                 <linkedTo>P_P</linkedTo>
-                <style>guitar_fingering_lh</style>
                 <text>0</text>
                 </Fingering>
               <pitch>40</pitch>
@@ -367,9 +367,9 @@
               <eid>8_8</eid>
               <linkedTo>R_R</linkedTo>
               <Fingering>
+                <style>guitar_fingering_lh</style>
                 <eid>9_9</eid>
                 <linkedTo>S_S</linkedTo>
-                <style>guitar_fingering_lh</style>
                 <text>1</text>
                 </Fingering>
               <pitch>41</pitch>
@@ -386,9 +386,9 @@
               <eid>/_/</eid>
               <linkedTo>U_U</linkedTo>
               <Fingering>
+                <style>guitar_fingering_lh</style>
                 <eid>AB_AB</eid>
                 <linkedTo>W_W</linkedTo>
-                <style>guitar_fingering_lh</style>
                 <text>2</text>
                 </Fingering>
               <pitch>42</pitch>
@@ -405,9 +405,9 @@
               <eid>CB_CB</eid>
               <linkedTo>Y_Y</linkedTo>
               <Fingering>
+                <style>guitar_fingering_lh</style>
                 <eid>DB_DB</eid>
                 <linkedTo>Z_Z</linkedTo>
-                <style>guitar_fingering_lh</style>
                 <text>3</text>
                 </Fingering>
               <pitch>43</pitch>
@@ -424,9 +424,9 @@
               <eid>FB_FB</eid>
               <linkedTo>b_b</linkedTo>
               <Fingering>
+                <style>guitar_fingering_lh</style>
                 <eid>GB_GB</eid>
                 <linkedTo>d_d</linkedTo>
-                <style>guitar_fingering_lh</style>
                 <text>4</text>
                 </Fingering>
               <pitch>44</pitch>
@@ -464,9 +464,9 @@
               <eid>LB_LB</eid>
               <linkedTo>k_k</linkedTo>
               <Fingering>
+                <style>guitar_fingering_rh</style>
                 <eid>MB_MB</eid>
                 <linkedTo>l_l</linkedTo>
-                <style>guitar_fingering_rh</style>
                 <text>p</text>
                 </Fingering>
               <pitch>40</pitch>
@@ -483,9 +483,9 @@
               <eid>OB_OB</eid>
               <linkedTo>n_n</linkedTo>
               <Fingering>
+                <style>guitar_fingering_rh</style>
                 <eid>PB_PB</eid>
                 <linkedTo>o_o</linkedTo>
-                <style>guitar_fingering_rh</style>
                 <text>i</text>
                 </Fingering>
               <pitch>41</pitch>
@@ -502,9 +502,9 @@
               <eid>RB_RB</eid>
               <linkedTo>q_q</linkedTo>
               <Fingering>
+                <style>guitar_fingering_rh</style>
                 <eid>SB_SB</eid>
                 <linkedTo>s_s</linkedTo>
-                <style>guitar_fingering_rh</style>
                 <text>m</text>
                 </Fingering>
               <pitch>42</pitch>
@@ -521,9 +521,9 @@
               <eid>UB_UB</eid>
               <linkedTo>u_u</linkedTo>
               <Fingering>
+                <style>guitar_fingering_rh</style>
                 <eid>VB_VB</eid>
                 <linkedTo>v_v</linkedTo>
-                <style>guitar_fingering_rh</style>
                 <text>a</text>
                 </Fingering>
               <pitch>43</pitch>
@@ -540,9 +540,9 @@
               <eid>XB_XB</eid>
               <linkedTo>x_x</linkedTo>
               <Fingering>
+                <style>guitar_fingering_rh</style>
                 <eid>YB_YB</eid>
                 <linkedTo>z_z</linkedTo>
-                <style>guitar_fingering_rh</style>
                 <text>c</text>
                 </Fingering>
               <pitch>44</pitch>

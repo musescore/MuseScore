@@ -136,8 +136,8 @@
         <height>10</height>
         <eid>I_I</eid>
         <Text>
-          <eid>J_J</eid>
           <style>title</style>
+          <eid>J_J</eid>
           <text>Guitar plus bass</text>
           </Text>
         </VBox>

@@ -140,18 +140,18 @@
         <height>10</height>
         <eid>M_M</eid>
         <Text>
-          <eid>N_N</eid>
           <style>title</style>
+          <eid>N_N</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>O_O</eid>
           <style>subtitle</style>
+          <eid>O_O</eid>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>P_P</eid>
           <style>composer</style>
+          <eid>P_P</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>

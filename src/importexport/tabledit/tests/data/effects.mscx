@@ -489,9 +489,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>LB_LB</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>MB_MB</eid>
           <track>0</track>
@@ -505,9 +505,9 @@
         <track>4</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>OB_OB</eid>
             <track>4</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>PB_PB</eid>
           <track>4</track>
@@ -520,9 +520,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>RB_RB</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>SB_SB</eid>
           <track>0</track>
@@ -536,9 +536,9 @@
         <track>4</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>UB_UB</eid>
             <track>4</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>VB_VB</eid>
           <track>4</track>
@@ -551,9 +551,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>XB_XB</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>YB_YB</eid>
           <track>0</track>
@@ -567,9 +567,9 @@
         <track>4</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>aB_aB</eid>
             <track>4</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>bB_bB</eid>
           <track>4</track>
@@ -582,9 +582,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>dB_dB</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>eB_eB</eid>
           <track>0</track>
@@ -598,9 +598,9 @@
         <track>4</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>gB_gB</eid>
             <track>4</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>hB_hB</eid>
           <track>4</track>

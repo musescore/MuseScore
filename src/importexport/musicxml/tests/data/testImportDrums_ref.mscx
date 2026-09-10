@@ -333,8 +333,8 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text><font size="24"/>drums</text>
           </Text>
         </VBox>

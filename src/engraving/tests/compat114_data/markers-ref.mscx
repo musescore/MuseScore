@@ -77,8 +77,8 @@
       <Measure>
         <eid>E_E</eid>
         <Marker>
-          <eid>F_F</eid>
           <style>repeat_left</style>
+          <eid>F_F</eid>
           <text><sym>segno</sym></text>
           <label>segno</label>
           <markerType>segno</markerType>
@@ -109,8 +109,8 @@
       <Measure>
         <eid>K_K</eid>
         <Marker>
-          <eid>L_L</eid>
           <style>repeat_left</style>
+          <eid>L_L</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>
@@ -126,8 +126,8 @@
       <Measure>
         <eid>N_N</eid>
         <Marker>
-          <eid>O_O</eid>
           <style>repeat_left</style>
+          <eid>O_O</eid>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
           <markerType>varcoda</markerType>
@@ -147,8 +147,8 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <eid>S_S</eid>
           <style>repeat_left</style>
+          <eid>S_S</eid>
           <text><sym>coda</sym><sym>coda</sym></text>
           <label>codetta</label>
           <markerType>codetta</markerType>
@@ -164,8 +164,8 @@
       <Measure>
         <eid>U_U</eid>
         <Marker>
-          <eid>V_V</eid>
           <style>repeat_right</style>
+          <eid>V_V</eid>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
@@ -180,8 +180,8 @@
       <Measure>
         <eid>X_X</eid>
         <Jump>
-          <eid>Y_Y</eid>
           <style>repeat_right</style>
+          <eid>Y_Y</eid>
           <text>D.C.</text>
           <jumpTo>start</jumpTo>
           <playUntil>end</playUntil>
@@ -198,8 +198,8 @@
       <Measure>
         <eid>a_a</eid>
         <Jump>
-          <eid>b_b</eid>
           <style>repeat_right</style>
+          <eid>b_b</eid>
           <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
           <playUntil>fine</playUntil>
@@ -220,8 +220,8 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Jump>
-          <eid>f_f</eid>
           <style>repeat_right</style>
+          <eid>f_f</eid>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>coda</playUntil>
@@ -238,8 +238,8 @@
       <Measure>
         <eid>h_h</eid>
         <Jump>
-          <eid>i_i</eid>
           <style>repeat_right</style>
+          <eid>i_i</eid>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
@@ -256,8 +256,8 @@
       <Measure>
         <eid>k_k</eid>
         <Jump>
-          <eid>l_l</eid>
           <style>repeat_right</style>
+          <eid>l_l</eid>
           <text>D.S. al Fine</text>
           <jumpTo>segno</jumpTo>
           <playUntil>fine</playUntil>
@@ -274,8 +274,8 @@
       <Measure>
         <eid>n_n</eid>
         <Jump>
-          <eid>o_o</eid>
           <style>repeat_right</style>
+          <eid>o_o</eid>
           <text>D.S.</text>
           <jumpTo>segno</jumpTo>
           <playUntil>end</playUntil>
@@ -292,8 +292,8 @@
       <Measure>
         <eid>q_q</eid>
         <Marker>
-          <eid>r_r</eid>
           <style>repeat_right</style>
+          <eid>r_r</eid>
           <text>To Coda</text>
           <label>coda</label>
           <markerType>coda</markerType>

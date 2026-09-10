@@ -135,8 +135,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>0PvvpAVmcFE_1eRoZ24u3KG</eid>
         <Text>
-          <eid>4vXiWwYYdHG_jowMfrEe/vL</eid>
           <style>title</style>
+          <eid>4vXiWwYYdHG_jowMfrEe/vL</eid>
           <text>tst_copy_symbol_list</text>
           </Text>
         </VBox>

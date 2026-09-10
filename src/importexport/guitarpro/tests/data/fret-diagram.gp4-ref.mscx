@@ -71,8 +71,8 @@
           <Capo>
             <fretPosition>6</fretPosition>
             <transposeMode>2</transposeMode>
-            <eid>I_I</eid>
             <style>staff</style>
+            <eid>I_I</eid>
             <text>Capo 6</text>
             </Capo>
           <Rest>

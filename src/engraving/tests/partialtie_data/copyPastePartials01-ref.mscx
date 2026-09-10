@@ -240,8 +240,8 @@
       <Measure>
         <eid>RzuLLMuj+FD_kzBGd5DsVbM</eid>
         <Jump>
-          <eid>kuC4EPHjOuG_ufpH8WLn7m</eid>
           <style>repeat_right</style>
+          <eid>kuC4EPHjOuG_ufpH8WLn7m</eid>
           <text>D.C.</text>
           <jumpTo>start</jumpTo>
           <playUntil>end</playUntil>

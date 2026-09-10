@@ -81,13 +81,13 @@
         <height>10</height>
         <eid>H_H</eid>
         <Text>
-          <eid>I_I</eid>
           <style>title</style>
+          <eid>I_I</eid>
           <text>Staff type properties</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>composer</style>
+          <eid>J_J</eid>
           <text>K. Rettinghaus</text>
           </Text>
         </VBox>
