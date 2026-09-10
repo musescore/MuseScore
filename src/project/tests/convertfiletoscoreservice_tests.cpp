@@ -742,6 +742,38 @@ TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterDone_NoLongerCo
     EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_ExternalProcessingItem_AddedToWatchedScores)
+{
+    // [GIVEN] The queue reports an item that was never started via startConvert() locally,
+    // alongside the one that was
+    const int externalId = TEST_QUEUE_ID + 1;
+
+    ConvertQueueItem ownItem;
+    ownItem.id = TEST_QUEUE_ID;
+    ownItem.type = ConvertType::Omr;
+    ownItem.status = ConvertStatus::Processing;
+
+    ConvertQueueItem externalItem;
+    externalItem.id = externalId;
+    externalItem.type = ConvertType::Omr;
+    externalItem.status = ConvertStatus::Processing;
+    externalItem.filename = "Externally Started Score";
+
+    // [WHEN] Uploading and polling the status
+    deliverQueueStatus({ ownItem, externalItem }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+
+    // [THEN] Both items are watched - the one we started, and the one discovered via the queue
+    const WatchedScoreList watchedScores = m_service->watchedScores().val;
+    ASSERT_EQ(watchedScores.size(), 2u);
+
+    const auto externalIt = std::find_if(watchedScores.begin(), watchedScores.end(), [externalId](const WatchedScore& watched) {
+        return watched.convertId == externalId;
+    });
+    ASSERT_NE(externalIt, watchedScores.end());
+    EXPECT_EQ(externalIt->name, u"Externally Started Score");
+    EXPECT_FALSE(externalIt->scoreId.has_value());
+}
+
 // ==================================================
 // resumeConvert()
 // ==================================================
@@ -1031,11 +1063,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
     JsonObject omrObj;
     omrObj["id"] = TEST_QUEUE_ID;
     omrObj["type"] = int(ConvertType::Omr);
+    omrObj["startedLocally"] = true;
     omrObj["convertedScoreName"] = "Omr Score";
 
     JsonObject audioObj;
     audioObj["id"] = TEST_QUEUE_ID;
     audioObj["type"] = int(ConvertType::Audio2Score);
+    audioObj["startedLocally"] = true;
     audioObj["convertedScoreName"] = "Audio Score";
 
     JsonArray array;

@@ -89,7 +89,6 @@ private:
 
     void handleItem(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode,
                     std::optional<int> scoreId);
-    void reportReady(WatchedScore& watched, muse::cloud::ConvertStatus status, int scoreId);
 
     void finishConvert(const muse::Ret& ret, const ScoreInfo& scoreInfo = ScoreInfo());
 

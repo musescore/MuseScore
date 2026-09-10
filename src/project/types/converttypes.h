@@ -101,6 +101,7 @@ struct WatchedScore {
     ConvertType convertType = ConvertType::Omr;
     ConvertStatus convertStatus = ConvertStatus::Unknown;
     std::optional<int> scoreId; //! set once the score is ready and reported (Done/AwaitingReview)
+    bool startedLocally = false; //! true if started in MuseScore
     muse::String name;
 
     bool operator==(const WatchedScore& other) const
@@ -109,6 +110,7 @@ struct WatchedScore {
                && convertType == other.convertType
                && convertStatus == other.convertStatus
                && scoreId == other.scoreId
+               && startedLocally == other.startedLocally
                && name == other.name;
     }
 };

@@ -39,8 +39,10 @@
 
 namespace muse::cloud {
 enum class ConvertType {
-    Omr,
-    Audio2Score
+    Omr = 0,
+    Audio2Score,
+
+    Last = Audio2Score
 };
 
 enum class ConvertStatus {
