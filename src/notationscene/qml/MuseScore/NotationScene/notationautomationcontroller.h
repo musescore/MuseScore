@@ -118,6 +118,10 @@ private:
     struct PolylineData {
         muse::uicomponents::PolylinePlot* polyline = nullptr;
         QVector<PointData> pointsData;
+        //! NOTE: Horizontal boxes can break up the staves of a system, so a polyline covers a "region" - a run
+        //! of measures bounded by horizontal boxes and/or the system itself...
+        const Measure* startMeasure = nullptr;
+        const Measure* endMeasure = nullptr;
     };
 
     struct TickStaffRange {
@@ -133,8 +137,9 @@ private:
         std::optional<TickStaffRange> boundary;
     };
 
-    QVector<PointData> pointsDataInStaff(const mu::engraving::Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick,
-                                         int endTick) const;
+    static std::optional<int> tickFromXInPolyline(const PolylineKey& key, const PolylineData& data, qreal x);
+    QVector<PointData> pointsDataInStaffRegion(const mu::engraving::Staff* staff, const muse::RectF& regionRect, int startTick,
+                                               int endTick) const;
 
     mu::engraving::AutomationType currentAutomationType() const;
 
@@ -152,7 +157,8 @@ private:
     void rebuildAllPolylines();
     void buildAndAddPolylinesForSystem(const System* system);
     void buildAndAddPolylinesForStaff(const System* system, staff_idx_t staffIdx);
-    void buildAndAddPolylineForStaffRegion(const System* system, staff_idx_t staffIdx, const Segment* startSeg, const Segment* endSeg);
+    void buildAndAddPolylineForStaffRegion(const System* system, staff_idx_t staffIdx, const Measure* startMeasure,
+                                           const Measure* endMeasure);
 
     void updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo);
 
