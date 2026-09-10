@@ -29,7 +29,6 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
-#include "engraving/dom/staff.h"
 #include "engraving/dom/tremolotwochord.h"
 
 #include "engraving/editing/editbeam.h"
