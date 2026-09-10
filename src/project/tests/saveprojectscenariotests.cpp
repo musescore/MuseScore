@@ -22,8 +22,7 @@
 
 #include <gmock/gmock.h>
 
-#include <QTimer>
-
+#include "async/async.h"
 #include "async/processevents.h"
 
 #include "project/internal/saveprojectscenario.h"
@@ -59,7 +58,7 @@ using namespace muse;
 using namespace mu::project;
 
 namespace mu::project {
-class SaveProjectScenarioTests : public ::testing::Test
+class SaveProjectScenarioTests : public ::testing::Test, public async::Asyncable
 {
 protected:
     void SetUp() override
@@ -126,6 +125,24 @@ protected:
         });
     }
 
+    void TearDown() override
+    {
+        // Let whatever the flow queued after its result run, so that nothing outlives the mocks
+        drainDeferredCalls();
+
+        release(m_globalContext);
+        release(m_project);
+        release(m_masterNotation);
+        release(m_notation);
+    }
+
+    template<typename T>
+    static void release(const std::shared_ptr<T>& mock)
+    {
+        ::testing::Mock::VerifyAndClearExpectations(mock.get());
+        ::testing::Mock::AllowLeak(mock.get());
+    }
+
     static async::Promise<IInteractive::Result> resolvedResult()
     {
         return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
@@ -133,29 +150,63 @@ protected:
         });
     }
 
+    //! Subscribes to `promise`, drains the deferred calls and hands back the result.
+    template<typename T>
+    T await(async::Promise<T> promise)
+    {
+        T result = T(make_ret(Ret::Code::UnknownError));
+        bool resolved = false;
+        promise.onResolve(this, [&result, &resolved](const T& value) {
+            result = value;
+            resolved = true;
+        });
+
+        drainDeferredCalls();
+
+        EXPECT_TRUE(resolved) << "the promise did not resolve";
+        return result;
+    }
+
+    //! A dialog that settles the way `answer` says: resolved with its value, or rejected with its error.
+    static async::Promise<Val> dialogAnswer(const RetVal<Val>& answer)
+    {
+        return async::make_promise<Val>([answer](auto resolve, auto reject) {
+            if (!answer.ret) {
+                return reject(answer.ret.code(), answer.ret.text());
+            }
+
+            return resolve(answer.val);
+        });
+    }
+
     Ret saveProject(SaveMode mode, SaveLocationType type = SaveLocationType::Undefined, bool force = false)
     {
-        return m_scenario->saveProject(mode, type, force);
+        return await(m_scenario->saveProject(mode, type, force));
     }
 
     Ret saveProjectAt(const SaveLocation& location, SaveMode mode = SaveMode::Save, bool force = false)
     {
-        return m_scenario->saveProjectAt(location, mode, force);
+        return await(m_scenario->saveProjectAt(location, mode, force));
     }
 
     Ret saveProjectAt(const rcommand::Params& params)
     {
-        return m_scenario->saveProjectAt(params);
+        return await(m_scenario->saveProjectAt(params));
     }
 
-    bool saveProjectToCloud(const CloudProjectInfo& info, SaveMode mode = SaveMode::Save)
+    async::Promise<Ret> startSaveProjectToCloud(const CloudProjectInfo& info, SaveMode mode = SaveMode::Save)
     {
         return m_scenario->saveProjectToCloud(info, mode);
     }
 
+    Ret saveProjectToCloud(const CloudProjectInfo& info, SaveMode mode = SaveMode::Save)
+    {
+        return await(startSaveProjectToCloud(info, mode));
+    }
+
     RetVal<bool> needGenerateAudio(bool isPublic)
     {
-        return m_scenario->needGenerateAudio(isPublic);
+        return await(m_scenario->needGenerateAudio(isPublic));
     }
 
     static ::testing::Matcher<const UriQuery&> IsDialog(const std::string& uri)
@@ -194,12 +245,15 @@ protected:
         ValCh<bool> authorized;
         authorized.val = false;
         ON_CALL(*m_authorization, userAuthorized()).WillByDefault(Return(authorized));
-        ON_CALL(*m_interactive, openSync(IsLoginDialog())).WillByDefault(Return(answer));
+        ON_CALL(*m_interactive, open(IsLoginDialog())).WillByDefault([answer] { return dialogAnswer(answer); });
     }
 
+    //! A deferred call may queue another one, hence the repetition.
     static void drainDeferredCalls()
     {
-        async::processMessages();
+        for (int i = 0; i < 10; ++i) {
+            async::processMessages();
+        }
     }
 
     //! The save location dialog is settled on "local file", and resolves to `path`.
@@ -224,8 +278,8 @@ protected:
         answer["name"] = name;
         answer["visibility"] = int(cloud::Visibility::Private);
         answer["replaceExisting"] = false;
-        ON_CALL(*m_interactive, openSync(_))
-        .WillByDefault(Return(RetVal<Val>::make_ok(Val::fromQVariant(answer))));
+        const Val val = Val::fromQVariant(answer);
+        ON_CALL(*m_interactive, open(_)).WillByDefault([val] { return dialogAnswer(RetVal<Val>::make_ok(val)); });
     }
 
     void givenReachableCloud()
@@ -238,14 +292,13 @@ protected:
         ON_CALL(*m_configuration, generateAudioTimePeriodType()).WillByDefault(Return(GenerateAudioTimePeriodType::Never));
     }
 
-    //! NOTE `uploadProject` blocks on a nested QEventLoop until the progress reports it is finished,
-    //! so the result has to be delivered from inside that loop rather than before it starts.
+    //! NOTE The result is delivered from a deferred call, after `uploadProject` has subscribed to the progress.
     void givenUploadFinishesWith(const Ret& ret, const ValMap& result, std::function<void()> alsoDo = nullptr)
     {
         ON_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _))
         .WillByDefault([ret, result, alsoDo](DevicePtr, const QString&, cloud::Visibility, const QUrl&, int) {
             auto progress = std::make_shared<Progress>();
-            QTimer::singleShot(0, [progress, ret, result, alsoDo]() {
+            async::Async::call(nullptr, [progress, ret, result, alsoDo]() {
                 if (alsoDo) {
                     alsoDo();
                 }
@@ -374,9 +427,9 @@ TEST_F(SaveProjectScenarioTests, SaveProject_LocalScoreToCloud_AsksForSaveLocati
 
     //! [THEN] The cloud is a destination it has never had, so it is asked for
     givenReachableCloud();
-    ON_CALL(*m_interactive, openSync(_))
-    .WillByDefault(Return(RetVal<Val>(make_ret(Ret::Code::Cancel))));
-    EXPECT_CALL(*m_interactive, openSync(IsSaveToCloudDialog())).Times(1);
+    ON_CALL(*m_interactive, open(_))
+    .WillByDefault([] { return dialogAnswer(RetVal<Val>(make_ret(Ret::Code::Cancel))); });
+    EXPECT_CALL(*m_interactive, open(IsSaveToCloudDialog())).Times(1);
 
     //! [WHEN] Saving it to the cloud...
     saveProject(SaveMode::Save, SaveLocationType::Cloud);
@@ -433,7 +486,8 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ChosenCloudLocation_IsAppliedToTheP
     answer["name"] = "Chosen name";
     answer["visibility"] = int(cloud::Visibility::Private);
     answer["replaceExisting"] = false;
-    ON_CALL(*m_interactive, openSync(_)).WillByDefault(Return(RetVal<Val>::make_ok(Val::fromQVariant(answer))));
+    const Val val = Val::fromQVariant(answer);
+    ON_CALL(*m_interactive, open(_)).WillByDefault([val] { return dialogAnswer(RetVal<Val>::make_ok(val)); });
 
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
     ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
@@ -494,11 +548,11 @@ TEST_F(SaveProjectScenarioTests, ShareAudio_NoOpenScore_IsRefusedInsteadOfCrashi
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
 
     //! [THEN] Nothing is asked and nothing is uploaded
-    EXPECT_CALL(*m_interactive, openSync(IsSaveToCloudDialog())).Times(0);
+    EXPECT_CALL(*m_interactive, open(IsSaveToCloudDialog())).Times(0);
     EXPECT_CALL(*m_audioComService, uploadAudio(_, _, _, _, _, _)).Times(0);
 
     //! [WHEN] Sharing the audio anyway, as the menu allows...
-    Ret ret = m_scenario->shareAudio();
+    Ret ret = await(m_scenario->shareAudio());
 
     //! [THEN] It is refused with a clear reason
     EXPECT_EQ(ret.code(), int(Err::NoProjectError));
@@ -512,7 +566,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_AlreadySaving_RefusesToStartAgain)
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(true));
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
-    //! [GIVEN] ...and a location dialog that re-enters the save, the way a nested event loop does
+    //! [GIVEN] ...and a location dialog that re-enters the save while it is up
     Ret nested;
     bool busyDuringDialog = false;
 
@@ -521,12 +575,15 @@ TEST_F(SaveProjectScenarioTests, SaveProject_AlreadySaving_RefusesToStartAgain)
     .WillByDefault([this, &nested, &busyDuringDialog](const std::string&, const io::path_t&,
                                                       const std::vector<std::string>&, bool) {
         busyDuringDialog = m_scenario->isBusy(BusyStatus::Saving);
-        nested = saveProject(SaveMode::Save);
+        m_scenario->saveProject(SaveMode::Save).onResolve(this, [&nested](const Ret& ret) {
+            nested = ret;
+        });
         return io::path_t();
     });
 
     //! [WHEN] Saving it...
     saveProject(SaveMode::Save);
+    drainDeferredCalls();
 
     //! [THEN] The save was marked busy while the dialog was up, and the re-entrant call was refused
     EXPECT_TRUE(busyDuringDialog);
@@ -552,16 +609,19 @@ TEST_F(SaveProjectScenarioTests, SaveProject_AfterSaving_IsNoLongerBusy)
 TEST_F(SaveProjectScenarioTests, SaveProjectToPath_AlreadySaving_RefusesToStartAgain)
 {
     //! [GIVEN] A write that re-enters the save while it is still in progress...
-    bool nested = true;
+    Ret nested = make_ok();
 
     ON_CALL(*m_project, save(_, _, _))
     .WillByDefault([this, &nested](const io::path_t&, SaveMode, bool) {
-        nested = m_scenario->saveProject(io::path_t("other.mscz"));
+        m_scenario->saveProject(io::path_t("other.mscz")).onResolve(this, [&nested](const Ret& ret) {
+            nested = ret;
+        });
         return make_ok();
     });
 
     //! [WHEN] Saving to an explicit path...
-    bool ok = m_scenario->saveProject(io::path_t("explicit.mscz"));
+    Ret ok = await(m_scenario->saveProject(io::path_t("explicit.mscz")));
+    drainDeferredCalls();
 
     //! [THEN] The outer save succeeds and the re-entrant one is refused
     EXPECT_TRUE(ok);
@@ -578,7 +638,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_PathGiven_WritesThereWithoutA
     EXPECT_CALL(*m_project, save(path, SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving to that path...
-    bool ok = m_scenario->saveProject(path);
+    Ret ok = await(m_scenario->saveProject(path));
 
     EXPECT_TRUE(ok);
 }
@@ -594,7 +654,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_NoPath_SavesTheScoreWhereItAl
     EXPECT_CALL(*m_project, save(io::path_t(), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving without naming a path...
-    bool ok = m_scenario->saveProject();
+    Ret ok = await(m_scenario->saveProject());
 
     EXPECT_TRUE(ok);
 }
@@ -605,7 +665,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_WriteFails_ReportsFailure)
     ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
 
     //! [WHEN] Saving it to an explicit path...
-    bool ok = m_scenario->saveProject(io::path_t("explicit.mscz"));
+    Ret ok = await(m_scenario->saveProject(io::path_t("explicit.mscz")));
 
     //! [THEN] The failure is reported, so that the close and quit flows can stop
     EXPECT_FALSE(ok);
@@ -833,10 +893,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_CloudUnreachable_SavesLocall
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Saving it to the cloud...
-    bool ok = saveProjectToCloud(CloudProjectInfo());
+    Ret ret = saveProjectToCloud(CloudProjectInfo());
 
     //! [THEN] This counts as success: the work is safe on disk and will sync once the connection returns
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyACloudProject_WritesToItsOwnFile)
@@ -885,10 +945,10 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInst
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Saving it to the cloud...
-    bool ok = saveProjectToCloud(CloudProjectInfo());
+    Ret ret = saveProjectToCloud(CloudProjectInfo());
 
-    //! [THEN] The cloud save itself did not happen
-    EXPECT_FALSE(ok);
+    //! [THEN] The save is reported as done: the work is on disk, so a close that waited for it may go ahead
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNothing)
@@ -905,9 +965,9 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNot
     EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
 
     //! [WHEN] Saving it to the cloud...
-    bool ok = saveProjectToCloud(CloudProjectInfo());
+    Ret ret = saveProjectToCloud(CloudProjectInfo());
 
-    EXPECT_FALSE(ok);
+    EXPECT_FALSE(ret);
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotLoggedIn_WritesNothing)
@@ -921,9 +981,9 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotLoggedIn_WritesNothing)
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Saving it to the cloud...
-    bool ok = saveProjectToCloud(CloudProjectInfo());
+    Ret ret = saveProjectToCloud(CloudProjectInfo());
 
-    EXPECT_FALSE(ok);
+    EXPECT_FALSE(ret);
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectAt_TextBeingEdited_CommitsTheTextFirst)
@@ -1098,15 +1158,17 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AudioCannotBeRendered_DoesNo
 
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyUploading_DoesNotStartASecondUpload)
 {
-    //! [GIVEN] An upload already in flight, re-entered from within its own event loop...
+    //! [GIVEN] An upload already in flight, re-entered while it is still running...
     givenReachableCloud();
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
 
     bool reentered = false;
-    bool nested = false;
+    Ret nested = make_ret(Ret::Code::UnknownError);
     givenUploadFinishesWith(make_ok(), ValMap(), [this, &reentered, &nested]() {
         reentered = true;
-        nested = saveProjectToCloud(CloudProjectInfo(), SaveMode::SaveAs);
+        startSaveProjectToCloud(CloudProjectInfo(), SaveMode::SaveAs).onResolve(this, [&nested](const Ret& ret) {
+            nested = ret;
+        });
     });
 
     //! [THEN] Only one upload is started
@@ -1116,12 +1178,37 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyUploading_DoesNotStar
     CloudProjectInfo info;
     info.sourceUrl = QUrl("score-99");
     saveProjectToCloud(info, SaveMode::SaveAs);
+    drainDeferredCalls();
 
     //! [THEN] The re-entrant call really happened...
     ASSERT_TRUE(reentered);
 
-    //! [THEN] ...and reported success without doing anything, so the caller does not retry
-    EXPECT_TRUE(nested);
+    //! [THEN] ...and was refused as busy, so a close that waited for it does not go ahead mid-upload
+    EXPECT_EQ(nested.code(), int(Ret::Code::Busy));
+}
+
+TEST_F(SaveProjectScenarioTests, SaveProject_ConflictAndSaveAs_AsksForANewLocation)
+{
+    //! [GIVEN] An existing cloud score whose upload hits a conflict...
+    ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
+    ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(true));
+    m_cloudInfo.sourceUrl = QUrl("score-42");
+
+    givenReachableCloud();
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+    givenUploadFinishesWith(make_ret(cloud::Err::Status409_Conflict), ValMap());
+
+    //! [GIVEN] ...and a user who answers the conflict dialog with "Save as"
+    static constexpr int SAVE_AS_CONFLICT_BTN_ID = int(IInteractive::Button::CustomButton) + 3;
+    ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
+    .WillByDefault(Return(IInteractive::Result(SAVE_AS_CONFLICT_BTN_ID)));
+
+    //! [THEN] The "Save as" flow really starts and asks for a new location, instead of being refused as busy
+    givenUserCancelsTheSaveDialog();
+    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
+
+    //! [WHEN] Saving the score...
+    saveProject(SaveMode::Save);
 }
 
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ConflictRetry_LeavesTheFirstUploadDisconnected)
@@ -1140,7 +1227,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ConflictRetry_LeavesTheFirst
         const ProgressPtr progress = isFirst ? firstUpload : retriedUpload;
         const Ret ret = isFirst ? make_ret(cloud::Err::Status409_Conflict) : make_ok();
 
-        QTimer::singleShot(0, [progress, ret]() {
+        async::Async::call(nullptr, [progress, ret]() {
             ProgressResult res;
             res.ret = ret;
             res.val = Val(ValMap());
@@ -1169,8 +1256,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ConflictRetry_LeavesTheFirst
     stale.ret = make_ret(cloud::Err::Status409_Conflict);
     firstUpload->finish(stale);
 
-    //! [THEN] Nothing listens to it any more: the retry replaced it, and its handler wrote to a
-    //! stack frame that is now gone
+    //! [THEN] Nothing listens to it any more: the retry replaced it
 }
 
 // ─── Whether an mp3 is generated for the cloud ───────────────────────────────
@@ -1240,7 +1326,7 @@ TEST_F(SaveProjectScenarioTests, NeedGenerateAudio_SettingsNeverShown_AsksBefore
     ON_CALL(*m_configuration, generateAudioTimePeriodType()).WillByDefault(Return(GenerateAudioTimePeriodType::Never));
 
     //! [THEN] The settings dialog is opened before the decision is made
-    EXPECT_CALL(*m_interactive, openSync(IsAudioGenerationSettingsDialog())).Times(1);
+    EXPECT_CALL(*m_interactive, open(IsAudioGenerationSettingsDialog())).Times(1);
 
     //! [WHEN] Deciding whether to generate audio for a private upload...
     needGenerateAudio(false);
@@ -1302,7 +1388,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadySignedIn_DoesNotAskTo
     givenUploadFinishesWith(make_ok(), ValMap());
 
     //! [THEN] The login dialog is not shown, and the upload goes ahead
-    EXPECT_CALL(*m_interactive, openSync(IsLoginDialog())).Times(0);
+    EXPECT_CALL(*m_interactive, open(_)).Times(::testing::AnyNumber());
+    EXPECT_CALL(*m_interactive, open(IsLoginDialog())).Times(0);
     EXPECT_CALL(*m_museScoreComService,
                 uploadScore(_, QString(), cloud::Visibility::Private, QUrl("score-99"), 0)).Times(1);
 
@@ -1325,7 +1412,7 @@ TEST_F(SaveProjectScenarioTests, Publish_AudioCannotBeRendered_ReportsFailure)
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Publishing...
-    Ret ret = m_scenario->publish();
+    Ret ret = await(m_scenario->publish());
 
     //! [THEN] A score without audio has no web playback, so this is reported as bad data
     EXPECT_EQ(ret.code(), int(Ret::Code::BadData));
@@ -1341,7 +1428,7 @@ TEST_F(SaveProjectScenarioTests, Publish_UploadFails_ReportsFailure)
     givenUploadFinishesWith(make_ret(Ret::Code::InternalError), ValMap());
 
     //! [WHEN] Publishing...
-    Ret ret = m_scenario->publish();
+    Ret ret = await(m_scenario->publish());
 
     //! [THEN] The failure reaches the caller instead of being swallowed
     EXPECT_FALSE(ret);
@@ -1361,7 +1448,7 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
                 uploadScore(_, QString("Published score"), cloud::Visibility::Private, QUrl(), 0)).Times(1);
 
     //! [WHEN] Publishing...
-    Ret ret = m_scenario->publish();
+    Ret ret = await(m_scenario->publish());
 
     EXPECT_TRUE(ret);
 }
@@ -1382,7 +1469,7 @@ TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesT
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Publishing...
-    Ret ret = m_scenario->publish();
+    Ret ret = await(m_scenario->publish());
 
     EXPECT_TRUE(ret);
 }
@@ -1402,7 +1489,7 @@ TEST_F(SaveProjectScenarioTests, Publish_LocalPathCancelled_WritesNothing)
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Publishing...
-    Ret ret = m_scenario->publish();
+    Ret ret = await(m_scenario->publish());
 
     EXPECT_FALSE(ret);
 }
