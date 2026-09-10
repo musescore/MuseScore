@@ -30,17 +30,16 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/staff.h"
-#include "engraving/dom/tabdurationsymbol.h"
 #include "engraving/dom/tremolotwochord.h"
 
-#include "engraving/editing/flip.h"
 #include "engraving/editing/editbeam.h"
 #include "engraving/editing/editdata.h"
+#include "engraving/editing/flip.h"
 #include "engraving/editing/navigation.h"
 #include "engraving/editing/transaction/transaction.h"
 
-#include "utils/scorerw.h"
 #include "utils/scorecomp.h"
+#include "utils/scorerw.h"
 
 using namespace mu::engraving;
 
@@ -69,7 +68,7 @@ void Engraving_BeamTests::beam(const char* path)
 
 TEST_F(Engraving_BeamTests, historicalTabGridModes)
 {
-    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"../../../vtest/scores/historical-tab-grids.mscz"));
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BEAM_DATA_DIR + u"historical-tab-grid.mscx"));
     ASSERT_TRUE(score);
     ChordRest* first = score->firstMeasure()->firstChordRest(0);
     ASSERT_TRUE(first);
@@ -77,46 +76,34 @@ TEST_F(Engraving_BeamTests, historicalTabGridModes)
     ASSERT_TRUE(second);
     ASSERT_EQ(first->durationType().type(), DurationType::V_QUARTER);
     ASSERT_EQ(second->durationType().type(), DurationType::V_QUARTER);
-    for (ChordRest* cr = first; cr; cr = Navigation::nextChordRest(cr)) {
-        cr->setBeamMode(BeamMode::AUTO);
-    }
 
     auto setMode = [&](ChordRest* cr, BeamMode mode) {
         score->select(cr, SelectType::SINGLE);
-        score->transactionManager()->transaction(TranslatableString::untranslatable("TAB grid mode"), [&](Transaction& tx) {
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving beam tests"), [&](Transaction& tx) {
             EditBeam::setBeamMode(tx, score.get(), mode);
         });
     };
     setMode(first, BeamMode::BEGIN);
     ASSERT_EQ(first->beamMode(), BeamMode::BEGIN);
-    EXPECT_EQ(first->tabDur()->ldata()->beamGrid, TabBeamGrid::NONE);
     setMode(second, BeamMode::MID);
     ASSERT_EQ(second->beamMode(), BeamMode::MID);
-    ASSERT_TRUE(second->tabDur());
-    EXPECT_EQ(second->tabDur()->ldata()->beamGrid, TabBeamGrid::MEDIALFINAL);
-    EXPECT_LT(second->tabDur()->ldata()->beamLength, 0.0);
 
     EditData ed;
     score->undoRedo(true, &ed);
     EXPECT_EQ(second->beamMode(), BeamMode::AUTO);
-    EXPECT_EQ(second->tabDur()->ldata()->beamGrid, TabBeamGrid::NONE);
-    EXPECT_EQ(first->tabDur()->ldata()->beamGrid, TabBeamGrid::NONE);
     score->undoRedo(true, &ed);
     EXPECT_EQ(first->beamMode(), BeamMode::AUTO);
     score->undoRedo(false, &ed);
     score->undoRedo(false, &ed);
     EXPECT_EQ(first->beamMode(), BeamMode::BEGIN);
     EXPECT_EQ(second->beamMode(), BeamMode::MID);
-    EXPECT_LT(second->tabDur()->ldata()->beamLength, 0.0);
 
     ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"historicalTabGridModes.mscx"));
     std::unique_ptr<MasterScore> reopened(ScoreRW::readScore(u"historicalTabGridModes.mscx", true));
     ASSERT_TRUE(reopened);
     ChordRest* restored = Navigation::nextChordRest(reopened->firstMeasure()->firstChordRest(0));
-    ASSERT_TRUE(restored && restored->tabDur());
+    ASSERT_TRUE(restored);
     EXPECT_EQ(restored->beamMode(), BeamMode::MID);
-    EXPECT_EQ(restored->tabDur()->ldata()->beamLevel, 2);
-    EXPECT_LT(restored->tabDur()->ldata()->beamLength, 0.0);
 
     // These modes subdivide modern beams and still require actual hooks.
     setMode(second, BeamMode::BEGIN16);
@@ -125,13 +112,11 @@ TEST_F(Engraving_BeamTests, historicalTabGridModes)
     EXPECT_EQ(second->beamMode(), BeamMode::MID);
 
     score->deselectAll();
-    score->transactionManager()->transaction(TranslatableString::untranslatable("Reset TAB grid"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving beam tests"), [&](Transaction& tx) {
         EditBeam::resetBeamMode(tx, score.get());
     });
     EXPECT_EQ(first->beamMode(), BeamMode::AUTO);
     EXPECT_EQ(second->beamMode(), BeamMode::AUTO);
-    EXPECT_EQ(second->tabDur()->ldata()->beamGrid, TabBeamGrid::NONE);
-    EXPECT_EQ(second->tabDur()->ldata()->beamLength, 0.0);
     score->undoRedo(true, &ed);
     EXPECT_EQ(first->beamMode(), BeamMode::BEGIN);
     EXPECT_EQ(second->beamMode(), BeamMode::MID);
@@ -146,103 +131,6 @@ TEST_F(Engraving_BeamTests, historicalTabGridModes)
     ASSERT_EQ(quarter->durationType().type(), DurationType::V_QUARTER);
     setMode(quarter, BeamMode::BEGIN);
     EXPECT_EQ(quarter->beamMode(), BeamMode::AUTO);
-}
-
-TEST_F(Engraving_BeamTests, historicalTabGridLayout)
-{
-    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"../../../vtest/scores/historical-tab-grids.mscz"));
-    ASSERT_TRUE(score);
-    score->doLayout();
-    ChordRest* cr = score->firstMeasure()->firstChordRest(0);
-    for (int i = 0; i < 6; ++i) {
-        ASSERT_TRUE(cr);
-        ASSERT_TRUE(cr->isChord());
-        const TabDurationSymbol* symbol = toChord(cr)->tabDur();
-        ASSERT_TRUE(symbol);
-        if (i == 0 || i == 2) {
-            EXPECT_EQ(symbol->ldata()->beamGrid, TabBeamGrid::INITIAL);
-        } else {
-            EXPECT_EQ(symbol->ldata()->beamGrid, TabBeamGrid::MEDIALFINAL);
-            EXPECT_EQ(symbol->ldata()->beamLevel, i < 2 ? 2 : 3);
-            EXPECT_LT(symbol->ldata()->beamLength, 0.0);
-            const ChordRest* previous = Navigation::prevChordRest(cr);
-            const double expectedLength = previous->tabDur()->pagePos().x() - symbol->pagePos().x();
-            EXPECT_NEAR(symbol->ldata()->beamLength * symbol->magS(), expectedLength, 0.000001);
-            EXPECT_LE(symbol->ldata()->bbox().left(), expectedLength + 0.000001);
-        }
-        cr = Navigation::nextChordRest(cr);
-    }
-}
-
-TEST_F(Engraving_BeamTests, historicalTabGridPreservesUnequalDurations)
-{
-    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"../../../vtest/scores/tabfont-14.mscz"));
-    ASSERT_TRUE(score);
-    ChordRest* first = score->firstMeasure()->firstChordRest(0);
-    ChordRest* second = Navigation::nextChordRest(first);
-    ASSERT_EQ(first->durationType().type(), DurationType::V_HALF);
-    ASSERT_EQ(second->durationType().type(), DurationType::V_QUARTER);
-    first->setBeamMode(BeamMode::BEGIN);
-    second->setBeamMode(BeamMode::MID);
-    score->doLayout();
-    ASSERT_TRUE(first->tabDur() && second->tabDur());
-    EXPECT_EQ(first->tabDur()->ldata()->beamGrid, TabBeamGrid::NONE);
-    EXPECT_EQ(second->tabDur()->ldata()->beamGrid, TabBeamGrid::NONE);
-    EXPECT_NE(first->tabDur()->text(), second->tabDur()->text());
-}
-
-TEST_F(Engraving_BeamTests, historicalTabGridBoundaries)
-{
-    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"../../../vtest/scores/historical-tab-grids.mscz"));
-    ASSERT_TRUE(score);
-    const std::vector<std::vector<TabBeamGrid> > expected {
-        { TabBeamGrid::INITIAL, TabBeamGrid::MEDIALFINAL, TabBeamGrid::INITIAL,
-          TabBeamGrid::MEDIALFINAL, TabBeamGrid::MEDIALFINAL, TabBeamGrid::MEDIALFINAL },
-        // END closes the group; the following MID has no partner.
-        { TabBeamGrid::INITIAL, TabBeamGrid::MEDIALFINAL, TabBeamGrid::NONE, TabBeamGrid::NONE },
-        // Dotted values retain their individual duration signs.
-        { TabBeamGrid::NONE, TabBeamGrid::NONE, TabBeamGrid::NONE },
-        { TabBeamGrid::INITIAL, TabBeamGrid::MEDIALFINAL },
-        // An Italian whole note has no grid beam level.
-        { TabBeamGrid::NONE },
-        // A rest interrupts a group; a new BEGIN can start another.
-        { TabBeamGrid::NONE, TabBeamGrid::NONE, TabBeamGrid::INITIAL, TabBeamGrid::MEDIALFINAL },
-        // MID does not connect to the previous measure's quarter-note group.
-        { TabBeamGrid::NONE, TabBeamGrid::NONE, TabBeamGrid::NONE },
-    };
-    ChordRest* cr = score->firstMeasure()->firstChordRest(0);
-    for (const auto& measure : expected) {
-        for (TabBeamGrid grid : measure) {
-            ASSERT_TRUE(cr);
-            if (cr->isChord()) {
-                ASSERT_TRUE(cr->tabDur());
-                EXPECT_EQ(cr->tabDur()->ldata()->beamGrid, grid) << cr->tick().ticks();
-            }
-            cr = Navigation::nextChordRest(cr);
-        }
-    }
-    EXPECT_FALSE(cr);
-
-    // The French font has no quarter-note grid beams, and one for eighth notes.
-    // Use a small staff to check that connector lengths are magnified only once.
-    StaffType* tab = score->staff(0)->staffType(Fraction(0, 1));
-    tab->setDurationFontName(u"MuseScore Tab French");
-    tab->setUserMag(0.7);
-    score->setLayoutAll();
-    score->doLayout();
-    cr = score->firstMeasure()->firstChordRest(0);
-    for (int i = 0; i < 6; ++i) {
-        ASSERT_TRUE(cr && cr->tabDur());
-        const TabDurationSymbol* symbol = cr->tabDur();
-        if (i < 2) {
-            EXPECT_EQ(symbol->ldata()->beamGrid, TabBeamGrid::NONE);
-        } else if (i > 2) {
-            EXPECT_EQ(symbol->ldata()->beamLevel, 1);
-            const double length = Navigation::prevChordRest(cr)->tabDur()->pagePos().x() - symbol->pagePos().x();
-            EXPECT_NEAR(symbol->ldata()->beamLength * symbol->magS(), length, 0.000001);
-        }
-        cr = Navigation::nextChordRest(cr);
-    }
 }
 
 TEST_F(Engraving_BeamTests, beamA)

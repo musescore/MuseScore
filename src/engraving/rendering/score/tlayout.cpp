@@ -5690,13 +5690,17 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     // A grid replaces the individual duration signs. Only connect equal, undotted
     // values; otherwise retain the signs rather than lose their rhythm information.
     auto connects = [](const ChordRest* left, const ChordRest* right) {
-        return left && right && left->isChord() && right->isChord()
-               && !left->isGrace() && !right->isGrace() && !toChord(left)->noStem() && !toChord(right)->noStem()
-               && left->measure() == right->measure() && left->staffType() == right->staffType()
-               && left->durationType() == right->durationType() && left->tuplet() == right->tuplet()
-               && !left->dots() && !right->dots()
-               && (left->beamMode() == BeamMode::BEGIN || left->beamMode() == BeamMode::MID)
-               && (right->beamMode() == BeamMode::MID || right->beamMode() == BeamMode::END);
+        if (!left || !right || !left->isChord() || !right->isChord()) {
+            return false;
+        }
+        const bool regularChords = !left->isGrace() && !right->isGrace()
+                                   && !toChord(left)->noStem() && !toChord(right)->noStem();
+        const bool sameContext = left->measure() == right->measure() && left->staffType() == right->staffType()
+                                 && left->tuplet() == right->tuplet();
+        const bool equalUndottedDurations = left->durationType() == right->durationType() && !left->dots() && !right->dots();
+        const bool leftContinues = left->beamMode() == BeamMode::BEGIN || left->beamMode() == BeamMode::MID;
+        const bool rightConnects = right->beamMode() == BeamMode::MID || right->beamMode() == BeamMode::END;
+        return regularChords && sameContext && equalUndottedDurations && leftContinues && rightConnects;
     };
     const int beamLevel = chord ? static_cast<int>(chord->durationType().type())
                           - static_cast<int>(item->tab()->tabDurationFont().zeroBeamLevel) : 0;
