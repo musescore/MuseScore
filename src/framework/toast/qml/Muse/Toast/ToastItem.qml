@@ -226,9 +226,17 @@ Item {
                     model: root.actions.length
 
                     FlatButton {
-                        text: root.actions[index].text
+                        id: actionBtn
+
+                        readonly property var action: root.actions[index]
+
+                        text: action.text
+                        icon: action.iconCode
+                        orientation: Qt.Horizontal
+                        accentButton: action.accent
                         height: root.actionButtonHeight
                         minWidth: root.actionButtonMinWidth
+                        width: Math.max(actionBtn.implicitWidth, root.actionButtonMinWidth)
                         margins: root.actionButtonMargins
 
                         navigation.panel: toastNavPanel
@@ -236,7 +244,7 @@ Item {
                         navigation.name: "ToastAction" + index
 
                         onClicked: {
-                            root.actionTriggered(root.actions[index].text)
+                            root.actionTriggered(action.text)
                         }
                     }
                 }

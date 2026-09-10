@@ -39,6 +39,7 @@
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
 #include "context/tests/mocks/globalcontextmock.h"
+#include "toast/tests/mocks/toastservicemock.h"
 
 namespace muse {
 // Teach GoogleTest how to print UriQuery so failure diffs are readable
@@ -95,6 +96,11 @@ async::Promise<IInteractive::Result> resolvedResultPromise(const IInteractive::R
     return resolvedPromise<IInteractive::Result>(result);
 }
 
+async::Promise<toast::ToastResult> resolvedToastResultPromise(const toast::ToastResult& result = toast::ToastResult())
+{
+    return resolvedPromise<toast::ToastResult>(result);
+}
+
 Matcher<const IInteractive::Text&> TextIs(const std::string& text)
 {
     return Field(&IInteractive::Text::text, text);
@@ -109,6 +115,22 @@ Matcher<const IInteractive::ButtonDatas&> ButtonIdsAre(const std::vector<int>& e
         }
         for (size_t i = 0; i < buttons.size(); ++i) {
             if (buttons[i].btn != expectedIds[i]) {
+                return false;
+            }
+        }
+        return true;
+    });
+}
+
+//! NOTE: ToastAction has no operator==, so match action lists by their codes, in order
+Matcher<const std::vector<toast::ToastAction>&> ToastActionCodesAre(const std::vector<int>& expectedCodes)
+{
+    return Truly([expectedCodes](const std::vector<toast::ToastAction>& actions) {
+        if (actions.size() != expectedCodes.size()) {
+            return false;
+        }
+        for (size_t i = 0; i < actions.size(); ++i) {
+            if (actions[i].code != expectedCodes[i]) {
                 return false;
             }
         }
@@ -142,9 +164,11 @@ protected:
         m_museScoreComService = std::make_shared<NiceMock<MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<AuthorizationServiceMock> >();
         m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
+        m_toastService = std::make_shared<NiceMock<toast::ToastServiceMock> >();
 
         m_scenario->service.set(m_service);
         m_scenario->interactive.set(m_interactive);
+        m_scenario->toastService.set(m_toastService);
         m_scenario->dispatcher.set(m_dispatcher);
         m_scenario->configuration.set(m_configuration);
         m_scenario->museScoreComService.set(m_museScoreComService);
@@ -169,6 +193,8 @@ protected:
         .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
         ON_CALL(*m_interactive, question(_, _, _, _, _, _))
         .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
+        ON_CALL(*m_toastService, show(_, _, _, _, _))
+        .WillByDefault(Invoke([](auto&&...) { return resolvedToastResultPromise(); }));
 
         ON_CALL(*m_authorization, userAuthorized())
         .WillByDefault(Return(ValCh<bool> { true, {} }));
@@ -207,6 +233,7 @@ protected:
     std::shared_ptr<ConvertFileToScoreScenario> m_scenario;
     std::shared_ptr<ConvertFileToScoreServiceMock> m_service;
     std::shared_ptr<InteractiveMock> m_interactive;
+    std::shared_ptr<toast::ToastServiceMock> m_toastService;
     std::shared_ptr<muse::actions::ActionsDispatcherMock> m_dispatcher;
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<MuseScoreComServiceMock> m_museScoreComService;
@@ -231,20 +258,19 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
     m_scenario->init();
 
     const io::path_t path = "/some/path/My Score.xyz";
-    constexpr int openScoreBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
+    constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
 
     const std::string title = muse::trc("project/convert", "Your score is ready!");
     const std::string text = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
                              .arg("My Score").toStdString();
 
     // [THEN] The "score ready" notification is shown
-    EXPECT_CALL(*m_interactive,
-                info(title, TextIs(text), ButtonIdsAre({ dismissBtn, openScoreBtn }), dismissBtn,
-                     IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    EXPECT_CALL(*m_toastService,
+                show(title, text, muse::ui::IconCode::Code::TICK_FILLED, true,
+                     ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), openScoreBtn })))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
-        return resolvedResultPromise();
+        return resolvedToastResultPromise();
     }));
 
     bool forwarded = false;
@@ -271,9 +297,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
-
     Ret ret = make_ret(Err::ConvertProcessingFailed);
     ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
 
@@ -282,12 +305,12 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
                              .arg("My Score").toStdString();
 
     // [THEN] The "convert failed" notification is shown
-    EXPECT_CALL(*m_interactive,
-                warning(title, TextIs(text), ButtonIdsAre({ dismissBtn, tryAgainBtn }), dismissBtn,
-                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    EXPECT_CALL(*m_toastService,
+                show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
+                     ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), int(toast::ToastActionCode::TryAgain) })))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
-        return resolvedResultPromise();
+        return resolvedToastResultPromise();
     }));
 
     bool forwarded = false;
@@ -314,12 +337,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    constexpr int tryAgainBtn = int(IInteractive::Button::CustomButton) + 1;
-
-    // [GIVEN] The user clicks "Try again" on the failure dialog
-    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
-    .WillByDefault(Invoke([tryAgainBtn](auto&&...) {
-        return resolvedResultPromise(IInteractive::Result(tryAgainBtn));
+    // [GIVEN] The user clicks "Try again" on the failure toast
+    ON_CALL(*m_toastService, show(_, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::TryAgain)));
     }));
 
     // [GIVEN] The user re-selects a file to convert
@@ -356,12 +377,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    constexpr int dismissBtn = int(IInteractive::Button::CustomButton) + 2;
-
-    // [GIVEN] The user dismisses the failure dialog
-    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
-    .WillByDefault(Invoke([dismissBtn](auto&&...) {
-        return resolvedResultPromise(IInteractive::Result(dismissBtn));
+    // [GIVEN] The user dismisses the failure toast
+    ON_CALL(*m_toastService, show(_, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::Dismiss)));
     }));
 
     // [THEN] No new conversion is started
@@ -383,18 +402,18 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Goo
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    constexpr int goodBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int badBtn = int(IInteractive::Button::CustomButton) + 2;
+    constexpr int goodBtn = int(toast::ToastActionCode::Custom) + 1;
+    constexpr int badBtn = int(toast::ToastActionCode::Custom) + 2;
 
     const std::string title = muse::trc("project/convert", "How does your score look?");
     const std::string text = muse::trc("project/convert",
                                        "We’re always improving our score conversion accuracy. Let us know how we did with this one.");
 
-    // [THEN] The review rating dialog is shown, and the user's pick of "Good" is submitted
-    EXPECT_CALL(*m_interactive,
-                question(title, TextIs(text), ButtonIdsAre({ goodBtn, badBtn }), goodBtn, IInteractive::Options(), std::string()))
+    // [THEN] The review rating toast is shown, and the user's pick of "Good" is submitted
+    EXPECT_CALL(*m_toastService,
+                show(title, text, muse::ui::IconCode::Code::NONE, true, ToastActionCodesAre({ goodBtn, badBtn })))
     .WillOnce(Invoke([goodBtn](auto&&...) {
-        return resolvedResultPromise(IInteractive::Result(goodBtn));
+        return resolvedToastResultPromise(toast::ToastResult(goodBtn));
     }));
 
     EXPECT_CALL(*m_service, submitReview(ConvertType::Omr, 42, ReviewRating::Good, QString()))
@@ -415,18 +434,18 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Bad
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    constexpr int goodBtn = int(IInteractive::Button::CustomButton) + 1;
-    constexpr int badBtn = int(IInteractive::Button::CustomButton) + 2;
+    constexpr int goodBtn = int(toast::ToastActionCode::Custom) + 1;
+    constexpr int badBtn = int(toast::ToastActionCode::Custom) + 2;
 
     const std::string title = muse::trc("project/convert", "How does your score look?");
     const std::string text = muse::trc("project/convert",
                                        "We’re always improving our score conversion accuracy. Let us know how we did with this one.");
 
-    // [THEN] The review rating dialog is shown, and the user's pick of "Bad" is submitted
-    EXPECT_CALL(*m_interactive,
-                question(title, TextIs(text), ButtonIdsAre({ goodBtn, badBtn }), goodBtn, IInteractive::Options(), std::string()))
+    // [THEN] The review rating toast is shown, and the user's pick of "Bad" is submitted
+    EXPECT_CALL(*m_toastService,
+                show(title, text, muse::ui::IconCode::Code::NONE, true, ToastActionCodesAre({ goodBtn, badBtn })))
     .WillOnce(Invoke([badBtn](auto&&...) {
-        return resolvedResultPromise(IInteractive::Result(badBtn));
+        return resolvedToastResultPromise(toast::ToastResult(badBtn));
     }));
 
     EXPECT_CALL(*m_service, submitReview(ConvertType::Audio2Score, 7, ReviewRating::Bad, QString()))
@@ -1012,7 +1031,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_Show
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
-    EXPECT_CALL(*m_interactive, info(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_toastService, show(_, _, _, _, _)).Times(0);
 
     // [WHEN] Converting with no pre-selected files
     m_scenario->convertFiles();

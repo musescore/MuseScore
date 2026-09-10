@@ -27,17 +27,17 @@
 using namespace muse::ui;
 using namespace muse::toast;
 
-muse::async::Promise<ToastActionCode> ToastService::show(const std::string& title, const std::string& message,
-                                                         muse::ui::IconCode::Code iconCode, bool dismissible,
-                                                         const std::vector<ToastAction>& actions)
+muse::async::Promise<ToastResult> ToastService::show(const std::string& title, const std::string& message,
+                                                     muse::ui::IconCode::Code iconCode, bool dismissible,
+                                                     const std::vector<ToastAction>& actions)
 {
     return toastProvider()->show(ToastItem(title, message, iconCode, dismissible, std::chrono::seconds(0), actions));
 }
 
-muse::async::Promise<ToastActionCode> ToastService::showWithTimeout(const std::string& title, const std::string& message,
-                                                                    std::chrono::seconds timeout,
-                                                                    muse::ui::IconCode::Code iconCode, bool dismissible,
-                                                                    const std::vector<ToastAction>& actions)
+muse::async::Promise<ToastResult> ToastService::showWithTimeout(const std::string& title, const std::string& message,
+                                                                std::chrono::seconds timeout,
+                                                                muse::ui::IconCode::Code iconCode, bool dismissible,
+                                                                const std::vector<ToastAction>& actions)
 {
     return toastProvider()->show(ToastItem(title, message, iconCode, dismissible, timeout, actions));
 }
@@ -62,10 +62,10 @@ void ToastService::showWarning(const std::string& title, const std::string& mess
     show(title, message, IconCode::Code::WARNING, true, {});
 }
 
-muse::async::Promise<ToastActionCode> ToastService::showWithProgress(const std::string& title, const std::string& message,
-                                                                     std::shared_ptr<muse::Progress> progress,
-                                                                     muse::ui::IconCode::Code iconCode, bool dismissible,
-                                                                     const std::vector<ToastAction>& actions, bool showProgressInfo)
+muse::async::Promise<ToastResult> ToastService::showWithProgress(const std::string& title, const std::string& message,
+                                                                 std::shared_ptr<muse::Progress> progress,
+                                                                 muse::ui::IconCode::Code iconCode, bool dismissible,
+                                                                 const std::vector<ToastAction>& actions, bool showProgressInfo)
 {
     return toastProvider()->show(ToastItem(title, message, iconCode, dismissible, actions, progress, showProgressInfo));
 }

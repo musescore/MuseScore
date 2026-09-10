@@ -334,6 +334,9 @@ enum class Code : char16_t {
     DOWN = 0xF3C1,
     UP = 0xF3C2,
 
+    LIKE = 0xF3C5,
+    DISLIKE = 0xF3C6,
+
     LOOP_IN = 0xF3C7,
     LOOP_OUT = 0xF3C8,
     PAUSE = 0xF3C9,
@@ -537,6 +540,10 @@ enum class Code : char16_t {
     FILLED_ARROW_RIGHT = 0xF4BF,
 
     VIDEO = 0xF4C2,
+
+    TICK_FILLED = 0xF4C4,
+    ERROR_FILLED = 0xF4C6,
+    WARNING_FILLED = 0xF4C8,
 
     INFO_FILLED = 0xF4CC,
 
