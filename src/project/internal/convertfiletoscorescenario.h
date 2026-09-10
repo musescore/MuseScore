@@ -94,11 +94,14 @@ private:
     void showFileProcessingDialog();
     void showScoreReadyNotification(const ScoreInfo& scoreInfo);
     void showConvertFailedNotification(const muse::Ret& ret);
+    void showPollingFailureNotification();
 
     void askReviewRating(int scoreId);
     void checkPendingReview();
 
     muse::async::Channel<muse::Ret, ScoreInfo> m_convertFinished;
     std::map<muse::io::path_t, int /*scoreId*/> m_pendingReviews;
+
+    bool m_retryToastShown = false;
 };
 }

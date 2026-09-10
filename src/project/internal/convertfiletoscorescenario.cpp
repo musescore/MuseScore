@@ -38,6 +38,9 @@ using namespace muse::cloud;
 //! NOTE: gives the user a moment to land on the score before prompting for a review
 static constexpr int REVIEW_PROMPT_DELAY_MS = 10000;
 
+//! NOTE: attempt 4 is ~5 minutes into retrying
+static constexpr int RETRY_TOAST_ATTEMPT_THRESHOLD = 4;
+
 static ConvertSelection toConvertSelection(const Val& val)
 {
     const QVariantMap map = val.toQVariant().toMap();
@@ -87,6 +90,17 @@ void ConvertFileToScoreScenario::init()
     service()->reviewRequested().onReceive(this, [this](int scoreId) {
         m_pendingReviews[configuration()->cloudProjectPath(scoreId)] = scoreId;
         checkPendingReview();
+    });
+
+    service()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
+        if (failure.attempt == 1) {
+            m_retryToastShown = false;
+        }
+
+        if (!m_retryToastShown && failure.attempt >= RETRY_TOAST_ATTEMPT_THRESHOLD) {
+            m_retryToastShown = true;
+            showPollingFailureNotification();
+        }
     });
 
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
@@ -477,6 +491,13 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
             convertFiles();
         }
     });
+}
+
+void ConvertFileToScoreScenario::showPollingFailureNotification()
+{
+    toastService()->showWarning(
+        muse::trc("project/convert", "We’re having trouble connecting to the internet."),
+        muse::trc("project/convert", "We’ll keep trying intermittently."));
 }
 
 void ConvertFileToScoreScenario::askReviewRating(int scoreId)

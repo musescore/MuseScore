@@ -427,66 +427,35 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Good_SubmitsGoodRating)
+// ==================================================
+// init() -- pollingFailed()
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_ShowsToastOnceAfterThreshold)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, ScoreInfo> convertFinished;
     async::Channel<int> reviewRequested;
+    async::Channel<PollingFailure> pollingFailed;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
+    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
     m_scenario->init();
 
-    constexpr int goodBtn = int(toast::ToastActionCode::Custom) + 1;
-    constexpr int badBtn = int(toast::ToastActionCode::Custom) + 2;
+    const std::string title = muse::trc("project/convert", "We’re having trouble connecting to the internet.");
+    const std::string text = muse::trc("project/convert", "We’ll keep trying intermittently.");
 
-    const std::string title = muse::trc("project/convert", "How does your score look?");
-    const std::string text = muse::trc("project/convert",
-                                       "We’re always improving our score conversion accuracy. Let us know how we did with this one.");
+    // [THEN] The connectivity toast is shown exactly once
+    EXPECT_CALL(*m_toastService, showWarning(title, text)).Times(1);
 
-    // [THEN] The review rating toast is shown, and the user's pick of "Good" is submitted
-    EXPECT_CALL(*m_toastService,
-                show(title, text, muse::ui::IconCode::Code::NONE, true, ToastActionCodesAre({ goodBtn, badBtn })))
-    .WillOnce(Invoke([goodBtn](auto&&...) {
-        return resolvedToastResultPromise(toast::ToastResult(goodBtn));
-    }));
-
-    EXPECT_CALL(*m_service, submitReview(555, ReviewRating::Good, QString()))
-    .Times(1);
-
-    // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(555);
-
-    pumpEvents();
-}
-
-TEST_F(Project_ConvertFileToScoreScenarioTest, DISABLED_Init_ReviewRequested_Bad_SubmitsBadRating)
-{
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, ScoreInfo> convertFinished;
-    async::Channel<int> reviewRequested;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
-    m_scenario->init();
-
-    constexpr int goodBtn = int(toast::ToastActionCode::Custom) + 1;
-    constexpr int badBtn = int(toast::ToastActionCode::Custom) + 2;
-
-    const std::string title = muse::trc("project/convert", "How does your score look?");
-    const std::string text = muse::trc("project/convert",
-                                       "We’re always improving our score conversion accuracy. Let us know how we did with this one.");
-
-    // [THEN] The review rating toast is shown, and the user's pick of "Bad" is submitted
-    EXPECT_CALL(*m_toastService,
-                show(title, text, muse::ui::IconCode::Code::NONE, true, ToastActionCodesAre({ goodBtn, badBtn })))
-    .WillOnce(Invoke([badBtn](auto&&...) {
-        return resolvedToastResultPromise(toast::ToastResult(badBtn));
-    }));
-
-    EXPECT_CALL(*m_service, submitReview(555, ReviewRating::Bad, QString()))
-    .Times(1);
-
-    // [WHEN] The service requests a review for a finished conversion
-    reviewRequested.send(555);
+    // [WHEN] Polling fails below the attempt threshold (4), then reaches and passes it, and
+    // eventually gives up
+    pollingFailed.send(PollingFailure { Ret(), 1, 5, secs_t(0), false });
+    pollingFailed.send(PollingFailure { Ret(), 2, 5, secs_t(0), false });
+    pollingFailed.send(PollingFailure { Ret(), 3, 5, secs_t(0), false });
+    pollingFailed.send(PollingFailure { Ret(), 4, 5, secs_t(0), false });
+    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), false });
+    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
 
     pumpEvents();
 }
