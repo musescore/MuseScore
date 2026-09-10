@@ -82,15 +82,17 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_OPEN_COMMAND, [this](const rcommand::Params& params) { return openProject(params); });
     d->onRequest(this, PROJECT_CLOSE_COMMAND, [this]() { return closeProject(); });
 
-    d->onRequest(this, PROJECT_SAVE_COMMAND, [this]() { return saveProject(SaveMode::Save); });
-    d->onRequest(this, PROJECT_SAVE_AS_COMMAND, [this]() { return saveProject(SaveMode::SaveAs); });
-    d->onRequest(this, PROJECT_SAVE_A_COPY_COMMAND, [this]() { return saveProject(SaveMode::SaveCopy); });
-    d->onRequest(this, PROJECT_SAVE_SELECTION_COMMAND, [this]() { return saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
-    d->onRequest(this, PROJECT_SAVE_TO_CLOUD_COMMAND, [this]() { return saveProject(SaveMode::Save, SaveLocationType::Cloud); });
-    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::Params& params) { return saveProjectAt(params); });
+    d->onRequest(this, PROJECT_SAVE_COMMAND, [this]() { return runAsync(saveProject(SaveMode::Save)); });
+    d->onRequest(this, PROJECT_SAVE_AS_COMMAND, [this]() { return runAsync(saveProject(SaveMode::SaveAs)); });
+    d->onRequest(this, PROJECT_SAVE_A_COPY_COMMAND, [this]() { return runAsync(saveProject(SaveMode::SaveCopy)); });
+    d->onRequest(this, PROJECT_SAVE_SELECTION_COMMAND, [this]() {
+        return runAsync(saveProject(SaveMode::SaveSelection, SaveLocationType::Local));
+    });
+    d->onRequest(this, PROJECT_SAVE_TO_CLOUD_COMMAND, [this]() { return runAsync(saveProject(SaveMode::Save, SaveLocationType::Cloud)); });
+    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::Params& params) { return runAsync(saveProjectAt(params)); });
 
-    d->onRequest(this, PROJECT_PUBLISH_COMMAND, [this]() { return publish(); });
-    d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return sharedAudio(); });
+    d->onRequest(this, PROJECT_PUBLISH_COMMAND, [this]() { return runAsync(publish()); });
+    d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return runAsync(sharedAudio()); });
 
     d->onRequest(this, PROJECT_EXPORT_COMMAND, [this]() { return exportScore(); });
     d->onRequest(this, PROJECT_IMPORT_PDF_COMMAND, [this]() { return importPdf(); });
@@ -361,6 +363,38 @@ muse::Ret ProjectActionsController::closeProject()
     return ok ? make_ok() : make_ret(Ret::Code::UnknownError);
 }
 
+//! Commands report that the flow has started; its outcome is shown to the user by the scenario itself
+muse::Ret ProjectActionsController::runAsync(async::Promise<Ret> flow)
+{
+    flow.onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGD() << ret.toString();
+        }
+    });
+
+    return make_ok();
+}
+
+//! The close and quit flows are still synchronous, so the save is waited for here
+muse::Ret ProjectActionsController::waitFor(async::Promise<Ret> flow)
+{
+    QEventLoop loop;
+    Ret result;
+    bool finished = false;
+
+    flow.onResolve(this, [&result, &finished, &loop](const Ret& ret) {
+        result = ret;
+        finished = true;
+        loop.quit();
+    });
+
+    if (!finished) {
+        loop.exec();
+    }
+
+    return result;
+}
+
 bool ProjectActionsController::closeOpenedProject(bool goToHome)
 {
     if (isBusy(BusyStatus::Closing)) {
@@ -389,7 +423,7 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
         if (btn == IInteractive::Button::Cancel) {
             result = false;
         } else if (btn == IInteractive::Button::Save) {
-            result = saveProject();
+            result = waitFor(saveProject());
         } else if (btn == IInteractive::Button::DontSave) {
             result = true;
         }
@@ -426,27 +460,27 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
     return result.standardButton();
 }
 
-muse::Ret ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
+async::Promise<Ret> ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
 {
     return saveProjectScenario()->saveProject(saveMode, saveLocationType, force);
 }
 
-muse::Ret ProjectActionsController::saveProject(const muse::io::path_t& path)
+async::Promise<Ret> ProjectActionsController::saveProject(const muse::io::path_t& path)
 {
     return saveProjectScenario()->saveProject(path);
 }
 
-muse::Ret ProjectActionsController::publish()
+async::Promise<Ret> ProjectActionsController::publish()
 {
     return saveProjectScenario()->publish();
 }
 
-muse::Ret ProjectActionsController::sharedAudio()
+async::Promise<Ret> ProjectActionsController::sharedAudio()
 {
     return saveProjectScenario()->shareAudio();
 }
 
-muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::Params& params)
+async::Promise<Ret> ProjectActionsController::saveProjectAt(const muse::rcommand::Params& params)
 {
     return saveProjectScenario()->saveProjectAt(params);
 }
