@@ -90,6 +90,9 @@ public:
     int subtype() const override { return int(m_vibratoType); }
     TranslatableString subtypeUserName() const override;
 
+protected:
+    Sid defaultPosSid() const override;
+
 private:
     VibratoType m_vibratoType = VibratoType::GUITAR_VIBRATO;
 };
