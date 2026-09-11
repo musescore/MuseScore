@@ -46,5 +46,7 @@ public:
     MOCK_METHOD((muse::async::Channel<int>), reviewRequested, (), (const, override));
     MOCK_METHOD(void, submitReview, (int, ReviewRating, const QString&), (override));
     MOCK_METHOD(void, submitReviewComment, (int, const QString&), (override));
+
+    MOCK_METHOD(void, deleteConversion, (ConvertType, int), (override));
 };
 }

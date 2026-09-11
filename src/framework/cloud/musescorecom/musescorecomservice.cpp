@@ -44,11 +44,12 @@ using namespace muse::async;
 static const QString MUSESCORECOM_CLOUD_TITLE("MuseScore.com");
 static const QString MUSESCORECOM_CLOUD_URL("https://musescore.com");
 static const QString MUSESCORECOM_API_ROOT_URL("https://desktop.musescore.com/editor/v1");
+static const QString MUSESCORECOM_API_ROOT_URL_V2("https://desktop.musescore.com/editor/v2");
 static const QUrl MUSESCORECOM_SCORE_MANAGER_URL(MUSESCORECOM_CLOUD_URL + "/my-scores");
 static const QUrl MUSESCORECOM_USER_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/me");
 
 static const QUrl MUSESCORECOM_SCORE_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/info");
-static const QUrl MUSESCORECOM_SCORES_LIST_API_URL(MUSESCORECOM_API_ROOT_URL + "/collection/scores");
+static const QUrl MUSESCORECOM_SCORES_LIST_API_URL(MUSESCORECOM_API_ROOT_URL_V2 + "/collection/scores");
 static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download");
 static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download-shared");
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
@@ -56,6 +57,8 @@ static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + 
 
 static const QUrl MUSESCORECOM_CONVERT_CONFIG_URL("https://musescore.com/static/musescore/studio/upload-config.json");
 static const QUrl MUSESCORECOM_CONVERT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/convert");
+//! NOTE: same path as the upload endpoint, DELETE instead of POST
+static const QUrl MUSESCORECOM_CONVERT_DELETE_API_URL = MUSESCORECOM_CONVERT_UPLOAD_API_URL;
 static const QUrl MUSESCORECOM_CONVERT_QUEUE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/queue");
 static const QUrl MUSESCORECOM_CONVERT_REVIEW_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/review");
 static const QUrl MUSESCORECOM_CONVERT_COMMENT_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/comment");
@@ -91,6 +94,98 @@ static RetVal<AccountInfo> parseMuseScoreComAccountInfo(const QByteArray& data)
     info.collectionUrl = QUrl(profileUrl + "/sheetmusic");
 
     return RetVal<AccountInfo>::make_ok(info);
+}
+
+static QString convertTypeToApiString(ConvertType type)
+{
+    switch (type) {
+    case ConvertType::Omr: return "omr";
+    case ConvertType::Audio2Score: return "audio2score";
+    }
+
+    return QString();
+}
+
+static ConvertType convertTypeFromApiString(const QString& str)
+{
+    if (str == "omr") {
+        return ConvertType::Omr;
+    }
+
+    if (str == "audio2score") {
+        return ConvertType::Audio2Score;
+    }
+
+    LOGW() << "Unknown convert type: \"" << str << "\", falling back to Omr";
+    return ConvertType::Omr;
+}
+
+static ConvertStatus convertStatusFromApiString(const QString& str)
+{
+    if (str == "processing") {
+        return ConvertStatus::Processing;
+    } else if (str == "awaiting_review") {
+        return ConvertStatus::AwaitingReview;
+    } else if (str == "done") {
+        return ConvertStatus::Done;
+    } else if (str == "failed") {
+        return ConvertStatus::Failed;
+    }
+
+    return ConvertStatus::Unknown;
+}
+
+static ConvertErrorCode convertErrorCodeFromApiString(const QString& str)
+{
+    if (str == "unsupported_format") {
+        return ConvertErrorCode::UnsupportedFormat;
+    } else if (str == "file_too_large") {
+        return ConvertErrorCode::FileTooLarge;
+    } else if (str == "too_many_files") {
+        return ConvertErrorCode::TooManyFiles;
+    } else if (str == "file_or_link_required") {
+        return ConvertErrorCode::FileOrLinkRequired;
+    } else if (str == "invalid_link") {
+        return ConvertErrorCode::InvalidLink;
+    } else if (str == "rate_limited") {
+        return ConvertErrorCode::RateLimited;
+    } else if (str == "mscz_not_ready") {
+        return ConvertErrorCode::MsczNotReady;
+    } else if (str == "no_need_review") {
+        return ConvertErrorCode::NoNeedReview;
+    } else if (str == "review_required") {
+        return ConvertErrorCode::ReviewRequired;
+    } else if (str == "comment_required") {
+        return ConvertErrorCode::CommentRequired;
+    } else if (str == "mu_status_various_file_issues") {
+        return ConvertErrorCode::VariousFileIssues;
+    } else if (str == "mu_status_too_complex") {
+        return ConvertErrorCode::TooComplex;
+    } else if (str == "mu_status_dont_recognize_notes") {
+        return ConvertErrorCode::DontRecognizeNotes;
+    } else if (str == "mu_status_general_failure") {
+        return ConvertErrorCode::GeneralFailure;
+    } else if (str == "bad_params") {
+        return ConvertErrorCode::BadParams;
+    }
+
+    return ConvertErrorCode::Unknown;
+}
+
+static std::optional<ScoreConversionInfo> parseScoreConversionInfo(const QJsonObject& itemObj)
+{
+    if (!itemObj.value("conversion").isObject()) {
+        return std::nullopt;
+    }
+
+    QJsonObject conversionObj = itemObj.value("conversion").toObject();
+
+    ScoreConversionInfo result;
+    result.id = conversionObj.value("id").toInt();
+    result.type = convertTypeFromApiString(conversionObj.value("type").toString());
+    result.status = convertStatusFromApiString(conversionObj.value("status").toString());
+
+    return result;
 }
 
 static RetVal<ScoresList> parseScoreList(const QByteArray& data, int batchNumber)
@@ -131,6 +226,7 @@ static RetVal<ScoresList> parseScoreList(const QByteArray& data, int batchNumber
         item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
         item.visibility = static_cast<Visibility>(itemObj.value("privacy").toInt());
         item.viewCount = itemObj.value("view_count").toInt();
+        item.conversion = parseScoreConversionInfo(itemObj);
 
         result.items.push_back(item);
     }
@@ -254,80 +350,6 @@ static QHttpMultiPartPtr makeMultiPartForAudioUpload(QIODevice* audioData, const
     multiPart->append(scoreIdPart);
 
     return multiPart;
-}
-
-static QString convertTypeToApiString(ConvertType type)
-{
-    switch (type) {
-    case ConvertType::Omr: return "omr";
-    case ConvertType::Audio2Score: return "audio2score";
-    }
-
-    return QString();
-}
-
-static ConvertType convertTypeFromApiString(const QString& str)
-{
-    if (str == "omr") {
-        return ConvertType::Omr;
-    }
-
-    if (str == "audio2score") {
-        return ConvertType::Audio2Score;
-    }
-
-    LOGW() << "Unknown convert type: \"" << str << "\", falling back to Omr";
-    return ConvertType::Omr;
-}
-
-static ConvertStatus convertStatusFromApiString(const QString& str)
-{
-    if (str == "processing") {
-        return ConvertStatus::Processing;
-    } else if (str == "awaiting_review") {
-        return ConvertStatus::AwaitingReview;
-    } else if (str == "done") {
-        return ConvertStatus::Done;
-    } else if (str == "failed") {
-        return ConvertStatus::Failed;
-    }
-
-    return ConvertStatus::Unknown;
-}
-
-static ConvertErrorCode convertErrorCodeFromApiString(const QString& str)
-{
-    if (str == "unsupported_format") {
-        return ConvertErrorCode::UnsupportedFormat;
-    } else if (str == "file_too_large") {
-        return ConvertErrorCode::FileTooLarge;
-    } else if (str == "too_many_files") {
-        return ConvertErrorCode::TooManyFiles;
-    } else if (str == "file_or_link_required") {
-        return ConvertErrorCode::FileOrLinkRequired;
-    } else if (str == "invalid_link") {
-        return ConvertErrorCode::InvalidLink;
-    } else if (str == "rate_limited") {
-        return ConvertErrorCode::RateLimited;
-    } else if (str == "mscz_not_ready") {
-        return ConvertErrorCode::MsczNotReady;
-    } else if (str == "no_need_review") {
-        return ConvertErrorCode::NoNeedReview;
-    } else if (str == "review_required") {
-        return ConvertErrorCode::ReviewRequired;
-    } else if (str == "comment_required") {
-        return ConvertErrorCode::CommentRequired;
-    } else if (str == "mu_status_various_file_issues") {
-        return ConvertErrorCode::VariousFileIssues;
-    } else if (str == "mu_status_too_complex") {
-        return ConvertErrorCode::TooComplex;
-    } else if (str == "mu_status_dont_recognize_notes") {
-        return ConvertErrorCode::DontRecognizeNotes;
-    } else if (str == "mu_status_general_failure") {
-        return ConvertErrorCode::GeneralFailure;
-    }
-
-    return ConvertErrorCode::Unknown;
 }
 
 static void appendServerErrorCode(Ret& ret, const QByteArray& data)
@@ -476,7 +498,8 @@ static QString sanitizeContentDispositionFilename(const QString& fileName)
     return sanitized;
 }
 
-static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const ConvertFileDataList& files, const QUrl& link)
+static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const ConvertFileDataList& files, const QUrl& link,
+                                                       const QString& filename)
 {
     auto multiPart = std::make_shared<QHttpMultiPart>(QHttpMultiPart::FormDataType);
 
@@ -484,6 +507,13 @@ static QHttpMultiPartPtr makeMultiPartForConvertUpload(ConvertType type, const C
     typePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"type\""));
     typePart.setBody(convertTypeToApiString(type).toUtf8());
     multiPart->append(typePart);
+
+    if (!filename.isEmpty()) {
+        QHttpPart filenamePart;
+        filenamePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"filename\""));
+        filenamePart.setBody(filename.toUtf8());
+        multiPart->append(filenamePart);
+    }
 
     if (!link.isEmpty()) {
         QHttpPart linkPart;
@@ -1031,7 +1061,7 @@ Promise<Ret> MuseScoreComService::doUpload(const ConvertUploadDataPtr& data, Pro
             return resolve(uploadUrl.ret);
         }
 
-        auto multiPart = makeMultiPartForConvertUpload(data->type, data->files, data->link);
+        auto multiPart = makeMultiPartForConvertUpload(data->type, data->files, data->link, data->filename);
         auto receivedData = std::make_shared<QBuffer>();
 
         RetVal<Progress> uploadProgress = m_networkManager->post(uploadUrl.val, multiPart, receivedData, headers());
@@ -1129,6 +1159,40 @@ Promise<RetVal<ConvertResult> > MuseScoreComService::submitReview(ConvertType ty
         });
 
         return Promise<RetVal<ConvertResult> >::dummy_result();
+    });
+}
+
+Promise<Ret> MuseScoreComService::deleteConversion(ConvertType type, int id)
+{
+    return Promise<Ret>([this, type, id](auto resolve, auto) {
+        QVariantMap params;
+        params["type"] = convertTypeToApiString(type);
+        params["id"] = id;
+
+        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_CONVERT_DELETE_API_URL, params);
+        if (!url.ret) {
+            return resolve(url.ret);
+        }
+
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->del(url.val, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
+
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
+                appendServerErrorCode(ret, receivedData->data());
+                (void)resolve(ret);
+                return;
+            }
+
+            (void)resolve(make_ok());
+        });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 

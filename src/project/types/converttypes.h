@@ -46,6 +46,7 @@ using ReviewRating = muse::cloud::ReviewRating;
 using LinkSource = muse::cloud::LinkSource;
 using LinkSources = muse::cloud::LinkSources;
 using ScoreInfo = muse::cloud::ScoreInfo;
+using ScoreConversionInfo = muse::cloud::ScoreConversionInfo;
 
 struct OmrConvertInput {
     muse::io::paths_t paths;
@@ -97,18 +98,14 @@ struct PollingFailure {
 };
 
 struct WatchedScore {
-    int convertId = 0;
-    ConvertType convertType = ConvertType::Omr;
-    ConvertStatus convertStatus = ConvertStatus::Unknown;
+    ScoreConversionInfo conversion;
     std::optional<int> scoreId; //! set once the score is ready and reported (Done/AwaitingReview)
     bool startedLocally = false; //! true if started in MuseScore
     muse::String name;
 
     bool operator==(const WatchedScore& other) const
     {
-        return convertId == other.convertId
-               && convertType == other.convertType
-               && convertStatus == other.convertStatus
+        return conversion == other.conversion
                && scoreId == other.scoreId
                && startedLocally == other.startedLocally
                && name == other.name;

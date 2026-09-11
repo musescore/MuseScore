@@ -91,6 +91,7 @@ enum class ConvertErrorCode {
     TooComplex,
     DontRecognizeNotes,
     GeneralFailure,
+    BadParams,
 };
 
 //! NOTE: key for ConvertErrorCode stored in Ret::data
@@ -153,6 +154,7 @@ struct ConvertUploadData {
     ConvertType type = ConvertType::Omr;
     ConvertFileDataList files;
     QUrl link; // Audio2Score only
+    QString filename; // desired name for the converted score, no extension
 };
 using ConvertUploadDataPtr = std::shared_ptr<const ConvertUploadData>;
 

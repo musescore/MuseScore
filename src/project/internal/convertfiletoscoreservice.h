@@ -72,6 +72,8 @@ public:
     void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) override;
     void submitReviewComment(int scoreId, const QString& comment) override;
 
+    void deleteConversion(ConvertType type, int convertId) override;
+
 private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
     static constexpr int MAX_RETRY_INTERVAL_MS = 10 * 60000;

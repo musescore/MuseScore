@@ -78,7 +78,7 @@ void RecentScoresModel::updateRecentScores()
     items.push_back(addItem);
 
     for (const WatchedScore& watchedScore : watchedScores) {
-        if (watchedScore.convertStatus != ConvertStatus::Processing) {
+        if (watchedScore.conversion.status != ConvertStatus::Processing) {
             continue;
         }
 

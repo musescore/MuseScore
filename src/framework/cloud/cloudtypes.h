@@ -22,6 +22,7 @@
 #ifndef MUSE_CLOUD_CLOUDTYPES_H
 #define MUSE_CLOUD_CLOUDTYPES_H
 
+#include <optional>
 #include <vector>
 
 #include <QDate>
@@ -29,6 +30,8 @@
 #include <QUrl>
 
 #include "types/id.h"
+
+#include "musescorecom/converttypes.h"
 
 namespace muse::cloud {
 static const QString MUSESCORE_COM_CLOUD_CODE = "musescorecom";
@@ -126,6 +129,19 @@ struct ScoreInfo {
     }
 };
 
+struct ScoreConversionInfo {
+    int id = 0;
+    ConvertType type = ConvertType::Omr;
+    ConvertStatus status = ConvertStatus::Unknown;
+
+    bool operator==(const ScoreConversionInfo& other) const
+    {
+        return id == other.id
+               && type == other.type
+               && status == other.status;
+    }
+};
+
 struct ScoresList {
     struct Item {
         int id = 0;
@@ -135,6 +151,7 @@ struct ScoresList {
         QString thumbnailUrl;
         Visibility visibility = Visibility::Private;
         int viewCount = 0;
+        std::optional<ScoreConversionInfo> conversion; //! set if the score originated from a conversion
     };
 
     std::vector<Item> items;

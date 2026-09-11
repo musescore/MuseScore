@@ -37,5 +37,7 @@ public:
 
     MOCK_METHOD(async::Promise<RetVal<ConvertResult> >, submitReview, (ConvertType, int, ReviewRating, const QString&), (override));
     MOCK_METHOD(async::Promise<RetVal<ConvertResult> >, submitReviewComment, (ConvertType, int, const QString&), (override));
+
+    MOCK_METHOD(async::Promise<Ret>, deleteConversion, (ConvertType, int), (override));
 };
 }

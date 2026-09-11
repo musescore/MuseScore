@@ -42,6 +42,7 @@ namespace muse::cloud {
 ///    submitReviewComment() may attach a comment afterwards, once the review has been submitted
 /// 4. Keep polling fetchQueue() until the status is Failed, or the item disappears
 ///    from the queue (which should be treated the same as Done)
+/// 5. deleteConversion() may be called at any point to remove an item from the queue
 class IMuseScoreComConvertService : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMuseScoreComConvertService)
@@ -58,6 +59,8 @@ public:
     virtual async::Promise<RetVal<ConvertResult> > submitReview(ConvertType type, int id, ReviewRating review,
                                                                 const QString& comment = QString()) = 0;
     virtual async::Promise<RetVal<ConvertResult> > submitReviewComment(ConvertType type, int id, const QString& comment) = 0;
+
+    virtual async::Promise<Ret> deleteConversion(ConvertType type, int id) = 0;
 };
 using IMuseScoreComConvertServicePtr = std::shared_ptr<IMuseScoreComConvertService>;
 }

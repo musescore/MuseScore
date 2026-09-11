@@ -71,6 +71,9 @@ public:
     virtual muse::async::Channel<int /*scoreId*/> reviewRequested() const = 0;
     virtual void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) = 0;
     virtual void submitReviewComment(int scoreId, const QString& comment) = 0;
+
+    //! Deletes a watched conversion, both server-side and from watchedScores()
+    virtual void deleteConversion(ConvertType type, int convertId) = 0;
 };
 
 using IConvertFileToScoreServicePtr = std::shared_ptr<IConvertFileToScoreService>;

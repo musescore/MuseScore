@@ -767,7 +767,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_ExternalProcessingIt
     ASSERT_EQ(watchedScores.size(), 2u);
 
     const auto externalIt = std::find_if(watchedScores.begin(), watchedScores.end(), [externalId](const WatchedScore& watched) {
-        return watched.convertId == externalId;
+        return watched.conversion.id == externalId;
     });
     ASSERT_NE(externalIt, watchedScores.end());
     EXPECT_EQ(externalIt->name, u"Externally Started Score");
@@ -1090,12 +1090,14 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
     failedOmrItem.type = ConvertType::Omr;
     failedOmrItem.status = ConvertStatus::Failed;
     failedOmrItem.errorCode = ConvertErrorCode::FileTooLarge;
+    failedOmrItem.filename = "Omr Score";
 
     ConvertQueueItem doneAudioItem;
     doneAudioItem.id = TEST_QUEUE_ID;
     doneAudioItem.type = ConvertType::Audio2Score;
     doneAudioItem.status = ConvertStatus::Done;
     doneAudioItem.scoreId = 999;
+    doneAudioItem.filename = "Audio Score";
 
     ON_CALL(*m_convertService, fetchQueue())
     .WillByDefault(Invoke([failedOmrItem, doneAudioItem] {
@@ -1135,6 +1137,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessi
     item.type = ConvertType::Omr;
     item.status = ConvertStatus::Failed;
     item.errorCode = ConvertErrorCode::FileTooLarge;
+    item.filename = "My Score";
 
     bool received = false;
     Ret receivedRet;
@@ -1503,4 +1506,58 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToCon
 
     // [WHEN] Submitting a follow-up comment
     m_service->submitReviewComment(555, "Great job");
+}
+
+// ==================================================
+// deleteConversion()
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Success_RemovesFromWatchedScores)
+{
+    // [GIVEN] A watched, still-processing conversion
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::Processing;
+
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+    ASSERT_EQ(m_service->watchedScores().val.size(), 1u);
+
+    // [THEN] The deletion is delegated to the convert service
+    EXPECT_CALL(*m_convertService, deleteConversion(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillOnce(Invoke([](auto, auto) {
+        return resolvedPromise<Ret>(make_ok());
+    }));
+
+    // [WHEN] Deleting the conversion
+    m_service->deleteConversion(ConvertType::Omr, TEST_QUEUE_ID);
+    pumpEvents();
+
+    // [THEN] It is no longer watched
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Fails_KeepsWatching)
+{
+    // [GIVEN] A watched, still-processing conversion
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::Processing;
+
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+    ASSERT_EQ(m_service->watchedScores().val.size(), 1u);
+
+    // [THEN] The deletion is delegated to the convert service, but fails
+    EXPECT_CALL(*m_convertService, deleteConversion(ConvertType::Omr, TEST_QUEUE_ID))
+    .WillOnce(Invoke([](auto, auto) {
+        return resolvedPromise<Ret>(make_ret(muse::cloud::Err::UnknownError));
+    }));
+
+    // [WHEN] Deleting the conversion
+    m_service->deleteConversion(ConvertType::Omr, TEST_QUEUE_ID);
+    pumpEvents();
+
+    // [THEN] It is still watched
+    EXPECT_EQ(m_service->watchedScores().val.size(), 1u);
 }

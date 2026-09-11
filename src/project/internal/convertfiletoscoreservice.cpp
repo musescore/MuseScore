@@ -109,6 +109,7 @@ static std::string errorCodeToString(ConvertErrorCode code)
     case ConvertErrorCode::TooComplex: return "The file is too large or there is a problem with access to this file";
     case ConvertErrorCode::DontRecognizeNotes: return "Invalid file, could not recognize notes";
     case ConvertErrorCode::GeneralFailure: return "Something went wrong";
+    case ConvertErrorCode::BadParams: return "Invalid conversion parameters";
     }
     return std::string();
 }
@@ -182,7 +183,7 @@ void ConvertFileToScoreService::resumeConvert()
     m_watchedScoresChanged.notify();
 
     for (const WatchedScore& watched : m_watchedScores) {
-        if (watched.convertStatus == ConvertStatus::AwaitingReview && watched.scoreId) {
+        if (watched.conversion.status == ConvertStatus::AwaitingReview && watched.scoreId) {
             m_reviewRequested.send(*watched.scoreId);
         }
     }
@@ -318,7 +319,8 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
     }
 
     const ConvertType type = convertTypeOf(input);
-    auto data = std::make_shared<const ConvertUploadData>(ConvertUploadData { type, std::move(files), link });
+    auto data = std::make_shared<const ConvertUploadData>(ConvertUploadData { type, std::move(files), link,
+                                                                              convertedScoreName.toQString() });
     ProgressPtr progress = museScoreComService()->convert()->upload(data);
 
     progress->progressChanged().onReceive(this, [convertedScoreName](int64_t current, int64_t total, const std::string&) {
@@ -384,8 +386,8 @@ void ConvertFileToScoreService::submitReview(int scoreId, ReviewRating rating, c
         return;
     }
 
-    const ConvertType type = watched->convertType;
-    const int convertId = watched->convertId;
+    const ConvertType type = watched->conversion.type;
+    const int convertId = watched->conversion.id;
 
     museScoreComService()->convert()->submitReview(type, convertId, rating, comment)
     .onResolve(this, [type, convertId](const RetVal<ConvertResult>& submitRes) {
@@ -402,14 +404,37 @@ void ConvertFileToScoreService::submitReviewComment(int scoreId, const QString& 
         return;
     }
 
-    const ConvertType type = watched->convertType;
-    const int convertId = watched->convertId;
+    const ConvertType type = watched->conversion.type;
+    const int convertId = watched->conversion.id;
 
     museScoreComService()->convert()->submitReviewComment(type, convertId, comment)
     .onResolve(this, [type, convertId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
             LOGE() << "Could not submit the comment for conversion " << convertLogId(type, convertId) << ": " << submitRes.ret.toString();
         }
+    });
+}
+
+void ConvertFileToScoreService::deleteConversion(ConvertType type, int convertId)
+{
+    museScoreComService()->convert()->deleteConversion(type, convertId)
+    .onResolve(this, [this, type, convertId](const Ret& ret) {
+        if (!ret) {
+            LOGE() << "Could not delete conversion " << convertLogId(type, convertId) << ": " << ret.toString();
+            return;
+        }
+
+        const auto it = std::find_if(m_watchedScores.begin(), m_watchedScores.end(), [type, convertId](const WatchedScore& watched) {
+            return watched.conversion.type == type && watched.conversion.id == convertId;
+        });
+
+        if (it == m_watchedScores.end()) {
+            return;
+        }
+
+        m_watchedScores.erase(it);
+        saveWatchedScores();
+        m_watchedScoresChanged.notify();
     });
 }
 
@@ -453,9 +478,9 @@ void ConvertFileToScoreService::loadWatchedScores()
         }
 
         WatchedScore& watched = m_watchedScores.emplace_back();
-        watched.convertId = obj.value("id").toInt();
-        watched.convertType = static_cast<ConvertType>(typeInt);
-        watched.convertStatus = static_cast<ConvertStatus>(obj.value("status").toInt());
+        watched.conversion.id = obj.value("id").toInt();
+        watched.conversion.type = static_cast<ConvertType>(typeInt);
+        watched.conversion.status = static_cast<ConvertStatus>(obj.value("status").toInt());
         watched.scoreId = obj.contains("scoreId") ? std::optional<int>(obj.value("scoreId").toInt()) : std::nullopt;
         watched.startedLocally = obj.value("startedLocally").toBool();
         watched.name = muse::String::fromStdString(obj.value("convertedScoreName").toStdString());
@@ -469,9 +494,9 @@ void ConvertFileToScoreService::saveWatchedScores()
     JsonArray array;
     for (const WatchedScore& watched : m_watchedScores) {
         JsonObject obj;
-        obj["id"] = watched.convertId;
-        obj["type"] = static_cast<int>(watched.convertType);
-        obj["status"] = static_cast<int>(watched.convertStatus);
+        obj["id"] = watched.conversion.id;
+        obj["type"] = static_cast<int>(watched.conversion.type);
+        obj["status"] = static_cast<int>(watched.conversion.status);
         obj["startedLocally"] = watched.startedLocally;
 
         if (!watched.name.isEmpty()) {
@@ -503,12 +528,12 @@ void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::
     LOGI() << "Start watching conversion " << convertLogId(convertedScoreName, type, itemId);
 
     const auto it = std::find_if(m_watchedScores.begin(), m_watchedScores.end(), [type, itemId](const WatchedScore& watched) {
-        return watched.convertType == type && watched.convertId == itemId;
+        return watched.conversion.type == type && watched.conversion.id == itemId;
     });
     WatchedScore& watched = it != m_watchedScores.end() ? *it : m_watchedScores.emplace_back();
-    watched.convertId = itemId;
-    watched.convertType = type;
-    watched.convertStatus = ConvertStatus::Processing;
+    watched.conversion.id = itemId;
+    watched.conversion.type = type;
+    watched.conversion.status = ConvertStatus::Processing;
     watched.startedLocally = true;
     watched.name = convertedScoreName;
 
@@ -596,7 +621,7 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
     std::array<std::unordered_map<int /*itemId*/, size_t /*index*/>, CONVERT_TYPE_COUNT> oldByTypeAndId;
     for (size_t i = 0; i < m_watchedScores.size(); ++i) {
         const WatchedScore& watched = m_watchedScores[i];
-        oldByTypeAndId[static_cast<size_t>(watched.convertType)][watched.convertId] = i;
+        oldByTypeAndId[static_cast<size_t>(watched.conversion.type)][watched.conversion.id] = i;
     }
 
     std::vector<bool> seen(m_watchedScores.size(), false);
@@ -611,7 +636,7 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
         const auto it = oldIndexById.find(queueItem.id);
 
         if (it != oldIndexById.end()) {
-            //! NOTE: already watched - update it (status, scoreId)
+            //! NOTE: already watched - update it (name, status, scoreId)
             seen[it->second] = true;
             WatchedScore watched = m_watchedScores.at(it->second);
             if (!queueItem.filename.isEmpty()) {
@@ -619,7 +644,7 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
             }
             handleItem(watched, queueItem.status, queueItem.errorCode, queueItem.scoreId);
 
-            if (watched.convertStatus != ConvertStatus::Done) {
+            if (watched.conversion.status != ConvertStatus::Done) {
                 newWatchedScores.push_back(watched);
             }
             continue;
@@ -633,13 +658,13 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
         LOGI() << "New external conversion: " << convertLogId(queueItem.type, queueItem.id);
 
         WatchedScore watched;
-        watched.convertId = queueItem.id;
-        watched.convertType = queueItem.type;
+        watched.conversion.id = queueItem.id;
+        watched.conversion.type = queueItem.type;
         watched.name = queueItem.filename;
 
         handleItem(watched, queueItem.status, queueItem.errorCode, queueItem.scoreId);
 
-        if (watched.convertStatus != ConvertStatus::Done) {
+        if (watched.conversion.status != ConvertStatus::Done) {
             newWatchedScores.push_back(watched);
         }
     }
@@ -678,10 +703,10 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
 void ConvertFileToScoreService::handleItem(WatchedScore& watched, ConvertStatus status, ConvertErrorCode errorCode,
                                            std::optional<int> scoreId)
 {
-    const ConvertStatus previousStatus = watched.convertStatus;
+    const ConvertStatus previousStatus = watched.conversion.status;
     const bool statusChanged = previousStatus != status;
     if (statusChanged) {
-        LOGI() << "Conversion status changed: " << convertLogId(watched.name, watched.convertType, watched.convertId)
+        LOGI() << "Conversion status changed: " << convertLogId(watched.name, watched.conversion.type, watched.conversion.id)
                << " -> " << convertStatusToString(status);
     }
 
@@ -698,9 +723,9 @@ void ConvertFileToScoreService::handleItem(WatchedScore& watched, ConvertStatus 
         if (watched.startedLocally) {
             const RetVal<ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(*scoreId);
             if (!scoreInfo.ret) {
-                LOGW() << "Could not fetch score info for " << convertLogId(watched.name, watched.convertType, watched.convertId)
+                LOGW() << "Could not fetch score info for " << convertLogId(watched.name, watched.conversion.type, watched.conversion.id)
                        << ", will retry on next poll: " << scoreInfo.ret.toString();
-                return; //! NOTE: watched.convertStatus stays at previousStatus - retried next poll
+                return; //! NOTE: watched.conversion.status stays at previousStatus - retried next poll
             }
 
             finishConvert(make_ok(), scoreInfo.val);
@@ -730,7 +755,7 @@ void ConvertFileToScoreService::handleItem(WatchedScore& watched, ConvertStatus 
     }
     }
 
-    watched.convertStatus = status;
+    watched.conversion.status = status;
 }
 
 void ConvertFileToScoreService::finishConvert(const Ret& ret, const ScoreInfo& scoreInfo)

@@ -75,6 +75,8 @@ public:
                                                         const QString& comment = QString()) override;
     async::Promise<RetVal<ConvertResult> > submitReviewComment(ConvertType type, int id, const QString& comment) override;
 
+    async::Promise<Ret> deleteConversion(ConvertType type, int id) override;
+
 private:
     ServerConfig serverConfig() const override;
 
