@@ -63,6 +63,7 @@ private slots:
     void tabStemThroughToggled(bool checked);
     void tabMinimShortToggled(bool checked);
     void tabStemsToggled(bool checked);
+    void tabZigzagToggled(bool checked);
     void updatePreview();
 
     void savePresets();
@@ -83,6 +84,7 @@ private:
 
     void enablePresets();
     void enableTextStyles();
+    void tabZigzagCompatibility(bool checked);
 
     std::vector<QString> textStyleNames() const;
     engraving::TextStyleType getTextStyle(const QString& name) const;
