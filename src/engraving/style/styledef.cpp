@@ -131,6 +131,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lyricsDashPosAtStartOfSystem,               int(LyricsDashSystemStart::STANDARD)),
     styleDef(lyricsAvoidBarlines,                        true),
     styleDef(lyricsAutoCenterBetweenStaves,              false),
+    styleDef(lyricsStackingOrder,                        int(LyricsStackingOrder::LYRICS_BEFORE_DYNAMICS)),
     styleDef(lyricsLimitDashCount,                       false),
     styleDef(lyricsMaxDashCount,                         1),
     styleDef(lyricsCenterDashedSyllables,                false),
