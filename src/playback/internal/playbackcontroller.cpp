@@ -1076,9 +1076,13 @@ void PlaybackController::resetPlayback()
 
     playback()->clearSources();
     playback()->sourceParamsChanged().disconnect(this);
+    playback()->controlParamsChanged().disconnect(this);
     playback()->fxChainParamsChanged().disconnect(this);
+    playback()->auxSendsParamsChanged().disconnect(this);
     playback()->clearAllFx();
+    playback()->masterControlParamsChanged().disconnect(this);
     playback()->masterFxChainParamsChanged().disconnect(this);
+    playback()->masterAuxSendsParamsChanged().disconnect(this);
     playback()->clearMasterOutputParams();
 
     m_seqAsyncReceiver.async_disconnectAll();
@@ -1490,9 +1494,21 @@ void PlaybackController::setupPlayback()
 
 void PlaybackController::subscribeOnAudioParamsChanges()
 {
+    playback()->masterControlParamsChanged().onReceive(this, [this](const ControlParams& params) {
+        AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
+        outParams.setControl(params);
+        audioSettings()->setMasterAudioOutputParams(outParams);
+    });
+
     playback()->masterFxChainParamsChanged().onReceive(this, [this](const AudioFxChain& params) {
         AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
         outParams.fxChain = params;
+        audioSettings()->setMasterAudioOutputParams(outParams);
+    });
+
+    playback()->masterAuxSendsParamsChanged().onReceive(this, [this](const AuxSendsParams& params) {
+        AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
+        outParams.auxSends = params;
         audioSettings()->setMasterAudioOutputParams(outParams);
     });
 
@@ -1537,6 +1553,54 @@ void PlaybackController::subscribeOnAudioParamsChanges()
             if (oldName != newName) {
                 m_auxChannelNameChanged.send(auxIdx, newName);
             }
+        }
+    });
+
+    playback()->controlParamsChanged().onReceive(this, [this](const TrackId trackId, const ControlParams& params) {
+        auto instrumentIt = std::find_if(m_instrumentTrackIdMap.begin(), m_instrumentTrackIdMap.end(), [trackId](const auto& pair) {
+            return pair.second == trackId;
+        });
+
+        if (instrumentIt != m_instrumentTrackIdMap.end()) {
+            AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentIt->first);
+            outParams.setControl(params);
+            audioSettings()->setTrackOutputParams(instrumentIt->first, outParams);
+            return;
+        }
+
+        auto auxIt = std::find_if(m_auxTrackIdMap.begin(), m_auxTrackIdMap.end(), [trackId](const auto& pair) {
+            return pair.second == trackId;
+        });
+
+        if (auxIt != m_auxTrackIdMap.end()) {
+            aux_channel_idx_t auxIdx = auxIt->first;
+            AudioOutputParams outParams = audioSettings()->auxOutputParams(auxIdx);
+            outParams.setControl(params);
+            audioSettings()->setAuxOutputParams(auxIdx, outParams);
+        }
+    });
+
+    playback()->auxSendsParamsChanged().onReceive(this, [this](const TrackId trackId, const AuxSendsParams& params) {
+        auto instrumentIt = std::find_if(m_instrumentTrackIdMap.begin(), m_instrumentTrackIdMap.end(), [trackId](const auto& pair) {
+            return pair.second == trackId;
+        });
+
+        if (instrumentIt != m_instrumentTrackIdMap.end()) {
+            AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentIt->first);
+            outParams.auxSends = params;
+            audioSettings()->setTrackOutputParams(instrumentIt->first, outParams);
+            return;
+        }
+
+        auto auxIt = std::find_if(m_auxTrackIdMap.begin(), m_auxTrackIdMap.end(), [trackId](const auto& pair) {
+            return pair.second == trackId;
+        });
+
+        if (auxIt != m_auxTrackIdMap.end()) {
+            aux_channel_idx_t auxIdx = auxIt->first;
+            AudioOutputParams outParams = audioSettings()->auxOutputParams(auxIdx);
+            outParams.auxSends = params;
+            audioSettings()->setAuxOutputParams(auxIdx, outParams);
         }
     });
 }
