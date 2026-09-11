@@ -22,6 +22,8 @@
 
 #include <gmock/gmock.h>
 
+#include <algorithm>
+
 #include <QFile>
 
 #include "async/async.h"
@@ -109,9 +111,26 @@ protected:
         ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ok()));
         ON_CALL(*m_project, cloudInfo()).WillByDefault(ReturnRef(m_cloudInfo));
 
-        // A publish also uploads the rendered audio; hand it a progress of its own.
+        // exportMp3 writes a real temp file on disk. The production code is expected to ask
+        // for its removal through this mock; record that so TearDown can verify it happened,
+        // then actually delete the file (the mock itself must not touch the real filesystem).
+        ON_CALL(*m_fileSystem, remove(_, _)).WillByDefault([this](const io::path_t& path, bool) {
+            m_removedFilePaths.push_back(path.toQString());
+            return make_ok();
+        });
+
+        // A publish also uploads the rendered audio; hand it a progress of its own,
+        // and let it finish successfully from a deferred call, after the caller has subscribed.
         ON_CALL(*m_museScoreComService, uploadAudio(_, _, _))
-        .WillByDefault([](DevicePtr, const QString&, const QUrl&) { return std::make_shared<Progress>(); });
+        .WillByDefault([](DevicePtr, const QString&, const QUrl&) {
+            auto progress = std::make_shared<Progress>();
+            async::Async::call(nullptr, [progress]() {
+                ProgressResult res;
+                res.ret = make_ok();
+                progress->finish(res);
+            });
+            return progress;
+        });
 
         // Dialogs resolve immediately so that unstubbed paths do not abort the test.
         ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
@@ -131,6 +150,14 @@ protected:
     {
         // Let whatever the flow queued after its result run, so that nothing outlives the mocks
         drainDeferredCalls();
+
+        // Verify the production code actually asked to remove each exported mp3, then delete
+        // the real file ourselves (the fileSystem mock only records the request, see SetUp).
+        for (const QString& path : m_exportedMp3Paths) {
+            EXPECT_TRUE(std::find(m_removedFilePaths.begin(), m_removedFilePaths.end(), path) != m_removedFilePaths.end())
+                << "exported mp3 was not removed: " << path.toStdString();
+            QFile::remove(path);
+        }
 
         release(m_globalContext);
         release(m_project);
@@ -297,7 +324,8 @@ protected:
     void givenAudioExportSucceeds()
     {
         ON_CALL(*m_exportScenario, exportScores(_, _, _, _))
-        .WillByDefault([](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool) {
+        .WillByDefault([this](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool) {
+            m_exportedMp3Paths.push_back(destinationPath.toQString());
             QFile file(destinationPath.toQString());
             return file.open(QIODevice::WriteOnly) && file.write("fake mp3 data") > 0;
         });
@@ -350,6 +378,11 @@ protected:
     std::shared_ptr<notation::NotationInteractionMock> m_interaction;
 
     CloudProjectInfo m_cloudInfo;
+
+    //! Real mp3 files written by givenAudioExportSucceeds(), and the paths that were
+    //! requested for removal through the fileSystem mock; compared and cleaned up in TearDown.
+    std::vector<QString> m_exportedMp3Paths;
+    std::vector<QString> m_removedFilePaths;
 };
 
 // ─── Where does the score go: ask, or save silently ──────────────────────────

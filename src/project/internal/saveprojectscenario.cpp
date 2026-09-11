@@ -740,13 +740,17 @@ Promise<Ret> SaveProjectScenario::uploadProject(const CloudProjectInfo& info, co
             }
 
             if (audio.isValid()) {
-                uploadAudioToMuseScoreCom(audio, newSourceUrl, editUrl, isFirstSave, publishMode);
-            } else {
-                onProjectSuccessfullyUploaded(editUrl, isFirstSave);
+                uploadAudioToMuseScoreCom(audio, newSourceUrl, editUrl, isFirstSave, publishMode).onResolve(this,
+                                                                                                            [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
+                return;
+            }
 
-                if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
-                    alsoShareAudioCom(audio);
-                }
+            onProjectSuccessfullyUploaded(editUrl, isFirstSave);
+
+            if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
+                alsoShareAudioCom(audio);
             }
 
             (void)resolve(res.ret);
@@ -756,33 +760,39 @@ Promise<Ret> SaveProjectScenario::uploadProject(const CloudProjectInfo& info, co
     });
 }
 
-void SaveProjectScenario::uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
-                                                    bool isFirstSave,
-                                                    bool publishMode)
+Promise<Ret> SaveProjectScenario::uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
+                                                            bool isFirstSave, bool publishMode)
 {
-    m_uploadingAudioProgress = museScoreComService()->uploadAudio(audio.device, audio.format, sourceUrl);
+    return async::make_promise<Ret>([this, audio, sourceUrl, urlToOpen, isFirstSave, publishMode](auto resolve) {
+        m_uploadingAudioProgress = museScoreComService()->uploadAudio(audio.device, audio.format, sourceUrl);
 
-    m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        if (total > 0) {
-            LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
-        }
-    });
+        m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+            if (total > 0) {
+                LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
+            }
+        });
 
-    m_uploadingAudioProgress->finished().onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode](const ProgressResult& res) {
-        LOGD() << "Uploading audio finished";
+        m_uploadingAudioProgress->finished().onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode,
+                                                              resolve](const ProgressResult& res) {
+            LOGD() << "Uploading audio finished";
 
-        if (!res.ret) {
-            LOGE() << res.ret.toString();
-        }
+            if (!res.ret) {
+                LOGE() << res.ret.toString();
+            }
 
-        onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
+            onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
 
-        m_uploadingAudioProgress->progressChanged().disconnect(this);
-        m_uploadingAudioProgress->finished().disconnect(this);
+            m_uploadingAudioProgress->progressChanged().disconnect(this);
+            m_uploadingAudioProgress->finished().disconnect(this);
 
-        if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
-            alsoShareAudioCom(audio);
-        }
+            if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
+                alsoShareAudioCom(audio);
+            }
+
+            (void)resolve(res.ret);
+        });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 
