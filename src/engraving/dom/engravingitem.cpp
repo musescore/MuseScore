@@ -1429,6 +1429,56 @@ bool EngravingItem::isBefore(const EngravingItem* item) const
     return toSegment(thisSeg)->goesBefore(toSegment(otherSeg));
 }
 
+const Staff* EngravingItem::staffToCenterAgainst(bool above, const System* system) const
+{
+    const Part* thisPart = part();
+    const Staff* thisStaff = staff();
+    if (!thisPart || !thisStaff) {
+        return nullptr;
+    }
+
+    const Fraction itemTick = tick();
+    const Instrument* thisPartInstrument = thisPart->instrument(itemTick);
+    const bool participatesInStaffCentering = thisPart->nstaves() > 1 || (thisPartInstrument && thisPartInstrument->isVocalInstrument());
+    if (!participatesInStaffCentering) {
+        return nullptr;
+    }
+
+    if (!system) {
+        if (isSpanner()) {
+            const Segment* startSeg = toSpanner(this)->startSegment();
+            system = startSeg ? startSeg->measure()->system() : nullptr;
+        } else {
+            system = toSystem(findAncestor(ElementType::SYSTEM));
+        }
+    }
+
+    if (!system) {
+        return nullptr;
+    }
+
+    const staff_idx_t thisIdx = thisStaff->idx();
+    const staff_idx_t otherIdx = above ? system->prevVisibleStaff(thisIdx) : system->nextVisibleStaff(thisIdx);
+    if (otherIdx == muse::nidx) {
+        return nullptr;
+    }
+
+    const Staff* otherStaff = score()->staff(otherIdx);
+    if (!otherStaff) {
+        return nullptr;
+    }
+
+    if (otherStaff->part() == thisPart) {
+        return otherStaff;
+    }
+
+    // If the staves are not of the same part, only allow centering if they are both vocal parts:
+    const bool bothVocal = thisPartInstrument->isVocalInstrument()
+                           && otherStaff->part()->instrument(itemTick)->isVocalInstrument();
+
+    return bothVocal ? otherStaff : nullptr;
+}
+
 bool EngravingItem::appliesToAllVoicesInInstrument() const
 {
     return hasVoiceAssignmentProperties()
@@ -1476,11 +1526,16 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
     PlacementV newPlacement = PlacementV::BELOW;
 
     DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
+    const bool directionIsAuto = internalDirectionProperty == DirectionV::AUTO && styledDirection == DirectionV::AUTO;
+    const bool centerBetweenStaves = getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON;
+    const bool gapAbove = directionIsAuto && centerBetweenStaves && staffToCenterAgainst(true);
+    const bool gapBelow = directionIsAuto && centerBetweenStaves && staffToCenterAgainst(false);
+
     if (internalDirectionProperty != DirectionV::AUTO) {
         newPlacement = internalDirectionProperty == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
     } else if (styledDirection != DirectionV::AUTO) {
         newPlacement = styledDirection == DirectionV::UP ? PlacementV::ABOVE : PlacementV::BELOW;
-    } else if (part()->nstaves() > 1 && getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON) {
+    } else if (centerBetweenStaves && part()->nstaves() > 1 && (gapAbove || gapBelow)) {
         bool isOnLastStaffOfInstrument = staffIdx() == part()->staves().back()->idx();
         newPlacement = isOnLastStaffOfInstrument ? PlacementV::ABOVE : PlacementV::BELOW;
     } else {
@@ -1520,6 +1575,17 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
             }
         } else {
             newPlacement = voice() % 2 ? PlacementV::BELOW : PlacementV::ABOVE;
+        }
+    }
+
+    if (directionIsAuto && centerBetweenStaves) {
+        /* If the preferred side has no staff to center against but the other side has one, place
+         * the item on that side instead. If neither side has one, leave the placement alone: */
+        const bool preferAbove = newPlacement == PlacementV::ABOVE;
+        const bool preferredGap = preferAbove ? gapAbove : gapBelow;
+        const bool otherGap = preferAbove ? gapBelow : gapAbove;
+        if (!preferredGap && otherGap) {
+            newPlacement = preferAbove ? PlacementV::BELOW : PlacementV::ABOVE;
         }
     }
 
