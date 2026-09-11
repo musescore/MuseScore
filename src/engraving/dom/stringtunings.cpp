@@ -24,6 +24,7 @@
 
 #include "types/typesconv.h"
 #include "utils.h"
+#include "pitchspelling.h"
 
 #include "part.h"
 #include "score.h"
@@ -36,6 +37,32 @@
 
 using namespace mu;
 using namespace mu::engraving;
+
+String mu::engraving::stringTuningPitchName(int pitch, bool useFlat, NoteSpellingType spelling, bool withOctave)
+{
+    if (!pitchIsValid(pitch)) {
+        return String();
+    }
+
+    const int tpc = pitch2tpc(pitch, Key::C, useFlat ? Prefer::FLATS : Prefer::SHARPS);
+
+    String step;
+    String accidental;
+    tpc2name(tpc, spelling, NoteCaseType::CAPITAL, step, accidental);
+
+    if (spelling == NoteSpellingType::GERMAN && tpc == TPC_B_B) {
+        accidental.clear();
+    }
+
+    String result = convertPitchStringFlatsAndSharpsToUnicode(step + accidental);
+
+    if (withOctave) {
+        const int octave = (pitch / PITCH_DELTA_OCTAVE) - 1;
+        result += String::number(octave);
+    }
+
+    return result;
+}
 
 // STYLE
 static const ElementStyle STRING_TUNINGS_STYLE {
@@ -162,6 +189,8 @@ String StringTunings::accessibleInfo() const
         return String();
     }
 
+    const NoteSpellingType spelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+
     String elementName = score() ? score()->getTextStyleUserName(TextStyleType::STRING_TUNINGS).translated()
                          : TConv::translatedUserName(TextStyleType::STRING_TUNINGS);
     String info;
@@ -171,10 +200,10 @@ String StringTunings::accessibleInfo() const
     for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
         if (muse::contains(m_visibleStrings, index)) {
-            const instrString str = stringList[index];
-            String pitchStr = pitch2string(str.pitch, str.useFlat);
+            const instrString& stringInfo = stringList[index];
+            String pitchStr = stringTuningPitchName(stringInfo.pitch, stringInfo.useFlat, spelling, true);
             if (pitchStr.empty()) {
-                LOGE() << "Invalid get pitch name for " << str.pitch;
+                LOGE() << "Invalid get pitch name for " << stringInfo.pitch;
                 continue;
             }
 
@@ -270,6 +299,8 @@ String StringTunings::generateText() const
         return u"";
     }
 
+    const NoteSpellingType spelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+
     auto guitarStringSymbol = [](int i) { return String(u"<sym>guitarString") + String::number(i) + u"</sym>"; };
 
     const std::vector<instrString>& stringList = stringData->stringList();
@@ -278,23 +309,14 @@ String StringTunings::generateText() const
     for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
         if (muse::contains(m_visibleStrings, index)) {
-            const instrString str = stringList[index];
-            String pitchStr = pitch2string(str.pitch, str.useFlat);
+            const instrString& stringInfo = stringList[index];
+            String pitchStr = stringTuningPitchName(stringInfo.pitch, stringInfo.useFlat, spelling, false);
             if (pitchStr.empty()) {
-                LOGE() << "Invalid get pitch name for " << str.pitch;
+                LOGE() << "Invalid get pitch name for " << stringInfo.pitch;
                 continue;
             }
 
-            Char accidental;
-            if (pitchStr.size() > 1) {
-                Char sym(pitchStr[1]);
-                if (!sym.isDigit()) {
-                    accidental = sym;
-                }
-            }
-
-            visibleStringList.emplace_back(String(guitarStringSymbol(i + 1) + u" \u2013 "
-                                                  + String(pitchStr[0]).toUpper() + accidental) + u"  ");
+            visibleStringList.emplace_back(String(guitarStringSymbol(i + 1) + u" \u2013 " + pitchStr) + u"  ");
         }
     }
 

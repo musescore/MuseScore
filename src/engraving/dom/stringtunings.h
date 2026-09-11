@@ -27,6 +27,8 @@
 #include "stringdata.h"
 
 namespace mu::engraving {
+String stringTuningPitchName(int pitch, bool useFlat, NoteSpellingType spelling, bool withOctave);
+
 class StringTunings final : public StaffTextBase
 {
     OBJECT_ALLOCATOR(engraving, StringTunings)
