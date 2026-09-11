@@ -258,7 +258,7 @@ void FretDiagram::updateDiagram(const String& harmonyName)
 
     clear();
 
-    read460::ReadContext ctx;
+    read460::ReadContext ctx(score());
     XmlReader reader(diagramXml.toUtf8());
 
     read460::TRead::read(this, reader, ctx);
@@ -1004,10 +1004,6 @@ void FretDiagram::add(EngravingItem* e)
             }
         }
 
-        m_harmony->resetProperty(Pid::OFFSET);
-        m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
-        m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
-
         e->added();
     } else {
         LOGW("FretDiagram: cannot add <%s>\n", e->typeName());
@@ -1353,6 +1349,10 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
         fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
 
         fretDiagram->updateDiagram(harmony->plainText());
+
+        harmony->resetProperty(Pid::OFFSET);
+        harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
+        harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
 
         fretDiagram->add(harmony);
     } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {

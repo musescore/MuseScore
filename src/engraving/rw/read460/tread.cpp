@@ -878,6 +878,15 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    if (d->harmony() && ctx.mscVersion() >= 460) {
+        // A bug in 4.6 caused user offset and alignment of chord symbols attached to fret diagrams to be lost
+        // Continue to ignore this for 4.6 - 4.7.x files only
+        Harmony* harmony = d->harmony();
+        harmony->resetProperty(Pid::OFFSET);
+        harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
+        harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+    }
 }
 
 void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)

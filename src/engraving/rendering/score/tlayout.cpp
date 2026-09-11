@@ -2372,12 +2372,6 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
 
         double headWidth = note->bboxRightPos();
 
-        // update offset after drag
-        double rebase = 0.0;
-        if (ldata->offsetChanged() != OffsetChange::NONE && !tight) {
-            rebase = Autoplace::rebaseOffset(item, ldata);
-        }
-
         // temporarily exclude self from chord shape
         const_cast<Fingering*>(item)->setAutoplace(false);
 
@@ -2439,11 +2433,6 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (diff > 0.0) {
                         yd -= diff;
                     }
-                    if (ldata->offsetChanged() != OffsetChange::NONE) {
-                        // user moved element within the skyline
-                        // we may need to adjust minDistance, yd, and/or offset
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
-                    }
                     ldata->moveY(yd);
                 }
             } else {
@@ -2474,11 +2463,6 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (diff > 0.0) {
                         yd += diff;
                     }
-                    if (ldata->offsetChanged() != OffsetChange::NONE) {
-                        // user moved element within the skyline
-                        // we may need to adjust minDistance, yd, and/or offset
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
-                    }
                     ldata->moveY(yd);
                 }
             }
@@ -2495,11 +2479,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
 
         // restore autoplace
         const_cast<Fingering*>(item)->setAutoplace(true);
-    } else if (ldata->offsetChanged() != OffsetChange::NONE) {
-        // rebase horizontally too, as autoplace may have adjusted it
-        Autoplace::rebaseOffset(item, ldata, false);
     }
-    Autoplace::setOffsetChanged(item, ldata, false);
 }
 
 void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx)
@@ -2923,7 +2903,7 @@ void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item,
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
@@ -3127,16 +3107,9 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         return;
     }
 
-    // rebase vertical offset on drag
-    if (ldata->offsetChanged() != OffsetChange::NONE) {
-        Autoplace::rebaseOffset(item, ldata);
-    }
-
     if (item->autoplace()) {
-        Autoplace::autoplaceSpannerSegment(item, ldata, item->spatium());
+        Autoplace::autoplaceSpannerSegment(item, ldata);
     }
-
-    Autoplace::setOffsetChanged(item, ldata, false);
 }
 
 void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
@@ -3325,7 +3298,7 @@ void TLayout::layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx)
@@ -3848,7 +3821,7 @@ void TLayout::layoutLetRingSegment(LetRingSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutLineSegment(LineSegment* item, LayoutContext& ctx)
@@ -4384,7 +4357,7 @@ void TLayout::layoutOttavaSegment(OttavaSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockIndicator::LayoutData* ldata)
@@ -4460,7 +4433,7 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
@@ -4500,7 +4473,7 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
         ldata->setShape(sh);
     }
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutPickScrapeSegment(PickScrapeSegment* item, LayoutContext& ctx)
@@ -4508,7 +4481,7 @@ void TLayout::layoutPickScrapeSegment(PickScrapeSegment* item, LayoutContext& ct
     LAYOUT_CALL_ITEM(item);
     PickScrapeSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* ldata)
@@ -4582,7 +4555,7 @@ void TLayout::layoutRasgueadoSegment(RasgueadoSegment* item, LayoutContext& ctx)
 
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::LayoutData* ldata)
@@ -5836,7 +5809,7 @@ void TLayout::layoutTextLineSegment(TextLineSegment* item, LayoutContext& ctx)
     TextLineSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 // Extends lines to fill the corner between them.
@@ -6554,7 +6527,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
         }
     }
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::fillTrillSegmentShape(const TrillSegment* item, TrillSegment::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -6638,6 +6611,9 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
         ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
     }
 
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
+
     ldata->moveY(item->staffOffsetY());
 
     switch (item->vibrato()->vibratoType()) {
@@ -6657,7 +6633,7 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
         break;
     }
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutVibrato(Vibrato* item, LayoutContext& ctx)
@@ -6700,7 +6676,7 @@ void TLayout::layoutVoltaSegment(VoltaSegment* item, LayoutContext& ctx)
         Shape sh = recalculateTextLineBaseSegmentShape(item);
         ldata->setShape(sh);
     }
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 void TLayout::layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx)
@@ -6709,7 +6685,7 @@ void TLayout::layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx)
     WhammyBarSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+    Autoplace::autoplaceSpannerSegment(item, ldata);
 }
 
 using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, HammerOnPullOff, TappingHalfSlur, Volta>;

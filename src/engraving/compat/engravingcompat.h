@@ -22,8 +22,13 @@
 
 #pragma once
 
+#include <set>
+#include <vector>
+
 namespace mu::engraving {
 class MasterScore;
+class EngravingItem;
+class System;
 }
 
 namespace mu::engraving::compat {
@@ -43,8 +48,25 @@ private:
     static void pre470TextCompat(MasterScore* masterScore);
     static void migrateNoteParens(MasterScore* masterScore);
     static void migrateOffset500(MasterScore* masterScore);
+    static void migrateOffsetAfterAutoplace(MasterScore* masterScore);
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
     static bool setLyricLineVisibility(MasterScore* masterScore);
+
+    static bool resetAllElementsPositions(MasterScore* score);
+    static bool resetAllCrossBeams(MasterScore* score);
+};
+
+class AlignmentMigration500
+{
+public:
+    static void migrateSnappedItemAlignment(MasterScore* masterScore);
+    static void migrateSameItemTypeAlignment(MasterScore* masterScore);
+    static void migrateHopoLetterAlignment(MasterScore* masterScore);
+private:
+    static bool rowItemIsAbove(const EngravingItem* item);
+    static void alignItemOffsetGroup(const std::vector<EngravingItem*>& group);
+    static void scanConnectedItemsInSnappingChain(EngravingItem* item, const System* system, std::set<EngravingItem*>& visited,
+                                                  std::vector<EngravingItem*>& group);
 };
 } // namespace mu::engraving::compat
