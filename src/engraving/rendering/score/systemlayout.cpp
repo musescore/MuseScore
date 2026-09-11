@@ -2752,6 +2752,15 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
 
 bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system, bool placeAbove)
 {
+    Sid centerStyleId = Sid::NOSTYLE;
+    if (item->isLyrics() || item->isLyricsLineSegment()) {
+        centerStyleId = Sid::lyricsAutoCenterBetweenStaves;
+    } else if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
+        centerStyleId = Sid::dynamicsHairpinsAutoCenterOnGrandStaff;
+    } else {
+        return false;
+    }
+
     if (item->offset().y() != item->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
         // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
         return false;
@@ -2766,16 +2775,19 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         return false;
     }
 
-    if (item->isLyrics() || item->isLyricsLineSegment()) {
-        return item->style().styleB(Sid::lyricsAutoCenterBetweenStaves);
+    AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
+    if (item->isLyricsLineSegment() && centerProperty == AutoOnOff::AUTO) {
+        // If a dash or melisma line is left on AUTO, it follows the lyric it belongs to:
+        const Lyrics* lyrics = toLyricsLineSegment(item)->lyrics();
+        centerProperty = lyrics ? lyrics->centerBetweenStaves() : AutoOnOff::AUTO;
+    }
+
+    const bool centerStyle = item->style().styleB(centerStyleId);
+    if (centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
+        return false;
     }
 
     if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
-        bool centerStyle = item->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
-        AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
-        if (centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
-            return false;
-        }
         if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
             return false;
         }
