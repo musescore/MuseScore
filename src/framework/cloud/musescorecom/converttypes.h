@@ -22,8 +22,9 @@
 
 #pragma once
 
+#include <memory>
+#include <optional>
 #include <string>
-#include <variant>
 #include <vector>
 
 #include <QDateTime>
@@ -31,14 +32,17 @@
 #include <QStringList>
 #include <QUrl>
 
-#include "global/logstream.h"
+#include "global/types/bytearray.h"
 #include "global/types/flags.h"
-#include "io/path.h"
+#include "global/io/path.h"
+#include "global/logstream.h"
 
 namespace muse::cloud {
 enum class ConvertType {
-    Omr,
-    Audio2Score
+    Omr = 0,
+    Audio2Score,
+
+    Last = Audio2Score
 };
 
 enum class ConvertStatus {
@@ -87,12 +91,11 @@ enum class ConvertErrorCode {
     TooComplex,
     DontRecognizeNotes,
     GeneralFailure,
+    BadParams,
 };
 
 //! NOTE: key for ConvertErrorCode stored in Ret::data
 static const std::string CONVERT_ERROR_CODE_KEY("errorCode");
-
-static const qint64 MAX_CONVERT_FILE_SIZE_BYTES = 1024LL * 1024 * 1024; // 1 GB
 
 enum class LinkSource {
     NoSources = 0x0,
@@ -141,66 +144,39 @@ struct ConvertConfig {
     Audio2ScoreConfig audio2score;
 };
 
-struct OmrConvertInput {
-    muse::io::paths_t paths;
+struct ConvertFileData {
+    muse::ByteArray data;
+    muse::io::path_t fileName; // basename, with extension
 };
+using ConvertFileDataList = std::vector<ConvertFileData>;
 
-struct Audio2ScoreConvertInput {
-    std::variant<muse::io::paths_t, QString> data; // paths or link
+struct ConvertUploadData {
+    ConvertType type = ConvertType::Omr;
+    ConvertFileDataList files;
+    QUrl link; // Audio2Score only
+    QString filename; // desired name for the converted score, no extension
 };
-
-using ConvertInput = std::variant<OmrConvertInput, Audio2ScoreConvertInput>;
-
-inline ConvertType convertTypeOf(const ConvertInput& input)
-{
-    return std::holds_alternative<OmrConvertInput>(input) ? ConvertType::Omr : ConvertType::Audio2Score;
-}
-
-inline muse::io::paths_t convertPathsOf(const ConvertInput& input)
-{
-    if (const OmrConvertInput* omr = std::get_if<OmrConvertInput>(&input)) {
-        return omr->paths;
-    }
-
-    const muse::io::paths_t* paths = std::get_if<muse::io::paths_t>(&std::get<Audio2ScoreConvertInput>(input).data);
-    return paths ? *paths : muse::io::paths_t();
-}
-
-inline QString convertLinkOf(const ConvertInput& input)
-{
-    const Audio2ScoreConvertInput* a2s = std::get_if<Audio2ScoreConvertInput>(&input);
-    if (!a2s) {
-        return QString();
-    }
-
-    const QString* link = std::get_if<QString>(&a2s->data);
-    return link ? *link : QString();
-}
+using ConvertUploadDataPtr = std::shared_ptr<const ConvertUploadData>;
 
 struct ConvertResult {
     int id = 0;
     ConvertType type = ConvertType::Omr;
-    ConvertStatus status = ConvertStatus::Processing;
+    ConvertStatus status = ConvertStatus::Unknown;
 };
 
 struct ConvertQueueItem {
     int id = 0;
     ConvertType type = ConvertType::Omr;
-    ConvertStatus status = ConvertStatus::Processing;
+    ConvertStatus status = ConvertStatus::Unknown;
     QString filename;
     QString link; //! audio2score only
-    int scoreId = 0;
+    std::optional<int> scoreId; //! set once the score is ready (AwaitingReview/Done)
     QDateTime createdAt;
     QDateTime updatedAt;
     ConvertErrorCode errorCode = ConvertErrorCode::Unknown;
 };
 
 using ConvertQueueList = std::vector<ConvertQueueItem>;
-
-struct SignedMsczUrl {
-    QUrl url;
-    int expiresInSeconds = 0;
-};
 
 //! NOTE: must be in sync with the musescore.com API
 enum class ReviewRating {
@@ -220,7 +196,7 @@ inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::clo
       << ", link: \"" << item.link << "\""
       << ", type: " << muse::cloud::convertTypeToString(item.type)
       << ", status: " << muse::cloud::convertStatusToString(item.status)
-      << ", scoreId: " << item.scoreId
+      << ", scoreId: " << (item.scoreId ? QString::number(*item.scoreId) : QString("none"))
       << ", createdAt: " << dateTimeToString(item.createdAt)
       << ", updatedAt: " << dateTimeToString(item.updatedAt);
     return s;

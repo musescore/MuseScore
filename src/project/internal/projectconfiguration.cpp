@@ -795,12 +795,7 @@ void ProjectConfiguration::setShowConvertFileProcessingDialog(bool show)
     settings()->setSharedValue(SHOW_CONVERT_FILE_PROCESSING_DIALOG, Val(show));
 }
 
-muse::io::path_t ProjectConfiguration::convertedScoresPath() const
+muse::io::path_t ProjectConfiguration::watchedConvertsJsonPath() const
 {
-    return globalConfiguration()->userAppDataPath() + "/converted_scores";
-}
-
-muse::io::path_t ProjectConfiguration::pendingConvertsJsonPath() const
-{
-    return globalConfiguration()->userAppDataPath().appendingComponent("pending_converts.json");
+    return globalConfiguration()->userAppDataPath().appendingComponent("watched_converts.json");
 }

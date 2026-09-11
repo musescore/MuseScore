@@ -35,7 +35,7 @@ class QUrl;
 namespace mu::project {
 struct ConvertSelection {
     ConvertInput input;
-    muse::String convertedFileName;
+    muse::String convertedScoreName;
 };
 
 class IConvertFileToScoreScenario : MODULE_CONTEXT_INTERFACE
@@ -62,8 +62,9 @@ public:
     //! opens the picker with them pre-selected
     virtual void convertFiles(const muse::io::paths_t& paths = {}) = 0;
 
-    //! Emits the result once the server-side conversion completes
-    virtual muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const = 0;
+    //! Emits the result once the server-side conversion completes; on success, the converted score
+    //! is already available in the user's MuseScore.com account, described by ScoreInfo
+    virtual muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const = 0;
 };
 
 using IConvertFileToScoreScenarioPtr = std::shared_ptr<IConvertFileToScoreScenario>;

@@ -31,13 +31,13 @@ class MuseScoreComConvertServiceMock : public IMuseScoreComConvertService
 public:
     MOCK_METHOD(async::Promise<RetVal<ConvertConfig> >, fetchConfig, (), (override));
 
-    MOCK_METHOD(ProgressPtr, upload, (const ConvertInput&), (override));
-    MOCK_METHOD(ProgressPtr, downloadConvertedScore, (const SignedMsczUrl&, DevicePtr), (override));
+    MOCK_METHOD(ProgressPtr, upload, (const ConvertUploadDataPtr&), (override));
 
     MOCK_METHOD(async::Promise<RetVal<ConvertQueueList> >, fetchQueue, (), (override));
-    MOCK_METHOD(async::Promise<RetVal<SignedMsczUrl> >, fetchMsczUrl, (ConvertType, int), (override));
 
     MOCK_METHOD(async::Promise<RetVal<ConvertResult> >, submitReview, (ConvertType, int, ReviewRating, const QString&), (override));
     MOCK_METHOD(async::Promise<RetVal<ConvertResult> >, submitReviewComment, (ConvertType, int, const QString&), (override));
+
+    MOCK_METHOD(async::Promise<Ret>, deleteConversion, (ConvertType, int), (override));
 };
 }
