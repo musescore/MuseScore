@@ -153,7 +153,7 @@ void DynamicsLayout::layoutDynamicToEndOfPrevious(const Dynamic* item, TextBase:
 
 void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::LayoutData* ldata)
 {
-    if (item->score()->nstaves() <= 1 || item->anchorToEndOfPrevious() || !item->offset().isNull()) {
+    if (item->score()->nstaves() <= 1 || item->anchorToEndOfPrevious()) {
         return;
     }
 
