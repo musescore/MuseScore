@@ -323,15 +323,9 @@ public:
     void cmdRemoveStaff(staff_idx_t staffIdx);
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
-    void setResetAutoplace() { m_resetAutoplace = true; }
-    void setResetCrossBeams() { m_resetCrossBeams = true; }
 
     Excerpt* excerpt() { return m_excerpt; }
     void setExcerpt(Excerpt* e) { m_excerpt = e; }
-
-    // methods for resetting elements for pre-4.0 score migration
-    void resetAutoplace();
-    void resetCrossBeams();
 
     void cmdRemovePart(Part*);
     void cmdAddOttava(OttavaType);
@@ -993,8 +987,6 @@ private:
     ShowAnchors m_showAnchors;
 
     ScoreOrder m_scoreOrder;                 // used for score ordering
-    bool m_resetAutoplace = false;
-    bool m_resetCrossBeams = false;
     int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
     bool m_isOpen = false;
