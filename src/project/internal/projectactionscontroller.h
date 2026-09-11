@@ -106,14 +106,17 @@ private:
     muse::Ret openPageIfNeed(muse::Uri pageUri);
 
     muse::Ret closeProject();
+    muse::Ret runAsync(muse::async::Promise<muse::Ret> flow);
+    muse::Ret waitFor(muse::async::Promise<muse::Ret> flow);
 
     muse::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
-    muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
-    muse::Ret saveProject(const muse::io::path_t& path = muse::io::path_t());
-    muse::Ret publish();
-    muse::Ret sharedAudio();
-    muse::Ret saveProjectAt(const muse::rcommand::Params& params);
+    muse::async::Promise<muse::Ret> saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
+                                                bool force = false);
+    muse::async::Promise<muse::Ret> saveProject(const muse::io::path_t& path = muse::io::path_t());
+    muse::async::Promise<muse::Ret> publish();
+    muse::async::Promise<muse::Ret> sharedAudio();
+    muse::async::Promise<muse::Ret> saveProjectAt(const muse::rcommand::Params& params);
 
     muse::Ret importPdf();
     muse::Ret importAudioToScore();
