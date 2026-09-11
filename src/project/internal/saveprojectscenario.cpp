@@ -23,6 +23,7 @@
 #include "saveprojectscenario.h"
 
 #include <QBuffer>
+#include <QFile>
 #include <QFileInfo>
 #include <QTemporaryFile>
 #include <QUrl>
@@ -597,13 +598,17 @@ bool SaveProjectScenario::needGenerateAudioAccordingToSettings() const
 
 SaveProjectScenario::AudioFile SaveProjectScenario::exportMp3(const INotationPtr notation) const
 {
-    auto tempFile = std::make_shared<QTemporaryFile>(configuration()->temporaryMp3FilePathTemplate().toQString());
-    if (!tempFile->open()) {
-        LOGE() << "Could not open a temp file";
-        return AudioFile();
+    QString mp3Path;
+    {
+        QTemporaryFile tempFile(configuration()->temporaryMp3FilePathTemplate().toQString());
+        if (!tempFile.open()) {
+            LOGE() << "Could not create a temp file";
+            return AudioFile();
+        }
+
+        mp3Path = QFileInfo(tempFile).absoluteFilePath();
     }
 
-    QString mp3Path = QFileInfo(*tempFile).absoluteFilePath();
     LOGD() << "mp3 path: " << mp3Path;
 
     if (mp3Path.isEmpty()) {
@@ -625,13 +630,24 @@ SaveProjectScenario::AudioFile SaveProjectScenario::exportMp3(const INotationPtr
 
     if (!exportProjectScenario()->exportScores({ notation }, mp3Path)) {
         LOGE() << "Could not export an mp3";
+        fileSystem()->remove(mp3Path);
+        return AudioFile();
+    }
+
+    std::shared_ptr<QFile> exportedFile(new QFile(mp3Path), [this](QFile* file) {
+        file->close();
+        fileSystem()->remove(file->fileName());
+        delete file;
+    });
+
+    if (!exportedFile->open(QIODevice::ReadOnly)) {
+        LOGE() << "Could not reopen exported mp3: " << mp3Path;
         return AudioFile();
     }
 
     AudioFile audio;
     audio.format = "mp3";
-    audio.device = tempFile;
-    audio.device->seek(0);
+    audio.device = exportedFile;
 
     return audio;
 }

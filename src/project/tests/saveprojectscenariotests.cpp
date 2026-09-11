@@ -22,6 +22,8 @@
 
 #include <gmock/gmock.h>
 
+#include <QFile>
+
 #include "async/async.h"
 #include "async/processevents.h"
 
@@ -290,6 +292,15 @@ protected:
         // Settled audio generation settings, so that the decision does not open a dialog and abort the save.
         ON_CALL(*m_configuration, hasAskedAudioGenerationSettings()).WillByDefault(Return(true));
         ON_CALL(*m_configuration, generateAudioTimePeriodType()).WillByDefault(Return(GenerateAudioTimePeriodType::Never));
+    }
+
+    void givenAudioExportSucceeds()
+    {
+        ON_CALL(*m_exportScenario, exportScores(_, _, _, _))
+        .WillByDefault([](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool) {
+            QFile file(destinationPath.toQString());
+            return file.open(QIODevice::WriteOnly) && file.write("fake mp3 data") > 0;
+        });
     }
 
     //! NOTE The result is delivered from a deferred call, after `uploadProject` has subscribed to the progress.
@@ -1423,7 +1434,7 @@ TEST_F(SaveProjectScenarioTests, Publish_UploadFails_ReportsFailure)
     //! [GIVEN] A publish whose upload fails...
     givenReachableCloud();
     givenUserConfirmsCloudDialog();
-    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(true));
+    givenAudioExportSucceeds();
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
     givenUploadFinishesWith(make_ret(Ret::Code::InternalError), ValMap());
 
@@ -1439,7 +1450,7 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
     //! [GIVEN] A publish that goes through...
     givenReachableCloud();
     givenUserConfirmsCloudDialog("Published score");
-    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(true));
+    givenAudioExportSucceeds();
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
     givenUploadFinishesWith(make_ok(), ValMap());
 
