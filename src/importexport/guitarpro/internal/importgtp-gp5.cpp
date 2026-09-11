@@ -1195,7 +1195,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         gnote->chord()->setDurationType(Fraction { 1, 8 });
 
         gnote->setString(note->string());
-        auto sd = note->part()->instrument()->stringData();
         gnote->setFret(fret);
         if (transition == 0) {
             // no transition
