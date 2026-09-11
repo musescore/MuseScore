@@ -59,6 +59,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/hideemptystaves_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/implodeexplode_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/instrumentchange_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/durationline_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/join_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keysig_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutelements_tests.cpp
@@ -68,6 +69,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midi/midirenderer_bend_tests.cpp
     #${CMAKE_CURRENT_LIST_DIR}/midimapping_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/note_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/octavedot_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parent_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parts_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/partialtie_tests.cpp
