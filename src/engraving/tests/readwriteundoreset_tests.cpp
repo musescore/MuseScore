@@ -106,3 +106,102 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
 
     delete score;
 }
+
+TEST_F(Engraving_ReadWriteUndoResetTests, testWatermarkStyleProperties)
+{
+    MasterScore* score = ScoreRW::readScore(u"test.mscx");
+    ASSERT_TRUE(score);
+
+    // 1. Verify default values
+    EXPECT_FALSE(score->style().styleB(Sid::watermarkEnabled));
+    EXPECT_EQ(score->style().styleI(Sid::watermarkType), 0);
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkText), String(u"DRAFT"));
+    EXPECT_DOUBLE_EQ(score->style().styleD(Sid::watermarkOpacity), 0.20);
+    EXPECT_DOUBLE_EQ(score->style().styleD(Sid::watermarkAngle), -45.0);
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkImagePath), String(u""));
+    EXPECT_DOUBLE_EQ(score->style().styleD(Sid::watermarkImageScale), 1.0);
+
+    // 2. Modify properties
+    score->style().set(Sid::watermarkEnabled, true);
+    score->style().set(Sid::watermarkType, 1);
+    score->style().set(Sid::watermarkText, String(u"CONFIDENTIAL"));
+    score->style().set(Sid::watermarkOpacity, 0.50);
+    score->style().set(Sid::watermarkAngle, 30.0);
+    score->style().set(Sid::watermarkImagePath, String(u"file://logo.png"));
+    score->style().set(Sid::watermarkImageScale, 2.5);
+
+    // 3. Verify modified values
+    EXPECT_TRUE(score->style().styleB(Sid::watermarkEnabled));
+    EXPECT_EQ(score->style().styleI(Sid::watermarkType), 1);
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkText), String(u"CONFIDENTIAL"));
+    EXPECT_DOUBLE_EQ(score->style().styleD(Sid::watermarkOpacity), 0.50);
+    EXPECT_DOUBLE_EQ(score->style().styleD(Sid::watermarkAngle), 30.0);
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkImagePath), String(u"file://logo.png"));
+    EXPECT_DOUBLE_EQ(score->style().styleD(Sid::watermarkImageScale), 2.5);
+
+    delete score;
+}
+
+TEST_F(Engraving_ReadWriteUndoResetTests, testWatermarkSerialization)
+{
+    MasterScore* score = ScoreRW::readScore(u"test.mscx");
+    ASSERT_TRUE(score);
+
+    // 1. Set non-default watermark style values
+    score->style().set(Sid::watermarkEnabled, true);
+    score->style().set(Sid::watermarkType, 1);
+    score->style().set(Sid::watermarkText, String(u"CONFIDENTIAL"));
+    score->style().set(Sid::watermarkOpacity, 0.50);
+    score->style().set(Sid::watermarkAngle, 30.0);
+    score->style().set(Sid::watermarkImagePath, String(u"file://logo.png"));
+    score->style().set(Sid::watermarkImageScale, 2.5);
+
+    // 2. Save score to XML
+    const String filename(u"watermark-serialization-test.mscx");
+    ASSERT_TRUE(ScoreRW::saveScore(score, filename));
+    delete score;
+
+    // 3. Read it back
+    MasterScore* loadedScore = ScoreRW::readScore(filename, true);
+    ASSERT_TRUE(loadedScore);
+
+    // 4. Verify deserialized watermark style values
+    EXPECT_TRUE(loadedScore->style().styleB(Sid::watermarkEnabled));
+    EXPECT_EQ(loadedScore->style().styleI(Sid::watermarkType), 1);
+    EXPECT_EQ(loadedScore->style().styleSt(Sid::watermarkText), String(u"CONFIDENTIAL"));
+    EXPECT_DOUBLE_EQ(loadedScore->style().styleD(Sid::watermarkOpacity), 0.50);
+    EXPECT_DOUBLE_EQ(loadedScore->style().styleD(Sid::watermarkAngle), 30.0);
+    EXPECT_EQ(loadedScore->style().styleSt(Sid::watermarkImagePath), String(u"file://logo.png"));
+    EXPECT_DOUBLE_EQ(loadedScore->style().styleD(Sid::watermarkImageScale), 2.5);
+
+    delete loadedScore;
+}
+
+TEST_F(Engraving_ReadWriteUndoResetTests, testWatermarkUndoRedo)
+{
+    MasterScore* score = ScoreRW::readScore(u"test.mscx");
+    ASSERT_TRUE(score);
+
+    // Verify initial default
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkText), String(u"DRAFT"));
+
+    // 1. Modify watermarkText via Undo Command
+    score->startCmd(TranslatableString::untranslatable("Change Watermark Text"));
+    score->undoChangeStyleVal(Sid::watermarkText, String(u"CONFIDENTIAL"));
+    score->endCmd();
+
+    // Verify it changed
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkText), String(u"CONFIDENTIAL"));
+
+    // 2. Undo
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkText), String(u"DRAFT"));
+
+    // 3. Redo
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(score->style().styleSt(Sid::watermarkText), String(u"CONFIDENTIAL"));
+
+    delete score;
+}
+
+

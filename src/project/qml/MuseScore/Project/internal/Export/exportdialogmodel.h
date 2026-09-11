@@ -107,6 +107,7 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
 
+    Q_PROPERTY(bool applyWatermark READ applyWatermark WRITE setApplyWatermark NOTIFY applyWatermarkChanged)
     Q_PROPERTY(bool isFFmpegAvailable READ isFFmpegAvailable NOTIFY isFFmpegAvailableChanged)
     Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged)
 
@@ -235,6 +236,9 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
 
+    bool applyWatermark() const;
+    void setApplyWatermark(bool apply);
+
     bool isFFmpegAvailable() const;
     QString ffmpegDir() const;
     void setFFmpegDir(const QString& dir);
@@ -284,6 +288,8 @@ signals:
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
+    void applyWatermarkChanged(bool apply);
+
     void isFFmpegAvailableChanged();
     void ffmpegDirChanged();
 
@@ -319,5 +325,6 @@ private:
     ExportType m_selectedExportType = ExportType();
     muse::io::path_t m_exportDirPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
+    bool m_applyWatermark = true;
 };
 }

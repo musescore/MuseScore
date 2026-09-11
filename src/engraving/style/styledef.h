@@ -2273,6 +2273,15 @@ enum class Sid : short {
     palmMuteEndFilledArrowHeight,
     palmMuteEndFilledArrowWidth,
 
+    // --- Watermark ---
+    watermarkEnabled,
+    watermarkType,
+    watermarkText,
+    watermarkOpacity,
+    watermarkAngle,
+    watermarkImagePath,
+    watermarkImageScale,
+
     STYLES
 };
 

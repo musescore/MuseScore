@@ -22,6 +22,7 @@
 #include "paint.h"
 
 #include "draw/painter.h"
+#include "draw/fontmetrics.h"
 #include "dom/score.h"
 #include "dom/page.h"
 #include "dom/engravingitem.h"
@@ -30,6 +31,11 @@
 #include "debugpaint.h"
 
 #include "log.h"
+
+#include <cmath>
+#include <QImage>
+#include <QPixmap>
+#include <QPainter>
 
 using namespace muse::draw;
 using namespace mu::engraving;
@@ -135,6 +141,9 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Sco
             } else if (opt.printPageBackground) {
                 painter->fillRect(pageRect, Color::WHITE);
             }
+
+            // Draw watermark
+            paintWatermark(painter, score, pageRect, opt);
 
             // Draw page elements
             bool disableClipping = false;
@@ -246,3 +255,168 @@ void Paint::paintItems(Painter& painter, const std::vector<EngravingItem*>& item
         paintItem(painter, item, opt);
     }
 }
+
+// Simple image cache
+struct WatermarkImageCache {
+    std::string path;
+    double opacity = -1.0;
+    double scale = -1.0;
+    QPixmap* pixmap = nullptr;
+};
+
+static WatermarkImageCache* getWatermarkCache() {
+    static WatermarkImageCache* cache = new WatermarkImageCache();
+    return cache;
+}
+
+void Paint::paintWatermark(Painter* painter, const Score* score, const RectF& pageRect, const IScoreRenderer::ScorePaintOptions& opt)
+{
+    UNUSED(opt);
+
+    if (!score->isLayoutMode(LayoutMode::PAGE) && !score->isLayoutMode(LayoutMode::FLOAT)) {
+        return;
+    }
+
+    if (!score->style().styleB(Sid::watermarkEnabled)) {
+        return;
+    }
+
+    const int watermarkTypeVal = score->style().styleI(Sid::watermarkType);
+
+    painter->save();
+
+    // Center on page
+    const PointF centre = pageRect.center();
+    painter->translate(centre);
+    painter->rotate(score->style().styleD(Sid::watermarkAngle));
+
+    if (watermarkTypeVal == 0) {
+        // Text mode
+        const String text = score->style().styleSt(Sid::watermarkText);
+        if (!text.isEmpty()) {
+            // Edwin 72pt Bold
+            Font font;
+            font.setFamily(Font::FontFamily(u"Edwin"), Font::Type::Text);
+            font.setPointSizeF(72.0);
+            font.setBold(true);
+
+            // Scale down font size if text exceeds page boundaries
+            FontMetrics fm(font);
+            double textWidth = fm.width(text);
+
+            const double angleDeg = score->style().styleD(Sid::watermarkAngle);
+            const double angleRad = angleDeg * 3.14159265358979323846 / 180.0;
+            const double cosA = std::abs(std::cos(angleRad));
+            const double sinA = std::abs(std::sin(angleRad));
+
+            const double w = pageRect.width();
+            const double h = pageRect.height();
+
+            double distToEdge = 1e9;
+            if (cosA > 1e-6) {
+                distToEdge = std::min(distToEdge, w / (2.0 * cosA));
+            }
+            if (sinA > 1e-6) {
+                distToEdge = std::min(distToEdge, h / (2.0 * sinA));
+            }
+
+            // 15% margin
+            double maxAllowedWidth = distToEdge * 2.0 * 0.85;
+
+            if (textWidth > maxAllowedWidth && textWidth > 0.0) {
+                double scaleFactor = maxAllowedWidth / textWidth;
+                font.setPointSizeF(font.pointSizeF() * scaleFactor);
+            }
+
+            painter->setFont(font);
+
+            // Light grey with opacity
+            const double opacity = std::max(0.0, std::min(1.0, score->style().styleD(Sid::watermarkOpacity)));
+            Color color(192, 192, 192);
+            color.setAlpha(static_cast<int>(opacity * 255));
+            painter->setPen(Pen(color));
+
+            // Draw centered
+            const double bigDim = std::max(pageRect.width(), pageRect.height()) * 2.0;
+            const RectF textRect(-bigDim / 2.0, -bigDim / 2.0, bigDim, bigDim);
+            painter->drawText(textRect, muse::draw::AlignCenter, muse::draw::TextFlags(), text);
+        }
+    }
+    else if (watermarkTypeVal == 1) {
+        // Image mode
+        const String imagePathStr = score->style().styleSt(Sid::watermarkImagePath);
+        const std::string pathStdStr = imagePathStr.toStdString();
+        
+        if (!pathStdStr.empty()) {
+            const double opacity = std::max(0.0, std::min(1.0, score->style().styleD(Sid::watermarkOpacity)));
+            const double scale = std::max(0.01, score->style().styleD(Sid::watermarkImageScale));
+
+            // Reload image if path or opacity changed
+            WatermarkImageCache* cache = getWatermarkCache();
+            if (cache->path != pathStdStr || cache->opacity != opacity || !cache->pixmap) {
+                QString qPath = imagePathStr.toQString();
+                
+                // Strip file:// prefix if present
+                if (qPath.startsWith("file:///")) {
+                    qPath = qPath.mid(8);
+                } else if (qPath.startsWith("file://")) {
+                    qPath = qPath.mid(7);
+                }
+                
+                QImage img(qPath);
+                if (!img.isNull()) {
+                    // Bake opacity into high-res pixmap
+                    QImage transparentImg(img.size(), QImage::Format_ARGB32_Premultiplied);
+                    transparentImg.fill(Qt::transparent);
+                    
+                    QPainter imgPainter(&transparentImg);
+                    imgPainter.setOpacity(opacity);
+                    imgPainter.drawImage(0, 0, img);
+                    imgPainter.end();
+
+                    if (!cache->pixmap) {
+                        cache->pixmap = new QPixmap();
+                    }
+                    *cache->pixmap = QPixmap::fromImage(transparentImg);
+                    cache->path = pathStdStr;
+                    cache->opacity = opacity;
+                } else {
+                    if (cache->pixmap) {
+                        delete cache->pixmap;
+                        cache->pixmap = nullptr;
+                    }
+                    cache->path = pathStdStr;
+                    cache->opacity = opacity;
+                }
+            }
+
+            if (cache->pixmap && !cache->pixmap->isNull()) {
+                const double imgW = cache->pixmap->width();
+                const double imgH = cache->pixmap->height();
+                
+                if (imgW > 0.0 && imgH > 0.0) {
+                    // Fit within 30% of page by default
+                    double maxImgW = pageRect.width() * 0.30;
+                    double maxImgH = pageRect.height() * 0.30;
+                    
+                    double baseScale = std::min(maxImgW / imgW, maxImgH / imgH);
+                    double finalScale = baseScale * scale;
+                    
+                    // Limit to page size
+                    if (imgW * finalScale > pageRect.width() || imgH * finalScale > pageRect.height()) {
+                        finalScale = std::min(pageRect.width() / imgW, pageRect.height() / imgH);
+                    }
+                    
+                    // Draw centered using painter scale
+                    painter->save();
+                    painter->scale(finalScale, finalScale);
+                    painter->drawPixmap(PointF(-imgW / 2.0, -imgH / 2.0), *cache->pixmap);
+                    painter->restore();
+                }
+            }
+        }
+    }
+
+    painter->restore();
+}
+

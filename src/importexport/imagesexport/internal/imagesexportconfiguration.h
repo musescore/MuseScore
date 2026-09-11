@@ -57,6 +57,9 @@ public:
     int trimMarginPixelSize() const override;
     void setTrimMarginPixelSize(std::optional<int> pixelSize) override;
 
+    bool exportApplyWatermark() const override;
+    void setExportApplyWatermark(bool apply) override;
+
 private:
     std::optional<int> m_trimMarginPixelSize;
     std::optional<float> m_customExportPngDpiOverride;
