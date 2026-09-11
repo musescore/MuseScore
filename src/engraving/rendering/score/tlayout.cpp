@@ -6611,6 +6611,9 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
         ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
     }
 
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
+
     ldata->moveY(item->staffOffsetY());
 
     switch (item->vibrato()->vibratoType()) {
