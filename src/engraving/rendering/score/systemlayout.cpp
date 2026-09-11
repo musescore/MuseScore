@@ -1274,6 +1274,12 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     createSkylines(elementsToLayout, ctx);
 
+    /* The skyline grows as elements are laid out, so whatever is laid out first ends up closest to the
+     * staff. We changed the stacking order of lyrics, from after pedals to before dynamics, so we use
+     * this style to keep compatibility for <5.0 scores. This will no longer be necessary if we implement
+     * a proper customisable stacking order. */
+    const LyricsStackingOrder lyricsStackingOrder = ctx.conf().styleV(Sid::lyricsStackingOrder).value<LyricsStackingOrder>();
+
     layoutTiesAndBends(elementsToLayout, ctx);
 
     if (ctx.conf().isLinearMode()) {
@@ -1327,7 +1333,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
-    layoutLyrics(elementsToLayout, ctx);
+    if (lyricsStackingOrder == LyricsStackingOrder::LYRICS_BEFORE_DYNAMICS) {
+        layoutLyrics(elementsToLayout, ctx);
+    }
 
     layoutDynamicExpressionAndHairpins(elementsToLayout, ctx);
 
@@ -1349,6 +1357,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     processLines(system, ctx, elementsToLayout.ottavas);
     processLines(system, ctx, elementsToLayout.pedal, /*align=*/ true);
+
+    if (lyricsStackingOrder == LyricsStackingOrder::LYRICS_AFTER_PEDALS) {
+        layoutLyrics(elementsToLayout, ctx);
+    }
 
     for (HarpPedalDiagram* hpd : elementsToLayout.harpDiagrams) {
         TLayout::layoutItem(hpd, ctx);
