@@ -76,4 +76,13 @@ Column {
         navigationRowStart: thicknessSection.navigationRowEnd + 1
     }
 
+    CenterBetweenStavesSection {
+        isApplicable: root.model && root.model.isStaveCenteringApplicable
+        isAvailable: root.model && root.model.isStaveCenteringAvailable
+
+        propertyItem: root.model ? root.model.centerBetweenStaves : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: setVerse.navigationRowEnd + 1
+    }
 }

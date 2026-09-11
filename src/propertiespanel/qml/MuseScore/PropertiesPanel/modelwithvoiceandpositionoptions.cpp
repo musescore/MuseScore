@@ -31,37 +31,32 @@ ModelWithVoiceAndPositionOptions::ModelWithVoiceAndPositionOptions(QObject* pare
                                                                    const muse::modularity::ContextPtr& iocCtx,
                                                                    IElementRepositoryService* repository,
                                                                    ElementType elementType)
-    : PropertiesPanelAbstractModel(parent, iocCtx, repository, elementType)
+    : ModelWithStaveCenteringOptions(parent, iocCtx, repository, elementType)
 {
     createProperties();
 }
 
 void ModelWithVoiceAndPositionOptions::createProperties()
 {
+    ModelWithStaveCenteringOptions::createProperties();
+
     m_voiceBasedPosition = buildPropertyItem(Pid::DIRECTION, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         updateStaveCenteringFlags();
     });
     m_voiceAssignment = buildPropertyItem(Pid::VOICE_ASSIGNMENT);
     m_voice = buildPropertyItem(Pid::VOICE);
-    m_centerBetweenStaves = buildPropertyItem(Pid::CENTER_BETWEEN_STAVES);
     updateIsMultiStaffInstrument();
-    updateStaveCenteringFlags();
 }
 
 void ModelWithVoiceAndPositionOptions::loadProperties()
 {
+    ModelWithStaveCenteringOptions::loadProperties();
+
     loadPropertyItem(m_voiceBasedPosition);
     loadPropertyItem(m_voiceAssignment);
     loadPropertyItem(m_voice);
-    loadPropertyItem(m_centerBetweenStaves);
     updateIsMultiStaffInstrument();
-    updateStaveCenteringFlags();
-}
-
-void ModelWithVoiceAndPositionOptions::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
-{
-    loadProperties();
 }
 
 void ModelWithVoiceAndPositionOptions::updateIsMultiStaffInstrument()
@@ -77,30 +72,11 @@ void ModelWithVoiceAndPositionOptions::updateIsMultiStaffInstrument()
     setIsMultiStaffInstrument(isMultiStaffInstrument);
 }
 
-void ModelWithVoiceAndPositionOptions::updateStaveCenteringFlags()
+bool ModelWithVoiceAndPositionOptions::centeringSideIsRelevant(const EngravingItem* item, bool above) const
 {
-    bool isApplicable = true;
-    bool isAvailable = true;
-
-    for (EngravingItem* item : m_elementList) {
-        const bool otherStaffAbove = item->staffToCenterAgainst(true) != nullptr;
-        const bool otherStaffBelow = item->staffToCenterAgainst(false) != nullptr;
-        if (!otherStaffAbove && !otherStaffBelow) {
-            isApplicable = false;
-            isAvailable = false;
-            break;
-        }
-
-        const DirectionV itemDirection = item->getProperty(Pid::DIRECTION).value<DirectionV>();
-        const bool otherStaffOnRelevantSide = (itemDirection != DirectionV::DOWN && otherStaffAbove)
-                                              || (itemDirection != DirectionV::UP && otherStaffBelow);
-        if (!otherStaffOnRelevantSide) {
-            isAvailable = false;
-        }
-    }
-
-    setIsStaveCenteringApplicable(isApplicable);
-    setIsStaveCenteringAvailable(isAvailable);
+    // These items may be placed automatically, in which case either side may end up being the one used
+    const DirectionV itemDirection = item->getProperty(Pid::DIRECTION).value<DirectionV>();
+    return above ? itemDirection != DirectionV::DOWN : itemDirection != DirectionV::UP;
 }
 
 PropertyItem* ModelWithVoiceAndPositionOptions::voiceBasedPosition() const
@@ -118,24 +94,9 @@ PropertyItem* ModelWithVoiceAndPositionOptions::voice() const
     return m_voice;
 }
 
-PropertyItem* ModelWithVoiceAndPositionOptions::centerBetweenStaves() const
-{
-    return m_centerBetweenStaves;
-}
-
 bool ModelWithVoiceAndPositionOptions::isMultiStaffInstrument() const
 {
     return m_isMultiStaffInstrument;
-}
-
-bool ModelWithVoiceAndPositionOptions::isStaveCenteringApplicable() const
-{
-    return m_isStaveCenteringApplicable;
-}
-
-bool ModelWithVoiceAndPositionOptions::isStaveCenteringAvailable() const
-{
-    return m_isStaveCenteringAvailable;
 }
 
 void ModelWithVoiceAndPositionOptions::setIsMultiStaffInstrument(bool v)
@@ -146,26 +107,6 @@ void ModelWithVoiceAndPositionOptions::setIsMultiStaffInstrument(bool v)
 
     m_isMultiStaffInstrument = v;
     emit isMultiStaffInstrumentChanged(m_isMultiStaffInstrument);
-}
-
-void ModelWithVoiceAndPositionOptions::setIsStaveCenteringApplicable(bool v)
-{
-    if (v == m_isStaveCenteringApplicable) {
-        return;
-    }
-
-    m_isStaveCenteringApplicable = v;
-    emit isStaveCenteringApplicableChanged(m_isStaveCenteringApplicable);
-}
-
-void ModelWithVoiceAndPositionOptions::setIsStaveCenteringAvailable(bool v)
-{
-    if (v == m_isStaveCenteringAvailable) {
-        return;
-    }
-
-    m_isStaveCenteringAvailable = v;
-    emit isStaveCenteringAvailableChanged(m_isStaveCenteringAvailable);
 }
 
 void ModelWithVoiceAndPositionOptions::changeVoice(int voice)

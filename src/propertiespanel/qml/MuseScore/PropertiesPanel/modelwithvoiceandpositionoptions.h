@@ -24,12 +24,12 @@
 
 #include <qqmlintegration.h>
 
-#include "propertiespanelabstractmodel.h"
+#include "modelwithstavecenteringoptions.h"
 
 using namespace mu::engraving;
 
 namespace mu::propertiespanel {
-class ModelWithVoiceAndPositionOptions : public PropertiesPanelAbstractModel
+class ModelWithVoiceAndPositionOptions : public ModelWithStaveCenteringOptions
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -38,14 +38,7 @@ class ModelWithVoiceAndPositionOptions : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * voiceBasedPosition READ voiceBasedPosition CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * voiceAssignment READ voiceAssignment CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * voice READ voice CONSTANT)
-    Q_PROPERTY(mu::propertiespanel::PropertyItem * centerBetweenStaves READ centerBetweenStaves CONSTANT)
     Q_PROPERTY(bool isMultiStaffInstrument READ isMultiStaffInstrument WRITE setIsMultiStaffInstrument NOTIFY isMultiStaffInstrumentChanged)
-    Q_PROPERTY(
-        bool isStaveCenteringApplicable READ isStaveCenteringApplicable WRITE setIsStaveCenteringApplicable NOTIFY
-        isStaveCenteringApplicableChanged)
-    Q_PROPERTY(
-        bool isStaveCenteringAvailable READ isStaveCenteringAvailable WRITE setIsStaveCenteringAvailable NOTIFY
-        isStaveCenteringAvailableChanged)
 
     Q_PROPERTY(QString shortcutUseVoice1 READ shortcutUseVoice1 CONSTANT)
     Q_PROPERTY(QString shortcutUseVoice2 READ shortcutUseVoice2 CONSTANT)
@@ -60,15 +53,11 @@ public:
 
     void createProperties() override;
     void loadProperties() override;
-    void onNotationChanged(const PropertyIdSet&, const StyleIdSet&) override;
 
     PropertyItem* voiceBasedPosition() const;
     PropertyItem* voiceAssignment() const;
     PropertyItem* voice() const;
-    PropertyItem* centerBetweenStaves() const;
     bool isMultiStaffInstrument() const;
-    bool isStaveCenteringApplicable() const;
-    bool isStaveCenteringAvailable() const;
 
     Q_INVOKABLE void changeVoice(int voice);
 
@@ -81,25 +70,20 @@ public:
 
 public slots:
     void setIsMultiStaffInstrument(bool v);
-    void setIsStaveCenteringApplicable(bool v);
-    void setIsStaveCenteringAvailable(bool v);
 
 signals:
     void isMultiStaffInstrumentChanged(bool isMultiStaffInstrument);
-    void isStaveCenteringApplicableChanged(bool isStaveCenteringApplicable);
-    void isStaveCenteringAvailableChanged(bool isStaveCenteringAvailable);
+
+protected:
+    bool centeringSideIsRelevant(const EngravingItem* item, bool above) const override;
 
 private:
     void updateIsMultiStaffInstrument();
-    void updateStaveCenteringFlags();
 
 private:
     PropertyItem* m_voiceBasedPosition = nullptr;
     PropertyItem* m_voiceAssignment = nullptr;
     PropertyItem* m_voice = nullptr;
-    PropertyItem* m_centerBetweenStaves = nullptr;
     bool m_isMultiStaffInstrument = false;
-    bool m_isStaveCenteringApplicable = false;
-    bool m_isStaveCenteringAvailable = false;
 };
 }

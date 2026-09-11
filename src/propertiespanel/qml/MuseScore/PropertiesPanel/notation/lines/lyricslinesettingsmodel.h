@@ -23,10 +23,10 @@
 
 #include <qqmlintegration.h>
 
-#include "propertiespanelabstractmodel.h"
+#include "modelwithstavecenteringoptions.h"
 
 namespace mu::propertiespanel {
-class LyricsLineSettingsModel : public PropertiesPanelAbstractModel
+class LyricsLineSettingsModel : public ModelWithStaveCenteringOptions
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -48,6 +48,9 @@ public:
     PropertyItem* thickness() const;
     PropertyItem* verse() const;
     bool hasVerse() const;
+
+protected:
+    bool centeringSideIsRelevant(const EngravingItem* item, bool above) const override;
 
 private:
     void createProperties() override;
