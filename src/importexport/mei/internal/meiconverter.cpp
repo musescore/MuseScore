@@ -176,9 +176,29 @@ engraving::AccidentalType Convert::accidFromMEI(const libmei::data_ACCIDENTAL_WR
     case (libmei::ACCIDENTAL_WRITTEN_nf): return engraving::AccidentalType::NATURAL_FLAT;
     case (libmei::ACCIDENTAL_WRITTEN_ns): return engraving::AccidentalType::NATURAL_SHARP;
     case (libmei::ACCIDENTAL_WRITTEN_ss): return engraving::AccidentalType::SHARP_SHARP;
+    case (libmei::ACCIDENTAL_WRITTEN_su): return engraving::AccidentalType::SHARP_ARROW_UP;
+    case (libmei::ACCIDENTAL_WRITTEN_sd): return engraving::AccidentalType::SHARP_ARROW_DOWN;
+    case (libmei::ACCIDENTAL_WRITTEN_fu): return engraving::AccidentalType::FLAT_ARROW_UP;
+    case (libmei::ACCIDENTAL_WRITTEN_fd): return engraving::AccidentalType::FLAT_ARROW_DOWN;
+    case (libmei::ACCIDENTAL_WRITTEN_nu): return engraving::AccidentalType::NATURAL_ARROW_UP;
+    case (libmei::ACCIDENTAL_WRITTEN_nd): return engraving::AccidentalType::NATURAL_ARROW_DOWN;
+    case (libmei::ACCIDENTAL_WRITTEN_xu): return engraving::AccidentalType::SHARP2_ARROW_UP;
+    case (libmei::ACCIDENTAL_WRITTEN_xd): return engraving::AccidentalType::SHARP2_ARROW_DOWN;
+    case (libmei::ACCIDENTAL_WRITTEN_ffu): return engraving::AccidentalType::FLAT2_ARROW_UP;
+    case (libmei::ACCIDENTAL_WRITTEN_ffd): return engraving::AccidentalType::FLAT2_ARROW_DOWN;
+    case (libmei::ACCIDENTAL_WRITTEN_1qf): return engraving::AccidentalType::MIRRORED_FLAT;
+    case (libmei::ACCIDENTAL_WRITTEN_3qf): return engraving::AccidentalType::MIRRORED_FLAT2;
+    case (libmei::ACCIDENTAL_WRITTEN_1qs): return engraving::AccidentalType::SHARP_SLASH;
+    case (libmei::ACCIDENTAL_WRITTEN_3qs): return engraving::AccidentalType::SHARP_SLASH4;
+    case (libmei::ACCIDENTAL_WRITTEN_bms): return engraving::AccidentalType::SHARP_SLASH2;
+    case (libmei::ACCIDENTAL_WRITTEN_kms): return engraving::AccidentalType::SHARP_SLASH3;
+    case (libmei::ACCIDENTAL_WRITTEN_bf): return engraving::AccidentalType::FLAT_SLASH;
+    case (libmei::ACCIDENTAL_WRITTEN_bmf): return engraving::AccidentalType::FLAT_SLASH2;
+    case (libmei::ACCIDENTAL_WRITTEN_koron): return engraving::AccidentalType::KORON;
+    case (libmei::ACCIDENTAL_WRITTEN_sori): return engraving::AccidentalType::SORI;
     default:
         warning = true;
-        return engraving::AccidentalType::NATURAL;
+        return engraving::AccidentalType::NONE;
     }
 }
 
@@ -196,42 +216,138 @@ libmei::data_ACCIDENTAL_WRITTEN Convert::accidToMEI(const engraving::AccidentalT
     case (engraving::AccidentalType::NATURAL_FLAT): return libmei::ACCIDENTAL_WRITTEN_nf;
     case (engraving::AccidentalType::NATURAL_SHARP): return libmei::ACCIDENTAL_WRITTEN_ns;
     case (engraving::AccidentalType::SHARP_SHARP): return libmei::ACCIDENTAL_WRITTEN_ss;
+    case (engraving::AccidentalType::SHARP_ARROW_UP): return libmei::ACCIDENTAL_WRITTEN_su;
+    case (engraving::AccidentalType::SHARP_ARROW_DOWN): return libmei::ACCIDENTAL_WRITTEN_sd;
+    case (engraving::AccidentalType::FLAT_ARROW_UP): return libmei::ACCIDENTAL_WRITTEN_fu;
+    case (engraving::AccidentalType::FLAT_ARROW_DOWN): return libmei::ACCIDENTAL_WRITTEN_fd;
+    case (engraving::AccidentalType::NATURAL_ARROW_UP): return libmei::ACCIDENTAL_WRITTEN_nu;
+    case (engraving::AccidentalType::NATURAL_ARROW_DOWN): return libmei::ACCIDENTAL_WRITTEN_nd;
+    case (engraving::AccidentalType::SHARP2_ARROW_UP): return libmei::ACCIDENTAL_WRITTEN_xu;
+    case (engraving::AccidentalType::SHARP2_ARROW_DOWN): return libmei::ACCIDENTAL_WRITTEN_xd;
+    case (engraving::AccidentalType::FLAT2_ARROW_UP): return libmei::ACCIDENTAL_WRITTEN_ffu;
+    case (engraving::AccidentalType::FLAT2_ARROW_DOWN): return libmei::ACCIDENTAL_WRITTEN_ffd;
+    case (engraving::AccidentalType::MIRRORED_FLAT): return libmei::ACCIDENTAL_WRITTEN_1qf;
+    case (engraving::AccidentalType::MIRRORED_FLAT2): return libmei::ACCIDENTAL_WRITTEN_3qf;
+    case (engraving::AccidentalType::SHARP_SLASH): return libmei::ACCIDENTAL_WRITTEN_1qs;
+    case (engraving::AccidentalType::SHARP_SLASH4): return libmei::ACCIDENTAL_WRITTEN_3qs;
+    case (engraving::AccidentalType::SHARP_SLASH2): return libmei::ACCIDENTAL_WRITTEN_bms;
+    case (engraving::AccidentalType::SHARP_SLASH3): return libmei::ACCIDENTAL_WRITTEN_kms;
+    case (engraving::AccidentalType::FLAT_SLASH): return libmei::ACCIDENTAL_WRITTEN_bf;
+    case (engraving::AccidentalType::FLAT_SLASH2): return libmei::ACCIDENTAL_WRITTEN_bmf;
+    case (engraving::AccidentalType::KORON): return libmei::ACCIDENTAL_WRITTEN_koron;
+    case (engraving::AccidentalType::SORI): return libmei::ACCIDENTAL_WRITTEN_sori;
     default:
-        return libmei::ACCIDENTAL_WRITTEN_n;
+        return libmei::ACCIDENTAL_WRITTEN_NONE;
     }
 }
 
-engraving::AccidentalVal Convert::accidGesFromMEI(const libmei::data_ACCIDENTAL_GESTURAL meiAccid, bool& warning)
+Convert::AccidentalSemantics Convert::accidGesFromMEI(const libmei::data_ACCIDENTAL_GESTURAL meiAccid, bool& warning)
 {
     warning = false;
     switch (meiAccid) {
-    case (libmei::ACCIDENTAL_GESTURAL_NONE): return engraving::AccidentalVal::NATURAL;
-    case (libmei::ACCIDENTAL_GESTURAL_n): return engraving::AccidentalVal::NATURAL;
-    case (libmei::ACCIDENTAL_GESTURAL_f): return engraving::AccidentalVal::FLAT;
-    case (libmei::ACCIDENTAL_GESTURAL_ff): return engraving::AccidentalVal::FLAT2;
-    case (libmei::ACCIDENTAL_GESTURAL_tf): return engraving::AccidentalVal::FLAT3;
-    case (libmei::ACCIDENTAL_GESTURAL_s): return engraving::AccidentalVal::SHARP;
-    case (libmei::ACCIDENTAL_GESTURAL_ss): return engraving::AccidentalVal::SHARP2;
-    case (libmei::ACCIDENTAL_GESTURAL_ts): return engraving::AccidentalVal::SHARP3;
+    case (libmei::ACCIDENTAL_GESTURAL_NONE): return { 0, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_n): return { 0, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_f): return { -1, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_ff): return { -2, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_tf): return { -3, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_s): return { 1, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_ss): return { 2, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_ts): return { 3, 0.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_su): return { 0, 150.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_sd): return { 0, 50.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_fu): return { 0, -50.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_fd): return { 0, -150.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_xu): return { 0, 250.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_ffd): return { 0, -250.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_bms): return { 0, 89.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_kms): return { 0, 56.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_bs): return { 0, 44.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_ks): return { 0, 11.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_kf): return { 0, -11.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_bf): return { 0, -44.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_kmf): return { 0, -56.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_bmf): return { 0, -89.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_koron): return { 0, -67.0 };
+    case (libmei::ACCIDENTAL_GESTURAL_sori): return { 0, 33.0 };
     default:
         warning = true;
-        return engraving::AccidentalVal::NATURAL;
+        return { 0, 0.0 };
     }
 }
 
-libmei::data_ACCIDENTAL_GESTURAL Convert::accidGesToMEI(const engraving::AccidentalVal accid)
+libmei::data_ACCIDENTAL_GESTURAL Convert::accidGesToMEI(const AccidentalSemantics& accid, bool& warning)
 {
-    switch (accid) {
-    case (engraving::AccidentalVal::NATURAL): return libmei::ACCIDENTAL_GESTURAL_n;
-    case (engraving::AccidentalVal::FLAT): return libmei::ACCIDENTAL_GESTURAL_f;
-    case (engraving::AccidentalVal::FLAT2): return libmei::ACCIDENTAL_GESTURAL_ff;
-    case (engraving::AccidentalVal::FLAT3): return libmei::ACCIDENTAL_GESTURAL_tf;
-    case (engraving::AccidentalVal::SHARP): return libmei::ACCIDENTAL_GESTURAL_s;
-    case (engraving::AccidentalVal::SHARP2): return libmei::ACCIDENTAL_GESTURAL_ss;
-    case (engraving::AccidentalVal::SHARP3): return libmei::ACCIDENTAL_GESTURAL_ts;
-    default:
-        return libmei::ACCIDENTAL_GESTURAL_n;
+    warning = false;
+    if (accid.semitoneOffset != 0 && !muse::RealIsNull(accid.centOffset)) {
+        warning = true;
+        return libmei::ACCIDENTAL_GESTURAL_NONE;
     }
+    if (muse::RealIsNull(accid.centOffset)) {
+        switch (accid.semitoneOffset) {
+        case -3: return libmei::ACCIDENTAL_GESTURAL_tf;
+        case -2: return libmei::ACCIDENTAL_GESTURAL_ff;
+        case -1: return libmei::ACCIDENTAL_GESTURAL_f;
+        case 0: return libmei::ACCIDENTAL_GESTURAL_n;
+        case 1: return libmei::ACCIDENTAL_GESTURAL_s;
+        case 2: return libmei::ACCIDENTAL_GESTURAL_ss;
+        case 3: return libmei::ACCIDENTAL_GESTURAL_ts;
+        default:
+            warning = true;
+            return libmei::ACCIDENTAL_GESTURAL_NONE;
+        }
+    }
+
+    if (muse::RealIsEqual(accid.centOffset, 250.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_xu;
+    }
+    if (muse::RealIsEqual(accid.centOffset, 150.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_su;
+    }
+    if (muse::RealIsEqual(accid.centOffset, 89.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_bms;
+    }
+    if (muse::RealIsEqual(accid.centOffset, 56.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_kms;
+    }
+    if (muse::RealIsEqual(accid.centOffset, 50.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_sd;
+    }
+    if (muse::RealIsEqual(accid.centOffset, 44.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_bs;
+    }
+    if (muse::RealIsEqual(accid.centOffset, 33.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_sori;
+    }
+    if (muse::RealIsEqual(accid.centOffset, 11.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_ks;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -11.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_kf;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -44.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_bf;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -50.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_fu;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -56.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_kmf;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -67.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_koron;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -89.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_bmf;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -150.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_fd;
+    }
+    if (muse::RealIsEqual(accid.centOffset, -250.0)) {
+        return libmei::ACCIDENTAL_GESTURAL_ffd;
+    }
+
+    warning = true;
+    return libmei::ACCIDENTAL_GESTURAL_NONE;
 }
 
 engraving::ArticulationAnchor Convert::anchorFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning)
@@ -2783,15 +2899,14 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
 
     int oct = meiNote.HasOct() ? meiNote.GetOct() : 3;
 
-    engraving::AccidentalVal alter = engraving::AccidentalVal::NATURAL;
+    AccidentalSemantics soundingAccidental;
     if (meiAccid.HasAccid() || meiAccid.HasAccidGes()) {
         bool accidWarning = false;
         libmei::data_ACCIDENTAL_GESTURAL meiAccidGes
             = (meiAccid.HasAccidGes()) ? meiAccid.GetAccidGes() : libmei::Att::AccidentalWrittenToGestural(meiAccid.GetAccid());
-        alter = Convert::accidGesFromMEI(meiAccidGes, accidWarning);
+        soundingAccidental = Convert::accidGesFromMEI(meiAccidGes, accidWarning);
         warning = (warning || accidWarning);
     }
-    int alterInt = static_cast<int>(alter);
 
     if (meiAccid.HasEnclose()) {
         switch (meiAccid.GetEnclose()) {
@@ -2813,8 +2928,16 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
     }
     pitchSt.accidType = Convert::accidFromMEI(meiAccid.GetAccid(), accidWarning);
     warning = (warning || accidWarning);
-    pitchSt.pitch = pitchMap[step] + alterInt + (oct + 1) * 12;
-    pitchSt.tpc2 = engraving::step2tpc(step, alter);
+    pitchSt.pitch = pitchMap[step] + soundingAccidental.semitoneOffset + (oct + 1) * 12;
+    pitchSt.centOffset = soundingAccidental.centOffset;
+
+    // TPC describes the written spelling. When @accid is absent, use the
+    // integer component of the sounding alteration instead.
+    engraving::AccidentalVal tpcAlter = static_cast<engraving::AccidentalVal>(soundingAccidental.semitoneOffset);
+    if (meiAccid.HasAccid() && pitchSt.accidType != engraving::AccidentalType::NONE) {
+        tpcAlter = engraving::Accidental::subtype2value(pitchSt.accidType);
+    }
+    pitchSt.tpc2 = engraving::step2tpc(step, tpcAlter);
     // The pitch retrieved from the MEI is the written pitch and we need to transpose it
     pitchSt.pitch += interval.chromatic;
 
@@ -2834,6 +2957,7 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     Convert::PitchStruct pitch;
     pitch.pitch = note->pitch();
     pitch.tpc2 = note->tpc2();
+    pitch.centOffset = note->centOffset();
     if (accid) {
         pitch.accidType = accid->accidentalType();
         pitch.accidBracket = accid->bracket();
@@ -2842,25 +2966,45 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     }
 
     // @pname
-    meiNote.SetPname(static_cast<libmei::data_PITCHNAME>(engraving::tpc2step(pitch.tpc2) + 1));
+    const int step = engraving::tpc2step(pitch.tpc2);
+    meiNote.SetPname(static_cast<libmei::data_PITCHNAME>(step + 1));
 
     int writtenAlterInt = static_cast<int>(engraving::Accidental::subtype2value(pitch.accidType));
-    int alterInt = tpc2alterByKey(pitch.tpc2, engraving::Key::C);
+    // Recover the sounding integer alteration independently of the written
+    // spelling. Microtonal displacement remains in pitch.centOffset.
+    static int pitchMap[7] = { 0, 2, 4, 5, 7, 9, 11 };
+    const int untransposedPitch = pitch.pitch - interval.chromatic;
+    int soundingAlterInt = (untransposedPitch - pitchMap[step]) % 12;
+    if (soundingAlterInt > 6) {
+        soundingAlterInt -= 12;
+    } else if (soundingAlterInt < -6) {
+        soundingAlterInt += 12;
+    }
 
     // @oct
     // We need to adjust the pitch to its transposed value for the octave calculation
-    int oct = ((pitch.pitch - interval.chromatic - alterInt) / 12) - 1;
+    int oct = ((untransposedPitch - soundingAlterInt - pitchMap[step]) / 12) - 1;
     meiNote.SetOct(oct);
 
     // @oct.ges
-    int octGes = ((note->ppitch() - interval.chromatic - alterInt) / 12) - 1;
+    const int untransposedPlaybackPitch = note->ppitch() - interval.chromatic;
+    int playbackAlterInt = (untransposedPlaybackPitch - pitchMap[step]) % 12;
+    if (playbackAlterInt > 6) {
+        playbackAlterInt -= 12;
+    } else if (playbackAlterInt < -6) {
+        playbackAlterInt += 12;
+    }
+    int octGes = ((untransposedPlaybackPitch - playbackAlterInt - pitchMap[step]) / 12) - 1;
     if (octGes != oct) {
         meiNote.SetOctGes(octGes);
     }
 
     // @accid
     if (pitch.accidType != engraving::AccidentalType::NONE) {
-        meiAccid.SetAccid(Convert::accidToMEI(pitch.accidType));
+        const libmei::data_ACCIDENTAL_WRITTEN writtenAccidental = Convert::accidToMEI(pitch.accidType);
+        if (writtenAccidental != libmei::ACCIDENTAL_WRITTEN_NONE) {
+            meiAccid.SetAccid(writtenAccidental);
+        }
         if (pitch.accidBracket == engraving::AccidentalBracket::BRACKET) {
             meiAccid.SetEnclose(libmei::ENCLOSURE_brack);
         } else if (pitch.accidBracket == engraving::AccidentalBracket::PARENTHESIS) {
@@ -2869,8 +3013,16 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     }
 
     // @accid.ges
-    if (alterInt && (alterInt != writtenAlterInt)) {
-        meiAccid.SetAccidGes(Convert::accidGesToMEI(static_cast<engraving::AccidentalVal>(alterInt)));
+    const double writtenCentOffset = engraving::Accidental::subtype2centOffset(pitch.accidType);
+    const bool soundingDiffersFromWritten = soundingAlterInt != writtenAlterInt
+                                            || !muse::RealIsEqual(pitch.centOffset, writtenCentOffset);
+    if (soundingDiffersFromWritten) {
+        bool accidWarning = false;
+        const AccidentalSemantics soundingAccidental { soundingAlterInt, pitch.centOffset };
+        const libmei::data_ACCIDENTAL_GESTURAL meiAccidGes = Convert::accidGesToMEI(soundingAccidental, accidWarning);
+        if (!accidWarning) {
+            meiAccid.SetAccidGes(meiAccidGes);
+        }
     }
 
     return { meiNote, meiAccid };

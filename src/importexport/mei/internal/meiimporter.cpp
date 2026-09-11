@@ -2121,6 +2121,9 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     accid->setBracket(pitchSt.accidBracket);
     accid->setRole(pitchSt.accidRole);
     note->add(accid);
+    // setAccidentalType() applies the written accidental's intrinsic offset.
+    // Restore the independently derived gestural/sounding displacement last.
+    note->setCentOffset(pitchSt.centOffset);
 
     note->setTrack(track);
     chord->add(note);
