@@ -48,15 +48,8 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 {
     int mscVersion = score->mscVersion();
 
-    if (mscVersion < 470) {
-        pre470TextCompat(score);
-        migrateNoteParens(score);
-    }
-
-    if (mscVersion < 460) {
-        resetMarkerLeftFontSize(score);
-        resetRestVerticalOffsets(score);
-        adjustVBoxDistances(score);
+    if (mscVersion < 400) {
+        applyPre400StyleCompat(score);
     }
 
     if (mscVersion < 440) {
@@ -65,6 +58,17 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
         if (mscVersion >= 420) {
             undoStaffTextExcludeFromPart(score);
         }
+    }
+
+    if (mscVersion < 460) {
+        resetMarkerLeftFontSize(score);
+        resetRestVerticalOffsets(score);
+        adjustVBoxDistances(score);
+    }
+
+    if (mscVersion < 470) {
+        pre470TextCompat(score);
+        migrateNoteParens(score);
     }
 }
 
@@ -345,20 +349,22 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     int mscVersion = score->mscVersion();
 
-    if (score->mscVersion() < 300) {
-        needRelayout |= resetAllElementsPositions(score);
+    if (mscVersion < 300) {
+        resetAllElementsPositions(score);
+        needRelayout = true;
     }
 
-    if (score->mscVersion() <= 206) {
-        needRelayout |= resetAllCrossBeams(score);
-    }
-
-    if (mscVersion < 470) {
-        needRelayout |= setLyricLineVisibility(score);
+    if (mscVersion <= 206) {
+        resetAllCrossBeams(score);
+        needRelayout = true;
     }
 
     if (mscVersion < 440) {
         needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
+    }
+
+    if (mscVersion < 470) {
+        needRelayout |= setLyricLineVisibility(score);
     }
 
     if (mscVersion < 500) {
@@ -433,13 +439,12 @@ bool EngravingCompat::setLyricLineVisibility(MasterScore* masterScore)
     return needRelayout;
 }
 
-bool EngravingCompat::resetAllElementsPositions(MasterScore* score)
+void EngravingCompat::resetAllElementsPositions(MasterScore* masterScore)
 {
-    for (Score* score : score->scoreList()) {
+    for (Score* score : masterScore->scoreList()) {
         Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
         Reset::resetAllPositions(tx, score);
     }
-    return true;
 }
 
 static void resetBeamOffset(EngravingItem* e)
@@ -449,11 +454,35 @@ static void resetBeamOffset(EngravingItem* e)
     }
 }
 
-bool EngravingCompat::resetAllCrossBeams(MasterScore* score)
+void EngravingCompat::resetAllCrossBeams(MasterScore* masterScore)
 {
-    for (Score* score : score->scoreList()) {
+    for (Score* score : masterScore->scoreList()) {
         score->scanElements(resetBeamOffset);
     }
-    return true;
+}
+
+void EngravingCompat::applyPre400StyleCompat(MasterScore* masterScore)
+{
+    if (MScore::testMode) {
+        return;
+    }
+
+    for (Score* score : masterScore->scoreList()) {
+        MStyle& style = score->style();
+        const double sp = style.spatium();
+
+        style.set(Sid::dynamicsFontSize, 10.0);
+        double doubleBarDistance = style.styleAbsolute(Sid::doubleBarDistance);
+        doubleBarDistance -= style.styleAbsolute(Sid::doubleBarWidth);
+        style.set(Sid::doubleBarDistance, doubleBarDistance / sp);
+        double endBarDistance = style.styleAbsolute(Sid::endBarDistance);
+        endBarDistance -= (style.styleAbsolute(Sid::barWidth) + style.styleAbsolute(Sid::endBarWidth)) / 2;
+        style.set(Sid::endBarDistance, endBarDistance / sp);
+        double repeatBarlineDotSeparation = style.styleAbsolute(Sid::repeatBarlineDotSeparation);
+        double dotWidth = score->engravingFont()->width(SymId::repeatDot, 1.0);
+        repeatBarlineDotSeparation -= (style.styleAbsolute(Sid::barWidth) + dotWidth) / 2;
+        style.set(Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
+        score->resetStyleValue(Sid::measureSpacing);
+    }
 }
 } // namespace mu::engraving::compat

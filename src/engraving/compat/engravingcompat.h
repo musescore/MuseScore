@@ -44,10 +44,12 @@ private:
     static void migrateNoteParens(MasterScore* masterScore);
     static void migrateOffset500(MasterScore* masterScore);
 
-    static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
+    static bool relayoutUserModifiedCrossStaffBeams(MasterScore* masterScore);
     static bool setLyricLineVisibility(MasterScore* masterScore);
 
-    static bool resetAllElementsPositions(MasterScore* score);
-    static bool resetAllCrossBeams(MasterScore* score);
+    static void resetAllElementsPositions(MasterScore* masterScore);
+    static void resetAllCrossBeams(MasterScore* masterScore);
+
+    static void applyPre400StyleCompat(MasterScore* masterScore);
 };
 } // namespace mu::engraving::compat

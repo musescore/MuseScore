@@ -418,25 +418,6 @@ void MStyle::applyCompatStyleVals(int mscVersion)
         // to INSIDE for compatibility. For files 4.2 and newer, defaults to OUTSIDE.
         set(Sid::tiePlacementChord, TiePlacement::INSIDE);
     }
-
-    if (mscVersion < 400 && !MScore::testMode) {
-        const double sp = spatium();
-        set(Sid::dynamicsFontSize, 10.0);
-        double doubleBarDistance = styleAbsolute(mu::engraving::Sid::doubleBarDistance);
-        doubleBarDistance -= styleAbsolute(mu::engraving::Sid::doubleBarWidth);
-        set(Sid::doubleBarDistance, doubleBarDistance / sp);
-        double endBarDistance = styleAbsolute(mu::engraving::Sid::endBarDistance);
-        endBarDistance -= (styleAbsolute(mu::engraving::Sid::barWidth) + styleAbsolute(Sid::endBarWidth)) / 2;
-        set(Sid::endBarDistance, endBarDistance / sp);
-        double repeatBarlineDotSeparation = styleAbsolute(mu::engraving::Sid::repeatBarlineDotSeparation);
-        static std::shared_ptr<IEngravingFontsProvider> engravingFonts
-            = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
-        double dotWidth = engravingFonts->fontByName(value(Sid::musicalSymbolFont).value<String>().toStdString())->width(
-            mu::engraving::SymId::repeatDot, 1.0);
-        repeatBarlineDotSeparation -= (styleAbsolute(mu::engraving::Sid::barWidth) + dotWidth) / 2;
-        set(Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
-        set(Sid::measureSpacing, DefaultStyle::defaultStyle().value(Sid::measureSpacing));
-    }
 }
 
 bool MStyle::read(IODevice* device, bool ign)
