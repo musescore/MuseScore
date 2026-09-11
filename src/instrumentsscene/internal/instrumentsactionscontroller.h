@@ -29,6 +29,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "notationscene/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
+#include "iinteractive.h"
 
 namespace mu::instrumentsscene {
 class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
@@ -36,6 +37,7 @@ class InstrumentsActionsController : public muse::actions::Actionable, public mu
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
 

@@ -816,80 +816,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatche
     EXPECT_EQ(watchedScores.front().name, u"My Score");
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemWithScoreId_SendsReviewRequested)
-{
-    // [GIVEN] A persisted item that was already reported ready and awaiting review before the app closed
-    JsonObject obj;
-    obj["id"] = TEST_QUEUE_ID;
-    obj["type"] = int(ConvertType::Omr);
-    obj["status"] = int(ConvertStatus::AwaitingReview);
-    obj["convertedScoreName"] = "My Score";
-    obj["scoreId"] = 555;
-
-    JsonArray array;
-    array << obj;
-    JsonDocument json(array);
-
-    ON_CALL(*m_configuration, watchedConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/watched.json")));
-    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
-    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
-
-    ON_CALL(*m_convertService, fetchQueue())
-    .WillByDefault(Invoke([] {
-        return pendingPromise<RetVal<ConvertQueueList> >();
-    }));
-
-    bool reviewRequested = false;
-    int reviewScoreId = 0;
-    m_service->reviewRequested().onReceive(nullptr, [&](int scoreId) {
-        reviewRequested = true;
-        reviewScoreId = scoreId;
-    });
-
-    // [WHEN] Resuming
-    m_service->resumeConvert();
-
-    // [THEN] The review is requested immediately, carrying the previously reported scoreId
-    ASSERT_TRUE(reviewRequested);
-    EXPECT_EQ(reviewScoreId, 555);
-}
-
-TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemWithoutScoreId_DoesNotSendReviewRequested)
-{
-    // [GIVEN] A persisted item that was awaiting review, but never got a chance to report a scoreId before the app closed
-    JsonObject obj;
-    obj["id"] = TEST_QUEUE_ID;
-    obj["type"] = int(ConvertType::Omr);
-    obj["status"] = int(ConvertStatus::AwaitingReview);
-    obj["convertedScoreName"] = "My Score";
-
-    JsonArray array;
-    array << obj;
-    JsonDocument json(array);
-
-    ON_CALL(*m_configuration, watchedConvertsJsonPath())
-    .WillByDefault(Return(io::path_t("/watched.json")));
-    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
-    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
-
-    ON_CALL(*m_convertService, fetchQueue())
-    .WillByDefault(Invoke([] {
-        return pendingPromise<RetVal<ConvertQueueList> >();
-    }));
-
-    bool reviewRequested = false;
-    m_service->reviewRequested().onReceive(nullptr, [&](int) {
-        reviewRequested = true;
-    });
-
-    // [WHEN] Resuming
-    m_service->resumeConvert();
-
-    // [THEN] No review is requested yet - there's no scoreId to identify the score by
-    EXPECT_FALSE(reviewRequested);
-}
-
 // ==================================================
 // polling / score info fetch pipeline
 // ==================================================
@@ -933,11 +859,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithoutScoreId_
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = std::nullopt; // no scoreId
 
-    bool reviewRequested = false;
     bool convertFinished = false;
-    m_service->reviewRequested().onReceive(nullptr, [&](int) {
-        reviewRequested = true;
-    });
     m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
         convertFinished = true;
     });
@@ -945,12 +867,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithoutScoreId_
     // [WHEN] Uploading and polling the status
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
-    // [THEN] Neither signal fires yet
-    EXPECT_FALSE(reviewRequested);
+    // [THEN] Nothing is reported yet
     EXPECT_FALSE(convertFinished);
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_EmitsReviewRequestedAndConvertFinished)
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_EmitsConvertFinished)
 {
     // [GIVEN] The queue reports the conversion as awaiting review, with its scoreId
     ConvertQueueItem item;
@@ -958,13 +879,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_Emi
     item.type = ConvertType::Omr;
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
-
-    bool reviewRequested = false;
-    int reviewScoreId = 0;
-    m_service->reviewRequested().onReceive(nullptr, [&](int scoreId) {
-        reviewRequested = true;
-        reviewScoreId = scoreId;
-    });
 
     bool convertFinished = false;
     Ret convertFinishedRet;
@@ -978,15 +892,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_Emi
     // [WHEN] Uploading and polling the status
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
-    // [THEN] The score is already usable, so both signals fire immediately
+    // [THEN] The score is already usable, so it's reported as finished immediately
     ASSERT_TRUE(convertFinished);
     EXPECT_TRUE(convertFinishedRet);
     ASSERT_TRUE(convertFinishedWatched.scoreId.has_value());
     EXPECT_EQ(*convertFinishedWatched.scoreId, 555);
     EXPECT_EQ(convertFinishedWatched.name, u"My Score");
-
-    ASSERT_TRUE(reviewRequested);
-    EXPECT_EQ(reviewScoreId, 555);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ItemNeverInQueueWithoutScoreId_SilentlyDropped)
@@ -1444,8 +1355,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_Good_DelegatesToConve
         return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(ConvertResult {}));
     }));
 
+    // [AND] The queue is checked again right away, instead of waiting for the next scheduled poll
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(1);
+
     // [WHEN] Submitting a "Good" review with no comment
     m_service->submitReview(555, ReviewRating::Good);
+    pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_DelegatesToConvertService)
@@ -1465,8 +1380,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_Delega
         return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(ConvertResult {}));
     }));
 
+    // [AND] The queue is checked again right away, instead of waiting for the next scheduled poll
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(1);
+
     // [WHEN] Submitting a "Bad" review with a comment
     m_service->submitReview(555, ReviewRating::Bad, "Too many wrong notes");
+    pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToConvertService)
@@ -1486,8 +1405,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToCon
         return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(ConvertResult {}));
     }));
 
+    // [AND] The queue is checked again right away, instead of waiting for the next scheduled poll
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(1);
+
     // [WHEN] Submitting a follow-up comment
     m_service->submitReviewComment(555, "Great job");
+    pumpEvents();
 }
 
 // ==================================================

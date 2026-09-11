@@ -61,14 +61,15 @@ public:
     //! All pending/reviewable conversions from the server's convert queue
     virtual muse::ValNt<WatchedScoreList> watchedScores() const = 0;
 
+    //! Returns a previously converted/watched score by its cloud score id
+    virtual const WatchedScore* watchedScoreById(int scoreId) const = 0;
+
     //! Emitted whenever checking the conversion status fails
     virtual muse::async::Channel<PollingFailure> pollingFailed() const = 0;
 
     //! Resumes polling for any still-pending items - e.g. in response to the user pressing "Retry"
     virtual void retryPolling() = 0;
 
-    //! Emitted once a converted score is ready and awaiting a quality review
-    virtual muse::async::Channel<int /*scoreId*/> reviewRequested() const = 0;
     virtual void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) = 0;
     virtual void submitReviewComment(int scoreId, const QString& comment) = 0;
 
