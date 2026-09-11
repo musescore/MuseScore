@@ -46,6 +46,8 @@ public:
 
     void init();
 
+    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+
     muse::ValCh<bool> isMasterPaletteOpened() const;
 
 private:

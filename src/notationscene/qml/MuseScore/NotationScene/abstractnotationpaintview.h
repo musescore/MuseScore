@@ -68,6 +68,8 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
+    Q_PROPERTY(bool readOnly READ readonly WRITE setReadonly NOTIFY readonlyChanged)
+
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::GlobalInject<INotationSceneConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
@@ -154,6 +156,9 @@ public:
     bool isMainView() const;
     void setIsMainView(bool isMainView);
 
+    bool readonly() const;
+    void setReadonly(bool readonly);
+
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
@@ -174,13 +179,14 @@ signals:
 
     void isMainViewChanged(bool isMainView);
 
+    void readonlyChanged();
+
 protected:
     INotationPtr notation() const;
     void setNotation(INotationPtr notation);
 
     NotationViewInputController* inputController() const;
 
-    void setReadonly(bool readonly);
     void setMatrix(const muse::draw::Transform& matrix);
 
     void moveCanvasToCenter();

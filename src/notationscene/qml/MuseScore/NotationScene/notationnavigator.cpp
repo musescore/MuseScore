@@ -68,6 +68,11 @@ void NotationNavigator::load()
 
     AbstractNotationPaintView::load();
 
+    //! NOTE: avoid double-handling zoom/page-navigation actions already handled by the main view
+    if (inputController()->dispatcher()) {
+        inputController()->dispatcher()->unReg(inputController());
+    }
+
     rescaleIfVisible();
 }
 

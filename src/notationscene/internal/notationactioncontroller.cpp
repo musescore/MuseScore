@@ -52,6 +52,8 @@ static constexpr bool DONT_PLAY_CHORD = false;
 static const ActionCode UNDO_ACTION_CODE = "action://notation/undo";
 static const ActionCode REDO_ACTION_CODE = "action://notation/redo";
 
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+
 static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
     { "advance-longa", Fraction(4, 1) },
     { "advance-breve", Fraction(2, 1) },
@@ -580,6 +582,11 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
     // If no notation is loaded, we cannot handle any action.
     auto masterNotation = currentMasterNotation();
     if (!masterNotation) {
+        return false;
+    }
+
+    // All actions are disabled on the review page
+    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
         return false;
     }
 

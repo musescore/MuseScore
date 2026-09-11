@@ -36,6 +36,8 @@ class MainToolBarModel : public QAbstractListModel, public muse::Contextable, pu
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString currentUri READ currentUri WRITE setCurrentUri NOTIFY currentUriChanged)
+
     QML_ELEMENT
 
     muse::ContextInject<context::IGlobalContext> context = { this };
@@ -50,15 +52,24 @@ public:
 
     Q_INVOKABLE void load();
 
+    QString currentUri() const;
+    void setCurrentUri(const QString& uri);
+
+signals:
+    void currentUriChanged();
+
 private:
     enum Roles {
         TitleRole = Qt::UserRole + 1,
         UriRole,
-        IsTitleBoldRole
+        IsTitleBoldRole,
+        IsCheckedRole
     };
 
     void updateNotationPageItem();
+    void updateCheckedState();
 
     QList<QVariantMap> m_items;
+    QString m_currentUri;
 };
 }

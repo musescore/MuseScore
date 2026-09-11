@@ -42,6 +42,8 @@ using namespace mu::appshell;
 using namespace muse;
 using namespace muse::actions;
 
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+
 void ApplicationActionController::preInit()
 {
     qApp->installEventFilter(this);
@@ -397,6 +399,22 @@ void ApplicationActionController::revertToFactorySettings()
             }
         });
     });
+}
+
+bool ApplicationActionController::canReceiveAction(const ActionCode& code) const
+{
+    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
+        static const std::unordered_set<ActionCode> ALLOWED_ACTION_CODES {
+            "quit",
+            "restart",
+            "fullscreen",
+            "preference-dialog",
+        };
+
+        return muse::contains(ALLOWED_ACTION_CODES, code);
+    }
+
+    return true;
 }
 
 bool ApplicationActionController::hasProjectAndIsFocused() const

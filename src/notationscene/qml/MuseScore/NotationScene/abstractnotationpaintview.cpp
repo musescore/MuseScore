@@ -1409,12 +1409,23 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
     }
 }
 
+bool AbstractNotationPaintView::readonly() const
+{
+    return m_readonly;
+}
+
 void AbstractNotationPaintView::setReadonly(bool readonly)
 {
+    if (m_readonly == readonly) {
+        return;
+    }
+
     m_readonly = readonly;
     if (m_inputController) {
         m_inputController->setReadonly(m_readonly);
     }
+
+    emit readonlyChanged();
 }
 
 void AbstractNotationPaintView::clear()

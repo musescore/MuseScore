@@ -39,6 +39,7 @@ FocusScope {
 
     property alias name: notationView.objectName
     property alias publishMode: notationView.publishMode
+    property alias readOnly: notationView.readOnly
 
     property alias paintView: notationView
 
