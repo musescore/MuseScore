@@ -163,6 +163,11 @@ muse::TranslatableString Vibrato::subtypeUserName() const
     return TConv::userName(vibratoType());
 }
 
+Sid Vibrato::defaultPosSid() const
+{
+    return placeAbove() ? Sid::vibratoPosAbove : Sid::vibratoPosBelow;
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
