@@ -158,9 +158,8 @@ DockPage {
         }
     ]
 
-    central: NotationView {
+    central: ReviewNotationView {
         name: "ReviewNotationView"
-        readOnly: true
     }
 
     statusBar: DockStatusBar {

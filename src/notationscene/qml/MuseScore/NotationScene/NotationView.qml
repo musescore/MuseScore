@@ -50,6 +50,7 @@ FocusScope {
     property alias defaultNavigationControl: fakeNavCtrl
 
     readonly property alias navigationSection: navSec
+    readonly property alias navigationOrderEnd: searchPopup.navigationOrderEnd
 
     NavigationSection {
         id: navSec
