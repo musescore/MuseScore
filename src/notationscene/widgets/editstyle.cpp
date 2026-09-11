@@ -605,6 +605,7 @@ void EditStyle::classBegin()
         // { StyleId::chordsXmlFile,            false, chordsXmlFile,                0 },
         { StyleId::dotMag,                   true,  dotMag,                       0 },
         { StyleId::articulationMag,          true,  articulationMag,              resetArticulationMag },
+        { StyleId::oversizedNoteheads,       false, oversizedNoteheads,           0 },
         { StyleId::shortenStem,              false, shortenStem,                  0 },
         { StyleId::showHeader,               false, showHeader,                   0 },
         { StyleId::headerFirstPage,          false, showHeaderFirstPage,          0 },

@@ -270,6 +270,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(barAccidentalDistance,                      0.65_sp),
     styleDef(noteBarDistance,                            1.5_sp),
+    styleDef(oversizedNoteheads,                         false),
     styleDef(spacingDensity,                             1.0),
     styleDef(measureSpacing,                             1.5),
     styleDef(measureRepeatNumberPos,                     -0.5_sp),

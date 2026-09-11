@@ -948,6 +948,7 @@ private:
     int m_mscoreRevision = 0;
 
     std::shared_ptr<IEngravingFont> m_engravingFont = nullptr;
+    std::string m_lastFontName;
 
     int m_pageNumberOffset = 0;          // Offset for page numbers.
 

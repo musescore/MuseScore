@@ -3102,6 +3102,12 @@ enum class SymId {
     accidentalSharpParens,
     accidentalDoubleSharpParens,
 
+    noteheadBlackOversized,
+    noteheadHalfOversized,
+    noteheadWholeOversized,
+    noteheadDoubleWholeOversized,
+    noteheadDoubleWholeSquareOversized,
+
     noteLongaUp,
     noteLongaDown,
     noteLongaSquareUp,
