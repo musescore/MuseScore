@@ -2379,6 +2379,7 @@ void TWrite::write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("syllabic", TConv::toXml(item->syllabic()));
     }
     writeProperty(item, xml, Pid::LYRIC_TICKS);
+    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
 
     writeProperties(toTextBase(item), xml, ctx, true);
     if (item->separator() && !item->separator()->generated()) {
@@ -2393,6 +2394,7 @@ void TWrite::write(const LyricsLine* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
+    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
@@ -2716,6 +2718,7 @@ void TWrite::write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& 
     xml.startElement(item);
     writeProperty(item, xml, Pid::VERSE);
     xml.tag("isEndMelisma", item->isEndMelisma());
+    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }

@@ -52,6 +52,8 @@ qt_add_qml_module(propertiespanel_qml
         propertiespanellistmodel.h
         propertiespanelmodelfactory.cpp
         propertiespanelmodelfactory.h
+        modelwithstavecenteringoptions.cpp
+        modelwithstavecenteringoptions.h
         modelwithvoiceandpositionoptions.cpp
         modelwithvoiceandpositionoptions.h
         propertiespanelpopupcontrollermodel.cpp
@@ -240,6 +242,7 @@ qt_add_qml_module(propertiespanel_qml
         types/voicetypes.h
 
     QML_FILES
+        common/CenterBetweenStavesSection.qml
         common/CheckBoxPropertyView.qml
         common/ColorSection.qml
         common/DirectionSection.qml

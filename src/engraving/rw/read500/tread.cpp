@@ -3217,7 +3217,9 @@ void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)
 void TRead::read(LyricsLine* l, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        if (!readProperties(static_cast<SLine*>(l), e, ctx)) {
+        const AsciiStringView tag(e.name());
+        if (TRead::readProperty(l, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
+        } else if (!readProperties(static_cast<SLine*>(l), e, ctx)) {
             e.unknown();
         }
     }
@@ -3628,6 +3630,7 @@ void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
         if (tag == "isEndMelisma") {
             p->setIsEndMelisma(xml.readBool());
         } else if (TRead::readProperty(p, tag, xml, ctx, Pid::VERSE)) {
+        } else if (TRead::readProperty(p, tag, xml, ctx, Pid::CENTER_BETWEEN_STAVES)) {
         } else if (!readProperties(static_cast<SLine*>(p), xml, ctx)) {
             xml.unknown();
         }
