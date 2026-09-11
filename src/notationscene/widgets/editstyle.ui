@@ -10790,7 +10790,7 @@
                </item>
                <item>
                 <layout class="QGridLayout" name="gridLayout_673">
-                 <item row="0" column="5">
+                 <item row="1" column="5">
                   <widget class="QDoubleSpinBox" name="lyricsMinTopDistance">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -10872,7 +10872,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="2">
+                 <item row="1" column="2">
                   <widget class="QToolButton" name="resetLyricsPosAbove">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -10895,7 +10895,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="0">
+                 <item row="2" column="0">
                   <widget class="QLabel" name="label_134">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -10908,7 +10908,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="6">
+                 <item row="1" column="6">
                   <widget class="QToolButton" name="resetLyricsMinTopDistance">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -10944,7 +10944,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="2">
+                 <item row="2" column="2">
                   <widget class="QToolButton" name="resetLyricsPosBelow">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -10957,7 +10957,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="2">
+                 <item row="3" column="2">
                   <widget class="QToolButton" name="resetLyricsLineHeight">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -10970,7 +10970,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="4">
+                 <item row="1" column="4">
                   <widget class="QLabel" name="label_131">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -10992,7 +10992,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
+                 <item row="3" column="1">
                   <widget class="QDoubleSpinBox" name="lyricsLineHeight">
                    <property name="keyboardTracking">
                     <bool>false</bool>
@@ -11027,7 +11027,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="1">
+                 <item row="1" column="1">
                   <widget class="QDoubleSpinBox" name="yLyricsPosAbove">
                    <property name="minimumSize">
                     <size>
@@ -11065,7 +11065,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="3">
+                 <item row="2" column="3">
                   <spacer name="horizontalSpacer_672">
                    <property name="orientation">
                     <enum>Qt::Orientation::Horizontal</enum>
@@ -11081,7 +11081,7 @@
                    </property>
                   </spacer>
                  </item>
-                 <item row="4" column="0">
+                 <item row="3" column="0">
                   <widget class="QLabel" name="label_133">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -11135,7 +11135,7 @@
                    </item>
                   </widget>
                  </item>
-                 <item row="3" column="1">
+                 <item row="2" column="1">
                   <widget class="QDoubleSpinBox" name="yLyricsPosBelow">
                    <property name="suffix">
                     <string>sp</string>
@@ -11148,7 +11148,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="0">
+                 <item row="1" column="0">
                   <widget class="QLabel" name="label_132">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -11190,7 +11190,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="0" colspan="2">
+                 <item row="4" column="0" colspan="2">
                   <widget class="QCheckBox" name="lyricsAvoidBarlines">
                    <property name="accessibleName">
                     <string>Avoid barlines</string>
@@ -11200,7 +11200,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="2">
+                 <item row="4" column="2">
                   <widget class="QToolButton" name="resetLyricsAvoidBarlines">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -11213,7 +11213,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="6" column="0" colspan="2">
+                 <item row="0" column="4" colspan="2">
                   <widget class="QCheckBox" name="lyricsAutoCenterBetweenStaves">
                    <property name="accessibleName">
                     <string>Center between staves automatically</string>
@@ -11223,7 +11223,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="6" column="2">
+                 <item row="0" column="6">
                   <widget class="QToolButton" name="resetLyricsAutoCenterBetweenStaves">
                    <property name="toolTip">
                     <string>Reset to default</string>

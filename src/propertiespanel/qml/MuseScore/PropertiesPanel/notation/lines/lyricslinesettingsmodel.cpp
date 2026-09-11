@@ -21,6 +21,8 @@
  */
 #include "lyricslinesettingsmodel.h"
 
+#include "engraving/dom/lyrics.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;
@@ -28,7 +30,7 @@ using namespace mu::propertiespanel;
 LyricsLineSettingsModel::LyricsLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                  IElementRepositoryService* repository,
                                                  ElementType elementType)
-    : PropertiesPanelAbstractModel(parent, iocCtx, repository)
+    : ModelWithStaveCenteringOptions(parent, iocCtx, repository)
 {
     if (elementType == ElementType::LyricsLine) {
         setTitle(muse::qtrc("propertiespanel", "Lyrics line"));
@@ -60,14 +62,30 @@ bool LyricsLineSettingsModel::hasVerse() const
     return m_hasVerse;
 }
 
+bool LyricsLineSettingsModel::centeringSideIsRelevant(const EngravingItem* item, bool above) const
+{
+    // A LyricsLine's placement isn't kept in sync with its lyric, so ask the lyric itself
+    if (item->isLyricsLine()) {
+        if (const mu::engraving::Lyrics* lyrics = mu::engraving::toLyricsLine(item)->lyrics()) {
+            return lyrics->placeAbove() == above;
+        }
+    }
+
+    return ModelWithStaveCenteringOptions::centeringSideIsRelevant(item, above);
+}
+
 void LyricsLineSettingsModel::createProperties()
 {
+    ModelWithStaveCenteringOptions::createProperties();
+
     m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
     m_verse = buildPropertyItem(mu::engraving::Pid::VERSE);
 }
 
 void LyricsLineSettingsModel::loadProperties()
 {
+    ModelWithStaveCenteringOptions::loadProperties();
+
     loadPropertyItem(m_thickness);
     loadPropertyItem(m_verse);
 }

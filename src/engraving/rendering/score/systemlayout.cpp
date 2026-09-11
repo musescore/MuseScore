@@ -2767,10 +2767,17 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
     }
 
     if (item->isLyrics() || item->isLyricsLineSegment()) {
-        return item->style().styleB(Sid::lyricsAutoCenterBetweenStaves);
-    }
-
-    if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
+        bool centerStyle = item->style().styleB(Sid::lyricsAutoCenterBetweenStaves);
+        AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
+        if (item->isLyricsLineSegment() && centerProperty == AutoOnOff::AUTO) {
+            // If a dash or melisma line is left on AUTO, it follows the lyric it belongs to:
+            const Lyrics* lyrics = toLyricsLineSegment(item)->lyrics();
+            centerProperty = lyrics ? lyrics->centerBetweenStaves() : AutoOnOff::AUTO;
+        }
+        if (centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
+            return false;
+        }
+    } else if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
         bool centerStyle = item->style().styleB(Sid::dynamicsHairpinsAutoCenterOnGrandStaff);
         AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
         if (centerProperty == AutoOnOff::OFF || (!centerStyle && centerProperty != AutoOnOff::ON)) {
