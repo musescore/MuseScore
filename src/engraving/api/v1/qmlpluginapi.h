@@ -31,6 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "global/iapplication.h"
+#include "interactive/iinteractive.h"
 
 #include "../../iengravingpluginapihelper.h"
 
@@ -139,6 +140,7 @@ private:
     muse::ContextInject<mu::context::IGlobalContext> context = { this };
     muse::GlobalInject<muse::IApplication> application;
     muse::ContextInject<mu::engraving::IEngravingPluginAPIHelper> helper = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     // Should be initialized in qmlpluginapi.cpp
@@ -519,7 +521,8 @@ public:
     static void registerQmlTypes();
 
     void setup(QQmlEngine* e) override;
-    void runPlugin() override { emit run(); }
+    //! Runs the plug-in and reports runtime QML errors to the user.
+    void runPlugin() override;
     muse::async::Notification closeRequest() const override { return m_closeRequested; }
 
     void endCmd(const QMap<QString, QVariant>& stateInfo) { emit scoreStateChanged(stateInfo); }
@@ -592,6 +595,8 @@ public:
 
 private:
     mu::engraving::Score* currentScore() const;
+    //! Closes windows owned by this plug-in instance.
+    void closePluginWindows();
 
     muse::api::IApiEngine* m_engine = nullptr;
     QString m_pluginType;
@@ -602,6 +607,7 @@ private:
     QString m_thumbnailName;
     QString m_categoryCode;
     muse::async::Notification m_closeRequested;
+    bool m_errorReported = false;
 };
 
 #undef DECLARE_API_ENUM2
