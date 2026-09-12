@@ -424,6 +424,24 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     // Relayout system to account for newly hidden/unhidden staves
     SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth);
 
+    // Update beamed rest positions now that the system has provisional geometry,
+    // so their shapes account for the displacement during horizontal spacing.
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& segment : toMeasure(mb)->segments()) {
+            if (!segment.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* item : segment.elist()) {
+                if (item && item->isChordRest()) {
+                    BeamLayout::layoutNonCrossBeams(toChordRest(item), ctx);
+                }
+            }
+        }
+    }
+
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
     if (lm) {
