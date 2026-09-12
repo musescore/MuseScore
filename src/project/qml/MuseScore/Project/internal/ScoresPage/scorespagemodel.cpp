@@ -83,3 +83,18 @@ void ScoresPageModel::setViewType(ViewType type)
     configuration()->setHomeScoresPageViewType(IProjectConfiguration::HomeScoresPageViewType(type));
     emit viewTypeChanged();
 }
+
+ScoresPageModel::SortMode ScoresPageModel::sortMode() const
+{
+    return static_cast<SortMode>(configuration()->homeScoresPageSortMode());
+}
+
+void ScoresPageModel::setSortMode(SortMode mode)
+{
+    if (sortMode() == mode) {
+        return;
+    }
+
+    configuration()->setHomeScoresPageSortMode(IProjectConfiguration::HomeScoresPageSortMode(mode));
+    emit sortModeChanged();
+}

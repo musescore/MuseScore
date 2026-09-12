@@ -77,6 +77,9 @@ public:
     MOCK_METHOD(HomeScoresPageViewType, homeScoresPageViewType, (), (const, override));
     MOCK_METHOD(void, setHomeScoresPageViewType, (HomeScoresPageViewType), (override));
 
+    MOCK_METHOD(HomeScoresPageSortMode, homeScoresPageSortMode, (), (const, override));
+    MOCK_METHOD(void, setHomeScoresPageSortMode, (HomeScoresPageSortMode), (override));
+
     MOCK_METHOD(int, homeScoresPageTabIndex, (), (const, override));
     MOCK_METHOD(void, setHomeScoresPageTabIndex, (int), (override));
 

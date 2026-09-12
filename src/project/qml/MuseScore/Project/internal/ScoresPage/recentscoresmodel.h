@@ -41,6 +41,7 @@ class RecentScoresModel : public AbstractScoresModel, public muse::async::Asynca
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    Q_PROPERTY(SortMode sortMode READ sortMode WRITE setSortMode NOTIFY sortModeChanged)
 
 public:
     RecentScoresModel(QObject* parent = nullptr);
@@ -49,8 +50,22 @@ public:
 
     QList<int> nonScoreItemIndices() const override;
 
+    enum SortMode {
+        SortByTimeModified,
+        SortByName
+    };
+    Q_ENUM(SortMode)
+
+    SortMode sortMode() const;
+    void setSortMode(SortMode mode);
+
+signals:
+    void sortModeChanged();
+
 private:
     void updateRecentScores();
     void setRecentScores(const std::vector<QVariantMap>& items);
+
+    SortMode m_sortMode = SortByTimeModified;
 };
 }
