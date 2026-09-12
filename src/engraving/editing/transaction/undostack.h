@@ -33,6 +33,7 @@ namespace mu::engraving {
 class EngravingObject;
 class Score;
 class Segment;
+class Box;
 
 class EditData;
 
@@ -71,6 +72,8 @@ public:
         Fraction tickEnd;
         staff_idx_t staffStart = muse::nidx;
         staff_idx_t staffEnd = muse::nidx;
+        Box* startBox = nullptr;
+        Box* endBox = nullptr;
 
         bool isValid() const { return !elements.empty() || staffStart != muse::nidx; }
     };

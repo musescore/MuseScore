@@ -1740,23 +1740,23 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
     std::vector<MeasureBase*> mbl;
     bool allNoBreaks = true; // NOBREAK is not removed unless every measure in selection already has one
     if (selection().isRange()) {
-        Measure* startMeasure = nullptr;
-        Measure* endMeasure = nullptr;
-        if (!selection().measureRange(&startMeasure, &endMeasure)) {
+        MeasureBase* startMeasureBase = nullptr;
+        MeasureBase* endMeasureBase = nullptr;
+        if (!selection().measureBaseRange(&startMeasureBase, &endMeasureBase)) {
             return;
         }
-        if (!startMeasure || !endMeasure) {
+        if (!startMeasureBase || !endMeasureBase) {
             return;
         }
         if (type == LayoutBreakType::NOBREAK) {
             // add throughout the selection
             // or remove if already on every measure
-            if (startMeasure == endMeasure) {
-                mbl.push_back(startMeasure);
-                allNoBreaks = startMeasure->noBreak();
+            if (startMeasureBase == endMeasureBase) {
+                mbl.push_back(startMeasureBase);
+                allNoBreaks = startMeasureBase->noBreak();
             } else {
-                for (Measure* m = startMeasure; m; m = m->nextMeasureMM()) {
-                    if (m == endMeasure) {
+                for (MeasureBase* m = startMeasureBase; m; m = m->nextMM()) {
+                    if (m == endMeasureBase) {
                         break;
                     }
                     mbl.push_back(m);
@@ -1767,11 +1767,11 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             }
         } else {
             // toggle break on the last measure of the range
-            mbl.push_back(endMeasure);
+            mbl.push_back(endMeasureBase);
             // if more than one measure selected,
             // also toggle break *before* the range (to try to fit selection on a single line)
-            if (startMeasure != endMeasure && startMeasure->prev()) {
-                mbl.push_back(startMeasure->prev());
+            if (startMeasureBase != endMeasureBase && startMeasureBase->prev()) {
+                mbl.push_back(startMeasureBase->prev());
             }
         }
     } else {
