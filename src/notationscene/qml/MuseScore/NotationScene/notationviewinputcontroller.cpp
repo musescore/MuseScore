@@ -1233,16 +1233,17 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     m_isCanvasDragged = false;
 
     if (interaction->isDragStarted()) {
-        bool isDraggingHairpinSegmentGrip
+        bool isDraggingHairpinSegmentStartEndGrip
             = interaction->isGripEditStarted()
               && interaction->selection()->element()
-              && interaction->selection()->element()->isHairpinSegment();
+              && interaction->selection()->element()->isHairpinSegment()
+              && interaction->isStartEndGripSelected();
 
         interaction->endDrag();
 
-        // When dragging of hairpin ends on a note or rest, open dynamic popup
+        // When dragging start or end of hairpin to a note or rest, open dynamic popup
         // Check for note or rest happens in Score::addText which is called through addTextToItem in toggleDynamicPopup
-        if (isDraggingHairpinSegmentGrip) {
+        if (isDraggingHairpinSegmentStartEndGrip) {
             interaction->toggleDynamicPopup();
         }
     }
