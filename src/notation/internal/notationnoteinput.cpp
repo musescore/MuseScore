@@ -919,9 +919,10 @@ void NotationNoteInput::resetSlur()
 void NotationNoteInput::addTie()
 {
     TRACEFUNC;
+    startEdit(TranslatableString("undoableAction", "Add tie"));
 
-    // Calls `startEdit` internally
     EditTie::cmdAddTie(score());
+    apply();
 
     notifyAboutStateChanged();
     m_interaction->checkAndShowError();
@@ -931,8 +932,10 @@ void NotationNoteInput::addLaissezVib()
 {
     TRACEFUNC;
 
-    // Calls `startEdit` internally
+    startEdit(TranslatableString("undoableAction", "Toggle laissez vibrer"));
+
     EditTie::cmdToggleLaissezVib(score());
+    apply();
 
     notifyAboutStateChanged();
     m_interaction->checkAndShowError();

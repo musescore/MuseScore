@@ -114,7 +114,6 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
 
     std::vector<EngravingItem*> toSelect;
 
-    score->startCmd(TranslatableString("undoableAction", "Add tie"));
     Chord* lastAddedChord = nullptr;
 
     Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
@@ -225,22 +224,18 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
             score->select(e, SelectType::ADD);
         }
     }
-    score->endCmd();
 }
 
-Tie* EditTie::cmdToggleTie(Score* score)
+EditTie::TieAnalysis EditTie::analyzeTieTargets(Score* score)
 {
-    std::vector<Note*> noteList = cmdTieNoteList(score->selection(), score->noteEntryMode());
-
-    if (noteList.empty()) {
-        LOGD("no notes selected");
-        return nullptr;
-    }
+    bool noteEntryMode = score->noteEntryMode();
+    std::vector<Note*> noteList = cmdTieNoteList(score->selection(), noteEntryMode);
 
     std::vector<Note*> tieNoteList(noteList.size());
     bool singleTick = true;
     bool someHaveExistingNextNoteToTieTo = false;
     bool allHaveExistingNextNoteToTieTo = true;
+
     for (size_t i = 0; i < noteList.size(); ++i) {
         Note* n = noteList[i];
         if (n->chord()->tick() != noteList.front()->tick()) {
@@ -259,88 +254,112 @@ Tie* EditTie::cmdToggleTie(Score* score)
         }
     }
 
-    const bool shouldTieListSelection = noteList.size() >= 2 && !singleTick;
+    TranslatableString actionName = (singleTick && !allHaveExistingNextNoteToTieTo) || someHaveExistingNextNoteToTieTo
+                                    ? TranslatableString("undoableAction", "Add tie")
+                                    : TranslatableString("undoableAction", "Remove tie");
 
-    if (singleTick /* i.e. all notes are in the same tick */ && !allHaveExistingNextNoteToTieTo) {
-        cmdAddTie(score);
+    return TieAnalysis {
+        std::move(noteList),
+        std::move(tieNoteList),
+        singleTick,
+        someHaveExistingNextNoteToTieTo,
+        allHaveExistingNextNoteToTieTo,
+        std::move(actionName)
+    };
+}
+
+Note* findTiePartnerInSelection(std::vector<Note*>& noteList, size_t i)
+{
+    Note* note = noteList[i];
+    for (size_t j = i + 1; j < noteList.size(); ++j) {
+        Note* candidate = noteList[j];
+        if (!candidate) {
+            continue;
+        }
+        const bool samePart = note->part() == candidate->part();
+        const bool samePitch = note->pitch() == candidate->pitch();
+        const bool sameUnisonIdx = note->unisonIndex() == candidate->unisonIndex();
+        const bool diffTick = note->tick() != candidate->tick();
+        if (samePart && samePitch && sameUnisonIdx && diffTick) {
+            noteList[j] = nullptr;
+            return candidate;
+        }
+    }
+    return nullptr;
+}
+
+bool toggleOffTie(Score* score, Note* note)
+{
+    Tie* oldTie = note->tieFor();
+    if (!oldTie) {
+        return false;
+    }
+    if (oldTie->tieJumpPoints()) {
+        oldTie->undoRemoveTiesFromJumpPoints();
+    }
+    score->undoRemoveElement(oldTie);
+    return true;
+}
+
+Tie* tieBetween(Note* a, Note* b)
+{
+    Note* startNote = a->tick() <= b->tick() ? a : b;
+    Note* endNote = startNote == b ? a : b;
+    return createAndAddTie(startNote, endNote);
+}
+
+Tie* EditTie::cmdToggleTie(Score* score)
+{
+    EditTie::TieAnalysis info = analyzeTieTargets(score);
+
+    if (info.noteList.empty()) {
+        LOGD("no notes selected");
         return nullptr;
     }
 
-    const TranslatableString actionName = someHaveExistingNextNoteToTieTo
-                                          ? TranslatableString("undoableAction", "Add tie")
-                                          : TranslatableString("undoableAction", "Remove tie");
-
-    score->startCmd(actionName);
+    if (info.singleTick /* i.e. all notes are in the same tick */ && !info.allHaveExistingNextNoteToTieTo) {
+        cmdAddTie(score);
+        return nullptr;
+    }
+    const bool shouldTieListSelection = info.noteList.size() >= 2 && !info.singleTick;
 
     Tie* tie = nullptr;
 
-    for (size_t i = 0; i < noteList.size(); ++i) {
-        Note* note = noteList[i];
-        Note* tieToNote = tieNoteList[i];
+    for (size_t i = 0; i < info.noteList.size(); ++i) {
+        Note* note = info.noteList[i];
 
         if (!note) {
             continue;
         }
 
         // Tie to adjacent unselected note
-        if (someHaveExistingNextNoteToTieTo && tieToNote) {
-            Note* startNote = note->tick() <= tieToNote->tick() ? note : tieToNote;
-            Note* endNote = startNote == tieToNote ? note : tieToNote;
-            tie = createAndAddTie(startNote, endNote);
+        if (info.someHaveExistingNextNoteToTieTo && info.tieNoteList[i]) {
+            tie = tieBetween(note, info.tieNoteList[i]);
             continue;
         }
 
-        Tie* oldTie = note->tieFor();
-        Chord* chord = note->chord();
-        if (oldTie) {
-            // Toggle existing tie off
-            if (oldTie->tieJumpPoints()) {
-                oldTie->undoRemoveTiesFromJumpPoints();
-            }
-            score->undoRemoveElement(oldTie);
+        if (toggleOffTie(score, note)) {
             continue;
         }
 
-        if (chord->hasFollowingJumpItem()) {
+        if (note->chord()->hasFollowingJumpItem()) {
             // Create partial tie
             tie = createAndAddTie(note, nullptr);
             continue;
         }
 
-        if (!shouldTieListSelection || i > noteList.size() - 2) {
+        if (!shouldTieListSelection || i > info.noteList.size() - 2) {
             continue;
         }
 
         // Tie to next appropriate note in selection
-        Note* note2 = nullptr;
-
-        for (size_t j = i + 1; j < noteList.size(); ++j) {
-            Note* candidateNote = noteList[j];
-            if (!candidateNote) {
-                continue;
-            }
-            const bool samePart = note->part() == candidateNote->part();
-            const bool samePitch = note->pitch() == candidateNote->pitch();
-            const bool sameUnisonIdx = note->unisonIndex() == candidateNote->unisonIndex();
-            const bool diffTick = note->tick() != candidateNote->tick();
-            if (samePart && samePitch && sameUnisonIdx && diffTick) {
-                note2 = candidateNote;
-                noteList[j] = nullptr;
-                break;
-            }
-        }
-
-        if (!(note && note2)) {
+        Note* partner = findTiePartnerInSelection(info.noteList, i);
+        if (!partner) {
             continue;
         }
 
-        Note* startNote = note->tick() <= note2->tick() ? note : note2;
-        Note* endNote = startNote == note2 ? note : note2;
-
-        tie = createAndAddTie(startNote, endNote);
+        tie = tieBetween(note, partner);
     }
-
-    score->endCmd();
 
     return tie;
 }
@@ -354,8 +373,6 @@ void EditTie::cmdToggleLaissezVib(Score* score)
         return;
     }
 
-    score->startCmd(TranslatableString("undoableAction", "Toggle laissez vibrer"));
-
     for (Note* note: noteList) {
         if (LaissezVib* lv = note->laissezVib()) {
             score->undoRemoveElement(lv);
@@ -367,6 +384,4 @@ void EditTie::cmdToggleLaissezVib(Score* score)
             score->undoAddElement(lvTie);
         }
     }
-
-    score->endCmd();
 }
