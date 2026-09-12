@@ -1052,6 +1052,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        GOTO_NEXT_SECTION_COMMAND,
+        TranslatableString("action", "Next section"),
+        TranslatableString("action", "Go to next section"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_PREV_SECTION_COMMAND,
+        TranslatableString("action", "Previous section"),
+        TranslatableString("action", "Go to previous section"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         GOTO_UPNOTE_IN_CHORD_COMMAND,
         TranslatableString("action", "Up note in chord"),
         TranslatableString("action", "Select note/rest above"),

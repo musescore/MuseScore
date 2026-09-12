@@ -131,6 +131,8 @@ void NotationActionController::init()
     registerCommand(GOTO_PREV_FRAME_COMMAND, [this]() { select(SelectionTarget::PrevFrame); });
     registerCommand(GOTO_NEXT_SYSTEM_COMMAND, [this]() { select(SelectionTarget::NextSystem); });
     registerCommand(GOTO_PREV_SYSTEM_COMMAND, [this]() { select(SelectionTarget::PrevSystem); });
+    registerCommand(GOTO_NEXT_SECTION_COMMAND, [this]() { select(SelectionTarget::NextSection); });
+    registerCommand(GOTO_PREV_SECTION_COMMAND, [this]() { select(SelectionTarget::PrevSection); });
     registerCommand(GOTO_UPNOTE_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::UpNoteInChord); });
     registerCommand(GOTO_DOWNNOTE_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::DownNoteInChord); });
     registerCommand(GOTO_TOPNOTE_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::TopNoteInChord); });
@@ -811,6 +813,8 @@ void NotationActionController::init()
             { "prev-frame", GOTO_PREV_FRAME_COMMAND, {} },
             { "next-system", GOTO_NEXT_SYSTEM_COMMAND, {} },
             { "prev-system", GOTO_PREV_SYSTEM_COMMAND, {} },
+            { "next-section", GOTO_NEXT_SECTION_COMMAND, {} },
+            { "prev-section", GOTO_PREV_SECTION_COMMAND, {} },
             { "up-chord", GOTO_UPNOTE_IN_CHORD_COMMAND, {} },
             { "down-chord", GOTO_DOWNNOTE_IN_CHORD_COMMAND, {} },
             { "top-chord", GOTO_TOPNOTE_IN_CHORD_COMMAND, {} },
