@@ -21364,13 +21364,18 @@
     </message>
     <message>
         <location filename="share/instruments/instrumentsxml.h" line="1"/>
-        <source>Barbershop Quartet (Men)</source>
-        <translation type="unfinished">Barbershop Quartet (Men)</translation>
+        <source>Barbershop Ensemble (TTBB)</source>
+        <translation type="unfinished">Barbershop Ensemble (TTBB)</translation>
     </message>
     <message>
         <location filename="share/instruments/instrumentsxml.h" line="1"/>
-        <source>Barbershop Quartet (Women)</source>
-        <translation type="unfinished">Barbershop Quartet (Women)</translation>
+        <source>Barbershop Ensemble (SSAA)</source>
+        <translation type="unfinished">Barbershop Ensemble (SSAA)</translation>
+    </message>
+    <message>
+        <location filename="share/instruments/instrumentsxml.h" line="1"/>
+        <source>Barbershop Ensemble (SATB)</source>
+        <translation type="unfinished">Barbershop Ensemble (SATB)</translation>
     </message>
     <message>
         <location filename="share/instruments/instrumentsxml.h" line="1"/>
