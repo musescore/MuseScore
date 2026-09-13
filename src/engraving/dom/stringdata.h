@@ -25,6 +25,7 @@
 #include <cstddef>
 #include <vector>
 #include <map>
+#include <utility> 
 
 #include "../types/fraction.h"
 #include "../types/types.h"
@@ -97,10 +98,18 @@ private:
     void        reassignNegativeFretNotes(const Chord* chord) const;
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
+    
+    // TODO: add in the new helper methods below 
 
     //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
     //      int         _frets = 19;
     std::vector<instrString> m_stringTable;                      // no strings by default
+
+    // caching chords we've seen before 
+    using ChordShapeKey = std::vector<int>;
+    using ChordVoicing = std::vector<std::pair<int, int>>;
+    mutable std::map<ChordShapeKey, ChordVoicing> m_chordShapeCache;
+
     int m_frets = 0;
 
     static bool bFretting;
