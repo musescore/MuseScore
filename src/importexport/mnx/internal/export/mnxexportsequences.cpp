@@ -1099,16 +1099,5 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
             appendContent(mnxSequence.content(), ctx, chordRests, ContentContext::Sequence);
         }
     }
-
-    // Avoid cluttering the output with unnecessary full-measure rests.
-    // Keep a solitary full-measure sequence only when the full measure rest
-    // carries additional information, such as a staff position or fermata.
-    if (mnxSequences.size() == 1) {
-        auto onlySequence = mnxSequences.at(0);
-        const auto fullMeasure = onlySequence.fullMeasure();
-        if (fullMeasure && onlySequence.content().empty() && fullMeasure->empty()) {
-            mnxSequences.erase(0);
-        }
-    }
 }
 } // namespace mu::iex::mnxio

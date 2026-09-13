@@ -37,11 +37,11 @@ else()
     message(STATUS "Using muse_deps nlohmann_json from ${NLOHMANN_JSON_PREFIX}")
     message(STATUS "Using muse_deps json_schema_validator from ${JSON_SCHEMA_VALIDATOR_PREFIX}")
 
-    set(MNXDOM_GIT_TAG 698f8a01b67d23ca57773ffd545e16646ed572d4)
+    set(MNXDOM_GIT_TAG 95d1a10ee637c5bb4b94a0c938923534f869f757)
     string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(
         mnxdom
-        GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
+        GIT_REPOSITORY https://github.com/mnx-works/mnxdom.git
         GIT_TAG        ${MNXDOM_GIT_TAG}
     )
     set(MNXDOM_GIT_COMMIT "${MNXDOM_GIT_COMMIT}" CACHE STRING "mnxdom source control revision to embed in provenance" FORCE)
