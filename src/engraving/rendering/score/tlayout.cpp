@@ -5757,6 +5757,23 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     // tempo text on first chordrest of measure should align over time sig if present, unless time sig is above staff
     Segment* s = item->segment();
 
+    // Align with preceding grace notes on all visible staves, unless the time signature overrides it below.
+    double graceNoteX = 0.0;
+    const System* system = s->measure()->system();
+    for (track_idx_t track = 0; track < staff2track(item->score()->nstaves()); ++track) {
+        if (!item->score()->staff(track2staff(track))->show()
+            || (system && !system->staff(track2staff(track))->show())) {
+            continue;
+        }
+        const EngravingItem* element = s->element(track);
+        if (!element || !element->isChord()) {
+            continue;
+        }
+        for (const Chord* grace : toChord(element)->graceNotesBefore()) {
+            graceNoteX = std::min(graceNoteX, grace->pagePos().x() - s->pagePos().x());
+        }
+    }
+
     RehearsalMark* rehearsalMark = toRehearsalMark(s->findAnnotation(ElementType::REHEARSAL_MARK, item->track(), item->track()));
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
@@ -5764,6 +5781,7 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     if (s->rtick().isZero()) {
         Segment* p = item->segment()->prev(SegmentType::TimeSig);
         if (p && !p->allElementsInvisible()) {
+            graceNoteX = 0.0;
             ldata->moveX(-(s->x() - p->x()));
             EngravingItem* e = p->element(item->staffIdx() * VOICES);
             if (e) {
@@ -5771,6 +5789,8 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
             }
         }
     }
+
+    ldata->moveX(graceNoteX);
 
     if (rehearsalMark) {
         const bool sameSide = item->placeAbove() == rehearsalMark->placeAbove();
