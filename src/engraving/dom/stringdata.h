@@ -98,8 +98,14 @@ private:
     void        reassignNegativeFretNotes(const Chord* chord) const;
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
-    
-    // TODO: add in the new helper methods below 
+    Note*       getBassNote(const Chord* chord) const;
+    std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
+    Note*       getBassNoteOfVoicings(const Chord* chord) const;
+    int         scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const;
+    void        assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, std::pair<int, int>& bassFretting) const;
+    std::vector<std::pair<int, int>> allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const;
+    ChordShapeKey makeChordShapeKey(const Chord* chord) const;
+    std::pair<int, int> getBestFrettingForBassNote(std::pair<int, int>& prevFretting, Chord* chord) const; 
 
     //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
     //      int         _frets = 19;
