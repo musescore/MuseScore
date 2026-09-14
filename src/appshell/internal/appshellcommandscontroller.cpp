@@ -295,7 +295,7 @@ muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::
 
     m_quiting = true;
 
-    if (!projectFilesController()->closeOpenedProject(false)) {
+    if (!closeProjectScenario()->closeOpenedProject(false)) {
         m_quiting = false;
         return muse::make_ret(Ret::Code::UnknownError);
     }
@@ -337,7 +337,7 @@ muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::
 
 void AppshellCommandsController::restart()
 {
-    if (projectFilesController()->closeOpenedProject(false)) {
+    if (closeProjectScenario()->closeOpenedProject(false)) {
         if (multiwindowsProvider()->windowCount() == 1) {
             application()->restart();
         } else {

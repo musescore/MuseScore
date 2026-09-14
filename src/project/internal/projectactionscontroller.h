@@ -22,8 +22,6 @@
 
 #pragma once
 
-#include "iprojectfilescontroller.h"
-
 #include <QObject>
 #include <QString>
 
@@ -51,8 +49,8 @@
 #include "irecentfilescontroller.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectCommandsController, public IProjectFilesController, public muse::mi::IProjectProvider,
-    public muse::Contextable, public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
+class ProjectActionsController : public IProjectCommandsController, public muse::mi::IProjectProvider, public muse::Contextable,
+    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
 {
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
@@ -84,8 +82,6 @@ public:
     // --------
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
-
-    bool closeOpenedProject(bool goToHome = true) override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
