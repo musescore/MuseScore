@@ -22,16 +22,24 @@
 
 #include <gtest/gtest.h>
 
+#include "global/defer.h"
+#include "global/io/buffer.h"
+#include "global/io/file.h"
+
 #include "engraving/dom/barline.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
+
+#include "engraving/rw/mscsaver.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -614,5 +622,76 @@ TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
         Measure* tsMeasure2 = score->lastMeasureMM();
         EXPECT_FALSE(tsMeasure2 == endMeasure);
         EXPECT_EQ(tsMeasure2->timesig(), Fraction(4, 4));
+    }
+}
+
+TEST_F(Engraving_TimesigTests, localMeterDeletionUndo)
+{
+    for (bool fromExcerpt : { false, true }) {
+        for (bool redo : { false, true }) {
+            SCOPED_TRACE(fromExcerpt);
+            SCOPED_TRACE(redo);
+            MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timeSig-11.mscz");
+            ASSERT_TRUE(score);
+            Measure* second = score->firstMeasure()->nextMeasure();
+            Measure* third = second->nextMeasure();
+            const std::array<std::pair<Measure*, Fraction>, 2> meters = { { { second, Fraction(7, 8) }, { third, Fraction(5, 4) } } };
+            for (const auto& entry : meters) {
+                TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+                ts->setSig(entry.second);
+                score->startCmd(TranslatableString::untranslatable("Add local time signature"));
+                EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, entry.first, 2, ts, true);
+                score->endCmd();
+            }
+            const Fraction tick = third->tick();
+            Score* part = score->excerpts().at(2)->excerptScore();
+            Score* owner = fromExcerpt ? part : score;
+            TimeSig* ts = toTimeSig(owner->tick2measure(tick)->findSegment(SegmentType::TimeSig, tick)->element(fromExcerpt ? 0 : 8));
+            score->startCmd(TranslatableString::untranslatable("Remove local time signature"));
+            EditTimeSig::removeTimeSig(score->transactionManager()->currentOrDummyTransaction(), owner, ts);
+            score->endCmd();
+            EXPECT_EQ(score->staff(2)->timeStretch(tick), Fraction(7, 8));
+            EXPECT_EQ(part->staff(0)->timeStretch(tick), Fraction(7, 8));
+            score->undoRedo(true, nullptr);
+            EXPECT_EQ(toTimeSig(score->tick2measure(tick)->findSegment(SegmentType::TimeSig, tick)->element(8))->sig(), Fraction(5, 4));
+            EXPECT_EQ(score->staff(2)->timeStretch(tick), Fraction(5, 4));
+            EXPECT_EQ(part->staff(0)->timeStretch(tick), Fraction(5, 4));
+            if (redo) {
+                score->undoRedo(false, nullptr);
+            }
+            const Fraction expected = redo ? Fraction(7, 8) : Fraction(5, 4);
+            EXPECT_EQ(score->staff(2)->timeStretch(tick), expected);
+            EXPECT_EQ(part->staff(0)->timeStretch(tick), expected);
+            const muse::Ret integrity = score->sanityCheck();
+            ASSERT_TRUE(integrity) << integrity.text();
+
+            const String fileName = String(u"localMeterDeletionUndo-%1-%2.mscz").arg(fromExcerpt).arg(redo);
+            auto buffer = muse::io::Buffer::opened(muse::io::IODevice::WriteOnly);
+            MscWriter::Params params;
+            params.device = &buffer;
+            params.filePath = fileName;
+            params.mode = MscIoMode::Zip;
+            MscWriter writer(params);
+            ASSERT_TRUE(writer.open());
+            {
+                // Production MSCZ files store excerpts separately, not inline as test-mode MSCX does.
+                const bool testMode = MScore::testMode;
+                DEFER { MScore::testMode = testMode;
+                };
+                MScore::testMode = false;
+                ASSERT_TRUE(MscSaver(score->iocContext()).writeMscz(score, writer, false));
+            }
+            writer.close();
+            ASSERT_FALSE(writer.hasError());
+            ASSERT_TRUE(muse::io::File::writeFile(fileName, buffer.data()));
+            delete score;
+
+            MasterScore* reopened = ScoreRW::readScore(fileName, true);
+            ASSERT_TRUE(reopened);
+            EXPECT_TRUE(reopened->sanityCheck());
+            EXPECT_EQ(reopened->staff(2)->timeStretch(tick), expected);
+            EXPECT_EQ(reopened->excerpts().at(2)->excerptScore()->staff(0)->timeStretch(tick), expected);
+            delete reopened;
+        }
     }
 }
