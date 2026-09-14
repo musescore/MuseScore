@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<museScore version="5.00">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.27</pageWidth>
+      <pageHeight>11.69</pageHeight>
+      <spatium>1.76389</spatium>
+    </Style>
+    <Part id="1">
+      <Staff>
+        <StaffType group="tablature">
+          <lines>6</lines>
+          <lineDistance>1.5</lineDistance>
+          <stemless>1</stemless>
+          <timesig>0</timesig>
+          <durations>1</durations>
+          <durationFontName>MuseScore Tab Italian</durationFontName>
+          <durationFontSize>15</durationFontSize>
+          <durationFontY>0</durationFontY>
+          <fretUseTextStyle>0</fretUseTextStyle>
+          <fretPresetIdx>0</fretPresetIdx>
+          <fretFontSize>9</fretFontSize>
+          <fretFontY>0</fretFontY>
+          <linesThrough>0</linesThrough>
+          <minimStyle>1</minimStyle>
+          <onLines>1</onLines>
+          <showRests>0</showRests>
+          <stemsDown>1</stemsDown>
+          <stemsThrough>0</stemsThrough>
+          <upsideDown>0</upsideDown>
+          <useNumbers>1</useNumbers>
+          <showBackTied>1</showBackTied>
+          <symbolRepeat>3</symbolRepeat>
+        </StaffType>
+      </Staff>
+      <Instrument id="cavaquinho">
+        <trackName>Renaissance Tenor Lute (6 course)</trackName>
+        <minPitchP>43</minPitchP>
+        <maxPitchP>79</maxPitchP>
+        <minPitchA>43</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>pluck.guitar</instrumentId>
+        <StringData>
+          <frets>24</frets>
+          <string>43</string>
+          <string>48</string>
+          <string>53</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+        </StringData>
+        <Channel>
+          <program value="25" />
+          <synti>Fluid</synti>
+        </Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Chord>
+            <BeamMode>auto</BeamMode>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>0</string>
+            </Note>
+          </Chord>
+          <Chord>
+            <BeamMode>auto</BeamMode>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>0</string>
+            </Note>
+          </Chord>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>
