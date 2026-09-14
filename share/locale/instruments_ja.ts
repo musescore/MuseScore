@@ -5795,7 +5795,7 @@
         <source>Melodica</source>
         <comment>melodica trackName</comment>
         <extracomment>trackName for Melodica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>メロディカ</translation>
+        <translation>鍵盤ハーモニカ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2065"/>
@@ -5830,14 +5830,14 @@
         <source>Shō</source>
         <comment>sho longName</comment>
         <extracomment>longName for Shō; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Shō</translation>
+        <translation>笙</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2076"/>
         <source>Shō</source>
         <comment>sho shortName</comment>
         <extracomment>shortName for Shō; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Shō</translation>
+        <translation>笙</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2079"/>
@@ -20830,7 +20830,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>
         <source>Melodicas</source>
-        <translation>メロディカ</translation>
+        <translation>鍵盤ハーモニカ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="126"/>
