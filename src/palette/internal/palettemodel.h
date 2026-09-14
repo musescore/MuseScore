@@ -236,7 +236,14 @@ class PaletteCellFilterProxyModel : public QSortFilterProxyModel
 public:
     PaletteCellFilterProxyModel(QObject* parent = nullptr);
 
+    void setSearchText(const QString& text);
+
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+
+private:
+    bool rowMatchesSearchText(int sourceRow, const QModelIndex& sourceParent) const;
+
+    QString m_searchText;
 };
 }
 
