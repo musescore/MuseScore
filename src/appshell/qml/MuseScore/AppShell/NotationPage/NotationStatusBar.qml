@@ -242,14 +242,7 @@ Item {
             }
 
             onHandleMenuItem: function(itemId) {
-                switch (itemId) {
-                case model.concertPitchItem.id:
-                    model.handleAction(model.concertPitchItem.code)
-                    break
-                case model.currentWorkspaceItem.id:
-                    model.handleAction(model.currentWorkspaceItem.code)
-                    break
-                }
+                model.handleMenuItem(itemId)
             }
         }
     }

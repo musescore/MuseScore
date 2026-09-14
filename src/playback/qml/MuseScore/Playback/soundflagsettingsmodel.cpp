@@ -22,7 +22,6 @@
 
 #include "soundflagsettingsmodel.h"
 
-#include "actions/actiontypes.h"
 #include "audio/common/audioutils.h"
 
 #include "engraving/dom/utils.h"
@@ -230,21 +229,14 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
     emit contextMenuModelChanged();
 }
 
-muse::uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode,
+muse::uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& itemId,
                                                                     const muse::TranslatableString& title,
                                                                     bool enabled)
 {
     muse::uicomponents::MenuItem* item = new muse::uicomponents::MenuItem(this);
-    item->setId(actionCode);
-
-    muse::ui::UiAction action;
-    action.code = muse::actions::codeFromQString(actionCode);
-    action.title = title;
-    item->setAction(action);
-
-    muse::ui::UiActionState state;
-    state.enabled = enabled;
-    item->setState(state);
+    item->setId(itemId);
+    item->setTitle(title);
+    item->setEnabled(enabled);
 
     return item;
 }
@@ -290,9 +282,7 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
     muse::uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset to default sound"),
                                                             isResetEnabled());
 
-    muse::ui::UiAction resetAction = resetItem->action();
-    resetAction.iconCode = muse::ui::IconCode::Code::UNDO;
-    resetItem->setAction(resetAction);
+    resetItem->setIcon(muse::ui::IconCode::Code::UNDO);
 
     items << resetItem;
 
@@ -301,27 +291,16 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
     muse::uicomponents::MenuItem* multiSelectionItem
         = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback", "Allow multiple selection"), isMultiSelectionEnabled);
 
-    muse::ui::UiAction multiSelectionAction = multiSelectionItem->action();
-    multiSelectionAction.checkable = muse::ui::Checkable::Yes;
-    multiSelectionItem->setAction(multiSelectionAction);
-
-    muse::ui::UiActionState multiSelectionActionState = multiSelectionItem->state();
-    multiSelectionActionState.checked = playbackConfiguration()->soundPresetsMultiSelectionEnabled();
-    multiSelectionItem->setState(multiSelectionActionState);
+    multiSelectionItem->setCheckable(true);
+    multiSelectionItem->setChecked(playbackConfiguration()->soundPresetsMultiSelectionEnabled());
 
     items << multiSelectionItem;
 
     muse::uicomponents::MenuItem* applyToAllStavesItem = buildMenuItem(APPLY_TO_ALL_STAVES_MENU_ID,
                                                                        TranslatableString("playback", "Apply selection to all staves"));
 
-    muse::ui::UiAction applyToAllStavesAction = applyToAllStavesItem->action();
-    applyToAllStavesAction.checkable = muse::ui::Checkable::Yes;
-    applyToAllStavesItem->setAction(applyToAllStavesAction);
-
-    muse::ui::UiActionState applyToAllStavesState;
-    applyToAllStavesState.enabled = true;
-    applyToAllStavesState.checked = soundFlag->applyToAllStaves();
-    applyToAllStavesItem->setState(applyToAllStavesState);
+    applyToAllStavesItem->setCheckable(true);
+    applyToAllStavesItem->setChecked(soundFlag->applyToAllStaves());
 
     items << applyToAllStavesItem;
 
