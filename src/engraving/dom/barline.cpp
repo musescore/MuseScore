@@ -633,11 +633,9 @@ void BarLine::endDragGrip(EditData& ed)
 {
     calcY();
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    mutldata()->y1 += bed->yoff1;
-    mutldata()->y2 += bed->yoff2;
 
     double ay0      = pagePos().y();
-    double ay2      = ay0 + mutldata()->y2;                       // absolute (page-relative) bar line bottom coord
+    double ay2      = ay0 + ldata()->y2 + bed->yoff2;             // absolute (page-relative) bar line bottom coord
     staff_idx_t staffIdx1 = staffIdx();
     System* syst   = segment()->measure()->system();
     double systTopY = syst->pagePos().y();
