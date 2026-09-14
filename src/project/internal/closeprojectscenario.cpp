@@ -138,6 +138,9 @@ Promise<IInteractive::Result> CloseProjectScenario::askAboutSavingScore(const IN
 
 Ret CloseProjectScenario::doCloseProject(bool goToHome)
 {
+    /// NOTE: Hold the project until it is fully disconnected from receivers
+    INotationProjectPtr project = currentNotationProject();
+
     interactive()->closeAllDialogsSync();
     globalContext()->setCurrentProject(nullptr);
 
