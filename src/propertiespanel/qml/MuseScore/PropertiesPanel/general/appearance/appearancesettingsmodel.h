@@ -72,6 +72,9 @@ public:
 
     bool isVerticalOffsetAvailable() const;
 
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+
 public slots:
     void setIsSnappedToGrid(bool isSnapped);
     void setIsVerticalOffsetAvailable(bool isAvailable);
@@ -81,8 +84,6 @@ signals:
     void isVerticalOffsetAvailableChanged(bool isVerticalOffsetAvailable);
 
 private:
-    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
-                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
     void loadProperties(const mu::engraving::PropertyIdSet& allowedPropertyIdSet);
 
     void updateIsVerticalOffsetAvailable();
