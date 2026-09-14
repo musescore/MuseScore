@@ -610,10 +610,15 @@ static Spanner* tryCreateSpanner(const AsciiStringView& tag, ReadContext& ctx, b
     return spanner;
 }
 
-void TRead::readScoreSpanners(Score* score, XmlReader& e, ReadContext& ctx)
+void TRead::readScoreSpanners(Score* score, XmlReader& e, ReadContext& ctx, rw::PasteMode mode)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
+        if (mode == rw::PasteMode::DynamicsOnly && tag != "HairPin") {
+            e.skipCurrentElement();
+            continue;
+        }
+
         if (Spanner* spanner = tryCreateSpanner(tag, ctx, /*requireNoteAnchor*/ false)) {
             TRead::readItem(spanner, e, ctx);
             if (ctx.pasteMode()) {
