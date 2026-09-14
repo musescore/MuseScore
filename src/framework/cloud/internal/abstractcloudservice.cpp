@@ -358,14 +358,21 @@ Promise<Ret> AbstractCloudService::checkCloudIsAvailableAsync() const
         }
 
         Progress progressVal = progress.val;
+        std::shared_ptr<bool> finished = std::make_shared<bool>(false);
 
         QTimer* timer = new QTimer();
         timer->setSingleShot(true);
-        QObject::connect(timer, &QTimer::timeout, [progressVal]() mutable {
-            progressVal.cancel();
+        QObject::connect(timer, &QTimer::timeout, [progressVal, finished]() mutable {
+            if (!*finished) {
+                progressVal.cancel();
+            }
         });
 
-        progressVal.finished().onReceive(this, [resolve, timer](const ProgressResult& res) {
+        progressVal.finished().onReceive(this, [resolve, timer, finished](const ProgressResult& res) {
+            if (*finished) {
+                return;
+            }
+            *finished = true;
             timer->stop();
             timer->deleteLater();
             (void)resolve(res.ret);
