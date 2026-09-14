@@ -64,7 +64,7 @@ private:
     muse::async::Promise<muse::IInteractive::Result> askAboutSavingScore(const INotationProjectPtr& project);
 
     //! NOTE Lets go of the score, and of everything that was opened for it
-    muse::Ret doCloseProject(bool goToHome);
+    muse::async::Promise<muse::Ret> doCloseProject(bool goToHome);
 
     void openHomePageIfNeed();
 
