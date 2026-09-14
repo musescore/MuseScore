@@ -58,6 +58,7 @@ public:
 
     virtual RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
     virtual RetVal<ScoreInfo> downloadScoreInfo(int scoreId) = 0;
+    virtual async::Promise<RetVal<ScoreInfo> > downloadScoreInfoAsync(int scoreId) = 0;
 
     /// The MuseScore.com API is a so-called paginated API, which means that
     /// you don't request all scores at once, but you request them in batches.

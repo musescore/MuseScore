@@ -92,6 +92,8 @@ private:
     void handleItem(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode,
                     std::optional<int> scoreId);
 
+    void fetchScoreInfoAndFinish(muse::cloud::ConvertType type, int itemId, int scoreId, muse::cloud::ConvertStatus status);
+
     void finishConvert(const muse::Ret& ret, const ScoreInfo& scoreInfo = ScoreInfo());
 
     WatchedScore* findWatchedScoreByScoreId(int scoreId);

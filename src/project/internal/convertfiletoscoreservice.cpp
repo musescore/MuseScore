@@ -718,15 +718,8 @@ void ConvertFileToScoreService::handleItem(WatchedScore& watched, ConvertStatus 
         }
 
         if (watched.startedLocally) {
-            const RetVal<ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(*scoreId);
-            if (!scoreInfo.ret) {
-                LOGW() << "Could not fetch score info for \"" << watched.name << "\" ("
-                       << convertIdAndType(watched.conversion.type, watched.conversion.id) << ")"
-                       << ", will retry on next poll: " << scoreInfo.ret.toString();
-                return; //! NOTE: watched.conversion.status stays at previousStatus - retried next poll
-            }
-
-            finishConvert(make_ok(), scoreInfo.val);
+            fetchScoreInfoAndFinish(watched.conversion.type, watched.conversion.id, *scoreId, status);
+            return; //! NOTE: status stays at previousStatus until the fetch resolves - retried next poll if needed
         }
 
         watched.scoreId = *scoreId;
@@ -754,6 +747,41 @@ void ConvertFileToScoreService::handleItem(WatchedScore& watched, ConvertStatus 
     }
 
     watched.conversion.status = status;
+}
+
+void ConvertFileToScoreService::fetchScoreInfoAndFinish(ConvertType type, int itemId, int scoreId, ConvertStatus status)
+{
+    museScoreComService()->downloadScoreInfoAsync(scoreId)
+    .onResolve(this, [this, type, itemId, scoreId, status](const RetVal<ScoreInfo>& info) {
+        const auto it = std::find_if(m_watchedScores.begin(), m_watchedScores.end(), [type, itemId](const WatchedScore& watched) {
+            return watched.conversion.type == type && watched.conversion.id == itemId;
+        });
+
+        if (it == m_watchedScores.end() || it->scoreId) {
+            return; //! NOTE: no longer watched, or already handled by a concurrent fetch
+        }
+
+        if (!info.ret) {
+            LOGW() << "Could not fetch score info for \"" << it->name << "\" (" << convertIdAndType(type, itemId) << ")"
+                   << ", will retry on next poll: " << info.ret.toString();
+            return; //! NOTE: conversion.status stays at previousStatus - retried next poll
+        }
+
+        if (status == ConvertStatus::Done) {
+            m_watchedScores.erase(it);
+        } else {
+            it->scoreId = scoreId;
+            it->conversion.status = status;
+        }
+
+        saveWatchedScores();
+        m_watchedScoresChanged.notify();
+        finishConvert(make_ok(), info.val);
+
+        if (status == ConvertStatus::AwaitingReview) {
+            m_reviewRequested.send(scoreId);
+        }
+    });
 }
 
 void ConvertFileToScoreService::finishConvert(const Ret& ret, const ScoreInfo& scoreInfo)

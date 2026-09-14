@@ -744,6 +744,17 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     return result;
 }
 
+Promise<RetVal<ScoreInfo> > MuseScoreComService::downloadScoreInfoAsync(int scoreId)
+{
+    return Promise<RetVal<ScoreInfo> >([this, scoreId](auto resolve, auto) {
+        doDownloadScoreInfo(scoreId, [resolve](const RetVal<ScoreInfo>& info) {
+            (void)resolve(info);
+        });
+
+        return Promise<RetVal<ScoreInfo> >::dummy_result();
+    });
+}
+
 void MuseScoreComService::doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished)
 {
     QVariantMap params;

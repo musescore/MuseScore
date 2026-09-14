@@ -726,8 +726,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterDone_NoLongerCo
     item.status = ConvertStatus::Done;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     bool changed = false;
     m_service->watchedScores().notification.onNotify(nullptr, [&] {
@@ -902,8 +902,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_FetchesScoreInfoAn
     item.status = ConvertStatus::Done;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555, "My Score"); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555, "My Score")); }));
 
     bool received = false;
     Ret receivedRet;
@@ -933,7 +933,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithoutScoreId_
     item.status = ConvertStatus::AwaitingReview;
 
     // [THEN] There's nothing to identify the score by yet, so nothing is fetched or reported
-    EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(An<int>())).Times(0);
+    EXPECT_CALL(*m_museScoreComService, downloadScoreInfoAsync(An<int>())).Times(0);
 
     bool reviewRequested = false;
     bool convertFinished = false;
@@ -961,8 +961,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_Emi
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     bool reviewRequested = false;
     int reviewScoreId = 0;
@@ -1036,9 +1036,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFr
         return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { otherItem }));
     }));
 
-    EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(555))
+    EXPECT_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
     .Times(1)
-    .WillOnce(Invoke([] { return okScoreInfo(555); }));
+    .WillOnce(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     int convertFinishedCount = 0;
     m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const ScoreInfo&) {
@@ -1052,7 +1052,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFr
     // [WHEN] Starting an unrelated conversion triggers a second poll; the original item has now dropped
     uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
 
-    // [THEN] No duplicate report, and downloadScoreInfo() was only ever called once
+    // [THEN] No duplicate report, and downloadScoreInfoAsync() was only ever called once
     EXPECT_EQ(convertFinishedCount, 1);
 }
 
@@ -1105,8 +1105,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
                                                                                                                doneAudioItem }));
     }));
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(999))
-    .WillByDefault(Invoke([] { return okScoreInfo(999, "Audio Score"); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(999))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(999, "Audio Score")); }));
 
     std::vector<Ret> receivedRets;
     m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
@@ -1178,10 +1178,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ScoreInfoFetchFails_RetriesOn
     }));
 
     // [GIVEN] Fetching the score's info fails transiently the first time, succeeds the second
-    EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(555))
+    EXPECT_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
     .Times(2)
-    .WillOnce(Return(RetVal<ScoreInfo>::make_ret(make_ret(muse::cloud::Err::NetworkError))))
-    .WillOnce(Invoke([] { return okScoreInfo(555); }));
+    .WillOnce(Invoke([] {
+        return resolvedPromise<RetVal<ScoreInfo> >(RetVal<ScoreInfo>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
+    }))
+    .WillOnce(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     bool received = false;
     Ret receivedRet;
@@ -1258,8 +1260,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
                                                                                                                otherItem }));
     }));
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     bool received = false;
     m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const ScoreInfo&) {
@@ -1445,8 +1447,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_Good_DelegatesToConve
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
@@ -1469,8 +1471,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_Delega
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
@@ -1493,8 +1495,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToCon
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
+    ON_CALL(*m_museScoreComService, downloadScoreInfoAsync(555))
+    .WillByDefault(Invoke([] { return resolvedPromise<RetVal<ScoreInfo> >(okScoreInfo(555)); }));
 
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
