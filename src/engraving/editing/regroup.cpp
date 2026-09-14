@@ -268,6 +268,8 @@ void Regroup::regroupNotesAndRestsInSelection(Transaction& tx, Score* score)
     Fraction eTick = score->selection().tickEnd();
     staff_idx_t sStaff = score->selection().staffStart();
     staff_idx_t eStaff = score->selection().staffEnd();
+    Box* sBox = score->selection().startBox();
+    Box* eBox = score->selection().endBox();
 
     for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
         track_idx_t sTrack = staff * VOICES;
@@ -285,6 +287,6 @@ void Regroup::regroupNotesAndRestsInSelection(Transaction& tx, Score* score)
     }
 
     // Reset selection to original selection
-    score->selection().setRangeTicks(sTick, eTick, sStaff, eStaff);
+    score->selection().setRangeTicks(sTick, eTick, sStaff, eStaff, sBox, eBox);
     score->selection().updateSelectedElements();
 }
