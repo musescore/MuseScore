@@ -21,7 +21,6 @@
  */
 
 #include <gtest/gtest.h>
-#include "engraving/dom/rest.h"
 
 #include "io/fileinfo.h"
 
@@ -39,6 +38,7 @@
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
@@ -1419,7 +1419,7 @@ TEST_F(Engraving_PartsTests, deleteLinkedRestsRemovesEmptySegments)
         };
         check(4);
         Score* owner = fromPart ? part : score;
-        score->startCmd(TranslatableString::untranslatable("Delete linked rests"));
+        score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
         owner->select(owner->firstMeasure(), SelectType::SINGLE, 0);
         owner->cmdDeleteSelection();
         score->endCmd();
