@@ -52,7 +52,7 @@ Promise<Ret> CloseProjectScenario::closeOpenedProject(bool goToHome)
         }
 
         if (!project->isNeedSave()) {
-            return resolvedPromise(doCloseProject(goToHome));
+            return doCloseProject(goToHome);
         }
 
         return askAboutSavingScore(project)
@@ -64,12 +64,23 @@ Promise<Ret> CloseProjectScenario::closeOpenedProject(bool goToHome)
             }
 
             if (btn != IInteractive::Button::Save) {
-                return resolve(doCloseProject(goToHome));
+                doCloseProject(goToHome).onResolve(this, [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
+
+                return Promise<Ret>::dummy_result();
             }
 
             //! NOTE The score is only let go of once its changes are safely written
             saveProjectScenario()->saveProject().onResolve(this, [this, goToHome, resolve](const Ret& ret) {
-                (void)resolve(ret ? doCloseProject(goToHome) : ret);
+                if (!ret) {
+                    (void)resolve(ret);
+                    return;
+                }
+
+                doCloseProject(goToHome).onResolve(this, [resolve](const Ret& closeRet) {
+                    (void)resolve(closeRet);
+                });
             });
 
             return Promise<Ret>::dummy_result();
@@ -136,19 +147,20 @@ Promise<IInteractive::Result> CloseProjectScenario::askAboutSavingScore(const IN
     }, IInteractive::Button::Save);
 }
 
-Ret CloseProjectScenario::doCloseProject(bool goToHome)
+Promise<Ret> CloseProjectScenario::doCloseProject(bool goToHome)
 {
-    /// NOTE: Hold the project until it is fully disconnected from receivers
-    INotationProjectPtr project = currentNotationProject();
+    return interactive()->closeAllDialogs().then<Ret>(this, [this, goToHome](const Ret&, auto resolve) {
+        /// NOTE: Hold the project until it is fully disconnected from receivers
+        INotationProjectPtr project = currentNotationProject();
 
-    interactive()->closeAllDialogsSync();
-    globalContext()->setCurrentProject(nullptr);
+        globalContext()->setCurrentProject(nullptr);
 
-    if (goToHome) {
-        openHomePageIfNeed();
-    }
+        if (goToHome) {
+            openHomePageIfNeed();
+        }
 
-    return make_ok();
+        return resolve(make_ok());
+    });
 }
 
 void CloseProjectScenario::openHomePageIfNeed()

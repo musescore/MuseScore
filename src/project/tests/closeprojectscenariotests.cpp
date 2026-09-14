@@ -81,6 +81,7 @@ protected:
                 return resolve(Val());
             });
         });
+        ON_CALL(*m_interactive, closeAllDialogs()).WillByDefault([] { return resolvedPromise(make_ok()); });
         ON_CALL(*m_commandDispatcher, dispatch(_)).WillByDefault([](const rcommand::Request& request) {
             return async::make_promise<rcommand::Response>([request](auto resolve) {
                 return resolve(rcommand::make_response(request, make_ok()));
@@ -211,7 +212,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_SavedScore_ClosesAndGoesHom
     //! [THEN] Nothing is asked, the dialogs left over from the score are closed with it,
     //! the score is let go of, and the home page takes its place
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
-    EXPECT_CALL(*m_interactive, closeAllDialogsSync()).Times(1);
+    EXPECT_CALL(*m_interactive, closeAllDialogs()).Times(1);
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(1);
 
@@ -219,6 +220,30 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_SavedScore_ClosesAndGoesHom
     Ret ret = closeOpenedProject();
 
     EXPECT_TRUE(ret);
+}
+
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_WaitsForTheDialogsToClose)
+{
+    //! [GIVEN] Dialogs that have not finished closing yet
+    ON_CALL(*m_interactive, closeAllDialogs()).WillByDefault([] {
+        return async::make_promise<Ret>([](auto) {
+            return async::Promise<Ret>::dummy_result();
+        });
+    });
+
+    //! [THEN] The score is not pulled out from under a window that is still on its way out
+    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
+
+    //! [WHEN] Closing...
+    bool resolved = false;
+    m_scenario->closeOpenedProject().onResolve(this, [&resolved](const Ret&) {
+        resolved = true;
+    });
+    drainDeferredCalls();
+
+    //! [THEN] ...has not finished either, it is still waiting for them
+    EXPECT_FALSE(resolved);
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotGoingHome_LeavesThePageAlone)
@@ -271,7 +296,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserCancels_
     //! [THEN] Nothing is saved, and the score stays where it was
     EXPECT_CALL(*m_saveScenario, saveProject(_)).Times(0);
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
-    EXPECT_CALL(*m_interactive, closeAllDialogsSync()).Times(0);
+    EXPECT_CALL(*m_interactive, closeAllDialogs()).Times(0);
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
     //! [WHEN] Closing...
