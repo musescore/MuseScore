@@ -2736,6 +2736,9 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
+    writeProperty(item, xml, Pid::PLACEMENT);
+    writeProperty(item, xml, Pid::OFFSET);
+    writeProperty(item, xml, Pid::TEXT_SIZE_SPATIUM_DEPENDENT);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
