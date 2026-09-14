@@ -48,20 +48,23 @@ public:
     CloseProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    bool closeOpenedProject(bool goToHome = true) override;
+    muse::async::Promise<muse::Ret> closeOpenedProject(bool goToHome = true) override;
 
     bool isBusy(BusyStatus status) const override;
     muse::async::Notification busyChanged() const override;
 
 private:
+    static muse::async::Promise<muse::Ret> resolvedPromise(const muse::Ret& ret);
+
     INotationProjectPtr currentNotationProject() const;
 
     void setBusy(BusyStatus status, bool isBusy);
+    muse::async::Promise<muse::Ret> runIfNotBusy(BusyStatus status, const std::function<muse::async::Promise<muse::Ret>()>& flow);
 
-    muse::IInteractive::Button askAboutSavingScore(const INotationProjectPtr& project);
+    muse::async::Promise<muse::IInteractive::Result> askAboutSavingScore(const INotationProjectPtr& project);
 
-    //! NOTE The close flow is synchronous, so the save is waited for here
-    muse::Ret waitFor(muse::async::Promise<muse::Ret> flow);
+    //! NOTE Lets go of the score, and of everything that was opened for it
+    muse::Ret doCloseProject(bool goToHome);
 
     void openHomePageIfNeed();
 

@@ -22,8 +22,6 @@
 
 #include <gmock/gmock.h>
 
-#include <QTimer>
-
 #include "async/processevents.h"
 
 #include "project/internal/closeprojectscenario.h"
@@ -88,18 +86,10 @@ protected:
                 return resolve(rcommand::make_response(request, make_ok()));
             });
         });
-
-        //! NOTE The close flow waits for the save in a nested event loop; in the application the async
-        //! queue is pumped by a ticker, so do the same here, or that loop would never see the result.
-        m_asyncPump.setInterval(1);
-        QObject::connect(&m_asyncPump, &QTimer::timeout, []() { async::processMessages(); });
-        m_asyncPump.start();
     }
 
     void TearDown() override
     {
-        m_asyncPump.stop();
-
         // Let whatever the flow queued after its result run, so that nothing outlives the mocks
         drainDeferredCalls();
 
@@ -129,6 +119,28 @@ protected:
         });
     }
 
+    //! Subscribes to `promise`, drains the deferred calls and hands back the result.
+    template<typename T>
+    T await(async::Promise<T> promise)
+    {
+        T result = T(make_ret(Ret::Code::UnknownError));
+        bool resolved = false;
+        promise.onResolve(this, [&result, &resolved](const T& value) {
+            result = value;
+            resolved = true;
+        });
+
+        drainDeferredCalls();
+
+        EXPECT_TRUE(resolved) << "the promise did not resolve";
+        return result;
+    }
+
+    Ret closeOpenedProject(bool goToHome = true)
+    {
+        return await(m_scenario->closeOpenedProject(goToHome));
+    }
+
     static ::testing::Matcher<const UriQuery&> IsHomePage()
     {
         return ::testing::Truly([](const UriQuery& q) {
@@ -147,8 +159,11 @@ protected:
     void givenUnsavedChangesAnsweredWith(IInteractive::Button btn)
     {
         ON_CALL(*m_project, isNeedSave()).WillByDefault(Return(true));
-        ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-        .WillByDefault(Return(IInteractive::Result(int(btn))));
+        ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([btn] {
+            return async::make_promise<IInteractive::Result>([btn](auto resolve) {
+                return resolve(IInteractive::Result(int(btn)));
+            });
+        });
     }
 
     void givenSaveFinishesWith(const Ret& ret)
@@ -165,8 +180,6 @@ protected:
 
     std::shared_ptr<NotationProjectMock> m_project;
     std::shared_ptr<context::PlaybackStateMock> m_playbackState;
-
-    QTimer m_asyncPump;
 };
 
 // ─── Nothing to close ────────────────────────────────────────────────────────
@@ -177,14 +190,14 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NoProject_Succeeds)
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
 
     //! [THEN] There is nothing to ask about, and nothing to let go of
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_scenario->closeOpenedProject();
+    Ret ret = closeOpenedProject();
 
     //! [THEN] ...succeeds, there was nothing in the way
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 // ─── A score with no pending changes ─────────────────────────────────────────
@@ -197,15 +210,15 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_SavedScore_ClosesAndGoesHom
 
     //! [THEN] Nothing is asked, the dialogs left over from the score are closed with it,
     //! the score is let go of, and the home page takes its place
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_interactive, closeAllDialogsSync()).Times(1);
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(1);
 
     //! [WHEN] Closing...
-    bool ok = m_scenario->closeOpenedProject();
+    Ret ret = closeOpenedProject();
 
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotGoingHome_LeavesThePageAlone)
@@ -217,9 +230,9 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotGoingHome_LeavesThePageA
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing without going home...
-    bool ok = m_scenario->closeOpenedProject(false);
+    Ret ret = closeOpenedProject(false);
 
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_HomeAlreadyOpen_DoesNotOpenItAgain)
@@ -231,9 +244,9 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_HomeAlreadyOpen_DoesNotOpen
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_scenario->closeOpenedProject();
+    Ret ret = closeOpenedProject();
 
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 // ─── A score with unsaved changes ────────────────────────────────────────────
@@ -244,10 +257,10 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_AsksAboutThe
     givenUnsavedChangesAnsweredWith(IInteractive::Button::DontSave);
 
     //! [THEN] The user is asked what to do with them
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
 
     //! [WHEN] Closing...
-    m_scenario->closeOpenedProject();
+    closeOpenedProject();
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserCancels_KeepsScoreOpen)
@@ -262,10 +275,11 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserCancels_
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_scenario->closeOpenedProject();
+    Ret ret = closeOpenedProject();
 
-    //! [THEN] ...is refused
-    EXPECT_FALSE(ok);
+    //! [THEN] ...is refused, and says it was the user's choice
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(Ret::Code::Cancel));
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserDeclinesToSave_ClosesAnyway)
@@ -278,9 +292,9 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserDeclines
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing...
-    bool ok = m_scenario->closeOpenedProject();
+    Ret ret = closeOpenedProject();
 
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserSaves_SavesThenCloses)
@@ -295,9 +309,9 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserSaves_Sa
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing...
-    bool ok = m_scenario->closeOpenedProject();
+    Ret ret = closeOpenedProject();
 
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_SaveFails_KeepsScoreOpen)
@@ -310,10 +324,10 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_SaveFails_Ke
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_scenario->closeOpenedProject();
+    Ret ret = closeOpenedProject();
 
     //! [THEN] ...is refused
-    EXPECT_FALSE(ok);
+    EXPECT_FALSE(ret);
 }
 
 // ─── Playback ────────────────────────────────────────────────────────────────
@@ -328,7 +342,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_WhilePlaying_StopsPlayback)
     EXPECT_CALL(*m_commandDispatcher, dispatch(IsStopPlayback())).Times(1);
 
     //! [WHEN] Closing...
-    m_scenario->closeOpenedProject();
+    closeOpenedProject();
 }
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotPlaying_DispatchesNothing)
@@ -340,37 +354,39 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotPlaying_DispatchesNothin
     EXPECT_CALL(*m_commandDispatcher, dispatch(_)).Times(0);
 
     //! [WHEN] Closing...
-    m_scenario->closeOpenedProject();
+    closeOpenedProject();
 }
 
 // ─── One close at a time ─────────────────────────────────────────────────────
 
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_WhileAlreadyClosing_IsRefused)
 {
-    //! [GIVEN] An opened score with unsaved changes; the question about them is where a second
-    //! close can arrive from, since the dialog is answered from a nested event loop
-    ON_CALL(*m_project, isNeedSave()).WillByDefault(Return(true));
-
-    bool secondCloseResult = true;
-    bool busyWhileClosing = false;
-    ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-    .WillByDefault([this, &secondCloseResult, &busyWhileClosing]() {
-        busyWhileClosing = m_scenario->isBusy(BusyStatus::Closing);
-        secondCloseResult = m_scenario->closeOpenedProject();
-        return IInteractive::Result(int(IInteractive::Button::DontSave));
-    });
+    //! [GIVEN] An opened score with unsaved changes, so that the first close is still
+    //! waiting for the user's answer when the second one arrives
+    givenUnsavedChangesAnsweredWith(IInteractive::Button::DontSave);
 
     //! [THEN] The question is asked once: the second close bails out before reaching it
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
 
-    //! [WHEN] Closing while a close is already under way...
-    bool ok = m_scenario->closeOpenedProject();
+    //! [WHEN] A close is started...
+    Ret firstResult;
+    bool firstResolved = false;
+    m_scenario->closeOpenedProject().onResolve(this, [&firstResult, &firstResolved](const Ret& ret) {
+        firstResult = ret;
+        firstResolved = true;
+    });
 
-    //! [THEN] The close in progress reports itself as busy, the second one is refused,
-    //! and the first one still finishes
-    EXPECT_TRUE(busyWhileClosing);
-    EXPECT_FALSE(secondCloseResult);
-    EXPECT_TRUE(ok);
+    //! [THEN] ...it reports itself as busy while it lasts
+    EXPECT_TRUE(m_scenario->isBusy(BusyStatus::Closing));
+
+    //! [WHEN] ...and another one is asked for before it is over
+    Ret second = closeOpenedProject();
+
+    //! [THEN] The second one is refused as busy, and the first one still finishes
+    EXPECT_FALSE(second);
+    EXPECT_EQ(second.code(), int(Ret::Code::Busy));
+    EXPECT_TRUE(firstResolved);
+    EXPECT_TRUE(firstResult);
 
     //! [THEN] Once it is over, closing is possible again
     EXPECT_FALSE(m_scenario->isBusy(BusyStatus::Closing));

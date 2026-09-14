@@ -22,9 +22,6 @@
 
 #include "closeprojectscenario.h"
 
-#include <QEventLoop>
-
-#include "defer.h"
 #include "translation.h"
 
 #include "log.h"
@@ -35,50 +32,49 @@ using muse::async::Promise;
 
 static const muse::Uri HOME_PAGE_URI("musescore://home");
 
-bool CloseProjectScenario::closeOpenedProject(bool goToHome)
+Promise<Ret> CloseProjectScenario::resolvedPromise(const Ret& ret)
 {
-    if (isBusy(BusyStatus::Closing)) {
-        return false;
-    }
+    return async::make_promise<Ret>([ret](auto resolve) {
+        return resolve(ret);
+    });
+}
 
-    setBusy(BusyStatus::Closing, true);
-    DEFER {
-        setBusy(BusyStatus::Closing, false);
-    };
-
-    INotationProjectPtr project = currentNotationProject();
-    if (!project) {
-        return true;
-    }
-
-    if (globalContext()->playbackState()->isPlaying()) {
-        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
-    }
-
-    bool result = true;
-
-    if (project->isNeedSave()) {
-        IInteractive::Button btn = askAboutSavingScore(project);
-
-        if (btn == IInteractive::Button::Cancel) {
-            result = false;
-        } else if (btn == IInteractive::Button::Save) {
-            result = waitFor(saveProjectScenario()->saveProject());
-        } else if (btn == IInteractive::Button::DontSave) {
-            result = true;
+Promise<Ret> CloseProjectScenario::closeOpenedProject(bool goToHome)
+{
+    return runIfNotBusy(BusyStatus::Closing, [this, goToHome]() -> Promise<Ret> {
+        INotationProjectPtr project = currentNotationProject();
+        if (!project) {
+            return resolvedPromise(make_ok());
         }
-    }
 
-    if (result) {
-        interactive()->closeAllDialogsSync();
-        globalContext()->setCurrentProject(nullptr);
-
-        if (goToHome) {
-            openHomePageIfNeed();
+        if (globalContext()->playbackState()->isPlaying()) {
+            commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
         }
-    }
 
-    return result;
+        if (!project->isNeedSave()) {
+            return resolvedPromise(doCloseProject(goToHome));
+        }
+
+        return askAboutSavingScore(project)
+               .then<Ret>(this, [this, goToHome](const IInteractive::Result& res, auto resolve) {
+            IInteractive::Button btn = res.standardButton();
+
+            if (btn == IInteractive::Button::Cancel) {
+                return resolve(make_ret(Ret::Code::Cancel));
+            }
+
+            if (btn != IInteractive::Button::Save) {
+                return resolve(doCloseProject(goToHome));
+            }
+
+            //! NOTE The score is only let go of once its changes are safely written
+            saveProjectScenario()->saveProject().onResolve(this, [this, goToHome, resolve](const Ret& ret) {
+                (void)resolve(ret ? doCloseProject(goToHome) : ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        });
+    });
 }
 
 bool CloseProjectScenario::isBusy(BusyStatus status) const
@@ -112,39 +108,44 @@ void CloseProjectScenario::setBusy(BusyStatus status, bool isBusy)
     m_busyChanged.notify();
 }
 
-IInteractive::Button CloseProjectScenario::askAboutSavingScore(const INotationProjectPtr& project)
+Promise<Ret> CloseProjectScenario::runIfNotBusy(BusyStatus status, const std::function<Promise<Ret>()>& flow)
+{
+    if (isBusy(status)) {
+        return resolvedPromise(make_ret(Ret::Code::Busy));
+    }
+
+    setBusy(status, true);
+
+    return flow().then<Ret>(this, [this, status](const Ret& ret, auto resolve) {
+        setBusy(status, false);
+        return resolve(ret);
+    });
+}
+
+Promise<IInteractive::Result> CloseProjectScenario::askAboutSavingScore(const INotationProjectPtr& project)
 {
     std::string title = muse::qtrc("project", "Do you want to save changes to the score “%1” before closing?")
                         .arg(project->displayName()).toStdString();
 
     std::string body = muse::trc("project", "Your changes will be lost if you don’t save them.");
 
-    IInteractive::Result result = interactive()->warningSync(title, body, {
+    return interactive()->warning(title, body, {
         IInteractive::Button::DontSave,
         IInteractive::Button::Cancel,
         IInteractive::Button::Save
     }, IInteractive::Button::Save);
-
-    return result.standardButton();
 }
 
-Ret CloseProjectScenario::waitFor(Promise<Ret> flow)
+Ret CloseProjectScenario::doCloseProject(bool goToHome)
 {
-    QEventLoop loop;
-    Ret result;
-    bool finished = false;
+    interactive()->closeAllDialogsSync();
+    globalContext()->setCurrentProject(nullptr);
 
-    flow.onResolve(this, [&result, &finished, &loop](const Ret& ret) {
-        result = ret;
-        finished = true;
-        loop.quit();
-    });
-
-    if (!finished) {
-        loop.exec();
+    if (goToHome) {
+        openHomePageIfNeed();
     }
 
-    return result;
+    return make_ok();
 }
 
 void CloseProjectScenario::openHomePageIfNeed()
