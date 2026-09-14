@@ -251,15 +251,15 @@ protected:
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotificationAndForwards)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<Ret, WatchedScore> convertFinished;
     async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    ScoreInfo scoreInfo;
-    scoreInfo.id = 555;
-    scoreInfo.title = "My Score";
+    WatchedScore watched;
+    watched.scoreId = 555;
+    watched.name = u"My Score";
 
     constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
 
@@ -278,31 +278,36 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
 
     bool forwarded = false;
     Ret forwardedRet;
-    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
+    WatchedScore forwardedWatched;
+    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore& w) {
         forwarded = true;
         forwardedRet = ret;
+        forwardedWatched = w;
     });
 
     // [WHEN] The service reports a successful conversion
-    convertFinished.send(make_ok(), scoreInfo);
+    convertFinished.send(make_ok(), watched);
 
-    // [THEN] The result is forwarded to the scenario's own convertFinished channel
+    // [THEN] The result, including the WatchedScore payload, is forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
     EXPECT_TRUE(forwardedRet);
+    ASSERT_TRUE(forwardedWatched.scoreId.has_value());
+    EXPECT_EQ(*forwardedWatched.scoreId, 555);
+    EXPECT_EQ(forwardedWatched.name, u"My Score");
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_DispatchesOpenScoreUrl)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<Ret, WatchedScore> convertFinished;
     async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
-    ScoreInfo scoreInfo;
-    scoreInfo.id = 555;
-    scoreInfo.title = "My Score";
+    WatchedScore watched;
+    watched.scoreId = 555;
+    watched.name = u"My Score";
 
     // [GIVEN] The user clicks "Open score" on the ready notification
     constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
@@ -318,14 +323,14 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_Disp
     .Times(1);
 
     // [WHEN] The service reports a successful conversion
-    convertFinished.send(make_ok(), scoreInfo);
+    convertFinished.send(make_ok(), watched);
     pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNotificationAndForwards)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<Ret, WatchedScore> convertFinished;
     async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
@@ -349,13 +354,13 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 
     bool forwarded = false;
     Ret forwardedRet;
-    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& r, const ScoreInfo&) {
+    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret& r, const WatchedScore&) {
         forwarded = true;
         forwardedRet = r;
     });
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(ret, ScoreInfo());
+    convertFinished.send(ret, WatchedScore());
 
     // [THEN] The failure is still forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
@@ -365,7 +370,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsConvert)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<Ret, WatchedScore> convertFinished;
     async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
@@ -397,7 +402,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     // [WHEN] The service reports a failed conversion
     Ret ret = make_ret(Err::ConvertProcessingFailed);
     ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
-    convertFinished.send(ret, ScoreInfo());
+    convertFinished.send(ret, WatchedScore());
 
     pumpEvents();
 }
@@ -405,7 +410,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotRestartConvert)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<Ret, WatchedScore> convertFinished;
     async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
@@ -422,7 +427,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
     EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(make_ret(Err::ConvertProcessingFailed), ScoreInfo());
+    convertFinished.send(make_ret(Err::ConvertProcessingFailed), WatchedScore());
 
     pumpEvents();
 }
@@ -434,7 +439,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_ShowsToastOnceAfterThreshold)
 {
     // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, ScoreInfo> convertFinished;
+    async::Channel<Ret, WatchedScore> convertFinished;
     async::Channel<int> reviewRequested;
     async::Channel<PollingFailure> pollingFailed;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));

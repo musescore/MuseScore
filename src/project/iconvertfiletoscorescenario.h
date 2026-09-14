@@ -63,8 +63,8 @@ public:
     virtual void convertFiles(const muse::io::paths_t& paths = {}) = 0;
 
     //! Emits the result once the server-side conversion completes; on success, the converted score
-    //! is already available in the user's MuseScore.com account, described by ScoreInfo
-    virtual muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const = 0;
+    //! is already available in the user's MuseScore.com account, described by the WatchedScore
+    virtual muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const = 0;
 };
 
 using IConvertFileToScoreScenarioPtr = std::shared_ptr<IConvertFileToScoreScenario>;

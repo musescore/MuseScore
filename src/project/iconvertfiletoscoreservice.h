@@ -55,8 +55,8 @@ public:
     //! Sends the conversion request to the server
     virtual muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName) = 0;
 
-    //! Emits the final result of a conversion (upload or processing failure, or success with ScoreInfo)
-    virtual muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const = 0;
+    //! Emits the final result of a conversion (upload or processing failure, or success with the WatchedScore)
+    virtual muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const = 0;
 
     //! All pending/reviewable conversions from the server's convert queue
     virtual muse::ValNt<WatchedScoreList> watchedScores() const = 0;

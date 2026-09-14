@@ -66,7 +66,7 @@ public:
     muse::Ret validateLink(const QUrl& link) override;
 
     void convertFiles(const muse::io::paths_t& paths = {}) override;
-    muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const override;
+    muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const override;
 
 private:
     muse::async::Promise<muse::Ret> checkConvertIsAllowed();
@@ -92,14 +92,14 @@ private:
     void showTooManyImagesError(int maxImages);
 
     void showFileProcessingDialog();
-    void showScoreReadyNotification(const ScoreInfo& scoreInfo);
+    void showScoreReadyNotification(const WatchedScore& watched);
     void showConvertFailedNotification(const muse::Ret& ret);
     void showPollingFailureNotification();
 
     void askReviewRating(int scoreId);
     void checkPendingReview();
 
-    muse::async::Channel<muse::Ret, ScoreInfo> m_convertFinished;
+    muse::async::Channel<muse::Ret, WatchedScore> m_convertFinished;
     std::map<muse::io::path_t, int /*scoreId*/> m_pendingReviews;
 
     bool m_retryToastShown = false;

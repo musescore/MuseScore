@@ -61,7 +61,7 @@ public:
     muse::Ret validateLink(const QUrl& link) const override;
 
     muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName) override;
-    muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const override;
+    muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const override;
 
     muse::ValNt<WatchedScoreList> watchedScores() const override;
 
@@ -89,10 +89,9 @@ private:
     void giveUpPolling(const muse::Ret& ret);
     void updateWatchedScores(const muse::cloud::ConvertQueueList& queue);
 
-    void handleItem(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode,
-                    std::optional<int> scoreId);
+    void updateStatus(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode);
 
-    void finishConvert(const muse::Ret& ret, const ScoreInfo& scoreInfo = ScoreInfo());
+    void finishConvert(const muse::Ret& ret, const WatchedScore& watched = WatchedScore());
 
     WatchedScore* findWatchedScoreByScoreId(int scoreId);
 
@@ -107,7 +106,7 @@ private:
 
     muse::async::Channel<PollingFailure> m_pollingFailed;
     muse::async::Notification m_watchedScoresChanged;
-    muse::async::Channel<muse::Ret, ScoreInfo> m_convertFinished;
+    muse::async::Channel<muse::Ret, WatchedScore> m_convertFinished;
     muse::async::Channel<int> m_reviewRequested;
 };
 }

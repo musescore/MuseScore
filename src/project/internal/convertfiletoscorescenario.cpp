@@ -77,14 +77,14 @@ void ConvertFileToScoreScenario::init()
 {
     TRACEFUNC;
 
-    service()->convertFinished().onReceive(this, [this](const Ret& ret, const ScoreInfo& scoreInfo) {
+    service()->convertFinished().onReceive(this, [this](const Ret& ret, const WatchedScore& watched) {
         if (ret) {
-            showScoreReadyNotification(scoreInfo);
+            showScoreReadyNotification(watched);
         } else {
             showConvertFailedNotification(ret);
         }
 
-        m_convertFinished.send(ret, scoreInfo);
+        m_convertFinished.send(ret, watched);
     });
 
     service()->reviewRequested().onReceive(this, [this](int scoreId) {
@@ -192,7 +192,7 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
     });
 }
 
-async::Channel<Ret, ScoreInfo> ConvertFileToScoreScenario::convertFinished() const
+async::Channel<Ret, WatchedScore> ConvertFileToScoreScenario::convertFinished() const
 {
     return m_convertFinished;
 }
@@ -451,21 +451,22 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
     });
 }
 
-void ConvertFileToScoreScenario::showScoreReadyNotification(const ScoreInfo& scoreInfo)
+void ConvertFileToScoreScenario::showScoreReadyNotification(const WatchedScore& watched)
 {
     constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
+    const int scoreId = watched.scoreId ? *watched.scoreId : 0;
 
     std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
-                      .arg(scoreInfo.title).toStdString();
+                      .arg(watched.name.toQString()).toStdString();
 
     toastService()->show(muse::trc("project/convert", "Your score is ready!"), msg,
                          muse::ui::IconCode::Code::TICK_FILLED, true,
     {
         { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
         { muse::trc("project/convert", "Open score"), openScoreBtn, /*accent*/ true },
-    }).onResolve(this, [this, scoreInfo, openScoreBtn](const toast::ToastResult& result) {
+    }).onResolve(this, [this, scoreId, openScoreBtn](const toast::ToastResult& result) {
         if (result.isCode(openScoreBtn)) {
-            const QUrl url(QString("musescore://open-score/%1").arg(scoreInfo.id));
+            const QUrl url(QString("musescore://open-score/%1").arg(scoreId));
             dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
         }
     });

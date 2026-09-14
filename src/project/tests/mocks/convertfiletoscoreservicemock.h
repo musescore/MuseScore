@@ -36,7 +36,7 @@ public:
     MOCK_METHOD(muse::Ret, validateLink, (const QUrl&), (const, override));
 
     MOCK_METHOD(muse::Ret, startConvert, (const ConvertInput&, const muse::String&), (override));
-    MOCK_METHOD((muse::async::Channel<muse::Ret, ScoreInfo>), convertFinished, (), (const, override));
+    MOCK_METHOD((muse::async::Channel<muse::Ret, WatchedScore>), convertFinished, (), (const, override));
 
     MOCK_METHOD(muse::ValNt<WatchedScoreList>, watchedScores, (), (const, override));
 

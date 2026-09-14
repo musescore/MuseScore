@@ -73,14 +73,6 @@ async::Promise<T> resolvedPromise(const T& val)
     });
 }
 
-RetVal<ScoreInfo> okScoreInfo(int scoreId, const QString& title = "My Score")
-{
-    ScoreInfo info;
-    info.id = scoreId;
-    info.title = title;
-    return RetVal<ScoreInfo>::make_ok(info);
-}
-
 //! NOTE: the hardcoded values ConvertFileToScoreService::init() falls back to
 void expectFallbackConfig(const ConvertConfig& config)
 {
@@ -579,7 +571,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadFails_ForwardsF
 
     bool received = false;
     Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore&) {
         received = true;
         receivedRet = ret;
     });
@@ -725,9 +717,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterDone_NoLongerCo
     item.type = ConvertType::Omr;
     item.status = ConvertStatus::Done;
     item.scoreId = 555;
-
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
 
     bool changed = false;
     m_service->watchedScores().notification.onNotify(nullptr, [&] {
@@ -893,7 +882,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AwaitingReviewItemWi
 // polling / score info fetch pipeline
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_FetchesScoreInfoAndFinishes)
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_FinishesImmediatelyWithWatchedScore)
 {
     // [GIVEN] The queue reports the conversion as done, with its scoreId
     ConvertQueueItem item;
@@ -902,26 +891,25 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_FetchesScoreInfoAn
     item.status = ConvertStatus::Done;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555, "My Score"); }));
-
     bool received = false;
     Ret receivedRet;
-    ScoreInfo receivedInfo;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo& info) {
+    WatchedScore receivedWatched;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore& watched) {
         received = true;
         receivedRet = ret;
-        receivedInfo = info;
+        receivedWatched = watched;
     });
 
     // [WHEN] Uploading and polling the status
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
-    // [THEN] The conversion finishes successfully, carrying the score's info
+    // [THEN] The conversion finishes successfully immediately - no separate fetch is needed, since
+    // the queue already carries everything needed to identify the resulting score
     ASSERT_TRUE(received);
     EXPECT_TRUE(receivedRet);
-    EXPECT_EQ(receivedInfo.id, 555);
-    EXPECT_EQ(receivedInfo.title, "My Score");
+    ASSERT_TRUE(receivedWatched.scoreId.has_value());
+    EXPECT_EQ(*receivedWatched.scoreId, 555);
+    EXPECT_EQ(receivedWatched.name, u"My Score");
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithoutScoreId_DoesNotReportYet)
@@ -931,16 +919,14 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithoutScoreId_
     item.id = TEST_QUEUE_ID;
     item.type = ConvertType::Omr;
     item.status = ConvertStatus::AwaitingReview;
-
-    // [THEN] There's nothing to identify the score by yet, so nothing is fetched or reported
-    EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(An<int>())).Times(0);
+    item.scoreId = std::nullopt; // no scoreId
 
     bool reviewRequested = false;
     bool convertFinished = false;
     m_service->reviewRequested().onReceive(nullptr, [&](int) {
         reviewRequested = true;
     });
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const ScoreInfo&) {
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
         convertFinished = true;
     });
 
@@ -961,9 +947,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_Emi
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
-
     bool reviewRequested = false;
     int reviewScoreId = 0;
     m_service->reviewRequested().onReceive(nullptr, [&](int scoreId) {
@@ -973,9 +956,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_Emi
 
     bool convertFinished = false;
     Ret convertFinishedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
+    WatchedScore convertFinishedWatched;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore& watched) {
         convertFinished = true;
         convertFinishedRet = ret;
+        convertFinishedWatched = watched;
     });
 
     // [WHEN] Uploading and polling the status
@@ -984,29 +969,29 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_Emi
     // [THEN] The score is already usable, so both signals fire immediately
     ASSERT_TRUE(convertFinished);
     EXPECT_TRUE(convertFinishedRet);
+    ASSERT_TRUE(convertFinishedWatched.scoreId.has_value());
+    EXPECT_EQ(*convertFinishedWatched.scoreId, 555);
+    EXPECT_EQ(convertFinishedWatched.name, u"My Score");
 
     ASSERT_TRUE(reviewRequested);
     EXPECT_EQ(reviewScoreId, 555);
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ItemNeverInQueueWithoutScoreId_TreatedAsFailed)
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ItemNeverInQueueWithoutScoreId_SilentlyDropped)
 {
     // [GIVEN] The item never appears in the queue at all, and never reported a scoreId - there's
-    // no way to identify a resulting score, so it can't be recovered as a success
+    // no way to identify a resulting score, so it's silently dropped rather than reported as failed
 
     bool received = false;
-    Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
         received = true;
-        receivedRet = ret;
     });
 
     // [WHEN] Uploading, then polling an empty queue
     deliverQueueStatus({}, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
-    // [THEN] The conversion is reported as failed
-    ASSERT_TRUE(received);
-    EXPECT_FALSE(receivedRet);
+    // [THEN] Nothing is reported - not failed, not succeeded
+    EXPECT_FALSE(received);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFromQueue_SilentlyErasedWithoutDuplicateReport)
@@ -1036,12 +1021,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFr
         return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { otherItem }));
     }));
 
-    EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .Times(1)
-    .WillOnce(Invoke([] { return okScoreInfo(555); }));
-
     int convertFinishedCount = 0;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const ScoreInfo&) {
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
         ++convertFinishedCount;
     });
 
@@ -1052,7 +1033,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFr
     // [WHEN] Starting an unrelated conversion triggers a second poll; the original item has now dropped
     uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
 
-    // [THEN] No duplicate report, and downloadScoreInfo() was only ever called once
+    // [THEN] No duplicate report
     EXPECT_EQ(convertFinishedCount, 1);
 }
 
@@ -1105,11 +1086,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
                                                                                                                doneAudioItem }));
     }));
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(999))
-    .WillByDefault(Invoke([] { return okScoreInfo(999, "Audio Score"); }));
-
     std::vector<Ret> receivedRets;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore&) {
         receivedRets.push_back(ret);
     });
 
@@ -1141,7 +1119,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessi
 
     bool received = false;
     Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore&) {
         received = true;
         receivedRet = ret;
     });
@@ -1156,54 +1134,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessi
     EXPECT_EQ(receivedRet.data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"My Score");
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ScoreInfoFetchFails_RetriesOnNextPoll)
-{
-    // [GIVEN] The queue reports the conversion as done, with its scoreId, on both polls
-    const int otherQueueId = TEST_QUEUE_ID + 1;
-
-    ConvertQueueItem doneItem;
-    doneItem.id = TEST_QUEUE_ID;
-    doneItem.type = ConvertType::Omr;
-    doneItem.status = ConvertStatus::Done;
-    doneItem.scoreId = 555;
-
-    ConvertQueueItem otherItem;
-    otherItem.id = otherQueueId;
-    otherItem.type = ConvertType::Omr;
-    otherItem.status = ConvertStatus::Processing;
-
-    ON_CALL(*m_convertService, fetchQueue())
-    .WillByDefault(Invoke([doneItem, otherItem] {
-        return resolvedPromise<RetVal<ConvertQueueList> >(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { doneItem, otherItem }));
-    }));
-
-    // [GIVEN] Fetching the score's info fails transiently the first time, succeeds the second
-    EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .Times(2)
-    .WillOnce(Return(RetVal<ScoreInfo>::make_ret(make_ret(muse::cloud::Err::NetworkError))))
-    .WillOnce(Invoke([] { return okScoreInfo(555); }));
-
-    bool received = false;
-    Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const ScoreInfo&) {
-        received = true;
-        receivedRet = ret;
-    });
-
-    // [WHEN] Starting the conversion - the first poll's score info fetch fails transiently
-    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
-    EXPECT_FALSE(received);
-
-    // [WHEN] Starting an unrelated conversion triggers a second poll, retrying the fetch
-    uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
-
-    // [THEN] The retried fetch succeeds and the conversion finishes
-    ASSERT_TRUE(received);
-    EXPECT_TRUE(receivedRet);
-}
-
 // ==================================================
-// retry logic (poll / download failures)
+// retry logic (poll failures)
 // ==================================================
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NonRetryableFetchFailure_FinishesImmediatelyWithError)
@@ -1258,11 +1190,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
                                                                                                                otherItem }));
     }));
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
-
     bool received = false;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const ScoreInfo&) {
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
         received = true;
     });
 
@@ -1445,9 +1374,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_Good_DelegatesToConve
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
-
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
     // [THEN] The rating is delegated to the convert service, resolving the scoreId back to its conversion
@@ -1469,9 +1395,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_Delega
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
 
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
-
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
     // [THEN] The rating and comment are delegated to the convert service, resolving the scoreId back to its conversion
@@ -1492,9 +1415,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToCon
     item.type = ConvertType::Audio2Score;
     item.status = ConvertStatus::AwaitingReview;
     item.scoreId = 555;
-
-    ON_CALL(*m_museScoreComService, downloadScoreInfo(555))
-    .WillByDefault(Invoke([] { return okScoreInfo(555); }));
 
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
