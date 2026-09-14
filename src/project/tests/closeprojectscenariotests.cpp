@@ -26,7 +26,7 @@
 
 #include "async/processevents.h"
 
-#include "project/internal/projectactionscontroller.h"
+#include "project/internal/closeprojectscenario.h"
 
 #include "context/tests/mocks/globalcontextmock.h"
 #include "context/tests/mocks/playbackstatemock.h"
@@ -34,7 +34,6 @@
 
 #include "mocks/commanddispatchermock.h"
 #include "mocks/notationprojectmock.h"
-#include "mocks/openprojectscenariomock.h"
 #include "mocks/saveprojectscenariomock.h"
 
 using ::testing::_;
@@ -47,24 +46,22 @@ using namespace muse;
 using namespace mu::project;
 
 namespace mu::project {
-class ProjectActionsControllerTests : public ::testing::Test, public async::Asyncable
+class CloseProjectScenarioTests : public ::testing::Test, public async::Asyncable
 {
 protected:
     void SetUp() override
     {
-        m_controller = std::make_shared<ProjectActionsController>(modularity::globalCtx());
+        m_scenario = std::make_shared<CloseProjectScenario>(modularity::globalCtx());
 
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
         m_commandDispatcher = std::make_shared<NiceMock<rcommand::CommandDispatcherMock> >();
         m_saveScenario = std::make_shared<NiceMock<SaveProjectScenarioMock> >();
-        m_openScenario = std::make_shared<NiceMock<OpenProjectScenarioMock> >();
 
-        m_controller->interactive.set(m_interactive);
-        m_controller->globalContext.set(m_globalContext);
-        m_controller->commandDispatcher.set(m_commandDispatcher);
-        m_controller->saveProjectScenario.set(m_saveScenario);
-        m_controller->openProjectScenario.set(m_openScenario);
+        m_scenario->interactive.set(m_interactive);
+        m_scenario->globalContext.set(m_globalContext);
+        m_scenario->commandDispatcher.set(m_commandDispatcher);
+        m_scenario->saveProjectScenario.set(m_saveScenario);
 
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
         m_playbackState = std::make_shared<NiceMock<context::PlaybackStateMock> >();
@@ -75,9 +72,6 @@ protected:
         ON_CALL(*m_playbackState, isPlaying()).WillByDefault(Return(false));
         ON_CALL(*m_project, isNeedSave()).WillByDefault(Return(false));
 
-        // Neither scenario is doing anything of its own, so the controller is only as busy as it makes itself.
-        ON_CALL(*m_saveScenario, isBusy(_)).WillByDefault(Return(false));
-        ON_CALL(*m_openScenario, isBusy(_)).WillByDefault(Return(false));
         ON_CALL(*m_saveScenario, saveProject(_)).WillByDefault([]() { return resolvedPromise(make_ok()); });
 
         // Dialogs and commands settle immediately so that unstubbed paths do not abort the test.
@@ -162,13 +156,12 @@ protected:
         ON_CALL(*m_saveScenario, saveProject(_)).WillByDefault([ret]() { return resolvedPromise(ret); });
     }
 
-    std::shared_ptr<ProjectActionsController> m_controller;
+    std::shared_ptr<CloseProjectScenario> m_scenario;
 
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<context::GlobalContextMock> m_globalContext;
     std::shared_ptr<rcommand::CommandDispatcherMock> m_commandDispatcher;
     std::shared_ptr<SaveProjectScenarioMock> m_saveScenario;
-    std::shared_ptr<OpenProjectScenarioMock> m_openScenario;
 
     std::shared_ptr<NotationProjectMock> m_project;
     std::shared_ptr<context::PlaybackStateMock> m_playbackState;
@@ -178,7 +171,7 @@ protected:
 
 // ─── Nothing to close ────────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_NoProject_Succeeds)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NoProject_Succeeds)
 {
     //! [GIVEN] No score is opened
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
@@ -188,7 +181,7 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_NoProject_Succeeds)
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     //! [THEN] ...succeeds, there was nothing in the way
     EXPECT_TRUE(ok);
@@ -196,7 +189,7 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_NoProject_Succeeds)
 
 // ─── A score with no pending changes ─────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_SavedScore_ClosesAndGoesHome)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_SavedScore_ClosesAndGoesHome)
 {
     //! [GIVEN] An opened score whose changes are all written already
     ON_CALL(*m_project, isNeedSave()).WillByDefault(Return(false));
@@ -210,12 +203,12 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_SavedScore_ClosesAndGoe
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(1);
 
     //! [WHEN] Closing...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     EXPECT_TRUE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_NotGoingHome_LeavesThePageAlone)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotGoingHome_LeavesThePageAlone)
 {
     //! [THEN] The caller has its own plans for the page, so the home page is not opened...
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
@@ -224,12 +217,12 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_NotGoingHome_LeavesTheP
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing without going home...
-    bool ok = m_controller->closeOpenedProject(false);
+    bool ok = m_scenario->closeOpenedProject(false);
 
     EXPECT_TRUE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_HomeAlreadyOpen_DoesNotOpenItAgain)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_HomeAlreadyOpen_DoesNotOpenItAgain)
 {
     //! [GIVEN] The home page is already on screen
     ON_CALL(*m_interactive, isOpened(::testing::An<const Uri&>())).WillByDefault(Return(RetVal<bool>::make_ok(true)));
@@ -238,14 +231,14 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_HomeAlreadyOpen_DoesNot
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     EXPECT_TRUE(ok);
 }
 
 // ─── A score with unsaved changes ────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_AsksAboutThem)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_AsksAboutThem)
 {
     //! [GIVEN] An opened score with changes that were never written
     givenUnsavedChangesAnsweredWith(IInteractive::Button::DontSave);
@@ -254,10 +247,10 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_AsksAbou
     EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(1);
 
     //! [WHEN] Closing...
-    m_controller->closeOpenedProject();
+    m_scenario->closeOpenedProject();
 }
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_UserCancels_KeepsScoreOpen)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserCancels_KeepsScoreOpen)
 {
     //! [GIVEN] An opened score with unsaved changes, and a user who changes their mind
     givenUnsavedChangesAnsweredWith(IInteractive::Button::Cancel);
@@ -269,13 +262,13 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_UserCanc
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     //! [THEN] ...is refused
     EXPECT_FALSE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_UserDeclinesToSave_ClosesAnyway)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserDeclinesToSave_ClosesAnyway)
 {
     //! [GIVEN] An opened score with unsaved changes the user is willing to lose
     givenUnsavedChangesAnsweredWith(IInteractive::Button::DontSave);
@@ -285,12 +278,12 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_UserDecl
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     EXPECT_TRUE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_UserSaves_SavesThenCloses)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserSaves_SavesThenCloses)
 {
     //! [GIVEN] An opened score with unsaved changes the user wants to keep
     givenUnsavedChangesAnsweredWith(IInteractive::Button::Save);
@@ -302,12 +295,12 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_UserSave
     EXPECT_CALL(*m_globalContext, setCurrentProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     EXPECT_TRUE(ok);
 }
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_SaveFails_KeepsScoreOpen)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_SaveFails_KeepsScoreOpen)
 {
     //! [GIVEN] An opened score the user wants to save, but the save does not go through
     givenUnsavedChangesAnsweredWith(IInteractive::Button::Save);
@@ -317,7 +310,7 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_SaveFail
     EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
 
     //! [WHEN] Closing...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     //! [THEN] ...is refused
     EXPECT_FALSE(ok);
@@ -325,7 +318,7 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_UnsavedChanges_SaveFail
 
 // ─── Playback ────────────────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_WhilePlaying_StopsPlayback)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_WhilePlaying_StopsPlayback)
 {
     //! [GIVEN] The score is being played
     ON_CALL(*m_playbackState, isPlaying()).WillByDefault(Return(true));
@@ -335,10 +328,10 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_WhilePlaying_StopsPlayb
     EXPECT_CALL(*m_commandDispatcher, dispatch(IsStopPlayback())).Times(1);
 
     //! [WHEN] Closing...
-    m_controller->closeOpenedProject();
+    m_scenario->closeOpenedProject();
 }
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_NotPlaying_DispatchesNothing)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotPlaying_DispatchesNothing)
 {
     //! [GIVEN] The score is not being played
     ON_CALL(*m_playbackState, isPlaying()).WillByDefault(Return(false));
@@ -347,12 +340,12 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_NotPlaying_DispatchesNo
     EXPECT_CALL(*m_commandDispatcher, dispatch(_)).Times(0);
 
     //! [WHEN] Closing...
-    m_controller->closeOpenedProject();
+    m_scenario->closeOpenedProject();
 }
 
 // ─── One close at a time ─────────────────────────────────────────────────────
 
-TEST_F(ProjectActionsControllerTests, CloseOpenedProject_WhileAlreadyClosing_IsRefused)
+TEST_F(CloseProjectScenarioTests, CloseOpenedProject_WhileAlreadyClosing_IsRefused)
 {
     //! [GIVEN] An opened score with unsaved changes; the question about them is where a second
     //! close can arrive from, since the dialog is answered from a nested event loop
@@ -362,8 +355,8 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_WhileAlreadyClosing_IsR
     bool busyWhileClosing = false;
     ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
     .WillByDefault([this, &secondCloseResult, &busyWhileClosing]() {
-        busyWhileClosing = m_controller->isBusy(BusyStatus::Closing);
-        secondCloseResult = m_controller->closeOpenedProject();
+        busyWhileClosing = m_scenario->isBusy(BusyStatus::Closing);
+        secondCloseResult = m_scenario->closeOpenedProject();
         return IInteractive::Result(int(IInteractive::Button::DontSave));
     });
 
@@ -371,7 +364,7 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_WhileAlreadyClosing_IsR
     EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(1);
 
     //! [WHEN] Closing while a close is already under way...
-    bool ok = m_controller->closeOpenedProject();
+    bool ok = m_scenario->closeOpenedProject();
 
     //! [THEN] The close in progress reports itself as busy, the second one is refused,
     //! and the first one still finishes
@@ -380,6 +373,6 @@ TEST_F(ProjectActionsControllerTests, CloseOpenedProject_WhileAlreadyClosing_IsR
     EXPECT_TRUE(ok);
 
     //! [THEN] Once it is over, closing is possible again
-    EXPECT_FALSE(m_controller->isBusy(BusyStatus::Closing));
+    EXPECT_FALSE(m_scenario->isBusy(BusyStatus::Closing));
 }
 }
