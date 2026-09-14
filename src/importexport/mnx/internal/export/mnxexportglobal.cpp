@@ -22,6 +22,7 @@
 #include "mnxexporter.h"
 
 #include <optional>
+#include <utility>
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/engravingitem.h"
@@ -33,10 +34,12 @@
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/sig.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/timesig.h"
 #include "log.h"
+#include "realfn.h"
 #include "internal/shared/mnxtypesconv.h"
 
 using namespace mu::engraving;
@@ -240,27 +243,61 @@ static void assignRepeats(mnx::global::Measure& mnxMeasure, const Measure* measu
 //   emit a MNX tempo entry from a TempoText item
 //---------------------------------------------------------
 
-static void createTempo(mnx::global::Measure& mnxMeasure, const TempoText* tempo, const Fraction& relTick)
+static void createTempo(mnx::global::Measure& mnxMeasure, const Measure* measure, const TempoText* tempo, const Fraction& relTick)
 {
-    IF_ASSERT_FAILED(tempo) {
+    IF_ASSERT_FAILED(measure && tempo) {
+        return;
+    }
+
+    // The MNX tempo object is a playback directive, so a tempo text that MuseScore does not play
+    // has nothing reliable to contribute (its stored tempo may be stale or unrelated to the text).
+    /// @todo When MNX adds a display string to tempo, export non-playing tempo texts as display-only
+    /// and include the original text for playing ones as well (as MusicXML does with words/sound).
+    if (!tempo->playTempoText()) {
         return;
     }
 
     const auto location = toMnxFractionValue(relTick).reduced();
-    const double bpm = tempo->tempoBpm();
-    if (bpm <= 0.0) {
-        LOGW() << "Skipping tempo with invalid beats-per-minute " << bpm;
+
+    // MuseScore stores the playback tempo in quarter notes per second, independent of how the text is
+    // spelled. Use that rather than re-parsing the text, which fails for non-SMuFL tempo fonts.
+    // "A tempo" and "Tempo primo" resolve to whatever the tempo map says is in effect at this tick.
+    const BeatsPerSecond bps = (tempo->isATempo() || tempo->isTempoPrimo())
+                               ? tempo->score()->tempo(tempo->tick())
+                               : tempo->tempo();
+    const double quarterBpm = bps.val * 60.0;
+    if (quarterBpm <= 0.0) {
+        LOGW() << "Skipping tempo with invalid beats-per-minute " << quarterBpm;
         return;
     }
 
-    const TDuration dur = tempo->duration();
-    const auto noteValue = toMnxNoteValue(dur);
-    if (!noteValue) {
-        LOGW() << "Skipping tempo with invalid duration value";
-        return;
-    }
+    // Prefer the note value the text displays so the exported marking reads the same. If the text
+    // cannot be parsed, use the beat of the current time signature (dotted for compound meters, unless
+    // the tempo is slow enough that the subdivision is what gets beaten), and failing that a quarter
+    // note, which is the unit the stored tempo is already in.
+    const auto [dur, noteValue] = [&]() -> std::pair<TDuration, mnx::NoteValue::Required> {
+        if (const TDuration textDur = tempo->duration(); textDur.isValid()) {
+            if (const auto nv = toMnxNoteValue(textDur)) {
+                return { textDur, *nv };
+            }
+        }
+        if (const TimeSigFrac timeSig(measure->timesig()); timeSig.isValid() && timeSig.isNotZero()) {
+            const int beatTicks = timeSig.isBeatedCompound(bps.val) ? timeSig.beatTicks() : timeSig.dUnitTicks();
+            if (const TDuration beatDur(Fraction::fromTicks(beatTicks)); beatDur.isValid()) {
+                if (const auto nv = toMnxNoteValue(beatDur)) {
+                    return { beatDur, *nv };
+                }
+            }
+        }
+        return { TDuration(DurationType::V_QUARTER), mnx::NoteValue::make(mnx::NoteValueBase::Quarter) };
+    }();
+    // Smooth out floating-point noise from the unit conversions without imposing a fixed precision:
+    // snap to the rounded value only when it is equal within MuseScore's relative epsilon.
+    const double rawBpm = quarterBpm * (Fraction(1, 4) / dur.fraction()).toDouble();
+    const double roundedBpm = muse::RealRound(rawBpm, 6);
+    const double bpm = muse::RealIsEqual(rawBpm, roundedBpm) ? roundedBpm : rawBpm;
 
-    auto mnxTempo = mnxMeasure.ensure_tempos().append(bpm, *noteValue);
+    auto mnxTempo = mnxMeasure.ensure_tempos().append(bpm, noteValue);
     if (relTick.isNotZero()) {
         mnxTempo.ensure_location(location);
     }
@@ -323,7 +360,7 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
             const Fraction relTick = item->tick() - measure->tick();
             switch (item->type()) {
             case ElementType::TEMPO_TEXT:
-                createTempo(mnxMeasure, toTempoText(item), relTick);
+                createTempo(mnxMeasure, measure, toTempoText(item), relTick);
                 break;
             default:
                 break;
