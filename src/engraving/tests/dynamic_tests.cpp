@@ -21,6 +21,7 @@
  */
 
 #include <gtest/gtest.h>
+#include <memory>
 
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/masterscore.h"
@@ -33,6 +34,53 @@ using namespace mu::engraving;
 class Engraving_DynamicTests : public ::testing::Test
 {
 };
+
+/** Checks compound styling, standard-dynamic priority, and preservation of ordinary text. */
+TEST_F(Engraving_DynamicTests, compoundDynamics)
+{
+    std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScore(nullptr));
+    Dynamic dynamic(score->dummy()->segment());
+    for (const char* token : { "sfzp", "sffzp", "sfzpp", "sfzppp", "sffzmp", "sffzmf" }) {
+        String expected;
+        for (const char* letter = token; *letter; ++letter) {
+            switch (*letter) {
+            case 's': expected += u"<sym>dynamicSforzando</sym>";
+                break;
+            case 'f': expected += u"<sym>dynamicForte</sym>";
+                break;
+            case 'z': expected += u"<sym>dynamicZ</sym>";
+                break;
+            case 'm': expected += u"<sym>dynamicMezzo</sym>";
+                break;
+            case 'p': expected += u"<sym>dynamicPiano</sym>";
+                break;
+            }
+        }
+        dynamic.setDynamicType(String::fromUtf8(token));
+        EXPECT_EQ(dynamic.dynamicType(), DynamicType::OTHER);
+        EXPECT_EQ(dynamic.xmlText(), expected);
+        dynamic.setDynamicType(dynamic.xmlText());
+        EXPECT_EQ(dynamic.xmlText(), expected);
+    }
+    dynamic.setDynamicType(u"sfp");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sfp (sforzando piano)");
+    EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFP);
+    dynamic.setDynamicType(u"sfpp");
+    EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFPP);
+    dynamic.setDynamicType(u"sffz");
+    EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFFZ);
+    dynamic.setDynamicType(u"sfzpp");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sfzpp (sforzando pianissimo)");
+    EXPECT_TRUE(dynamic.screenReaderInfo().contains(u"sfzpp (sforzando pianissimo)"));
+    dynamic.setDynamicType(u"sffzmp");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sffzmp (sforzando mezzo piano)");
+    dynamic.setDynamicType(u"subito sfzp!");
+    EXPECT_EQ(dynamic.xmlText(), u"subito <sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym><sym>dynamicPiano</sym>!");
+    for (const char* text : { "sempre", "sfzmpmore", "sfzm", "sffzmm", "<font face=\"sfzp\"/>dolce" }) {
+        dynamic.setDynamicType(String::fromUtf8(text));
+        EXPECT_EQ(dynamic.xmlText(), String::fromUtf8(text));
+    }
+}
 
 //---------------------------------------------------------
 //    read write test
