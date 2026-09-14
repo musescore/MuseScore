@@ -223,6 +223,7 @@
         <lyricsDashMaxLength>0.8</lyricsDashMaxLength>
         <lyricsMelismaPad>0.1</lyricsMelismaPad>
         <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+        <lyricsStackingOrder>0</lyricsStackingOrder>
         <maskBarlinesForText>0</maskBarlinesForText>
         <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
