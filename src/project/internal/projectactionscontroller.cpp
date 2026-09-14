@@ -354,7 +354,7 @@ muse::Ret ProjectActionsController::newProject()
 muse::Ret ProjectActionsController::closeProject()
 {
     auto anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
-    bool ok = closeOpenedProject();
+    bool ok = closeProjectScenario()->closeOpenedProject(true);
     if (ok && anyInstanceWithoutProject) {
         //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
         async::Async::call(this, [this]() {
@@ -376,11 +376,6 @@ muse::Ret ProjectActionsController::runAsync(async::Promise<Ret> flow)
     });
 
     return make_ok();
-}
-
-bool ProjectActionsController::closeOpenedProject(bool goToHome)
-{
-    return closeProjectScenario()->closeOpenedProject(goToHome);
 }
 
 async::Promise<Ret> ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)

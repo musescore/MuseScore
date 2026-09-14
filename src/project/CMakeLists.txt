@@ -35,7 +35,6 @@ target_sources(project PRIVATE
     inotationwriter.h
     inotationwritersregister.h
     iprojectaudiosettings.h
-    iprojectfilescontroller.h
     iprojectconfiguration.h
     irecentfilescontroller.h
     imscmetareader.h
