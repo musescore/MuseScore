@@ -24,6 +24,8 @@
 
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
+#include "async/promise.h"
+#include "types/ret.h"
 
 #include "types/projecttypes.h"
 
@@ -35,8 +37,9 @@ class ICloseProjectScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~ICloseProjectScenario() = default;
 
-    //! NOTE Synchronous, because the close and quit flows it serves are synchronous too
-    virtual bool closeOpenedProject(bool goToHome = true) = 0;
+    //! NOTE Resolves once the score is gone, or with an error if it is still there:
+    //! the user kept it, the save it needed failed, or a close is already under way
+    virtual muse::async::Promise<muse::Ret> closeOpenedProject(bool goToHome = true) = 0;
 
     virtual bool isBusy(BusyStatus status) const = 0;
     virtual muse::async::Notification busyChanged() const = 0;

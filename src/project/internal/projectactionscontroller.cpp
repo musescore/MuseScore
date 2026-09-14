@@ -353,17 +353,20 @@ muse::Ret ProjectActionsController::newProject()
 
 muse::Ret ProjectActionsController::closeProject()
 {
-    auto anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
-    bool ok = closeProjectScenario()->closeOpenedProject(true);
-    if (ok && anyInstanceWithoutProject) {
-        //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
-        async::Async::call(this, [this]() {
-            dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
-        });
-        multiwindowsProvider()->activateWindowWithoutProject();
-    }
+    bool anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
 
-    return ok ? make_ok() : make_ret(Ret::Code::UnknownError);
+    return runAsync(closeProjectScenario()->closeOpenedProject(true)
+                    .then<Ret>(this, [this, anyInstanceWithoutProject](const Ret& ret, auto resolve) {
+        if (ret && anyInstanceWithoutProject) {
+            //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
+            async::Async::call(this, [this]() {
+                dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
+            });
+            multiwindowsProvider()->activateWindowWithoutProject();
+        }
+
+        return resolve(ret);
+    }));
 }
 
 //! Commands report that the flow has started; its outcome is shown to the user by the scenario itself
