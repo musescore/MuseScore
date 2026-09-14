@@ -135,6 +135,8 @@ public:
     void beginTransaction(const muse::TranslatableString& description);
     void endTransaction(bool rollback = false, bool layoutAllParts = false, bool keepRolledBackElements = false);
 
+    void reopen();
+
     /// Returns the current transaction, if any is active.
     /// Where possible, prefer using `transaction()` instead of this method.
     Transaction* currentTransaction() const;
