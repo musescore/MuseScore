@@ -30,6 +30,7 @@
 #include "internal/projectconfiguration.h"
 #include "internal/openprojectscenario.h"
 #include "internal/saveprojectscenario.h"
+#include "internal/closeprojectscenario.h"
 #include "internal/exportprojectscenario.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
@@ -131,6 +132,7 @@ void ProjectContext::registerExports()
     ioc()->registerExport<mi::IProjectProvider>(mname, m_actionsController);
     ioc()->registerExport<IOpenProjectScenario>(mname, new OpenProjectScenario(iocContext()));
     ioc()->registerExport<ISaveProjectScenario>(mname, new SaveProjectScenario(iocContext()));
+    ioc()->registerExport<ICloseProjectScenario>(mname, new CloseProjectScenario(iocContext()));
     ioc()->registerExport<IExportProjectScenario>(mname, new ExportProjectScenario(iocContext()));
     ioc()->registerExport<IRecentFilesController>(mname, m_recentFilesController);
     ioc()->registerExport<ITemplatesRepository>(mname, new TemplatesRepository());

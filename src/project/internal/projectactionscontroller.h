@@ -42,6 +42,7 @@
 #include "multiwindows/imultiwindowsprovider.h"
 #include "multiwindows/iprojectprovider.h"
 #include "print/iprintprovider.h"
+#include "icloseprojectscenario.h"
 #include "iopenprojectscenario.h"
 #include "isaveprojectscenario.h"
 
@@ -59,6 +60,7 @@ public:
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
     muse::ContextInject<ISaveProjectScenario> saveProjectScenario = { this };
+    muse::ContextInject<ICloseProjectScenario> closeProjectScenario = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
@@ -107,13 +109,9 @@ private:
 
     muse::Ret closeProject();
     muse::Ret runAsync(muse::async::Promise<muse::Ret> flow);
-    muse::Ret waitFor(muse::async::Promise<muse::Ret> flow);
-
-    muse::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     muse::async::Promise<muse::Ret> saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
                                                 bool force = false);
-    muse::async::Promise<muse::Ret> saveProject(const muse::io::path_t& path = muse::io::path_t());
     muse::async::Promise<muse::Ret> publish();
     muse::async::Promise<muse::Ret> sharedAudio();
     muse::async::Promise<muse::Ret> saveProjectAt(const muse::rcommand::Params& params);
