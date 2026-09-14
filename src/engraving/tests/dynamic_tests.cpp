@@ -73,7 +73,12 @@ TEST_F(Engraving_DynamicTests, compoundDynamics)
     EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sfzpp (sforzando pianissimo)");
     EXPECT_TRUE(dynamic.screenReaderInfo().contains(u"sfzpp (sforzando pianissimo)"));
     dynamic.setDynamicType(u"sffzmp");
-    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sffzmp (sforzando mezzo piano)");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sffzmp (sforzando fortissimo, then mezzo piano)");
+    EXPECT_TRUE(dynamic.screenReaderInfo().contains(u"sforzando fortissimo, then mezzo piano"));
+    dynamic.setDynamicType(u"sfzmp");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sfzmp (sforzando mezzo piano)");
+    dynamic.setDynamicType(u"sfffzpp");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sfffzpp (sforzando forte fortissimo, then pianissimo)");
     dynamic.setDynamicType(u"subito sfzp!");
     EXPECT_EQ(dynamic.xmlText(), u"subito <sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym><sym>dynamicPiano</sym>!");
     for (const char* text : { "sempre", "sfzmpmore", "sfzm", "sffzmm", "<font face=\"sfzp\"/>dolce" }) {

@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "dynamic.h"
+
+#include <map>
+
 #include "iengravingfont.h"
 
 #include "../editing/edithairpin.h"
@@ -404,10 +407,30 @@ TranslatableString Dynamic::subtypeUserName() const
             s.replace(score()->engravingFont()->toString(entry.first), entry.second);
         }
         const std::string text = s.toStdString();
-        const std::regex compoundRegex(R"(\bsf{1,3}z?(p{1,6}|f{1,6}|m[pf])\b)");
+        const std::regex compoundRegex(R"(\bs(f{1,3})z?(p{1,6}|f{1,6}|m[pf])\b)");
         std::smatch match;
         if (std::regex_search(text, match, compoundRegex)) {
-            const std::string level = match[1].str();
+            const std::string level = match[2].str();
+            if (match[1].length() > 1) {
+                const TranslatableString attack = match[1].length() == 2
+                                                  ? TranslatableString("engraving/dynamictype", "fortissimo")
+                                                  : TranslatableString("engraving/dynamictype", "forte fortissimo");
+                TranslatableString sustain = TranslatableString::untranslatable(String::fromStdString(level));
+                static const std::map<std::string, TranslatableString> levels {
+                    { "p", TranslatableString("engraving/dynamictype", "piano") },
+                    { "pp", TranslatableString("engraving/dynamictype", "pianissimo") },
+                    { "ppp", TranslatableString("engraving/dynamictype", "piano pianissimo") },
+                    { "mp", TranslatableString("engraving/dynamictype", "mezzo piano") },
+                    { "mf", TranslatableString("engraving/dynamictype", "mezzo forte") },
+                    { "f", TranslatableString("engraving/dynamictype", "forte") },
+                    { "ff", TranslatableString("engraving/dynamictype", "fortissimo") },
+                    { "fff", TranslatableString("engraving/dynamictype", "forte fortissimo") }
+                };
+                if (auto it = levels.find(level); it != levels.end()) {
+                    sustain = it->second;
+                }
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando %2, then %3)").arg(s, attack, sustain);
+            }
             if (level == "p") {
                 return TranslatableString("engraving/dynamictype", "%1 (sforzando piano)").arg(s);
             } else if (level == "pp") {
