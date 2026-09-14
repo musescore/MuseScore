@@ -93,6 +93,7 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return sharedAudio(); });
 
     d->onRequest(this, PROJECT_EXPORT_COMMAND, [this]() { return exportScore(); });
+    d->onRequest(this, PROJECT_EXPORT_SELECTION_COMMAND, [this]() { return exportSelection(); });
     d->onRequest(this, PROJECT_IMPORT_PDF_COMMAND, [this]() { return importPdf(); });
     d->onRequest(this, PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND, [this]() { return importAudioToScore(); });
 
@@ -117,6 +118,7 @@ void ProjectActionsController::init()
             { "file-publish", PROJECT_PUBLISH_COMMAND, {} },
             { "file-share-audio", PROJECT_SHARED_AUDIO_COMMAND, {} },
             { "file-export", PROJECT_EXPORT_COMMAND, {} },
+            { "file-export-selection", PROJECT_EXPORT_SELECTION_COMMAND, {} },
             { "file-import-pdf", PROJECT_IMPORT_PDF_COMMAND, {} },
             { "file-import-audio-to-score", PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND, {} },
             { "export", PROJECT_EXPORT_COMMAND, {} },
@@ -208,6 +210,11 @@ muse::async::Notification ProjectActionsController::busyChanged() const
 bool ProjectActionsController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
+}
+
+bool ProjectActionsController::hasRangeSelection() const
+{
+    return currentNotationSelection() ? currentNotationSelection()->isRange() : false;
 }
 
 muse::async::Notification ProjectActionsController::hasSelectionChanged() const
@@ -491,6 +498,23 @@ muse::Ret ProjectActionsController::exportScore()
     if (!interactive()->isOpened(EXPORT_URI).val) {
         interactive()->open(EXPORT_URI);
     }
+    return make_ok();
+}
+
+muse::Ret ProjectActionsController::exportSelection()
+{
+    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationSelectionPtr selection = notation ? notation->interaction()->selection() : nullptr;
+    if (!selection || !selection->isRange()) {
+        return Ret(Ret::Code::BadArgs);
+    }
+
+    UriQuery query("musescore://project/export");
+    query.set("selectionMode", Val(true));
+    if (!interactive()->isOpened(query.uri()).val) {
+        interactive()->open(query);
+    }
+
     return make_ok();
 }
 

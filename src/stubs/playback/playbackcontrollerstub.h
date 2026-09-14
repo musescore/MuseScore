@@ -106,6 +106,8 @@ public:
 
     void setNotation(notation::INotationPtr notation) override;
     void setIsExportingAudio(bool exporting) override;
+    void setSelectionExportTrackVolumes(const PartVolumeMap& partVolumes) override;
+    void setSelectionExportMetronomeEnabled(bool enabled) override;
 
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;

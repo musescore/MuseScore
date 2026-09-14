@@ -59,6 +59,10 @@ const engraving::InstrumentTrackId& NotationPlaybackStub::metronomeTrackId() con
     return dummy;
 }
 
+void NotationPlaybackStub::setIsMetronomeEnabled(bool)
+{
+}
+
 engraving::InstrumentTrackId NotationPlaybackStub::chordSymbolsTrackId(const ID&) const
 {
     return {};

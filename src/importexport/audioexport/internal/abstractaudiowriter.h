@@ -60,7 +60,8 @@ protected:
                              const Options& options = Options());
 
 private:
-    void doWrite(muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
+    void doWrite(muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format,
+                 const muse::audio::SoundTrackSaveOptions& saveOptions);
 
     UnitType unitTypeFromOptions(const Options& options) const;
 
@@ -70,6 +71,8 @@ private:
     muse::Ret m_writeRet;
 
     notation::INotationPtr m_notationForRestore;
+    double m_tempoMultiplierForRestore = 1.0;
+    bool m_shouldRestoreTempoMultiplier = false;
 };
 }
 

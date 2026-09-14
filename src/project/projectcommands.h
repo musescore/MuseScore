@@ -40,6 +40,7 @@ inline static const muse::rcommand::Command PROJECT_PUBLISH_COMMAND("command://p
 inline static const muse::rcommand::Command PROJECT_SHARED_AUDIO_COMMAND("command://project/shared-audio");
 
 inline static const muse::rcommand::Command PROJECT_EXPORT_COMMAND("command://project/export");
+inline static const muse::rcommand::Command PROJECT_EXPORT_SELECTION_COMMAND("command://project/export-selection");
 inline static const muse::rcommand::Command PROJECT_IMPORT_PDF_COMMAND("command://project/import-pdf");
 inline static const muse::rcommand::Command PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND("command://project/import-audio-to-score");
 

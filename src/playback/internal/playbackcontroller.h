@@ -142,6 +142,8 @@ public:
     void setMasterNotation(notation::IMasterNotationPtr masterNotation);
 
     void setIsExportingAudio(bool exporting) override;
+    void setSelectionExportTrackVolumes(const PartVolumeMap& partVolumes) override;
+    void setSelectionExportMetronomeEnabled(bool enabled) override;
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const;
 
@@ -265,6 +267,8 @@ private:
     size_t m_loadingTrackCount = 0;
 
     bool m_isExportingAudio = false;
+    std::optional<PartVolumeMap> m_selectionExportTrackVolumes;
+    std::optional<bool> m_selectionExportMetronomeEnabled;
     bool m_isRangeSelection = false;
 
     DrumsetLoader m_drumsetLoader;

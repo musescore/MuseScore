@@ -39,12 +39,14 @@
 #include "notationscene/notationcommands.h"
 #include "palette/palettecommands.h"
 #include "instrumentsscene/instrumentscommands.h"
+#include "project/projectcommands.h"
 
 #include "widgets/editstyleutils.h"
 
 using namespace mu::notation;
 using namespace mu::palette;
 using namespace mu::instrumentsscene;
+using namespace mu::project;
 using namespace muse;
 using namespace muse::uicomponents;
 using namespace muse::actions;
@@ -54,6 +56,12 @@ void NotationContextMenuModel::loadItems(int elementType)
     AbstractMenuModel::load();
 
     MenuItemList items = makeItemsByElementType(static_cast<ElementType>(elementType));
+
+    const INotationSelectionPtr notationSelection = selection();
+    if (notationSelection && notationSelection->isRange()) {
+        items << makeSeparator()
+              << makeMenuItem(PROJECT_EXPORT_SELECTION_COMMAND);
+    }
 
     const INotationAutomationPtr automation = this->automation();
     if (automation && automation->isAutomationModeEnabled()) {
