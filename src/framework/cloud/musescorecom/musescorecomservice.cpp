@@ -412,8 +412,8 @@ static RetVal<ConvertQueueList> parseConvertQueueList(const QByteArray& data)
         if (scoreIdVal.isDouble()) {
             item.scoreId = scoreIdVal.toInt();
         }
-        item.createdAt = QDateTime::fromSecsSinceEpoch(itemObj.value("created_at").toInteger());
-        item.updatedAt = QDateTime::fromSecsSinceEpoch(itemObj.value("updated_at").toInteger());
+        item.dataCreated = QDateTime::fromSecsSinceEpoch(itemObj.value("date_created").toInteger());
+        item.dataUpdated = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInteger());
         item.errorCode = convertErrorCodeFromApiString(itemObj.value("error_code").toString());
 
         result.push_back(item);

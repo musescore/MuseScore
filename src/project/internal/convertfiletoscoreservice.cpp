@@ -116,14 +116,9 @@ static std::string errorCodeToString(ConvertErrorCode code)
 
 static const std::string WATCHED_CONVERTS_RESOURCE_NAME("WATCHED_CONVERTS");
 
-static std::string convertLogId(ConvertType type, int itemId)
+static std::string convertIdAndType(ConvertType type, int itemId)
 {
-    return std::to_string(itemId) + " (type: " + convertTypeToString(type) + ")";
-}
-
-static std::string convertLogId(const muse::String& convertedScoreName, ConvertType type, int itemId)
-{
-    return "\"" + convertedScoreName.toStdString() + "\" (conversion " + convertLogId(type, itemId) + ")";
+    return "id: " + std::to_string(itemId) + ", type: " + convertTypeToString(type);
 }
 
 void ConvertFileToScoreService::init()
@@ -392,7 +387,8 @@ void ConvertFileToScoreService::submitReview(int scoreId, ReviewRating rating, c
     museScoreComService()->convert()->submitReview(type, convertId, rating, comment)
     .onResolve(this, [type, convertId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
-            LOGE() << "Could not submit the review for conversion " << convertLogId(type, convertId) << ": " << submitRes.ret.toString();
+            LOGE() << "Could not submit the review for conversion (" << convertIdAndType(type,
+                                                                                         convertId) << "): " << submitRes.ret.toString();
         }
     });
 }
@@ -410,7 +406,8 @@ void ConvertFileToScoreService::submitReviewComment(int scoreId, const QString& 
     museScoreComService()->convert()->submitReviewComment(type, convertId, comment)
     .onResolve(this, [type, convertId](const RetVal<ConvertResult>& submitRes) {
         if (!submitRes.ret) {
-            LOGE() << "Could not submit the comment for conversion " << convertLogId(type, convertId) << ": " << submitRes.ret.toString();
+            LOGE() << "Could not submit the comment for conversion (" << convertIdAndType(type,
+                                                                                          convertId) << "): " << submitRes.ret.toString();
         }
     });
 }
@@ -420,7 +417,7 @@ void ConvertFileToScoreService::deleteConversion(ConvertType type, int convertId
     museScoreComService()->convert()->deleteConversion(type, convertId)
     .onResolve(this, [this, type, convertId](const Ret& ret) {
         if (!ret) {
-            LOGE() << "Could not delete conversion " << convertLogId(type, convertId) << ": " << ret.toString();
+            LOGE() << "Could not delete conversion (" << convertIdAndType(type, convertId) << "): " << ret.toString();
             return;
         }
 
@@ -525,7 +522,7 @@ void ConvertFileToScoreService::saveWatchedScores()
 
 void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::String& convertedScoreName)
 {
-    LOGI() << "Start watching conversion " << convertLogId(convertedScoreName, type, itemId);
+    LOGI() << "Start watching conversion of \"" << convertedScoreName << "\" (" << convertIdAndType(type, itemId) << ")";
 
     const auto it = std::find_if(m_watchedScores.begin(), m_watchedScores.end(), [type, itemId](const WatchedScore& watched) {
         return watched.conversion.type == type && watched.conversion.id == itemId;
@@ -655,7 +652,7 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
             continue;
         }
 
-        LOGI() << "New external conversion: " << convertLogId(queueItem.type, queueItem.id);
+        LOGI() << "Found new external conversion (" << convertIdAndType(queueItem.type, queueItem.id) << ")";
 
         WatchedScore watched;
         watched.conversion.id = queueItem.id;
@@ -706,8 +703,8 @@ void ConvertFileToScoreService::handleItem(WatchedScore& watched, ConvertStatus 
     const ConvertStatus previousStatus = watched.conversion.status;
     const bool statusChanged = previousStatus != status;
     if (statusChanged) {
-        LOGI() << "Conversion status changed: " << convertLogId(watched.name, watched.conversion.type, watched.conversion.id)
-               << " -> " << convertStatusToString(status);
+        LOGI() << "Conversion of \"" << watched.name << "\" (" << convertIdAndType(watched.conversion.type, watched.conversion.id) << ")"
+               << " status changed: " << convertStatusToString(previousStatus) << " -> " << convertStatusToString(status);
     }
 
     switch (status) {
@@ -723,7 +720,8 @@ void ConvertFileToScoreService::handleItem(WatchedScore& watched, ConvertStatus 
         if (watched.startedLocally) {
             const RetVal<ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(*scoreId);
             if (!scoreInfo.ret) {
-                LOGW() << "Could not fetch score info for " << convertLogId(watched.name, watched.conversion.type, watched.conversion.id)
+                LOGW() << "Could not fetch score info for \"" << watched.name << "\" ("
+                       << convertIdAndType(watched.conversion.type, watched.conversion.id) << ")"
                        << ", will retry on next poll: " << scoreInfo.ret.toString();
                 return; //! NOTE: watched.conversion.status stays at previousStatus - retried next poll
             }

@@ -171,8 +171,8 @@ struct ConvertQueueItem {
     QString filename;
     QString link; //! audio2score only
     std::optional<int> scoreId; //! set once the score is ready (AwaitingReview/Done)
-    QDateTime createdAt;
-    QDateTime updatedAt;
+    QDateTime dataCreated;
+    QDateTime dataUpdated;
     ConvertErrorCode errorCode = ConvertErrorCode::Unknown;
 };
 
@@ -197,7 +197,7 @@ inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::clo
       << ", type: " << muse::cloud::convertTypeToString(item.type)
       << ", status: " << muse::cloud::convertStatusToString(item.status)
       << ", scoreId: " << (item.scoreId ? QString::number(*item.scoreId) : QString("none"))
-      << ", createdAt: " << dateTimeToString(item.createdAt)
-      << ", updatedAt: " << dateTimeToString(item.updatedAt);
+      << ", dataCreated: " << dateTimeToString(item.dataCreated)
+      << ", dataUpdated: " << dateTimeToString(item.dataUpdated);
     return s;
 }
