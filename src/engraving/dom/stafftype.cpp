@@ -79,6 +79,7 @@ StaffType::StaffType()
     m_symRepeat = TablatureSymbolRepeat::NEVER;
     setDurationFontName(m_durationFonts[0].displayName);
     setFretPresetIdx(0);
+    setJianpuTextStyle(TextStyleType::JIANPU_NUMBER);
 }
 
 StaffType::StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff, double lineDist,
@@ -98,6 +99,7 @@ StaffType::StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff,
     m_genTimesig(genTimeSig),
     m_genKeysig(genKeySig)
 {
+    setJianpuTextStyle(TextStyleType::JIANPU_NUMBER);
 }
 
 StaffType::StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff, double lineDist,
@@ -216,7 +218,10 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_fretUseTextStyle == st.m_fretUseTextStyle);
     equal &= (m_fretTextStyle == st.m_fretTextStyle);
     equal &= (m_fretPresetIdx == st.m_fretPresetIdx);
-
+    equal &= (m_jianpuTextStyle == st.m_jianpuTextStyle);
+    equal &= (m_jianpuFont == st.m_jianpuFont);
+    equal &= (m_jianpuFontSize == st.m_jianpuFontSize);
+    equal &= (m_jianpuBoxH == st.m_jianpuBoxH);
     return equal;
 }
 
@@ -286,6 +291,8 @@ bool StaffType::isHiddenElementOnTab(Sid commonTabStyle, Sid simpleTabStyle) con
 
 void StaffType::styleChanged()
 {
+    setJianpuTextStyle(m_jianpuTextStyle);
+
     if (!m_fretUseTextStyle) {
         return;
     }
@@ -307,6 +314,37 @@ void StaffType::setUseNumbers(bool val)
 {
     m_useNumbers = val;
     setFretMetrics();
+}
+
+void StaffType::setJianpuTextStyle(const TextStyleType& val)
+{
+    m_jianpuTextStyle = val;
+    m_jianpuFont = Font();
+
+    const TextStyle* ts = textStyle(m_jianpuTextStyle);
+    for (const TextStyleProperty property : *ts) {
+        switch (property.type) {
+        case TextStylePropertyType::FontFace: {
+            String fontName = style().styleSt(property.sid);
+            m_jianpuFont.setFamily(fontName, Font::Type::Tablature);
+        } break;
+        case TextStylePropertyType::FontSize: {
+            double fontSize = style().styleD(property.sid);
+            setJianpuFontSize(fontSize);
+        } break;
+        case TextStylePropertyType::FontStyle: {
+            FontStyle fStyle = style().styleV(property.sid).value<FontStyle>();
+            m_jianpuFont.setBold(fStyle & FontStyle::Bold);
+            m_jianpuFont.setItalic(fStyle & FontStyle::Italic);
+            m_jianpuFont.setUnderline(fStyle & FontStyle::Underline);
+            m_jianpuFont.setStrike(fStyle & FontStyle::Strike);
+        } break;
+        default:
+            continue;
+        }
+    }
+
+    setJianpuMetrics();
 }
 
 void StaffType::setFretTextStyle(const TextStyleType& val)
@@ -454,6 +492,17 @@ void StaffType::setFretMetrics()
     m_deadFretBoxY = deadBb.y() + m_deadFretYOffset;
 }
 
+void StaffType::setJianpuMetrics()
+{
+    FontMetrics fm(jianpuFont());
+
+    // compute total height of used characters
+    String txt = u"01234567";
+    RectF bb = fm.tightBoundingRect(txt);
+
+    m_jianpuBoxH = bb.height();
+}
+
 //---------------------------------------------------------
 //   setDurationFontName
 //---------------------------------------------------------
@@ -547,6 +596,13 @@ void StaffType::setFretFontSize(double val)
     m_fretFontSize = val;
     m_fretFont.setPointSizeF(val);
     setFretMetrics();
+}
+
+void StaffType::setJianpuFontSize(double val)
+{
+    m_jianpuFontSize = val;
+    m_jianpuFont.setPointSizeF(val);
+    setJianpuMetrics();
 }
 
 //---------------------------------------------------------
@@ -886,10 +942,11 @@ double StaffType::spatium() const
 //
 //=========================================================
 
-static const int _defaultPreset[STAFF_GROUP_MAX] =
-{ 0,                    // default pitched preset is "stdNormal"
-  4,                    // default percussion preset is "perc5lines"
-  5                     // default tab preset is "tab6StrCommon"
+static const StaffTypes _defaultPreset[STAFF_GROUP_MAX] =
+{
+    StaffTypes::STANDARD,   // default pitched preset is "stdNormal"
+    StaffTypes::PERC_5LINE, // default percussion preset is "perc5lines"
+    StaffTypes::TAB_6COMMON // default tab preset is "tab6StrCommon"
 };
 
 //---------------------------------------------------------
@@ -918,7 +975,7 @@ const StaffType* StaffType::presetFromXmlName(const String& xmlName)
 
 const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
 {
-    int _idx = _defaultPreset[int(grp)];
+    int _idx = static_cast<int>(_defaultPreset[int(grp)]);
     return &m_presets[_idx];
 }
 
@@ -936,6 +993,7 @@ void StaffType::initStaffTypes(const Color& defaultColor)
     m_presets = {
 //                       group,              staff type,                    lin stpOff  dist clef   bars stmless time  key    ledger invis     color
         StaffType(StaffGroup::STANDARD,   StaffTypes::STANDARD,             5, 0,     1,   true,  true, false, true, true, true, false,  defaultColor),
+        StaffType(StaffGroup::STANDARD,   StaffTypes::JIANPU,               0, 0,     1,   true,  true, false, true, true, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_1LINE,           1, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_2LINE,           2, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_3LINE,           3, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
