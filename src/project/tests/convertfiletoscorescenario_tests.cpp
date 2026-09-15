@@ -1174,3 +1174,34 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UserCancelsConfirm_D
 
     pumpEvents();
 }
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_RepeatedCallsWhilePending_OnlyOpensPickerOnce_ThenAllowsNewConvert)
+{
+    // [GIVEN] The user will eventually pick a file and complete a conversion
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    // [THEN] The picker is opened exactly once, even though convertFiles() was called twice in a
+    // row before checkConvertIsAllowed() resolved (e.g. a double-click on "Convert...")
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .Times(1);
+
+    // [WHEN] Converting is triggered twice in a row
+    m_scenario->convertFiles();
+    m_scenario->convertFiles();
+
+    pumpEvents();
+
+    // [THEN] Once that flow has completed, a later convert is not blocked by the earlier one
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .Times(1);
+
+    // [WHEN] Converting again
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
