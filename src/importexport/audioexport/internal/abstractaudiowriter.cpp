@@ -88,8 +88,8 @@ void AbstractAudioWriter::abort()
 {
     muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
     playback()->abortSavingAllSoundTracks();
-    m_writeRet = make_ret(Ret::Code::Cancel);
-    m_isCompleted = true;
+    // The engine still owns the destination device until it acknowledges the abort.
+    // Let the saveSoundTrack callback finish the export and restore playback state.
 }
 
 muse::Progress* AbstractAudioWriter::progress()
