@@ -40,6 +40,7 @@ public:
 
     MOCK_METHOD(RetVal<ScoreInfo>, downloadScoreInfo, (const QUrl&), (override));
     MOCK_METHOD(RetVal<ScoreInfo>, downloadScoreInfo, (int), (override));
+    MOCK_METHOD(async::Promise<RetVal<ScoreInfo> >, downloadScoreInfoAsync, (int), (override));
 
     MOCK_METHOD(async::Promise<ScoresList>, downloadScoresList, (int, int), (override));
 

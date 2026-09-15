@@ -66,7 +66,7 @@ public:
     muse::Ret validateLink(const QUrl& link) override;
 
     void convertFiles(const muse::io::paths_t& paths = {}) override;
-    muse::async::Channel<muse::Ret, muse::io::path_t> convertFinished() const override;
+    muse::async::Channel<muse::Ret, ScoreInfo> convertFinished() const override;
 
 private:
     muse::async::Promise<muse::Ret> checkConvertIsAllowed();
@@ -76,7 +76,7 @@ private:
 
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
 
-    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedFileName);
+    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName);
 
     void showValidationError(const muse::Ret& ret);
 
@@ -92,13 +92,16 @@ private:
     void showTooManyImagesError(int maxImages);
 
     void showFileProcessingDialog();
-    void showScoreReadyNotification(const muse::io::path_t& path);
+    void showScoreReadyNotification(const ScoreInfo& scoreInfo);
     void showConvertFailedNotification(const muse::Ret& ret);
+    void showPollingFailureNotification();
 
-    void askReviewRating(ConvertType type, int queueId);
+    void askReviewRating(int scoreId);
     void checkPendingReview();
 
-    muse::async::Channel<muse::Ret, muse::io::path_t> m_convertFinished;
-    std::map<muse::io::path_t, std::pair<ConvertType, int /*queueId*/> > m_pendingReviews;
+    muse::async::Channel<muse::Ret, ScoreInfo> m_convertFinished;
+    std::map<muse::io::path_t, int /*scoreId*/> m_pendingReviews;
+
+    bool m_retryToastShown = false;
 };
 }

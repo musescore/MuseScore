@@ -72,9 +72,9 @@ StyledDialogView {
         }
     }
 
-    function finish(type, paths, link, convertedFileName) {
+    function finish(type, paths, link, convertedScoreName) {
         root.skipCloseConfirmation = true
-        root.ret = { errcode: 0, value: { type: type, paths: paths, link: link, convertedFileName: convertedFileName } }
+        root.ret = { errcode: 0, value: { type: type, paths: paths, link: link, convertedScoreName: convertedScoreName } }
         root.hide()
     }
 
@@ -194,8 +194,8 @@ StyledDialogView {
 
             onBackRequested: convertModel.confirmGoingBack()
 
-            onConvertRequested: function(paths, convertedFileName) {
-                root.finish(convertModel.convertType, paths, "", convertedFileName)
+            onConvertRequested: function(paths, convertedScoreName) {
+                root.finish(convertModel.convertType, paths, "", convertedScoreName)
             }
 
             onSelectMoreFilesRequested: function(existingPaths) {
@@ -220,13 +220,13 @@ StyledDialogView {
 
             onBackRequested: convertModel.confirmGoingBack()
 
-            onConvertRequested: function(link, convertedFileName) {
+            onConvertRequested: function(link, convertedScoreName) {
                 if (!convertModel.validateLink(link)) {
                     return
                 }
 
                 convertModel.selectedLink = link
-                root.finish(convertModel.convertType, [], link, convertedFileName)
+                root.finish(convertModel.convertType, [], link, convertedScoreName)
             }
         }
     }
