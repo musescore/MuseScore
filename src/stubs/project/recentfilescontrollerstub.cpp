@@ -43,6 +43,10 @@ void RecentFilesControllerStub::moveRecentFile(const muse::io::path_t&, const Re
 {
 }
 
+void RecentFilesControllerStub::removeRecentFile(const muse::io::path_t&)
+{
+}
+
 void RecentFilesControllerStub::clearRecentFiles()
 {
 }
