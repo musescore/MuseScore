@@ -5778,14 +5778,41 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
 
-    if (s->rtick().isZero()) {
+    const staff_idx_t tempoStaffIdx = item->effectiveStaffIdx();
+    if (s->rtick().isZero() && tempoStaffIdx != muse::nidx) {
         Segment* p = item->segment()->prev(SegmentType::TimeSig);
         if (p && !p->allElementsInvisible()) {
-            graceNoteX = 0.0;
-            ldata->moveX(-(s->x() - p->x()));
-            EngravingItem* e = p->element(item->staffIdx() * VOICES);
-            if (e) {
-                ldata->moveX(p->hasTimeSigAboveStaves() ? e->x() + e->width() + e->spatium() : e->x());
+            const TimeSig* timeSig = nullptr;
+            const TimeSig* firstVisibleTimeSig = nullptr;
+            for (const EngravingItem* element : p->elist()) {
+                if (!element || !element->isTimeSig() || !element->visible()) {
+                    continue;
+                }
+                const TimeSig* candidate = toTimeSig(element);
+                const staff_idx_t staffIdx = candidate->effectiveStaffIdx();
+                if (!candidate->showOnThisStaff() || staffIdx == muse::nidx || candidate->ldata()->bbox().isEmpty()
+                    || !item->score()->staff(staffIdx)->show() || (system && !system->staff(staffIdx)->show())) {
+                    continue;
+                }
+                if (!firstVisibleTimeSig || staffIdx < firstVisibleTimeSig->effectiveStaffIdx()) {
+                    firstVisibleTimeSig = candidate;
+                }
+                if (candidate->isAboveStaves() || candidate->isAcrossStaves()) {
+                    if (staffIdx <= tempoStaffIdx
+                        && (!timeSig || staffIdx > timeSig->effectiveStaffIdx())) {
+                        timeSig = candidate;
+                    }
+                } else if (staffIdx == tempoStaffIdx) {
+                    timeSig = candidate;
+                }
+            }
+            if (!timeSig) {
+                timeSig = firstVisibleTimeSig;
+            }
+            if (timeSig) {
+                graceNoteX = 0.0;
+                ldata->moveX(-(s->x() - p->x()));
+                ldata->moveX(timeSig->isAboveStaves() ? timeSig->x() + timeSig->width() + timeSig->spatium() : timeSig->x());
             }
         }
     }
