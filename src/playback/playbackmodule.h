@@ -56,6 +56,7 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
+    void onDeinit() override;
 
 private:
     std::shared_ptr<PlaybackCommandsController> m_commandsController;

@@ -99,6 +99,8 @@ void PlaybackController::init()
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+
+        setupPlaybackIfNeed();
     });
 
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
@@ -106,17 +108,20 @@ void PlaybackController::init()
             resetPlayback();
         }
 
-        if (!globalContext()->currentProject()) {
+        m_needSetupPlayback = globalContext()->currentProject() != nullptr;
+
+        if (m_needSetupPlayback) {
+            m_loadingProgress.start();
+        }
+    });
+
+    playback()->init().onResolve(this, [this](const Ret& ret) {
+        if (!ret) {
+            LOGE() << "failed to init the audio context: " << ret.toString();
             return;
         }
 
-        m_loadingProgress.start();
-
-        playback()->init().onResolve(this, [this](const Ret& ret) {
-            if (ret) {
-                setupPlayback();
-            }
-        });
+        setupPlaybackIfNeed();
     });
 
     m_totalPlayTimeChanged.onNotify(this, [this]() {
@@ -130,6 +135,30 @@ void PlaybackController::init()
     });
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
+}
+
+void PlaybackController::setupPlaybackIfNeed()
+{
+    if (!m_needSetupPlayback || !playback()->isInited()) {
+        return;
+    }
+
+    m_needSetupPlayback = false;
+
+    setupPlayback();
+}
+
+void PlaybackController::deinit()
+{
+    m_needSetupPlayback = false;
+
+    if (m_isPlaybackInited) {
+        resetPlayback();
+    }
+
+    if (playback()->isInited()) {
+        playback()->deinit();
+    }
 }
 
 void PlaybackController::updateCurrentTempo()
@@ -1072,6 +1101,9 @@ void PlaybackController::resetPlayback()
     if (currentPlayer()) {
         currentPlayer()->playbackPositionChanged().disconnect(this);
         currentPlayer()->playbackStatusChanged().disconnect(this);
+
+        currentPlayer()->stop();
+        currentPlayer()->seek(0 /*newPosition*/);
     }
 
     playback()->clearSources();
@@ -1088,8 +1120,6 @@ void PlaybackController::resetPlayback()
     m_seqAsyncReceiver.async_disconnectAll();
 
     m_currentTick = 0;
-
-    playback()->deinit();
 
     m_instrumentTrackIdMap.clear();
     m_auxTrackIdMap.clear();

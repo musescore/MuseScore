@@ -120,3 +120,8 @@ void PlaybackContext::onInit(const IApplication::RunMode& mode)
     m_playbackUiActions->init();
     m_soundProfileRepo->init();
 }
+
+void PlaybackContext::onDeinit()
+{
+    m_playbackController->deinit();
+}
