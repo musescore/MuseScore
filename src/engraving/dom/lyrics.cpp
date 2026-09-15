@@ -579,6 +579,16 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
 }
 
 //---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void Lyrics::reset()
+{
+    undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
+    TextBase::reset();
+}
+
+//---------------------------------------------------------
 //   removeInvalidSegments
 //
 // Remove lyric-final melisma lines and reset the alignment of the lyric

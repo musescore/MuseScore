@@ -65,6 +65,7 @@ LyricsLine::LyricsLine(const LyricsLine& g)
     : SLine(g)
 {
     m_nextLyrics = 0;
+    m_centerBetweenStaves = g.m_centerBetweenStaves;
 }
 
 //---------------------------------------------------------
@@ -93,12 +94,29 @@ void LyricsLine::removeUnmanaged()
 }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+PropertyValue LyricsLine::getProperty(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::CENTER_BETWEEN_STAVES:
+        return centerBetweenStaves();
+    default:
+        return SLine::getProperty(propertyId);
+    }
+}
+
+//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
 bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
 {
     switch (propertyId) {
+    case Pid::CENTER_BETWEEN_STAVES:
+        setCenterBetweenStaves(v.value<AutoOnOff>());
+        break;
     case Pid::SPANNER_TICKS:
     {
         // if parent lyrics has a melisma, change its length too
@@ -125,9 +143,17 @@ PropertyValue LyricsLine::propertyDefault(Pid id) const
     switch (id) {
     case Pid::LINE_WIDTH:
         return styleValue(Pid::LINE_WIDTH, getPropertyStyle(Pid::LINE_WIDTH));
+    case Pid::CENTER_BETWEEN_STAVES:
+        return AutoOnOff::AUTO;
     default:
         return SLine::propertyDefault(id);
     }
+}
+
+void LyricsLine::reset()
+{
+    undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
+    SLine::reset();
 }
 
 Sid LyricsLine::getPropertyStyle(Pid propertyId) const
@@ -212,7 +238,7 @@ PropertyValue LyricsLineSegment::propertyDefault(Pid propertyId) const
 
 EngravingObject* LyricsLineSegment::propertyDelegate(Pid propertyId) const
 {
-    if (propertyId == Pid::GENERATED) {
+    if (propertyId == Pid::GENERATED || propertyId == Pid::CENTER_BETWEEN_STAVES) {
         return lyricsLine();
     }
 
