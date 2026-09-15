@@ -32,14 +32,16 @@ playback and mixer state afterwards.
 | Qt | 6.10.2, MSVC 2022 x64 |
 | MuseScore base revision | `87e6a2cc1973` |
 | Muse Framework base revision | `34ecec524d1b` |
-| Feature revision | Published MuseScore draft `8b4202c204` and framework draft `4ffe3392b94c`; local generic cancellation fix installed and user-tested, not yet published |
+| Feature revision | Published MuseScore draft `876d398de8` and framework draft `4ffe3392b94c`; unsuccessful local cleanup candidate reverted, test results documented here |
 | Executable | `C:\Users\afortun8\b\m\install\bin\MuseScoreStudio5.exe` |
 | Build result | **PASS** — complete compile, link, and install after upstream refresh on 2026-09-15; one transient `LNK1104` at final link resolved by retry |
 | PR style-only revision rebuild | **PASS** — compile, link, and install on 2026-09-15 after closing MuseScore; linked and installed executable SHA-256 hashes agree |
-| Cancellation-fix local rebuild | **PASS** — compile, link, install, and linked/installed SHA-256 equality on 2026-09-15; user confirmed that in-progress abort no longer crashes standard or selection audio export |
+| Cancellation-fix rebuild | **PASS** — compile, link, install, and linked/installed SHA-256 equality on 2026-09-15; user confirmed that in-progress abort no longer crashes standard or selection audio export, while canceled MP3 cleanup remains a known limitation |
+| Unpublished cleanup experiment | **FAIL** — compile, link, and install passed, but user testing found the partial MP3 still remained and a new program runtime regression; the candidate was reverted and the published non-crashing code was rebuilt and reinstalled |
 | Code-style check | **PASS** — Uncrustify 0.74.0 checks all 13 framework and 35 application C++ files touched by the feature |
 | Audio unit-test build | **PASS** — isolated `muse_audio_tests` target compiled and linked |
 | Audio unit-test run | **BLOCKED** — Windows runner exits with `0xC0000005` before publishing GoogleTest results |
+| MuseScore PR unit-test CI | **FAIL** — [current `run_tests` job](https://github.com/musescore/MuseScore/actions/runs/34966230344/job/104371224603) built successfully, but its **Run tests** step failed; the exact failing assertion or process exit has not yet been verified from the job log |
 
 ### Launching the local test build on Windows
 
@@ -79,8 +81,10 @@ navigation, and abort/error recovery still need attention; individual manual
 results from 2026-09-14 should not be presented as a full retest of every
 scenario on the refreshed build. After the generic audio-writer cancellation
 fix, the user canceled both a standard full-score export and a selection export
-in progress without a process crash. Partial-file cleanup and exact playback/
-mixer restoration after these aborts were not separately recorded.
+in progress without a process crash. On the selection path, original tempo and
+instrument volumes were retained, but the partial MP3 remained and played only
+the portion rendered before cancellation. Exact mute/solo state after abort was
+not separately recorded.
 
 One test-score fragment exhibits the same sound-rendering anomaly during live
 playback and selection export. Because the exported result matches MuseScore's
@@ -267,7 +271,7 @@ this PR because its interactive event stream is not atomic with offline export.
 |---|---|---|---|---|
 | STATE-01 | Export with changed tempo, volumes, fades, and metronome, then play normally. | Original tempo, mixer, metronome, and playback state are restored. | **PASS** | Manually confirmed across development iterations. |
 | STATE-02 | Change settings and cancel from the dialog before choosing a path. | No state changes escape the dialog; score is not dirty. | **PASS** | Canceling the dialog before export leaves the score and playback unchanged, user-confirmed 2026-09-15. |
-| STATE-03 | Cancel/abort while an export is in progress, if supported by the progress dialog. | Temporary state is restored and no unusable partial file is presented as successful. | **PARTIAL** | Pre-fix build crashed in both selection and standard full-score audio export (Windows 0xC0000005 in MuseSamplerCoreLib.dll 0.105.7.1189). The generic AbstractAudioWriter::abort() correction was installed, and the user confirmed both in-progress cancellation paths no longer crash. Exact state restoration and absence of a partial output file still need separate confirmation. |
+| STATE-03 | Cancel/abort while an export is in progress, if supported by the progress dialog. | Temporary state is restored and no unusable partial file is presented as successful. | **FAIL** | Pre-fix build crashed in both selection and standard full-score audio export (Windows 0xC0000005 in MuseSamplerCoreLib.dll 0.105.7.1189). The first generic abort correction stopped both crashes; the user confirmed original tempo and volumes are restored. However, a canceled MP3 remains on disk and plays only the rendered portion. A local cancellation-result follow-up failed to clean it and caused a runtime regression, so it was reverted before publication. |
 | STATE-04 | Export to a read-only/invalid destination. | A clear error is shown; temporary playback and mixer state is restored. | READY | Not attempted; identify a safe temporary destination for this test. |
 | STATE-05 | Export twice with opposite settings without restarting. | Second file reflects only the second settings; no stale range, gain, fade, or click remains. | **PASS** | Opposite settings were applied independently in consecutive exports, user-confirmed 2026-09-15. |
 | STATE-06 | Compare the project dirty indicator and save prompt before/after export. | Export does not modify or dirty the score. | **PASS** | Manually confirmed: temporary tempo, level, and metronome settings do not modify the score. |
@@ -295,10 +299,10 @@ Before marking either draft PR ready for review:
 2. Execute every high-priority case: BUILD-01, RNG-01, RNG-05, FMT-01,
    FMT-02, TMP-02, MIX-01, MIX-02, MIX-07, FAD-04, MET-01, MET-03,
    MET-07, MET-08, STATE-01, STATE-04, STATE-06, and ACT-04.
-3. Publish the locally tested in-progress-cancellation fix for both normal and
-   selection audio export, then confirm mixer restoration and partial-file
-   cleanup. Address UI-02/UI-03 keyboard failures or disclose an explicit
-   accessible-navigation limitation to the maintainers.
+3. Disclose STATE-03's known canceled-MP3 partial-file limitation and the
+   UI-02/UI-03 keyboard-navigation limitations to maintainers. The candidate
+   cleanup fix that regressed at runtime is excluded from the PR; its original
+   non-crashing cancellation path was rebuilt and reinstalled.
 4. Run available automated unit tests for audio range validation and RPC
    packing.
 5. Attach the completed result summary plus representative boundary/fade/
