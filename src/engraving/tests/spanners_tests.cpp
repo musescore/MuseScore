@@ -32,9 +32,12 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editexcerpt.h"
+
+#include "engraving/compat/scoreaccess.h"
 
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/elements.h"
@@ -642,5 +645,50 @@ TEST_F(Engraving_SpannersTests, spanners17_pluginAPI_scoreSpanners)
         }
     }
 
+    delete score;
+}
+
+//---------------------------------------------------------
+// A styled property the user has overriden must survive a write/read
+// round trip. See PR #34917
+//---------------------------------------------------------
+
+TEST_F(Engraving_SpannersTests, spanners18_pedalOverriddenStyledProperties)
+{
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    Pedal* pedal = Factory::createPedal(score->dummy());
+
+    // a new pedal follows the style
+    for (Pid pid : { Pid::PLACEMENT, Pid::OFFSET, Pid::TEXT_SIZE_SPATIUM_DEPENDENT }) {
+        EXPECT_EQ(pedal->propertyFlags(pid), PropertyFlags::STYLED);
+        EXPECT_EQ(pedal->getProperty(pid), pedal->propertyDefault(pid));
+    }
+    EXPECT_EQ(pedal->placement(), PlacementV::BELOW);
+
+    // overriding a styled property (e.g. Score::cmdFlip) makes it UNSTYLED; STYLED
+    // values are regenerated from the style on load and so are not written
+    const PointF offset(1.5, -2.5);
+    pedal->setProperty(Pid::PLACEMENT, PlacementV::ABOVE);
+    pedal->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    pedal->setProperty(Pid::OFFSET, offset);
+    pedal->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+    pedal->setProperty(Pid::TEXT_SIZE_SPATIUM_DEPENDENT, false);
+    pedal->setPropertyFlags(Pid::TEXT_SIZE_SPATIUM_DEPENDENT, PropertyFlags::UNSTYLED);
+
+    Pedal* readPedal = toPedal(ScoreRW::writeReadElement(pedal));
+
+    // the read pedal must itself still be UNSTYLED too, otherwise
+    // saving it a second time would forget the override again
+    for (Pid pid : { Pid::PLACEMENT, Pid::OFFSET, Pid::TEXT_SIZE_SPATIUM_DEPENDENT }) {
+        EXPECT_EQ(readPedal->propertyFlags(pid), PropertyFlags::UNSTYLED);
+    }
+
+    EXPECT_EQ(readPedal->placement(), PlacementV::ABOVE);
+    EXPECT_NEAR(readPedal->offset().x(), offset.x(), 0.0001);
+    EXPECT_NEAR(readPedal->offset().y(), offset.y(), 0.0001);
+    EXPECT_FALSE(readPedal->getProperty(Pid::TEXT_SIZE_SPATIUM_DEPENDENT).toBool());
+
+    delete readPedal;
+    delete pedal;
     delete score;
 }
