@@ -288,6 +288,10 @@ void EditStyle::classBegin()
     articulationStemSide->addButton(radioArticAlignNoteHead, int(ArticulationStemSideAlign::NOTEHEAD));
     articulationStemSide->addButton(radioArticAlignCenter, int(ArticulationStemSideAlign::AVERAGE));
 
+    QButtonGroup* lyricsStackingOrderGroup = new QButtonGroup(this);
+    lyricsStackingOrderGroup->addButton(lyricsStackingOrderInsideDynamics, int(LyricsStackingOrder::LYRICS_BEFORE_DYNAMICS));
+    lyricsStackingOrderGroup->addButton(lyricsStackingOrderOutsidePedals, int(LyricsStackingOrder::LYRICS_AFTER_PEDALS));
+
     QButtonGroup* articulationKeepTogether = new QButtonGroup(this);
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
@@ -420,6 +424,7 @@ void EditStyle::classBegin()
         { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
         { StyleId::lyricsAvoidBarlines, false, lyricsAvoidBarlines, resetLyricsAvoidBarlines },
         { StyleId::lyricsAutoCenterBetweenStaves, false, lyricsAutoCenterBetweenStaves, resetLyricsAutoCenterBetweenStaves },
+        { StyleId::lyricsStackingOrder,    false, lyricsStackingOrderGroup, resetLyricsStackingOrder },
         { StyleId::lyricsLimitDashCount, false, limitDashCount, 0 },
         { StyleId::lyricsMaxDashCount, false, lyricsMaxDashCount, resetLyricsMaxDashCount },
         { StyleId::lyricsCenterDashedSyllables, false, lyricsCenterDashedSyllables, lyricsResetCenterDashedSyllables },
