@@ -30,6 +30,8 @@ Column {
     property alias currentText: input.currentText
     property alias errorText: errorLabel.text
 
+    readonly property string trimmedText: input.currentText.trim()
+
     property NavigationPanel navigationPanel: null
     property int navigationOrder: 0
 

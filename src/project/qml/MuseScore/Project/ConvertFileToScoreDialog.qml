@@ -182,8 +182,10 @@ StyledDialogView {
         id: selectedFilesPageComponent
 
         SelectedFilesPage {
+            id: filesPage
+
             saveAsName: convertModel.defaultSaveAsName
-            saveAsErrorText: convertModel.validateFileName(saveAsName)
+            saveAsErrorText: convertModel.validateFileName(filesPage.saveAsTrimmed)
             navigationSection: root.navigationSection
             files: convertModel.selectedPaths
             canSelectMultipleFiles: convertModel.canSelectMultipleFiles
@@ -191,7 +193,6 @@ StyledDialogView {
             convertLimits: convertModel.convertLimits
 
             onCancelRequested: convertModel.confirmCancel()
-
             onBackRequested: convertModel.confirmGoingBack()
 
             onConvertRequested: function(paths, convertedScoreName) {
@@ -208,8 +209,10 @@ StyledDialogView {
         id: linkEntryPageComponent
 
         LinkEntryPage {
+            id: linkPage
+
             saveAsName: convertModel.defaultSaveAsName
-            saveAsErrorText: convertModel.validateFileName(saveAsName)
+            saveAsErrorText: convertModel.validateFileName(linkPage.saveAsTrimmed)
             hintText: convertModel.linkPageHintText
             hintPlainText: convertModel.linkPageHintPlainText
             audioComUrl: convertModel.audioComUrl
@@ -217,7 +220,6 @@ StyledDialogView {
             navigationSection: root.navigationSection
 
             onCancelRequested: convertModel.confirmCancel()
-
             onBackRequested: convertModel.confirmGoingBack()
 
             onConvertRequested: function(link, convertedScoreName) {

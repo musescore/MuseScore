@@ -30,6 +30,7 @@ Item {
     id: root
 
     property alias saveAsName: saveAsField.currentText
+    property alias saveAsTrimmed: saveAsField.trimmedText
     property alias saveAsErrorText: saveAsField.errorText
 
     property var files: []
@@ -103,7 +104,7 @@ Item {
             onBackRequested: root.backRequested()
 
             onConvertRequested: {
-                root.convertRequested(fileListModel.paths, saveAsField.currentText)
+                root.convertRequested(fileListModel.paths, saveAsField.trimmedText)
             }
         }
     }
