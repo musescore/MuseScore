@@ -6,7 +6,7 @@ Status: active validation document for pull-request evidence
 
 This document defines the functional, regression, usability, and resilience
 tests for **Export selection…**. It is both a repeatable test plan and the place
-where results are recorded before opening the pull request.
+where results are recorded before marking the draft pull request ready for review.
 
 The feature is accepted only if it exports the requested musical range from the
 original score, applies the temporary rehearsal settings, and restores all
@@ -15,6 +15,7 @@ playback and mixer state afterwards.
 ## Result legend
 
 - **PASS** — observed result matches the expected result.
+- **PARTIAL** — a named subcase passed, but other expected checks remain unverified.
 - **FAIL** — result differs from the expectation; link the issue or add notes.
 - **BLOCKED** — the test cannot currently be executed; explain why.
 - **READY** — implemented or specified, but not yet executed for this build.
@@ -24,17 +25,18 @@ playback and mixer state afterwards.
 
 | Field | Value |
 |---|---|
-| Test date | 2026-09-14 manual validation; 2026-09-15 refreshed build |
-| Tester | User manual confirmations and development build; extended matrix pending |
+| Test date | 2026-09-14 manual validation; 2026-09-15 refreshed build and extended regression checks |
+| Tester | User manual confirmations and development build; remaining boundary, accessibility, and failure cases tracked below |
 | Platform | Windows, x64 |
 | Build type | RelWithDebInfo |
 | Qt | 6.10.2, MSVC 2022 x64 |
 | MuseScore base revision | `87e6a2cc1973` |
 | Muse Framework base revision | `34ecec524d1b` |
-| Feature revision | Local `feature/export-selection-audio` and framework `4ffe3392`; record current application SHA in the PR |
+| Feature revision | Published MuseScore draft `8b4202c204` and framework draft `4ffe3392b94c`; local generic cancellation fix installed and user-tested, not yet published |
 | Executable | `C:\Users\afortun8\b\m\install\bin\MuseScoreStudio5.exe` |
 | Build result | **PASS** — complete compile, link, and install after upstream refresh on 2026-09-15; one transient `LNK1104` at final link resolved by retry |
 | PR style-only revision rebuild | **PASS** — compile, link, and install on 2026-09-15 after closing MuseScore; linked and installed executable SHA-256 hashes agree |
+| Cancellation-fix local rebuild | **PASS** — compile, link, install, and linked/installed SHA-256 equality on 2026-09-15; user confirmed that in-progress abort no longer crashes standard or selection audio export |
 | Code-style check | **PASS** — Uncrustify 0.74.0 checks all 13 framework and 35 application C++ files touched by the feature |
 | Audio unit-test build | **PASS** — isolated `muse_audio_tests` target compiled and linked |
 | Audio unit-test run | **BLOCKED** — Windows runner exits with `0xC0000005` before publishing GoogleTest results |
@@ -71,9 +73,14 @@ compiled, linked, and installed successfully. The post-rebase manual smoke
 test (BUILD-02) passed on the refreshed build: two MP3 selections exported
 the correct ranges, the enabled metronome sounded its first downbeat, tempo
 and background levels were applied, and subsequent normal playback retained
-its original settings. The extended test matrix is still pending; individual
-manual results from 2026-09-14 should not be presented as a full retest of
-every scenario on the refreshed build.
+its original settings. More scenarios were user-tested on 2026-09-15 and are
+marked individually below. Repeat-specific fixtures, extreme fades, keyboard
+navigation, and abort/error recovery still need attention; individual manual
+results from 2026-09-14 should not be presented as a full retest of every
+scenario on the refreshed build. After the generic audio-writer cancellation
+fix, the user canceled both a standard full-score export and a selection export
+in progress without a process crash. Partial-file cleanup and exact playback/
+mixer restoration after these aborts were not separately recorded.
 
 One test-score fragment exhibits the same sound-rendering anomaly during live
 playback and selection export. Because the exported result matches MuseScore's
@@ -146,10 +153,10 @@ sufficient.
 | BUILD-02 | Launch the refreshed installed build and export one middle-score range with metronome Off, then another with metronome On, changed tempo and background level. | Both exports contain the requested range and settings; the first downbeat clicks when enabled; normal playback state remains unchanged. | **PASS** | User-confirmed on 2026-09-15: two correct MP3 fragments; first metronome tick, tempo and levels correct; normal playback settings restored. |
 | ACT-01 | Create a contiguous range selection and open the main File menu. | **Export selection…** is enabled and opens the selection export dialog. | **PASS** | Manually confirmed during development. |
 | ACT-02 | Right-click a contiguous range selection. | The context menu contains **Export selection…** and opens the same dialog. | **PASS** | Manually confirmed during development. |
-| ACT-03 | Test with no selection, a single note, and a list selection. | The command is unavailable; no invalid export starts. | READY | Single-note subcase **PASS** on 2026-09-14; no-selection and list-selection subcases remain pending. |
-| ACT-04 | Open normal **Export…** without using selection export. | Existing formats, options, duration, and full-score rendering are unchanged. | READY | Regression test. |
+| ACT-03 | Test with no selection, a single note, and a list selection. | The command is unavailable; no invalid export starts. | **PASS** | User confirmed the unavailable-command behaviour with no valid range on 2026-09-15. |
+| ACT-04 | Open normal **Export…** without using selection export. | Existing formats, options, duration, and full-score rendering are unchanged. | **PASS** | Normal full-score export and dialog remain unchanged, user-confirmed 2026-09-15. |
 | ACT-05 | Open selection export and inspect the format list. | Only supported audio formats are offered. | **PASS** | Manually confirmed during development. |
-| ACT-06 | Inspect the normal and selection dialogs. | Normal-export-only text such as per-part export guidance is absent from selection mode. | READY | |
+| ACT-06 | Inspect the normal and selection dialogs. | Normal-export-only text such as per-part export guidance is absent from selection mode. | **PASS** | Normal-export guidance remains only in the normal dialog, user-confirmed 2026-09-15. |
 
 ### Automated-test status
 
@@ -166,15 +173,15 @@ sufficient.
 |---|---|---|---|---|
 | RNG-01 | In F1, select complete measures in the middle of the score and export at 100%, no fades. | Audio begins at the selected start and stops at the exclusive end; earlier/later measures are absent. | **PASS** | Range capture manually confirmed. |
 | RNG-02 | Select different horizontal ranges while keeping the same parts. | Each file contains exactly its own selected range. | **PASS** | Manually confirmed repeatedly with metronome off. |
-| RNG-03 | Export a range beginning at score time zero. | No negative seek or unexpected leading silence occurs. | READY | |
-| RNG-04 | Export a range ending at the score end. | Export completes normally with no overrun or hang. | READY | |
-| RNG-05 | In F1, place `p` or `f` before the selection and no dynamic inside it. | The selected notes retain the prior dynamic context. | READY | Core motivation versus Save selection. |
-| RNG-06 | Use a tempo marking before the selection and a tempo change inside it. | Both affect the export at the correct musical positions. | READY | |
-| RNG-07 | In F3, select across articulations, techniques, automation, and an instrument change. | The original score’s evaluated playback context is preserved. | READY | |
-| RNG-08 | Select a region outside repeats in F3. | Exported audio maps to the correct unfolded playback position. | READY | |
-| RNG-09 | Select within a repeated region in F3. | Behaviour is deterministic and matches the documented repeat policy. | READY | Record which occurrence is rendered. |
+| RNG-03 | Export a range beginning at score time zero. | No negative seek or unexpected leading silence occurs. | **PASS** | Export beginning at the score start behaved correctly, user-confirmed 2026-09-15. |
+| RNG-04 | Export a range ending at the score end. | Export completes normally with no overrun or hang. | **PASS** | Export through the final measure behaved correctly; no post-score fade-out margin was added. |
+| RNG-05 | In F1, place `p` or `f` before the selection and no dynamic inside it. | The selected notes retain the prior dynamic context. | READY | User heard correct dynamics throughout the score on 2026-09-15; the isolated prior-marker/no-inside-marker subcase remains to be checked. |
+| RNG-06 | Use a tempo marking before the selection and a tempo change inside it. | Both affect the export at the correct musical positions. | **PASS** | Prior and internal tempo markings followed the expected playback, user-confirmed 2026-09-15. |
+| RNG-07 | In F3, select across articulations, techniques, automation, and an instrument change. | The original score’s evaluated playback context is preserved. | READY | General playback appeared correct, but an F3 fixture with all named events was not identified or checked individually. |
+| RNG-08 | Select a region outside repeats in F3. | Exported audio maps to the correct unfolded playback position. | READY | General behaviour appeared correct; repeat-specific F3 comparison remains. |
+| RNG-09 | Select within a repeated region in F3. | Behaviour is deterministic and matches the documented repeat policy. | READY | General behaviour appeared correct; record the rendered occurrence in a dedicated repeat fixture. |
 | RNG-10 | Export a sustained note crossing the start or end boundary. | Result follows the documented exact-range/fade policy without earlier unrelated music. | READY | |
-| RNG-11 | With MuseSounds active, export a selection beginning well after the score start, then compare it with live playback of the same range. | Audio begins at the selected music, not at the beginning of the score, and retains the requested duration. | READY | High-priority regression against the MuseSampler issue in the unmerged attempts [#24369](https://github.com/musescore/MuseScore/pull/24369) and [#32564](https://github.com/musescore/MuseScore/pull/32564). Record MuseSampler version and sound profile. |
+| RNG-11 | With MuseSounds active, export a selection beginning well after the score start, then compare it with live playback of the same range. | Audio begins at the selected music, not at the beginning of the score, and retains the requested duration. | **PASS** | User confirmed on 2026-09-15 that ranged MuseSounds exports match normal playback and start at the requested music. Exact score/measures and MuseSampler version remain to be logged as supporting evidence against [#24369](https://github.com/musescore/MuseScore/pull/24369) and [#32564](https://github.com/musescore/MuseScore/pull/32564). |
 
 ## C. Formats and duration consistency
 
@@ -187,8 +194,8 @@ particular distribution may be marked N/A.
 | FMT-02 | MP3 | Opens successfully; same musical content and expected encoder-padding tolerance. | **PASS** | Multiple exports manually confirmed. |
 | FMT-03 | FLAC | Opens successfully; duration agrees with WAV. | **PASS** | Manually confirmed on the compact-dialog build. |
 | FMT-04 | OGG | Opens successfully; duration agrees within codec tolerance. | **PASS** | Manually confirmed on the compact-dialog build. |
-| FMT-05 | AAC | Opens successfully; duration agrees within codec tolerance. | READY | |
-| FMT-06 | Repeat WAV then MP3 export without restarting MuseScore. | Both exports succeed and neither inherits stale state. | READY | |
+| FMT-05 | AAC | Opens successfully; duration agrees within codec tolerance. | **PASS** | AAC export succeeded, user-confirmed 2026-09-15. |
+| FMT-06 | Repeat WAV then MP3 export without restarting MuseScore. | Both exports succeed and neither inherits stale state. | **PASS** | MP3, WAV, and another MP3 succeeded consecutively without stale options or errors. |
 
 ## D. Tempo controls
 
@@ -196,9 +203,9 @@ particular distribution may be marked N/A.
 |---|---|---|---|---|
 | TMP-01 | Export at 100%. | Duration and tempo match normal score playback. | **PASS** | Manually confirmed. |
 | TMP-02 | Export at 75%. | Musical duration is approximately `100/75` of the 100% version. | **PASS** | Manually confirmed. |
-| TMP-03 | Export at 50%. | Musical duration is approximately twice the 100% version. | READY | |
-| TMP-04 | Export at the minimum value (10%). | Export completes; no zero/negative tempo or hang. | READY | Slow-boundary test. |
-| TMP-05 | Export at the maximum value (300%). | Export completes; no truncation or seek error. | READY | Fast-boundary test. |
+| TMP-03 | Export at 50%. | Musical duration is approximately twice the 100% version. | **PASS** | User confirmed correct behaviour at 50% and other tempo percentages on 2026-09-15. |
+| TMP-04 | Export at the minimum value (10%). | Export completes; no zero/negative tempo or hang. | **PASS** | Minimum-tempo export completed normally, user-confirmed 2026-09-15. |
+| TMP-05 | Export at the maximum value (300%). | Export completes; no truncation or seek error. | **PASS** | Maximum-tempo export completed normally, user-confirmed 2026-09-15. |
 | TMP-06 | Drag the tempo thumb continuously and click several rail positions. | Value tracks smoothly and the final displayed value is exported. | **PASS** | Manually confirmed. |
 | TMP-07 | After a non-100% export, play the score normally. | Playback returns to the user’s pre-export tempo multiplier. | **PASS** | Manually confirmed; real-time playback retains its original parameters. |
 
@@ -213,13 +220,13 @@ the project mixer setting.
 | MIX-02 | Select two or more parts. | Selected parts default to 100%; other parts default to 50%. | **PASS** | Manually confirmed. |
 | MIX-03 | Move the global **Other instruments** slider. | Every background-part slider follows it and export uses the shown values. | **PASS** | Manually confirmed. |
 | MIX-04 | Enable **Mute other instruments**. | All background parts are silent; selected parts remain audible. | **PASS** | Manually confirmed. |
-| MIX-05 | Disable mute after setting different individual background levels. | The prior individual values are retained/restored in the dialog. | READY | |
+| MIX-05 | Disable mute after setting different individual background levels. | The prior individual values are retained/restored in the dialog. | **PASS** | Individual background values remained available after toggling mute, user-confirmed 2026-09-15. |
 | MIX-06 | Drag each individual slider continuously and click the rail. | Thumb movement is smooth; no release/re-grab is needed. | **PASS** | Regression for the former 5%-step drag defect. |
-| MIX-07 | Export individual values 0%, 25%, 50%, 100%, 150%, and 200%. | Audible levels follow the requested relative gains, including values above 100%. | READY | 150–200% also verifies the corrected engine clamp. |
+| MIX-07 | Export individual values 0%, 25%, 50%, 100%, 150%, and 200%. | Audible levels follow the requested relative gains, including values above 100%. | **PASS** | User confirmed the individual gain values, including boosted levels, on 2026-09-15. |
 | MIX-08 | Give different values to three background instruments. | Each instrument uses its own value in the rendered file. | **PASS** | Manually confirmed. |
-| MIX-09 | Use a score whose mixer channels already have different fader levels. | 100% preserves the existing mix; other values scale it relatively. | READY | |
+| MIX-09 | Use a score whose mixer channels already have different fader levels. | 100% preserves the existing mix; other values scale it relatively. | **PASS** | Existing mixer levels were used as the starting values, user-confirmed 2026-09-15. |
 | MIX-10 | Open F4 with 20–30 instruments. | Background details start collapsed, expand on demand, and scroll internally without growing beyond the dialog. | **PASS** | Collapsing/scrolling behaviour manually confirmed; repeat with F4 scale. |
-| MIX-11 | Export, cancel a second export, then inspect/play the mixer. | Original mute, solo, and volume state is unchanged. | READY | |
+| MIX-11 | Export, cancel a second export, then inspect/play the mixer. | Original mute, solo, and volume state is unchanged. | READY | Earlier normal cancellation left the mixer unchanged; in-progress cancellation now avoids a crash in both export paths, but exact post-abort mute, solo, and volume values were not recorded. |
 
 ## F. Fade-in and fade-out
 
@@ -229,10 +236,10 @@ the project mixer setting.
 | FAD-02 | Enable a 2.0 s fade-in only. | Up to 2.0 s before the selection is included and rises smoothly to full level at the selection start. | **PASS** | Manually confirmed. |
 | FAD-03 | Enable a 2.0 s fade-out only. | Up to 2.0 s after the selection is included and falls smoothly to silence. | **PASS** | Manually confirmed. |
 | FAD-04 | Enable both fades with different durations. | Both margins and ramps are independent and correctly timed. | **PASS** | Manually confirmed. |
-| FAD-05 | Request fade-in longer than available audio before score start. | Fade is safely shortened to the available duration. | READY | |
-| FAD-06 | Request fade-out longer than available audio after score end. | Fade is safely shortened to the available duration. | READY | |
-| FAD-07 | Use minimum (0.1 s) and maximum (30 s) UI durations. | Export remains valid, finite, and bounded by score duration. | READY | |
-| FAD-08 | Inspect representative WAV waveforms at both joins. | Gain ramps are monotonic and no abrupt full-scale cut/click is introduced. | READY | Attach one screenshot. |
+| FAD-05 | Request fade-in longer than available audio before score start. | Fade is safely shortened to the available duration. | **PASS** | At score start there is no preceding music; the export safely starts there without an invented fade margin. |
+| FAD-06 | Request fade-out longer than available audio after score end. | Fade is safely shortened to the available duration. | **PASS** | At score end there is no following music; the requested fade-out safely contributes no post-score margin. |
+| FAD-07 | Use minimum (0.1 s) and maximum (30 s) UI durations. | Export remains valid, finite, and bounded by score duration. | READY | Ordinary 1 s and 5 s durations worked; the 0.1 s and 30 s boundary values were not tested. |
+| FAD-08 | Inspect representative WAV waveforms at both joins. | Gain ramps are monotonic and no abrupt full-scale cut/click is introduced. | READY | User heard no extra clicks or unexpected volume changes; actual waveform/ramp inspection and screenshot remain pending. |
 
 ## G. Metronome
 
@@ -246,35 +253,35 @@ this PR because its interactive event stream is not atomic with offline export.
 | MET-01 | Choose **Off** while the toolbar metronome is enabled. | Export contains no click. | **PASS** | Manually confirmed; export choice overrides, but does not persist over, toolbar state. |
 | MET-02 | Export several different ranges with **Throughout exported fragment**. | Every file contains the requested musical range; enabling the metronome does not change range mapping. | **PASS** | Manually confirmed; the former displaced-range defect occurred only in the now-deferred count-in prototype. |
 | MET-03 | Export from a barline with **Throughout exported fragment**. | The downbeat click is audible on the first selected beat and remains synchronized throughout. | **PASS** | Manually confirmed after aligning the export start down to the preceding audio-sample boundary. |
-| MET-04 | Run Off and Throughout at 50%, 75%, and 150% tempo. | Click timing follows the export tempo exactly. | READY | |
+| MET-04 | Run Off and Throughout at 50%, 75%, and 150% tempo. | Click timing follows the export tempo exactly. | **PASS** | User confirmed metronome tempo alignment across the requested values on 2026-09-15. |
 | MET-05 | Enable fade-in, then choose **Throughout exported fragment**. | Fade-in is automatically unchecked and disabled; selecting Off makes it available again. | **PASS** | Manually confirmed. |
 | MET-06 | Export throughout-click with fade-out both disabled and enabled. | Range and click remain correct in both files; fade-out affects the final mixed signal. | **PASS** | Manually confirmed, including the first click covered by MET-03. |
 | MET-07 | Test with toolbar metronome initially off, then initially on. | After every export, the toolbar setting and normal playback behaviour are exactly restored. | **PASS** | Real-time playback state manually confirmed unchanged after export. |
 | MET-08 | Export different nonzero ranges successively with the metronome active. | Every file starts at its own selected range and no isolated click sounds through the live interface. | **PASS** | Manually confirmed after removing the interactive count-in path. |
-| MET-09 | Export active metronome to WAV and one compressed format. | Both contain the same click pattern and musical start time within codec tolerance. | READY | |
-| MET-10 | Start playback, invoke selection export, and export with active metronome. | Playback stops safely; export succeeds; subsequent playback remains usable. | READY | |
+| MET-09 | Export active metronome to WAV and one compressed format. | Both contain the same click pattern and musical start time within codec tolerance. | **PASS** | WAV and compressed exports contained the expected metronome pattern, user-confirmed 2026-09-15. |
+| MET-10 | Start playback, invoke selection export, and export with active metronome. | Playback stops safely; export succeeds; subsequent playback remains usable. | READY | Related subcase passed: toolbar metronome initially on, selection export set Off, and no exported click; exporting while playback runs with metronome On remains untested. |
 
 ## H. Cancellation, failure, and state restoration
 
 | ID | Procedure | Expected result | Status | Notes / evidence |
 |---|---|---|---|---|
 | STATE-01 | Export with changed tempo, volumes, fades, and metronome, then play normally. | Original tempo, mixer, metronome, and playback state are restored. | **PASS** | Manually confirmed across development iterations. |
-| STATE-02 | Change settings and cancel from the dialog before choosing a path. | No state changes escape the dialog; score is not dirty. | READY | |
-| STATE-03 | Cancel/abort while an export is in progress, if supported by the progress dialog. | Temporary state is restored and no unusable partial file is presented as successful. | READY | |
-| STATE-04 | Export to a read-only/invalid destination. | A clear error is shown; temporary playback and mixer state is restored. | READY | |
-| STATE-05 | Export twice with opposite settings without restarting. | Second file reflects only the second settings; no stale range, gain, fade, or click remains. | READY | |
+| STATE-02 | Change settings and cancel from the dialog before choosing a path. | No state changes escape the dialog; score is not dirty. | **PASS** | Canceling the dialog before export leaves the score and playback unchanged, user-confirmed 2026-09-15. |
+| STATE-03 | Cancel/abort while an export is in progress, if supported by the progress dialog. | Temporary state is restored and no unusable partial file is presented as successful. | **PARTIAL** | Pre-fix build crashed in both selection and standard full-score audio export (Windows 0xC0000005 in MuseSamplerCoreLib.dll 0.105.7.1189). The generic AbstractAudioWriter::abort() correction was installed, and the user confirmed both in-progress cancellation paths no longer crash. Exact state restoration and absence of a partial output file still need separate confirmation. |
+| STATE-04 | Export to a read-only/invalid destination. | A clear error is shown; temporary playback and mixer state is restored. | READY | Not attempted; identify a safe temporary destination for this test. |
+| STATE-05 | Export twice with opposite settings without restarting. | Second file reflects only the second settings; no stale range, gain, fade, or click remains. | **PASS** | Opposite settings were applied independently in consecutive exports, user-confirmed 2026-09-15. |
 | STATE-06 | Compare the project dirty indicator and save prompt before/after export. | Export does not modify or dirty the score. | **PASS** | Manually confirmed: temporary tempo, level, and metronome settings do not modify the score. |
-| STATE-07 | Close the selection dialog and run normal full-score export. | Full export still starts at zero and uses the normal mixer/metronome policy. | READY | |
+| STATE-07 | Close the selection dialog and run normal full-score export. | Full export still starts at zero and uses the normal mixer/metronome policy. | **PASS** | Normal full-score export retained its usual behaviour after using selection export, user-confirmed 2026-09-15. |
 
 ## I. UI, accessibility, and scale
 
 | ID | Procedure | Expected result | Status | Notes / evidence |
 |---|---|---|---|---|
-| UI-01 | Resize/open the dialog at common 100%, 125%, and 150% Windows display scaling. | Controls fit, labels are readable, and no essential control is clipped. | READY | |
-| UI-02 | Traverse controls using keyboard navigation only. | Focus order follows tempo, metronome, fades, background controls, then individual instruments. | READY | |
-| UI-03 | Operate sliders with mouse drag, rail click, and keyboard. | All methods update predictably and accessible names report purpose/value. | READY | |
+| UI-01 | Resize/open the dialog at common 100%, 125%, and 150% Windows display scaling. | Controls fit, labels are readable, and no essential control is clipped. | READY | Dialog is not user-resizable, as with normal Export; the 100%/125%/150% scaling subcases were not executed. |
+| UI-02 | Traverse controls using keyboard navigation only. | Focus order follows tempo, metronome, fades, background controls, then individual instruments. | **FAIL** | Tab cycles only Export and audio format. Arrow navigation can reach tempo, metronome, fades, codec fields, mute and instrument controls, but its order is unintuitive; horizontal arrows inside numeric fields edit the cursor instead of moving focus. User-confirmed 2026-09-15. |
+| UI-03 | Operate sliders with mouse drag, rail click, and keyboard. | All methods update predictably and accessible names report purpose/value. | **FAIL** | Mouse drag, rail click, and wheel worked. Up/Down on the first instrument percentage changes the value by 5% then jumps focus to Open folder on export; tempo Up/Down continues editing tempo. Accessible-name verification remains pending. User-confirmed 2026-09-15. |
 | UI-04 | Expand/collapse background instruments repeatedly. | State changes reliably; internal scrolling does not move unrelated dialog content unexpectedly. | **PASS** | Core interaction manually confirmed. |
-| UI-05 | Test long and duplicate instrument names. | Labels remain distinguishable or expose sufficient identifying context; layout stays usable. | READY | |
+| UI-05 | Test long and duplicate instrument names. | Labels remain distinguishable or expose sufficient identifying context; layout stays usable. | READY | Not yet tested with long or duplicate part names. |
 | UI-06 | Run the translatable-string extraction/check used by MuseScore. | All new user-facing strings are discoverable through the project translation context. | **PASS** | Qt `lupdate` found all 17 expected feature strings, including the menu mnemonic and accessible names. Locale catalogues remain managed by Transifex. |
 | UI-07 | Inspect the compact dialog with one instrument and with several instruments, including formats with different codec controls. | Tempo/metronome, fade controls, background mute/level, and format controls use their intended compact rows; the instrument area remains usable. | **PASS** | Manually confirmed on 2026-09-14; layout is substantially more compact and clear. Display-scaling coverage remains tracked separately in UI-01. |
 | PERF-01 | Export a short F4 range with 20–30 parts. | Dialog remains responsive and export completes without excessive memory growth. | READY | Record elapsed time. |
@@ -282,13 +289,16 @@ this PR because its interactive event stream is not atomic with offline export.
 
 ## Pull-request completion gate
 
-Before opening the PR:
+Before marking either draft PR ready for review:
 
 1. Record the exact application and framework commit SHAs in the PR descriptions.
 2. Execute every high-priority case: BUILD-01, RNG-01, RNG-05, FMT-01,
    FMT-02, TMP-02, MIX-01, MIX-02, MIX-07, FAD-04, MET-01, MET-03,
    MET-07, MET-08, STATE-01, STATE-04, STATE-06, and ACT-04.
-3. Resolve every FAIL, or document a deliberately scoped limitation in the PR.
+3. Publish the locally tested in-progress-cancellation fix for both normal and
+   selection audio export, then confirm mixer restoration and partial-file
+   cleanup. Address UI-02/UI-03 keyboard failures or disclose an explicit
+   accessible-navigation limitation to the maintainers.
 4. Run available automated unit tests for audio range validation and RPC
    packing.
 5. Attach the completed result summary plus representative boundary/fade/
