@@ -48,7 +48,7 @@ namespace mu::engraving {
 //   StaffLines
 //---------------------------------------------------------
 
-StaffLines::StaffLines(Measure* parent)
+StaffLines::StaffLines(DummyParentOr<Measure> parent)
     : EngravingItem(ElementType::STAFF_LINES, parent)
 {
     setSelectable(false);

@@ -31,7 +31,7 @@ class StaffVisibilityIndicator : public IndicatorIcon
     DECLARE_CLASSOF(ElementType::STAFF_VISIBILITY_INDICATOR)
 
 public:
-    StaffVisibilityIndicator(System* parent);
+    StaffVisibilityIndicator(DummyParentOr<System> parent);
 
     char16_t iconCode() const override { return 0xF4AE; }
 };

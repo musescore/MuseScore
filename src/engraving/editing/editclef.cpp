@@ -250,13 +250,13 @@ void EditClef::undoChangeClef(Transaction&, Score* score, Staff* ostaff, Engravi
             if (gclef) {
                 clef = toClef(gclef->linkedClone());
                 clef->setScore(staffScore);
+                clef->setOwnershipParent(destSeg);
             } else {
-                clef = Factory::createClef(staffScore->dummy()->segment());
+                clef = Factory::createClef(destSeg);
                 clef->setClefType(ct);
                 gclef = clef;
             }
             clef->setTrack(track);
-            clef->setOwnershipParent(destSeg);
             clef->setIsHeader(st == SegmentType::HeaderClef);
             staffScore->doUndoAddElement(clef);
         }

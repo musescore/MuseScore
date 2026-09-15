@@ -76,7 +76,7 @@ Hairpin* EditHairpin::addHairpin(Transaction& tx, Score* score, HairpinType type
         return nullptr;
     }
 
-    Hairpin* hairpin = Factory::createHairpin(score->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(score->dummy());
     hairpin->setHairpinType(type);
     if (type == HairpinType::CRESC_LINE) {
         hairpin->setBeginText(u"cresc.");
@@ -93,7 +93,7 @@ Hairpin* EditHairpin::addHairpin(Transaction& tx, Score* score, HairpinType type
 
 Hairpin* EditHairpin::addHairpin(Transaction&, Score* score, HairpinType type, Fraction sTick, Fraction eTick, track_idx_t track)
 {
-    Hairpin* hairpin = Factory::createHairpin(score->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(score->dummy());
     hairpin->setHairpinType(type);
     if (type == HairpinType::CRESC_LINE) {
         hairpin->setBeginText(u"cresc.");
@@ -207,7 +207,7 @@ Hairpin* EditHairpin::addHairpinToDynamicOnGripDrag(Transaction&, Score* score, 
         return nullptr;
     }
 
-    Hairpin* hairpin = Factory::createHairpin(score->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(score->dummy());
     hairpin->setHairpinType(isLeftGrip ? HairpinType::DIM_HAIRPIN : HairpinType::CRESC_HAIRPIN);
 
     hairpin->setTrack(track);

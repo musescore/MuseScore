@@ -54,6 +54,7 @@
 #endif
 
 namespace mu::engraving {
+class DummyParent;
 class EngravingItem;
 class MeasureBase;
 class Part;
@@ -74,10 +75,6 @@ class UndoableCommand;
 class EditData;
 
 class Selection;
-}
-
-namespace mu::engraving::compat {
-class DummyElement;
 }
 
 namespace mu::engraving::rendering::score {
@@ -201,7 +198,7 @@ public:
     // Create/Remove
     const Score* score() const;
     Score* score();
-    compat::DummyElement* dummyParent() const;
+    DummyParent* dummyParent() const;
     void doUndoAddElement(EngravingItem*);
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);

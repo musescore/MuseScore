@@ -32,7 +32,7 @@ class StaffText final : public StaffTextBase
     DECLARE_CLASSOF(ElementType::STAFF_TEXT)
 
 public:
-    StaffText(Segment* parent = nullptr, TextStyleType = TextStyleType::STAFF);
+    StaffText(DummyParentOr<Segment> parent, TextStyleType = TextStyleType::STAFF);
     StaffText(const StaffText&);
 
     bool isEditAllowed(EditData&) const override;

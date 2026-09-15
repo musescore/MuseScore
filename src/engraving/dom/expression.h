@@ -33,7 +33,7 @@ class Expression final : public TextBase
     DECLARE_CLASSOF(ElementType::EXPRESSION)
 
 public:
-    Expression(Segment* parent);
+    Expression(DummyParentOr<Segment> parent);
     Expression(const Expression& expression);
 
     bool isEditAllowed(EditData&) const override;

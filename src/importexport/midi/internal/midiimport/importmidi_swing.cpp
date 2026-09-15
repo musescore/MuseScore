@@ -251,7 +251,6 @@ void detectSwing(Staff* staff, MidiOperations::Swing swingType)
         Segment* seg = score->firstSegment(SegmentType::ChordRest);
         StaffText* st = new StaffText(seg, TextStyleType::STAFF);
         st->setPlainText(swingCaption(swingType));
-        st->setOwnershipParent(seg);
         st->setTrack(strack);       // voice == 0
         score->addElement(st);
     }

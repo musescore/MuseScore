@@ -41,7 +41,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-Arpeggio::Arpeggio(Chord* parent, ElementType type)
+Arpeggio::Arpeggio(DummyParentOr<Chord> parent, ElementType type)
     : EngravingItem(type, parent, ElementFlag::MOVABLE)
 {
     m_arpeggioType = ArpeggioType::NORMAL;
@@ -51,8 +51,9 @@ Arpeggio::Arpeggio(Chord* parent, ElementType type)
     m_playArpeggio = true;
     m_stretch = 1.0;
 
-    if (type == ElementType::ARPEGGIO) {
-        parent->setSpanArpeggio(this);
+    EngravingObject* p = parent;
+    if (type == ElementType::ARPEGGIO && p->isChord()) {
+        toChord(p)->setSpanArpeggio(this);
     }
 }
 

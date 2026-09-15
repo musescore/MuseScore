@@ -43,7 +43,7 @@ using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-TremoloSingleChord::TremoloSingleChord(Chord* parent)
+TremoloSingleChord::TremoloSingleChord(DummyParentOr<Chord> parent)
     : EngravingItem(ElementType::TREMOLO_SINGLECHORD, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }

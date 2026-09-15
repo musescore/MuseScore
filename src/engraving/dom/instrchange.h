@@ -40,8 +40,8 @@ class InstrumentChange final : public TextBase
     DECLARE_CLASSOF(ElementType::INSTRUMENT_CHANGE)
 
 public:
-    InstrumentChange(EngravingItem* parent);
-    InstrumentChange(const Instrument&, EngravingItem* parent);
+    InstrumentChange(EngravingObject* parent);
+    InstrumentChange(const Instrument&, EngravingObject* parent);
     InstrumentChange(const InstrumentChange&);
     ~InstrumentChange();
 

@@ -37,7 +37,7 @@ namespace mu::engraving {
 //   ChordTextLineBase
 //---------------------------------------------------------
 
-ChordTextLineBase::ChordTextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
+ChordTextLineBase::ChordTextLineBase(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : TextLineBase(type, parent, f)
 {
 }

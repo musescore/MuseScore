@@ -277,19 +277,15 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
         duration.setDots(augmentDotsAtt->GetDots());
     }
 
-    Segment* segment = nullptr;
-    // For grace notes we use a dummy segment, otherwise a ChordRest segment with the appropriate ticks value
-    if (m_readingGraceNotes) {
-        segment = m_score->dummy()->segment();
-    } else {
-        segment = measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
-    }
+    // grace notes are added to the chord they precede, so they get no segment of their own
+    Segment* segment = m_readingGraceNotes ? nullptr : measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
+    const DummyParentOr<Segment> parent = parentOrDummy(segment, m_score->dummy());
 
     ChordRest* chordRest = nullptr;
     if (isRest) {
-        chordRest = Factory::createRest(segment);
+        chordRest = Factory::createRest(parent);
     } else {
-        chordRest = Factory::createChord(segment);
+        chordRest = Factory::createChord(parent);
     }
 
     // Do not use single note xml:id / EID for the ChordRest
@@ -522,27 +518,28 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
         return nullptr;
     }
 
-    Spanner* item = nullptr;
-    Segment* segment = pos.measure->getSegment(SegmentType::ChordRest, pos.tick);
+    // a spanner is not attached to anything: the score manages it
+    DummyParent* dummy = m_score->dummy();
 
+    Spanner* item = nullptr;
     if (meiElement.m_name == "dir") {
         ElementType elementType = Convert::elementTypeForDirWithExt(meiElement);
         switch (elementType) {
-        case (ElementType::HAIRPIN): item = Factory::createHairpin(segment);
+        case (ElementType::HAIRPIN): item = Factory::createHairpin(dummy);
             break;
         default:
-            item = Factory::createTextLine(segment);
+            item = Factory::createTextLine(dummy);
         }
     } else if (meiElement.m_name == "hairpin") {
-        item = Factory::createHairpin(segment);
+        item = Factory::createHairpin(dummy);
     } else if (meiElement.m_name == "octave") {
-        item = Factory::createOttava(segment);
+        item = Factory::createOttava(dummy);
     } else if (meiElement.m_name == "pedal") {
-        item = Factory::createPedal(segment);
+        item = Factory::createPedal(dummy);
     } else if (meiElement.m_name == "slur") {
-        item = Factory::createSlur(segment);
+        item = Factory::createSlur(dummy);
     } else if (meiElement.m_name == "trill") {
-        item = Factory::createTrill(segment);
+        item = Factory::createTrill(dummy);
     } else {
         return nullptr;
     }
@@ -895,13 +892,11 @@ void MeiImporter::setOrnamentAccid(engraving::Ornament* ornament, const Convert:
     if (ornament->hasIntervalAbove() && (ornamSt.accidTypeAbove != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeAbove);
-        accidental->setOwnershipParent(ornament);
         ornament->setAccidentalAbove(accidental);
     }
     if (ornament->hasIntervalBelow() && (ornamSt.accidTypeBelow != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeBelow);
-        accidental->setOwnershipParent(ornament);
         ornament->setAccidentalBelow(accidental);
     }
 }
@@ -2225,7 +2220,6 @@ bool MeiImporter::readTuplet(pugi::xml_node tupletNode, Measure* measure, int tr
     }
 
     m_tuplet->setTrack(track);
-    m_tuplet->setOwnershipParent(measure);
 
     success = readElements(tupletNode, measure, track, ticks);
 
@@ -2747,7 +2741,6 @@ bool MeiImporter::readGliss(pugi::xml_node glissNode, Measure* measure)
     gliss->setTick(startNote->chord()->tick());
     gliss->setStartElement(startNote);
     gliss->setTrack(startNote->track());
-    gliss->setOwnershipParent(startNote);
     gliss->setGlissandoStyle(startNote->part()->instrument(startNote->tick())->glissandoStyle());
 
     const String glissText = String(glissNode.text().as_string());
@@ -2881,7 +2874,6 @@ bool MeiImporter::readLv(pugi::xml_node lvNode, Measure* measure)
     }
 
     LaissezVib* lv = Factory::createLaissezVib(note);
-    lv->setOwnershipParent(note);
     note->score()->undoAddElement(lv);
     m_uids->reg(lv, meiLv.m_xmlId);
 

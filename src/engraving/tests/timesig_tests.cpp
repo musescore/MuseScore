@@ -54,7 +54,7 @@ TEST_F(Engraving_TimesigTests, timesig01)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig01.mscx");
     EXPECT_TRUE(score);
     Measure* m  = score->firstMeasure()->nextMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
@@ -78,7 +78,7 @@ TEST_F(Engraving_TimesigTests, timesig02)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-02.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
@@ -104,7 +104,7 @@ TEST_F(Engraving_TimesigTests, timesig03)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-03.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
@@ -125,7 +125,7 @@ TEST_F(Engraving_TimesigTests, timesig04)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-04.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(6, 4), TimeSigType::NORMAL);
 
     EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
@@ -149,7 +149,7 @@ TEST_F(Engraving_TimesigTests, timesig05)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-05.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
@@ -169,7 +169,7 @@ TEST_F(Engraving_TimesigTests, timesig06)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-06.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(5, 4), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
@@ -195,7 +195,7 @@ TEST_F(Engraving_TimesigTests, timesig07)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-07.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
@@ -240,7 +240,7 @@ TEST_F(Engraving_TimesigTests, DISABLED_timesig09)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-09.mscx");
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(9, 8), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
@@ -267,16 +267,16 @@ TEST_F(Engraving_TimesigTests, timesig10)
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-10.mscx");
 
     Measure* m1 = score->firstMeasure();
-    TimeSig* ts1 = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts1 = Factory::createTimeSig(score->dummy());
     ts1->setSig(Fraction(2, 2), TimeSigType::ALLA_BREVE);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
     EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m1, 0, ts1, false);
 
     Measure* m2 = m1->nextMeasure();
-    TimeSig* ts2 = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts2 = Factory::createTimeSig(score->dummy());
     ts2->setSig(Fraction(2, 2), TimeSigType::NORMAL);
-    TimeSig* ts3 = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts3 = Factory::createTimeSig(score->dummy());
     ts3->setSig(Fraction(4, 4), TimeSigType::FOUR_FOUR);
 
     EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m2, 0, ts2, false);
@@ -317,13 +317,13 @@ TEST_F(Engraving_TimesigTests, timesig_11)
     EXPECT_TRUE(score);
     score->doLayout();
 
-    TimeSig* timeSig1 = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* timeSig1 = Factory::createTimeSig(score->dummy());
     timeSig1->setSig(Fraction(5, 4));
 
-    TimeSig* timeSig2 = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* timeSig2 = Factory::createTimeSig(score->dummy());
     timeSig2->setSig(Fraction(7, 8));
 
-    TimeSig* timeSig3 = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* timeSig3 = Factory::createTimeSig(score->dummy());
     timeSig3->setSig(Fraction(3, 4));
 
     Measure* secondMeas = score->firstMeasure()->nextMeasure();
@@ -481,7 +481,7 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     EXPECT_TRUE(endBl);
 
     EditData dropData(0);
-    BarLine* barLine = Factory::createBarLine(score->dummy()->segment());
+    BarLine* barLine = Factory::createBarLine(score->dummy());
     barLine->setBarLineType(BarLineType::END_REPEAT);
     dropData.dropElement = barLine;
     dropData.track = 0;
@@ -532,7 +532,7 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
     EXPECT_TRUE(tie->endNote());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
-        TimeSig* newSig = Factory::createTimeSig(score->dummy()->segment());
+        TimeSig* newSig = Factory::createTimeSig(score->dummy());
         newSig->setSig(Fraction(3, 4));
         EditTimeSig::addTimeSig(tx, score, m1, 0, newSig, false);
     });

@@ -88,7 +88,6 @@ void createTupletNotes(
         tuplet->setTrack(track);
         tuplet->setTick(tupletData.onTime.fraction());
         tuplet->setVoice(tupletData.voice);
-        tuplet->setOwnershipParent(measure);
 
         for (DurationElement* el: tupletData.elements) {
             tuplet->add(el);

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "dummyparent.h"
 
-#include "indicatoricon.h"
-
-#include "iengravingconfiguration.h" // IWYU pragma: keep
-
-#include "mscore.h"
-#include "system.h"
+#include "rootitem.h"
+#include "score.h"
 
 using namespace mu::engraving;
-using namespace muse::draw;
 
-IndicatorIcon::IndicatorIcon(const ElementType& type, DummyParentOr<System> parent, ElementFlags flags)
-    : EngravingItem(type, parent, flags)
+DummyParent::DummyParent(Score* score)
+    : EngravingObject(ElementType::DUMMY, score)
 {
 }
 
-Font IndicatorIcon::font() const
+DummyParent::~DummyParent()
 {
-    Font font(configuration()->iconsFontFamily(), Font::Type::Icon);
-    font.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE * magS());
-    return font;
+    delete m_root;
 }
 
-Fraction IndicatorIcon::tick() const
+void DummyParent::init()
 {
-    return system() ? system()->endTick() : Fraction(0, 1);
+    m_root = new RootItem(score(), RootItem::Kind::Dummy);
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    m_root->setupAccessible();
+#endif
 }

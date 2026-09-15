@@ -55,7 +55,7 @@ public:
 
 private:
     friend class Factory;
-    PlayCountText(Segment* parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
+    PlayCountText(DummyParentOr<Segment> parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
 
     AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
     String m_playCountCustomText = u"";

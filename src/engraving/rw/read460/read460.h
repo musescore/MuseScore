@@ -40,7 +40,7 @@ public:
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
-    void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) override;
+    void readTremoloCompat(compat::TremoloCompat* item, Score* score, XmlReader& xml) override;
 
 private:
     bool preparePasteDurationElement(Score* score, const Fraction& tick, const Fraction& ticks, const track_idx_t track);

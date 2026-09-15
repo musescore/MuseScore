@@ -102,7 +102,7 @@ class SLine : public Spanner
     OBJECT_ALLOCATOR(engraving, SLine)
 
 public:
-    SLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    SLine(const ElementType& type, EngravingObject* parent, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
 
     virtual LineSegment* createLineSegment() = 0;

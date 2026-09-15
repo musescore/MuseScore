@@ -63,7 +63,7 @@ static const ElementStyle tupletStyle {
 //   Tuplet
 //---------------------------------------------------------
 
-Tuplet::Tuplet(Measure* parent)
+Tuplet::Tuplet(DummyParentOr<Measure> parent)
     : DurationElement(ElementType::TUPLET, parent)
 {
     m_direction    = DirectionV::AUTO;
@@ -114,7 +114,7 @@ Tuplet::~Tuplet()
     delete m_number;
 }
 
-void Tuplet::setOwnershipParent(Measure* parent)
+void Tuplet::setOwnershipParent(DummyParentOr<Measure> parent)
 {
     EngravingItem::setOwnershipParent(parent);
 }

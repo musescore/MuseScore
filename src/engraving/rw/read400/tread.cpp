@@ -703,7 +703,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "mag") {
             TRead::readProperty(d, e, ctx, Pid::MAG);
         } else if (tag == "Harmony") {
-            Harmony* h = new Harmony(d->score()->dummy()->segment());
+            Harmony* h = new Harmony(d->score()->dummy());
             read(h, e, ctx);
             if (h->chords().empty()) {
                 // Invalid harmony
@@ -1500,7 +1500,6 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Number") {
             number = Factory::createText(t, TextStyleType::TUPLET);
             number->setComposition(true);
-            number->setOwnershipParent(t);
             Tuplet::resetNumberProperty(number);
             TRead::read(number, e, ctx);
             number->setVisible(t->visible());         //?? override saved property
@@ -1783,10 +1782,9 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
     } else if (tag == "Accidental") {
         Accidental* accidental = Factory::createAccidental(o);
         TRead::read(accidental, xml, ctx);
-        accidental->setOwnershipParent(o);
         accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
     } else if (tag == "Chord") {
-        Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
+        Chord* chord = Factory::createChord(ctx.score()->dummy());
         TRead::read(chord, xml, ctx);
         chord->setTrack(ctx.track());
         o->setCueNoteChord(chord);
@@ -1900,7 +1898,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "spanToOffset") {
             b->setSpanTo(e.readInt());
         } else if (tag == "Articulation") {
-            Articulation* a = Factory::createArticulation(b->score()->dummy()->chord());
+            Articulation* a = Factory::createArticulation(b->score()->dummy());
             TRead::read(a, e, ctx);
             b->add(a);
         } else if (tag == "Symbol") {
@@ -2070,7 +2068,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
             b->add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy()->segment());
+        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy());
         TRead::read(f, e, ctx);
         //! TODO Looks like a bug.
         //! The FretDiagram parent must be Segment
@@ -2145,7 +2143,6 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
     } else if (tag == "StaffTypeChange") {
         StaffTypeChange* stc = Factory::createStaffTypeChange(b);
         stc->setTrack(ctx.track());
-        stc->setOwnershipParent(b);
         TRead::read(stc, e, ctx);
         b->add(stc);
     } else if (readItemProperties(b, e, ctx)) {
@@ -2331,7 +2328,6 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         Note* note = Factory::createNote(ch);
         // the note needs to know the properties of the track it belongs to
         note->setTrack(ch->track());
-        note->setOwnershipParent(ch);
         TRead::read(note, e, ctx);
         ch->add(note);
     } else if (TRead::readProperties(toChordRest(ch), e, ctx)) {
@@ -2379,7 +2375,6 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         Arpeggio* arpeggio = Factory::createArpeggio(ch);
         arpeggio->setTrack(ch->track());
         TRead::read(arpeggio, e, ctx);
-        arpeggio->setOwnershipParent(ch);
         ch->setArpeggio(arpeggio);
     } else if (tag == "Tremolo") {
         TremoloCompat tcompat;
@@ -4336,7 +4331,6 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Accidental") {
             Accidental* accidental = Factory::createAccidental(t);
             TRead::read(accidental, e, ctx);
-            accidental->setOwnershipParent(t);
             t->setAccidental(accidental);
             if (t->ornament()) {
                 t->ornament()->setTrillOldCompatAccidental(accidental);

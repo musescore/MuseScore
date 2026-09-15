@@ -32,10 +32,10 @@
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
 
+#include "engraving/dom/dummyparent.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/compat/dummyelement.h"
 
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -111,7 +111,7 @@ bool TimeEditor::showTimePalette() const
 
 void TimeEditor::addClicked()
 {
-    auto ts = mu::engraving::Factory::makeTimeSig(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    auto ts = mu::engraving::Factory::makeTimeSig(paletteScoreProvider()->paletteScore()->dummy());
     ts->setSig(Fraction(zNominal->value(), denominator()));
     ts->setGroups(groups->groups());
 

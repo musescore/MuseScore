@@ -1542,7 +1542,6 @@ void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata
 
     if (!item->text()) {
         Text* bracketText = new Text(const_cast<Bracket*>(item), TextStyleType::GROUP_BRACKET);
-        bracketText->setOwnershipParent(const_cast<Bracket*>(item));
         bracketText->setSelected(item->selected());
         bracketText->setGenerated(true);
         const_cast<Bracket*>(item)->setText(bracketText);

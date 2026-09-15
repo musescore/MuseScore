@@ -74,7 +74,7 @@ PickScrapeSegment::PickScrapeSegment(PickScrape* sp)
 //   PickScrape
 //---------------------------------------------------------
 
-PickScrape::PickScrape(EngravingItem* parent)
+PickScrape::PickScrape(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::PICK_SCRAPE, parent)
 {
     initElementStyle(&pickScrapeStyle);

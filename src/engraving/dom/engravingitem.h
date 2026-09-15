@@ -146,8 +146,6 @@ enum class KerningType : unsigned char
     ALLOW_COLLISION,
 };
 
-using EngravingItemList = std::vector<EngravingItem*>;
-
 //-------------------------------------------------------------------
 //    @@ EngravingItem
 ///     \brief Base class of score layout elements
@@ -172,8 +170,6 @@ public:
     virtual EngravingItem* linkedClone();
 
     void deleteLater();
-
-    EngravingItemList childrenItems(bool all = false) const;
 
     //! Item-typed variant of ownershipParent(); additionally null when the
     //! owner is not an item.
@@ -488,8 +484,9 @@ public:
     bool accessibleEnabled() const;
     void setAccessibleEnabled(bool enabled);
 
-    //! Parent in the accessibility hierarchy: the layout parent when placed,
-    //! otherwise the raw parent (so that e.g. palette items reach the dummy).
+    //! Parent in the accessibility hierarchy: the layout parent when placed; the head of
+    //! the tree the unattached objects form when attached to nothing; null in between,
+    //! i.e. while attached to something that does not place it.
     virtual EngravingItem* accessibleParentItem() const;
     //! Children in the accessibility hierarchy: the items that name this one as their
     //! accessibleParentItem(). Those are the children it owns, unless ownership and

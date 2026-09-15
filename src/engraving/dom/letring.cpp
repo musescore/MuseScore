@@ -76,7 +76,7 @@ LetRingSegment::LetRingSegment(LetRing* sp)
 //   LetRing
 //---------------------------------------------------------
 
-LetRing::LetRing(EngravingItem* parent)
+LetRing::LetRing(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::LET_RING, parent)
 {
     initElementStyle(&letRingStyle);

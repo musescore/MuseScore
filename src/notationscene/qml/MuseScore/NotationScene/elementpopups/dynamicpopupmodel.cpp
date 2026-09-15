@@ -211,7 +211,7 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
     }
 
     beginCommand(TranslatableString("undoableAction", "Add hairpin"));
-    Hairpin* hairpin = Factory::createHairpin(m_item->score()->dummy()->segment());
+    Hairpin* hairpin = Factory::createHairpin(m_item->score()->dummy());
     hairpin->setHairpinType(hairpinType);
     Transaction& tx = m_item->score()->transactionManager()->currentOrDummyTransaction();
     EditHairpin::addHairpinToDynamic(tx, m_item->score(), hairpin, dynamic);

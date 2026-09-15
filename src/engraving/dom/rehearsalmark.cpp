@@ -54,7 +54,7 @@ static const ElementStyle additionalRehearsalMarkStyle {
 //   RehearsalMark
 //---------------------------------------------------------
 
-RehearsalMark::RehearsalMark(Segment* parent)
+RehearsalMark::RehearsalMark(DummyParentOr<Segment> parent)
     : TextBase(ElementType::REHEARSAL_MARK, parent, TextStyleType::REHEARSAL_MARK, ElementFlag::ON_STAFF)
 {
     initElementStyle(&rehearsalMarkStyle);

@@ -61,7 +61,7 @@ void EditChord::toggleArticulation(Score* score, SymId attr)
                     continue;
                 }
             }
-            Articulation* na = Factory::createArticulation(score->dummy()->chord());
+            Articulation* na = Factory::createArticulation(score->dummy());
             na->setSymId(attr);
             if (!EditChord::toggleArticulation(score, el, na)) {
                 delete na;
@@ -189,12 +189,10 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
 {
     track_idx_t track = chord->track();
     Parenthesis* leftParen = Factory::createParenthesis(chord);
-    leftParen->setOwnershipParent(chord);
     leftParen->setTrack(track);
     leftParen->setDirection(DirectionH::LEFT);
     leftParen->setGenerated(generated);
     Parenthesis* rightParen = Factory::createParenthesis(chord);
-    rightParen->setOwnershipParent(chord);
     rightParen->setTrack(track);
     rightParen->setDirection(DirectionH::RIGHT);
     rightParen->setGenerated(generated);

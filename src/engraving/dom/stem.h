@@ -87,7 +87,7 @@ public:
 
 private:
     friend class Factory;
-    Stem(Chord* parent = 0);
+    Stem(DummyParentOr<Chord> parent);
 
     Spatium m_baseLength = 0.0_sp;
 
