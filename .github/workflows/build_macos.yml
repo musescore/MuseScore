@@ -75,13 +75,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
   # This information is public and can be extracted by anyone from the final .app file
   APPLE_TEAM_ID: 6EPAF2X3PR
 
 jobs:
   macos_universal:
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
     - name: Clone repository
       uses: actions/checkout@v7
@@ -211,16 +210,14 @@ jobs:
           bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
-      # uses: jurplel/install-qt-action@v4
-      # with:
-      #   version: 6.10.2
-      #   host: 'mac'
-      #   target: 'desktop'
-      #   arch: 'clang_64'
-      #   modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
-      #   cache: true
-      run: |
-        bash ./buildscripts/ci/macos/install_qt.sh
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: 6.10.2
+        host: 'mac'
+        target: 'desktop'
+        arch: 'clang_64'
+        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+        cache: true
 
     - parallel:
       - name: Generate _en.ts files
