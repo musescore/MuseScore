@@ -56,12 +56,10 @@ public:
 
     Q_INVOKABLE void init() override;
     Q_INVOKABLE QString pitchToString(int pitch);
+    Q_INVOKABLE bool setStringPitchValue(int stringIndex, int value, bool useFlat);
 
     Q_INVOKABLE void toggleString(int stringIndex);
     Q_INVOKABLE bool setStringValue(int stringIndex, const QString& stringValue);
-
-    Q_INVOKABLE QString increaseStringValue(int currentPitch);
-    Q_INVOKABLE QString decreaseStringValue(int currentPitch);
 
     QVariantList presets(bool withCustom = true) const;
 
@@ -122,6 +120,8 @@ public:
     bool useFlat() const;
     void setUseFlat(bool use);
 
+    void setSpelling(int spelling);
+
 signals:
     void showChanged();
     void numberChanged();
@@ -132,5 +132,6 @@ private:
     QString m_number;
     int m_value = 0;
     bool m_useFlat = false;
+    int m_spelling = 0;
 };
 }
