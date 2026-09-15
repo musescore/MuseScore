@@ -226,6 +226,9 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         linkedNotes.reserve(notes.size());
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
+            if (!linkedNote) {
+                continue;
+            }
             linkedNotes.push_back(linkedNote);
         }
 
