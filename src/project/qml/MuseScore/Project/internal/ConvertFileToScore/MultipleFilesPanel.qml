@@ -93,18 +93,22 @@ Rectangle {
             StyledListView {
                 id: fileListView
 
+                readonly property int scrollBarGap: 6
+
                 anchors.fill: parent
                 anchors.topMargin: 12
                 anchors.leftMargin: 12
                 anchors.bottomMargin: 12
-                anchors.rightMargin: (fileListView.ScrollBar.vertical && fileListView.ScrollBar.vertical.visible) ? 6 : 12
+                anchors.rightMargin: (fileListView.ScrollBar.vertical && fileListView.ScrollBar.vertical.visible) ? fileListView.scrollBarGap : 12
+
+                //! NOTE: keeps edge rows visible until fully scrolled out
+                displayMarginBeginning: 12
+                displayMarginEnd: 12
 
                 clip: false
 
                 spacing: 4
                 topMargin: root.filesModel.count === 1 ? Math.max(0, (fileListView.height - 40) / 2) : 0
-
-                property int scrollBarGap: 8
 
                 navigation.section: root.navigationPanel.section
                 navigation.order: 0
@@ -112,6 +116,7 @@ Rectangle {
                 accessible.name: qsTrc("project/convert", "Selected files")
 
                 ScrollBar.vertical: StyledScrollBar {
+                    padding: 0
                     thickness: fileListView.scrollBarThickness
                     policy: ScrollBar.AlwaysOn
                 }
