@@ -6021,6 +6021,18 @@ void NotationInteraction::changeSelectedElementsVoiceAssignment(VoiceAssignment 
     apply();
 }
 
+//! Inserts a glissando from a single selected note using the palette's endpoint selection rules.
+void NotationInteraction::addGlissandoToSelectedNote()
+{
+    EngravingItem* selected = selection()->element();
+    if (!selected || !selected->isNote()) {
+        return;
+    }
+
+    std::unique_ptr<EngravingItem> glissando(Factory::createItem(ElementType::GLISSANDO, score()->dummy()));
+    applyPaletteElement(glissando.get());
+}
+
 void NotationInteraction::addAnchoredLineToSelectedNotes()
 {
     if (selection()->isNone()) {
