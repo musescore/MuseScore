@@ -44,6 +44,7 @@ Item {
     signal cancelRequested()
     signal backRequested()
     signal selectMoreFilesRequested(var existingPaths)
+    signal applyFilesRequested(var paths)
     signal convertRequested(var paths, string convertedScoreName)
 
     function focusOnDefault() {
@@ -119,6 +120,10 @@ Item {
 
             onSelectMoreFilesRequested: function(existingPaths) {
                 root.selectMoreFilesRequested(existingPaths)
+            }
+
+            onFilesDropped: function(urls) {
+                root.applyFilesRequested(fileListModel.paths.concat(urls))
             }
 
             onRemoveLastFileRequested: root.backRequested()

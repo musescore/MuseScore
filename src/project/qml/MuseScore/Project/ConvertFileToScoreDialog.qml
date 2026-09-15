@@ -202,6 +202,10 @@ StyledDialogView {
             onSelectMoreFilesRequested: function(existingPaths) {
                 convertModel.selectAndValidateFiles(existingPaths)
             }
+
+            onApplyFilesRequested: function(paths) {
+                convertModel.validateAndApplyFiles(paths)
+            }
         }
     }
 

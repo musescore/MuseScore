@@ -34,6 +34,7 @@ Rectangle {
     property var fileRequirements: []
 
     signal selectMoreFilesRequested(var existingPaths)
+    signal filesDropped(var urls)
     signal removeLastFileRequested()
 
     function moveCurrentFile(delta) {
@@ -61,6 +62,33 @@ Rectangle {
             color: ui.theme.backgroundPrimaryColor
             radius: 3
             clip: true
+
+            DropArea {
+                id: fileDropArea
+
+                anchors.fill: parent
+                //! NOTE: below the list, so internal item reordering still wins
+                z: -1
+
+                property bool containsFileDrag: false
+
+                onEntered: function(drag) {
+                    fileDropArea.containsFileDrag = drag.hasUrls
+                }
+
+                onExited: {
+                    fileDropArea.containsFileDrag = false
+                }
+
+                onDropped: function(drop) {
+                    fileDropArea.containsFileDrag = false
+
+                    if (drop.hasUrls) {
+                        var urls = drop.urls.map(function(url) { return url.toString() })
+                        root.filesDropped(urls)
+                    }
+                }
+            }
 
             StyledListView {
                 id: fileListView
@@ -194,11 +222,13 @@ Rectangle {
             }
 
             Rectangle {
+                id: dropAreaBorder
+
                 anchors.fill: parent
 
                 color: "transparent"
                 border.width: 1
-                border.color: ui.theme.strokeColor
+                border.color: fileDropArea.containsFileDrag ? ui.theme.accentColor : ui.theme.strokeColor
                 radius: fileListBackground.radius
             }
         }
