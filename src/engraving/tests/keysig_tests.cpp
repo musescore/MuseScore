@@ -21,17 +21,21 @@
  */
 
 #include <gtest/gtest.h>
+#include <memory>
 
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 #include "engraving/editing/editkeysig.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
-#include "utils/scorerw.h"
 #include "utils/scorecomp.h"
+#include "utils/scorerw.h"
+#include "utils/testutils.h"
 
 using namespace mu::engraving;
 
@@ -39,6 +43,23 @@ static const String KEYSIG_DATA_DIR("keysig_data/");
 
 class Engraving_KeySigTests : public ::testing::Test
 {
+protected:
+    void checkInstrumentChangeKey(Score* score, Key concertKey, Key writtenKey)
+    {
+        const Fraction tick = score->firstMeasure()->nextMeasure()->tick();
+        const KeySigEvent event = score->staff(0)->keySigEvent(tick);
+        EXPECT_TRUE(event.forInstrumentChange());
+        EXPECT_EQ(event.concertKey(), concertKey);
+        EXPECT_EQ(event.key(), writtenKey);
+        Segment* segment = score->tick2measure(tick)->findSegment(SegmentType::KeySig, tick);
+        ASSERT_TRUE(segment);
+        EngravingItem* item = segment->element(0);
+        ASSERT_TRUE(item && item->isKeySig());
+        const KeySigEvent actual = toKeySig(item)->keySigEvent();
+        EXPECT_TRUE(actual.forInstrumentChange());
+        EXPECT_EQ(actual.concertKey(), concertKey);
+        EXPECT_EQ(actual.key(), writtenKey);
+    }
 };
 
 TEST_F(Engraving_KeySigTests, keysig)
@@ -175,4 +196,72 @@ TEST_F(Engraving_KeySigTests, keysigMode)
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"keysig03.mscx", KEYSIG_DATA_DIR + u"keysig03-ref.mscx"));
     delete score;
+}
+
+TEST_F(Engraving_KeySigTests, linkedPrecedingKeyChange)
+{
+    for (bool fromExcerpt : { false, true }) {
+        SCOPED_TRACE(fromExcerpt);
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(KEYSIG_DATA_DIR + u"linked-instrument-change.mscx"));
+        ASSERT_TRUE(score);
+        Score* excerpt = TestUtils::createPart(score.get());
+        ASSERT_TRUE(excerpt);
+        Score* owner = fromExcerpt ? excerpt : score.get();
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::G, Key::A);
+        }
+        KeySigEvent key;
+        key.setConcertKey(Key::D);
+        owner->startCmd(TranslatableString::untranslatable("Change preceding key"));
+        EditKeySig::undoChangeKeySig(owner->transactionManager()->currentOrDummyTransaction(), owner,
+                                     owner->staff(0), Fraction(1, 2), key);
+        owner->endCmd();
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::D, Key::E);
+        }
+        owner->undoRedo(true, nullptr);
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::G, Key::A);
+        }
+        owner->undoRedo(false, nullptr);
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::D, Key::E);
+        }
+    }
+}
+
+TEST_F(Engraving_KeySigTests, linkedPrecedingKeyDeletion)
+{
+    for (bool fromExcerpt : { false, true }) {
+        SCOPED_TRACE(fromExcerpt);
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(KEYSIG_DATA_DIR + u"linked-instrument-change.mscx"));
+        ASSERT_TRUE(score);
+        Score* excerpt = TestUtils::createPart(score.get());
+        ASSERT_TRUE(excerpt);
+        Score* owner = fromExcerpt ? excerpt : score.get();
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::G, Key::A);
+        }
+        Segment* segment = owner->firstMeasure()->findSegment(SegmentType::KeySig, Fraction(1, 2));
+        ASSERT_TRUE(segment);
+        EngravingItem* item = segment->element(0);
+        ASSERT_TRUE(item && item->isKeySig());
+        ASSERT_FALSE(toKeySig(item)->forInstrumentChange());
+        ASSERT_EQ(item->linkList().size(), 2u);
+        owner->select(item, SelectType::SINGLE, 0);
+        owner->startCmd(TranslatableString::untranslatable("Delete preceding key"));
+        owner->cmdDeleteSelection();
+        owner->endCmd();
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::C, Key::D);
+        }
+        owner->undoRedo(true, nullptr);
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::G, Key::A);
+        }
+        owner->undoRedo(false, nullptr);
+        for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
+            checkInstrumentChangeKey(target, Key::C, Key::D);
+        }
+    }
 }
