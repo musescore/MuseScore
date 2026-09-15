@@ -67,7 +67,14 @@ Score* EngravingPluginAPIHelper::readScore(const QString& name)
 
 void EngravingPluginAPIHelper::closeScore()
 {
-    projectFilesController()->closeOpenedProject();
+    //! NOTE The plugin API has nowhere to report the outcome to, and the close may still
+    //! ask the user about unsaved changes, so the flow is only started here
+    closeProjectController()->closeOpenedProject()
+    .onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGD() << "score was not closed: " << ret.toString();
+        }
+    });
 }
 
 std::optional<INotationWriter::UnitType> EngravingPluginAPIHelper::determineWriterUnitType(const std::string& ext) const

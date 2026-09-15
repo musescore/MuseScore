@@ -23,7 +23,6 @@
 #include "projectactionscontroller.h"
 
 #include <QBuffer>
-#include <QEventLoop>
 #include <QFileInfo>
 #include <QTemporaryFile>
 #include <QUrl>
@@ -34,7 +33,6 @@
 #include "async/async.h"
 #include "defer.h"
 #include "rcommand/commandtypes.h"
-#include "translation.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotationinteraction.h"
@@ -82,15 +80,17 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_OPEN_COMMAND, [this](const rcommand::Params& params) { return openProject(params); });
     d->onRequest(this, PROJECT_CLOSE_COMMAND, [this]() { return closeProject(); });
 
-    d->onRequest(this, PROJECT_SAVE_COMMAND, [this]() { return saveProject(SaveMode::Save); });
-    d->onRequest(this, PROJECT_SAVE_AS_COMMAND, [this]() { return saveProject(SaveMode::SaveAs); });
-    d->onRequest(this, PROJECT_SAVE_A_COPY_COMMAND, [this]() { return saveProject(SaveMode::SaveCopy); });
-    d->onRequest(this, PROJECT_SAVE_SELECTION_COMMAND, [this]() { return saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
-    d->onRequest(this, PROJECT_SAVE_TO_CLOUD_COMMAND, [this]() { return saveProject(SaveMode::Save, SaveLocationType::Cloud); });
-    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::Params& params) { return saveProjectAt(params); });
+    d->onRequest(this, PROJECT_SAVE_COMMAND, [this]() { return runAsync(saveProject(SaveMode::Save)); });
+    d->onRequest(this, PROJECT_SAVE_AS_COMMAND, [this]() { return runAsync(saveProject(SaveMode::SaveAs)); });
+    d->onRequest(this, PROJECT_SAVE_A_COPY_COMMAND, [this]() { return runAsync(saveProject(SaveMode::SaveCopy)); });
+    d->onRequest(this, PROJECT_SAVE_SELECTION_COMMAND, [this]() {
+        return runAsync(saveProject(SaveMode::SaveSelection, SaveLocationType::Local));
+    });
+    d->onRequest(this, PROJECT_SAVE_TO_CLOUD_COMMAND, [this]() { return runAsync(saveProject(SaveMode::Save, SaveLocationType::Cloud)); });
+    d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::Params& params) { return runAsync(saveProjectAt(params)); });
 
-    d->onRequest(this, PROJECT_PUBLISH_COMMAND, [this]() { return publish(); });
-    d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return sharedAudio(); });
+    d->onRequest(this, PROJECT_PUBLISH_COMMAND, [this]() { return runAsync(publish()); });
+    d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return runAsync(sharedAudio()); });
 
     d->onRequest(this, PROJECT_EXPORT_COMMAND, [this]() { return exportScore(); });
     d->onRequest(this, PROJECT_IMPORT_PDF_COMMAND, [this]() { return importPdf(); });
@@ -139,6 +139,10 @@ void ProjectActionsController::init()
         m_busyChanged.notify();
     });
 
+    closeProjectScenario()->busyChanged().onNotify(this, [this]() {
+        m_busyChanged.notify();
+    });
+
     // listen changes
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
         auto project = globalContext()->currentProject();
@@ -181,7 +185,8 @@ bool ProjectActionsController::isBusy(BusyStatus status) const
 {
     return m_busyStatuses.contains(status)
            || saveProjectScenario()->isBusy(status)
-           || openProjectScenario()->isBusy(status);
+           || openProjectScenario()->isBusy(status)
+           || closeProjectScenario()->isBusy(status);
 }
 
 void ProjectActionsController::setBusy(BusyStatus status, bool isBusy)
@@ -348,105 +353,50 @@ muse::Ret ProjectActionsController::newProject()
 
 muse::Ret ProjectActionsController::closeProject()
 {
-    auto anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
-    bool ok = closeOpenedProject();
-    if (ok && anyInstanceWithoutProject) {
-        //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
-        async::Async::call(this, [this]() {
-            dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
-        });
-        multiwindowsProvider()->activateWindowWithoutProject();
-    }
+    bool anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
 
-    return ok ? make_ok() : make_ret(Ret::Code::UnknownError);
-}
-
-bool ProjectActionsController::closeOpenedProject(bool goToHome)
-{
-    if (isBusy(BusyStatus::Closing)) {
-        return false;
-    }
-
-    setBusy(BusyStatus::Closing, true);
-    DEFER {
-        setBusy(BusyStatus::Closing, false);
-    };
-
-    INotationProjectPtr project = currentNotationProject();
-    if (!project) {
-        return true;
-    }
-
-    if (globalContext()->playbackState()->isPlaying()) {
-        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
-    }
-
-    bool result = true;
-
-    if (project->isNeedSave()) {
-        IInteractive::Button btn = askAboutSavingScore(project);
-
-        if (btn == IInteractive::Button::Cancel) {
-            result = false;
-        } else if (btn == IInteractive::Button::Save) {
-            result = saveProject();
-        } else if (btn == IInteractive::Button::DontSave) {
-            result = true;
+    return runAsync(closeProjectScenario()->closeOpenedProject(true)
+                    .then<Ret>(this, [this, anyInstanceWithoutProject](const Ret& ret, auto resolve) {
+        if (ret && anyInstanceWithoutProject) {
+            //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
+            async::Async::call(this, [this]() {
+                dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
+            });
+            multiwindowsProvider()->activateWindowWithoutProject();
         }
-    }
 
-    if (result) {
-        interactive()->closeAllDialogsSync();
-        globalContext()->setCurrentProject(nullptr);
-
-        if (goToHome) {
-            Ret ret = openPageIfNeed(HOME_PAGE_URI);
-            if (!ret) {
-                LOGE() << ret.toString();
-            }
-        }
-    }
-
-    return result;
+        return resolve(ret);
+    }));
 }
 
-IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProjectPtr project)
+//! Commands report that the flow has started; its outcome is shown to the user by the scenario itself
+muse::Ret ProjectActionsController::runAsync(async::Promise<Ret> flow)
 {
-    std::string title = muse::qtrc("project", "Do you want to save changes to the score “%1” before closing?")
-                        .arg(project->displayName()).toStdString();
+    flow.onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGD() << ret.toString();
+        }
+    });
 
-    std::string body = muse::trc("project", "Your changes will be lost if you don’t save them.");
-
-    IInteractive::Result result = interactive()->warningSync(title, body, {
-        IInteractive::Button::DontSave,
-        IInteractive::Button::Cancel,
-        IInteractive::Button::Save
-    }, IInteractive::Button::Save);
-
-    return result.standardButton();
+    return make_ok();
 }
 
-muse::Ret ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
+async::Promise<Ret> ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
 {
     return saveProjectScenario()->saveProject(saveMode, saveLocationType, force);
 }
 
-muse::Ret ProjectActionsController::saveProject(const muse::io::path_t& path)
-{
-    return saveProjectScenario()->saveProject(path);
-}
-
-muse::Ret ProjectActionsController::publish()
+async::Promise<Ret> ProjectActionsController::publish()
 {
     return saveProjectScenario()->publish();
 }
 
-muse::Ret ProjectActionsController::sharedAudio()
+async::Promise<Ret> ProjectActionsController::sharedAudio()
 {
     return saveProjectScenario()->shareAudio();
 }
 
-muse::Ret ProjectActionsController::saveProjectAt(const muse::rcommand::Params& params)
+async::Promise<Ret> ProjectActionsController::saveProjectAt(const muse::rcommand::Params& params)
 {
     return saveProjectScenario()->saveProjectAt(params);
 }

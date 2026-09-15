@@ -22,21 +22,26 @@
 
 #pragma once
 
-#include <gmock/gmock.h>
+#include "modularity/imoduleinterface.h"
+#include "async/notification.h"
+#include "async/promise.h"
+#include "types/ret.h"
 
-#include "project/isaveprojectscenario.h"
+#include "types/projecttypes.h"
 
 namespace mu::project {
-class SaveProjectScenarioMock : public ISaveProjectScenario
+class ICloseProjectScenario : MODULE_CONTEXT_INTERFACE
 {
+    INTERFACE_ID(ICloseProjectScenario)
+
 public:
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProject, (SaveMode saveMode, SaveLocationType saveLocationType, bool force),
-                (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProject, (const muse::io::path_t& path), (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProjectAt, (const muse::rcommand::Params& params), (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, publish, (), (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, shareAudio, (), (override));
-    MOCK_METHOD(bool, isBusy, (BusyStatus status), (const, override));
-    MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
+    virtual ~ICloseProjectScenario() = default;
+
+    //! NOTE Resolves once the score is gone, or with an error if it is still there:
+    //! the user kept it, the save it needed failed, or a close is already under way
+    virtual muse::async::Promise<muse::Ret> closeOpenedProject(bool goToHome = true) = 0;
+
+    virtual bool isBusy(BusyStatus status) const = 0;
+    virtual muse::async::Notification busyChanged() const = 0;
 };
 }

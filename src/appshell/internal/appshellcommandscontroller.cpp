@@ -134,8 +134,9 @@ bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
 {
     if ((event->type() == QEvent::Close && watched == qWindow())
         || event->type() == QEvent::Quit) {
-        bool accepted = quit(false);
-        event->setAccepted(accepted);
+        event->setAccepted(false);
+
+        quit(false);
 
         return true;
     }
@@ -295,11 +296,22 @@ muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::
 
     m_quiting = true;
 
-    if (!projectFilesController()->closeOpenedProject(false)) {
-        m_quiting = false;
-        return muse::make_ret(Ret::Code::UnknownError);
-    }
+    closeProjectScenario()->closeOpenedProject(false)
+    .onResolve(this, [this, isAllInstances, installerPath](const Ret& ret) {
+        if (!ret) {
+            LOGD() << "quit cancelled: " << ret.toString();
+            m_quiting = false;
+            return;
+        }
 
+        doQuit(isAllInstances, installerPath);
+    });
+
+    return muse::make_ok();
+}
+
+void AppshellCommandsController::doQuit(bool isAllInstances, const muse::io::path_t& installerPath)
+{
     if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
         //! NOTE: All windows are quitting to complete the update, apply it
         //! in-place, falling back to handing the package to the user.
@@ -331,13 +343,17 @@ muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::
     } else {
         multiwindowsProvider()->quitWindow(iocContext());
     }
-
-    return muse::make_ok();
 }
 
 void AppshellCommandsController::restart()
 {
-    if (projectFilesController()->closeOpenedProject(false)) {
+    closeProjectScenario()->closeOpenedProject(false)
+    .onResolve(this, [this](const Ret& ret) {
+        if (!ret) {
+            LOGD() << "restart cancelled: " << ret.toString();
+            return;
+        }
+
         if (multiwindowsProvider()->windowCount() == 1) {
             application()->restart();
         } else {
@@ -345,7 +361,7 @@ void AppshellCommandsController::restart()
 
             QCoreApplication::exit();
         }
-    }
+    });
 }
 
 void AppshellCommandsController::toggleFullScreen()

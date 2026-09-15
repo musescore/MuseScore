@@ -24,19 +24,17 @@
 
 #include <gmock/gmock.h>
 
-#include "project/isaveprojectscenario.h"
+#include "context/iplaybackstate.h"
 
-namespace mu::project {
-class SaveProjectScenarioMock : public ISaveProjectScenario
+namespace mu::context {
+class PlaybackStateMock : public IPlaybackState
 {
 public:
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProject, (SaveMode saveMode, SaveLocationType saveLocationType, bool force),
-                (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProject, (const muse::io::path_t& path), (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProjectAt, (const muse::rcommand::Params& params), (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, publish, (), (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, shareAudio, (), (override));
-    MOCK_METHOD(bool, isBusy, (BusyStatus status), (const, override));
-    MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
+    MOCK_METHOD(bool, isPlaying, (), (const, override));
+    MOCK_METHOD(muse::audio::PlaybackStatus, playbackStatus, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<muse::audio::PlaybackStatus>, playbackStatusChanged, (), (const, override));
+
+    MOCK_METHOD(muse::audio::secs_t, playbackPosition, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<muse::audio::secs_t>, playbackPositionChanged, (), (const, override));
 };
 }

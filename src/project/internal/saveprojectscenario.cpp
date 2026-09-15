@@ -23,13 +23,12 @@
 #include "saveprojectscenario.h"
 
 #include <QBuffer>
-#include <QEventLoop>
+#include <QFile>
 #include <QFileInfo>
 #include <QTemporaryFile>
 #include <QUrl>
 
 #include "async/async.h"
-#include "async/processevents.h"
 #include "defer.h"
 #include "translation.h"
 
@@ -49,6 +48,15 @@
 using namespace mu::project;
 using namespace mu::notation;
 using namespace muse;
+using muse::async::Promise;
+
+template<typename T>
+static Promise<T> resolvedPromise(const T& value)
+{
+    return async::make_promise<T>([value](auto resolve) {
+        return resolve(value);
+    });
+}
 
 static const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 
@@ -96,7 +104,36 @@ muse::async::Notification SaveProjectScenario::busyChanged() const
     return m_busyChanged;
 }
 
-muse::Ret SaveProjectScenario::shareAudio()
+Promise<Ret> SaveProjectScenario::runIfNotBusy(BusyStatus status, const std::function<Promise<Ret>()>& flow)
+{
+    if (isBusy(status)) {
+        return resolvedPromise(make_ret(Ret::Code::Busy));
+    }
+
+    setBusy(status, true);
+
+    return flow().then<Ret>(this, [this, status](const Ret& ret, auto resolve) {
+        setBusy(status, false);
+        return resolve(ret);
+    });
+}
+
+Promise<RetVal<Val> > SaveProjectScenario::openDialog(const UriQuery& query) const
+{
+    return async::make_promise<RetVal<Val> >([this, query](auto resolve) {
+        interactive()->open(query)
+        .onResolve(this, [resolve](const Val& val) {
+            (void)resolve(RetVal<Val>::make_ok(val));
+        })
+        .onReject(this, [resolve](int code, const std::string& err) {
+            (void)resolve(RetVal<Val>(muse::make_ret(code, err)));
+        });
+
+        return Promise<RetVal<Val> >::dummy_result();
+    });
+}
+
+Promise<Ret> SaveProjectScenario::shareAudio()
 {
     return shareAudio(AudioFile());
 }
@@ -112,198 +149,176 @@ Ret SaveProjectScenario::canSaveProject() const
     return project->canSave();
 }
 
-bool SaveProjectScenario::saveProject(const muse::io::path_t& path)
+Promise<Ret> SaveProjectScenario::saveProject(const muse::io::path_t& path)
 {
-    if (!path.empty()) {
-        if (isBusy(BusyStatus::Saving)) {
-            return false;
-        }
+    if (path.empty()) {
+        return saveProject(SaveMode::Save);
+    }
 
-        setBusy(BusyStatus::Saving, true);
-        DEFER {
-            setBusy(BusyStatus::Saving, false);
-        };
-
+    return runIfNotBusy(BusyStatus::Saving, [this, path]() {
         return saveProjectAt(SaveLocation(SaveLocationType::Local, path));
-    }
-
-    return saveProject(SaveMode::Save);
-}
-
-muse::Ret SaveProjectScenario::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
-{
-    if (isBusy(BusyStatus::Saving)) {
-        return make_ret(Ret::Code::Busy);
-    }
-
-    setBusy(BusyStatus::Saving, true);
-    DEFER {
-        setBusy(BusyStatus::Saving, false);
-    };
-
-    INotationProjectPtr project = currentNotationProject();
-    if (!project) {
-        LOGW() << "no current project";
-        return make_ret(Err::NoProjectError);
-    }
-
-    const bool isExistingSave = saveMode == SaveMode::Save && !project->isNewlyCreated();
-    const bool wantNewCloudSave = saveLocationType == SaveLocationType::Cloud && !project->isCloudProject();
-    if (isExistingSave && !wantNewCloudSave) {
-        // Under these conditions, we can save without asking...
-        SaveLocation location;
-        if (project->isCloudProject()) {
-            location = SaveLocation(SaveLocationType::Cloud, project->cloudInfo());
-        } else {
-            location = SaveLocation(SaveLocationType::Local);
-        }
-        return saveProjectAt(location, saveMode, force);
-    }
-
-    RetVal<SaveLocation> response = askSaveLocation(project, saveMode, saveLocationType);
-    if (!response.ret) {
-        LOGE() << response.ret.toString();
-        return response.ret;
-    }
-
-    return saveProjectAt(response.val, saveMode, force);
-}
-
-muse::Ret SaveProjectScenario::publish()
-{
-    if (isBusy(BusyStatus::Publishing)) {
-        return make_ret(Ret::Code::Busy);
-    }
-
-    setBusy(BusyStatus::Publishing, true);
-    DEFER {
-        setBusy(BusyStatus::Publishing, false);
-    };
-
-    Ret ret = canSaveProject();
-    if (!ret) {
-        askIfUserAgreesToSaveProjectWithErrors(ret, SaveLocationType::Cloud);
-        return ret;
-    }
-
-    auto project = currentNotationProject();
-
-    RetVal<CloudProjectInfo> info = askPublishLocation(project);
-    if (info.ret.code() == RET_CODE_CHANGE_SAVE_LOCATION_TYPE) {
-        RetVal<muse::io::path_t> path = askLocalPath(project, SaveMode::Save);
-        if (!path.ret) {
-            LOGE() << path.ret.toString();
-            return path.ret;
-        }
-
-        saveProjectLocally(path.val, SaveMode::Save);
-        configuration()->setLastUsedSaveLocationType(SaveLocationType::Local);
-
-        return make_ok();
-    }
-
-    if (!info.ret) {
-        return info.ret;
-    }
-
-    AudioFile audio = exportMp3(project->masterNotation()->notation());
-    if (!audio.isValid()) {
-        return make_ret(Ret::Code::BadData);
-    }
-
-    return uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true);
-}
-
-muse::Ret SaveProjectScenario::shareAudio(const AudioFile& existingAudio)
-{
-    if (isBusy(BusyStatus::AudioSharing)) {
-        return make_ret(Ret::Code::Busy);
-    }
-
-    setBusy(BusyStatus::AudioSharing, true);
-
-    bool isSharingFinished = true;
-    DEFER {
-        if (isSharingFinished) {
-            setBusy(BusyStatus::AudioSharing, false);
-        }
-    };
-
-    auto project = currentNotationProject();
-    if (!project) {
-        LOGW() << "no current project";
-        return make_ret(Err::NoProjectError);
-    }
-
-    RetVal<CloudAudioInfo> retVal = askShareAudioLocation(project);
-    if (!retVal.ret) {
-        return retVal.ret;
-    }
-
-    AudioFile audio;
-    if (existingAudio.isValid()) {
-        audio = existingAudio;
-    } else {
-        audio = exportMp3(project->masterNotation()->notation());
-        if (!audio.isValid()) {
-            return make_ret(Ret::Code::BadData);
-        }
-    }
-
-    uploadAudioToAudioCom(audio, project, retVal.val);
-
-    isSharingFinished = false;
-
-    return make_ok();
-}
-
-void SaveProjectScenario::uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project,
-                                                const CloudAudioInfo& info)
-{
-    m_uploadingAudioProgress = audioComService()->uploadAudio(audio.device, audio.format, info.name,
-                                                              project->cloudAudioInfo().url, info.visibility,
-                                                              info.replaceExisting);
-    LOGD() << "Uploading audio started";
-    showUploadProgressDialog();
-
-    m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        if (total > 0) {
-            LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
-        }
     });
+}
 
-    m_uploadingAudioProgress->finished().onReceive(this, [this, project, info](const ProgressResult& res) {
-        LOGD() << "Uploading audio finished";
+Promise<Ret> SaveProjectScenario::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
+{
+    return runIfNotBusy(BusyStatus::Saving, [this, saveMode, saveLocationType, force]() -> Promise<Ret> {
+        INotationProjectPtr project = currentNotationProject();
+        if (!project) {
+            LOGW() << "no current project";
+            return resolvedPromise(make_ret(Err::NoProjectError));
+        }
 
-        if (!res.ret) {
-            LOGE() << res.ret.toString();
-            onAudioUploadFailed(res.ret);
-        } else {
-            ValMap resMap = res.val.toMap();
-            onAudioSuccessfullyUploaded(resMap["editUrl"].toQString());
-            if (!info.replaceExisting) {
-                CloudAudioInfo newInfo = project->cloudAudioInfo();
-                newInfo.url = QUrl(resMap["url"].toQString());
-                project->setCloudAudioInfo(newInfo);
+        const bool isExistingSave = saveMode == SaveMode::Save && !project->isNewlyCreated();
+        const bool wantNewCloudSave = saveLocationType == SaveLocationType::Cloud && !project->isCloudProject();
+        if (isExistingSave && !wantNewCloudSave) {
+            // Under these conditions, we can save without asking...
+            SaveLocation location;
+            if (project->isCloudProject()) {
+                location = SaveLocation(SaveLocationType::Cloud, project->cloudInfo());
+            } else {
+                location = SaveLocation(SaveLocationType::Local);
             }
+            return saveProjectAt(location, saveMode, force);
         }
 
-        m_uploadingAudioProgress->started().disconnect(this);
-        m_uploadingAudioProgress->progressChanged().disconnect(this);
-        m_uploadingAudioProgress->finished().disconnect(this);
+        return askSaveLocation(project, saveMode, saveLocationType)
+               .then<Ret>(this, [this, saveMode, force](const RetVal<SaveLocation>& response, auto resolve) {
+            if (!response.ret) {
+                LOGE() << response.ret.toString();
+                return resolve(response.ret);
+            }
+
+            saveProjectAt(response.val, saveMode, force).onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        });
     });
 }
 
-muse::Ret SaveProjectScenario::saveProjectAt(const muse::rcommand::Params& params)
+Promise<Ret> SaveProjectScenario::publish()
+{
+    return runIfNotBusy(BusyStatus::Publishing, [this]() -> Promise<Ret> {
+        Ret ret = canSaveProject();
+        if (!ret) {
+            askIfUserAgreesToSaveProjectWithErrors(ret, SaveLocationType::Cloud);
+            return resolvedPromise(ret);
+        }
+
+        auto project = currentNotationProject();
+
+        return askPublishLocation(project)
+               .then<Ret>(this, [this, project](const RetVal<CloudProjectInfo>& info, auto resolve) {
+            if (info.ret.code() == RET_CODE_CHANGE_SAVE_LOCATION_TYPE) {
+                return resolve(saveProjectLocallyInstead(project, SaveMode::Save));
+            }
+
+            if (!info.ret) {
+                return resolve(info.ret);
+            }
+
+            AudioFile audio = exportMp3(project->masterNotation()->notation());
+            if (!audio.isValid()) {
+                return resolve(make_ret(Ret::Code::BadData));
+            }
+
+            uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true)
+            .onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        });
+    });
+}
+
+Promise<Ret> SaveProjectScenario::shareAudio(const AudioFile& existingAudio)
+{
+    return runIfNotBusy(BusyStatus::AudioSharing, [this, existingAudio]() -> Promise<Ret> {
+        auto project = currentNotationProject();
+        if (!project) {
+            LOGW() << "no current project";
+            return resolvedPromise(make_ret(Err::NoProjectError));
+        }
+
+        return askShareAudioLocation(project)
+               .then<Ret>(this, [this, project, existingAudio](const RetVal<CloudAudioInfo>& info, auto resolve) {
+            if (!info.ret) {
+                return resolve(info.ret);
+            }
+
+            AudioFile audio = existingAudio.isValid() ? existingAudio : exportMp3(project->masterNotation()->notation());
+            if (!audio.isValid()) {
+                return resolve(make_ret(Ret::Code::BadData));
+            }
+
+            uploadAudioToAudioCom(audio, project, info.val).onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        });
+    });
+}
+
+Promise<Ret> SaveProjectScenario::uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project,
+                                                        const CloudAudioInfo& info)
+{
+    return async::make_promise<Ret>([this, audio, project, info](auto resolve) {
+        m_uploadingAudioProgress = audioComService()->uploadAudio(audio.device, audio.format, info.name,
+                                                                  project->cloudAudioInfo().url, info.visibility,
+                                                                  info.replaceExisting);
+        LOGD() << "Uploading audio started";
+        showUploadProgressDialog();
+
+        m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+            if (total > 0) {
+                LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
+            }
+        });
+
+        m_uploadingAudioProgress->finished().onReceive(this, [this, project, info, resolve](const ProgressResult& res) {
+            LOGD() << "Uploading audio finished";
+
+            if (!res.ret) {
+                LOGE() << res.ret.toString();
+                onAudioUploadFailed(res.ret);
+            } else {
+                ValMap resMap = res.val.toMap();
+                onAudioSuccessfullyUploaded(resMap["editUrl"].toQString());
+                if (!info.replaceExisting) {
+                    CloudAudioInfo newInfo = project->cloudAudioInfo();
+                    newInfo.url = QUrl(resMap["url"].toQString());
+                    project->setCloudAudioInfo(newInfo);
+                }
+            }
+
+            m_uploadingAudioProgress->started().disconnect(this);
+            m_uploadingAudioProgress->progressChanged().disconnect(this);
+            m_uploadingAudioProgress->finished().disconnect(this);
+
+            (void)resolve(res.ret);
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
+Promise<Ret> SaveProjectScenario::saveProjectAt(const muse::rcommand::Params& params)
 {
     const std::string& path = params.at("path").toString();
-    if (!path.empty()) {
-        return saveProjectAt(SaveLocation(muse::io::path_t(path)));
+    if (path.empty()) {
+        return resolvedPromise(make_ret(Ret::Code::BadArgs));
     }
-    return make_ret(Ret::Code::BadArgs);
+
+    return runIfNotBusy(BusyStatus::Saving, [this, path]() {
+        return saveProjectAt(SaveLocation(muse::io::path_t(path)));
+    });
 }
 
-muse::Ret SaveProjectScenario::saveProjectAt(const SaveLocation& location, SaveMode saveMode, bool force)
+Promise<Ret> SaveProjectScenario::saveProjectAt(const SaveLocation& location, SaveMode saveMode, bool force)
 {
     INotationInteractionPtr interaction = currentInteraction();
     if (interaction && interaction->isTextEditingStarted()) {
@@ -315,20 +330,20 @@ muse::Ret SaveProjectScenario::saveProjectAt(const SaveLocation& location, SaveM
         if (!ret) {
             ret = askIfUserAgreesToSaveProjectWithErrors(ret, location);
             if (!ret) {
-                return ret;
+                return resolvedPromise(ret);
             }
         }
     }
 
     if (location.isLocal()) {
-        return saveProjectLocally(location.localPath(), saveMode);
+        return resolvedPromise(Ret(saveProjectLocally(location.localPath(), saveMode)));
     }
 
     if (location.isCloud()) {
         return saveProjectToCloud(location.cloudInfo(), saveMode);
     }
 
-    return make_ret(Err::UnknownError);
+    return resolvedPromise(make_ret(Err::UnknownError));
 }
 
 bool SaveProjectScenario::saveProjectLocally(const muse::io::path_t& filePath, SaveMode saveMode, bool createBackup)
@@ -369,54 +384,53 @@ bool SaveProjectScenario::saveProjectLocally(const muse::io::path_t& filePath, S
     return true;
 }
 
-bool SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)
+Promise<Ret> SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)
 {
-    if (isBusy(BusyStatus::Uploading)) {
-        return true;
-    }
+    return runIfNotBusy(BusyStatus::Uploading, [this, info, saveMode]() {
+        bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
+        if (!isCloudAvailable) {
+            warnCloudIsNotAvailable();
 
-    setBusy(BusyStatus::Uploading, true);
-
-    DEFER {
-        setBusy(BusyStatus::Uploading, false);
-    };
-
-    INotationProjectPtr project = currentNotationProject();
-
-    bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
-    if (!isCloudAvailable) {
-        warnCloudIsNotAvailable();
-    } else {
-        std::string dialogText = muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
-        RetVal<Val> retVal = ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText);
-        if (!retVal.ret) {
-            return false;
-        }
-
-        using Response = muse::cloud::SaveToCloudResponse::SaveToCloudResponse;
-        bool saveLocally = static_cast<Response>(retVal.val.toInt()) == Response::SaveLocallyInstead;
-        if (saveLocally && project) {
-            RetVal<muse::io::path_t> rv = askLocalPath(project, saveMode);
-            if (!rv.ret) {
-                LOGE() << rv.ret.toString();
-                return false;
+            INotationProjectPtr project = currentNotationProject();
+            if (!project) {
+                return resolvedPromise(make_ret(Err::NoProjectError));
             }
 
-            saveProjectLocally(rv.val, saveMode);
-            configuration()->setLastUsedSaveLocationType(SaveLocationType::Local);
-
-            return false;
+            return resolvedPromise(Ret(saveCloudProjectLocally(project, info, saveMode)));
         }
-    }
 
-    if (!project) {
-        return false;
-    }
+        std::string dialogText = muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
 
+        return ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText)
+               .then<Ret>(this, [this, info, saveMode](const RetVal<Val>& auth, auto resolve) {
+            if (!auth.ret) {
+                return resolve(auth.ret);
+            }
+
+            INotationProjectPtr project = currentNotationProject();
+            if (!project) {
+                return resolve(make_ret(Err::NoProjectError));
+            }
+
+            using Response = muse::cloud::SaveToCloudResponse::SaveToCloudResponse;
+            if (static_cast<Response>(auth.val.toInt()) == Response::SaveLocallyInstead) {
+                return resolve(saveProjectLocallyInstead(project, saveMode));
+            }
+
+            saveAndUploadProject(project, info, saveMode).onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        });
+    });
+}
+
+Promise<Ret> SaveProjectScenario::saveAndUploadProject(const INotationProjectPtr& project, CloudProjectInfo info, SaveMode saveMode)
+{
     bool isPublic = info.visibility == muse::cloud::Visibility::Public;
-    bool generateAudio = false;
 
-    if (saveMode == SaveMode::Save && isCloudAvailable) {
+    if (saveMode == SaveMode::Save) {
         // Get up-to-date visibility information
         RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
         if (scoreInfo.ret) {
@@ -429,22 +443,43 @@ bool SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, SaveMode sav
                    << info.name << " and " << static_cast<int>(info.visibility);
         }
 
-        if (isPublic) {
-            if (!warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
-                return false;
+        if (isPublic && !warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
+            return resolvedPromise(make_ret(Ret::Code::Cancel));
+        }
+    }
+
+    return needGenerateAudio(isPublic)
+           .then<Ret>(this, [this, project, info, saveMode, isPublic](const RetVal<bool>& need, auto resolve) {
+        if (!need.ret) {
+            return resolve(need.ret);
+        }
+
+        if (!saveCloudProjectLocally(project, info, saveMode)) {
+            return resolve(make_ret(Ret::Code::UnknownError));
+        }
+
+        AudioFile audio;
+        if (need.val) {
+            audio = exportMp3(project->masterNotation()->notation());
+            if (!audio.isValid()) {
+                return resolve(make_ret(Ret::Code::BadData));
             }
         }
-    }
 
-    if (isCloudAvailable) {
-        RetVal<bool> need = needGenerateAudio(isPublic);
-        if (!need.ret) {
-            return false;
-        }
+        uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false)
+        .onResolve(this, [this, resolve](const Ret& ret) {
+            if (ret) {
+                m_numberOfSavesToCloud++;
+            }
+            (void)resolve(ret);
+        });
 
-        generateAudio = need.val;
-    }
+        return Promise<Ret>::dummy_result();
+    });
+}
 
+bool SaveProjectScenario::saveCloudProjectLocally(const INotationProjectPtr& project, const CloudProjectInfo& info, SaveMode saveMode)
+{
     // TODO(cloud): is this correct for all save modes?
     project->setCloudInfo(info);
 
@@ -462,28 +497,21 @@ bool SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, SaveMode sav
         savingPath = configuration()->cloudProjectSavingPath(scoreId.toUint64());
     }
 
-    if (!saveProjectLocally(savingPath, saveMode)) {
-        return false;
+    return saveProjectLocally(savingPath, saveMode);
+}
+
+Ret SaveProjectScenario::saveProjectLocallyInstead(const INotationProjectPtr& project, SaveMode saveMode)
+{
+    RetVal<muse::io::path_t> path = askLocalPath(project, saveMode);
+    if (!path.ret) {
+        LOGE() << path.ret.toString();
+        return path.ret;
     }
 
-    if (!isCloudAvailable) {
-        return true;
-    }
+    bool ok = saveProjectLocally(path.val, saveMode);
+    configuration()->setLastUsedSaveLocationType(SaveLocationType::Local);
 
-    AudioFile audio;
-
-    if (generateAudio) {
-        audio = exportMp3(project->masterNotation()->notation());
-        if (!audio.isValid()) {
-            return false;
-        }
-    }
-
-    Ret ret = uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false);
-
-    m_numberOfSavesToCloud++;
-
-    return ret;
+    return Ret(ok);
 }
 
 void SaveProjectScenario::alsoShareAudioCom(const AudioFile& audio)
@@ -495,77 +523,92 @@ void SaveProjectScenario::alsoShareAudioCom(const AudioFile& audio)
 
     UriQuery query("musescore://project/alsoshareaudiocom");
     query.addParam("rememberChoice", Val(!configuration()->hasAskedAlsoShareAudioCom()));
-    RetVal<Val> rv = interactive()->openSync(query);
 
-    if (!rv.val.isNull()) {
-        QVariantMap vals = rv.val.toQVariant().toMap();
-        bool shareAudioCom = vals["share"].toBool();
-        bool rememberChoice = vals["remember"].toBool();
+    openDialog(query).onResolve(this, [this, audio](const RetVal<Val>& rv) {
+        if (!rv.val.isNull()) {
+            QVariantMap vals = rv.val.toQVariant().toMap();
+            bool shareAudioCom = vals["share"].toBool();
+            bool rememberChoice = vals["remember"].toBool();
 
-        if (shareAudioCom) {
-            shareAudio(audio);
+            if (shareAudioCom) {
+                shareAudio(audio);
+            }
+
+            configuration()->setShowAlsoShareAudioComDialog(!rememberChoice);
+            configuration()->setAlsoShareAudioCom(shareAudioCom);
         }
 
-        configuration()->setShowAlsoShareAudioComDialog(!rememberChoice);
-        configuration()->setAlsoShareAudioCom(shareAudioCom);
-    }
-
-    configuration()->setHasAskedAlsoShareAudioCom(true);
+        configuration()->setHasAskedAlsoShareAudioCom(true);
+    });
 }
 
-Ret SaveProjectScenario::askAudioGenerationSettings() const
+Promise<Ret> SaveProjectScenario::askAudioGenerationSettings() const
 {
-    RetVal<Val> res = interactive()->openSync("musescore://project/audiogenerationsettings");
-    if (!res.ret) {
-        return res.ret;
-    }
+    return openDialog(UriQuery("musescore://project/audiogenerationsettings"))
+           .then<Ret>(this, [this](const RetVal<Val>& res, auto resolve) {
+        if (!res.ret) {
+            return resolve(res.ret);
+        }
 
-    configuration()->setHasAskedAudioGenerationSettings(true);
+        configuration()->setHasAskedAudioGenerationSettings(true);
 
-    return muse::make_ok();
+        return resolve(make_ok());
+    });
 }
 
-RetVal<bool> SaveProjectScenario::needGenerateAudio(bool isPublicUpload) const
+Promise<RetVal<bool> > SaveProjectScenario::needGenerateAudio(bool isPublicUpload) const
 {
     if (isPublicUpload) {
-        return RetVal<bool>::make_ok(true);
+        return resolvedPromise(RetVal<bool>::make_ok(true));
     }
 
-    if (!configuration()->hasAskedAudioGenerationSettings()) {
-        Ret ret = askAudioGenerationSettings();
+    if (configuration()->hasAskedAudioGenerationSettings()) {
+        return resolvedPromise(RetVal<bool>::make_ok(needGenerateAudioAccordingToSettings()));
+    }
+
+    return askAudioGenerationSettings().then<RetVal<bool> >(this, [this](const Ret& ret, auto resolve) {
         if (!ret) {
-            return ret;
+            return resolve(RetVal<bool>(ret));
         }
-    }
 
+        return resolve(RetVal<bool>::make_ok(needGenerateAudioAccordingToSettings()));
+    });
+}
+
+bool SaveProjectScenario::needGenerateAudioAccordingToSettings() const
+{
     switch (configuration()->generateAudioTimePeriodType()) {
     case GenerateAudioTimePeriodType::Never:
-        return RetVal<bool>::make_ok(false);
+        return false;
     case GenerateAudioTimePeriodType::Always:
-        return RetVal<bool>::make_ok(true);
+        return true;
     case GenerateAudioTimePeriodType::AfterCertainNumberOfSaves: {
         int requiredNumberOfSaves = configuration()->numberOfSavesToGenerateAudio();
         if (requiredNumberOfSaves <= 0) {
             LOGW() << "invalid number of saves to generate audio: " << requiredNumberOfSaves;
-            return RetVal<bool>::make_ok(true);
+            return true;
         }
 
-        return RetVal<bool>::make_ok(m_numberOfSavesToCloud % requiredNumberOfSaves == 0);
+        return m_numberOfSavesToCloud % requiredNumberOfSaves == 0;
     }
     }
 
-    return RetVal<bool>::make_ok(false);
+    return false;
 }
 
 SaveProjectScenario::AudioFile SaveProjectScenario::exportMp3(const INotationPtr notation) const
 {
-    auto tempFile = std::make_shared<QTemporaryFile>(configuration()->temporaryMp3FilePathTemplate().toQString());
-    if (!tempFile->open()) {
-        LOGE() << "Could not open a temp file";
-        return AudioFile();
+    QString mp3Path;
+    {
+        QTemporaryFile tempFile(configuration()->temporaryMp3FilePathTemplate().toQString());
+        if (!tempFile.open()) {
+            LOGE() << "Could not create a temp file";
+            return AudioFile();
+        }
+
+        mp3Path = QFileInfo(tempFile).absoluteFilePath();
     }
 
-    QString mp3Path = QFileInfo(*tempFile).absoluteFilePath();
     LOGD() << "mp3 path: " << mp3Path;
 
     if (mp3Path.isEmpty()) {
@@ -587,13 +630,24 @@ SaveProjectScenario::AudioFile SaveProjectScenario::exportMp3(const INotationPtr
 
     if (!exportProjectScenario()->exportScores({ notation }, mp3Path)) {
         LOGE() << "Could not export an mp3";
+        fileSystem()->remove(mp3Path);
+        return AudioFile();
+    }
+
+    std::shared_ptr<QFile> exportedFile(new QFile(mp3Path), [this](QFile* file) {
+        file->close();
+        fileSystem()->remove(file->fileName());
+        delete file;
+    });
+
+    if (!exportedFile->open(QIODevice::ReadOnly)) {
+        LOGE() << "Could not reopen exported mp3: " << mp3Path;
         return AudioFile();
     }
 
     AudioFile audio;
     audio.format = "mp3";
-    audio.device = tempFile;
-    audio.device->seek(0);
+    audio.device = exportedFile;
 
     return audio;
 }
@@ -614,126 +668,131 @@ void SaveProjectScenario::closeUploadProgressDialog()
     }
 }
 
-Ret SaveProjectScenario::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
+Promise<Ret> SaveProjectScenario::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
 {
-    INotationProjectPtr project = globalContext()->currentProject();
-    if (!project) {
-        return false;
-    }
-
-    auto projectData = std::make_shared<QBuffer>();
-    projectData->open(QIODevice::WriteOnly);
-
-    Ret ret = project->writeToDevice(projectData.get());
-    if (!ret) {
-        LOGE() << ret.toString();
-        return ret;
-    }
-
-    projectData->close();
-    projectData->open(QIODevice::ReadOnly);
-
-    bool isFirstSave = info.sourceUrl.isEmpty();
-
-    // The method must not return until the saving is complete, to prevent the app from being quit prematurely
-    QEventLoop eventLoop;
-
-    ProgressPtr progress = museScoreComService()->uploadScore(projectData, info.name, info.visibility, info.sourceUrl,
-                                                              info.revisionId);
-    m_uploadingProjectProgress = progress;
-
-    showUploadProgressDialog();
-    LOGD() << "Uploading project started";
-
-    progress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        if (total > 0) {
-            LOGD() << "Uploading project progress: " << current << " / " << total << " bytes";
+    return async::make_promise<Ret>([this, info, audio, openEditUrl, publishMode](auto resolve) {
+        INotationProjectPtr project = globalContext()->currentProject();
+        if (!project) {
+            return resolve(make_ret(Err::NoProjectError));
         }
-    });
 
-    progress->finished().onReceive(this, [this, project, info, audio, openEditUrl, publishMode,
-                                          isFirstSave, &ret, &eventLoop, &progress](const ProgressResult& res) {
-        DEFER {
+        auto projectData = std::make_shared<QBuffer>();
+        projectData->open(QIODevice::WriteOnly);
+
+        Ret ret = project->writeToDevice(projectData.get());
+        if (!ret) {
+            LOGE() << ret.toString();
+            return resolve(ret);
+        }
+
+        projectData->close();
+        projectData->open(QIODevice::ReadOnly);
+
+        bool isFirstSave = info.sourceUrl.isEmpty();
+
+        ProgressPtr progress = museScoreComService()->uploadScore(projectData, info.name, info.visibility, info.sourceUrl,
+                                                                  info.revisionId);
+        m_uploadingProjectProgress = progress;
+
+        showUploadProgressDialog();
+        LOGD() << "Uploading project started";
+
+        progress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+            if (total > 0) {
+                LOGD() << "Uploading project progress: " << current << " / " << total << " bytes";
+            }
+        });
+
+        progress->finished().onReceive(this, [this, project, info, audio, openEditUrl, publishMode,
+                                              isFirstSave, progress, resolve](const ProgressResult& res) {
             progress->progressChanged().disconnect(this);
             progress->finished().disconnect(this);
-            eventLoop.quit();
-        };
 
-        ret = res.ret;
-
-        if (!res.ret) {
-            LOGE() << res.ret.toString();
-            ret = onProjectUploadFailed(res.ret, info, audio, openEditUrl, publishMode);
-            return;
-        }
-
-        ValMap urlMap = res.val.toMap();
-        QString newSourceUrl = urlMap["sourceUrl"].toQString();
-        QString editUrl = openEditUrl ? urlMap["editUrl"].toQString() : QString();
-        int newRevisionId = urlMap["revisionId"].toInt();
-
-        LOGD() << "Source url received: " << newSourceUrl;
-
-        CloudProjectInfo cpinfo = project->cloudInfo();
-        if (cpinfo.sourceUrl != newSourceUrl || cpinfo.revisionId != newRevisionId) {
-            // TODO(cloud): does this work correctly with different save modes?
-            cpinfo.sourceUrl = newSourceUrl;
-            cpinfo.revisionId = newRevisionId;
-            project->setCloudInfo(cpinfo);
-
-            if (!project->isNewlyCreated()) {
-                project->save();
+            if (!res.ret) {
+                LOGE() << res.ret.toString();
+                onProjectUploadFailed(res.ret, info, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& failRet) {
+                    (void)resolve(failRet);
+                });
+                return;
             }
 
-            if (project->isCloudProject()) {
-                moveProject(project, configuration()->cloudProjectPath(muse::cloud::idFromCloudUrl(cpinfo.sourceUrl).toUint64()), true);
-            }
-        }
+            ValMap urlMap = res.val.toMap();
+            QString newSourceUrl = urlMap["sourceUrl"].toQString();
+            QString editUrl = openEditUrl ? urlMap["editUrl"].toQString() : QString();
+            int newRevisionId = urlMap["revisionId"].toInt();
 
-        if (audio.isValid()) {
-            uploadAudioToMuseScoreCom(audio, newSourceUrl, editUrl, isFirstSave, publishMode);
-        } else {
+            LOGD() << "Source url received: " << newSourceUrl;
+
+            CloudProjectInfo cpinfo = project->cloudInfo();
+            if (cpinfo.sourceUrl != newSourceUrl || cpinfo.revisionId != newRevisionId) {
+                // TODO(cloud): does this work correctly with different save modes?
+                cpinfo.sourceUrl = newSourceUrl;
+                cpinfo.revisionId = newRevisionId;
+                project->setCloudInfo(cpinfo);
+
+                if (!project->isNewlyCreated()) {
+                    project->save();
+                }
+
+                if (project->isCloudProject()) {
+                    moveProject(project, configuration()->cloudProjectPath(muse::cloud::idFromCloudUrl(cpinfo.sourceUrl).toUint64()), true);
+                }
+            }
+
+            if (audio.isValid()) {
+                uploadAudioToMuseScoreCom(audio, newSourceUrl, editUrl, isFirstSave, publishMode).onResolve(this,
+                                                                                                            [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
+                return;
+            }
+
             onProjectSuccessfullyUploaded(editUrl, isFirstSave);
 
             if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
                 alsoShareAudioCom(audio);
             }
-        }
+
+            (void)resolve(res.ret);
+        });
+
+        return Promise<Ret>::dummy_result();
     });
-
-    muse::async::processMessages();
-    eventLoop.exec();
-
-    return ret;
 }
 
-void SaveProjectScenario::uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
-                                                    bool isFirstSave,
-                                                    bool publishMode)
+Promise<Ret> SaveProjectScenario::uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
+                                                            bool isFirstSave, bool publishMode)
 {
-    m_uploadingAudioProgress = museScoreComService()->uploadAudio(audio.device, audio.format, sourceUrl);
+    return async::make_promise<Ret>([this, audio, sourceUrl, urlToOpen, isFirstSave, publishMode](auto resolve) {
+        m_uploadingAudioProgress = museScoreComService()->uploadAudio(audio.device, audio.format, sourceUrl);
 
-    m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        if (total > 0) {
-            LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
-        }
-    });
+        m_uploadingAudioProgress->progressChanged().onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+            if (total > 0) {
+                LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
+            }
+        });
 
-    m_uploadingAudioProgress->finished().onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode](const ProgressResult& res) {
-        LOGD() << "Uploading audio finished";
+        m_uploadingAudioProgress->finished().onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode,
+                                                              resolve](const ProgressResult& res) {
+            LOGD() << "Uploading audio finished";
 
-        if (!res.ret) {
-            LOGE() << res.ret.toString();
-        }
+            if (!res.ret) {
+                LOGE() << res.ret.toString();
+            }
 
-        onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
+            onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
 
-        m_uploadingAudioProgress->progressChanged().disconnect(this);
-        m_uploadingAudioProgress->finished().disconnect(this);
+            m_uploadingAudioProgress->progressChanged().disconnect(this);
+            m_uploadingAudioProgress->finished().disconnect(this);
 
-        if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
-            alsoShareAudioCom(audio);
-        }
+            if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
+                alsoShareAudioCom(audio);
+            }
+
+            (void)resolve(res.ret);
+        });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 
@@ -777,9 +836,8 @@ void SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, b
     });
 }
 
-Ret SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio,
-                                               bool openEditUrl,
-                                               bool publishMode)
+Promise<Ret> SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio,
+                                                        bool openEditUrl, bool publishMode)
 {
     setBusy(BusyStatus::Uploading, false);
 
@@ -788,6 +846,8 @@ Ret SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const CloudProjec
     Ret userResponse = showCloudSaveError(ret, info, publishMode, true);
     switch (userResponse.code()) {
     case RET_CODE_CONFLICT_RESPONSE_SAVE_AS: {
+        // The save that started this upload still holds the status; the new flow takes it over
+        setBusy(BusyStatus::Saving, false);
         return saveProject(SaveMode::SaveAs);
     }
     case RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE: {
@@ -812,13 +872,11 @@ Ret SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const CloudProjec
         break;
     }
 
-    return ret;
+    return resolvedPromise(ret);
 }
 
 void SaveProjectScenario::onAudioSuccessfullyUploaded(const QUrl& urlToOpen)
 {
-    setBusy(BusyStatus::AudioSharing, false);
-
     closeUploadProgressDialog();
 
     platformInteractive()->openUrl(urlToOpen);
@@ -826,8 +884,6 @@ void SaveProjectScenario::onAudioSuccessfullyUploaded(const QUrl& urlToOpen)
 
 void SaveProjectScenario::onAudioUploadFailed(const Ret& ret)
 {
-    setBusy(BusyStatus::AudioSharing, false);
-
     closeUploadProgressDialog();
 
     showAudioCloudShareError(ret);
@@ -1157,60 +1213,64 @@ static std::string saveCloudStatusCodeErrorMessage(const Ret& ret, bool withHelp
     return message;
 }
 
-RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
-                                                          SaveLocationType preselectedType) const
+Promise<RetVal<SaveLocation> > SaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
+                                                                    SaveLocationType preselectedType) const
 {
-    SaveLocationType type = preselectedType;
-
-    if (type == SaveLocationType::Undefined) {
-        RetVal<SaveLocationType> askedType = saveLocationType();
-        if (!askedType.ret) {
-            return askedType.ret;
-        }
-
-        type = askedType.val;
+    if (preselectedType != SaveLocationType::Undefined) {
+        return askSaveLocationOfType(project, mode, preselectedType);
     }
 
+    return saveLocationType()
+           .then<RetVal<SaveLocation> >(this, [this, project, mode](const RetVal<SaveLocationType>& type, auto resolve) {
+        if (!type.ret) {
+            return resolve(RetVal<SaveLocation>(type.ret));
+        }
+
+        askSaveLocationOfType(project, mode, type.val).onResolve(this, [resolve](const RetVal<SaveLocation>& location) {
+            (void)resolve(location);
+        });
+
+        return Promise<RetVal<SaveLocation> >::dummy_result();
+    });
+}
+
+Promise<RetVal<SaveLocation> > SaveProjectScenario::askSaveLocationOfType(INotationProjectPtr project, SaveMode mode,
+                                                                          SaveLocationType type) const
+{
     IF_ASSERT_FAILED(type != SaveLocationType::Undefined) {
-        return make_ret(Ret::Code::UnknownError);
+        return resolvedPromise(RetVal<SaveLocation>(make_ret(Ret::Code::UnknownError)));
     }
 
     // The user may switch between Local and Cloud as often as they want
-    for (;;) {
-        configuration()->setLastUsedSaveLocationType(type);
+    configuration()->setLastUsedSaveLocationType(type);
 
-        switch (type) {
-        case SaveLocationType::Undefined:
-            return make_ret(Ret::Code::UnknownError);
-
-        case SaveLocationType::Local: {
-            RetVal<muse::io::path_t> path = askLocalPath(project, mode);
-            switch (path.ret.code()) {
-            case int(Ret::Code::Ok): {
-                return RetVal<SaveLocation>::make_ok(SaveLocation(path.val));
-            }
-            case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
-                type = SaveLocationType::Cloud;
-                continue;
-            default:
-                return path.ret;
-            }
-        }
-
-        case SaveLocationType::Cloud: {
-            RetVal<CloudProjectInfo> info = askCloudLocation(project, mode);
-            switch (info.ret.code()) {
-            case int(Ret::Code::Ok):
-                return RetVal<SaveLocation>::make_ok(SaveLocation(info.val));
-            case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
-                type = SaveLocationType::Local;
-                continue;
-            default:
-                return info.ret;
-            }
-        }
+    if (type == SaveLocationType::Local) {
+        RetVal<muse::io::path_t> path = askLocalPath(project, mode);
+        switch (path.ret.code()) {
+        case int(Ret::Code::Ok):
+            return resolvedPromise(RetVal<SaveLocation>::make_ok(SaveLocation(path.val)));
+        case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
+            return askSaveLocationOfType(project, mode, SaveLocationType::Cloud);
+        default:
+            return resolvedPromise(RetVal<SaveLocation>(path.ret));
         }
     }
+
+    return askCloudLocation(project, mode)
+           .then<RetVal<SaveLocation> >(this, [this, project, mode](const RetVal<CloudProjectInfo>& info, auto resolve) {
+        switch (info.ret.code()) {
+            case int(Ret::Code::Ok):
+                return resolve(RetVal<SaveLocation>::make_ok(SaveLocation(info.val)));
+            case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
+                askSaveLocationOfType(project, mode, SaveLocationType::Local)
+                .onResolve(this, [resolve](const RetVal<SaveLocation>& location) {
+                (void)resolve(location);
+            });
+                return Promise<RetVal<SaveLocation> >::dummy_result();
+            default:
+                return resolve(RetVal<SaveLocation>(info.ret));
+        }
+    });
 }
 
 RetVal<muse::io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
@@ -1257,118 +1317,141 @@ RetVal<muse::io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr p
     return RetVal<muse::io::path_t>::make_ok(selectedPath);
 }
 
-RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
+Promise<RetVal<SaveLocationType> > SaveProjectScenario::saveLocationType() const
 {
     bool shouldAsk = configuration()->shouldAskSaveLocationType();
     SaveLocationType lastUsed = configuration()->lastUsedSaveLocationType();
     if (!shouldAsk && lastUsed != SaveLocationType::Undefined) {
-        return RetVal<SaveLocationType>::make_ok(lastUsed);
+        return resolvedPromise(RetVal<SaveLocationType>::make_ok(lastUsed));
     }
 
     return askSaveLocationType();
 }
 
-RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
+Promise<RetVal<SaveLocationType> > SaveProjectScenario::askSaveLocationType() const
 {
     UriQuery query("musescore://project/asksavelocationtype");
     bool shouldAsk = configuration()->shouldAskSaveLocationType();
     query.addParam("askAgain", Val(shouldAsk));
 
-    RetVal<Val> rv = interactive()->openSync(query);
-    if (!rv.ret) {
-        return rv.ret;
-    }
+    return openDialog(query).then<RetVal<SaveLocationType> >(this, [this](const RetVal<Val>& rv, auto resolve) {
+        if (!rv.ret) {
+            return resolve(RetVal<SaveLocationType>(rv.ret));
+        }
 
-    QVariantMap vals = rv.val.toQVariant().toMap();
+        QVariantMap vals = rv.val.toQVariant().toMap();
 
-    bool askAgain = vals["askAgain"].toBool();
-    configuration()->setShouldAskSaveLocationType(askAgain);
+        bool askAgain = vals["askAgain"].toBool();
+        configuration()->setShouldAskSaveLocationType(askAgain);
 
-    SaveLocationType type = static_cast<SaveLocationType>(vals["saveLocationType"].toInt());
-    return RetVal<SaveLocationType>::make_ok(type);
+        SaveLocationType type = static_cast<SaveLocationType>(vals["saveLocationType"].toInt());
+        return resolve(RetVal<SaveLocationType>::make_ok(type));
+    });
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project, SaveMode mode) const
+Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::askCloudLocation(INotationProjectPtr project, SaveMode mode) const
 {
     return doAskCloudLocation(project, mode, false);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::askPublishLocation(INotationProjectPtr project) const
+Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::askPublishLocation(INotationProjectPtr project) const
 {
     return doAskCloudLocation(project, SaveMode::Save, true);
 }
 
-RetVal<CloudAudioInfo> SaveProjectScenario::askShareAudioLocation(INotationProjectPtr project) const
+Promise<RetVal<CloudAudioInfo> > SaveProjectScenario::askShareAudioLocation(INotationProjectPtr project) const
 {
     bool isCloudAvailable = audioComService()->authorization()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
-        return warnCloudNotAvailableForSharingAudio();
+        return resolvedPromise(RetVal<CloudAudioInfo>(warnCloudNotAvailableForSharingAudio()));
     }
 
     std::string dialogText = muse::trc("project/save", "Log in or create a new account on Audio.com to share your music.");
-    Ret ret = ensureAuthorization(muse::cloud::AUDIO_COM_CLOUD_CODE, false, dialogText).ret;
-    if (!ret) {
-        return ret;
-    }
 
-    QString defaultName = project->displayName();
-    QUrl uploadUrl = project->cloudAudioInfo().url;
-    cloud::Visibility defaultVisibility = cloud::Visibility::Public;
+    return ensureAuthorization(muse::cloud::AUDIO_COM_CLOUD_CODE, false, dialogText)
+           .then<RetVal<CloudAudioInfo> >(this, [this, project](const RetVal<Val>& auth, auto resolve) {
+        if (!auth.ret) {
+            return resolve(RetVal<CloudAudioInfo>(auth.ret));
+        }
 
-    UriQuery query("musescore://project/savetocloud");
-    query.addParam("isPublishShare", Val(true));
-    query.addParam("name", Val(defaultName));
-    query.addParam("visibility", Val(defaultVisibility));
-    query.addParam("cloudCode", Val(cloud::AUDIO_COM_CLOUD_CODE));
+        QString defaultName = project->displayName();
+        QUrl uploadUrl = project->cloudAudioInfo().url;
+        cloud::Visibility defaultVisibility = cloud::Visibility::Public;
 
-    if (!uploadUrl.isEmpty()) {
-        query.addParam("existingScoreOrAudioUrl", Val(uploadUrl.toString()));
-    }
+        UriQuery query("musescore://project/savetocloud");
+        query.addParam("isPublishShare", Val(true));
+        query.addParam("name", Val(defaultName));
+        query.addParam("visibility", Val(defaultVisibility));
+        query.addParam("cloudCode", Val(cloud::AUDIO_COM_CLOUD_CODE));
 
-    RetVal<Val> rv = interactive()->openSync(query);
-    if (!rv.ret) {
-        return rv.ret;
-    }
+        if (!uploadUrl.isEmpty()) {
+            query.addParam("existingScoreOrAudioUrl", Val(uploadUrl.toString()));
+        }
 
-    QVariantMap vals = rv.val.toQVariant().toMap();
-    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
-    auto response = static_cast<Response>(vals["response"].toInt());
-    switch (response) {
-    case Response::Cancel:
-    case Response::SaveLocallyInstead:
-        return make_ret(Ret::Code::Cancel);
-    case Response::Ok:
-        break;
-    }
+        openDialog(query).onResolve(this, [resolve, uploadUrl](const RetVal<Val>& rv) {
+            if (!rv.ret) {
+                (void)resolve(RetVal<CloudAudioInfo>(rv.ret));
+                return;
+            }
 
-    CloudAudioInfo result;
-    result.name = vals["name"].toString();
-    result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
-    result.replaceExisting = vals["replaceExisting"].toBool() && !uploadUrl.isEmpty();
+            QVariantMap vals = rv.val.toQVariant().toMap();
+            using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
+            auto response = static_cast<Response>(vals["response"].toInt());
+            switch (response) {
+                case Response::Cancel:
+                case Response::SaveLocallyInstead:
+                    (void)resolve(RetVal<CloudAudioInfo>(make_ret(Ret::Code::Cancel)));
+                    return;
+                case Response::Ok:
+                    break;
+            }
 
-    return RetVal<CloudAudioInfo>::make_ok(result);
+            CloudAudioInfo result;
+            result.name = vals["name"].toString();
+            result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
+            result.replaceExisting = vals["replaceExisting"].toBool() && !uploadUrl.isEmpty();
+
+            (void)resolve(RetVal<CloudAudioInfo>::make_ok(result));
+        });
+
+        return Promise<RetVal<CloudAudioInfo> >::dummy_result();
+    });
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const
+Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode,
+                                                                           bool isPublishShare) const
 {
     bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
-        return warnCloudNotAvailableForUploading(isPublishShare);
+        return resolvedPromise(RetVal<CloudProjectInfo>(warnCloudNotAvailableForUploading(isPublishShare)));
     }
 
     std::string dialogText = isPublishShare
                              ? muse::trc("project/save", "Log in to MuseScore.com to publish this score.")
                              : muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
-    RetVal<Val> retVal = ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText);
-    if (!retVal.ret) {
-        return retVal.ret;
-    }
 
-    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
-    if (static_cast<Response>(retVal.val.toInt()) == Response::SaveLocallyInstead) {
-        return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
-    }
+    return ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText)
+           .then<RetVal<CloudProjectInfo> >(this, [this, project, mode, isPublishShare](const RetVal<Val>& auth, auto resolve) {
+        if (!auth.ret) {
+            return resolve(RetVal<CloudProjectInfo>(auth.ret));
+        }
 
+        using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
+        if (static_cast<Response>(auth.val.toInt()) == Response::SaveLocallyInstead) {
+            return resolve(RetVal<CloudProjectInfo>(Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE)));
+        }
+
+        askCloudProjectInfo(project, mode, isPublishShare).onResolve(this, [resolve](const RetVal<CloudProjectInfo>& info) {
+            (void)resolve(info);
+        });
+
+        return Promise<RetVal<CloudProjectInfo> >::dummy_result();
+    });
+}
+
+Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::askCloudProjectInfo(INotationProjectPtr project, SaveMode mode,
+                                                                            bool isPublishShare) const
+{
     QString defaultName = project->displayName();
     cloud::Visibility defaultVisibility = isPublishShare ? cloud::Visibility::Public : cloud::Visibility::Private;
     const CloudProjectInfo existingProjectInfo = project->cloudInfo();
@@ -1400,7 +1483,8 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         case int(cloud::Err::Status500_InternalServerError):
         case int(cloud::Err::UnknownStatusCode):
         case int(cloud::Err::NetworkError):
-            return showCloudSaveError(scoreInfo.ret, project->cloudInfo(), isPublishShare, false);
+            return resolvedPromise(RetVal<CloudProjectInfo>(showCloudSaveError(scoreInfo.ret, project->cloudInfo(), isPublishShare,
+                                                                               false)));
 
         // It's possible the source URL is invalid or points to a score on a different user's account.
         // In this situation we shouldn't show an error.
@@ -1415,37 +1499,39 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     query.addParam("existingScoreOrAudioUrl", Val(existingScoreUrl.toString()));
     query.addParam("cloudCode", Val(cloud::MUSESCORE_COM_CLOUD_CODE));
 
-    RetVal<Val> rv = interactive()->openSync(query);
-    if (!rv.ret) {
-        return rv.ret;
-    }
+    return openDialog(query)
+           .then<RetVal<CloudProjectInfo> >(this, [this, mode, isPublishShare, existingProjectInfo](const RetVal<Val>& rv, auto resolve) {
+        if (!rv.ret) {
+            return resolve(RetVal<CloudProjectInfo>(rv.ret));
+        }
 
-    QVariantMap vals = rv.val.toQVariant().toMap();
-    using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
-    auto response = static_cast<Response>(vals["response"].toInt());
-    switch (response) {
-    case Response::Cancel:
-        return make_ret(Ret::Code::Cancel);
-    case Response::SaveLocallyInstead:
-        return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
-    case Response::Ok:
-        break;
-    }
+        QVariantMap vals = rv.val.toQVariant().toMap();
+        using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
+        auto response = static_cast<Response>(vals["response"].toInt());
+        switch (response) {
+            case Response::Cancel:
+                return resolve(RetVal<CloudProjectInfo>(make_ret(Ret::Code::Cancel)));
+            case Response::SaveLocallyInstead:
+                return resolve(RetVal<CloudProjectInfo>(Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE)));
+            case Response::Ok:
+                break;
+        }
 
-    CloudProjectInfo result;
+        CloudProjectInfo result;
 
-    if ((mode == SaveMode::Save || isPublishShare) && vals["replaceExisting"].toBool()) {
-        result = existingProjectInfo;
-    }
+        if ((mode == SaveMode::Save || isPublishShare) && vals["replaceExisting"].toBool()) {
+            result = existingProjectInfo;
+        }
 
-    result.name = vals["name"].toString();
-    result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
+        result.name = vals["name"].toString();
+        result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
 
-    if (!warnBeforePublishing(isPublishShare, result.visibility)) {
-        return make_ret(Ret::Code::Cancel);
-    }
+        if (!warnBeforePublishing(isPublishShare, result.visibility)) {
+            return resolve(RetVal<CloudProjectInfo>(make_ret(Ret::Code::Cancel)));
+        }
 
-    return RetVal<CloudProjectInfo>::make_ok(result);
+        return resolve(RetVal<CloudProjectInfo>::make_ok(result));
+    });
 }
 
 bool SaveProjectScenario::warnBeforePublishing(bool isPublishShare, cloud::Visibility visibility) const
@@ -1543,11 +1629,11 @@ Ret SaveProjectScenario::warnCloudNotAvailableForSharingAudio() const
     return make_ret(Ret::Code::Cancel);
 }
 
-muse::RetVal<Val> SaveProjectScenario::ensureAuthorization(const QString& cloudCode, bool publishingScore,
-                                                           const std::string& text) const
+Promise<RetVal<Val> > SaveProjectScenario::ensureAuthorization(const QString& cloudCode, bool publishingScore,
+                                                               const std::string& text) const
 {
     IF_ASSERT_FAILED(cloudCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE || cloudCode == muse::cloud::AUDIO_COM_CLOUD_CODE) {
-        return muse::RetVal<Val>::make_ret(Err::UnknownError);
+        return resolvedPromise(RetVal<Val>(make_ret(Err::UnknownError)));
     }
 
     bool isMuseScoreCom = cloudCode == muse::cloud::MUSESCORE_COM_CLOUD_CODE;
@@ -1555,14 +1641,14 @@ muse::RetVal<Val> SaveProjectScenario::ensureAuthorization(const QString& cloudC
                           : audioComService()->authorization()->userAuthorized().val;
 
     if (userAuthorized) {
-        return muse::make_ok();
+        return resolvedPromise(RetVal<Val>::make_ok(Val()));
     }
 
     UriQuery query("muse://cloud/requireauthorization");
     query.addParam("text", Val(text));
     query.addParam("cloudCode", Val(cloudCode));
     query.addParam("publishingScore", Val(publishingScore));
-    return interactive()->openSync(query);
+    return openDialog(query);
 }
 
 Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublishShare,
