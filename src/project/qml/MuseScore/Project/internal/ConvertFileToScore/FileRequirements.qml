@@ -64,7 +64,7 @@ Item {
 
         accessible.role: MUAccessible.Button
         accessible.name: qsTrc("project/convert", "File requirements")
-        accessible.description: root.accessibleRequirementsText()
+        accessible.description: popup.isOpened ? root.accessibleRequirementsText() : ""
         accessible.visualItem: root
         accessible.enabled: navCtrl.enabled
 
@@ -115,5 +115,9 @@ Item {
         id: popup
 
         sections: root.fileRequirements
+
+        onClosed: {
+            navCtrl.requestActive()
+        }
     }
 }
