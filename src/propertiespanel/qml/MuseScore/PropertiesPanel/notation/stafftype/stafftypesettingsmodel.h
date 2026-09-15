@@ -43,6 +43,7 @@ class StaffTypeSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * color READ color CONSTANT)
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * noteheadSchemeType READ noteheadSchemeType CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * instrumentLabelVisibility READ instrumentLabelVisibility CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * isStemless READ isStemless CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldShowBarlines READ shouldShowBarlines CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * shouldShowLedgerLines READ shouldShowLedgerLines CONSTANT)
@@ -71,6 +72,7 @@ public:
     PropertyItem* color() const;
 
     PropertyItem* noteheadSchemeType() const;
+    PropertyItem* instrumentLabelVisibility() const;
     PropertyItem* isStemless() const;
     PropertyItem* shouldShowBarlines() const;
     PropertyItem* shouldShowLedgerLines() const;
@@ -93,6 +95,7 @@ private:
     PropertyItem* m_color = nullptr;
 
     PropertyItem* m_noteheadSchemeType = nullptr;
+    PropertyItem* m_instrumentLabelVisibility = nullptr;
     PropertyItem* m_isStemless = nullptr;
     PropertyItem* m_shouldShowBarlines = nullptr;
     PropertyItem* m_shouldShowLedgerLines = nullptr;

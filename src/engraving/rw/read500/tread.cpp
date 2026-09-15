@@ -4092,6 +4092,8 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
             t->setGenTimesig(e.readInt());
         } else if (tag == "noteheadScheme") {
             t->setNoteHeadScheme(TConv::fromXml(e.readAsciiText(), NoteHeadScheme::HEAD_NORMAL));
+        } else if (tag == "instrumentLabelVisibility") {
+            t->setInstrumentLabelVisibility(TConv::fromXml(e.readAsciiText(), InstrumentLabelVisibility::AUTO));
         } else if (tag == "keysig") {
             t->setGenKeysig(e.readInt());
         } else if (tag == "ledgerlines") {
