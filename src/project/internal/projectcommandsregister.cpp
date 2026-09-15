@@ -125,6 +125,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::SHARE_FILE)
     },
     CommandInfo{
+        PROJECT_EXPORT_SELECTION_COMMAND,
+        TranslatableString("project", "Export &selection…"),
+        TranslatableString("project", "Export the selected range as audio"),
+        InputSchema(),
+        Decoration(IconCode::Code::SHARE_FILE)
+    },
+    CommandInfo{
         PROJECT_IMPORT_PDF_COMMAND,
         TranslatableString("project", "Import P&DF…"),
         TranslatableString("project", "Import the PDF file"),

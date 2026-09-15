@@ -38,7 +38,7 @@ public:
 
     MOCK_METHOD(bool, exportScores,
                 (notation::INotationPtrList notations, const muse::io::path_t destinationPath, INotationWriter::UnitType unitType,
-                 bool openDestinationFolderOnExport), (const, override));
+                 bool openDestinationFolderOnExport, const INotationWriter::Options& writerOptions), (const, override));
 
     MOCK_METHOD(const ExportInfo&, exportInfo, (), (const, override));
     MOCK_METHOD(void, setExportInfo, (const ExportInfo& exportInfo), (override));

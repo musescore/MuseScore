@@ -22,10 +22,13 @@
 
 #pragma once
 
+#include <map>
+
 #include "async/channel.h"
 #include "async/notification.h"
 #include "async/promise.h"
 #include "audio/common/audiotypes.h"
+#include "global/types/id.h"
 #include "global/progress.h"
 #include "modularity/imoduleinterface.h"
 
@@ -85,6 +88,7 @@ public:
     virtual muse::Ret reloadPlaybackCache() = 0;
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
+    using PartVolumeMap = std::map<muse::ID, int>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
 
     using AuxTrackIdMap = std::map<muse::audio::aux_channel_idx_t, muse::audio::TrackId>;
@@ -140,6 +144,8 @@ public:
 
     virtual void setNotation(notation::INotationPtr notation) = 0;
     virtual void setIsExportingAudio(bool exporting) = 0;
+    virtual void setSelectionExportTrackVolumes(const PartVolumeMap& partVolumes) = 0;
+    virtual void setSelectionExportMetronomeEnabled(bool enabled) = 0;
 
     virtual const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const = 0;
     virtual muse::async::Notification onlineSoundsChanged() const = 0;

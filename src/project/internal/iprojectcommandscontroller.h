@@ -45,6 +45,7 @@ public:
     virtual muse::async::Notification busyChanged() const = 0;
 
     virtual bool hasSelection() const = 0;
+    virtual bool hasRangeSelection() const = 0;
     virtual muse::async::Notification hasSelectionChanged() const = 0;
 };
 }

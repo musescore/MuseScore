@@ -22,6 +22,9 @@
 
 #include "abstractaudiowriter.h"
 
+#include <limits>
+#include <optional>
+
 #include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
@@ -30,7 +33,9 @@
 #include "global/containers.h"
 #include "log.h"
 
+#include "notation/imasternotation.h"
 #include "notation/inotation.h"
+#include "notation/inotationplayback.h"
 
 using namespace muse;
 using namespace muse::audio;
@@ -83,8 +88,8 @@ void AbstractAudioWriter::abort()
 {
     muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
     playback()->abortSavingAllSoundTracks();
-    m_writeRet = make_ret(Ret::Code::Cancel);
-    m_isCompleted = true;
+    // The engine still owns the destination device until it acknowledges the abort.
+    // Let the saveSoundTrack callback finish the export and restore playback state.
 }
 
 muse::Progress* AbstractAudioWriter::progress()
@@ -119,7 +124,6 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     m_writeRet = muse::Ret();
 
     playbackController()->setNotation(notation);
-    playbackController()->setIsExportingAudio(true);
 
     SoundTrackFormat actualFormat = format;
 
@@ -131,7 +135,133 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     actualFormat.trailingSilenceDuration = std::isfinite(trailingSilenceSec)
                                            ? static_cast<msecs_t>(trailingSilenceSec) : msecs_t(0);
 
-    doWrite(dstDevice, actualFormat);
+    SoundTrackSaveOptions saveOptions;
+    std::optional<bool> selectionMetronomeEnabled;
+    const auto startTickIt = options.find(OptionKey::AUDIO_EXPORT_START_TICK);
+    const auto endTickIt = options.find(OptionKey::AUDIO_EXPORT_END_TICK);
+
+    if ((startTickIt == options.end()) != (endTickIt == options.end())) {
+        return make_ret(Ret::Code::BadArgs, std::string("audio export range requires both start and end ticks"));
+    }
+
+    if (startTickIt != options.end()) {
+        const int64_t startTickValue = startTickIt->second.toInt64();
+        const int64_t endTickValue = endTickIt->second.toInt64();
+        if (startTickValue < 0 || endTickValue <= startTickValue
+            || endTickValue > std::numeric_limits<midi::tick_t>::max()) {
+            return make_ret(Ret::Code::BadArgs, std::string("invalid audio export tick range"));
+        }
+        const notation::INotationPlaybackPtr notationPlayback = notation->masterNotation()->playback();
+        if (!notationPlayback) {
+            return make_ret(Ret::Code::InternalError, std::string("notation playback is unavailable"));
+        }
+
+        const auto tempoPercentageIt = options.find(OptionKey::AUDIO_EXPORT_TEMPO_PERCENT);
+        if (tempoPercentageIt != options.end()) {
+            const double tempoPercentage = tempoPercentageIt->second.toDouble();
+            if (!std::isfinite(tempoPercentage) || tempoPercentage < 10.0 || tempoPercentage > 300.0) {
+                return make_ret(Ret::Code::BadArgs, std::string("invalid audio export tempo percentage"));
+            }
+
+            m_tempoMultiplierForRestore = playbackController()->tempoMultiplier();
+            m_shouldRestoreTempoMultiplier = true;
+            playbackController()->setTempoMultiplier(tempoPercentage / 100.0);
+        }
+
+        const RetVal<midi::tick_t> startPlayedTick
+            = notationPlayback->playPositionTickByRawTick(static_cast<midi::tick_t>(startTickValue));
+        const RetVal<midi::tick_t> endPlayedTick
+            = notationPlayback->playPositionTickByRawTick(static_cast<midi::tick_t>(endTickValue));
+        if (!startPlayedTick.ret || !endPlayedTick.ret) {
+            if (m_shouldRestoreTempoMultiplier) {
+                playbackController()->setTempoMultiplier(m_tempoMultiplierForRestore);
+                m_shouldRestoreTempoMultiplier = false;
+            }
+            return make_ret(Ret::Code::BadData, std::string("could not map the selected score range to playback time"));
+        }
+
+        const secs_t selectionStartTime = notationPlayback->playedTickToSec(startPlayedTick.val);
+        const secs_t selectionEndTime = notationPlayback->playedTickToSec(endPlayedTick.val);
+        const double fadeInSeconds = muse::value(options, OptionKey::AUDIO_EXPORT_FADE_IN_SEC, Val(0.0)).toDouble();
+        const double fadeOutSeconds = muse::value(options, OptionKey::AUDIO_EXPORT_FADE_OUT_SEC, Val(0.0)).toDouble();
+        if (!std::isfinite(fadeInSeconds) || fadeInSeconds < 0.0 || fadeInSeconds > 30.0
+            || !std::isfinite(fadeOutSeconds) || fadeOutSeconds < 0.0 || fadeOutSeconds > 30.0) {
+            if (m_shouldRestoreTempoMultiplier) {
+                playbackController()->setTempoMultiplier(m_tempoMultiplierForRestore);
+                m_shouldRestoreTempoMultiplier = false;
+            }
+            return make_ret(Ret::Code::BadArgs, std::string("invalid selection export fade duration"));
+        }
+
+        const secs_t totalPlayTime = notationPlayback->totalPlayTime();
+        saveOptions.hasTimeRange = true;
+        saveOptions.startTime = std::max(secs_t(0.0), selectionStartTime - secs_t(fadeInSeconds));
+        saveOptions.endTime = std::min(totalPlayTime, selectionEndTime + secs_t(fadeOutSeconds));
+        saveOptions.fadeInDuration = selectionStartTime - saveOptions.startTime;
+        saveOptions.fadeOutDuration = saveOptions.endTime - selectionEndTime;
+        if (!saveOptions.isValid()) {
+            if (m_shouldRestoreTempoMultiplier) {
+                playbackController()->setTempoMultiplier(m_tempoMultiplierForRestore);
+                m_shouldRestoreTempoMultiplier = false;
+            }
+            return make_ret(Ret::Code::BadData, std::string("selected score range has no playable duration"));
+        }
+    }
+
+    const auto metronomeEnabledIt = options.find(OptionKey::AUDIO_EXPORT_METRONOME_ENABLED);
+    if (metronomeEnabledIt != options.end()) {
+        if (!saveOptions.hasTimeRange) {
+            if (m_shouldRestoreTempoMultiplier) {
+                playbackController()->setTempoMultiplier(m_tempoMultiplierForRestore);
+                m_shouldRestoreTempoMultiplier = false;
+            }
+            return make_ret(Ret::Code::BadArgs, std::string("selection export metronome requires a time range"));
+        }
+        selectionMetronomeEnabled = metronomeEnabledIt->second.toBool();
+    }
+
+    const auto partVolumesIt = options.find(OptionKey::AUDIO_EXPORT_PART_VOLUMES);
+    if (partVolumesIt != options.end()) {
+        playback::IPlaybackController::PartVolumeMap partVolumes;
+        bool validPartVolumes = saveOptions.hasTimeRange;
+
+        for (const Val& partVolumeValue : partVolumesIt->second.toList()) {
+            const ValMap partVolume = partVolumeValue.toMap();
+            const auto partIdIt = partVolume.find("partId");
+            const auto volumeIt = partVolume.find("volume");
+            if (partIdIt == partVolume.end() || volumeIt == partVolume.end()) {
+                validPartVolumes = false;
+                break;
+            }
+
+            const muse::ID partId(partIdIt->second.toString());
+            const int volume = volumeIt->second.toInt();
+            if (!partId.isValid() || volume < 0 || volume > 200) {
+                validPartVolumes = false;
+                break;
+            }
+
+            partVolumes.insert_or_assign(partId, volume);
+        }
+
+        if (!validPartVolumes || partVolumes.empty()) {
+            if (m_shouldRestoreTempoMultiplier) {
+                playbackController()->setTempoMultiplier(m_tempoMultiplierForRestore);
+                m_shouldRestoreTempoMultiplier = false;
+            }
+            return make_ret(Ret::Code::BadArgs, std::string("invalid selection export part volumes"));
+        }
+
+        playbackController()->setSelectionExportTrackVolumes(partVolumes);
+    } else {
+        playbackController()->setIsExportingAudio(true);
+    }
+
+    if (selectionMetronomeEnabled.has_value()) {
+        playbackController()->setSelectionExportMetronomeEnabled(*selectionMetronomeEnabled);
+    }
+
+    doWrite(dstDevice, actualFormat, saveOptions);
 
     const bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
     if (waitForCompletion) {
@@ -144,7 +274,8 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     return m_writeRet;
 }
 
-void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackFormat& format)
+void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackFormat& format,
+                                  const SoundTrackSaveOptions& saveOptions)
 {
     muse::ContextInject<muse::audio::IPlayback> playbackInj = { m_iocContext };
 
@@ -155,6 +286,10 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
 
     auto restorePlaybackState = [this]() {
         muse::ContextInject<playback::IPlaybackController> playbackController = { m_iocContext };
+        if (m_shouldRestoreTempoMultiplier) {
+            playbackController()->setTempoMultiplier(m_tempoMultiplierForRestore);
+            m_shouldRestoreTempoMultiplier = false;
+        }
         playbackController()->setIsExportingAudio(false);
         playbackController()->setNotation(m_notationForRestore);
     };
@@ -180,7 +315,7 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
         sendProgress(current, total, stage);
     });
 
-    playback->saveSoundTrack(std::move(format), dstDevice)
+    playback->saveSoundTrack(std::move(format), dstDevice, saveOptions)
     .onResolve(this, [this, playback, restorePlaybackState](const bool /*result*/) {
         LOGI() << "Successfully saved sound track";
 

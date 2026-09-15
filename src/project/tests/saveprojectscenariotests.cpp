@@ -1084,7 +1084,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AudioCannotBeRendered_DoesNo
     //! [GIVEN] A public score, which always needs an mp3, whose export fails...
     givenReachableCloud();
     givenUserConfirmsCloudDialog();
-    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(false));
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _, _)).WillByDefault(Return(false));
 
     //! [THEN] Nothing is uploaded, because a public score without audio has no web playback
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
@@ -1321,7 +1321,7 @@ TEST_F(SaveProjectScenarioTests, Publish_AudioCannotBeRendered_ReportsFailure)
 
     //! [THEN] The export of the current score is attempted and fails, and nothing is uploaded
     EXPECT_CALL(*m_exportScenario, exportScores(notation::INotationPtrList { m_notation }, _,
-                                                INotationWriter::UnitType::PER_PART, false)).WillOnce(Return(false));
+                                                INotationWriter::UnitType::PER_PART, false, _)).WillOnce(Return(false));
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Publishing...
@@ -1336,7 +1336,7 @@ TEST_F(SaveProjectScenarioTests, Publish_UploadFails_ReportsFailure)
     //! [GIVEN] A publish whose upload fails...
     givenReachableCloud();
     givenUserConfirmsCloudDialog();
-    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(true));
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _, _)).WillByDefault(Return(true));
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
     givenUploadFinishesWith(make_ret(Ret::Code::InternalError), ValMap());
 
@@ -1352,7 +1352,7 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
     //! [GIVEN] A publish that goes through...
     givenReachableCloud();
     givenUserConfirmsCloudDialog("Published score");
-    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(true));
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _, _)).WillByDefault(Return(true));
     ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
     givenUploadFinishesWith(make_ok(), ValMap());
 

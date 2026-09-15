@@ -86,6 +86,45 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return muse::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
+static void applyVolumePercentage(ControlParams& control, int percentage)
+{
+    percentage = std::clamp(percentage, 0, 200);
+    if (percentage == 100) {
+        return;
+    }
+
+    if (percentage == 0) {
+        control.muted = true;
+        return;
+    }
+
+    const float offsetDb = muse::linear_to_db(static_cast<float>(percentage) / 100.f);
+    const float volumeRangeDb = VOLUME_DB_MAX.raw() - VOLUME_DB_MIN.raw();
+
+    if (const volume_db_t* fixedVolume = std::get_if<volume_db_t>(&control.volume.value())) {
+        control.volume = volume_db_t(std::clamp(fixedVolume->raw() + offsetDb,
+                                                VOLUME_DB_MIN.raw(), VOLUME_DB_MAX.raw()));
+        return;
+    }
+
+    const AutomationEnvelope& originalEnvelope = std::get<AutomationEnvelope>(control.volume.value());
+    AutomationEnvelope adjustedEnvelope;
+    const real_t normalizedOffset(offsetDb / volumeRangeDb);
+
+    for (const auto& [position, originalPoint] : originalEnvelope) {
+        mpe::AutomationPoint point = originalPoint;
+        point.outValue = std::clamp(point.outValue + normalizedOffset, real_t(0.0), real_t(1.0));
+
+        if (auto* arrival = std::get_if<mpe::AutomationPoint::ExplicitArrival>(&point.inValue)) {
+            arrival->value = std::clamp(arrival->value + normalizedOffset, real_t(0.0), real_t(1.0));
+        }
+
+        adjustedEnvelope.insert({ position, point });
+    }
+
+    control.volume = AutomatableValue<volume_db_t>(adjustedEnvelope);
+}
+
 PlaybackController::PlaybackController(const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_onlineSoundsController(std::make_unique<OnlineSoundsController>(iocCtx))
 {
@@ -1713,6 +1752,10 @@ void PlaybackController::updateSoloMuteStates()
 
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
     bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
+    const bool isSelectionExportMix = m_isExportingAudio
+                                      && m_selectionExportTrackVolumes.has_value()
+                                      && selection()->isRange()
+                                      && !m_selectionExportTrackVolumes->empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!muse::contains(m_instrumentTrackIdMap, instrumentTrackId)) {
@@ -1743,7 +1786,14 @@ void PlaybackController::updateSoloMuteStates()
         params.forceMute = shouldForceMute;
 
         audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
-        playback()->setControlParams(trackId, trackControlParams(instrumentTrackId, params, /*rebuildVolume*/ false, /*rebuildPan*/ false));
+        ControlParams control = trackControlParams(instrumentTrackId, params, /*rebuildVolume*/ false, /*rebuildPan*/ false);
+        if (isSelectionExportMix) {
+            const auto volumeIt = m_selectionExportTrackVolumes->find(instrumentTrackId.partId);
+            if (volumeIt != m_selectionExportTrackVolumes->cend()) {
+                applyVolumePercentage(control, volumeIt->second);
+            }
+        }
+        playback()->setControlParams(trackId, control);
     }
 
     updateAuxMuteStates();
@@ -1973,12 +2023,44 @@ void PlaybackController::setIsExportingAudio(bool exporting)
         return;
     }
 
+    if (!exporting && m_selectionExportMetronomeEnabled.has_value() && notationPlayback()) {
+        notationPlayback()->setIsMetronomeEnabled(notationConfiguration()->isMetronomeEnabled());
+        setTrackActivity(notationPlayback()->metronomeTrackId(),
+                         notationConfiguration()->isMetronomeEnabled() || notationConfiguration()->isCountInEnabled());
+        m_selectionExportMetronomeEnabled.reset();
+    }
+
     m_isExportingAudio = exporting;
+    m_selectionExportTrackVolumes.reset();
     updateSoloMuteStates();
 
     if (exporting && notationPlayback()) {
         notationPlayback()->sendEventsForChangedTracks();
     }
+}
+
+void PlaybackController::setSelectionExportTrackVolumes(const PartVolumeMap& partVolumes)
+{
+    m_isExportingAudio = true;
+    m_selectionExportTrackVolumes = partVolumes;
+    updateSoloMuteStates();
+
+    if (notationPlayback()) {
+        notationPlayback()->sendEventsForChangedTracks();
+    }
+}
+
+void PlaybackController::setSelectionExportMetronomeEnabled(bool enabled)
+{
+    if (!notationPlayback()) {
+        return;
+    }
+
+    doStop();
+
+    m_selectionExportMetronomeEnabled = enabled;
+    notationPlayback()->setIsMetronomeEnabled(enabled);
+    setTrackActivity(notationPlayback()->metronomeTrackId(), enabled);
 }
 
 bool PlaybackController::canReceiveAction(const muse::actions::ActionCode&) const

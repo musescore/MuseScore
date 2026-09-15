@@ -29,6 +29,7 @@
 #include "app_config.h"
 
 #include "modularity/ioc.h"
+#include "global/types/id.h"
 
 #include "async/asyncable.h"
 
@@ -56,8 +57,28 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
 
+    Q_PROPERTY(bool selectionMode READ selectionMode WRITE setSelectionMode NOTIFY selectionModeChanged FINAL)
+    Q_PROPERTY(int selectionTempoPercentage READ selectionTempoPercentage WRITE setSelectionTempoPercentage
+               NOTIFY selectionTempoPercentageChanged FINAL)
+    Q_PROPERTY(bool selectionMetronomeEnabled READ selectionMetronomeEnabled WRITE setSelectionMetronomeEnabled
+               NOTIFY selectionMetronomeEnabledChanged FINAL)
+    Q_PROPERTY(bool selectionFadeInEnabled READ selectionFadeInEnabled WRITE setSelectionFadeInEnabled
+               NOTIFY selectionFadeInEnabledChanged FINAL)
+    Q_PROPERTY(double selectionFadeInDuration READ selectionFadeInDuration WRITE setSelectionFadeInDuration
+               NOTIFY selectionFadeInDurationChanged FINAL)
+    Q_PROPERTY(bool selectionFadeOutEnabled READ selectionFadeOutEnabled WRITE setSelectionFadeOutEnabled
+               NOTIFY selectionFadeOutEnabledChanged FINAL)
+    Q_PROPERTY(double selectionFadeOutDuration READ selectionFadeOutDuration WRITE setSelectionFadeOutDuration
+               NOTIFY selectionFadeOutDurationChanged FINAL)
+    Q_PROPERTY(int selectionOtherInstrumentsVolume READ selectionOtherInstrumentsVolume WRITE setSelectionOtherInstrumentsVolume
+               NOTIFY selectionOtherInstrumentsVolumeChanged FINAL)
+    Q_PROPERTY(bool selectionOtherInstrumentsMuted READ selectionOtherInstrumentsMuted WRITE setSelectionOtherInstrumentsMuted
+               NOTIFY selectionOtherInstrumentsMutedChanged FINAL)
+    Q_PROPERTY(QVariantList selectionInstruments READ selectionInstruments NOTIFY selectionInstrumentsChanged FINAL)
+    Q_PROPERTY(bool hasOtherInstruments READ hasOtherInstruments NOTIFY selectionInstrumentsChanged FINAL)
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
+    Q_PROPERTY(QVariantList exportTypes READ exportTypeList NOTIFY exportTypeListChanged FINAL)
     Q_PROPERTY(QVariantMap selectedExportType READ selectedExportType NOTIFY selectedExportTypeChanged)
 
     Q_PROPERTY(QVariantList availableUnitTypes READ availableUnitTypes NOTIFY selectedExportTypeChanged)
@@ -139,6 +160,28 @@ public:
     Q_INVOKABLE void setAllSelected(bool selected);
     Q_INVOKABLE void selectCurrentNotation();
     int selectionLength() const;
+
+    bool selectionMode() const;
+    void setSelectionMode(bool selectionMode);
+    int selectionTempoPercentage() const;
+    void setSelectionTempoPercentage(int percentage);
+    bool selectionMetronomeEnabled() const;
+    void setSelectionMetronomeEnabled(bool enabled);
+    bool selectionFadeInEnabled() const;
+    void setSelectionFadeInEnabled(bool enabled);
+    double selectionFadeInDuration() const;
+    void setSelectionFadeInDuration(double duration);
+    bool selectionFadeOutEnabled() const;
+    void setSelectionFadeOutEnabled(bool enabled);
+    double selectionFadeOutDuration() const;
+    void setSelectionFadeOutDuration(double duration);
+    int selectionOtherInstrumentsVolume() const;
+    void setSelectionOtherInstrumentsVolume(int percentage);
+    bool selectionOtherInstrumentsMuted() const;
+    void setSelectionOtherInstrumentsMuted(bool muted);
+    QVariantList selectionInstruments() const;
+    bool hasOtherInstruments() const;
+    Q_INVOKABLE void setSelectionInstrumentVolume(int index, int percentage);
 
     Q_INVOKABLE QVariantList exportTypeList() const;
     QVariantMap selectedExportType() const;
@@ -242,6 +285,17 @@ public:
     Q_INVOKABLE void updateExportInfo();
 
 signals:
+    void selectionModeChanged();
+    void selectionTempoPercentageChanged();
+    void selectionMetronomeEnabledChanged();
+    void selectionFadeInEnabledChanged();
+    void selectionFadeInDurationChanged();
+    void selectionFadeOutEnabledChanged();
+    void selectionFadeOutDurationChanged();
+    void selectionOtherInstrumentsVolumeChanged();
+    void selectionOtherInstrumentsMutedChanged();
+    void selectionInstrumentsChanged();
+    void exportTypeListChanged();
     void selectionChanged();
 
     void selectedExportTypeChanged(QVariantMap newExportType);
@@ -301,6 +355,9 @@ private:
     bool isIndexValid(int index) const;
 
     bool isFormatSelected(const QString& formatSuffix) const;
+    bool isAudioExportType(const ExportType& type) const;
+    void ensureAudioExportTypeSelected();
+    void updateSelectionInstrumentInfo();
 
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
@@ -319,5 +376,22 @@ private:
     ExportType m_selectedExportType = ExportType();
     muse::io::path_t m_exportDirPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
+    bool m_selectionMode = false;
+    int m_selectionTempoPercentage = 100;
+    bool m_selectionMetronomeEnabled = false;
+    bool m_selectionFadeInEnabled = false;
+    double m_selectionFadeInDuration = 2.0;
+    bool m_selectionFadeOutEnabled = false;
+    double m_selectionFadeOutDuration = 2.0;
+    int m_selectionOtherInstrumentsVolume = 50;
+    bool m_selectionOtherInstrumentsMuted = false;
+
+    struct SelectionInstrument {
+        muse::ID partId;
+        QString name;
+        bool selected = false;
+        int volume = 100;
+    };
+    std::vector<SelectionInstrument> m_selectionInstruments;
 };
 }
