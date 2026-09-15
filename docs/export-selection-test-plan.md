@@ -32,7 +32,7 @@ playback and mixer state afterwards.
 | Qt | 6.10.2, MSVC 2022 x64 |
 | MuseScore base revision | `87e6a2cc1973` |
 | Muse Framework base revision | `34ecec524d1b` |
-| Feature revision | Published MuseScore draft `876d398de8` and framework draft `4ffe3392b94c`; unsuccessful local cleanup candidate reverted, test results documented here |
+| Feature revision | MuseScore audio-code revision `876d398de8` and framework test-fix revision `561d436c5d`; unsuccessful local cleanup candidate reverted, test results documented here |
 | Executable | `C:\Users\afortun8\b\m\install\bin\MuseScoreStudio5.exe` |
 | Build result | **PASS** — complete compile, link, and install after upstream refresh on 2026-09-15; one transient `LNK1104` at final link resolved by retry |
 | PR style-only revision rebuild | **PASS** — compile, link, and install on 2026-09-15 after closing MuseScore; linked and installed executable SHA-256 hashes agree |
@@ -40,8 +40,8 @@ playback and mixer state afterwards.
 | Unpublished cleanup experiment | **FAIL** — compile, link, and install passed, but user testing found the partial MP3 still remained and a new program runtime regression; the candidate was reverted and the published non-crashing code was rebuilt and reinstalled |
 | Code-style check | **PASS** — Uncrustify 0.74.0 checks all 13 framework and 35 application C++ files touched by the feature |
 | Audio unit-test build | **PASS** — isolated `muse_audio_tests` target compiled and linked |
-| Audio unit-test run | **BLOCKED** — Windows runner exits with `0xC0000005` before publishing GoogleTest results |
-| MuseScore PR unit-test CI | **FAIL** — [current `run_tests` job](https://github.com/musescore/MuseScore/actions/runs/34966230344/job/104371224603) built successfully, but its **Run tests** step failed; the exact failing assertion or process exit has not yet been verified from the job log |
+| Audio unit-test run | **BLOCKED** — Windows runner historically exits with `0xC0000005` before GoogleTest results; the rebuilt filtered test executable also exited without printed results, so no local PASS is claimed |
+| MuseScore PR unit-test CI | **FAIL (prior revision)** — [`run_tests` job](https://github.com/musescore/MuseScore/actions/runs/34966230344/job/104371224603) built successfully, but CTest #8 aborted on the framework test `Audio_SoundTrackSaveOptionsTests.RejectsNonFiniteValues`: it assigned NaN through `secs_t` and triggered `number_t::check_valid` before `isValid()`. The test-only correction in `561d436c5d` sets the raw value solely to exercise defensive validation; a CI rerun is pending |
 
 ### Launching the local test build on Windows
 
