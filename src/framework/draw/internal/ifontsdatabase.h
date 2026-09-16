@@ -38,6 +38,8 @@ public:
 
     virtual int addFont(const FontDataKey& key, const io::path_t& path) = 0;
 
+    virtual void removeFont(const FontDataKey& key) = 0;
+
     virtual FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const = 0;
     virtual std::vector<FontDataKey> substitutionFonts(const FontDataKey& requireKey) const = 0;
     virtual FontData fontData(const FontDataKey& requireKey, Font::Type type) const = 0;
