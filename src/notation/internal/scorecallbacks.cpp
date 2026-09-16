@@ -62,15 +62,6 @@ void ScoreCallbacks::setDropTarget(mu::engraving::EngravingItem* dropTarget)
     m_interaction->setDropTarget(dropTarget, false);
 }
 
-void ScoreCallbacks::setDropRectangles(const std::vector<muse::RectF>& rects)
-{
-    IF_ASSERT_FAILED(m_interaction) {
-        return;
-    }
-
-    m_interaction->setDropRects(rects);
-}
-
 void ScoreCallbacks::changeEditElement(mu::engraving::EngravingItem* newElement)
 {
     IF_ASSERT_FAILED(m_interaction) {

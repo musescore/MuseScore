@@ -3107,7 +3107,11 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
             edd.ed.track = trackZeroVoice(targetElem->track());
             setAnchorLines({ LineF(pos, measureRect.topLeft()) });
 
-            return targetMeasure->acceptDrop(edd.ed);
+            const bool dropAccepted = targetMeasure->acceptDrop(edd.ed);
+            if (dropAccepted) {
+                setDropRects(dropHighlightRects(dropElem, targetMeasure, measureRect, edd.ed.modifiers));
+            }
+            return dropAccepted;
         }
     }
 
@@ -3179,6 +3183,7 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
         const bool dropAccepted = targetMeasure->acceptDrop(edd.ed);
         if (dropAccepted) {
             setAnchorLines({ LineF(pos, measureRect.topLeft()) });
+            setDropRects(dropHighlightRects(dropElem, targetMeasure, measureRect, edd.ed.modifiers));
         }
 
         return dropAccepted;
@@ -3186,6 +3191,90 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
     dropElem->score()->addRefresh(dropElem->canvasBoundingRect());
     setDropTarget(nullptr);
     return false;
+}
+
+std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* dropElem, const Measure* targetMeasure,
+                                                           const RectF& staffRect, KeyboardModifiers modifiers) const
+{
+    switch (dropElem->type()) {
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+    case ElementType::HBOX:
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::JUMP:
+    case ElementType::MARKER:
+    case ElementType::LAYOUT_BREAK:
+        return { targetMeasure->canvasBoundingRect() };
+
+    case ElementType::VOLTA:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
+    case ElementType::KEYSIG:
+    case ElementType::TIMESIG:
+        if (modifiers & ControlModifier) {
+            return { staffRect };
+        }
+        return { targetMeasure->canvasBoundingRect() };
+
+    case ElementType::BRACKET:
+    case ElementType::MEASURE_REPEAT:
+    case ElementType::MEASURE:
+    case ElementType::SPACER:
+    case ElementType::IMAGE:
+    case ElementType::BAR_LINE:
+    case ElementType::SYMBOL:
+    case ElementType::CLEF:
+    case ElementType::STAFFTYPE_CHANGE:
+    case ElementType::STRING_TUNINGS:
+        return { staffRect };
+
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(dropElem)->actionType()) {
+        case ActionIconType::VFRAME:
+        case ActionIconType::HFRAME:
+        case ActionIconType::TFRAME:
+        case ActionIconType::FFRAME:
+        case ActionIconType::MEASURE:
+            return { targetMeasure->canvasBoundingRect() };
+
+        case ActionIconType::STAFF_TYPE_CHANGE:
+            return { staffRect };
+
+        case ActionIconType::SYSTEM_LOCK: {
+            const System* sys = targetMeasure->system();
+            const MeasureBase* first = sys ? sys->first() : nullptr;
+            const PointF topLeft = first ? first->canvasBoundingRect().topLeft() : PointF(0.0, 0.0);
+            return { RectF(topLeft, targetMeasure->canvasBoundingRect().bottomRight()) };
+        }
+
+        case ActionIconType::PAGE_LOCK: {
+            std::vector<RectF> dropRects;
+            for (System* sys : targetMeasure->page()->systems()) {
+                const bool lastSelectedSys = sys == targetMeasure->system();
+                const MeasureBase* first = sys ? sys->first() : nullptr;
+                const MeasureBase* last = sys ? sys->last() : nullptr;
+                if (lastSelectedSys) {
+                    last = targetMeasure;
+                }
+                if (!first || !last) {
+                    continue;
+                }
+                dropRects.push_back(RectF(first->canvasBoundingRect().topLeft(), last->canvasBoundingRect().bottomRight()));
+
+                if (lastSelectedSys) {
+                    break;
+                }
+            }
+            return dropRects;
+        }
+
+        default:
+            return {};
+        }
+
+    default:
+        return {};
+    }
 }
 
 //! NOTE Copied from ScoreView::dragTimeAnchorElement
