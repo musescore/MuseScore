@@ -326,11 +326,9 @@ int StringData::scoreFrettingCandidate(const std::pair<int, int>& anchor, const 
 
     int strings = static_cast<int>(this->strings());
 
-    // TODO: might be overcomplicating it, test this feature 
-    // handle case of open string being playable, horizontal distance is essentially 0
-    // but this should only be true if the candidate fret we are GOING to can be played by an open string 
+    // we only give special treatment to the open string if it's on the same string
     int horizontalDistance = 0; 
-    if (candidate.second != 0) {
+    if (anchor.first != candidate.first && anchor.second != 0 && candidate.second != 0) {
         horizontalDistance = std::abs(anchor.second - candidate.second);
     }
 
