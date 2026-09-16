@@ -174,9 +174,8 @@ void ConvertFileToScoreService::resumeConvert()
 
     LOGI() << "Resuming watching " << m_watchedScores.size() << " pending conversion(s)";
 
-    m_timer.start();
     m_watchedScoresChanged.notify();
-
+    m_timer.start();
     poll();
 }
 
@@ -549,14 +548,23 @@ void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::
     poll();
 }
 
+bool ConvertFileToScoreService::hasActiveWatchedScores() const
+{
+    return std::any_of(m_watchedScores.begin(), m_watchedScores.end(), [](const WatchedScore& watched) {
+        return watched.conversion.status == ConvertStatus::Processing || watched.conversion.status == ConvertStatus::AwaitingReview;
+    });
+}
+
 void ConvertFileToScoreService::poll()
 {
-    if (m_watchedScores.empty()) {
+    if (!hasActiveWatchedScores()) {
+        LOGDA() << "Nothing active to poll, stopping timer";
         m_timer.stop();
         return;
     }
 
     if (m_pollInProgress) {
+        LOGDA() << "Polling already in progress, skipping";
         return;
     }
 
@@ -623,6 +631,8 @@ void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
 void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queue, const WatchedScoreList& snapshot)
 {
     TRACEFUNC;
+
+    LOGDA() << "Received queue: " << queue.size() << ", snapshot: " << snapshot.size();
 
     constexpr size_t CONVERT_TYPE_COUNT = static_cast<size_t>(ConvertType::Last) + 1;
     std::array<std::unordered_map<int /*itemId*/, size_t /*index*/>, CONVERT_TYPE_COUNT> snapshotByTypeAndId;

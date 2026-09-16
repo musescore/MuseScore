@@ -816,6 +816,44 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_LoadsPersistedWatche
     EXPECT_EQ(watchedScores.front().name, u"My Score");
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AllTerminal_DoesNotPoll)
+{
+    // [GIVEN] Persisted conversions left in terminal states
+    // (e.g. one failed, one done, neither ever explicitly deleted)
+    JsonObject failedObj;
+    failedObj["id"] = TEST_QUEUE_ID;
+    failedObj["type"] = int(ConvertType::Omr);
+    failedObj["status"] = int(ConvertStatus::Failed);
+    failedObj["convertedScoreName"] = "My Score";
+
+    JsonObject doneObj;
+    doneObj["id"] = TEST_QUEUE_ID + 1;
+    doneObj["type"] = int(ConvertType::Omr);
+    doneObj["status"] = int(ConvertStatus::Done);
+    doneObj["convertedScoreName"] = "Other Score";
+
+    JsonArray array;
+    array << failedObj << doneObj;
+    JsonDocument json(array);
+
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
+
+    // [THEN] Nothing is left to watch for, so the queue is never checked
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(0);
+
+    // [WHEN] Resuming
+    m_service->resumeConvert();
+
+    // [THEN] The persisted items are still restored and reported, just not actively polled
+    const WatchedScoreList watchedScores = m_service->watchedScores().val;
+    ASSERT_EQ(watchedScores.size(), 2u);
+    EXPECT_EQ(watchedScores.at(0).name, u"My Score");
+    EXPECT_EQ(watchedScores.at(1).name, u"Other Score");
+}
+
 // ==================================================
 // polling / score info fetch pipeline
 // ==================================================
@@ -1105,6 +1143,26 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessi
     EXPECT_FALSE(receivedRet);
     EXPECT_EQ(receivedRet.code(), int(mu::project::Err::ConvertProcessingFailed));
     EXPECT_EQ(receivedRet.data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"My Score");
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AllTerminalAfterFailure_StopsPolling)
+{
+    // [GIVEN] The queue reports the conversion as failed - it stays watched,
+    // but nothing about it can change anymore
+    ConvertQueueItem item;
+    item.id = TEST_QUEUE_ID;
+    item.type = ConvertType::Omr;
+    item.status = ConvertStatus::Failed;
+    item.errorCode = ConvertErrorCode::FileTooLarge;
+    item.filename = "My Score";
+
+    deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
+
+    // [THEN] A further poll doesn't check the queue again
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(0);
+
+    // [WHEN] Retrying polling
+    m_service->retryPolling();
 }
 
 // ==================================================
