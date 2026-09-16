@@ -326,17 +326,17 @@ int StringData::scoreFrettingCandidate(const std::pair<int, int>& anchor, const 
 
     int strings = static_cast<int>(this->strings());
 
-    // we only give special treatment to the open string if it's on the same string
-    int horizontalDistance = 0; 
-    if (anchor.first != candidate.first && anchor.second != 0 && candidate.second != 0) {
-        horizontalDistance = std::abs(anchor.second - candidate.second);
-    }
-
     // TODO: for tiebreaking, prefer same string/closer string as opposed to closer fret 
 
     // TODO: prefer vertical jumps of one or two strings, but afterwards vertical jump should be penalized heavily 
     // deals with the case of playing octaves, for example 
     int verticalDistance = std::abs(anchor.first - candidate.first);
+    int horizontalDistance = std::abs(anchor.second - candidate.second);
+    
+    if (verticalDistance == 0 && (anchor.second == 0 || candidate.second == 0)) {
+        horizontalDistance = 0; // if we are on the same string and one of the frets is open 
+    }
+
     return horizontalDistance + verticalDistance; 
 }
 
