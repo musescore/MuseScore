@@ -362,7 +362,7 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     }
 }
 
-Lyrics* LyricsLayout::findNextLyrics(const ChordRest* endChordRest, int verseNumber)
+Lyrics* LyricsLayout::findNextLyrics(const ChordRest* endChordRest, int verseNumber, std::optional<PlacementV> placement)
 {
     if (!endChordRest) {
         return nullptr;
@@ -374,7 +374,7 @@ Lyrics* LyricsLayout::findNextLyrics(const ChordRest* endChordRest, int verseNum
         }
         ChordRest* nextCR = toChordRest(segment->element(endChordRest->track()));
         for (Lyrics* lyr : nextCR->lyrics()) {
-            if (lyr->verse() == verseNumber) {
+            if (lyr->verse() == verseNumber && (!placement || lyr->placement() == placement)) {
                 return lyr;
             }
         }
@@ -853,7 +853,9 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
 
     // Partial melisma or dashes
     if (lyricsLine->isPartialLyricsLine()) {
-        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
+        // A partial lyrics line's placement is independent of the lyrics around it, so only
+        // take the Y from a lyric which is on the same side of the staff:
+        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse(), lyricsLine->placement());
         if (nextLyrics) {
             PointF nextLyricsDefaultPos = nextLyrics->defaultPos();
             ldata->setPosY(nextLyrics->offset().y() + nextLyricsDefaultPos.y());

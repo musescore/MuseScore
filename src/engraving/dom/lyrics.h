@@ -149,14 +149,9 @@ public:
     virtual bool isEndMelisma() const { return lyrics() && lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
 
-    void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
-    AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
-
-    PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
     Sid getPropertyStyle(Pid) const override;
-    void reset() override;
 
 protected:
     LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
@@ -164,7 +159,6 @@ protected:
     bool isInSpannerMap() const override { return false; }
 
     Lyrics* m_nextLyrics = nullptr;
-    AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
 
     void doComputeEndElement() override;
 };
@@ -238,11 +232,15 @@ public:
     void setVerse(int val) { m_verse = val; }
     int verse() const { return m_verse; }
 
+    void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
+    AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
+
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid propertyId) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
+    void reset() override;
 
     Lyrics* findLyricsInPreviousRepeatSeg() const;
     Lyrics* findAdjacentLyricsOrDefault() const;
@@ -254,6 +252,7 @@ protected:
 private:
     bool m_isEndMelisma = false;
     int m_verse = 0;
+    AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
 };
 
 class PartialLyricsLineSegment final : public LyricsLineSegment

@@ -6975,6 +6975,7 @@ void NotationInteraction::navigateToNextSyllable()
             dash->setIsEndMelisma(false);
             dash->setVerse(verse);
             dash->setPlacement(placement);
+            dash->setPropertyFlags(Pid::PLACEMENT, lyrics->propertyFlags(Pid::PLACEMENT));
             dash->setTick(initialCR->tick());
             dash->setTicks(Fraction(0, 1));
             dash->setTrack(initialCR->track());
@@ -7109,6 +7110,7 @@ void NotationInteraction::navigateToNextSyllable()
         dash->setIsEndMelisma(false);
         dash->setVerse(verse);
         dash->setPlacement(lyrics->placement());
+        dash->setPropertyFlags(Pid::PLACEMENT, lyrics->propertyFlags(Pid::PLACEMENT));
         dash->setTick(initialCR->tick());
         dash->setTicks(hasPrecedingRepeat ? Fraction(0, 1) : initialCR->ticks());
         dash->setTrack(initialCR->track());
@@ -7864,6 +7866,7 @@ void NotationInteraction::addMelisma()
             melisma->setIsEndMelisma(true);
             melisma->setVerse(verse);
             melisma->setPlacement(lyrics->placement());
+            melisma->setPropertyFlags(Pid::PLACEMENT, lyrics->propertyFlags(Pid::PLACEMENT));
             melisma->setTick(initialCR->tick());
             melisma->setTicks(initialCR->ticks());
             melisma->setTrack(initialCR->track());
@@ -7949,6 +7952,7 @@ void NotationInteraction::addMelisma()
         melisma->setIsEndMelisma(true);
         melisma->setVerse(verse);
         melisma->setPlacement(lyrics->placement());
+        melisma->setPropertyFlags(Pid::PLACEMENT, lyrics->propertyFlags(Pid::PLACEMENT));
         melisma->setTick(initialCR->tick());
         melisma->setTicks(initialCR->ticks());
         melisma->setTrack(initialCR->track());
