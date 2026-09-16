@@ -351,6 +351,7 @@ void InstrumentsOnScoreListModel::moveInstrument(int sourceRow, int destinationR
         return;
     }
 
+    // SelectableItemListModel::moveRows expects the final row, not Qt's insertion boundary.
     const int targetRow = destinationRow > sourceRow ? destinationRow - 1 : destinationRow;
     if (moveRow(QModelIndex(), sourceRow, QModelIndex(), targetRow)) {
         clearSelection();

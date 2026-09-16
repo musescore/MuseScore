@@ -117,13 +117,27 @@ Item {
 
         function updateDrop(point) {
             dragPoint = point
-            let row = indexAt(1, point.y + contentY)
+            let bottom = Math.max(originY, originY + contentHeight - height)
+            if (point.y <= 0 && contentY <= originY) {
+                dropRow = 0
+                return
+            }
+            if (point.y >= height && contentY >= bottom) {
+                dropRow = count
+                return
+            }
+            let hitY = Math.max(0, Math.min(Math.max(0, height - 1), point.y)) + contentY
+            let row = indexAt(1, hitY)
             if (row < 0) {
-                dropRow = point.y < 0 ? 0 : count
+                if (contentY >= bottom && hitY >= originY + contentHeight) {
+                    dropRow = count
+                }
                 return
             }
             let delegateItem = itemAtIndex(row)
-            dropRow = row + (point.y + contentY > delegateItem.y + delegateItem.height / 2 ? 1 : 0)
+            if (delegateItem) {
+                dropRow = row + (hitY > delegateItem.y + delegateItem.height / 2 ? 1 : 0)
+            }
         }
 
         Timer {
