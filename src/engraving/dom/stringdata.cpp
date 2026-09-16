@@ -284,15 +284,23 @@ int StringData::scoreFrettingCandidate(const std::pair<int, int>& anchor, const 
 //
 //      Doesn't return anything, instead persists changes to each note object within the chord. 
 //---------------------------------------------------------
-void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, std::pair<int, int>& bassFretting) const {
+void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, const std::pair<int, int>& bassFretting) const {
     // TODO: penalize placing notes to the left of the bass note on the fretboard to avoid weird fingerings 
     
     int strings = static_cast<int>(this->strings()); 
     std::vector<bool> used(strings, false);
-    
     used[bassFretting.first] = true; 
-    
+
     std::vector<Note*> notes = collectNotesAtSameTick(chord); 
+
+    for (Note* n : notes) {
+        if (n == bassNote) continue;
+        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed()) {
+            if (n->string() != INVALID_STRING_INDEX && n->string() < strings) {
+                used[n->string()] = true;
+            }
+        }
+    }
 
     std::sort(notes.begin(), notes.end(), [bassNote](Note* a, Note* b) {
         // sort notes by how close each note's pitch is to the bassNote's pitch 
@@ -377,7 +385,7 @@ StringData::ChordShapeKey StringData::makeChordShapeKey(const Chord* chord) cons
 //    Take in the fretting for the previous chord's bass note and a pointer to the current chord, and
 //    decides the best bass note to use for the chord depending on that. 
 //---------------------------------------------------------
-std::pair<Note*, std::pair<int, int>> StringData::getBestFrettingForBassNote(std::pair<int, int>& prevFretting, Chord* chord) const {
+std::pair<Note*, std::pair<int, int>> StringData::getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const {
     Note* desiredBassNote = getBassNoteOfVoicings(chord); 
     std::vector<std::pair<int, int>> candidates = allCandidateFrettings(desiredBassNote->pitch(), chord->staff(), chord->tick());
     
@@ -397,7 +405,7 @@ std::pair<Note*, std::pair<int, int>> StringData::getBestFrettingForBassNote(std
     return {desiredBassNote, bestFretting}; 
 }
 
-void StringData::assignBestFrettingForBassNote(std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const {
+void StringData::assignBestFrettingForBassNote(const ChordShapeKey& shapeKey, std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const {
     // persist changes for bass note 
     if (bestFretting.first != INVALID_STRING_INDEX) {
         desiredBassNote->undoChangeProperty(Pid::STRING, bestFretting.first);
@@ -441,9 +449,13 @@ void StringData::fretChords(Chord* chord) const
 
     Chord* prevChord = chord->prev(); 
     Note* prevBassNote = prevChord ? getBassNoteOfVoicings(prevChord) : nullptr;
+    
     int strings = static_cast<int>(this->strings()); 
+    if (!strings) return; // skip if string count is 0
 
+    const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
     Note* candidateBassNote = getBassNoteOfVoicings(chord);
+    
     bool bassNoteEligible = candidateBassNote
         && candidateBassNote->displayFret() == Note::DisplayFretOption::NoHarmonic
         && !candidateBassNote->negativeFretUsed()
@@ -452,7 +464,7 @@ void StringData::fretChords(Chord* chord) const
     ChordShapeKey shapeKey = makeChordShapeKey(chord);
     auto cacheIterator = m_chordShapeCache.find(shapeKey); 
 
-    if (cacheIterator != m_chordShapeCache.end()) { // if we've processed this chord before 
+    if (bassNoteEligible && cacheIterator != m_chordShapeCache.end()) { // if we've processed this chord before 
         std::vector<Note*> notes = collectNotesAtSameTick(chord);
         std::sort(notes.begin(), notes.end(), [](Note* a, Note* b) { return a->pitch() < b->pitch(); });
         for (size_t i = 0; i < notes.size() && i < cacheIterator->second.size(); ++i) {
@@ -461,27 +473,23 @@ void StringData::fretChords(Chord* chord) const
             note->undoChangeProperty(Pid::STRING, s);
             note->undoChangeProperty(Pid::FRET, f);
         }
-    } else if (prevChord && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX) {
+    } else if (bassNoteEligible && prevChord && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX) {
         // we look at all candidates for the bass note of the chord and compute their distances to the bass note of the previous chord 
         // pick the "closest" one to minimize hand movement. see getBestFrettingForBassNote for more details. 
         std::pair<int, int> prevFretting = {prevBassNote->string(), prevBassNote->fret()}; 
 
         auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
-        assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord); 
-    } else { 
+        assignBestFrettingForBassNote(shapeKey, bestFretting, desiredBassNote, chord); 
+    } else if (bassNoteEligible && strings > 0) { 
         // we want the string as low and as close to the start of the fretboard as possible
         // prioritize close to the start of the fretboard if we have no prevChord
 
         // basically just treat it as if we are scoring with prevFretting being playing the lowest note 
         // on the lowest string 
-        if (strings > 0) {
-            std::pair<int, int> nutAnchor = {strings - 1, 0}; 
-            auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(nutAnchor, chord);
-            assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord); 
-        }
+        std::pair<int, int> nutAnchor = {strings - 1, 0}; 
+        auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(nutAnchor, chord);
+        assignBestFrettingForBassNote(shapeKey, bestFretting, desiredBassNote, chord); 
     }
-
-    const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
 
     // we need the notes sorted in order of string (from highest to lowest) and then pitch
     // looping backwards effectively does the reverse, we go from lower -> highest 
@@ -509,10 +517,6 @@ void StringData::fretChords(Chord* chord) const
             note->undoChangeProperty(Pid::STRING, INVALID_STRING_INDEX);
             note->undoChangeProperty(Pid::FRET, INVALID_FRET_INDEX);
         }
-    }
-
-    if (!strings) {
-        return;
     }
 
     // we need to keep track of string allocation
@@ -549,7 +553,8 @@ void StringData::fretChords(Chord* chord) const
         }
 
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
-        if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
+        // this will be skipped since the earlier logic in fretChords should cover this. this block exists only as a fallback in case that method fails. 
+        if (nString == INVALID_STRING_INDEX) {
             const CapoParams& capo = note->staff()->capo(note->tick());
             // get a new fretting
             if (convertPitch(note->pitch(), pitchOffsetAt(chord->staff(), chord->tick()), &nNewString, &nNewFret,
@@ -597,8 +602,6 @@ void StringData::fretChords(Chord* chord) const
             && bUsed[nNewString] > 1) {
             tryResolveStringConflictWithOutOfRangeFret(note, strings, bUsed, nNewString, nNewFret);
         }
-
-        // TODO : try to optimize used fret range, avoiding excessively open positions
 
         // if fretting did change, store as a fret change
         if (nFret != nNewFret) {
@@ -752,7 +755,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
         // look for a suitable string, starting from the highest
         // NOTE: this assumes there are always enough frets to fill
         // the interval between any fretted string and the next
-        for (int i = 0; i < strings; i++) {
+        for (int i = strings - 1; i >= 0; i--) {
             instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
                 *string = strings - i - 1;

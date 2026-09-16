@@ -88,17 +88,20 @@ public:
     bool        useFlats() const { return m_useFlats; }
 
 private:
+    using ChordShapeKey = std::vector<int>;
+    using ChordVoicing = std::vector<std::pair<int, int>>;
+    mutable std::map<ChordShapeKey, ChordVoicing> m_chordShapeCache;
 
     int         fret(int pitch, int string, int pitchOffset) const;
     int         scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const;
-    void        assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, std::pair<int, int>& bassFretting) const;
+    void        assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, const std::pair<int, int>& bassFretting) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const;
     void        sortChordNotesUseSameString(const Chord* chord) const;
     bool        hasPendingPitchChange(const Chord* chord) const;
     void        updateFretsOnSameStrings(const Chord* chord) const;
     void        preferBassStringForNegativeFret(const Chord* chord) const;
     void        reassignNegativeFretNotes(const Chord* chord) const;
-    void StringData::assignBestFrettingForBassNote(std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const; 
+    void        assignBestFrettingForBassNote(const ChordShapeKey& chordShapeKey, std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const; 
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
     Note*       getBassNote(const Chord* chord) const;
@@ -106,16 +109,11 @@ private:
     ChordShapeKey makeChordShapeKey(const Chord* chord) const;
     std::vector<std::pair<int, int>> allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const;
     std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
-    std::pair<Note*, std::pair<int, int>> StringData::getBestFrettingForBassNote(std::pair<int, int>& prevFretting, Chord* chord) const; 
+    std::pair<Note*, std::pair<int, int>> getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const; 
 
     //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
     //      int         _frets = 19;
     std::vector<instrString> m_stringTable;                      // no strings by default
-
-    // caching chords we've seen before 
-    using ChordShapeKey = std::vector<int>;
-    using ChordVoicing = std::vector<std::pair<int, int>>;
-    mutable std::map<ChordShapeKey, ChordVoicing> m_chordShapeCache;
 
     int m_frets = 0;
 
