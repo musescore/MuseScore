@@ -23,9 +23,11 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <vector>
 #include <map>
 #include <utility> 
+#include <tuple> 
 
 #include "../types/fraction.h"
 #include "../types/types.h"
@@ -88,9 +90,8 @@ public:
     bool        useFlats() const { return m_useFlats; }
 
 private:
-    using ChordShapeKey = std::vector<int>;
-    using ChordVoicing = std::vector<std::pair<int, int>>;
-    mutable std::map<ChordShapeKey, ChordVoicing> m_chordShapeCache;
+    using FrettingCacheKey = std::tuple<int, const Staff*, int64_t>;
+    mutable std::map<FrettingCacheKey, std::vector<std::pair<int, int>>> m_candidateFrettingCache;
 
     int         fret(int pitch, int string, int pitchOffset) const;
     int         scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const;
@@ -102,7 +103,7 @@ private:
     void        updateFretsOnSameStrings(const Chord* chord) const;
     void        preferBassStringForNegativeFret(const Chord* chord) const;
     void        reassignNegativeFretNotes(const Chord* chord) const;
-    void        assignBestFrettingForBassNote(const ChordShapeKey& shapeKey, bool anyForcedString, std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const; 
+    void        assignBestFrettingForBassNote(std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const; 
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
     bool        stringSupportsGlissando(const Note* note, int candidateString) const; 
@@ -111,7 +112,6 @@ private:
     Note*       glissandoTo(const Note* note) const; 
     Note*       getBassNote(const Chord* chord) const;
     Note*       getBassNoteOfVoicings(const Chord* chord) const;
-    ChordShapeKey makeChordShapeKey(const Chord* chord) const;
     std::vector<std::pair<int, int>> allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const;
     std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
     std::pair<Note*, std::pair<int, int>> getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const; 

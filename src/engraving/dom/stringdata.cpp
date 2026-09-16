@@ -438,6 +438,12 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
 //    fret number respectively. 
 //---------------------------------------------------------
 std::vector<std::pair<int, int>> StringData::allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const {
+    FrettingCacheKey key = {pitch, staff, tick.ticks()}; 
+    auto it = m_candidateFrettingCache.find(key); 
+    if (it != m_candidateFrettingCache.end()) {
+        return it->second; 
+    }
+
     std::vector<std::pair<int, int>> candidateFrettings; 
     int strings = static_cast<int>(m_stringTable.size()); 
     
@@ -448,23 +454,8 @@ std::vector<std::pair<int, int>> StringData::allCandidateFrettings(int pitch, co
         if (fretNumber != INVALID_FRET_INDEX) candidateFrettings.push_back({visualStringNumber, fretNumber}); 
     }
 
+    m_candidateFrettingCache[key] = candidateFrettings; 
     return candidateFrettings; 
-}
-
-//---------------------------------------------------------
-//   makeChordShapeKey
-//    Converts a chord into a cachable key for lookups in the fretChords function 
-//---------------------------------------------------------
-StringData::ChordShapeKey StringData::makeChordShapeKey(const Chord* chord) const
-{
-    std::vector<Note*> notes = collectNotesAtSameTick(chord);
-    ChordShapeKey pitches;
-    pitches.reserve(notes.size());
-    for (Note* n : notes) {
-        pitches.push_back(n->pitch());
-    }
-    std::sort(pitches.begin(), pitches.end());
-    return pitches; 
 }
 
 //---------------------------------------------------------
@@ -515,27 +506,18 @@ std::pair<Note*, std::pair<int, int>> StringData::getBestFrettingForBassNote(con
     return {desiredBassNote, bestFrettingNotGliss}; 
 }
 
-void StringData::assignBestFrettingForBassNote(const ChordShapeKey& shapeKey, bool anyForcedString, std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const {
-    // persist changes for bass note 
+//---------------------------------------------------------
+//   assignBestfretting
+//    Persists changes to the optimal fretting of the bass note based off the scoring functions 
+//---------------------------------------------------------
+void StringData::assignBestFrettingForBassNote(std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const {
     if (bestFretting.first != INVALID_STRING_INDEX) {
         desiredBassNote->undoChangeProperty(Pid::STRING, bestFretting.first);
         desiredBassNote->undoChangeProperty(Pid::FRET, bestFretting.second);
         assignRemainingNotesAroundBass(chord, desiredBassNote, bestFretting); 
-
-        if (!anyForcedString) {
-            std::vector<Note*> notes = collectNotesAtSameTick(chord);
-            std::sort(notes.begin(), notes.end(), [](Note* a, Note* b) { return a->pitch() < b->pitch(); });
-            ChordVoicing voicing;
-            voicing.reserve(notes.size());
-            for (Note* n : notes) {
-                voicing.push_back({ n->string(), n->fret() });
-            }
-            m_chordShapeCache[shapeKey] = voicing;
-        }
     } else {
         desiredBassNote->setFretConflict(true);
     }
-
     return; 
 }
 
@@ -568,42 +550,19 @@ void StringData::fretChords(Chord* chord) const
 
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
     Note* candidateBassNote = getBassNoteOfVoicings(chord);
-
-    // handles glissando case. we skip cache lookup/write here. 
-    bool anyForcedString = false;
-    for (Note* n : collectNotesAtSameTick(chord)) {
-        if (resolveForcedString(n) != INVALID_STRING_INDEX) {
-            anyForcedString = true; 
-            break; 
-        }
-    } 
     
     bool bassNoteEligible = candidateBassNote
         && candidateBassNote->displayFret() == Note::DisplayFretOption::NoHarmonic
         && !candidateBassNote->negativeFretUsed()
         && !(skipDeadNotes && candidateBassNote->deadNote());
 
-
-    // TODO: consider dropping caching logic altogether
-    ChordShapeKey shapeKey = makeChordShapeKey(chord);
-    auto cacheIterator = m_chordShapeCache.find(shapeKey); 
-
-    if (bassNoteEligible && !anyForcedString && cacheIterator != m_chordShapeCache.end()) { // if we've processed this chord before 
-        std::vector<Note*> notes = collectNotesAtSameTick(chord);
-        std::sort(notes.begin(), notes.end(), [](Note* a, Note* b) { return a->pitch() < b->pitch(); });
-        for (size_t i = 0; i < notes.size() && i < cacheIterator->second.size(); ++i) {
-            Note* note = notes[i];
-            auto [s, f] = cacheIterator->second[i];
-            note->undoChangeProperty(Pid::STRING, s);
-            note->undoChangeProperty(Pid::FRET, f);
-        }
-    } else if (bassNoteEligible && prevChord && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX) {
+    if (bassNoteEligible && prevChord && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX) {
         // we look at all candidates for the bass note of the chord and compute their distances to the bass note of the previous chord 
         // pick the "closest" one to minimize hand movement. see getBestFrettingForBassNote for more details. 
         std::pair<int, int> prevFretting = {prevBassNote->string(), prevBassNote->fret()}; 
 
         auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
-        assignBestFrettingForBassNote(shapeKey, anyForcedString, bestFretting, desiredBassNote, chord); 
+        assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord); 
     } else if (bassNoteEligible && strings > 0) { 
         // we want the string as low and as close to the start of the fretboard as possible
         // prioritize close to the start of the fretboard if we have no prevChord
@@ -612,7 +571,7 @@ void StringData::fretChords(Chord* chord) const
         // on the lowest string 
         std::pair<int, int> nutAnchor = {strings - 1, 0}; 
         auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(nutAnchor, chord);
-        assignBestFrettingForBassNote(shapeKey, anyForcedString, bestFretting, desiredBassNote, chord); 
+        assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord); 
     }
 
     // we need the notes sorted in order of string (from highest to lowest) and then pitch
