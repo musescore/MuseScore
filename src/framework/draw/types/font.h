@@ -35,23 +35,20 @@ class Font
 public:
     struct FontFamily {
         FontFamily() = default;
+        FontFamily(const String& id)
+            : m_id(id.toLower()) {}
+
         FontFamily(const char16_t* id)
-            : m_id(id) {}
+            : FontFamily(String(id)) {}
 
         FontFamily(const std::string& id)
-            : m_id(String::fromStdString(id)) {}
-
-        FontFamily(const String& id)
-            : m_id(id) {}
+            : FontFamily(String::fromStdString(id)) {}
 
         inline bool valid() const { return !m_id.empty(); }
         const String& id() const { return m_id; }
 
-        //! NOTE: Case insensitive comparison
-        inline bool operator==(const FontFamily& o) const
-        {
-            return m_id.isEqualIgnoreCase(o.m_id);
-        }
+        inline bool operator==(const FontFamily& o) const { return m_id == o.m_id; }
+        inline bool operator<(const FontFamily& o) const { return m_id < o.m_id; }
 
     private:
         String m_id;
