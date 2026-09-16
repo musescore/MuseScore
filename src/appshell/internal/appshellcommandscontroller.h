@@ -118,8 +118,10 @@ private:
 
     void setupConnections();
 
-    muse::Ret quit(const muse::rcommand::Params& params);
-    muse::Ret quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
+    static muse::async::Promise<muse::Ret> resolvedPromise(const muse::Ret& ret);
+
+    muse::async::Promise<muse::Ret> quit(const muse::rcommand::Params& params);
+    muse::async::Promise<muse::Ret> quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
     void doQuit(bool isAllInstances, const muse::io::path_t& installerPath);
     void restart();
 
