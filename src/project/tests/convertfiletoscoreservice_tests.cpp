@@ -22,6 +22,7 @@
 #include <gmock/gmock.h>
 
 #include <algorithm>
+#include <functional>
 #include <thread>
 #include <vector>
 
@@ -97,6 +98,17 @@ async::Promise<T> pendingPromise()
     return async::make_promise<T>([](auto resolve, auto reject) {
         (void)resolve;
         (void)reject;
+        return async::Promise<T>::dummy_result();
+    });
+}
+
+//! NOTE: resolved manually by calling "resolver", once set (after a pumpEvents())
+template<typename T>
+async::Promise<T> deferredPromise(std::function<void(const T&)>& resolver)
+{
+    return async::make_promise<T>([&resolver](auto resolve, auto reject) {
+        (void)reject;
+        resolver = [resolve](const T& val) { (void)resolve(val); };
         return async::Promise<T>::dummy_result();
     });
 }
@@ -992,6 +1004,56 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ItemNeverInQueueWithoutScoreI
 
     // [THEN] Nothing is reported - not failed, not succeeded
     EXPECT_FALSE(received);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProgress_NotDroppedByStaleSnapshot)
+{
+    // [GIVEN] A first conversion has started, and its poll's fetchQueue() request is still in progress
+    std::function<void(const RetVal<ConvertQueueList>&)> resolveFirstFetch;
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .WillOnce(Invoke([&] {
+        return deferredPromise<RetVal<ConvertQueueList> >(resolveFirstFetch);
+    }));
+
+    auto uploadProgressA = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressA));
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    pumpEvents();
+
+    ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
+
+    // [WHEN] A second conversion finishes uploading and starts being watched before the first
+    // fetchQueue() request finishes - its poll() does nothing because one is already running
+    const int secondId = TEST_QUEUE_ID + 1;
+    auto uploadProgressB = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressB));
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
+    pumpEvents();
+
+    // [AND] The first request finally resolves - with a snapshot the server built before the
+    // second conversion ever existed, so it doesn't include it
+    ConvertQueueItem firstItem;
+    firstItem.id = TEST_QUEUE_ID;
+    firstItem.type = ConvertType::Omr;
+    firstItem.status = ConvertStatus::Processing;
+
+    resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem }));
+    pumpEvents();
+
+    // [THEN] The second conversion must still be watched - it was added after the request started,
+    // so the old response must not treat it as missing
+    const WatchedScoreList watched = m_service->watchedScores().val;
+    const bool stillWatched = std::any_of(watched.begin(), watched.end(), [secondId](const WatchedScore& w) {
+        return w.conversion.id == secondId;
+    });
+    EXPECT_TRUE(stillWatched);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFromQueue_SilentlyErasedWithoutDuplicateReport)

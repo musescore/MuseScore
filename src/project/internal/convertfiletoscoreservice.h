@@ -87,7 +87,7 @@ private:
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);
     void giveUpPolling(const muse::Ret& ret);
-    void updateWatchedScores(const muse::cloud::ConvertQueueList& queue);
+    void updateWatchedScores(const muse::cloud::ConvertQueueList& queue, const WatchedScoreList& snapshot);
 
     void updateStatus(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode);
 
