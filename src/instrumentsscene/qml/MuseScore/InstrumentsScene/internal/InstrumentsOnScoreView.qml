@@ -111,6 +111,38 @@ Item {
 
         accessible.name: instrumentsLabel.text
 
+        property int draggedRow: -1
+        property int dropRow: -1
+        property point dragPoint: Qt.point(0, 0)
+
+        function updateDrop(point) {
+            dragPoint = point
+            let row = indexAt(1, point.y + contentY)
+            if (row < 0) {
+                dropRow = point.y < 0 ? 0 : count
+                return
+            }
+            let delegateItem = itemAtIndex(row)
+            dropRow = row + (point.y + contentY > delegateItem.y + delegateItem.height / 2 ? 1 : 0)
+        }
+
+        Timer {
+            interval: 50
+            repeat: true
+            running: instrumentsView.draggedRow >= 0
+            onTriggered: {
+                let direction = instrumentsView.dragPoint.y < 24 ? -1
+                              : instrumentsView.dragPoint.y > instrumentsView.height - 24 ? 1 : 0
+                if (direction !== 0) {
+                    let bottom = Math.max(instrumentsView.originY,
+                                          instrumentsView.originY + instrumentsView.contentHeight - instrumentsView.height)
+                    instrumentsView.contentY = Math.max(instrumentsView.originY,
+                                                        Math.min(bottom, instrumentsView.contentY + direction * 10))
+                    instrumentsView.updateDrop(instrumentsView.dragPoint)
+                }
+            }
+        }
+
         delegate: ListItemBlank {
             id: item
 
@@ -120,12 +152,53 @@ Item {
             required property string description
             required property bool isSoloist
             required property int index
+
+            mouseArea.hoverEnabled: instrumentsView.draggedRow < 0
+
+            HoverHandler {
+                id: rowHover
+                enabled: instrumentsView.draggedRow < 0
+            }
+
+            DragHandler {
+                id: rowDrag
+                target: null
+                xAxis.enabled: false
+                onActiveChanged: {
+                    if (active) {
+                        instrumentsView.draggedRow = item.index
+                        instrumentsView.updateDrop(item.mapToItem(instrumentsView, centroid.position))
+                    } else if (instrumentsView.draggedRow >= 0) {
+                        let source = instrumentsView.draggedRow
+                        let destination = instrumentsView.dropRow
+                        instrumentsView.draggedRow = -1
+                        instrumentsView.dropRow = -1
+                        root.instrumentsOnScoreModel.moveInstrument(source, destination)
+                    }
+                }
+                onCentroidChanged: {
+                    if (active) {
+                        instrumentsView.updateDrop(item.mapToItem(instrumentsView, centroid.position))
+                    }
+                }
+            }
+
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                y: instrumentsView.dropRow === item.index ? 0 : parent.height - height
+                height: 2
+                color: ui.theme.accentColor
+                visible: instrumentsView.draggedRow >= 0
+                         && (instrumentsView.dropRow === item.index
+                             || (item.index === instrumentsView.count - 1 && instrumentsView.dropRow === instrumentsView.count))
+            }
             
             navigation.name: name
             navigation.panel: instrumentsView.navigation
             navigation.row: 1 + index
             navigation.column: 0
-            navigation.accessible.name: itemTitleLabel.text
+            navigation.accessible.name: item.isSoloist ? item.name + ", " + qsTrc("instruments", "Soloist") : item.name
             navigation.accessible.description: description
             navigation.accessible.row: index
 
@@ -133,33 +206,46 @@ Item {
                 id: itemTitleLabel
                 anchors.left: parent.left
                 anchors.leftMargin: 12
-                anchors.right: parent.right
-                anchors.rightMargin: 4
+                anchors.right: soloistControl.left
+                anchors.rightMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
 
                 horizontalAlignment: Text.AlignLeft
-                text:  item.isSoloist ? qsTrc("instruments", "Soloist:") + " " + item.name : item.name
+                text: item.name
                 font: ui.theme.bodyBoldFont
             }
 
-            FlatButton {
+            Item {
+                id: soloistControl
                 anchors.right: parent.right
-                anchors.leftMargin: 4
-                anchors.rightMargin: 4
+                anchors.rightMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
+                width: soloistCheck.implicitWidth
+                height: soloistCheck.implicitHeight
 
-                isNarrow: true
+                property bool showCheck: instrumentsView.draggedRow < 0
+                                         && (rowHover.hovered || item.navigation.active || soloistCheck.navigation.active)
 
-                text: item.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
-                visible: item.isSelected
+                CheckBox {
+                    id: soloistCheck
+                    anchors.fill: parent
+                    text: qsTrc("instruments", "Soloist")
+                    checked: item.isSoloist
+                    visible: soloistControl.showCheck
 
-                navigation.name: item.name + "MakeSoloist"
-                navigation.panel: instrumentsView.navigation
-                navigation.row: 1 + item.index
-                navigation.column: 1
+                    navigation.name: item.name + "Soloist"
+                    navigation.panel: instrumentsView.navigation
+                    navigation.row: 1 + item.index
+                    navigation.column: 1
 
-                onClicked: {
-                    item.model.isSoloist = !item.model.isSoloist
+                    onClicked: item.model.isSoloist = !item.isSoloist
+                }
+
+                StyledTextLabel {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTrc("instruments", "Soloist")
+                    visible: item.isSoloist && !soloistControl.showCheck
                 }
             }
 
