@@ -60,6 +60,8 @@ public:
 
     bool isAwaitingReview(int scoreId) const override;
 
+    void cancelConversion(ConvertType type, int convertId) override;
+
 private:
     muse::async::Promise<muse::Ret> checkConvertIsAllowed();
     muse::async::Promise<muse::Ret> ensureAuthorization();

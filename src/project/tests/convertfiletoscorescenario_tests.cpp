@@ -1189,3 +1189,51 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_RepeatedCallsWhilePe
 
     pumpEvents();
 }
+
+// ==================================================
+// cancelConversion()
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserConfirms_DeletesConversion)
+{
+    constexpr int convertId = 42;
+
+    const std::string title = muse::trc("project/convert", "Are you sure you want to cancel this file conversion?");
+    const std::string text = muse::trc("project/convert",
+                                       "Processing will be canceled and this score will be removed from your scores.");
+
+    // [GIVEN] The user confirms with "Yes, cancel"
+    EXPECT_CALL(*m_interactive,
+                question(title, TextIs(text),
+                         ButtonIdsAre({ int(IInteractive::Button::No), int(IInteractive::Button::Yes) }),
+                         int(IInteractive::Button::No), IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::Yes)));
+    }));
+
+    // [THEN] The conversion is deleted
+    EXPECT_CALL(*m_service, deleteConversion(ConvertType::Omr, convertId))
+    .Times(1);
+
+    // [WHEN] Cancelling the conversion
+    m_scenario->cancelConversion(ConvertType::Omr, convertId);
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserKeepsConverting_DoesNotDeleteConversion)
+{
+    // [GIVEN] The user dismisses with "Continue converting"
+    ON_CALL(*m_interactive, question(_, _, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::No)));
+    }));
+
+    // [THEN] The conversion is not deleted
+    EXPECT_CALL(*m_service, deleteConversion(_, _)).Times(0);
+
+    // [WHEN] Cancelling the conversion
+    m_scenario->cancelConversion(ConvertType::Omr, 42);
+
+    pumpEvents();
+}

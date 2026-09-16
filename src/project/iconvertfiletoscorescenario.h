@@ -68,6 +68,9 @@ public:
 
     //! Whether the cloud score with the given id is a converted score still awaiting a quality review
     virtual bool isAwaitingReview(int scoreId) const = 0;
+
+    //! Confirms with the user, then cancels a watched conversion
+    virtual void cancelConversion(ConvertType type, int convertId) = 0;
 };
 
 using IConvertFileToScoreScenarioPtr = std::shared_ptr<IConvertFileToScoreScenario>;

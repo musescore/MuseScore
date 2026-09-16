@@ -178,6 +178,28 @@ bool ConvertFileToScoreScenario::isAwaitingReview(int scoreId) const
     return watched && watched->conversion.status == ConvertStatus::AwaitingReview;
 }
 
+void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertId)
+{
+    constexpr int keepConvertingBtn = int(IInteractive::Button::No);
+    constexpr int cancelBtn = int(IInteractive::Button::Yes);
+
+    IInteractive::ButtonData keepConverting(keepConvertingBtn, muse::trc("project/convert", "Continue converting"));
+    keepConverting.role = IInteractive::ButtonRole::RejectRole;
+
+    IInteractive::ButtonData cancel(cancelBtn, muse::trc("project/convert", "Yes, cancel"), /*accent*/ true);
+    cancel.role = IInteractive::ButtonRole::DestructiveRole;
+
+    interactive()->question(
+        muse::trc("project/convert", "Are you sure you want to cancel this file conversion?"),
+        muse::trc("project/convert", "Processing will be canceled and this score will be removed from your scores."),
+        { keepConverting, cancel }, keepConvertingBtn, IInteractive::WithIcon)
+    .onResolve(this, [this, type, convertId, cancelBtn](const IInteractive::Result& result) {
+        if (result.isButton(cancelBtn)) {
+            service()->deleteConversion(type, convertId);
+        }
+    });
+}
+
 async::Promise<Ret> ConvertFileToScoreScenario::checkConvertIsAllowed()
 {
     return async::make_promise<Ret>([this](auto resolve, auto reject) {
