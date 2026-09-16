@@ -572,8 +572,8 @@ void AlignmentMigration500::migrateSnappedItemAlignment(MasterScore* masterScore
     for (Score* score : masterScore->scoreList()) {
         std::vector<EngravingItem*> candidates;
         score->scanElements([&candidates](EngravingItem* item) {
-            if (item && (item->isDynamic()
-                         || item->isExpression()
+            if (item && ((item->isDynamic() && item->autoplace())
+                         || (item->isExpression() && item->addToSkyline())
                          || item->isHairpinSegment()
                          || item->isTempoText()
                          || item->isGradualTempoChangeSegment())) {
