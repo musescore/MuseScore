@@ -37,9 +37,30 @@ StyledPopupView {
     contentHeight: content.implicitHeight
     padding: 8
 
-    //! NOTE: purely informational content — must never steal keyboard focus
+    //! NOTE: default-opened without activating focus, but the section is still requested
+    //! active (see onOpened below) so that Escape closes just this popup, not the dialog
     openPolicies: PopupView.NoActivateFocus
-    navigationSection: null
+    focusPolicies: PopupView.NoFocus
+
+    navigationSection: NavigationSection {
+        id: infoSection
+
+        name: "FileRequirementsPopup"
+        type: NavigationSection.Exclusive
+        enabled: root.isOpened
+        order: 1
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.Escape) {
+                root.close()
+                event.accepted = true
+            }
+        }
+    }
+
+    onOpened: {
+        infoSection.requestActive()
+    }
 
     Column {
         id: content

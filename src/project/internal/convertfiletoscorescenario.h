@@ -103,5 +103,6 @@ private:
     std::map<muse::io::path_t, int /*scoreId*/> m_pendingReviews;
 
     bool m_retryToastShown = false;
+    bool m_convertFlowInProgress = false;
 };
 }

@@ -29,6 +29,7 @@ Item {
     id: root
 
     property alias saveAsName: saveAsField.currentText
+    property alias saveAsTrimmed: saveAsField.trimmedText
     property alias saveAsErrorText: saveAsField.errorText
 
     property string hintText: ""
@@ -162,7 +163,7 @@ Item {
             onBackRequested: root.backRequested()
 
             onConvertRequested: {
-                root.convertRequested(linkInputField.trimmedText, saveAsField.currentText)
+                root.convertRequested(linkInputField.trimmedText, saveAsField.trimmedText)
             }
         }
     }

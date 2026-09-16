@@ -1035,7 +1035,7 @@ Promise<RetVal<ConvertConfig> > MuseScoreComService::fetchConfig()
     });
 }
 
-ProgressPtr MuseScoreComService::upload(const ConvertUploadDataPtr& data)
+ProgressPtr MuseScoreComService::startConvert(const ConvertUploadDataPtr& data)
 {
     ProgressPtr progress = std::make_shared<Progress>();
     progress->start();

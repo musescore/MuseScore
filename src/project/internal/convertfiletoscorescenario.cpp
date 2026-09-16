@@ -169,9 +169,18 @@ Ret ConvertFileToScoreScenario::validateLink(const QUrl& link)
 
 void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
 {
+    //! NOTE Guards against repeated clicks opening multiple dialogs
+    //! while checkConvertIsAllowed is still pending
+    if (m_convertFlowInProgress) {
+        return;
+    }
+
+    m_convertFlowInProgress = true;
+
     checkConvertIsAllowed()
     .onResolve(this, [this, paths](const Ret& ret) {
         if (!ret) {
+            m_convertFlowInProgress = false;
             return;
         }
 
@@ -179,16 +188,24 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
             selectFilesToConvert()
             .onResolve(this, [this](const ConvertSelection& selection) {
                 startConvert(selection.input, selection.convertedScoreName);
+                m_convertFlowInProgress = false;
+            })
+            .onReject(this, [this](int, const std::string&) {
+                m_convertFlowInProgress = false;
             });
             return;
         }
 
         RetVal<ConvertFilesValidation> validation = validateFiles(paths);
         if (!validation.ret) {
+            m_convertFlowInProgress = false;
             return;
         }
 
         confirmConvert(paths, validation.val.type);
+    })
+    .onReject(this, [this](int, const std::string&) {
+        m_convertFlowInProgress = false;
     });
 }
 
@@ -284,13 +301,21 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
                             { cancel, proceed }, proceedBtn)
     .onResolve(this, [this, paths, type, proceedBtn](const IInteractive::Result& result) {
         if (!result.isButton(proceedBtn)) {
+            m_convertFlowInProgress = false;
             return;
         }
 
         selectFilesToConvert(paths, type)
         .onResolve(this, [this](const ConvertSelection& selection) {
             startConvert(selection.input, selection.convertedScoreName);
+            m_convertFlowInProgress = false;
+        })
+        .onReject(this, [this](int, const std::string&) {
+            m_convertFlowInProgress = false;
         });
+    })
+    .onReject(this, [this](int, const std::string&) {
+        m_convertFlowInProgress = false;
     });
 }
 
