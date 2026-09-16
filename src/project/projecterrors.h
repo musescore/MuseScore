@@ -54,7 +54,6 @@ enum class Err {
     ConvertTooManyImages,
     ConvertUnsupportedLink,
     ConvertProcessingFailed,
-    DownloadLinkExpired,
 };
 
 //! NOTE: key for the converted file name stored in Ret::data

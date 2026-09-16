@@ -51,6 +51,8 @@ Column {
 
         width: parent.width
 
+        maximumLength: 255
+
         navigation.panel: root.navigationPanel
         navigation.order: root.navigationOrder
         navigation.accessible.name: label.text + " " + input.currentText

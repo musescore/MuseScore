@@ -43,7 +43,7 @@ Item {
     signal cancelRequested()
     signal backRequested()
     signal selectMoreFilesRequested(var existingPaths)
-    signal convertRequested(var paths, string convertedFileName)
+    signal convertRequested(var paths, string convertedScoreName)
 
     function focusOnDefault() {
         saveAsField.focusOnInput()
