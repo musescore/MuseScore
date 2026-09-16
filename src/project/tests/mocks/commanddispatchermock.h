@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,16 +22,20 @@
 
 #pragma once
 
-#include "modularity/imoduleinterface.h"
+#include <gmock/gmock.h>
 
-namespace mu::project {
-class IProjectFilesController : MODULE_CONTEXT_INTERFACE
+#include "rcommand/icommanddispatcher.h"
+
+namespace muse::rcommand {
+class CommandDispatcherMock : public ICommandDispatcher
 {
-    INTERFACE_ID(IProjectFilesController)
-
 public:
-    virtual ~IProjectFilesController() = default;
+    //! NOTE Keeps the convenience overloads of the interface visible next to the mocked ones
+    using ICommandDispatcher::dispatch;
+    using ICommandDispatcher::onRequest;
 
-    virtual bool closeOpenedProject(bool goToHome = true) = 0;
+    MOCK_METHOD(async::Promise<Response>, dispatch, (const Request& request), (override));
+    MOCK_METHOD(void, onRequest, (Commandable * client, const Command& command, const CallBack& callback), (override));
+    MOCK_METHOD(void, unreg, (Commandable * client), (override));
 };
 }

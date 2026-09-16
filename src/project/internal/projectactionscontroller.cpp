@@ -23,7 +23,6 @@
 #include "projectactionscontroller.h"
 
 #include <QBuffer>
-#include <QEventLoop>
 #include <QFileInfo>
 #include <QTemporaryFile>
 #include <QUrl>
@@ -34,7 +33,6 @@
 #include "async/async.h"
 #include "defer.h"
 #include "rcommand/commandtypes.h"
-#include "translation.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotationinteraction.h"
@@ -141,6 +139,10 @@ void ProjectActionsController::init()
         m_busyChanged.notify();
     });
 
+    closeProjectScenario()->busyChanged().onNotify(this, [this]() {
+        m_busyChanged.notify();
+    });
+
     // listen changes
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
         auto project = globalContext()->currentProject();
@@ -183,7 +185,8 @@ bool ProjectActionsController::isBusy(BusyStatus status) const
 {
     return m_busyStatuses.contains(status)
            || saveProjectScenario()->isBusy(status)
-           || openProjectScenario()->isBusy(status);
+           || openProjectScenario()->isBusy(status)
+           || closeProjectScenario()->isBusy(status);
 }
 
 void ProjectActionsController::setBusy(BusyStatus status, bool isBusy)
@@ -350,17 +353,20 @@ muse::Ret ProjectActionsController::newProject()
 
 muse::Ret ProjectActionsController::closeProject()
 {
-    auto anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
-    bool ok = closeOpenedProject();
-    if (ok && anyInstanceWithoutProject) {
-        //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
-        async::Async::call(this, [this]() {
-            dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
-        });
-        multiwindowsProvider()->activateWindowWithoutProject();
-    }
+    bool anyInstanceWithoutProject = multiwindowsProvider()->isHasWindowWithoutProject();
 
-    return ok ? make_ok() : make_ret(Ret::Code::UnknownError);
+    return runAsync(closeProjectScenario()->closeOpenedProject(true)
+                    .then<Ret>(this, [this, anyInstanceWithoutProject](const Ret& ret, auto resolve) {
+        if (ret && anyInstanceWithoutProject) {
+            //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
+            async::Async::call(this, [this]() {
+                dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
+            });
+            multiwindowsProvider()->activateWindowWithoutProject();
+        }
+
+        return resolve(ret);
+    }));
 }
 
 //! Commands report that the flow has started; its outcome is shown to the user by the scenario itself
@@ -375,99 +381,9 @@ muse::Ret ProjectActionsController::runAsync(async::Promise<Ret> flow)
     return make_ok();
 }
 
-//! The close and quit flows are still synchronous, so the save is waited for here
-muse::Ret ProjectActionsController::waitFor(async::Promise<Ret> flow)
-{
-    QEventLoop loop;
-    Ret result;
-    bool finished = false;
-
-    flow.onResolve(this, [&result, &finished, &loop](const Ret& ret) {
-        result = ret;
-        finished = true;
-        loop.quit();
-    });
-
-    if (!finished) {
-        loop.exec();
-    }
-
-    return result;
-}
-
-bool ProjectActionsController::closeOpenedProject(bool goToHome)
-{
-    if (isBusy(BusyStatus::Closing)) {
-        return false;
-    }
-
-    setBusy(BusyStatus::Closing, true);
-    DEFER {
-        setBusy(BusyStatus::Closing, false);
-    };
-
-    INotationProjectPtr project = currentNotationProject();
-    if (!project) {
-        return true;
-    }
-
-    if (globalContext()->playbackState()->isPlaying()) {
-        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
-    }
-
-    bool result = true;
-
-    if (project->isNeedSave()) {
-        IInteractive::Button btn = askAboutSavingScore(project);
-
-        if (btn == IInteractive::Button::Cancel) {
-            result = false;
-        } else if (btn == IInteractive::Button::Save) {
-            result = waitFor(saveProject());
-        } else if (btn == IInteractive::Button::DontSave) {
-            result = true;
-        }
-    }
-
-    if (result) {
-        interactive()->closeAllDialogsSync();
-        globalContext()->setCurrentProject(nullptr);
-
-        if (goToHome) {
-            Ret ret = openPageIfNeed(HOME_PAGE_URI);
-            if (!ret) {
-                LOGE() << ret.toString();
-            }
-        }
-    }
-
-    return result;
-}
-
-IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProjectPtr project)
-{
-    std::string title = muse::qtrc("project", "Do you want to save changes to the score “%1” before closing?")
-                        .arg(project->displayName()).toStdString();
-
-    std::string body = muse::trc("project", "Your changes will be lost if you don’t save them.");
-
-    IInteractive::Result result = interactive()->warningSync(title, body, {
-        IInteractive::Button::DontSave,
-        IInteractive::Button::Cancel,
-        IInteractive::Button::Save
-    }, IInteractive::Button::Save);
-
-    return result.standardButton();
-}
-
 async::Promise<Ret> ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
 {
     return saveProjectScenario()->saveProject(saveMode, saveLocationType, force);
-}
-
-async::Promise<Ret> ProjectActionsController::saveProject(const muse::io::path_t& path)
-{
-    return saveProjectScenario()->saveProject(path);
 }
 
 async::Promise<Ret> ProjectActionsController::publish()
