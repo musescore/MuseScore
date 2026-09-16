@@ -21,8 +21,6 @@
  */
 #include "lyricslinesettingsmodel.h"
 
-#include "engraving/dom/lyrics.h"
-
 #include "translation.h"
 
 using namespace mu::propertiespanel;
@@ -40,7 +38,7 @@ LyricsLineSettingsModel::LyricsLineSettingsModel(QObject* parent, const muse::mo
         setTitle(muse::qtrc("propertiespanel", "Partial lyrics line"));
         setElementType(mu::engraving::ElementType::PARTIAL_LYRICSLINE);
         setModelType(PropertiesPanelModelType::TYPE_PARTIAL_LYRICS_LINE);
-        m_hasVerse = true;
+        m_isPartialLyricsLine = true;
     }
     setIcon(muse::ui::IconCode::Code::LYRICS);
 
@@ -57,21 +55,14 @@ PropertyItem* LyricsLineSettingsModel::verse() const
     return m_verse;
 }
 
-bool LyricsLineSettingsModel::hasVerse() const
+PropertyItem* LyricsLineSettingsModel::placement() const
 {
-    return m_hasVerse;
+    return m_placement;
 }
 
-bool LyricsLineSettingsModel::centeringSideIsRelevant(const EngravingItem* item, bool above) const
+bool LyricsLineSettingsModel::isPartialLyricsLine() const
 {
-    // A LyricsLine's placement isn't kept in sync with its lyric, so ask the lyric itself
-    if (item->isLyricsLine()) {
-        if (const mu::engraving::Lyrics* lyrics = mu::engraving::toLyricsLine(item)->lyrics()) {
-            return lyrics->placeAbove() == above;
-        }
-    }
-
-    return ModelWithStaveCenteringOptions::centeringSideIsRelevant(item, above);
+    return m_isPartialLyricsLine;
 }
 
 void LyricsLineSettingsModel::createProperties()
@@ -80,6 +71,7 @@ void LyricsLineSettingsModel::createProperties()
 
     m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
     m_verse = buildPropertyItem(mu::engraving::Pid::VERSE);
+    m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
 }
 
 void LyricsLineSettingsModel::loadProperties()
@@ -88,4 +80,5 @@ void LyricsLineSettingsModel::loadProperties()
 
     loadPropertyItem(m_thickness);
     loadPropertyItem(m_verse);
+    loadPropertyItem(m_placement);
 }

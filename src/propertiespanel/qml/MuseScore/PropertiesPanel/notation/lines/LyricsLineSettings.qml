@@ -65,7 +65,7 @@ Column {
         titleText: qsTrc("propertiespanel", "Set to verse")
         propertyItem: root.model ? root.model.verse : null
 
-        visible: model ? model.hasVerse : false
+        visible: root.model ? root.model.isPartialLyricsLine : false
 
         decimals: 0
         step: 1
@@ -76,13 +76,24 @@ Column {
         navigationRowStart: thicknessSection.navigationRowEnd + 1
     }
 
+    PlacementSection {
+        id: placementSection
+
+        visible: root.model ? root.model.isPartialLyricsLine : false
+
+        propertyItem: root.model ? root.model.placement : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: setVerse.navigationRowEnd + 1
+    }
+
     CenterBetweenStavesSection {
-        isApplicable: root.model && root.model.isStaveCenteringApplicable
+        isApplicable: root.model && root.model.isPartialLyricsLine && root.model.isStaveCenteringApplicable
         isAvailable: root.model && root.model.isStaveCenteringAvailable
 
         propertyItem: root.model ? root.model.centerBetweenStaves : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: setVerse.navigationRowEnd + 1
+        navigationRowStart: placementSection.navigationRowEnd + 1
     }
 }

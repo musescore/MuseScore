@@ -2412,7 +2412,6 @@ void TWrite::write(const LyricsLine* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
@@ -2737,6 +2736,7 @@ void TWrite::write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& 
     writeProperty(item, xml, Pid::VERSE);
     xml.tag("isEndMelisma", item->isEndMelisma());
     writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
+    writeProperty(item, xml, Pid::PLACEMENT);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }

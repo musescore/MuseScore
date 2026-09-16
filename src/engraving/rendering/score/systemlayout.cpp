@@ -2787,11 +2787,14 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         return false;
     }
 
-    AutoOnOff centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
-    if (item->isLyricsLineSegment() && centerProperty == AutoOnOff::AUTO) {
-        // If a dash or melisma line is left on AUTO, it follows the lyric it belongs to:
+    AutoOnOff centerProperty;
+    if (item->isLyricsLineSegment() && !item->isPartialLyricsLineSegment()) {
+        // A dash or melisma line belonging to a lyric has no setting of its own: it always
+        // follows that lyric. Only partial lyrics lines are configurable individually.
         const Lyrics* lyrics = toLyricsLineSegment(item)->lyrics();
         centerProperty = lyrics ? lyrics->centerBetweenStaves() : AutoOnOff::AUTO;
+    } else {
+        centerProperty = item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>();
     }
 
     const bool centerStyle = item->style().styleB(centerStyleId);
