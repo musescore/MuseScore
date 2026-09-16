@@ -519,14 +519,17 @@ void StringData::assignBestFrettingForBassNote(const ChordShapeKey& shapeKey, bo
         desiredBassNote->undoChangeProperty(Pid::STRING, bestFretting.first);
         desiredBassNote->undoChangeProperty(Pid::FRET, bestFretting.second);
         assignRemainingNotesAroundBass(chord, desiredBassNote, bestFretting); 
-        std::vector<Note*> notes = collectNotesAtSameTick(chord);
-        std::sort(notes.begin(), notes.end(), [](Note* a, Note* b) { return a->pitch() < b->pitch(); });
-        ChordVoicing voicing;
-        voicing.reserve(notes.size());
-        for (Note* n : notes) {
-            voicing.push_back({ n->string(), n->fret() });
+
+        if (!anyForcedString) {
+            std::vector<Note*> notes = collectNotesAtSameTick(chord);
+            std::sort(notes.begin(), notes.end(), [](Note* a, Note* b) { return a->pitch() < b->pitch(); });
+            ChordVoicing voicing;
+            voicing.reserve(notes.size());
+            for (Note* n : notes) {
+                voicing.push_back({ n->string(), n->fret() });
+            }
+            m_chordShapeCache[shapeKey] = voicing;
         }
-        m_chordShapeCache[shapeKey] = voicing;
     } else {
         desiredBassNote->setFretConflict(true);
     }
