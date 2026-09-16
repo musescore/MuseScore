@@ -43,12 +43,12 @@ void ScoreCallbacks::drawBackground(muse::draw::Painter*, const muse::RectF&) co
     NOT_IMPLEMENTED;
 }
 
-qreal ScoreCallbacks::selectionProximity() const
+double ScoreCallbacks::selectionProximity() const
 {
     return m_selectionProximity;
 }
 
-void ScoreCallbacks::setSelectionProximity(qreal proximity)
+void ScoreCallbacks::setSelectionProximity(double proximity)
 {
     m_selectionProximity = proximity;
 }

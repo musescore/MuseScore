@@ -1095,8 +1095,8 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
 
     startEdit(TranslatableString("undoableAction", "Drag element(s)", nullptr, int(m_dragData.elements.size())));
 
-    qreal scaling = m_notation->viewState()->matrix().m11();
-    qreal proximity = configuration()->selectionProximity() * 0.5f / scaling;
+    double scaling = m_notation->viewState()->matrix().m11();
+    double proximity = configuration()->selectionProximity() * 0.5 / scaling;
     m_scoreCallbacks.setSelectionProximity(proximity);
 
     if (isGripEditStarted()) {
