@@ -175,7 +175,7 @@ protected:
         }));
 
         auto uploadProgress = std::make_shared<Progress>();
-        ON_CALL(*m_convertService, upload(_))
+        ON_CALL(*m_convertService, startConvert(_))
         .WillByDefault(Return(uploadProgress));
 
         const io::paths_t paths { "/some/path/file.pdf" };
@@ -195,7 +195,7 @@ protected:
     void uploadAndResolve(int queueId, const QString& convertedScoreName, const io::paths_t& paths)
     {
         auto uploadProgress = std::make_shared<Progress>();
-        EXPECT_CALL(*m_convertService, upload(Truly([paths](const ConvertUploadDataPtr& data) {
+        EXPECT_CALL(*m_convertService, startConvert(Truly([paths](const ConvertUploadDataPtr& data) {
             return uploadDataMatchesPaths(*data, paths);
         })))
         .WillOnce(Return(uploadProgress));
@@ -566,7 +566,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadFails_ForwardsF
 {
     // [GIVEN] The upload fails
     auto uploadProgress = std::make_shared<Progress>();
-    ON_CALL(*m_convertService, upload(_))
+    ON_CALL(*m_convertService, startConvert(_))
     .WillByDefault(Return(uploadProgress));
 
     bool received = false;
@@ -597,7 +597,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     auto uploadProgress = std::make_shared<Progress>();
     const io::paths_t paths { "/some/path/file.pdf" };
 
-    EXPECT_CALL(*m_convertService, upload(Truly([&](const ConvertUploadDataPtr& data) {
+    EXPECT_CALL(*m_convertService, startConvert(Truly([&](const ConvertUploadDataPtr& data) {
         return data->type == ConvertType::Omr && uploadDataMatchesPaths(*data, paths);
     })))
     .WillOnce(Return(uploadProgress));
@@ -639,7 +639,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     .WillByDefault(Return(io::path_t("/watched.json")));
 
     auto uploadProgress = std::make_shared<Progress>();
-    ON_CALL(*m_convertService, upload(_))
+    ON_CALL(*m_convertService, startConvert(_))
     .WillByDefault(Return(uploadProgress));
     ON_CALL(*m_convertService, fetchQueue())
     .WillByDefault(Invoke([] {
@@ -686,7 +686,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterStartConvert_Co
 
     auto uploadProgress = std::make_shared<Progress>();
     const io::paths_t paths { "/some/path/file.pdf" };
-    ON_CALL(*m_convertService, upload(_))
+    ON_CALL(*m_convertService, startConvert(_))
     .WillByDefault(Return(uploadProgress));
     ON_CALL(*m_convertService, fetchQueue())
     .WillByDefault(Invoke([] {

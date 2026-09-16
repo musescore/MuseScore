@@ -32,10 +32,10 @@
 namespace muse::cloud {
 /// fetchConfig() can be called at any time (no authenticated user required) to get the
 /// upload limits (max file size, page/image counts, allowed types) for client-side validation
-/// before upload() is called.
+/// before startConvert() is called.
 ///
 /// Expected call order for a conversion (OMR or Audio2Score):
-/// 1. upload() to submit the file(s) and start processing
+/// 1. startConvert() to submit the file(s) and start processing
 /// 2. Poll fetchQueue() and watch the item's status; once it's AwaitingReview or Done, its
 ///    scoreId identifies the resulting score, already available via IMuseScoreComService
 /// 3. Rating the recognition quality (submitReview(), once AwaitingReview) is optional;
@@ -52,7 +52,7 @@ public:
 
     virtual async::Promise<RetVal<ConvertConfig> > fetchConfig() = 0;
 
-    virtual ProgressPtr upload(const ConvertUploadDataPtr& data) = 0;
+    virtual ProgressPtr startConvert(const ConvertUploadDataPtr& data) = 0;
 
     virtual async::Promise<RetVal<ConvertQueueList> > fetchQueue() = 0;
 

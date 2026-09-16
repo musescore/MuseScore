@@ -316,7 +316,7 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
     const ConvertType type = convertTypeOf(input);
     auto data = std::make_shared<const ConvertUploadData>(ConvertUploadData { type, std::move(files), link,
                                                                               convertedScoreName.toQString() });
-    ProgressPtr progress = museScoreComService()->convert()->upload(data);
+    ProgressPtr progress = museScoreComService()->convert()->startConvert(data);
 
     progress->progressChanged().onReceive(this, [convertedScoreName](int64_t current, int64_t total, const std::string&) {
         LOGI() << "Uploading for convert \"" << convertedScoreName << "\": " << current << "/" << total;
@@ -439,8 +439,6 @@ void ConvertFileToScoreService::loadWatchedScores()
 {
     TRACEFUNC;
 
-    m_watchedScores.clear();
-
     RetVal<ByteArray> data;
     {
         muse::mi::ReadResourceLockGuard resource_guard(multiwindowsProvider(), WATCHED_CONVERTS_RESOURCE_NAME);
@@ -464,6 +462,7 @@ void ConvertFileToScoreService::loadWatchedScores()
     }
 
     const JsonArray array = json.rootArray();
+    m_watchedScores.clear();
     m_watchedScores.reserve(array.size());
 
     for (size_t i = 0; i < array.size(); ++i) {

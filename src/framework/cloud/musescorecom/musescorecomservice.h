@@ -67,7 +67,7 @@ public:
     // IMuseScoreComConvertService
     async::Promise<RetVal<ConvertConfig> > fetchConfig() override;
 
-    ProgressPtr upload(const ConvertUploadDataPtr& data) override;
+    ProgressPtr startConvert(const ConvertUploadDataPtr& data) override;
 
     async::Promise<RetVal<ConvertQueueList> > fetchQueue() override;
 
