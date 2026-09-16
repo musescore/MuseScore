@@ -334,6 +334,8 @@ int StringData::scoreFrettingCandidate(const std::pair<int, int>& anchor, const 
         horizontalDistance = std::abs(anchor.second - candidate.second);
     }
 
+    // TODO: for tiebreaking, prefer same string/closer string as opposed to closer fret 
+
     // TODO: prefer vertical jumps of one or two strings, but afterwards vertical jump should be penalized heavily 
     // deals with the case of playing octaves, for example 
     int verticalDistance = std::abs(anchor.first - candidate.first);
@@ -581,6 +583,8 @@ void StringData::fretChords(Chord* chord) const
         && !candidateBassNote->negativeFretUsed()
         && !(skipDeadNotes && candidateBassNote->deadNote());
 
+
+    // TODO: consider dropping caching logic altogether
     ChordShapeKey shapeKey = makeChordShapeKey(chord);
     auto cacheIterator = m_chordShapeCache.find(shapeKey); 
 
