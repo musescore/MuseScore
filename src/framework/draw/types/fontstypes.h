@@ -66,7 +66,7 @@ struct FontDataKey {
             return m_italic < o.m_italic;
         }
 
-        return m_family.id() < o.m_family.id();
+        return m_family < o.m_family;
     }
 
 private:
