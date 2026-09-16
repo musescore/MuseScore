@@ -94,6 +94,7 @@ private:
 
     int         fret(int pitch, int string, int pitchOffset) const;
     int         scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const;
+    int         resolveForcedString(const Note* note) const; 
     void        assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, const std::pair<int, int>& bassFretting) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const;
     void        sortChordNotesUseSameString(const Chord* chord) const;
@@ -101,9 +102,13 @@ private:
     void        updateFretsOnSameStrings(const Chord* chord) const;
     void        preferBassStringForNegativeFret(const Chord* chord) const;
     void        reassignNegativeFretNotes(const Chord* chord) const;
-    void        assignBestFrettingForBassNote(const ChordShapeKey& chordShapeKey, std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const; 
+    void        assignBestFrettingForBassNote(const ChordShapeKey& shapeKey, bool anyForcedString, std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const; 
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
+    bool        stringSupportsGlissando(const Note* note, int candidateString) const; 
+    
+    Note*       glissandoFrom(const Note* note) const; 
+    Note*       glissandoTo(const Note* note) const; 
     Note*       getBassNote(const Chord* chord) const;
     Note*       getBassNoteOfVoicings(const Chord* chord) const;
     ChordShapeKey makeChordShapeKey(const Chord* chord) const;
