@@ -54,6 +54,12 @@ void TextStylePopupModel::init()
 {
 }
 
+void TextStylePopupModel::onItemDestroyed()
+{
+    AbstractElementPopupModel::onItemDestroyed();
+    m_elementRepositoryService->updateElementList({}, notation::SelectionState::NONE);
+}
+
 TextSettingsModel* TextStylePopupModel::textSettingsModel() const
 {
     return m_textSettingsModel;

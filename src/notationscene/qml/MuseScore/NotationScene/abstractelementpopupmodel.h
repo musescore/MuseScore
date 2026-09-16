@@ -79,6 +79,7 @@ signals:
 protected:
     virtual void updateItemRect();
     virtual bool ignoreTextEditingChanges() const { return true; }
+    virtual void onItemDestroyed();
 
     muse::PointF fromLogical(muse::PointF point) const;
     muse::RectF fromLogical(muse::RectF rect) const;
@@ -100,6 +101,7 @@ protected:
 
 private:
     INotationSelectionPtr selection() const;
+    mu::engraving::Score* score() const;
 
     engraving::ElementType elementType() const;
     const engraving::ElementTypeSet& dependentElementTypes() const;

@@ -64,6 +64,7 @@ private:
 
     void updateItemRect() override;
     bool ignoreTextEditingChanges() const override { return false; }
+    void onItemDestroyed() override;
 
     std::unique_ptr<ElementRepositoryService> m_elementRepositoryService;
     TextSettingsModel* m_textSettingsModel = nullptr;
