@@ -150,6 +150,9 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         std::vector<Note*> linkedNotes;
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
+            if (!linkedNote) {
+                continue;
+            }
             linkedNotes.push_back(linkedNote);
         }
 
@@ -176,7 +179,11 @@ void EditChord::undoRemoveParenthesesFromNote(Chord* chord, Note* note, Parenthe
         if (!linkedLeftParen) {
             continue;
         }
+
         Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
+        if (!linkedNote) {
+            continue;
+        }
 
         const NoteParenthesisInfo* noteParenInfo = linkedChord->findNoteParenthesisInfo(linkedNote);
         if (noteParenInfo) {
@@ -211,6 +218,9 @@ void EditChord::undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes
         std::vector<Note*> linkedNotes;
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
+            if (!linkedNote) {
+                continue;
+            }
             linkedNotes.push_back(linkedNote);
         }
 
