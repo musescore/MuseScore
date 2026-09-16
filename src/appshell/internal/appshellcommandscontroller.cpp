@@ -281,33 +281,46 @@ bool AppshellCommandsController::onDropEvent(QDropEvent* event)
     return false;
 }
 
-muse::Ret AppshellCommandsController::quit(const muse::rcommand::Params& params)
+muse::async::Promise<muse::Ret> AppshellCommandsController::quit(const muse::rcommand::Params& params)
 {
-    bool isAllInstances = params.at("all_instances").toBool();
+    bool isAllInstances = params.at("all_instances", Val(true)).toBool();
     muse::io::path_t installatorPath = params.at("installer_path").toString();
     return quit(isAllInstances, installatorPath);
 }
 
-muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
+muse::async::Promise<muse::Ret> AppshellCommandsController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
 {
     if (m_quiting) {
-        return muse::make_ret(Ret::Code::Busy);
+        return resolvedPromise(muse::make_ret(Ret::Code::Busy));
     }
 
     m_quiting = true;
 
-    closeProjectScenario()->closeOpenedProject(false)
-    .onResolve(this, [this, isAllInstances, installerPath](const Ret& ret) {
-        if (!ret) {
-            LOGD() << "quit cancelled: " << ret.toString();
-            m_quiting = false;
-            return;
-        }
+    return muse::async::make_promise<Ret>([this, isAllInstances, installerPath](auto resolve) {
+        closeProjectScenario()->closeOpenedProject(false)
+        .onResolve(this, [this, isAllInstances, installerPath, resolve](const Ret& ret) {
+            if (!ret) {
+                LOGD() << "quit cancelled: " << ret.toString();
+                m_quiting = false;
+                (void)resolve(ret);
+                return;
+            }
 
-        doQuit(isAllInstances, installerPath);
+            //! NOTE `doQuit` destroys this window, so let's answer before it
+            (void)resolve(muse::make_ok());
+
+            doQuit(isAllInstances, installerPath);
+        });
+
+        return muse::async::Promise<Ret>::dummy_result();
     });
+}
 
-    return muse::make_ok();
+muse::async::Promise<muse::Ret> AppshellCommandsController::resolvedPromise(const muse::Ret& ret)
+{
+    return muse::async::make_promise<Ret>([ret](auto resolve) {
+        return resolve(ret);
+    });
 }
 
 void AppshellCommandsController::doQuit(bool isAllInstances, const muse::io::path_t& installerPath)
@@ -339,7 +352,7 @@ void AppshellCommandsController::doQuit(bool isAllInstances, const muse::io::pat
     //! NOTE the following destroys the IoC context and `this` with it,
     //! so don't access `this` after this point!
     if (isAllInstances) {
-        multiwindowsProvider()->quitForAll();
+        multiwindowsProvider()->quitForAll(iocContext());
     } else {
         multiwindowsProvider()->quitWindow(iocContext());
     }
