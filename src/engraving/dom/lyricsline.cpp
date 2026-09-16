@@ -65,7 +65,6 @@ LyricsLine::LyricsLine(const LyricsLine& g)
     : SLine(g)
 {
     m_nextLyrics = 0;
-    m_centerBetweenStaves = g.m_centerBetweenStaves;
 }
 
 //---------------------------------------------------------
@@ -94,29 +93,12 @@ void LyricsLine::removeUnmanaged()
 }
 
 //---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-PropertyValue LyricsLine::getProperty(Pid propertyId) const
-{
-    switch (propertyId) {
-    case Pid::CENTER_BETWEEN_STAVES:
-        return centerBetweenStaves();
-    default:
-        return SLine::getProperty(propertyId);
-    }
-}
-
-//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
 bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
 {
     switch (propertyId) {
-    case Pid::CENTER_BETWEEN_STAVES:
-        setCenterBetweenStaves(v.value<AutoOnOff>());
-        break;
     case Pid::SPANNER_TICKS:
     {
         // if parent lyrics has a melisma, change its length too
@@ -143,17 +125,9 @@ PropertyValue LyricsLine::propertyDefault(Pid id) const
     switch (id) {
     case Pid::LINE_WIDTH:
         return styleValue(Pid::LINE_WIDTH, getPropertyStyle(Pid::LINE_WIDTH));
-    case Pid::CENTER_BETWEEN_STAVES:
-        return AutoOnOff::AUTO;
     default:
         return SLine::propertyDefault(id);
     }
-}
-
-void LyricsLine::reset()
-{
-    undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
-    SLine::reset();
 }
 
 Sid LyricsLine::getPropertyStyle(Pid propertyId) const
@@ -238,7 +212,7 @@ PropertyValue LyricsLineSegment::propertyDefault(Pid propertyId) const
 
 EngravingObject* LyricsLineSegment::propertyDelegate(Pid propertyId) const
 {
-    if (propertyId == Pid::GENERATED || propertyId == Pid::CENTER_BETWEEN_STAVES) {
+    if (propertyId == Pid::GENERATED) {
         return lyricsLine();
     }
 
@@ -248,16 +222,24 @@ EngravingObject* LyricsLineSegment::propertyDelegate(Pid propertyId) const
 //=========================================================
 //   PartialLyricsLine
 //=========================================================
+
+static const ElementStyle partialLyricsLineElementStyle {
+    { Sid::lyricsDashLineThickness, Pid::LINE_WIDTH },
+    { Sid::lyricsPlacement,         Pid::PLACEMENT },
+};
+
 PartialLyricsLine::PartialLyricsLine(EngravingItem* parent)
     : LyricsLine(ElementType::PARTIAL_LYRICSLINE, parent)
 {
     setGenerated(false);
+    initElementStyle(&partialLyricsLineElementStyle);
 }
 
 PartialLyricsLine::PartialLyricsLine(const PartialLyricsLine& other)
     : LyricsLine(other)
 {
     m_isEndMelisma = other.m_isEndMelisma;
+    m_centerBetweenStaves = other.m_centerBetweenStaves;
 }
 
 LineSegment* PartialLyricsLine::createLineSegment()
@@ -273,6 +255,8 @@ PropertyValue PartialLyricsLine::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::VERSE:
         return m_verse;
+    case Pid::CENTER_BETWEEN_STAVES:
+        return centerBetweenStaves();
     default:
         return LyricsLine::getProperty(propertyId);
     }
@@ -283,6 +267,9 @@ bool PartialLyricsLine::setProperty(Pid propertyId, const PropertyValue& val)
     switch (propertyId) {
     case Pid::VERSE:
         setVerse(val.toInt());
+        break;
+    case Pid::CENTER_BETWEEN_STAVES:
+        setCenterBetweenStaves(val.value<AutoOnOff>());
         break;
     default:
         return LyricsLine::setProperty(propertyId, val);
@@ -298,9 +285,17 @@ PropertyValue PartialLyricsLine::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::VERSE:
         return 0;
+    case Pid::CENTER_BETWEEN_STAVES:
+        return AutoOnOff::AUTO;
     default:
         return LyricsLine::propertyDefault(propertyId);
     }
+}
+
+void PartialLyricsLine::reset()
+{
+    undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
+    LyricsLine::reset();
 }
 
 Sid PartialLyricsLine::getPropertyStyle(Pid propertyId) const
@@ -352,7 +347,6 @@ void PartialLyricsLine::doComputeEndElement()
 //=========================================================
 
 static const ElementStyle partialLyricsLineSegmentElementStyle {
-    { Sid::lyricsPlacement, Pid::PLACEMENT },
     { Sid::lyricsMinTopDistance, Pid::MIN_DISTANCE },
 };
 
@@ -392,6 +386,7 @@ EngravingObject* PartialLyricsLineSegment::propertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::VERSE:
+    case Pid::CENTER_BETWEEN_STAVES:
         return lyricsLine();
     default:
         return LyricsLineSegment::propertyDelegate(pid);

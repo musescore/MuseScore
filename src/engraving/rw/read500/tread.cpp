@@ -3217,9 +3217,7 @@ void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)
 void TRead::read(LyricsLine* l, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (TRead::readProperty(l, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
-        } else if (!readProperties(static_cast<SLine*>(l), e, ctx)) {
+        if (!readProperties(static_cast<SLine*>(l), e, ctx)) {
             e.unknown();
         }
     }
