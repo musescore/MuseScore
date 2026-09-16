@@ -420,6 +420,7 @@ void EditStyle::classBegin()
         { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
         { StyleId::lyricsAvoidBarlines, false, lyricsAvoidBarlines, resetLyricsAvoidBarlines },
         { StyleId::lyricsAutoCenterBetweenStaves, false, lyricsAutoCenterBetweenStaves, resetLyricsAutoCenterBetweenStaves },
+        { StyleId::lyricsStackingOrder,    false, lyricsUseLegacyStackingOrder, resetLyricsStackingOrder },
         { StyleId::lyricsLimitDashCount, false, limitDashCount, 0 },
         { StyleId::lyricsMaxDashCount, false, lyricsMaxDashCount, resetLyricsMaxDashCount },
         { StyleId::lyricsCenterDashedSyllables, false, lyricsCenterDashedSyllables, lyricsResetCenterDashedSyllables },
@@ -1851,7 +1852,11 @@ PropertyValue EditStyle::getValue(StyleId idx)
     case P_TYPE::TIMESIG_STYLE:
     case P_TYPE::TIMESIG_MARGIN:
     case P_TYPE::INT: {
-        if (qobject_cast<QComboBox*>(sw.widget)) {
+        if (sw.idx == StyleId::lyricsStackingOrder) { // special case for enum represented by a checkbox
+            return int(sw.widget->property("checked").toBool()
+                       ? LyricsStackingOrder::LYRICS_AFTER_PEDALS
+                       : LyricsStackingOrder::LYRICS_BEFORE_DYNAMICS);
+        } else if (qobject_cast<QComboBox*>(sw.widget)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             return cb->currentData().toInt();
         } else if (qobject_cast<QSpinBox*>(sw.widget)) {
@@ -1989,7 +1994,9 @@ void EditStyle::setValues()
         case P_TYPE::TIMESIG_MARGIN:
         case P_TYPE::INT: {
             int value = val.toInt();
-            if (qobject_cast<QComboBox*>(sw.widget)) {
+            if (sw.idx == StyleId::lyricsStackingOrder) { // special case for enum represented by a checkbox
+                sw.widget->setProperty("checked", value == int(LyricsStackingOrder::LYRICS_AFTER_PEDALS));
+            } else if (qobject_cast<QComboBox*>(sw.widget)) {
                 QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
                 cb->setCurrentIndex(cb->findData(value));
             } else if (qobject_cast<QSpinBox*>(sw.widget)) {
