@@ -7595,6 +7595,13 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="dynamicsAndHairpinsCenterOnVocalStaves">
+                 <property name="text">
+                  <string>Center between vocal staves automatically</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -10872,7 +10879,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="2">
+                 <item row="3" column="2">
                   <widget class="QToolButton" name="resetLyricsPosAbove">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -10895,7 +10902,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="0">
+                 <item row="4" column="0">
                   <widget class="QLabel" name="label_134">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -10944,7 +10951,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="2">
+                 <item row="4" column="2">
                   <widget class="QToolButton" name="resetLyricsPosBelow">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -10957,7 +10964,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="2">
+                 <item row="5" column="2">
                   <widget class="QToolButton" name="resetLyricsLineHeight">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -10992,7 +10999,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
+                 <item row="5" column="1">
                   <widget class="QDoubleSpinBox" name="lyricsLineHeight">
                    <property name="keyboardTracking">
                     <bool>false</bool>
@@ -11027,7 +11034,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="1">
+                 <item row="3" column="1">
                   <widget class="QDoubleSpinBox" name="yLyricsPosAbove">
                    <property name="minimumSize">
                     <size>
@@ -11081,7 +11088,7 @@
                    </property>
                   </spacer>
                  </item>
-                 <item row="4" column="0">
+                 <item row="5" column="0">
                   <widget class="QLabel" name="label_133">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -11135,7 +11142,7 @@
                    </item>
                   </widget>
                  </item>
-                 <item row="3" column="1">
+                 <item row="4" column="1">
                   <widget class="QDoubleSpinBox" name="yLyricsPosBelow">
                    <property name="suffix">
                     <string>sp</string>
@@ -11148,7 +11155,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="0">
+                 <item row="3" column="0">
                   <widget class="QLabel" name="label_132">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -11190,7 +11197,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="0" colspan="2">
+                 <item row="6" column="0" colspan="2">
                   <widget class="QCheckBox" name="lyricsAvoidBarlines">
                    <property name="accessibleName">
                     <string>Avoid barlines</string>
@@ -11200,7 +11207,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="2">
+                 <item row="6" column="2">
                   <widget class="QToolButton" name="resetLyricsAvoidBarlines">
                    <property name="toolTip">
                     <string>Reset to default</string>
@@ -11214,22 +11221,45 @@
                   </widget>
                  </item>
                  <item row="1" column="0" colspan="2">
-                  <widget class="QCheckBox" name="lyricsAutoCenterBetweenStaves">
+                  <widget class="QCheckBox" name="lyricsAutoCenterOnGrandStaff">
                    <property name="accessibleName">
-                    <string>Center between staves automatically</string>
+                    <string>Center on grand staff instruments automatically</string>
                    </property>
                    <property name="text">
-                    <string>Center between staves automatically</string>
+                    <string>Center on grand staff instruments automatically</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="2">
-                  <widget class="QToolButton" name="resetLyricsAutoCenterBetweenStaves">
+                  <widget class="QToolButton" name="resetLyricsAutoCenterOnGrandStaff">
                    <property name="toolTip">
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Center between staves automatically'</string>
+                    <string>Reset 'Center on grand staff instruments automatically'</string>
+                   </property>
+                   <property name="text">
+                    <string notr="true"/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0" colspan="2">
+                  <widget class="QCheckBox" name="lyricsAutoCenterOnVocalStaves">
+                   <property name="accessibleName">
+                    <string>Center between vocal staves automatically</string>
+                   </property>
+                   <property name="text">
+                    <string>Center between vocal staves automatically</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QToolButton" name="resetLyricsAutoCenterOnVocalStaves">
+                   <property name="toolTip">
+                    <string>Reset to default</string>
+                   </property>
+                   <property name="accessibleName">
+                    <string>Reset 'Center between vocal staves automatically'</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -13962,6 +13992,7 @@ followed by dashes</string>
   <tabstop>resetDynamicsAndHairpinPos</tabstop>
   <tabstop>dynamicsAndHairpinsAboveOnVocalStaves</tabstop>
   <tabstop>dynamicsAndHairpinsCenterOnGrandStaff</tabstop>
+  <tabstop>dynamicsAndHairpinsCenterOnVocalStaves</tabstop>
   <tabstop>dynamicsOverrideFont</tabstop>
   <tabstop>dynamicsFont</tabstop>
   <tabstop>avoidBarLines</tabstop>
@@ -14099,8 +14130,10 @@ followed by dashes</string>
   <tabstop>editLyricsTextStyleButton</tabstop>
   <tabstop>lyricsPlacement</tabstop>
   <tabstop>resetLyricsPlacement</tabstop>
-  <tabstop>lyricsAutoCenterBetweenStaves</tabstop>
-  <tabstop>resetLyricsAutoCenterBetweenStaves</tabstop>
+  <tabstop>lyricsAutoCenterOnGrandStaff</tabstop>
+  <tabstop>resetLyricsAutoCenterOnGrandStaff</tabstop>
+  <tabstop>lyricsAutoCenterOnVocalStaves</tabstop>
+  <tabstop>resetLyricsAutoCenterOnVocalStaves</tabstop>
   <tabstop>yLyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
   <tabstop>yLyricsPosBelow</tabstop>
