@@ -76,6 +76,18 @@ Column {
         navigationRowStart: thicknessSection.navigationRowEnd + 1
     }
 
+    CenterBetweenStavesSection {
+        id: centerStavesSection
+
+        isApplicable: root.model && root.model.isPartialLyricsLine && root.model.isStaveCenteringApplicable
+        isAvailable: root.model && root.model.isStaveCenteringAvailable
+
+        propertyItem: root.model ? root.model.centerBetweenStaves : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: setVerse.navigationRowEnd + 1
+    }
+
     PlacementSection {
         id: placementSection
 
@@ -84,16 +96,6 @@ Column {
         propertyItem: root.model ? root.model.placement : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: setVerse.navigationRowEnd + 1
-    }
-
-    CenterBetweenStavesSection {
-        isApplicable: root.model && root.model.isPartialLyricsLine && root.model.isStaveCenteringApplicable
-        isAvailable: root.model && root.model.isStaveCenteringAvailable
-
-        propertyItem: root.model ? root.model.centerBetweenStaves : null
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: placementSection.navigationRowEnd + 1
+        navigationRowStart: centerStavesSection.navigationRowEnd + 1
     }
 }

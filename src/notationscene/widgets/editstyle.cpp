@@ -419,7 +419,8 @@ void EditStyle::classBegin()
         { StyleId::lyricsMelismaForce,      false, lyricsMelismaForce,   resetLyricsMelismaForce },
         { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
         { StyleId::lyricsAvoidBarlines, false, lyricsAvoidBarlines, resetLyricsAvoidBarlines },
-        { StyleId::lyricsAutoCenterBetweenStaves, false, lyricsAutoCenterBetweenStaves, resetLyricsAutoCenterBetweenStaves },
+        { StyleId::lyricsAutoCenterOnGrandStaff, false, lyricsAutoCenterOnGrandStaff, resetLyricsAutoCenterOnGrandStaff },
+        { StyleId::lyricsAutoCenterOnVocalStaves, false, lyricsAutoCenterOnVocalStaves, resetLyricsAutoCenterOnVocalStaves },
         { StyleId::lyricsStackingOrder,    false, lyricsUseLegacyStackingOrder, resetLyricsStackingOrder },
         { StyleId::lyricsLimitDashCount, false, limitDashCount, 0 },
         { StyleId::lyricsMaxDashCount, false, lyricsMaxDashCount, resetLyricsMaxDashCount },
@@ -648,6 +649,7 @@ void EditStyle::classBegin()
 
         { StyleId::dynamicsHairpinVoiceBasedPlacement, false, dynamicsAndHairpinPos, resetDynamicsAndHairpinPos },
         { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff, false, dynamicsAndHairpinsCenterOnGrandStaff, 0 },
+        { StyleId::dynamicsHairpinsAutoCenterOnVocalStaves, false, dynamicsAndHairpinsCenterOnVocalStaves, 0 },
         { StyleId::dynamicsHairpinsAboveForVocalStaves, false, dynamicsAndHairpinsAboveOnVocalStaves, 0 },
 
         { StyleId::tempoPlacement,          false, tempoTextPlacement,          resetTempoTextPlacement },
@@ -2187,6 +2189,7 @@ bool EditStyle::hasDefaultStyleValue(StyleId id) const
 bool EditStyle::dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue() const
 {
     return hasDefaultStyleValue(StyleId::dynamicsHairpinsAutoCenterOnGrandStaff)
+           && hasDefaultStyleValue(StyleId::dynamicsHairpinsAutoCenterOnVocalStaves)
            && hasDefaultStyleValue(StyleId::dynamicsHairpinsAboveForVocalStaves)
            && hasDefaultStyleValue(StyleId::dynamicsHairpinVoiceBasedPlacement);
 }
@@ -2396,7 +2399,7 @@ void EditStyle::valueChanged(int i)
     }
 
     if (idx == StyleId::dynamicsHairpinVoiceBasedPlacement || idx == StyleId::dynamicsHairpinsAutoCenterOnGrandStaff
-        || idx == StyleId::dynamicsHairpinsAboveForVocalStaves) {
+        || idx == StyleId::dynamicsHairpinsAutoCenterOnVocalStaves || idx == StyleId::dynamicsHairpinsAboveForVocalStaves) {
         resetDynamicsAndHairpinPos->setEnabled(!dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue());
     }
 
@@ -2439,7 +2442,9 @@ void EditStyle::resetStyleValue(int i)
 
     setStyleValue(idx, defaultStyleValue(idx));
     if (idx == StyleId::dynamicsHairpinVoiceBasedPlacement) {
-        for (StyleId id : { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff, StyleId::dynamicsHairpinsAboveForVocalStaves }) {
+        for (StyleId id : { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff,
+                            StyleId::dynamicsHairpinsAutoCenterOnVocalStaves,
+                            StyleId::dynamicsHairpinsAboveForVocalStaves }) {
             setStyleValue(id, defaultStyleValue(id));
         }
     }

@@ -140,7 +140,8 @@ enum class Sid : short {
     lyricsMelismaMinLength,
     lyricsDashPosAtStartOfSystem,
     lyricsAvoidBarlines,
-    lyricsAutoCenterBetweenStaves,
+    lyricsAutoCenterOnGrandStaff,
+    lyricsAutoCenterOnVocalStaves,
     lyricsStackingOrder,
     lyricsLimitDashCount,
     lyricsMaxDashCount,
@@ -816,6 +817,7 @@ enum class Sid : short {
 
     dynamicsHairpinVoiceBasedPlacement,
     dynamicsHairpinsAutoCenterOnGrandStaff,
+    dynamicsHairpinsAutoCenterOnVocalStaves,
     dynamicsHairpinsAboveForVocalStaves,
 
     dynamicsOverrideFont,

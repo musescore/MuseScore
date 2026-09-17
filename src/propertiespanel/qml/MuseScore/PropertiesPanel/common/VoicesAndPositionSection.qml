@@ -37,7 +37,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    readonly property int navigationRowEnd: centerStavesSection.navigationRowEnd
+    readonly property int navigationRowEnd: positionSection.navigationRowEnd
 
     spacing: 12
 
@@ -163,23 +163,6 @@ Column {
         }
     }
 
-    FlatRadioButtonGroupPropertyView {
-        id: positionSection
-
-        titleText: qsTrc("propertiespanel", "Position")
-
-        propertyItem: root.model ? root.model.voiceBasedPosition : null
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: voiceAssignmentSection.navigationRowEnd + 1
-
-        model: [
-            { text: qsTrc("propertiespanel", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
-            { text: qsTrc("propertiespanel", "Above"), value: DirectionTypes.VERTICAL_UP },
-            { text: qsTrc("propertiespanel", "Below"), value: DirectionTypes.VERTICAL_DOWN }
-        ]
-    }
-
     CenterBetweenStavesSection {
         id: centerStavesSection
 
@@ -189,6 +172,23 @@ Column {
         propertyItem: root.model ? root.model.centerBetweenStaves : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: positionSection.navigationRowEnd + 1
+        navigationRowStart: voiceAssignmentSection.navigationRowEnd + 1
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: positionSection
+
+        titleText: qsTrc("propertiespanel", "Position")
+
+        propertyItem: root.model ? root.model.voiceBasedPosition : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: centerStavesSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("propertiespanel", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
+            { text: qsTrc("propertiespanel", "Above"), value: DirectionTypes.VERTICAL_UP },
+            { text: qsTrc("propertiespanel", "Below"), value: DirectionTypes.VERTICAL_DOWN }
+        ]
     }
 }
