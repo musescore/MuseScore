@@ -110,7 +110,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::CLOUD_FILE)
     },
     CommandInfo{
-        PROJECT_SHARED_AUDIO_COMMAND,
+        PROJECT_SHARE_AUDIO_COMMAND,
         TranslatableString("project", "Share on &Audio.com…"),
         TranslatableString("project", "Share the project on Audio.com"),
         InputSchema(),
