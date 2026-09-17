@@ -64,6 +64,8 @@ public:
 
     void cancelConversion(ConvertType type, int convertId) override;
 
+    muse::async::Channel<PollingFailure> pollingFailed() const override;
+
     void retryPolling() override;
 
 private:

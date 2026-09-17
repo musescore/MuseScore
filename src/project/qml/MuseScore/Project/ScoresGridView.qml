@@ -49,6 +49,8 @@ Item {
     signal revealInFileBrowserRequested(var scorePath)
     signal viewOnlineRequested(var scoreId)
     signal removeFromRecentFilesRequested(var scorePath)
+    signal retryRequested()
+    signal cancelRequested(int convertType, int convertId)
 
     clip: true
 
@@ -144,6 +146,8 @@ Item {
             height: view.cellHeight
 
             ScoreGridItem {
+                id: item
+
                 anchors.centerIn: parent
 
                 width: view.actualCellWidth
@@ -164,16 +168,18 @@ Item {
                 thumbnailUrl: score.thumbnailUrl ?? ""
                 isCreateNew: score.isCreateNew
                 isNoResultsFound: score.isNoResultsFound
-                isProcessing: score.isProcessing ?? false
+                processingStatus: score.processingStatus
+                convertType: score.convertType ?? 0
+                convertId: score.convertId ?? 0
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
                 showRemoveFromRecentFiles: root.allowRemoveFromRecentFiles
 
                 onClicked: {
-                    if (isCreateNew) {
+                    if (item.isCreateNew) {
                         root.createNewScoreRequested()
-                    } else if (!isNoResultsFound && !isProcessing) {
+                    } else if (!item.isNoResultsFound && !item.isProcessing) {
                         root.openScoreRequested(score.path, score.name)
                     }
                 }
@@ -188,6 +194,12 @@ Item {
 
                 onRemoveFromRecentFilesRequested: function(scorePath) {
                     root.removeFromRecentFilesRequested(scorePath)
+                }
+
+                onRetryRequested: root.retryRequested()
+
+                onCancelRequested: function(convertType, convertId) {
+                    root.cancelRequested(convertType, convertId)
                 }
             }
         }

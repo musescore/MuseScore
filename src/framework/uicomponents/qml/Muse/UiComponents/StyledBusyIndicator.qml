@@ -28,13 +28,14 @@ BusyIndicator {
     padding: 0
 
     property color backgroundColor: ui.theme.strokeColor
+    property int indicatorSize: 20
 
     contentItem: Rectangle {
         id: backgroundCircle
-        implicitWidth: 20
-        implicitHeight: 20
+        implicitWidth: root.indicatorSize
+        implicitHeight: root.indicatorSize
 
-        width: 20
+        width: root.indicatorSize
         height: width
 
         anchors.centerIn: parent

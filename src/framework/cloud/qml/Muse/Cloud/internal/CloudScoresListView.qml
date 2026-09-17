@@ -34,6 +34,12 @@ ScoresListView {
     navigation.name: "OnlineScoresList"
     navigation.accessible.name: qsTrc("project", "Online scores list")
 
+    onRetryRequested: model.retryAllConversions()
+
+    onCancelRequested: function(convertType, convertId) {
+        model.cancelConversion(convertType, convertId)
+    }
+
     Component.onCompleted: {
         prv.updateDesiredRowCount()
     }
@@ -177,7 +183,7 @@ ScoresListView {
 
             delegate: StyledTextLabel {
                 id: modifiedLabel
-                text: score.timeSinceModified ?? ""
+                text: score.timeSinceModified ?? "-"
 
                 font.capitalization: Font.AllUppercase
                 horizontalAlignment: Text.AlignLeft
@@ -297,7 +303,7 @@ ScoresListView {
                         id: viewsLabel
                         Layout.fillWidth: true
 
-                        text: score.cloudViewCount ?? ""
+                        text: score.cloudViewCount ?? "-"
 
                         font: ui.theme.largeBodyFont
                         horizontalAlignment: Text.AlignLeft

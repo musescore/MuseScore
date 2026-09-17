@@ -66,6 +66,9 @@ public:
     void load() override;
     Q_INVOKABLE void reload();
 
+    Q_INVOKABLE void retryAllConversions();
+    Q_INVOKABLE void cancelConversion(int convertType, int convertId);
+
     State state() const;
     bool hasMore() const;
 
@@ -98,5 +101,7 @@ private:
     size_t m_watchedItemCount = 0;
 
     int m_desiredRowCount = 0;
+
+    bool m_pollingGaveUp = false;
 };
 }

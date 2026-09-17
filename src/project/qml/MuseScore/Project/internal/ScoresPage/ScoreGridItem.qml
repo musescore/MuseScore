@@ -37,7 +37,10 @@ FocusScope {
     property string thumbnailUrl: ""
     property bool isCreateNew: false
     property bool isNoResultsFound: false
-    property bool isProcessing: false
+    property var processingStatus: undefined
+    readonly property bool isProcessing: root.processingStatus !== undefined
+    property int convertType: 0
+    property int convertId: 0
     property bool isCloud: false
     property int cloudScoreId: 0
     property bool showRemoveFromRecentFiles: false
@@ -48,6 +51,8 @@ FocusScope {
     signal revealInFileBrowserRequested(string scorePath)
     signal viewOnlineRequested(int scoreId)
     signal removeFromRecentFilesRequested(string scorePath)
+    signal retryRequested()
+    signal cancelRequested(int convertType, int convertId)
 
     NavigationControl {
         id: navCtrl
@@ -55,8 +60,19 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        //: %1 is the name of the score being converted
-        accessible.name: root.isProcessing ? qsTrc("project", "Processing %1").arg(root.name) : root.name
+        accessible.name: {
+            if (root.isProcessing) {
+                if (root.processingStatus === ScoreProcessingPlaceholder.Failed) {
+                    //: %1 is the name of the score whose conversion failed
+                    return qsTrc("project/convert", "Processing failed: %1").arg(root.name)
+                }
+
+                //: %1 is the name of the score being converted
+                return qsTrc("project", "Processing %1").arg(root.name)
+            }
+
+            return root.name
+        }
 
         onActiveChanged: function(active) {
             if (active) {
@@ -333,13 +349,16 @@ FocusScope {
     Component {
         id: processingComp
 
-        Rectangle {
-            anchors.fill: parent
-            color: "white"
+        ScoreProcessingPlaceholder {
+            status: root.processingStatus
+            iconSize: 24
 
-            StyledBusyIndicator {
-                anchors.centerIn: parent
-            }
+            navigationPanel: root.navigation.panel
+            navigationRow: root.navigation.row
+            navigationColumn: root.navigation.column + 2
+
+            onRetryRequested: root.retryRequested()
+            onCancelRequested: root.cancelRequested(root.convertType, root.convertId)
         }
     }
 

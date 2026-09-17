@@ -210,6 +210,11 @@ void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertI
     });
 }
 
+async::Channel<PollingFailure> ConvertFileToScoreScenario::pollingFailed() const
+{
+    return service()->pollingFailed();
+}
+
 void ConvertFileToScoreScenario::retryPolling()
 {
     service()->retryPolling();

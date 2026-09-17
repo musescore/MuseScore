@@ -33,6 +33,12 @@ ScoresGridView {
 
     isNoResultsMessageAllowed: model.state === CloudScoresModel.Fine
 
+    onRetryRequested: model.retryAllConversions()
+
+    onCancelRequested: function(convertType, convertId) {
+        model.cancelConversion(convertType, convertId)
+    }
+
     Component.onCompleted: {
         prv.updateDesiredRowCount()
     }
