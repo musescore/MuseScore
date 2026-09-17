@@ -2764,15 +2764,6 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
 
 bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system, bool placeAbove)
 {
-    Sid centerStyleId = Sid::NOSTYLE;
-    if (item->isLyrics() || item->isLyricsLineSegment()) {
-        centerStyleId = Sid::lyricsAutoCenterBetweenStaves;
-    } else if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
-        centerStyleId = Sid::dynamicsHairpinsAutoCenterOnGrandStaff;
-    } else {
-        return false;
-    }
-
     if (item->offset().y() != item->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
         // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
         return false;
@@ -2783,7 +2774,19 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         return false;
     }
 
-    if (!item->staffToCenterAgainst(placeAbove, system)) {
+    const Staff* otherStaff = item->staffToCenterAgainst(placeAbove, system);
+    if (!otherStaff) {
+        return false;
+    }
+
+    const bool sameInstrument = otherStaff->part() == itemPart;
+
+    Sid centerStyleId;
+    if (item->isLyrics() || item->isLyricsLineSegment()) {
+        centerStyleId = sameInstrument ? Sid::lyricsAutoCenterOnGrandStaff : Sid::lyricsAutoCenterOnVocalStaves;
+    } else if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
+        centerStyleId = sameInstrument ? Sid::dynamicsHairpinsAutoCenterOnGrandStaff : Sid::dynamicsHairpinsAutoCenterOnVocalStaves;
+    } else {
         return false;
     }
 
@@ -2802,10 +2805,11 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
         return false;
     }
 
+    if (sameInstrument && centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
+        return false;
+    }
+
     if (item->isDynamic() || item->isExpression() || item->isHairpinSegment()) {
-        if (centerProperty != AutoOnOff::ON && !itemPart->instrument()->isNormallyMultiStaveInstrument()) {
-            return false;
-        }
         if (!(centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument())) {
             return false;
         }

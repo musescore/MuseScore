@@ -69,22 +69,24 @@ Column {
         propertyItem: root.model ? root.model.avoidBarlines : null
     }
 
-    PlacementSection {
-        id: placementSection
-
-        propertyItem: root.model ? root.model.placement : null
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: avoidBarlines.navigation.row + 1
-    }
-
     CenterBetweenStavesSection {
+        id: centerStavesSection
+
         isApplicable: root.model && root.model.isStaveCenteringApplicable
         isAvailable: root.model && root.model.isStaveCenteringAvailable
 
         propertyItem: root.model ? root.model.centerBetweenStaves : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: placementSection.navigationRowEnd + 1
+        navigationRowStart: avoidBarlines.navigation.row + 1
+    }
+
+    PlacementSection {
+        id: placementSection
+
+        propertyItem: root.model ? root.model.placement : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: centerStavesSection.navigationRowEnd + 1
     }
 }
