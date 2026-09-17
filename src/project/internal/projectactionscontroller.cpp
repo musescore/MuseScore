@@ -90,7 +90,7 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_SAVE_AT_COMMAND, [this](const rcommand::Params& params) { return runAsync(saveProjectAt(params)); });
 
     d->onRequest(this, PROJECT_PUBLISH_COMMAND, [this]() { return runAsync(publish()); });
-    d->onRequest(this, PROJECT_SHARED_AUDIO_COMMAND, [this]() { return runAsync(sharedAudio()); });
+    d->onRequest(this, PROJECT_SHARE_AUDIO_COMMAND, [this]() { return runAsync(sharedAudio()); });
 
     d->onRequest(this, PROJECT_EXPORT_COMMAND, [this]() { return exportScore(); });
     d->onRequest(this, PROJECT_IMPORT_PDF_COMMAND, [this]() { return importPdf(); });
@@ -115,7 +115,7 @@ void ProjectActionsController::init()
             { "file-save-to-cloud", PROJECT_SAVE_TO_CLOUD_COMMAND, {} },
             { "file-save-at", PROJECT_SAVE_AT_COMMAND, make_conv({ { "path", param<io::path_t> } }) },
             { "file-publish", PROJECT_PUBLISH_COMMAND, {} },
-            { "file-share-audio", PROJECT_SHARED_AUDIO_COMMAND, {} },
+            { "file-share-audio", PROJECT_SHARE_AUDIO_COMMAND, {} },
             { "file-export", PROJECT_EXPORT_COMMAND, {} },
             { "file-import-pdf", PROJECT_IMPORT_PDF_COMMAND, {} },
             { "file-import-audio-to-score", PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND, {} },
