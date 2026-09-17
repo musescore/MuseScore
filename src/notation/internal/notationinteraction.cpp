@@ -120,6 +120,7 @@
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/editpagelocks.h"
+#include "engraving/editing/editposition.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/flip.h"
 #include "engraving/editing/exchangevoices.h"
@@ -6586,6 +6587,20 @@ void NotationInteraction::resetShapesAndPosition()
     }
 }
 
+void NotationInteraction::freezeSelectionPosition()
+{
+    std::vector<EngravingItem*> items = selection()->elements();
+    if (items.empty()) {
+        return;
+    }
+
+    transaction(TranslatableString("undoableAction", "Freeze current placement"), [&](mu::engraving::Transaction& tx) {
+        EditPosition::freezeItemsPositions(tx, items);
+    });
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefaultLayout()
 {
     TRACEFUNC;
@@ -8095,6 +8110,12 @@ void NotationInteraction::addFretboardDiagram()
     for (int i = int(created.size()) - 1; i >= 0; --i) {
         FretDiagram* diagram = created[i];
         Harmony* harmony = toHarmony(filteredElements[i]);
+
+        harmony->undoResetProperty(Pid::OFFSET);
+        harmony->undoChangeProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
+        if (harmony->propertyFlags(Pid::ALIGN) == PropertyFlags::STYLED) {
+            harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+        }
 
         score->undoChangeParent(harmony, diagram,
                                 track2staff(filteredElements[i]->track()));
