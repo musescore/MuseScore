@@ -1408,17 +1408,25 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_Good_DelegatesToConve
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
     // [THEN] The rating is delegated to the convert service, resolving the scoreId back to its conversion
+    ConvertResult result;
+    result.id = TEST_QUEUE_ID;
+    result.type = ConvertType::Omr;
+    result.status = ConvertStatus::Done;
+
     EXPECT_CALL(*m_convertService, submitReview(ConvertType::Omr, TEST_QUEUE_ID, ReviewRating::Good, QString()))
-    .WillOnce(Invoke([](auto, auto, auto, auto) {
-        return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(ConvertResult {}));
+    .WillOnce(Invoke([result](auto, auto, auto, auto) {
+        return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(result));
     }));
 
-    // [AND] The queue is checked again right away, instead of waiting for the next scheduled poll
-    EXPECT_CALL(*m_convertService, fetchQueue()).Times(1);
+    // [AND] The status is updated from the response directly, without an extra queue poll
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(0);
 
     // [WHEN] Submitting a "Good" review with no comment
     m_service->submitReview(555, ReviewRating::Good);
     pumpEvents();
+
+    // [THEN] The conversion is done, and no longer watched
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_DelegatesToConvertService)
@@ -1433,17 +1441,26 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_Delega
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
     // [THEN] The rating and comment are delegated to the convert service, resolving the scoreId back to its conversion
+    ConvertResult result;
+    result.id = 7;
+    result.type = ConvertType::Audio2Score;
+    result.status = ConvertStatus::Processing;
+
     EXPECT_CALL(*m_convertService, submitReview(ConvertType::Audio2Score, 7, ReviewRating::Bad, QString("Too many wrong notes")))
-    .WillOnce(Invoke([](auto, auto, auto, auto) {
-        return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(ConvertResult {}));
+    .WillOnce(Invoke([result](auto, auto, auto, auto) {
+        return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(result));
     }));
 
-    // [AND] The queue is checked again right away, instead of waiting for the next scheduled poll
-    EXPECT_CALL(*m_convertService, fetchQueue()).Times(1);
+    // [AND] The status is updated from the response directly, without an extra queue poll
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(0);
 
     // [WHEN] Submitting a "Bad" review with a comment
     m_service->submitReview(555, ReviewRating::Bad, "Too many wrong notes");
     pumpEvents();
+
+    // [THEN] The conversion goes back to being processed, and is still watched
+    ASSERT_EQ(m_service->watchedScores().val.size(), 1u);
+    EXPECT_EQ(m_service->watchedScores().val.front().conversion.status, ConvertStatus::Processing);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToConvertService)
@@ -1457,18 +1474,22 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToCon
 
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
-    // [THEN] The comment is delegated to the convert service, resolving the scoreId back to its conversion
+    // [THEN] The comment is delegated to the convert service; it carries no status update
     EXPECT_CALL(*m_convertService, submitReviewComment(ConvertType::Audio2Score, 7, QString("Great job")))
     .WillOnce(Invoke([](auto, auto, auto) {
-        return resolvedPromise<RetVal<ConvertResult> >(RetVal<ConvertResult>::make_ok(ConvertResult {}));
+        return resolvedPromise<Ret>(make_ok());
     }));
 
-    // [AND] The queue is checked again right away, instead of waiting for the next scheduled poll
-    EXPECT_CALL(*m_convertService, fetchQueue()).Times(1);
+    // [AND] It doesn't trigger an extra queue poll either
+    EXPECT_CALL(*m_convertService, fetchQueue()).Times(0);
 
     // [WHEN] Submitting a follow-up comment
     m_service->submitReviewComment(555, "Great job");
     pumpEvents();
+
+    // [THEN] The conversion is still watched, awaiting review
+    ASSERT_EQ(m_service->watchedScores().val.size(), 1u);
+    EXPECT_EQ(m_service->watchedScores().val.front().conversion.status, ConvertStatus::AwaitingReview);
 }
 
 // ==================================================

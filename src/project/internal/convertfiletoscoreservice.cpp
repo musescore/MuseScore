@@ -389,8 +389,22 @@ void ConvertFileToScoreService::submitReview(int scoreId, ReviewRating rating, c
             return;
         }
 
-        //! NOTE: refresh the status immediately rather than waiting for the next scheduled poll
-        poll();
+        const auto it = std::find_if(m_watchedScores.begin(), m_watchedScores.end(), [type, convertId](const WatchedScore& watched) {
+            return watched.conversion.type == type && watched.conversion.id == convertId;
+        });
+
+        if (it == m_watchedScores.end()) {
+            return;
+        }
+
+        updateStatus(*it, submitRes.val.status, ConvertErrorCode::Unknown);
+
+        if (it->conversion.status == ConvertStatus::Done) {
+            m_watchedScores.erase(it);
+        }
+
+        saveWatchedScores();
+        m_watchedScoresChanged.notify();
     });
 }
 
@@ -405,15 +419,11 @@ void ConvertFileToScoreService::submitReviewComment(int scoreId, const QString& 
     const int convertId = watched->conversion.id;
 
     museScoreComService()->convert()->submitReviewComment(type, convertId, comment)
-    .onResolve(this, [this, type, convertId](const RetVal<ConvertResult>& submitRes) {
-        if (!submitRes.ret) {
+    .onResolve(this, [type, convertId](const Ret& ret) {
+        if (!ret) {
             LOGE() << "Could not submit the comment for conversion ("
-                   << convertIdAndType(type, convertId) << "): " << submitRes.ret.toString();
-            return;
+                   << convertIdAndType(type, convertId) << "): " << ret.toString();
         }
-
-        //! NOTE: refresh the status immediately rather than waiting for the next scheduled poll
-        poll();
     });
 }
 
@@ -548,16 +558,16 @@ void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::
     poll();
 }
 
-bool ConvertFileToScoreService::hasActiveWatchedScores() const
+bool ConvertFileToScoreService::hasAnyProcessingScores() const
 {
     return std::any_of(m_watchedScores.begin(), m_watchedScores.end(), [](const WatchedScore& watched) {
-        return watched.conversion.status == ConvertStatus::Processing || watched.conversion.status == ConvertStatus::AwaitingReview;
+        return watched.conversion.status == ConvertStatus::Processing;
     });
 }
 
 void ConvertFileToScoreService::poll()
 {
-    if (!hasActiveWatchedScores()) {
+    if (!hasAnyProcessingScores()) {
         LOGDA() << "Nothing active to poll, stopping timer";
         m_timer.stop();
         return;
