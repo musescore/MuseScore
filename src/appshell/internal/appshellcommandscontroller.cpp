@@ -246,10 +246,12 @@ bool AppshellCommandsController::onDropEvent(QDropEvent* event)
         switch (target) {
         case DragTarget::ProjectFile: {
             async::Async::call(this, [this, url]() {
-                    Ret ret = openProjectScenario()->openProject(url);
-                    if (!ret) {
-                        LOGE() << ret.toString();
-                    }
+                    openProjectScenario()->openProject(url)
+                    .onResolve(this, [](const Ret& ret) {
+                        if (!ret) {
+                            LOGE() << ret.toString();
+                        }
+                    });
                 });
         } break;
         case DragTarget::SoundFont: {

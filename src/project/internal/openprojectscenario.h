@@ -72,13 +72,11 @@ public:
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const muse::io::path_t& path) const override;
 
-    using IOpenProjectScenario::openProject;
+    muse::async::Promise<muse::Ret> openProject(const ProjectFile& file) override;
+    muse::async::Promise<muse::Ret> openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString()) override;
+    muse::async::Promise<muse::Ret> openProject(const muse::rcommand::Params& params) override;
 
-    muse::Ret openProject(const ProjectFile& file) override;
-    muse::Ret openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString()) override;
-    muse::Ret openProject(const muse::rcommand::Params& params) override;
-
-    void revertToLastSaved() override;
+    muse::async::Promise<muse::Ret> revertToLastSaved() override;
     muse::Ret finishOpening() override;
 
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
@@ -88,32 +86,45 @@ public:
     muse::async::Notification busyChanged() const override;
 
 private:
-    using BusyStatus = BusyStatus;
+    template<typename T>
+    static muse::async::Promise<T> resolvedPromise(const T& value)
+    {
+        return muse::async::make_promise<T>([value](auto resolve) {
+            return resolve(value);
+        });
+    }
 
     bool isProjectOpened(const muse::io::path_t& scorePath) const;
 
     void setBusy(BusyStatus status, bool isBusy);
+    muse::async::Promise<muse::Ret> runIfNotBusy(BusyStatus status, const std::function<muse::async::Promise<muse::Ret>()>& flow);
 
-    muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);
-    muse::Ret loadWithFallback(const std::shared_ptr<INotationProject>& project, const muse::io::path_t& loadPath,
-                               const std::string& format);
+    muse::async::Promise<muse::RetVal<INotationProjectPtr> > loadProject(const muse::io::path_t& filePath);
+    muse::async::Promise<muse::Ret> loadWithFallback(const std::shared_ptr<INotationProject>& project, const muse::io::path_t& loadPath,
+                                                     const std::string& format);
 
-    muse::Ret doOpenProject(const muse::io::path_t& filePath);
-    muse::Ret doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
-    muse::Ret doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride);
+    muse::async::Promise<muse::Ret> doOpenProject(const muse::io::path_t& filePath);
+    muse::async::Promise<muse::Ret> doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
+    muse::async::Promise<muse::Ret> doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride);
 
-    void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
-    muse::Ret openMuseScoreUrl(const QUrl& url);
-    muse::Ret openScoreFromMuseScoreCom(const QUrl& url);
+    muse::async::Promise<muse::Ret> downloadAndOpenCloudProject(int scoreId,
+                                                                const QString& hash = QString(),
+                                                                const QString& secret = QString(), bool isOwner = true);
+    muse::async::Promise<muse::Ret> doDownloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret, bool isOwner);
+    muse::async::Promise<muse::Ret> downloadCloudProject(int scoreId, const muse::io::path_t& localPath, const QString& hash,
+                                                         const QString& secret, const CloudProjectInfo& info, bool isOwner);
+    muse::async::Promise<muse::Ret> openMuseScoreUrl(const QUrl& url);
+    muse::async::Promise<muse::Ret> openScoreFromMuseScoreCom(const QUrl& url);
 
     muse::Ret openPageIfNeed(muse::Uri pageUri);
 
-    muse::RetVal<muse::Val> ensureAuthorization() const;
+    muse::async::Promise<muse::RetVal<muse::Val> > openDialog(const muse::UriQuery& query) const;
+    muse::async::Promise<muse::RetVal<muse::Val> > ensureAuthorization() const;
 
-    bool shouldRetryLoadAfterError(const muse::Ret& ret, const muse::io::path_t& filepath);
-    bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
+    muse::async::Promise<bool> shouldRetryLoadAfterError(const muse::Ret& ret, const muse::io::path_t& filepath);
+    muse::async::Promise<bool> askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
     void warnFileTooNew(const muse::io::path_t& filepath);
-    bool askIfUserAgreesToOpenCorruptedProject(const muse::String& projectName, const std::string& errorText);
+    muse::async::Promise<bool> askIfUserAgreesToOpenCorruptedProject(const muse::String& projectName, const std::string& errorText);
     void warnProjectCriticallyCorrupted(const muse::String& projectName, const std::string& errorText);
     void warnProjectCannotBeOpened(const muse::Ret& ret, const muse::io::path_t& filepath);
 

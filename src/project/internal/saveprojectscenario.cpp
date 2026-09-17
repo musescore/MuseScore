@@ -1126,7 +1126,12 @@ void SaveProjectScenario::askToRevertCorruptedScoreToLastSaved()
             return;
         }
 
-        openProjectScenario()->revertToLastSaved();
+        openProjectScenario()->revertToLastSaved()
+        .onResolve(this, [](const Ret& ret) {
+            if (!ret) {
+                LOGE() << "score was not reverted: " << ret.toString();
+            }
+        });
     });
 }
 

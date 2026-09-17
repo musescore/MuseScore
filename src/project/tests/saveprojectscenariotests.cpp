@@ -144,6 +144,12 @@ protected:
                 return resolve(Val());
             });
         });
+
+        ON_CALL(*m_openScenario, revertToLastSaved()).WillByDefault([] {
+            return async::make_promise<Ret>([](auto resolve) {
+                return resolve(make_ok());
+            });
+        });
     }
 
     void TearDown() override
