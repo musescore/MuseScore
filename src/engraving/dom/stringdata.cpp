@@ -529,7 +529,7 @@ void StringData::assignBestFrettingForBassNote(std::pair<int, int> bestFretting,
 //    Dynamically computes the approximate "middle" of the fretboard.
 //    Returns a string#-fret# pair representing this. 
 //---------------------------------------------------------
-std::pair<int, int> defaultFretboardAnchor() const {
+std::pair<int, int> StringData::defaultFretboardAnchor() const {
     int strings = static_cast<int>(this->strings());
 
     // consider experimenting with making this divide by 3? 
@@ -566,6 +566,10 @@ void StringData::fretChords(Chord* chord) const
 
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
     Note* candidateBassNote = getBassNoteOfVoicings(chord);
+
+    if (!prevChord) {
+        m_lastNonOpenFretting = defaultFretboardAnchor(); 
+    }
     
     bool bassNoteEligible = candidateBassNote
         && candidateBassNote->displayFret() == Note::DisplayFretOption::NoHarmonic
@@ -578,7 +582,7 @@ void StringData::fretChords(Chord* chord) const
         std::pair<int, int> prevFretting = {prevBassNote->string(), prevBassNote->fret()}; 
 
         if (prevFretting.second == 0) {
-            prevFretting = findEffectiveAnchor(prevChord, defaultFretboardAnchor());
+            prevFretting = m_lastNonOpenFretting; 
         }
 
         auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
