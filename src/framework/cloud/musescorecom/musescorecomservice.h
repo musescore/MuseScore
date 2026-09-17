@@ -73,7 +73,7 @@ public:
 
     async::Promise<RetVal<ConvertResult> > submitReview(ConvertType type, int id, ReviewRating review,
                                                         const QString& comment = QString()) override;
-    async::Promise<RetVal<ConvertResult> > submitReviewComment(ConvertType type, int id, const QString& comment) override;
+    async::Promise<Ret> submitReviewComment(ConvertType type, int id, const QString& comment) override;
 
     async::Promise<Ret> deleteConversion(ConvertType type, int id) override;
 
@@ -97,5 +97,13 @@ private:
     async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
 
     async::Promise<Ret> doUpload(const ConvertUploadDataPtr& data, ProgressPtr progress);
+
+    async::Promise<Ret> doFetchQueue(std::shared_ptr<ConvertQueueList> queue);
+
+    async::Promise<Ret> doSubmitReview(ConvertType type, int id, ReviewRating review, const QString& comment,
+                                       std::shared_ptr<ConvertResult> result);
+    async::Promise<Ret> doSubmitReviewComment(ConvertType type, int id, const QString& comment);
+
+    async::Promise<Ret> doDeleteConversion(ConvertType type, int id);
 };
 }

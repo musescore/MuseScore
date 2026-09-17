@@ -58,7 +58,7 @@ public:
 
     virtual async::Promise<RetVal<ConvertResult> > submitReview(ConvertType type, int id, ReviewRating review,
                                                                 const QString& comment = QString()) = 0;
-    virtual async::Promise<RetVal<ConvertResult> > submitReviewComment(ConvertType type, int id, const QString& comment) = 0;
+    virtual async::Promise<Ret> submitReviewComment(ConvertType type, int id, const QString& comment) = 0;
 
     virtual async::Promise<Ret> deleteConversion(ConvertType type, int id) = 0;
 };
