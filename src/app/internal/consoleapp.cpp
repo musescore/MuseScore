@@ -81,6 +81,16 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
     muse::ConsoleApplication::applyCommandLineOptions(opt);
 
     if (opt->runMode == IApplication::RunMode::AudioPluginRegistration) {
+
+        if (crashHandler()) {
+            muse::diagnostics::CrashHandlerStartConfig config;
+            //! Note: A separate client key could be created in the Sentry project and passed here.
+            //! This would allow plugin-registration-specific rate limits.
+            config.reportPipeline.serverUrl = muse::String::fromStdString(MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL);
+            config.reportPipeline.dumpsDir = globalConfiguration()->userAppDataPath() + "/logs/plugin-validation-dumps";
+            crashHandler()->setStartConfig(std::move(config));
+        }
+
         return;
     }
 

@@ -8,6 +8,8 @@
 
 #include "modularity/ioc.h"
 #include "multiwindows/imultiwindowsprovider.h"
+#include "diagnostics/icrashhandler.h"
+#include "global/iglobalconfiguration.h"
 #include "appshell/iappshellconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
@@ -19,6 +21,8 @@ namespace mu::app {
 class MuseScoreGuiApp : public muse::ui::GuiApplication
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
+    muse::GlobalInject<muse::diagnostics::ICrashHandler> crashHandler;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 

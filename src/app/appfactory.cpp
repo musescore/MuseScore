@@ -556,6 +556,15 @@ static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
 
 static void addAudioPluginRegistrationModules(std::shared_ptr<MuseScoreConsoleApp> app)
 {
+#ifdef MUSE_MODULE_DIAGNOSTICS
+    //! NOTE `diagnostics` must be first, because it installs the crash handler.
+    //! For other modules, the order is (and should be) unimportant.
+    app->addModule(new muse::diagnostics::DiagnosticsModule());
+    //! NOTE Needed by the diagnostics module's actions controller
+    app->addModule(new muse::actions::ActionsModule());
+    app->addModule(new muse::rcommand::RCommandModule());
+#endif
+
     app->addModule(new muse::audio::AudioModule());
 
 #ifdef MUSE_MODULE_AUDIOPLUGINS

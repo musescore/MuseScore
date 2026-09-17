@@ -43,6 +43,8 @@
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "playback/isoundprofilesrepository.h"
+#include "global/iglobalconfiguration.h"
+#include "diagnostics/icrashhandler.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
@@ -54,6 +56,8 @@ namespace mu::app {
 class MuseScoreConsoleApp : public muse::ConsoleApplication
 {
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::diagnostics::ICrashHandler> crashHandler;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;

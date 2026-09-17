@@ -141,6 +141,13 @@ void MuseScoreGuiApp::applyCommandLineOptions(const std::shared_ptr<CmdOptions>&
 {
     GuiApplication::applyCommandLineOptions(opt);
 
+    if (crashHandler()) {
+        muse::diagnostics::CrashHandlerStartConfig config;
+        config.reportPipeline.serverUrl = muse::String::fromStdString(MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL);
+        config.reportPipeline.dumpsDir = globalConfiguration()->userAppDataPath() + "/logs/dumps";
+        crashHandler()->setStartConfig(std::move(config));
+    }
+
     std::shared_ptr<MuseScoreCmdOptions> options = std::dynamic_pointer_cast<MuseScoreCmdOptions>(opt);
     IF_ASSERT_FAILED(options) {
         return;
