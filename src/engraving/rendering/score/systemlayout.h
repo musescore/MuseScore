@@ -192,7 +192,7 @@ private:
     static bool shapesStackVertically(const Shape& shape1, const Shape& shape2, double minHorizontalClearance);
     static void collectCenterableItems(const System* system, std::vector<CenterableItems>& centerableItemsByStaff,
                                        std::vector<MMRest*>& mmRestsToCenter);
-    static void centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above, const System* system,
+    static bool centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above, const System* system,
                                          std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance);
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
