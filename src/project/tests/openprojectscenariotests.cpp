@@ -25,7 +25,6 @@
 #include <QDir>
 
 #include "async/async.h"
-#include "async/processevents.h"
 
 #include "project/internal/openprojectscenario.h"
 #include "project/projecterrors.h"
@@ -51,6 +50,7 @@
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/projectcreatormock.h"
 #include "mocks/recentfilescontrollermock.h"
+#include "utils/promisetest.h"
 
 using ::testing::_;
 using ::testing::NiceMock;
@@ -61,7 +61,7 @@ using namespace muse;
 using namespace mu::project;
 
 namespace mu::project {
-class OpenProjectScenarioTests : public ::testing::Test, public async::Asyncable
+class OpenProjectScenarioTests : public PromiseTest
 {
 protected:
     void SetUp() override
@@ -122,15 +122,13 @@ protected:
         .WillByDefault(Return(RetVal<bool>::make_ok(true)));
 
         // Dialogs answer immediately so that unstubbed paths do not abort the test.
-        ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
-        ON_CALL(*m_interactive, error(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
-        ON_CALL(*m_interactive, info(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
+        ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([] { return dialogResult(); });
+        ON_CALL(*m_interactive, error(_, _, _, _, _, _)).WillByDefault([] { return dialogResult(); });
+        ON_CALL(*m_interactive, info(_, _, _, _, _, _)).WillByDefault([] { return dialogResult(); });
         ON_CALL(*m_interactive, buttonData(_)).WillByDefault([](IInteractive::Button btn) {
             return IInteractive::ButtonData(btn, "");
         });
-        ON_CALL(*m_interactive, open(_)).WillByDefault([] {
-            return async::make_promise<Val>([](auto resolve, auto) { return resolve(Val()); });
-        });
+        ON_CALL(*m_interactive, open(_)).WillByDefault([] { return dialogAnswer(RetVal<Val>::make_ok(Val())); });
 
         // A logged-in account and a server that answers. The download hands back a progress that
         // never finishes, so the flow stops there unless a test says otherwise
@@ -160,49 +158,6 @@ protected:
         release(m_project);
         release(m_masterNotation);
         release(m_notation);
-    }
-
-    template<typename T>
-    static void release(const std::shared_ptr<T>& mock)
-    {
-        ::testing::Mock::VerifyAndClearExpectations(mock.get());
-        ::testing::Mock::AllowLeak(mock.get());
-    }
-
-    static async::Promise<IInteractive::Result> resolvedResult()
-    {
-        return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
-            return resolve(IInteractive::Result(int(IInteractive::Button::Ok)));
-        });
-    }
-
-    //! Subscribes to `promise`, drains the deferred calls and hands back the result.
-    template<typename T>
-    T await(async::Promise<T> promise)
-    {
-        T result = T(make_ret(Ret::Code::UnknownError));
-        bool resolved = false;
-        promise.onResolve(this, [&result, &resolved](const T& value) {
-            result = value;
-            resolved = true;
-        });
-
-        drainDeferredCalls();
-
-        EXPECT_TRUE(resolved) << "the promise did not resolve";
-        return result;
-    }
-
-    //! A dialog that settles the way `answer` says: resolved with its value, or rejected with its error.
-    static async::Promise<Val> dialogAnswer(const RetVal<Val>& answer)
-    {
-        return async::make_promise<Val>([answer](auto resolve, auto reject) {
-            if (!answer.ret) {
-                return reject(answer.ret.code(), answer.ret.text());
-            }
-
-            return resolve(answer.val);
-        });
     }
 
     async::Promise<Ret> startOpenProject(const ProjectFile& file)
@@ -279,14 +234,6 @@ protected:
             });
             return progress;
         });
-    }
-
-    //! A deferred call may queue another one, hence the repetition.
-    static void drainDeferredCalls()
-    {
-        for (int i = 0; i < 10; ++i) {
-            async::processMessages();
-        }
     }
 
     std::shared_ptr<OpenProjectScenario> m_scenario;
@@ -805,11 +752,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserAgrees
     ON_CALL(*m_project, load(_, _, _))
     .WillByDefault(Return(make_ret(engraving::Err::FileTooOld)));
     ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
-    .WillByDefault([] {
-        return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
-            return resolve(IInteractive::Result(int(IInteractive::Button::CustomButton)));
-        });
-    });
+    .WillByDefault([] { return dialogResult(IInteractive::Button::CustomButton); });
 
     //! [THEN] It is read a second time, this time forcing the old format through
     EXPECT_CALL(*m_project, load(_, ::testing::Field(&OpenParams::forceMode, false), _)).Times(1);
@@ -825,11 +768,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserDeclin
     ON_CALL(*m_project, load(_, _, _))
     .WillByDefault(Return(make_ret(engraving::Err::FileTooOld)));
     ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
-    .WillByDefault([] {
-        return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
-            return resolve(IInteractive::Result(int(IInteractive::Button::Cancel)));
-        });
-    });
+    .WillByDefault([] { return dialogResult(IInteractive::Button::Cancel); });
 
     //! [THEN] There is no second attempt, and no score becomes current
     EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
@@ -877,11 +816,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CorruptedFileAndUserAgrees_LoadsItF
     ON_CALL(*m_project, load(_, _, _))
     .WillByDefault(Return(make_ret(engraving::Err::FileCorrupted)));
     ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
-    .WillByDefault([] {
-        return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
-            return resolve(IInteractive::Result(int(IInteractive::Button::CustomButton)));
-        });
-    });
+    .WillByDefault([] { return dialogResult(IInteractive::Button::CustomButton); });
 
     //! [THEN] It is read a second time, forcing past the damage
     EXPECT_CALL(*m_project, load(_, ::testing::Field(&OpenParams::forceMode, false), _)).Times(1);

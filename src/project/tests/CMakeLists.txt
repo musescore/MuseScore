@@ -33,6 +33,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectautosavermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectcreatormock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/saveprojectscenariomock.h
+    ${CMAKE_CURRENT_LIST_DIR}/utils/promisetest.h
     ${CMAKE_CURRENT_LIST_DIR}/mscmetareadertests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/openprojectscenariotests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/saveprojectscenariotests.cpp
