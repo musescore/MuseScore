@@ -119,8 +119,10 @@ private:
 
     std::vector<instrString> m_stringTable;                      // no strings by default
 
-    mutable std::pair<int, int> m_lastNonOpenFretting = { INVALID_STRING_INDEX, INVALID_FRET_INDEX }; // this allows us to deal with open chords more efficiently 
-    int DEFAULT_ANCHOR_FRET = 7; // approximate middle of the fretboard for most fretted instruments 
+    mutable std::pair<int, int> m_lastNonOpenFretting = { 0, 7 }; // this allows us to deal with open chords more efficiently 
+    
+    static constexpr int DEFAULT_ANCHOR_FRET = 7; 
+    // approximate middle of the fretboard for most fretted instruments 
     // this is technically a magic number, however it functions as an incredibly powerful heuristic
 
     int m_frets = 0;
