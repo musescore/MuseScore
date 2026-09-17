@@ -45,6 +45,11 @@ public:
     const StaffType* staffType() const { return m_staffType; }
     void setStaffType(StaffType* st, bool owned);
 
+    void startDrag(EditData&) override;
+    RectF drag(EditData&) override;
+    void endDrag(EditData&) override;
+    std::vector<LineF> dragAnchorLines() const override;
+
     double lw() const { return m_lw; }
 
     Measure* measure() const { return toMeasure(ownershipParent()); }
@@ -64,6 +69,8 @@ private:
     StaffType* m_staffType = nullptr;
     bool m_ownsStaffType = false;
     double m_lw = 0.0;
+    Measure* m_dragTarget = nullptr;
+    PointF m_dragOffset;
 };
 } // namespace mu::engraving
 

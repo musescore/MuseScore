@@ -26,17 +26,56 @@
 
 #include "score.h"
 #include "measure.h"
+#include "page.h"
 #include "system.h"
 #include "staff.h"
+#include "../editing/editdata.h"
+#include "../editing/mscoreview.h"
+#include "../editing/transaction/undoablecommand.h"
 
 using namespace mu::engraving;
+
+namespace {
+//! Moves a staff-type marker while retaining the initial staff type for undo.
+class MoveStaffTypeChange : public UndoableCommand
+{
+public:
+    MoveStaffTypeChange(StaffTypeChange* item, Measure* target)
+        : m_item(item), m_target(target), m_initialType(*item->staff()->staffType(Fraction(0, 1))) {}
+
+    UNDO_NAME("MoveStaffTypeChange")
+    UNDO_CHANGED_OBJECTS({ m_item, m_target })
+
+private:
+    void flip() override
+    {
+        Measure* source = m_item->measure();
+        Staff* staff = m_item->staff();
+        const StaffType initialType = *staff->staffType(Fraction(0, 1));
+        source->remove(m_item);
+        if (source->tick().isZero()) {
+            staff->setStaffType(Fraction(0, 1), m_initialType);
+            staff->staffTypeListChanged(Fraction(0, 1));
+        }
+        m_item->setOwnershipParent(m_target);
+        m_target->add(m_item);
+        m_target = source;
+        m_initialType = initialType;
+        m_item->triggerLayout();
+    }
+
+    StaffTypeChange* m_item;
+    Measure* m_target;
+    StaffType m_initialType;
+};
+}
 
 //---------------------------------------------------------
 //   StaffTypeChange
 //---------------------------------------------------------
 
 StaffTypeChange::StaffTypeChange(MeasureBase* parent)
-    : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent)
+    : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::MOVABLE)
 {
     m_lw = spatium() * 0.3;
 }
@@ -68,6 +107,69 @@ void StaffTypeChange::setStaffType(StaffType* st, bool owned)
 
     m_staffType = st;
     m_ownsStaffType = owned && (st != nullptr);
+}
+
+//! Keeps the original offset so dragging changes the measure, not the marker's layout.
+void StaffTypeChange::startDrag(EditData& ed)
+{
+    m_dragTarget = nullptr;
+    m_dragOffset = offset();
+    EngravingItem::startDrag(ed);
+}
+
+//! Previews attachment to the original measure or an unoccupied measure on the same staff.
+RectF StaffTypeChange::drag(EditData& ed)
+{
+    const RectF dirty = EngravingItem::drag(ed);
+    Measure* target = score()->searchMeasure(ed.pos);
+    m_dragTarget = measure() && target && (target == measure() || target->canAddStaffTypeChange(staffIdx())) ? target : nullptr;
+    if (ed.view()) {
+        if (m_dragTarget && m_dragTarget->system()) {
+            const RectF rect = m_dragTarget->staffPageBoundingRect(staffIdx()).translated(m_dragTarget->system()->page()->pos());
+            ed.view()->setDropRectangles({ rect });
+        } else {
+            ed.view()->setDropRectangles({});
+        }
+    }
+    return dirty;
+}
+
+//! Connects the dragged marker to the start of its prospective destination measure.
+std::vector<LineF> StaffTypeChange::dragAnchorLines() const
+{
+    if (!m_dragTarget || !m_dragTarget->system()) {
+        return {};
+    }
+    const PointF anchor = m_dragTarget->staffPageBoundingRect(staffIdx()).topLeft()
+                          + m_dragTarget->system()->page()->pos();
+    return { LineF(anchor, canvasPos()) };
+}
+
+//! Commits the move, including linked parts, as part of the current drag transaction.
+void StaffTypeChange::endDrag(EditData& ed)
+{
+    setOffset(m_dragOffset);
+    EngravingItem::endDrag(ed);
+    if (ed.view()) {
+        ed.view()->setDropRectangles({});
+    }
+    Measure* target = m_dragTarget;
+    m_dragTarget = nullptr;
+    if (!target || target == measure()) {
+        return;
+    }
+    std::vector<std::pair<StaffTypeChange*, Measure*> > moves;
+    for (EngravingObject* linked : linkList()) {
+        StaffTypeChange* item = toStaffTypeChange(linked);
+        Measure* destination = item->score()->tick2measure(target->tick());
+        if (!destination || !destination->canAddStaffTypeChange(item->staffIdx())) {
+            return;
+        }
+        moves.emplace_back(item, destination);
+    }
+    for (const auto& [item, destination] : moves) {
+        item->score()->undo(new MoveStaffTypeChange(item, destination));
+    }
 }
 
 //---------------------------------------------------------
