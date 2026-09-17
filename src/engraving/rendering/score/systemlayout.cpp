@@ -2629,8 +2629,16 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
                 }
             }
 
-            if (!block.empty()) {
-                centerItemsBetweenStaves(block, staffIdx, above, system, centeredItems, minHorizontalClearance);
+            if (!block.empty() && !centerItemsBetweenStaves(block, staffIdx, above, system, centeredItems, minHorizontalClearance)) {
+                /* The lyrics must move as one rigid unit, so if one of them is obstructed none of them
+                 * will be centered. The items which only joined the block because they stack with the
+                 * lyrics are not bound to them, so we give them a second chance on their own: now
+                 * that the lyrics are not centered, they simply constrain them like any other item: */
+                for (const CenterableItem& centerableItem : block) {
+                    if (!centerableItem.isLyrics) {
+                        centerItemsBetweenStaves({ centerableItem }, staffIdx, above, system, centeredItems, minHorizontalClearance);
+                    }
+                }
             }
         }
     }
@@ -2877,14 +2885,14 @@ bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element,
     return false;
 }
 
-void SystemLayout::centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above,
+bool SystemLayout::centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above,
                                             const System* system, std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance)
 {
     staff_idx_t nextStaffIdx = above ? system->prevVisibleStaff(staffIdx) : system->nextVisibleStaff(staffIdx);
     SysStaff* thisStaff = system->staff(staffIdx);
     SysStaff* nextStaff = system->staff(nextStaffIdx);
     IF_ASSERT_FAILED(thisStaff && nextStaff) {
-        return;
+        return false;
     }
 
     SkylineLine& skylineOfThisStaff = above ? thisStaff->skyline().north() : thisStaff->skyline().south();
@@ -2925,7 +2933,7 @@ void SystemLayout::centerItemsBetweenStaves(const std::vector<CenterableItem>& b
         // An item with something not belonging to the block stacked outside it has no gap to be centered in:
         if (elementHasAnotherStackedOutside(centerableItem.item, itemShape, thisSkyline)) {
             // If one item of the block cannot be centered, then none can:
-            return;
+            return false;
         }
 
         double minDist = centerableItem.item->absoluteFromSpatium(centerableItem.item->minDistance());
@@ -2936,7 +2944,7 @@ void SystemLayout::centerItemsBetweenStaves(const std::vector<CenterableItem>& b
     }
 
     if (blockSpaceAbove == DBL_MAX || blockSpaceBelow == DBL_MAX) {
-        return;
+        return false;
     }
 
     double yMove = 0.5 * (blockSpaceBelow - blockSpaceAbove);
@@ -2969,6 +2977,8 @@ void SystemLayout::centerItemsBetweenStaves(const std::vector<CenterableItem>& b
 
         item->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
     }
+
+    return true;
 }
 
 void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* system)
