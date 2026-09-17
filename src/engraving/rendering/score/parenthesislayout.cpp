@@ -562,6 +562,9 @@ Shape ParenthesisLayout::getParentShape(const EngravingItem* parent)
 
 Shape ParenthesisLayout::getNoteShape(const Note* note, Parenthesis* paren)
 {
+    IF_ASSERT_FAILED(note && paren) {
+        return Shape();
+    }
     Shape noteShape = note->shape();
     noteShape.remove_if([paren](ShapeElement& s) {
         return s.item() == paren || s.item()->isBend() || s.item()->isParenthesis() || s.item()->isAccidental() || s.item()->isNoteDot() || s.item()->isLaissezVibSegment();

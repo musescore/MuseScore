@@ -427,12 +427,15 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
     InputState& is = externalInputState ? (*externalInputState) : score->inputState();
 
     if (addFlag) {
-        ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
+        const Segment* lastSegment = is.lastSegment();
+        IF_ASSERT_FAILED(lastSegment) {
+            return nullptr;
+        }
+        ChordRest* c = toChordRest(lastSegment->element(is.track()));
         if (!c || !c->isChord()) {
             LOGD("NoteInput::addPitch: cr %s", c ? c->typeName() : "zero");
             return nullptr;
         }
-
         return addPitchToChord(tx, score, nval, toChord(c), externalInputState);
     }
 
