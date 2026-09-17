@@ -29,8 +29,8 @@
 #include "context/tests/mocks/globalcontextmock.h"
 #include "context/tests/mocks/playbackstatemock.h"
 #include "interactive/tests/mocks/interactivemock.h"
+#include "rcommand/tests/mocks/commanddispatchermock.h"
 
-#include "mocks/commanddispatchermock.h"
 #include "mocks/notationprojectmock.h"
 #include "mocks/saveprojectscenariomock.h"
 
