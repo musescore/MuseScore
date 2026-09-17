@@ -332,10 +332,10 @@ int StringData::scoreFrettingCandidate(const std::pair<int, int>& anchor, const 
     // deals with the case of playing octaves, for example 
     int verticalDistance = std::abs(anchor.first - candidate.first);
     int horizontalDistance = std::abs(anchor.second - candidate.second);
-    
-    if (verticalDistance == 0 && (anchor.second == 0 || candidate.second == 0)) {
-        horizontalDistance = 0; // if we are on the same string and one of the frets is open 
-    }
+  
+    if (verticalDistance == 0 && candidate.second == 0) {
+        horizontalDistance = 0; // if the note we are going to has a fret of 0 
+    } 
 
     return horizontalDistance + verticalDistance; 
 }
@@ -505,18 +505,36 @@ std::pair<Note*, std::pair<int, int>> StringData::getBestFrettingForBassNote(con
 }
 
 //---------------------------------------------------------
-//   assignBestfretting
-//    Persists changes to the optimal fretting of the bass note based off the scoring functions 
+//   assignBestFrettingForBassNote
+//    Persists changes to the optimal fretting of the bass note based off the scoring functions.
+//    Also updates the last seen non-open chord. 
 //---------------------------------------------------------
 void StringData::assignBestFrettingForBassNote(std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const {
     if (bestFretting.first != INVALID_STRING_INDEX) {
         desiredBassNote->undoChangeProperty(Pid::STRING, bestFretting.first);
         desiredBassNote->undoChangeProperty(Pid::FRET, bestFretting.second);
         assignRemainingNotesAroundBass(chord, desiredBassNote, bestFretting); 
+
+        if (bestFretting.second != 0) {
+            m_lastNonOpenFretting = bestFretting; // update this as we go 
+        }
     } else {
         desiredBassNote->setFretConflict(true);
     }
     return; 
+}
+
+//---------------------------------------------------------
+//   defaultFretboardAnchor
+//    Dynamically computes the approximate "middle" of the fretboard.
+//    Returns a string#-fret# pair representing this. 
+//---------------------------------------------------------
+std::pair<int, int> defaultFretboardAnchor() const {
+    int strings = static_cast<int>(this->strings());
+
+    // consider experimenting with making this divide by 3? 
+    int middleString = strings / 2; 
+    return {middleString, DEFAULT_ANCHOR_FRET}; 
 }
 
 //---------------------------------------------------------
@@ -559,16 +577,19 @@ void StringData::fretChords(Chord* chord) const
         // pick the "closest" one to minimize hand movement. see getBestFrettingForBassNote for more details. 
         std::pair<int, int> prevFretting = {prevBassNote->string(), prevBassNote->fret()}; 
 
+        if (prevFretting.second == 0) {
+            prevFretting = findEffectiveAnchor(prevChord, defaultFretboardAnchor());
+        }
+
         auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
         assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord); 
     } else if (bassNoteEligible && strings > 0) { 
-        // we want the string as low and as close to the start of the fretboard as possible
-        // prioritize close to the start of the fretboard if we have no prevChord
+        // we want the string as close to the middle of the fretboard as possible 
+        // in our case, this is the number of frets // 2 and the number of strings // 2
 
         // basically just treat it as if we are scoring with prevFretting being playing the lowest note 
         // on the lowest string 
-        std::pair<int, int> nutAnchor = {strings - 1, 0}; 
-        auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(nutAnchor, chord);
+        auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(defaultFretboardAnchor(), chord);
         assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord); 
     }
 

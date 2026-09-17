@@ -115,10 +115,13 @@ private:
     std::vector<std::pair<int, int>> allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const;
     std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
     std::pair<Note*, std::pair<int, int>> getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const; 
+    std::pair<int, int> defaultFretboardAnchor() const; 
 
-    //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
-    //      int         _frets = 19;
     std::vector<instrString> m_stringTable;                      // no strings by default
+
+    mutable std::pair<int, int> m_lastNonOpenFretting = { INVALID_STRING_INDEX, INVALID_FRET_INDEX }; // this allows us to deal with open chords more efficiently 
+    int DEFAULT_ANCHOR_FRET = 7; // approximate middle of the fretboard for most fretted instruments 
+    // this is technically a magic number, however it functions as an incredibly powerful heuristic
 
     int m_frets = 0;
 
