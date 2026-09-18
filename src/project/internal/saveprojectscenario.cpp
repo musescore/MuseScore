@@ -28,7 +28,6 @@
 #include <QTemporaryFile>
 #include <QUrl>
 
-#include "async/async.h"
 #include "defer.h"
 #include "translation.h"
 
@@ -289,22 +288,28 @@ Promise<Ret> SaveProjectScenario::uploadAudioToAudioCom(const AudioFile& audio, 
         m_uploadingAudioProgress->finished().onReceive(this, [this, project, info, resolve](const ProgressResult& res) {
             LOGD() << "Uploading audio finished";
 
-            if (!res.ret) {
-                LOGE() << res.ret.toString();
-                onAudioUploadFailed(res.ret);
-            } else {
-                ValMap resMap = res.val.toMap();
-                onAudioSuccessfullyUploaded(resMap["editUrl"].toQString());
-                if (!info.replaceExisting) {
-                    CloudAudioInfo newInfo = project->cloudAudioInfo();
-                    newInfo.url = QUrl(resMap["url"].toQString());
-                    project->setCloudAudioInfo(newInfo);
-                }
-            }
-
             m_uploadingAudioProgress->started().disconnect(this);
             m_uploadingAudioProgress->progressChanged().disconnect(this);
             m_uploadingAudioProgress->finished().disconnect(this);
+
+            if (!res.ret) {
+                LOGE() << res.ret.toString();
+
+                onAudioUploadFailed(res.ret).onResolve(this, [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
+
+                return;
+            }
+
+            ValMap resMap = res.val.toMap();
+            onAudioSuccessfullyUploaded(resMap["editUrl"].toQString());
+
+            if (!info.replaceExisting) {
+                CloudAudioInfo newInfo = project->cloudAudioInfo();
+                newInfo.url = QUrl(resMap["url"].toQString());
+                project->setCloudAudioInfo(newInfo);
+            }
 
             (void)resolve(res.ret);
         });
@@ -383,8 +388,7 @@ Promise<Ret> SaveProjectScenario::saveProjectLocally(const muse::io::path_t& fil
     LOGE() << ret.toString();
 
     if (ret.code() != (int)Err::CorruptionUponSavingError) {
-        warnScoreCouldnotBeSaved(ret);
-        return resolvedPromise(ret);
+        return warnScoreCouldnotBeSaved(ret);
     }
 
     return warnScoreHasBecomeCorruptedAfterSave(ret).then<Ret>(this, [this, filePath, saveMode, ret](int btn, auto resolve) {
@@ -422,15 +426,16 @@ Promise<Ret> SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, Save
         return museScoreComService()->authorization()->checkCloudIsAvailable()
                .then<Ret>(this, [this, info, saveMode](const Ret& isCloudAvailable, auto resolve) {
             if (!isCloudAvailable) {
-                warnCloudIsNotAvailable();
+                warnCloudIsNotAvailable().onResolve(this, [this, info, saveMode, resolve](const Ret&) {
+                    INotationProjectPtr project = currentNotationProject();
+                    if (!project) {
+                        (void)resolve(make_ret(Err::NoProjectError));
+                        return;
+                    }
 
-                INotationProjectPtr project = currentNotationProject();
-                if (!project) {
-                    return resolve(make_ret(Err::NoProjectError));
-                }
-
-                saveCloudProjectLocally(project, info, saveMode).onResolve(this, [resolve](const Ret& ret) {
-                    (void)resolve(ret);
+                    saveCloudProjectLocally(project, info, saveMode).onResolve(this, [resolve](const Ret& ret) {
+                        (void)resolve(ret);
+                    });
                 });
 
                 return Promise<Ret>::dummy_result();
@@ -606,31 +611,45 @@ Promise<Ret> SaveProjectScenario::saveProjectLocallyInstead(const INotationProje
     });
 }
 
-void SaveProjectScenario::alsoShareAudioCom(const AudioFile& audio)
+Promise<Ret> SaveProjectScenario::alsoShareAudioCom(const AudioFile& audio)
 {
     if (!configuration()->showAlsoShareAudioComDialog()) {
-        shareAudio(audio);
-        return;
+        return shareAudio(audio);
     }
 
     UriQuery query("musescore://project/alsoshareaudiocom");
     query.addParam("rememberChoice", Val(!configuration()->hasAskedAlsoShareAudioCom()));
 
-    openDialog(query).onResolve(this, [this, audio](const RetVal<Val>& rv) {
-        if (!rv.val.isNull()) {
-            QVariantMap vals = rv.val.toQVariant().toMap();
-            bool shareAudioCom = vals["share"].toBool();
-            bool rememberChoice = vals["remember"].toBool();
+    auto audioHolder = std::make_shared<AudioFile>(audio);
 
-            if (shareAudioCom) {
-                shareAudio(audio);
-            }
+    return openDialog(query).then<Ret>(this, [this, audioHolder](const RetVal<Val>& rv, auto resolve) {
+        const AudioFile audio = *audioHolder;
+        *audioHolder = AudioFile();
 
-            configuration()->setShowAlsoShareAudioComDialog(!rememberChoice);
-            configuration()->setAlsoShareAudioCom(shareAudioCom);
+        DEFER {
+            configuration()->setHasAskedAlsoShareAudioCom(true);
+        };
+
+        if (rv.val.isNull()) {
+            return resolve(make_ret(Ret::Code::Cancel));
         }
 
-        configuration()->setHasAskedAlsoShareAudioCom(true);
+        QVariantMap vals = rv.val.toQVariant().toMap();
+        bool shareAudioCom = vals["share"].toBool();
+        bool rememberChoice = vals["remember"].toBool();
+
+        configuration()->setShowAlsoShareAudioComDialog(!rememberChoice);
+        configuration()->setAlsoShareAudioCom(shareAudioCom);
+
+        if (!shareAudioCom) {
+            return resolve(make_ok());
+        }
+
+        shareAudio(audio).onResolve(this, [resolve](const Ret& ret) {
+            (void)resolve(ret);
+        });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 
@@ -839,13 +858,9 @@ Promise<Ret> SaveProjectScenario::uploadProject(const CloudProjectInfo& info, co
                 return;
             }
 
-            onProjectSuccessfullyUploaded(editUrl, isFirstSave);
-
-            if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
-                alsoShareAudioCom(audio);
-            }
-
-            (void)resolve(res.ret);
+            onUploadFinished(editUrl, isFirstSave, audio, publishMode).onResolve(this, [res, resolve](const Ret&) {
+                (void)resolve(res.ret);
+            });
         });
 
         return Promise<Ret>::dummy_result();
@@ -872,23 +887,43 @@ Promise<Ret> SaveProjectScenario::uploadAudioToMuseScoreCom(const AudioFile& aud
                 LOGE() << res.ret.toString();
             }
 
-            onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
-
             m_uploadingAudioProgress->progressChanged().disconnect(this);
             m_uploadingAudioProgress->finished().disconnect(this);
 
-            if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
-                alsoShareAudioCom(audio);
-            }
-
-            (void)resolve(res.ret);
+            onUploadFinished(urlToOpen, isFirstSave, audio, publishMode).onResolve(this, [res, resolve](const Ret&) {
+                (void)resolve(res.ret);
+            });
         });
 
         return Promise<Ret>::dummy_result();
     });
 }
 
-void SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, bool isFirstSave)
+Promise<Ret> SaveProjectScenario::onUploadFinished(const QUrl& urlToOpen, bool isFirstSave, const AudioFile& audio, bool publishMode)
+{
+    //! NOTE The exported audio has to outlive the message, because publishing offers to share it too.
+    //! It is held through a holder the offer empties: what a resolved callback captured stays alive,
+    //! and that would keep the temporary mp3 on disk.
+    auto audioHolder = std::make_shared<AudioFile>(audio);
+
+    return onProjectSuccessfullyUploaded(urlToOpen, isFirstSave)
+           .then<Ret>(this, [this, audioHolder, publishMode](const Ret&, auto resolve) {
+        const AudioFile sharedAudio = *audioHolder;
+        *audioHolder = AudioFile();
+
+        if (!publishMode || !(configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
+            return resolve(make_ok());
+        }
+
+        alsoShareAudioCom(sharedAudio).onResolve(this, [resolve](const Ret& ret) {
+            (void)resolve(ret);
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
+Promise<Ret> SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, bool isFirstSave)
 {
     setBusy(BusyStatus::Uploading, false);
 
@@ -896,7 +931,7 @@ void SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, b
 
     if (!urlToOpen.isEmpty()) {
         platformInteractive()->openUrl(urlToOpen);
-        return;
+        return resolvedPromise(make_ok());
     }
 
     QUrl scoreManagerUrl = this->scoreManagerUrl();
@@ -904,13 +939,15 @@ void SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, b
     if (configuration()->openDetailedProjectUploadedDialog()) {
         UriQuery query("musescore://project/upload/success");
         query.addParam("scoreManagerUrl", Val(scoreManagerUrl.toString()));
-        interactive()->open(query);
         configuration()->setOpenDetailedProjectUploadedDialog(false);
-        return;
+
+        return openDialog(query).then<Ret>(this, [](const RetVal<Val>&, auto resolve) {
+            return resolve(make_ok());
+        });
     }
 
     if (!isFirstSave) {
-        return;
+        return resolvedPromise(make_ok());
     }
 
     IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton, muse::trc("project/save", "View online"));
@@ -919,12 +956,14 @@ void SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, b
     std::string msg = muse::trc("project/save", "All saved changes will now update to the cloud. "
                                                 "You can manage this file in the score manager on MuseScore.com.");
 
-    interactive()->info(muse::trc("global", "Success!"), msg, { viewOnlineBtn, okBtn },
-                        static_cast<int>(IInteractive::Button::Ok))
-    .onResolve(this, [this, viewOnlineBtn, scoreManagerUrl](const IInteractive::Result& res) {
+    return interactive()->info(muse::trc("global", "Success!"), msg, { viewOnlineBtn, okBtn },
+                               static_cast<int>(IInteractive::Button::Ok))
+           .then<Ret>(this, [this, viewOnlineBtn, scoreManagerUrl](const IInteractive::Result& res, auto resolve) {
         if (res.isButton(viewOnlineBtn.btn)) {
             platformInteractive()->openUrl(scoreManagerUrl);
         }
+
+        return resolve(make_ok());
     });
 }
 
@@ -1002,30 +1041,38 @@ void SaveProjectScenario::onAudioSuccessfullyUploaded(const QUrl& urlToOpen)
     platformInteractive()->openUrl(urlToOpen);
 }
 
-void SaveProjectScenario::onAudioUploadFailed(const Ret& ret)
+Promise<Ret> SaveProjectScenario::onAudioUploadFailed(const Ret& ret)
 {
     closeUploadProgressDialog();
 
-    showAudioCloudShareError(ret);
+    return showAudioCloudShareError(ret);
 }
 
-void SaveProjectScenario::warnCloudIsNotAvailable()
+Promise<Ret> SaveProjectScenario::warnCloudIsNotAvailable()
 {
     closeUploadProgressDialog();
 
     if (!configuration()->showCloudIsNotAvailableWarning()) {
-        return;
+        return resolvedPromise(make_ok());
     }
 
     std::string title = muse::trc("project/save", "Unable to connect to the cloud");
     std::string msg = muse::trc("project/save", "Your changes will be saved to a local file until the connection resumes.");
 
-    auto result = interactive()->warning(title, msg,
-                                         { IInteractive::Button::Ok }, IInteractive::Button::Ok,
-                                         IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
-
-    result.onResolve(this, [this](const IInteractive::Result& res) {
+    return interactive()->warning(title, msg,
+                                  { IInteractive::Button::Ok }, IInteractive::Button::Ok,
+                                  IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox)
+           .then<Ret>(this, [this](const IInteractive::Result& res, auto resolve) {
         configuration()->setShowCloudIsNotAvailableWarning(res.showAgain());
+
+        return resolve(make_ok());
+    });
+}
+
+Promise<bool> SaveProjectScenario::refuseSaveAfter(Promise<Ret> shown)
+{
+    return shown.then<bool>(this, [](const Ret&, auto resolve) {
+        return resolve(false);
     });
 }
 
@@ -1033,8 +1080,7 @@ Promise<bool> SaveProjectScenario::askIfUserAgreesToSaveProjectWithErrors(const 
 {
     switch (static_cast<Err>(ret.code())) {
     case Err::NoPartsError:
-        warnScoreCouldnotBeSaved(muse::trc("project/save", "Please add at least one instrument to enable saving."));
-        return resolvedPromise(false);
+        return refuseSaveAfter(warnScoreCouldnotBeSaved(muse::trc("project/save", "Please add at least one instrument to enable saving.")));
     case Err::CorruptionUponOpenningError:
         return askIfUserAgreesToSaveCorruptedScoreUponOpenning(location, ret.text());
     case Err::CorruptionError: {
@@ -1051,13 +1097,11 @@ Promise<bool> SaveProjectScenario::askIfUserAgreesToSaveCorruptedScore(const Sav
 {
     switch (location.type) {
     case SaveLocationType::Cloud: {
-        if (newlyCreated) {
-            showErrCorruptedScoreCannotBeSaved(location, errorText);
-        } else {
-            warnCorruptedScoreCannotBeSavedOnCloud(errorText, !newlyCreated);
-        }
+        Promise<Ret> shown = newlyCreated
+                             ? showErrCorruptedScoreCannotBeSaved(location, errorText)
+                             : warnCorruptedScoreCannotBeSavedOnCloud(errorText, !newlyCreated);
 
-        return resolvedPromise(false);
+        return refuseSaveAfter(shown);
     }
     case SaveLocationType::Local:
         return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, !newlyCreated);
@@ -1067,7 +1111,7 @@ Promise<bool> SaveProjectScenario::askIfUserAgreesToSaveCorruptedScore(const Sav
     }
 }
 
-void SaveProjectScenario::warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert)
+Promise<Ret> SaveProjectScenario::warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert)
 {
     std::string title = muse::trc("project", "Your score cannot be uploaded to the cloud");
 
@@ -1093,15 +1137,31 @@ void SaveProjectScenario::warnCorruptedScoreCannotBeSavedOnCloud(const std::stri
         defaultBtn = revertToLastSavedBtn.btn;
     }
 
-    interactive()->error(title, text, buttons, defaultBtn)
-    .onResolve(this, [this, saveCopyBtn, revertToLastSavedBtn](const IInteractive::Result& res) {
+    return interactive()->error(title, text, buttons, defaultBtn)
+           .then<Ret>(this, [this, saveCopyBtn, revertToLastSavedBtn](const IInteractive::Result& res, auto resolve) {
         int btn = res.button();
+
         if (btn == saveCopyBtn.btn) {
+            //! NOTE The save that ran into this still holds the status; the new flow takes it over
             setBusy(BusyStatus::Saving, false);
-            saveProject(SaveMode::SaveAs, SaveLocationType::Local, true /*force*/);
-        } else if (btn == revertToLastSavedBtn.btn) {
-            askToRevertCorruptedScoreToLastSaved();
+
+            saveProject(SaveMode::SaveAs, SaveLocationType::Local, true /*force*/)
+            .onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
         }
+
+        if (btn == revertToLastSavedBtn.btn) {
+            askToRevertCorruptedScoreToLastSaved().onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        }
+
+        return resolve(make_ret(Ret::Code::Cancel));
     });
 }
 
@@ -1138,7 +1198,11 @@ Promise<bool> SaveProjectScenario::askIfUserAgreesToSaveCorruptedScoreLocally(co
     return interactive()->error(title, text, buttons, defaultBtn)
            .then<bool>(this, [this, saveAnywayBtn, revertToLastSavedBtn](const IInteractive::Result& res, auto resolve) {
         if (res.isButton(revertToLastSavedBtn.btn)) {
-            askToRevertCorruptedScoreToLastSaved();
+            askToRevertCorruptedScoreToLastSaved().onResolve(this, [resolve](const Ret&) {
+                (void)resolve(false);
+            });
+
+            return Promise<bool>::dummy_result();
         }
 
         return resolve(res.isButton(saveAnywayBtn.btn));
@@ -1150,8 +1214,7 @@ Promise<bool> SaveProjectScenario::askIfUserAgreesToSaveCorruptedScoreUponOpenni
 {
     switch (location.type) {
     case SaveLocationType::Cloud:
-        showErrCorruptedScoreCannotBeSaved(location, errorText);
-        return resolvedPromise(false);
+        return refuseSaveAfter(showErrCorruptedScoreCannotBeSaved(location, errorText));
     case SaveLocationType::Local:
         return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, false /*canRevert*/);
     case SaveLocationType::Undefined:     // fallthrough
@@ -1160,7 +1223,7 @@ Promise<bool> SaveProjectScenario::askIfUserAgreesToSaveCorruptedScoreUponOpenni
     }
 }
 
-void SaveProjectScenario::showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText)
+Promise<Ret> SaveProjectScenario::showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText)
 {
     std::string title = location.isLocal()
                         ? muse::trc("project", "Your score cannot be saved")
@@ -1172,29 +1235,37 @@ void SaveProjectScenario::showErrCorruptedScoreCannotBeSaved(const SaveLocation&
 
     IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, muse::trc("project", "Get help"));
 
-    interactive()->error(title, text, {
+    return interactive()->error(title, text, {
         getHelpBtn,
         interactive()->buttonData(IInteractive::Button::Ok)
-    }).onResolve(this, [this, getHelpBtn](const IInteractive::Result& res) {
+    }).then<Ret>(this, [this, getHelpBtn](const IInteractive::Result& res, auto resolve) {
         if (res.isButton(getHelpBtn.btn)) {
             platformInteractive()->openUrl(configuration()->supportForumUrl());
         }
+
+        return resolve(make_ok());
     });
 }
 
-void SaveProjectScenario::warnScoreCouldnotBeSaved(const Ret& ret)
+Promise<Ret> SaveProjectScenario::warnScoreCouldnotBeSaved(const Ret& ret)
 {
     std::string message = ret.text();
     if (message.empty()) {
         message = muse::trc("project/save", "An unknown error occurred while saving this file.");
     }
 
-    warnScoreCouldnotBeSaved(message);
+    return warnScoreCouldnotBeSaved(message)
+           .then<Ret>(this, [ret](const Ret&, auto resolve) {
+        return resolve(ret);
+    });
 }
 
-void SaveProjectScenario::warnScoreCouldnotBeSaved(const std::string& errorText)
+Promise<Ret> SaveProjectScenario::warnScoreCouldnotBeSaved(const std::string& errorText)
 {
-    interactive()->warning(muse::trc("project/save", "Your score could not be saved"), errorText);
+    return interactive()->warning(muse::trc("project/save", "Your score could not be saved"), errorText)
+           .then<Ret>(this, [](const IInteractive::Result&, auto resolve) {
+        return resolve(make_ok());
+    });
 }
 
 Promise<int> SaveProjectScenario::warnScoreHasBecomeCorruptedAfterSave(const Ret& ret)
@@ -1233,28 +1304,30 @@ Promise<int> SaveProjectScenario::warnScoreHasBecomeCorruptedAfterSave(const Ret
     });
 }
 
-void SaveProjectScenario::askToRevertCorruptedScoreToLastSaved()
+Promise<Ret> SaveProjectScenario::askToRevertCorruptedScoreToLastSaved()
 {
     TRACEFUNC;
 
     std::string title = muse::trc("project", "Revert to last saved?");
     std::string body = muse::trc("project", "Your changes will be lost. This action cannot be undone.");
 
-    auto promise = interactive()->warning(title, body, {
+    return interactive()->warning(title, body, {
         { IInteractive::Button::No, IInteractive::Button::Yes }
-    }, IInteractive::Button::Yes, IInteractive::Option::WithIcon);
-
-    promise.onResolve(this, [this](const IInteractive::Result& res) {
+    }, IInteractive::Button::Yes, IInteractive::Option::WithIcon)
+           .then<Ret>(this, [this](const IInteractive::Result& res, auto resolve) {
         if (res.isButton(IInteractive::Button::No)) {
-            return;
+            return resolve(make_ret(Ret::Code::Cancel));
         }
 
-        openProjectScenario()->revertToLastSaved()
-        .onResolve(this, [](const Ret& ret) {
+        openProjectScenario()->revertToLastSaved().onResolve(this, [resolve](const Ret& ret) {
             if (!ret) {
                 LOGE() << "score was not reverted: " << ret.toString();
             }
+
+            (void)resolve(ret);
         });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 
@@ -1511,7 +1584,11 @@ Promise<RetVal<CloudAudioInfo> > SaveProjectScenario::askShareAudioLocation(INot
     return audioComService()->authorization()->checkCloudIsAvailable()
            .then<RetVal<CloudAudioInfo> >(this, [this, project](const Ret& isCloudAvailable, auto resolve) {
         if (!isCloudAvailable) {
-            return resolve(RetVal<CloudAudioInfo>(warnCloudNotAvailableForSharingAudio()));
+            warnCloudNotAvailableForSharingAudio().onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(RetVal<CloudAudioInfo>(ret));
+            });
+
+            return Promise<RetVal<CloudAudioInfo> >::dummy_result();
         }
 
         doAskShareAudioLocation(project).onResolve(this, [resolve](const RetVal<CloudAudioInfo>& info) {
@@ -1829,12 +1906,13 @@ Promise<Ret> SaveProjectScenario::warnCloudNotAvailableForUploading(bool isPubli
     });
 }
 
-Ret SaveProjectScenario::warnCloudNotAvailableForSharingAudio() const
+Promise<Ret> SaveProjectScenario::warnCloudNotAvailableForSharingAudio() const
 {
-    //! NOTE Nothing to answer, so the flow does not wait for the message to be dismissed
-    interactive()->warning(muse::trc("project/save", "Unable to connect to Audio.com"),
-                           muse::trc("project/save", "Please check your internet connection or try again later."));
-    return make_ret(Ret::Code::Cancel);
+    return interactive()->warning(muse::trc("project/save", "Unable to connect to Audio.com"),
+                                  muse::trc("project/save", "Please check your internet connection or try again later."))
+           .then<Ret>(this, [](const IInteractive::Result&, auto resolve) {
+        return resolve(make_ret(Ret::Code::Cancel));
+    });
 }
 
 Promise<RetVal<Val> > SaveProjectScenario::ensureAuthorization(const QString& cloudCode, bool publishingScore,
@@ -1963,7 +2041,7 @@ Promise<Ret> SaveProjectScenario::showCloudSaveError(const Ret& ret, const Cloud
     });
 }
 
-Ret SaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
+Promise<Ret> SaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
 {
     std::string title= muse::trc("project/share", "Your audio could not be shared");
     std::string msg;
@@ -1995,7 +2073,8 @@ Ret SaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
         break;
     }
 
-    interactive()->warning(title, msg, buttons);
-
-    return muse::make_ok();
+    return interactive()->warning(title, msg, buttons)
+           .then<Ret>(this, [ret](const IInteractive::Result&, auto resolve) {
+        return resolve(ret);
+    });
 }
