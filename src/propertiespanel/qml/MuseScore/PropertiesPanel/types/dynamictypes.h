@@ -24,6 +24,8 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace DynamicTypes {
 Q_NAMESPACE;
@@ -37,9 +39,9 @@ enum class Scope {
 Q_ENUM_NS(Scope)
 
 enum class VelocityChangeSpeed {
-    VELOCITY_CHANGE_SPEED_SLOW = 0,
-    VELOCITY_CHANGE_SPEED_NORMAL,
-    VELOCITY_CHANGE_SPEED_FAST
+    VELOCITY_CHANGE_SPEED_SLOW = int(engraving::DynamicSpeed::SLOW),
+    VELOCITY_CHANGE_SPEED_NORMAL = int(engraving::DynamicSpeed::NORMAL),
+    VELOCITY_CHANGE_SPEED_FAST = int(engraving::DynamicSpeed::FAST)
 };
 Q_ENUM_NS(VelocityChangeSpeed)
 }

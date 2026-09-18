@@ -24,20 +24,22 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace MarkerTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class Type {
-    TYPE_SEGNO = 0,
-    TYPE_VARSEGNO,
-    TYPE_CODA,
-    TYPE_VARCODA,
-    TYPE_CODETTA,
-    TYPE_FINE,
-    TYPE_TOCODA,
-    TYPE_USER
+    TYPE_SEGNO = int(engraving::MarkerType::SEGNO),
+    TYPE_VARSEGNO = int(engraving::MarkerType::VARSEGNO),
+    TYPE_CODA = int(engraving::MarkerType::CODA),
+    TYPE_VARCODA = int(engraving::MarkerType::VARCODA),
+    TYPE_CODETTA = int(engraving::MarkerType::CODETTA),
+    TYPE_FINE = int(engraving::MarkerType::FINE),
+    TYPE_TOCODA = int(engraving::MarkerType::TOCODA),
+    TYPE_USER = int(engraving::MarkerType::USER)
 };
 
 Q_ENUM_NS(Type)

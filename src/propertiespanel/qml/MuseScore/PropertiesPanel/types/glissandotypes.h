@@ -24,18 +24,19 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace GlissandoTypes {
 Q_NAMESPACE;
 QML_NAMED_ELEMENT(Glissando);
 
-//! NOTE: must be in sync with mu::engraving::GlissandoStyle
 enum class Style {
-    STYLE_CHROMATIC = 0,
-    STYLE_WHITE_KEYS,
-    STYLE_BLACK_KEYS,
-    STYLE_DIATONIC,
-    STYLE_PORTAMENTO
+    STYLE_CHROMATIC = int(engraving::GlissandoStyle::CHROMATIC),
+    STYLE_WHITE_KEYS = int(engraving::GlissandoStyle::WHITE_KEYS),
+    STYLE_BLACK_KEYS = int(engraving::GlissandoStyle::BLACK_KEYS),
+    STYLE_DIATONIC = int(engraving::GlissandoStyle::DIATONIC),
+    STYLE_PORTAMENTO = int(engraving::GlissandoStyle::PORTAMENTO)
 };
 
 Q_ENUM_NS(Style)
