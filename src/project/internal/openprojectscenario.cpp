@@ -317,18 +317,29 @@ Promise<Ret> OpenProjectScenario::openProject(const muse::io::path_t& givenPath,
 
         //! Step 5. If it's a cloud project, download the latest version
         if (configuration()->isCloudProject(actualPath) && !configuration()->isLegacyCloudProject(actualPath)) {
-            bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
-            if (isCloudAvailable) {
-                return downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
-            }
+            return museScoreComService()->authorization()->checkCloudIsAvailable()
+                   .then<Ret>(this, [this, actualPath, displayNameOverride](const Ret& isCloudAvailable, auto resolve) {
+                if (isCloudAvailable) {
+                    downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath))
+                    .onResolve(this, [resolve](const Ret& ret) {
+                        (void)resolve(ret);
+                    });
 
-            if (fileSystem()->exists(actualPath)) {
-                return doOpenCloudProjectOffline(actualPath, displayNameOverride);
-            }
+                    return Promise<Ret>::dummy_result();
+                }
 
-            Ret ret = make_ret(cloud::Err::NetworkError);
-            showCloudOpenError(ret);
-            return resolvedPromise(ret);
+                if (fileSystem()->exists(actualPath)) {
+                    doOpenCloudProjectOffline(actualPath, displayNameOverride).onResolve(this, [resolve](const Ret& ret) {
+                        (void)resolve(ret);
+                    });
+
+                    return Promise<Ret>::dummy_result();
+                }
+
+                Ret ret = make_ret(cloud::Err::NetworkError);
+                showCloudOpenError(ret);
+                return resolve(ret);
+            });
         }
 
         //! Step 6. Open project in the current window
@@ -521,17 +532,22 @@ Promise<Ret> OpenProjectScenario::downloadAndOpenCloudProject(int scoreId, const
 
 Promise<Ret> OpenProjectScenario::doDownloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret, bool isOwner)
 {
-    CloudProjectInfo info;
     muse::io::path_t localPath = configuration()->cloudProjectPath(scoreId);
 
-    if (isOwner) {
-        RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+    if (!isOwner) {
+        return downloadCloudProject(scoreId, localPath, hash, secret, CloudProjectInfo(), isOwner);
+    }
+
+    return museScoreComService()->downloadScoreInfo(scoreId)
+           .then<Ret>(this, [this, scoreId, localPath, hash, secret, isOwner](const RetVal<muse::cloud::ScoreInfo>& scoreInfo,
+                                                                              auto resolve) {
         if (!scoreInfo.ret) {
             LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
             showCloudOpenError(scoreInfo.ret);
-            return resolvedPromise(scoreInfo.ret);
+            return resolve(scoreInfo.ret);
         }
 
+        CloudProjectInfo info;
         info.name = scoreInfo.val.title;
         info.visibility = scoreInfo.val.visibility;
         info.sourceUrl = scoreInfo.val.url;
@@ -541,14 +557,22 @@ Promise<Ret> OpenProjectScenario::doDownloadAndOpenCloudProject(int scoreId, con
 
         if (localInfo.ret) {
             if (localInfo.val.revisionId == scoreInfo.val.revisionId) {
-                return doOpenCloudProject(localPath, info, isOwner);
+                doOpenCloudProject(localPath, info, isOwner).onResolve(this, [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
+
+                return Promise<Ret>::dummy_result();
             }
         } else {
             LOGE() << localInfo.ret;
         }
-    }
 
-    return downloadCloudProject(scoreId, localPath, hash, secret, info, isOwner);
+        downloadCloudProject(scoreId, localPath, hash, secret, info, isOwner).onResolve(this, [resolve](const Ret& ret) {
+            (void)resolve(ret);
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 Promise<Ret> OpenProjectScenario::downloadCloudProject(int scoreId, const muse::io::path_t& localPath, const QString& hash,
@@ -619,55 +643,69 @@ Promise<Ret> OpenProjectScenario::openScoreFromMuseScoreCom(const QUrl& url)
             }
 
             // Check if user is owner
-            RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
-            if (!scoreInfo.ret) {
-                LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
-                showCloudOpenError(scoreInfo.ret);
+            museScoreComService()->downloadScoreInfo(scoreId)
+            .onResolve(this, [this, url, scoreId, resolve](const RetVal<muse::cloud::ScoreInfo>& scoreInfo) {
+                if (!scoreInfo.ret) {
+                    LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
+                    showCloudOpenError(scoreInfo.ret);
 
-                return resolve(scoreInfo.ret);
-            }
-
-            bool isOwner = QString::number(scoreInfo.val.owner.id) == museScoreComService()->authorization()->accountInfo().id;
-
-            // If yes, score will be opened as regular cloud score; check if not yet opened
-            if (isOwner) {
-                muse::io::path_t projectPath = configuration()->cloudProjectPath(scoreId);
-
-                // either in this instance
-                if (isProjectOpened(projectPath)) {
-                    return resolve(finishOpening());
+                    (void)resolve(scoreInfo.ret);
+                    return;
                 }
 
-                // or in another one
-                if (multiwindowsProvider()->isProjectAlreadyOpened(projectPath)) {
-                    multiwindowsProvider()->activateWindowWithProject(projectPath);
-                    return resolve(muse::make_ok());
-                }
-            }
-
-            // Check if this instance already has an open project
-            if (globalContext()->currentProject()) {
-                QStringList args;
-                args << url.toString();
-
-                if (!scoreInfo.val.title.isEmpty()) {
-                    args << "--score-display-name-override" << scoreInfo.val.title;
-                }
-
-                multiwindowsProvider()->openNewWindow(args);
-                return resolve(muse::make_ok());
-            }
-
-            QUrlQuery query(url);
-            QString hash = query.queryItemValue("h");
-            QString secret = query.queryItemValue("secret");
-
-            downloadAndOpenCloudProject(scoreId, hash, secret, isOwner).onResolve(this, [resolve](const Ret& ret) {
-                (void)resolve(ret);
+                openScoreFromMuseScoreCom(url, scoreId, scoreInfo.val).onResolve(this, [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
             });
 
             return Promise<Ret>::dummy_result();
         });
+    });
+}
+
+Promise<Ret> OpenProjectScenario::openScoreFromMuseScoreCom(const QUrl& url, int scoreId, const muse::cloud::ScoreInfo& scoreInfo)
+{
+    return async::make_promise<Ret>([this, url, scoreId, scoreInfo](auto resolve) {
+        bool isOwner = QString::number(scoreInfo.owner.id) == museScoreComService()->authorization()->accountInfo().id;
+
+        // If yes, score will be opened as regular cloud score; check if not yet opened
+        if (isOwner) {
+            muse::io::path_t projectPath = configuration()->cloudProjectPath(scoreId);
+
+            // either in this instance
+            if (isProjectOpened(projectPath)) {
+                return resolve(finishOpening());
+            }
+
+            // or in another one
+            if (multiwindowsProvider()->isProjectAlreadyOpened(projectPath)) {
+                multiwindowsProvider()->activateWindowWithProject(projectPath);
+                return resolve(muse::make_ok());
+            }
+        }
+
+        // Check if this instance already has an open project
+        if (globalContext()->currentProject()) {
+            QStringList args;
+            args << url.toString();
+
+            if (!scoreInfo.title.isEmpty()) {
+                args << "--score-display-name-override" << scoreInfo.title;
+            }
+
+            multiwindowsProvider()->openNewWindow(args);
+            return resolve(muse::make_ok());
+        }
+
+        QUrlQuery query(url);
+        QString hash = query.queryItemValue("h");
+        QString secret = query.queryItemValue("secret");
+
+        downloadAndOpenCloudProject(scoreId, hash, secret, isOwner).onResolve(this, [resolve](const Ret& ret) {
+            (void)resolve(ret);
+        });
+
+        return Promise<Ret>::dummy_result();
     });
 }
 
