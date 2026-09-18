@@ -56,6 +56,35 @@ void FontsDatabase::insertSubstitution(const String& familyName, const String& s
 #endif
 }
 
+void FontsDatabase::removeSubstitutions(const String& familyName, const std::vector<String>& substituteNames)
+{
+    auto it = m_familySubstitutions.find(FontDataKey(familyName));
+    if (it == m_familySubstitutions.end()) {
+        return;
+    }
+
+    std::vector<FontDataKey>& substitutes = it->second;
+    size_t removed = 0;
+    for (const String& substituteName : substituteNames) {
+        removed += std::erase(substitutes, FontDataKey(substituteName));
+    }
+
+    if (removed == 0) {
+        return;
+    }
+
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
+    QFont::removeSubstitutions(familyName);
+    for (const FontDataKey& key : substitutes) {
+        QFont::insertSubstitution(familyName, key.family().id().toQString());
+    }
+#endif
+
+    if (substitutes.empty()) {
+        m_familySubstitutions.erase(it);
+    }
+}
+
 const FontDataKey& FontsDatabase::defaultFont(Font::Type type) const
 {
     auto it = m_defaults.find(type);
