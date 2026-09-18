@@ -69,13 +69,27 @@ protected:
         });
     }
 
+    //! A flow that is already over, and rejects with `ret`.
+    template<typename T>
+    static muse::async::Promise<T> rejectedPromise(const muse::Ret& ret)
+    {
+        return muse::async::make_promise<T>([ret](auto, auto reject) {
+            return reject(ret.code(), ret.text());
+        });
+    }
+
     //! A dialog the user answers with `btn`.
+    static muse::async::Promise<muse::IInteractive::Result> dialogResult(int btn)
+    {
+        return muse::async::make_promise<muse::IInteractive::Result>([btn](auto resolve, auto) {
+            return resolve(muse::IInteractive::Result(btn));
+        });
+    }
+
     static muse::async::Promise<muse::IInteractive::Result> dialogResult(
         muse::IInteractive::Button btn = muse::IInteractive::Button::Ok)
     {
-        return muse::async::make_promise<muse::IInteractive::Result>([btn](auto resolve, auto) {
-            return resolve(muse::IInteractive::Result(int(btn)));
-        });
+        return dialogResult(int(btn));
     }
 
     //! A dialog that settles the way `answer` says: resolved with its value, or rejected with its error.
