@@ -28,6 +28,7 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationviewinputcontroller_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stringtuningsutils_tests.cpp
 )
 
 set(MODULE_TEST_LINK
