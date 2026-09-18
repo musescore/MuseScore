@@ -187,10 +187,47 @@ FocusScope {
             orientation: Qt.Horizontal
         }
 
+        StyledTextLabel {
+            visible: sortModeRadioButtons.visible
+
+            text: qsTrc("project", "Sort by:")
+        }
+
+        RadioButtonGroup {
+            id: sortModeRadioButtons
+
+            visible: tabBar.currentIndex === 0
+
+            implicitHeight: ui.theme.defaultButtonSize
+
+            model: [
+                { "title": qsTrc("project", "Date modified"), "value": ScoresPageModel.SortByTimeModified },
+                { "title": qsTrc("project", "Name"), "value": ScoresPageModel.SortByName }
+            ]
+
+            delegate: FlatRadioButton {
+                implicitHeight: ui.theme.defaultButtonSize
+
+                checked: scoresPageModel.sortMode === modelData.value
+
+                text: modelData.title
+                transparent: true
+                checkedColor: ui.theme.buttonColor
+
+                navigation.name: "SortMode_" + modelData.title
+                navigation.panel: viewButtonsNavPanel
+                navigation.order: model.index
+
+                onToggled: {
+                    scoresPageModel.sortMode = modelData.value
+                }
+            }
+        }
+
         RadioButtonGroup {
             id: viewTypeRadioButtons
 
-            property int navigationOrderStart: refreshButton.navigation.order + 1
+            property int navigationOrderStart: refreshButton.navigation.order + 3
 
             implicitHeight: ui.theme.defaultButtonSize
 
@@ -246,6 +283,7 @@ FocusScope {
             anchors.fill: parent
 
             viewType: scoresPageModel.viewType
+            sortMode: scoresPageModel.sortMode
             searchText: searchField.searchText
 
             backgroundColor: background.color
