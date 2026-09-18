@@ -104,6 +104,8 @@ public:
 
     void init();
 
+    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+
     void initZoom();
     void initCanvasPos();
     void updateZoomAfterSizeChange();

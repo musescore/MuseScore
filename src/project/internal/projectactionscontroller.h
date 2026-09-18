@@ -215,6 +215,7 @@ private:
 
     muse::Ret doFinishOpenProject();
     muse::Ret openPageIfNeed(muse::Uri pageUri);
+    muse::Uri resolveNotationPageUri() const;
 
     void exportScore();
     void printScore();

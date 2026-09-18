@@ -65,6 +65,9 @@ public:
     //! Emits the result once the server-side conversion completes; on success, the converted score
     //! is already available in the user's MuseScore.com account, described by the WatchedScore
     virtual muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const = 0;
+
+    //! Whether the cloud score with the given id is a converted score still awaiting a quality review
+    virtual bool isAwaitingReview(int scoreId) const = 0;
 };
 
 using IConvertFileToScoreScenarioPtr = std::shared_ptr<IConvertFileToScoreScenario>;

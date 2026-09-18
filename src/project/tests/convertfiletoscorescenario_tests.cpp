@@ -38,7 +38,6 @@
 #include "actions/tests/mocks/actionsdispatchermock.h"
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
-#include "context/tests/mocks/globalcontextmock.h"
 #include "toast/tests/mocks/toastservicemock.h"
 
 namespace muse {
@@ -163,7 +162,6 @@ protected:
         m_configuration = std::make_shared<NiceMock<ProjectConfigurationMock> >();
         m_museScoreComService = std::make_shared<NiceMock<MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<AuthorizationServiceMock> >();
-        m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
         m_toastService = std::make_shared<NiceMock<toast::ToastServiceMock> >();
 
         m_scenario->service.set(m_service);
@@ -172,7 +170,6 @@ protected:
         m_scenario->dispatcher.set(m_dispatcher);
         m_scenario->configuration.set(m_configuration);
         m_scenario->museScoreComService.set(m_museScoreComService);
-        m_scenario->globalContext.set(m_globalContext);
 
         ON_CALL(*m_museScoreComService, authorization())
         .WillByDefault(Return(m_authorization));
@@ -238,7 +235,6 @@ protected:
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<MuseScoreComServiceMock> m_museScoreComService;
     std::shared_ptr<AuthorizationServiceMock> m_authorization;
-    std::shared_ptr<context::GlobalContextMock> m_globalContext;
 
     ConvertConfig m_config;
 };
@@ -252,9 +248,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
     WatchedScore watched;
@@ -300,9 +294,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_Disp
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
     WatchedScore watched;
@@ -331,9 +323,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
     Ret ret = make_ret(Err::ConvertProcessingFailed);
@@ -371,9 +361,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
     // [GIVEN] The user clicks "Try again" on the failure toast
@@ -411,9 +399,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotResta
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<int> reviewRequested;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     m_scenario->init();
 
     // [GIVEN] The user dismisses the failure toast
@@ -440,10 +426,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_ShowsToastOnce
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<int> reviewRequested;
     async::Channel<PollingFailure> pollingFailed;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, reviewRequested()).WillByDefault(Return(reviewRequested));
     ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
     m_scenario->init();
 

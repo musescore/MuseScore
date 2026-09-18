@@ -21,7 +21,6 @@
  */
 #include "convertfiletoscorescenario.h"
 
-#include <QTimer>
 #include <QUrl>
 
 #include "actions/actiontypes.h"
@@ -34,9 +33,6 @@
 using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
-
-//! NOTE: gives the user a moment to land on the score before prompting for a review
-static constexpr int REVIEW_PROMPT_DELAY_MS = 10000;
 
 //! NOTE: attempt 4 is ~5 minutes into retrying
 static constexpr int RETRY_TOAST_ATTEMPT_THRESHOLD = 4;
@@ -68,8 +64,8 @@ static ConvertSelection toConvertSelection(const Val& val)
     return selection;
 }
 
-ConvertFileToScoreScenario::ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx, QObject* parent)
-    : QObject(parent), muse::Contextable(iocCtx)
+ConvertFileToScoreScenario::ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Contextable(iocCtx)
 {
 }
 
@@ -87,11 +83,6 @@ void ConvertFileToScoreScenario::init()
         m_convertFinished.send(ret, watched);
     });
 
-    service()->reviewRequested().onReceive(this, [this](int scoreId) {
-        m_pendingReviews[configuration()->cloudProjectPath(scoreId)] = scoreId;
-        checkPendingReview();
-    });
-
     service()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
         if (failure.attempt == 1) {
             m_retryToastShown = false;
@@ -101,39 +92,6 @@ void ConvertFileToScoreScenario::init()
             m_retryToastShown = true;
             showPollingFailureNotification();
         }
-    });
-
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
-        checkPendingReview();
-    });
-}
-
-void ConvertFileToScoreScenario::checkPendingReview()
-{
-    INotationProjectPtr project = globalContext()->currentProject();
-    if (!project) {
-        return;
-    }
-
-    auto it = m_pendingReviews.find(project->path());
-    if (it == m_pendingReviews.end()) {
-        return;
-    }
-
-    const int scoreId = it->second;
-    const io::path_t path = it->first;
-
-    QTimer::singleShot(REVIEW_PROMPT_DELAY_MS, this, [this, scoreId, path]() {
-        INotationProjectPtr currentProject = globalContext()->currentProject();
-        if (!currentProject || currentProject->path() != path) {
-            return;
-        }
-
-        if (m_pendingReviews.erase(path) == 0) {
-            return;
-        }
-
-        askReviewRating(scoreId);
     });
 }
 
@@ -212,6 +170,12 @@ void ConvertFileToScoreScenario::convertFiles(const io::paths_t& paths)
 async::Channel<Ret, WatchedScore> ConvertFileToScoreScenario::convertFinished() const
 {
     return m_convertFinished;
+}
+
+bool ConvertFileToScoreScenario::isAwaitingReview(int scoreId) const
+{
+    const WatchedScore* watched = service()->watchedScoreById(scoreId);
+    return watched && watched->conversion.status == ConvertStatus::AwaitingReview;
 }
 
 async::Promise<Ret> ConvertFileToScoreScenario::checkConvertIsAllowed()
@@ -524,24 +488,4 @@ void ConvertFileToScoreScenario::showPollingFailureNotification()
     toastService()->showWarning(
         muse::trc("project/convert", "We’re having trouble connecting to the internet."),
         muse::trc("project/convert", "We’ll keep trying intermittently."));
-}
-
-void ConvertFileToScoreScenario::askReviewRating(int scoreId)
-{
-    static constexpr int goodBtn = int(toast::ToastActionCode::Custom) + 1;
-    static constexpr int badBtn = int(toast::ToastActionCode::Custom) + 2;
-
-    toastService()->show(
-        muse::trc("project/convert", "How does your score look?"),
-        muse::trc("project/convert", "We’re always improving our score conversion accuracy. Let us know how we did with this one."),
-        muse::ui::IconCode::Code::NONE, true,
-    {
-        //: Button to rate the quality of a converted score as good
-        { muse::trc("project/convert", "Good"), goodBtn, /*accent*/ true, muse::ui::IconCode::Code::LIKE },
-        //: Button to rate the quality of a converted score as bad
-        { muse::trc("project/convert", "Bad"), badBtn, /*accent*/ false, muse::ui::IconCode::Code::DISLIKE },
-    }).onResolve(this, [this, scoreId](const toast::ToastResult& result) {
-        ReviewRating rating = result.isCode(goodBtn) ? ReviewRating::Good : ReviewRating::Bad;
-        service()->submitReview(scoreId, rating);
-    });
 }

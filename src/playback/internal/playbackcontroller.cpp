@@ -49,6 +49,8 @@ using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::playback;
 
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+
 static const ActionCode PLAY_CODE("play");
 static const ActionCode PLAY_FROM_SELECTION("play-from-selection");
 static const ActionCode PAUSE_CODE("pause");
@@ -1793,6 +1795,10 @@ void PlaybackController::setIsExportingAudio(bool exporting)
 bool PlaybackController::canReceiveAction(const ActionCode& code) const
 {
     if (!m_masterNotation || !m_masterNotation->hasParts()) {
+        return false;
+    }
+
+    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
         return false;
     }
 

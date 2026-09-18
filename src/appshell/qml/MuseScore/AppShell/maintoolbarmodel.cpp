@@ -28,25 +28,37 @@ using namespace mu::appshell;
 
 static const QString HOME_PAGE("musescore://home");
 static const QString NOTATION_PAGE("musescore://notation");
+static const QString NOTATION_REVIEW_PAGE("musescore://notation/review");
 static const QString PUBLISH_PAGE("musescore://publish");
 static const QString DEVTOOLS_PAGE("musescore://devtools");
 
 static const QString TITLE_KEY("title");
 static const QString URI_KEY("uri");
 static const QString IS_TITLE_BOLD_KEY("isTitleBold");
+static const QString IS_CHECKED_KEY("isChecked");
 
-inline QVariantMap buildItem(const QString& title, const QString& uri)
+static bool isItemChecked(const QString& itemUri, const QString& currentUri)
+{
+    if (itemUri == NOTATION_PAGE) {
+        return currentUri == NOTATION_PAGE || currentUri == NOTATION_REVIEW_PAGE;
+    }
+
+    return itemUri == currentUri;
+}
+
+inline QVariantMap buildItem(const QString& title, const QString& uri, const QString& currentUri)
 {
     QVariantMap item;
     item[TITLE_KEY] = title;
     item[URI_KEY] = uri;
     item[IS_TITLE_BOLD_KEY] = false;
+    item[IS_CHECKED_KEY] = isItemChecked(uri, currentUri);
 
     return item;
 }
 
 MainToolBarModel::MainToolBarModel(QObject* parent)
-    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this)), m_currentUri(HOME_PAGE)
 {
 }
 
@@ -61,6 +73,7 @@ QVariant MainToolBarModel::data(const QModelIndex& index, int role) const
     case TitleRole: return item[TITLE_KEY];
     case UriRole: return item[URI_KEY];
     case IsTitleBoldRole: return item[IS_TITLE_BOLD_KEY];
+    case IsCheckedRole: return item[IS_CHECKED_KEY];
     }
 
     return QVariant();
@@ -77,6 +90,7 @@ QHash<int, QByteArray> MainToolBarModel::roleNames() const
         { TitleRole, TITLE_KEY.toUtf8() },
         { UriRole, URI_KEY.toUtf8() },
         { IsTitleBoldRole, IS_TITLE_BOLD_KEY.toUtf8() },
+        { IsCheckedRole, IS_CHECKED_KEY.toUtf8() },
     };
 
     return roles;
@@ -87,20 +101,38 @@ void MainToolBarModel::load()
     beginResetModel();
 
     m_items.clear();
-    m_items << buildItem(muse::qtrc("appshell", "Home"), HOME_PAGE);
-    m_items << buildItem(muse::qtrc("appshell", "Score"), NOTATION_PAGE);
-    m_items << buildItem(muse::qtrc("appshell", "Publish"), PUBLISH_PAGE);
+    m_items << buildItem(muse::qtrc("appshell", "Home"), HOME_PAGE, m_currentUri);
+    m_items << buildItem(muse::qtrc("appshell", "Score"), NOTATION_PAGE, m_currentUri);
+    m_items << buildItem(muse::qtrc("appshell", "Publish"), PUBLISH_PAGE, m_currentUri);
 
     if (globalConfiguration()->devModeEnabled()) {
-        m_items << buildItem(muse::qtrc("appshell", "DevTools"), DEVTOOLS_PAGE);
+        m_items << buildItem(muse::qtrc("appshell", "DevTools"), DEVTOOLS_PAGE, m_currentUri);
     }
 
     endResetModel();
 
     updateNotationPageItem();
+
     context()->currentProjectChanged().onNotify(this, [this]() {
         updateNotationPageItem();
     });
+}
+
+QString MainToolBarModel::currentUri() const
+{
+    return m_currentUri;
+}
+
+void MainToolBarModel::setCurrentUri(const QString& uri)
+{
+    if (m_currentUri == uri) {
+        return;
+    }
+
+    m_currentUri = uri;
+    emit currentUriChanged();
+
+    updateCheckedState();
 }
 
 void MainToolBarModel::updateNotationPageItem()
@@ -116,5 +148,23 @@ void MainToolBarModel::updateNotationPageItem()
 
             break;
         }
+    }
+}
+
+void MainToolBarModel::updateCheckedState()
+{
+    for (int i = 0; i < m_items.size(); ++i) {
+        QVariantMap& item = m_items[i];
+
+        QVariant& checkedValue = item[IS_CHECKED_KEY];
+        bool checked = isItemChecked(item[URI_KEY].toString(), m_currentUri);
+        if (checkedValue.toBool() == checked) {
+            continue;
+        }
+
+        checkedValue = checked;
+
+        QModelIndex modelIndex = index(i);
+        emit dataChanged(modelIndex, modelIndex, { IsCheckedRole });
     }
 }

@@ -50,6 +50,7 @@ using namespace muse;
 using namespace muse::actions;
 
 static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
 static const muse::Uri HOME_PAGE_URI("musescore://home");
 static const muse::Uri NEW_SCORE_URI("musescore://project/newscore");
 static const muse::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
@@ -143,6 +144,10 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
         if (code == "file-save-to-cloud" || code == "file-publish") {
             return false;
         }
+    }
+
+    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
+        return false;
     }
 
     return true;
@@ -421,7 +426,9 @@ Ret ProjectActionsController::doFinishOpenProject()
         });
     };
 
-    if (interactive()->isOpened(NOTATION_PAGE_URI).val) {
+    const Uri notationPageUri = resolveNotationPageUri();
+
+    if (interactive()->isOpened(notationPageUri).val) {
         showUpdateNotification();
     } else {
         async::Channel<Uri> opened = interactive()->opened();
@@ -435,7 +442,22 @@ Ret ProjectActionsController::doFinishOpenProject()
         });
     }
 
-    return openPageIfNeed(NOTATION_PAGE_URI);
+    return openPageIfNeed(notationPageUri);
+}
+
+Uri ProjectActionsController::resolveNotationPageUri() const
+{
+    INotationProjectPtr project = globalContext()->currentProject();
+    if (!project || !project->cloudInfo().isValid()) {
+        return NOTATION_PAGE_URI;
+    }
+
+    int scoreId = static_cast<int>(muse::cloud::idFromCloudUrl(project->cloudInfo().sourceUrl).toUint64());
+    if (convertFileToScoreScenario()->isAwaitingReview(scoreId)) {
+        return NOTATION_REVIEW_PAGE_URI;
+    }
+
+    return NOTATION_PAGE_URI;
 }
 
 void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret, bool isOwner)
