@@ -61,8 +61,7 @@ private:
 class AlignmentMigration500
 {
 public:
-    static void migrateSnappedItemAlignment(MasterScore* masterScore);
-    static void migrateSameItemTypeAlignment(MasterScore* masterScore);
+    static void migrateSnappedAndSameItemTypeAlignment(MasterScore* masterScore);
     static void migrateHopoLetterAlignment(MasterScore* masterScore);
 private:
     static bool rowItemIsAbove(const EngravingItem* item);
