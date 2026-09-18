@@ -28,6 +28,7 @@
 #include "global/serialization/xmlstreamreader.h"
 
 #include "translation.h"
+#include "engraving/dom/accidental.h"
 #include "engraving/dom/chordlist.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/score.h"
@@ -603,52 +604,34 @@ String musicXmlAccidentalTextToChar(const String mxmlName)
 }
 
 //---------------------------------------------------------
-//   isAppr
-//---------------------------------------------------------
-
-/**
- Check if v approximately equals ref.
- Used to prevent floating point comparison for equality from failing
- */
-
-static bool isAppr(const double v, const double ref, const double epsilon)
-{
-    return v > ref - epsilon && v < ref + epsilon;
-}
-
-//---------------------------------------------------------
 //   microtonalGuess
 //---------------------------------------------------------
 
 /**
  Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum AccidentalType.
- Works only for quarter tone, half tone, three-quarters tone and whole tone accidentals.
  */
 
 AccidentalType microtonalGuess(double val)
 {
-    const double eps = 0.001;
-    if (isAppr(val, -2, eps)) {
-        return AccidentalType::FLAT2;
-    } else if (isAppr(val, -1.5, eps)) {
+    if (muse::RealIsEqual(val, -1.5)) {
         return AccidentalType::MIRRORED_FLAT2;
-    } else if (isAppr(val, -1, eps)) {
-        return AccidentalType::FLAT;
-    } else if (isAppr(val, -0.5, eps)) {
+    } else if (muse::RealIsEqual(val, -0.5)) {
         return AccidentalType::MIRRORED_FLAT;
-    } else if (isAppr(val, 0, eps)) {
-        return AccidentalType::NATURAL;
-    } else if (isAppr(val, 0.5, eps)) {
+    } else if (muse::RealIsEqual(val, 0.5)) {
         return AccidentalType::SHARP_SLASH;
-    } else if (isAppr(val, 1, eps)) {
-        return AccidentalType::SHARP;
-    } else if (isAppr(val, 1.5, eps)) {
+    } else if (muse::RealIsEqual(val, 1.5)) {
         return AccidentalType::SHARP_SLASH4;
-    } else if (isAppr(val, 2, eps)) {
-        return AccidentalType::SHARP2;
-    } else {
-        LOGD("Guess for microtonal accidental corresponding to value %f failed.", val);
     }
+
+    for (int i = 1; i < static_cast<int>(AccidentalType::END); ++i) {
+        AccidentalType type = static_cast<AccidentalType>(i);
+        double altVal = static_cast<int>(Accidental::subtype2value(type)) + Accidental::subtype2centOffset(type) / 100.0;
+        if (muse::RealIsEqual(val, altVal)) {
+            return type;
+        }
+    }
+
+    LOGD("Guess for microtonal accidental corresponding to value %f failed.", val);
     // default
     return AccidentalType::NONE;
 }
