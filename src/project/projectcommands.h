@@ -37,7 +37,7 @@ inline static const muse::rcommand::Command PROJECT_SAVE_TO_CLOUD_COMMAND("comma
 inline static const muse::rcommand::Command PROJECT_SAVE_AT_COMMAND("command://project/save-at");
 
 inline static const muse::rcommand::Command PROJECT_PUBLISH_COMMAND("command://project/publish");
-inline static const muse::rcommand::Command PROJECT_SHARED_AUDIO_COMMAND("command://project/shared-audio");
+inline static const muse::rcommand::Command PROJECT_SHARE_AUDIO_COMMAND("command://project/share-audio");
 
 inline static const muse::rcommand::Command PROJECT_EXPORT_COMMAND("command://project/export");
 inline static const muse::rcommand::Command PROJECT_IMPORT_PDF_COMMAND("command://project/import-pdf");
