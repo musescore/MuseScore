@@ -103,6 +103,8 @@ private:
 
     muse::async::Promise<muse::RetVal<muse::Val> > openDialog(const muse::UriQuery& query) const;
 
+    muse::async::Promise<bool> refuseSaveAfter(muse::async::Promise<muse::Ret> shown);
+
     muse::async::Promise<muse::RetVal<SaveLocation> > askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                                                       SaveLocationType preselectedType = SaveLocationType::Undefined) const;
     muse::async::Promise<muse::RetVal<SaveLocation> > askSaveLocationOfType(INotationProjectPtr project, SaveMode mode,
@@ -128,12 +130,12 @@ private:
     muse::async::Promise<bool> warnBeforePublishing(bool isPublishShare, muse::cloud::Visibility visibility) const;
     muse::async::Promise<bool> warnBeforeSavingToExistingPubliclyVisibleCloudProject() const;
     muse::async::Promise<muse::Ret> warnCloudNotAvailableForUploading(bool isPublishShare) const;
-    muse::Ret warnCloudNotAvailableForSharingAudio() const;
+    muse::async::Promise<muse::Ret> warnCloudNotAvailableForSharingAudio() const;
     muse::async::Promise<muse::RetVal<muse::Val> > ensureAuthorization(const QString& cloudCode, bool publishingScore,
                                                                        const std::string& text) const;
     muse::async::Promise<muse::Ret> showCloudSaveError(const muse::Ret& ret, const CloudProjectInfo& info, bool isPublishShare,
                                                        bool alreadyAttempted) const;
-    muse::Ret showAudioCloudShareError(const muse::Ret& ret) const;
+    muse::async::Promise<muse::Ret> showAudioCloudShareError(const muse::Ret& ret) const;
 
     muse::Ret canSaveProject() const;
     muse::async::Promise<muse::Ret> saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
@@ -151,7 +153,7 @@ private:
     muse::async::Promise<muse::Ret> shareAudio(const AudioFile& existingAudio);
     muse::async::Promise<muse::Ret> uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project,
                                                           const CloudAudioInfo& info);
-    void alsoShareAudioCom(const AudioFile& audio);
+    muse::async::Promise<muse::Ret> alsoShareAudioCom(const AudioFile& audio);
 
     muse::async::Promise<muse::Ret> askAudioGenerationSettings() const;
     muse::async::Promise<muse::RetVal<bool> > needGenerateAudio(bool isPublic) const;
@@ -165,28 +167,29 @@ private:
     muse::async::Promise<muse::Ret> uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
                                                               bool isFirstSave, bool publishMode);
 
-    void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
+    muse::async::Promise<muse::Ret> onUploadFinished(const QUrl& urlToOpen, bool isFirstSave, const AudioFile& audio, bool publishMode);
+    muse::async::Promise<muse::Ret> onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
     muse::async::Promise<muse::Ret> onProjectUploadFailed(const muse::Ret& ret, const CloudProjectInfo& info, const AudioFile& audio,
                                                           bool openEditUrl, bool publishMode);
 
     void onAudioSuccessfullyUploaded(const QUrl& urlToOpen);
-    void onAudioUploadFailed(const muse::Ret& ret);
+    muse::async::Promise<muse::Ret> onAudioUploadFailed(const muse::Ret& ret);
 
-    void warnCloudIsNotAvailable();
+    muse::async::Promise<muse::Ret> warnCloudIsNotAvailable();
 
     muse::async::Promise<bool> askIfUserAgreesToSaveProjectWithErrors(const muse::Ret& ret, const SaveLocation& location);
     muse::async::Promise<bool> askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText,
                                                                    bool newlyCreated);
-    void warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert);
+    muse::async::Promise<muse::Ret> warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert);
     muse::async::Promise<bool> askIfUserAgreesToSaveCorruptedScoreLocally(const std::string& errorText, bool canRevert);
     muse::async::Promise<bool> askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText);
-    void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
+    muse::async::Promise<muse::Ret> showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
 
-    void warnScoreCouldnotBeSaved(const muse::Ret& ret);
-    void warnScoreCouldnotBeSaved(const std::string& errorText);
+    muse::async::Promise<muse::Ret> warnScoreCouldnotBeSaved(const muse::Ret& ret);
+    muse::async::Promise<muse::Ret> warnScoreCouldnotBeSaved(const std::string& errorText);
     muse::async::Promise<int> warnScoreHasBecomeCorruptedAfterSave(const muse::Ret& ret);
 
-    void askToRevertCorruptedScoreToLastSaved();
+    muse::async::Promise<muse::Ret> askToRevertCorruptedScoreToLastSaved();
 
     RecentFile makeRecentFile(INotationProjectPtr project);
     void moveProject(INotationProjectPtr project, const muse::io::path_t& newPath, bool replace);
