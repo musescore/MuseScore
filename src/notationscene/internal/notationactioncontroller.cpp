@@ -3139,6 +3139,12 @@ bool NotationActionController::isNoteOrRestSelected() const
     return selection && selection->elementsSelected(NOTE_REST_TYPES);
 }
 
+bool NotationActionController::isHairpinSelected() const
+{
+    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    return selection && selection->element() && selection->element()->isHairpinSegment();
+}
+
 const mu::engraving::Harmony* NotationActionController::editedChordSymbol() const
 {
     INotationInteractionPtr interaction = currentNotationInteraction();
