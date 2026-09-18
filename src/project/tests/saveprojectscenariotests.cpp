@@ -268,7 +268,13 @@ protected:
 
     void givenReachableCloud()
     {
-        ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+        ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
+
+        // The server says nothing about the score, so the flow falls back to what it already knows.
+        ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<const QUrl&>()))
+        .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>()); });
+        ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
+        .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>()); });
         givenSignedIn();
 
         // Settled audio generation settings, so that the decision does not open a dialog and abort the save.
@@ -366,7 +372,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ExistingCloudScore_SavesWithoutAski
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(true));
 
     //! [GIVEN] ...while the cloud is unreachable, so only the local write happens
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     m_cloudInfo.name = "Symphony";
@@ -883,7 +889,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_OrdinaryFailure_WarnsTheUser
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_CloudUnreachable_SavesLocallyAndReportsSuccess)
 {
     //! [GIVEN] An unreachable cloud...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
     ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
 
@@ -903,7 +909,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyACloudProject_WritesT
     //! [GIVEN] A score that already lives in the cloud and has a local file of its own...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(true));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("project.mscz")));
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     //! [THEN] It is written back over that same file
@@ -918,7 +924,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotACloudProjectYet_WritesTo
     //! [GIVEN] A score that is going to the cloud for the first time...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
     ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     //! [THEN] It is written to the path reserved for cloud scores, not to wherever it was before
@@ -931,7 +937,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotACloudProjectYet_WritesTo
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
 {
     //! [GIVEN] A reachable cloud whose login dialog is answered with "Save to computer"...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
@@ -953,7 +959,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInst
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNothing)
 {
     //! [GIVEN] A user who picks "Save to computer" and then cancels the file dialog...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
@@ -972,7 +978,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNot
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotLoggedIn_WritesNothing)
 {
     //! [GIVEN] A reachable cloud the user refuses to log in to...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
     givenLoginDialogAnswers(RetVal<Val>(make_ret(Ret::Code::Cancel)));
 
     //! [THEN] Nothing is written and nothing is uploaded
@@ -1025,7 +1031,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb_Asks
     remote.title = "Renamed on the web";
     remote.visibility = cloud::Visibility::Public;
     ON_CALL(*m_museScoreComService, downloadScoreInfo(sourceUrl))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
+    .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
 
     //! [GIVEN] ...and a user who declines the warning
     ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
@@ -1048,7 +1054,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_RemoteInfoUnavailable_KeepsT
 
     givenReachableCloud();
     ON_CALL(*m_museScoreComService, downloadScoreInfo(sourceUrl))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))));
+    .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))); });
 
     CloudProjectInfo info;
     info.name = "Locally known name";
@@ -1455,7 +1461,7 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
 TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
 {
     //! [GIVEN] A reachable cloud whose login dialog is answered with "Save to computer"...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
@@ -1476,7 +1482,7 @@ TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesT
 TEST_F(SaveProjectScenarioTests, Publish_LocalPathCancelled_WritesNothing)
 {
     //! [GIVEN] A user who picks "Save to computer" and then cancels the file dialog...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
