@@ -380,8 +380,7 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     if (mscVersion < 500) {
         migrateOffset500(score);
-        AlignmentMigration500::migrateSnappedItemAlignment(score);
-        AlignmentMigration500::migrateSameItemTypeAlignment(score);
+        AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(score);
         AlignmentMigration500::migrateHopoLetterAlignment(score);
         needRelayout = true;
     }
@@ -565,42 +564,18 @@ void AlignmentMigration500::scanConnectedItemsInSnappingChain(EngravingItem* ite
     }
 }
 
-void AlignmentMigration500::migrateSnappedItemAlignment(MasterScore* masterScore)
+void AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(MasterScore* masterScore)
 {
     // For items aligned by AlignmentLayout::alignItemsWithTheirSnappingChain
     // Used for dynamics, expressions, hairpins, tempo text and gradual tempo change lines
-    for (Score* score : masterScore->scoreList()) {
-        std::vector<EngravingItem*> candidates;
-        score->scanElements([&candidates](EngravingItem* item) {
-            if (item && ((item->isDynamic() && item->autoplace())
-                         || (item->isExpression() && item->addToSkyline())
-                         || item->isHairpinSegment()
-                         || item->isTempoText()
-                         || item->isGradualTempoChangeSegment())) {
-                candidates.push_back(item);
-            }
-        });
-
-        std::set<EngravingItem*> visited;
-        for (EngravingItem* item : candidates) {
-            if (muse::contains(visited, item)) {
-                continue;
-            }
-            const System* system = toSystem(item->findAncestor(ElementType::SYSTEM));
-            std::vector<EngravingItem*> group;
-            scanConnectedItemsInSnappingChain(item, system, visited, group);
-            alignItemOffsetGroup(group);
-        }
-    }
-}
-
-void AlignmentMigration500::migrateSameItemTypeAlignment(MasterScore* masterScore)
-{
+    //
     // For items aligned by AlignmentLayout::alignItemsForSystem
     // Used for harmony, fret diagrams and sticking
     using RowKey = std::tuple<const System*, staff_idx_t, bool>;
 
     for (Score* score : masterScore->scoreList()) {
+        std::vector<EngravingItem*> snappedCandidates;
+
         std::map<RowKey, std::vector<EngravingItem*> > harmonyGroups;
         std::map<RowKey, std::vector<EngravingItem*> > harmonyOnFretDiagramGroups;
         std::map<RowKey, std::vector<EngravingItem*> > fretGroups;
@@ -609,7 +584,19 @@ void AlignmentMigration500::migrateSameItemTypeAlignment(MasterScore* masterScor
         bool alignChordSymbols = score->style().styleB(Sid::verticallyAlignChordSymbols);
 
         score->scanElements([&](EngravingItem* item) {
-            if (!item || !item->addToSkyline() || item->excludeVerticalAlign()) {
+            if (!item) {
+                return;
+            }
+
+            if (((item->isDynamic() && item->autoplace())
+                 || (item->isExpression() && item->addToSkyline())
+                 || item->isHairpinSegment()
+                 || item->isTempoText()
+                 || item->isGradualTempoChangeSegment())) {
+                snappedCandidates.push_back(item);
+            }
+
+            if (!item->addToSkyline() || item->excludeVerticalAlign()) {
                 return;
             }
             bool isHarmony = alignChordSymbols && item->isHarmony();
@@ -634,6 +621,17 @@ void AlignmentMigration500::migrateSameItemTypeAlignment(MasterScore* masterScor
                 stickingGroups[key].push_back(item);
             }
         });
+
+        std::set<EngravingItem*> visited;
+        for (EngravingItem* item : snappedCandidates) {
+            if (muse::contains(visited, item)) {
+                continue;
+            }
+            const System* system = toSystem(item->findAncestor(ElementType::SYSTEM));
+            std::vector<EngravingItem*> group;
+            scanConnectedItemsInSnappingChain(item, system, visited, group);
+            alignItemOffsetGroup(group);
+        }
 
         for (auto& pair : harmonyGroups) {
             alignItemOffsetGroup(pair.second);
