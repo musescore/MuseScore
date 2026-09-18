@@ -238,6 +238,12 @@ INotationSelectionPtr AbstractElementPopupModel::selection() const
     return interaction ? interaction->selection() : nullptr;
 }
 
+mu::engraving::Score* AbstractElementPopupModel::score() const
+{
+    INotationElementsPtr elements = currentNotation() ? currentNotation()->elements() : nullptr;
+    return elements ? elements->msScore() : nullptr;
+}
+
 void AbstractElementPopupModel::init()
 {
     m_item = nullptr;
@@ -252,7 +258,18 @@ void AbstractElementPopupModel::init()
         return;
     }
 
+    mu::engraving::Score* score = this->score();
+    if (!score) {
+        return;
+    }
+
     m_item = selection->element();
+
+    score->elementDestroyed().onReceive(this, [this](EngravingItem* destroyed) {
+        if (m_item == destroyed) {
+            onItemDestroyed();
+        }
+    });
 
     undoStack->changesChannel().onReceive(this, [this] (const ScoreChanges& changes) {
         if (ignoreTextEditingChanges() && changes.isTextEditing) {
@@ -285,6 +302,11 @@ const mu::engraving::ElementTypeSet& AbstractElementPopupModel::dependentElement
 
     static const engraving::ElementTypeSet dummy;
     return dummy;
+}
+
+void AbstractElementPopupModel::onItemDestroyed()
+{
+    m_item = nullptr;
 }
 
 void AbstractElementPopupModel::updateItemRect()
