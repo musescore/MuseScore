@@ -75,12 +75,13 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
   # This information is public and can be extracted by anyone from the final .app file
   APPLE_TEAM_ID: 6EPAF2X3PR
 
 jobs:
   macos_universal:
-    runs-on: xcode-27
+    runs-on: macos-26
     steps:
     - name: Clone repository
       uses: actions/checkout@v7
