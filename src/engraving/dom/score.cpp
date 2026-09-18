@@ -2868,6 +2868,33 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
     return def;
 }
 
+static std::pair</*startStaff*/ staff_idx_t, /*endStaff*/ staff_idx_t> boxStartEndStaves(const Box* box,
+                                                                                         staff_idx_t scoreNstaves)
+{
+    IF_ASSERT_FAILED(box) {
+        return { muse::nidx, muse::nidx };
+    }
+
+    if (box->isVBoxBase()) {
+        if (scoreNstaves == 0) {
+            return { muse::nidx, muse::nidx };
+        }
+        return { 0, scoreNstaves };
+    }
+
+    const System* system = box->system();
+    if (!system) {
+        return { muse::nidx, muse::nidx };
+    }
+
+    const staff_idx_t firstVisible = system->firstVisibleStaff();
+    const staff_idx_t lastVisible = system->lastVisibleStaff();
+    if (firstVisible == muse::nidx || lastVisible == muse::nidx) {
+        return { muse::nidx, muse::nidx };
+    }
+    return { firstVisible, lastVisible + 1};
+}
+
 void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
 {
     if (m_selection.isSingle()) {
@@ -3011,37 +3038,13 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
 
     Box* newBox = newElement->isBox() ? toBox(newElement) : nullptr;
 
-    const staff_idx_t scoreNstaves = nstaves();
     staff_idx_t startStaffIdx = muse::nidx;
     staff_idx_t endStaffIdx = muse::nidx;
 
-    const auto expandStaveRangeToBox = [&startStaffIdx, &endStaffIdx, scoreNstaves](const Box* box) {
-        if (box->isVBoxBase()) {
-            if (scoreNstaves == 0) {
-                return;
-            }
-            startStaffIdx = 0;
-            endStaffIdx = scoreNstaves;
-            return;
-        }
-
-        const System* system = box->system();
-        if (!system) {
-            return;
-        }
-
-        const staff_idx_t firstVisible = system->firstVisibleStaff();
-        const staff_idx_t lastVisible = system->lastVisibleStaff();
-        if (firstVisible == muse::nidx || lastVisible == muse::nidx) {
-            return;
-        }
-
-        startStaffIdx = startStaffIdx == muse::nidx ? firstVisible : std::min(startStaffIdx, firstVisible);
-        endStaffIdx = endStaffIdx == muse::nidx ? lastVisible + 1 : std::max(endStaffIdx, lastVisible + 1);
-    };
-
     if (selectedBox) {
-        expandStaveRangeToBox(selectedBox);
+        const std::pair<staff_idx_t, staff_idx_t> boxStaves = boxStartEndStaves(selectedBox, nstaves());
+        startStaffIdx = boxStaves.first;
+        endStaffIdx = boxStaves.second;
     } else {
         startStaffIdx = selectedElement->staffIdx();
         endStaffIdx = startStaffIdx + 1;
@@ -3095,7 +3098,9 @@ bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx
 
         staff_idx_t newStaffIdx = newElement->staffIdx();
         if (newBox) {
-            expandStaveRangeToBox(newBox);
+            const std::pair<staff_idx_t, staff_idx_t> boxStaves = boxStartEndStaves(selectedBox, nstaves());
+            startStaffIdx = std::min(startStaffIdx, boxStaves.first);
+            endStaffIdx = std::max(endStaffIdx, boxStaves.second);
         } else if (newStaffIdx != muse::nidx) {
             startStaffIdx = std::min(startStaffIdx, newStaffIdx);
             endStaffIdx = std::max(endStaffIdx, newStaffIdx + 1);
