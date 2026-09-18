@@ -107,6 +107,8 @@ public:
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     muse::async::Notification projectBeingDownloadedChanged() const override;
 
+    muse::Uri resolveNotationPageUri() const override;
+
 private:
     void setupConnections();
 
@@ -215,7 +217,6 @@ private:
 
     muse::Ret doFinishOpenProject();
     muse::Ret openPageIfNeed(muse::Uri pageUri);
-    muse::Uri resolveNotationPageUri() const;
 
     void exportScore();
     void printScore();

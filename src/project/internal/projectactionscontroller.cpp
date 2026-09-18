@@ -147,7 +147,11 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
     }
 
     if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
-        return false;
+        static const std::unordered_set<ActionCode> ALLOWED_ON_REVIEW_PAGE {
+            "file-close",
+        };
+
+        return muse::contains(ALLOWED_ON_REVIEW_PAGE, code);
     }
 
     return true;

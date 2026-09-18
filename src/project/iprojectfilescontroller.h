@@ -24,6 +24,7 @@
 
 #include "modularity/imoduleinterface.h"
 #include "types/ret.h"
+#include "types/uri.h"
 #include "io/path.h"
 
 #include "types/projecttypes.h"
@@ -48,6 +49,8 @@ public:
 
     virtual const ProjectBeingDownloaded& projectBeingDownloaded() const = 0;
     virtual muse::async::Notification projectBeingDownloadedChanged() const = 0;
+
+    virtual muse::Uri resolveNotationPageUri() const = 0;
 };
 }
 
