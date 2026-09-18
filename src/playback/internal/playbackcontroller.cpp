@@ -1069,10 +1069,11 @@ void PlaybackController::resetCurrentSequence()
     m_onlineSoundsController->resetCurrentSequence();
 }
 
-void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
+void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, bool projectHadNoAudioSettings,
+                                  const TrackAddFinished& onFinished)
 {
     if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
-        doAddTrack(instrumentTrackId, muse::trc("playback", "Metronome"), onFinished);
+        doAddTrack(instrumentTrackId, muse::trc("playback", "Metronome"), projectHadNoAudioSettings, onFinished);
         return;
     }
 
@@ -1083,25 +1084,25 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
 
     if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
         const std::string trackName = muse::trc("playback", "Chords") + "." + part->partName().toStdString();
-        doAddTrack(instrumentTrackId, trackName, onFinished);
+        doAddTrack(instrumentTrackId, trackName, projectHadNoAudioSettings, onFinished);
         return;
     }
 
     const muse::String primaryInstrId = part->instrument()->id();
     if (instrumentTrackId.instrumentId == primaryInstrId) {
         const std::string trackName = part->partName().toStdString();
-        doAddTrack(instrumentTrackId, trackName, onFinished);
+        doAddTrack(instrumentTrackId, trackName, projectHadNoAudioSettings, onFinished);
         return;
     }
 
     const Instrument* instrument = part->instrumentById(instrumentTrackId.instrumentId);
     if (instrument != nullptr) {
         std::string trackName = "(" + instrument->trackName().toStdString() + ")";
-        doAddTrack(instrumentTrackId, trackName, onFinished);
+        doAddTrack(instrumentTrackId, trackName, projectHadNoAudioSettings, onFinished);
     }
 }
 
-void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title,
+void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title, bool projectHadNoAudioSettings,
                                     const TrackAddFinished& onFinished)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
@@ -1146,8 +1147,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     uint64_t playbackKey = notationPlaybackKey();
 
     playback()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, title, instrumentTrackId, playbackKey, onFinished, originMeta](const TrackId trackId,
-                                                                                           const AudioParams& appliedParams) {
+    .onResolve(this, [=](const TrackId trackId, const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
         if (notationPlaybackKey() != playbackKey) {
@@ -1156,9 +1156,9 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
 
         m_instrumentTrackIdMap.insert({ instrumentTrackId, trackId });
 
-        const bool trackNewlyAdded = !audioSettings()->trackHasExistingOutputParams(instrumentTrackId);
-        audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
-        audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
+        const bool trackNewlyAdded = projectHadNoAudioSettings || !audioSettings()->trackHasExistingOutputParams(instrumentTrackId);
+        audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in, !projectHadNoAudioSettings);
+        audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out, !projectHadNoAudioSettings);
 
         updateSoloMuteStates();
 
@@ -1191,7 +1191,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     m_loadingTrackCount++;
 }
 
-void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFinished& onFinished)
+void PlaybackController::addAuxTrack(aux_channel_idx_t index, bool projectHadNoAudioSettings, const TrackAddFinished& onFinished)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
@@ -1209,7 +1209,7 @@ void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFini
     uint64_t playbackKey = notationPlaybackKey();
 
     playback()->addAuxTrack(m_currentSequenceId, title, outParams)
-    .onResolve(this, [this, playbackKey, index, onFinished](const TrackId trackId, const AudioOutputParams& appliedParams) {
+    .onResolve(this, [=](const TrackId trackId, const AudioOutputParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
         if (notationPlaybackKey() != playbackKey) {
@@ -1218,7 +1218,7 @@ void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFini
 
         m_auxTrackIdMap.insert({ index, trackId });
 
-        audioSettings()->setAuxOutputParams(index, appliedParams);
+        audioSettings()->setAuxOutputParams(index, appliedParams, !projectHadNoAudioSettings);
 
         updateSoloMuteStates();
         onFinished();
@@ -1405,6 +1405,8 @@ void PlaybackController::setupSequenceTracks()
         return;
     }
 
+    const bool projectHadNoAudioSettings = !audioSettings()->hasAnyAudioSettings();
+
     m_loadingTrackCount = 0;
 
     InstrumentTrackIdSet trackIdSet = notationPlayback()->existingTrackIdSet();
@@ -1424,17 +1426,17 @@ void PlaybackController::setupSequenceTracks()
     };
 
     for (const InstrumentTrackId& trackId : trackIdSet) {
-        addTrack(trackId, onAddFinished);
+        addTrack(trackId, projectHadNoAudioSettings, onAddFinished);
     }
 
     for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
-        addAuxTrack(idx, onAddFinished);
+        addAuxTrack(idx, projectHadNoAudioSettings, onAddFinished);
     }
 
     m_loadingProgress.progress(0, trackCount, title);
 
     notationPlayback()->trackAdded().onReceive(this, [this, onAddFinished](const InstrumentTrackId& instrumentTrackId) {
-        addTrack(instrumentTrackId, onAddFinished);
+        addTrack(instrumentTrackId, false /*projectHadNoAudioSettings*/, onAddFinished);
     });
 
     notationPlayback()->trackRemoved().onReceive(this, [this](const InstrumentTrackId& instrumentTrackId) {

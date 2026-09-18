@@ -40,22 +40,27 @@ public:
 
     virtual ~IProjectAudioSettings() = default;
 
+    virtual bool hasAnyAudioSettings() const = 0;
+
     virtual const muse::audio::AudioOutputParams& masterAudioOutputParams() const = 0;
     virtual void setMasterAudioOutputParams(const muse::audio::AudioOutputParams& params) = 0;
 
     virtual bool containsAuxOutputParams(muse::audio::aux_channel_idx_t index) const = 0;
     virtual const muse::audio::AudioOutputParams& auxOutputParams(muse::audio::aux_channel_idx_t index) const = 0;
-    virtual void setAuxOutputParams(muse::audio::aux_channel_idx_t index, const muse::audio::AudioOutputParams& params) = 0;
+    virtual void setAuxOutputParams(muse::audio::aux_channel_idx_t index, const muse::audio::AudioOutputParams& params,
+                                    bool notifySettingsChanged = true) = 0;
 
     virtual const TrackInputParamsMap& allTrackInputParams() const = 0;
     virtual const muse::audio::AudioInputParams& trackInputParams(const engraving::InstrumentTrackId& trackId) const = 0;
-    virtual void setTrackInputParams(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioInputParams& params) = 0;
+    virtual void setTrackInputParams(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioInputParams& params,
+                                     bool notifySettingsChanged = true) = 0;
     virtual void clearTrackInputParams() = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackInputParamsChanged() const = 0;
 
     virtual bool trackHasExistingOutputParams(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual const muse::audio::AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& trackId) const = 0;
-    virtual void setTrackOutputParams(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioOutputParams& params) = 0;
+    virtual void setTrackOutputParams(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioOutputParams& params,
+                                      bool notifySettingsChanged = true) = 0;
 
     virtual const SoloMuteState& auxSoloMuteState(muse::audio::aux_channel_idx_t index) const = 0;
     virtual void setAuxSoloMuteState(muse::audio::aux_channel_idx_t index, const SoloMuteState& state) = 0;
