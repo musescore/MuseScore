@@ -34,6 +34,7 @@
 #include "../dom/segment.h"
 #include "../dom/spanner.h"
 #include "../dom/staff.h"
+#include "../dom/tie.h"
 #include "../dom/tiemap.h"
 #include "../dom/tremolotwochord.h"
 #include "../dom/tupletmap.h"
@@ -143,7 +144,14 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                         nn->setTpc2(Transpose::transposeTpc(nn->tpc1(), v, true));
                     }
 
-                    if (on->tieFor()) {
+                    if (!link && on->tieForNonPartial()) {
+                        // Keep ordinary ties out of chords while undoAddCR creates linked copies.
+                        Tie* tie = nn->tieFor();
+                        nn->setTieFor(nullptr);
+                        tie->setScore(destScore);
+                        tie->setTrack(nn->track());
+                        tieMap.add(on->tieFor(), tie);
+                    } else if (link && on->tieFor()) {
                         Tie* tie = toTie(maybeLinkedClone(on->tieFor()));
                         tie->setScore(destScore);
                         nn->setTieFor(tie);
@@ -155,7 +163,9 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                     if (on->tieBack()) {
                         Tie* tie = tieMap.findNew(on->tieBack());
                         if (tie) {
-                            nn->setTieBack(tie);
+                            if (link) {
+                                nn->setTieBack(tie);
+                            }
                             tie->setEndNote(nn);
                         } else {
                             LOGD("cloneVoices: cannot find tie");
@@ -258,6 +268,19 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
             } else {
                 // To all linked staves (implode/explode)
                 destScore->undoAddElement(newAnnotation);
+            }
+        }
+    }
+
+    if (!link) {
+        for (const auto& entry : tieMap) {
+            Tie* tie = toTie(entry.second);
+            if (tie->endNote()) {
+                // Both chords and their linked copies now exist.
+                destScore->undoAddElement(tie);
+            } else {
+                // As in paste, a tie without its copied endpoint is not included.
+                delete tie;
             }
         }
     }
