@@ -96,11 +96,12 @@ const ClefInfo ClefInfo::clefTable[] = {
 //   Clef
 //---------------------------------------------------------
 
-Clef::Clef(Segment* parent)
+Clef::Clef(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF)
 {
     m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
-    m_isHeader = parent->isHeaderClefType();
+    const Segment* segment = parent.as<Segment>();
+    m_isHeader = segment && segment->isHeaderClefType();
 }
 
 //---------------------------------------------------------
@@ -149,7 +150,6 @@ EngravingItem* Clef::drop(Transaction& tx, EditData& data)
                 score()->undoRemoveElement(segm->element(track()));
             }
             Ambitus* r = Factory::createAmbitus(segm);
-            r->setOwnershipParent(segm);
             r->setTrack(track());
             score()->undoAddElement(r);
         }

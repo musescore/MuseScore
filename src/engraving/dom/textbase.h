@@ -524,9 +524,9 @@ public:
     PointF defaultPos() const override;
 
 protected:
-    TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
+    TextBase(const ElementType& type, EngravingObject* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
-    TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
+    TextBase(const ElementType& type, EngravingObject* parent, ElementFlags);
     TextBase(const TextBase&);
 
     bool nudge(const EditData& ed);

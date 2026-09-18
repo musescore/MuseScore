@@ -344,7 +344,7 @@ void Read302::pasteSymbols(XmlReader&, ChordRest*)
     UNREACHABLE;
 }
 
-void Read302::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
+void Read302::readTremoloCompat(compat::TremoloCompat*, Score*, XmlReader&)
 {
     UNREACHABLE;
 }

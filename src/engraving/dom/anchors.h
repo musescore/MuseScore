@@ -65,7 +65,7 @@ private:
 
 class TimeTickAnchor : public EngravingItem
 {
-    TimeTickAnchor(Segment* parent);
+    TimeTickAnchor(DummyParentOr<Segment> parent);
     friend class Factory;
 
 public:

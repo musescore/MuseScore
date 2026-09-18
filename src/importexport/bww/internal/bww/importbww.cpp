@@ -354,7 +354,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     mu::engraving::DirectionV sd = mu::engraving::DirectionV::AUTO;
 
     // create chord
-    mu::engraving::Chord* cr = Factory::createChord(score->dummy()->segment());
+    mu::engraving::Chord* cr = Factory::createChord(score->dummy());
     //ws cr->setTick(tick);
     cr->setBeamMode(bm);
     cr->setTrack(0);

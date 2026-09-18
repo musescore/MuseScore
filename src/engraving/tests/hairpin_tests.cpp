@@ -37,7 +37,7 @@ class Engraving_HairpinTests : public ::testing::Test
 TEST_F(Engraving_HairpinTests, hairpin)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
-    Hairpin* hp = new Hairpin(score->dummy()->segment());
+    Hairpin* hp = new Hairpin(score->dummy());
 
     // subtype
     hp->setHairpinType(HairpinType::DIM_HAIRPIN);

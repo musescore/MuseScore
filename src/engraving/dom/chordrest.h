@@ -60,7 +60,7 @@ class ChordRest : public DurationElement
     DECLARE_CLASSOF(ElementType::INVALID) // dummy
 
 public:
-    ChordRest(const ElementType& type, Segment* parent);
+    ChordRest(const ElementType& type, DummyParentOr<Segment> parent);
     ChordRest(const ChordRest&, bool link = false);
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();

@@ -88,7 +88,7 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp)
 //   PalmMute
 //---------------------------------------------------------
 
-PalmMute::PalmMute(EngravingItem* parent)
+PalmMute::PalmMute(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::PALM_MUTE, parent)
 {
     initElementStyle(&palmMuteStyle);

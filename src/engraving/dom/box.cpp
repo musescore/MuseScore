@@ -393,7 +393,6 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
     case ElementType::STAFF_TEXT:
     {
         Text* text = Factory::createText(this, TextStyleType::FRAME);
-        text->setOwnershipParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);
         delete e;
@@ -966,7 +965,6 @@ TBox::TBox(Score* parent)
     resetProperty(Pid::BOX_HEIGHT);
     m_text  = Factory::createText(this, TextStyleType::FRAME);
     m_text->setLayoutToParentWidth(true);
-    m_text->setOwnershipParent(this);
 }
 
 TBox::TBox(const TBox& tbox)
@@ -1039,7 +1037,6 @@ void TBox::remove(EngravingItem* el)
         LOGD("TBox::remove() - replacing _text");
         m_text = Factory::createText(this, TextStyleType::FRAME);
         m_text->setLayoutToParentWidth(true);
-        m_text->setOwnershipParent(this);
         el->removed();
     } else {
         VBox::remove(el);

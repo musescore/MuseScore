@@ -57,7 +57,7 @@ class PalmMute final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::PALM_MUTE)
 
 public:
-    PalmMute(EngravingItem* parent);
+    PalmMute(DummyParentOr<EngravingItem> parent);
 
     PalmMute* clone() const override { return new PalmMute(*this); }
 

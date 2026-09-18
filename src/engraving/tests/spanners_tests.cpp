@@ -508,7 +508,7 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
     // DROP A BREAK AT FIRST MEASURE AND VERIFY
     Measure* msr   = score->firstMeasure();
     EXPECT_TRUE(msr);
-    brk = Factory::createLayoutBreak(score->dummy()->measure());
+    brk = Factory::createLayoutBreak(score->dummy());
     brk->setLayoutBreakType(LayoutBreakType::LINE);
 
     EditData dropData(0);

@@ -41,7 +41,7 @@ using namespace muse::draw;
 //   Bracket
 //---------------------------------------------------------
 
-Bracket::Bracket(EngravingItem* parent)
+Bracket::Bracket(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::BRACKET, parent)
 {
     m_ay1          = 0;

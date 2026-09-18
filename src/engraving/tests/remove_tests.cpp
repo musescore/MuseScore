@@ -22,10 +22,15 @@
 
 #include <gtest/gtest.h>
 
+#include "global/containers.h"
+
+#include "engraving/dom/bracket.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/spanner.h"
+#include "engraving/dom/system.h"
 
 #include "utils/scorerw.h"
 
@@ -113,4 +118,32 @@ TEST_F(Engraving_RemoveTests, removeStaffWithCourtesyClefs)
     EXPECT_TRUE(courtesyClef);
     EXPECT_TRUE(courtesyClef->leftParen());
     EXPECT_TRUE(courtesyClef->rightParen());
+}
+
+//! A bracket is only a rendering of its bracket item, so it must not outlive it:
+//! otherwise the system is left holding a bracket that points at freed memory.
+TEST_F(Engraving_RemoveTests, removingABracketItemRemovesItsBrackets)
+{
+    MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + u"remove_staff.mscx");
+    ASSERT_TRUE(score);
+
+    System* system = nullptr;
+    for (System* s : score->systems()) {
+        if (!s->brackets().empty()) {
+            system = s;
+            break;
+        }
+    }
+    ASSERT_TRUE(system);
+
+    const size_t bracketsBefore = system->brackets().size();
+
+    BracketItem* bracketItem = system->brackets().front()->bracketItem();
+    ASSERT_TRUE(bracketItem);
+    muse::remove(score->brackets(bracketItem->startStaffIdx()), bracketItem);
+    delete bracketItem;
+
+    EXPECT_EQ(system->brackets().size(), bracketsBefore - 1);
+
+    delete score;
 }

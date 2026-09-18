@@ -64,7 +64,7 @@ static const PitchValues RELEASE_DOWN_CURVE = { PitchValue(0, 150),
 //   TremoloBar
 //---------------------------------------------------------
 
-TremoloBar::TremoloBar(EngravingItem* parent)
+TremoloBar::TremoloBar(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::TREMOLOBAR, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tremoloBarStyle);

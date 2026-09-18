@@ -36,7 +36,7 @@ class MeasureNumber : public MeasureNumberBase
     DECLARE_CLASSOF(ElementType::MEASURE_NUMBER)
 
 public:
-    MeasureNumber(Measure* parent = nullptr, TextStyleType tid = TextStyleType::MEASURE_NUMBER);
+    MeasureNumber(DummyParentOr<Measure> parent, TextStyleType tid = TextStyleType::MEASURE_NUMBER);
     MeasureNumber(const MeasureNumber& other);
 
     virtual MeasureNumber* clone() const override { return new MeasureNumber(*this); }

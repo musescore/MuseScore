@@ -747,7 +747,7 @@ TEST_F(Engraving_MeasureTests, breathInPart)
         EXPECT_TRUE(m);
         ChordRest* cr = m->findChordRest(m->tick(), 0);
         EXPECT_TRUE(cr);
-        Breath* b = Factory::createBreath(score->dummy()->segment());
+        Breath* b = Factory::createBreath(score->dummy());
         b->setSymId(SymId::breathMarkComma);
         EditData dd(nullptr);
         dd.dropElement = b;
@@ -773,7 +773,7 @@ TEST_F(Engraving_MeasureTests, breathInPart)
         EXPECT_TRUE(m);
         ChordRest* cr = m->findChordRest(m->tick(), 0);
         EXPECT_TRUE(cr);
-        Breath* b = Factory::createBreath(score->dummy()->segment());
+        Breath* b = Factory::createBreath(score->dummy());
         b->setSymId(SymId::breathMarkTick);
         EditData dd(nullptr);
         dd.dropElement = b;

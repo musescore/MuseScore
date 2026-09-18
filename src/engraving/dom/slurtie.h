@@ -159,7 +159,7 @@ class SlurTie : public Spanner
     OBJECT_ALLOCATOR(engraving, SlurTie)
 
 public:
-    SlurTie(const ElementType& type, EngravingItem* parent);
+    SlurTie(const ElementType& type, EngravingObject* parent);
     SlurTie(const SlurTie&);
     ~SlurTie();
 

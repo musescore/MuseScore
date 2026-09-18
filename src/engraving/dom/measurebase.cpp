@@ -43,8 +43,6 @@ using namespace mu::engraving;
 MeasureBase::MeasureBase(const ElementType& type, Score* parent)
     : EngravingItem(type, parent)
 {
-    // Owned by its score right away; a system only places it later
-    setOwnershipParent(parent);
 }
 
 void MeasureBase::setOwnershipParent(Score* score)
@@ -527,7 +525,6 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
         lb->setTrack(0);
-        lb->setOwnershipParent(mb);
         score()->undoAddElement(lb);
     }
     cleanupLayoutBreaks(true);

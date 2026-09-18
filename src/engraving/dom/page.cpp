@@ -29,6 +29,7 @@
 #include "factory.h"
 #include "measurebase.h"
 #include "mscore.h"
+#include "rootitem.h"
 #include "score.h"
 #include "system.h"
 
@@ -41,9 +42,6 @@ using namespace mu::engraving;
 Page::Page(Score* parent)
     : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE)
 {
-    // Owned by its score right away; Score::m_pages manages page lifetime
-    setOwnershipParent(parent);
-
     m_bspTreeValid = false;
 }
 
@@ -61,11 +59,9 @@ EngravingItem* Page::layoutParent() const
 EngravingItem* Page::accessibleParentItem() const
 {
     // Above the visual hierarchy sits the root item, which exists only to head the
-    // accessibility tree. (The dummy's page hangs off the dummy's own root item, which
-    // the base implementation finds as its raw parent.)
-    EngravingItem* parent = EngravingItem::accessibleParentItem();
-
-    return parent ? parent : score()->rootItem();
+    // accessibility tree. A page that is not in the score belongs to the dummy's tree,
+    // which the base implementation finds.
+    return ownershipParent() ? score()->rootItem() : EngravingItem::accessibleParentItem();
 }
 
 Page::~Page()
