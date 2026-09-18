@@ -35,6 +35,7 @@ public:
 
     void setDefaultFont(Font::Type type, const FontDataKey& key) override;
     void insertSubstitution(const String& f1, const String& substituteName) override;
+    void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) override;
 
     int addFont(const FontDataKey& key, const io::path_t& path) override;
     void removeFont(const FontDataKey& key) override;
