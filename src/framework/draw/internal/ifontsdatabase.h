@@ -35,6 +35,7 @@ public:
 
     virtual void setDefaultFont(Font::Type type, const FontDataKey& key) = 0;
     virtual void insertSubstitution(const String& f1, const String& substituteName) = 0;
+    virtual void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) = 0;
 
     virtual int addFont(const FontDataKey& key, const io::path_t& path) = 0;
 
