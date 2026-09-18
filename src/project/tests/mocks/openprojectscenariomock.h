@@ -32,10 +32,11 @@ class OpenProjectScenarioMock : public IOpenProjectScenario
 public:
     MOCK_METHOD(bool, isUrlSupported, (const QUrl& url), (const, override));
     MOCK_METHOD(bool, isFileSupported, (const muse::io::path_t& path), (const, override));
-    MOCK_METHOD(muse::Ret, openProject, (const ProjectFile& file), (override));
-    MOCK_METHOD(muse::Ret, openProject, (const muse::io::path_t& path, const QString& displayNameOverride), (override));
-    MOCK_METHOD(muse::Ret, openProject, (const muse::rcommand::Params& params), (override));
-    MOCK_METHOD(void, revertToLastSaved, (), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, openProject, (const ProjectFile& file), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, openProject,
+                (const muse::io::path_t& path, const QString& displayNameOverride), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, openProject, (const muse::rcommand::Params& params), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, revertToLastSaved, (), (override));
     MOCK_METHOD(muse::Ret, finishOpening, (), (override));
     MOCK_METHOD(const ProjectBeingDownloaded&, projectBeingDownloaded, (), (const, override));
     MOCK_METHOD(muse::async::Notification, projectBeingDownloadedChanged, (), (const, override));

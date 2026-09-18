@@ -22,8 +22,6 @@
 
 #include <gmock/gmock.h>
 
-#include "async/processevents.h"
-
 #include "project/internal/closeprojectscenario.h"
 
 #include "context/tests/mocks/globalcontextmock.h"
@@ -33,6 +31,7 @@
 #include "mocks/commanddispatchermock.h"
 #include "mocks/notationprojectmock.h"
 #include "mocks/saveprojectscenariomock.h"
+#include "utils/promisetest.h"
 
 using ::testing::_;
 using ::testing::AnyNumber;
@@ -44,7 +43,7 @@ using namespace muse;
 using namespace mu::project;
 
 namespace mu::project {
-class CloseProjectScenarioTests : public ::testing::Test, public async::Asyncable
+class CloseProjectScenarioTests : public PromiseTest
 {
 protected:
     void SetUp() override
@@ -76,11 +75,7 @@ protected:
         ON_CALL(*m_interactive, buttonData(_)).WillByDefault([](IInteractive::Button btn) {
             return IInteractive::ButtonData(btn, "");
         });
-        ON_CALL(*m_interactive, open(_)).WillByDefault([] {
-            return async::make_promise<Val>([](auto resolve) {
-                return resolve(Val());
-            });
-        });
+        ON_CALL(*m_interactive, open(_)).WillByDefault([] { return dialogAnswer(RetVal<Val>::make_ok(Val())); });
         ON_CALL(*m_interactive, closeAllDialogs()).WillByDefault([] { return resolvedPromise(make_ok()); });
         ON_CALL(*m_commandDispatcher, dispatch(_)).WillByDefault([](const rcommand::Request& request) {
             return async::make_promise<rcommand::Response>([request](auto resolve) {
@@ -96,45 +91,6 @@ protected:
 
         release(m_globalContext);
         release(m_project);
-    }
-
-    template<typename T>
-    static void release(const std::shared_ptr<T>& mock)
-    {
-        ::testing::Mock::VerifyAndClearExpectations(mock.get());
-        ::testing::Mock::AllowLeak(mock.get());
-    }
-
-    //! A deferred call may queue another one, hence the repetition.
-    static void drainDeferredCalls()
-    {
-        for (int i = 0; i < 10; ++i) {
-            async::processMessages();
-        }
-    }
-
-    static async::Promise<Ret> resolvedPromise(const Ret& ret)
-    {
-        return async::make_promise<Ret>([ret](auto resolve) {
-            return resolve(ret);
-        });
-    }
-
-    //! Subscribes to `promise`, drains the deferred calls and hands back the result.
-    template<typename T>
-    T await(async::Promise<T> promise)
-    {
-        T result = T(make_ret(Ret::Code::UnknownError));
-        bool resolved = false;
-        promise.onResolve(this, [&result, &resolved](const T& value) {
-            result = value;
-            resolved = true;
-        });
-
-        drainDeferredCalls();
-
-        EXPECT_TRUE(resolved) << "the promise did not resolve";
-        return result;
     }
 
     Ret closeOpenedProject(bool goToHome = true)
@@ -160,11 +116,7 @@ protected:
     void givenUnsavedChangesAnsweredWith(IInteractive::Button btn)
     {
         ON_CALL(*m_project, isNeedSave()).WillByDefault(Return(true));
-        ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([btn] {
-            return async::make_promise<IInteractive::Result>([btn](auto resolve) {
-                return resolve(IInteractive::Result(int(btn)));
-            });
-        });
+        ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([btn] { return dialogResult(btn); });
     }
 
     void givenSaveFinishesWith(const Ret& ret)

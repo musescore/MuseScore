@@ -24,8 +24,10 @@
 
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
+#include "async/promise.h"
 #include "io/path.h"
 #include "rcommand/commandtypes.h"
+#include "types/ret.h"
 
 #include "types/projecttypes.h"
 #include "types/projectfile.h"
@@ -41,11 +43,11 @@ public:
     virtual bool isUrlSupported(const QUrl& url) const = 0;
     virtual bool isFileSupported(const muse::io::path_t& path) const = 0;
 
-    virtual muse::Ret openProject(const ProjectFile& file) = 0;
-    virtual muse::Ret openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString()) = 0;
-    virtual muse::Ret openProject(const muse::rcommand::Params& params) = 0;
+    virtual muse::async::Promise<muse::Ret> openProject(const ProjectFile& file) = 0;
+    virtual muse::async::Promise<muse::Ret> openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString()) = 0;
+    virtual muse::async::Promise<muse::Ret> openProject(const muse::rcommand::Params& params) = 0;
 
-    virtual void revertToLastSaved() = 0;
+    virtual muse::async::Promise<muse::Ret> revertToLastSaved() = 0;
 
     virtual muse::Ret finishOpening() = 0;
 

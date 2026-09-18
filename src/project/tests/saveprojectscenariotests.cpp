@@ -27,8 +27,6 @@
 #include <QFile>
 
 #include "async/async.h"
-#include "async/processevents.h"
-
 #include "project/internal/saveprojectscenario.h"
 #include "project/projecterrors.h"
 
@@ -52,6 +50,7 @@
 #include "mocks/openprojectscenariomock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/recentfilescontrollermock.h"
+#include "utils/promisetest.h"
 
 using ::testing::_;
 using ::testing::NiceMock;
@@ -62,7 +61,7 @@ using namespace muse;
 using namespace mu::project;
 
 namespace mu::project {
-class SaveProjectScenarioTests : public ::testing::Test, public async::Asyncable
+class SaveProjectScenarioTests : public PromiseTest
 {
 protected:
     void SetUp() override
@@ -133,17 +132,15 @@ protected:
         });
 
         // Dialogs resolve immediately so that unstubbed paths do not abort the test.
-        ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
-        ON_CALL(*m_interactive, error(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
+        ON_CALL(*m_interactive, warning(_, _, _, _, _, _)).WillByDefault([] { return dialogResult(); });
+        ON_CALL(*m_interactive, error(_, _, _, _, _, _)).WillByDefault([] { return dialogResult(); });
         ON_CALL(*m_interactive, buttonData(_)).WillByDefault([](IInteractive::Button btn) {
             return IInteractive::ButtonData(btn, "");
         });
-        ON_CALL(*m_interactive, info(_, _, _, _, _, _)).WillByDefault([] { return resolvedResult(); });
-        ON_CALL(*m_interactive, open(_)).WillByDefault([] {
-            return async::make_promise<Val>([](auto resolve, auto) {
-                return resolve(Val());
-            });
-        });
+        ON_CALL(*m_interactive, info(_, _, _, _, _, _)).WillByDefault([] { return dialogResult(); });
+        ON_CALL(*m_interactive, open(_)).WillByDefault([] { return dialogAnswer(RetVal<Val>::make_ok(Val())); });
+
+        ON_CALL(*m_openScenario, revertToLastSaved()).WillByDefault([] { return resolvedPromise(make_ok()); });
     }
 
     void TearDown() override
@@ -163,49 +160,6 @@ protected:
         release(m_project);
         release(m_masterNotation);
         release(m_notation);
-    }
-
-    template<typename T>
-    static void release(const std::shared_ptr<T>& mock)
-    {
-        ::testing::Mock::VerifyAndClearExpectations(mock.get());
-        ::testing::Mock::AllowLeak(mock.get());
-    }
-
-    static async::Promise<IInteractive::Result> resolvedResult()
-    {
-        return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
-            return resolve(IInteractive::Result(int(IInteractive::Button::Ok)));
-        });
-    }
-
-    //! Subscribes to `promise`, drains the deferred calls and hands back the result.
-    template<typename T>
-    T await(async::Promise<T> promise)
-    {
-        T result = T(make_ret(Ret::Code::UnknownError));
-        bool resolved = false;
-        promise.onResolve(this, [&result, &resolved](const T& value) {
-            result = value;
-            resolved = true;
-        });
-
-        drainDeferredCalls();
-
-        EXPECT_TRUE(resolved) << "the promise did not resolve";
-        return result;
-    }
-
-    //! A dialog that settles the way `answer` says: resolved with its value, or rejected with its error.
-    static async::Promise<Val> dialogAnswer(const RetVal<Val>& answer)
-    {
-        return async::make_promise<Val>([answer](auto resolve, auto reject) {
-            if (!answer.ret) {
-                return reject(answer.ret.code(), answer.ret.text());
-            }
-
-            return resolve(answer.val);
-        });
     }
 
     Ret saveProject(SaveMode mode, SaveLocationType type = SaveLocationType::Undefined, bool force = false)
@@ -275,14 +229,6 @@ protected:
         authorized.val = false;
         ON_CALL(*m_authorization, userAuthorized()).WillByDefault(Return(authorized));
         ON_CALL(*m_interactive, open(IsLoginDialog())).WillByDefault([answer] { return dialogAnswer(answer); });
-    }
-
-    //! A deferred call may queue another one, hence the repetition.
-    static void drainDeferredCalls()
-    {
-        for (int i = 0; i < 10; ++i) {
-            async::processMessages();
-        }
     }
 
     //! The save location dialog is settled on "local file", and resolves to `path`.

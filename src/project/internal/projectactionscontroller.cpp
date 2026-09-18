@@ -279,12 +279,12 @@ muse::Ret ProjectActionsController::openPageIfNeed(muse::Uri pageUri)
 
 muse::Ret ProjectActionsController::openProject(const muse::io::path_t& path, const QString& displayNameOverride)
 {
-    return openProjectScenario()->openProject(path, displayNameOverride);
+    return runAsync(openProjectScenario()->openProject(path, displayNameOverride));
 }
 
 muse::Ret ProjectActionsController::openProject(const muse::rcommand::Params& params)
 {
-    return openProjectScenario()->openProject(params);
+    return runAsync(openProjectScenario()->openProject(params));
 }
 
 bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath) const

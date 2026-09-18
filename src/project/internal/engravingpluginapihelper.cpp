@@ -57,18 +57,20 @@ Score* EngravingPluginAPIHelper::readScore(const QString& name)
 {
     const muse::io::path_t path(name);
     const ProjectFile file(path);
-    const Ret ret = openProjectScenario()->openProject(file);
 
-    if (ret.success() && globalContext()->currentNotation()) {
-        return globalContext()->currentNotation()->elements()->msScore();
-    }
+    openProjectScenario()->openProject(file)
+    .onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGD() << "score was not opened: " << ret.toString();
+        }
+    });
+
+    //! TODO: return promise to js
     return nullptr;
 }
 
 void EngravingPluginAPIHelper::closeScore()
 {
-    //! NOTE The plugin API has nowhere to report the outcome to, and the close may still
-    //! ask the user about unsaved changes, so the flow is only started here
     closeProjectController()->closeOpenedProject()
     .onResolve(this, [](const Ret& ret) {
         if (!ret) {
