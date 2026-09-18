@@ -329,13 +329,15 @@ static void doMigrateOffset500(EngravingItem* item)
         return;
     }
 
-    // In versions <5 any adjustment to offset meant we couldn't centre items between staves
-    item->setProperty(Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
-    if (item->isStyled(Pid::CENTER_BETWEEN_STAVES)) {
-        item->setPropertyFlags(Pid::CENTER_BETWEEN_STAVES, PropertyFlags::UNSTYLED);
-    }
-
     item->setProperty(Pid::OFFSET, CompatUtils::getAdjustedOffset(item, item->offset()));
+
+    if (!muse::RealIsNull(item->offset().y())) {
+        // In versions <5 any adjustment to y offset meant we couldn't centre items between staves
+        item->setProperty(Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+        if (item->isStyled(Pid::CENTER_BETWEEN_STAVES)) {
+            item->setPropertyFlags(Pid::CENTER_BETWEEN_STAVES, PropertyFlags::UNSTYLED);
+        }
+    }
 }
 
 void EngravingCompat::migrateOffset500(MasterScore* masterScore)
