@@ -22,6 +22,7 @@
 
 #include "exportmidi.h"
 
+#include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/lyrics.h"
@@ -32,6 +33,7 @@
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/swing.h"
 #include "engraving/dom/synthesizerstate.h"
 #include "engraving/dom/tempotimeline.h"
 
@@ -199,6 +201,29 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
                       static_cast<unsigned char>(tempo) });
         track.insert(tick, ev);
     }
+}
+
+//---------------------------------------------------------
+//   swingTickOffset
+//---------------------------------------------------------
+
+static int swingTickOffset(const ChordRest* cr)
+{
+    if (!cr->isChord()) {
+        return 0;
+    }
+
+    const Chord* chord = toChord(cr);
+    const SwingParameters st = chord->staff()->swing(chord->tick());
+    if (!st.swingUnit || chord->tuplet() || chord->playEventType() != PlayEventType::Auto) {
+        return 0;
+    }
+
+    int onTime = 0;
+    int gateTime = 100;
+    Swing::swingAdjustParams(chord, st, onTime, gateTime);
+
+    return chord->actualTicks().ticks() * onTime / 1000;
 }
 
 //---------------------------------------------------------
@@ -388,7 +413,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                             ev.setEData(std::move(data));
                             ev.setLen(static_cast<int>(len));
 
-                            int tick = cr->tick().ticks() + tickOffset;
+                            int tick = cr->tick().ticks() + tickOffset + swingTickOffset(cr);
                             track.insert(CompatMidiRender::tick(context, tick), ev);
                         }
                     }
