@@ -427,6 +427,7 @@ void NotationActionController::init()
     registerCommand(PASTE_HALF_COMMAND, [this]() { pasteSelection(PastingType::Half); });
     registerCommand(PASTE_DOUBLE_COMMAND, [this]() { pasteSelection(PastingType::Double); });
     registerCommand(PASTE_SPECIAL_COMMAND, [this]() { pasteSelection(PastingType::Special); });
+    registerCommand(PASTE_DYNAMICS_COMMAND, &Interaction::pasteDynamics);
     registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
 
     // move commands
@@ -680,6 +681,7 @@ void NotationActionController::init()
             { "notation-paste-half", PASTE_HALF_COMMAND, {} },
             { "notation-paste-double", PASTE_DOUBLE_COMMAND, {} },
             { "notation-paste-special", PASTE_SPECIAL_COMMAND, {} },
+            { "notation-paste-dynamics", PASTE_DYNAMICS_COMMAND, {} },
             { "notation-swap", COPY_PASTE_SWAP_COMMAND, {} },
             { "action://notation/delete", DELETE_COMMAND, {} },
             { "action://notation/cancel", CANCEL_COMMAND, {} },
