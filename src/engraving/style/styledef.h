@@ -277,6 +277,7 @@ enum class Sid : short {
     barNoteDistance,
     barAccidentalDistance,
     noteBarDistance,
+    oversizedNoteheads,
 
     spacingDensity,
     measureSpacing, // At some point we should rename this. This name is a legacy relic. This is now the spacing ratio.

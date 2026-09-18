@@ -56,12 +56,15 @@ EngravingFont::EngravingFont(const std::string& name, const std::string& family,
 
 EngravingFont::EngravingFont(const EngravingFont& other)
 {
-    m_loaded = false;
-    m_symbols  = other.m_symbols;
-    m_name     = other.m_name;
-    m_family   = other.m_family;
-    m_fontPath = other.m_fontPath;
+    m_loaded       = false;
+    m_symbols      = other.m_symbols;
+    m_name         = other.m_name;
+    m_family       = other.m_family;
+    m_fontPath     = other.m_fontPath;
     m_metadataPath = other.m_metadataPath;
+    m_engravingDefaults      = other.m_engravingDefaults;
+    m_textEnclosureThickness = other.m_textEnclosureThickness;
+    m_oversizedNoteheads     = other.m_oversizedNoteheads;
 }
 
 // =============================================
@@ -86,6 +89,25 @@ std::unordered_map<Sid, PropertyValue> EngravingFont::engravingDefaults() const
 double EngravingFont::textEnclosureThickness()
 {
     return m_textEnclosureThickness;
+}
+
+bool EngravingFont::oversizedNoteheads() const
+{
+    return m_oversizedNoteheads;
+}
+
+void EngravingFont::setOversizedNoteheads(bool val)
+{
+    if (m_oversizedNoteheads != val) {
+        m_oversizedNoteheads = val;
+    }
+}
+
+std::shared_ptr<IEngravingFont> EngravingFont::clone() const
+{
+    auto clonedFont = std::make_shared<EngravingFont>(*this);
+    clonedFont->ensureLoad();
+    return clonedFont;
 }
 
 // =============================================
@@ -237,23 +259,23 @@ static const struct GlyphWithAlternates {
     },
     { std::string("noteheadBlack"),
       std::string("noteheadBlackOversized"),
-      SymId::noteheadBlack
+      SymId::noteheadBlackOversized
     },
     { std::string("noteheadHalf"),
       std::string("noteheadHalfOversized"),
-      SymId::noteheadHalf
+      SymId::noteheadHalfOversized
     },
     { std::string("noteheadWhole"),
       std::string("noteheadWholeOversized"),
-      SymId::noteheadWhole
+      SymId::noteheadWholeOversized
     },
     { std::string("noteheadDoubleWhole"),
       std::string("noteheadDoubleWholeOversized"),
-      SymId::noteheadDoubleWhole
+      SymId::noteheadDoubleWholeOversized
     },
     { std::string("noteheadDoubleWholeSquare"),
       std::string("noteheadDoubleWholeSquareOversized"),
-      SymId::noteheadDoubleWholeSquare
+      SymId::noteheadDoubleWholeSquareOversized
     },
     { std::string("noteheadDoubleWhole"),
       std::string("noteheadDoubleWholeAlt"),
@@ -838,6 +860,10 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         applyEngravingDefault(key, engravingDefaultsObject.value(key).toDouble());
     }
 
+    bool defaultOversized = (m_family == "Bravura");
+    m_engravingDefaults.insert({ Sid::oversizedNoteheads, defaultOversized });
+    m_oversizedNoteheads = defaultOversized;
+
     m_engravingDefaults.insert({ Sid::musicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
 }
 
@@ -859,14 +885,32 @@ void EngravingFont::computeMetrics(EngravingFont::Sym& sym, const Smufl::Code& c
 // Symbol properties
 // =============================================
 
+SymId EngravingFont::resolveSymId(SymId id) const
+{
+    SymId oversizedId = id;
+    switch (id) {
+        case SymId::noteheadBlack:             oversizedId = SymId::noteheadBlackOversized; break;
+        case SymId::noteheadHalf:              oversizedId = SymId::noteheadHalfOversized; break;
+        case SymId::noteheadWhole:             oversizedId = SymId::noteheadWholeOversized; break;
+        case SymId::noteheadDoubleWhole:       oversizedId = SymId::noteheadDoubleWholeOversized; break;
+        case SymId::noteheadDoubleWholeSquare: oversizedId = SymId::noteheadDoubleWholeSquareOversized; break;
+        default:                               return id;
+    }
+    return m_symbols[static_cast<size_t>(oversizedId)].isValid() ? oversizedId : id;
+}
+
 EngravingFont::Sym& EngravingFont::sym(SymId id)
 {
-    return m_symbols[static_cast<size_t>(id)];
+    return m_oversizedNoteheads
+        ? m_symbols[static_cast<size_t>(resolveSymId(id))]
+        : m_symbols[static_cast<size_t>(id)];
 }
 
 const EngravingFont::Sym& EngravingFont::sym(SymId id) const
 {
-    return m_symbols.at(static_cast<size_t>(id));
+    return m_oversizedNoteheads
+        ? m_symbols.at(static_cast<size_t>(resolveSymId(id)))
+        : m_symbols.at(static_cast<size_t>(id));
 }
 
 char32_t EngravingFont::symCode(SymId id) const
