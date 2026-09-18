@@ -48,6 +48,8 @@ qt_add_qml_module(project_qml
         internal/ScoresPage/cloudscorestatuswatcher.h
         internal/ScoresPage/pixmapscorethumbnailview.cpp
         internal/ScoresPage/pixmapscorethumbnailview.h
+        internal/ScoresPage/qsmodel.h
+        internal/ScoresPage/qsmodel.mm
         internal/ScoresPage/recentscoresmodel.cpp
         internal/ScoresPage/recentscoresmodel.h
         internal/ScoresPage/scorespagemodel.cpp
@@ -132,6 +134,9 @@ qt_add_qml_module(project_qml
         internal/ScoresPage/images/Placeholder_Other.png
         resources/AudioCom_Waveform.png
         resources/PublishScores.png
+        resources/qsb_hovered.png
+        resources/qsb_normal.png
+        resources/qsb_pressed.png
     IMPORTS
         TARGET muse_cloud_qml
         TARGET muse_ui_qml
@@ -148,4 +153,11 @@ target_include_directories(project_qml PRIVATE
     internal/NewScore
     internal/Properties
     internal/ScoresPage
+)
+
+set_source_files_properties(
+    internal/ScoresPage/qsmodel.mm
+    PROPERTIES
+    SKIP_UNITY_BUILD_INCLUSION ON
+    SKIP_PRECOMPILE_HEADERS ON
 )
