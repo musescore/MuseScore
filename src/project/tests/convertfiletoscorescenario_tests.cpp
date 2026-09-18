@@ -899,8 +899,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_O
         return resolvedValPromise(Val::fromQVariant(result));
     }));
 
-    // [THEN] The app navigates to Home > Scores page
-    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://home?section=scores")))
+    // [THEN] The app navigates to Home > Scores page, on the "My online scores" tab
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://home?section=scores&subSection=myOnlineScores")))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedValPromise();
