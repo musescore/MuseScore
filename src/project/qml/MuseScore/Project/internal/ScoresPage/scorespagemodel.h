@@ -25,6 +25,7 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "actions/iactionsdispatcher.h"
@@ -34,7 +35,7 @@
 class QString;
 
 namespace mu::project {
-class ScoresPageModel : public QObject, public muse::Contextable
+class ScoresPageModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -35,10 +35,10 @@ namespace mu::project {
 class PromiseTest : public ::testing::Test, public muse::async::Asyncable
 {
 protected:
-    //! A deferred call may queue another one, hence the repetition.
+    //! A deferred call may queue another one, and a flow can be many of them long, hence the repetition.
     static void drainDeferredCalls()
     {
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 100; ++i) {
             muse::async::processMessages();
         }
     }
@@ -47,17 +47,24 @@ protected:
     template<typename T>
     T await(muse::async::Promise<T> promise)
     {
-        T result = T(muse::make_ret(muse::Ret::Code::UnknownError));
-        bool resolved = false;
-        promise.onResolve(this, [&result, &resolved](const T& value) {
-            result = value;
-            resolved = true;
+        //! NOTE Held on the heap: a flow that outlives the drain would otherwise
+        //! report back into a stack frame that is already gone
+        struct Awaited {
+            bool resolved = false;
+            T result = T(muse::make_ret(muse::Ret::Code::UnknownError));
+        };
+
+        auto awaited = std::make_shared<Awaited>();
+
+        promise.onResolve(this, [awaited](const T& value) {
+            awaited->result = value;
+            awaited->resolved = true;
         });
 
         drainDeferredCalls();
 
-        EXPECT_TRUE(resolved) << "the promise did not resolve";
-        return result;
+        EXPECT_TRUE(awaited->resolved) << "the promise did not resolve";
+        return awaited->result;
     }
 
     //! A flow that is already over, and resolves with `value`.

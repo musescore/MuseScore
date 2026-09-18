@@ -114,10 +114,17 @@ private:
     muse::async::Promise<muse::RetVal<CloudProjectInfo> > askCloudLocation(INotationProjectPtr project, SaveMode mode) const;
     muse::async::Promise<muse::RetVal<CloudProjectInfo> > askPublishLocation(INotationProjectPtr project) const;
     muse::async::Promise<muse::RetVal<CloudAudioInfo> > askShareAudioLocation(INotationProjectPtr project) const;
+    muse::async::Promise<muse::RetVal<CloudAudioInfo> > doAskShareAudioLocation(INotationProjectPtr project) const;
     muse::async::Promise<muse::RetVal<CloudProjectInfo> > doAskCloudLocation(INotationProjectPtr project, SaveMode mode,
                                                                              bool isPublishShare) const;
+    muse::async::Promise<muse::RetVal<CloudProjectInfo> > doAskCloudLocationAuthorized(INotationProjectPtr project, SaveMode mode,
+                                                                                       bool isPublishShare) const;
     muse::async::Promise<muse::RetVal<CloudProjectInfo> > askCloudProjectInfo(INotationProjectPtr project, SaveMode mode,
                                                                               bool isPublishShare) const;
+    muse::async::Promise<muse::RetVal<CloudProjectInfo> > askCloudProjectInfo(INotationProjectPtr project, SaveMode mode,
+                                                                              bool isPublishShare, const QString& defaultName,
+                                                                              muse::cloud::Visibility defaultVisibility,
+                                                                              const QUrl& existingScoreUrl) const;
     muse::async::Promise<bool> warnBeforePublishing(bool isPublishShare, muse::cloud::Visibility visibility) const;
     muse::async::Promise<bool> warnBeforeSavingToExistingPubliclyVisibleCloudProject() const;
     muse::async::Promise<muse::Ret> warnCloudNotAvailableForUploading(bool isPublishShare) const;
@@ -132,6 +139,7 @@ private:
     muse::async::Promise<muse::Ret> saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     muse::async::Promise<muse::Ret> doSaveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode);
     muse::async::Promise<muse::Ret> saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
+    muse::async::Promise<muse::Ret> doSaveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode);
     muse::async::Promise<muse::Ret> saveAndUploadProject(const INotationProjectPtr& project, CloudProjectInfo info, SaveMode saveMode);
     muse::async::Promise<muse::Ret> doSaveAndUploadProject(const INotationProjectPtr& project, const CloudProjectInfo& info,
                                                            SaveMode saveMode, bool isPublic);

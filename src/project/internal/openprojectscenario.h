@@ -115,6 +115,7 @@ private:
                                                          const QString& secret, const CloudProjectInfo& info, bool isOwner);
     muse::async::Promise<muse::Ret> openMuseScoreUrl(const QUrl& url);
     muse::async::Promise<muse::Ret> openScoreFromMuseScoreCom(const QUrl& url);
+    muse::async::Promise<muse::Ret> openScoreFromMuseScoreCom(const QUrl& url, int scoreId, const muse::cloud::ScoreInfo& scoreInfo);
 
     muse::Ret openPageIfNeed(muse::Uri pageUri);
 

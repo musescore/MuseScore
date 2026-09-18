@@ -419,41 +419,24 @@ Promise<Ret> SaveProjectScenario::saveProjectLocally(const muse::io::path_t& fil
 Promise<Ret> SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)
 {
     return runIfNotBusy(BusyStatus::Uploading, [this, info, saveMode]() {
-        bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
-        if (!isCloudAvailable) {
-            warnCloudIsNotAvailable();
+        return museScoreComService()->authorization()->checkCloudIsAvailable()
+               .then<Ret>(this, [this, info, saveMode](const Ret& isCloudAvailable, auto resolve) {
+            if (!isCloudAvailable) {
+                warnCloudIsNotAvailable();
 
-            INotationProjectPtr project = currentNotationProject();
-            if (!project) {
-                return resolvedPromise(make_ret(Err::NoProjectError));
-            }
+                INotationProjectPtr project = currentNotationProject();
+                if (!project) {
+                    return resolve(make_ret(Err::NoProjectError));
+                }
 
-            return saveCloudProjectLocally(project, info, saveMode);
-        }
-
-        std::string dialogText = muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
-
-        return ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText)
-               .then<Ret>(this, [this, info, saveMode](const RetVal<Val>& auth, auto resolve) {
-            if (!auth.ret) {
-                return resolve(auth.ret);
-            }
-
-            INotationProjectPtr project = currentNotationProject();
-            if (!project) {
-                return resolve(make_ret(Err::NoProjectError));
-            }
-
-            using Response = muse::cloud::SaveToCloudResponse::SaveToCloudResponse;
-            if (static_cast<Response>(auth.val.toInt()) == Response::SaveLocallyInstead) {
-                saveProjectLocallyInstead(project, saveMode).onResolve(this, [resolve](const Ret& ret) {
+                saveCloudProjectLocally(project, info, saveMode).onResolve(this, [resolve](const Ret& ret) {
                     (void)resolve(ret);
                 });
 
                 return Promise<Ret>::dummy_result();
             }
 
-            saveAndUploadProject(project, info, saveMode).onResolve(this, [resolve](const Ret& ret) {
+            doSaveProjectToCloud(info, saveMode).onResolve(this, [resolve](const Ret& ret) {
                 (void)resolve(ret);
             });
 
@@ -462,40 +445,83 @@ Promise<Ret> SaveProjectScenario::saveProjectToCloud(CloudProjectInfo info, Save
     });
 }
 
+Promise<Ret> SaveProjectScenario::doSaveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
+{
+    std::string dialogText = muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
+
+    return ensureAuthorization(muse::cloud::MUSESCORE_COM_CLOUD_CODE, true, dialogText)
+           .then<Ret>(this, [this, info, saveMode](const RetVal<Val>& auth, auto resolve) {
+        if (!auth.ret) {
+            return resolve(auth.ret);
+        }
+
+        INotationProjectPtr project = currentNotationProject();
+        if (!project) {
+            return resolve(make_ret(Err::NoProjectError));
+        }
+
+        using Response = muse::cloud::SaveToCloudResponse::SaveToCloudResponse;
+        if (static_cast<Response>(auth.val.toInt()) == Response::SaveLocallyInstead) {
+            saveProjectLocallyInstead(project, saveMode).onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        }
+
+        saveAndUploadProject(project, info, saveMode).onResolve(this, [resolve](const Ret& ret) {
+            (void)resolve(ret);
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
 Promise<Ret> SaveProjectScenario::saveAndUploadProject(const INotationProjectPtr& project, CloudProjectInfo info, SaveMode saveMode)
 {
-    bool isPublic = info.visibility == muse::cloud::Visibility::Public;
+    const bool isPublic = info.visibility == muse::cloud::Visibility::Public;
 
-    if (saveMode == SaveMode::Save) {
-        // Get up-to-date visibility information
-        RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
-        if (scoreInfo.ret) {
-            info.name = scoreInfo.val.title;
-            info.visibility = scoreInfo.val.visibility;
-            isPublic = info.visibility == muse::cloud::Visibility::Public;
-        } else {
-            LOGE() << "Failed to download up-to-date score info for " << info.sourceUrl
-                   << "; falling back to last known name and visibility setting, namely "
-                   << info.name << " and " << static_cast<int>(info.visibility);
-        }
-
-        if (isPublic) {
-            return warnBeforeSavingToExistingPubliclyVisibleCloudProject()
-                   .then<Ret>(this, [this, project, info, saveMode, isPublic](bool agreed, auto resolve) {
-                if (!agreed) {
-                    return resolve(make_ret(Ret::Code::Cancel));
-                }
-
-                doSaveAndUploadProject(project, info, saveMode, isPublic).onResolve(this, [resolve](const Ret& ret) {
-                    (void)resolve(ret);
-                });
-
-                return Promise<Ret>::dummy_result();
-            });
-        }
+    if (saveMode != SaveMode::Save) {
+        return doSaveAndUploadProject(project, info, saveMode, isPublic);
     }
 
-    return doSaveAndUploadProject(project, info, saveMode, isPublic);
+    // Get up-to-date visibility information
+    return museScoreComService()->downloadScoreInfo(info.sourceUrl)
+           .then<Ret>(this, [this, project, info, saveMode](const RetVal<muse::cloud::ScoreInfo>& scoreInfo, auto resolve) {
+        CloudProjectInfo actualInfo = info;
+
+        if (scoreInfo.ret) {
+            actualInfo.name = scoreInfo.val.title;
+            actualInfo.visibility = scoreInfo.val.visibility;
+        } else {
+            LOGE() << "Failed to download up-to-date score info for " << actualInfo.sourceUrl
+                   << "; falling back to last known name and visibility setting, namely "
+                   << actualInfo.name << " and " << static_cast<int>(actualInfo.visibility);
+        }
+
+        const bool isPublic = actualInfo.visibility == muse::cloud::Visibility::Public;
+        if (!isPublic) {
+            doSaveAndUploadProject(project, actualInfo, saveMode, isPublic).onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+
+            return Promise<Ret>::dummy_result();
+        }
+
+        warnBeforeSavingToExistingPubliclyVisibleCloudProject()
+        .onResolve(this, [this, project, actualInfo, saveMode, isPublic, resolve](bool agreed) {
+            if (!agreed) {
+                (void)resolve(make_ret(Ret::Code::Cancel));
+                return;
+            }
+
+            doSaveAndUploadProject(project, actualInfo, saveMode, isPublic).onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(ret);
+            });
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
 }
 
 Promise<Ret> SaveProjectScenario::doSaveAndUploadProject(const INotationProjectPtr& project, const CloudProjectInfo& info,
@@ -941,18 +967,22 @@ Promise<Ret> SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const Cl
                 return Promise<Ret>::dummy_result();
             }
             case RET_CODE_CONFLICT_RESPONSE_REPLACE: {
-                RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
-                if (!scoreInfo.ret) {
-                    LOGE() << scoreInfo.ret.toString();
-                    showCloudSaveError(scoreInfo.ret, info, publishMode, false);
-                    break;
-                }
+                museScoreComService()->downloadScoreInfo(info.sourceUrl)
+                .onResolve(this, [this, ret, info, audio, openEditUrl, publishMode,
+                                  resolve](const RetVal<muse::cloud::ScoreInfo>& scoreInfo) {
+                    if (!scoreInfo.ret) {
+                        LOGE() << scoreInfo.ret.toString();
+                        showCloudSaveError(scoreInfo.ret, info, publishMode, false);
+                        (void)resolve(ret);
+                        return;
+                    }
 
-                CloudProjectInfo newInfo = info;
-                newInfo.revisionId = scoreInfo.val.revisionId;
+                    CloudProjectInfo newInfo = info;
+                    newInfo.revisionId = scoreInfo.val.revisionId;
 
-                uploadProject(newInfo, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& uploadRet) {
-                    (void)resolve(uploadRet);
+                    uploadProject(newInfo, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& uploadRet) {
+                        (void)resolve(uploadRet);
+                    });
                 });
 
                 return Promise<Ret>::dummy_result();
@@ -1478,11 +1508,22 @@ Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::askPublishLocation(INota
 
 Promise<RetVal<CloudAudioInfo> > SaveProjectScenario::askShareAudioLocation(INotationProjectPtr project) const
 {
-    bool isCloudAvailable = audioComService()->authorization()->checkCloudIsAvailable();
-    if (!isCloudAvailable) {
-        return resolvedPromise(RetVal<CloudAudioInfo>(warnCloudNotAvailableForSharingAudio()));
-    }
+    return audioComService()->authorization()->checkCloudIsAvailable()
+           .then<RetVal<CloudAudioInfo> >(this, [this, project](const Ret& isCloudAvailable, auto resolve) {
+        if (!isCloudAvailable) {
+            return resolve(RetVal<CloudAudioInfo>(warnCloudNotAvailableForSharingAudio()));
+        }
 
+        doAskShareAudioLocation(project).onResolve(this, [resolve](const RetVal<CloudAudioInfo>& info) {
+            (void)resolve(info);
+        });
+
+        return Promise<RetVal<CloudAudioInfo> >::dummy_result();
+    });
+}
+
+Promise<RetVal<CloudAudioInfo> > SaveProjectScenario::doAskShareAudioLocation(INotationProjectPtr project) const
+{
     std::string dialogText = muse::trc("project/save", "Log in or create a new account on Audio.com to share your music.");
 
     return ensureAuthorization(muse::cloud::AUDIO_COM_CLOUD_CODE, false, dialogText)
@@ -1538,14 +1579,27 @@ Promise<RetVal<CloudAudioInfo> > SaveProjectScenario::askShareAudioLocation(INot
 Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode,
                                                                            bool isPublishShare) const
 {
-    bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
-    if (!isCloudAvailable) {
-        return warnCloudNotAvailableForUploading(isPublishShare)
-               .then<RetVal<CloudProjectInfo> >(this, [](const Ret& ret, auto resolve) {
-            return resolve(RetVal<CloudProjectInfo>(ret));
-        });
-    }
+    return museScoreComService()->authorization()->checkCloudIsAvailable()
+           .then<RetVal<CloudProjectInfo> >(this, [this, project, mode, isPublishShare](const Ret& isCloudAvailable, auto resolve) {
+        if (!isCloudAvailable) {
+            warnCloudNotAvailableForUploading(isPublishShare).onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(RetVal<CloudProjectInfo>(ret));
+            });
 
+            return Promise<RetVal<CloudProjectInfo> >::dummy_result();
+        }
+
+        doAskCloudLocationAuthorized(project, mode, isPublishShare).onResolve(this, [resolve](const RetVal<CloudProjectInfo>& info) {
+            (void)resolve(info);
+        });
+
+        return Promise<RetVal<CloudProjectInfo> >::dummy_result();
+    });
+}
+
+Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::doAskCloudLocationAuthorized(INotationProjectPtr project, SaveMode mode,
+                                                                                     bool isPublishShare) const
+{
     std::string dialogText = isPublishShare
                              ? muse::trc("project/save", "Log in to MuseScore.com to publish this score.")
                              : muse::trc("project/save", "Log in to MuseScore.com to save this score to the cloud.");
@@ -1572,47 +1626,70 @@ Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::doAskCloudLocation(INota
 Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::askCloudProjectInfo(INotationProjectPtr project, SaveMode mode,
                                                                             bool isPublishShare) const
 {
-    QString defaultName = project->displayName();
-    cloud::Visibility defaultVisibility = isPublishShare ? cloud::Visibility::Public : cloud::Visibility::Private;
-    const CloudProjectInfo existingProjectInfo = project->cloudInfo();
+    const QString defaultName = project->displayName();
+    const cloud::Visibility defaultVisibility = isPublishShare ? cloud::Visibility::Public : cloud::Visibility::Private;
+    const QUrl existingScoreUrl = project->cloudInfo().sourceUrl;
 
-    QUrl existingScoreUrl = existingProjectInfo.sourceUrl;
+    if (existingScoreUrl.isEmpty()) {
+        return askCloudProjectInfo(project, mode, isPublishShare, defaultName, defaultVisibility, existingScoreUrl);
+    }
 
-    if (!existingScoreUrl.isEmpty()) {
-        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(existingScoreUrl);
+    return museScoreComService()->downloadScoreInfo(existingScoreUrl)
+           .then<RetVal<CloudProjectInfo> >(this, [this, project, mode, isPublishShare, defaultName, defaultVisibility,
+                                                   existingScoreUrl](const RetVal<cloud::ScoreInfo>& scoreInfo, auto resolve) {
+        QString name = defaultName;
+        cloud::Visibility visibility = defaultVisibility;
+        QUrl scoreUrl = existingScoreUrl;
 
         if (scoreInfo.val.isValid()) {
             const cloud::AccountInfo& accountInfo = museScoreComService()->authorization()->accountInfo();
             if (accountInfo.id.toInt() != scoreInfo.val.owner.id) {
-                existingScoreUrl = QUrl();
+                scoreUrl = QUrl();
             }
         }
 
         switch (scoreInfo.ret.code()) {
-        case int(Ret::Code::Ok):
-            defaultName = scoreInfo.val.title;
-            if (!isPublishShare) {
-                defaultVisibility = scoreInfo.val.visibility;
-            }
-            break;
+            case int(Ret::Code::Ok):
+                name = scoreInfo.val.title;
+                if (!isPublishShare) {
+                    visibility = scoreInfo.val.visibility;
+                }
+                break;
 
-        case int(cloud::Err::Status400_InvalidRequest):
-        case int(cloud::Err::Status403_AccountNotActivated):
-        case int(cloud::Err::Status422_ValidationFailed):
-        case int(cloud::Err::Status429_RateLimitExceeded):
-        case int(cloud::Err::Status500_InternalServerError):
-        case int(cloud::Err::UnknownStatusCode):
-        case int(cloud::Err::NetworkError):
-            return showCloudSaveError(scoreInfo.ret, project->cloudInfo(), isPublishShare, false)
-                   .then<RetVal<CloudProjectInfo> >(this, [](const Ret& ret, auto resolve) {
-                return resolve(RetVal<CloudProjectInfo>(ret));
+            case int(cloud::Err::Status400_InvalidRequest):
+            case int(cloud::Err::Status403_AccountNotActivated):
+            case int(cloud::Err::Status422_ValidationFailed):
+            case int(cloud::Err::Status429_RateLimitExceeded):
+            case int(cloud::Err::Status500_InternalServerError):
+            case int(cloud::Err::UnknownStatusCode):
+            case int(cloud::Err::NetworkError):
+                showCloudSaveError(scoreInfo.ret, project->cloudInfo(), isPublishShare, false)
+                .onResolve(this, [resolve](const Ret& ret) {
+                (void)resolve(RetVal<CloudProjectInfo>(ret));
             });
 
-        // It's possible the source URL is invalid or points to a score on a different user's account.
-        // In this situation we shouldn't show an error.
-        default: break;
+                return Promise<RetVal<CloudProjectInfo> >::dummy_result();
+
+            // It's possible the source URL is invalid or points to a score on a different user's account.
+            // In this situation we shouldn't show an error.
+            default: break;
         }
-    }
+
+        askCloudProjectInfo(project, mode, isPublishShare, name, visibility, scoreUrl)
+        .onResolve(this, [resolve](const RetVal<CloudProjectInfo>& info) {
+            (void)resolve(info);
+        });
+
+        return Promise<RetVal<CloudProjectInfo> >::dummy_result();
+    });
+}
+
+Promise<RetVal<CloudProjectInfo> > SaveProjectScenario::askCloudProjectInfo(INotationProjectPtr project, SaveMode mode,
+                                                                            bool isPublishShare, const QString& defaultName,
+                                                                            muse::cloud::Visibility defaultVisibility,
+                                                                            const QUrl& existingScoreUrl) const
+{
+    const CloudProjectInfo existingProjectInfo = project->cloudInfo();
 
     UriQuery query("musescore://project/savetocloud");
     query.addParam("isPublishShare", Val(isPublishShare));
