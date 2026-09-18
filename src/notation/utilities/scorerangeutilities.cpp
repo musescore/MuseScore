@@ -79,8 +79,21 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
         const double y1 = topY + segmentFirstStaff->y() + section.startSegment->pagePos().y() - padding;
         const double y2 = bottomY + segmentLastStaff->y() + section.endSegment->pagePos().y() + padding;
 
-        if (section.startSegment->measure()->firstEnabled() == section.startSegment) {
-            x1 = section.startSegment->measure()->pagePos().x();
+        if (section.startSegment->rtick().isZero()) {
+            Measure* m = section.startSegment->measure();
+            bool hasStartingSignature = false;
+            for (const Segment* s = m->first(); s && s->rtick().isZero(); s = s->next()) {
+                if (s->enabled() && s->isType(SegmentType::HeaderClef | SegmentType::Clef
+                                              | SegmentType::KeySig | SegmentType::TimeSig
+                                              | SegmentType::StartRepeatBarLine)) {
+                    hasStartingSignature = true;
+                    break;
+                }
+            }
+
+            if (!hasStartingSignature) {
+                x1 = m->pagePos().x();
+            }
         }
 
         const RectF rect = RectF(PointF(x1, y1), PointF(x2, y2)).translated(section.system->page()->pos());
