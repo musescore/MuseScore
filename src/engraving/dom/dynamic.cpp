@@ -21,6 +21,10 @@
  */
 #include "dynamic.h"
 
+#include <map>
+
+#include "iengravingfont.h"
+
 #include "../editing/edithairpin.h"
 #include "../editing/textedit.h"
 #include "../editing/transaction/transaction.h"
@@ -240,6 +244,7 @@ void Dynamic::setDynamicType(const String& tag)
     setXmlText(dynamicInfo.second);
 }
 
+/** Recognizes standard dynamics first, then styles supported compound tokens as custom dynamics. */
 std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) const
 {
     std::string utf8Tag = tag.toStdString();
@@ -255,6 +260,36 @@ std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) cons
                 return { DynamicType(i), String::fromStdString(utf8Tag) };
             }
         }
+    }
+    const std::regex compoundRegex(R"(sf{1,3}z?(?:p{1,6}|f{1,6}|m[pf]))");
+    for (auto it = begin; it != std::sregex_iterator(); ++it) {
+        const std::smatch match = *it;
+        const std::string token = match.str();
+        const size_t tagStart = utf8Tag.rfind('<', match.position(0));
+        const size_t tagEnd = utf8Tag.rfind('>', match.position(0));
+        if (tagStart != std::string::npos && (tagEnd == std::string::npos || tagStart > tagEnd)) {
+            continue;
+        }
+        if (!std::regex_match(token, compoundRegex)) {
+            continue;
+        }
+        std::string symbols;
+        for (char letter : token) {
+            switch (letter) {
+            case 's': symbols += "<sym>dynamicSforzando</sym>";
+                break;
+            case 'f': symbols += "<sym>dynamicForte</sym>";
+                break;
+            case 'z': symbols += "<sym>dynamicZ</sym>";
+                break;
+            case 'm': symbols += "<sym>dynamicMezzo</sym>";
+                break;
+            case 'p': symbols += "<sym>dynamicPiano</sym>";
+                break;
+            }
+        }
+        utf8Tag.replace(match.position(0), match.length(0), symbols);
+        return { DynamicType::OTHER, String::fromStdString(utf8Tag) };
     }
     return { DynamicType::OTHER, tag };
 }
@@ -359,10 +394,62 @@ void Dynamic::endEdit(EditData& ed)
     }
 }
 
+/** Returns a readable, translatable label for compound dynamics and the existing names otherwise. */
 TranslatableString Dynamic::subtypeUserName() const
 {
     if (dynamicType() == DynamicType::OTHER) {
         String s = plainText().simplified();
+        for (const auto& entry : { std::pair { SymId::dynamicSforzando, u"s" },
+                                   std::pair { SymId::dynamicForte, u"f" },
+                                   std::pair { SymId::dynamicZ, u"z" },
+                                   std::pair { SymId::dynamicMezzo, u"m" },
+                                   std::pair { SymId::dynamicPiano, u"p" } }) {
+            s.replace(score()->engravingFont()->toString(entry.first), entry.second);
+        }
+        const std::string text = s.toStdString();
+        const std::regex compoundRegex(R"(\bs(f{1,3})z?(p{1,6}|f{1,6}|m[pf])\b)");
+        std::smatch match;
+        if (std::regex_search(text, match, compoundRegex)) {
+            const std::string level = match[2].str();
+            if (match[1].length() > 1) {
+                const TranslatableString attack = match[1].length() == 2
+                                                  ? TranslatableString("engraving/dynamictype", "fortissimo")
+                                                  : TranslatableString("engraving/dynamictype", "forte fortissimo");
+                TranslatableString sustain = TranslatableString::untranslatable(String::fromStdString(level));
+                static const std::map<std::string, TranslatableString> levels {
+                    { "p", TranslatableString("engraving/dynamictype", "piano") },
+                    { "pp", TranslatableString("engraving/dynamictype", "pianissimo") },
+                    { "ppp", TranslatableString("engraving/dynamictype", "piano pianissimo") },
+                    { "mp", TranslatableString("engraving/dynamictype", "mezzo piano") },
+                    { "mf", TranslatableString("engraving/dynamictype", "mezzo forte") },
+                    { "f", TranslatableString("engraving/dynamictype", "forte") },
+                    { "ff", TranslatableString("engraving/dynamictype", "fortissimo") },
+                    { "fff", TranslatableString("engraving/dynamictype", "forte fortissimo") }
+                };
+                if (auto it = levels.find(level); it != levels.end()) {
+                    sustain = it->second;
+                }
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando %2, then %3)").arg(s, attack, sustain);
+            }
+            if (level == "p") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando piano)").arg(s);
+            } else if (level == "pp") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando pianissimo)").arg(s);
+            } else if (level == "ppp") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando piano pianissimo)").arg(s);
+            } else if (level == "mp") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando mezzo piano)").arg(s);
+            } else if (level == "mf") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando mezzo forte)").arg(s);
+            } else if (level == "f") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando forte)").arg(s);
+            } else if (level == "ff") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando fortissimo)").arg(s);
+            } else if (level == "fff") {
+                return TranslatableString("engraving/dynamictype", "%1 (sforzando forte fortissimo)").arg(s);
+            }
+            return TranslatableString("engraving/dynamictype", "%1 (sforzando, then %2)").arg(s, String::fromStdString(level));
+        }
         if (s.size() > 20) {
             s.truncate(20);
             s += u"…";
@@ -574,7 +661,7 @@ String Dynamic::screenReaderInfo() const
     String s;
 
     if (dynamicType() == DynamicType::OTHER) {
-        s = plainText().simplified();
+        s = translatedSubtypeUserName();
     } else {
         s = TConv::translatedUserName(dynamicType());
     }
