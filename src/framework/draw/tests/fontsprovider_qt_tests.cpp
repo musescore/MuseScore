@@ -26,6 +26,7 @@
 #include <memory>
 #include <vector>
 
+#include <QFont>
 #include <QFontDatabase>
 
 #include "draw/internal/fontprovider.h"
@@ -198,6 +199,32 @@ TEST_F(Draw_FontsProviderQtTests, insertSubstitution)
     ASSERT_EQ(1u, substitutions.size());
     EXPECT_EQ(substitutions.front(), FontDataKey(u"FreeSerif"));
     EXPECT_TRUE(env.fontsDatabase->substitutionFonts(FontDataKey(u"Leland")).empty());
+}
+
+TEST_F(Draw_FontsProviderQtTests, removeSubstitutions)
+{
+    Env env;
+
+    const muse::String family = u"Draw_FontsProviderQtTests_family";
+    QFont::removeSubstitutions(family.toQString());
+
+    env.fontsDatabase->insertSubstitution(family, u"Edwin");
+    env.fontsDatabase->insertSubstitution(family, u"FreeSerif");
+    env.fontsDatabase->insertSubstitution(family, u"Leland");
+
+    env.fontsDatabase->removeSubstitutions(family, { u"FreeSerif" });
+
+    std::vector<FontDataKey> substitutions = env.fontsDatabase->substitutionFonts(FontDataKey(family));
+
+    ASSERT_EQ(2u, substitutions.size());
+    EXPECT_EQ(substitutions.at(0), FontDataKey(u"Edwin"));
+    EXPECT_EQ(substitutions.at(1), FontDataKey(u"Leland"));
+
+    QStringList qSubstitutions = QFont::substitutes(family.toQString());
+
+    ASSERT_EQ(2, qSubstitutions.size());
+    EXPECT_EQ(qSubstitutions.at(0).toLower(), QString("edwin"));
+    EXPECT_EQ(qSubstitutions.at(1).toLower(), QString("leland"));
 }
 
 TEST_F(Draw_FontsProviderQtTests, xHeight)
