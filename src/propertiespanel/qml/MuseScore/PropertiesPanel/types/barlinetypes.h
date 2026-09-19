@@ -24,30 +24,32 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace BarlineTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class LineType {
-    TYPE_NORMAL = 1,
-    TYPE_SINGLE= LineType::TYPE_NORMAL,
-    TYPE_DOUBLE = 2,
-    TYPE_START_REPEAT = 4,
-    TYPE_LEFT_REPEAT = LineType::TYPE_START_REPEAT,
-    TYPE_END_REPEAT = 8,
-    TYPE_RIGHT_REPEAT = LineType::TYPE_END_REPEAT,
-    TYPE_DASHED = 0x10,
-    TYPE_BROKEN = LineType::TYPE_DASHED,
-    TYPE_FINAL = 0x20,
-    TYPE_END = LineType::TYPE_FINAL,
-    TYPE_END_START_REPEAT = 0x40,
-    TYPE_LEFT_RIGHT_REPEAT = LineType::TYPE_END_START_REPEAT,
-    TYPE_DOTTED = 0x80,
-    TYPE_REVERSE_END = 0x100,
-    TYPE_REVERS_FINAL = LineType::TYPE_REVERSE_END,
-    TYPE_HEAVY = 0x200,
-    TYPE_DOUBLE_HEAVY = 0x400,
+    TYPE_NORMAL = int(engraving::BarLineType::NORMAL),
+    TYPE_SINGLE = int(engraving::BarLineType::SINGLE),
+    TYPE_DOUBLE = int(engraving::BarLineType::DOUBLE),
+    TYPE_START_REPEAT = int(engraving::BarLineType::START_REPEAT),
+    TYPE_LEFT_REPEAT = int(engraving::BarLineType::LEFT_REPEAT),
+    TYPE_END_REPEAT = int(engraving::BarLineType::END_REPEAT),
+    TYPE_RIGHT_REPEAT = int(engraving::BarLineType::RIGHT_REPEAT),
+    TYPE_DASHED = int(engraving::BarLineType::BROKEN),
+    TYPE_BROKEN = int(engraving::BarLineType::BROKEN),
+    TYPE_FINAL = int(engraving::BarLineType::END),
+    TYPE_END = int(engraving::BarLineType::END),
+    TYPE_END_START_REPEAT = int(engraving::BarLineType::END_START_REPEAT),
+    TYPE_LEFT_RIGHT_REPEAT = int(engraving::BarLineType::LEFT_RIGHT_REPEAT),
+    TYPE_DOTTED = int(engraving::BarLineType::DOTTED),
+    TYPE_REVERSE_END = int(engraving::BarLineType::REVERSE_END),
+    TYPE_REVERS_FINAL = int(engraving::BarLineType::REVERSE_FINALE),
+    TYPE_HEAVY = int(engraving::BarLineType::HEAVY),
+    TYPE_DOUBLE_HEAVY = int(engraving::BarLineType::DOUBLE_HEAVY),
 };
 Q_ENUM_NS(LineType)
 
@@ -61,9 +63,9 @@ enum class SpanPreset {
 Q_ENUM_NS(SpanPreset)
 
 enum class AutoCustomHide {
-    COUNT_AUTO,
-    COUNT_CUSTOM,
-    COUNT_HIDE
+    COUNT_AUTO = int(engraving::AutoCustomHide::AUTO),
+    COUNT_CUSTOM = int(engraving::AutoCustomHide::CUSTOM),
+    COUNT_HIDE = int(engraving::AutoCustomHide::HIDE)
 };
 
 Q_ENUM_NS(AutoCustomHide)
