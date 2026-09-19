@@ -34,7 +34,7 @@ QML_ELEMENT;
 enum class BracketType {
     BRACKET_TYPE_NONE = int(engraving::AccidentalBracket::NONE),
     BRACKET_TYPE_PARENTHESIS = int(engraving::AccidentalBracket::PARENTHESIS),
-    BRACKET_TYPE_SQUARE = int(engraving::AccidentalBracket::BRACKET)
+    BRACKET_TYPE_BRACKET = int(engraving::AccidentalBracket::BRACKET)
 };
 
 Q_ENUM_NS(BracketType)

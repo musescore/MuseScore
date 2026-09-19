@@ -37,13 +37,6 @@ enum class Placement {
     TYPE_BOTTOM = int(engraving::ArticulationAnchor::BOTTOM),
     TYPE_AUTO = int(engraving::ArticulationAnchor::AUTO)
 };
-
-enum class Style {
-    STYLE_STANDART = int(engraving::OrnamentStyle::DEFAULT),
-    STYLE_BAROQUE = int(engraving::OrnamentStyle::BAROQUE)
-};
-
 Q_ENUM_NS(Placement)
-Q_ENUM_NS(Style)
 }
 }
