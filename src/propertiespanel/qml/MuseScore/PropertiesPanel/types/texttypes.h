@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <QObject>
+#include <QList>
 #include <qqmlintegration.h>
 
 #include "engraving/dom/textbase.h"
@@ -66,72 +66,6 @@ enum class FrameType {
 };
 Q_ENUM_NS(FrameType)
 
-enum class TextType {
-    TEXT_TYPE_DEFAULT = int(engraving::TextStyleType::DEFAULT),
-    TEXT_TYPE_TITLE = int(engraving::TextStyleType::TITLE),
-    TEXT_TYPE_SUBTITLE = int(engraving::TextStyleType::SUBTITLE),
-    TEXT_TYPE_COMPOSER = int(engraving::TextStyleType::COMPOSER),
-    TEXT_TYPE_POET = int(engraving::TextStyleType::LYRICIST),
-    TEXT_TYPE_TRANSLATOR = int(engraving::TextStyleType::TRANSLATOR),
-    TEXT_TYPE_FRAME = int(engraving::TextStyleType::FRAME),
-    TEXT_TYPE_INSTRUMENT_EXCERPT = int(engraving::TextStyleType::INSTRUMENT_EXCERPT),
-    TEXT_TYPE_INSTRUMENT_LONG = int(engraving::TextStyleType::INSTRUMENT_LONG),
-    TEXT_TYPE_INSTRUMENT_SHORT = int(engraving::TextStyleType::INSTRUMENT_SHORT),
-    TEXT_TYPE_INSTRUMENT_CHANGE = int(engraving::TextStyleType::INSTRUMENT_CHANGE),
-    TEXT_TYPE_HEADER = int(engraving::TextStyleType::HEADER),
-    TEXT_TYPE_FOOTER = int(engraving::TextStyleType::FOOTER),
-    TEXT_TYPE_COPYRIGHT = int(engraving::TextStyleType::COPYRIGHT),
-    TEXT_TYPE_PAGE_NUMBER = int(engraving::TextStyleType::PAGE_NUMBER),
-    TEXT_TYPE_MEASURE_NUMBER = int(engraving::TextStyleType::MEASURE_NUMBER),
-    TEXT_TYPE_MMREST_RANGE = int(engraving::TextStyleType::MMREST_RANGE),
-    TEXT_TYPE_TEMPO = int(engraving::TextStyleType::TEMPO),
-    TEXT_TYPE_TEMPO_CHANGE = int(engraving::TextStyleType::TEMPO_CHANGE),
-    TEXT_TYPE_METRONOME = int(engraving::TextStyleType::METRONOME),
-    TEXT_TYPE_REPEAT_LEFT = int(engraving::TextStyleType::REPEAT_LEFT),       // align to start of measure
-    TEXT_TYPE_REPEAT_RIGHT = int(engraving::TextStyleType::REPEAT_RIGHT),      // align to end of measure
-    TEXT_TYPE_REHEARSAL_MARK = int(engraving::TextStyleType::REHEARSAL_MARK),
-    TEXT_TYPE_SYSTEM = int(engraving::TextStyleType::SYSTEM),
-    TEXT_TYPE_STAFF = int(engraving::TextStyleType::STAFF),
-    TEXT_TYPE_EXPRESSION = int(engraving::TextStyleType::EXPRESSION),
-    TEXT_TYPE_DYNAMICS = int(engraving::TextStyleType::DYNAMICS),
-    TEXT_TYPE_HAIRPIN = int(engraving::TextStyleType::HAIRPIN),
-    TEXT_TYPE_LYRICS_ODD = int(engraving::TextStyleType::LYRICS_ODD),
-    TEXT_TYPE_LYRICS_EVEN = int(engraving::TextStyleType::LYRICS_EVEN),
-    TEXT_TYPE_HARMONY_A = int(engraving::TextStyleType::HARMONY_A),
-    TEXT_TYPE_HARMONY_B = int(engraving::TextStyleType::HARMONY_B),
-    TEXT_TYPE_HARMONY_ROMAN = int(engraving::TextStyleType::HARMONY_ROMAN),
-    TEXT_TYPE_HARMONY_NASHVILLE = int(engraving::TextStyleType::HARMONY_NASHVILLE),
-    TEXT_TYPE_TUPLET = int(engraving::TextStyleType::TUPLET),
-    TEXT_TYPE_STICKING = int(engraving::TextStyleType::STICKING),
-    TEXT_TYPE_FINGERING = int(engraving::TextStyleType::FINGERING),
-    TEXT_TYPE_LH_GUITAR_FINGERING = int(engraving::TextStyleType::LH_GUITAR_FINGERING),
-    TEXT_TYPE_RH_GUITAR_FINGERING = int(engraving::TextStyleType::RH_GUITAR_FINGERING),
-    TEXT_TYPE_STRING_NUMBER = int(engraving::TextStyleType::STRING_NUMBER),
-    TEXT_TYPE_HARP_PEDAL_DIAGRAM = int(engraving::TextStyleType::HARP_PEDAL_DIAGRAM),
-    TEXT_TYPE_HARP_PEDAL_TEXT_DIAGRAM = int(engraving::TextStyleType::HARP_PEDAL_TEXT_DIAGRAM),
-    TEXT_TYPE_TEXTLINE = int(engraving::TextStyleType::TEXTLINE),
-    TEXT_TYPE_VOLTA = int(engraving::TextStyleType::VOLTA),
-    TEXT_TYPE_OTTAVA = int(engraving::TextStyleType::OTTAVA),
-    TEXT_TYPE_GLISSANDO = int(engraving::TextStyleType::GLISSANDO),
-    TEXT_TYPE_PEDAL = int(engraving::TextStyleType::PEDAL),
-    TEXT_TYPE_BEND = int(engraving::TextStyleType::BEND),
-    TEXT_TYPE_LET_RING = int(engraving::TextStyleType::LET_RING),
-    TEXT_TYPE_PALM_MUTE = int(engraving::TextStyleType::PALM_MUTE),
-    TEXT_TYPE_USER1 = int(engraving::TextStyleType::USER1),
-    TEXT_TYPE_USER2 = int(engraving::TextStyleType::USER2),
-    TEXT_TYPE_USER3 = int(engraving::TextStyleType::USER3),
-    TEXT_TYPE_USER4 = int(engraving::TextStyleType::USER4),
-    TEXT_TYPE_USER5 = int(engraving::TextStyleType::USER5),
-    TEXT_TYPE_USER6 = int(engraving::TextStyleType::USER6),
-    TEXT_TYPE_USER7 = int(engraving::TextStyleType::USER7),
-    TEXT_TYPE_USER8 = int(engraving::TextStyleType::USER8),
-    TEXT_TYPE_USER9 = int(engraving::TextStyleType::USER9),
-    TEXT_TYPE_USER10 = int(engraving::TextStyleType::USER10),
-    TEXT_TYPE_USER11 = int(engraving::TextStyleType::USER11),
-    TEXT_TYPE_USER12 = int(engraving::TextStyleType::USER12)
-};
-Q_ENUM_NS(TextType)
-
 enum class TextSubscriptMode {
     TEXT_SUBSCRIPT_NORMAL = int(engraving::VerticalAlignment::AlignNormal),
     TEXT_SUBSCRIPT_TOP = int(engraving::VerticalAlignment::AlignSuperScript),
@@ -140,7 +74,7 @@ enum class TextSubscriptMode {
 Q_ENUM_NS(TextSubscriptMode)
 }
 
-static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
+static inline QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::TEXT,
     mu::engraving::ElementType::STAFF_TEXT,
     mu::engraving::ElementType::SYSTEM_TEXT,

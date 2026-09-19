@@ -31,12 +31,6 @@ namespace OrnamentTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
-enum class Style {
-    STYLE_STANDARD = int(engraving::OrnamentStyle::DEFAULT),
-    STYLE_BAROQUE = int(engraving::OrnamentStyle::BAROQUE)
-};
-Q_ENUM_NS(Style)
-
 // For ornaments that only accept intervals of second (turns...)
 // a simplified view over engraving::OrnamentInterval, which has no single enum equivalent
 enum class BasicInterval {
