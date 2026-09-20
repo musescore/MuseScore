@@ -7728,7 +7728,7 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1470"/>
         <source>&amp;Decrease layout stretch</source>
-        <translation>Re&amp;ducir el factor de expansión</translation>
+        <translation>Re&amp;ducir la anchura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1471"/>
@@ -7738,17 +7738,17 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1476"/>
         <source>&amp;Increase layout stretch</source>
-        <translation>Aumentar factor de expans&amp;ión</translation>
+        <translation>Aumentar anchura (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1477"/>
         <source>Increase layout stretch</source>
-        <translation>Aumentar el factor de expansión</translation>
+        <translation>Aumentar anchura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1482"/>
         <source>&amp;Reset layout stretch</source>
-        <translation>&amp;Restablecer el factor de expansión</translation>
+        <translation>&amp;Restablecer anchura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1483"/>
@@ -8331,12 +8331,12 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1926"/>
         <source>Toggle short trill</source>
-        <translation>Alternar trino corto</translation>
+        <translation>Alternar mordente superior</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1927"/>
         <source>Add ornament: short trill</source>
-        <translation>Añadir adorno: trino corto</translation>
+        <translation>Añadir adorno: mordente superior</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1932"/>
@@ -19921,7 +19921,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5394"/>
         <source>Short trill</source>
-        <translation>Trino corto</translation>
+        <translation>Mordente superior</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5399"/>
@@ -20718,6 +20718,7 @@ Traste %1 en cuerdas %2</translation>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="107"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="261"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="212"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="56"/>
         <source>OK</source>
         <translation>Aceptar</translation>
@@ -21228,9 +21229,9 @@ Traste %1 en cuerdas %2</translation>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="215"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="129"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TitleListView.qml" line="129"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="293"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="202"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="268"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="312"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="203"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="272"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/filteredflyoutmodel.cpp" line="130"/>
         <source>No results found</source>
         <translation>No se han encontrado resultados</translation>
@@ -21278,6 +21279,7 @@ Traste %1 en cuerdas %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="165"/>
         <source>Don’t show again</source>
         <translation>No volver a mostrar</translation>
     </message>
@@ -21484,17 +21486,17 @@ Traste %1 en cuerdas %2</translation>
         <translation>Mostrar más…</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="255"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="263"/>
         <source>Move up</source>
         <translation>Pasar al pentagrama superior</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="269"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="277"/>
         <source>Move down</source>
         <translation>Pasar al pentagrama inferior</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="284"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="292"/>
         <source>Select more</source>
         <translation>Seleccionar más</translation>
     </message>
@@ -21508,9 +21510,20 @@ Traste %1 en cuerdas %2</translation>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="214"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="223"/>
         <source>Proceed</source>
         <translation>Continuar</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="407"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="434"/>
+        <source>Dismiss</source>
+        <translation>Descartar</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="437"/>
+        <source>Try again</source>
+        <translation>Intentar de nuevo</translation>
     </message>
 </context>
 <context>
@@ -34843,7 +34856,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="71"/>
         <location filename="../../src/project/internal/notationproject.cpp" line="88"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="200"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="199"/>
         <source>Untitled score</source>
         <translation>Partitura sin título</translation>
     </message>
@@ -34900,7 +34913,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="105"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/recentscoresmodel.cpp" line="68"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/recentscoresmodel.cpp" line="79"/>
         <source>New score</source>
         <translation>Nueva partitura</translation>
     </message>
@@ -35203,92 +35216,93 @@ fallo: %2</translation>
         <translation>Ocurrió un error al leer este archivo.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1927"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1913"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="422"/>
         <source>All supported files</source>
         <translation>Todos los formatos de archivo soportados</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1928"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1914"/>
         <source>MuseScore files</source>
         <translation>Archivos MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1915"/>
         <source>MusicXML files</source>
         <translation>Archivos MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1930"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1916"/>
         <source>MIDI files</source>
         <translation>Archivos MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1931"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1917"/>
         <source>MNX files (experimental)</source>
         <translation>ficheros MNX (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1932"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1918"/>
         <source>MuseData files</source>
         <translation>Archivos MuseData</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1933"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1919"/>
         <source>Capella files</source>
         <translation>Archivos Capella</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1934"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1920"/>
         <source>BB files (experimental)</source>
         <translation>Archivos BB (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1935"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1921"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Archivos Overture / Score Writer (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1936"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1922"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Archivos Bagpipe Music Writer (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1937"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1923"/>
         <source>Guitar Pro files</source>
         <translation>Archivos Guitar Pro</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1938"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1924"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Archivos Power Tab Editor (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1939"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1925"/>
         <source>MEI files</source>
         <translation>archivos MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1940"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1926"/>
         <source>TablEdit files (experimental)</source>
         <translation>Archivos de TablEdit (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1941"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1927"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>Carpetas descomprimidas de MuseScore (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1942"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1928"/>
         <source>MuseScore developer files</source>
         <translation>Archivos de desarrollador de MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1943"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
         <source>MuseScore backup files</source>
         <translation>Archivos de copia de seguridad de MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1945"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1931"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
@@ -35356,6 +35370,18 @@ fallo: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/projectpropertiesmodel.cpp" line="70"/>
         <source>Audio.com URL</source>
         <translation>URL de Audio.com</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="55"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="47"/>
+        <source>Processing %1</source>
+        <extracomment>%1 is the name of the score being converted</extracomment>
+        <translation>Procesando %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="423"/>
+        <source>All</source>
+        <translation>Todos</translation>
     </message>
 </context>
 <context>
@@ -35465,13 +35491,13 @@ fallo: %2</translation>
         <translation>Convertir archivo en partitura</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="86"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="114"/>
         <source>Convert audio to score (beta)</source>
         <translation>Convertir audio a partitura (beta)
 </translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="87"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="115"/>
         <source>Convert a file to score</source>
         <translation>Convertir un archivo a partitura</translation>
     </message>
@@ -35502,54 +35528,86 @@ fallo: %2</translation>
         <translation>Utiliza un PDF, imágenes o un MP3 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="190"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="398"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="177"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="765"/>
         <source>Log in or create a free account on MuseScore.com to convert a file.</source>
         <translation>nicia sesión o crea una cuenta gratuita en MuseScore.com para convertir un archivo.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="216"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="761"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="795"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="828"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="226"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1028"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1077"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1125"/>
         <source>Would you like to convert this file to a score?</source>
         <translation>¿Quieres convertir este archivo en una partitura?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="217"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="762"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="796"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="829"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="227"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1029"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1078"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1126"/>
         <source>This file needs to be converted online before it can be edited. Would you like to proceed?</source>
         <translation>Este archivo debe convertirse en línea antes de poder editarlo. ¿Quieres continuar?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="269"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="340"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="703"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="294"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="719"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="800"/>
         <source>Unable to connect to MuseScore.com</source>
         <translation>No se puede conectar a MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="270"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="341"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="704"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="295"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="720"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="801"/>
         <source>An internet connection is required to convert a file. Please check your internet connection or try again later.</source>
         <translation>Se necesita una conexión a Internet para convertir un archivo. Comprueba tu conexión a Internet o vuelve a intentarlo más tarde.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="278"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="512"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="523"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="302"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="497"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1000"/>
+        <source>Something went wrong</source>
+        <translation>Algo salió mal</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="303"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="498"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1001"/>
+        <source>Check your internet connection and try again.</source>
+        <translation>Comprueba tu conexión a Internet y vuelve a intentarlo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="310"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="528"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="539"/>
         <source>The maximum file size is %1. Reduce the size of your file and try again.</source>
         <translation>El tamaño máximo de archivo es %1. Reduce el tamaño del archivo e inténtalo de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="280"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="515"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="526"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="312"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="531"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="542"/>
         <source>This file is too large</source>
         <translation>El archivo es demasiado grande</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="329"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="505"/>
+        <source>Make sure you’re importing a suitable PDF, image or MP3 file.</source>
+        <translation>Asegúrate de importar un archivo PDF, una imagen o un archivo MP3 adecuado.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="368"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="561"/>
+        <source>You can convert up to %n audio file(s) at a time. Remove some files and try again.</source>
+        <translation><numerusform>Puedes convertir hasta %n archivo de audio a la vez. Elimina algunos archivos y vuelve a intentarlo.</numerusform><numerusform>Puedes convertir hasta %n archivos de audio a la vez. Elimina algunos archivos y vuelve a intentarlo.</numerusform><numerusform>Puedes convertir hasta %n archivo(s) de audio a la vez. Elimina algunos archivos y vuelve a intentarlo.</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="376"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="572"/>
+        <source>You can convert up to %n image(s) at a time. Remove some images and try again.</source>
+        <translation><numerusform>Puedes convertir hasta %n imagen a la vez. Elimina algunas imágenes y vuelve a intentarlo.</numerusform><numerusform>Puedes convertir hasta %n imágenes a la vez. Elimina algunas imágenes y vuelve a intentarlo.</numerusform><numerusform>Puedes convertir hasta %n imagen a la vez. Elimina algunas imágenes y vuelve a intentarlo.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="218"/>
@@ -35558,198 +35616,214 @@ fallo: %2</translation>
         <translation>Directrices para la carga</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="287"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="534"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="319"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="550"/>
         <source>The maximum combined file size for all images is %1. Choose a smaller file or remove some images to continue.</source>
         <translation>El tamaño máximo combinado de todos los archivos de imagen es de %1. Elige un archivo más pequeño o elimina algunas imágenes para continuar.
 </translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="290"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="538"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="322"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="554"/>
         <source>Maximum file size exceeded</source>
         <translation>Se ha superado el tamaño máximo del archivo</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="296"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="488"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="732"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="328"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="504"/>
         <source>This file type is not compatible</source>
         <translation>Este tipo de archivo no es compatible</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="297"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="489"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="733"/>
         <source>Make sure you’ve selected a PDF, image or MP3 file.</source>
         <translation>Asegúrate de haber seleccionado un archivo PDF, una imagen o un archivo MP3.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="308"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="592"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="619"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="340"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="608"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="635"/>
         <source>Make sure you’re using a valid link from YouTube or Audio.com.</source>
         <translation>Asegúrate de utilizar un enlace válido de YouTube o Audio.com.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="310"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="646"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="342"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="662"/>
         <source>Make sure you’re using a valid link from YouTube.</source>
         <translation>Asegúrate de utilizar un enlace válido de YouTube.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="312"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="673"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="344"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="689"/>
         <source>Make sure you’re using a valid link from Audio.com.</source>
         <translation>Asegúrate de utilizar un enlace válido de Audio.com.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="315"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="591"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="618"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="645"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="672"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="347"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="607"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="634"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="661"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="688"/>
         <source>Please use a compatible URL</source>
         <translation>Utiliza una URL compatible</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="321"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="495"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="353"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="511"/>
         <source>Please select files of the same type</source>
         <translation>Selecciona archivos del mismo tipo</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="322"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="496"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="354"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="512"/>
         <source>Per conversion, you may select either one MP3 file, one PDF file, or multiple image files.</source>
         <translation>Para cada conversión, puedes seleccionar un archivo MP3, un archivo PDF o varios archivos de imagen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="329"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="503"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="361"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="519"/>
         <source>Please select a single PDF file</source>
         <translation>Selecciona un único archivo PDF</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="330"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="504"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="362"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="520"/>
         <source>Only one PDF file can be converted at a time.</source>
         <translation>Solo se puede convertir un archivo PDF a la vez.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="336"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="545"/>
         <source>You can convert up to %1 audio files at a time. Remove some files and try again.</source>
         <translation>Puedes convertir hasta %1 archivos de audio a la vez. Elimina algunos archivos y vuelve a intentarlo.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="338"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="549"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="370"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="565"/>
         <source>Too many files selected</source>
         <translation>Se han seleccionado demasiados archivos</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="344"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="556"/>
         <source>You can convert up to %1 images at a time. Remove some images and try again.</source>
         <translation>Puedes convertir hasta %1 imágenes a la vez. Elimina algunas imágenes y vuelve a intentarlo.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="346"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="559"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="378"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="575"/>
         <source>Too many images selected</source>
         <translation>Se han seleccionado demasiadas imágenes</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="355"/>
         <source>Upload more</source>
         <translation>Cargar más</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="356"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="39"/>
+        <source>Home &gt; Scores</source>
+        <translation>Inicio &gt; Partituras</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="44"/>
+        <source>We’ll notify you once the score is ready to open. You can check the status of the score in %1.</source>
+        <translation>Te notificaremos cuando la partitura esté lista para abrirla. Puedes consultar el estado de la partitura en %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="194"/>
+        <source>Convert more</source>
+        <translation>Convertir más</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="203"/>
         <source>Go to scores</source>
         <translation>Ir a las partituras</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="359"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="865"/>
         <source>We’ll notify you once the score is ready to open. You can check the status of the score in Home &gt; Scores.</source>
         <translation>Te notificaremos cuando la partitura esté lista para abrirla. Puedes consultar el estado de la partitura en Inicio → Partituras.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="363"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="864"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="144"/>
         <source>Your score is being processed</source>
         <translation>Tu partitura está siendo procesada</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="392"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="404"/>
         <source>Open score</source>
         <translation>Abrir partitura</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="393"/>
         <source>Dismiss</source>
         <translation>Descartar</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="396"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="195"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="411"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="234"/>
         <source>‘%1’ has finished processing and is ready to open.</source>
         <translation>‘%1’ ha terminado de procesarse y está lista para abrirse.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="400"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="194"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="415"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="233"/>
         <source>Your score is ready!</source>
         <translation>¡Tu partitura está lista!</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="414"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="440"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="277"/>
+        <source>We weren’t able to convert ‘%1’. Please try again with a better quality file.</source>
+        <translation>No hemos podido convertir «%1». Vuelve a intentarlo con un archivo de mejor calidad.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="444"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="276"/>
+        <source>Error processing score</source>
+        <translation>Error al procesar la partitura</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="459"/>
         <source>Good</source>
+        <extracomment>Button to rate the quality of a converted score as good</extracomment>
         <translation>Bien</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="415"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="461"/>
         <source>Bad</source>
+        <extracomment>Button to rate the quality of a converted score as bad</extracomment>
         <translation>Mal</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="419"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="261"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="293"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="465"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="385"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="417"/>
         <source>How does your score look?</source>
         <translation>¿ Qué aspecto tiene tu partitura?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="420"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="262"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="294"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="466"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="386"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="418"/>
         <source>We’re always improving our score conversion accuracy. Let us know how we did with this one.</source>
         <translation>Siempre estamos mejorando la precisión de la conversión de partituras. Cuéntanos qué tal ha funcionado esta vez.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="59"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="60"/>
         <source>%1 max</source>
+        <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max&quot;; shown as a short label/badge</extracomment>
         <translation>%1 máximo</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="65"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="67"/>
         <source>%1 max combined</source>
+        <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max combined&quot;; shown as a short label/badge</extracomment>
         <translation>%1 máximo combinado</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="224"/>
         <source>%1 pages max</source>
         <translation>%1 páginas máximo</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="228"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="231"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="255"/>
         <source>Max %1 images</source>
         <translation>Máximo %1 imágenes</translation>
     </message>
@@ -35763,18 +35837,20 @@ fallo: %2</translation>
         <translation>Las imágenes se combinarán en una sola partitura en el orden que se muestra aquí</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="268"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="269"/>
         <source>%1/%2 used</source>
+        <extracomment>%1 and %2 are pre-formatted file sizes including units, e.g. &quot;15 MB/20 MB used&quot;</extracomment>
         <translation>%1/%2 utilizados</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="259"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="258"/>
         <source>Images</source>
         <translation>Imágenes</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="267"/>
         <source>%1 format</source>
+        <extracomment>%1 is one or more file format names, e.g. &quot;MP3 format&quot; or &quot;MP3, WAV format&quot;</extracomment>
         <translation>%1 formato</translation>
     </message>
     <message>
@@ -35786,80 +35862,106 @@ fallo: %2</translation>
         <translation>%1 archivos por carga/subida</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="282"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="280"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="110"/>
         <source>Paste a link from %1 (beta)</source>
+        <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>Pega un enlace de %1 (beta)
 </translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="107"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="105"/>
         <source>Paste a link from %1 or %2 (beta)</source>
+        <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>Pega un enlace de %1 o %2 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="227"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="275"/>
         <source>1 file per conversion</source>
         <translation>1 archivo por conversión</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="277"/>
         <source>%1 files per conversion</source>
         <translation>%1 archivos por conversión</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="342"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="350"/>
         <source>Or paste a link from %1 or %2 (beta)</source>
+        <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>O pega un enlace de %1 o %2 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="346"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="355"/>
         <source>Or paste a link from %1 (beta)</source>
+        <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>O pega un enlace desde %1 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="406"/>
         <source>Supported files</source>
         <translation>Archivos soportados</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="407"/>
         <source>All files</source>
         <translation>Todos los archivos</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="414"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="417"/>
         <source>Choose file</source>
         <translation>Elegir archivo</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="496"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="532"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="554"/>
         <source>No, stay here</source>
         <translation>No, permanecer aquí</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="497"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="535"/>
+        <source>Yes, cancel</source>
+        <translation>Sí, cancelar</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="539"/>
+        <source>Are you sure you want to cancel?</source>
+        <translation>¿Estás seguro de querer cancelar?</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="557"/>
         <source>Yes, go back</source>
         <translation>Sí, ir hacia atrás</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="500"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="561"/>
         <source>Are you sure you want to go back?</source>
         <translation>¿Estás seguro de que quieres ir hacia atrás?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="501"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="540"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="562"/>
         <source>Your current selection will be lost.</source>
         <translation>Tu selección actual se perderá</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="224"/>
+        <source>%n page(s) max.</source>
+        <extracomment>%n is the maximum number of pages; shown as a short label/badge, e.g. &quot;20 pages max&quot;</extracomment>
+        <translation><numerusform>Máx. %n página</numerusform><numerusform>Máx. %n páginas</numerusform><numerusform>Máx. %n página(s)</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="228"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="275"/>
+        <source>%n file(s) per conversion</source>
+        <translation><numerusform>%n archivo por conversión</numerusform><numerusform>%n archivos por conversión</numerusform><numerusform>%n archivo(s) por conversión</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="254"/>
+        <source>Max. %n image(s)</source>
+        <translation><numerusform>Máx. %n imagen</numerusform><numerusform>Máx. %n imágenes</numerusform><numerusform>Máx. %n imagen(es)</numerusform></translation>
+    </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="485"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="521"/>
         <source>“%1” cannot be used as a file name. Please choose a different name.</source>
         <translation>No se puede utilizar “%1” como un nombre de archivo. Por favor, elige un nombre diferente.</translation>
     </message>
@@ -35876,17 +35978,22 @@ fallo: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="131"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="281"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="279"/>
         <source>Recommended for solo arrangements only</source>
         <translation>Recomendado únicamente para arreglos para instrumento solista</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="83"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="84"/>
         <source>Selected files</source>
         <translation>Archivos seleccionados</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="225"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="233"/>
+        <source>%1/%n file(s) max.</source>
+        <extracomment>%1 is the number of files currently selected, %2 is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
+        <translation>Máx. %1/%n archivo(s).</translation>
+    </message>
+    <message>
         <source>%1/%2 max files</source>
         <translation>máximo de archivos: %1/%2</translation>
     </message>
@@ -37529,6 +37636,8 @@ fallo: %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="131"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="450"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="453"/>
         <source>Choose file</source>
         <translation>Elegir archivo</translation>
     </message>
@@ -38497,7 +38606,7 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6320"/>
         <source>Increase layout stretch</source>
-        <translation>Aumentar factor de expansión</translation>
+        <translation>Aumentar anchura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6321"/>
