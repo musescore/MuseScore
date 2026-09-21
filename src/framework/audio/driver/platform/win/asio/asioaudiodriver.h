@@ -21,7 +21,6 @@
  */
 #pragma once
 
-#include <thread>
 #include <atomic>
 
 #include "../../../../iaudiodriver.h"
@@ -59,7 +58,6 @@ private:
 
     void doClose();
 
-    std::thread m_thread;
     std::atomic<bool> m_running = false;
 
     AudioDeviceID m_audioDeviceId;
