@@ -336,7 +336,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     // [THEN] The "convert failed" notification is shown
     EXPECT_CALL(*m_toastService,
                 show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
-                     ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), int(toast::ToastActionCode::TryAgain) })))
+                     ToastActionCodesAre({ int(toast::ToastActionCode::TryAgain), int(toast::ToastActionCode::Dismiss) })))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedToastResultPromise();
@@ -364,7 +364,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     m_scenario->init();
 
-    // [GIVEN] The user clicks "Try again" on the failure toast
+    // [GIVEN] The user clicks "Try another file" on the failure toast
     ON_CALL(*m_toastService, show(_, _, _, _, _))
     .WillByDefault(Invoke([](auto&&...) {
         return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::TryAgain)));
@@ -395,14 +395,14 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotRestartConvert)
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Ok_DoesNotRestartConvert)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     m_scenario->init();
 
-    // [GIVEN] The user dismisses the failure toast
+    // [GIVEN] The user clicks "OK" on the failure toast
     ON_CALL(*m_toastService, show(_, _, _, _, _))
     .WillByDefault(Invoke([](auto&&...) {
         return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::Dismiss)));

@@ -496,8 +496,8 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     toastService()->show(muse::trc("project/convert", "Error processing score"), msg,
                          muse::ui::IconCode::Code::ERROR_FILLED, true,
     {
-        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
-        { muse::trc("global", "Try again"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+        { muse::trc("project/convert", "Try another file"), toast::ToastActionCode::TryAgain },
+        { muse::trc("global", "OK"), toast::ToastActionCode::Dismiss, /*accent*/ true },
     }).onResolve(this, [this](const toast::ToastResult& result) {
         if (result.isCode(toast::ToastActionCode::TryAgain)) {
             convertFiles();
