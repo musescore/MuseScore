@@ -92,7 +92,7 @@ jobs:
         host: 'linux'
         target: 'desktop'
         arch: 'linux_gcc_64'
-        modules: 'qt5compat qtcanvaspainter qtnetworkauth qtshadertools qttasktree qtwebsockets'
+        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
         cache: true
     - name: Setup environment
       run: |
@@ -159,7 +159,7 @@ jobs:
         host: 'linux'
         target: 'desktop'
         arch: 'linux_gcc_64'
-        modules: 'qt5compat qtcanvaspainter qtnetworkauth qtshadertools qttasktree qtwebsockets'
+        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
         cache: true
     - name: Setup environment
       run: |

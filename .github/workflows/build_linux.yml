@@ -231,7 +231,7 @@ jobs:
         host: ${{ matrix.qt-host }}
         target: 'desktop'
         arch: ${{ matrix.qt-arch }}
-        modules: 'qt5compat qtcanvaspainter qtnetworkauth qtshadertools qttasktree qtwebsockets'
+        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
         cache: true
     - name: Setup environment
       run: |
