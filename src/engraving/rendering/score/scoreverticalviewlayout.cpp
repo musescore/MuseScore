@@ -181,6 +181,8 @@ void ScoreVerticalViewLayout::doLayout(LayoutContext& ctx)
     } while (ctx.state().curSystem() && !(ctx.state().rangeDone() && lmb == ctx.state().pageOldMeasure()));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
 
+    SystemLayout::centerPendingSystems(ctx);
+
     if (!ctx.state().curSystem()) {
         // The end of the score. The remaining systems are not needed...
         muse::DeleteAll(ctx.mutState().systemList());

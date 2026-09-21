@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <cfloat>
+#include <unordered_set>
 
 #include "systemlayout.h"
 
@@ -1226,6 +1227,11 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     if (ctx.dom().nstaves() == 0) {
         return;
+    }
+
+    // Continuous view does not center items between staves (it collects no pages and doesn't call centerPendingSystems)
+    if (!ctx.conf().isLinearMode()) {
+        ctx.mutState().addSystemNeedingCentering(system);
     }
 
     ElementsToLayout elementsToLayout(system);
@@ -2644,6 +2650,15 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
     }
 
     AlignmentLayout::alignStaffCenteredItems(centeredItems, system);
+}
+
+void SystemLayout::centerPendingSystems(LayoutContext& ctx)
+{
+    for (System* system : ctx.state().systemsNeedingCentering()) {
+        centerElementsBetweenStaves(system);
+    }
+
+    ctx.mutState().clearSystemsNeedingCentering();
 }
 
 void SystemLayout::collectCenterableItems(const System* system, std::vector<CenterableItems>& centerableItemsByStaff,
