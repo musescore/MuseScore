@@ -145,6 +145,14 @@ Item {
             width: view.cellWidth
             height: view.cellHeight
 
+            Connections {
+                target: view
+
+                function onContentYChanged() {
+                    item.closeMenu()
+                }
+            }
+
             ScoreGridItem {
                 id: item
 

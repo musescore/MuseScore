@@ -83,23 +83,20 @@ FocusScope {
         onTriggered: root.clicked()
     }
 
+    function closeMenu() {
+        contextMenu.closeMenu()
+    }
+
     MouseArea {
         id: rootMouseArea
         anchors.fill: parent
 
         enabled: root.enabled && !root.isProcessing
         hoverEnabled: true
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton
 
-        onClicked: function(mouse) {
+        onClicked: {
             navCtrl.requestActiveByInteraction()
-
-            if (mouse.button === Qt.RightButton) {
-                if (contextMenu.menuModel.length > 0) {
-                    contextMenu.show(Qt.point(mouse.x, mouse.y), root)
-                }
-                return
-            }
 
             root.clicked()
         }
@@ -222,6 +219,7 @@ FocusScope {
                              || root.navigation.active
                              || navigation.active
                              || isMenuOpenedByButton)
+                transparent: !isMenuOpenedByButton && !rootMouseArea.containsMouse
 
                 isCreateNew: root.isCreateNew
                 isNoResultsFound: root.isNoResultsFound
