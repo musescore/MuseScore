@@ -82,6 +82,7 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
 
     if (opt->runMode == IApplication::RunMode::AudioPluginRegistration) {
         if (diagnosticsConfiguration()) {
+            diagnosticsConfiguration()->setSystemCrashReporterForwardingEnabled(false);
             diagnostics::CrashDumpConfig config = diagnosticsConfiguration()->crashDumpConfig();
             // Keep default directory but empty URL - we don't want plugin-registration events to be sent.
             diagnosticsConfiguration()->setCrashDumpConfig({config.directory, String{}});
