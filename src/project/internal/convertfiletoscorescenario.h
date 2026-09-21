@@ -58,9 +58,13 @@ public:
     void convertFiles(const muse::io::paths_t& paths = {}) override;
     muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const override;
 
+    muse::ValNt<WatchedScoreList> watchedScores() const override;
+
     bool isAwaitingReview(int scoreId) const override;
 
     void cancelConversion(ConvertType type, int convertId) override;
+
+    void retryPolling() override;
 
 private:
     muse::async::Promise<muse::Ret> checkConvertIsAllowed();

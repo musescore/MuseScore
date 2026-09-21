@@ -177,6 +177,11 @@ async::Channel<Ret, WatchedScore> ConvertFileToScoreScenario::convertFinished() 
     return m_convertFinished;
 }
 
+ValNt<WatchedScoreList> ConvertFileToScoreScenario::watchedScores() const
+{
+    return service()->watchedScores();
+}
+
 bool ConvertFileToScoreScenario::isAwaitingReview(int scoreId) const
 {
     const WatchedScore* watched = service()->watchedScoreById(scoreId);
@@ -203,6 +208,11 @@ void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertI
             service()->deleteConversion(type, convertId);
         }
     });
+}
+
+void ConvertFileToScoreScenario::retryPolling()
+{
+    service()->retryPolling();
 }
 
 async::Promise<Ret> ConvertFileToScoreScenario::checkConvertIsAllowed()
@@ -528,7 +538,7 @@ void ConvertFileToScoreScenario::showPollingGaveUpNotification()
         { muse::trc("global", "Retry"), toast::ToastActionCode::TryAgain, /*accent*/ true },
     }).onResolve(this, [this](const toast::ToastResult& result) {
         if (result.isCode(toast::ToastActionCode::TryAgain)) {
-            service()->retryPolling();
+            retryPolling();
         }
     });
 }

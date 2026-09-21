@@ -58,7 +58,7 @@ void CloudScoresModel::load()
         loadItemsIfNecessary();
     });
 
-    convertFileToScoreService()->watchedScores().notification.onNotify(this, [this]() {
+    convertFileToScoreScenario()->watchedScores().notification.onNotify(this, [this]() {
         updateWatchedItems();
     });
 }
@@ -230,7 +230,7 @@ bool CloudScoresModel::containsCloudScore(int scoreId) const
 
 std::vector<QVariantMap> CloudScoresModel::buildWatchedItems(const std::unordered_set<int>& downloadedScoreIds) const
 {
-    const WatchedScoreList watchedScores = convertFileToScoreService()->watchedScores().val;
+    const WatchedScoreList watchedScores = convertFileToScoreScenario()->watchedScores().val;
     std::vector<QVariantMap> items;
 
     for (const WatchedScore& watchedScore : watchedScores) {

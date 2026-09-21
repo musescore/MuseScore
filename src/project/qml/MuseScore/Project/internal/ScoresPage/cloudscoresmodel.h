@@ -33,7 +33,7 @@
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
-#include "iconvertfiletoscoreservice.h"
+#include "iconvertfiletoscorescenario.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
@@ -50,7 +50,7 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
 
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
-    muse::ContextInject<IConvertFileToScoreService> convertFileToScoreService = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
 
 public:
     CloudScoresModel(QObject* parent = nullptr);
