@@ -43,6 +43,7 @@ static int s_fontID = -1;
 void FontsDatabase::setDefaultFont(Font::Type type, const FontDataKey& key)
 {
     m_defaults[type] = key;
+    m_changed.notify();
 }
 
 void FontsDatabase::insertSubstitution(const String& familyName, const String& substituteName)
@@ -54,6 +55,8 @@ void FontsDatabase::insertSubstitution(const String& familyName, const String& s
 #ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     QFont::insertSubstitution(familyName, substituteName);
 #endif
+
+    m_changed.notify();
 }
 
 void FontsDatabase::removeSubstitutions(const String& familyName, const std::vector<String>& substituteNames)
@@ -83,6 +86,8 @@ void FontsDatabase::removeSubstitutions(const String& familyName, const std::vec
     if (substitutes.empty()) {
         m_familySubstitutions.erase(it);
     }
+
+    m_changed.notify();
 }
 
 const FontDataKey& FontsDatabase::defaultFont(Font::Type type) const
@@ -120,6 +125,7 @@ int FontsDatabase::addFont(const FontDataKey& key, const io::path_t& path)
     }
 
     m_fonts.insert({ key, FontInfo { id, key, path } });
+    m_changed.notify();
 
     return id;
 }
@@ -134,6 +140,7 @@ void FontsDatabase::removeFont(const FontDataKey& key)
     const FontInfo removed = it->second;
     m_fonts.erase(it);
     release(removed);
+    m_changed.notify();
 }
 
 void FontsDatabase::release(const FontInfo& fi)
@@ -205,6 +212,11 @@ bool FontsDatabase::isFtxFont(const FontDataKey& requireKey, Font::Type type) co
     FontDataKey key = actualFont(requireKey, type);
     io::path_t path = fontInfo(key).path;
     return io::FileInfo::suffix(path).toLower() == u"ftx";
+}
+
+async::Notification FontsDatabase::changed() const
+{
+    return m_changed;
 }
 
 const FontsDatabase::FontInfo& FontsDatabase::fontInfo(const FontDataKey& key) const
