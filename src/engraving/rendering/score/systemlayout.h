@@ -80,6 +80,11 @@ public:
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
     static void centerElementsBetweenStaves(const System* system);
+    /* Centers the systems which were laid out during this layout but whose page was not
+     * collected (e.g. the first system of the next page, re-laid out by a partial layout),
+     * so centerElementsBetweenStaves has not been called for them yet. Call it after the
+     * system/page collection loop, before any leftover systems are deleted. */
+    static void centerPendingSystems(LayoutContext& ctx);
     static void centerBigTimeSigsAcrossStaves(const System* system);
 
     static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
