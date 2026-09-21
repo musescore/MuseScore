@@ -40,6 +40,7 @@
 #include "testflow/itestflow.h"
 
 #include "ui/iuiconfiguration.h"
+#include "diagnostics/idiagnosticsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "playback/isoundprofilesrepository.h"
@@ -54,6 +55,7 @@ namespace mu::app {
 class MuseScoreConsoleApp : public muse::ConsoleApplication
 {
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::diagnostics::IDiagnosticsConfiguration> diagnosticsConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;

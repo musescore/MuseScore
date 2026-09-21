@@ -184,6 +184,10 @@ void CommandLineParser::init()
                                           "Check an audio plugin for compatibility with the application and register it", "path"));
     m_parser.addOption(QCommandLineOption("register-audio-plugin-out", "Write audio plugin registration result to file", "path"));
 
+    // Crash dumps
+    m_parser.addOption(internalCommandLineOption("crash-dumps-dir", "Directory where this process writes its crash dumps", "path"));
+    m_parser.addOption(internalCommandLineOption("crash-server-url", "URL where this process's crash dumps are sent", "url"));
+
     // Internal
     m_parser.addOption(internalCommandLineOption("score-display-name-override",
                                                  "Display name to be shown in splash screen for the score that is being opened", "name"));
@@ -298,6 +302,14 @@ void CommandLineParser::parse(int argc, char** argv)
         m_options->runMode = IApplication::RunMode::AudioPluginRegistration;
         m_options->audioPluginRegistration.pluginPath = fromUserInputPath(m_parser.value("register-audio-plugin"));
         m_options->audioPluginRegistration.outputFile = fromUserInputPath(m_parser.value("register-audio-plugin-out"));
+    }
+
+    if (m_parser.isSet("crash-dumps-dir")) {
+        m_options->crashDump.dir = fromUserInputPath(m_parser.value("crash-dumps-dir"));
+    }
+
+    if (m_parser.isSet("crash-server-url")) {
+        m_options->crashDump.serverUrl = muse::String::fromQString(m_parser.value("crash-server-url"));
     }
 
     // Converter mode

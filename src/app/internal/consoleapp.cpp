@@ -80,12 +80,26 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
 
     muse::ConsoleApplication::applyCommandLineOptions(opt);
 
-    if (opt->runMode == IApplication::RunMode::AudioPluginRegistration) {
+    const std::shared_ptr<MuseScoreCmdOptions> options = std::dynamic_pointer_cast<MuseScoreCmdOptions>(opt);
+    IF_ASSERT_FAILED(options) {
         return;
     }
 
-    const std::shared_ptr<MuseScoreCmdOptions> options = std::dynamic_pointer_cast<MuseScoreCmdOptions>(opt);
-    IF_ASSERT_FAILED(options) {
+    if (opt->runMode == IApplication::RunMode::AudioPluginRegistration) {
+        if (diagnosticsConfiguration()) {
+            diagnosticsConfiguration()->setSystemCrashReporterForwardingEnabled(false);
+
+            if (options->crashDump.dir.has_value()) {
+                //! NOTE The spawning process handed us our own pipeline, so that our dumps neither
+                //! collide with its own nor get uploaded to the wrong project.
+                diagnosticsConfiguration()->setCrashDumpConfig({ options->crashDump.dir.value(),
+                                                                 options->crashDump.serverUrl.value_or(String{}) });
+            } else {
+                const diagnostics::CrashDumpConfig config = diagnosticsConfiguration()->crashDumpConfig();
+                // Keep default directory but empty URL - we don't want plugin-registration events to be sent.
+                diagnosticsConfiguration()->setCrashDumpConfig({ config.directory, String{} });
+            }
+        }
         return;
     }
 

@@ -5,6 +5,7 @@
 #include <string>
 
 #include "global/io/path.h"
+#include "global/types/string.h"
 #include "global/logger.h"
 #include "global/internal/cmdoptions.h"
 
@@ -124,6 +125,11 @@ struct MuseScoreCmdOptions : public muse::CmdOptions {
         muse::io::path_t pluginPath;
         muse::io::path_t outputFile;
     } audioPluginRegistration;
+
+    struct CrashDump {
+        std::optional<muse::io::path_t> dir;
+        std::optional<muse::String> serverUrl;
+    } crashDump;
 };
 }
 
