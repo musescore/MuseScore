@@ -89,6 +89,7 @@ private:
     void showScoreReadyNotification(const WatchedScore& watched);
     void showConvertFailedNotification(const muse::Ret& ret);
     void showPollingFailureNotification();
+    void showPollingGaveUpNotification();
 
     muse::async::Channel<muse::Ret, WatchedScore> m_convertFinished;
 

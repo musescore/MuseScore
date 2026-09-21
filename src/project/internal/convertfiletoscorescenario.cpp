@@ -84,6 +84,11 @@ void ConvertFileToScoreScenario::init()
     });
 
     service()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
+        if (failure.gaveUp) {
+            showPollingGaveUpNotification();
+            return;
+        }
+
         if (failure.attempt == 1) {
             m_retryToastShown = false;
         }
@@ -359,7 +364,7 @@ void ConvertFileToScoreScenario::showCloudIsNotAvailableError()
 {
     interactive()->warning(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
                            muse::trc("project/convert",
-                                     "An internet connection is required to convert a file. Please check your internet connection or try again later."),
+                                     "An internet connection is required for file conversion. Please check your internet connection or try again later."),
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
@@ -508,6 +513,22 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
 void ConvertFileToScoreScenario::showPollingFailureNotification()
 {
     toastService()->showWarning(
-        muse::trc("project/convert", "We’re having trouble connecting to the internet."),
+        muse::trc("project/convert", "We’re having trouble connecting to MuseScore.com."),
         muse::trc("project/convert", "We’ll keep trying intermittently."));
+}
+
+void ConvertFileToScoreScenario::showPollingGaveUpNotification()
+{
+    toastService()->show(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
+                         muse::trc("project/convert",
+                                   "An internet connection is required for file conversion. Please check your internet connection or try again later."),
+                         muse::ui::IconCode::Code::ERROR_FILLED, true,
+    {
+        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
+        { muse::trc("global", "Retry"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+    }).onResolve(this, [this](const toast::ToastResult& result) {
+        if (result.isCode(toast::ToastActionCode::TryAgain)) {
+            service()->retryPolling();
+        }
+    });
 }
