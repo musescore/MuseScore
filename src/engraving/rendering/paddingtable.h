@@ -28,9 +28,6 @@
 namespace mu::engraving {
 class EngravingItem;
 class MStyle;
-struct ParenPaddingTable;
-
-using ParenPaddingTablePtr = std::unique_ptr<ParenPaddingTable>;
 
 template<typename T>
 struct PaddingVector : std::array<T, TOT_ELEMENT_TYPES>
@@ -43,10 +40,10 @@ struct PaddingVector : std::array<T, TOT_ELEMENT_TYPES>
 struct PaddingTable : public PaddingVector<PaddingVector<double> >
 {
 public:
-    void createTable(const MStyle& style);
+    void update(const MStyle& style);
 
 private:
-    void initPaddingTable(double minPadUnit);
+    void init(double minPadUnit);
 };
 
 struct ParenPaddingTable
@@ -54,30 +51,61 @@ struct ParenPaddingTable
 public:
     virtual ~ParenPaddingTable() = default;
 
-    virtual void createTable(const MStyle& style) = 0;
-    double padding(ElementType type1, ElementType type2);
-
-    static ParenPaddingTablePtr getPaddingTable(const EngravingItem* parent);
+    virtual void update(const MStyle& style) = 0;
+    double padding(ElementType type1, ElementType type2) const;
 
 protected:
-    void initPaddingTable(double minPadUnit);
+    void init(double minPadUnit);
     PaddingVector<double> m_parenBefore;
     PaddingVector<double> m_parenAfter;
 };
 
 struct NoteParenPaddingTable : public ParenPaddingTable {
-    void createTable(const MStyle& style) override;
+    void update(const MStyle& style) override;
 };
 
 struct KeySigParenPaddingTable : public ParenPaddingTable {
-    void createTable(const MStyle& style) override;
+    void update(const MStyle& style) override;
 };
 
 struct TimeSigParenPaddingTable : public ParenPaddingTable {
-    void createTable(const MStyle& style) override;
+    void update(const MStyle& style) override;
 };
 
 struct ClefParenPaddingTable : public ParenPaddingTable {
-    void createTable(const MStyle& style) override;
+    void update(const MStyle& style) override;
+};
+
+struct ParenPaddingTables {
+    void update(const MStyle& style)
+    {
+        noteParenPaddingTable.update(style);
+        keySigParenPaddingTable.update(style);
+        timeSigParenPaddingTable.update(style);
+        clefParenPaddingTable.update(style);
+    }
+
+    const ParenPaddingTable& getTableFor(const EngravingItem* item) const;
+
+private:
+    NoteParenPaddingTable noteParenPaddingTable;
+    KeySigParenPaddingTable keySigParenPaddingTable;
+    TimeSigParenPaddingTable timeSigParenPaddingTable;
+    ClefParenPaddingTable clefParenPaddingTable;
+};
+
+struct PaddingTables {
+    const PaddingTable& horizontalPaddingTable() const { return m_horizontalPaddingTable; }
+    const ParenPaddingTable& parenthesisPaddingTableFor(const EngravingItem* item) const { return m_parenPaddingTables.getTableFor(item); }
+
+    void update(const MStyle& style)
+    {
+        m_horizontalPaddingTable.update(style);
+        m_parenPaddingTables.update(style);
+    }
+
+private:
+    PaddingTable m_horizontalPaddingTable;
+    ParenPaddingTables m_parenPaddingTables;
 };
 }

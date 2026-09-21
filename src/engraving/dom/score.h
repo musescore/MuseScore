@@ -840,8 +840,8 @@ public:
 
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
-    void createPaddingTable();
-    const PaddingTable& paddingTable() const { return m_paddingTable; }
+    void updatePaddingTables();
+    const PaddingTables& paddingTables() const { return m_paddingTables; }
 
     void autoUpdateSpatium();
 
@@ -1007,7 +1007,7 @@ private:
 
     muse::async::Channel<float> m_layoutProgressChannel;
 
-    PaddingTable m_paddingTable;
+    PaddingTables m_paddingTables;
     double m_minimumPaddingUnit = 0.0;
 };
 
