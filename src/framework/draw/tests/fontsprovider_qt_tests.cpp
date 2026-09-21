@@ -227,6 +227,22 @@ TEST_F(Draw_FontsProviderQtTests, removeSubstitutions)
     EXPECT_EQ(qSubstitutions.at(1).toLower(), QString("leland"));
 }
 
+TEST_F(Draw_FontsProviderQtTests, substitutionChangeReachesCachedFaces)
+{
+    Env env;
+    Font f(u"Edwin", Font::Type::Text);
+    f.setPointSizeF(12.0);
+    const muse::String gClef = muse::String::fromUcs4(0xE050);
+
+    const double withoutSubstitution = env.xProvider.horizontalAdvance(f, gClef);
+
+    env.fontsDatabase->insertSubstitution(u"Edwin", u"Leland");
+    EXPECT_NE(withoutSubstitution, env.xProvider.horizontalAdvance(f, gClef));
+
+    env.fontsDatabase->removeSubstitutions(u"Edwin", { u"Leland" });
+    EXPECT_EQ(withoutSubstitution, env.xProvider.horizontalAdvance(f, gClef));
+}
+
 TEST_F(Draw_FontsProviderQtTests, xHeight)
 {
     Env env;

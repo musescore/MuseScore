@@ -124,6 +124,10 @@ FontsEngine::~FontsEngine()
 void FontsEngine::init()
 {
     m_renderCache.init();
+
+    fontsDatabase()->changed().onNotify(this, [this]() {
+        clearLoadedFaces();
+    });
 }
 
 void FontsEngine::setRenderCacheDirPath(const io::path_t& path, const std::string& revision)
