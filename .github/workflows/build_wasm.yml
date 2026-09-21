@@ -71,7 +71,7 @@ jobs:
         host: all_os
         target: 'wasm'
         arch: wasm_singlethread
-        modules: 'qt5compat qtcanvaspainter qtshadertools qttasktree qtwebsockets'
+        modules: 'qt5compat qtshadertools qtwebsockets'
         cache: true
 
     - name: Setup environment
