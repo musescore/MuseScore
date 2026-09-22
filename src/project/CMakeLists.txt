@@ -52,6 +52,7 @@ target_sources(project PRIVATE
     types/savelocation.h
     types/template.h
     types/converttypes.h
+    types/projecturis.h
 
     internal/projectcommandsregister.cpp
     internal/projectcommandsregister.h

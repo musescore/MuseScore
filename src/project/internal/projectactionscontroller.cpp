@@ -42,6 +42,7 @@
 
 #include "../projectcommands.h"
 #include "rcommand/actiontocommand.h"
+#include "types/projecturis.h"
 
 #include "log.h"
 #include "types/ret.h"
@@ -51,16 +52,6 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::actions;
-
-static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
-static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
-static const muse::Uri HOME_PAGE_URI("musescore://home");
-static const muse::Uri NEW_SCORE_URI("musescore://project/newscore");
-static const muse::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
-static const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
-
-static const QString MUSESCORE_URL_SCHEME("musescore");
-static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
 auto openArgs = [](const rcommand::Command& command, const ActionData& args) -> muse::rcommand::CommandQuery {
     rcommand::CommandQuery query(command);

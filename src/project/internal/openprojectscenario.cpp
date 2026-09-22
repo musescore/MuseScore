@@ -39,6 +39,7 @@
 
 #include "inotationproject.h"
 #include "projecterrors.h"
+#include "types/projecturis.h"
 
 #include "log.h"
 
@@ -46,12 +47,6 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace muse;
 using muse::async::Promise;
-
-static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
-static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
-
-static const QString MUSESCORE_URL_SCHEME("musescore");
-static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
 bool OpenProjectScenario::isBusy(BusyStatus status) const
 {

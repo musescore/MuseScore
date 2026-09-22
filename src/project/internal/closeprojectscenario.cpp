@@ -23,14 +23,13 @@
 #include "closeprojectscenario.h"
 
 #include "translation.h"
+#include "types/projecturis.h"
 
 #include "log.h"
 
 using namespace mu::project;
 using namespace muse;
 using muse::async::Promise;
-
-static const muse::Uri HOME_PAGE_URI("musescore://home");
 
 Promise<Ret> CloseProjectScenario::resolvedPromise(const Ret& ret)
 {
