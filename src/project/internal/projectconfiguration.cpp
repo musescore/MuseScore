@@ -47,6 +47,7 @@ static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/m
 static const Settings::Key LAST_OPENED_PROJECTS_PATH(module_name, "application/paths/lastOpenedProjectsPath");
 static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/paths/lastSavedProjectsPath");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
+static const Settings::Key LAST_OPENED_CONVERT_FILE_PATH(module_name, "application/paths/lastOpenedConvertFilePath");
 static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
 static const Settings::Key SHOULD_WARN_BEFORE_PUBLISH(module_name, "project/shouldWarnBeforePublish");
@@ -246,6 +247,21 @@ muse::async::Channel<muse::io::path_t> ProjectConfiguration::userProjectsPathCha
 muse::io::path_t ProjectConfiguration::defaultUserProjectsPath() const
 {
     return settings()->defaultValue(USER_PROJECTS_PATH).toPath();
+}
+
+void ProjectConfiguration::setLastOpenedConvertFilePath(const muse::io::path_t& path)
+{
+    settings()->setSharedValue(LAST_OPENED_CONVERT_FILE_PATH, Val(path));
+}
+
+muse::io::path_t ProjectConfiguration::defaultConvertFilePath() const
+{
+    muse::io::path_t dir = settings()->value(LAST_OPENED_CONVERT_FILE_PATH).toPath();
+    if (dir.empty()) {
+        dir = globalConfiguration()->documentsPath();
+    }
+
+    return dir;
 }
 
 bool ProjectConfiguration::shouldAskSaveLocationType() const
@@ -651,6 +667,11 @@ QUrl ProjectConfiguration::dotComBugReportUrl() const
 {
     // The general .com bug report page
     return QUrl("https://musescore.com/groups/bug-reports");
+}
+
+QUrl ProjectConfiguration::scoreUploadingGuidelinesUrl() const
+{
+    return QUrl("https://musescore.com/score-uploading-guidelines");
 }
 
 bool ProjectConfiguration::openDetailedProjectUploadedDialog() const

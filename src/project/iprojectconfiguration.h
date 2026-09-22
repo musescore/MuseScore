@@ -68,6 +68,10 @@ public:
     virtual muse::async::Channel<muse::io::path_t> userProjectsPathChanged() const = 0;
     virtual muse::io::path_t defaultUserProjectsPath() const = 0;
 
+    //! NOTE: best-guess directory to start browsing from in the convert-to-score "open file" dialog
+    virtual muse::io::path_t defaultConvertFilePath() const = 0;
+    virtual void setLastOpenedConvertFilePath(const muse::io::path_t& path) = 0;
+
     virtual bool shouldAskSaveLocationType() const = 0;
     virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
 
@@ -141,6 +145,8 @@ public:
     virtual QUrl supportForumUrl() const = 0;
 
     virtual QUrl dotComBugReportUrl() const = 0;
+
+    virtual QUrl scoreUploadingGuidelinesUrl() const = 0;
 
     virtual bool openDetailedProjectUploadedDialog() const = 0;
     virtual void setOpenDetailedProjectUploadedDialog(bool show) = 0;

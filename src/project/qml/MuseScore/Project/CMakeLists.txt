@@ -28,6 +28,10 @@ qt_add_qml_module(project_qml
         audiogenerationsettingsmodel.h
         enums.cpp
         enums.h
+        internal/ConvertFileToScore/convertfiletoscoremodel.cpp
+        internal/ConvertFileToScore/convertfiletoscoremodel.h
+        internal/ConvertFileToScore/filelistmodel.cpp
+        internal/ConvertFileToScore/filelistmodel.h
         internal/Export/exportdialogmodel.cpp
         internal/Export/exportdialogmodel.h
         internal/NewScore/additionalinfomodel.cpp
@@ -59,6 +63,19 @@ qt_add_qml_module(project_qml
         AskSaveLocationTypeDialog.qml
         AudioGenerationSettings.qml
         AudioGenerationSettingsDialog.qml
+        ConvertFileToScoreDialog.qml
+        internal/ConvertFileToScore/ConvertButtonBox.qml
+        internal/ConvertFileToScore/ConvertFromLinkPanel.qml
+        internal/ConvertFileToScore/FileItem.qml
+        internal/ConvertFileToScore/FileRequirements.qml
+        internal/ConvertFileToScore/FileRequirementsPopup.qml
+        internal/ConvertFileToScore/LinkEntryPage.qml
+        internal/ConvertFileToScore/LinkPastePanel.qml
+        internal/ConvertFileToScore/MultipleFilesPanel.qml
+        internal/ConvertFileToScore/SaveAsField.qml
+        internal/ConvertFileToScore/SelectFilePage.qml
+        internal/ConvertFileToScore/SelectedFilesPage.qml
+        internal/ConvertFileToScore/SingleFilePanel.qml
         ExportDialog.qml
         internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml
@@ -144,6 +161,7 @@ fixup_qml_module_dependencies(project_qml)
 # Necessary for the auto-generated sources
 target_include_directories(project_qml PRIVATE
     internal
+    internal/ConvertFileToScore
     internal/Export
     internal/NewScore
     internal/Properties
