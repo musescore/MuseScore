@@ -48,6 +48,8 @@ Item {
     signal revealInFileBrowserRequested(var scorePath)
     signal viewOnlineRequested(var scoreId)
     signal removeFromRecentFilesRequested(var scorePath)
+    signal retryRequested()
+    signal cancelRequested(int convertType, int convertId)
 
     component ColumnItem : QtObject {
         property string header
@@ -208,6 +210,8 @@ Item {
                     model: searchFilterModel
 
                     delegate: ScoreListItem {
+                        id: item
+
                         required property int index
 
                         columns: root.columns
@@ -217,12 +221,16 @@ Item {
                         columnSpacing: view.columnSpacing
                         showRemoveFromRecentFiles: root.allowRemoveFromRecentFiles
 
+                        mouseArea.enabled: !item.isProcessing
+
                         navigation.panel: navPanel
                         navigation.row: index + 1
                         navigation.column: 0
 
                         onClicked: {
-                            root.openScoreRequested(score.path, score.name)
+                            if (!item.isProcessing) {
+                                root.openScoreRequested(score.path, score.name)
+                            }
                         }
 
                         onRevealInFileBrowserRequested: function(scorePath) {
@@ -235,6 +243,12 @@ Item {
 
                         onRemoveFromRecentFilesRequested: function(scorePath) {
                             root.removeFromRecentFilesRequested(scorePath)
+                        }
+
+                        onRetryRequested: root.retryRequested()
+
+                        onCancelRequested: function(convertType, convertId) {
+                            root.cancelRequested(convertType, convertId)
                         }
                     }
                 }

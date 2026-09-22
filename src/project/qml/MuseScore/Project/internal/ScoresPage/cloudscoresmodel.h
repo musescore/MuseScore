@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include <optional>
+#include <unordered_set>
+
 #include <qqmlintegration.h>
 
 #include "abstractscoresmodel.h"
@@ -30,6 +33,7 @@
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
+#include "iconvertfiletoscorescenario.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
@@ -46,6 +50,7 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
 
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
 
 public:
     CloudScoresModel(QObject* parent = nullptr);
@@ -60,6 +65,9 @@ public:
 
     void load() override;
     Q_INVOKABLE void reload();
+
+    Q_INVOKABLE void retryAllConversions();
+    Q_INVOKABLE void cancelConversion(int convertType, int convertId);
 
     State state() const;
     bool hasMore() const;
@@ -77,14 +85,23 @@ signals:
 private:
     void setState(State state);
 
-    void loadItemsIfNecessary();
+    void loadItemsIfNecessary(std::optional<int> refreshPage = std::nullopt);
     bool needsLoading();
+    size_t loadedCloudItemCount() const;
+    bool containsCloudScore(int scoreId) const;
+
+    std::vector<QVariantMap> buildWatchedItems(const std::unordered_set<int>& downloadedScoreIds = {}) const;
+    void updateWatchedItems(const std::unordered_set<int>& downloadedScoreIds = {}, bool allowRefresh = true);
 
     State m_state = State::Fine;
-    bool m_isWaitingForPromise = false;
+    bool m_isRequestPending = false;
+    std::optional<int> m_queuedRefreshPage;
 
     size_t m_totalItems = muse::nidx;
+    size_t m_watchedItemCount = 0;
 
     int m_desiredRowCount = 0;
+
+    bool m_pollingGaveUp = false;
 };
 }
