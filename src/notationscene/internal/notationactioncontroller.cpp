@@ -70,6 +70,8 @@ static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
 
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+
 using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
 static const std::map<muse::rcommand::Command, bool EngravingDebuggingOptions::*> s_debuggingCommands = {
     { SHOW_ELEMENT_BOUNDING_RECTS_COMMAND, &EngravingDebuggingOptions::showElementBoundingRects },
@@ -1162,6 +1164,11 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
     // If no notation is loaded, we cannot handle any action.
     auto masterNotation = currentMasterNotation();
     if (!masterNotation) {
+        return false;
+    }
+
+    // All actions are disabled on the review page
+    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
         return false;
     }
 

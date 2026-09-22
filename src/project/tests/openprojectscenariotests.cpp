@@ -42,6 +42,7 @@
 #include "notation/tests/mocks/masternotationmock.h"
 #include "notation/tests/mocks/notationmock.h"
 
+#include "mocks/convertfiletoscorescenariomock.h"
 #include "mocks/mscmetareadermock.h"
 #include "mocks/notationprojectmock.h"
 #include "mocks/notationreadermock.h"
@@ -82,6 +83,7 @@ protected:
         m_museSounds = std::make_shared<NiceMock<musesounds::MuseSoundsCheckUpdateScenarioMock> >();
         m_museSampler = std::make_shared<NiceMock<musesounds::MuseSamplerCheckUpdateScenarioMock> >();
         m_mscMetaReader = std::make_shared<NiceMock<notation::MscMetaReaderMock> >();
+        m_convertFileToScoreScenario = std::make_shared<NiceMock<ConvertFileToScoreScenarioMock> >();
 
         m_scenario->configuration.set(m_configuration);
         m_scenario->fileSystem.set(m_fileSystem);
@@ -96,6 +98,7 @@ protected:
         m_scenario->museSoundsCheckUpdateScenario.set(m_museSounds);
         m_scenario->museSamplerCheckUpdateScenario.set(m_museSampler);
         m_scenario->mscMetaReader.set(m_mscMetaReader);
+        m_scenario->convertFileToScoreScenario.set(m_convertFileToScoreScenario);
 
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
         m_masterNotation = std::make_shared<NiceMock<notation::MasterNotationMock> >();
@@ -252,6 +255,7 @@ protected:
     std::shared_ptr<musesounds::MuseSoundsCheckUpdateScenarioMock> m_museSounds;
     std::shared_ptr<musesounds::MuseSamplerCheckUpdateScenarioMock> m_museSampler;
     std::shared_ptr<notation::MscMetaReaderMock> m_mscMetaReader;
+    std::shared_ptr<ConvertFileToScoreScenarioMock> m_convertFileToScoreScenario;
 
     std::shared_ptr<NotationProjectMock> m_project;
     std::shared_ptr<notation::MasterNotationMock> m_masterNotation;
@@ -421,6 +425,52 @@ TEST_F(OpenProjectScenarioTests, OpenProject_EmptyPath_IsRefused)
     Ret ret = openProject("score.mscz");
 
     EXPECT_FALSE(ret);
+}
+
+// ─── Which page a score opens on ─────────────────────────────────────────────
+
+TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_NoCurrentProject_IsTheNotationPage)
+{
+    //! [GIVEN] No project is current...
+    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
+
+    //! [WHEN] Resolving which page to show...
+    //! [THEN] It is the ordinary notation page
+    EXPECT_EQ(m_scenario->resolveNotationPageUri(), Uri("musescore://notation"));
+}
+
+TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_NotACloudScore_IsTheNotationPage)
+{
+    //! [GIVEN] A local score with no cloud info...
+    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+
+    //! [WHEN] Resolving which page to show...
+    //! [THEN] It is the ordinary notation page
+    EXPECT_EQ(m_scenario->resolveNotationPageUri(), Uri("musescore://notation"));
+}
+
+TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_CloudScoreNotAwaitingReview_IsTheNotationPage)
+{
+    //! [GIVEN] A cloud score that is not a conversion awaiting review...
+    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    m_cloudInfo.sourceUrl = QUrl("https://musescore.com/score/42");
+    ON_CALL(*m_convertFileToScoreScenario, isAwaitingReview(42)).WillByDefault(Return(false));
+
+    //! [WHEN] Resolving which page to show...
+    //! [THEN] It is the ordinary notation page
+    EXPECT_EQ(m_scenario->resolveNotationPageUri(), Uri("musescore://notation"));
+}
+
+TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_CloudScoreAwaitingReview_IsTheReviewPage)
+{
+    //! [GIVEN] A converted cloud score still awaiting a quality review...
+    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    m_cloudInfo.sourceUrl = QUrl("https://musescore.com/score/42");
+    ON_CALL(*m_convertFileToScoreScenario, isAwaitingReview(42)).WillByDefault(Return(true));
+
+    //! [WHEN] Resolving which page to show...
+    //! [THEN] It is the review page
+    EXPECT_EQ(m_scenario->resolveNotationPageUri(), Uri("musescore://notation/review"));
 }
 
 // ─── Cloud scores ────────────────────────────────────────────────────────────

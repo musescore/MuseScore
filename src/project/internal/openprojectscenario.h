@@ -44,6 +44,7 @@
 #include "inotationreadersregister.h"
 #include "iprojectcreator.h"
 #include "irecentfilescontroller.h"
+#include "iconvertfiletoscorescenario.h"
 
 namespace mu::project {
 class OpenProjectScenario : public IOpenProjectScenario, public muse::Contextable, public muse::async::Asyncable
@@ -65,6 +66,7 @@ public:
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
     muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
 
     OpenProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
@@ -78,6 +80,8 @@ public:
 
     muse::async::Promise<muse::Ret> revertToLastSaved() override;
     muse::Ret finishOpening() override;
+
+    muse::Uri resolveNotationPageUri() const override;
 
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     muse::async::Notification projectBeingDownloadedChanged() const override;
