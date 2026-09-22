@@ -421,3 +421,9 @@ TEST_F(Engraving_RepeatTests, repeat68) {
 TEST_F(Engraving_RepeatTests, repeat69) {
     repeat("repeat69.mscx", u"1; 2;3; 2;3; 4");
 }
+
+TEST_F(Engraving_RepeatTests, repeat70) {
+    // Skipped open volta without any repeat structure following it: only the volta itself is skipped,
+    // it should not swallow the remainder of the score
+    repeat("repeat70.mscx", u"1;2; 1; 4;5");
+}
