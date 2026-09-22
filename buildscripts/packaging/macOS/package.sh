@@ -25,6 +25,11 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+DO_NOTARIZE=false
+if $DO_SIGN && [ -n "$APPLE_USERNAME" ] && [ -n "$APPLE_PASSWORD" ] && [ -n "$APPLE_TEAM_ID" ]; then
+    DO_NOTARIZE=true
+fi
+
 # Sign one binary or bundle for distribution. --timestamp and --options runtime
 # are both required for notarization; the entitlements file is optional, so pass
 # an empty first argument to sign without one.
@@ -40,6 +45,54 @@ sign_code() {
         -s "$SIGN_IDENTITY" \
         "${entitlements_args[@]}" \
         "$@"
+}
+
+# Submit one file to Apple's notary service and wait for the verdict. Always
+# prints the notarization log, because notarytool's own summary rarely says what
+# went wrong.
+notarize_file() {
+    local path="$1"
+    local attempt status submit_output submission_id
+
+    for attempt in 1 2 3; do
+        status=0
+        submit_output="$(xcrun notarytool submit "$path" \
+            --apple-id "$APPLE_USERNAME" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_PASSWORD" \
+            --wait 2>&1)" || status=$?
+        echo "$submit_output"
+
+        submission_id="$(awk '/id: / { print $2; exit }' <<<"$submit_output")"
+        if [ -n "$submission_id" ]; then
+            xcrun notarytool log "$submission_id" \
+                --apple-id "$APPLE_USERNAME" \
+                --team-id "$APPLE_TEAM_ID" \
+                --password "$APPLE_PASSWORD" \
+                || echo "Failed to fetch the notarization log"
+        fi
+
+        if [ $status -eq 0 ]; then
+            return 0
+        fi
+
+        # Invalid and Rejected are the notary service's considered verdicts on
+        # this exact file; submitting it again would only waste a round trip.
+        if grep -qE 'status: (Invalid|Rejected)' <<<"$submit_output"; then
+            echo "The notary service rejected ${path}; not retrying."
+            return $status
+        fi
+
+        if [ $attempt -eq 3 ]; then
+            echo "notarytool failed; giving up after 3 attempts."
+            return $status
+        fi
+
+        # The notary service is occasionally unavailable, and a whole macOS
+        # build is a lot to throw away over that.
+        echo "notarytool failed; retrying in 30s"
+        sleep 30
+    done
 }
 
 ################################################################
@@ -109,22 +162,31 @@ if $DO_SIGN; then
     echo "Codesign verify"
     codesign --verify --deep --strict --verbose=2 "${APP_PATH}"
 
-    echo "spctl"
-    spctl --assess --type execute -vvv "${APP_PATH}"
-
-    # Notarize and staple the .app before sealing the DMG
-    if [ -n "$APPLE_USERNAME" ] && [ -n "$APPLE_PASSWORD" ]; then
+    # Notarize and staple the .app before sealing the DMG, so that it is
+    # accepted by Gatekeeper even when it is dragged out of the DMG by hand.
+    if $DO_NOTARIZE; then
+        echo "Notarize the app"
         APP_ZIP="applebuild/app-notarization.zip"
         rm -f "$APP_ZIP"
         ditto -c -k --keepParent "${APP_PATH}" "$APP_ZIP"
-        xcrun notarytool submit "$APP_ZIP" \
-            --apple-id "$APPLE_USERNAME" \
-            --team-id "$APPLE_TEAM_ID" \
-            --password "$APPLE_PASSWORD" \
-            --wait
+        notarize_file "$APP_ZIP"
+        rm -f "$APP_ZIP"
+
+        echo "Staple the app"
         xcrun stapler staple "${APP_PATH}"
         xcrun stapler validate "${APP_PATH}"
-        rm -f "$APP_ZIP"
+
+        # Only meaningful now that the ticket is stapled: Gatekeeper rejects a
+        # signed but unnotarized app.
+        echo "spctl"
+        spctl --assess --type execute -vvv "${APP_PATH}"
+    else
+        echo "Skipping notarization of the app"
+
+        # Informational: without a ticket this can only say "Unnotarized
+        # Developer ID", which is expected here and must not fail the build.
+        echo "spctl (unnotarized build)"
+        spctl --assess --type execute -vvv "${APP_PATH}" || true
     fi
 else
     # Removing the dSYM bundles and renaming Resources/qml invalidated the
@@ -241,6 +303,38 @@ if $DO_SIGN; then
         "applebuild/${COMPRESSED_DMG_NAME}"
 
     codesign --verify --verbose=2 "applebuild/${COMPRESSED_DMG_NAME}"
+
+    # A second submission, on top of the one for the .app: the ticket stapled to
+    # the app covers the app alone, and it is the DMG that Gatekeeper checks
+    # when someone opens the download.
+    if $DO_NOTARIZE; then
+        echo "Notarize the DMG"
+        notarize_file "applebuild/${COMPRESSED_DMG_NAME}"
+
+        echo "Staple the DMG"
+        xcrun stapler staple "applebuild/${COMPRESSED_DMG_NAME}"
+        xcrun stapler validate "applebuild/${COMPRESSED_DMG_NAME}"
+
+        # The last word on whether what we are about to ship would open on
+        # someone else's Mac, asked of the .app as it is actually distributed:
+        # inside the sealed DMG.
+        echo "Check the Gatekeeper policy"
+        MOUNT_POINT="$(mktemp -d)"
+        hdiutil attach "applebuild/${COMPRESSED_DMG_NAME}" \
+            -mountpoint "$MOUNT_POINT" -nobrowse -readonly
+        MOUNTED_APP="$(ls -d "$MOUNT_POINT"/*.app)"
+        syspolicy_status=0
+        xcrun syspolicy_check distribution "$MOUNTED_APP" || syspolicy_status=$?
+        hdiutil detach "$MOUNT_POINT"
+        rmdir "$MOUNT_POINT" || true
+        if [ $syspolicy_status -ne 0 ]; then
+            echo "syspolicy_check failed"
+            exit 1
+        fi
+        echo "syspolicy_check passed"
+    else
+        echo "Skipping notarization of the DMG"
+    fi
 fi
 
 shasum -a 256 "applebuild/${COMPRESSED_DMG_NAME}"

@@ -262,13 +262,6 @@ jobs:
 
         bash ./buildscripts/ci/macos/package.sh "${PACKAGE_ARGS[@]}"
 
-    - name: Notarize
-      if: env.DO_NOTARIZE == 'true'
-      env:
-        APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
-        APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-      run: |
-        bash ./buildscripts/ci/macos/notarize.sh -u "${APPLE_USERNAME}" -p "${APPLE_PASSWORD}" -t "$APPLE_TEAM_ID"
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
