@@ -50,6 +50,7 @@ static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/s
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
 static const Settings::Key SHOULD_WARN_BEFORE_PUBLISH(module_name, "project/shouldWarnBeforePublish");
 static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD(module_name, "project/shouldWarnBeforeSavingPubliclyToCloud");
+static const Settings::Key HOME_SCORES_PAGE_TAB_INDEX(module_name, "project/homeScoresPageTabIndex");
 static const Settings::Key HOME_SCORES_PAGE_VIEW_TYPE(module_name, "project/homeScoresPageViewType");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
@@ -91,6 +92,8 @@ void ProjectConfiguration::init()
 
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
+
+    settings()->setDefaultValue(HOME_SCORES_PAGE_TAB_INDEX, Val(0));
 
     settings()->setDefaultValue(HOME_SCORES_PAGE_VIEW_TYPE, Val(HomeScoresPageViewType::Grid));
 
@@ -447,12 +450,14 @@ void ProjectConfiguration::setShouldWarnBeforeSavingPubliclyToCloud(bool shouldW
 
 int ProjectConfiguration::homeScoresPageTabIndex() const
 {
-    return m_homeScoresPageTabIndex;
+    return settings()->value(HOME_SCORES_PAGE_TAB_INDEX).toInt();
 }
 
 void ProjectConfiguration::setHomeScoresPageTabIndex(int index)
 {
-    m_homeScoresPageTabIndex = index;
+    // Intentionally not directly synced between instances
+    // (it would be weird if you switch the tab in one instance, and the others suddenly switch too)
+    settings()->setLocalValue(HOME_SCORES_PAGE_TAB_INDEX, Val(index));
 }
 
 IProjectConfiguration::HomeScoresPageViewType ProjectConfiguration::homeScoresPageViewType() const

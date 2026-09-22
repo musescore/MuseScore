@@ -187,9 +187,6 @@ private:
     muse::async::Channel<muse::io::path_t> m_userTemplatesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userScoresPathChanged;
 
-    int m_homeScoresPageTabIndex = 0;
-    muse::async::Notification m_homeScoresPageTabIndexChanged;
-
     muse::async::Channel<bool> m_autoSaveEnabledChanged;
     muse::async::Channel<int> m_autoSaveIntervalChanged;
 
