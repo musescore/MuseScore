@@ -117,12 +117,12 @@ bool ChordArticulationsRenderer::renderChordArticulations(const Chord* chord, co
             return true;
         }
 
-        if (TremoloRenderer::isAbleToRender(type)) {
+        if (TremoloRenderer::isAbleToRender(type) && (chord->tremoloSingleChord() || chord->tremoloTwoChord())) {
             TremoloRenderer::render(chord, type, ctx, result);
             return true;
         }
 
-        if (ArpeggioRenderer::isAbleToRender(type)) {
+        if (ArpeggioRenderer::isAbleToRender(type) && chord->arpeggio()) {
             ArpeggioRenderer::render(chord, type, ctx, result);
             return true;
         }

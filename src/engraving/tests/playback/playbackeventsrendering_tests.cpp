@@ -1810,6 +1810,57 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_Chord_Arpeggio_Grace
+ * @details In this case we're gonna render a simple piece of score with a single measure,
+ *          which starts with the E4 acciaccatura followed by the F4+A4+C5 quarter chord
+ *          marked by the Arpeggio articulation. The grace chord has no arpeggio of its own,
+ *          so it must be rendered as a plain chord
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Grace)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_grace/chord_arpeggio_grace.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected disclosure: 1 grace note + 3 arpeggiated notes
+    std::vector<pitch_level_t> expectedPitches = {
+        pitchLevel(PitchClass::E, 4),
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::A, 4),
+        pitchLevel(PitchClass::C, 5)
+    };
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Arpeggio, m_dummyPattern);
+    m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Request to render a chord
+    PlaybackEventsMap result;
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    for (const auto& pair : result) {
+        // [THEN] The grace note is rendered along with the arpeggiated notes
+        ASSERT_EQ(pair.second.size(), expectedPitches.size());
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+}
+
+/**
  * @brief PlaybackEventsRendererTests_Chord_Arpeggio_Up
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio Up articulation
