@@ -104,6 +104,7 @@ jobs:
         SENTRY_MUSE_MU4_KEY: ${{ secrets.SENTRY_MUSE_MU4_KEY }}
         SENTRY_MUSE_MU4_SANDBOX_KEY: ${{ secrets.SENTRY_MUSE_MU4_SANDBOX_KEY }}
         SENTRY_PROJECT: ${{ inputs.sentry_project }}
+        HAS_SIGN_CERTIFICATE: ${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET != '' }}
         APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
         APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         TRANSIFEX_API_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
@@ -119,6 +120,13 @@ jobs:
           bash ./buildscripts/ci/tools/make_build_number.sh
         fi
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+        DO_SIGN='false'
+        if [ "$HAS_SIGN_CERTIFICATE" == 'true' ]; then
+          DO_SIGN='true'
+        else
+          echo "::warning::MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET is empty; code signing disabled"
+        fi
 
         DO_NOTARIZE='false'
         if [ "$BUILD_MODE" != "devel" ]; then
@@ -189,6 +197,7 @@ jobs:
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
         echo "DO_UPDATE_TS=$DO_UPDATE_TS" | tee -a $GITHUB_ENV
         echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" | tee -a $GITHUB_ENV
+        echo "DO_SIGN=$DO_SIGN" | tee -a $GITHUB_ENV
         echo "DO_NOTARIZE=$DO_NOTARIZE" | tee -a $GITHUB_ENV
         echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" | tee -a $GITHUB_ENV
         echo "SENTRY_PROJECT=$SENTRY_PROJECT" | tee -a $GITHUB_ENV
@@ -241,17 +250,24 @@ jobs:
     - name: Show ccache stats
       run: |
         ccache -sv
-    - name: Package
+    # The signing keychain exists only while packaging, so that no other step
+    # can use the certificate.
+    - name: Setup signing keychain
+      if: env.DO_SIGN == 'true'
       env:
         MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET: ${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}
         MAC_SIGN_CERTIFICATE_PASSWORD: ${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}
+      run: |
+        bash ./buildscripts/ci/macos/setup_keychain.sh
+    - name: Package
+      env:
         APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
         APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
       run: |
-        PACKAGE_ARGS=(
-          --signsecret "${MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET}"
-          --signpass "${MAC_SIGN_CERTIFICATE_PASSWORD}"
-        )
+        PACKAGE_ARGS=()
+        if [ "$DO_SIGN" = "true" ]; then
+          PACKAGE_ARGS+=(--sign)
+        fi
         if [ "$DO_NOTARIZE" = "true" ]; then
           PACKAGE_ARGS+=(
             --user "${APPLE_USERNAME}"
@@ -261,6 +277,10 @@ jobs:
         fi
 
         bash ./buildscripts/ci/macos/package.sh "${PACKAGE_ARGS[@]}"
+    - name: Remove signing keychain
+      if: always() && env.MAC_KEYCHAIN != ''
+      run: |
+        security delete-keychain "$MAC_KEYCHAIN"
 
     - name: Checksum
       run: |
