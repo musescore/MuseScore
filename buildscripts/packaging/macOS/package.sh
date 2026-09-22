@@ -67,6 +67,7 @@ if $DO_SIGN; then
     # Re-sign appex to ensure proper entitlements
     echo "Re-sign appex"
     codesign --force \
+        --timestamp \
         --options runtime \
         --entitlements "src/macos_integration/entitlements.plist" \
         -s "Developer ID Application: MuseScore" \
@@ -82,6 +83,7 @@ if $DO_SIGN; then
     # Re-sign main app after removing dSYM files and renaming qml folder
     echo "Re-sign main app"
     codesign --force \
+        --timestamp \
         --options runtime \
         --entitlements "buildscripts/packaging/macOS/entitlements.plist" \
         -s "Developer ID Application: MuseScore" \
