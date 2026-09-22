@@ -207,6 +207,12 @@ AppshellCommandsController::DragTarget AppshellCommandsController::dragTarget(co
             return DragTarget::SoundFont;
         } else if (extensionInstaller()->isFileSupported(filePath)) {
             return DragTarget::Extension;
+        } else {
+            bool scorePageWithProjectOpen = interactive()->currentUri().val == NOTATION_URI
+                                            && globalContext()->currentProject() != nullptr;
+            if (!scorePageWithProjectOpen && convertFileToScoreScenario()->isFileSupported(filePath)) {
+                return DragTarget::ConvertibleFile;
+            }
         }
     }
     return DragTarget::Unknown;
@@ -264,6 +270,17 @@ bool AppshellCommandsController::onDropEvent(QDropEvent* event)
             muse::io::path_t filePath = url.toLocalFile();
             async::Async::call(this, [this, filePath]() {
                     extensionInstaller()->installExtension(filePath);
+                });
+        } break;
+        case DragTarget::ConvertibleFile: {
+            muse::io::paths_t paths;
+            for (const QUrl& u : urls) {
+                if (u.isLocalFile()) {
+                    paths.push_back(muse::io::path_t(u.toLocalFile()));
+                }
+            }
+            async::Async::call(this, [this, paths]() {
+                    convertFileToScoreScenario()->convertFiles(paths);
                 });
         } break;
         case DragTarget::Unknown:

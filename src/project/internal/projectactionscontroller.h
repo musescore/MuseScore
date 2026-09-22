@@ -29,7 +29,6 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -43,6 +42,7 @@
 #include "icloseprojectscenario.h"
 #include "iopenprojectscenario.h"
 #include "isaveprojectscenario.h"
+#include "iconvertfiletoscorescenario.h"
 
 #include "async/asyncable.h"
 
@@ -54,11 +54,11 @@ class ProjectActionsController : public IProjectCommandsController, public muse:
 {
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
-    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
     muse::ContextInject<ISaveProjectScenario> saveProjectScenario = { this };
     muse::ContextInject<ICloseProjectScenario> closeProjectScenario = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
@@ -112,8 +112,7 @@ private:
     muse::async::Promise<muse::Ret> sharedAudio();
     muse::async::Promise<muse::Ret> saveProjectAt(const muse::rcommand::Params& params);
 
-    muse::Ret importPdf();
-    muse::Ret importAudioToScore();
+    muse::Ret convertFileToScore();
 
     muse::Ret clearRecentScores();
 

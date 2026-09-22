@@ -53,6 +53,7 @@ using namespace muse;
 using namespace muse::actions;
 
 static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
 static const muse::Uri HOME_PAGE_URI("musescore://home");
 static const muse::Uri NEW_SCORE_URI("musescore://project/newscore");
 static const muse::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
@@ -93,8 +94,7 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_SHARE_AUDIO_COMMAND, [this]() { return runAsync(sharedAudio()); });
 
     d->onRequest(this, PROJECT_EXPORT_COMMAND, [this]() { return exportScore(); });
-    d->onRequest(this, PROJECT_IMPORT_PDF_COMMAND, [this]() { return importPdf(); });
-    d->onRequest(this, PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND, [this]() { return importAudioToScore(); });
+    d->onRequest(this, PROJECT_CONVERT_TO_SCORE_COMMAND, [this]() { return convertFileToScore(); });
 
     d->onRequest(this, PROJECT_PRINT_COMMAND, [this]() { return printScore(); });
     d->onRequest(this, PROJECT_CLEAR_RECENT_COMMAND, [this]() { return clearRecentScores(); });
@@ -117,11 +117,8 @@ void ProjectActionsController::init()
             { "file-publish", PROJECT_PUBLISH_COMMAND, {} },
             { "file-share-audio", PROJECT_SHARE_AUDIO_COMMAND, {} },
             { "file-export", PROJECT_EXPORT_COMMAND, {} },
-            { "file-import-pdf", PROJECT_IMPORT_PDF_COMMAND, {} },
-            { "file-import-audio-to-score", PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND, {} },
+            { "file-convert-to-score", PROJECT_CONVERT_TO_SCORE_COMMAND, {} },
             { "export", PROJECT_EXPORT_COMMAND, {} },
-            { "import-pdf", PROJECT_IMPORT_PDF_COMMAND, {} },
-            { "import-audio-to-score", PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND, {} },
             { "print", PROJECT_PRINT_COMMAND, {} },
             { "clear-recent", PROJECT_CLEAR_RECENT_COMMAND, {} },
             { "continue-last-session", PROJECT_CONTINUE_LAST_SESSION_COMMAND, {} },
@@ -251,8 +248,7 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
         static const std::unordered_set<ActionCode> DONT_REQUIRE_OPEN_PROJECT {
             "file-new",
             "file-open",
-            "file-import-pdf",
-            "file-import-audio-to-score",
+            "file-convert-to-score",
             "continue-last-session",
             "clear-recent",
         };
@@ -264,6 +260,14 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
         if (code == "file-save-to-cloud" || code == "file-publish") {
             return false;
         }
+    }
+
+    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
+        static const std::unordered_set<ActionCode> ALLOWED_ON_REVIEW_PAGE {
+            "file-close",
+        };
+
+        return muse::contains(ALLOWED_ON_REVIEW_PAGE, code);
     }
 
     return true;
@@ -401,15 +405,9 @@ async::Promise<Ret> ProjectActionsController::saveProjectAt(const muse::rcommand
     return saveProjectScenario()->saveProjectAt(params);
 }
 
-muse::Ret ProjectActionsController::importPdf()
+muse::Ret ProjectActionsController::convertFileToScore()
 {
-    platformInteractive()->openUrl("https://musescore.com/import");
-    return make_ok();
-}
-
-muse::Ret ProjectActionsController::importAudioToScore()
-{
-    platformInteractive()->openUrl("https://musescore.com/upload?format=audio2score");
+    convertFileToScoreScenario()->convertFiles();
     return make_ok();
 }
 
