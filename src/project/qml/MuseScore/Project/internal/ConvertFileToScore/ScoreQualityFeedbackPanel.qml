@@ -89,7 +89,9 @@ Item {
 
                 onTextChanged: function(newTextValue) {
                     if (newTextValue.length > root.maxFeedbackLength) {
+                        var cursorPosition = inputField.cursorPosition
                         inputField.text = newTextValue.slice(0, root.maxFeedbackLength)
+                        inputField.cursorPosition = Math.min(cursorPosition, inputField.text.length)
                     }
                 }
             }
