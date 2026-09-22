@@ -87,7 +87,5 @@ private:
     async::Notification m_outputDeviceChanged;
     async::Notification m_outputDeviceBufferSizeChanged;
     async::Notification m_outputDeviceSampleRateChanged;
-
-    bool m_retryOpenDevice = false;
 };
 }

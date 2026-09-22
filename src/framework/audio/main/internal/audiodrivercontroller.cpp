@@ -329,23 +329,19 @@ bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
         return false;
     }
 
-    if (!m_audioDriver->isOpened()) {
-        configuration()->setAudioOutputDeviceId(deviceId);
-        return true;
-    }
-
     const IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
 
     IAudioDriver::Spec spec;
     spec.deviceId = deviceId;
-    spec.callback = oldSpec.callback;
+
+    spec.callback = oldSpec.callback ? oldSpec.callback : m_callback;
     spec.output = configuration()->desiredOutputSpec();
 
     LOGI() << "Trying to change output device from " << oldSpec << " to " << spec;
 
     m_audioDriver->close();
     bool ok = m_audioDriver->open(spec, nullptr);
-    if (!ok) {
+    if (!ok && oldSpec.isValid()) {
         LOGE() << "Failed to select device: " << deviceId << ", returning to: " << oldSpec.deviceId;
         bool restored = m_audioDriver->open(oldSpec, nullptr);
         if (!restored) {
@@ -362,7 +358,7 @@ async::Notification AudioDriverController::outputDeviceChanged() const
 
 void AudioDriverController::handleOutputDeviceChange()
 {
-    if (!m_audioDriver->isOpened() && !m_retryOpenDevice) {
+    if (!m_callback) {
         return;
     }
 
@@ -390,11 +386,9 @@ void AudioDriverController::handleOutputDeviceChange()
         ok = m_audioDriver->open(spec, nullptr);
         if (!ok) {
             LOGE() << "Failed to reopen default device on " << m_audioDriver->name() << ", switching to default audio driver";
-            ok = switchToDefaultAudioDriver();
+            switchToDefaultAudioDriver();
         }
     }
-
-    m_retryOpenDevice = !ok;
 }
 
 bool AudioDriverController::switchToDefaultAudioDriver(IAudioDriver::Spec* activeSpec)
