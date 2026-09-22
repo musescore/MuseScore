@@ -144,5 +144,7 @@ public:
 
     bool createBackupBeforeSaving() const override;
     void setCreateBackupBeforeSaving(bool create) override;
+
+    muse::io::path_t watchedConvertsJsonPath() const override;
 };
 }

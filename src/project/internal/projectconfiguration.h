@@ -161,6 +161,8 @@ public:
     bool createBackupBeforeSaving() const override;
     void setCreateBackupBeforeSaving(bool create) override;
 
+    muse::io::path_t watchedConvertsJsonPath() const override;
+
 private:
     muse::io::path_t appTemplatesPath() const;
     muse::io::path_t legacyCloudProjectsPath() const;

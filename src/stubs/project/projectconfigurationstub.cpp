@@ -390,3 +390,8 @@ bool ProjectConfigurationStub::createBackupBeforeSaving() const
 void ProjectConfigurationStub::setCreateBackupBeforeSaving(bool)
 {
 }
+
+muse::io::path_t ProjectConfigurationStub::watchedConvertsJsonPath() const
+{
+    return muse::io::path_t();
+}

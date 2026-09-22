@@ -168,5 +168,7 @@ public:
 
     virtual bool createBackupBeforeSaving() const = 0;
     virtual void setCreateBackupBeforeSaving(bool create) = 0;
+
+    virtual muse::io::path_t watchedConvertsJsonPath() const = 0;
 };
 }

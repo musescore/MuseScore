@@ -39,6 +39,7 @@ target_sources(project PRIVATE
     irecentfilescontroller.h
     imscmetareader.h
     iprojectautosaver.h
+    iconvertfiletoscoreservice.h
     projectcommands.h
 
     types/migrationtypes.h
@@ -49,6 +50,7 @@ target_sources(project PRIVATE
     types/recentfile.h
     types/savelocation.h
     types/template.h
+    types/converttypes.h
 
     internal/projectcommandsregister.cpp
     internal/projectcommandsregister.h
@@ -67,6 +69,8 @@ target_sources(project PRIVATE
     internal/notationwritersregister.h
     internal/projectautosaver.cpp
     internal/projectautosaver.h
+    internal/convertfiletoscoreservice.cpp
+    internal/convertfiletoscoreservice.h
     internal/iprojectcommandscontroller.h
     internal/projectactionscontroller.cpp
     internal/projectactionscontroller.h

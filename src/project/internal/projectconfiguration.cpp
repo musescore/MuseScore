@@ -742,3 +742,8 @@ void ProjectConfiguration::setDisableVersionChecking(bool disable)
 {
     settings()->setSharedValue(DISABLE_VERSION_CHECKING, Val(disable));
 }
+
+muse::io::path_t ProjectConfiguration::watchedConvertsJsonPath() const
+{
+    return globalConfiguration()->userAppDataPath().appendingComponent("watched_converts.json");
+}
