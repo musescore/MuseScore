@@ -33,6 +33,7 @@ class RecentFilesController;
 class ProjectAutoSaver;
 class EngravingPluginAPIHelper;
 class ConvertFileToScoreService;
+class ConvertFileToScoreScenario;
 class ProjectModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -65,5 +66,6 @@ private:
     std::shared_ptr<ProjectAutoSaver> m_projectAutoSaver;
     std::shared_ptr<EngravingPluginAPIHelper> m_engravingPluginAPIHelper;
     std::shared_ptr<ConvertFileToScoreService> m_convertFileToScoreService;
+    std::shared_ptr<ConvertFileToScoreScenario> m_convertFileToScoreScenario;
 };
 }

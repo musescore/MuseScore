@@ -43,7 +43,7 @@ class ConvertFileToScoreService : public QObject, public IConvertFileToScoreServ
     Q_OBJECT
 
 public:
-    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;

@@ -145,6 +145,9 @@ public:
     bool createBackupBeforeSaving() const override;
     void setCreateBackupBeforeSaving(bool create) override;
 
+    bool showConvertFileProcessingDialog() const override;
+    void setShowConvertFileProcessingDialog(bool show) override;
+
     muse::io::path_t watchedConvertsJsonPath() const override;
 };
 }

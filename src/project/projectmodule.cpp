@@ -37,6 +37,7 @@
 #include "internal/projectmigrator.h"
 #include "internal/projectautosaver.h"
 #include "internal/convertfiletoscoreservice.h"
+#include "internal/convertfiletoscorescenario.h"
 
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
@@ -120,6 +121,7 @@ void ProjectContext::registerExports()
     m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(iocContext());
     m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
     m_convertFileToScoreService = std::make_shared<ConvertFileToScoreService>(iocContext());
+    m_convertFileToScoreScenario = std::make_shared<ConvertFileToScoreScenario>(iocContext());
 
 #ifdef Q_OS_MAC
     m_recentFilesController = std::make_shared<MacOSRecentFilesController>();
@@ -141,6 +143,7 @@ void ProjectContext::registerExports()
     ioc()->registerExport<IProjectAutoSaver>(mname, m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(mname, m_engravingPluginAPIHelper);
     ioc()->registerExport<IConvertFileToScoreService>(mname, m_convertFileToScoreService);
+    ioc()->registerExport<IConvertFileToScoreScenario>(mname, m_convertFileToScoreScenario);
 }
 
 void ProjectContext::resolveImports()
@@ -166,6 +169,7 @@ void ProjectContext::onInit(const IApplication::RunMode& mode)
     m_recentFilesController->init();
     m_projectAutoSaver->init();
     m_convertFileToScoreService->init();
+    m_convertFileToScoreScenario->init();
 }
 
 void ProjectContext::onAllInited(const IApplication::RunMode& mode)
