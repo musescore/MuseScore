@@ -6,6 +6,8 @@ trap 'echo Package failed; exit 1' ERR
 APP_NAME="MuseScore Studio"
 VOL_NAME="MuseScore-Studio"
 DO_SIGN=false
+# Matched against the common names of the identities in the keychain.
+SIGN_IDENTITY="Developer ID Application: MuseScore"
 APPLE_TEAM_ID=""
 APPLE_USERNAME=""
 APPLE_PASSWORD=""
@@ -23,6 +25,23 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+# Sign one binary or bundle for distribution. --timestamp and --options runtime
+# are both required for notarization; the entitlements file is optional, so pass
+# an empty first argument to sign without one.
+sign_code() {
+    local entitlements="$1"; shift
+    local entitlements_args=()
+    if [ -n "$entitlements" ]; then
+        entitlements_args=(--entitlements "$entitlements")
+    fi
+    codesign --force \
+        --timestamp \
+        --options runtime \
+        -s "$SIGN_IDENTITY" \
+        "${entitlements_args[@]}" \
+        "$@"
+}
+
 ################################################################
 # Deploy
 ################################################################
@@ -33,20 +52,23 @@ echo "otool -L pre-macdeployqt"
 otool -L ${APP_PATH}/Contents/MacOS/mscore
 
 echo "macdeployqt"
+# An array, so that an identity given by name rather than by hash does not
+# word-split into four bogus arguments.
+sign_args=()
 if $DO_SIGN; then
-    sign_args="-sign-for-notarization=Developer ID Application: MuseScore"
+    sign_args=("-sign-for-notarization=$SIGN_IDENTITY")
 else
     # macdeployqt rewrites the load commands of everything it deploys, which
     # invalidates the signature that Qt shipped its libraries and plugins with.
     # Ad-hoc signatures are cheap and need no certificate, so use those; the
     # alternative is leaving behind binaries that macOS refuses to load.
-    sign_args="-codesign=-"
+    sign_args=("-codesign=-")
 fi
 macdeployqt ${APP_PATH} \
     -verbose=2 \
     -qmldir=. \
     -executable="${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex/Contents/MacOS/MuseScoreQuickLookPreviewExtension" \
-    $sign_args
+    "${sign_args[@]}"
 
 echo "otool -L post-macdeployqt"
 otool -L ${APP_PATH}/Contents/MacOS/mscore
@@ -66,28 +88,23 @@ sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${APP_PATH}/Contents/Resources/qt
 if $DO_SIGN; then
     # Re-sign appex to ensure proper entitlements
     echo "Re-sign appex"
-    codesign --force \
-        --timestamp \
-        --options runtime \
-        --entitlements "src/macos_integration/entitlements.plist" \
-        -s "Developer ID Application: MuseScore" \
+    sign_code "src/macos_integration/entitlements.plist" \
         "${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
 
     # Sign the bundled dylibs that are loaded at runtime and therefore
     # invisible to macdeployqt's dependency walk (e.g. libsndfile, vorbis)
     echo "Sign bundled dylibs"
-    find "${APP_PATH}/Contents/Frameworks" -maxdepth 1 -type f -name "*.dylib" \
-        -exec codesign --force --options runtime --timestamp \
-        -s "Developer ID Application: MuseScore" {} +
+    dylibs=()
+    while IFS= read -r dylib; do
+        dylibs+=("$dylib")
+    done < <(find "${APP_PATH}/Contents/Frameworks" -maxdepth 1 -type f -name "*.dylib")
+    if [ ${#dylibs[@]} -gt 0 ]; then
+        sign_code "" "${dylibs[@]}"
+    fi
 
     # Re-sign main app after removing dSYM files and renaming qml folder
     echo "Re-sign main app"
-    codesign --force \
-        --timestamp \
-        --options runtime \
-        --entitlements "buildscripts/packaging/macOS/entitlements.plist" \
-        -s "Developer ID Application: MuseScore" \
-        "${APP_PATH}"
+    sign_code "buildscripts/packaging/macOS/entitlements.plist" "${APP_PATH}"
 
     echo "Codesign verify"
     codesign --verify --deep --strict --verbose=2 "${APP_PATH}"
@@ -220,7 +237,7 @@ hdiutil convert "applebuild/${DMG_NAME}" -format ULFO -o "applebuild/${COMPRESSE
 if $DO_SIGN; then
     echo "Codesign DMG"
     codesign --timestamp \
-        -s "Developer ID Application: MuseScore" \
+        -s "$SIGN_IDENTITY" \
         "applebuild/${COMPRESSED_DMG_NAME}"
 
     codesign --verify --verbose=2 "applebuild/${COMPRESSED_DMG_NAME}"
