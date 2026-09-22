@@ -46,6 +46,11 @@ void RecentScoresModel::load()
     });
 }
 
+void RecentScoresModel::removeRecentScore(const QString& scorePath)
+{
+    recentFilesController()->removeRecentFile(scorePath);
+}
+
 void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 {
     if (m_items == items) {
@@ -68,7 +73,6 @@ void RecentScoresModel::updateRecentScores()
     addItem[NAME_KEY] = muse::qtrc("project", "New score");
     addItem[IS_CREATE_NEW_KEY] = true;
     addItem[IS_NO_RESULTS_FOUND_KEY] = false;
-    addItem[IS_PROCESSING_KEY] = false;
     addItem[IS_CLOUD_KEY] = false;
     items.push_back(addItem);
 
@@ -90,7 +94,6 @@ void RecentScoresModel::updateRecentScores()
         obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULTS_FOUND_KEY] = false;
-        obj[IS_PROCESSING_KEY] = false;
 
         items.push_back(obj);
     }
@@ -99,7 +102,6 @@ void RecentScoresModel::updateRecentScores()
     noResultsFoundItem[NAME_KEY] = "";
     noResultsFoundItem[IS_CREATE_NEW_KEY] = false;
     noResultsFoundItem[IS_NO_RESULTS_FOUND_KEY] = true;
-    noResultsFoundItem[IS_PROCESSING_KEY] = false;
     noResultsFoundItem[IS_CLOUD_KEY] = false;
     items.push_back(noResultsFoundItem);
 

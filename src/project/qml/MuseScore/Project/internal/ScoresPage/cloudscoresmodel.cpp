@@ -32,6 +32,9 @@ using namespace mu::project;
 
 static const int BATCH_SIZE = 20;
 
+static constexpr int PROCESSING_STATUS_PROCESSING = 0;
+static constexpr int PROCESSING_STATUS_FAILED = 1;
+
 CloudScoresModel::CloudScoresModel(QObject* parent)
     : AbstractScoresModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -58,8 +61,15 @@ void CloudScoresModel::load()
         loadItemsIfNecessary();
     });
 
-    convertFileToScoreService()->watchedScores().notification.onNotify(this, [this]() {
+    convertFileToScoreScenario()->watchedScores().notification.onNotify(this, [this]() {
         updateWatchedItems();
+    });
+
+    convertFileToScoreScenario()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
+        if (failure.gaveUp) {
+            m_pollingGaveUp = true;
+            updateWatchedItems();
+        }
     });
 }
 
@@ -78,6 +88,18 @@ void CloudScoresModel::reload()
     emit desiredRowCountChanged();
 
     setState(State::Loading);
+}
+
+void CloudScoresModel::retryAllConversions()
+{
+    m_pollingGaveUp = false;
+    convertFileToScoreScenario()->retryPolling();
+    updateWatchedItems();
+}
+
+void CloudScoresModel::cancelConversion(int convertType, int convertId)
+{
+    convertFileToScoreScenario()->cancelConversion(static_cast<ConvertType>(convertType), convertId);
 }
 
 CloudScoresModel::State CloudScoresModel::state() const
@@ -230,7 +252,7 @@ bool CloudScoresModel::containsCloudScore(int scoreId) const
 
 std::vector<QVariantMap> CloudScoresModel::buildWatchedItems(const std::unordered_set<int>& downloadedScoreIds) const
 {
-    const WatchedScoreList watchedScores = convertFileToScoreService()->watchedScores().val;
+    const WatchedScoreList watchedScores = convertFileToScoreScenario()->watchedScores().val;
     std::vector<QVariantMap> items;
 
     for (const WatchedScore& watchedScore : watchedScores) {
@@ -248,8 +270,11 @@ std::vector<QVariantMap> CloudScoresModel::buildWatchedItems(const std::unordere
         obj[NAME_KEY] = watchedScore.name.toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULTS_FOUND_KEY] = false;
-        obj[IS_PROCESSING_KEY] = true;
+        obj[PROCESSING_STATUS_KEY] = m_pollingGaveUp ? PROCESSING_STATUS_FAILED : PROCESSING_STATUS_PROCESSING;
+        obj[CONVERT_ID_KEY] = watchedScore.conversion.id;
+        obj[CONVERT_TYPE_KEY] = static_cast<int>(watchedScore.conversion.type);
         obj[IS_CLOUD_KEY] = false;
+        obj[CLOUD_VISIBILITY_KEY] = static_cast<int>(cloud::Visibility::Private);
         items.push_back(obj);
     }
 

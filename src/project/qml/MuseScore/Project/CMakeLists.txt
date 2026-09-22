@@ -127,7 +127,9 @@ qt_add_qml_module(project_qml
         internal/ScoresPage/CloudScoreIndicatorButton.qml
         internal/ScoresPage/RecentScoresView.qml
         internal/ScoresPage/ScoreGridItem.qml
+        internal/ScoresPage/ScoreItemMenuButton.qml
         internal/ScoresPage/ScoreListItem.qml
+        internal/ScoresPage/ScoreProcessingPlaceholder.qml
         internal/ScoresPage/ScoreThumbnail.qml
         Message.qml
         MigrationDialog.qml

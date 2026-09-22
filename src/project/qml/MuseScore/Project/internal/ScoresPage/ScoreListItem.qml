@@ -38,13 +38,32 @@ ListItemBlank {
     property real itemInset: 12
     property real columnSpacing: 44
     property alias showBottomBorder: bottomBorder.visible
+    property bool showRemoveFromRecentFiles: false
+
+    signal revealInFileBrowserRequested(string scorePath)
+    signal viewOnlineRequested(int scoreId)
+    signal removeFromRecentFilesRequested(string scorePath)
+    signal retryRequested()
+    signal cancelRequested(int convertType, int convertId)
+
+    readonly property bool isProcessing: root.score.processingStatus !== undefined
 
     implicitHeight: 64
 
     navigation.accessible.name: {
         const name = root.score.name ?? ""
-        //: %1 is the name of the score being converted
-        return (root.score.isProcessing ?? false) ? qsTrc("project", "Processing %1").arg(name) : name
+
+        if (root.isProcessing) {
+            if (root.score.processingStatus === ScoreProcessingPlaceholder.Failed) {
+                //: %1 is the name of the score whose conversion failed
+                return qsTrc("project/convert", "Processing failed: %1").arg(name)
+            }
+
+            //: %1 is the name of the score being converted
+            return qsTrc("project", "Processing %1").arg(name)
+        }
+
+        return name
     }
     navigation.onActiveChanged: {
         if (navigation.active) {
@@ -70,7 +89,7 @@ ListItemBlank {
                 Layout.preferredWidth: 30
                 Layout.preferredHeight: 40
 
-                sourceComponent: Boolean(root.score.isProcessing) ? processingComp : scoreThumbnailComp
+                sourceComponent: root.isProcessing ? processingComp : scoreThumbnailComp
 
                 layer.enabled: ui.isEffectsAllowed
                 layer.effect: RoundedCornersEffect {
@@ -91,13 +110,13 @@ ListItemBlank {
             Component {
                 id: processingComp
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "white"
+                ScoreProcessingPlaceholder {
+                    status: root.score.processingStatus
+                    compact: true
+                    iconSize: 16
 
-                    StyledBusyIndicator {
-                        anchors.centerIn: parent
-                    }
+                    onRetryRequested: root.retryRequested()
+                    onCancelRequested: root.cancelRequested(root.score.convertType, root.score.convertId)
                 }
             }
 
@@ -110,9 +129,56 @@ ListItemBlank {
             }
 
             Loader {
-                active: root.score.isCloud ?? false
+                active: root.isProcessing || (root.score.isCloud ?? false)
 
-                sourceComponent: RowLayout {
+                sourceComponent: root.isProcessing ? processingStatusComp : cloudStatusComp
+            }
+
+            Component {
+                id: processingStatusComp
+
+                RowLayout {
+                    spacing: 12
+
+                    StyledTextLabel {
+                        text: root.score.processingStatus === ScoreProcessingPlaceholder.Failed
+                              ? qsTrc("project/convert", "Processing failed")
+                              : qsTrc("global", "Processing…")
+                        font: ui.theme.bodyBoldFont
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    FlatButton {
+                        minWidth: 60
+
+                        text: root.score.processingStatus === ScoreProcessingPlaceholder.Failed
+                              ? qsTrc("global", "Retry")
+                              : qsTrc("global", "Cancel")
+
+                        navigation.panel: root.navigation.panel
+                        navigation.row: root.navigation.row
+                        navigation.column: 2
+                        navigation.onActiveChanged: {
+                            if (navigation.active) {
+                                root.scrollIntoView()
+                            }
+                        }
+
+                        onClicked: {
+                            if (root.score.processingStatus === ScoreProcessingPlaceholder.Failed) {
+                                root.retryRequested()
+                            } else {
+                                root.cancelRequested(root.score.convertType, root.score.convertId)
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: cloudStatusComp
+
+                RowLayout {
                     visible: root.score.isCloud
 
                     spacing: 24
@@ -186,6 +252,46 @@ ListItemBlank {
                 readonly property int navigationColumnStart: 100 * (model.index + 1)
 
                 sourceComponent: modelData.delegate
+            }
+        }
+    }
+
+    ScoreItemMenuButton {
+        id: contextMenu
+
+        // Drawn on top of the row instead of taking a spot in the RowLayout, so hover never shifts the columns
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: root.itemInset
+        width: 20
+        height: 20
+        z: 1
+
+        isCreateNew: root.score.isCreateNew ?? false
+        isNoResultsFound: root.score.isNoResultsFound ?? false
+        isCloud: root.score.isCloud ?? false
+        showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
+
+        visible: root.mouseArea.containsMouse
+                 || mouseArea.containsMouse
+                 || root.navigation.active
+                 || navigation.active
+                 || isMenuOpenedByButton
+
+        navigation.panel: root.navigation.panel
+        navigation.row: root.navigation.row
+        navigation.column: 100 * (root.columns.length + 1) + 1
+
+        onOpenRequested: root.clicked(null)
+        onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
+        onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
+        onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
+
+        Connections {
+            target: root.ListView.view
+
+            function onContentYChanged() {
+                contextMenu.closeMenu()
             }
         }
     }

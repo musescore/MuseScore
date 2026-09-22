@@ -37,13 +37,22 @@ FocusScope {
     property string thumbnailUrl: ""
     property bool isCreateNew: false
     property bool isNoResultsFound: false
-    property bool isProcessing: false
+    property var processingStatus: undefined
+    readonly property bool isProcessing: root.processingStatus !== undefined
+    property int convertType: 0
+    property int convertId: 0
     property bool isCloud: false
     property int cloudScoreId: 0
+    property bool showRemoveFromRecentFiles: false
 
     property alias navigation: navCtrl
 
     signal clicked()
+    signal revealInFileBrowserRequested(string scorePath)
+    signal viewOnlineRequested(int scoreId)
+    signal removeFromRecentFilesRequested(string scorePath)
+    signal retryRequested()
+    signal cancelRequested(int convertType, int convertId)
 
     NavigationControl {
         id: navCtrl
@@ -51,8 +60,19 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        //: %1 is the name of the score being converted
-        accessible.name: root.isProcessing ? qsTrc("project", "Processing %1").arg(root.name) : root.name
+        accessible.name: {
+            if (root.isProcessing) {
+                if (root.processingStatus === ScoreProcessingPlaceholder.Failed) {
+                    //: %1 is the name of the score whose conversion failed
+                    return qsTrc("project/convert", "Processing failed: %1").arg(root.name)
+                }
+
+                //: %1 is the name of the score being converted
+                return qsTrc("project", "Processing %1").arg(root.name)
+            }
+
+            return root.name
+        }
 
         onActiveChanged: function(active) {
             if (active) {
@@ -63,14 +83,21 @@ FocusScope {
         onTriggered: root.clicked()
     }
 
+    function closeMenu() {
+        contextMenu.closeMenu()
+    }
+
     MouseArea {
-        id: mouseArea
+        id: rootMouseArea
         anchors.fill: parent
 
         enabled: root.enabled && !root.isProcessing
         hoverEnabled: true
+        acceptedButtons: Qt.LeftButton
 
         onClicked: {
+            navCtrl.requestActiveByInteraction()
+
             root.clicked()
         }
     }
@@ -100,7 +127,7 @@ FocusScope {
 
                     sourceComponent: {
                         if (root.isCreateNew) {
-                            return addComp
+                            return createNewComp
                         }
 
                         if (root.isProcessing) {
@@ -139,7 +166,7 @@ FocusScope {
                 states: [
                     State {
                         name: "NORMAL"
-                        when: !mouseArea.containsMouse && !mouseArea.pressed
+                        when: !rootMouseArea.containsMouse && !rootMouseArea.pressed
 
                         PropertyChanges {
                             target: thumbnail
@@ -149,7 +176,7 @@ FocusScope {
 
                     State {
                         name: "HOVERED"
-                        when: mouseArea.containsMouse && !mouseArea.pressed
+                        when: rootMouseArea.containsMouse && !rootMouseArea.pressed
 
                         PropertyChanges {
                             target: thumbnail
@@ -160,7 +187,7 @@ FocusScope {
 
                     State {
                         name: "PRESSED"
-                        when: mouseArea.pressed
+                        when: rootMouseArea.pressed
 
                         PropertyChanges {
                             target: thumbnail
@@ -177,6 +204,36 @@ FocusScope {
                     color: "#08000000"
                     cornerRadius: thumbnail.radius + glowRadius
                 }
+            }
+
+            ScoreItemMenuButton {
+                id: contextMenu
+
+                anchors.top: parent.top
+                anchors.topMargin: 8
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                visible: menuModel.length > 0
+                         && (rootMouseArea.containsMouse
+                             || mouseArea.containsMouse
+                             || root.navigation.active
+                             || navigation.active
+                             || isMenuOpenedByButton)
+                transparent: !isMenuOpenedByButton && !rootMouseArea.containsMouse
+
+                isCreateNew: root.isCreateNew
+                isNoResultsFound: root.isNoResultsFound
+                isCloud: root.isCloud
+                showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
+
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigation.row
+                navigation.column: root.navigation.column + 1
+
+                onOpenRequested: root.clicked()
+                onViewOnlineRequested: root.viewOnlineRequested(root.cloudScoreId)
+                onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.path)
+                onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.path)
             }
 
             Loader {
@@ -214,7 +271,7 @@ FocusScope {
 
                         navigation.panel: root.navigation.panel
                         navigation.row: root.navigation.row
-                        navigation.column: root.navigation.column + 1
+                        navigation.column: root.navigation.column + 2
                     }
 
                     CloudScoreIndicatorButton {
@@ -225,7 +282,7 @@ FocusScope {
 
                         navigation.panel: root.navigation.panel
                         navigation.row: root.navigation.row
-                        navigation.column: root.navigation.column + 2
+                        navigation.column: root.navigation.column + 3
 
                         onClicked: {
                             if (isProgress) {
@@ -270,7 +327,7 @@ FocusScope {
     }
 
     Component {
-        id: addComp
+        id: createNewComp
 
         Rectangle {
             anchors.fill: parent
@@ -290,13 +347,16 @@ FocusScope {
     Component {
         id: processingComp
 
-        Rectangle {
-            anchors.fill: parent
-            color: "white"
+        ScoreProcessingPlaceholder {
+            status: root.processingStatus
+            iconSize: 24
 
-            StyledBusyIndicator {
-                anchors.centerIn: parent
-            }
+            navigationPanel: root.navigation.panel
+            navigationRow: root.navigation.row
+            navigationColumn: root.navigation.column + 2
+
+            onRetryRequested: root.retryRequested()
+            onCancelRequested: root.cancelRequested(root.convertType, root.convertId)
         }
     }
 

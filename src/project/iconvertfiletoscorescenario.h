@@ -66,8 +66,20 @@ public:
     //! is already available in the user's MuseScore.com account, described by the WatchedScore
     virtual muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const = 0;
 
+    //! All pending/reviewable conversions from the server's convert queue
+    virtual muse::ValNt<WatchedScoreList> watchedScores() const = 0;
+
     //! Whether the cloud score with the given id is a converted score still awaiting a quality review
     virtual bool isAwaitingReview(int scoreId) const = 0;
+
+    //! Confirms with the user, then cancels a watched conversion
+    virtual void cancelConversion(ConvertType type, int convertId) = 0;
+
+    //! Emitted whenever checking the conversion status fails
+    virtual muse::async::Channel<PollingFailure> pollingFailed() const = 0;
+
+    //! Retries polling after it gave up (e.g. due to a lost internet connection)
+    virtual void retryPolling() = 0;
 };
 
 using IConvertFileToScoreScenarioPtr = std::shared_ptr<IConvertFileToScoreScenario>;

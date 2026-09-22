@@ -84,6 +84,11 @@ void ConvertFileToScoreScenario::init()
     });
 
     service()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
+        if (failure.gaveUp) {
+            showPollingGaveUpNotification();
+            return;
+        }
+
         if (failure.attempt == 1) {
             m_retryToastShown = false;
         }
@@ -172,10 +177,47 @@ async::Channel<Ret, WatchedScore> ConvertFileToScoreScenario::convertFinished() 
     return m_convertFinished;
 }
 
+ValNt<WatchedScoreList> ConvertFileToScoreScenario::watchedScores() const
+{
+    return service()->watchedScores();
+}
+
 bool ConvertFileToScoreScenario::isAwaitingReview(int scoreId) const
 {
     const WatchedScore* watched = service()->watchedScoreById(scoreId);
     return watched && watched->conversion.status == ConvertStatus::AwaitingReview;
+}
+
+void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertId)
+{
+    constexpr int keepConvertingBtn = int(IInteractive::Button::No);
+    constexpr int cancelBtn = int(IInteractive::Button::Yes);
+
+    IInteractive::ButtonData keepConverting(keepConvertingBtn, muse::trc("project/convert", "Continue converting"));
+    keepConverting.role = IInteractive::ButtonRole::RejectRole;
+
+    IInteractive::ButtonData cancel(cancelBtn, muse::trc("project/convert", "Yes, cancel"), /*accent*/ true);
+    cancel.role = IInteractive::ButtonRole::DestructiveRole;
+
+    interactive()->question(
+        muse::trc("project/convert", "Are you sure you want to cancel this file conversion?"),
+        muse::trc("project/convert", "Processing will be canceled and this score will be removed from your scores."),
+        { keepConverting, cancel }, keepConvertingBtn, IInteractive::WithIcon)
+    .onResolve(this, [this, type, convertId, cancelBtn](const IInteractive::Result& result) {
+        if (result.isButton(cancelBtn)) {
+            service()->deleteConversion(type, convertId);
+        }
+    });
+}
+
+async::Channel<PollingFailure> ConvertFileToScoreScenario::pollingFailed() const
+{
+    return service()->pollingFailed();
+}
+
+void ConvertFileToScoreScenario::retryPolling()
+{
+    service()->retryPolling();
 }
 
 async::Promise<Ret> ConvertFileToScoreScenario::checkConvertIsAllowed()
@@ -337,7 +379,7 @@ void ConvertFileToScoreScenario::showCloudIsNotAvailableError()
 {
     interactive()->warning(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
                            muse::trc("project/convert",
-                                     "An internet connection is required to convert a file. Please check your internet connection or try again later."),
+                                     "An internet connection is required for file conversion. Please check your internet connection or try again later."),
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
@@ -474,8 +516,8 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     toastService()->show(muse::trc("project/convert", "Error processing score"), msg,
                          muse::ui::IconCode::Code::ERROR_FILLED, true,
     {
-        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
-        { muse::trc("global", "Try again"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+        { muse::trc("project/convert", "Try another file"), toast::ToastActionCode::TryAgain },
+        { muse::trc("global", "OK"), toast::ToastActionCode::Dismiss, /*accent*/ true },
     }).onResolve(this, [this](const toast::ToastResult& result) {
         if (result.isCode(toast::ToastActionCode::TryAgain)) {
             convertFiles();
@@ -486,6 +528,22 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
 void ConvertFileToScoreScenario::showPollingFailureNotification()
 {
     toastService()->showWarning(
-        muse::trc("project/convert", "We’re having trouble connecting to the internet."),
+        muse::trc("project/convert", "We’re having trouble connecting to MuseScore.com."),
         muse::trc("project/convert", "We’ll keep trying intermittently."));
+}
+
+void ConvertFileToScoreScenario::showPollingGaveUpNotification()
+{
+    toastService()->show(muse::trc("project/convert", "Unable to connect to MuseScore.com"),
+                         muse::trc("project/convert",
+                                   "An internet connection is required for file conversion. Please check your internet connection or try again later."),
+                         muse::ui::IconCode::Code::ERROR_FILLED, true,
+    {
+        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
+        { muse::trc("global", "Retry"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+    }).onResolve(this, [this](const toast::ToastResult& result) {
+        if (result.isCode(toast::ToastActionCode::TryAgain)) {
+            retryPolling();
+        }
+    });
 }

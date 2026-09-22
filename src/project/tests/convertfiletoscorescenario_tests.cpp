@@ -336,7 +336,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     // [THEN] The "convert failed" notification is shown
     EXPECT_CALL(*m_toastService,
                 show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
-                     ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), int(toast::ToastActionCode::TryAgain) })))
+                     ToastActionCodesAre({ int(toast::ToastActionCode::TryAgain), int(toast::ToastActionCode::Dismiss) })))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedToastResultPromise();
@@ -364,7 +364,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     m_scenario->init();
 
-    // [GIVEN] The user clicks "Try again" on the failure toast
+    // [GIVEN] The user clicks "Try another file" on the failure toast
     ON_CALL(*m_toastService, show(_, _, _, _, _))
     .WillByDefault(Invoke([](auto&&...) {
         return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::TryAgain)));
@@ -395,14 +395,14 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Dismiss_DoesNotRestartConvert)
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Ok_DoesNotRestartConvert)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
     m_scenario->init();
 
-    // [GIVEN] The user dismisses the failure toast
+    // [GIVEN] The user clicks "OK" on the failure toast
     ON_CALL(*m_toastService, show(_, _, _, _, _))
     .WillByDefault(Invoke([](auto&&...) {
         return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::Dismiss)));
@@ -431,7 +431,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_ShowsToastOnce
     ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
     m_scenario->init();
 
-    const std::string title = muse::trc("project/convert", "We’re having trouble connecting to the internet.");
+    const std::string title = muse::trc("project/convert", "We’re having trouble connecting to MuseScore.com.");
     const std::string text = muse::trc("project/convert", "We’ll keep trying intermittently.");
 
     // [THEN] The connectivity toast is shown exactly once
@@ -444,6 +444,82 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_ShowsToastOnce
     pollingFailed.send(PollingFailure { Ret(), 3, 5, secs_t(0), false });
     pollingFailed.send(PollingFailure { Ret(), 4, 5, secs_t(0), false });
     pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), false });
+    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_ShowsConnectionLostToast)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, WatchedScore> convertFinished;
+    async::Channel<PollingFailure> pollingFailed;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
+    m_scenario->init();
+
+    const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
+    const std::string text = muse::trc("project/convert",
+                                       "An internet connection is required for file conversion. Please check your internet connection or try again later.");
+
+    // [THEN] The "connection lost" toast is shown, with a Dismiss and an accented Retry action
+    EXPECT_CALL(*m_toastService,
+                show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
+                     ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), int(toast::ToastActionCode::TryAgain) })))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedToastResultPromise();
+    }));
+
+    // [WHEN] Polling gives up
+    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_Retry_RetriesPolling)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, WatchedScore> convertFinished;
+    async::Channel<PollingFailure> pollingFailed;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
+    m_scenario->init();
+
+    // [GIVEN] The user clicks "Retry" on the connection lost toast
+    ON_CALL(*m_toastService, show(_, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::TryAgain)));
+    }));
+
+    // [THEN] Polling is retried
+    EXPECT_CALL(*m_service, retryPolling()).Times(1);
+
+    // [WHEN] Polling gives up
+    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_Dismiss_DoesNotRetryPolling)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, WatchedScore> convertFinished;
+    async::Channel<PollingFailure> pollingFailed;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
+    m_scenario->init();
+
+    // [GIVEN] The user dismisses the connection lost toast
+    ON_CALL(*m_toastService, show(_, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::Dismiss)));
+    }));
+
+    // [THEN] Polling is not retried
+    EXPECT_CALL(*m_service, retryPolling()).Times(0);
+
+    // [WHEN] Polling gives up
     pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
 
     pumpEvents();
@@ -733,7 +809,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsError_W
 
     const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
     const std::string text = muse::trc("project/convert",
-                                       "An internet connection is required to convert a file. Please check your internet connection or try again later.");
+                                       "An internet connection is required for file conversion. Please check your internet connection or try again later.");
 
     // [THEN] The "cloud unavailable" error is shown
     EXPECT_CALL(*m_interactive,
@@ -814,7 +890,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
 
     const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
     const std::string text = muse::trc("project/convert",
-                                       "An internet connection is required to convert a file. Please check your internet connection or try again later.");
+                                       "An internet connection is required for file conversion. Please check your internet connection or try again later.");
 
     // [THEN] The "cloud unavailable" error is shown, but neither validation, confirmation, nor conversion is attempted
     EXPECT_CALL(*m_interactive,
@@ -1186,6 +1262,54 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_RepeatedCallsWhilePe
 
     // [WHEN] Converting again
     m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+// ==================================================
+// cancelConversion()
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserConfirms_DeletesConversion)
+{
+    constexpr int convertId = 42;
+
+    const std::string title = muse::trc("project/convert", "Are you sure you want to cancel this file conversion?");
+    const std::string text = muse::trc("project/convert",
+                                       "Processing will be canceled and this score will be removed from your scores.");
+
+    // [GIVEN] The user confirms with "Yes, cancel"
+    EXPECT_CALL(*m_interactive,
+                question(title, TextIs(text),
+                         ButtonIdsAre({ int(IInteractive::Button::No), int(IInteractive::Button::Yes) }),
+                         int(IInteractive::Button::No), IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::Yes)));
+    }));
+
+    // [THEN] The conversion is deleted
+    EXPECT_CALL(*m_service, deleteConversion(ConvertType::Omr, convertId))
+    .Times(1);
+
+    // [WHEN] Cancelling the conversion
+    m_scenario->cancelConversion(ConvertType::Omr, convertId);
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserKeepsConverting_DoesNotDeleteConversion)
+{
+    // [GIVEN] The user dismisses with "Continue converting"
+    ON_CALL(*m_interactive, question(_, _, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::No)));
+    }));
+
+    // [THEN] The conversion is not deleted
+    EXPECT_CALL(*m_service, deleteConversion(_, _)).Times(0);
+
+    // [WHEN] Cancelling the conversion
+    m_scenario->cancelConversion(ConvertType::Omr, 42);
 
     pumpEvents();
 }
