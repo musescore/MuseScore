@@ -135,7 +135,7 @@ protected:
         // (see givenDownloadFinishesWith).
         givenSignedIn();
         ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
-        .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(cloud::ScoreInfo())));
+        .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(cloud::ScoreInfo())); });
         ON_CALL(*m_authorization, accountInfo()).WillByDefault(ReturnRef(m_accountInfo));
         ON_CALL(*m_museScoreComService, downloadScore(_, _, _, _))
         .WillByDefault([](int, DevicePtr, const QString&, const QString&) {
@@ -431,7 +431,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreAndCloudReachable_Downloa
     ON_CALL(*m_configuration, isCloudProject(_)).WillByDefault(Return(true));
     ON_CALL(*m_configuration, isLegacyCloudProject(_)).WillByDefault(Return(false));
     ON_CALL(*m_configuration, cloudScoreIdFromPath(_)).WillByDefault(Return(42));
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     //! [THEN] The freshest version is fetched rather than the local copy being loaded
     EXPECT_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>())).Times(1);
@@ -447,7 +447,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOffline_OpensTheLocalCopy
     //! [GIVEN] A cloud score, an unreachable cloud, but the file is on disk...
     ON_CALL(*m_configuration, isCloudProject(_)).WillByDefault(Return(true));
     ON_CALL(*m_configuration, isLegacyCloudProject(_)).WillByDefault(Return(false));
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_fileSystem, exists(_)).WillByDefault(Return(true));
 
     //! [THEN] The local copy is opened so the user can keep working offline
@@ -463,7 +463,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CloudScoreOfflineAndNotOnDisk_Repor
     //! [GIVEN] A cloud score, an unreachable cloud, and no local copy...
     ON_CALL(*m_configuration, isCloudProject(_)).WillByDefault(Return(true));
     ON_CALL(*m_configuration, isLegacyCloudProject(_)).WillByDefault(Return(false));
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_fileSystem, exists(_)).WillByDefault(Return(false));
 
     //! [THEN] There is nothing to open, and the user is told why
@@ -570,7 +570,7 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_ScoreInfoUnavailable_Reports
 {
     //! [GIVEN] A server that will not say anything about the score...
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))));
+    .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))); });
 
     //! [THEN] The user is told, and nothing is fetched
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
@@ -587,7 +587,7 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_LocalCopyIsUpToDate_SkipsThe
     remote.revisionId = 7;
     remote.title = "Symphony";
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
+    .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
 
     CloudProjectInfo local;
     local.revisionId = 7;
@@ -608,7 +608,7 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_LocalCopyIsStale_FetchesTheN
     cloud::ScoreInfo remote;
     remote.revisionId = 9;
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
+    .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
 
     CloudProjectInfo local;
     local.revisionId = 7;
@@ -647,7 +647,7 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_DownloadSucceeds_OpensItWith
     remote.revisionId = 9;
     remote.title = "Symphony";
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
+    .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
     ON_CALL(*m_mscMetaReader, readCloudProjectInfo(_))
     .WillByDefault(Return(RetVal<CloudProjectInfo>(make_ret(Ret::Code::InternalError))));
     givenDownloadFinishesWith(make_ok());
@@ -696,7 +696,7 @@ TEST_F(OpenProjectScenarioTests, OpenScoreUrl_OwnScoreAlreadyOpenElsewhere_Raise
     cloud::ScoreInfo remote;
     remote.owner.id = 5;
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
+    .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
     m_accountInfo.id = "5";
     ON_CALL(*m_multiwindows, isProjectAlreadyOpened(_)).WillByDefault(Return(true));
 
@@ -716,7 +716,7 @@ TEST_F(OpenProjectScenarioTests, OpenScoreUrl_WindowIsTaken_OpensANewWindowWithT
     cloud::ScoreInfo remote;
     remote.title = "Cloud title";
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
+    .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 

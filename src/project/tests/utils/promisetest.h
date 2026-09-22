@@ -35,10 +35,10 @@ namespace mu::project {
 class PromiseTest : public ::testing::Test, public muse::async::Asyncable
 {
 protected:
-    //! A deferred call may queue another one, hence the repetition.
+    //! A deferred call may queue another one, and a flow can be many of them long, hence the repetition.
     static void drainDeferredCalls()
     {
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 100; ++i) {
             muse::async::processMessages();
         }
     }
@@ -47,17 +47,24 @@ protected:
     template<typename T>
     T await(muse::async::Promise<T> promise)
     {
-        T result = T(muse::make_ret(muse::Ret::Code::UnknownError));
-        bool resolved = false;
-        promise.onResolve(this, [&result, &resolved](const T& value) {
-            result = value;
-            resolved = true;
+        //! NOTE Held on the heap: a flow that outlives the drain would otherwise
+        //! report back into a stack frame that is already gone
+        struct Awaited {
+            bool resolved = false;
+            T result = T(muse::make_ret(muse::Ret::Code::UnknownError));
+        };
+
+        auto awaited = std::make_shared<Awaited>();
+
+        promise.onResolve(this, [awaited](const T& value) {
+            awaited->result = value;
+            awaited->resolved = true;
         });
 
         drainDeferredCalls();
 
-        EXPECT_TRUE(resolved) << "the promise did not resolve";
-        return result;
+        EXPECT_TRUE(awaited->resolved) << "the promise did not resolve";
+        return awaited->result;
     }
 
     //! A flow that is already over, and resolves with `value`.
@@ -69,13 +76,27 @@ protected:
         });
     }
 
+    //! A flow that is already over, and rejects with `ret`.
+    template<typename T>
+    static muse::async::Promise<T> rejectedPromise(const muse::Ret& ret)
+    {
+        return muse::async::make_promise<T>([ret](auto, auto reject) {
+            return reject(ret.code(), ret.text());
+        });
+    }
+
     //! A dialog the user answers with `btn`.
+    static muse::async::Promise<muse::IInteractive::Result> dialogResult(int btn)
+    {
+        return muse::async::make_promise<muse::IInteractive::Result>([btn](auto resolve, auto) {
+            return resolve(muse::IInteractive::Result(btn));
+        });
+    }
+
     static muse::async::Promise<muse::IInteractive::Result> dialogResult(
         muse::IInteractive::Button btn = muse::IInteractive::Button::Ok)
     {
-        return muse::async::make_promise<muse::IInteractive::Result>([btn](auto resolve, auto) {
-            return resolve(muse::IInteractive::Result(int(btn)));
-        });
+        return dialogResult(int(btn));
     }
 
     //! A dialog that settles the way `answer` says: resolved with its value, or rejected with its error.

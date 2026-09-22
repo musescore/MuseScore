@@ -234,15 +234,24 @@ protected:
     //! The save location dialog is settled on "local file", and resolves to `path`.
     void givenUserPicksLocalFile(const io::path_t& path)
     {
-        ON_CALL(*m_configuration, shouldAskSaveLocationType()).WillByDefault(Return(false));
-        ON_CALL(*m_configuration, lastUsedSaveLocationType()).WillByDefault(Return(SaveLocationType::Local));
-        ON_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).WillByDefault(Return(path));
+        givenLocalSaveLocation();
+        ON_CALL(*m_interactive, selectSavingFile(_, _, _, _)).WillByDefault([path] { return resolvedPromise(path); });
     }
 
     //! The user dismisses the file dialog without choosing anything.
     void givenUserCancelsTheSaveDialog()
     {
-        givenUserPicksLocalFile(io::path_t());
+        givenLocalSaveLocation();
+        ON_CALL(*m_interactive, selectSavingFile(_, _, _, _)).WillByDefault([] {
+            return rejectedPromise<io::path_t>(make_ret(Ret::Code::Cancel));
+        });
+    }
+
+    //! Saving goes to a local file, without asking where.
+    void givenLocalSaveLocation()
+    {
+        ON_CALL(*m_configuration, shouldAskSaveLocationType()).WillByDefault(Return(false));
+        ON_CALL(*m_configuration, lastUsedSaveLocationType()).WillByDefault(Return(SaveLocationType::Local));
     }
 
     //! The cloud destination dialog is answered with "publish under this name".
@@ -259,7 +268,13 @@ protected:
 
     void givenReachableCloud()
     {
-        ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+        ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
+
+        // The server says nothing about the score, so the flow falls back to what it already knows.
+        ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<const QUrl&>()))
+        .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>()); });
+        ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
+        .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>()); });
         givenSignedIn();
 
         // Settled audio generation settings, so that the decision does not open a dialog and abort the save.
@@ -341,7 +356,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ExistingLocalScore_SavesWithoutAski
 
     //! [THEN] The save location is not asked for, and the score is written back over itself:
     //! an empty path is what tells the project to keep the file it already has
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, save(io::path_t(), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving it...
@@ -357,7 +372,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ExistingCloudScore_SavesWithoutAski
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(true));
 
     //! [GIVEN] ...while the cloud is unreachable, so only the local write happens
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     m_cloudInfo.name = "Symphony";
@@ -368,7 +383,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ExistingCloudScore_SavesWithoutAski
 
     //! [THEN] The save location is not asked for; the score keeps the cloud details it already had,
     //! and is still written to its own file so that the work survives until the connection returns
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, setCloudInfo(::testing::AllOf(
                                              ::testing::Field(&CloudProjectInfo::name, QString("Symphony")),
                                              ::testing::Field(&CloudProjectInfo::sourceUrl, m_cloudInfo.sourceUrl)))).Times(1);
@@ -386,7 +401,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_NewlyCreatedScore_AsksForSaveLocati
 
     //! [THEN] The save location is asked for
     givenUserCancelsTheSaveDialog();
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving it...
     Ret ret = saveProject(SaveMode::Save);
@@ -403,7 +418,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_SaveAs_AlwaysAsksForSaveLocation)
 
     //! [THEN] "Save as" asks for a location even though the score already has one
     givenUserCancelsTheSaveDialog();
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving it as a new file...
     saveProject(SaveMode::SaveAs);
@@ -433,7 +448,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_SaveCopy_AsksForSaveLocation)
 
     //! [THEN] A copy is a new file, so its location is asked for
     givenUserCancelsTheSaveDialog();
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving a copy...
     saveProject(SaveMode::SaveCopy);
@@ -520,7 +535,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_NoOpenScore_IsRefusedInsteadOfCrash
     ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
 
     //! [THEN] Nothing is asked and nothing is written
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
 
     //! [WHEN] A save is requested anyway, as the command path allows...
     Ret ret = saveProject(SaveMode::Save);
@@ -561,14 +576,14 @@ TEST_F(SaveProjectScenarioTests, SaveProject_AlreadySaving_RefusesToStartAgain)
     bool busyDuringDialog = false;
 
     givenUserCancelsTheSaveDialog();
-    ON_CALL(*m_interactive, selectSavingFileSync(_, _, _, _))
+    ON_CALL(*m_interactive, selectSavingFile(_, _, _, _))
     .WillByDefault([this, &nested, &busyDuringDialog](const std::string&, const io::path_t&,
                                                       const std::vector<std::string>&, bool) {
         busyDuringDialog = m_scenario->isBusy(BusyStatus::Saving);
         m_scenario->saveProject(SaveMode::Save).onResolve(this, [&nested](const Ret& ret) {
             nested = ret;
         });
-        return io::path_t();
+        return rejectedPromise<io::path_t>(make_ret(Ret::Code::Cancel));
     });
 
     //! [WHEN] Saving it...
@@ -624,7 +639,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_PathGiven_WritesThereWithoutA
     const io::path_t path = "explicit.mscz";
 
     //! [THEN] It is used as is, and nothing is asked
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, save(path, SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving to that path...
@@ -640,7 +655,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToPath_NoPath_SavesTheScoreWhereItAl
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
 
     //! [THEN] Omitting the path falls back to a plain save over the existing file
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
     EXPECT_CALL(*m_project, save(io::path_t(), SaveMode::Save, true)).Times(1);
 
     //! [WHEN] Saving without naming a path...
@@ -771,8 +786,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedScoreAndUserAgrees_Write
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
 
     //! [GIVEN] ...and a user who picks "Save anyway"
-    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(SAVE_ANYWAY_BTN_ID)));
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(SAVE_ANYWAY_BTN_ID); });
 
     //! [THEN] The score is written despite the corruption
     EXPECT_CALL(*m_project, save(io::path_t("corrupted.mscz"), SaveMode::Save, true)).Times(1);
@@ -801,8 +816,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndRetry_Rewr
 {
     //! [GIVEN] A write that corrupts the file, and a user who chooses "Try again"...
     const io::path_t path = "score.mscz";
-    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(RETRY_SAVE_BTN_ID)));
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(RETRY_SAVE_BTN_ID); });
 
     //! [THEN] The retry deliberately skips the backup: the target is already corrupted, and backing it
     //! up again would overwrite the healthy backup made on the first attempt
@@ -824,12 +839,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndSaveAs_Ask
     ON_CALL(*m_project, save(_, _, _)).WillByDefault(Return(make_ret(Err::CorruptionUponSavingError)));
 
     //! [GIVEN] ...and a user who chooses "Save as"
-    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(SAVE_AS_BTN_ID)));
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(SAVE_AS_BTN_ID); });
 
     //! [THEN] A fresh destination is asked for, so the healthy version can go somewhere else
     givenUserCancelsTheSaveDialog();
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving it, then letting the deferred call run...
     saveProjectAt(SaveLocation(io::path_t("score.mscz")));
@@ -840,14 +855,14 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_CorruptedOnSaveAndCancel_Doe
 {
     //! [GIVEN] A write that corrupts the file, and a user who cancels...
     const io::path_t path = "score.mscz";
-    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(int(IInteractive::Button::Cancel))));
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(int(IInteractive::Button::Cancel)); });
 
     //! [THEN] The write is attempted exactly once, and nothing is retried
     EXPECT_CALL(*m_project, save(path, SaveMode::Save, true))
     .Times(1)
     .WillOnce(Return(make_ret(Err::CorruptionUponSavingError)));
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
 
     //! [WHEN] Saving it, then letting any deferred call run...
     Ret ret = saveProjectAt(SaveLocation(path));
@@ -863,7 +878,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_OrdinaryFailure_WarnsTheUser
 
     //! [THEN] The user is warned, and the corruption dialog is not used
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
-    EXPECT_CALL(*m_interactive, errorSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, error(_, _, _, _, _, _)).Times(0);
 
     //! [WHEN] Saving it...
     saveProjectAt(SaveLocation(io::path_t("score.mscz")));
@@ -874,7 +889,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectLocally_OrdinaryFailure_WarnsTheUser
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_CloudUnreachable_SavesLocallyAndReportsSuccess)
 {
     //! [GIVEN] An unreachable cloud...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
     ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
 
@@ -894,7 +909,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AlreadyACloudProject_WritesT
     //! [GIVEN] A score that already lives in the cloud and has a local file of its own...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(true));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("project.mscz")));
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     //! [THEN] It is written back over that same file
@@ -909,7 +924,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotACloudProjectYet_WritesTo
     //! [GIVEN] A score that is going to the cloud for the first time...
     ON_CALL(*m_project, isCloudProject()).WillByDefault(Return(false));
     ON_CALL(*m_configuration, cloudProjectSavingPath(0)).WillByDefault(Return(io::path_t("cloud.mscz")));
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ret(Ret::Code::InternalError)));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::InternalError)); });
     ON_CALL(*m_configuration, showCloudIsNotAvailableWarning()).WillByDefault(Return(false));
 
     //! [THEN] It is written to the path reserved for cloud scores, not to wherever it was before
@@ -922,7 +937,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotACloudProjectYet_WritesTo
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
 {
     //! [GIVEN] A reachable cloud whose login dialog is answered with "Save to computer"...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
@@ -944,7 +959,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UserChoosesToSaveLocallyInst
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNothing)
 {
     //! [GIVEN] A user who picks "Save to computer" and then cancels the file dialog...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
@@ -963,7 +978,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_LocalPathCancelled_WritesNot
 TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_NotLoggedIn_WritesNothing)
 {
     //! [GIVEN] A reachable cloud the user refuses to log in to...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
     givenLoginDialogAnswers(RetVal<Val>(make_ret(Ret::Code::Cancel)));
 
     //! [THEN] Nothing is written and nothing is uploaded
@@ -1016,11 +1031,11 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ScoreWentPublicOnTheWeb_Asks
     remote.title = "Renamed on the web";
     remote.visibility = cloud::Visibility::Public;
     ON_CALL(*m_museScoreComService, downloadScoreInfo(sourceUrl))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>::make_ok(remote)));
+    .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
 
     //! [GIVEN] ...and a user who declines the warning
-    ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(int(IInteractive::Button::Cancel))));
+    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(int(IInteractive::Button::Cancel)); });
 
     //! [THEN] Nothing is written and nothing is uploaded
     EXPECT_CALL(*m_project, save(_, _, _)).Times(0);
@@ -1039,7 +1054,7 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_RemoteInfoUnavailable_KeepsT
 
     givenReachableCloud();
     ON_CALL(*m_museScoreComService, downloadScoreInfo(sourceUrl))
-    .WillByDefault(Return(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))));
+    .WillByDefault([] { return resolvedPromise(RetVal<cloud::ScoreInfo>(make_ret(Ret::Code::InternalError))); });
 
     CloudProjectInfo info;
     info.name = "Locally known name";
@@ -1105,8 +1120,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_UploadFails_ReportsTheError)
     givenUploadFinishesWith(make_ret(Ret::Code::InternalError), ValMap());
 
     //! [THEN] The failure is shown through the cloud save error dialog
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-    .WillOnce(Return(IInteractive::Result(int(IInteractive::Button::Cancel))));
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillOnce([] { return dialogResult(int(IInteractive::Button::Cancel)); });
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
@@ -1190,12 +1205,12 @@ TEST_F(SaveProjectScenarioTests, SaveProject_ConflictAndSaveAs_AsksForANewLocati
 
     //! [GIVEN] ...and a user who answers the conflict dialog with "Save as"
     static constexpr int SAVE_AS_CONFLICT_BTN_ID = int(IInteractive::Button::CustomButton) + 3;
-    ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(SAVE_AS_CONFLICT_BTN_ID)));
+    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(SAVE_AS_CONFLICT_BTN_ID); });
 
     //! [THEN] The "Save as" flow really starts and asks for a new location, instead of being refused as busy
     givenUserCancelsTheSaveDialog();
-    EXPECT_CALL(*m_interactive, selectSavingFileSync(_, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(1);
 
     //! [WHEN] Saving the score...
     saveProject(SaveMode::Save);
@@ -1229,12 +1244,12 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_ConflictRetry_LeavesTheFirst
 
     //! [GIVEN] ...because the user answers the conflict dialog with "Publish as new score"
     static constexpr int PUBLISH_AS_NEW_SCORE_BTN_ID = int(IInteractive::Button::CustomButton) + 4;
-    ON_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(PUBLISH_AS_NEW_SCORE_BTN_ID)));
+    ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(PUBLISH_AS_NEW_SCORE_BTN_ID); });
 
     //! [THEN] Both uploads are started, and the conflict is reported exactly once
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(2);
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
 
     //! [WHEN] Saving it to the cloud...
     CloudProjectInfo info;
@@ -1331,8 +1346,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_CorruptedScoreAndUserReverts_Reop
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
 
     //! [GIVEN] ...a user who picks "Revert to last saved" and confirms losing the changes
-    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(REVERT_TO_LAST_SAVED_BTN_ID)));
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(REVERT_TO_LAST_SAVED_BTN_ID); });
     ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
     .WillByDefault([] {
         return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
@@ -1354,8 +1369,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectAt_RevertIsConfirmedWithNo_ChangesAr
     //! [GIVEN] The same score, but a user who backs out of the confirmation...
     ON_CALL(*m_project, isNewlyCreated()).WillByDefault(Return(false));
     ON_CALL(*m_project, canSave()).WillByDefault(Return(make_ret(Err::CorruptionError)));
-    ON_CALL(*m_interactive, errorSync(_, _, _, _, _, _))
-    .WillByDefault(Return(IInteractive::Result(REVERT_TO_LAST_SAVED_BTN_ID)));
+    ON_CALL(*m_interactive, error(_, _, _, _, _, _))
+    .WillByDefault([] { return dialogResult(REVERT_TO_LAST_SAVED_BTN_ID); });
     ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
     .WillByDefault([] {
         return async::make_promise<IInteractive::Result>([](auto resolve, auto) {
@@ -1446,7 +1461,7 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
 TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
 {
     //! [GIVEN] A reachable cloud whose login dialog is answered with "Save to computer"...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
@@ -1467,7 +1482,7 @@ TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesT
 TEST_F(SaveProjectScenarioTests, Publish_LocalPathCancelled_WritesNothing)
 {
     //! [GIVEN] A user who picks "Save to computer" and then cancels the file dialog...
-    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_authorization, checkCloudIsAvailable()).WillByDefault([] { return resolvedPromise(make_ok()); });
 
     using Response = cloud::SaveToCloudResponse::SaveToCloudResponse;
     givenLoginDialogAnswers(RetVal<Val>::make_ok(Val(int(Response::SaveLocallyInstead))));
