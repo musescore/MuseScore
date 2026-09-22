@@ -36,7 +36,7 @@ StyledDialogView {
     modal: true
 
     function bodyText(accessible) {
-        var homeScores = qsTrc("project/convert", "Home > Scores")
+        var homeScores = qsTrc("project/convert", "Home > Scores > My online scores")
         if (!accessible) {
             homeScores = "<b>" + homeScores + "</b>"
         }
@@ -191,31 +191,31 @@ StyledDialogView {
         isAccessibilityDisabledWhenInit: true
 
         FlatButton {
-            text: qsTrc("project/convert", "Convert more")
+            text: qsTrc("global", "OK")
 
             buttonRole: ButtonBoxModel.CustomRole
             buttonId: ButtonBoxModel.CustomButton + 1
+
+            onClicked: root.done("")
+        }
+
+        FlatButton {
+            text: qsTrc("project/convert", "Convert more")
+
+            buttonRole: ButtonBoxModel.CustomRole
+            buttonId: ButtonBoxModel.CustomButton + 2
 
             onClicked: root.done("convertMore")
         }
 
         FlatButton {
             text: qsTrc("project/convert", "Go to scores")
-
-            buttonRole: ButtonBoxModel.CustomRole
-            buttonId: ButtonBoxModel.CustomButton + 2
-
-            onClicked: root.done("goToScores")
-        }
-
-        FlatButton {
-            text: qsTrc("global", "OK")
             accentButton: true
 
-            buttonRole: ButtonBoxModel.AcceptRole
-            buttonId: ButtonBoxModel.Ok
+            buttonRole: ButtonBoxModel.CustomRole
+            buttonId: ButtonBoxModel.CustomButton + 3
 
-            onClicked: root.done("")
+            onClicked: root.done("goToScores")
         }
     }
 }

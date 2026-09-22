@@ -1104,65 +1104,113 @@ Promise<Ret> MuseScoreComService::doUpload(const ConvertUploadDataPtr& data, Pro
 Promise<RetVal<ConvertQueueList> > MuseScoreComService::fetchQueue()
 {
     return Promise<RetVal<ConvertQueueList> >([this](auto resolve, auto) {
-        RetVal<QUrl> queueUrl = prepareUrlForRequest(MUSESCORECOM_CONVERT_QUEUE_API_URL);
-        if (!queueUrl.ret) {
-            return resolve(RetVal<ConvertQueueList>::make_ret(queueUrl.ret));
-        }
+        auto queue = std::make_shared<ConvertQueueList>();
 
-        auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->get(queueUrl.val, receivedData, headers());
-        if (!progress.ret) {
-            return resolve(RetVal<ConvertQueueList>::make_ret(progress.ret));
-        }
-
-        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
-            if (!res.ret) {
-                printServerReply(*receivedData);
-                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
-                appendServerErrorCode(ret, receivedData->data());
-                (void)resolve(RetVal<ConvertQueueList>::make_ret(ret));
-                return;
-            }
-
-            (void)resolve(parseConvertQueueList(receivedData->data()));
+        executeAsyncRequest([this, queue]() {
+            return doFetchQueue(queue);
+        }).onResolve(this, [queue, resolve](const Ret& ret) {
+            RetVal<ConvertQueueList> result;
+            result.ret = ret;
+            result.val = std::move(*queue);
+            (void)resolve(result);
         });
 
         return Promise<RetVal<ConvertQueueList> >::dummy_result();
     });
 }
 
-Promise<RetVal<ConvertResult> > MuseScoreComService::submitReview(ConvertType type, int id, ReviewRating review, const QString& comment)
+Promise<Ret> MuseScoreComService::doFetchQueue(std::shared_ptr<ConvertQueueList> queue)
 {
-    return Promise<RetVal<ConvertResult> >([this, type, id, review, comment](auto resolve, auto) {
-        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_CONVERT_REVIEW_API_URL);
-        if (!url.ret) {
-            return resolve(RetVal<ConvertResult>::make_ret(url.ret));
+    return Promise<Ret>([this, queue](auto resolve, auto) {
+        RetVal<QUrl> queueUrl = prepareUrlForRequest(MUSESCORECOM_CONVERT_QUEUE_API_URL);
+        if (!queueUrl.ret) {
+            return resolve(queueUrl.ret);
         }
 
-        auto multiPart = makeMultiPartForReview(type, id, review, comment);
         auto receivedData = std::make_shared<QBuffer>();
-        RetVal<Progress> progress = m_networkManager->post(url.val, multiPart, receivedData, headers());
+        RetVal<Progress> progress = m_networkManager->get(queueUrl.val, receivedData, headers());
         if (!progress.ret) {
-            return resolve(RetVal<ConvertResult>::make_ret(progress.ret));
+            return resolve(progress.ret);
         }
 
-        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+        progress.val.finished().onReceive(this, [this, receivedData, queue, resolve](const ProgressResult& res) {
             if (!res.ret) {
                 printServerReply(*receivedData);
                 Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
                 appendServerErrorCode(ret, receivedData->data());
-                (void)resolve(RetVal<ConvertResult>::make_ret(ret));
+                (void)resolve(ret);
                 return;
             }
 
-            (void)resolve(parseConvertResult(receivedData->data()));
+            RetVal<ConvertQueueList> parsed = parseConvertQueueList(receivedData->data());
+            *queue = parsed.val;
+            (void)resolve(parsed.ret);
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
+Promise<RetVal<ConvertResult> > MuseScoreComService::submitReview(ConvertType type, int id, ReviewRating review, const QString& comment)
+{
+    return Promise<RetVal<ConvertResult> >([this, type, id, review, comment](auto resolve, auto) {
+        auto result = std::make_shared<ConvertResult>();
+
+        executeAsyncRequest([this, type, id, review, comment, result]() {
+            return doSubmitReview(type, id, review, comment, result);
+        }).onResolve(this, [result, resolve](const Ret& ret) {
+            RetVal<ConvertResult> retVal;
+            retVal.ret = ret;
+            retVal.val = *result;
+            (void)resolve(retVal);
         });
 
         return Promise<RetVal<ConvertResult> >::dummy_result();
     });
 }
 
+Promise<Ret> MuseScoreComService::doSubmitReview(ConvertType type, int id, ReviewRating review, const QString& comment,
+                                                 std::shared_ptr<ConvertResult> result)
+{
+    return Promise<Ret>([this, type, id, review, comment, result](auto resolve, auto) {
+        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_CONVERT_REVIEW_API_URL);
+        if (!url.ret) {
+            return resolve(url.ret);
+        }
+
+        auto multiPart = makeMultiPartForReview(type, id, review, comment);
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->post(url.val, multiPart, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
+
+        progress.val.finished().onReceive(this, [this, receivedData, result, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
+                appendServerErrorCode(ret, receivedData->data());
+                (void)resolve(ret);
+                return;
+            }
+
+            RetVal<ConvertResult> parsed = parseConvertResult(receivedData->data());
+            *result = parsed.val;
+            (void)resolve(parsed.ret);
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
 Promise<Ret> MuseScoreComService::deleteConversion(ConvertType type, int id)
+{
+    return executeAsyncRequest([this, type, id]() {
+        return doDeleteConversion(type, id);
+    });
+}
+
+Promise<Ret> MuseScoreComService::doDeleteConversion(ConvertType type, int id)
 {
     return Promise<Ret>([this, type, id](auto resolve, auto) {
         QVariantMap params;
@@ -1196,19 +1244,26 @@ Promise<Ret> MuseScoreComService::deleteConversion(ConvertType type, int id)
     });
 }
 
-Promise<RetVal<ConvertResult> > MuseScoreComService::submitReviewComment(ConvertType type, int id, const QString& comment)
+Promise<Ret> MuseScoreComService::submitReviewComment(ConvertType type, int id, const QString& comment)
 {
-    return Promise<RetVal<ConvertResult> >([this, type, id, comment](auto resolve, auto) {
+    return executeAsyncRequest([this, type, id, comment]() {
+        return doSubmitReviewComment(type, id, comment);
+    });
+}
+
+Promise<Ret> MuseScoreComService::doSubmitReviewComment(ConvertType type, int id, const QString& comment)
+{
+    return Promise<Ret>([this, type, id, comment](auto resolve, auto) {
         RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_CONVERT_COMMENT_API_URL);
         if (!url.ret) {
-            return resolve(RetVal<ConvertResult>::make_ret(url.ret));
+            return resolve(url.ret);
         }
 
         auto multiPart = makeMultiPartForComment(type, id, comment);
         auto receivedData = std::make_shared<QBuffer>();
         RetVal<Progress> progress = m_networkManager->post(url.val, multiPart, receivedData, headers());
         if (!progress.ret) {
-            return resolve(RetVal<ConvertResult>::make_ret(progress.ret));
+            return resolve(progress.ret);
         }
 
         progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
@@ -1216,13 +1271,13 @@ Promise<RetVal<ConvertResult> > MuseScoreComService::submitReviewComment(Convert
                 printServerReply(*receivedData);
                 Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
                 appendServerErrorCode(ret, receivedData->data());
-                (void)resolve(RetVal<ConvertResult>::make_ret(ret));
+                (void)resolve(ret);
                 return;
             }
 
-            (void)resolve(parseConvertResult(receivedData->data()));
+            (void)resolve(make_ok());
         });
 
-        return Promise<RetVal<ConvertResult> >::dummy_result();
+        return Promise<Ret>::dummy_result();
     });
 }

@@ -585,6 +585,10 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
 {
     TRACEFUNC;
 
+    if (m_readonly) {
+        return;
+    }
+
     QPointF _pos = pos;
     if (_pos.isNull()) {
         _pos = QPointF(width() / 2, height() / 2);

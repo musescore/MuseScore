@@ -37,13 +37,14 @@ static const QString URI_KEY("uri");
 static const QString IS_TITLE_BOLD_KEY("isTitleBold");
 static const QString IS_CHECKED_KEY("isChecked");
 
+static bool isNotationPageUri(const QString& uri)
+{
+    return uri == NOTATION_PAGE || uri == NOTATION_REVIEW_PAGE;
+}
+
 static bool isItemChecked(const QString& itemUri, const QString& currentUri)
 {
-    if (itemUri == NOTATION_PAGE) {
-        return currentUri == NOTATION_PAGE || currentUri == NOTATION_REVIEW_PAGE;
-    }
-
-    return itemUri == currentUri;
+    return itemUri == currentUri || (isNotationPageUri(itemUri) && isNotationPageUri(currentUri));
 }
 
 inline QVariantMap buildItem(const QString& title, const QString& uri, const QString& currentUri)
@@ -140,11 +141,12 @@ void MainToolBarModel::updateNotationPageItem()
     for (int i = 0; i < m_items.size(); ++i) {
         QVariantMap& item = m_items[i];
 
-        if (item[URI_KEY] == NOTATION_PAGE) {
+        if (isNotationPageUri(item[URI_KEY].toString())) {
+            item[URI_KEY] = QString::fromStdString(projectFilesController()->resolveNotationPageUri().toString());
             item[IS_TITLE_BOLD_KEY] = context()->currentProject() != nullptr;
 
             QModelIndex modelIndex = index(i);
-            emit dataChanged(modelIndex, modelIndex, { IsTitleBoldRole });
+            emit dataChanged(modelIndex, modelIndex, { UriRole, IsTitleBoldRole });
 
             break;
         }

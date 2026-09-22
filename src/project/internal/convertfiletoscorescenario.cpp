@@ -435,7 +435,7 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
         if (action == "convertMore") {
             convertFiles();
         } else if (action == "goToScores") {
-            interactive()->open("musescore://home?section=scores");
+            interactive()->open("musescore://home?section=scores&subSection=myOnlineScores");
         }
     });
 }

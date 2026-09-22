@@ -83,7 +83,7 @@ private:
     void saveWatchedScores();
 
     void watch(ConvertType type, int itemId, const muse::String& convertedScoreName);
-    bool hasActiveWatchedScores() const;
+    bool hasAnyProcessingScores() const;
     void poll();
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);

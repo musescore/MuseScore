@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "iglobalconfiguration.h"
+#include "project/iprojectfilescontroller.h"
 
 namespace mu::appshell {
 class MainToolBarModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
@@ -42,6 +43,7 @@ class MainToolBarModel : public QAbstractListModel, public muse::Contextable, pu
 
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);

@@ -74,8 +74,6 @@ public:
     void preInit();
     void init();
 
-    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
-
     muse::ValCh<bool> isFullScreen() const;
 
 private:

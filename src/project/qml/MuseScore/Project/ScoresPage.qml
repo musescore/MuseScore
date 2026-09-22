@@ -32,10 +32,21 @@ import "internal/ScoresPage"
 FocusScope {
     id: root
 
+    property string subSection: ""
+
     QtObject {
         id: prv
 
         readonly property int sideMargin: 46
+    }
+
+    onSubSectionChanged: applySubSection()
+
+    function applySubSection() {
+        switch (root.subSection) {
+        case "newAndRecent": scoresPageModel.tabIndex = 0; break
+        case "myOnlineScores": scoresPageModel.tabIndex = 1; break
+        }
     }
 
     NavigationSection {
@@ -52,9 +63,14 @@ FocusScope {
 
     ScoresPageModel {
         id: scoresPageModel
+
+        onTabIndexChanged: {
+            tabBar.currentIndex = scoresPageModel.tabIndex
+        }
     }
 
     Component.onCompleted: {
+        applySubSection()
         tabBar.currentIndex = scoresPageModel.tabIndex
         tabBar.completed = true
     }
