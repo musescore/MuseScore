@@ -404,9 +404,6 @@ static ASIOError create_asio_buffers(long bufferSize, long outputChannels, long 
             LOGE() << "failed get channels info";
             delete[] s_adata.channelInfos;
             s_adata.channelInfos = nullptr;
-            ASIODisposeBuffers();
-            delete[] s_adata.bufferInfos;
-            s_adata.bufferInfos = nullptr;
             return result;
         }
     }
@@ -446,7 +443,6 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
     ok = ASIOInit(&s_adata.driverInfo) == ASE_OK;
     if (!ok) {
         LOGE() << "failed init driver: " << name << ", error: " << s_adata.driverInfo.errorMessage;
-        s_adata.drivers->removeCurrentDriver();
         return ok;
     }
 
@@ -459,7 +455,6 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
     ok =  ASIOGetChannels(&metrics.inputChannels, &metrics.outputChannels) == ASE_OK;
     if (!ok) {
         LOGE() << "failed get num of channels, driver: " << name;
-        s_adata.drivers->removeCurrentDriver();
         return ok;
     }
 
@@ -469,7 +464,6 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
                            &metrics.preferredSize, &metrics.granularity) == ASE_OK;
     if (!ok) {
         LOGE() << "failed get buffer size, driver: " << name;
-        s_adata.drivers->removeCurrentDriver();
         return ok;
     }
 
@@ -500,7 +494,6 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
         ok = ASIOSetSampleRate(static_cast<double>(spec.output.sampleRate)) == ASE_OK;
         if (!ok) {
             LOGE() << "failed set sample rate: " << spec.output.sampleRate << ", driver: " << name;
-            s_adata.drivers->removeCurrentDriver();
             return false;
         }
         active.sampleRate = spec.output.sampleRate;
@@ -510,6 +503,11 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
            << " audioChannelCount: " << active.audioChannelCount
            << " samplesPerChannel: " << active.samplesPerChannel
            << " sampleRate: " << active.sampleRate;
+
+    m_activeSpecChanged.send(s_adata.activeSpec);
+    if (activeSpec) {
+        *activeSpec = s_adata.activeSpec;
+    }
 
     if (ASIOOutputReady() == ASE_OK) {
         s_adata.postOutput = true;
@@ -527,22 +525,6 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
     ok = create_asio_buffers((long)active.samplesPerChannel, (long)active.audioChannelCount) == ASE_OK;
     if (!ok) {
         LOGE() << "failed create asio buffers, driver: " << name;
-        s_adata.drivers->removeCurrentDriver();
-        return ok;
-    }
-
-    ok = ASIOStart() == ASE_OK;
-    if (!ok) {
-        LOGE() << "failed asio start, driver: " << name;
-        ASIODisposeBuffers();
-
-        delete[] s_adata.bufferInfos;
-        s_adata.bufferInfos = nullptr;
-        delete[] s_adata.channelInfos;
-        s_adata.channelInfos = nullptr;
-
-        s_adata.drivers->removeCurrentDriver();
-
         return ok;
     }
 
@@ -551,11 +533,26 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
     }, async::Asyncable::Mode::SetReplace);
 
     m_running = true;
+    m_thread = std::thread([this]() {
+        bool ok = ASIOStart() == ASE_OK;
+        if (!ok) {
+            LOGE() << "failed asio start";
+            return;
+        }
 
-    m_activeSpecChanged.send(s_adata.activeSpec);
-    if (activeSpec) {
-        *activeSpec = s_adata.activeSpec;
-    }
+        LOGI() << "ASIO thread started: " << std::this_thread::get_id();
+
+        // Main thread loop
+        while (m_running) {
+            // ASIO callbacks will be called in this thread
+            // We just need to keep the thread alive
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+
+        // Stop ASIO
+        ASIOStop();
+        LOGI() << "ASIO thread stopped";
+    });
 
     return true;
 }
@@ -571,8 +568,10 @@ void AsioAudioDriver::doClose()
         return;
     }
     m_running = false;
+    if (m_thread.joinable()) {
+        m_thread.join();
+    }
 
-    ASIOStop();
     ASIODisposeBuffers();
 
     delete[] s_adata.bufferInfos;
