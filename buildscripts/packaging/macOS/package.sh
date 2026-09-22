@@ -88,7 +88,7 @@ sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${APP_PATH}/Contents/Resources/qt
 if $DO_SIGN; then
     # Re-sign appex to ensure proper entitlements
     echo "Re-sign appex"
-    sign_code "src/macos_integration/entitlements.plist" \
+    sign_code "src/macos_integration/entitlements-distribution.plist" \
         "${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
 
     # Sign the bundled dylibs that are loaded at runtime and therefore
