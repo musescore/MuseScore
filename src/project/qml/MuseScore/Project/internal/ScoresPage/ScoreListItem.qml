@@ -102,34 +102,6 @@ ListItemBlank {
                 horizontalAlignment: Text.AlignLeft
             }
 
-            ScoreItemMenuButton {
-                id: contextMenu
-
-                isCreateNew: root.score.isCreateNew ?? false
-                isNoResultsFound: root.score.isNoResultsFound ?? false
-                isCloud: root.score.isCloud ?? false
-                showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
-
-                Layout.alignment: Qt.AlignTrailing | Qt.AlignVCenter
-                Layout.preferredWidth: 20
-                Layout.preferredHeight: 20
-                visible: menuModel.length > 0
-                         && (root.mouseArea.containsMouse 
-                             || mouseArea.containsMouse
-                             || root.navigation.active 
-                             || navigation.active 
-                             || isMenuOpenedByButton)
-
-                navigation.panel: root.navigation.panel
-                navigation.row: root.navigation.row
-                navigation.column: 1
-
-                onOpenRequested: root.clicked(null)
-                onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
-                onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
-                onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
-            }
-
             Loader {
                 active: root.score.isCloud ?? false
 
@@ -209,6 +181,38 @@ ListItemBlank {
                 sourceComponent: modelData.delegate
             }
         }
+    }
+
+    ScoreItemMenuButton {
+        id: contextMenu
+
+        // Drawn on top of the row instead of taking a spot in the RowLayout, so hover never shifts the columns
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: root.itemInset
+        width: 20
+        height: 20
+        z: 1
+
+        isCreateNew: root.score.isCreateNew ?? false
+        isNoResultsFound: root.score.isNoResultsFound ?? false
+        isCloud: root.score.isCloud ?? false
+        showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
+
+        visible: root.mouseArea.containsMouse
+                 || mouseArea.containsMouse
+                 || root.navigation.active
+                 || navigation.active
+                 || isMenuOpenedByButton
+
+        navigation.panel: root.navigation.panel
+        navigation.row: root.navigation.row
+        navigation.column: 100 * (root.columns.length + 1) + 1
+
+        onOpenRequested: root.clicked(null)
+        onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
+        onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
+        onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
     }
 
     SeparatorLine {

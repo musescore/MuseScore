@@ -62,6 +62,14 @@ FlatButton {
         menuLoader.close()
     }
 
+    readonly property string revealInFileBrowserTitle: {
+        switch (Qt.platform.os) {
+        case "windows": return qsTrc("project", "Show in Explorer")
+        case "osx": return qsTrc("project", "Show in Finder")
+        default: return qsTrc("project", "Show in File Manager")
+        }
+    }
+
     readonly property var menuModel: {
         if (root.isCreateNew || root.isNoResultsFound) {
             return []
@@ -72,9 +80,9 @@ FlatButton {
         ]
 
         if (root.isCloud) {
-            result.push({ id: "view-online", title: qsTrc("project", "View online") })
+            result.push({ id: "view-online", title: qsTrc("project", "View online"), icon: IconCode.OPEN_LINK })
         } else {
-            result.push({ id: "reveal-in-file-browser", title: qsTrc("project", "Reveal in file browser") })
+            result.push({ id: "reveal-in-file-browser", title: root.revealInFileBrowserTitle })
         }
 
         if (root.showRemoveFromRecentFiles) {

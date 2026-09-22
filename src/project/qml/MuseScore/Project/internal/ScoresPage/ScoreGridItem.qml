@@ -200,6 +200,7 @@ FocusScope {
                              || root.navigation.active
                              || navigation.active
                              || isMenuOpenedByButton)
+                transparent: !isMenuOpenedByButton && !rootMouseArea.containsMouse
 
                 isCreateNew: root.isCreateNew
                 isNoResultsFound: root.isNoResultsFound
