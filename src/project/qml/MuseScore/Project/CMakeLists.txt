@@ -32,6 +32,8 @@ qt_add_qml_module(project_qml
         internal/ConvertFileToScore/convertfiletoscoremodel.h
         internal/ConvertFileToScore/filelistmodel.cpp
         internal/ConvertFileToScore/filelistmodel.h
+        internal/ConvertFileToScore/reviewscorequalitymodel.cpp
+        internal/ConvertFileToScore/reviewscorequalitymodel.h
         internal/Export/exportdialogmodel.cpp
         internal/Export/exportdialogmodel.h
         internal/NewScore/additionalinfomodel.cpp
@@ -74,6 +76,8 @@ qt_add_qml_module(project_qml
         internal/ConvertFileToScore/LinkPastePanel.qml
         internal/ConvertFileToScore/MultipleFilesPanel.qml
         internal/ConvertFileToScore/SaveAsField.qml
+        internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml
+        internal/ConvertFileToScore/ScoreQualityRatingPanel.qml
         internal/ConvertFileToScore/SelectFilePage.qml
         internal/ConvertFileToScore/SelectedFilesPage.qml
         internal/ConvertFileToScore/SingleFilePanel.qml
@@ -136,6 +140,7 @@ qt_add_qml_module(project_qml
         NewScoreDialog.qml
         ProjectPropertiesDialog.qml
         ProjectUploadedDialog.qml
+        ReviewScoreQualityPanel.qml
         SaveToCloudDialog.qml
         ScoresPage.qml
         UploadProgressDialog.qml
