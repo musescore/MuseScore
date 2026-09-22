@@ -36,7 +36,11 @@ echo "macdeployqt"
 if $DO_SIGN; then
     sign_args="-sign-for-notarization=Developer ID Application: MuseScore"
 else
-    sign_args=""
+    # macdeployqt rewrites the load commands of everything it deploys, which
+    # invalidates the signature that Qt shipped its libraries and plugins with.
+    # Ad-hoc signatures are cheap and need no certificate, so use those; the
+    # alternative is leaving behind binaries that macOS refuses to load.
+    sign_args="-codesign=-"
 fi
 macdeployqt ${APP_PATH} \
     -verbose=2 \
@@ -104,7 +108,25 @@ if $DO_SIGN; then
         rm -f "$APP_ZIP"
     fi
 else
-    echo "Skipping code signing"
+    # Removing the dSYM bundles and renaming Resources/qml invalidated the
+    # signatures that macdeployqt just made, so sign again, from the inside out.
+    echo "Ad-hoc code sign"
+
+    # As above: signed here rather than by macdeployqt, which cannot see them.
+    find "${APP_PATH}/Contents/Frameworks" -maxdepth 1 -type f -name "*.dylib" \
+        -exec codesign --force -s - {} +
+
+    # The same flags CMake signs the extension with at build time.
+    codesign --force \
+        --options runtime \
+        --entitlements "src/macos_integration/entitlements.plist" \
+        -s - \
+        "${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
+
+    codesign --force -s - "${APP_PATH}"
+
+    echo "Codesign verify"
+    codesign --verify --deep --strict --verbose=2 "${APP_PATH}"
 fi
 
 ################################################################
