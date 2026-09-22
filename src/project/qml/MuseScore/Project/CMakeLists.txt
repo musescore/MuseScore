@@ -63,6 +63,7 @@ qt_add_qml_module(project_qml
         AskSaveLocationTypeDialog.qml
         AudioGenerationSettings.qml
         AudioGenerationSettingsDialog.qml
+        ConvertFileProcessingDialog.qml
         ConvertFileToScoreDialog.qml
         internal/ConvertFileToScore/ConvertButtonBox.qml
         internal/ConvertFileToScore/ConvertFromLinkPanel.qml
@@ -149,6 +150,7 @@ qt_add_qml_module(project_qml
         internal/ScoresPage/images/Placeholder_Other.png
         resources/AudioCom_Waveform.png
         resources/PublishScores.png
+        resources/ScoreProcessing.png
     IMPORTS
         TARGET muse_cloud_qml
         TARGET muse_ui_qml
