@@ -21,6 +21,8 @@
  */
 #include "twrite.h"
 
+#include <set>
+
 #include "../../iengravingconfiguration.h" // IWYU pragma: keep
 #include "../../iengravingfont.h"
 #include "../../types/typesconv.h"
@@ -514,13 +516,29 @@ void TWrite::writeScoreSpanners(const Score* score, XmlWriter& xml, WriteContext
     if (score->spannerMap().empty()) {
         return;
     }
-    xml.startElement("SpannerMap");
-    for (auto& i : score->spannerMap().map()) {
+    std::set<Spanner*> pending;
+    for (const auto& i : score->spannerMap().map()) {
         Spanner* s = i.second;
-        if (s->generated() || !ctx.canWrite(s)) {
+        if (!s->generated() && ctx.canWrite(s)) {
+            pending.insert(s);
+        }
+    }
+    xml.startElement("SpannerMap");
+    for (const auto& i : score->spannerMap().map()) {
+        Spanner* s = i.second;
+        if (!pending.count(s)) {
             continue;
         }
-        TWrite::writeItem(s, xml, ctx);
+        if (s->links()) {
+            // The reader resolves linkedTo immediately, so write the eligible main first.
+            Spanner* main = toSpanner(s->links()->mainElement());
+            if (pending.erase(main)) {
+                TWrite::writeItem(main, xml, ctx);
+            }
+        }
+        if (pending.erase(s)) {
+            TWrite::writeItem(s, xml, ctx);
+        }
     }
     xml.endElement();
 }
