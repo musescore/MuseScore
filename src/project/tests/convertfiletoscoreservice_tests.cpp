@@ -583,9 +583,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadFails_ForwardsF
 
     bool received = false;
     Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore&) {
+    WatchedScore receivedWatched;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore& watched) {
         received = true;
         receivedRet = ret;
+        receivedWatched = watched;
     });
 
     // [WHEN] Starting the conversion
@@ -597,7 +599,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadFails_ForwardsF
     uploadProgress->finish(make_ret(Ret::Code::UnknownError, std::string("network error")));
     ASSERT_TRUE(received);
     EXPECT_FALSE(receivedRet);
-    EXPECT_EQ(receivedRet.data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"My Score");
+    EXPECT_EQ(receivedWatched.name, u"My Score");
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_PersistsWatchedItemAndPolls)
@@ -1097,9 +1099,9 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
                                                                                                                doneAudioItem }));
     }));
 
-    std::vector<Ret> receivedRets;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore&) {
-        receivedRets.push_back(ret);
+    std::vector<std::pair<Ret, WatchedScore> > received;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore& watched) {
+        received.push_back({ ret, watched });
     });
 
     // [WHEN] Resuming loads both items and triggers a poll
@@ -1108,14 +1110,14 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
 
     // [THEN] Exactly one failure (the Omr one) and one success (the Audio2Score one) are reported -
     // if type were ignored during matching, the two items could be mixed up with each other
-    ASSERT_EQ(receivedRets.size(), 2u);
+    ASSERT_EQ(received.size(), 2u);
 
-    const auto failureIt = std::find_if(receivedRets.begin(), receivedRets.end(), [](const Ret& ret) { return !ret; });
-    ASSERT_NE(failureIt, receivedRets.end());
-    EXPECT_EQ(failureIt->data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"Omr Score");
+    const auto failureIt = std::find_if(received.begin(), received.end(), [](const auto& entry) { return !entry.first; });
+    ASSERT_NE(failureIt, received.end());
+    EXPECT_EQ(failureIt->second.name, u"Omr Score");
 
-    const auto successIt = std::find_if(receivedRets.begin(), receivedRets.end(), [](const Ret& ret) { return bool(ret); });
-    ASSERT_NE(successIt, receivedRets.end());
+    const auto successIt = std::find_if(received.begin(), received.end(), [](const auto& entry) { return bool(entry.first); });
+    ASSERT_NE(successIt, received.end());
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessingFailure)
@@ -1130,9 +1132,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessi
 
     bool received = false;
     Ret receivedRet;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore&) {
+    WatchedScore receivedWatched;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore& watched) {
         received = true;
         receivedRet = ret;
+        receivedWatched = watched;
     });
 
     // [WHEN] Uploading and polling the status
@@ -1142,7 +1146,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessi
     ASSERT_TRUE(received);
     EXPECT_FALSE(receivedRet);
     EXPECT_EQ(receivedRet.code(), int(mu::project::Err::ConvertProcessingFailed));
-    EXPECT_EQ(receivedRet.data<String>(CONVERT_FAILED_FILE_NAME_KEY, String()), u"My Score");
+    EXPECT_EQ(receivedWatched.name, u"My Score");
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AllTerminalAfterFailure_StopsPolling)

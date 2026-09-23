@@ -92,8 +92,6 @@ private:
 
     void updateStatus(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode);
 
-    void finishConvert(const muse::Ret& ret, const WatchedScore& watched = WatchedScore());
-
     ConvertConfig m_config;
 
     QTimer m_timer;

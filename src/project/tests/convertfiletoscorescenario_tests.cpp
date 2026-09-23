@@ -373,7 +373,9 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     m_scenario->init();
 
     Ret ret = make_ret(Err::ConvertProcessingFailed);
-    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
+
+    WatchedScore watched;
+    watched.name = u"My Score";
 
     const std::string title = muse::trc("project/convert", "Error processing score");
     const std::string text = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
@@ -396,7 +398,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     });
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(ret, WatchedScore());
+    convertFinished.send(ret, watched);
 
     // [THEN] The failure is still forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
@@ -435,8 +437,9 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
 
     // [WHEN] The service reports a failed conversion
     Ret ret = make_ret(Err::ConvertProcessingFailed);
-    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
-    convertFinished.send(ret, WatchedScore());
+    WatchedScore watched;
+    watched.name = u"My Score";
+    convertFinished.send(ret, watched);
 
     pumpEvents();
 }

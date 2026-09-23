@@ -319,9 +319,12 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
         if (!res.ret) {
             LOGE() << "Could not upload files for \"" << convertedScoreName << "\" (type: "
                    << convertTypeToString(type) << "): " << res.ret.toString();
-            Ret ret = res.ret;
-            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedScoreName);
-            finishConvert(ret);
+            WatchedScore watched;
+            watched.conversion.type = type;
+            watched.conversion.status = ConvertStatus::Failed;
+            watched.startedLocally = true;
+            watched.name = convertedScoreName;
+            m_convertFinished.send(res.ret, watched);
             return;
         }
 
@@ -760,25 +763,19 @@ void ConvertFileToScoreService::updateStatus(WatchedScore& watched, ConvertStatu
     case ConvertStatus::AwaitingReview:
     case ConvertStatus::Done:
         if (!wasDone && watched.scoreId && watched.startedLocally) {
-            finishConvert(make_ok(), watched);
+            m_convertFinished.send(make_ok(), watched);
         }
         break;
     case ConvertStatus::Failed: {
         Ret ret = make_ret(Err::ConvertProcessingFailed);
         ret.setText("Conversion failed for \"" + watched.name.toStdString() + "\": " + errorCodeToString(errorCode));
-        ret.setData(CONVERT_FAILED_FILE_NAME_KEY, watched.name);
 
         LOGE() << ret.toString();
 
         if (watched.startedLocally) {
-            finishConvert(ret);
+            m_convertFinished.send(ret, watched);
         }
         break;
     }
     }
-}
-
-void ConvertFileToScoreService::finishConvert(const Ret& ret, const WatchedScore& watched)
-{
-    m_convertFinished.send(ret, watched);
 }
