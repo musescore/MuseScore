@@ -659,6 +659,11 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
     newWatchedScores.reserve(queue.size());
 
     for (const ConvertQueueItem& queueItem : queue) {
+        if (queueItem.type == ConvertType::Unknown) {
+            LOGW() << "Skipping queue item with unrecognized type (" << convertIdAndType(queueItem.type, queueItem.id) << ")";
+            continue;
+        }
+
         const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(queueItem.type)];
         const auto it = snapshotIndexById.find(queueItem.id);
 
