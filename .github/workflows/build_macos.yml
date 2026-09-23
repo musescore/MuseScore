@@ -114,7 +114,8 @@ jobs:
         fi
 
         if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly" ]; then
-          SENTRY_PROJECT="mu4-sandbox"
+          # DO_UPLOAD_SYMBOLS is turned off because the files are large, and sending them every night is costly
+          SENTRY_URL=https://sentry.musescore.com/api/3/minidump/?sentry_key=$SENTRY_MUSE_MU4_SANDBOX_KEY
         fi
 
         if [ "$SENTRY_PROJECT" == "mu4-sandbox" ] && [ "$SENTRY_MUSE_MU4_SANDBOX_KEY" != "" ]; then
@@ -196,6 +197,14 @@ jobs:
     - name: Show ccache stats
       run: |
         ccache -sv
+
+    # Must run before Package: macdeployqt strips the binary and package.sh
+    # deletes the dSYM bundles
+    - name: Generate dSYM
+      if: env.DO_UPLOAD_SYMBOLS == 'true'
+      run: |
+        bash ./buildscripts/ci/macos/generate_dsym.sh
+
     - name: Package
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
@@ -212,21 +221,18 @@ jobs:
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
-    - name: Generate and upload dump symbols
+
+    - name: Upload debug files
       if: env.DO_UPLOAD_SYMBOLS == 'true'
+      env:
+        SENTRY_URL: https://sentry.musescore.com
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_MUSE_AUTH_TOKEN }}
+        SENTRY_ORG: sentry
       run: |
-        APP_BIN=$(pwd)/applebuild/mscore.app/Contents/MacOS/mscore
-        GENERATE_ARCHS=("x86_64 arm64")
-        BUILD_DIR=$(pwd)/applebuild
-        cmake -DAPP_BIN=${APP_BIN} \
-              -DGENERATE_ARCHS="${GENERATE_ARCHS}" \
-              -DBUILD_DIR=${BUILD_DIR} \
-              -DSENTRY_URL=https://sentry.musescore.com \
-              -DSENTRY_ORG=sentry \
-              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_MUSE_AUTH_TOKEN }} \
-              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
-              -DSTAGE=${BUILD_MODE} \
-              -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
+        bash ./buildscripts/ci/tools/sentry/upload_debug_files.sh \
+            applebuild/mscore.dSYM/Contents/Resources/DWARF/mscore \
+            applebuild/mscore.app/Contents/MacOS/mscore
+
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
