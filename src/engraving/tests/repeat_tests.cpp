@@ -427,3 +427,8 @@ TEST_F(Engraving_RepeatTests, repeat70) {
     // it should not swallow the remainder of the score
     repeat("repeat70.mscx", u"1;2; 1; 4;5");
 }
+
+TEST_F(Engraving_RepeatTests, repeat71) {
+    // A Marker is not a repeat structure: it must not extend a skipped open volta over its measure
+    repeat("repeat71.mscx", u"1;2; 1; 4;5");
+}

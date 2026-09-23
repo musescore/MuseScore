@@ -916,8 +916,12 @@ void RepeatList::unwind()
                     Measure const* lastSkippedMeasure = activeVolta->endMeasure();
                     do {
                         ++repeatListElementIt;
-                        if (
-                            ((*repeatListElementIt)->repeatListElementType != RepeatListElementType::VOLTA_END)
+
+                        const RepeatListElementType skippedType = (*repeatListElementIt)->repeatListElementType;
+                        const bool isRepeatStructure = (skippedType == RepeatListElementType::REPEAT_START)
+                                                       || (skippedType == RepeatListElementType::REPEAT_END)
+                                                       || (skippedType == RepeatListElementType::JUMP);
+                        if (isRepeatStructure
                             && ((lastSkippedMeasure == nullptr)
                                 || ((*repeatListElementIt)->measure->tick() > lastSkippedMeasure->tick()))) {
                             lastSkippedMeasure = (*repeatListElementIt)->measure;

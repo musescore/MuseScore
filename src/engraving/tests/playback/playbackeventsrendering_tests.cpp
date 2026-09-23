@@ -1849,6 +1849,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Grace)
     PlaybackEventsMap result;
     m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
 
+    // [THEN] Something has been rendered at all
+    ASSERT_FALSE(result.empty());
+
     for (const auto& pair : result) {
         // [THEN] The grace note is rendered along with the arpeggiated notes
         ASSERT_EQ(pair.second.size(), expectedPitches.size());
