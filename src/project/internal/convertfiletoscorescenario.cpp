@@ -37,33 +37,6 @@ using namespace muse::cloud;
 //! NOTE: attempt 4 is ~5 minutes into retrying
 static constexpr int RETRY_TOAST_ATTEMPT_THRESHOLD = 4;
 
-static ConvertSelection toConvertSelection(const Val& val)
-{
-    const QVariantMap map = val.toQVariant().toMap();
-    const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
-    const QString link = map.value("link").toString();
-    const QStringList pathsList = map.value("paths").toStringList();
-
-    io::paths_t paths;
-    paths.reserve(pathsList.size());
-    for (const QString& path : pathsList) {
-        paths.push_back(io::path_t(path));
-    }
-
-    ConvertSelection selection;
-    selection.convertedScoreName = map.value("convertedScoreName").toString();
-
-    if (type == ConvertType::Audio2Score && !link.isEmpty()) {
-        selection.input = Audio2ScoreConvertInput { QUrl(link) };
-    } else if (type == ConvertType::Audio2Score) {
-        selection.input = Audio2ScoreConvertInput { paths };
-    } else {
-        selection.input = OmrConvertInput { paths };
-    }
-
-    return selection;
-}
-
 ConvertFileToScoreScenario::ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx)
 {
@@ -271,7 +244,8 @@ async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
     });
 }
 
-async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert(const io::paths_t& paths, ConvertType type)
+async::Promise<ConvertFileToScoreScenario::ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert(const io::paths_t& paths,
+                                                                                                              ConvertType type)
 {
     UriQuery query("musescore://project/convert/selectfiles");
 
@@ -286,9 +260,36 @@ async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConver
     }
 
     return interactive()->open(query)
-           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
+           .then<ConvertSelection>(this, [this](const Val& val, auto resolve) {
         return resolve(toConvertSelection(val));
     });
+}
+
+ConvertFileToScoreScenario::ConvertSelection ConvertFileToScoreScenario::toConvertSelection(const Val& val) const
+{
+    const QVariantMap map = val.toQVariant().toMap();
+    const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
+    const QString link = map.value("link").toString();
+    const QStringList pathsList = map.value("paths").toStringList();
+
+    io::paths_t paths;
+    paths.reserve(pathsList.size());
+    for (const QString& path : pathsList) {
+        paths.push_back(io::path_t(path));
+    }
+
+    ConvertSelection selection;
+    selection.convertedScoreName = map.value("convertedScoreName").toString();
+
+    if (type == ConvertType::Audio2Score && !link.isEmpty()) {
+        selection.input = Audio2ScoreConvertInput { QUrl(link) };
+    } else if (type == ConvertType::Audio2Score) {
+        selection.input = Audio2ScoreConvertInput { paths };
+    } else {
+        selection.input = OmrConvertInput { paths };
+    }
+
+    return selection;
 }
 
 void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, ConvertType type)

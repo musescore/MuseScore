@@ -33,11 +33,6 @@
 class QUrl;
 
 namespace mu::project {
-struct ConvertSelection {
-    ConvertInput input;
-    muse::String convertedScoreName;
-};
-
 class IConvertFileToScoreScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IConvertFileToScoreScenario)
