@@ -65,11 +65,16 @@ void CloudScoresModel::load()
         updateWatchedItems();
     });
 
-    convertFileToScoreScenario()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
-        if (failure.gaveUp) {
-            m_pollingGaveUp = true;
-            updateWatchedItems();
+    convertFileToScoreScenario()->pollingStatusChanged().onReceive(this, [this](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        const bool gaveUp = failure && failure->gaveUp;
+
+        if (m_pollingGaveUp == gaveUp) {
+            return;
         }
+
+        m_pollingGaveUp = gaveUp;
+        updateWatchedItems();
     });
 }
 

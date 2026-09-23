@@ -1180,9 +1180,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NonRetryableFetchFailure_Fini
 
     bool gaveUp = false;
     Ret gaveUpRet;
-    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
-        gaveUp = failure.gaveUp;
-        gaveUpRet = failure.ret;
+    m_service->pollingStatusChanged().onReceive(nullptr, [&](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        if (!failure) {
+            return;
+        }
+        gaveUp = failure->gaveUp;
+        gaveUpRet = failure->ret;
     });
 
     // [WHEN] Starting the conversion, triggering the first poll
@@ -1254,9 +1258,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ConsecutiveRetryableFetchFail
 
     bool gaveUp = false;
     Ret gaveUpRet;
-    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
-        gaveUp = failure.gaveUp;
-        gaveUpRet = failure.ret;
+    m_service->pollingStatusChanged().onReceive(nullptr, [&](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        if (!failure) {
+            return;
+        }
+        gaveUp = failure->gaveUp;
+        gaveUpRet = failure->ret;
     });
 
     // [WHEN] Starting a new conversion re-triggers polling, each attempt failing
@@ -1285,9 +1293,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_Reports
 
     bool received = false;
     PollingFailure failure;
-    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& f) {
+    m_service->pollingStatusChanged().onReceive(nullptr, [&](const PollingStatus& status) {
+        const PollingFailure* f = std::get_if<PollingFailure>(&status);
+        if (!f) {
+            return;
+        }
         received = true;
-        failure = f;
+        failure = *f;
     });
 
     // [WHEN] Starting the conversion, triggering the first poll
@@ -1315,8 +1327,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_AfterGivingUp_Resumes
     }));
 
     bool gaveUp = false;
-    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
-        gaveUp = failure.gaveUp;
+    m_service->pollingStatusChanged().onReceive(nullptr, [&](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        if (!failure) {
+            return;
+        }
+        gaveUp = failure->gaveUp;
     });
 
     for (int i = 0; i < maxAttempts; ++i) {
@@ -1378,8 +1394,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_R
     .WillOnce(Invoke(failure));
 
     bool gaveUp = false;
-    m_service->pollingFailed().onReceive(nullptr, [&](const PollingFailure& failure) {
-        gaveUp = failure.gaveUp;
+    m_service->pollingStatusChanged().onReceive(nullptr, [&](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        if (!failure) {
+            return;
+        }
+        gaveUp = failure->gaveUp;
     });
 
     // [WHEN] Triggering 8 polls in a row

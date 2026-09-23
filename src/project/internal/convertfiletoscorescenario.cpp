@@ -56,17 +56,22 @@ void ConvertFileToScoreScenario::init()
         m_convertFinished.send(ret, watched);
     });
 
-    service()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
-        if (failure.gaveUp) {
+    service()->pollingStatusChanged().onReceive(this, [this](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        if (!failure) {
+            return;
+        }
+
+        if (failure->gaveUp) {
             showPollingGaveUpNotification();
             return;
         }
 
-        if (failure.attempt == 1) {
+        if (failure->attempt == 1) {
             m_retryToastShown = false;
         }
 
-        if (!m_retryToastShown && failure.attempt >= RETRY_TOAST_ATTEMPT_THRESHOLD) {
+        if (!m_retryToastShown && failure->attempt >= RETRY_TOAST_ATTEMPT_THRESHOLD) {
             m_retryToastShown = true;
             showPollingFailureNotification();
         }
@@ -183,9 +188,9 @@ void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertI
     });
 }
 
-async::Channel<PollingFailure> ConvertFileToScoreScenario::pollingFailed() const
+async::Channel<PollingStatus> ConvertFileToScoreScenario::pollingStatusChanged() const
 {
-    return service()->pollingFailed();
+    return service()->pollingStatusChanged();
 }
 
 void ConvertFileToScoreScenario::retryPolling()

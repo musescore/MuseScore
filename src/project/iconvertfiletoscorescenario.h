@@ -70,8 +70,8 @@ public:
     //! Confirms with the user, then cancels a watched conversion
     virtual void cancelConversion(ConvertType type, int convertId) = 0;
 
-    //! Emitted whenever checking the conversion status fails
-    virtual muse::async::Channel<PollingFailure> pollingFailed() const = 0;
+    //! Emitted after every conversion status check, whether it succeeded or failed
+    virtual muse::async::Channel<PollingStatus> pollingStatusChanged() const = 0;
 
     //! Retries polling after it gave up (e.g. due to a lost internet connection)
     virtual void retryPolling() = 0;
