@@ -33,6 +33,10 @@
 #include "project/iconvertfiletoscorescenario.h"
 #include "project/iconvertfiletoscoreservice.h"
 
+namespace muse {
+class Val;
+}
+
 namespace mu::project {
 class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public muse::async::Asyncable, public muse::Contextable
 {
@@ -69,10 +73,16 @@ public:
     void retryPolling() override;
 
 private:
+    struct ConvertSelection {
+        ConvertInput input;
+        muse::String convertedScoreName;
+    };
+
     muse::async::Promise<muse::Ret> checkConvertIsAllowed();
     muse::async::Promise<muse::Ret> ensureAuthorization();
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert(const muse::io::paths_t& paths = {}, ConvertType type = ConvertType::Omr);
+    ConvertSelection toConvertSelection(const muse::Val& val) const;
 
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
 
