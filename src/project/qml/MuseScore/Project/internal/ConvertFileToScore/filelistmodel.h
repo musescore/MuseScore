@@ -26,42 +26,50 @@
 #include <qqmlintegration.h>
 
 #include "project/types/filecategory.h"
+#include "project/types/converttypes.h"
 
 namespace mu::project {
 class FileListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList paths READ paths WRITE setPaths NOTIFY pathsChanged)
     Q_PROPERTY(int count READ rowCount NOTIFY pathsChanged)
+    Q_PROPERTY(FileCategoryQml fileCategory READ fileCategoryQml NOTIFY pathsChanged)
     Q_PROPERTY(int fileIconCode READ fileIconCode NOTIFY pathsChanged)
     Q_PROPERTY(QString combinedFilesNote READ combinedFilesNote NOTIFY pathsChanged)
-
-    Q_PROPERTY(QVariantMap convertLimits READ convertLimits WRITE setConvertLimits NOTIFY convertLimitsChanged)
-    Q_PROPERTY(int maxFileCount READ maxFileCount NOTIFY convertLimitsChanged)
-
+    Q_PROPERTY(QVariantMap convertLimits READ convertLimits NOTIFY convertLimitsChanged)
     Q_PROPERTY(QString usedSizeLabel READ usedSizeLabel NOTIFY usedSizeLabelChanged)
     Q_PROPERTY(bool exceedsLimits READ exceedsLimits NOTIFY exceedsLimitsChanged)
 
     QML_ELEMENT
 
 public:
+    //! NOTE: must be in sync with mu::project::FileCategory
+    enum class FileCategoryQml {
+        Unknown,
+        Audio,
+        Pdf,
+        Image
+    };
+    Q_ENUM(FileCategoryQml)
+
     explicit FileListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    QStringList paths() const;
-    void setPaths(const QStringList& paths);
+    void load(const QStringList& paths, const ConvertConfig& config);
 
+    Q_INVOKABLE QStringList paths() const;
+    void setPaths(const QStringList& paths, FileCategory category);
+    void clear();
+
+    FileCategory fileCategory() const;
+    FileCategoryQml fileCategoryQml() const;
     int fileIconCode() const;
     QString combinedFilesNote() const;
-
     QVariantMap convertLimits() const;
-    void setConvertLimits(const QVariantMap& limits);
-
-    int maxFileCount() const;
     QString usedSizeLabel() const;
     bool exceedsLimits() const;
 
@@ -83,15 +91,16 @@ private:
         FileSizeRole
     };
 
-    qint64 maxCombinedSizeBytes() const;
-
     void updateTotalSizeBytes();
+    void updateConvertLimits();
     void updateExceedsLimits();
     void updateUsedSizeLabel();
 
     QStringList m_paths;
     FileCategory m_fileCategory = FileCategory::Unknown;
-    QVariantMap m_convertLimits;
+    ConvertConfig m_config;
+    int m_maxFileCount = 0;
+    qint64 m_maxCombinedSizeBytes = 0;
     bool m_exceedsLimits = false;
     qint64 m_totalSizeBytes = 0;
     QString m_usedSizeLabel;

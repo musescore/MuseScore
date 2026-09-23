@@ -37,6 +37,8 @@
 #include "project/iconvertfiletoscorescenario.h"
 #include "project/types/filecategory.h"
 
+#include "filelistmodel.h"
+
 namespace mu::project {
 class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
@@ -46,13 +48,11 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(QString guidelinesUrl READ guidelinesUrl CONSTANT)
 
     Q_PROPERTY(int convertType READ convertType NOTIFY convertTypeChanged)
-    Q_PROPERTY(FileCategoryQml selectedFileCategory READ selectedFileCategory NOTIFY selectedFileCategoryChanged)
-    Q_PROPERTY(QStringList selectedPaths READ selectedPaths WRITE setSelectedPaths NOTIFY selectedPathsChanged)
+    Q_PROPERTY(FileListModel * fileListModel READ fileListModel CONSTANT)
     Q_PROPERTY(QString selectedLink READ selectedLink WRITE setSelectedLink NOTIFY selectedLinkChanged)
-    Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY selectedPathsChanged)
+    Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY defaultSaveAsNameChanged)
 
     Q_PROPERTY(QVariantList fileRequirements READ fileRequirements NOTIFY fileRequirementsChanged)
-    Q_PROPERTY(QVariantMap convertLimits READ convertLimits NOTIFY fileRequirementsChanged)
     Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY fileRequirementsChanged)
 
     Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
@@ -70,25 +70,13 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
-    //! NOTE: copy of mu::project::FileCategory, exposed for QML
-    enum class FileCategoryQml {
-        Unknown,
-        Audio,
-        Pdf,
-        Image
-    };
-    Q_ENUM(FileCategoryQml)
-
     explicit ConvertFileToScoreModel(QObject* parent = nullptr);
 
     QString accountAvatarUrl() const;
     QString guidelinesUrl() const;
 
     int convertType() const; // OMR = 0, Audio2Score = 1
-    FileCategoryQml selectedFileCategory() const;
-
-    QStringList selectedPaths() const;
-    void setSelectedPaths(const QStringList& paths);
+    FileListModel* fileListModel() const;
 
     QString selectedLink() const;
     void setSelectedLink(const QString& link);
@@ -96,7 +84,6 @@ public:
     QString defaultSaveAsName() const;
 
     QVariantList fileRequirements() const;
-    QVariantMap convertLimits() const;
     bool canSelectMultipleFiles() const;
 
     QString linkHintText() const;
@@ -107,8 +94,8 @@ public:
 
     Q_INVOKABLE void load(const QStringList& paths, int type);
 
-    Q_INVOKABLE bool validateAndApplyFiles(const QStringList& pathsOrUrls);
-    Q_INVOKABLE bool selectAndValidateFiles(const QStringList& existingPaths = {});
+    Q_INVOKABLE bool validateAndAddFiles(const QStringList& pathsOrUrls);
+    Q_INVOKABLE bool selectAndValidateFiles();
 
     Q_INVOKABLE QString validateFileName(const QString& name) const;
     Q_INVOKABLE bool validateLink(const QString& link) const;
@@ -119,8 +106,7 @@ public:
 
 signals:
     void convertTypeChanged();
-    void selectedFileCategoryChanged();
-    void selectedPathsChanged();
+    void defaultSaveAsNameChanged();
     void selectedLinkChanged();
     void fileRequirementsChanged();
     void cancelConfirmed();
@@ -129,13 +115,12 @@ signals:
 private:
     void setConvertType(int type);
 
-    FileCategory resolveFileCategory() const;
     QStringList boldLinkSources() const;
 
     QStringList selectFiles(const QStringList& existingPaths = {});
 
     ConvertType m_convertType = ConvertType::Omr;
-    QStringList m_selectedPaths;
+    FileListModel* m_fileListModel = nullptr;
     QString m_selectedLink;
 };
 }
