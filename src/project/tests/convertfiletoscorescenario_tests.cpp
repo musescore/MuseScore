@@ -39,6 +39,7 @@
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
 #include "toast/tests/mocks/toastservicemock.h"
+#include "multiwindows/tests/mocks/multiwindowsprovidermock.h"
 
 namespace muse {
 // Teach GoogleTest how to print UriQuery so failure diffs are readable
@@ -163,6 +164,7 @@ protected:
         m_museScoreComService = std::make_shared<NiceMock<MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<AuthorizationServiceMock> >();
         m_toastService = std::make_shared<NiceMock<toast::ToastServiceMock> >();
+        m_multiwindowsProvider = std::make_shared<NiceMock<muse::mi::MultiWindowsProviderMock> >();
 
         m_scenario->service.set(m_service);
         m_scenario->interactive.set(m_interactive);
@@ -170,6 +172,7 @@ protected:
         m_scenario->dispatcher.set(m_dispatcher);
         m_scenario->configuration.set(m_configuration);
         m_scenario->museScoreComService.set(m_museScoreComService);
+        m_scenario->multiwindowsProvider.set(m_multiwindowsProvider);
 
         ON_CALL(*m_museScoreComService, authorization())
         .WillByDefault(Return(m_authorization));
@@ -235,6 +238,7 @@ protected:
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<MuseScoreComServiceMock> m_museScoreComService;
     std::shared_ptr<AuthorizationServiceMock> m_authorization;
+    std::shared_ptr<muse::mi::MultiWindowsProviderMock> m_multiwindowsProvider;
 
     ConvertConfig m_config;
 };
@@ -317,6 +321,39 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_Disp
     // [WHEN] The service reports a successful conversion
     convertFinished.send(make_ok(), watched);
     pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ScoreAlreadyOpen_DoesNotShowNotification)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, WatchedScore> convertFinished;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    m_scenario->init();
+
+    WatchedScore watched;
+    watched.scoreId = 555;
+    watched.name = u"My Score";
+
+    // [GIVEN] The converted score's project is already open, in this or another window
+    const io::path_t path = "/some/path/My Score.mscz";
+    ON_CALL(*m_configuration, cloudProjectPath(555))
+    .WillByDefault(Return(path));
+    ON_CALL(*m_multiwindowsProvider, isProjectAlreadyOpened(path))
+    .WillByDefault(Return(true));
+
+    // [THEN] The "score ready" notification is not shown
+    EXPECT_CALL(*m_toastService, show(_, _, _, _, _)).Times(0);
+
+    bool forwarded = false;
+    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
+        forwarded = true;
+    });
+
+    // [WHEN] The service reports a successful conversion
+    convertFinished.send(make_ok(), watched);
+
+    // [THEN] The result is still forwarded to the scenario's own convertFinished channel
+    EXPECT_TRUE(forwarded);
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNotificationAndForwards)

@@ -26,6 +26,7 @@
 #include "global/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "toast/itoastservice.h"
+#include "multiwindows/imultiwindowsprovider.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
@@ -46,6 +47,7 @@ public:
     muse::GlobalInject<muse::toast::IToastService> toastService;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::ContextInject<IConvertFileToScoreService> service = { this };
 
 public:

@@ -490,8 +490,17 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
 
 void ConvertFileToScoreScenario::showScoreReadyNotification(const WatchedScore& watched)
 {
+    IF_ASSERT_FAILED(watched.scoreId) {
+        return;
+    }
+
+    const io::path_t path = configuration()->cloudProjectPath(*watched.scoreId);
+    if (multiwindowsProvider()->isProjectAlreadyOpened(path)) {
+        return;
+    }
+
     constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
-    const int scoreId = watched.scoreId ? *watched.scoreId : 0;
+    const int scoreId = *watched.scoreId;
 
     std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
                       .arg(watched.name.toQString()).toStdString();
