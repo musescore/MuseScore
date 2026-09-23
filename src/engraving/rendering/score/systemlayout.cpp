@@ -424,6 +424,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     // Relayout system to account for newly hidden/unhidden staves
     SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth);
 
+    // Locked systems skip incremental spacing, so establish geometry for the beam pass.
+    if (systemLock) {
+        HorizontalSpacing::computeSpacingForFullSystem(system);
+    }
+
     // Update beamed rest positions now that the system has provisional geometry,
     // so their shapes account for the displacement during horizontal spacing.
     for (MeasureBase* mb : system->measures()) {
