@@ -213,13 +213,15 @@ FocusScope {
                 anchors.topMargin: 8
                 anchors.right: parent.right
                 anchors.rightMargin: 8
-                visible: menuModel.length > 0
-                         && (rootMouseArea.containsMouse
-                             || mouseArea.containsMouse
-                             || root.navigation.active
-                             || navigation.active
-                             || isMenuOpenedByButton)
-                transparent: !isMenuOpenedByButton && !rootMouseArea.containsMouse
+
+                readonly property bool isHovered: rootMouseArea.containsMouse
+                                                   || contextMenu.mouseArea.containsMouse
+                                                   || root.navigation.active
+                                                   || contextMenu.navigation.active
+                                                   || contextMenu.isMenuOpenedByButton
+
+                visible: contextMenu.menuModel.length > 0 && !root.isProcessing && contextMenu.isHovered
+                transparent: !contextMenu.isMenuOpenedByButton && !rootMouseArea.containsMouse
 
                 isCreateNew: root.isCreateNew
                 isNoResultsFound: root.isNoResultsFound
