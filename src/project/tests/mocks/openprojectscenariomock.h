@@ -38,6 +38,7 @@ public:
     MOCK_METHOD(muse::async::Promise<muse::Ret>, openProject, (const muse::rcommand::Params& params), (override));
     MOCK_METHOD(muse::async::Promise<muse::Ret>, revertToLastSaved, (), (override));
     MOCK_METHOD(muse::Ret, finishOpening, (), (override));
+    MOCK_METHOD(muse::Uri, resolveNotationPageUri, (), (const, override));
     MOCK_METHOD(const ProjectBeingDownloaded&, projectBeingDownloaded, (), (const, override));
     MOCK_METHOD(muse::async::Notification, projectBeingDownloadedChanged, (), (const, override));
     MOCK_METHOD(bool, isBusy, (BusyStatus status), (const, override));

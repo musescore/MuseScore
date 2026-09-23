@@ -90,6 +90,12 @@ ScoresView {
             onViewOnlineRequested: function(scoreId) {
                 root.viewOnlineRequested(scoreId)
             }
+
+            onRetryRequested: cloudScoresModel.retryAllConversions()
+
+            onCancelRequested: function(convertType, convertId) {
+                cloudScoresModel.cancelConversion(convertType, convertId)
+            }
         }
     }
 
@@ -122,6 +128,12 @@ ScoresView {
 
             onViewOnlineRequested: function(scoreId) {
                 root.viewOnlineRequested(scoreId)
+            }
+
+            onRetryRequested: cloudScoresModel.retryAllConversions()
+
+            onCancelRequested: function(convertType, convertId) {
+                cloudScoresModel.cancelConversion(convertType, convertId)
             }
         }
     }

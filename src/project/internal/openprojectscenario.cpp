@@ -30,6 +30,7 @@
 #include "translation.h"
 
 #include "cloud/clouderrors.h"
+#include "cloud/cloudtypes.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/infrastructure/mscio.h"
 
@@ -38,6 +39,7 @@
 
 #include "inotationproject.h"
 #include "projecterrors.h"
+#include "types/projecturis.h"
 
 #include "log.h"
 
@@ -45,11 +47,6 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace muse;
 using muse::async::Promise;
-
-static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
-
-static const QString MUSESCORE_URL_SCHEME("musescore");
-static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
 bool OpenProjectScenario::isBusy(BusyStatus status) const
 {
@@ -476,6 +473,8 @@ Promise<Ret> OpenProjectScenario::doOpenCloudProjectOffline(const muse::io::path
 
 Ret OpenProjectScenario::finishOpening()
 {
+    const Uri pageUri = resolveNotationPageUri();
+
     //! Show MuseSounds / MuseSampler update if need
     auto showUpdateNotification = [this]() {
         QTimer::singleShot(1000, [this]() {
@@ -487,21 +486,38 @@ Ret OpenProjectScenario::finishOpening()
         });
     };
 
-    if (interactive()->isOpened(NOTATION_PAGE_URI).val) {
-        showUpdateNotification();
-    } else {
-        async::Channel<Uri> opened = interactive()->opened();
-        opened.onReceive(this, [this, opened, showUpdateNotification](const Uri&) {
-            async::Async::call(this, [this, opened, showUpdateNotification]() {
-                async::Channel<Uri> mut = opened;
-                mut.disconnect(this);
+    if (pageUri == NOTATION_PAGE_URI) {
+        if (interactive()->isOpened(NOTATION_PAGE_URI).val) {
+            showUpdateNotification();
+        } else {
+            async::Channel<Uri> opened = interactive()->opened();
+            opened.onReceive(this, [this, opened, showUpdateNotification](const Uri&) {
+                async::Async::call(this, [this, opened, showUpdateNotification]() {
+                    async::Channel<Uri> mut = opened;
+                    mut.disconnect(this);
 
-                showUpdateNotification();
+                    showUpdateNotification();
+                });
             });
-        });
+        }
     }
 
-    return openPageIfNeed(NOTATION_PAGE_URI);
+    return openPageIfNeed(pageUri);
+}
+
+Uri OpenProjectScenario::resolveNotationPageUri() const
+{
+    INotationProjectPtr project = globalContext()->currentProject();
+    if (!project || !project->cloudInfo().isValid()) {
+        return NOTATION_PAGE_URI;
+    }
+
+    int scoreId = static_cast<int>(muse::cloud::idFromCloudUrl(project->cloudInfo().sourceUrl).toUint64());
+    if (convertFileToScoreScenario()->isAwaitingReview(scoreId)) {
+        return NOTATION_REVIEW_PAGE_URI;
+    }
+
+    return NOTATION_PAGE_URI;
 }
 
 Promise<Ret> OpenProjectScenario::downloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret, bool isOwner)

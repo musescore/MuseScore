@@ -41,6 +41,7 @@
 
 #include "inotationproject.h"
 #include "projecterrors.h"
+#include "types/projecturis.h"
 
 #include "log.h"
 
@@ -56,8 +57,6 @@ static Promise<T> resolvedPromise(const T& value)
         return resolve(value);
     });
 }
-
-static const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 
 static constexpr int RETRY_SAVE_BTN_ID = int(IInteractive::Button::CustomButton);
 static constexpr int SAVE_AS_BTN_ID    = RETRY_SAVE_BTN_ID + 1;

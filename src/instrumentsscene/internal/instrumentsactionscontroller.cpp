@@ -40,6 +40,8 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::actions;
 
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+
 void InstrumentsActionsController::init()
 {
     commandDispatcher()->onRequest(this, INSTRUMENTS_SELECT_COMMAND, [this]() { selectInstruments(); return muse::make_ok(); });
@@ -59,7 +61,11 @@ void InstrumentsActionsController::init()
 
 bool InstrumentsActionsController::canReceiveAction(const ActionCode&) const
 {
-    return context()->currentMasterNotation() != nullptr;
+    if (!context()->currentMasterNotation()) {
+        return false;
+    }
+
+    return interactive()->currentUri().val != NOTATION_REVIEW_PAGE_URI;
 }
 
 void InstrumentsActionsController::selectInstruments()

@@ -47,6 +47,8 @@ Item {
     signal revealInFileBrowserRequested(var scorePath)
     signal viewOnlineRequested(var scoreId)
     signal removeFromRecentFilesRequested(var scorePath)
+    signal retryRequested()
+    signal cancelRequested(int convertType, int convertId)
 
     clip: true
 
@@ -162,6 +164,9 @@ Item {
                 thumbnailUrl: score.thumbnailUrl ?? ""
                 isCreateNew: score.isCreateNew
                 isNoResultsFound: score.isNoResultsFound
+                processingStatus: score.processingStatus
+                convertType: score.convertType ?? 0
+                convertId: score.convertId ?? 0
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
@@ -170,7 +175,7 @@ Item {
                 onClicked: {
                     if (isCreateNew) {
                         root.createNewScoreRequested()
-                    } else if (!isNoResultsFound) {
+                    } else if (!isNoResultsFound && !isProcessing) {
                         root.openScoreRequested(score.path, score.name)
                     }
                 }
@@ -185,6 +190,12 @@ Item {
 
                 onRemoveFromRecentFilesRequested: function(scorePath) {
                     root.removeFromRecentFilesRequested(scorePath)
+                }
+
+                onRetryRequested: root.retryRequested()
+
+                onCancelRequested: function(convertType, convertId) {
+                    root.cancelRequested(convertType, convertId)
                 }
             }
         }

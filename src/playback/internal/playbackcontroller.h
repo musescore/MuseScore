@@ -38,6 +38,7 @@
 #include "audio/main/iplayback.h"
 #include "audio/common/audiotypes.h"
 #include "tours/itoursservice.h"
+#include "interactive/iinteractive.h"
 
 #include "drumsetloader.h"
 
@@ -55,6 +56,7 @@ class PlaybackController : public IPlaybackController, public muse::async::Async
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     PlaybackController(const muse::modularity::ContextPtr& iocCtx);
@@ -216,9 +218,11 @@ private:
 
     using TrackAddFinished = std::function<void ()>;
 
-    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished);
-    void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title, const TrackAddFinished& onFinished);
-    void addAuxTrack(muse::audio::aux_channel_idx_t index, const TrackAddFinished& onFinished);
+    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, bool projectHadNoAudioSettings,
+                  const TrackAddFinished& onFinished);
+    void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title, bool projectHadNoAudioSettings,
+                    const TrackAddFinished& onFinished);
+    void addAuxTrack(muse::audio::aux_channel_idx_t index, bool projectHadNoAudioSettings, const TrackAddFinished& onFinished);
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
