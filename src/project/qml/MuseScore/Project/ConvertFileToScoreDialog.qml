@@ -50,6 +50,25 @@ StyledDialogView {
     property int currentPageIndex: 0
     property bool skipCloseConfirmation: false
 
+    readonly property string pageTitle: {
+        if (root.currentPageIndex === 2) {
+            return qsTrc("project/convert", "Convert audio to score (beta)")
+        }
+
+        switch (convertModel.selectedFileCategory) {
+        case ConvertFileToScoreModel.Audio:
+            return qsTrc("project/convert", "Convert audio to score (beta)")
+        case ConvertFileToScoreModel.Pdf:
+            return qsTrc("project/convert", "Convert PDF to score")
+        case ConvertFileToScoreModel.Image:
+            return qsTrc("project/convert", "Convert images to score")
+        case ConvertFileToScoreModel.Unknown:
+            break
+        }
+
+        return qsTrc("project/convert", "Convert a file to score")
+    }
+
     ConvertFileToScoreModel {
         id: convertModel
 
@@ -110,9 +129,7 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
 
-                text: root.currentPageIndex === 2
-                      ? qsTrc("project/convert", "Convert audio to score (beta)")
-                      : qsTrc("project/convert", "Convert a file to score")
+                text: root.pageTitle
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }

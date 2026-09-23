@@ -46,6 +46,7 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     Q_PROPERTY(QString guidelinesUrl READ guidelinesUrl CONSTANT)
 
     Q_PROPERTY(int convertType READ convertType NOTIFY convertTypeChanged)
+    Q_PROPERTY(FileCategoryQml selectedFileCategory READ selectedFileCategory NOTIFY selectedFileCategoryChanged)
     Q_PROPERTY(QStringList selectedPaths READ selectedPaths WRITE setSelectedPaths NOTIFY selectedPathsChanged)
     Q_PROPERTY(QString selectedLink READ selectedLink WRITE setSelectedLink NOTIFY selectedLinkChanged)
     Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY selectedPathsChanged)
@@ -69,12 +70,22 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
     muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
+    //! NOTE: copy of mu::project::FileCategory, exposed for QML
+    enum class FileCategoryQml {
+        Unknown,
+        Audio,
+        Pdf,
+        Image
+    };
+    Q_ENUM(FileCategoryQml)
+
     explicit ConvertFileToScoreModel(QObject* parent = nullptr);
 
     QString accountAvatarUrl() const;
     QString guidelinesUrl() const;
 
     int convertType() const; // OMR = 0, Audio2Score = 1
+    FileCategoryQml selectedFileCategory() const;
 
     QStringList selectedPaths() const;
     void setSelectedPaths(const QStringList& paths);
@@ -108,6 +119,7 @@ public:
 
 signals:
     void convertTypeChanged();
+    void selectedFileCategoryChanged();
     void selectedPathsChanged();
     void selectedLinkChanged();
     void fileRequirementsChanged();
@@ -117,7 +129,7 @@ signals:
 private:
     void setConvertType(int type);
 
-    FileCategory selectedFileCategory() const;
+    FileCategory resolveFileCategory() const;
     QStringList boldLinkSources() const;
 
     QStringList selectFiles(const QStringList& existingPaths = {});

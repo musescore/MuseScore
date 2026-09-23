@@ -144,7 +144,23 @@ void ConvertFileToScoreModel::setConvertType(int type)
     emit fileRequirementsChanged();
 }
 
-FileCategory ConvertFileToScoreModel::selectedFileCategory() const
+ConvertFileToScoreModel::FileCategoryQml ConvertFileToScoreModel::selectedFileCategory() const
+{
+    switch (resolveFileCategory()) {
+    case FileCategory::Audio:
+        return FileCategoryQml::Audio;
+    case FileCategory::Pdf:
+        return FileCategoryQml::Pdf;
+    case FileCategory::Image:
+        return FileCategoryQml::Image;
+    case FileCategory::Unknown:
+        break;
+    }
+
+    return FileCategoryQml::Unknown;
+}
+
+FileCategory ConvertFileToScoreModel::resolveFileCategory() const
 {
     if (!m_selectedLink.isEmpty()) {
         return FileCategory::Audio;
@@ -170,6 +186,7 @@ void ConvertFileToScoreModel::setSelectedPaths(const QStringList& paths)
 
     m_selectedPaths = paths;
     emit selectedPathsChanged();
+    emit selectedFileCategoryChanged();
     emit fileRequirementsChanged();
 }
 
@@ -186,6 +203,7 @@ void ConvertFileToScoreModel::setSelectedLink(const QString& link)
 
     m_selectedLink = link;
     emit selectedLinkChanged();
+    emit selectedFileCategoryChanged();
 
     if (!link.isEmpty()) {
         setConvertType(int(ConvertType::Audio2Score));
@@ -209,7 +227,7 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
     const cloud::Audio2ScoreConfig& a2s = config.audio2score;
 
     //! NOTE: before a file is selected, category is Unknown, so every section is shown
-    const FileCategory category = selectedFileCategory();
+    const FileCategory category = resolveFileCategory();
     QVariantList result;
 
     if (category == FileCategory::Unknown || category == FileCategory::Pdf) {
@@ -289,7 +307,7 @@ QVariantMap ConvertFileToScoreModel::convertLimits() const
     const ConvertConfig& config = convertFileToScoreScenario()->config();
     QVariantMap result;
 
-    switch (selectedFileCategory()) {
+    switch (resolveFileCategory()) {
     case FileCategory::Audio:
         result["maxFileCount"] = config.audio2score.file.maxFiles;
         result["maxCombinedSizeBytes"] = config.audio2score.file.maxFileSizeBytes;
@@ -312,7 +330,7 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles() const
 {
     const ConvertConfig& config = convertFileToScoreScenario()->config();
 
-    switch (selectedFileCategory()) {
+    switch (resolveFileCategory()) {
     case FileCategory::Audio:
         return allowsMultipleFiles(config.audio2score.file.maxFiles);
     case FileCategory::Pdf:
