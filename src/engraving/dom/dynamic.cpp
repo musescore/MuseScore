@@ -29,6 +29,7 @@
 #include "../editing/textedit.h"
 #include "../editing/transaction/transaction.h"
 #include "../types/typesconv.h"
+#include "../types/symnames.h"
 
 #include "dynamichairpingroup.h"
 #include "expression.h"
@@ -244,6 +245,19 @@ void Dynamic::setDynamicType(const String& tag)
     setXmlText(dynamicInfo.second);
 }
 
+static const std::map<std::string, SymId> compoundSymbols {
+    { "s", SymId::dynamicSforzando }, { "z", SymId::dynamicZ },
+    { "sf", SymId::dynamicSforzando1 }, { "sfz", SymId::dynamicSforzato },
+    { "sffz", SymId::dynamicSforzatoFF },
+    { "f", SymId::dynamicForte }, { "ff", SymId::dynamicFF },
+    { "fff", SymId::dynamicFFF }, { "ffff", SymId::dynamicFFFF },
+    { "fffff", SymId::dynamicFFFFF }, { "ffffff", SymId::dynamicFFFFFF },
+    { "p", SymId::dynamicPiano }, { "pp", SymId::dynamicPP },
+    { "ppp", SymId::dynamicPPP }, { "pppp", SymId::dynamicPPPP },
+    { "ppppp", SymId::dynamicPPPPP }, { "pppppp", SymId::dynamicPPPPPP },
+    { "m", SymId::dynamicMezzo }, { "mp", SymId::dynamicMP }, { "mf", SymId::dynamicMF }
+};
+
 /** Recognizes standard dynamics first, then styles supported compound tokens as custom dynamics. */
 std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) const
 {
@@ -261,7 +275,7 @@ std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) cons
             }
         }
     }
-    const std::regex compoundRegex(R"(sf{1,3}z?(?:p{1,6}|f{1,6}|m[pf]))");
+    const std::regex compoundRegex(R"(s(f{1,6})(z?)(p{1,6}|f{1,6}|m[pf])|s(f{4,6})z)");
     for (auto it = begin; it != std::sregex_iterator(); ++it) {
         const std::smatch match = *it;
         const std::string token = match.str();
@@ -270,23 +284,31 @@ std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) cons
         if (tagStart != std::string::npos && (tagEnd == std::string::npos || tagStart > tagEnd)) {
             continue;
         }
-        if (!std::regex_match(token, compoundRegex)) {
+        std::smatch parts;
+        if (!std::regex_match(token, parts, compoundRegex)) {
             continue;
         }
         std::string symbols;
-        for (char letter : token) {
-            switch (letter) {
-            case 's': symbols += "<sym>dynamicSforzando</sym>";
-                break;
-            case 'f': symbols += "<sym>dynamicForte</sym>";
-                break;
-            case 'z': symbols += "<sym>dynamicZ</sym>";
-                break;
-            case 'm': symbols += "<sym>dynamicMezzo</sym>";
-                break;
-            case 'p': symbols += "<sym>dynamicPiano</sym>";
-                break;
+        const auto appendSymbol = [&symbols](const std::string& group) {
+            symbols += "<sym>";
+            symbols += SymNames::nameForSymId(compoundSymbols.at(group)).ascii();
+            symbols += "</sym>";
+        };
+        const std::string forte = parts[4].matched ? parts[4].str() : parts[1].str();
+        const std::string z = parts[4].matched ? "z" : parts[2].str();
+        const std::string attack = "s" + forte + z;
+        // Explicit group glyphs prevent font ligatures from crossing the attack/sustain boundary.
+        if (compoundSymbols.count(attack)) {
+            appendSymbol(attack);
+        } else {
+            appendSymbol("s");
+            appendSymbol(forte);
+            if (!z.empty()) {
+                appendSymbol(z);
             }
+        }
+        if (parts[3].matched) {
+            appendSymbol(parts[3].str());
         }
         utf8Tag.replace(match.position(0), match.length(0), symbols);
         return { DynamicType::OTHER, String::fromStdString(utf8Tag) };
@@ -399,22 +421,20 @@ TranslatableString Dynamic::subtypeUserName() const
 {
     if (dynamicType() == DynamicType::OTHER) {
         String s = plainText().simplified();
-        for (const auto& entry : { std::pair { SymId::dynamicSforzando, u"s" },
-                                   std::pair { SymId::dynamicForte, u"f" },
-                                   std::pair { SymId::dynamicZ, u"z" },
-                                   std::pair { SymId::dynamicMezzo, u"m" },
-                                   std::pair { SymId::dynamicPiano, u"p" } }) {
-            s.replace(score()->engravingFont()->toString(entry.first), entry.second);
+        for (const auto& entry : compoundSymbols) {
+            s.replace(score()->engravingFont()->toString(entry.second), String::fromStdString(entry.first));
         }
         const std::string text = s.toStdString();
-        const std::regex compoundRegex(R"(\bs(f{1,3})z?(p{1,6}|f{1,6}|m[pf])\b)");
+        const std::regex compoundRegex(R"(\bs(f{1,6})z?(p{1,6}|f{1,6}|m[pf])\b)");
         std::smatch match;
         if (std::regex_search(text, match, compoundRegex)) {
             const std::string level = match[2].str();
             if (match[1].length() > 1) {
                 const TranslatableString attack = match[1].length() == 2
                                                   ? TranslatableString("engraving/dynamictype", "fortissimo")
-                                                  : TranslatableString("engraving/dynamictype", "forte fortissimo");
+                                                  : match[1].length() == 3
+                                                  ? TranslatableString("engraving/dynamictype", "forte fortissimo")
+                                                  : TranslatableString::untranslatable(String::fromStdString(match[1].str()));
                 TranslatableString sustain = TranslatableString::untranslatable(String::fromStdString(level));
                 static const std::map<std::string, TranslatableString> levels {
                     { "p", TranslatableString("engraving/dynamictype", "piano") },

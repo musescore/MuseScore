@@ -40,23 +40,22 @@ TEST_F(Engraving_DynamicTests, compoundDynamics)
 {
     std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScore(nullptr));
     Dynamic dynamic(score->dummy()->segment());
-    for (const char* token : { "sfzp", "sffzp", "sfzpp", "sfzppp", "sffzmp", "sffzmf" }) {
-        String expected;
-        for (const char* letter = token; *letter; ++letter) {
-            switch (*letter) {
-            case 's': expected += u"<sym>dynamicSforzando</sym>";
-                break;
-            case 'f': expected += u"<sym>dynamicForte</sym>";
-                break;
-            case 'z': expected += u"<sym>dynamicZ</sym>";
-                break;
-            case 'm': expected += u"<sym>dynamicMezzo</sym>";
-                break;
-            case 'p': expected += u"<sym>dynamicPiano</sym>";
-                break;
-            }
-        }
-        dynamic.setDynamicType(String::fromUtf8(token));
+    const std::pair<const char*, const char*> cases[] = {
+        { "sfzp", "<sym>dynamicSforzato</sym><sym>dynamicPiano</sym>" },
+        { "sffzp", "<sym>dynamicSforzatoFF</sym><sym>dynamicPiano</sym>" },
+        { "sfzpp", "<sym>dynamicSforzato</sym><sym>dynamicPP</sym>" },
+        { "sfzppp", "<sym>dynamicSforzato</sym><sym>dynamicPPP</sym>" },
+        { "sffzmp", "<sym>dynamicSforzatoFF</sym><sym>dynamicMP</sym>" },
+        { "sffzmf", "<sym>dynamicSforzatoFF</sym><sym>dynamicMF</sym>" },
+        { "sfpppp", "<sym>dynamicSforzando1</sym><sym>dynamicPPPP</sym>" },
+        { "sffffz", "<sym>dynamicSforzando</sym><sym>dynamicFFFF</sym><sym>dynamicZ</sym>" },
+        { "sfffffz", "<sym>dynamicSforzando</sym><sym>dynamicFFFFF</sym><sym>dynamicZ</sym>" },
+        { "sffffffz", "<sym>dynamicSforzando</sym><sym>dynamicFFFFFF</sym><sym>dynamicZ</sym>" },
+        { "sffffffzpp", "<sym>dynamicSforzando</sym><sym>dynamicFFFFFF</sym><sym>dynamicZ</sym><sym>dynamicPP</sym>" }
+    };
+    for (const auto& entry : cases) {
+        const String expected = String::fromUtf8(entry.second);
+        dynamic.setDynamicType(String::fromUtf8(entry.first));
         EXPECT_EQ(dynamic.dynamicType(), DynamicType::OTHER);
         EXPECT_EQ(dynamic.xmlText(), expected);
         dynamic.setDynamicType(dynamic.xmlText());
@@ -67,6 +66,13 @@ TEST_F(Engraving_DynamicTests, compoundDynamics)
     EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFP);
     dynamic.setDynamicType(u"sfpp");
     EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFPP);
+    EXPECT_EQ(dynamic.xmlText(), Dynamic::dynamicText(DynamicType::SFPP));
+    dynamic.setDynamicType(u"sfff");
+    EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFFF);
+    EXPECT_EQ(dynamic.xmlText(), Dynamic::dynamicText(DynamicType::SFFF));
+    dynamic.setDynamicType(u"sfffz");
+    EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFFFZ);
+    EXPECT_EQ(dynamic.xmlText(), Dynamic::dynamicText(DynamicType::SFFFZ));
     dynamic.setDynamicType(u"sffz");
     EXPECT_EQ(dynamic.dynamicType(), DynamicType::SFFZ);
     dynamic.setDynamicType(u"sfzpp");
@@ -79,9 +85,14 @@ TEST_F(Engraving_DynamicTests, compoundDynamics)
     EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sfzmp (sforzando mezzo piano)");
     dynamic.setDynamicType(u"sfffzpp");
     EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sfffzpp (sforzando forte fortissimo, then pianissimo)");
+    dynamic.setDynamicType(u"sffffffzpp");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sffffffzpp (sforzando ffffff, then pianissimo)");
+    dynamic.setDynamicType(u"sffffz");
+    EXPECT_EQ(dynamic.translatedSubtypeUserName(), u"sffffz");
     dynamic.setDynamicType(u"subito sfzp!");
-    EXPECT_EQ(dynamic.xmlText(), u"subito <sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym><sym>dynamicPiano</sym>!");
-    for (const char* text : { "sempre", "sfzmpmore", "sfzm", "sffzmm", "<font face=\"sfzp\"/>dolce" }) {
+    EXPECT_EQ(dynamic.xmlText(), u"subito <sym>dynamicSforzato</sym><sym>dynamicPiano</sym>!");
+    for (const char* text : { "sempre", "sfzmpmore", "sfzm", "sffzmm", "sfffffffz", "sfffffffzpp", "sfzppppppp",
+                              "<font face=\"sfzp\"/>dolce" }) {
         dynamic.setDynamicType(String::fromUtf8(text));
         EXPECT_EQ(dynamic.xmlText(), String::fromUtf8(text));
     }
