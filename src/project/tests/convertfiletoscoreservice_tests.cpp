@@ -1007,6 +1007,198 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     EXPECT_TRUE(stillWatched);
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProgress_AndIncludedInResponse_NotDuplicated)
+{
+    // [GIVEN] A first conversion has started, and its poll's fetchQueue() request is still in progress
+    std::function<void(const RetVal<ConvertQueueList>&)> resolveFirstFetch;
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .WillOnce(Invoke([&] {
+        return deferredPromise<RetVal<ConvertQueueList> >(resolveFirstFetch);
+    }));
+
+    auto uploadProgressA = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressA));
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    pumpEvents();
+
+    ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
+
+    // [WHEN] A second conversion finishes uploading and starts being watched before the first
+    // fetchQueue() request finishes - its poll() does nothing because one is already running
+    const int secondId = TEST_QUEUE_ID + 1;
+    auto uploadProgressB = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressB));
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
+    pumpEvents();
+
+    // [AND] The first request finally resolves - and, by unlucky timing, the server had already
+    // processed the second conversion's upload by the time it answered, so the response includes it too
+    ConvertQueueItem firstItem;
+    firstItem.id = TEST_QUEUE_ID;
+    firstItem.type = ConvertType::Omr;
+    firstItem.status = ConvertStatus::Processing;
+
+    ConvertQueueItem secondItem;
+    secondItem.id = secondId;
+    secondItem.type = ConvertType::Omr;
+    secondItem.status = ConvertStatus::Processing;
+
+    resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem, secondItem }));
+    pumpEvents();
+
+    // [THEN] The second conversion is watched exactly once, still known to have started locally
+    const WatchedScoreList watched = m_service->watchedScores().val;
+    const auto secondCount = std::count_if(watched.begin(), watched.end(), [secondId](const WatchedScore& w) {
+        return w.conversion.id == secondId;
+    });
+    ASSERT_EQ(secondCount, 1);
+
+    const auto secondIt = std::find_if(watched.begin(), watched.end(), [secondId](const WatchedScore& w) {
+        return w.conversion.id == secondId;
+    });
+    ASSERT_NE(secondIt, watched.end());
+    EXPECT_TRUE(secondIt->startedLocally);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProgress_ReachesAwaitingReview_EmitsConvertFinished)
+{
+    // [GIVEN] A first conversion has started, and its poll's fetchQueue() request is still in progress
+    std::function<void(const RetVal<ConvertQueueList>&)> resolveFirstFetch;
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .WillOnce(Invoke([&] {
+        return deferredPromise<RetVal<ConvertQueueList> >(resolveFirstFetch);
+    }));
+
+    auto uploadProgressA = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressA));
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    pumpEvents();
+
+    ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
+
+    // [WHEN] A second conversion finishes uploading and starts being watched before the first
+    // fetchQueue() request finishes
+    const int secondId = TEST_QUEUE_ID + 1;
+    auto uploadProgressB = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressB));
+
+    bool convertFinished = false;
+    WatchedScore convertFinishedWatched;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore& watched) {
+        if (watched.conversion.id == secondId) {
+            convertFinished = true;
+            convertFinishedWatched = watched;
+        }
+    });
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
+    pumpEvents();
+
+    // [AND] The first request finally resolves - and, by unlucky timing, the server had already
+    // finished reviewing the second conversion by the time it answered
+    ConvertQueueItem firstItem;
+    firstItem.id = TEST_QUEUE_ID;
+    firstItem.type = ConvertType::Omr;
+    firstItem.status = ConvertStatus::Processing;
+
+    ConvertQueueItem secondItem;
+    secondItem.id = secondId;
+    secondItem.type = ConvertType::Omr;
+    secondItem.status = ConvertStatus::AwaitingReview;
+    secondItem.scoreId = 777;
+
+    resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem, secondItem }));
+    pumpEvents();
+
+    // [THEN] Even though it reached AwaitingReview on the very poll that first merged it in, it's
+    // still recognized as started locally, and reported as finished
+    ASSERT_TRUE(convertFinished);
+    ASSERT_TRUE(convertFinishedWatched.scoreId.has_value());
+    EXPECT_EQ(*convertFinishedWatched.scoreId, 777);
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProgress_ReachesDoneDirectly_EmitsConvertFinished)
+{
+    // [GIVEN] A first conversion has started, and its poll's fetchQueue() request is still in progress
+    std::function<void(const RetVal<ConvertQueueList>&)> resolveFirstFetch;
+
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .WillOnce(Invoke([&] {
+        return deferredPromise<RetVal<ConvertQueueList> >(resolveFirstFetch);
+    }));
+
+    auto uploadProgressA = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressA));
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    pumpEvents();
+
+    ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
+
+    // [WHEN] A second conversion finishes uploading and starts being watched before the first
+    // fetchQueue() request finishes
+    const int secondId = TEST_QUEUE_ID + 1;
+    auto uploadProgressB = std::make_shared<Progress>();
+    EXPECT_CALL(*m_convertService, startConvert(_))
+    .WillOnce(Return(uploadProgressB));
+
+    bool convertFinished = false;
+    WatchedScore convertFinishedWatched;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore& watched) {
+        if (watched.conversion.id == secondId) {
+            convertFinished = true;
+            convertFinishedWatched = watched;
+        }
+    });
+
+    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
+    pumpEvents();
+
+    // [AND] The first request finally resolves - and, by unlucky timing, the server had already
+    // finished processing the second conversion entirely, skipping straight to Done
+    ConvertQueueItem firstItem;
+    firstItem.id = TEST_QUEUE_ID;
+    firstItem.type = ConvertType::Omr;
+    firstItem.status = ConvertStatus::Processing;
+
+    ConvertQueueItem secondItem;
+    secondItem.id = secondId;
+    secondItem.type = ConvertType::Omr;
+    secondItem.status = ConvertStatus::Done;
+    secondItem.scoreId = 777;
+
+    resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem, secondItem }));
+    pumpEvents();
+
+    // [THEN] Even though it skipped straight to Done on the very poll that first merged it in, it's
+    // still recognized as started locally, reported as finished, and no longer watched
+    ASSERT_TRUE(convertFinished);
+    ASSERT_TRUE(convertFinishedWatched.scoreId.has_value());
+    EXPECT_EQ(*convertFinishedWatched.scoreId, 777);
+
+    const WatchedScoreList watched = m_service->watchedScores().val;
+    const bool stillWatched = std::any_of(watched.begin(), watched.end(), [secondId](const WatchedScore& w) {
+        return w.conversion.id == secondId;
+    });
+    EXPECT_FALSE(stillWatched);
+}
+
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFromQueue_SilentlyErasedWithoutDuplicateReport)
 {
     // [GIVEN] The item was already reported ready (AwaitingReview, with its scoreId) on the first poll,

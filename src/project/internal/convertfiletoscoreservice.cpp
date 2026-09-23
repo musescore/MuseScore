@@ -655,7 +655,16 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
         snapshotByTypeAndId[static_cast<size_t>(watched.conversion.type)][watched.conversion.id] = i;
     }
 
-    std::vector<bool> seen(snapshot.size(), false);
+    std::vector<bool> seenInSnapshot(snapshot.size(), false);
+
+    //! NOTE: m_watchedScores also covers items watched while a poll is in progress
+    std::array<std::unordered_map<int /*itemId*/, size_t /*index*/>, CONVERT_TYPE_COUNT> liveByTypeAndId;
+    for (size_t i = 0; i < m_watchedScores.size(); ++i) {
+        const WatchedScore& watched = m_watchedScores[i];
+        liveByTypeAndId[static_cast<size_t>(watched.conversion.type)][watched.conversion.id] = i;
+    }
+
+    std::vector<bool> seenInWatchedScores(m_watchedScores.size(), false);
 
     //! NOTE: the queue is the source of truth - rebuild m_watchedScores from it every time,
     //! since it may also contain conversions started outside MuseScore
@@ -668,36 +677,35 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
             continue;
         }
 
-        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(queueItem.type)];
-        const auto it = snapshotIndexById.find(queueItem.id);
+        const std::unordered_map<int, size_t>& liveIndexById = liveByTypeAndId[static_cast<size_t>(queueItem.type)];
+        const auto liveIt = liveIndexById.find(queueItem.id);
 
-        if (it != snapshotIndexById.end()) {
-            //! NOTE: already watched - update it (name, status, scoreId)
-            seen[it->second] = true;
-            WatchedScore watched = snapshot.at(it->second);
-            if (!queueItem.filename.isEmpty()) {
-                watched.name = queueItem.filename;
-            }
-            watched.scoreId = queueItem.scoreId;
-            updateStatus(watched, queueItem.status, queueItem.errorCode);
-
-            if (watched.conversion.status != ConvertStatus::Done) {
-                newWatchedScores.push_back(watched);
-            }
-            continue;
-        }
-
-        if (queueItem.status != ConvertStatus::Processing && queueItem.status != ConvertStatus::AwaitingReview) {
+        if (liveIt == liveIndexById.end()
+            && queueItem.status != ConvertStatus::Processing && queueItem.status != ConvertStatus::AwaitingReview) {
             //! NOTE: not previously watched, and already terminal - nothing to watch for anymore
             continue;
         }
 
-        LOGI() << "Found new external conversion (" << convertIdAndType(queueItem.type, queueItem.id) << ")";
-
         WatchedScore watched;
+        if (liveIt != liveIndexById.end()) {
+            //! NOTE: already watched - whether known before the poll started, or watched mid-poll
+            watched = m_watchedScores.at(liveIt->second);
+            seenInWatchedScores[liveIt->second] = true;
+        } else {
+            LOGI() << "Found new external conversion (" << convertIdAndType(queueItem.type, queueItem.id) << ")";
+        }
+
+        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(queueItem.type)];
+        const auto snapshotIt = snapshotIndexById.find(queueItem.id);
+        if (snapshotIt != snapshotIndexById.end()) {
+            seenInSnapshot[snapshotIt->second] = true;
+        }
+
         watched.conversion.id = queueItem.id;
         watched.conversion.type = queueItem.type;
-        watched.name = queueItem.filename;
+        if (!queueItem.filename.isEmpty()) {
+            watched.name = queueItem.filename;
+        }
         watched.scoreId = queueItem.scoreId;
 
         updateStatus(watched, queueItem.status, queueItem.errorCode);
@@ -708,7 +716,7 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
     }
 
     for (size_t i = 0; i < snapshot.size(); ++i) {
-        if (seen.at(i)) {
+        if (seenInSnapshot.at(i)) {
             continue;
         }
 
@@ -726,12 +734,20 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
         }
     }
 
-    //! NOTE: items watched mid-poll weren't in the snapshot - carry them over untouched
-    for (const WatchedScore& watched : m_watchedScores) {
-        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(watched.conversion.type)];
-        if (snapshotIndexById.find(watched.conversion.id) == snapshotIndexById.end()) {
-            newWatchedScores.push_back(watched);
+    //! NOTE: items watched mid-poll that never appeared in the queue response at all (the server
+    //! hasn't listed them yet) - carry them over untouched
+    for (size_t i = 0; i < m_watchedScores.size(); ++i) {
+        if (seenInWatchedScores[i]) {
+            continue;
         }
+
+        const WatchedScore& watched = m_watchedScores[i];
+        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(watched.conversion.type)];
+        if (snapshotIndexById.find(watched.conversion.id) != snapshotIndexById.end()) {
+            continue;
+        }
+
+        newWatchedScores.push_back(watched);
     }
 
     if (m_watchedScores != newWatchedScores) {
