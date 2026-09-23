@@ -55,14 +55,14 @@ StyledDialogView {
             return qsTrc("project/convert", "Convert audio to score (beta)")
         }
 
-        switch (convertModel.selectedFileCategory) {
-        case ConvertFileToScoreModel.Audio:
+        switch (convertModel.fileListModel.fileCategory) {
+        case FileListModel.Audio:
             return qsTrc("project/convert", "Convert audio to score (beta)")
-        case ConvertFileToScoreModel.Pdf:
+        case FileListModel.Pdf:
             return qsTrc("project/convert", "Convert PDF to score")
-        case ConvertFileToScoreModel.Image:
+        case FileListModel.Image:
             return qsTrc("project/convert", "Convert images to score")
-        case ConvertFileToScoreModel.Unknown:
+        case FileListModel.Unknown:
             break
         }
 
@@ -184,7 +184,7 @@ StyledDialogView {
             }
 
             onFilesDropped: function(urls) {
-                if (convertModel.validateAndApplyFiles(urls)) {
+                if (convertModel.validateAndAddFiles(urls)) {
                     root.currentPageIndex = 1
                 }
             }
@@ -204,24 +204,21 @@ StyledDialogView {
             saveAsName: convertModel.defaultSaveAsName
             saveAsErrorText: convertModel.validateFileName(filesPage.saveAsTrimmed)
             navigationSection: root.navigationSection
-            files: convertModel.selectedPaths
+            fileListModel: convertModel.fileListModel
             canSelectMultipleFiles: convertModel.canSelectMultipleFiles
             fileRequirements: convertModel.fileRequirements
-            convertLimits: convertModel.convertLimits
 
             onCancelRequested: convertModel.confirmCancel()
             onBackRequested: convertModel.confirmGoingBack()
 
-            onConvertRequested: function(paths, convertedScoreName) {
-                root.finish(convertModel.convertType, paths, "", convertedScoreName)
+            onConvertRequested: function(convertedScoreName) {
+                root.finish(convertModel.convertType, convertModel.fileListModel.paths(), "", convertedScoreName)
             }
 
-            onSelectMoreFilesRequested: function(existingPaths) {
-                convertModel.selectAndValidateFiles(existingPaths)
-            }
+            onSelectMoreFilesRequested: convertModel.selectAndValidateFiles()
 
-            onApplyFilesRequested: function(paths) {
-                convertModel.validateAndApplyFiles(paths)
+            onAddFilesRequested: function(urls) {
+                convertModel.validateAndAddFiles(urls)
             }
         }
     }
