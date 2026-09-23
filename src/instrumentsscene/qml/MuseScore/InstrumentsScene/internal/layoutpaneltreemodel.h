@@ -35,8 +35,15 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "interactive/iinteractive.h"
-#include "shortcuts/ishortcutsregister.h"
 #include "layoutpanelutils.h"
+
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_SHORTCUTS_V2
+#include "shortcuts_v2/icommandshortcutsregister.h"
+#else
+#include "shortcuts/ishortcutsregister.h"
+#endif
 
 Q_MOC_INCLUDE(< QItemSelectionModel >)
 
@@ -69,8 +76,12 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
+#ifdef MUSE_MODULE_SHORTCUTS_V2
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
+#else
+    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+#endif
 
 public:
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);
