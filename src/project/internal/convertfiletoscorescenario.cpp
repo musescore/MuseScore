@@ -50,7 +50,7 @@ void ConvertFileToScoreScenario::init()
         if (ret) {
             showScoreReadyNotification(watched);
         } else {
-            showConvertFailedNotification(ret);
+            showConvertFailedNotification(watched);
         }
 
         m_convertFinished.send(ret, watched);
@@ -518,15 +518,14 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const WatchedScore& 
     });
 }
 
-void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
+void ConvertFileToScoreScenario::showConvertFailedNotification(const WatchedScore& watched)
 {
-    muse::String fileName = ret.data<muse::String>(CONVERT_FAILED_FILE_NAME_KEY, muse::String());
-    if (fileName.isEmpty()) {
+    if (watched.name.isEmpty()) {
         return;
     }
 
     std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
-                      .arg(fileName.toQString()).toStdString();
+                      .arg(watched.name.toQString()).toStdString();
 
     toastService()->show(muse::trc("project/convert", "Error processing score"), msg,
                          muse::ui::IconCode::Code::ERROR_FILLED, true,

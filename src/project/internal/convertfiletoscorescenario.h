@@ -105,7 +105,7 @@ private:
 
     void showFileProcessingDialog();
     void showScoreReadyNotification(const WatchedScore& watched);
-    void showConvertFailedNotification(const muse::Ret& ret);
+    void showConvertFailedNotification(const WatchedScore& watched);
     void showPollingFailureNotification();
     void showPollingGaveUpNotification();
 
