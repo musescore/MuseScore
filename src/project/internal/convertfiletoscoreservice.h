@@ -66,7 +66,7 @@ public:
     muse::ValNt<WatchedScoreList> watchedScores() const override;
     const WatchedScore* watchedScoreById(int scoreId) const override;
 
-    muse::async::Channel<PollingFailure> pollingFailed() const override;
+    muse::async::Channel<PollingStatus> pollingStatusChanged() const override;
     void retryPolling() override;
 
     void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) override;
@@ -103,7 +103,7 @@ private:
     bool m_pollInProgress = false;
     bool m_isSaving = false;
 
-    muse::async::Channel<PollingFailure> m_pollingFailed;
+    muse::async::Channel<PollingStatus> m_pollingStatusChanged;
     muse::async::Notification m_watchedScoresChanged;
     muse::async::Channel<muse::Ret, WatchedScore> m_convertFinished;
 };

@@ -355,9 +355,9 @@ const WatchedScore* ConvertFileToScoreService::watchedScoreById(int scoreId) con
     return it != m_watchedScores.cend() ? &*it : nullptr;
 }
 
-async::Channel<PollingFailure> ConvertFileToScoreService::pollingFailed() const
+async::Channel<PollingStatus> ConvertFileToScoreService::pollingStatusChanged() const
 {
-    return m_pollingFailed;
+    return m_pollingStatusChanged;
 }
 
 void ConvertFileToScoreService::retryPolling()
@@ -594,6 +594,7 @@ void ConvertFileToScoreService::poll()
         }
 
         resetPollState();
+        m_pollingStatusChanged.send(PollingSuccess {});
         updateWatchedScores(result.val, snapshot);
     });
 }
@@ -618,7 +619,7 @@ void ConvertFileToScoreService::handlePollFailure(const Ret& ret)
         LOGW() << "Could not check the conversion status, retrying in " << intervalSecs.raw()
                << "s (attempt " << m_pollFailureCount << "/" << MAX_POLL_RETRY_ATTEMPTS
                << "): " << ret.toString();
-        m_pollingFailed.send(PollingFailure { ret, m_pollFailureCount, MAX_POLL_RETRY_ATTEMPTS, intervalSecs, false });
+        m_pollingStatusChanged.send(PollingFailure { ret, m_pollFailureCount, MAX_POLL_RETRY_ATTEMPTS, intervalSecs, false });
         return;
     }
 
@@ -635,7 +636,7 @@ void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
     m_timer.stop();
     resetPollState();
 
-    m_pollingFailed.send(PollingFailure { ret, count, MAX_POLL_RETRY_ATTEMPTS, secs_t(0), true });
+    m_pollingStatusChanged.send(PollingFailure { ret, count, MAX_POLL_RETRY_ATTEMPTS, secs_t(0), true });
 }
 
 void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queue, const WatchedScoreList& snapshot)

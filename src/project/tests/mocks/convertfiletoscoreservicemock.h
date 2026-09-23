@@ -41,7 +41,7 @@ public:
     MOCK_METHOD(muse::ValNt<WatchedScoreList>, watchedScores, (), (const, override));
     MOCK_METHOD(const WatchedScore*, watchedScoreById, (int), (const, override));
 
-    MOCK_METHOD((muse::async::Channel<PollingFailure>), pollingFailed, (), (const, override));
+    MOCK_METHOD((muse::async::Channel<PollingStatus>), pollingStatusChanged, (), (const, override));
     MOCK_METHOD(void, retryPolling, (), (override));
 
     MOCK_METHOD(void, submitReview, (int, ReviewRating, const QString&), (override));
