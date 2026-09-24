@@ -360,7 +360,7 @@
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
+            <StemDirection>up</StemDirection>
             <Note>
               <eid>K_K</eid>
               <pitch>36</pitch>

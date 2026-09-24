@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <spatium>1.75</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <eid>C_C</eid>
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          <lines>1</lines>
+          </StaffType>
+        </Staff>
+      <Instrument id="percussion">
+        <InstrumentLabel>
+          <longName>Percussion 3</longName>
+          <shortName>Perc.  3</shortName>
+          </InstrumentLabel>
+        <trackName>Percussion 3</trackName>
+        <instrumentId>drum.group.set</instrumentId>
+        <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
+        <Drum pitch="27">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Closed Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="28">
+          <head>cross</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Pedal Hi-Hat</name>
+          <stem>2</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="29">
+          <head>xcircle</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Open Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="30">
+          <head>cross</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride Cymbal</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="31">
+          <head>plus</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Stick Click</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="36">
+          <head>normal</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum</name>
+          <stem>2</stem>
+          <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="37">
+          <head>cross</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare Rim</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="38">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare</name>
+          <stem>1</stem>
+          <shortcut>B</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="54">
+          <head>diamond</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          <shortcut>G</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="55">
+          <head>cross</head>
+          <line>-4</line>
+          <voice>0</voice>
+          <name>Splash Cymbal</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="56">
+          <head>triangle-down</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Cowbell</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="57">
+          <head>cross</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Suspended Cymbal</name>
+          <stem>1</stem>
+          <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="58">
+          <head>ti</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Vibraslap</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="59">
+          <head>cross</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Hand Cymbals</name>
+          <stem>1</stem>
+          <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="61">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Lo Bongo</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="62">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadXOrnate</whole>
+            <half>noteheadXOrnate</half>
+            <quarter>noteheadXOrnate</quarter>
+            <breve>noteheadXOrnate</breve>
+            </noteheads>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Mute Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="63">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="64">
+          <head>normal</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Lo Conga</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="65">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Hi Timbale</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="66">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Lo Timbale</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="67">
+          <head>triangle-down</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Hi Agogô</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="68">
+          <head>triangle-down</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Lo Agogô</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="69">
+          <head>diamond</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Cabasa</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="70">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Maracas</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="71">
+          <head>ti</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Long Whistle</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="72">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Short Whistle</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="73">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Short Güiro</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="74">
+          <head>slashed1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Long Güiro</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="75">
+          <head>normal</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>claves</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="76">
+          <head>la</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Hi Woodblock</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="77">
+          <head>la</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Lo Woodblock</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="78">
+          <head>cross</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Mute Cuica</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="79">
+          <head>slashed2</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Open Cuica</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="80">
+          <head>cross</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Mute Triangle</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="81">
+          <head>triangle-up</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Triangle</name>
+          <stem>1</stem>
+          <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="82">
+          <head>diamond</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Shaker</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="83">
+          <head>triangle-down</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Sleigh Bells</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="84">
+          <head>ti</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Mark Tree</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="85">
+          <head>la</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Castanets</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="86">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadSlashX</whole>
+            <half>noteheadSlashX</half>
+            <quarter>noteheadSlashX</quarter>
+            <breve>noteheadSlashX</breve>
+            </noteheads>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Mute Surdo</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="87">
+          <head>slash</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Surdo</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="0"/>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>E_E</eid>
+        </VBox>
+      <Measure>
+        <eid>F_F</eid>
+        <voice>
+          <Clef>
+            <concertClefType>PERC</concertClefType>
+            <transposingClefType>PERC</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>G_G</eid>
+            </Clef>
+          <TimeSig>
+            <eid>H_H</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <eid>I_I</eid>
+            <text>InstrLow</text>
+            </StaffText>
+          <Rest>
+            <eid>J_J</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <StaffText>
+            <eid>K_K</eid>
+            <text>InstrHigh</text>
+            </StaffText>
+          <Chord>
+            <eid>L_L</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>M_M</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>N_N</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>O_O</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>Q_Q</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>S_S</eid>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>T_T</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>U_U</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <eid>V_V</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>W_W</eid>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>X_X</eid>
+        <voice>
+          <StaffText>
+            <eid>Y_Y</eid>
+            <text>InstrHigh</text>
+            </StaffText>
+          <StaffText>
+            <eid>Z_Z</eid>
+            <text>InstrLow</text>
+            </StaffText>
+          <Beam>
+            <eid>a_a</eid>
+            <StemDirection>up</StemDirection>
+            <l1>-20</l1>
+            <l2>-20</l2>
+            </Beam>
+          <Chord>
+            <eid>b_b</eid>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>c_c</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>d_d</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>e_e</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>f_f</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>g_g</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>h_h</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>i_i</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Beam>
+            <eid>j_j</eid>
+            <StemDirection>up</StemDirection>
+            <l1>-20</l1>
+            <l2>-20</l2>
+            </Beam>
+          <Chord>
+            <eid>k_k</eid>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>l_l</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>m_m</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>n_n</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>o_o</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>p_p</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>q_q</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>r_r</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>s_s</eid>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>t_t</eid>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>u_u</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>v_v</eid>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>w_w</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>x_x</eid>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>y_y</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>z_z</eid>
+        <voice>
+          <StaffText>
+            <eid>0_0</eid>
+            <text>Claves</text>
+            </StaffText>
+          <StaffText>
+            <eid>1_1</eid>
+            <text>Maracas</text>
+            </StaffText>
+          <Beam>
+            <eid>2_2</eid>
+            <StemDirection>up</StemDirection>
+            <l1>-24</l1>
+            <l2>-24</l2>
+            </Beam>
+          <Chord>
+            <eid>3_3</eid>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>4_4</eid>
+              <pitch>75</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5_5</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>6_6</eid>
+              <pitch>75</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>7_7</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>8_8</eid>
+              <pitch>75</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>9_9</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>+_+</eid>
+              <pitch>75</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>/_/</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <BarLine>
+            <eid>AB_AB</eid>
+            </BarLine>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>BB_BB</eid>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>CB_CB</eid>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>DB_DB</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>EB_EB</eid>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>FB_FB</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>GB_GB</eid>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>HB_HB</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
