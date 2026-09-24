@@ -82,13 +82,7 @@ static FileCategory resolveFileCategory(const io::path_t& path, const ConvertCon
         return FileCategory::Audio;
     }
 
-    //! NOTE: config is a client-side sanity check only; if it hasn't been fully fetched yet, fall back
-    //! to a best-effort guess rather than blocking the conversion
-    if (!config.omr.images.allowedExtensions.isEmpty() && !config.audio2score.file.allowedExtensions.isEmpty()) {
-        return FileCategory::Unknown;
-    }
-
-    return fileCategoryFromSuffix(ext.toStdString());
+    return FileCategory::Unknown;
 }
 
 static std::string errorCodeToString(ConvertErrorCode code)
@@ -136,7 +130,7 @@ void ConvertFileToScoreService::init()
     m_config.omr.images.allowedExtensions = { "jpeg", "jpg", "png" };
     m_config.omr.images.maxFileSizeBytes = 78643200;
     m_config.omr.images.maxFiles = 15;
-    m_config.audio2score.file.allowedExtensions = { "mp3" };
+    m_config.audio2score.file.allowedExtensions = { "mp3", "wav", "flac" };
     m_config.audio2score.file.maxFileSizeBytes = 52428800;
     m_config.audio2score.file.maxFiles = 1;
     m_config.audio2score.link.maxLength = 2048;
@@ -259,22 +253,18 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
 
 Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
 {
-    const LinkSources sources = m_config.audio2score.link.allowedSources
-                                ? m_config.audio2score.link.allowedSources
-                                : LinkSource::YouTube | LinkSource::AudioCom;
-
     if (!link.isValid()) {
         return make_ret(Err::ConvertUnsupportedLink, link.errorString().toStdString());
     }
 
     const QString host = link.host().toLower();
 
-    if (sources.testFlag(LinkSource::YouTube)
+    if (m_config.audio2score.link.allowedSources.testFlag(LinkSource::YouTube)
         && (host == "youtube.com" || host.endsWith(".youtube.com") || host == "youtu.be")) {
         return make_ok();
     }
 
-    if (sources.testFlag(LinkSource::AudioCom)
+    if (m_config.audio2score.link.allowedSources.testFlag(LinkSource::AudioCom)
         && (host == "audio.com" || host.endsWith(".audio.com"))) {
         return make_ok();
     }

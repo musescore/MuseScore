@@ -754,7 +754,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     EXPECT_FALSE(ret);
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_UnsetSourcesFallsBackToBoth)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_UnsetSourcesEmptyText)
 {
     // [GIVEN] No link sources are configured, and the service rejects the link
     m_config.audio2score.link.allowedSources = LinkSources();
@@ -763,11 +763,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     .WillByDefault(Return(make_ret(Err::ConvertUnsupportedLink)));
 
     const std::string title = muse::trc("project/convert", "Please use a compatible URL");
-    const std::string text = muse::trc("project/convert", "Make sure you’re using a valid link from YouTube or Audio.com.");
 
-    // [THEN] The error dialog falls back to mentioning both sources
+    // [THEN] The error dialog has no source-specific text
     EXPECT_CALL(*m_interactive,
-                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                warning(title, TextIs(std::string()), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {

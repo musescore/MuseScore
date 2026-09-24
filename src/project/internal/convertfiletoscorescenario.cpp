@@ -424,8 +424,7 @@ void ConvertFileToScoreScenario::showUnsupportedFormatError()
 
 void ConvertFileToScoreScenario::showUnsupportedLinkError()
 {
-    const LinkSources configured = service()->config().audio2score.link.allowedSources;
-    const LinkSources sources = configured ? configured : (LinkSource::YouTube | LinkSource::AudioCom);
+    const LinkSources sources = service()->config().audio2score.link.allowedSources;
 
     std::string text;
     if (sources.testFlag(LinkSource::YouTube) && sources.testFlag(LinkSource::AudioCom)) {

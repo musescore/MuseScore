@@ -83,7 +83,7 @@ void expectFallbackConfig(const ConvertConfig& config)
     EXPECT_EQ(config.omr.images.allowedExtensions, QStringList({ "jpeg", "jpg", "png" }));
     EXPECT_EQ(config.omr.images.maxFileSizeBytes, 78643200);
     EXPECT_EQ(config.omr.images.maxFiles, 15);
-    EXPECT_EQ(config.audio2score.file.allowedExtensions, QStringList({ "mp3" }));
+    EXPECT_EQ(config.audio2score.file.allowedExtensions, QStringList({ "mp3", "wav", "flac" }));
     EXPECT_EQ(config.audio2score.file.maxFileSizeBytes, 52428800);
     EXPECT_EQ(config.audio2score.file.maxFiles, 1);
     EXPECT_EQ(config.audio2score.link.maxLength, 2048);
@@ -173,7 +173,8 @@ protected:
     {
         ConvertConfig config;
         config.omr.images.allowedExtensions = { "png", "jpg", "jpeg" };
-        config.audio2score.file.allowedExtensions = { "mp3" };
+        config.audio2score.file.allowedExtensions = { "mp3", "wav", "flac" };
+        config.audio2score.link.allowedSources = LinkSource::YouTube | LinkSource::AudioCom;
         return config;
     }
 
@@ -516,19 +517,25 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_PdfTooLarge_FileTooL
 
 TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_YouTube_DefaultConfig_Success)
 {
-    // [WHEN] Validating a YouTube link, with no config fetched yet
+    // [GIVEN] A config allowing both link sources
+    setConfig(testConfig());
+
+    // [WHEN] Validating a YouTube link
     Ret ret = m_service->validateLink(QUrl("https://youtube.com/x"));
 
-    // [THEN] It succeeds, since both sources are allowed by default
+    // [THEN] It succeeds
     EXPECT_TRUE(ret);
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_AudioCom_DefaultConfig_Success)
 {
-    // [WHEN] Validating an Audio.com link, with no config fetched yet
+    // [GIVEN] A config allowing both link sources
+    setConfig(testConfig());
+
+    // [WHEN] Validating an Audio.com link
     Ret ret = m_service->validateLink(QUrl("https://audio.com/x"));
 
-    // [THEN] It succeeds, since both sources are allowed by default
+    // [THEN] It succeeds
     EXPECT_TRUE(ret);
 }
 
