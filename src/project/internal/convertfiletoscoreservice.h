@@ -99,6 +99,7 @@ private:
     int m_pollFailureCount = 0;
     std::vector<WatchedScore> m_watchedScores;
     bool m_pollInProgress = false;
+    bool m_manualRetryRequested = false;
     bool m_isSaving = false;
 
     muse::async::Channel<PollingStatus> m_pollingStatusChanged;
