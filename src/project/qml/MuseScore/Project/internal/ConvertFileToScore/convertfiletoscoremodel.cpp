@@ -77,11 +77,6 @@ static QVariantMap requirementsSection(const QString& title, const QStringList& 
     return result;
 }
 
-static bool allowsMultipleFiles(int maxCount)
-{
-    return maxCount <= 0 || maxCount > 1;
-}
-
 static QStringList resolveExtensionsForFilePicker(const QStringList& paths)
 {
     QStringList extensions;
@@ -282,14 +277,21 @@ bool ConvertFileToScoreModel::canSelectMultipleFiles() const
 
     const ConvertConfig& config = convertFileToScoreScenario()->config();
 
+    auto allowsMultipleFiles = [](int maxCount) {
+        return maxCount <= 0 || maxCount > 1;
+    };
+
     switch (m_fileListModel->fileCategory()) {
     case FileCategory::Audio:
         return allowsMultipleFiles(config.audio2score.file.maxFiles);
     case FileCategory::Pdf:
         return allowsMultipleFiles(config.omr.pdf.maxFiles);
     case FileCategory::Image:
-    case FileCategory::Unknown:
         return allowsMultipleFiles(config.omr.images.maxFiles);
+    case FileCategory::Unknown: // No files selected yet
+        return allowsMultipleFiles(config.omr.pdf.maxFiles)
+               || allowsMultipleFiles(config.omr.images.maxFiles)
+               || allowsMultipleFiles(config.audio2score.file.maxFiles);
     }
 
     return false;
@@ -389,30 +391,8 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
         muse::trc("project", "All") + " (*)"
     };
 
-    const FileCategory category = existingPaths.isEmpty()
-                                  ? FileCategory::Unknown
-                                  : fileCategoryFromPath(io::path_t(existingPaths.first()));
-
-    bool multiple = false;
-    switch (category) {
-    case FileCategory::Pdf:
-        multiple = allowsMultipleFiles(config.omr.pdf.maxFiles);
-        break;
-    case FileCategory::Image:
-        multiple = allowsMultipleFiles(config.omr.images.maxFiles);
-        break;
-    case FileCategory::Audio:
-        multiple = allowsMultipleFiles(config.audio2score.file.maxFiles);
-        break;
-    case FileCategory::Unknown:
-        multiple = allowsMultipleFiles(config.omr.pdf.maxFiles)
-                   || allowsMultipleFiles(config.omr.images.maxFiles)
-                   || allowsMultipleFiles(config.audio2score.file.maxFiles);
-        break;
-    }
-
     io::paths_t files;
-    if (multiple) {
+    if (canSelectMultipleFiles()) {
         files = interactive()->selectOpeningFilesSync(muse::trc("ui", "Choose file"),
                                                       configuration()->defaultConvertFilePath(), filters);
     } else {
