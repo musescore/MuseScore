@@ -181,13 +181,17 @@ private:
 
     struct CenterableItem {
         EngravingItem* item = nullptr;
-        Shape shape; // x relative to the system, y relative to the staff.
+        Shape shape; // x relative to the system, y relative to the upper staff of the item's gap
         bool isLyrics = false;
+        bool onUpperGapStaff = false; // whether the item hangs below the upper staff of its gap or sits above the lower one
     };
 
-    struct CenterableItems {
-        std::vector<CenterableItem> above;
-        std::vector<CenterableItem> below;
+    // The space between two vertically adjacent visible staves
+    struct Gap {
+        staff_idx_t upperStaffIdx = muse::nidx;
+        staff_idx_t lowerStaffIdx = muse::nidx;
+        double yStaffDiff = 0.0; // Inside a gap, everything is expressed relative to its upper staff, so we need the y diff between staves
+        std::vector<CenterableItem> items;
     };
 
     static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system, bool placeAbove);
@@ -195,10 +199,19 @@ private:
     static bool whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system);
     static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine);
     static bool shapesStackVertically(const Shape& shape1, const Shape& shape2, double minHorizontalClearance);
-    static void collectCenterableItems(const System* system, std::vector<CenterableItems>& centerableItemsByStaff,
-                                       std::vector<MMRest*>& mmRestsToCenter);
-    static bool centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above, const System* system,
-                                         std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance);
+    static void collectCenterableItems(const System* system, std::vector<Gap>& gaps, std::vector<MMRest*>& mmRestsToCenter);
+    static std::vector<std::vector<const CenterableItem*> > groupItemsToCenterTogether(const std::vector<const CenterableItem*>& items,
+                                                                                       double minHorizontalClearance);
+    static void centerItemsInGap(const Gap& gap, const System* system, std::vector<EngravingItem*>& centeredItems,
+                                 double minHorizontalClearance);
+    static double gapConvergeDistance(const std::vector<const CenterableItem*>& group, double yStaffDiff, double minHorizontalClearance);
+    static double convergenceMoveFor(const CenterableItem* centerableItem, double convergeDistance);
+    static void centerItemGroup(const std::vector<const CenterableItem*>& group, const System* system, const SkylineLine& upperSkyline,
+                                const SkylineLine& lowerSkyline, double yStaffDiff, std::vector<EngravingItem*>& centeredItems,
+                                double minHorizontalClearance);
+    static void updateStaffCenteringInfo(const std::vector<const CenterableItem*>& group, const std::vector<double>& spaceAbove,
+                                         const std::vector<double>& spaceBelow, double yMove, double convergeDistance,
+                                         double minHorizontalClearance);
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
