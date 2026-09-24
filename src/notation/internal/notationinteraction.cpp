@@ -4885,11 +4885,21 @@ void NotationInteraction::joinSelectedMeasures()
         return;
     }
 
-    INotationSelectionRange::MeasureBaseRange measureBaseRange = m_selection->range()->measureBaseRange();
+    const INotationSelectionRange::MeasureBaseRange measureBaseRange = m_selection->range()->measureBaseRange();
+    const MeasureBase* startMeasureBase = measureBaseRange.startMeasureBase;
+    const MeasureBase* endMeasureBase = measureBaseRange.endMeasureBase;
+    if (!startMeasureBase || !endMeasureBase) {
+        return;
+    }
+
+    const Measure* startMeasure = startMeasureBase->isMeasure() ? toMeasure(startMeasureBase) : startMeasureBase->nextMeasure();
+    const Measure* endMeasure = endMeasureBase->isMeasure() ? toMeasure(endMeasureBase) : endMeasureBase->prevMeasure();
+    if (!startMeasure || !endMeasure || endMeasure->tick() < startMeasure->tick()) {
+        return;
+    }
 
     transaction(TranslatableString("undoableAction", "Join measures"), [&](engraving::Transaction& tx) {
-        SplitJoinMeasure::joinMeasures(tx, score()->masterScore(), measureBaseRange.startMeasureBase->tick(),
-                                       measureBaseRange.endMeasureBase->tick());
+        SplitJoinMeasure::joinMeasures(tx, score()->masterScore(), startMeasure->tick(), endMeasure->tick());
     });
 
     checkAndShowError();

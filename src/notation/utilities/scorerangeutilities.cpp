@@ -57,6 +57,11 @@ static RectF boxRunBoundingRect(const Box* box, bool forwards, const Box* limit 
         rect.unite(mb->canvasBoundingRect());
     }
 
+    if (!rect.isEmpty()) {
+        const double padding = 0.5 * box->spatium();
+        rect.adjust(0, -padding, 0, padding);
+    }
+
     return rect;
 }
 
@@ -83,7 +88,7 @@ static std::set<const System*> boxOnlySystems(const System* startSystem, const S
         if (currSystem == endSystem) {
             break;
         }
-        const MeasureBase* firstInNext = currSystem->last() ? currSystem->last()->next() : nullptr;
+        const MeasureBase* firstInNext = currSystem->last() ? currSystem->last()->nextMM() : nullptr;
         currSystem = firstInNext ? firstInNext->system() : nullptr;
     }
     return result;
@@ -100,16 +105,38 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
     }
 
     const std::vector<RangeSection> sections = splitRangeBySections(startSegment, endSegment);
-    if (sections.empty() && !startBox && !endBox) {
-        return {};
-    }
 
     std::vector<RectF> result;
 
+    if (sections.empty()) {
+        // Box-only range...
+        if (!startBox && !endBox) {
+            return result;
+        }
+        IF_ASSERT_FAILED(startBox && endBox) {
+            return result;
+        }
+        const Box* currBox = startBox;
+        const System* endSystem = endBox->system();
+        while (currBox) {
+            const System* currSystem = currBox->system();
+            IF_ASSERT_FAILED(currSystem) {
+                break;
+            }
+            result.push_back(boxRunBoundingRect(currBox, /*forwards*/ true, endBox));
+            if (currSystem == endSystem) {
+                break;
+            }
+            const MeasureBase* firstInNext = currSystem->last() ? currSystem->last()->nextMM() : nullptr;
+            currBox = firstInNext && firstInNext->isBox() ? toBox(firstInNext) : nullptr;
+        }
+        return result;
+    }
+
     //! NOTE: endSegment is exclusive, so these are the systems of the first and last segments that are actually inside
-    //! the range. They're null when the range contains boxes but no segments...
-    const System* firstSegmentSystem = sections.empty() ? nullptr : sections.front().system;
-    const System* lastSegmentSystem = sections.empty() ? nullptr : sections.back().system;
+    //! the range...
+    const System* firstSegmentSystem = sections.front().system;
+    const System* lastSegmentSystem = sections.back().system;
 
     // Collect and add systems consisting solely of boxes...
     const System* startSystem = startBox ? startBox->system() : firstSegmentSystem;
@@ -127,11 +154,6 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
         }
 
         result.push_back(boxRunBoundingRect(toBox(first), /*forwards*/ true, toBox(last)));
-    }
-
-    if (sections.empty()) {
-        // TODO: Entire range consists solely of boxes...
-        return result;
     }
 
     // Handle start/end boxes that exist on a different system to the start/end segment...
