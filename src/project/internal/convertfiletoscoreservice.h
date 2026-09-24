@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <cstdint>
 #include <optional>
 #include <vector>
 
@@ -74,10 +75,13 @@ public:
 
     void deleteConversion(ConvertType type, int convertId) override;
 
+protected:
+    //! NOTE: overridable so tests can fake elapsed time instead of waiting on the real clock
+    virtual int64_t nowMs() const;
+
 private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
-    static constexpr int MAX_RETRY_INTERVAL_MS = 10 * 60000;
-    static constexpr int MAX_POLL_RETRY_ATTEMPTS = 5; // gives up after ~15 minutes
+    static constexpr int MAX_POLL_RETRY_DURATION_MS = 10 * 60000; // gives up after ~10 minutes
 
     void loadWatchedScores();
     void saveWatchedScores();
@@ -87,7 +91,7 @@ private:
     void poll();
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);
-    void giveUpPolling(const muse::Ret& ret);
+    void giveUpPolling(const muse::Ret& ret, muse::secs_t elapsed);
     void updateWatchedScores(const muse::cloud::ConvertQueueList& queue, const WatchedScoreList& snapshot);
 
     void updateStatus(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode);
@@ -95,6 +99,7 @@ private:
     ConvertConfig m_config;
 
     QTimer m_timer;
+    int64_t m_pollRetryStartMs = 0;
     int m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
     int m_pollFailureCount = 0;
     std::vector<WatchedScore> m_watchedScores;

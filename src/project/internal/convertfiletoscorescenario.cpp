@@ -34,8 +34,7 @@ using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
 
-//! NOTE: attempt 4 is ~5 minutes into retrying
-static constexpr int RETRY_TOAST_ATTEMPT_THRESHOLD = 4;
+static constexpr muse::secs_t RETRY_TOAST_ELAPSED_THRESHOLD_SECS = muse::secs_t::make(5.0 * 60.0);
 
 ConvertFileToScoreScenario::ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx)
@@ -57,21 +56,19 @@ void ConvertFileToScoreScenario::init()
     });
 
     service()->pollingStatusChanged().onReceive(this, [this](const PollingStatus& status) {
-        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
-        if (!failure) {
+        if (std::holds_alternative<PollingSuccess>(status)) {
+            m_retryToastShown = false;
             return;
         }
 
-        if (failure->gaveUp) {
+        const PollingFailure& failure = std::get<PollingFailure>(status);
+
+        if (failure.gaveUp) {
             showPollingGaveUpNotification();
             return;
         }
 
-        if (failure->attempt == 1) {
-            m_retryToastShown = false;
-        }
-
-        if (!m_retryToastShown && failure->attempt >= RETRY_TOAST_ATTEMPT_THRESHOLD) {
+        if (!m_retryToastShown && failure.elapsed >= RETRY_TOAST_ELAPSED_THRESHOLD_SECS) {
             m_retryToastShown = true;
             showPollingFailureNotification();
         }
