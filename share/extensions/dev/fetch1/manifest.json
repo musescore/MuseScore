@@ -1,0 +1,13 @@
+{
+    "uri": "musescore://extensions/dev/fetch_1",
+    "type": "form",
+    "title": "Fetch 1",
+    "icon": "CLOCK",
+    "ui_context": "Any",
+    "modal": true,
+
+    "actions": [
+        {"path": "Main.qml"}
+    ]
+    
+}
