@@ -2596,56 +2596,21 @@ void SystemLayout::updateSkylineForElement(EngravingItem* element, const System*
 
 void SystemLayout::centerElementsBetweenStaves(const System* system)
 {
-    staff_idx_t nStaves = system->staves().size();
-    std::vector<CenterableItems> itemsByStaff(nStaves);
-    std::vector<MMRest*> mmRestsToCenter;
+    std::vector<Gap> gaps; // populated by collectCenterableItems
+    std::vector<MMRest*> mmRestsToCenter; // populated by collectCenterableItems
 
-    collectCenterableItems(system, itemsByStaff, mmRestsToCenter);
+    collectCenterableItems(system, gaps, mmRestsToCenter);
 
     for (MMRest* mmrest : mmRestsToCenter) {
         centerMMRestBetweenStaves(mmrest, system);
     }
 
     const double minHorizontalClearance = system->style().styleAbsolute(Sid::skylineMinHorizontalClearance);
-    std::vector<EngravingItem*> centeredItems; // will be populated by centerItemsBetweenStaves
+    std::vector<EngravingItem*> centeredItems; // will be populated by centerItemGroup (in centerItemsInGap)
 
-    for (staff_idx_t staffIdx = 0; staffIdx < nStaves; ++staffIdx) {
-        for (bool above : { true, false }) {
-            const std::vector<CenterableItem>& items = above ? itemsByStaff[staffIdx].above : itemsByStaff[staffIdx].below;
-            if (items.empty()) {
-                continue;
-            }
-
-            /* We center lyrics as a single block so that the verses will not lose their alignment. Other items
-             * join the block if they are vertically stacked with the lyrics. Items which aren't (e.g. a dynamic
-             * with no lyrics above it) are centered individually, against their own space above and below. */
-            Shape lyricsShape(Shape::Type::Composite);
-            for (const CenterableItem& centerableItem : items) {
-                if (centerableItem.isLyrics) {
-                    lyricsShape.add(centerableItem.shape);
-                }
-            }
-
-            std::vector<CenterableItem> block;
-            for (const CenterableItem& centerableItem : items) {
-                if (centerableItem.isLyrics || shapesStackVertically(centerableItem.shape, lyricsShape, minHorizontalClearance)) {
-                    block.push_back(centerableItem);
-                } else {
-                    centerItemsBetweenStaves({ centerableItem }, staffIdx, above, system, centeredItems, minHorizontalClearance);
-                }
-            }
-
-            if (!block.empty() && !centerItemsBetweenStaves(block, staffIdx, above, system, centeredItems, minHorizontalClearance)) {
-                /* The lyrics must move as one rigid unit, so if one of them is obstructed none of them
-                 * will be centered. The items which only joined the block because they stack with the
-                 * lyrics are not bound to them, so we give them a second chance on their own: now
-                 * that the lyrics are not centered, they simply constrain them like any other item: */
-                for (const CenterableItem& centerableItem : block) {
-                    if (!centerableItem.isLyrics) {
-                        centerItemsBetweenStaves({ centerableItem }, staffIdx, above, system, centeredItems, minHorizontalClearance);
-                    }
-                }
-            }
+    for (const Gap& gap : gaps) {
+        if (!gap.items.empty()) {
+            centerItemsInGap(gap, system, centeredItems, minHorizontalClearance);
         }
     }
 
@@ -2661,20 +2626,51 @@ void SystemLayout::centerPendingSystems(LayoutContext& ctx)
     ctx.mutState().clearSystemsNeedingCentering();
 }
 
-void SystemLayout::collectCenterableItems(const System* system, std::vector<CenterableItems>& centerableItemsByStaff,
-                                          std::vector<MMRest*>& mmRestsToCenter)
+void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>& gaps, std::vector<MMRest*>& mmRestsToCenter)
 {
     const double systemX = system->pageX();
+    const staff_idx_t nStaves = static_cast<staff_idx_t>(system->staves().size());
+    if (nStaves < 2) {
+        return;
+    }
+
+    struct GapsOfStaff {
+        size_t forItemsBelow = muse::nidx;
+        size_t forItemsAbove = muse::nidx;
+    };
+    std::vector<GapsOfStaff> gapsOfStaff(nStaves);
+    gaps.reserve(nStaves);
+
+    staff_idx_t upperStaffIdx = system->firstVisibleStaff();
+    staff_idx_t lowerStaffIdx = muse::nidx;
+    for (; upperStaffIdx < nStaves; upperStaffIdx = lowerStaffIdx) {
+        lowerStaffIdx = system->nextVisibleStaff(upperStaffIdx);
+        if (lowerStaffIdx == muse::nidx) {
+            break; // the last visible staff of the system
+        }
+
+        gapsOfStaff[upperStaffIdx].forItemsBelow = gaps.size();
+        gapsOfStaff[lowerStaffIdx].forItemsAbove = gaps.size();
+        gaps.emplace_back(upperStaffIdx, lowerStaffIdx, system->staff(lowerStaffIdx)->y() - system->staff(upperStaffIdx)->y());
+    }
 
     auto addItem = [&](EngravingItem* item, Shape shape, bool above, bool isLyrics) {
-        staff_idx_t staffIdx = item->staffIdx();
-        const SysStaff* sysStaff = staffIdx < centerableItemsByStaff.size() ? system->staff(staffIdx) : nullptr;
-        if (!sysStaff || !sysStaff->show()) {
+        const staff_idx_t staffIdx = item->staffIdx();
+        if (staffIdx >= nStaves) {
             return;
         }
+        const size_t gapIdx = above ? gapsOfStaff[staffIdx].forItemsAbove : gapsOfStaff[staffIdx].forItemsBelow;
+        if (gapIdx == muse::nidx) {
+            // The staff is hidden, or there is no staff on that side to center against
+            return;
+        }
+        Gap& gap = gaps[gapIdx];
         shape.remove_if([](ShapeElement& shapeEl) { return shapeEl.ignoreForLayout(); });
-        CenterableItems& bucket = centerableItemsByStaff[staffIdx];
-        (above ? bucket.above : bucket.below).push_back(CenterableItem { item, std::move(shape), isLyrics });
+        if (above) {
+            // Inside a gap, everything is expressed relative to its upper staff
+            shape.translate(PointF(0.0, gap.yStaffDiff));
+        }
+        gap.items.push_back(CenterableItem { item, std::move(shape), isLyrics, !above });
     };
 
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
@@ -2882,7 +2878,7 @@ bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element,
 
     for (const ShapeElement& skylineElement : skylineLine.elements()) {
         const EngravingItem* skylineItem = skylineElement.item();
-        if (!skylineItem || skylineItem == element || skylineItem->parent() == element
+        if (!skylineItem || skylineItem == element || skylineItem->parent() == element || skylineItem->isAccidental()
             || Autoplace::itemsShouldIgnoreEachOther(element, skylineItem)) {
             continue;
         }
@@ -2900,100 +2896,291 @@ bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element,
     return false;
 }
 
-bool SystemLayout::centerItemsBetweenStaves(const std::vector<CenterableItem>& block, staff_idx_t staffIdx, bool above,
-                                            const System* system, std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance)
+static SkylineLine skylineFacingGap(const System* system, staff_idx_t staffIdx, bool isUpperStaffOfGap, double yShift,
+                                    const std::unordered_set<const EngravingItem*>& itemsToIgnore)
 {
-    staff_idx_t nextStaffIdx = above ? system->prevVisibleStaff(staffIdx) : system->nextVisibleStaff(staffIdx);
-    SysStaff* thisStaff = system->staff(staffIdx);
-    SysStaff* nextStaff = system->staff(nextStaffIdx);
-    IF_ASSERT_FAILED(thisStaff && nextStaff) {
-        return false;
+    const SkylineLine& skyline = isUpperStaffOfGap ? system->staff(staffIdx)->skyline().south()
+                                 : system->staff(staffIdx)->skyline().north();
+
+    SkylineLine filteredSkyline = skyline.getFilteredCopy([&itemsToIgnore](const ShapeElement& shapeEl) {
+        const EngravingItem* shapeItem = shapeEl.item();
+        return shapeItem && (muse::contains(itemsToIgnore, shapeItem)
+                             || muse::contains(itemsToIgnore, const_cast<const EngravingItem*>(shapeItem->ownershipParentItem())));
+    });
+
+    if (yShift != 0.0) {
+        filteredSkyline.translateY(yShift);
     }
 
-    SkylineLine& skylineOfThisStaff = above ? thisStaff->skyline().north() : thisStaff->skyline().south();
+    return filteredSkyline;
+}
 
-    auto skylineOfThisStaffFor = [&skylineOfThisStaff](const EngravingItem* item, const std::unordered_set<const EngravingItem*>& ignore) {
-        return skylineOfThisStaff.getFilteredCopy([item, &ignore](const ShapeElement& shapeEl) {
-            const EngravingItem* shapeItem = shapeEl.item();
-            return shapeItem && (shapeItem->isAccidental()
-                                 || Autoplace::itemsShouldIgnoreEachOther(item, shapeItem)
-                                 || muse::contains(ignore, shapeItem)
-                                 || muse::contains(ignore, const_cast<const EngravingItem*>(shapeItem->ownershipParentItem())));
-        });
-    };
-
-    double yStaffDiff = nextStaff->y() - thisStaff->y();
-    SkylineLine nextSkyline = above ? nextStaff->skyline().south() : nextStaff->skyline().north();
-    nextSkyline.translateY(yStaffDiff);
-
-    double blockSpaceAbove = DBL_MAX;
-    double blockSpaceBelow = DBL_MAX;
-
-    std::unordered_set<const EngravingItem*> blockItems;
-    for (const CenterableItem& centerableItem : block) {
-        blockItems.insert(centerableItem.item);
+void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, std::vector<EngravingItem*>& centeredItems,
+                                    double minHorizontalClearance)
+{
+    /* Nothing which is itself centered in this gap may take part in measuring it */
+    std::unordered_set<const EngravingItem*> movableItems;
+    for (const CenterableItem& gapItem : gap.items) {
+        movableItems.insert(gapItem.item);
     }
 
-    // Measure how far the block can move as one rigid unit
-    for (const CenterableItem& centerableItem : block) {
-        Shape itemShape = centerableItem.shape.adjusted(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
+    /* An item with something non-centered stacked outside it has no gap to be centered in: it
+     * stays where it is and joins the skyline, so that it constrains the items which do move */
+    while (!movableItems.empty()) {
+        const SkylineLine upperSkyline = skylineFacingGap(system, gap.upperStaffIdx, true, 0.0, movableItems);
+        const SkylineLine lowerSkyline = skylineFacingGap(system, gap.lowerStaffIdx, false, gap.yStaffDiff, movableItems);
+
+        std::vector<const CenterableItem*> itemsToCenter;
+        bool anythingGotStuck = false;
+        for (const CenterableItem& gapItem : gap.items) {
+            const EngravingItem* item = gapItem.item;
+            if (!muse::contains(movableItems, item)) {
+                continue;
+            }
+
+            const Shape itemShape = gapItem.shape.adjusted(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
+            const SkylineLine& ownSkyline = gapItem.onUpperGapStaff ? upperSkyline : lowerSkyline;
+            if (!itemShape.empty() && elementHasAnotherStackedOutside(item, itemShape, ownSkyline)) {
+                movableItems.erase(item);
+                anythingGotStuck = true;
+
+                // A dash or melisma line and the lyric it belongs to stay together:
+                if (item->isLyricsLineSegment()) {
+                    if (const Lyrics* lyrics = toLyricsLineSegment(item)->lyrics()) {
+                        movableItems.erase(lyrics);
+                    }
+                } else if (item->isLyrics()) {
+                    if (const LyricsLine* separator = toLyrics(item)->separator()) {
+                        for (const SpannerSegment* segment : separator->spannerSegments()) {
+                            movableItems.erase(segment);
+                        }
+                    }
+                }
+            } else {
+                itemsToCenter.push_back(&gapItem);
+            }
+        }
+
+        if (anythingGotStuck) {
+            continue;
+        }
+
+        for (const std::vector<const CenterableItem*>& group : groupItemsToCenterTogether(itemsToCenter, minHorizontalClearance)) {
+            centerItemGroup(group, system, upperSkyline, lowerSkyline, gap.yStaffDiff, centeredItems, minHorizontalClearance);
+        }
+        return;
+    }
+}
+
+std::vector<std::vector<const SystemLayout::CenterableItem*> > SystemLayout::groupItemsToCenterTogether(
+    const std::vector<const CenterableItem*>& items, double minHorizontalClearance)
+{
+    /* We center lyrics as a single block so that the verses will not lose their alignment (separating the ones
+     * below the upper staff from the ones above the lower staff if they don't overlap). Other centerable items
+     * join the group if they overlap horizontally so that they will preserve their relative positions. */
+    const size_t nItems = items.size();
+    std::vector<size_t> groupIds(nItems, muse::nidx);
+    size_t nGroupIds = 0;
+
+    for (size_t i = 0; i < nItems; ++i) {
+        if (groupIds[i] == muse::nidx) {
+            groupIds[i] = nGroupIds++;
+        }
+        for (size_t j = i + 1; j < nItems; ++j) {
+            const bool areVersesOfTheSameBlock = items[i]->isLyrics && items[j]->isLyrics
+                                                 && items[i]->onUpperGapStaff == items[j]->onUpperGapStaff;
+            const bool mustMoveTogether = areVersesOfTheSameBlock
+                                          || shapesStackVertically(items[i]->shape, items[j]->shape, minHorizontalClearance);
+            if (!mustMoveTogether) {
+                continue;
+            }
+            if (groupIds[j] == muse::nidx) {
+                groupIds[j] = groupIds[i];
+            } else if (groupIds[j] != groupIds[i]) {
+                const size_t idToMerge = groupIds[j];
+                const size_t idToKeep = groupIds[i];
+                for (size_t& groupId : groupIds) {
+                    if (groupId == idToMerge) {
+                        groupId = idToKeep;
+                    }
+                }
+            }
+        }
+    }
+
+    std::vector<size_t> groupIdToIndex(nGroupIds, muse::nidx);
+    std::vector<std::vector<const CenterableItem*> > groups;
+
+    for (size_t i = 0; i < nItems; ++i) {
+        size_t& index = groupIdToIndex[groupIds[i]];
+        if (index == muse::nidx) {
+            index = groups.size();
+            groups.emplace_back();
+        }
+        groups[index].push_back(items[i]);
+    }
+
+    return groups;
+}
+
+// How far an item moves when its group is converged: only the half sitting above the lower staff moves to meet the upper one
+double SystemLayout::convergenceMoveFor(const CenterableItem* centerableItem, double convergeDistance)
+{
+    return centerableItem->onUpperGapStaff ? 0.0 : -convergeDistance;
+}
+
+double SystemLayout::gapConvergeDistance(const std::vector<const CenterableItem*>& group, double yStaffDiff, double minHorizontalClearance)
+{
+    /* A group that has items below the upper staff and above the lower one, spreads over the whole gap and
+     * has no space left to center the items, so we bring the items together into the middle of the gap. This
+     * function calculates how much slack there is for the lower items to converge towards the upper ones
+     * before centering, so that they will be centered together. */
+
+    double slack = DBL_MAX;
+    for (const CenterableItem* upper : group) {
+        if (!upper->onUpperGapStaff || upper->shape.empty()) {
+            continue;
+        }
+
+        for (const CenterableItem* lower : group) {
+            if (lower->onUpperGapStaff || lower->shape.empty()) {
+                continue;
+            }
+            if (!shapesStackVertically(upper->shape, lower->shape, minHorizontalClearance)) {
+                continue;
+            }
+
+            const EngravingItem* upperItem = upper->item;
+            const EngravingItem* lowerItem = lower->item;
+            const Lyrics* upperLyrics = upperItem->isLyrics() ? toLyrics(upperItem) : nullptr;
+            const Lyrics* lowerLyrics = lowerItem->isLyrics() ? toLyrics(lowerItem) : nullptr;
+
+            if (upperLyrics && lowerLyrics) {
+                // The distance between the top-staff and bottom-staff lyrics blocks will be like between verses:
+                const double verseSpace = std::max(upperLyrics->lineSpacing(), lowerLyrics->lineSpacing())
+                                          * upperItem->style().styleD(Sid::lyricsLineHeight);
+                const double spaceBetweenLyrics = lowerLyrics->yRelativeToStaff() + yStaffDiff - upperLyrics->yRelativeToStaff();
+                slack = std::min(slack, spaceBetweenLyrics - verseSpace);
+                continue;
+            }
+
+            // If it's not lyrics, we just use the items' min distance
+            const double minDist = std::max(upperItem->absoluteFromSpatium(upperItem->minDistance()),
+                                            lowerItem->absoluteFromSpatium(lowerItem->minDistance()));
+            slack = std::min(slack, upper->shape.verticalClearance(lower->shape, minHorizontalClearance) - minDist);
+        }
+    }
+
+    // Nothing to do for a group that is on one staff only, or whose halves are already as close as possible
+    return slack == DBL_MAX ? 0.0 : std::max(slack, 0.0);
+}
+
+void SystemLayout::centerItemGroup(const std::vector<const CenterableItem*>& group, const System* system,
+                                   const SkylineLine& upperSkyline, const SkylineLine& lowerSkyline, double yStaffDiff,
+                                   std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance)
+{
+    const double convergeDistance = gapConvergeDistance(group, yStaffDiff, minHorizontalClearance);
+
+    /* Space left above and below each item once the group has been converged, measured against the
+     * gap's skylines alone. We store them here since we're calculating them anyway, but these individual
+     * spaces will be used later by updateStaffCenteringInfo. */
+    std::vector<double> spaceAbove(group.size(), DBL_MAX);
+    std::vector<double> spaceBelow(group.size(), DBL_MAX);
+
+    /* Space left above and below the entire group. Measure how far the group can move as one rigid unit */
+    double groupSpaceAbove = DBL_MAX;
+    double groupSpaceBelow = DBL_MAX;
+    for (size_t i = 0; i < group.size(); ++i) {
+        const CenterableItem* centerableItem = group[i];
+        Shape itemShape = centerableItem->shape.adjusted(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
         if (itemShape.empty()) {
             continue;
         }
 
-        /* Filter out the blockItems from the skyline: the other members move with this
-         * item, so they must not constrain it. */
-        SkylineLine thisSkyline = skylineOfThisStaffFor(centerableItem.item, blockItems);
+        const bool onUpperStaff = centerableItem->onUpperGapStaff;
+        const SkylineLine ownSkyline
+            = (onUpperStaff ? upperSkyline : lowerSkyline).getFilteredCopy([centerableItem](const ShapeElement& shapeEl) {
+            const EngravingItem* shapeItem = shapeEl.item();
+            return shapeItem && (shapeItem->isAccidental() || Autoplace::itemsShouldIgnoreEachOther(centerableItem->item, shapeItem));
+        });
 
-        // An item with something not belonging to the block stacked outside it has no gap to be centered in:
-        if (elementHasAnotherStackedOutside(centerableItem.item, itemShape, thisSkyline)) {
-            // If one item of the block cannot be centered, then none can:
-            return false;
+        const double convergeMove = convergenceMoveFor(centerableItem, convergeDistance);
+        if (convergeMove != 0.0) {
+            itemShape.translate(PointF(0.0, convergeMove));
         }
 
-        double minDist = centerableItem.item->absoluteFromSpatium(centerableItem.item->minDistance());
-        blockSpaceAbove = std::min(blockSpaceAbove,
-                                   (above ? nextSkyline : thisSkyline).verticalClearanceBelow(itemShape) - minDist);
-        blockSpaceBelow = std::min(blockSpaceBelow,
-                                   (above ? thisSkyline : nextSkyline).verticalClearanceAbove(itemShape) - minDist);
+        const double minDist = centerableItem->item->absoluteFromSpatium(centerableItem->item->minDistance());
+        spaceAbove[i] = (onUpperStaff ? ownSkyline : upperSkyline).verticalClearanceBelow(itemShape) - minDist;
+        spaceBelow[i] = (onUpperStaff ? lowerSkyline : ownSkyline).verticalClearanceAbove(itemShape) - minDist;
+
+        groupSpaceAbove = std::min(groupSpaceAbove, spaceAbove[i]);
+        groupSpaceBelow = std::min(groupSpaceBelow, spaceBelow[i]);
     }
 
-    if (blockSpaceAbove == DBL_MAX || blockSpaceBelow == DBL_MAX) {
-        return false;
+    if (groupSpaceAbove == DBL_MAX || groupSpaceBelow == DBL_MAX) {
+        return;
     }
 
-    double yMove = 0.5 * (blockSpaceBelow - blockSpaceAbove);
+    const double yMove = 0.5 * (groupSpaceBelow - groupSpaceAbove);
 
     // Move the items
-    for (const CenterableItem& centerableItem : block) {
-        centerableItem.item->mutldata()->moveY(yMove);
-        updateSkylineForElement(centerableItem.item, system, yMove);
-        centeredItems.push_back(centerableItem.item);
+    for (const CenterableItem* centerableItem : group) {
+        const double itemMove = yMove + convergenceMoveFor(centerableItem, convergeDistance);
+        centerableItem->item->mutldata()->moveY(itemMove);
+        updateSkylineForElement(centerableItem->item, system, itemMove);
+        centeredItems.push_back(centerableItem->item);
     }
 
-    // Update staffCenteringInfo
-    for (const CenterableItem& centerableItem : block) {
-        EngravingItem* item = centerableItem.item;
-        Shape itemShape = centerableItem.shape.adjusted(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
-        if (itemShape.empty()) {
+    updateStaffCenteringInfo(group, spaceAbove, spaceBelow, yMove, convergeDistance, minHorizontalClearance);
+}
+
+void SystemLayout::updateStaffCenteringInfo(const std::vector<const CenterableItem*>& group, const std::vector<double>& spaceAbove,
+                                            const std::vector<double>& spaceBelow, double yMove, double convergeDistance,
+                                            double minHorizontalClearance)
+{
+    /* staffCenteringInfo stores how much each item may still move on its own (not as part of the
+     * group), and is used by AlignmentLayout::alignStaffCenteredItems. So now, other group members
+     * are allowed to constrain the move. The gap's skylines are already known (calculated in
+     * centerItemGroup, stored in spaceAbove/spaceBelow), so the only thing left to calculate is
+     * the other group members. */
+    for (size_t i = 0; i < group.size(); ++i) {
+        if (group[i]->shape.empty()) {
             continue;
         }
-        itemShape.translate(PointF(0.0, yMove));
 
-        /* Re-compute with new positions after updating skyline. staffCenteringInfo records
-         * how much each item may still move on its own (not as part of the block), which is
-         * what AlignmentLayout::alignStaffCenteredItems uses. So here the other block members
-         * are allowed to constrain the item's skyline: */
-        SkylineLine thisSkyline = skylineOfThisStaffFor(item, {});
+        const EngravingItem* item = group[i]->item;
+        const double minDist = item->absoluteFromSpatium(item->minDistance());
 
-        double minDist = item->absoluteFromSpatium(item->minDistance());
-        double availSpaceAbove = (above ? nextSkyline : thisSkyline).verticalClearanceBelow(itemShape) - minDist;
-        double availSpaceBelow = (above ? thisSkyline : nextSkyline).verticalClearanceAbove(itemShape) - minDist;
+        // spaceAbove/spaceBelow were measured after convergence but before yMove
+        double availSpaceAbove = spaceAbove[i] + yMove;
+        double availSpaceBelow = spaceBelow[i] - yMove;
 
-        item->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
+        for (size_t j = 0; j < group.size(); ++j) {
+            if (j == i || group[j]->shape.empty() || Autoplace::itemsShouldIgnoreEachOther(item, group[j]->item)) {
+                continue;
+            }
+
+            /* The shapes are still where they were collected, while the items have moved by yMove + convergence.
+             * yMove is the same for every group member, so only convergence changed the distance between these: */
+            const double relativeMove = convergenceMoveFor(group[j], convergeDistance) - convergenceMoveFor(group[i], convergeDistance);
+
+            const double clearanceIfOtherIsAbove = group[j]->shape.verticalClearance(group[i]->shape, minHorizontalClearance);
+            if (clearanceIfOtherIsAbove == DBL_MAX) {
+                continue; // they never overlap horizontally
+            }
+            const double clearanceIfOtherIsBelow = group[i]->shape.verticalClearance(group[j]->shape, minHorizontalClearance);
+            if (clearanceIfOtherIsAbove >= 0.0) {
+                availSpaceAbove = std::min(availSpaceAbove, clearanceIfOtherIsAbove - relativeMove - minDist);
+            } else if (clearanceIfOtherIsBelow >= 0.0) {
+                availSpaceBelow = std::min(availSpaceBelow, clearanceIfOtherIsBelow + relativeMove - minDist);
+            } else {
+                availSpaceAbove = 0.0;
+                availSpaceBelow = 0.0;
+            }
+        }
+
+        group[i]->item->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
     }
-
-    return true;
 }
 
 void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* system)
