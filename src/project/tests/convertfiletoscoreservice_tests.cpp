@@ -1568,6 +1568,37 @@ TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_NoPendingItems_DoesNo
     m_service->retryPolling();
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_FailsWithRetryableError_GivesUpImmediately)
+{
+    // [GIVEN] A pending conversion, watched after an earlier poll gave up
+    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
+
+    // [AND GIVEN] The manual retry itself fails with a transient network error
+    ON_CALL(*m_convertService, fetchQueue())
+    .WillByDefault(Invoke([] {
+        return resolvedPromise<RetVal<ConvertQueueList> >(
+            RetVal<ConvertQueueList>::make_ret(make_ret(muse::cloud::Err::NetworkError)));
+    }));
+
+    bool gaveUp = false;
+    int attempt = -1;
+    m_service->pollingStatusChanged().onReceive(nullptr, [&](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        if (!failure) {
+            return;
+        }
+        gaveUp = failure->gaveUp;
+        attempt = failure->attempt;
+    });
+
+    // [WHEN] Retrying polling
+    m_service->retryPolling();
+
+    // [THEN] Polling gives up on this single attempt, rather than backing off and retrying again
+    ASSERT_TRUE(gaveUp);
+    EXPECT_EQ(attempt, 1);
+}
+
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_ResetsConsecutiveFailureCount)
 {
     // [GIVEN] A pattern of failures with a success in between: 3 failures, then a success, then

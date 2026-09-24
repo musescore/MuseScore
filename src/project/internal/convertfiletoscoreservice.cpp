@@ -356,6 +356,7 @@ async::Channel<PollingStatus> ConvertFileToScoreService::pollingStatusChanged() 
 void ConvertFileToScoreService::retryPolling()
 {
     resetPollState();
+    m_manualRetryRequested = true;
     m_timer.start();
     poll();
 }
@@ -563,6 +564,7 @@ void ConvertFileToScoreService::poll()
     if (!hasAnyProcessingScores()) {
         LOGDA() << "Nothing active to poll, stopping timer";
         m_timer.stop();
+        m_manualRetryRequested = false;
         return;
     }
 
@@ -597,11 +599,14 @@ void ConvertFileToScoreService::resetPollState()
     m_pollFailureCount = 0;
     m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
     m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
+    m_manualRetryRequested = false;
 }
 
 void ConvertFileToScoreService::handlePollFailure(const Ret& ret)
 {
-    if (isRetryableError(ret) && ++m_pollFailureCount < MAX_POLL_RETRY_ATTEMPTS) {
+    ++m_pollFailureCount;
+
+    if (!m_manualRetryRequested && isRetryableError(ret) && m_pollFailureCount < MAX_POLL_RETRY_ATTEMPTS) {
         //! NOTE: the first retry is likely just a stale pooled connection the server closed
         //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
         if (m_pollFailureCount > 1) {
