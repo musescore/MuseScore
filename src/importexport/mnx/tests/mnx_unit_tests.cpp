@@ -24,10 +24,17 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <utility>
+#include <vector>
 
+#include "engraving/dom/breath.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/types/typesconv.h"
 
@@ -262,4 +269,346 @@ TEST_F(Mnx_UnitTests, fractionalTempoRoundTrips)
     ASSERT_TRUE(tempos.has_value());
     ASSERT_EQ(tempos->size(), size_t(1));
     EXPECT_DOUBLE_EQ((*tempos)[0].bpm(), 92.5);
+}
+
+//---------------------------------------------------------
+//   synthesized document helpers
+//---------------------------------------------------------
+
+namespace {
+//! A 4/4 document with one single-staff part whose measures hold the given sequences arrays.
+//! partExtras is spliced into each part measure after its sequences, e.g. `, "staffConfigs": [...]`.
+std::string singleStaffMnx(const std::vector<std::string>& sequencesPerMeasure,
+                           const std::vector<std::string>& partExtras = {})
+{
+    std::string globalMeasures;
+    std::string partMeasures;
+    for (size_t i = 0; i < sequencesPerMeasure.size(); ++i) {
+        if (i > 0) {
+            globalMeasures += ",";
+            partMeasures += ",";
+        }
+        globalMeasures += i == 0
+                          ? R"({ "id": "m1", "key": { "fifths": 0 }, "time": { "count": 4, "unit": 4 } })"
+                          : R"({ "id": "m)" + std::to_string(i + 1) + R"(" })";
+        partMeasures += "{";
+        if (i == 0) {
+            partMeasures += R"("clefs": [ { "clef": { "sign": "G", "staffPosition": -2 } } ], )";
+        }
+        partMeasures += R"("sequences": )" + sequencesPerMeasure[i];
+        if (i < partExtras.size()) {
+            partMeasures += partExtras[i];
+        }
+        partMeasures += "}";
+    }
+    return R"({
+  "mnx": { "version": )" + std::to_string(mnx::MNX_VERSION) + R"( },
+  "global": { "measures": [ )" + globalMeasures + R"( ] },
+  "parts": [ { "id": "P1", "measures": [ )" + partMeasures + R"( ] } ]
+})";
+}
+
+//! A sequence of one whole note, with an optional direction hint.
+std::string wholeNoteSequence(const char* step, int octave, const char* hint = nullptr)
+{
+    std::string result = R"({ "content": [ { "duration": { "base": "whole" }, "notes": [ { "pitch": { "octave": )"
+                         + std::to_string(octave) + R"(, "step": ")" + step + R"(" } } ] } ])";
+    if (hint) {
+        result += R"(, "directionHint": ")" + std::string(hint) + R"(")";
+    }
+    return result + " }";
+}
+
+//! A sequence of four quarter notes on one pitch, with an optional direction hint.
+std::string quarterNoteSequence(const char* step, int octave, const char* hint = nullptr)
+{
+    const std::string event = R"({ "duration": { "base": "quarter" }, "notes": [ { "pitch": { "octave": )"
+                              + std::to_string(octave) + R"(, "step": ")" + step + R"(" } } ] })";
+    std::string result = R"({ "content": [ )" + event + "," + event + "," + event + "," + event + " ]";
+    if (hint) {
+        result += R"(, "directionHint": ")" + std::string(hint) + R"(")";
+    }
+    return result + " }";
+}
+
+std::string sequencesArray(const std::vector<std::string>& sequences)
+{
+    std::string result = "[ ";
+    for (size_t i = 0; i < sequences.size(); ++i) {
+        result += (i > 0 ? ", " : "") + sequences[i];
+    }
+    return result + " ]";
+}
+
+const Measure* nthMeasure(const Score* score, size_t index)
+{
+    const Measure* measure = score->firstMeasure();
+    for (size_t i = 0; measure && i < index; ++i) {
+        measure = measure->nextMeasure();
+    }
+    return measure;
+}
+
+//! The chords on a track in a measure, in order.
+std::vector<const Chord*> chordsOnTrack(const Measure* measure, track_idx_t track)
+{
+    std::vector<const Chord*> result;
+    for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+         segment = segment->next(SegmentType::ChordRest)) {
+        const EngravingItem* item = segment->element(track);
+        if (item && item->isChord()) {
+            result.push_back(toChord(item));
+        }
+    }
+    return result;
+}
+
+int firstPitchOnTrack(const Measure* measure, track_idx_t track)
+{
+    const auto chords = chordsOnTrack(measure, track);
+    return chords.empty() ? -1 : chords.front()->notes().front()->pitch();
+}
+
+//! Measures of a document exercising direction-hint voice allocation. Pitches identify the
+//! sequences: C4 = 60, D4 = 62, E4 = 64, C5 = 72, E5 = 76, A5 = 81, C6 = 84.
+std::string directionHintMnx()
+{
+    return singleStaffMnx({
+            // m1: a lower voice listed before its upper voice
+            sequencesArray({ wholeNoteSequence("C", 4, "lower"), wholeNoteSequence("C", 5, "upper") }),
+            // m2: three upper voices; the third overflows into voice 2
+            sequencesArray({ wholeNoteSequence("C", 6, "upper"), wholeNoteSequence("A", 5, "upper"),
+                             quarterNoteSequence("E", 5, "upper") }),
+            // m3: the hinted voices fill the staff before the unhinted one is placed
+            sequencesArray({ wholeNoteSequence("D", 4), wholeNoteSequence("C", 6, "upper"), wholeNoteSequence("A", 5, "upper"),
+                             quarterNoteSequence("E", 5, "upper"), wholeNoteSequence("C", 4, "lower") }),
+            // m4: unhinted voices take what the hinted one leaves
+            sequencesArray({ wholeNoteSequence("D", 4), wholeNoteSequence("C", 4, "lower"), wholeNoteSequence("E", 4) }),
+            // m5: a lone lower voice
+            sequencesArray({ wholeNoteSequence("C", 4, "lower") }),
+        });
+}
+} // namespace
+
+//---------------------------------------------------------
+//   direction hint tests
+//---------------------------------------------------------
+
+TEST_F(Mnx_UnitTests, directionHintAllocation)
+{
+    std::unique_ptr<MasterScore> score(importMnxFromJson(directionHintMnx(), u"<directionHints>/hints.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+
+    // m1: upper takes voice 1 and lower voice 2, whatever order they are listed in.
+    const Measure* m1 = nthMeasure(score.get(), 0);
+    ASSERT_TRUE(m1);
+    EXPECT_EQ(firstPitchOnTrack(m1, 0), 72);
+    EXPECT_EQ(firstPitchOnTrack(m1, 1), 60);
+
+    // m2: upper voices fill voices 1 and 3, then the third takes voice 2 with its stems held up.
+    const Measure* m2 = nthMeasure(score.get(), 1);
+    ASSERT_TRUE(m2);
+    EXPECT_EQ(firstPitchOnTrack(m2, 0), 84);
+    EXPECT_EQ(firstPitchOnTrack(m2, 2), 81);
+    const auto overflow = chordsOnTrack(m2, 1);
+    ASSERT_EQ(overflow.size(), size_t(4));
+    for (const Chord* chord : overflow) {
+        EXPECT_EQ(chord->notes().front()->pitch(), 76);
+        EXPECT_EQ(chord->stemDirection(), DirectionV::UP);
+    }
+    EXPECT_EQ(chordsOnTrack(m2, 0).front()->stemDirection(), DirectionV::AUTO);
+
+    // m3: the hinted voices are placed first and fill all four voices, so the unhinted D4 is dropped.
+    const Measure* m3 = nthMeasure(score.get(), 2);
+    ASSERT_TRUE(m3);
+    EXPECT_EQ(firstPitchOnTrack(m3, 0), 84);
+    EXPECT_EQ(firstPitchOnTrack(m3, 2), 81);
+    EXPECT_EQ(firstPitchOnTrack(m3, 1), 76);
+    EXPECT_EQ(firstPitchOnTrack(m3, 3), 60);
+
+    // m4: unhinted voices take the lowest voices the lower voice leaves free.
+    const Measure* m4 = nthMeasure(score.get(), 3);
+    ASSERT_TRUE(m4);
+    EXPECT_EQ(firstPitchOnTrack(m4, 0), 62);
+    EXPECT_EQ(firstPitchOnTrack(m4, 1), 60);
+    EXPECT_EQ(firstPitchOnTrack(m4, 2), 64);
+
+    // m5: a lone lower voice goes to voice 2, over a hidden full-measure rest in voice 1.
+    const Measure* m5 = nthMeasure(score.get(), 4);
+    ASSERT_TRUE(m5);
+    EXPECT_EQ(firstPitchOnTrack(m5, 1), 60);
+    const Segment* first = m5->first(SegmentType::ChordRest);
+    ASSERT_TRUE(first);
+    const EngravingItem* voice1 = first->element(0);
+    ASSERT_TRUE(voice1 && voice1->isRest());
+    EXPECT_TRUE(toRest(voice1)->durationType().isMeasure());
+    EXPECT_FALSE(voice1->visible());
+    for (const Segment* segment = first->next(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        EXPECT_FALSE(segment->element(0)) << "voice 1 should hold only the hidden full-measure rest";
+    }
+}
+
+TEST_F(Mnx_UnitTests, directionHintExport)
+{
+    std::unique_ptr<MasterScore> score(importMnxFromJson(directionHintMnx(), u"<directionHints>/hints.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+
+    const std::string json = exportMnxJson(score.get());
+    ASSERT_FALSE(json.empty());
+    auto doc = mnx::Document::create(json.data(), json.size());
+    ASSERT_TRUE(mnx::validation::schemaValidate(doc));
+    const auto partMeasures = doc.parts()[0].measures();
+    ASSERT_EQ(partMeasures.size(), size_t(5));
+
+    const auto hintsAndStems = [](const mnx::part::Measure& measure) {
+        std::vector<std::pair<mnx::DirectionHint, bool> > result;
+        for (const auto& sequence : measure.sequences()) {
+            bool hasStem = false;
+            for (const auto& item : sequence.content()) {
+                if (item.type() == mnx::sequence::Event::ContentTypeValue && item.get<mnx::sequence::Event>().stemDirection()) {
+                    hasStem = true;
+                }
+            }
+            result.emplace_back(sequence.directionHint(), hasStem);
+        }
+        return result;
+    };
+    using Hint = mnx::DirectionHint;
+    using HintsAndStems = std::vector<std::pair<Hint, bool> >;
+
+    // Voices are written in voice order, each hinted by where MuseScore points its stems.
+    EXPECT_EQ(hintsAndStems(partMeasures[0]), (HintsAndStems { { Hint::Upper, false }, { Hint::Lower, false } }));
+    // The overflowing upper voice sits in voice 2, so it is written as lower with its forced stems.
+    EXPECT_EQ(hintsAndStems(partMeasures[1]),
+              (HintsAndStems { { Hint::Upper, false }, { Hint::Lower, true }, { Hint::Upper, false } }));
+    // The lone lower voice is written alone: its hidden full-measure rest in voice 1 is omitted.
+    EXPECT_EQ(hintsAndStems(partMeasures[4]), (HintsAndStems { { Hint::Lower, false } }));
+}
+
+TEST_F(Mnx_UnitTests, directionHintOmittedForSingleVoice)
+{
+    std::unique_ptr<MasterScore> score(importMnxFromJson(singleStaffMnx({ sequencesArray({ wholeNoteSequence("C", 5) }) }),
+                                                         u"<directionHints>/single.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+
+    const std::string json = exportMnxJson(score.get());
+    ASSERT_FALSE(json.empty());
+    auto doc = mnx::Document::create(json.data(), json.size());
+    const auto sequences = doc.parts()[0].measures()[0].sequences();
+    ASSERT_EQ(sequences.size(), size_t(1));
+    EXPECT_EQ(sequences[0].dump().find("directionHint"), std::string::npos);
+}
+
+//---------------------------------------------------------
+//   caesura tests
+//---------------------------------------------------------
+
+TEST_F(Mnx_UnitTests, caesuraMapping)
+{
+    struct Case {
+        mnx::CaesuraShape shape;
+        unsigned marks;
+        SymId sym;
+    };
+    const Case cases[] = {
+        { mnx::CaesuraShape::Normal, 2, SymId::caesura },
+        { mnx::CaesuraShape::Normal, 1, SymId::caesuraSingleStroke },
+        { mnx::CaesuraShape::Curved, 2, SymId::caesuraCurved },
+        { mnx::CaesuraShape::Short, 2, SymId::caesuraShort },
+        { mnx::CaesuraShape::Thick, 2, SymId::caesuraThick },
+    };
+    for (const Case& c : cases) {
+        SCOPED_TRACE(TConv::toXml(c.sym).ascii());
+        EXPECT_EQ(toMuseScoreCaesuraSym(c.shape, c.marks), c.sym);
+        const MnxCaesura back = toMnxCaesura(c.sym);
+        EXPECT_EQ(back.shape, c.shape);
+        EXPECT_EQ(back.marks, c.marks);
+    }
+    // MuseScore has no single-stroke form of the other shapes, so the shape wins.
+    EXPECT_EQ(toMuseScoreCaesuraSym(mnx::CaesuraShape::Thick, 1), SymId::caesuraThick);
+}
+
+TEST_F(Mnx_UnitTests, caesuraReplacesBreathMarkOnSameEvent)
+{
+    const std::string sequences
+        =
+            R"([ { "content": [ { "duration": { "base": "whole" },
+        "markings": { "breath": { "symbol": "comma" }, "caesura": { "shape": "curved" } },
+        "notes": [ { "pitch": { "octave": 5, "step": "C" } } ] } ] } ])";
+    std::unique_ptr<MasterScore> score(importMnxFromJson(singleStaffMnx({ sequences }), u"<caesura>/both.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+
+    const Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+    std::vector<const Breath*> breaths;
+    for (const Segment* segment = measure->first(SegmentType::Breath); segment; segment = segment->next(SegmentType::Breath)) {
+        if (const EngravingItem* item = segment->element(0)) {
+            breaths.push_back(toBreath(item));
+        }
+    }
+    ASSERT_EQ(breaths.size(), size_t(1));
+    EXPECT_TRUE(breaths.front()->isCaesura());
+    EXPECT_EQ(breaths.front()->symId(), SymId::caesuraCurved);
+}
+
+//---------------------------------------------------------
+//   staff config tests
+//---------------------------------------------------------
+
+TEST_F(Mnx_UnitTests, staffConfigMidMeasureMovesToNextBarline)
+{
+    const std::string whole = sequencesArray({ wholeNoteSequence("C", 5) });
+    // m1 changes to one line halfway through; m3 changes to three lines halfway through, with
+    // no measure after it to take the change.
+    std::unique_ptr<MasterScore> score(importMnxFromJson(
+                                           singleStaffMnx({ whole, whole, whole },
+    {
+        R"(, "staffConfigs": [ { "config": { "lines": 1 }, "position": { "fraction": [1, 2] } } ])",
+        "",
+        R"(, "staffConfigs": [ { "config": { "lines": 3 }, "position": { "fraction": [1, 2] } } ])" }),
+                                           u"<staffConfig>/midMeasure.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+
+    const Staff* staff = score->staff(0);
+    ASSERT_TRUE(staff);
+    EXPECT_EQ(staff->lines(nthMeasure(score.get(), 0)->tick()), 5);
+    EXPECT_EQ(staff->lines(nthMeasure(score.get(), 1)->tick()), 1);
+    EXPECT_EQ(staff->lines(nthMeasure(score.get(), 2)->tick()), 1);
+}
+
+TEST_F(Mnx_UnitTests, staffConfigExportWritesChangesAndOmitsDefaults)
+{
+    const std::string whole = sequencesArray({ wholeNoteSequence("C", 5) });
+    std::unique_ptr<MasterScore> score(importMnxFromJson(
+                                           singleStaffMnx({ whole, whole, whole },
+                                                          { R"(, "staffConfigs": [ { "config": { "lines": 1 } } ])",
+                                                            "",
+                                                            R"(, "staffConfigs": [ { "config": {} } ])" }),
+                                           u"<staffConfig>/defaults.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+    EXPECT_EQ(score->staff(0)->lines(nthMeasure(score.get(), 1)->tick()), 1);
+    EXPECT_EQ(score->staff(0)->lines(nthMeasure(score.get(), 2)->tick()), 5);
+
+    const std::string json = exportMnxJson(score.get());
+    ASSERT_FALSE(json.empty());
+    auto doc = mnx::Document::create(json.data(), json.size());
+    ASSERT_TRUE(mnx::validation::schemaValidate(doc));
+    const auto partMeasures = doc.parts()[0].measures();
+    ASSERT_EQ(partMeasures.size(), size_t(3));
+
+    // A staff config describes the whole staff, so only changes are written, and a return to
+    // the defaults is an empty config.
+    ASSERT_TRUE(partMeasures[0].staffConfigs());
+    ASSERT_EQ(partMeasures[0].staffConfigs()->size(), size_t(1));
+    EXPECT_EQ((*partMeasures[0].staffConfigs())[0].config().lines(), 1u);
+    EXPECT_FALSE(partMeasures[1].staffConfigs());
+    ASSERT_TRUE(partMeasures[2].staffConfigs());
+    ASSERT_EQ(partMeasures[2].staffConfigs()->size(), size_t(1));
+    EXPECT_EQ((*partMeasures[2].staffConfigs())[0].config().dump(), "{}");
 }
