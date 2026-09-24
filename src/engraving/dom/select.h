@@ -156,8 +156,6 @@ public:
     void setStartSegment(Segment* s);
     void setEndSegment(Segment* s);
 
-    void setStartBox(Box* box);
-    void setEndBox(Box* box);
     Box* startBox() const { return m_startBox; }
     Box* endBox() const { return m_endBox; }
 
@@ -205,6 +203,8 @@ private:
     ChordRest* lastChordRestInRange(track_idx_t preferredTrack = muse::nidx) const;
 
     void validateBoxesAndSegments(); // Checks that the Boxes/segments match (asserts and clears the Box if not)
+
+    bool rangeIsValid() const;
 
     Score* m_score = nullptr;
     SelState m_state = SelState::NONE;

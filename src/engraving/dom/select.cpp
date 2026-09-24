@@ -726,6 +726,8 @@ void Selection::updateSelectedElements()
         update();
         return;
     }
+
+    // TODO: Quite a lot of nesting - should clean this up...
     if (m_state == SelState::RANGE && m_plannedTick1 != Fraction(-1, 1) && m_plannedTick2 != Fraction(-1, 1)) {
         const staff_idx_t staffStart = m_staffStart;
         const staff_idx_t staffEnd = m_staffEnd;
@@ -734,26 +736,39 @@ void Selection::updateSelectedElements()
 
         deselectAll();
 
-        Segment* s1 = m_score->tick2segmentMM(m_plannedTick1);
-        Segment* s2 = m_score->tick2segmentMM(m_plannedTick2, /* first */ true /* HACK */);
-        if (s2 && s2->measure()->isMMRest()) {
-            s2 = s2->prev1MM(); // HACK
-        }
-        // These hacks are needed to prevent https://musescore.org/node/173381.
-        // This should exclude any segments belonging to MM-rest range from the selection.
-        if (s1 && s2 && s1->tick() + s1->ticks() > s2->tick()) {
-            // can happen with MM rests as tick2measure returns only the first segment for them.
+        Segment* s1 = nullptr;
+        Segment* s2 = nullptr;
 
-            m_plannedTick1 = Fraction(-1, 1);
-            m_plannedTick2 = Fraction(-1, 1);
-            return;
-        }
+        if (startBox && endBox && m_plannedTick1 == m_plannedTick2) {
+            // Box-only range...
+            if (m_plannedTick1 == m_score->endTick()) {
+                s1 = m_score->lastSegmentMM();
+            } else {
+                s1 = m_score->tick2segmentMM(m_plannedTick1, true, SegmentType::Duration);
+                s2 = s1;
+            }
+        } else {
+            s1 = m_score->tick2segmentMM(m_plannedTick1);
+            s2 = m_score->tick2segmentMM(m_plannedTick2, /* first */ true /* HACK */);
+            if (s2 && s2->measure()->isMMRest()) {
+                s2 = s2->prev1MM(); // HACK
+            }
+            // These hacks are needed to prevent https://musescore.org/node/173381.
+            // This should exclude any segments belonging to MM-rest range from the selection.
+            if (s1 && s2 && s1->tick() + s1->ticks() > s2->tick()) {
+                // can happen with MM rests as tick2measure returns only the first segment for them.
 
-        if (s2 && s2 == s2->measure()->first()) {
-            // we want the last segment of the previous measure (unless it's part of a MMrest)
-            Measure* prevMeasure = s2->measure()->prevMeasure();
-            if (!(prevMeasure && prevMeasure != prevMeasure->coveringMMRestOrThis())) {
-                s2 = s2->prev1();
+                m_plannedTick1 = Fraction(-1, 1);
+                m_plannedTick2 = Fraction(-1, 1);
+                return;
+            }
+
+            if (s2 && s2 == s2->measure()->first()) {
+                // we want the last segment of the previous measure (unless it's part of a MMrest)
+                Measure* prevMeasure = s2->measure()->prevMeasure();
+                if (!(prevMeasure && prevMeasure != prevMeasure->coveringMMRestOrThis())) {
+                    s2 = s2->prev1();
+                }
             }
         }
 
@@ -908,18 +923,6 @@ void Selection::setEndSegment(Segment* s)
     validateBoxesAndSegments();
 }
 
-void Selection::setStartBox(Box* box)
-{
-    m_startBox = box;
-    validateBoxesAndSegments();
-}
-
-void Selection::setEndBox(Box* box)
-{
-    m_endBox = box;
-    validateBoxesAndSegments();
-}
-
 void Selection::validateBoxesAndSegments()
 {
     if (m_startBox) {
@@ -1052,6 +1055,37 @@ void Selection::dump()
     }
 }
 
+bool Selection::rangeIsValid() const
+{
+    if (!isRange()) {
+        return false;
+    }
+
+    //! NOTE: m_startSegment being non-null and m_endSegment being null is a
+    //! valid case. It means we've selected the last segment of the final measure...
+    if (!m_startSegment) {
+        return false;
+    }
+
+    if (m_endSegment && m_endSegment->tick() <= m_startSegment->tick()) {
+        const bool isBoxOnlyRange = m_startBox && m_endBox && tickStart() == tickEnd()
+                                    && m_startBox->isBeforeOrEqual(m_endBox);
+        if (!isBoxOnlyRange) {
+            return false;
+        }
+    }
+
+    const size_t totalStaves = m_score->nstaves();
+    if (m_staffStart == muse::nidx || m_staffStart >= totalStaves) {
+        return false;
+    }
+    if (m_staffEnd == muse::nidx || m_staffEnd > totalStaves) {
+        return false;
+    }
+
+    return m_staffStart < m_staffEnd;
+}
+
 //---------------------------------------------------------
 //   updateState
 ///   update selection and input state
@@ -1059,18 +1093,8 @@ void Selection::dump()
 
 void Selection::updateState()
 {
-    const size_t totalStaves = m_score->nstaves();
-
-    //! NOTE: m_startSegment being non-null and m_endSegment being null is a valid case. It means we've selected the
-    //! last segment of the final measure...
-    const bool rangeSegsInvalid = !m_startSegment || (m_endSegment && m_endSegment->tick() <= m_startSegment->tick());
-    const bool rangeStavesInvalid = m_staffStart == muse::nidx || m_staffStart >= totalStaves
-                                    || m_staffEnd == muse::nidx || m_staffEnd > totalStaves
-                                    || m_staffStart >= m_staffEnd;
-    const bool rangeIsValid = isRange() && !rangeSegsInvalid && !rangeStavesInvalid;
-
     //! NOTE: Range can be valid even if no elements are selectable in that range...
-    if (m_el.size() == 0 && !rangeIsValid) {
+    if (m_el.size() == 0 && !rangeIsValid()) {
         setState(SelState::NONE);
     } else if (m_state == SelState::NONE) {
         setState(SelState::LIST);
@@ -1676,28 +1700,39 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
     bool activeSegmentIsStart = false;
     staff_idx_t activeStaff = m_activeTrack / VOICES;
 
-    if (staffIdx < m_staffStart) {
-        m_staffStart = staffIdx;
-    } else if (staffIdx >= m_staffEnd) {
-        m_staffEnd = staffIdx + 1;
-    } else if (m_staffEnd - m_staffStart > 1) { // at least 2 staff selected
-        if (staffIdx == m_staffStart + 1 && activeStaff == m_staffStart) {   // going down
+    // TODO: Quite a lot of nesting - should clean this up...
+    if (!box) {
+        if (staffIdx < m_staffStart) {
             m_staffStart = staffIdx;
-        } else if (staffIdx == m_staffEnd - 2 && activeStaff == m_staffEnd - 1) { // going up
+        } else if (staffIdx >= m_staffEnd) {
             m_staffEnd = staffIdx + 1;
+        } else if (m_staffEnd - m_staffStart > 1) { // at least 2 staff selected
+            if (staffIdx == m_staffStart + 1 && activeStaff == m_staffStart) {   // going down
+                m_staffStart = staffIdx;
+            } else if (staffIdx == m_staffEnd - 2 && activeStaff == m_staffEnd - 1) { // going up
+                m_staffEnd = staffIdx + 1;
+            }
         }
     }
 
-    // start/end tick may not have changed, but we might have extended to a Box...
-    const bool newBoxAtStart = !m_startBox && box && box->tick() == tickStart();
-    const bool newBoxAtEnd = !m_endBox && box && box->tick() == tickEnd();
+    // start/end tick may not have changed, but a Box at the same tick may still lie outside the range...
+    bool extendsBackwards = tick < tickStart();
+    bool extendsForwards = etick > tickEnd();
+    if (box) {
+        if (box->tick() == tickStart()) {
+            extendsBackwards = !m_startBox || box->isBefore(m_startBox);
+        }
+        if (box->tick() == tickEnd()) {
+            extendsForwards = !m_endBox || m_endBox->isBefore(box);
+        }
+    }
 
-    if (tick < tickStart() || newBoxAtStart) {
+    if (extendsBackwards) {
         // Range extends backwards...
         m_startSegment = seg;
         m_startBox = box;
         activeSegmentIsStart = true;
-    } else if (etick > tickEnd() || newBoxAtEnd) {
+    } else if (extendsForwards) {
         // Range extends forwards...
         m_endSegment = segAfter;
         m_endBox = box;

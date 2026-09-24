@@ -680,7 +680,6 @@ public:
     MeasureBase* first() const;
     MeasureBase* firstMM() const;
     MeasureBase* last()  const;
-    std::vector<MeasureBase*> measureBasesAtTick(const Fraction& tick) const;
     Measure* firstMeasure() const;
     Measure* firstMeasureMM() const;
     Measure* lastMeasure() const;
