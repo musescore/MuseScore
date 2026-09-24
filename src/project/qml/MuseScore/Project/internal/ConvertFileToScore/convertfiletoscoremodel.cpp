@@ -82,17 +82,23 @@ static bool allowsMultipleFiles(int maxCount)
     return maxCount <= 0 || maxCount > 1;
 }
 
-static bool isJpeg(const QString& extOrPath)
-{
-    return extOrPath.compare("jpeg", Qt::CaseInsensitive) == 0 || extOrPath.endsWith(".jpeg", Qt::CaseInsensitive);
-}
-
-static QStringList resolveExtensions(const QStringList& paths)
+static QStringList resolveExtensionsForFilePicker(const QStringList& paths)
 {
     QStringList extensions;
     for (const QString& path : paths) {
-        QString ext = QFileInfo(path).suffix();
-        if (!ext.isEmpty() && !extensions.contains(ext, Qt::CaseInsensitive)) {
+        const QString ext = QFileInfo(path).suffix().toLower();
+        if (ext.isEmpty()) {
+            continue;
+        }
+
+        if (ext == "jpg" || ext == "jpeg") {
+            if (!extensions.contains("jpg")) {
+                extensions << "jpg";
+            }
+            if (!extensions.contains("jpeg")) {
+                extensions << "jpeg";
+            }
+        } else if (!extensions.contains(ext)) {
             extensions << ext;
         }
     }
@@ -217,8 +223,9 @@ QVariantList ConvertFileToScoreModel::fileRequirements() const
     if (category == FileCategory::Unknown || category == FileCategory::Image) {
         QStringList imageExtensions;
         for (const QString& ext : omr.images.allowedExtensions) {
-            QString normalizedExt = isJpeg(ext) ? "jpg" : ext;
-            if (!imageExtensions.contains(normalizedExt, Qt::CaseInsensitive)) {
+            // Display only JPG in the UI, not both JPG & JPEG
+            const QString normalizedExt = ext == "jpeg" ? "jpg" : ext;
+            if (!imageExtensions.contains(normalizedExt)) {
                 imageExtensions << normalizedExt;
             }
         }
@@ -369,7 +376,7 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
 
     QStringList extensions = existingPaths.isEmpty()
                              ? QStringList { "pdf" } + config.omr.images.allowedExtensions + config.audio2score.file.allowedExtensions
-    : resolveExtensions(existingPaths);
+    : resolveExtensionsForFilePicker(existingPaths);
 
     QStringList patterns;
     patterns.reserve(extensions.size());
