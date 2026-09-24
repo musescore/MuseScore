@@ -317,17 +317,6 @@ int StringData::resolveForcedString(const Note* note) const {
 //    is to minimize the distance we'll be moving in total across all ticks. 
 //---------------------------------------------------------
 int StringData::scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const {
-    // TODO: if the chord has a certain amount of notes, prioritized bass notes that allow for all the
-    // notes in the string to be played 
-
-    // TODO: if we plan to use this function for non-bass notes, we should try to incentivize barring and shift all of the other frettings after the fretting of the anchor 
-    // use the above as a tiebreaker, perhaps? 
-    // this is especially important if the chord has 5+ notes
-
-    // TODO: for tiebreaking, prefer same string/closer string as opposed to closer fret 
-
-    // TODO: prefer vertical jumps of one or two strings, but afterwards vertical jump should be penalized heavily 
-    // deals with the case of playing octaves, for example 
     int verticalDistance = std::abs(anchor.first - candidate.first);
     int horizontalDistance = std::abs(anchor.second - candidate.second);
   
@@ -381,11 +370,6 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
     std::vector<bool> used(strings, false);
     int bassString = bassFretting.first; 
     used[bassString] = true; 
-
-    // TODO: main idea is that we do not allow for distane between any two frets in the chord
-    // to exceed the max_fret_distance of 4
-    // to account for the case of barring, we say that if it's on the same fret as the bassnote 
-    // then its distance is 0 
 
     std::vector<Note*> notes = collectNotesAtSameTick(chord); 
 
