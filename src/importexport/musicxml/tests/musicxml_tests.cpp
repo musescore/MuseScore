@@ -993,6 +993,9 @@ TEST_F(MusicXml_Tests, multipleNotations) {
 TEST_F(MusicXml_Tests, namedNoteheads) {
     musicXmlImportTestRef("testNamedNoteheads");
 }
+TEST_F(MusicXml_Tests, namedNoteheadsPercussion) {
+    musicXmlImportTestRef("testNamedNoteheadsPercussion");
+}
 TEST_F(MusicXml_Tests, negativeOffset) {
     musicXmlImportTestRef("testNegativeOffset");
 }
