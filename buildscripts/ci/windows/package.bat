@@ -138,6 +138,12 @@ ECHO on
 ECHO "PACKAGE_UUID: %PACKAGE_UUID%"
 ECHO off
 
+:: Sign the binaries before they are packed into the installer
+IF %DO_SIGN% == ON (
+    CALL :SIGN_INSTALL_DIR
+    IF ERRORLEVEL 1 GOTO END_ERROR
+)
+
 cd "%BUILD_DIR%" 
 cmake -DCPACK_WIX_PRODUCT_GUID=%PACKAGE_UUID% ^
     -DCPACK_WIX_UPGRADE_GUID=%UPGRADE_UUID% ^
@@ -194,6 +200,12 @@ GOTO END_SUCCESS
 :PACK_PORTABLE
 ECHO "Start portable packing..."
 
+:: Sign the binaries before they are packed into the installer
+IF %DO_SIGN% == ON (
+    CALL :SIGN_INSTALL_DIR
+    IF ERRORLEVEL 1 GOTO END_ERROR
+)
+
 :: Create launcher
 ECHO "Start comLauncherGenerator..."
 CALL C:\portableappslauncher\Launcher\PortableApps.comLauncherGenerator.exe %CD%\%INSTALL_DIR%
@@ -238,3 +250,45 @@ exit /b 0
 
 :END_ERROR
 exit /b 1
+
+:: ============================
+:: SIGN_INSTALL_DIR
+:: Packs all exe and dll files from the install dir into a zip,
+:: sends the zip to the sign service and unpacks the signed files back
+:: ============================
+:SIGN_INSTALL_DIR
+ECHO "Start signing binaries in %INSTALL_DIR%..."
+
+:: the msi and the portable jobs run in parallel, so the name must be different for them
+SET SIGN_ZIP_SUFFIX=binaries
+IF %BUILD_WIN_PORTABLE% == ON ( SET "SIGN_ZIP_SUFFIX=portable-binaries" )
+
+IF %BUILD_MODE% == nightly (
+    SET "SIGN_ZIP_NAME=MuseScore-Studio-Nightly-%BUILD_NUMBER%-%BUILD_BRANCH%-%BUILD_REVISION%-%TARGET_PROCESSOR_ARCH%-%SIGN_ZIP_SUFFIX%.zip"
+) ELSE (
+    SET "SIGN_ZIP_NAME=MuseScore-Studio-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%-%SIGN_ZIP_SUFFIX%.zip"
+)
+
+SET "SIGN_ZIP_PATH=%CD%\%SIGN_ZIP_NAME%"
+
+IF EXIST "%SIGN_ZIP_PATH%" DEL /F /Q "%SIGN_ZIP_PATH%"
+
+ECHO "Pack binaries to %SIGN_ZIP_NAME%"
+PUSHD "%INSTALL_DIR%" || EXIT /b 1
+7z a -tzip "%SIGN_ZIP_PATH%" -r *.exe *.dll
+SET PACK_ERROR=%ERRORLEVEL%
+POPD
+IF NOT "%PACK_ERROR%" == "0" (
+    ECHO "error: failed to pack binaries from %INSTALL_DIR%"
+    EXIT /b 1
+)
+
+CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %SIGN_ZIP_NAME% || EXIT /b 1
+
+ECHO "Replace binaries in %INSTALL_DIR% with the signed ones"
+7z x -y -o"%INSTALL_DIR%" "%SIGN_ZIP_PATH%" || EXIT /b 1
+
+DEL /F /Q "%SIGN_ZIP_PATH%"
+
+ECHO "Finished signing binaries"
+EXIT /b 0
