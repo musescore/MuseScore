@@ -555,8 +555,6 @@ void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::
     if (!m_timer.isActive()) {
         m_timer.start();
     }
-
-    poll();
 }
 
 bool ConvertFileToScoreService::hasAnyProcessingScores() const
@@ -621,15 +619,11 @@ void ConvertFileToScoreService::handlePollFailure(const Ret& ret)
     const secs_t elapsedSecs(elapsedMs / 1000.0);
 
     if (!m_manualRetryRequested && isRetryableError(ret) && remainingMs > 0) {
-        //! NOTE: the first retry is likely just a stale pooled connection the server closed
-        //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
-        if (m_pollFailureCount > 1) {
-            m_pollIntervalMs = static_cast<int>(std::min<int64_t>(m_pollIntervalMs * 2, remainingMs));
-            m_timer.setInterval(m_pollIntervalMs);
-        }
+        m_pollIntervalMs = static_cast<int>(std::min<int64_t>(m_pollIntervalMs * 2, remainingMs));
+        m_timer.setInterval(m_pollIntervalMs);
         const secs_t intervalSecs(m_pollIntervalMs / 1000.0);
-        LOGW() << "Could not check the conversion status, retrying in " << intervalSecs.raw()
-               << "s (elapsed " << elapsedSecs.raw() << "s): " << ret.toString();
+        LOGW() << "Could not check the conversion status, retrying in " << intervalSecs
+               << "s (elapsed " << elapsedSecs << "s): " << ret.toString();
         m_pollingStatusChanged.send(PollingFailure { ret, elapsedSecs, intervalSecs, false });
         return;
     }

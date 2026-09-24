@@ -79,6 +79,9 @@ protected:
     //! NOTE: overridable so tests can fake elapsed time instead of waiting on the real clock
     virtual int64_t nowMs() const;
 
+    //! NOTE: protected so tests can trigger a poll directly instead of waiting on the real timer
+    void poll();
+
 private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
     static constexpr int MAX_POLL_RETRY_DURATION_MS = 10 * 60000; // gives up after ~10 minutes
@@ -88,7 +91,6 @@ private:
 
     void watch(ConvertType type, int itemId, const muse::String& convertedScoreName);
     bool hasAnyProcessingScores() const;
-    void poll();
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);
     void giveUpPolling(const muse::Ret& ret, muse::secs_t elapsed);

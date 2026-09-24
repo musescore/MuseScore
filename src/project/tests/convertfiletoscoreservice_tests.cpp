@@ -136,6 +136,7 @@ class TestableConvertFileToScoreService : public ConvertFileToScoreService
 {
 public:
     using ConvertFileToScoreService::ConvertFileToScoreService;
+    using ConvertFileToScoreService::poll;
 
     int64_t fakeNowMs = 0;
 
@@ -191,8 +192,7 @@ protected:
         return config;
     }
 
-    //! NOTE: uploads the given file, resolves the upload with queueId, and lets the resulting
-    //! poll (mocked to return queueList) run to completion
+    //! NOTE: uploads the given file, resolves it, and manually polls
     void deliverQueueStatus(const ConvertQueueList& queueList, ConvertType type, int queueId, const QString& convertedScoreName)
     {
         ON_CALL(*m_convertService, fetchQueue())
@@ -212,12 +212,12 @@ protected:
         m_service->startConvert(input, convertedScoreName);
 
         uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(queueId) } })));
+        m_service->poll();
         pumpEvents();
     }
 
-    //! NOTE: uploads the given file and resolves with queueId, triggering a fresh poll
-    //! (watch() always re-polls all watched items) without touching the fetchQueue mock,
-    //! which the caller owns - lets a test drive N polls without waiting on the real QTimer
+    //! NOTE: uploads the given file, resolves with queueId, and manually polls, without touching
+    //! the fetchQueue mock, which the caller owns
     void uploadAndResolve(int queueId, const QString& convertedScoreName, const io::paths_t& paths)
     {
         auto uploadProgress = std::make_shared<Progress>();
@@ -229,6 +229,7 @@ protected:
         m_service->startConvert(OmrConvertInput { paths }, convertedScoreName);
 
         uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(queueId) } })));
+        m_service->poll();
         pumpEvents();
     }
 
@@ -662,6 +663,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     EXPECT_TRUE(ret);
 
     uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->poll();
 
     EXPECT_TRUE(savedExpectedEntry);
 }
@@ -993,12 +995,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
 
     m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
     uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->poll();
     pumpEvents();
 
     ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
 
     // [WHEN] A second conversion finishes uploading and starts being watched before the first
-    // fetchQueue() request finishes - its poll() does nothing because one is already running
+    // fetchQueue() request finishes
     const int secondId = TEST_QUEUE_ID + 1;
     auto uploadProgressB = std::make_shared<Progress>();
     EXPECT_CALL(*m_convertService, startConvert(_))
@@ -1043,12 +1046,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
 
     m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
     uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->poll();
     pumpEvents();
 
     ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
 
     // [WHEN] A second conversion finishes uploading and starts being watched before the first
-    // fetchQueue() request finishes - its poll() does nothing because one is already running
+    // fetchQueue() request finishes
     const int secondId = TEST_QUEUE_ID + 1;
     auto uploadProgressB = std::make_shared<Progress>();
     EXPECT_CALL(*m_convertService, startConvert(_))
@@ -1103,6 +1107,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
 
     m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
     uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->poll();
     pumpEvents();
 
     ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
@@ -1166,6 +1171,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
 
     m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
     uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->poll();
     pumpEvents();
 
     ASSERT_TRUE(resolveFirstFetch) << "The first fetchQueue() request should already be in progress";
@@ -1524,11 +1530,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_Reports
     // [WHEN] Starting the conversion, triggering the first poll
     uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
 
-    // [THEN] The first failure is reported as still retrying, at the normal (non-backed-off) interval
+    // [THEN] The first failure is reported as still retrying, already backed off from the minimum interval
     ASSERT_TRUE(received);
     EXPECT_FALSE(failure.gaveUp);
-    EXPECT_DOUBLE_EQ(failure.elapsed.raw(), 0.0);
-    EXPECT_DOUBLE_EQ(failure.nextInterval.raw(), 60.0);
+    EXPECT_EQ(failure.elapsed, secs_t(0.0));
+    EXPECT_EQ(failure.nextInterval, secs_t(120.0));
     EXPECT_EQ(failure.ret.code(), int(muse::cloud::Err::NetworkError));
 }
 
