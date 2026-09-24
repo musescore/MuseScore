@@ -80,6 +80,11 @@ void CloudScoresModel::load()
 
 void CloudScoresModel::reload()
 {
+    if (m_requestState != RequestState::Idle) {
+        m_requestState = RequestState::PendingStale;
+        m_queuedRefreshPage.reset();
+    }
+
     beginResetModel();
 
     m_items = buildWatchedItems();
@@ -144,8 +149,8 @@ void CloudScoresModel::setDesiredRowCount(int count)
 
 void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
 {
-    if (m_isRequestPending) {
-        if (refreshPage.has_value()) {
+    if (m_requestState != RequestState::Idle) {
+        if (refreshPage.has_value() && m_requestState != RequestState::PendingStale) {
             m_queuedRefreshPage = refreshPage;
         }
         return;
@@ -168,10 +173,18 @@ void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
         setState(State::Loading);
     }
 
-    m_isRequestPending = true;
+    m_requestState = RequestState::Pending;
 
     museScoreComService()->downloadScoresList(BATCH_SIZE, page)
     .onResolve(this, [this, isRefresh](const cloud::ScoresList& scoresList) {
+        const RequestState prevState = m_requestState;
+        m_requestState = RequestState::Idle;
+
+        if (prevState == RequestState::PendingStale) {
+            loadItemsIfNecessary();
+            return;
+        }
+
         std::unordered_set<int> downloadedScoreIds;
         downloadedScoreIds.reserve(scoresList.items.size());
         for (const cloud::ScoresList::Item& item : scoresList.items) {
@@ -210,8 +223,6 @@ void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
         m_totalItems = scoresList.meta.totalScoresCount;
         emit hasMoreChanged();
 
-        m_isRequestPending = false;
-
         if (m_queuedRefreshPage) {
             const int queuedPage = *m_queuedRefreshPage;
             m_queuedRefreshPage.reset();
@@ -222,7 +233,14 @@ void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
     })
     .onReject(this, [this, isRefresh](int code, const std::string& err) {
         LOGE() << "Loading scores list failed: [" << code << "] " << err;
-        m_isRequestPending = false;
+
+        const RequestState prevState = m_requestState;
+        m_requestState = RequestState::Idle;
+
+        if (prevState == RequestState::PendingStale) {
+            loadItemsIfNecessary();
+            return;
+        }
 
         if (m_queuedRefreshPage) {
             const int queuedPage = *m_queuedRefreshPage;

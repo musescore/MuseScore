@@ -85,6 +85,12 @@ signals:
 private:
     void setState(State state);
 
+    enum class RequestState {
+        Idle, // no request in flight
+        Pending, // request is in flight
+        PendingStale // request in flight when reload() reset the list - discard its result
+    };
+
     void loadItemsIfNecessary(std::optional<int> refreshPage = std::nullopt);
     bool needsLoading();
     size_t loadedCloudItemCount() const;
@@ -94,7 +100,7 @@ private:
     void updateWatchedItems(const std::unordered_set<int>& downloadedScoreIds = {}, bool allowRefresh = true);
 
     State m_state = State::Fine;
-    bool m_isRequestPending = false;
+    RequestState m_requestState = RequestState::Idle;
     std::optional<int> m_queuedRefreshPage;
 
     size_t m_totalItems = muse::nidx;
