@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <memory>
 #include <optional>
 #include <unordered_map>
@@ -353,6 +354,12 @@ async::Channel<PollingStatus> ConvertFileToScoreService::pollingStatusChanged() 
     return m_pollingStatusChanged;
 }
 
+int64_t ConvertFileToScoreService::nowMs() const
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+}
+
 void ConvertFileToScoreService::retryPolling()
 {
     resetPollState();
@@ -604,37 +611,41 @@ void ConvertFileToScoreService::resetPollState()
 
 void ConvertFileToScoreService::handlePollFailure(const Ret& ret)
 {
+    if (m_pollFailureCount == 0) {
+        m_pollRetryStartMs = nowMs();
+    }
     ++m_pollFailureCount;
 
-    if (!m_manualRetryRequested && isRetryableError(ret) && m_pollFailureCount < MAX_POLL_RETRY_ATTEMPTS) {
+    const int64_t elapsedMs = nowMs() - m_pollRetryStartMs;
+    const int64_t remainingMs = MAX_POLL_RETRY_DURATION_MS - elapsedMs;
+    const secs_t elapsedSecs(elapsedMs / 1000.0);
+
+    if (!m_manualRetryRequested && isRetryableError(ret) && remainingMs > 0) {
         //! NOTE: the first retry is likely just a stale pooled connection the server closed
         //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
         if (m_pollFailureCount > 1) {
-            m_pollIntervalMs = std::min(m_pollIntervalMs * 2, MAX_RETRY_INTERVAL_MS);
+            m_pollIntervalMs = static_cast<int>(std::min<int64_t>(m_pollIntervalMs * 2, remainingMs));
             m_timer.setInterval(m_pollIntervalMs);
         }
         const secs_t intervalSecs(m_pollIntervalMs / 1000.0);
         LOGW() << "Could not check the conversion status, retrying in " << intervalSecs.raw()
-               << "s (attempt " << m_pollFailureCount << "/" << MAX_POLL_RETRY_ATTEMPTS
-               << "): " << ret.toString();
-        m_pollingStatusChanged.send(PollingFailure { ret, m_pollFailureCount, MAX_POLL_RETRY_ATTEMPTS, intervalSecs, false });
+               << "s (elapsed " << elapsedSecs.raw() << "s): " << ret.toString();
+        m_pollingStatusChanged.send(PollingFailure { ret, elapsedSecs, intervalSecs, false });
         return;
     }
 
-    giveUpPolling(ret);
+    giveUpPolling(ret, elapsedSecs);
 }
 
-void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
+void ConvertFileToScoreService::giveUpPolling(const Ret& ret, secs_t elapsed)
 {
     LOGE() << "Could not check the conversion status, stopping polling for now, "
            << m_watchedScores.size() << " pending conversion(s) remain watched: " << ret.toString();
 
-    const int count = m_pollFailureCount;
-
     m_timer.stop();
     resetPollState();
 
-    m_pollingStatusChanged.send(PollingFailure { ret, count, MAX_POLL_RETRY_ATTEMPTS, secs_t(0), true });
+    m_pollingStatusChanged.send(PollingFailure { ret, elapsed, secs_t(0), true });
 }
 
 void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queue, const WatchedScoreList& snapshot)

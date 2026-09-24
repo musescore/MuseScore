@@ -486,14 +486,14 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_ShowsTo
     // [THEN] The connectivity toast is shown exactly once
     EXPECT_CALL(*m_toastService, showWarning(title, text)).Times(1);
 
-    // [WHEN] Polling fails below the attempt threshold (4), then reaches and passes it, and
-    // eventually gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), 1, 5, secs_t(0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), 2, 5, secs_t(0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), 3, 5, secs_t(0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), 4, 5, secs_t(0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), 5, 5, secs_t(0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    // [WHEN] Polling fails below the elapsed threshold (5 minutes), then reaches and passes it,
+    // and eventually gives up
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(0.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(60.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(180.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(300.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(420.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
@@ -521,7 +521,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_
     }));
 
     // [WHEN] Polling gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
@@ -545,7 +545,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_
     EXPECT_CALL(*m_service, retryPolling()).Times(1);
 
     // [WHEN] Polling gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
@@ -569,7 +569,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_
     EXPECT_CALL(*m_service, retryPolling()).Times(0);
 
     // [WHEN] Polling gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
