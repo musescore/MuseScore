@@ -1,0 +1,161 @@
+{
+    "mnx": {
+        "version": 40
+    },
+    "global": {
+        "measures": [
+            {
+                "id": "m1",
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 6,
+                    "unit": 4
+                }
+            }
+        ]
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "name": "Flute",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "e1",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "C"
+                                            },
+                                            "id": "e1n1"
+                                        }
+                                    ],
+                                    "markings": {
+                                        "breath": {
+                                            "symbol": "comma"
+                                        }
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "e2",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "D"
+                                            },
+                                            "id": "e2n1"
+                                        }
+                                    ],
+                                    "markings": {
+                                        "caesura": {}
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "e3",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            },
+                                            "id": "e3n1"
+                                        }
+                                    ],
+                                    "markings": {
+                                        "caesura": {
+                                            "marks": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "e4",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            },
+                                            "id": "e4n1"
+                                        }
+                                    ],
+                                    "markings": {
+                                        "caesura": {
+                                            "shape": "curved"
+                                        }
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "e5",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            },
+                                            "id": "e5n1"
+                                        }
+                                    ],
+                                    "markings": {
+                                        "caesura": {
+                                            "shape": "short"
+                                        }
+                                    }
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "e6",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            },
+                                            "id": "e6n1"
+                                        }
+                                    ],
+                                    "markings": {
+                                        "caesura": {
+                                            "shape": "thick"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -171,79 +171,72 @@
       <Measure>
         <eid>T_T</eid>
         <voice>
-          <Dynamic>
-            <subtype>mp</subtype>
-            <velocity>64</velocity>
-            <voiceAssignment>allInStaff</voiceAssignment>
-            <centerBetweenStaves>on</centerBetweenStaves>
-            <eid>U_U</eid>
-            <text><sym>dynamicMP</sym></text>
-            </Dynamic>
           <Chord>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>W_W</eid>
+              <eid>V_V</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         <voice>
           <Chord>
-            <eid>Y_Y</eid>
-            <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>Z_Z</eid>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>a_a</eid>
-            <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>b_b</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Chord>
-            <eid>c_c</eid>
+            <eid>X_X</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>Y_Y</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>e_e</eid>
+            <eid>Z_Z</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         <voice>
           <Chord>
-            <eid>f_f</eid>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>g_g</eid>
+              <eid>b_b</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>h_h</eid>
+            <eid>c_c</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        <voice>
+          <Dynamic>
+            <subtype>mp</subtype>
+            <velocity>64</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <centerBetweenStaves>on</centerBetweenStaves>
+            <eid>d_d</eid>
+            <text><sym>dynamicMP</sym></text>
+            </Dynamic>
+          <Chord>
+            <eid>e_e</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>f_f</eid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>g_g</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -256,14 +249,14 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>i_i</eid>
+            <eid>h_h</eid>
             </Clef>
           <KeySig>
-            <eid>j_j</eid>
+            <eid>i_i</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>k_k</eid>
+            <eid>j_j</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -272,29 +265,29 @@
             <velocity>64</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
             <centerBetweenStaves>on</centerBetweenStaves>
-            <eid>l_l</eid>
+            <eid>k_k</eid>
             <text><sym>dynamicMP</sym></text>
             </Dynamic>
           <Chord>
-            <eid>m_m</eid>
+            <eid>l_l</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>n_n</eid>
+              <eid>m_m</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>o_o</eid>
+            <eid>n_n</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>p_p</eid>
+              <eid>o_o</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>q_q</eid>
+            <eid>p_p</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -305,28 +298,28 @@
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
             <direction>down</direction>
             <centerBetweenStaves>off</centerBetweenStaves>
-            <eid>r_r</eid>
+            <eid>q_q</eid>
             </Dynamic>
           <Chord>
-            <eid>s_s</eid>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>t_t</eid>
+              <eid>s_s</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>u_u</eid>
+            <eid>t_t</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>v_v</eid>
+              <eid>u_u</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>w_w</eid>
+            <eid>v_v</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -334,7 +327,7 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>x_x</eid>
+            <eid>w_w</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

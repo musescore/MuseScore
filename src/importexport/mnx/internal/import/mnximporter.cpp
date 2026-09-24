@@ -21,9 +21,13 @@
  */
 #include <array>
 #include <exception>
+#include <map>
+#include <optional>
+#include <utility>
 #include <vector>
 
 #include "mnximporter.h"
+#include "internal/shared/mnxstaffconfig.h"
 #include "internal/shared/mnxtypesconv.h"
 
 #include "engraving/dom/barline.h"
@@ -42,6 +46,7 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/stafftypechange.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/volta.h"
@@ -82,6 +87,39 @@ int mensurStricheFinalSpanTo(int lines)
 //   Build a MuseScore Drumset from an MNX part kit definition.
 //---------------------------------------------------------
 
+//---------------------------------------------------------
+//   isMeasureStart
+//   Whether an optional MNX position is the start of its measure.
+//---------------------------------------------------------
+
+static bool isMeasureStart(const std::optional<mnx::RhythmicPosition>& position)
+{
+    return !position || toMuseScoreFraction(position->fraction()).isZero();
+}
+
+//---------------------------------------------------------
+//   initialStaffConfig
+//   The staff config a part's staff starts with, if MNX gives one.
+//---------------------------------------------------------
+
+static std::optional<MnxStaffConfigState> initialStaffConfig(const mnx::Part& mnxPart, int staffNum)
+{
+    const auto measures = mnxPart.measures();
+    if (measures.empty()) {
+        return std::nullopt;
+    }
+    const auto staffConfigs = measures[0].staffConfigs();
+    if (!staffConfigs) {
+        return std::nullopt;
+    }
+    for (const mnx::part::PositionedStaffConfig& staffConfig : staffConfigs.value()) {
+        if (staffConfig.staff() == staffNum && isMeasureStart(staffConfig.position())) {
+            return MnxStaffConfigState::fromMnx(staffConfig.config());
+        }
+    }
+    return std::nullopt;
+}
+
 static Drumset* createDrumset(const mnx::Part& mnxPart, const mnx::Document& doc,
                               std::map<std::pair<size_t, std::string>, int>& kitComponentToMidi)
 {
@@ -97,8 +135,17 @@ static Drumset* createDrumset(const mnx::Part& mnxPart, const mnx::Document& doc
 
     const auto sounds = doc.global().sounds();
     const StaffType* percStaffType = StaffType::preset(StaffTypes::PERC_DEFAULT);
-    /// @todo If MNX gains explicit staff type info, use it here instead of PERC_DEFAULT.
-    const int middleLine = percStaffType ? percStaffType->middleLine() : 4;
+    // MuseScore's default drumset is laid out for a 5-line staff, so fallback pitches are looked
+    // up against that staff. The kit's own lines follow the staff the part actually starts with.
+    const int defaultMiddleLine = percStaffType ? percStaffType->middleLine() : 4;
+    int middleLine = defaultMiddleLine;
+    if (percStaffType) {
+        if (const auto staffConfig = initialStaffConfig(mnxPart, 1)) {
+            StaffType kitStaffType = *percStaffType;
+            staffConfig->applyTo(kitStaffType);
+            middleLine = kitStaffType.middleLine();
+        }
+    }
     const size_t partIdx = mnxPart.calcArrayIndex();
     const auto kit = mnxPart.kit().value();
     struct KitEntry {
@@ -139,7 +186,7 @@ static Drumset* createDrumset(const mnx::Part& mnxPart, const mnx::Document& doc
             continue;
         }
         int fallbackPitch = defaultDrumset
-                            ? defaultDrumset->defaultPitchForLine(middleLine - entry.component.staffPosition())
+                            ? defaultDrumset->defaultPitchForLine(defaultMiddleLine - entry.component.staffPosition())
                             : -1;
         if (!pitchIsValid(fallbackPitch) || usedPitches[fallbackPitch]) {
             fallbackPitch = findFallbackPitch();
@@ -394,6 +441,120 @@ void MnxImporter::createStaff(Part* part, const mnx::Part& mnxPart, int staffNum
     m_score->appendStaff(staff);
     m_mnxPartStaffToStaff.emplace(std::make_pair(mnxPart.calcArrayIndex(), staffNum), staff->idx());
     m_StaffToMnxPart.emplace(staff->idx(), mnxPart.calcArrayIndex());
+}
+
+//---------------------------------------------------------
+//   PendingStaffTypeEdits
+//   Staff settings that MuseScore keeps in the staff type, which can change only at a barline.
+//   Both staff configs and clef visibility feed it, so each (measure index, staff) gets at most
+//   one staff type change. Add a member to PendingStaffTypeEdit for any further staff type
+//   setting MNX describes.
+//---------------------------------------------------------
+
+struct PendingStaffTypeEdit {
+    std::optional<MnxStaffConfigState> config;
+    std::optional<bool> showClef;
+};
+
+struct PendingStaffTypeEdits {
+    std::map<std::pair<size_t, staff_idx_t>, PendingStaffTypeEdit> edits;
+};
+
+//---------------------------------------------------------
+//   collectStaffTypeEdits
+//   Gather the staff type changes MNX staff configs and clefs call for, by measure. Barline
+//   spans depend on staff lines, so these must be known before brackets and barlines are
+//   imported. Those at the start of the score are applied here; the rest are applied as
+//   their measures are created.
+//---------------------------------------------------------
+
+PendingStaffTypeEdits MnxImporter::collectStaffTypeEdits()
+{
+    PendingStaffTypeEdits result;
+    const size_t measureCount = mnxDocument().global().measures().size();
+    for (const mnx::Part& mnxPart : mnxDocument().parts()) {
+        for (const mnx::part::Measure& partMeasure : mnxPart.measures()) {
+            const size_t measureIndex = partMeasure.calcArrayIndex();
+            if (const auto staffConfigs = partMeasure.staffConfigs()) {
+                for (const mnx::part::PositionedStaffConfig& staffConfig : staffConfigs.value()) {
+                    const staff_idx_t staffIdx = mnxPartStaffToStaffIdx(mnxPart, staffConfig.staff());
+                    size_t targetIndex = measureIndex;
+                    if (!isMeasureStart(staffConfig.position())) {
+                        // MuseScore changes staff types only at a barline. Waiting for the next one
+                        // leaves the music before the change on the staff it was written for.
+                        ++targetIndex;
+                        if (targetIndex >= measureCount) {
+                            LOGW() << "Staff config at " << staffConfig.pointer().to_string()
+                                   << " is not at the start of a measure and there is no following measure; it is skipped.";
+                            continue;
+                        }
+                        LOGW() << "Staff config at " << staffConfig.pointer().to_string()
+                               << " is not at the start of a measure; it is applied at the start of the next measure.";
+                    }
+                    result.edits[{ targetIndex, staffIdx }].config = MnxStaffConfigState::fromMnx(staffConfig.config());
+                }
+            }
+            if (const auto mnxClefs = partMeasure.clefs()) {
+                for (const mnx::part::PositionedClef& mnxClef : mnxClefs.value()) {
+                    // A clef within a measure cannot change the staff type; createClefs hides it instead.
+                    if (isMeasureStart(mnxClef.position())) {
+                        const staff_idx_t staffIdx = mnxPartStaffToStaffIdx(mnxPart, mnxClef.staff());
+                        result.edits[{ measureIndex, staffIdx }].showClef = !mnxClef.clef().hide();
+                    }
+                }
+            }
+        }
+    }
+    applyStaffTypeEdits(result, nullptr, 0);
+    return result;
+}
+
+//---------------------------------------------------------
+//   applyStaffTypeEdits
+//   Apply the staff type changes collected for a measure. The first measure's are applied
+//   to the staves directly, with no measure needed.
+//---------------------------------------------------------
+
+void MnxImporter::applyStaffTypeEdits(const PendingStaffTypeEdits& edits, Measure* measure, size_t measureIndex)
+{
+    const auto begin = edits.edits.lower_bound({ measureIndex, 0 });
+    const auto end = edits.edits.lower_bound({ measureIndex + 1, 0 });
+    for (auto it = begin; it != end; ++it) {
+        const staff_idx_t staffIdx = it->first.second;
+        const PendingStaffTypeEdit& edit = it->second;
+        Staff* staff = m_score->staff(staffIdx);
+        IF_ASSERT_FAILED(staff) {
+            continue;
+        }
+        const Fraction tick = measure ? measure->tick() : Fraction(0, 1);
+        const StaffType* current = staff->staffType(tick);
+        IF_ASSERT_FAILED(current) {
+            continue;
+        }
+        StaffType staffType = *current;
+        if (edit.config) {
+            edit.config->applyTo(staffType);
+        }
+        if (edit.showClef) {
+            staffType.setGenClef(edit.showClef.value());
+        }
+        if (staffType == *current) {
+            continue;
+        }
+        if (measureIndex == 0) {
+            staff->setStaffType(tick, staffType);
+            continue;
+        }
+        IF_ASSERT_FAILED(measure) {
+            continue;
+        }
+        // Measure::add copies the template into the staff's type list and repoints the change at the copy.
+        StaffTypeChange* staffTypeChange = Factory::createStaffTypeChange(measure);
+        staffTypeChange->setOwnershipParent(measure);
+        staffTypeChange->setTrack(staff2track(staffIdx));
+        staffTypeChange->setStaffType(&staffType, false);
+        measure->add(staffTypeChange);
+    }
 }
 
 //---------------------------------------------------------
@@ -806,7 +967,7 @@ void MnxImporter::createTempoMark(engraving::Measure* measure, const mnx::global
 //   Build MuseScore measures and global items from MNX global section.
 //---------------------------------------------------------
 
-void MnxImporter::importGlobalMeasures()
+void MnxImporter::importGlobalMeasures(const PendingStaffTypeEdits& staffTypeEdits)
 {
     Fraction currTimeSig(4, 4);
     m_score->sigmap()->clear();
@@ -829,6 +990,9 @@ void MnxImporter::importGlobalMeasures()
         }
         measure->setTimesig(currTimeSig);
         measure->setTicks(currTimeSig);
+        if (!isFirst) {
+            applyStaffTypeEdits(staffTypeEdits, measure, mnxMeasure.calcArrayIndex());
+        }
 
         if (const std::optional<mnx::KeySignature>& keySig = mnxMeasure.key(); keySig || isFirst) {
             const int keyFifths = keySig ? keySig->fifths() : 0;
@@ -894,7 +1058,7 @@ void MnxImporter::importGlobalMeasures()
 void MnxImporter::createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::part::PositionedClef>& mnxClefs,
                               engraving::Measure* measure)
 {
-    /// @todo honor the MNX clef glyph if MuseScore ever allows it.
+    /// @todo honor MNX clef glyphs other than the percussion clefs if MuseScore ever allows it.
     for (const mnx::part::PositionedClef& mnxClef : mnxClefs) {
         staff_idx_t staffIdx = mnxPartStaffToStaffIdx(mnxPart, mnxClef.staff());
         Fraction rTick{};
@@ -904,13 +1068,34 @@ void MnxImporter::createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::pa
         ClefType clefType = toMuseScoreClefType(mnxClef.clef());
         if (clefType != ClefType::INVALID) {
             const bool isHeader = !measure->prevMeasure() && rTick.isZero();
-            Segment* clefSeg = measure->getSegmentR(isHeader ? SegmentType::HeaderClef : SegmentType::Clef, rTick);
+            const bool isPercussionClef = clefType == ClefType::PERC || clefType == ClefType::PERC2;
+            if (isHeader && isPercussionClef && m_score->staff(staffIdx)->clef(Fraction(0, 1)) == clefType) {
+                // A kit part's instrument already opens its staff with this percussion clef, which
+                // the export writes out. An explicit copy would make the round trip differ.
+                continue;
+            }
+            // MuseScore keeps a clef change at a barline at the end of the previous measure, as
+            // MusicXML import places it. Before an end repeat it is drawn before the barline.
+            Measure* prev = measure->prevMeasure();
+            const bool atBarline = rTick.isZero() && prev;
+            Segment* clefSeg = atBarline ? prev->getSegmentR(SegmentType::Clef, prev->ticks())
+                               : measure->getSegmentR(isHeader ? SegmentType::HeaderClef : SegmentType::Clef, rTick);
             Clef* clef = Factory::createClef(clefSeg);
             clef->setTrack(staff2track(staffIdx));
             clef->setConcertClef(clefType);
             clef->setTransposingClef(clefType);
             clef->setGenerated(false);
             clef->setIsHeader(isHeader);
+            if (atBarline && prev->repeatEnd()) {
+                clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
+            }
+            if (rTick.isNotZero() && mnxClef.clef().hide()) {
+                // A clef at a barline is hidden through the staff type (see collectStaffTypeEdits),
+                // which also removes its space. Within a measure only the glyph can be hidden.
+                LOGI() << "Hidden clef at " << mnxClef.pointer().to_string()
+                       << " is within a measure; it is made invisible but keeps its space.";
+                clef->setVisible(false);
+            }
             clefSeg->add(clef);
         } else {
             LOGE() << "Unsupported clef encountered at " << mnxClef.pointer().to_string();
@@ -945,8 +1130,9 @@ void MnxImporter::importMnx()
             }
             importSettings();
             importParts();
+            const PendingStaffTypeEdits staffTypeEdits = collectStaffTypeEdits();
             importBrackets();
-            importGlobalMeasures();
+            importGlobalMeasures(staffTypeEdits);
             importPartMeasures();
         } catch (...) {
             failure = std::current_exception();
