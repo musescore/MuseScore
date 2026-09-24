@@ -32,6 +32,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/transpose.h"
+#include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 #include "framework/global/containers.h"
 
@@ -41,31 +42,51 @@ using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
 namespace {
-const std::unordered_map<mnx::Orientation, ArticulationAnchor> articulationAnchorTable = {
-    { mnx::Orientation::Auto,       ArticulationAnchor::AUTO },
-    { mnx::Orientation::Below,      ArticulationAnchor::BOTTOM },
-    { mnx::Orientation::Above,      ArticulationAnchor::TOP },
+const std::unordered_map<mnx::Placement, ArticulationAnchor> articulationAnchorTable = {
+    { mnx::Placement::Auto,       ArticulationAnchor::AUTO },
+    { mnx::Placement::Below,      ArticulationAnchor::BOTTOM },
+    { mnx::Placement::Above,      ArticulationAnchor::TOP },
 };
 } // namespace
 
-ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient)
+ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Placement placement)
 {
-    return muse::value(articulationAnchorTable, orient, ArticulationAnchor::AUTO);
+    return muse::value(articulationAnchorTable, placement, ArticulationAnchor::AUTO);
 }
 
-mnx::Orientation toMnxOrientation(ArticulationAnchor anchor)
+mnx::Placement toMnxPlacement(ArticulationAnchor anchor)
 {
-    return muse::key(articulationAnchorTable, anchor, mnx::Orientation::Auto);
+    return muse::key(articulationAnchorTable, anchor, mnx::Placement::Auto);
 }
 
-mnx::Orientation toMnxOrientation(PlacementV placement)
+mnx::Placement toMnxPlacement(DirectionV direction)
+{
+    switch (direction) {
+    case DirectionV::UP:   return mnx::Placement::Above;
+    case DirectionV::DOWN: return mnx::Placement::Below;
+    case DirectionV::AUTO: break;
+    }
+    return mnx::Placement::Auto;
+}
+
+DirectionV toMuseScoreDirectionV(mnx::Placement placement)
 {
     switch (placement) {
-    case PlacementV::ABOVE: return mnx::Orientation::Above;
-    case PlacementV::BELOW: return mnx::Orientation::Below;
+    case mnx::Placement::Above: return DirectionV::UP;
+    case mnx::Placement::Below: return DirectionV::DOWN;
+    case mnx::Placement::Auto:  break;
+    }
+    return DirectionV::AUTO;
+}
+
+mnx::Placement toMnxPlacement(PlacementV placement)
+{
+    switch (placement) {
+    case PlacementV::ABOVE: return mnx::Placement::Above;
+    case PlacementV::BELOW: return mnx::Placement::Below;
     }
     ASSERT_X("invalid placement value");
-    return mnx::Orientation::Auto;
+    return mnx::Placement::Auto;
 }
 
 namespace {
@@ -212,9 +233,11 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
         sign = ClefSign::CClef;
         octave = OttavaAmountOrZero::OctaveDown;
         break;
-    case ClefType::INVALID:
     case ClefType::PERC:
     case ClefType::PERC2:
+        // A percussion clef sits centered on the staff whatever line MuseScore anchors it to.
+        return Required { ClefSign::PercussionClef, 0, octave };
+    case ClefType::INVALID:
     case ClefType::TAB:
     case ClefType::TAB4:
     case ClefType::TAB_SERIF:
@@ -225,6 +248,16 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
 
     const int staffPosition = (ClefInfo::line(clefType) - 3) * 2;
     return Required { sign, staffPosition, octave };
+}
+
+std::optional<std::string> toMnxClefGlyph(ClefType clefType)
+{
+    // MNX names no default glyph for a percussion clef. ClefType::PERC draws SMuFL's standard
+    // form, unpitchedPercussionClef1, so only PERC2 needs its glyph spelled out.
+    if (clefType == ClefType::PERC2) {
+        return std::string(SymNames::nameForSymId(ClefInfo::symId(clefType)).ascii());
+    }
+    return std::nullopt;
 }
 
 std::optional<mnx::sequence::Pitch::Required> toMnxPitch(const Note* note)
@@ -324,6 +357,31 @@ SymId toMuseScoreBreathMarkSym(mnx::BreathMarkSymbol brSym)
 mnx::BreathMarkSymbol toMnxBreathMarkSym(SymId sym)
 {
     return muse::key(breathMarkTable, sym, mnx::BreathMarkSymbol::Auto);
+}
+
+SymId toMuseScoreCaesuraSym(mnx::CaesuraShape shape, unsigned marks)
+{
+    // MuseScore has a single-stroke glyph only for the normal shape; the other shapes keep their
+    // own glyph whatever the stroke count.
+    switch (shape) {
+    case mnx::CaesuraShape::Normal: return marks == 1 ? SymId::caesuraSingleStroke : SymId::caesura;
+    case mnx::CaesuraShape::Curved: return SymId::caesuraCurved;
+    case mnx::CaesuraShape::Short:  return SymId::caesuraShort;
+    case mnx::CaesuraShape::Thick:  return SymId::caesuraThick;
+    }
+    return SymId::caesura;
+}
+
+MnxCaesura toMnxCaesura(SymId sym)
+{
+    switch (sym) {
+    case SymId::caesuraSingleStroke: return { mnx::CaesuraShape::Normal, 1 };
+    case SymId::caesuraCurved:       return { mnx::CaesuraShape::Curved, 2 };
+    case SymId::caesuraShort:        return { mnx::CaesuraShape::Short, 2 };
+    case SymId::caesuraThick:        return { mnx::CaesuraShape::Thick, 2 };
+    default:                         break;
+    }
+    return { mnx::CaesuraShape::Normal, 2 };
 }
 
 MnxDynamicMapping toMnxDynamicType(DynamicType type)
@@ -814,6 +872,16 @@ mnx::LineType toMnxSlurLineType(SlurStyleType sst)
     return muse::key(slurStyleTable, sst, mnx::LineType::Solid);
 }
 
+DirectionV toMuseScoreSlurTieDirection(mnx::SlurTieSide side)
+{
+    switch (side) {
+    case mnx::SlurTieSide::Up:   return DirectionV::UP;
+    case mnx::SlurTieSide::Down: return DirectionV::DOWN;
+    case mnx::SlurTieSide::Auto: break;
+    }
+    return DirectionV::AUTO;
+}
+
 namespace {
 const std::unordered_map<mnx::AutoYesNo, TupletBracketType> tupletBracketTypeTable = {
     { mnx::AutoYesNo::Auto,     TupletBracketType::AUTO_BRACKET },
@@ -935,6 +1003,19 @@ ClefType toMuseScoreClefType(const mnx::part::Clef& mnxClef)
             return ClefType::C3;
         }
 
+    case ClefSign::PercussionClef:
+        if (const auto glyph = mnxClef.glyph()) {
+            const SymId glyphSym = SymNames::symIdByName(glyph.value());
+            for (const ClefType percussionClef : { ClefType::PERC, ClefType::PERC2 }) {
+                if (glyphSym == ClefInfo::symId(percussionClef)) {
+                    return percussionClef;
+                }
+            }
+            LOGI() << "Percussion clef glyph " << glyph.value() << " is not supported; using "
+                   << SymNames::nameForSymId(ClefInfo::symId(ClefType::PERC)).ascii() << ".";
+        }
+        return ClefType::PERC;
+
     default:
         return ClefType::INVALID;
     }
@@ -975,14 +1056,14 @@ PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt)
     }
 }
 
-PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const EngravingItem* item)
+PlacementV toMuseScorePlacementV(const mnx::Placement placement, const EngravingItem* item)
 {
-    switch (orient) {
-    case mnx::Orientation::Above:
+    switch (placement) {
+    case mnx::Placement::Above:
         return PlacementV::ABOVE;
-    case mnx::Orientation::Below:
+    case mnx::Placement::Below:
         return PlacementV::BELOW;
-    case mnx::Orientation::Auto:
+    case mnx::Placement::Auto:
         IF_ASSERT_FAILED(item) {
             break;
         }

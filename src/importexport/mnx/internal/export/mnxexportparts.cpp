@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "mnxexporter.h"
+#include "internal/shared/mnxstaffconfig.h"
 #include "internal/shared/mnxtypesconv.h"
 #include "log.h"
 
@@ -117,59 +118,146 @@ void MnxExporter::exportDrumsetKit(const Part* part, const Instrument* instrumen
 }
 
 //---------------------------------------------------------
+//   exportableClef
+//   the clef on a track of a segment, if it is one the export writes
+//---------------------------------------------------------
+
+static const Clef* exportableClef(const Segment* segment, track_idx_t track, bool allowGenerated)
+{
+    const Clef* clef = segment ? toClef(segment->element(track)) : nullptr;
+    if (!clef || clef->isCourtesy() || (clef->generated() && !allowGenerated)) {
+        return nullptr;
+    }
+    return clef;
+}
+
+//---------------------------------------------------------
+//   clefAtMeasureStart
+//   the clef that takes effect at a measure's opening barline
+//---------------------------------------------------------
+
+static const Clef* clefAtMeasureStart(const Measure* measure, track_idx_t track)
+{
+    const Measure* prev = measure->prevMeasure();
+    if (!prev) {
+        // The score's opening clef is written even though layout generates it.
+        if (const Clef* clef = exportableClef(measure->findSegmentR(SegmentType::HeaderClef, Fraction(0, 1)), track, true)) {
+            return clef;
+        }
+        return exportableClef(measure->findSegmentR(SegmentType::Clef, Fraction(0, 1)), track, true);
+    }
+    // MuseScore keeps a clef change at the end of the previous measure, as MusicXML import
+    // places it. A clef just after the barline (MusicXML's after-barline) is the same clef
+    // change to MNX. When both exist, the one before the barline wins, as in MusicXML export.
+    if (const Clef* clef = exportableClef(prev->findSegmentR(SegmentType::Clef, prev->ticks()), track, false)) {
+        return clef;
+    }
+    return exportableClef(measure->findSegmentR(SegmentType::Clef, Fraction(0, 1)), track, false);
+}
+
+//---------------------------------------------------------
 //   appendClefsForMeasure
 //   export clefs for a single measure
 //---------------------------------------------------------
 
 static void appendClefsForMeasure(const Part* part, const Measure* measure, mnx::part::Measure& mnxMeasure)
 {
-    if (part && part->instrument() && part->instrument()->useDrumset()) {
-        /// @todo Export percussion and tab staves/clefs when MNX supports them.
-        return;
-    }
-
-    const bool isFirstMeasure = (measure->prevMeasure() == nullptr);
     const size_t staves = part->nstaves();
     const TrackRange trackRange = part->trackRange();
     std::optional<mnx::Array<mnx::part::PositionedClef> > mnxClefs;
 
-    constexpr SegmentType cleftTypes = SegmentType::Clef | SegmentType::HeaderClef;
-    for (Segment* segment = measure->first(cleftTypes); segment; segment = segment->next(cleftTypes)) {
-        const SegmentType segmentType = segment->segmentType();
-        if ((segmentType == SegmentType::HeaderClef) && !isFirstMeasure) {
+    const auto appendClef = [&](ClefType clefType, track_idx_t track, const Fraction& rTick, bool hide) {
+        const auto required = toMnxClef(clefType);
+        if (!required) {
+            /// @todo Export tab clefs when MNX supports them.
+            LOGW() << "Skipping unsupported clef type in MNX export: " << int(clefType);
+            return;
+        }
+        if (!mnxClefs) {
+            mnxClefs = mnxMeasure.ensure_clefs();
+        }
+        auto mnxClef = mnxClefs->append(required->clefSign,
+                                        required->staffPosition,
+                                        required->octaveAdjustment);
+        if (const auto glyph = toMnxClefGlyph(clefType)) {
+            mnxClef.clef().set_glyph(glyph.value());
+        }
+        mnxClef.clef().set_or_clear_hide(hide);
+        if (staves > 1) {
+            const size_t staffIdx = (track - trackRange.startTrack) / VOICES;
+            mnxClef.set_staff(static_cast<int>(staffIdx + 1));
+        }
+        if (rTick.isNotZero()) {
+            mnxClef.ensure_position(mnx::FractionValue(rTick.numerator(), rTick.denominator()));
+        }
+    };
+
+    // Clefs at the opening barline. MNX hides a clef without leaving space for it, which is what
+    // the staff type's "Show clef" does, and that setting can change only at a barline. It can
+    // change with no clef there, so the current clef is repeated to carry the change.
+    const Measure* prev = measure->prevMeasure();
+    for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; track += VOICES) {
+        const Staff* staff = part->score()->staff(track2staff(track));
+        const StaffType* staffType = staff ? staff->staffType(measure->tick()) : nullptr;
+        if (!staffType) {
             continue;
         }
+        const bool showClef = staffType->genClef();
+        if (const Clef* clef = clefAtMeasureStart(measure, track)) {
+            appendClef(clef->clefType(), track, Fraction(0, 1), !clef->visible() || !showClef);
+            continue;
+        }
+        const StaffType* prevStaffType = prev ? staff->staffType(prev->tick()) : nullptr;
+        const bool prevShowClef = prevStaffType ? prevStaffType->genClef() : true;
+        if (showClef != prevShowClef) {
+            appendClef(staff->clef(measure->tick()), track, Fraction(0, 1), !showClef);
+        }
+    }
 
+    // Clefs within the measure. One at its end belongs to the next measure's opening barline,
+    // unless this is the last measure.
+    const bool isLastMeasure = !measure->nextMeasure();
+    for (Segment* segment = measure->first(SegmentType::Clef); segment; segment = segment->next(SegmentType::Clef)) {
         const Fraction rTick = segment->rtick();
+        if (rTick.isZero() || (rTick == measure->ticks() && !isLastMeasure)) {
+            continue;
+        }
         for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; track += VOICES) {
-            Clef* clef = toClef(segment->element(track));
-            if (!clef || clef->isCourtesy()) {
-                continue;
+            if (const Clef* clef = exportableClef(segment, track, false)) {
+                appendClef(clef->clefType(), track, rTick, !clef->visible());
             }
-            if (clef->generated() && !(rTick.isZero() && isFirstMeasure)) {
-                continue;
-            }
+        }
+    }
+}
 
-            const auto required = toMnxClef(clef->clefType());
-            if (!required) {
-                LOGW() << "Skipping nsupported clef type in MNX export: " << int(clef->clefType());
-                continue;
-            }
+//---------------------------------------------------------
+//   appendStaffConfigsForMeasure
+//   export the staff configs that change at a measure
+//---------------------------------------------------------
 
-            if (!mnxClefs) {
-                mnxClefs = mnxMeasure.ensure_clefs();
-            }
-
-            auto mnxClef = mnxClefs->append(required->clefSign,
-                                            required->staffPosition,
-                                            required->octaveAdjustment);
-            if (staves > 1) {
-                const size_t staffIdx = (track - trackRange.startTrack) / VOICES;
-                mnxClef.set_staff(static_cast<int>(staffIdx + 1));
-            }
-            if (rTick.isNotZero()) {
-                mnxClef.ensure_position(mnx::FractionValue(rTick.numerator(), rTick.denominator()));
-            }
+static void appendStaffConfigsForMeasure(const Part* part, const Measure* measure, mnx::part::Measure& mnxMeasure)
+{
+    const size_t staves = part->nstaves();
+    const Measure* prev = measure->prevMeasure();
+    for (staff_idx_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+        const Staff* staff = part->staff(staffIdx);
+        const StaffType* staffType = staff ? staff->staffType(measure->tick()) : nullptr;
+        if (!staffType) {
+            continue;
+        }
+        // A staff config replaces the whole staff description, and the first measure starts
+        // from MNX's defaults.
+        const MnxStaffConfigState state = MnxStaffConfigState::fromStaffType(*staffType);
+        const StaffType* prevStaffType = prev ? staff->staffType(prev->tick()) : nullptr;
+        const MnxStaffConfigState prevState = prevStaffType ? MnxStaffConfigState::fromStaffType(*prevStaffType) : MnxStaffConfigState();
+        if (state == prevState) {
+            continue;
+        }
+        auto mnxStaffConfig = mnxMeasure.ensure_staffConfigs().append();
+        auto mnxConfig = mnxStaffConfig.config();
+        state.writeTo(mnxConfig);
+        if (staves > 1) {
+            mnxStaffConfig.set_staff(static_cast<int>(staffIdx + 1));
         }
     }
 }
@@ -233,22 +321,22 @@ static const ChordRest* findFirstChordRest(const Slur* s)
     }
 }
 
-static mnx::MultiStaffOrientation mnxMultiStaffOrientFromDirection(const EngravingItem* item)
+static mnx::MultiStaffPlacement mnxMultiStaffPlacementFromDirection(const EngravingItem* item)
 {
     switch (item->getProperty(Pid::DIRECTION).value<DirectionV>()) {
     case DirectionV::UP:
-        return mnx::MultiStaffOrientation::Above;
+        return mnx::MultiStaffPlacement::Above;
     case DirectionV::DOWN:
-        return mnx::MultiStaffOrientation::Below;
+        return mnx::MultiStaffPlacement::Below;
     case DirectionV::AUTO:
         if (item->part()->staves().size() > 1) {
             if (item->getProperty(Pid::CENTER_BETWEEN_STAVES) == AutoOnOff::ON) {
-                return mnx::MultiStaffOrientation::Between;
+                return mnx::MultiStaffPlacement::Between;
             }
         }
     }
 
-    return mnx::MultiStaffOrientation::Auto;
+    return mnx::MultiStaffPlacement::Auto;
 }
 
 static void exportMnxVoiceAssignment(mnx::part::DynamicGroupBase& mnxDynamic, int mnxStaffNum,
@@ -431,7 +519,7 @@ void MnxExporter::createHairpin(const Hairpin* hairpin)
         }
     }
 
-    mnxHairpin.set_or_clear_orient(mnxMultiStaffOrientFromDirection(hairpin));
+    mnxHairpin.set_or_clear_placement(mnxMultiStaffPlacementFromDirection(hairpin));
     exportMnxVoiceAssignment(mnxHairpin, mnxStaffNum, hairpin->voiceAssignment(), hairpin->track());
 }
 
@@ -854,7 +942,7 @@ static void createDynamic(const Dynamic* dynamic, const Fraction& rTick, int mnx
         }
     }
 
-    mnxDynamic.set_or_clear_orient(mnxMultiStaffOrientFromDirection(dynamic));
+    mnxDynamic.set_or_clear_placement(mnxMultiStaffPlacementFromDirection(dynamic));
     exportMnxVoiceAssignment(mnxDynamic, mnxStaffNum, dynamic->voiceAssignment(), dynamic->track());
 }
 
@@ -1003,6 +1091,7 @@ bool MnxExporter::createParts()
             auto mnxMeasure = mnxMeasures.append();
 
             appendClefsForMeasure(part, measure, mnxMeasure);
+            appendStaffConfigsForMeasure(part, measure, mnxMeasure);
             // A measure repeat stands in for the measure's content, so the sequences stay
             // empty. Measure's constructor has already created them.
             if (exportMeasureRepeat(part, measure, mnxMeasure)) {

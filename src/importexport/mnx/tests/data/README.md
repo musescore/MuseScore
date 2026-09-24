@@ -114,7 +114,9 @@ All located in `project_examples/`.
 
 - `altoFluteTremMissingKey.mnx`: Removed `key` node to test that importer correctly imports transposed key signatures when no first key signature is present.
 - `barlineTypesWithShort.mnx`: Modified a dashed barline to "dotted" and a tick barline to "short" to test full range of barline type in mnx.
+- `caesura.mnx`: Hand-authored caesuras in every shape, with single and double strokes, next to a breath mark.
 - `clarinet38MissingTime.mnx`: Removed `time` node to test that importer handles missing time signature gracefully.
+- `directionHints.mnx`: Hand-authored sequence direction hints on a grand staff: a lower voice listed before its upper voice, a lone lower voice, three upper voices (one overflowing into a lower voice's slot), and an upper voice crossing onto a staff whose only voice is lower.
 - `enharmonics.mnx`: Hand-edited example to exercise extremes of enharmonic respelling of transposed notes.
 - `key56Wrapped56Edited.mnx` : Hand-edited to test keyFifthsWrapAt values +/-5 and +/-6.
 - `layoutBrackets.mnx`: Minimal layout with nested group brackets to exercise layout import/export bracket handling.
@@ -122,3 +124,4 @@ All located in `project_examples/`.
 - `layoutBarlineStylesNested.mnx`: Hand-authored nested layout with conflicting group barline styles (`individual` outer, `unified` middle, `mensurstrich` inner) to verify nested export behavior.
 - `percussionKit.mnx`: Hand-authored percussion kit/kitNotes example (with sounds + ties) to exercise MNX percussion round-trip.
 - `restPosition.mnx`: export from MuseScore with "Export rest positions" enabled.
+- `staffLines.mnx`: Hand-authored staff configs and hidden clefs: a grand staff whose lower staff drops to one line and back to five, an upper staff whose clef is hidden at a barline, shown again, and hidden within a measure, and a one-line snare kit whose percussion clef is hidden.
