@@ -107,11 +107,15 @@ private:
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
     bool        stringSupportsGlissando(const Note* note, int candidateString) const; 
+    bool        fretReachableFromAll(int candidate, const std::vector<int>& placedFrets) const; 
     
     Note*       glissandoFrom(const Note* note) const; 
     Note*       glissandoTo(const Note* note) const; 
     Note*       getBassNote(const Chord* chord) const;
     Note*       getBassNoteOfVoicings(const Chord* chord) const;
+
+    Chord* findPrecedingChordAcrossRests(Chord* chord) const;
+
     std::vector<std::pair<int, int>> allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const;
     std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
     std::pair<Note*, std::pair<int, int>> getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const; 
@@ -120,7 +124,8 @@ private:
     std::vector<instrString> m_stringTable;                      // no strings by default
 
     mutable std::pair<int, int> m_lastNonOpenFretting = { 0, 7 }; // this allows us to deal with open chords more efficiently 
-    
+
+    static constexpr int MAX_FRET_SPAN = 4; // reasonable amount that a hand can stretch for a chord
     static constexpr int DEFAULT_ANCHOR_FRET = 7; 
     // approximate middle of the fretboard for most fretted instruments 
     // this is technically a magic number, however it functions as an incredibly powerful heuristic
