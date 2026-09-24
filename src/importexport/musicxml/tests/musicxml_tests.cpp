@@ -886,6 +886,9 @@ TEST_F(MusicXml_Tests, inferredTempoText2) {
 TEST_F(MusicXml_Tests, inferredCrescLines2) {
     musicXmlImportTestRef("testInferredCrescLines2");
 }
+TEST_F(MusicXml_Tests, inferredPercStemDir) {
+    musicXmlImportTestRef("testInferredPercStemDir");
+}
 TEST_F(MusicXml_Tests, instrumentChangeMIDIportExport) {
     musicXmlMscxExportTestRef("testInstrumentChangeMIDIportExport");
 }
