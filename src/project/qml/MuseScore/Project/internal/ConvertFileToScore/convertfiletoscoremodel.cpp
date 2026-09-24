@@ -371,10 +371,6 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
                              ? QStringList { "pdf" } + config.omr.images.allowedExtensions + config.audio2score.file.allowedExtensions
     : resolveExtensions(existingPaths);
 
-    if (extensions.isEmpty()) {
-        extensions = { "pdf", "jpg", "jpeg", "png", "mp3" }; // fallback
-    }
-
     QStringList patterns;
     patterns.reserve(extensions.size());
     for (const QString& ext : extensions) {
