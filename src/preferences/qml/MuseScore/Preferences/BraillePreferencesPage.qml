@@ -59,8 +59,10 @@ PreferencesPage {
             id: brailleAdvanced
             tables: preferencesModel.brailleTables()
             directions: preferencesModel.intervalDirections()
+            voiceOrders: preferencesModel.voiceOrders()
             brailleTable: preferencesModel.brailleTable
             intervalDirection: preferencesModel.intervalDirection
+            voiceOrder: preferencesModel.voiceOrder
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
@@ -73,6 +75,10 @@ PreferencesPage {
 
             onIntervalDirectionChangeRequested: function(direction) {
                 preferencesModel.intervalDirection = direction;
+            }
+
+            onVoiceOrderChangeRequested: function(order) {
+                preferencesModel.voiceOrder = order;
             }
 
             onFocusChanged: {

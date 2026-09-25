@@ -79,11 +79,13 @@ public:
     muse::ValCh<std::string> keys() const override;
     muse::ValCh<bool> enabled() const override;
     muse::ValCh<braille::BrailleIntervalDirection> intervalDirection() const override;
+    muse::ValCh<braille::BrailleVoiceOrder> voiceOrder() const override;
     muse::ValCh<int> mode() const override;
     muse::ValCh<std::string> cursorColor() const override;
 
     void setEnabled(const bool enabled) override;
     void setIntervalDirection(const braille::BrailleIntervalDirection direction) override;
+    void setVoiceOrder(const braille::BrailleVoiceOrder order) override;
 
     void setCursorPosition(const int pos) override;
     void setCurrentItemPosition(const int, const int) override;
@@ -133,6 +135,7 @@ private:
     muse::ValCh<bool> m_enabled;
     muse::ValCh<int> m_mode;
     muse::ValCh<braille::BrailleIntervalDirection> m_intervalDirection;
+    muse::ValCh<braille::BrailleVoiceOrder> m_voiceOrder;
     muse::ValCh<std::string> m_cursorColor;
 
     muse::async::Notification m_selectionChanged;
