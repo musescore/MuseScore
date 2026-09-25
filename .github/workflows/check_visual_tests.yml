@@ -204,6 +204,7 @@ jobs:
     - parallel:
       - name: Setup environment
         run: |
+          sudo apt-get update
           sudo apt-get install libegl1 imagemagick -y
           echo "ASAN_OPTIONS=detect_leaks=0" >> $GITHUB_ENV
           echo "QT_QPA_PLATFORM=offscreen" >> $GITHUB_ENV
