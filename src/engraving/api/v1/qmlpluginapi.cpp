@@ -33,6 +33,11 @@
 
 #include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationundostack.h"
+#include "notation/inotationparts.h"
+#include "project/inotationproject.h"
+#include "notation/imasternotation.h"
 
 // api
 #include "engravingapiv1.h"
@@ -236,6 +241,8 @@ void PluginAPI::setup(QQmlEngine* e)
 
     engravingApi->setApi(this);
     m_engine = engravingApi->engine();
+
+    initScoreStateNotifications();
 }
 
 PluginAPI::PluginAPI(QQuickItem* parent)
@@ -495,6 +502,8 @@ apiv1::Fraction* PluginAPI::fractionFromTicks(int ticks) const
 
 void PluginAPI::quit()
 {
+    m_notationSubscriptions.async_disconnectAll();
+    async_disconnectAll();
     emit closeRequested();
     m_closeRequested.notify();
 }
@@ -661,4 +670,55 @@ IntervalWrapper* PluginAPI::interval(int diatonic, int chromatic) const
 IntervalWrapper* PluginAPI::intervalFromOrnamentInterval(OrnamentIntervalWrapper* o) const
 {
     return wrap(mu::engraving::Interval::fromOrnamentInterval(o->ornamentInterval()));
+}
+
+void PluginAPI::initScoreStateNotifications()
+{
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        subscribeToNotationState(context()->currentNotation());
+    });
+
+    subscribeToNotationState(context()->currentNotation());
+}
+
+void PluginAPI::subscribeToNotationState(notation::INotationPtr n)
+{
+    m_notationSubscriptions.async_disconnectAll();
+
+    if (!n) {
+        return;
+    }
+
+    auto emitState = [this](bool selection, bool undoRedo, bool instruments, bool excerpts) {
+        QMap<QString, QVariant> state;
+        state["selectionChanged"] = selection;
+        state["undoRedo"] = undoRedo;
+        state["instrumentsChanged"] = instruments;
+        state["excerptsChanged"] = excerpts;
+        emit scoreStateChanged(state);
+    };
+
+    if (n->interaction()) {
+        n->interaction()->selectionChanged().onNotify(&m_notationSubscriptions, [emitState]() {
+            emitState(true, false, false, false);
+        });
+    }
+
+    if (n->undoStack()) {
+        n->undoStack()->stackChanged().onNotify(&m_notationSubscriptions, [emitState]() {
+            emitState(false, true, false, false);
+        });
+    }
+
+    if (n->parts()) {
+        n->parts()->partsChanged().onNotify(&m_notationSubscriptions, [emitState]() {
+            emitState(false, false, true, false);
+        });
+    }
+
+    if (n->project() && n->project()->masterNotation()) {
+        n->project()->masterNotation()->excerptsChanged().onNotify(&m_notationSubscriptions, [emitState]() {
+            emitState(false, false, false, true);
+        });
+    }
 }
