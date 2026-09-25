@@ -76,7 +76,9 @@ TEST_F(Engraving_LVTests, LV_Double_Notehead_test)
 
     // Add a Laissez-Vibrer tie to the First Note
     score->select(c->upNote());
+    score->startCmd(TranslatableString::untranslatable("Toggle Laissez-Vibrer"));
     EditTie::cmdToggleLaissezVib(score);
+    score->endCmd();
 
     EXPECT_TRUE(c->upNote()->tieFor()->isLaissezVib());
     score->doLayout();

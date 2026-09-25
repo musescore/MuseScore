@@ -316,10 +316,12 @@ TEST_F(Engraving_NoteTests, grace)
 
     // tie
     score->select(gn);
+    score->startCmd(TranslatableString::untranslatable("Add tie"));
     EditTie::cmdAddTie(score);
-//      n = toNote(ScoreRW::writeReadElement(gn));
-//      QVERIFY(n->tieFor() != 0);
-//      delete n;
+    score->endCmd();
+    //      n = toNote(ScoreRW::writeReadElement(gn));
+    //      QVERIFY(n->tieFor() != 0);
+    //      delete n;
 
     // tremolo
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
