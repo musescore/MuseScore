@@ -913,12 +913,31 @@ void RepeatList::unwind()
                         push_back(rs);
                     }
                     // Skip the volta
+                    Measure const* lastSkippedMeasure = activeVolta->endMeasure();
                     do {
                         ++repeatListElementIt;
+
+                        const RepeatListElementType skippedType = (*repeatListElementIt)->repeatListElementType;
+                        const bool isRepeatStructure = (skippedType == RepeatListElementType::REPEAT_START)
+                                                       || (skippedType == RepeatListElementType::REPEAT_END)
+                                                       || (skippedType == RepeatListElementType::JUMP);
+                        if (isRepeatStructure
+                            && ((lastSkippedMeasure == nullptr)
+                                || ((*repeatListElementIt)->measure->tick() > lastSkippedMeasure->tick()))) {
+                            lastSkippedMeasure = (*repeatListElementIt)->measure;
+                        }
                     } while ((*repeatListElementIt)->repeatListElementType != RepeatListElementType::VOLTA_END);
+
+                    RepeatListElementList::const_iterator afterVoltaEndIt = repeatListElementIt + 1;
+                    bool voltaEndedBySectionEnd = (afterVoltaEndIt == sectionIt->cend())
+                                                  || ((*afterVoltaEndIt)->repeatListElementType
+                                                      == RepeatListElementType::SECTION_BREAK);
+                    if (!voltaEndedBySectionEnd || (lastSkippedMeasure == nullptr)) {
+                        lastSkippedMeasure = (*repeatListElementIt)->measure;
+                    }
                     activeVolta = nullptr;
                     // Start next rs on the following measure
-                    Measure const* const possibleNextMeasure = (*repeatListElementIt)->measure->nextMeasure();
+                    Measure const* const possibleNextMeasure = lastSkippedMeasure->nextMeasure();
                     if (possibleNextMeasure == nullptr) {
                         rs = nullptr;                   // end of score, but will still encounter section break, notify it
                     } else {
