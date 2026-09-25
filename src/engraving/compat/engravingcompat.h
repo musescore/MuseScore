@@ -22,8 +22,13 @@
 
 #pragma once
 
+#include <set>
+#include <vector>
+
 namespace mu::engraving {
 class MasterScore;
+class EngravingItem;
+class System;
 }
 
 namespace mu::engraving::compat {
@@ -51,5 +56,17 @@ private:
     static void resetAllCrossBeams(MasterScore* masterScore);
 
     static void applyPre400StyleCompat(MasterScore* masterScore);
+};
+
+class AlignmentMigration500
+{
+public:
+    static void migrateSnappedAndSameItemTypeAlignment(MasterScore* masterScore);
+    static void migrateHopoLetterAlignment(MasterScore* masterScore);
+private:
+    static bool rowItemIsAbove(const EngravingItem* item);
+    static void alignItemOffsetGroup(const std::vector<EngravingItem*>& group);
+    static void scanConnectedItemsInSnappingChain(EngravingItem* item, const System* system, std::set<EngravingItem*>& visited,
+                                                  std::vector<EngravingItem*>& group);
 };
 } // namespace mu::engraving::compat

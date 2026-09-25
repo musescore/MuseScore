@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ALIGNMENTLAYOUT_DEV_H
-#define MU_ENGRAVING_ALIGNMENTLAYOUT_DEV_H
+#pragma once
 
 #include <vector>
 #include <set>
@@ -50,5 +49,4 @@ private:
     static double computeAverageY(const std::vector<double>& vecOfY);
     static bool isAbove(const EngravingItem* item);
 };
-} // namespace mu::engraving::rendering::dev
-#endif // MU_ENGRAVING_ALIGNMENTLAYOUT_DEV_H
+} // namespace mu::engraving::rendering::score

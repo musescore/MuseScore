@@ -8097,6 +8097,12 @@ void NotationInteraction::addFretboardDiagram()
         FretDiagram* diagram = created[i];
         Harmony* harmony = toHarmony(filteredElements[i]);
 
+        harmony->undoResetProperty(Pid::OFFSET);
+        harmony->undoChangeProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
+        if (harmony->propertyFlags(Pid::ALIGN) == PropertyFlags::STYLED) {
+            harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+        }
+
         score->undoChangeParent(harmony, diagram,
                                 track2staff(filteredElements[i]->track()));
     }
