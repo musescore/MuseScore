@@ -631,6 +631,7 @@ MNX_PROJECT_FILE_TEST(staffLines)
 MNX_PROJECT_FILE_TEST(tupletHiddenRest)
 MNX_PROJECT_FILE_TEST(tupletNested)
 MNX_PROJECT_FILE_TEST(tupletSimple)
+MNX_PROJECT_FILE_TEST(tupletTrailingSpace)
 
 MNX_W3C_EXAMPLE_TEST(accidentals)
 MNX_W3C_EXAMPLE_TEST(articulations)
