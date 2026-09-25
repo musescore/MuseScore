@@ -24,33 +24,33 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/dom/fret.h"
+
 namespace mu::propertiespanel {
 namespace FretDiagramTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
-// the difference between the start numbers of two enum types
-// is because of how they're defined in engraving/dom/fret.h
-// to enable direct cast, we use the same values
+// engraving::FretDotType has no "none" entry, so DOT_NONE has no engraving counterpart
 enum class FretDot {
     DOT_NONE = -1,
-    DOT_NORMAL = 0,
-    DOT_CROSS,
-    DOT_SQUARE,
-    DOT_TRIANGLE
+    DOT_NORMAL = int(engraving::FretDotType::NORMAL),
+    DOT_CROSS = int(engraving::FretDotType::CROSS),
+    DOT_SQUARE = int(engraving::FretDotType::SQUARE),
+    DOT_TRIANGLE = int(engraving::FretDotType::TRIANGLE)
 };
 Q_ENUM_NS(FretDot)
 
 enum class FretMarker {
-    MARKER_NONE = 0,
-    MARKER_CIRCLE,
-    MARKER_CROSS
+    MARKER_NONE = int(engraving::FretMarkerType::NONE),
+    MARKER_CIRCLE = int(engraving::FretMarkerType::CIRCLE),
+    MARKER_CROSS = int(engraving::FretMarkerType::CROSS)
 };
 Q_ENUM_NS(FretMarker)
 
 enum class Orientation {
-    ORIENTATION_VERTICAL,
-    ORIENTATION_HORIZONTAL
+    ORIENTATION_VERTICAL = int(engraving::Orientation::VERTICAL),
+    ORIENTATION_HORIZONTAL = int(engraving::Orientation::HORIZONTAL)
 };
 Q_ENUM_NS(Orientation)
 }
