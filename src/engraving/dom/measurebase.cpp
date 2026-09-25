@@ -22,10 +22,15 @@
 
 #include "measurebase.h"
 
+#include "../editing/editpagelocks.h"
+#include "../editing/editsystemlocks.h"
+
+#include "actionicon.h"
 #include "box.h"
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"
+#include "page.h"
 #include "score.h"
 #include "staff.h"
 #include "stafftypechange.h"
@@ -191,6 +196,50 @@ Page* MeasureBase::nextPage() const
     }
 
     return nextPage != curPage ? nextPage : nullptr;
+}
+
+bool MeasureBase::acceptDrop(EditData& data) const
+{
+    const EngravingItem* e = data.dropElement;
+    if (!e || !e->isActionIcon()) {
+        return false;
+    }
+    switch (toActionIcon(e)->actionType()) {
+    case ActionIconType::PAGE_LOCK:
+    {
+        LayoutMode layoutMode = score()->layoutMode();
+        return layoutMode == LayoutMode::PAGE;
+    }
+    case ActionIconType::SYSTEM_LOCK:
+    {
+        LayoutMode layoutMode = score()->layoutMode();
+        return layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM;
+    }
+    default: break;
+    }
+    return false;
+}
+
+EngravingItem* MeasureBase::drop(Transaction& tx, EditData& data)
+{
+    EngravingItem* e = data.dropElement;
+    if (!e || !e->isActionIcon()) {
+        delete e;
+        return nullptr;
+    }
+    switch (toActionIcon(e)->actionType()) {
+    case ActionIconType::SYSTEM_LOCK:
+        EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
+        break;
+    case ActionIconType::PAGE_LOCK:
+        EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
+        break;
+    default:
+        LOGD("MeasureBase: cannot drop %s here", e->typeName());
+        break;
+    }
+    delete e;
+    return nullptr;
 }
 
 //---------------------------------------------------------

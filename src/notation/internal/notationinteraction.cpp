@@ -1529,7 +1529,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::STRING_TUNINGS:
     case ElementType::VOLTA: {
         edd.ed.modifiers = keyboardModifier(modifiers);
-        return prepareDropMeasureAnchorElement(pos);
+        return prepareDropMeasureBaseAnchorElement(pos);
     }
     case ElementType::PEDAL:
     case ElementType::LET_RING:
@@ -1601,7 +1601,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
         case ActionIconType::PAGE_LOCK:
         case ActionIconType::STAFF_TYPE_CHANGE: {
             edd.ed.modifiers = keyboardModifier(modifiers);
-            return prepareDropMeasureAnchorElement(pos);
+            return prepareDropMeasureBaseAnchorElement(pos);
         }
         // Other action icons (e.g parenthesis) can be dragged normally
         default: return prepareDropStandardElement(pos, modifiers);
@@ -3124,7 +3124,7 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
 }
 
 //! NOTE Copied from ScoreView::dragMeasureAnchorElement
-bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
+bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
 {
     IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
         return false;
@@ -3138,10 +3138,23 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
         return false;
     }
 
-    mu::engraving::staff_idx_t staffIdx;
-    mu::engraving::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, nullptr, 0);
+    // "Measure anchored only" means we're dropping something can't anchor to other MeasureBase types (i.e. boxes)...
+    bool isMeasureAnchorOnly = true;
+    if (dropElem->isActionIcon()) {
+        const ActionIconType actionType = toActionIcon(dropElem)->actionType();
+        isMeasureAnchorOnly = actionType != ActionIconType::PAGE_LOCK && actionType != ActionIconType::SYSTEM_LOCK;
+    }
 
-    //! NOTE: Should match Measure::acceptDrop
+    mu::engraving::MeasureBase* mb = nullptr;
+    mu::engraving::staff_idx_t staffIdx = muse::nidx;
+    if (isMeasureAnchorOnly) {
+        // Use pos2measure to get the staff idx too...
+        mb = score()->pos2measure(pos, &staffIdx, 0, nullptr, 0);
+    } else {
+        // TODO: Do something else, don't just look for measures..
+    }
+
+    //! NOTE: Should match Measure::acceptDrop / MeasureBase::acceptDrop
     switch (dropElem->type()) {
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:

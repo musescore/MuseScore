@@ -34,7 +34,6 @@
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
-#include "../editing/editpagelocks.h"
 #include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
 #include "../editing/navigation.h"
@@ -1435,16 +1434,6 @@ bool Measure::acceptDrop(EditData& data) const
         }
         case ActionIconType::STAFF_TYPE_CHANGE:
             return canAddStaffTypeChange(staffIdx);
-        case ActionIconType::SYSTEM_LOCK:
-        {
-            LayoutMode layoutMode = score()->layoutMode();
-            return layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM;
-        }
-        case ActionIconType::PAGE_LOCK:
-        {
-            LayoutMode layoutMode = score()->layoutMode();
-            return layoutMode == LayoutMode::PAGE;
-        }
         default:
             break;
         }
@@ -1453,7 +1442,7 @@ bool Measure::acceptDrop(EditData& data) const
     default:
         break;
     }
-    return false;
+    return MeasureBase::acceptDrop(data);
 }
 
 //---------------------------------------------------------
@@ -1765,12 +1754,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             score()->undoAddElement(stc);
             break;
         }
-        case ActionIconType::SYSTEM_LOCK:
-            EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
-            break;
-        case ActionIconType::PAGE_LOCK:
-            EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
-            break;
         default:
             break;
         }
@@ -1790,12 +1773,10 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     case ElementType::HBOX:
         return score()->insertBox(toMeasureBase(e), this);
 
-    default:
-        LOGD("Measure: cannot drop %s here", e->typeName());
-        delete e;
-        break;
+    default: break;
     }
-    return 0;
+
+    return MeasureBase::drop(tx, data);
 }
 
 //---------------------------------------------------------
