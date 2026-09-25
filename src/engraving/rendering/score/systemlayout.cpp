@@ -3079,20 +3079,20 @@ void SystemLayout::centerItemGroup(const std::vector<const CenterableItem*>& gro
                                    const SkylineLine& upperSkyline, const SkylineLine& lowerSkyline, double yStaffDiff,
                                    std::vector<EngravingItem*>& centeredItems, double minHorizontalClearance)
 {
-    const double convergeDistance = gapConvergeDistance(group, yStaffDiff, minHorizontalClearance);
-
-    /* Space left above and below each item once the group has been converged, measured against the
-     * gap's skylines alone. We store them here since we're calculating them anyway, but these individual
-     * spaces will be used later by updateStaffCenteringInfo. */
+    /* Space left above and below each item, measured against the gap's skylines alone. We store them here since
+     * we're calculating them anyway, but these individual spaces will be used later by updateStaffCenteringInfo */
     std::vector<double> spaceAbove(group.size(), DBL_MAX);
     std::vector<double> spaceBelow(group.size(), DBL_MAX);
 
-    /* Space left above and below the entire group. Measure how far the group can move as one rigid unit */
-    double groupSpaceAbove = DBL_MAX;
-    double groupSpaceBelow = DBL_MAX;
+    // The least space each half has on either side
+    double upperHalfSpaceAbove = DBL_MAX;
+    double upperHalfSpaceBelow = DBL_MAX;
+    double lowerHalfSpaceAbove = DBL_MAX;
+    double lowerHalfSpaceBelow = DBL_MAX;
+
     for (size_t i = 0; i < group.size(); ++i) {
         const CenterableItem* centerableItem = group[i];
-        Shape itemShape = centerableItem->shape.adjusted(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
+        const Shape itemShape = centerableItem->shape.adjusted(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
         if (itemShape.empty()) {
             continue;
         }
@@ -3104,18 +3104,29 @@ void SystemLayout::centerItemGroup(const std::vector<const CenterableItem*>& gro
             return shapeItem && (shapeItem->isAccidental() || Autoplace::itemsShouldIgnoreEachOther(centerableItem->item, shapeItem));
         });
 
-        const double convergeMove = convergenceMoveFor(centerableItem, convergeDistance);
-        if (convergeMove != 0.0) {
-            itemShape.translate(PointF(0.0, convergeMove));
-        }
-
         const double minDist = centerableItem->item->absoluteFromSpatium(centerableItem->item->minDistance());
         spaceAbove[i] = (onUpperStaff ? ownSkyline : upperSkyline).verticalClearanceBelow(itemShape) - minDist;
         spaceBelow[i] = (onUpperStaff ? lowerSkyline : ownSkyline).verticalClearanceAbove(itemShape) - minDist;
 
-        groupSpaceAbove = std::min(groupSpaceAbove, spaceAbove[i]);
-        groupSpaceBelow = std::min(groupSpaceBelow, spaceBelow[i]);
+        if (onUpperStaff) {
+            upperHalfSpaceAbove = std::min(upperHalfSpaceAbove, spaceAbove[i]);
+            upperHalfSpaceBelow = std::min(upperHalfSpaceBelow, spaceBelow[i]);
+        } else {
+            lowerHalfSpaceAbove = std::min(lowerHalfSpaceAbove, spaceAbove[i]);
+            lowerHalfSpaceBelow = std::min(lowerHalfSpaceBelow, spaceBelow[i]);
+        }
     }
+
+    double convergeDistance = gapConvergeDistance(group, yStaffDiff, minHorizontalClearance);
+    if (lowerHalfSpaceAbove != DBL_MAX && upperHalfSpaceBelow != DBL_MAX) {
+        /* Convergence only measures the items of the two halves, but there might be other non-centered
+         * items in the gap, so we cap it at the space the group actually has in the gap */
+        convergeDistance = std::min(convergeDistance, std::max(lowerHalfSpaceAbove + upperHalfSpaceBelow, 0.0));
+    }
+
+    // Space left above and below the entire group once converged, i.e. how far it can move as one rigid unit
+    const double groupSpaceAbove = std::min(upperHalfSpaceAbove, lowerHalfSpaceAbove - convergeDistance);
+    const double groupSpaceBelow = std::min(upperHalfSpaceBelow, lowerHalfSpaceBelow + convergeDistance);
 
     if (groupSpaceAbove == DBL_MAX || groupSpaceBelow == DBL_MAX) {
         return;
@@ -3151,9 +3162,10 @@ void SystemLayout::updateStaffCenteringInfo(const std::vector<const CenterableIt
         const EngravingItem* item = group[i]->item;
         const double minDist = item->absoluteFromSpatium(item->minDistance());
 
-        // spaceAbove/spaceBelow were measured after convergence but before yMove
-        double availSpaceAbove = spaceAbove[i] + yMove;
-        double availSpaceBelow = spaceBelow[i] - yMove;
+        // spaceAbove/spaceBelow were measured where autoplace left the item, so we update them with how much the item has moved
+        const double itemMove = yMove + convergenceMoveFor(group[i], convergeDistance);
+        double availSpaceAbove = spaceAbove[i] + itemMove;
+        double availSpaceBelow = spaceBelow[i] - itemMove;
 
         for (size_t j = 0; j < group.size(); ++j) {
             if (j == i || group[j]->shape.empty() || Autoplace::itemsShouldIgnoreEachOther(item, group[j]->item)) {
