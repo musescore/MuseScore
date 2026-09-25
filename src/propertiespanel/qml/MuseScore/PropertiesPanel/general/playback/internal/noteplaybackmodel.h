@@ -34,12 +34,16 @@ class NotePlaybackModel : public PropertiesPanelAbstractModel
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * tuning READ tuning CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * velocity READ velocity CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * playbackStartOffset READ playbackStartOffset CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * playbackDurationOffset READ playbackDurationOffset CONSTANT)
 
 public:
     explicit NotePlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* tuning() const;
     PropertyItem* velocity() const;
+    PropertyItem* playbackStartOffset() const;
+    PropertyItem* playbackDurationOffset() const;
 
 protected:
     void createProperties() override;
@@ -49,5 +53,7 @@ protected:
 private:
     PropertyItem* m_tuning = nullptr;
     PropertyItem* m_velocity = nullptr;
+    PropertyItem* m_playbackStartOffset = nullptr;
+    PropertyItem* m_playbackDurationOffset = nullptr;
 };
 }
