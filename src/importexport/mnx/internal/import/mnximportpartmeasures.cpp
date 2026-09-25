@@ -666,7 +666,7 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
 ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                                     track_idx_t curTrackIdx, Measure* measure, const mnx::FractionValue& startTick,
                                     const mnx::FractionValue& actualDuration,
-                                    const std::stack<Tuplet*>& activeTuplets, TremoloTwoChord* activeTremolo)
+                                    Tuplet* tuplet, TremoloTwoChord* activeTremolo)
 {
     const TDuration d = toMuseScoreDuration(event.duration());
     if (!d.isValid()) {
@@ -775,11 +775,8 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
     importMarkings(event, cr, toMuseScoreFraction(startTick + actualDuration), measure);
     if (!event.isGrace()) {
         segment->add(cr);
-        if (!activeTuplets.empty()) {
-            DO_ASSERT(activeTuplets.top());
-            if (activeTuplets.top()) {
-                activeTuplets.top()->add(cr);
-            }
+        if (tuplet) {
+            tuplet->add(cr);
         }
         if (activeTremolo) {
             activeTremolo->add(cr);
@@ -798,7 +795,16 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
                                        track_idx_t curTrackIdx, GraceNeighborsMap& graceNeighbors)
 {
     bool insertedCR = false;
-    std::stack<Tuplet*> activeTuplets;
+    // Each entry is a tuplet that was created, with the MNX tuplet that opened it. A tuplet that
+    // could not be created pushes nothing, so only the MNX tuplet that pushed an entry pops it.
+    struct ActiveTuplet {
+        std::string mnxPointer;
+        Tuplet* tuplet = nullptr;
+    };
+    std::stack<ActiveTuplet> activeTuplets;
+    const auto innermostTuplet = [&activeTuplets]() -> Tuplet* {
+        return activeTuplets.empty() ? nullptr : activeTuplets.top().tuplet;
+    };
     TremoloTwoChord* activeTremolo = nullptr;
 
     ChordRest* lastCR = nullptr;
@@ -839,25 +845,18 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
             return mnx::util::SequenceWalkControl::SkipChildren;
         } else if (item.type() == mnx::sequence::Tuplet::ContentTypeValue) {
             const auto mnxTuplet = item.get<mnx::sequence::Tuplet>();
-            if (tupletHasOnlySpacesAndGraces(mnxTuplet)) {
-                // MuseScore does not like Tuplets that contain only gap Rests,
-                // so replace the entire thing with a single gap rest.
-                TDuration baseLen = toMuseScoreDuration(mnxTuplet.outer().duration());
-                const Fraction total = baseLen.fraction() * mnxTuplet.outer().multiple();
-                DO_ASSERT(activeTuplets.empty());
-                emitGapRest(measure, curTrackIdx, ctx.elapsedTime, toMnxFractionValue(total.reduced()), nullptr);
-                activeTuplets.push(nullptr);
+            // MuseScore does not like tuplets that contain only gap rests, and a tuplet that cannot
+            // be created cannot hold its content. Either way the tuplet becomes a single gap rest
+            // in whatever encloses it, and its content is skipped.
+            Tuplet* t = tupletHasOnlySpacesAndGraces(mnxTuplet) ? nullptr : createTuplet(mnxTuplet, measure, curTrackIdx, ctx.elapsedTime);
+            if (!t) {
+                emitGapRest(measure, curTrackIdx, ctx.elapsedTime, mnxTuplet.outer(), innermostTuplet());
                 return mnx::util::SequenceWalkControl::SkipChildren;
             }
-            if (Tuplet* t = createTuplet(mnxTuplet, measure, curTrackIdx, ctx.elapsedTime)) {
-                if (!activeTuplets.empty()) {
-                    DO_ASSERT(activeTuplets.top());
-                    if (activeTuplets.top()) {
-                        activeTuplets.top()->add(t); // reparent tuplet
-                    }
-                }
-                activeTuplets.push(t);
+            if (Tuplet* parent = innermostTuplet()) {
+                parent->add(t); // reparent tuplet
             }
+            activeTuplets.push({ item.pointer().to_string(), t });
         } else if (item.type() == mnx::sequence::MultiNoteTremolo::ContentTypeValue) {
             const auto mnxTremolo = item.get<mnx::sequence::MultiNoteTremolo>();
             auto content = mnxTremolo.content();
@@ -877,8 +876,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
             // Note that if we are inside a tuplet (ctx.timeRatio != 1), we must emit a gap rest here.
             // For now, though, we emit a gap rest for *any* spacer, since that seems to be the intent of them.
             const auto mnxSpace = item.get<mnx::sequence::Space>();
-            emitGapRest(measure, curTrackIdx, ctx.elapsedTime, mnxSpace.duration(),
-                        activeTuplets.empty() ? nullptr : activeTuplets.top());
+            emitGapRest(measure, curTrackIdx, ctx.elapsedTime, mnxSpace.duration(), innermostTuplet());
         }
         return mnx::util::SequenceWalkControl::Continue;
     };
@@ -890,7 +888,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
             return true;
         }
         updateLyricLineUsageForEvent(event, sequence, measure, curTrackIdx, startTick);
-        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, activeTuplets, activeTremolo)) {
+        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, innermostTuplet(), activeTremolo)) {
             if (event.fermata()) {
                 importFermata(event.fermata().value(), cr);
             }
@@ -908,10 +906,10 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
     };
     hooks.onAfterItem = [&](const mnx::sequence::SequenceContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Tuplet::ContentTypeValue) {
-            if (Tuplet* tuplet = activeTuplets.top()) {
-                hideTrailingGapRests(tuplet);
+            if (!activeTuplets.empty() && activeTuplets.top().mnxPointer == item.pointer().to_string()) {
+                hideTrailingGapRests(activeTuplets.top().tuplet);
+                activeTuplets.pop();
             }
-            activeTuplets.pop();
         } else if (item.type() == mnx::sequence::MultiNoteTremolo::ContentTypeValue) {
             const auto mnxTremolo = item.get<mnx::sequence::MultiNoteTremolo>();
             const auto startTime = ctx.elapsedTime - (mnxTremolo.outer() * ctx.timeRatio);
@@ -946,7 +944,7 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
             const bool useRight = rightNeighbor && rightNeighbor->isChord();
             const bool useLeft = !useRight && leftNeighbor && leftNeighbor->isChord();
             if (useRight || useLeft) {
-                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, {}, nullptr)) {
+                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, nullptr, nullptr)) {
                     engraving::Chord* gc = toChord(cr);
                     TDuration d = gc->durationType();
                     if (useRight && grace.slash() && grace.content().size() == 1) {
