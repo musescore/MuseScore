@@ -176,6 +176,7 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     m_masterScore = nullptr;
 
     m_engravingFont = engravingFonts()->fontByName("Leland");
+    m_lastFontName.clear();
 
     m_fileDivision = Constants::DIVISION;
     m_style = DefaultStyle::defaultStyle();
@@ -4858,7 +4859,12 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
         end = std::max(et, spanner->tick2());
     }
 
-    m_engravingFont = engravingFonts()->fontByName(style().value(Sid::musicalSymbolFont).value<String>().toStdString());
+    std::string fontName = style().value(Sid::musicalSymbolFont).value<String>().toStdString();
+    if (!m_engravingFont || m_lastFontName != fontName) {
+        m_engravingFont = engravingFonts()->fontByName(fontName)->clone();
+        m_lastFontName = fontName;
+    }
+    m_engravingFont->setOversizedNoteheads(style().value(Sid::oversizedNoteheads).toBool());
     m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, style().spatium() / style().defaultSpatium());
 
     if (this->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
