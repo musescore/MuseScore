@@ -25,6 +25,8 @@
 #include "measurebase.h"
 #include "property.h"
 
+#include "draw/types/font.h"
+
 namespace mu::engraving {
 class Transaction;
 
@@ -90,6 +92,10 @@ public:
     bool canBeExcludedFromOtherParts() const override { return true; }
     void manageExclusionFromParts(bool exclude) override;
 
+    // For use in palettes
+    char16_t iconCode() const { return m_iconCode; }
+    const muse::draw::Font& iconFont() const { return m_iconFont; }
+
 private:
     Spatium m_boxWidth;         // only valid for HBox
     Spatium m_boxHeight;        // only valid for VBox
@@ -102,6 +108,9 @@ private:
     double m_topMargin = 0.0;
     double m_bottomMargin = 0.0;
     bool m_isAutoSizeEnabled = true;
+
+    char16_t m_iconCode = 0;
+    muse::draw::Font m_iconFont;
 };
 
 //---------------------------------------------------------
