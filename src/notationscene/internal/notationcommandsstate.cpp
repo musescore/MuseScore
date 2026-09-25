@@ -224,7 +224,9 @@ static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
     { GOTO_NEXT_FRAME_COMMAND, MoveSelectionType::Frame },
     { GOTO_PREV_FRAME_COMMAND, MoveSelectionType::Frame },
     { GOTO_NEXT_SYSTEM_COMMAND, MoveSelectionType::System },
-    { GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System }
+    { GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System },
+    { GOTO_NEXT_SECTION_COMMAND, MoveSelectionType::Section },
+    { GOTO_PREV_SECTION_COMMAND, MoveSelectionType::Section }
 };
 
 static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
