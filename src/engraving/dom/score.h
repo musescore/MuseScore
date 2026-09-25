@@ -635,8 +635,8 @@ public:
     void lassoSelectEnd();
 
     Page* searchPage(const PointF&) const;
-    std::vector<System*> searchSystem(const PointF& p, const System* preferredSystem = nullptr, double spacingFactor = 0.5,
-                                      double preferredSpacingFactor = 1.0) const;
+    std::vector<System*> searchSystem(const PointF& p, bool includeMeasurelessSystems = true, const System* preferredSystem = nullptr,
+                                      double spacingFactor = 0.5, double preferredSpacingFactor = 1.0) const;
     MeasureBase* searchMeasureBase(const PointF& p, bool scanMeasuresOnly = false, const System* preferredSystem = nullptr,
                                    double spacingFactor = 0.5, double preferredSpacingFactor = 1.0) const;
 

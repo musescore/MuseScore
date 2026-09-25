@@ -321,7 +321,6 @@ bool Box::acceptDrop(EditData& data) const
     }
     ElementType t = data.dropElement->type();
     switch (t) {
-    case ElementType::LAYOUT_BREAK:
     case ElementType::TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::IMAGE:
@@ -361,35 +360,6 @@ EngravingItem* Box::drop(Transaction& tx, EditData& data)
         LOGD("<%s>", e->typeName());
     }
     switch (e->type()) {
-    case ElementType::LAYOUT_BREAK:
-    {
-        LayoutBreak* lb = toLayoutBreak(e);
-        if (pageBreak() || lineBreak()) {
-            if (
-                (lb->isPageBreak() && pageBreak())
-                || (lb->isLineBreak() && lineBreak())
-                || (lb->isSectionBreak() && sectionBreak())
-                ) {
-                //
-                // if break already set
-                //
-                delete lb;
-                break;
-            }
-            for (EngravingItem* elem : el()) {
-                if (elem->isLayoutBreak()) {
-                    score()->undoChangeElement(elem, e);
-                    break;
-                }
-            }
-            break;
-        }
-        lb->setTrack(0);
-        lb->setOwnershipParent(this);
-        score()->undoAddElement(lb);
-        return lb;
-    }
-
     case ElementType::STAFF_TEXT:
     {
         Text* text = Factory::createText(this, TextStyleType::FRAME);

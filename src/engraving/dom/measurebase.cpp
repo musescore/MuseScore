@@ -201,21 +201,28 @@ Page* MeasureBase::nextPage() const
 bool MeasureBase::acceptDrop(EditData& data) const
 {
     const EngravingItem* e = data.dropElement;
-    if (!e || !e->isActionIcon()) {
+    if (!e) {
         return false;
     }
-    switch (toActionIcon(e)->actionType()) {
-    case ActionIconType::PAGE_LOCK:
-    {
-        LayoutMode layoutMode = score()->layoutMode();
-        return layoutMode == LayoutMode::PAGE;
+
+    if (e->isLayoutBreak()) {
+        return true;
     }
-    case ActionIconType::SYSTEM_LOCK:
-    {
-        LayoutMode layoutMode = score()->layoutMode();
-        return layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM;
-    }
-    default: break;
+
+    if (e->isActionIcon()) {
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::PAGE_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            return layoutMode == LayoutMode::PAGE;
+        }
+        case ActionIconType::SYSTEM_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            return layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM;
+        }
+        default: break;
+        }
     }
     return false;
 }
@@ -223,20 +230,77 @@ bool MeasureBase::acceptDrop(EditData& data) const
 EngravingItem* MeasureBase::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    if (!e || !e->isActionIcon()) {
+    if (!e) {
         delete e;
         return nullptr;
     }
-    switch (toActionIcon(e)->actionType()) {
-    case ActionIconType::SYSTEM_LOCK:
-        EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
-        break;
-    case ActionIconType::PAGE_LOCK:
-        EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
-        break;
-    default:
-        LOGD("MeasureBase: cannot drop %s here", e->typeName());
-        break;
+    if (e->isLayoutBreak()) {
+        LayoutBreak* b = toLayoutBreak(e);
+        MeasureBase* mb = this;
+        if (isMeasure()) {
+            Measure* m = toMeasure(this);
+            if (m->isMMRest()) {
+                mb = m->mmRestLast();
+            }
+        }
+        switch (b->layoutBreakType()) {
+        case  LayoutBreakType::PAGE:
+            if (mb->pageBreak()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setLineBreak(false);
+            }
+            break;
+        case  LayoutBreakType::LINE:
+            if (mb->lineBreak()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setPageBreak(false);
+            }
+            break;
+        case  LayoutBreakType::SECTION:
+            if (mb->sectionBreak()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setLineBreak(false);
+            }
+            break;
+        case LayoutBreakType::NOBREAK:
+            if (mb->noBreak() || mb->isEndOfSystemLock() || mb->isEndOfPageLock()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setLineBreak(false);
+                mb->setPageBreak(false);
+            }
+            break;
+        }
+        if (b) {
+            if (b->layoutBreakType() != LayoutBreakType::NOBREAK) {
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
+            }
+            b->setTrack(0);
+            b->setOwnershipParent(mb);
+            score()->undoAddElement(b);
+        }
+        mb->cleanupLayoutBreaks(true);
+        return b;
+    }
+    if (e->isActionIcon()) {
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::SYSTEM_LOCK:
+            EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
+            break;
+        case ActionIconType::PAGE_LOCK:
+            EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
+            break;
+        default:
+            LOGD("MeasureBase: cannot drop %s here", e->typeName());
+            break;
+        }
     }
     delete e;
     return nullptr;
