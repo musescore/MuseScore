@@ -36,6 +36,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
+#include "engraving/dom/tuplet.h"
 #include "engraving/types/typesconv.h"
 
 #include "importexport/mnx/internal/shared/mnxtypesconv.h"
@@ -613,4 +614,161 @@ TEST_F(Mnx_UnitTests, staffConfigExportWritesChangesAndOmitsDefaults)
     ASSERT_TRUE(partMeasures[2].staffConfigs());
     ASSERT_EQ(partMeasures[2].staffConfigs()->size(), size_t(1));
     EXPECT_EQ((*partMeasures[2].staffConfigs())[0].config().dump(), "{}");
+}
+
+//---------------------------------------------------------
+//   tuplet tests
+//---------------------------------------------------------
+
+namespace {
+//! An event on C5 with the given note value.
+std::string noteEvent(const char* base)
+{
+    return R"({ "duration": { "base": ")" + std::string(base) + R"(" }, "notes": [ { "pitch": { "octave": 5, "step": "C" } } ] })";
+}
+
+std::string dottedNoteEvent(const char* base)
+{
+    return R"({ "duration": { "base": ")" + std::string(base)
+           + R"(", "dots": 1 }, "notes": [ { "pitch": { "octave": 5, "step": "C" } } ] })";
+}
+
+std::string spaceItem(int numerator, int denominator)
+{
+    return R"({ "type": "space", "duration": [)" + std::to_string(numerator) + ", " + std::to_string(denominator) + "] }";
+}
+
+//! A tuplet of `innerMultiple` inner note values in the time of `outerMultiple` outer ones.
+std::string tupletItem(const char* outerBase, int outerMultiple, const std::string& innerDuration, int innerMultiple,
+                       const std::vector<std::string>& content)
+{
+    std::string items;
+    for (size_t i = 0; i < content.size(); ++i) {
+        items += (i > 0 ? ", " : "") + content[i];
+    }
+    return R"({ "type": "tuplet", "outer": { "duration": { "base": ")" + std::string(outerBase) + R"(" }, "multiple": )"
+           + std::to_string(outerMultiple) + R"( }, "inner": { "duration": )" + innerDuration + R"(, "multiple": )"
+           + std::to_string(innerMultiple) + R"( }, "content": [ )" + items + " ] }";
+}
+
+std::string contentSequence(const std::vector<std::string>& content)
+{
+    std::string items;
+    for (size_t i = 0; i < content.size(); ++i) {
+        items += (i > 0 ? ", " : "") + content[i];
+    }
+    return R"({ "content": [ )" + items + " ] }";
+}
+
+//! A tuplet MuseScore cannot represent: two dotted quarters in the time of one quarter, whose
+//! outer value is not a whole multiple of its inner value.
+std::string unimportableTuplet()
+{
+    return tupletItem("quarter", 1, R"({ "base": "quarter", "dots": 1 })", 2,
+                      { dottedNoteEvent("quarter"), dottedNoteEvent("quarter") });
+}
+
+const ChordRest* chordRestAt(const Measure* measure, const Fraction& rTick)
+{
+    const Segment* segment = measure->findSegmentR(SegmentType::ChordRest, rTick);
+    const EngravingItem* item = segment ? segment->element(0) : nullptr;
+    return item && item->isChordRest() ? toChordRest(item) : nullptr;
+}
+} // namespace
+
+TEST_F(Mnx_UnitTests, tupletThatCannotImportIsSkipped)
+{
+    // The unimportable tuplet appears at the top level and nested inside a valid tuplet. Each
+    // becomes a gap in whatever encloses it, and the valid tuplets around it are unaffected.
+    const std::string eighthTriplet = tupletItem("eighth", 2, R"({ "base": "eighth" })", 3,
+                                                 { noteEvent("eighth"), noteEvent("eighth"), noteEvent("eighth") });
+    const std::string quarterTriplet = tupletItem("quarter", 2, R"({ "base": "quarter" })", 3,
+                                                  { noteEvent("quarter"), unimportableTuplet(), noteEvent("quarter") });
+    std::unique_ptr<MasterScore> score(importMnxFromJson(
+                                           singleStaffMnx({ sequencesArray({ contentSequence({ unimportableTuplet(), eighthTriplet,
+                                                                                               quarterTriplet }) }) }),
+                                           u"<tuplets>/unimportable.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+    const Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+
+    // The top-level tuplet is a gap belonging to no tuplet.
+    const ChordRest* first = chordRestAt(measure, Fraction(0, 1));
+    ASSERT_TRUE(first && first->isRest());
+    EXPECT_TRUE(toRest(first)->isGap());
+    EXPECT_FALSE(first->tuplet());
+
+    // The eighth-note triplet keeps its three chords.
+    const ChordRest* e1 = chordRestAt(measure, Fraction(1, 4));
+    const ChordRest* e2 = chordRestAt(measure, Fraction(1, 3));
+    const ChordRest* e3 = chordRestAt(measure, Fraction(5, 12));
+    ASSERT_TRUE(e1 && e2 && e3);
+    const Tuplet* eighths = e1->tuplet();
+    ASSERT_TRUE(eighths);
+    EXPECT_EQ(e2->tuplet(), eighths);
+    EXPECT_EQ(e3->tuplet(), eighths);
+    EXPECT_EQ(eighths->elements().size(), size_t(3));
+
+    // The quarter-note triplet holds its two chords with the nested tuplet's gap between them.
+    const ChordRest* q1 = chordRestAt(measure, Fraction(1, 2));
+    const ChordRest* q2 = chordRestAt(measure, Fraction(2, 3));
+    const ChordRest* q3 = chordRestAt(measure, Fraction(5, 6));
+    ASSERT_TRUE(q1 && q2 && q3);
+    const Tuplet* quarters = q1->tuplet();
+    ASSERT_TRUE(quarters);
+    EXPECT_NE(quarters, eighths);
+    EXPECT_TRUE(q1->isChord());
+    ASSERT_TRUE(q2->isRest());
+    EXPECT_TRUE(toRest(q2)->isGap());
+    EXPECT_EQ(q2->tuplet(), quarters);
+    EXPECT_TRUE(q3->isChord());
+    EXPECT_EQ(q3->tuplet(), quarters);
+    EXPECT_EQ(quarters->elements().size(), size_t(3));
+}
+
+TEST_F(Mnx_UnitTests, allSpaceTupletBecomesGap)
+{
+    // A tuplet holding only spaces (and graces) becomes one gap in whatever encloses it: the
+    // measure at the top level, or the enclosing tuplet when nested. Its graces have nothing
+    // to attach to and are dropped.
+    const std::string grace = R"({ "type": "grace", "content": [ )" + noteEvent("eighth") + " ] }";
+    const std::string topLevelSpaces = tupletItem("quarter", 2, R"({ "base": "quarter" })", 3,
+                                                  { spaceItem(1, 4), grace, spaceItem(1, 4), spaceItem(1, 4) });
+    const std::string nestedSpaces = tupletItem("quarter", 1, R"({ "base": "eighth" })", 3,
+                                                { spaceItem(1, 8), spaceItem(1, 8), spaceItem(1, 8) });
+    const std::string tripletJson = tupletItem("quarter", 2, R"({ "base": "quarter" })", 3,
+                                               { noteEvent("quarter"), nestedSpaces, noteEvent("quarter") });
+    std::unique_ptr<MasterScore> score(importMnxFromJson(
+                                           singleStaffMnx({ sequencesArray({ contentSequence({ topLevelSpaces, tripletJson }) }) }),
+                                           u"<tuplets>/allSpaces.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+    const Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+
+    // At the top level: a single gap belonging to no tuplet, and nothing else until the triplet.
+    const ChordRest* topGap = chordRestAt(measure, Fraction(0, 1));
+    ASSERT_TRUE(topGap && topGap->isRest());
+    EXPECT_TRUE(toRest(topGap)->isGap());
+    EXPECT_FALSE(topGap->tuplet());
+    EXPECT_FALSE(chordRestAt(measure, Fraction(1, 6)));
+    EXPECT_FALSE(chordRestAt(measure, Fraction(1, 3)));
+
+    // Nested: the gap belongs to the enclosing triplet, between its two chords.
+    const ChordRest* first = chordRestAt(measure, Fraction(1, 2));
+    const ChordRest* nestedGap = chordRestAt(measure, Fraction(2, 3));
+    const ChordRest* last = chordRestAt(measure, Fraction(5, 6));
+    ASSERT_TRUE(first && nestedGap && last);
+    const Tuplet* triplet = first->tuplet();
+    ASSERT_TRUE(triplet);
+    ASSERT_TRUE(nestedGap->isRest());
+    EXPECT_TRUE(toRest(nestedGap)->isGap());
+    EXPECT_EQ(nestedGap->tuplet(), triplet);
+    EXPECT_EQ(last->tuplet(), triplet);
+    EXPECT_EQ(triplet->elements().size(), size_t(3));
+
+    // The skipped grace note is not attached to either neighbor.
+    ASSERT_TRUE(first->isChord());
+    EXPECT_TRUE(toChord(first)->graceNotes().empty());
 }
