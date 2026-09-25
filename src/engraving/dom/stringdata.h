@@ -90,9 +90,6 @@ public:
     bool        useFlats() const { return m_useFlats; }
 
 private:
-    using FrettingCacheKey = std::tuple<int, const Staff*, int64_t>;
-    mutable std::map<FrettingCacheKey, std::vector<std::pair<int, int>>> m_candidateFrettingCache;
-
     int         fret(int pitch, int string, int pitchOffset) const;
     int         scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const;
     int         resolveForcedString(const Note* note) const; 
@@ -120,10 +117,9 @@ private:
     std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
     std::pair<Note*, std::pair<int, int>> getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const; 
     std::pair<int, int> defaultFretboardAnchor() const; 
+    std::pair<int, int> findLastNonOpenAnchor(const Chord* chord) const; 
 
     std::vector<instrString> m_stringTable;                      // no strings by default
-
-    mutable std::pair<int, int> m_lastNonOpenFretting = { 0, 7 }; // this allows us to deal with open chords more efficiently 
 
     static constexpr int MAX_FRET_SPAN = 4; // reasonable amount that a hand can stretch for a chord
     static constexpr int DEFAULT_ANCHOR_FRET = 7; 

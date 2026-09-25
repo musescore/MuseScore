@@ -24,6 +24,7 @@
 
 #include <algorithm> 
 #include <cstdlib> 
+#include <climits>
 #include <map>
 #include <utility>
 
@@ -342,6 +343,25 @@ Chord* StringData::findPrecedingChordAcrossRests(Chord* chord) const {
 }
 
 //---------------------------------------------------------
+//   findLastNonOpenAnchor
+//      Takes a pointer to a chord, finds the previous anchor to compare against
+//      for score calculations for fret candidates. 
+//---------------------------------------------------------
+std::pair<int, int> StringData::findLastNonOpenAnchor(const Chord* chord) const {
+    Chord* cur = chord; 
+
+    while (cur) {
+        Note* bassNote = getBassNoteOfVoicings(cur); 
+        if (bassNote && bassNote->string() != INVALID_FRET_INDEX && bassNote->fret() != 0) {
+            return { bassNote->string(), bassNote->fret() }
+        }
+        cur = findPrecedingChordAcrossRests(cur); 
+    }
+
+    return defaultFretboardAnchor(); 
+}
+
+//---------------------------------------------------------
 //   fretReachableFromAll
 //      Determines whether a fret is reachable from all the other given ones. Returns the result as a boolean. 
 //---------------------------------------------------------
@@ -372,10 +392,11 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
     used[bassString] = true; 
 
     std::vector<Note*> notes = collectNotesAtSameTick(chord); 
+    bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
 
     for (Note* n : notes) {
         if (n == bassNote) continue;
-        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed()) {
+        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed() || (skipDeadNotes && n->deadNote)) {
             if (n->string() != INVALID_STRING_INDEX && n->string() < strings) {
                 used[n->string()] = true;
             }
@@ -389,7 +410,12 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
     std::vector<int> placedFrets; 
 
     for (Note* note: notes) {
-        if (note == bassNote || note->displayFret() != Note::DisplayFretOption::NoHarmonic || note->negativeFretUsed()) continue; 
+        if (note == bassNote || note->displayFret() != Note::DisplayFretOption::NoHarmonic || note->negativeFretUsed() || (skipDeadNotes && note->deadNote())) continue; 
+
+        if (getPitch(note->string(), note->fret(), note->staff(), note->tick()) == note->pitch()) {
+            used[note->string()] = true; 
+            continue; 
+        }
 
         std::pair<int, int> best = { INVALID_STRING_INDEX, INVALID_FRET_INDEX }; 
         
@@ -455,12 +481,6 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
 //    fret number respectively. 
 //---------------------------------------------------------
 std::vector<std::pair<int, int>> StringData::allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const {
-    FrettingCacheKey key = {pitch, staff, tick.ticks()}; 
-    auto it = m_candidateFrettingCache.find(key); 
-    if (it != m_candidateFrettingCache.end()) {
-        return it->second; 
-    }
-
     std::vector<std::pair<int, int>> candidateFrettings; 
     int strings = static_cast<int>(m_stringTable.size()); 
     
@@ -471,7 +491,6 @@ std::vector<std::pair<int, int>> StringData::allCandidateFrettings(int pitch, co
         if (fretNumber != INVALID_FRET_INDEX) candidateFrettings.push_back({visualStringNumber, fretNumber}); 
     }
 
-    m_candidateFrettingCache[key] = candidateFrettings; 
     return candidateFrettings; 
 }
 
@@ -548,10 +567,6 @@ void StringData::assignBestFrettingForBassNote(std::pair<int, int> bestFretting,
         desiredBassNote->undoChangeProperty(Pid::STRING, bestFretting.first);
         desiredBassNote->undoChangeProperty(Pid::FRET, bestFretting.second);
         assignRemainingNotesAroundBass(chord, desiredBassNote, bestFretting); 
-
-        if (bestFretting.second != 0) {
-            m_lastNonOpenFretting = bestFretting; // update this as we go 
-        }
     } else {
         desiredBassNote->setFretConflict(true);
     }
@@ -600,45 +615,49 @@ void StringData::fretChords(Chord* chord) const
 
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
     Note* candidateBassNote = getBassNoteOfVoicings(chord);
+    Chord* lastRealChord = findPrecedingChordAcrossRests(chord); 
 
-    if (!prevChord) {
-        Chord* lastRealChord = findPrecedingChordAcrossRests(chord); 
-        if (lastRealChord) {
-            Fraction gap = chord->tick() - lastRealChord->endTick(); 
-            Fraction oneBar = chord->measure() ? chord->measure()->ticks() : Fraction(1, 1); // calculate duration of one bar 
+    if (!prevChord && lastRealChord) {
+        Fraction gap = chord->tick() - lastRealChord->endTick(); 
+        Fraction oneBar = chord->measure() ? chord->measure()->ticks() : Fraction(1, 1); // calculate duration of one bar 
 
-            // if we have 1 or more bars of rest, then we start fretting around the default anchor 
-            // (middle of fretboard) instead of based off the actual previous chord 
-            if (gap >= oneBar) {
-                m_lastNonOpenFretting = defaultFretboardAnchor(); 
-            } else {
-                prevBassNote = getBassNoteOfVoicings(lastRealChord); 
-            }
-        } else {
-            // this is the very first chord in the entire piece 
-            m_lastNonOpenFretting = defaultFretboardAnchor(); 
+        // if we have 1 or more bars of rest, then we start fretting around the default anchor 
+        // (middle of fretboard) instead of based off the actual previous chord 
+        if (gap < oneBar) {
+            prevBassNote = getBassNoteOfVoicings(lastRealChord); 
         }
-    } else {
+    } else if (prevChord) {
         prevBassNote = getBassNoteOfVoicings(prevChord); 
     }
+
+    auto needsFretting = [&](const Note* n) {
+        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed()
+            || (skipDeadNotes && n->deadNote())) {
+            return false;
+        }
+        if (n->string() &lt; 0 || n->string() >= strings || n->fret() == INVALID_FRET_INDEX) {
+            return true;
+        }
+        return getPitch(n->string(), n->fret(), n->staff(), n->tick()) != n->pitch();
+    };
     
     bool bassNoteEligible = candidateBassNote
         && candidateBassNote->displayFret() == Note::DisplayFretOption::NoHarmonic
         && !candidateBassNote->negativeFretUsed()
         && !(skipDeadNotes && candidateBassNote->deadNote());
 
-    if (bassNoteEligible && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX) {
+    if (bassNoteEligible && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX && needsFretting(candidateBassNote)) {
         // we look at all candidates for the bass note of the chord and compute their distances to the bass note of the previous chord 
         // pick the "closest" one to minimize hand movement. see getBestFrettingForBassNote for more details. 
         std::pair<int, int> prevFretting = {prevBassNote->string(), prevBassNote->fret()}; 
 
         if (prevFretting.second == 0) {
-            prevFretting = m_lastNonOpenFretting; 
+            prevFretting = findLastNonOpenAnchor(prevChord); 
         }
 
         auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
         assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord); 
-    } else if (bassNoteEligible && strings > 0) { 
+    } else if (bassNoteEligible && strings > 0 && needsFretting(candidateBassNote)) { 
         // we want the string as close to the middle of the fretboard as possible 
         // in our case, this is the number of frets // 2 and the number of strings // 2
 
