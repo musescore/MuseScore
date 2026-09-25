@@ -635,7 +635,7 @@ void StringData::fretChords(Chord* chord) const
             || (skipDeadNotes && n->deadNote())) {
             return false;
         }
-        if (n->string() &lt; 0 || n->string() >= strings || n->fret() == INVALID_FRET_INDEX) {
+        if (n->string() < 0 || n->string() >= strings || n->fret() == INVALID_FRET_INDEX) {
             return true;
         }
         return getPitch(n->string(), n->fret(), n->staff(), n->tick()) != n->pitch();
