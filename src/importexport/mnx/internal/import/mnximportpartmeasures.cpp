@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <algorithm>
+#include <array>
+#include <initializer_list>
 #include <optional>
 #include <stack>
 #include <vector>
@@ -118,6 +120,26 @@ static bool tupletHasOnlySpacesAndGraces(const mnx::sequence::Tuplet& tuplet)
 }
 
 //---------------------------------------------------------
+//   hideTrailingGapRests
+//   Turn the gap rests that end a tuplet into invisible rests. MuseScore draws a
+//   tuplet's bracket to the end of its last chord or rest, which a gap rest does
+//   not have.
+//---------------------------------------------------------
+
+static void hideTrailingGapRests(Tuplet* tuplet)
+{
+    const auto& elements = tuplet->elements();
+    for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
+        if (!(*it)->isRest() || !toRest(*it)->isGap()) {
+            break;
+        }
+        Rest* rest = toRest(*it);
+        rest->setGap(false);
+        rest->setVisible(false);
+    }
+}
+
+//---------------------------------------------------------
 //   createSlur
 //   Create a MuseScore slur from an MNX slur attached to start chord/rest.
 //---------------------------------------------------------
@@ -142,12 +164,9 @@ void MnxImporter::createSlur(const mnx::sequence::Slur& mnxSlur, engraving::Chor
     if (const auto lineType = mnxSlur.lineType()) {
         setAndStyleProperty(slur, Pid::SLUR_STYLE_TYPE, toMuseScoreSlurStyleType(lineType.value()));
     }
-    if (const auto side = mnxSlur.side()) {
-        DirectionV slurDir = side.value() == mnx::SlurTieSide::Up ? DirectionV::UP : DirectionV::DOWN;
-        setAndStyleProperty(slur, Pid::SLUR_DIRECTION, slurDir);
-    } else if (const auto sideEnd = mnxSlur.sideEnd()) {
-        DirectionV slurDir = sideEnd.value() == mnx::SlurTieSide::Up ? DirectionV::UP : DirectionV::DOWN;
-        setAndStyleProperty(slur, Pid::SLUR_DIRECTION, slurDir);
+    const mnx::SlurTieSide side = mnxSlur.side() != mnx::SlurTieSide::Auto ? mnxSlur.side() : mnxSlur.sideEnd();
+    if (side != mnx::SlurTieSide::Auto) {
+        setAndStyleProperty(slur, Pid::SLUR_DIRECTION, toMuseScoreSlurTieDirection(side));
     }
     /// @todo implement side and sideEnd in opposite directions, if/when MuseScore supports it.
     /// @todo endNote and startNote are not supported by MuseScore (yet?)
@@ -368,9 +387,8 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
         tie->setTrack(startNote->track());
         tie->setOwnershipParent(startNote);
         startNote->setTieFor(tie);
-        DirectionV tieDir = DirectionV::AUTO;
-        if (const auto side = mnxTie.side()) {
-            tieDir = side.value() == mnx::SlurTieSide::Up ? DirectionV::UP : DirectionV::DOWN;
+        const DirectionV tieDir = toMuseScoreSlurTieDirection(mnxTie.side());
+        if (tieDir != DirectionV::AUTO) {
             setAndStyleProperty(tie, Pid::SLUR_DIRECTION, tieDir);
         }
         if (!isLv) {
@@ -423,10 +441,7 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
         const mnx::sequence::Tie& mnxTie = jumpTarget.tie;
         Note* targetNote = jumpTarget.targetNote;
 
-        DirectionV tieDir = DirectionV::AUTO;
-        if (const auto side = mnxTie.side()) {
-            tieDir = side.value() == mnx::SlurTieSide::Up ? DirectionV::UP : DirectionV::DOWN;
-        }
+        const DirectionV tieDir = toMuseScoreSlurTieDirection(mnxTie.side());
         if (!startTie || startTie->isPartialTie()) {
             PartialTie* tie = Factory::createPartialTie(startNote);
             tie->setStartNote(startNote);
@@ -591,6 +606,7 @@ Tuplet* MnxImporter::createTuplet(const mnx::sequence::Tuplet& mnxTuplet, Measur
     // options
     t->setNumberType(toMuseScoreTupletNumberType(mnxTuplet.showNumber()));
     t->setBracketType(toMuseScoreTupletBracketType(mnxTuplet.bracket()));
+    t->setDirection(toMuseScoreDirectionV(mnxTuplet.placement()));
     return t;
 }
 
@@ -650,7 +666,7 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
 ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                                     track_idx_t curTrackIdx, Measure* measure, const mnx::FractionValue& startTick,
                                     const mnx::FractionValue& actualDuration,
-                                    const std::stack<Tuplet*>& activeTuplets, TremoloTwoChord* activeTremolo)
+                                    Tuplet* tuplet, TremoloTwoChord* activeTremolo)
 {
     const TDuration d = toMuseScoreDuration(event.duration());
     if (!d.isValid()) {
@@ -759,11 +775,8 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
     importMarkings(event, cr, toMuseScoreFraction(startTick + actualDuration), measure);
     if (!event.isGrace()) {
         segment->add(cr);
-        if (!activeTuplets.empty()) {
-            DO_ASSERT(activeTuplets.top());
-            if (activeTuplets.top()) {
-                activeTuplets.top()->add(cr);
-            }
+        if (tuplet) {
+            tuplet->add(cr);
         }
         if (activeTremolo) {
             activeTremolo->add(cr);
@@ -782,7 +795,16 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
                                        track_idx_t curTrackIdx, GraceNeighborsMap& graceNeighbors)
 {
     bool insertedCR = false;
-    std::stack<Tuplet*> activeTuplets;
+    // Each entry is a tuplet that was created, with the MNX tuplet that opened it. A tuplet that
+    // could not be created pushes nothing, so only the MNX tuplet that pushed an entry pops it.
+    struct ActiveTuplet {
+        std::string mnxPointer;
+        Tuplet* tuplet = nullptr;
+    };
+    std::stack<ActiveTuplet> activeTuplets;
+    const auto innermostTuplet = [&activeTuplets]() -> Tuplet* {
+        return activeTuplets.empty() ? nullptr : activeTuplets.top().tuplet;
+    };
     TremoloTwoChord* activeTremolo = nullptr;
 
     ChordRest* lastCR = nullptr;
@@ -823,25 +845,18 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
             return mnx::util::SequenceWalkControl::SkipChildren;
         } else if (item.type() == mnx::sequence::Tuplet::ContentTypeValue) {
             const auto mnxTuplet = item.get<mnx::sequence::Tuplet>();
-            if (tupletHasOnlySpacesAndGraces(mnxTuplet)) {
-                // MuseScore does not like Tuplets that contain only gap Rests,
-                // so replace the entire thing with a single gap rest.
-                TDuration baseLen = toMuseScoreDuration(mnxTuplet.outer().duration());
-                const Fraction total = baseLen.fraction() * mnxTuplet.outer().multiple();
-                DO_ASSERT(activeTuplets.empty());
-                emitGapRest(measure, curTrackIdx, ctx.elapsedTime, toMnxFractionValue(total.reduced()), nullptr);
-                activeTuplets.push(nullptr);
+            // MuseScore does not like tuplets that contain only gap rests, and a tuplet that cannot
+            // be created cannot hold its content. Either way the tuplet becomes a single gap rest
+            // in whatever encloses it, and its content is skipped.
+            Tuplet* t = tupletHasOnlySpacesAndGraces(mnxTuplet) ? nullptr : createTuplet(mnxTuplet, measure, curTrackIdx, ctx.elapsedTime);
+            if (!t) {
+                emitGapRest(measure, curTrackIdx, ctx.elapsedTime, mnxTuplet.outer(), innermostTuplet());
                 return mnx::util::SequenceWalkControl::SkipChildren;
             }
-            if (Tuplet* t = createTuplet(mnxTuplet, measure, curTrackIdx, ctx.elapsedTime)) {
-                if (!activeTuplets.empty()) {
-                    DO_ASSERT(activeTuplets.top());
-                    if (activeTuplets.top()) {
-                        activeTuplets.top()->add(t); // reparent tuplet
-                    }
-                }
-                activeTuplets.push(t);
+            if (Tuplet* parent = innermostTuplet()) {
+                parent->add(t); // reparent tuplet
             }
+            activeTuplets.push({ item.pointer().to_string(), t });
         } else if (item.type() == mnx::sequence::MultiNoteTremolo::ContentTypeValue) {
             const auto mnxTremolo = item.get<mnx::sequence::MultiNoteTremolo>();
             auto content = mnxTremolo.content();
@@ -861,8 +876,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
             // Note that if we are inside a tuplet (ctx.timeRatio != 1), we must emit a gap rest here.
             // For now, though, we emit a gap rest for *any* spacer, since that seems to be the intent of them.
             const auto mnxSpace = item.get<mnx::sequence::Space>();
-            emitGapRest(measure, curTrackIdx, ctx.elapsedTime, mnxSpace.duration(),
-                        activeTuplets.empty() ? nullptr : activeTuplets.top());
+            emitGapRest(measure, curTrackIdx, ctx.elapsedTime, mnxSpace.duration(), innermostTuplet());
         }
         return mnx::util::SequenceWalkControl::Continue;
     };
@@ -874,7 +888,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
             return true;
         }
         updateLyricLineUsageForEvent(event, sequence, measure, curTrackIdx, startTick);
-        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, activeTuplets, activeTremolo)) {
+        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, innermostTuplet(), activeTremolo)) {
             if (event.fermata()) {
                 importFermata(event.fermata().value(), cr);
             }
@@ -892,7 +906,10 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
     };
     hooks.onAfterItem = [&](const mnx::sequence::SequenceContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Tuplet::ContentTypeValue) {
-            activeTuplets.pop();
+            if (!activeTuplets.empty() && activeTuplets.top().mnxPointer == item.pointer().to_string()) {
+                hideTrailingGapRests(activeTuplets.top().tuplet);
+                activeTuplets.pop();
+            }
         } else if (item.type() == mnx::sequence::MultiNoteTremolo::ContentTypeValue) {
             const auto mnxTremolo = item.get<mnx::sequence::MultiNoteTremolo>();
             const auto startTime = ctx.elapsedTime - (mnxTremolo.outer() * ctx.timeRatio);
@@ -927,7 +944,7 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
             const bool useRight = rightNeighbor && rightNeighbor->isChord();
             const bool useLeft = !useRight && leftNeighbor && leftNeighbor->isChord();
             if (useRight || useLeft) {
-                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, {}, nullptr)) {
+                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, nullptr, nullptr)) {
                     engraving::Chord* gc = toChord(cr);
                     TDuration d = gc->durationType();
                     if (useRight && grace.slash() && grace.content().size() == 1) {
@@ -971,9 +988,16 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
 {
     auto& sequenceTracks = m_partMeasureSequenceTracks[partMeasure.pointer().to_string()];
     sequenceTracks.clear();
-    std::vector<std::vector<track_idx_t> > staffVoiceMaps(mnxPart.staves());
 
-    // pass1: import non-grace-note events to ChordRest
+    struct SequenceVoice {
+        mnx::Sequence sequence;
+        staff_idx_t staffIdx = muse::nidx;
+        voice_idx_t voice = muse::nidx;
+        DirectionV forcedStem = DirectionV::AUTO;
+    };
+    std::vector<SequenceVoice> sequenceVoices;
+    std::vector<std::array<bool, VOICES> > usedVoices(mnxPart.staves());
+
     for (const auto& sequence : partMeasure.sequences()) {
         if (sequence.staff() > mnxPart.staves()) {
             LOGE() << "Sequence " << sequence.pointer().to_string()
@@ -990,25 +1014,90 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
                    << " for MNX part at " << mnxPart.pointer().to_string() << ".";
             return;
         }
-        auto& staffVoiceMap = staffVoiceMaps[static_cast<size_t>(sequence.staff() - 1)];
-        const track_idx_t voiceId = staffVoiceMap.size();
-        if (voiceId >= VOICES) {
-            LOGW() << "Part measure " << partMeasure.pointer().to_string()
-                   << " contains too many voices for staff " << sequence.staff() << ". This sequence is skipped.";
+        sequenceVoices.push_back({ sequence, curStaffIdx });
+    }
+
+    // Assign voices. Sequences hinted as upper have first choice of voices 1 and 3, and those
+    // hinted as lower of voices 2 and 4, which are where MuseScore points stems up and down.
+    // Unhinted sequences take whatever is left.
+    const auto takeVoice = [&](SequenceVoice& sv, std::initializer_list<voice_idx_t> candidates) {
+        auto& used = usedVoices[static_cast<size_t>(sv.sequence.staff() - 1)];
+        for (const voice_idx_t voice : candidates) {
+            if (!used[voice]) {
+                used[voice] = true;
+                sv.voice = voice;
+                return true;
+            }
+        }
+        return false;
+    };
+    const auto warnTooManyVoices = [&](const SequenceVoice& sv) {
+        LOGW() << "Part measure " << partMeasure.pointer().to_string()
+               << " contains too many voices for staff " << sv.sequence.staff() << ". This sequence is skipped.";
+    };
+    for (SequenceVoice& sv : sequenceVoices) {
+        const mnx::DirectionHint hint = sv.sequence.directionHint();
+        if (hint == mnx::DirectionHint::Auto) {
             continue;
         }
-        const track_idx_t curTrackIdx = staff2track(curStaffIdx, voiceId);
-        GraceNeighborsMap graceNeighbors;
-        if (importNonGraceEvents(sequence, measure, curTrackIdx, graceNeighbors)) {
-            importGraceEvents(sequence, measure, curTrackIdx, graceNeighbors); // if MuseScore refactors graces, maybe we don't need this.
-            sequenceTracks.emplace(sequence.pointer().to_string(), curTrackIdx);
-            staffVoiceMap.push_back(voiceId);
+        const bool isUpper = hint == mnx::DirectionHint::Upper;
+        if (isUpper ? takeVoice(sv, { 0, 2 }) : takeVoice(sv, { 1, 3 })) {
+            continue;
+        }
+        // Its voice points stems the other way, so hold them to the hint.
+        if (takeVoice(sv, { 0, 1, 2, 3 })) {
+            sv.forcedStem = isUpper ? DirectionV::UP : DirectionV::DOWN;
+        } else {
+            warnTooManyVoices(sv);
+        }
+    }
+    for (SequenceVoice& sv : sequenceVoices) {
+        if (sv.sequence.directionHint() == mnx::DirectionHint::Auto && !takeVoice(sv, { 0, 1, 2, 3 })) {
+            warnTooManyVoices(sv);
         }
     }
 
-    // fill in measures as needed with rests.
+    // pass1: import non-grace-note events to ChordRest
+    std::vector<std::array<bool, VOICES> > importedVoices(mnxPart.staves());
+    for (const SequenceVoice& sv : sequenceVoices) {
+        if (sv.voice == muse::nidx) {
+            continue;
+        }
+        const track_idx_t curTrackIdx = staff2track(sv.staffIdx, sv.voice);
+        GraceNeighborsMap graceNeighbors;
+        if (importNonGraceEvents(sv.sequence, measure, curTrackIdx, graceNeighbors)) {
+            importGraceEvents(sv.sequence, measure, curTrackIdx, graceNeighbors); // if MuseScore refactors graces, maybe we don't need this.
+            sequenceTracks.emplace(sv.sequence.pointer().to_string(), curTrackIdx);
+            importedVoices[static_cast<size_t>(sv.sequence.staff() - 1)][sv.voice] = true;
+            if (sv.forcedStem != DirectionV::AUTO) {
+                for (Segment* segment = measure->first(SegmentType::ChordRest); segment;
+                     segment = segment->next(SegmentType::ChordRest)) {
+                    EngravingItem* item = segment->element(curTrackIdx);
+                    if (item && item->isChord() && toChord(item)->stemDirection() == DirectionV::AUTO) {
+                        toChord(item)->setStemDirection(sv.forcedStem);
+                    }
+                }
+            }
+        }
+    }
+
     for (int staffNum = 1; staffNum <= mnxPart.staves(); staffNum++) {
         staff_idx_t staffIdx = mnxPartStaffToStaffIdx(mnxPart, staffNum);
+        // A staff whose only sequences are lower voices has nothing in voice 1. MNX draws nothing
+        // there, so fill it with a hidden full-measure rest rather than the visible one
+        // checkMeasure would add. The exporter omits hidden full-measure rests, so this round-trips.
+        const auto& imported = importedVoices[static_cast<size_t>(staffNum - 1)];
+        if (!imported[0] && std::any_of(imported.begin(), imported.end(), [](bool v) { return v; })) {
+            Staff* staff = m_score->staff(staffIdx);
+            Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+            Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
+            rest->setDurationType(TDuration(DurationType::V_MEASURE));
+            rest->setTrack(staff2track(staffIdx));
+            rest->setTicks(measure->stretchedLen(staff));
+            rest->setVisible(false);
+            segment->add(rest);
+        }
+        // fill in measures as needed with rests.
         measure->checkMeasure(staffIdx);
     }
 }
@@ -1051,17 +1140,17 @@ staff_idx_t MnxImporter::resolveDynamicStaff(const mnx::Part& mnxPart, const mnx
                            muse::nidx);
     }
 
-    // Orient only decides which staff to anchor to when MNX does not provide an
+    // Placement only decides which staff to anchor to when MNX does not provide an
     // explicit staff number.
     const int staffNum = [&]() {
-        switch (mnxDynamic.orient()) {
-        case mnx::MultiStaffOrientation::Above:
+        switch (mnxDynamic.placement()) {
+        case mnx::MultiStaffPlacement::Above:
             return 1;
-        case mnx::MultiStaffOrientation::Below:
+        case mnx::MultiStaffPlacement::Below:
             return mnxPart.staves();
-        case mnx::MultiStaffOrientation::Between:
+        case mnx::MultiStaffPlacement::Between:
             return 1;
-        case mnx::MultiStaffOrientation::Auto:
+        case mnx::MultiStaffPlacement::Auto:
             return 1;
         }
         return 1;
@@ -1072,28 +1161,28 @@ staff_idx_t MnxImporter::resolveDynamicStaff(const mnx::Part& mnxPart, const mnx
                        muse::nidx);
 }
 
-void MnxImporter::applyDynamicOrient(EngravingItem* item, const mnx::Part& mnxPart, mnx::MultiStaffOrientation orient)
+void MnxImporter::applyDynamicPlacement(EngravingItem* item, const mnx::Part& mnxPart, mnx::MultiStaffPlacement placement)
 {
     IF_ASSERT_FAILED(item) {
         return;
     }
 
-    switch (orient) {
-    case mnx::MultiStaffOrientation::Above:
+    switch (placement) {
+    case mnx::MultiStaffPlacement::Above:
         setAndStyleProperty(item, Pid::DIRECTION, DirectionV::UP);
         setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
         break;
-    case mnx::MultiStaffOrientation::Below:
+    case mnx::MultiStaffPlacement::Below:
         setAndStyleProperty(item, Pid::DIRECTION, DirectionV::DOWN);
         setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
         break;
-    case mnx::MultiStaffOrientation::Between:
+    case mnx::MultiStaffPlacement::Between:
         setAndStyleProperty(item, Pid::DIRECTION, DirectionV::AUTO);
         if (mnxPart.staves() > 1) {
             setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::ON);
         }
         break;
-    case mnx::MultiStaffOrientation::Auto:
+    case mnx::MultiStaffPlacement::Auto:
         break;
     }
 }
@@ -1189,7 +1278,7 @@ void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, S
             dyn->setDynamicType(type.value());
         }
     }
-    applyDynamicOrient(dyn, mnxPart, mnxDynamic.orient());
+    applyDynamicPlacement(dyn, mnxPart, mnxDynamic.placement());
     dyn->setVoiceAssignment(resolveDynamicVoiceAssignment(mnxDynamic, useVoiceAssignment));
     segment->add(dyn);
 }
@@ -1239,7 +1328,7 @@ void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Seg
     hairpin->setTick(segment->tick());
     hairpin->setTick2(endTick);
 
-    applyDynamicOrient(hairpin, mnxPart, mnxHairpin.orient());
+    applyDynamicPlacement(hairpin, mnxPart, mnxHairpin.placement());
     hairpin->setVoiceAssignment(resolveDynamicVoiceAssignment(mnxHairpin, useVoiceAssignment));
 
     m_score->addElement(hairpin);

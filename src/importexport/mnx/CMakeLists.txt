@@ -37,11 +37,11 @@ else()
     message(STATUS "Using muse_deps nlohmann_json from ${NLOHMANN_JSON_PREFIX}")
     message(STATUS "Using muse_deps json_schema_validator from ${JSON_SCHEMA_VALIDATOR_PREFIX}")
 
-    set(MNXDOM_GIT_TAG 45bf46221c00411e968c851ff9a1be4e202af5c2)
+    set(MNXDOM_GIT_TAG 8c5056cb5cb08ff317b3199ed73aacf9e350d7ae)
     string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(
         mnxdom
-        GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
+        GIT_REPOSITORY https://github.com/mnx-works/mnxdom.git
         GIT_TAG        ${MNXDOM_GIT_TAG}
     )
     set(MNXDOM_GIT_COMMIT "${MNXDOM_GIT_COMMIT}" CACHE STRING "mnxdom source control revision to embed in provenance" FORCE)
@@ -66,6 +66,8 @@ target_sources(iex_mnx PRIVATE
     internal/import/mnximporter.h
     internal/import/mnximportmarkings.cpp
     internal/import/mnximportpartmeasures.cpp
+    internal/shared/mnxstaffconfig.cpp
+    internal/shared/mnxstaffconfig.h
     internal/shared/mnxtypesconv.cpp
     internal/shared/mnxtypesconv.h
     internal/notationmnxreader.cpp
