@@ -25,6 +25,7 @@
 #include "engraving/dom/measure.h" // IWYU pragma: keep
 #include "engraving/dom/page.h"
 #include "engraving/editing/editpagelocks.h"
+#include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -238,5 +239,31 @@ TEST_F(Engraving_PageLocksTests, removePageLockOnExpandMMRest)
         retained = retained || lock == firstLock;
     }
     EXPECT_FALSE(retained);
+    delete score;
+}
+
+TEST_F(Engraving_PageLocksTests, lockSystemAtStartOfPageLock)
+{
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
+    EXPECT_TRUE(score);
+
+    // The second page lock, and the first two measures in it
+    std::vector<const RangeLock*> pageLocks = score->pageLocks()->allLocks();
+    ASSERT_GE(pageLocks.size(), 2);
+    MeasureBase* pageStart = pageLocks.at(1)->startMB();
+    MeasureBase* pageEnd = pageLocks.at(1)->endMB();
+    MeasureBase* systemEnd = pageStart->next();
+    ASSERT_TRUE(systemEnd->isBefore(pageEnd));
+
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving page locks tests"), [&](auto& tx) {
+        EditSystemLocks::undoAddSystemLock(tx, new RangeLock(pageStart, systemEnd));
+    });
+
+    // Locking a system that starts together with a page lock leaves the page lock alone
+    EXPECT_TRUE(pageStart->isStartOfSystemLock());
+    EXPECT_TRUE(systemEnd->isEndOfSystemLock());
+    EXPECT_TRUE(pageStart->isStartOfPageLock());
+    EXPECT_EQ(pageStart->pageLock()->endMB(), pageEnd);
+
     delete score;
 }
