@@ -191,7 +191,9 @@ namespace {
 std::string fractionalTempoMnx()
 {
     return R"({
-  "mnx": { "version": )" + std::to_string(mnx::MNX_VERSION) + R"( },
+  "mnx": { "version": )" + std::to_string(mnx::MNX_VERSION)
+           +
+           R"( },
   "global": {
     "measures": [
       {
