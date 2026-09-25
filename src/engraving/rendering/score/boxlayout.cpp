@@ -151,6 +151,8 @@ void BoxLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layo
             TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
         }
     }
+
+    layoutBaseBox(item, ldata, ctx);
 }
 
 void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx)
@@ -335,6 +337,8 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
     }
 
     ldata->setBbox(0.0, 0.0, width, height);
+
+    layoutBaseBox(item, ldata, ctx);
 }
 
 void BoxLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx)
