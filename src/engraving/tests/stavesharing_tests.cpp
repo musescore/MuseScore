@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
 
@@ -196,6 +197,59 @@ TEST_F(Engraving_StaveSharingTests, testSaveReloadStaveSharing)
     collectSharedAndOriginParts(score, &sharedPart, originParts);
 
     EXPECT_TRUE(checkSharedPartExist(sharedPart, originParts));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testChangeDurationAfterUndoingStaveSharing)
+{
+    // [GIVEN] A score of 1 measure with 2 staves and stave sharing disabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_01.mscx");
+    EXPECT_TRUE(score);
+
+    // [THEN] Check rest has no shared item yet
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr1 = m1->findChordRest(Fraction(0, 1), 0);
+    EXPECT_TRUE(cr1 && cr1->isRest());
+    ASSERT_FALSE(cr1->sharedItem());
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    // [THEN] Rest should have a shared item now
+    ASSERT_TRUE(cr1->sharedItem());
+
+    // [WHEN] Stave sharing is disabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, false);
+    });
+
+    // [THEN] Rest should stll have a shared item, as the shared parts still exist
+    ASSERT_TRUE(cr1->sharedItem());
+
+    // [WHEN] Undo twice
+    // Undo "Disable stave sharing"
+    score->undoRedo(true, nullptr);
+    // Undo "Enable stave sharing" - creation of the stave sharing groups is now undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The shared item should have been removed from the score and disconnected from the origin rest
+    ASSERT_FALSE(cr1->sharedItem());
+
+    // [THEN] Shared parts should have been removed
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
+
+    // [WHEN] The rest's duration is changed
+    score->startCmd(muse::TranslatableString("staveSharingTest", "Change rest duration"));
+    score->changeCRlen(cr1, TDuration(DurationType::V_QUARTER));
+    score->endCmd();
+
+    // [THEN] We should not crash
 
     delete score;
 }
