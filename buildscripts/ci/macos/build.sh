@@ -63,7 +63,7 @@ MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
 MUSESCORE_BUILD_CRASHPAD_CLIENT=$BUILD_CRASHPAD_CLIENT \
 MUSESCORE_BUILD_VST_MODULE="ON" \
 MUSESCORE_BUILD_WEBSOCKET="ON" \
-bash ./ninja_build.sh -t install
+bash ./ninja_build.sh -t installrelwithdebinfo
 
 bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $MUSE_APP_BUILD_MODE
 bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
