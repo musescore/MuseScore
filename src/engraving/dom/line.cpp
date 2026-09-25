@@ -429,7 +429,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     const double spacingFactor = 0.5;   // defines the point where canvas is divided between segments, systems etc.
 
     System* sys = system();
-    const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
+    const std::vector<System*> foundSystems = score()->searchSystem(pos, /*includeMeasurelessSystems*/ false, sys, spacingFactor);
 
     if (!foundSystems.empty() && !muse::contains(foundSystems, sys) && foundSystems[0]->staves().size()) {
         sys = foundSystems[0];

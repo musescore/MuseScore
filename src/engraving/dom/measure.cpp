@@ -34,7 +34,6 @@
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
-#include "../editing/editpagelocks.h"
 #include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
 #include "../editing/navigation.h"
@@ -54,7 +53,6 @@
 #include "hook.h"
 #include "key.h"
 #include "keysig.h"
-#include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "marker.h"
 #include "masterscore.h"
@@ -1392,10 +1390,6 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::MEASURE_NUMBER:
     case ElementType::JUMP:
     case ElementType::MARKER:
-    case ElementType::LAYOUT_BREAK:
-        // Always drop to all staves
-        return true;
-
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::KEYSIG:
@@ -1435,16 +1429,6 @@ bool Measure::acceptDrop(EditData& data) const
         }
         case ActionIconType::STAFF_TYPE_CHANGE:
             return canAddStaffTypeChange(staffIdx);
-        case ActionIconType::SYSTEM_LOCK:
-        {
-            LayoutMode layoutMode = score()->layoutMode();
-            return layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM;
-        }
-        case ActionIconType::PAGE_LOCK:
-        {
-            LayoutMode layoutMode = score()->layoutMode();
-            return layoutMode == LayoutMode::PAGE;
-        }
         default:
             break;
         }
@@ -1453,7 +1437,7 @@ bool Measure::acceptDrop(EditData& data) const
     default:
         break;
     }
-    return false;
+    return MeasureBase::acceptDrop(data);
 }
 
 //---------------------------------------------------------
@@ -1555,56 +1539,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     case ElementType::TIMESIG: {
         EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
         break;
-    }
-
-    case ElementType::LAYOUT_BREAK: {
-        LayoutBreak* b = toLayoutBreak(e);
-        Measure* measure = isMMRest() ? mmRestLast() : this;
-        switch (b->layoutBreakType()) {
-        case  LayoutBreakType::PAGE:
-            if (measure->pageBreak()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setLineBreak(false);
-            }
-            break;
-        case  LayoutBreakType::LINE:
-            if (measure->lineBreak()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setPageBreak(false);
-            }
-            break;
-        case  LayoutBreakType::SECTION:
-            if (measure->sectionBreak()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setLineBreak(false);
-            }
-            break;
-        case LayoutBreakType::NOBREAK:
-            if (measure->noBreak() || measure->isEndOfSystemLock() || measure->isEndOfPageLock()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setLineBreak(false);
-                measure->setPageBreak(false);
-            }
-            break;
-        }
-        if (b) {
-            if (b->layoutBreakType() != LayoutBreakType::NOBREAK) {
-                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
-            }
-            b->setTrack(0);
-            b->setOwnershipParent(measure);
-            score()->undoAddElement(b);
-        }
-        measure->cleanupLayoutBreaks(true);
-        return b;
     }
 
     case ElementType::SPACER:
@@ -1765,12 +1699,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             score()->undoAddElement(stc);
             break;
         }
-        case ActionIconType::SYSTEM_LOCK:
-            EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
-            break;
-        case ActionIconType::PAGE_LOCK:
-            EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
-            break;
         default:
             break;
         }
@@ -1790,12 +1718,10 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     case ElementType::HBOX:
         return score()->insertBox(toMeasureBase(e), this);
 
-    default:
-        LOGD("Measure: cannot drop %s here", e->typeName());
-        delete e;
-        break;
+    default: break;
     }
-    return 0;
+
+    return MeasureBase::drop(tx, data);
 }
 
 //---------------------------------------------------------

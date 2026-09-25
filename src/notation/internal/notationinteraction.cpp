@@ -812,7 +812,9 @@ NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF
     mu::engraving::staff_idx_t staffIndex = muse::nidx;
     mu::engraving::Segment* segment = nullptr;
     PointF offset;
-    Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
+
+    MeasureBase* mb = score()->pos2measureBase(pos, /*scanMeasuresOnly*/ true, &staffIndex, 0, &segment, &offset);
+    Measure* measure = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
 
     HitMeasureData result;
     if (measure && measure->staffLines(staffIndex)->canvasHitShape().contains(pos)) {
@@ -1529,7 +1531,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::STRING_TUNINGS:
     case ElementType::VOLTA: {
         edd.ed.modifiers = keyboardModifier(modifiers);
-        return prepareDropMeasureAnchorElement(pos);
+        return prepareDropMeasureBaseAnchorElement(pos);
     }
     case ElementType::PEDAL:
     case ElementType::LET_RING:
@@ -1601,7 +1603,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
         case ActionIconType::PAGE_LOCK:
         case ActionIconType::STAFF_TYPE_CHANGE: {
             edd.ed.modifiers = keyboardModifier(modifiers);
-            return prepareDropMeasureAnchorElement(pos);
+            return prepareDropMeasureBaseAnchorElement(pos);
         }
         // Other action icons (e.g parenthesis) can be dragged normally
         default: return prepareDropStandardElement(pos, modifiers);
@@ -1815,7 +1817,8 @@ bool NotationInteraction::updateDropRange(const PointF& pos, std::optional<bool>
 
         rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
                                                           segment, endSegment,
-                                                          staffIdx, endStaffIdx);
+                                                          staffIdx, endStaffIdx,
+                                                          /*startBox*/ nullptr, /*endBox*/ nullptr);
     } else {
         rdd.targetSegment = nullptr;
         rdd.targetStaffIdx = muse::nidx;
@@ -2036,7 +2039,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(engraving::Transaction& tx, c
         mu::engraving::staff_idx_t staffIdx;
         mu::engraving::Segment* seg;
         PointF offset;
-        el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
+        el = score()->pos2measureBase(pos, /*scanMeasuresOnly*/ true, &staffIdx, 0, &seg, &offset);
         if (el && el->isMeasure()) {
             edd.ed.dropElement->setTrack(staff2track(staffIdx));
             edd.ed.dropElement->setOwnershipParent(seg);
@@ -3124,7 +3127,7 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
 }
 
 //! NOTE Copied from ScoreView::dragMeasureAnchorElement
-bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
+bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
 {
     IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
         return false;
@@ -3138,10 +3141,17 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
         return false;
     }
 
-    mu::engraving::staff_idx_t staffIdx;
-    mu::engraving::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, nullptr, 0);
+    // "Measure anchored only" means we're dropping something can't anchor to other MeasureBase types (i.e. boxes)...
+    bool isMeasureAnchorOnly = !dropElem->isLayoutBreak();
+    if (dropElem->isActionIcon()) {
+        const ActionIconType actionType = toActionIcon(dropElem)->actionType();
+        isMeasureAnchorOnly = actionType != ActionIconType::PAGE_LOCK && actionType != ActionIconType::SYSTEM_LOCK;
+    }
 
-    //! NOTE: Should match Measure::acceptDrop
+    mu::engraving::staff_idx_t staffIdx = muse::nidx;
+    mu::engraving::MeasureBase* mb = score()->pos2measureBase(pos, /*scanMeasuresOnly*/ isMeasureAnchorOnly, &staffIdx, 0, nullptr, 0);
+
+    //! NOTE: Should match Measure::acceptDrop / MeasureBase::acceptDrop
     switch (dropElem->type()) {
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
@@ -3172,19 +3182,18 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
         staffIdx = 0;
     }
 
-    if (mb && mb->isMeasure()) {
-        mu::engraving::Measure* targetMeasure = mu::engraving::toMeasure(mb);
-        setDropTarget(targetMeasure, true);
+    if (mb) {
+        setDropTarget(mb, true);
         edd.ed.track = staff2track(staffIdx);
 
-        RectF measureRect = targetMeasure->staffPageBoundingRect(staffIdx);
-        measureRect.adjust(page->x(), page->y(), page->x(), page->y());
-        edd.ed.pos = measureRect.center();
+        RectF mbRect = mb->isMeasure() ? toMeasure(mb)->staffPageBoundingRect(staffIdx) : mb->pageBoundingRect();
+        mbRect.adjust(page->x(), page->y(), page->x(), page->y());
+        edd.ed.pos = mbRect.center();
 
-        const bool dropAccepted = targetMeasure->acceptDrop(edd.ed);
+        const bool dropAccepted = mb->acceptDrop(edd.ed);
         if (dropAccepted) {
-            setAnchorLines({ LineF(pos, measureRect.topLeft()) });
-            setDropRects(dropHighlightRects(dropElem, targetMeasure, measureRect, edd.ed.modifiers));
+            setAnchorLines({ LineF(pos, mbRect.topLeft()) });
+            setDropRects(dropHighlightRects(dropElem, mb, mbRect, edd.ed.modifiers));
         }
 
         return dropAccepted;
@@ -3194,7 +3203,7 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
     return false;
 }
 
-std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* dropElem, const Measure* targetMeasure,
+std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* dropElem, const MeasureBase* targetMeasureBase,
                                                            const RectF& staffRect, KeyboardModifiers modifiers) const
 {
     switch (dropElem->type()) {
@@ -3206,7 +3215,7 @@ std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* 
     case ElementType::JUMP:
     case ElementType::MARKER:
     case ElementType::LAYOUT_BREAK:
-        return { targetMeasure->canvasBoundingRect() };
+        return { targetMeasureBase->canvasBoundingRect() };
 
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
@@ -3215,7 +3224,7 @@ std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* 
         if (modifiers & ControlModifier) {
             return { staffRect };
         }
-        return { targetMeasure->canvasBoundingRect() };
+        return { targetMeasureBase->canvasBoundingRect() };
 
     case ElementType::BRACKET:
     case ElementType::MEASURE_REPEAT:
@@ -3236,26 +3245,26 @@ std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* 
         case ActionIconType::TFRAME:
         case ActionIconType::FFRAME:
         case ActionIconType::MEASURE:
-            return { targetMeasure->canvasBoundingRect() };
+            return { targetMeasureBase->canvasBoundingRect() };
 
         case ActionIconType::STAFF_TYPE_CHANGE:
             return { staffRect };
 
         case ActionIconType::SYSTEM_LOCK: {
-            const System* sys = targetMeasure->system();
+            const System* sys = targetMeasureBase->system();
             const MeasureBase* first = sys ? sys->first() : nullptr;
             const PointF topLeft = first ? first->canvasBoundingRect().topLeft() : PointF(0.0, 0.0);
-            return { RectF(topLeft, targetMeasure->canvasBoundingRect().bottomRight()) };
+            return { RectF(topLeft, targetMeasureBase->canvasBoundingRect().bottomRight()) };
         }
 
         case ActionIconType::PAGE_LOCK: {
             std::vector<RectF> dropRects;
-            for (System* sys : targetMeasure->page()->systems()) {
-                const bool lastSelectedSys = sys == targetMeasure->system();
+            for (System* sys : targetMeasureBase->page()->systems()) {
+                const bool lastSelectedSys = sys == targetMeasureBase->system();
                 const MeasureBase* first = sys ? sys->first() : nullptr;
                 const MeasureBase* last = sys ? sys->last() : nullptr;
                 if (lastSelectedSys) {
-                    last = targetMeasure;
+                    last = targetMeasureBase;
                 }
                 if (!first || !last) {
                     continue;
@@ -3289,7 +3298,7 @@ bool NotationInteraction::prepareDropTimeAnchorElement(const PointF& pos)
 
     mu::engraving::staff_idx_t staffIdx = 0;
     mu::engraving::Segment* seg = nullptr;
-    mu::engraving::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
+    mu::engraving::MeasureBase* mb = score()->pos2measureBase(pos, /*scanMeasuresOnly*/ true, &staffIdx, 0, &seg, 0);
     mu::engraving::track_idx_t track = staff2track(staffIdx);
 
     if (mb && mb->isMeasure() && seg->element(track)) {
@@ -3639,7 +3648,7 @@ void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
 
     Color selectionColor = configuration()->selectionColor();
     double penWidth = 3.0 / currentScaling(painter);
-    double minPenWidth = 0.20 * m_selection->range()->measureRange().startMeasure->spatium();
+    double minPenWidth = 0.20 * m_selection->range()->measureBaseRange().startMeasureBase->spatium();
     penWidth = std::max(penWidth, minPenWidth);
 
     Pen pen;
@@ -4885,10 +4894,21 @@ void NotationInteraction::joinSelectedMeasures()
         return;
     }
 
-    INotationSelectionRange::MeasureRange measureRange = m_selection->range()->measureRange();
+    const INotationSelectionRange::MeasureBaseRange measureBaseRange = m_selection->range()->measureBaseRange();
+    const MeasureBase* startMeasureBase = measureBaseRange.startMeasureBase;
+    const MeasureBase* endMeasureBase = measureBaseRange.endMeasureBase;
+    if (!startMeasureBase || !endMeasureBase) {
+        return;
+    }
+
+    const Measure* startMeasure = startMeasureBase->isMeasure() ? toMeasure(startMeasureBase) : startMeasureBase->nextMeasure();
+    const Measure* endMeasure = endMeasureBase->isMeasure() ? toMeasure(endMeasureBase) : endMeasureBase->prevMeasure();
+    if (!startMeasure || !endMeasure || endMeasure->tick() < startMeasure->tick()) {
+        return;
+    }
 
     transaction(TranslatableString("undoableAction", "Join measures"), [&](engraving::Transaction& tx) {
-        SplitJoinMeasure::joinMeasures(tx, score()->masterScore(), measureRange.startMeasure->tick(), measureRange.endMeasure->tick());
+        SplitJoinMeasure::joinMeasures(tx, score()->masterScore(), startMeasure->tick(), endMeasure->tick());
     });
 
     checkAndShowError();
@@ -4911,9 +4931,10 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         }
 
         if (selection()->isRange()) {
-            INotationSelectionRange::MeasureRange range = selection()->range()->measureRange();
-            int startMeasureIndex = range.startMeasure ? range.startMeasure->index() : 0;
-            int endMeasureIndex = range.endMeasure ? range.endMeasure->index() + 1 : 0;
+            INotationSelectionRange::MeasureBaseRange range = selection()->range()->measureBaseRange();
+
+            const int startMeasureIndex = range.startMeasureBase ? range.startMeasureBase->index() : 0;
+            const int endMeasureIndex = range.endMeasureBase ? range.endMeasureBase->index() + 1 : 0;
 
             beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
                              ? startMeasureIndex
@@ -6317,16 +6338,24 @@ Measure* NotationInteraction::selectedMeasure() const
 {
     INotationInteraction::HitElementContext context = hitElementContext();
     mu::engraving::Measure* measure = context.element && context.element->isMeasure() ? mu::engraving::toMeasure(context.element) : nullptr;
-
-    if (!measure) {
-        INotationSelectionPtr selection = this->selection();
-        if (selection->isRange()) {
-            measure = selection->range()->measureRange().endMeasure;
-        } else if (selection->element()) {
-            measure = selection->element()->findMeasure();
-        }
+    if (measure) {
+        return measure;
     }
-    return measure;
+
+    INotationSelectionPtr selection = this->selection();
+    if (selection->isRange()) {
+        MeasureBase* mb = selection->range()->measureBaseRange().endMeasureBase;
+        if (!mb) {
+            return nullptr;
+        }
+        return mb->isMeasure() ? toMeasure(mb) : mb->prevMeasure();
+    }
+
+    if (selection->element()) {
+        return selection->element()->findMeasure();
+    }
+
+    return nullptr;
 }
 
 void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIndex, TimeSignature* timeSignature)
@@ -6399,13 +6428,13 @@ void NotationInteraction::removeSelectedMeasures()
         return;
     }
 
-    mu::engraving::MeasureBase* firstMeasure = nullptr;
-    mu::engraving::MeasureBase* lastMeasure = nullptr;
+    mu::engraving::MeasureBase* firstMeasureBase = nullptr;
+    mu::engraving::MeasureBase* lastMeasureBase = nullptr;
 
     if (selection()->isRange()) {
-        INotationSelectionRange::MeasureRange measureRange = selection()->range()->measureRange();
-        firstMeasure = measureRange.startMeasure;
-        lastMeasure = measureRange.endMeasure;
+        INotationSelectionRange::MeasureBaseRange measureBaseRange = selection()->range()->measureBaseRange();
+        firstMeasureBase = measureBaseRange.startMeasureBase;
+        lastMeasureBase = measureBaseRange.endMeasureBase;
     } else {
         const std::vector<EngravingItem*>& elements = selection()->elements();
         if (elements.empty()) {
@@ -6415,24 +6444,32 @@ void NotationInteraction::removeSelectedMeasures()
         for (EngravingItem* element : elements) {
             mu::engraving::MeasureBase* elementMeasure = element->findMeasureBase();
 
-            if (!firstMeasure || firstMeasure->index() > elementMeasure->index()) {
-                firstMeasure = elementMeasure;
+            if (!firstMeasureBase || firstMeasureBase->index() > elementMeasure->index()) {
+                firstMeasureBase = elementMeasure;
             }
 
-            if (!lastMeasure || lastMeasure->index() < elementMeasure->index()) {
-                lastMeasure = elementMeasure;
+            if (!lastMeasureBase || lastMeasureBase->index() < elementMeasure->index()) {
+                lastMeasureBase = elementMeasure;
             }
         }
     }
 
-    IF_ASSERT_FAILED(firstMeasure && lastMeasure) {
+    IF_ASSERT_FAILED(firstMeasureBase && lastMeasureBase) {
         return;
     }
 
-    m_selection->select({ firstMeasure }, SelectType::REPLACE);
-    m_selection->select({ lastMeasure }, SelectType::RANGE);
+    m_selection->select({ firstMeasureBase }, SelectType::REPLACE);
+    m_selection->select({ lastMeasureBase }, SelectType::RANGE);
 
-    int numDeletedMeasures = 1 + lastMeasure->measureIndex() - firstMeasure->measureIndex();
+    // Slight hack because measureIndex is only meaningful for Measure types (perhaps this property shouldn't
+    // exist on MeasureBase in the first place)...
+    const Measure* firstMeasure = firstMeasureBase->isMeasure() ? toMeasure(firstMeasureBase) : firstMeasureBase->nextMeasure();
+    const Measure* lastMeasure = lastMeasureBase->isMeasure() ? toMeasure(lastMeasureBase) : lastMeasureBase->prevMeasure();
+
+    int numDeletedMeasures = 0;
+    if (firstMeasure && lastMeasure && firstMeasure->measureIndex() <= lastMeasure->measureIndex()) {
+        numDeletedMeasures = 1 + lastMeasure->measureIndex() - firstMeasure->measureIndex();
+    }
 
     startEdit(TranslatableString("undoableAction", "Delete %Ln measure(s)", nullptr, numDeletedMeasures));
     score()->cmdTimeDelete();

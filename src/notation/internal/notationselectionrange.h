@@ -39,12 +39,14 @@ public:
     engraving::staff_idx_t startStaffIndex() const override;
     engraving::Segment* rangeStartSegment() const override;
     engraving::Fraction startTick() const override;
+    engraving::Box* rangeStartBox() const override;
 
     engraving::staff_idx_t endStaffIndex() const override;
     engraving::Segment* rangeEndSegment() const override;
     engraving::Fraction endTick() const override;
+    engraving::Box* rangeEndBox() const override;
 
-    MeasureRange measureRange() const override;
+    MeasureBaseRange measureBaseRange() const override;
 
     std::vector<const engraving::Part*> selectedParts() const override;
 

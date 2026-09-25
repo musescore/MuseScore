@@ -42,7 +42,7 @@ void EditSpanner::addSpanner(Transaction&, Score* score, Spanner* spanner, const
 {
     staff_idx_t staffIdx = spanner->staffIdx();
     Segment* segment;
-    MeasureBase* mb = score->pos2measure(pos, &staffIdx, 0, &segment, 0);
+    MeasureBase* mb = score->pos2measureBase(pos, /*scanMeasuresOnly*/ true, &staffIdx, 0, &segment, 0);
     if (systemStavesOnly) {
         staffIdx = 0;
     }
