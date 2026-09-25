@@ -58,6 +58,8 @@ Column {
     }
 
     PropertyCheckBox {
+        id: avoidBarlines
+
         navigation.name: "Avoid barlines"
         navigation.panel: root.navigationPanel
         navigation.row: setVerse.navigationRowEnd + 1
@@ -65,5 +67,26 @@ Column {
         text: qsTrc("propertiespanel", "Avoid barlines")
 
         propertyItem: root.model ? root.model.avoidBarlines : null
+    }
+
+    CenterBetweenStavesSection {
+        id: centerStavesSection
+
+        isApplicable: root.model && root.model.isStaveCenteringApplicable
+        isAvailable: root.model && root.model.isStaveCenteringAvailable
+
+        propertyItem: root.model ? root.model.centerBetweenStaves : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: avoidBarlines.navigation.row + 1
+    }
+
+    PlacementSection {
+        id: placementSection
+
+        propertyItem: root.model ? root.model.placement : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: centerStavesSection.navigationRowEnd + 1
     }
 }

@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <set>
+#include <unordered_set>
 
 #include "../../types/fraction.h"
 #include "../../types/types.h"
@@ -249,6 +250,8 @@ public:
 
     bool rangeDone() const { return m_rangeDone; }
 
+    const std::unordered_set<System*>& systemsNeedingCentering() const { return m_systemsNeedingCentering; }
+
     bool mustRecomputeHeadersFooters() const { return m_mustRecomputeHeadersFooters; }
 
     double totalBracketsWidth() const { return m_totalBracketsWidth; }
@@ -286,6 +289,10 @@ public:
 
     void setRangeDone(bool val) { m_rangeDone = val; }
 
+    void addSystemNeedingCentering(System* s) { m_systemsNeedingCentering.insert(s); }
+    void removeSystemNeedingCentering(System* s) { m_systemsNeedingCentering.erase(s); }
+    void clearSystemsNeedingCentering() { m_systemsNeedingCentering.clear(); }
+
     void setMustRecomputeHeadersFooters(bool val) { m_mustRecomputeHeadersFooters = val; }
 
     void setTotalBracketsWidth(double val) { m_totalBracketsWidth = val; }
@@ -316,6 +323,8 @@ private:
     int m_measureNumber = 0;
 
     bool m_rangeDone = false;
+
+    std::unordered_set<System*> m_systemsNeedingCentering; // systems which have been laid out and still need SystemLayout::centerElementsBetweenStaves
 
     bool m_mustRecomputeHeadersFooters = false; // we may need to re-compute headers/footers after laying out all pages if they contained a page count
 

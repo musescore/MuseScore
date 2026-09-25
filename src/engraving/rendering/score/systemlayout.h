@@ -80,6 +80,11 @@ public:
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
     static void centerElementsBetweenStaves(const System* system);
+    /* Centers the systems which were laid out during this layout but whose page was not
+     * collected (e.g. the first system of the next page, re-laid out by a partial layout),
+     * so centerElementsBetweenStaves has not been called for them yet. Call it after the
+     * system/page collection loop, before any leftover systems are deleted. */
+    static void centerPendingSystems(LayoutContext& ctx);
     static void centerBigTimeSigsAcrossStaves(const System* system);
 
     static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
@@ -174,11 +179,39 @@ private:
 
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2, LayoutContext& ctx);
 
-    static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
+    struct CenterableItem {
+        EngravingItem* item = nullptr;
+        Shape shape; // x relative to the system, y relative to the upper staff of the item's gap
+        bool isLyrics = false;
+        bool onUpperGapStaff = false; // whether the item hangs below the upper staff of its gap or sits above the lower one
+    };
+
+    // The space between two vertically adjacent visible staves
+    struct Gap {
+        staff_idx_t upperStaffIdx = muse::nidx;
+        staff_idx_t lowerStaffIdx = muse::nidx;
+        double yStaffDiff = 0.0; // Inside a gap, everything is expressed relative to its upper staff, so we need the y diff between staves
+        std::vector<CenterableItem> items;
+    };
+
+    static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system, bool placeAbove);
     static bool mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system);
     static bool whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system);
     static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine);
-    static void centerElementBetweenStaves(EngravingItem* element, const System* system);
+    static bool shapesStackVertically(const Shape& shape1, const Shape& shape2, double minHorizontalClearance);
+    static void collectCenterableItems(const System* system, std::vector<Gap>& gaps, std::vector<MMRest*>& mmRestsToCenter);
+    static std::vector<std::vector<const CenterableItem*> > groupItemsToCenterTogether(const std::vector<const CenterableItem*>& items,
+                                                                                       double minHorizontalClearance);
+    static void centerItemsInGap(const Gap& gap, const System* system, std::vector<EngravingItem*>& centeredItems,
+                                 double minHorizontalClearance);
+    static double gapConvergeDistance(const std::vector<const CenterableItem*>& group, double yStaffDiff, double minHorizontalClearance);
+    static double convergenceMoveFor(const CenterableItem* centerableItem, double convergeDistance);
+    static void centerItemGroup(const std::vector<const CenterableItem*>& group, const System* system, const SkylineLine& upperSkyline,
+                                const SkylineLine& lowerSkyline, double yStaffDiff, std::vector<EngravingItem*>& centeredItems,
+                                double minHorizontalClearance);
+    static void updateStaffCenteringInfo(const std::vector<const CenterableItem*>& group, const std::vector<double>& spaceAbove,
+                                         const std::vector<double>& spaceBelow, double yMove, double convergeDistance,
+                                         double minHorizontalClearance);
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);

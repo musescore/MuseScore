@@ -26,7 +26,7 @@
 using namespace mu::propertiespanel;
 
 LyricsSettingsModel::LyricsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
-    : PropertiesPanelAbstractModel(parent, iocCtx, repository)
+    : ModelWithStaveCenteringOptions(parent, iocCtx, repository)
 {
     setModelType(PropertiesPanelModelType::TYPE_LYRICS);
     setTitle(muse::qtrc("propertiespanel", "Lyrics"));
@@ -36,8 +36,11 @@ LyricsSettingsModel::LyricsSettingsModel(QObject* parent, const muse::modularity
 
 void LyricsSettingsModel::createProperties()
 {
+    ModelWithStaveCenteringOptions::createProperties();
+
     m_verse = buildPropertyItem(mu::engraving::Pid::VERSE);
     m_avoidBarlines = buildPropertyItem(mu::engraving::Pid::AVOID_BARLINES);
+    m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
 }
 
 void LyricsSettingsModel::requestElements()
@@ -47,8 +50,11 @@ void LyricsSettingsModel::requestElements()
 
 void LyricsSettingsModel::loadProperties()
 {
+    ModelWithStaveCenteringOptions::loadProperties();
+
     loadPropertyItem(m_verse);
     loadPropertyItem(m_avoidBarlines);
+    loadPropertyItem(m_placement);
 }
 
 PropertyItem* LyricsSettingsModel::verse() const
@@ -59,4 +65,9 @@ PropertyItem* LyricsSettingsModel::verse() const
 PropertyItem* LyricsSettingsModel::avoidBarlines() const
 {
     return m_avoidBarlines;
+}
+
+PropertyItem* LyricsSettingsModel::placement() const
+{
+    return m_placement;
 }

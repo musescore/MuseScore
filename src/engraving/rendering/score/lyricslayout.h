@@ -24,6 +24,8 @@
 
 #include "layoutcontext.h"
 
+#include <optional>
+
 namespace mu::engraving {
 class Score;
 class System;
@@ -65,7 +67,7 @@ private:
     static void layoutMelismaLine(LyricsLineSegment* item);
     static void layoutDashes(LyricsLineSegment* item);
 
-    static Lyrics* findNextLyrics(const ChordRest* endChordRest, int verseNumber);
+    static Lyrics* findNextLyrics(const ChordRest* endChordRest, int verseNumber, std::optional<PlacementV> placement = std::nullopt);
 
     static void computeVerticalPositions(staff_idx_t staffIdx, System* system, LayoutContext& ctx);
     static void collectLyricsVerses(staff_idx_t staffIdx, System* system, LyricsVersesMap& lyricsVersesAbove,

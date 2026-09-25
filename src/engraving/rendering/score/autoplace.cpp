@@ -25,6 +25,7 @@
 #include "style/style.h"
 
 #include "dom/chordrest.h"
+#include "dom/lyrics.h"
 #include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/spanner.h"
@@ -408,6 +409,12 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
     if ((type1 == ElementType::DYNAMIC || type1 == ElementType::HAIRPIN_SEGMENT)
         && (type2 == ElementType::DYNAMIC || type2 == ElementType::HAIRPIN_SEGMENT)) {
         return true;
+    }
+
+    if (itemToAutoplace->isLyricsLineSegment() && itemInSkyline->isLyricsLineSegment()) {
+        const LyricsLineSegment* a = toLyricsLineSegment(itemToAutoplace);
+        const LyricsLineSegment* b = toLyricsLineSegment(itemInSkyline);
+        return a->verse() == b->verse() && a->lyricsPlaceAbove() == b->lyricsPlaceAbove();
     }
 
     if (type1 == type2) {

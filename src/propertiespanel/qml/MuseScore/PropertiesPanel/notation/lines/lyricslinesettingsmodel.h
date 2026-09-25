@@ -23,10 +23,10 @@
 
 #include <qqmlintegration.h>
 
-#include "propertiespanelabstractmodel.h"
+#include "modelwithstavecenteringoptions.h"
 
 namespace mu::propertiespanel {
-class LyricsLineSettingsModel : public PropertiesPanelAbstractModel
+class LyricsLineSettingsModel : public ModelWithStaveCenteringOptions
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -34,8 +34,9 @@ class LyricsLineSettingsModel : public PropertiesPanelAbstractModel
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * thickness READ thickness CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * verse READ verse CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * placement READ placement CONSTANT)
 
-    Q_PROPERTY(bool hasVerse READ hasVerse CONSTANT)
+    Q_PROPERTY(bool isPartialLyricsLine READ isPartialLyricsLine CONSTANT)
 
 public:
     enum ElementType {
@@ -47,7 +48,8 @@ public:
 
     PropertyItem* thickness() const;
     PropertyItem* verse() const;
-    bool hasVerse() const;
+    PropertyItem* placement() const;
+    bool isPartialLyricsLine() const;
 
 private:
     void createProperties() override;
@@ -55,7 +57,8 @@ private:
 
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_verse = nullptr;
+    PropertyItem* m_placement = nullptr;
 
-    bool m_hasVerse = false;
+    bool m_isPartialLyricsLine = false;
 };
 }
