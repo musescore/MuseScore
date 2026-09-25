@@ -7297,7 +7297,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
         handleSmallness(cue || isSmall, note, c);
         note->setPlay(!cue);          // cue notes don't play
         note->setHeadGroup(headGroup);
-        if (headScheme != NoteHeadScheme::HEAD_AUTO) {
+        if (headScheme != NoteHeadScheme::HEAD_AUTO && !mnp.unpitched()) {
             note->setHeadScheme(headScheme);
         }
         colorItem(note, noteColor);
