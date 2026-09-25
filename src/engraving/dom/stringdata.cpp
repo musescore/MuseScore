@@ -409,23 +409,27 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
     std::vector<Note*> notes = collectNotesAtSameTick(chord);
     bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
 
+    std::vector<int> placedFrets;
+    placedFrets.push_back(bassFretting.second);
+
     for (Note* n : notes) {
-        if (n == bassNote) {
+        if (n == bassNote || n->string() < 0 || n->string() >= strings) {
             continue;
         }
-        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed() || (skipDeadNotes && n->deadNote())) {
-            if (n->string() != INVALID_STRING_INDEX && n->string() < strings) {
-                used[n->string()] = true;
-            }
+        const bool frozen = n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed()
+                            || (skipDeadNotes && n->deadNote());
+        const bool validFretting = !frozen && getPitch(n->string(), n->fret(), n->staff(), n->tick()) == n->pitch();
+        if (frozen || validFretting) {
+            used[n->string()] = true;
+        }
+        if (validFretting) {
+            placedFrets.push_back(n->fret());
         }
     }
 
     std::sort(notes.begin(), notes.end(), [bassNote](Note* a, Note* b) {
         return std::abs(a->pitch() - bassNote->pitch()) < std::abs(b->pitch() - bassNote->pitch()); // sort notes by how close each note's pitch is to the bassNote's pitch
     });
-
-    std::vector<int> placedFrets;
-    placedFrets.push_back(bassFretting.second);
 
     for (Note* note: notes) {
         if (note == bassNote || note->displayFret() != Note::DisplayFretOption::NoHarmonic || note->negativeFretUsed()
@@ -434,8 +438,6 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
         }
 
         if (getPitch(note->string(), note->fret(), note->staff(), note->tick()) == note->pitch()) {
-            used[note->string()] = true;
-            placedFrets.push_back(note->fret());
             continue;
         }
 
