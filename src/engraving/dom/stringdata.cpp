@@ -784,7 +784,7 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
         // use most convenient string as key
         if (!(skipDeadNotes && note->deadNote()) && !note->negativeFretUsed()
             && (string <= INVALID_STRING_INDEX || noteFret <= INVALID_FRET_INDEX
-                || (pitchIsValid(pitch) && pitch != note->pitch()))) {
+                || (pitchIsValid(pitch) && pitch != note->pitch() && !note->bendBack()))) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
         }
