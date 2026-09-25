@@ -220,11 +220,11 @@ COMPRESSED_DMG_NAME="${VOL_NAME}.dmg"
 rm -f "applebuild/${COMPRESSED_DMG_NAME}"
 
 # Tip: increase the size if error on copy
-hdiutil create -size 800m -fs APFS -volname "${VOL_NAME}" "applebuild/${DMG_NAME}"
+diskutil image create blank --size 800m --fs APFS --volumeName "${VOL_NAME}" "applebuild/${DMG_NAME}"
 
 # Mount the disk image
 VOLUME="/Volumes/${VOL_NAME}"
-ATTACH_OUTPUT=$(hdiutil attach "applebuild/${DMG_NAME}" -mountpoint "${VOLUME}")
+ATTACH_OUTPUT=$(diskutil image attach "applebuild/${DMG_NAME}" --mountPoint "${VOLUME}")
 echo "${ATTACH_OUTPUT}"
 DEV=$(echo "${ATTACH_OUTPUT}" | head -n1 | awk '{print $1}')
 
@@ -278,7 +278,7 @@ echo "Unmount"
 for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
     # Detach by device: a failed eject can leave the image attached with the
     # mountpoint already gone
-    if hdiutil detach "${DEV}"; then
+    if diskutil eject "${DEV}"; then
         break
     fi
     if ! hdiutil info | grep -qE "^${DEV}(s[0-9]+)?[[:space:]]"; then
@@ -294,7 +294,7 @@ for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
 done
 
 # Convert the disk image to read-only
-hdiutil convert "applebuild/${DMG_NAME}" -format ULFO -o "applebuild/${COMPRESSED_DMG_NAME}"
+diskutil image create from --format ULFO "applebuild/${DMG_NAME}" "applebuild/${COMPRESSED_DMG_NAME}"
 
 if $DO_SIGN; then
     echo "Codesign DMG"
@@ -320,12 +320,12 @@ if $DO_SIGN; then
         # inside the sealed DMG.
         echo "Check the Gatekeeper policy"
         MOUNT_POINT="$(mktemp -d)"
-        hdiutil attach "applebuild/${COMPRESSED_DMG_NAME}" \
-            -mountpoint "$MOUNT_POINT" -nobrowse -readonly
+        diskutil image attach "applebuild/${COMPRESSED_DMG_NAME}" \
+            --mountPoint "$MOUNT_POINT" --nobrowse --readOnly
         MOUNTED_APP="$(ls -d "$MOUNT_POINT"/*.app)"
         syspolicy_status=0
         xcrun syspolicy_check distribution "$MOUNTED_APP" || syspolicy_status=$?
-        hdiutil detach "$MOUNT_POINT"
+        diskutil eject "$MOUNT_POINT"
         rmdir "$MOUNT_POINT" || true
         if [ $syspolicy_status -ne 0 ]; then
             echo "syspolicy_check failed"
