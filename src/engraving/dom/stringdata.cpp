@@ -352,8 +352,8 @@ std::pair<int, int> StringData::findLastNonOpenAnchor(const Chord* chord) const 
 
     while (cur) {
         Note* bassNote = getBassNoteOfVoicings(cur); 
-        if (bassNote && bassNote->string() != INVALID_FRET_INDEX && bassNote->fret() != 0) {
-            return { bassNote->string(), bassNote->fret() }
+        if (bassNote && bassNote->string() != INVALID_STRING_INDEX && bassNote->fret() != 0) {
+            return { bassNote->string(), bassNote->fret() }; 
         }
         cur = findPrecedingChordAcrossRests(cur); 
     }
@@ -396,7 +396,7 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
 
     for (Note* n : notes) {
         if (n == bassNote) continue;
-        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed() || (skipDeadNotes && n->deadNote)) {
+        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed() || (skipDeadNotes && n->deadNote())) {
             if (n->string() != INVALID_STRING_INDEX && n->string() < strings) {
                 used[n->string()] = true;
             }
