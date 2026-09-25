@@ -37,6 +37,7 @@
 #include "part.h"
 #include "segment.h"
 #include "staff.h"
+#include "measure.h"
 
 #include "../editing/navigation.h"
 #include "types/types.h"
