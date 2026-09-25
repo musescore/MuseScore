@@ -21,6 +21,7 @@
  */
 
 #include <gtest/gtest.h>
+#include <memory>
 
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
@@ -30,11 +31,14 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/tremolotwochord.h"
 
+#include "engraving/editing/editbeam.h"
+#include "engraving/editing/editdata.h"
 #include "engraving/editing/flip.h"
+#include "engraving/editing/navigation.h"
 #include "engraving/editing/transaction/transaction.h"
 
-#include "utils/scorerw.h"
 #include "utils/scorecomp.h"
+#include "utils/scorerw.h"
 
 using namespace mu::engraving;
 
@@ -59,6 +63,73 @@ void Engraving_BeamTests::beam(const char* path)
     EXPECT_TRUE(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(path), BEAM_DATA_DIR + String::fromUtf8(path)));
     delete score;
+}
+
+TEST_F(Engraving_BeamTests, historicalTabGridModes)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BEAM_DATA_DIR + u"historical-tab-grid.mscx"));
+    ASSERT_TRUE(score);
+    ChordRest* first = score->firstMeasure()->firstChordRest(0);
+    ASSERT_TRUE(first);
+    ChordRest* second = Navigation::nextChordRest(first);
+    ASSERT_TRUE(second);
+    ASSERT_EQ(first->durationType().type(), DurationType::V_QUARTER);
+    ASSERT_EQ(second->durationType().type(), DurationType::V_QUARTER);
+
+    auto setMode = [&](ChordRest* cr, BeamMode mode) {
+        score->select(cr, SelectType::SINGLE);
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving beam tests"), [&](Transaction& tx) {
+            EditBeam::setBeamMode(tx, score.get(), mode);
+        });
+    };
+    setMode(first, BeamMode::BEGIN);
+    ASSERT_EQ(first->beamMode(), BeamMode::BEGIN);
+    setMode(second, BeamMode::MID);
+    ASSERT_EQ(second->beamMode(), BeamMode::MID);
+
+    EditData ed;
+    score->undoRedo(true, &ed);
+    EXPECT_EQ(second->beamMode(), BeamMode::AUTO);
+    score->undoRedo(true, &ed);
+    EXPECT_EQ(first->beamMode(), BeamMode::AUTO);
+    score->undoRedo(false, &ed);
+    score->undoRedo(false, &ed);
+    EXPECT_EQ(first->beamMode(), BeamMode::BEGIN);
+    EXPECT_EQ(second->beamMode(), BeamMode::MID);
+
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"historicalTabGridModes.mscx"));
+    std::unique_ptr<MasterScore> reopened(ScoreRW::readScore(u"historicalTabGridModes.mscx", true));
+    ASSERT_TRUE(reopened);
+    ChordRest* restored = Navigation::nextChordRest(reopened->firstMeasure()->firstChordRest(0));
+    ASSERT_TRUE(restored);
+    EXPECT_EQ(restored->beamMode(), BeamMode::MID);
+
+    // These modes subdivide modern beams and still require actual hooks.
+    setMode(second, BeamMode::BEGIN16);
+    EXPECT_EQ(second->beamMode(), BeamMode::MID);
+    setMode(second, BeamMode::BEGIN32);
+    EXPECT_EQ(second->beamMode(), BeamMode::MID);
+
+    score->deselectAll();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving beam tests"), [&](Transaction& tx) {
+        EditBeam::resetBeamMode(tx, score.get());
+    });
+    EXPECT_EQ(first->beamMode(), BeamMode::AUTO);
+    EXPECT_EQ(second->beamMode(), BeamMode::AUTO);
+    score->undoRedo(true, &ed);
+    EXPECT_EQ(first->beamMode(), BeamMode::BEGIN);
+    EXPECT_EQ(second->beamMode(), BeamMode::MID);
+    score->undoRedo(false, &ed);
+    EXPECT_EQ(first->beamMode(), BeamMode::AUTO);
+    EXPECT_EQ(second->beamMode(), BeamMode::AUTO);
+
+    score.reset(ScoreRW::readScore(u"selectionfilter_data/selectionfilter1.mscx"));
+    ASSERT_TRUE(score);
+    ChordRest* quarter = score->firstMeasure()->firstChordRest(0);
+    ASSERT_TRUE(quarter);
+    ASSERT_EQ(quarter->durationType().type(), DurationType::V_QUARTER);
+    setMode(quarter, BeamMode::BEGIN);
+    EXPECT_EQ(quarter->beamMode(), BeamMode::AUTO);
 }
 
 TEST_F(Engraving_BeamTests, beamA)
