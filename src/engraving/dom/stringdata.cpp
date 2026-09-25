@@ -353,7 +353,7 @@ Chord* StringData::findPrecedingChordAcrossRests(Chord* chord) const
 //      Takes a pointer to a chord, finds the previous anchor to compare against
 //      for score calculations for fret candidates.
 //---------------------------------------------------------
-std::pair<int, int> StringData::findLastNonOpenAnchor(const Chord* chord) const
+std::pair<int, int> StringData::findLastNonOpenAnchor(Chord* chord) const
 {
     Chord* cur = chord;
 

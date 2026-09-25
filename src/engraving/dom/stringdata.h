@@ -117,7 +117,7 @@ private:
     std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
     std::pair<Note*, std::pair<int, int> > getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const;
     std::pair<int, int> defaultFretboardAnchor() const;
-    std::pair<int, int> findLastNonOpenAnchor(const Chord* chord) const;
+    std::pair<int, int> findLastNonOpenAnchor(Chord* chord) const;
 
     std::vector<instrString> m_stringTable;                      // no strings by default
 
