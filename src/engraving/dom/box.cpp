@@ -344,14 +344,14 @@ bool Box::acceptDrop(EditData& data) const
     default:
         break;
     }
-    return false;
+    return MeasureBase::acceptDrop(data);
 }
 
 //---------------------------------------------------------
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Box::drop(Transaction&, EditData& data)
+EngravingItem* Box::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->flag(ElementFlag::ON_STAFF)) {
@@ -429,9 +429,10 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
         score()->undoAddElement(e);
         return e;
     default:
-        return 0;
+        break;
     }
-    return 0;
+
+    return MeasureBase::drop(tx, data);
 }
 
 void Box::manageExclusionFromParts(bool exclude)

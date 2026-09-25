@@ -1014,7 +1014,8 @@ bool dragPositionToMeasure(const PointF& pos, const Score* score,
 {
     const System* preferredSystem = (*measure) ? (*measure)->system() : nullptr;
 
-    Measure* m = score->searchMeasure(pos, preferredSystem, spacingFactor);
+    MeasureBase* mb = score->searchMeasureBase(pos, /*scanMeasuresOnly*/ true, preferredSystem, spacingFactor);
+    Measure* m = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
     if (!m) {
         return false;
     }
