@@ -735,8 +735,8 @@ Page* Score::searchPage(const PointF& p) const
 ///   \returns List of found systems.
 //---------------------------------------------------------
 
-std::vector<System*> Score::searchSystem(const PointF& pos, const System* preferredSystem, double spacingFactor,
-                                         double preferredSpacingFactor) const
+std::vector<System*> Score::searchSystem(const PointF& pos, bool includeMeasurelessSystems, const System* preferredSystem,
+                                         double spacingFactor, double preferredSpacingFactor) const
 {
     std::vector<System*> systems;
     Page* page = searchPage(pos);
@@ -749,7 +749,7 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
     size_t n = sl.size();
     for (size_t i = 0; i < n; ++i) {
         System* s = sl.at(i);
-        if (!s->firstMeasure()) {
+        if (!includeMeasurelessSystems && !s->firstMeasure()) {
             continue;
         }
         System* ns = 0;                   // next system row
@@ -798,7 +798,8 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
 MeasureBase* Score::searchMeasureBase(const PointF& p, bool scanMeasuresOnly, const System* preferredSystem, double spacingFactor,
                                       double preferredSpacingFactor) const
 {
-    std::vector<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
+    std::vector<System*> systems = searchSystem(p, /*includeMeasurelessSystems*/ !scanMeasuresOnly, preferredSystem,
+                                                spacingFactor, preferredSpacingFactor);
     MeasureBase* lastMB = nullptr;
     for (System* system : systems) {
         const double x = p.x() - system->canvasPos().x();

@@ -3143,7 +3143,7 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
     }
 
     // "Measure anchored only" means we're dropping something can't anchor to other MeasureBase types (i.e. boxes)...
-    bool isMeasureAnchorOnly = true;
+    bool isMeasureAnchorOnly = !dropElem->isLayoutBreak();
     if (dropElem->isActionIcon()) {
         const ActionIconType actionType = toActionIcon(dropElem)->actionType();
         isMeasureAnchorOnly = actionType != ActionIconType::PAGE_LOCK && actionType != ActionIconType::SYSTEM_LOCK;

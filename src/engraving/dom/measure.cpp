@@ -53,7 +53,6 @@
 #include "hook.h"
 #include "key.h"
 #include "keysig.h"
-#include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "marker.h"
 #include "masterscore.h"
@@ -1391,10 +1390,6 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::MEASURE_NUMBER:
     case ElementType::JUMP:
     case ElementType::MARKER:
-    case ElementType::LAYOUT_BREAK:
-        // Always drop to all staves
-        return true;
-
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::KEYSIG:
@@ -1544,56 +1539,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     case ElementType::TIMESIG: {
         EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
         break;
-    }
-
-    case ElementType::LAYOUT_BREAK: {
-        LayoutBreak* b = toLayoutBreak(e);
-        Measure* measure = isMMRest() ? mmRestLast() : this;
-        switch (b->layoutBreakType()) {
-        case  LayoutBreakType::PAGE:
-            if (measure->pageBreak()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setLineBreak(false);
-            }
-            break;
-        case  LayoutBreakType::LINE:
-            if (measure->lineBreak()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setPageBreak(false);
-            }
-            break;
-        case  LayoutBreakType::SECTION:
-            if (measure->sectionBreak()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setLineBreak(false);
-            }
-            break;
-        case LayoutBreakType::NOBREAK:
-            if (measure->noBreak() || measure->isEndOfSystemLock() || measure->isEndOfPageLock()) {
-                delete b;
-                b = 0;
-            } else {
-                measure->setLineBreak(false);
-                measure->setPageBreak(false);
-            }
-            break;
-        }
-        if (b) {
-            if (b->layoutBreakType() != LayoutBreakType::NOBREAK) {
-                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
-            }
-            b->setTrack(0);
-            b->setOwnershipParent(measure);
-            score()->undoAddElement(b);
-        }
-        measure->cleanupLayoutBreaks(true);
-        return b;
     }
 
     case ElementType::SPACER:
