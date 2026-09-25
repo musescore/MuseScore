@@ -512,52 +512,78 @@ void Score::rebuildTimeSigMap(Measure* measure)
 }
 
 //---------------------------------------------------------
-//   pos2measure
-//     Return measure for canvas relative position \a p.
+//   pos2measureBase
+//     Return measure base for canvas relative position \a p.
 //---------------------------------------------------------
 
-Measure* Score::pos2measure(const PointF& p, staff_idx_t* rst, int* pitch, Segment** seg, PointF* offset) const
+MeasureBase* Score::pos2measureBase(const PointF& p, bool scanMeasuresOnly, staff_idx_t* staffIdx, int* pitch, Segment** seg,
+                                    PointF* offset) const
 {
-    Measure* m = searchMeasure(p);
-    if (m == 0) {
-        return 0;
-    }
-
-    System* s = m->system();
-    double y   = p.y() - s->canvasPos().y();
-
-    const staff_idx_t i = s->searchStaff(y);
-
-    // search for segment + offset
-    PointF pppp = p - m->canvasPos();
-    staff_idx_t strack = i * VOICES;
-    if (!staff(i)) {
+    MeasureBase* mb = searchMeasureBase(p, scanMeasuresOnly);
+    if (!mb) {
         return nullptr;
     }
-//      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
+    if (!mb->isMeasure()) {
+        //! NOTE: staffIdx, pitch, and seg are only relevant for Measure types...
+        if (staffIdx) {
+            *staffIdx = muse::nidx;
+        }
+        if (pitch) {
+            *pitch = -1;
+        }
+        if (seg) {
+            *seg = nullptr;
+        }
+        if (offset) {
+            // TODO: Relevant?
+        }
+        return mb;
+    }
+
+    Measure* m = toMeasure(mb);
+    if (!m) {
+        return nullptr;
+    }
+
+    const System* system = m->system();
+    const double y = p.y() - system->canvasPos().y();
+
+    const staff_idx_t staffIdxResult = system->searchStaff(y);
+
+    // search for segment + offset
+    const PointF offsetResult = p - m->canvasPos();
+    const staff_idx_t strack = staffIdxResult * VOICES;
+    if (!staff(staffIdxResult)) {
+        return nullptr;
+    }
+
+    // int etrack = staff(i)->part()->nstaves() * VOICES + strack;
     track_idx_t etrack = VOICES + strack;
 
     constexpr SegmentType st = SegmentType::ChordRest;
-    Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack);
-    if (segment) {
-        SysStaff* sstaff = m->system()->staff(i);
-        *rst = i;
-        if (pitch) {
-            Staff* s1 = m_staves[i];
-            Fraction tick  = segment->tick();
-            ClefType clef = s1->clef(tick);
-            *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s1->spatium(tick));
-        }
-        if (offset) {
-            *offset = pppp - PointF(segment->x(), sstaff->bbox().y());
-        }
-        if (seg) {
-            *seg = segment;
-        }
-        return m;
+    Segment* segment = m->searchSegment(offsetResult.x(), st, strack, etrack);
+    if (!segment) {
+        return nullptr;
     }
 
-    return 0;
+    const SysStaff* sysStaff = m->system()->staff(staffIdxResult);
+    if (staffIdx) {
+        *staffIdx = staffIdxResult;
+    }
+    if (pitch) {
+        const Staff* s1 = m_staves[staffIdxResult];
+        const Fraction tick  = segment->tick();
+        const ClefType clef = s1->clef(tick);
+        *pitch = y2pitch(offsetResult.y() - sysStaff->bbox().y(), clef, s1->spatium(tick));
+    }
+    if (offset) {
+        *offset = offsetResult - PointF(segment->x(), sysStaff->bbox().y());
+    }
+    if (seg) {
+        *seg = segment;
+    }
+
+    return m;
 }
 
 //---------------------------------------------------------
@@ -769,25 +795,24 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
 ///   space to measures in this system when searching.
 //---------------------------------------------------------
 
-Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, double spacingFactor, double preferredSpacingFactor) const
+MeasureBase* Score::searchMeasureBase(const PointF& p, bool scanMeasuresOnly, const System* preferredSystem, double spacingFactor,
+                                      double preferredSpacingFactor) const
 {
     std::vector<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
-    Measure* lastMeasure = nullptr;
+    MeasureBase* lastMB = nullptr;
     for (System* system : systems) {
-        double x = p.x() - system->canvasPos().x();
+        const double x = p.x() - system->canvasPos().x();
         for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure()) {
-                if (x < (mb->x() + mb->ldata()->bbox().width())) {
-                    return toMeasure(mb);
-                }
-                lastMeasure = toMeasure(mb);
+            if (scanMeasuresOnly && !mb->isMeasure()) {
+                continue;
             }
+            if (x < (mb->x() + mb->ldata()->bbox().width())) {
+                return mb;
+            }
+            lastMB = mb;
         }
     }
-    if (lastMeasure) {
-        return lastMeasure;
-    }
-    return 0;
+    return lastMB;
 }
 
 //---------------------------------------------------------
@@ -844,8 +869,11 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
             preferredStaffIdx = track >> 2;
         }
     }
-    Measure* measure = searchMeasure(p, preferredSystem, spacingFactor, preferredSpacingFactor);
-    if (measure == 0) {
+
+    //! NOTE: For Positions we only care about Measure types, we're not interested in all MeasureBases...
+    MeasureBase* mb = searchMeasureBase(p, /*scanMeasuresOnly*/ true, preferredSystem, spacingFactor, preferredSpacingFactor);
+    Measure* measure = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
+    if (!measure) {
         return false;
     }
 
