@@ -120,6 +120,26 @@ static bool tupletHasOnlySpacesAndGraces(const mnx::sequence::Tuplet& tuplet)
 }
 
 //---------------------------------------------------------
+//   hideTrailingGapRests
+//   Turn the gap rests that end a tuplet into invisible rests. MuseScore draws a
+//   tuplet's bracket to the end of its last chord or rest, which a gap rest does
+//   not have.
+//---------------------------------------------------------
+
+static void hideTrailingGapRests(Tuplet* tuplet)
+{
+    const auto& elements = tuplet->elements();
+    for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
+        if (!(*it)->isRest() || !toRest(*it)->isGap()) {
+            break;
+        }
+        Rest* rest = toRest(*it);
+        rest->setGap(false);
+        rest->setVisible(false);
+    }
+}
+
+//---------------------------------------------------------
 //   createSlur
 //   Create a MuseScore slur from an MNX slur attached to start chord/rest.
 //---------------------------------------------------------
@@ -888,6 +908,9 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
     };
     hooks.onAfterItem = [&](const mnx::sequence::SequenceContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Tuplet::ContentTypeValue) {
+            if (Tuplet* tuplet = activeTuplets.top()) {
+                hideTrailingGapRests(tuplet);
+            }
             activeTuplets.pop();
         } else if (item.type() == mnx::sequence::MultiNoteTremolo::ContentTypeValue) {
             const auto mnxTremolo = item.get<mnx::sequence::MultiNoteTremolo>();
