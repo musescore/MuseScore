@@ -326,6 +326,7 @@ void NotationActionController::init()
     registerCommand(INCREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ 1);
     registerCommand(DECREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ -1);
     registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
+    registerCommand(ADD_GLISSANDO_COMMAND, &Interaction::addGlissandoToSelectedNote);
 
     registerCommand(ADD_IMAGE_COMMAND, [this]() { addImage(); });
 
@@ -893,6 +894,7 @@ void NotationActionController::init()
             { "increase-dynamic", INCREASE_DYNAMIC_COMMAND, {} },
             { "decrease-dynamic", DECREASE_DYNAMIC_COMMAND, {} },
             { "add-noteline", ADD_NOTELINE_COMMAND, {} },
+            { "add-glissando", ADD_GLISSANDO_COMMAND, {} },
             { "add-image", ADD_IMAGE_COMMAND, {} },
             { "stretch-", STRETCH_DECREASE_COMMAND, {} },
             { "stretch+", STRETCH_INCREASE_COMMAND, {} },
