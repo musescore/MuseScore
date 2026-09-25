@@ -39,6 +39,7 @@
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
 #include "toast/tests/mocks/toastservicemock.h"
+#include "multiwindows/tests/mocks/multiwindowsprovidermock.h"
 
 namespace muse {
 // Teach GoogleTest how to print UriQuery so failure diffs are readable
@@ -163,6 +164,7 @@ protected:
         m_museScoreComService = std::make_shared<NiceMock<MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<AuthorizationServiceMock> >();
         m_toastService = std::make_shared<NiceMock<toast::ToastServiceMock> >();
+        m_multiwindowsProvider = std::make_shared<NiceMock<muse::mi::MultiWindowsProviderMock> >();
 
         m_scenario->service.set(m_service);
         m_scenario->interactive.set(m_interactive);
@@ -170,6 +172,7 @@ protected:
         m_scenario->dispatcher.set(m_dispatcher);
         m_scenario->configuration.set(m_configuration);
         m_scenario->museScoreComService.set(m_museScoreComService);
+        m_scenario->multiwindowsProvider.set(m_multiwindowsProvider);
 
         ON_CALL(*m_museScoreComService, authorization())
         .WillByDefault(Return(m_authorization));
@@ -235,6 +238,7 @@ protected:
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<MuseScoreComServiceMock> m_museScoreComService;
     std::shared_ptr<AuthorizationServiceMock> m_authorization;
+    std::shared_ptr<muse::mi::MultiWindowsProviderMock> m_multiwindowsProvider;
 
     ConvertConfig m_config;
 };
@@ -319,6 +323,39 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_Disp
     pumpEvents();
 }
 
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ScoreAlreadyOpen_DoesNotShowNotification)
+{
+    // [GIVEN] The service's channels, wired up via init()
+    async::Channel<Ret, WatchedScore> convertFinished;
+    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    m_scenario->init();
+
+    WatchedScore watched;
+    watched.scoreId = 555;
+    watched.name = u"My Score";
+
+    // [GIVEN] The converted score's project is already open, in this or another window
+    const io::path_t path = "/some/path/My Score.mscz";
+    ON_CALL(*m_configuration, cloudProjectPath(555))
+    .WillByDefault(Return(path));
+    ON_CALL(*m_multiwindowsProvider, isProjectAlreadyOpened(path))
+    .WillByDefault(Return(true));
+
+    // [THEN] The "score ready" notification is not shown
+    EXPECT_CALL(*m_toastService, show(_, _, _, _, _)).Times(0);
+
+    bool forwarded = false;
+    m_scenario->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
+        forwarded = true;
+    });
+
+    // [WHEN] The service reports a successful conversion
+    convertFinished.send(make_ok(), watched);
+
+    // [THEN] The result is still forwarded to the scenario's own convertFinished channel
+    EXPECT_TRUE(forwarded);
+}
+
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNotificationAndForwards)
 {
     // [GIVEN] The service's channels, wired up via init()
@@ -327,7 +364,9 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     m_scenario->init();
 
     Ret ret = make_ret(Err::ConvertProcessingFailed);
-    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
+
+    WatchedScore watched;
+    watched.name = u"My Score";
 
     const std::string title = muse::trc("project/convert", "Error processing score");
     const std::string text = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
@@ -350,7 +389,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     });
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(ret, WatchedScore());
+    convertFinished.send(ret, watched);
 
     // [THEN] The failure is still forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
@@ -389,8 +428,9 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
 
     // [WHEN] The service reports a failed conversion
     Ret ret = make_ret(Err::ConvertProcessingFailed);
-    ret.setData(CONVERT_FAILED_FILE_NAME_KEY, muse::String(u"My Score"));
-    convertFinished.send(ret, WatchedScore());
+    WatchedScore watched;
+    watched.name = u"My Score";
+    convertFinished.send(ret, watched);
 
     pumpEvents();
 }
@@ -419,16 +459,16 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Ok_DoesNotRestartCon
 }
 
 // ==================================================
-// init() -- pollingFailed()
+// init() -- pollingStatusChanged()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_ShowsToastOnceAfterThreshold)
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_ShowsToastOnceAfterThreshold)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingFailure> pollingFailed;
+    async::Channel<PollingStatus> pollingStatusChanged;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
+    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
     m_scenario->init();
 
     const std::string title = muse::trc("project/convert", "We’re having trouble connecting to MuseScore.com.");
@@ -437,25 +477,25 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_ShowsToastOnce
     // [THEN] The connectivity toast is shown exactly once
     EXPECT_CALL(*m_toastService, showWarning(title, text)).Times(1);
 
-    // [WHEN] Polling fails below the attempt threshold (4), then reaches and passes it, and
-    // eventually gives up
-    pollingFailed.send(PollingFailure { Ret(), 1, 5, secs_t(0), false });
-    pollingFailed.send(PollingFailure { Ret(), 2, 5, secs_t(0), false });
-    pollingFailed.send(PollingFailure { Ret(), 3, 5, secs_t(0), false });
-    pollingFailed.send(PollingFailure { Ret(), 4, 5, secs_t(0), false });
-    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), false });
-    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    // [WHEN] Polling fails below the elapsed threshold (5 minutes), then reaches and passes it,
+    // and eventually gives up
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(0.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(60.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(180.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(300.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(420.0), secs_t(0.0), false });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_ShowsConnectionLostToast)
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_ShowsConnectionLostToast)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingFailure> pollingFailed;
+    async::Channel<PollingStatus> pollingStatusChanged;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
+    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
     m_scenario->init();
 
     const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
@@ -472,18 +512,18 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_ShowsCo
     }));
 
     // [WHEN] Polling gives up
-    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_Retry_RetriesPolling)
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_Retry_RetriesPolling)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingFailure> pollingFailed;
+    async::Channel<PollingStatus> pollingStatusChanged;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
+    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
     m_scenario->init();
 
     // [GIVEN] The user clicks "Retry" on the connection lost toast
@@ -496,18 +536,18 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_Retry_R
     EXPECT_CALL(*m_service, retryPolling()).Times(1);
 
     // [WHEN] Polling gives up
-    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_Dismiss_DoesNotRetryPolling)
+TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_Dismiss_DoesNotRetryPolling)
 {
     // [GIVEN] The service's channels, wired up via init()
     async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingFailure> pollingFailed;
+    async::Channel<PollingStatus> pollingStatusChanged;
     ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingFailed()).WillByDefault(Return(pollingFailed));
+    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
     m_scenario->init();
 
     // [GIVEN] The user dismisses the connection lost toast
@@ -520,7 +560,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingFailed_GaveUp_Dismiss
     EXPECT_CALL(*m_service, retryPolling()).Times(0);
 
     // [WHEN] Polling gives up
-    pollingFailed.send(PollingFailure { Ret(), 5, 5, secs_t(0), true });
+    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
@@ -714,7 +754,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     EXPECT_FALSE(ret);
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_UnsetSourcesFallsBackToBoth)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDialog_UnsetSourcesEmptyText)
 {
     // [GIVEN] No link sources are configured, and the service rejects the link
     m_config.audio2score.link.allowedSources = LinkSources();
@@ -723,11 +763,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     .WillByDefault(Return(make_ret(Err::ConvertUnsupportedLink)));
 
     const std::string title = muse::trc("project/convert", "Please use a compatible URL");
-    const std::string text = muse::trc("project/convert", "Make sure you’re using a valid link from YouTube or Audio.com.");
 
-    // [THEN] The error dialog falls back to mentioning both sources
+    // [THEN] The error dialog has no source-specific text
     EXPECT_CALL(*m_interactive,
-                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                warning(title, TextIs(std::string()), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {

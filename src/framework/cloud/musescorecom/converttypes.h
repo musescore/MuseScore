@@ -39,6 +39,7 @@
 
 namespace muse::cloud {
 enum class ConvertType {
+    Unknown = -1,
     Omr = 0,
     Audio2Score,
 
@@ -56,6 +57,7 @@ enum class ConvertStatus {
 inline const char* convertTypeToString(ConvertType type)
 {
     switch (type) {
+    case ConvertType::Unknown: return "Unknown";
     case ConvertType::Omr: return "Omr";
     case ConvertType::Audio2Score: return "Audio2Score";
     }

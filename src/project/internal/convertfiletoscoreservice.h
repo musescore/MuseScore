@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <cstdint>
 #include <optional>
 #include <vector>
 
@@ -66,7 +67,7 @@ public:
     muse::ValNt<WatchedScoreList> watchedScores() const override;
     const WatchedScore* watchedScoreById(int scoreId) const override;
 
-    muse::async::Channel<PollingFailure> pollingFailed() const override;
+    muse::async::Channel<PollingStatus> pollingStatusChanged() const override;
     void retryPolling() override;
 
     void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) override;
@@ -74,36 +75,41 @@ public:
 
     void deleteConversion(ConvertType type, int convertId) override;
 
+protected:
+    //! NOTE: overridable so tests can fake elapsed time instead of waiting on the real clock
+    virtual int64_t nowMs() const;
+
+    //! NOTE: protected so tests can trigger a poll directly instead of waiting on the real timer
+    void poll();
+
 private:
     static constexpr int MIN_RETRY_INTERVAL_MS = 60000;
-    static constexpr int MAX_RETRY_INTERVAL_MS = 10 * 60000;
-    static constexpr int MAX_POLL_RETRY_ATTEMPTS = 5; // gives up after ~15 minutes
+    static constexpr int MAX_POLL_RETRY_DURATION_MS = 10 * 60000; // gives up after ~10 minutes
 
     void loadWatchedScores();
     void saveWatchedScores();
 
     void watch(ConvertType type, int itemId, const muse::String& convertedScoreName);
     bool hasAnyProcessingScores() const;
-    void poll();
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);
-    void giveUpPolling(const muse::Ret& ret);
+    void giveUpPolling(const muse::Ret& ret, muse::secs_t elapsed);
     void updateWatchedScores(const muse::cloud::ConvertQueueList& queue, const WatchedScoreList& snapshot);
 
     void updateStatus(WatchedScore& watched, muse::cloud::ConvertStatus status, muse::cloud::ConvertErrorCode errorCode);
 
-    void finishConvert(const muse::Ret& ret, const WatchedScore& watched = WatchedScore());
-
     ConvertConfig m_config;
 
     QTimer m_timer;
+    int64_t m_pollRetryStartMs = 0;
     int m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
     int m_pollFailureCount = 0;
     std::vector<WatchedScore> m_watchedScores;
     bool m_pollInProgress = false;
+    bool m_manualRetryRequested = false;
     bool m_isSaving = false;
 
-    muse::async::Channel<PollingFailure> m_pollingFailed;
+    muse::async::Channel<PollingStatus> m_pollingStatusChanged;
     muse::async::Notification m_watchedScoresChanged;
     muse::async::Channel<muse::Ret, WatchedScore> m_convertFinished;
 };
