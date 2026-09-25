@@ -438,13 +438,13 @@ void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNo
             continue;
         }
 
-        if (getPitch(note->string(), note->fret(), note->staff(), note->tick()) == note->pitch()) {
+        int forcedString = resolveForcedString(note);
+        if (getPitch(note->string(), note->fret(), note->staff(),
+                     note->tick()) == note->pitch() && (forcedString == INVALID_STRING_INDEX || note->string() == forcedString)) {
             continue;
         }
 
         std::pair<int, int> best = { INVALID_STRING_INDEX, INVALID_FRET_INDEX };
-
-        int forcedString = resolveForcedString(note);
         if (forcedString != INVALID_STRING_INDEX) {
             int offset = pitchOffsetAt(chord->staff(), chord->tick(), forcedString);
             int f = fret(note->pitch(), forcedString, offset);
@@ -685,25 +685,29 @@ void StringData::fretChords(Chord* chord) const
                             && !candidateBassNote->negativeFretUsed()
                             && !(skipDeadNotes && candidateBassNote->deadNote());
 
-    if (bassNoteEligible && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX && needsFretting(candidateBassNote)) {
-        std::pair<int, int> prevFretting = { prevBassNote->string(), prevBassNote->fret() };
+    bool useSameString = chord->configuration()->preferSameStringForTranspose();
 
-        if (prevFretting.second == 0) {
-            if (prevChord) {
-                prevFretting = findLastNonOpenAnchor(prevChord);
-            } else {
-                prevFretting = findLastNonOpenAnchor(lastRealChord);
+    if (!useSameString) {
+        if (bassNoteEligible && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX && needsFretting(candidateBassNote)) {
+            std::pair<int, int> prevFretting = { prevBassNote->string(), prevBassNote->fret() };
+
+            if (prevFretting.second == 0) {
+                if (prevChord) {
+                    prevFretting = findLastNonOpenAnchor(prevChord);
+                } else {
+                    prevFretting = findLastNonOpenAnchor(lastRealChord);
+                }
             }
-        }
 
-        auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
-        assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord);
-    } else if (bassNoteEligible && strings > 0 && needsFretting(candidateBassNote)) {
-        auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(defaultFretboardAnchor(), chord);
-        assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord);
-    } else if (bassNoteEligible && candidateBassNote->string() != INVALID_STRING_INDEX) {
-        std::pair<int, int> existingBassFretting = { candidateBassNote->string(), candidateBassNote->fret() };
-        assignRemainingNotesAroundBass(chord, candidateBassNote, existingBassFretting);
+            auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
+            assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord);
+        } else if (bassNoteEligible && strings > 0 && needsFretting(candidateBassNote)) {
+            auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(defaultFretboardAnchor(), chord);
+            assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord);
+        } else if (bassNoteEligible && candidateBassNote->string() != INVALID_STRING_INDEX) {
+            std::pair<int, int> existingBassFretting = { candidateBassNote->string(), candidateBassNote->fret() };
+            assignRemainingNotesAroundBass(chord, candidateBassNote, existingBassFretting);
+        }
     }
 
     // we need the notes sorted in order of string (from highest to lowest) and then pitch
