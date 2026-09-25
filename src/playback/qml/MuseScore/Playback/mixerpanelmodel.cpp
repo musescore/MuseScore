@@ -625,6 +625,10 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
         playback()->setMasterAuxSendsParams(params.auxSends);
     });
 
+    connect(item, &MixerChannelItem::soloMuteStateChanged, this, [this, item](const notation::INotationSoloMuteState::SoloMuteState&) {
+        playback()->setMasterControlParams(item->outputParams().control());
+    });
+
     return item;
 }
 
