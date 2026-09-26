@@ -54,6 +54,7 @@ static const Settings::Key SHOULD_WARN_BEFORE_PUBLISH(module_name, "project/shou
 static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD(module_name, "project/shouldWarnBeforeSavingPubliclyToCloud");
 static const Settings::Key HOME_SCORES_PAGE_TAB_INDEX(module_name, "project/homeScoresPageTabIndex");
 static const Settings::Key HOME_SCORES_PAGE_VIEW_TYPE(module_name, "project/homeScoresPageViewType");
+static const Settings::Key HOME_SCORES_PAGE_SORT_MODE(module_name, "project/homeScoresPageSortMode");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
@@ -97,6 +98,7 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(HOME_SCORES_PAGE_TAB_INDEX, Val(0));
 
     settings()->setDefaultValue(HOME_SCORES_PAGE_VIEW_TYPE, Val(HomeScoresPageViewType::Grid));
+    settings()->setDefaultValue(HOME_SCORES_PAGE_SORT_MODE, Val(HomeScoresPageSortMode::TimeModified));
 
     settings()->setDefaultValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(true));
     settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::Undefined));
@@ -457,6 +459,18 @@ void ProjectConfiguration::setHomeScoresPageViewType(HomeScoresPageViewType type
     // Intentionally not directly synced between instances
     // (it would be weird if you switch the view in one instance, and the others suddenly switch too)
     settings()->setLocalValue(HOME_SCORES_PAGE_VIEW_TYPE, Val(type));
+}
+
+IProjectConfiguration::HomeScoresPageSortMode ProjectConfiguration::homeScoresPageSortMode() const
+{
+    return settings()->value(HOME_SCORES_PAGE_SORT_MODE).toEnum<HomeScoresPageSortMode>();
+}
+
+void ProjectConfiguration::setHomeScoresPageSortMode(HomeScoresPageSortMode mode)
+{
+    // Intentionally not directly synced between instances
+    // (it would be weird if you switch the sort in one instance, and the others suddenly switch too)
+    settings()->setLocalValue(HOME_SCORES_PAGE_SORT_MODE, Val(mode));
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const
