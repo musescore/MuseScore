@@ -1168,7 +1168,7 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
     }
 
     // All actions are disabled on the review page
-    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
+    if (interactive() && interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
         return false;
     }
 
