@@ -1531,8 +1531,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     }
 
     case ElementType::TIMESIG: {
-        EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
-        break;
+        return EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
     }
 
     case ElementType::SPACER:

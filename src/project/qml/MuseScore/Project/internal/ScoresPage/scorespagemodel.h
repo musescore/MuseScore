@@ -42,6 +42,7 @@ class ScoresPageModel : public QObject, public muse::Contextable, public muse::a
 
     Q_PROPERTY(int tabIndex READ tabIndex WRITE setTabIndex NOTIFY tabIndexChanged)
     Q_PROPERTY(ViewType viewType READ viewType WRITE setViewType NOTIFY viewTypeChanged)
+    Q_PROPERTY(SortMode sortMode READ sortMode WRITE setSortMode NOTIFY sortModeChanged)
 
     QML_ELEMENT
 
@@ -66,6 +67,15 @@ public:
     ViewType viewType() const;
     void setViewType(ViewType type);
 
+    enum SortMode {
+        SortByTimeModified = int(IProjectConfiguration::HomeScoresPageSortMode::TimeModified),
+        SortByName = int(IProjectConfiguration::HomeScoresPageSortMode::Name),
+    };
+    Q_ENUM(SortMode);
+
+    SortMode sortMode() const;
+    void setSortMode(SortMode mode);
+
     Q_INVOKABLE void createNewScore();
     Q_INVOKABLE void convertFileToScore();
     Q_INVOKABLE void openOther();
@@ -78,5 +88,6 @@ public:
 signals:
     void tabIndexChanged();
     void viewTypeChanged();
+    void sortModeChanged();
 };
 }

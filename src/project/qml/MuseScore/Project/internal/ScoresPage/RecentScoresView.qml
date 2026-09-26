@@ -29,8 +29,11 @@ import MuseScore.Project
 ScoresView {
     id: root
 
+    property int sortMode: RecentScoresModel.SortByTimeModified
+
     RecentScoresModel {
         id: recentScoresModel
+        sortMode: root.sortMode
     }
 
     Component.onCompleted: {
