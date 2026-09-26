@@ -194,6 +194,15 @@ void ProjectConfigurationStub::setHomeScoresPageViewType(IProjectConfiguration::
 {
 }
 
+IProjectConfiguration::HomeScoresPageSortMode ProjectConfigurationStub::homeScoresPageSortMode() const
+{
+    return IProjectConfiguration::HomeScoresPageSortMode::TimeModified;
+}
+
+void ProjectConfigurationStub::setHomeScoresPageSortMode(IProjectConfiguration::HomeScoresPageSortMode)
+{
+}
+
 QColor ProjectConfigurationStub::templatePreviewBackgroundColor() const
 {
     return QColor();
