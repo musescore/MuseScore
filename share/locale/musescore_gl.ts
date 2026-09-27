@@ -3499,7 +3499,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10795"/>
         <source>Dashes</source>
-        <translation type="unfinished"/>
+        <translation>Guións</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10803"/>
@@ -3509,7 +3509,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10813"/>
         <source>Limit number of dashes to:</source>
-        <translation type="unfinished"/>
+        <translation>Limitar o número de guións a:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10823"/>
@@ -3525,7 +3525,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10883"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restaurar o valor de «Posición vertical (% da altura da letra minúscula)»</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10934"/>
@@ -3565,7 +3565,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11064"/>
         <source>Max. space between dashes:</source>
-        <translation type="unfinished"/>
+        <translation>Espazo máximo entre guións:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11081"/>
@@ -3602,7 +3602,8 @@ first note of the system</source>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11142"/>
         <source>Never left-align syllables
 followed by dashes</source>
-        <translation type="unfinished"/>
+        <translation>Nunca aliñar á esquerda sílabas
+seguidas de guións.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11162"/>
@@ -3882,7 +3883,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12573"/>
         <source>Musical symbols</source>
-        <translation type="unfinished"/>
+        <translation>Símbolos musicais</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12582"/>
@@ -3902,7 +3903,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12647"/>
         <source>Reset &apos;Text font size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restaurar o valor do tamaño da fonte do texto</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12887"/>
@@ -6747,7 +6748,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="595"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation type="unfinished"/>
+        <translation>Compases por s&amp;istema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="596"/>
@@ -6881,17 +6882,17 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="701"/>
         <source>Insert measures before selection</source>
-        <translation type="unfinished"/>
+        <translation>Inserir compases antes da selección</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="707"/>
         <source>Insert measures after selection</source>
-        <translation type="unfinished"/>
+        <translation>Inserir compases despois da selección</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="713"/>
         <source>Insert measures at start of score</source>
-        <translation type="unfinished"/>
+        <translation>Inserir compases ao comezo da partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="719"/>
@@ -7752,12 +7753,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1488"/>
         <source>Reset &amp;text style overrides</source>
-        <translation type="unfinished"/>
+        <translation>Restaurar as &amp;substitucións de estilo do texto</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1489"/>
         <source>Reset all text style overrides to default</source>
-        <translation type="unfinished"/>
+        <translation>Restaurar todas as substitucións de estilo de texto aos valores predeterminados</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1494"/>
@@ -9335,7 +9336,7 @@ followed by dashes</source>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2740"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2741"/>
         <source>Mark corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>Marcar compases corruptos</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2747"/>
@@ -9660,7 +9661,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
         <source>Publish to &amp;MuseScore.com…</source>
-        <translation type="unfinished"/>
+        <translation>Publicar en &amp;Musescore.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="90"/>
@@ -9700,12 +9701,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation type="unfinished"/>
+        <translation>Importar &amp;son á partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation type="unfinished"/>
+        <translation>Importar son á partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="128"/>
@@ -10184,7 +10185,7 @@ Publicado baixo a &lt;a href=&quot;%1&quot;&gt;GNU General Public License versio
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/firstlaunchsetupmodel.cpp" line="126"/>
         <source>Keep going</source>
-        <translation type="unfinished"/>
+        <translation>Continúa</translation>
     </message>
 </context>
 <context>
@@ -10465,7 +10466,7 @@ Publicado baixo a &lt;a href=&quot;%1&quot;&gt;GNU General Public License versio
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="52"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation>Garda as túas partituras de forma privada en MuseScore.com para revisitar versións anteriores e convidar a outras persoas a velas e comentalas. Cando esteas listo, comparte a túa música co mundo.</translation>
+        <translation>Garda as túas partituras de forma privada en MuseScore.com para revisitar versións anteriores e convidar a outras persoas a velas e comentalas. Cando esteas listo, comparte a túa música co mundo.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="54"/>
@@ -13138,7 +13139,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1714"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>Número de páxina</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1716"/>
@@ -13148,12 +13149,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1718"/>
         <source>Measure number (alternate)</source>
-        <translation type="unfinished"/>
+        <translation>Número de compás (alternativo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1719"/>
         <source>Multimeasure rest range</source>
-        <translation>Serie de pausas multicompás</translation>
+        <translation>Intervalo de silencios de varios compases</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1721"/>
@@ -13238,7 +13239,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1738"/>
         <source>Roman numeral analysis</source>
-        <translation type="unfinished"/>
+        <translation>Análise con numerais romanos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1741"/>
@@ -13258,42 +13259,42 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1744"/>
         <source>Tablature fret number</source>
-        <translation type="unfinished"/>
+        <translation>Número de traste na tablatura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1745"/>
         <source>LH guitar fingering</source>
-        <translation type="unfinished"/>
+        <translation>Posicións dos dedos para guitarra para zurdos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1746"/>
         <source>RH guitar fingering</source>
-        <translation type="unfinished"/>
+        <translation>Posición dos dedos da man para guitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1748"/>
         <source>Hammer-ons, pull-offs, and tapping</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-ons, pull-offs e tapping</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1752"/>
         <source>Fretboard diagram fingering</source>
-        <translation type="unfinished"/>
+        <translation>Diagrama do diapasón dixitación</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1754"/>
         <source>Fretboard diagram fret number</source>
-        <translation type="unfinished"/>
+        <translation>Diagrama do diapasón número de traste</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1755"/>
         <source>Harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagrama dos pedais da arpa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1756"/>
         <source>Harp pedal text diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagrama de texto dos pedais da arpa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1759"/>
@@ -13409,7 +13410,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1985"/>
         <source>triple ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>tripla ♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1987"/>
@@ -13421,7 +13422,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
         <source>double ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>dupla díese</translation>
+        <translation>dupla ♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1992"/>
@@ -13433,7 +13434,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1995"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Díese</translation>
+        <translation>♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
@@ -13445,7 +13446,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2000"/>
         <source>♮</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Becuadro</translation>
+        <translation>♮</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
@@ -13457,7 +13458,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2005"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Bemol</translation>
+        <translation>♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
@@ -13469,7 +13470,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2010"/>
         <source>double ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>duplo bemol</translation>
+        <translation>duplo ♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2012"/>
@@ -13481,7 +13482,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
         <source>triple ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>triplo ♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
@@ -15575,7 +15576,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2331"/>
         <source>Keep measures on the same system</source>
-        <translation type="unfinished"/>
+        <translation>Mantén os compases no mesmo sistema.</translation>
     </message>
 </context>
 <context>
@@ -20605,7 +20606,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="34"/>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="100"/>
         <source>Failed to install extension</source>
-        <translation type="unfinished"/>
+        <translation>Produciuse un erro ao instalar a extensión</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="35"/>
@@ -22746,7 +22747,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/capella/internal/capella.cpp" line="2882"/>
         <source>Import failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Produciuse un erro na importación: %1</translation>
     </message>
 </context>
 <context>
@@ -22792,7 +22793,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1274"/>
         <source>Import failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Produciuse un erro na importación: %1</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="89"/>
@@ -23074,7 +23075,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/importexport/mnx/internal/notationmnxreader.cpp" line="68"/>
         <source>File contains no measures.</source>
-        <translation type="unfinished"/>
+        <translation>O ficheiro non contén compases.</translation>
     </message>
 </context>
 <context>
@@ -23536,7 +23537,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="80"/>
         <source>Where to insert measures:</source>
-        <translation type="unfinished"/>
+        <translation>Onde inserir os compases:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="108"/>
@@ -23602,7 +23603,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="171"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation type="unfinished"/>
+        <translation>Mantén agrupados os compases dos sistemas seleccionados e evita que pasen ao sistema seguinte.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="194"/>
@@ -28124,7 +28125,7 @@ Ademais, Mastering MuseScore conta cunha comunidade de músicos que apoia o teu 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="107"/>
         <source>Insufficient or unequal measures</source>
-        <translation type="unfinished"/>
+        <translation>Compases insuficientes ou desiguais</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="110"/>
@@ -28241,7 +28242,7 @@ Ademais, Mastering MuseScore conta cunha comunidade de músicos que apoia o teu 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="170"/>
         <source>These measures cannot be joined</source>
-        <translation type="unfinished"/>
+        <translation>Estos compases non se poden combinar</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="171"/>
@@ -28559,7 +28560,7 @@ Ademais, Mastering MuseScore conta cunha comunidade de músicos que apoia o teu 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="121"/>
         <source>Clear measures</source>
-        <translation type="unfinished"/>
+        <translation>Limpar compases</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="123"/>
@@ -28574,7 +28575,7 @@ Ademais, Mastering MuseScore conta cunha comunidade de músicos que apoia o teu 
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="137"/>
         <source>Move measures</source>
-        <translation type="unfinished"/>
+        <translation>Mover compases</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="139"/>
@@ -30662,7 +30663,7 @@ Ademais, Mastering MuseScore conta cunha comunidade de músicos que apoia o teu 
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="55"/>
         <source>Insert mode (grow measures)</source>
-        <translation type="unfinished"/>
+        <translation>Modo de inserción (ampliar compases)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="60"/>
@@ -30918,7 +30919,10 @@ Ademais, Mastering MuseScore conta cunha comunidade de músicos que apoia o teu 
         <source>Writing palette file
 %1
 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Escribindo o ficheiro de paleta
+%1
+produciuse un erro.
+</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="340"/>
@@ -31695,12 +31699,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1974"/>
         <source>Harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagrama dos pedais da arpa</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1979"/>
         <source>Harp pedal text diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagrama de texto dos pedais da arpa</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1987"/>
@@ -31813,12 +31817,12 @@ failed.</source>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="602"/>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="653"/>
         <source>MuseScore drumset file</source>
-        <translation type="unfinished"/>
+        <translation>Ficheiro de batería de MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="604"/>
         <source>Load drumset</source>
-        <translation type="unfinished"/>
+        <translation>Cargar a batería</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="621"/>
@@ -31828,19 +31832,21 @@ failed.</source>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="622"/>
         <source>MuseScore Studio may not be able to load this drumset file.</source>
-        <translation type="unfinished"/>
+        <translation>É posible que MuseScore Studio non poida cargar este ficheiro de batería.</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="655"/>
         <source>Save drumset</source>
-        <translation type="unfinished"/>
+        <translation>Gardar a batería</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="663"/>
         <source>Opening file
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Abrindo ficheiro
+%1
+produciuse un erro: %2</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="664"/>
@@ -31850,7 +31856,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="675"/>
         <source>Writing file failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Produciuse un erro ao escribir o ficheiro: %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="676"/>
@@ -31886,17 +31892,17 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="437"/>
         <source>Common symbols</source>
-        <translation type="unfinished"/>
+        <translation>Símbolos comúns</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="456"/>
         <source>Musical symbols</source>
-        <translation type="unfinished"/>
+        <translation>Símbolos musicais</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="479"/>
         <source>Unicode symbols</source>
-        <translation type="unfinished"/>
+        <translation>Símbolos Unicode</translation>
     </message>
 </context>
 <context>
@@ -32000,7 +32006,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="121"/>
         <source>Syriac Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Suplemento siríaco</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="122"/>
@@ -32215,12 +32221,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="164"/>
         <source>Cyrillic Extended-C</source>
-        <translation type="unfinished"/>
+        <translation>Dó cirílico extendido</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="165"/>
         <source>Georgian Extended</source>
-        <translation type="unfinished"/>
+        <translation>Xeorxiano estendido</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="166"/>
@@ -32275,7 +32281,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="176"/>
         <source>Combining Diacritical Marks for Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Combinación de Signos diacríticos para Símbolos</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="177"/>
@@ -33365,7 +33371,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="394"/>
         <source>Chess Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Símbolos de xadrez</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="395"/>
@@ -33712,7 +33718,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="687"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>As marcas de son deste instrumento pódense restaurar, pero o texto do pentagrama permanecerá. Esta acción non se pode desfacer.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -33747,7 +33753,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="132"/>
         <source>Please check your connection, and make sure MuseHub is running and you are logged in.</source>
-        <translation type="unfinished"/>
+        <translation>Por favor, comproba a túa conexión e asegúrate de que MuseHub estea en execución e de que accedeches.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/outputresourceitem.cpp" line="17"/>
@@ -33797,7 +33803,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="165"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>As marcas de son poden restaurarse, pero o texto do pentagrama permanecerá. Esta acción non se pode desfacer.</translation>
     </message>
 </context>
 <context>
@@ -34378,7 +34384,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
         <source>Always prompt to share on Audio.com after publishing to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Non esquezas compartir en Audio.com despois de publicar en MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/RemoteControlSection.qml" line="31"/>
@@ -35403,18 +35409,18 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="462"/>
         <source>MuseScore.com returned an error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned; this might contain english text that is deliberately not translated</extracomment>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com devolveu un código de erro: %1.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <source>MuseScore.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned, which is a number.</extracomment>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com devolveu un código de erro descoñecido: %1.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="471"/>
         <source>MuseScore.com returned an unknown error code.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com devolveu un código de erro descoñecido.</translation>
     </message>
     <message>
         <source>Please try again later, or get help for this problem on MuseScore.org.</source>
@@ -35424,7 +35430,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="477"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="609"/>
         <source>Please try again later, or get help for this problem on MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Por favor, téntao de novo máis tarde ou busca axuda para este problema en MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="493"/>
@@ -35435,12 +35441,12 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="496"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="563"/>
         <source>Your MuseScore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation type="unfinished"/>
+        <translation>A túa conta de MuseScore.com debe verificarse primeiro. Por favor, activa a túa conta a través da ligazón que aparece no correo electrónico de activación.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="500"/>
         <source>This score does not belong to this account. To access this score, make sure you are logged in to the desktop app with the account to which this score belongs.</source>
-        <translation type="unfinished"/>
+        <translation>Esta partitura non pertence a esta conta. Para acceder a ela, asegúrate de ter acceder na aplicación de escritorio coa conta á que pertence a partitura.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="504"/>
@@ -35451,7 +35457,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="517"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="604"/>
         <source>Could not connect to &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel conectar con &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Comproba a túa conexión a Internet ou téntao de novo máis tarde.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="522"/>
@@ -35506,7 +35512,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="177"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="765"/>
         <source>Log in or create a free account on MuseScore.com to convert a file.</source>
-        <translation type="unfinished"/>
+        <translation>Accede ou crea unha conta gratuíta en MuseScore.com para converter un ficheiro.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="226"/>
@@ -35529,7 +35535,7 @@ failed: %2</source>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="719"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="800"/>
         <source>Unable to connect to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel conectar con MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="295"/>
@@ -35570,7 +35576,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="329"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="505"/>
         <source>Make sure you’re importing a suitable PDF, image or MP3 file.</source>
-        <translation type="unfinished"/>
+        <translation>Asegúrate de importar un ficheiro PDF, imaxe ou MP3 adecuado.</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="368"/>
@@ -36632,7 +36638,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="149"/>
         <source>Initial number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Número inicial de compases</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="190"/>
@@ -37019,7 +37025,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Compartir esta partitura e o seu son en MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="49"/>
@@ -37122,12 +37128,12 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1034"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
-        <translation type="unfinished"/>
+        <translation>Acceder a MuseScore.com para gardar esta partitura na nube.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="236"/>
         <source>Log in to MuseScore.com to publish this score.</source>
-        <translation type="unfinished"/>
+        <translation>Acceder a MuseScore.com para publicar esta partitura.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="357"/>
@@ -37148,7 +37154,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="361"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</source>
-        <translation type="unfinished"/>
+        <translation>Todos os cambios gardados serán visibles publicamente en MuseScore.com. Se queres facer cambios frecuentes, recomendamos gardar esta partitura de xeito privado ata que esteas listo para compartila co mundo.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
@@ -37158,7 +37164,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
         <source>Unable to connect to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel conectar con MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="402"/>
@@ -37239,7 +37245,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="466"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="559"/>
         <source>Log in or create a free account on MuseScore.com to open this score.</source>
-        <translation type="unfinished"/>
+        <translation>Accede ou crea unha conta gratuíta en MuseScore.com para abrir esta partitura.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1401"/>
@@ -37249,7 +37255,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1404"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Todos os cambios gardados actualizaranse agora na nube. Podes xestionar este ficheiro no xestor de partituras de MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1480"/>
@@ -38674,7 +38680,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6540"/>
         <source>Reset text style overrides</source>
-        <translation type="unfinished"/>
+        <translation>Restaurar as substitucións de estilo do texto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6547"/>
