@@ -51,7 +51,6 @@ public:
     virtual void removeScore() {}
 
     virtual void changeEditElement(EngravingItem*) {}
-    virtual void setDropRectangles(const std::vector<RectF>&) {}
     virtual void drawBackground(muse::draw::Painter*, const RectF&) const = 0;
     virtual void setDropTarget(EngravingItem*) {}
 

@@ -24,6 +24,7 @@
 
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
+#include "async/promise.h"
 #include "io/path.h"
 #include "rcommand/commandtypes.h"
 
@@ -38,14 +39,13 @@ class ISaveProjectScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~ISaveProjectScenario() = default;
 
-    virtual muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
-                                  bool force = false) = 0;
-    virtual bool saveProject(const muse::io::path_t& path = muse::io::path_t()) = 0;
-    virtual bool saveProjectLocally(const muse::io::path_t& path, SaveMode saveMode = SaveMode::Save, bool createBackup = true) = 0;
-    virtual muse::Ret saveProjectAt(const muse::rcommand::Params& params) = 0;
+    virtual muse::async::Promise<muse::Ret> saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
+                                                        bool force = false) = 0;
+    virtual muse::async::Promise<muse::Ret> saveProject(const muse::io::path_t& path = muse::io::path_t()) = 0;
+    virtual muse::async::Promise<muse::Ret> saveProjectAt(const muse::rcommand::Params& params) = 0;
 
-    virtual muse::Ret publish() = 0;
-    virtual muse::Ret shareAudio() = 0;
+    virtual muse::async::Promise<muse::Ret> publish() = 0;
+    virtual muse::async::Promise<muse::Ret> shareAudio() = 0;
 
     virtual bool isBusy(BusyStatus status) const = 0;
     virtual muse::async::Notification busyChanged() const = 0;

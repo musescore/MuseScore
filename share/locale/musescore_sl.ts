@@ -5638,13 +5638,13 @@ ki jim sledi vezaj</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="237"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="87"/>
         <source>&amp;Copy</source>
-        <translation>&amp;Kopiraj</translation>
+        <translation>&amp;Pomni</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="238"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Kopiraj</translation>
+        <translation>Pomni</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="245"/>
@@ -6377,7 +6377,7 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="355"/>
         <source>Copy/paste: swap with clipboard</source>
-        <translation>Kopiraj/prilepi: zamenjaj z odložiščem</translation>
+        <translation>Pomni/prilepi: zamenjaj z odložiščem</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="360"/>
@@ -6634,7 +6634,7 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="518"/>
         <source>Copy &amp;lyrics to clipboard</source>
-        <translation>Kopira&amp;j besedilo v odložišče</translation>
+        <translation>Pomni besedi&amp;lo v odložišču</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="519"/>
@@ -9165,7 +9165,7 @@ ki jim sledi vezaj</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2578"/>
         <source>Dive</source>
         <extracomment>Standard guitar dive, i.e. a movement of the tremolo bar between two pitches</extracomment>
-        <translation>Dive</translation>
+        <translation>Strunski spusti</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2585"/>
@@ -9633,12 +9633,12 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="70"/>
         <source>Save a &amp;copy…</source>
-        <translation>Shrani ko&amp;pijo ...</translation>
+        <translation>Shrani &amp;dvojnik ...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="71"/>
         <source>Save a copy</source>
-        <translation>Shrani kopijo</translation>
+        <translation>Shrani dvojnik</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
@@ -12383,72 +12383,72 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
         <source>volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek premika oktave</numerusform><numerusform>odseka premika oktave</numerusform><numerusform>odseki premika oktave</numerusform><numerusform>odsekov premika oktave</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="429"/>
         <source>Volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek premika oktave</numerusform><numerusform>Odseka premika oktave</numerusform><numerusform>Odseki premika oktave</numerusform><numerusform>Odsekov premika oktave</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
         <source>pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek pedala</numerusform><numerusform>odseka pedala</numerusform><numerusform>odseki pedala</numerusform><numerusform>odsekov pedala</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="432"/>
         <source>Pedal segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek pedala</numerusform><numerusform>Odseka pedala</numerusform><numerusform>Odseki pedala</numerusform><numerusform>Odsekov pedala</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="434"/>
         <source>extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek podaljševalne črte</numerusform><numerusform>odseka podaljševalne črte</numerusform><numerusform>odsekov podaljševalne črte</numerusform><numerusform>odsek podaljševalne črte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="435"/>
         <source>Extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek podaljševalne črte</numerusform><numerusform>Odseka podaljševalne črte</numerusform><numerusform>Odseki podaljševalne črte</numerusform><numerusform>Odsekov podaljševalne črte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="437"/>
         <source>partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek delne podaljševalne črte</numerusform><numerusform>odseka delne podaljševalne črte</numerusform><numerusform>odseki delne podaljševalne črte</numerusform><numerusform>odsekov delne podaljševalne črte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="438"/>
         <source>Partial extension line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek delne podaljševalne črte</numerusform><numerusform>Odseka delne podaljševalne črte</numerusform><numerusform>Odseki delne podaljševalne črte</numerusform><numerusform>Odsekov delne podaljševalne črte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
         <source>glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek zadrsa (glisanda)</numerusform><numerusform>odseka zadrsa (glisanda)</numerusform><numerusform>odseki zadrsa (glisanda)</numerusform><numerusform>odsekov zadrsa (glisanda)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="441"/>
         <source>Glissando segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek zadrsa (glisanda)</numerusform><numerusform>Odseka zadrsa (glisanda)</numerusform><numerusform>Odseki zadrsa (glisanda)</numerusform><numerusform>Odsekov zadrsa (glisanda)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="443"/>
         <source>note-anchored line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek na note sidrane črte</numerusform><numerusform>odseka na note sidrane črte</numerusform><numerusform>odseki na note sidrane črte</numerusform><numerusform>odsekov na note sidrane črte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="444"/>
         <source>Note-anchored line segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek na note sidrane črte</numerusform><numerusform>Odseka na note sidrane črte</numerusform><numerusform>Odseki na note sidrane črte</numerusform><numerusform>Odsekov na note sidrane črte</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="446"/>
         <source>layout break(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>prelom v postavitvi</numerusform><numerusform>preloma v postavitvi</numerusform><numerusform>prelomi v postavitvi</numerusform><numerusform>prelomov v postavitvi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="447"/>
         <source>Layout break(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Prelom v postavitvi</numerusform><numerusform>Preloma v postavitvi</numerusform><numerusform>Prelomi v postavitvi</numerusform><numerusform>Prelomov v postavitvi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
@@ -12463,313 +12463,313 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
         <source>system lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>zaklep vrstice</numerusform><numerusform>zaklepa vrstice</numerusform><numerusform>zaklepi vrstice</numerusform><numerusform>zaklepov vrstice</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
         <source>System lock(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Zaklep vrstice</numerusform><numerusform>Zaklepa vrstice</numerusform><numerusform>Zaklepi vrstice</numerusform><numerusform>Zaklepov vrstice</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
         <source>spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>presledek</numerusform><numerusform>presledka</numerusform><numerusform>presledki</numerusform><numerusform>presledkov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="456"/>
         <source>Spacer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Presledek</numerusform><numerusform>Presledka</numerusform><numerusform>Presledki</numerusform><numerusform>Presledkov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="458"/>
         <source>staff state(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>stanje notnega črtovja</numerusform><numerusform>stanji notnega črtovja</numerusform><numerusform>stanja notnega črtovja</numerusform><numerusform>stanj notnega črtovja</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="459"/>
         <source>Staff state(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Stanje notnega črtovja</numerusform><numerusform>Stanji notnega črtovja</numerusform><numerusform>Stanja notnega črtovja</numerusform><numerusform>Stanj notnega črtovja</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="461"/>
         <source>notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notna glavica</numerusform><numerusform>notni glavici</numerusform><numerusform>notne glavice</numerusform><numerusform>notnih glavic</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="462"/>
         <source>Notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notna glavica</numerusform><numerusform>Notni glavici</numerusform><numerusform>Notne glavice</numerusform><numerusform>Notnih glavic</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="464"/>
         <source>note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pika</numerusform><numerusform>piki</numerusform><numerusform>pike</numerusform><numerusform>pik</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="465"/>
         <source>Note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pika</numerusform><numerusform>Piki</numerusform><numerusform>Pike</numerusform><numerusform>Pik</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="467"/>
         <source>image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>slika</numerusform><numerusform>sliki</numerusform><numerusform>slike</numerusform><numerusform>slik</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
         <source>Image(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Slika</numerusform><numerusform>Sliki</numerusform><numerusform>Slike</numerusform><numerusform>Slik</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
         <source>measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>takt</numerusform><numerusform>takta</numerusform><numerusform>takti</numerusform><numerusform>taktov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
         <source>Measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Takt</numerusform><numerusform>Takta</numerusform><numerusform>Takti</numerusform><numerusform>Taktov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
         <source>selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>izbor</numerusform><numerusform>izbora</numerusform><numerusform>izbori</numerusform><numerusform>izborov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="474"/>
         <source>Selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Izbor</numerusform><numerusform>Izbora</numerusform><numerusform>Izbori</numerusform><numerusform>Izborov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="476"/>
         <source>lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>zanka</numerusform><numerusform>zanki</numerusform><numerusform>zanke</numerusform><numerusform>zank</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="477"/>
         <source>Lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Zanka</numerusform><numerusform>Zanki</numerusform><numerusform>Zanke</numerusform><numerusform>Zank</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="479"/>
         <source>shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>senčna nota</numerusform><numerusform>senčni noti</numerusform><numerusform>senčne note</numerusform><numerusform>senčnih not</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="480"/>
         <source>Shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Senčna nota</numerusform><numerusform>Senčni noti</numerusform><numerusform>Senčne note</numerusform><numerusform>Senčnih not</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="482"/>
         <source>tab duration symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>znak trajanja tablature</numerusform><numerusform>znaka trajanja tablatur</numerusform><numerusform>znaki trajanja tablatur</numerusform><numerusform>znakov trajanja tablatur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="483"/>
         <source>Tab duration symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Znak trajanja tablature</numerusform><numerusform>Znaka trajanja tablatur</numerusform><numerusform>Znaki trajanja tablatur</numerusform><numerusform>Znakov trajanja tablatur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
         <source>font symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>znak pisave</numerusform><numerusform>znaka pisav</numerusform><numerusform>znaki pisav</numerusform><numerusform>znakov pisav</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
         <source>Font symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Znak pisave</numerusform><numerusform>Znaka pisav</numerusform><numerusform>Znaki pisav</numerusform><numerusform>Znakov pisav</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
         <source>page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>stran</numerusform><numerusform>strani</numerusform><numerusform>strani</numerusform><numerusform>strani</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="489"/>
         <source>Page(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Stran</numerusform><numerusform>Strani</numerusform><numerusform>Strani</numerusform><numerusform>Strani</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="491"/>
         <source>parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>okrogli oklepaj</numerusform><numerusform>okrogla oklepaja</numerusform><numerusform>okrogli oklepaji</numerusform><numerusform>okroglih oklepajev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="492"/>
         <source>Parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Okrogli oklepaj</numerusform><numerusform>Okrogla oklepaja</numerusform><numerusform>Okrogli oklepaji</numerusform><numerusform>Okroglih oklepajev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
         <source>hairpin(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>vilice</numerusform><numerusform>vilice</numerusform><numerusform>vilice</numerusform><numerusform>vilic</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="495"/>
         <source>Hairpin(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Vilice</numerusform><numerusform>Vilice</numerusform><numerusform>Vilice</numerusform><numerusform>Vilic</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>ottava(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>premik oktave</numerusform><numerusform>premika oktav</numerusform><numerusform>premiki oktav</numerusform><numerusform>premikov oktav</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>Ottava(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Premik oktave</numerusform><numerusform>Premika oktav</numerusform><numerusform>Premiki oktav</numerusform><numerusform>Premikov oktav</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
         <source>pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pedal</numerusform><numerusform>pedala</numerusform><numerusform>pedali</numerusform><numerusform>pedalov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
         <source>Pedal(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pedal</numerusform><numerusform>Pedala</numerusform><numerusform>Pedali</numerusform><numerusform>Pedalov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="503"/>
         <source>trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>trilček</numerusform><numerusform>trilčka</numerusform><numerusform>trilčki</numerusform><numerusform>trilčkov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="504"/>
         <source>Trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Trilček</numerusform><numerusform>Trilčka</numerusform><numerusform>Trilčki</numerusform><numerusform>Trilčkov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="506"/>
         <source>let ring</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pusti zveneti</numerusform><numerusform>pusti zveneti</numerusform><numerusform>pusti zveneti</numerusform><numerusform>pusti zveneti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="507"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1767"/>
         <source>Let ring</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pusti zveneti</numerusform><numerusform>Pusti zveneti</numerusform><numerusform>Pusti zveneti</numerusform><numerusform>Pusti zveneti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
         <source>gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Postopna sprememba hitrosti</numerusform><numerusform>Postopni spremembi hitrosti</numerusform><numerusform>Postopne spremembe hitrosti</numerusform><numerusform>Postopnih sprememb hitrosti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
         <source>Gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Postopna sprememba hitrosti</numerusform><numerusform>Postopni spremembi hitrosti</numerusform><numerusform>Postopne spremembe hitrosti</numerusform><numerusform>Postopnih sprememb hitrosti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
         <source>vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tresoče (vibrato)</numerusform><numerusform>tresoče (vibrata)</numerusform><numerusform>tresoče (vibrati)</numerusform><numerusform>tresoče (vibratov)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="513"/>
         <source>Vibrato(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tresoče (vibrato)</numerusform><numerusform>Tresoče (vibrata)</numerusform><numerusform>Tresoče (vibrati)</numerusform><numerusform>Tresoče (vibratov)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="515"/>
         <source>palm mute(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>dušenje z dlanjo</numerusform><numerusform>dušenji z dlanjo</numerusform><numerusform>dušenja z dlanjo</numerusform><numerusform>dušenj z dlanjo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="516"/>
         <source>Palm mute(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Dušenje z dlanjo</numerusform><numerusform>Dušenji z dlanjo</numerusform><numerusform>Dušenja z dlanjo</numerusform><numerusform>Dušenj z dlanjo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="518"/>
         <source>whammy bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tremolo ročka</numerusform><numerusform>tremolo ročki</numerusform><numerusform>tremolo ročke</numerusform><numerusform>tremolo ročk</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="519"/>
         <source>Whammy bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tremolo ročka</numerusform><numerusform>Tremolo ročki</numerusform><numerusform>Tremolo ročke</numerusform><numerusform>Tremolo ročk</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="521"/>
         <source>rasgueado(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>brenkanje (rasgueado)</numerusform><numerusform>brenkanji (rasgueado)</numerusform><numerusform>brenkanja (rasgueado)</numerusform><numerusform>brenkanj (rasgueado)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="522"/>
         <source>Rasgueado(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Brenkanje (rasgueado)</numerusform><numerusform>Brenkanji (rasgueado)</numerusform><numerusform>Brenkanja (rasgueado)</numerusform><numerusform>Brenkanj (rasgueado)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="524"/>
         <source>harmonic mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>oznaka za flažolet</numerusform><numerusform>oznaki za flažolet</numerusform><numerusform>oznake za flažolet</numerusform><numerusform>oznak za flažolet</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="525"/>
         <source>Harmonic mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Oznaka za flažolet</numerusform><numerusform>Oznaki za flažolet</numerusform><numerusform>Oznake za flažolet</numerusform><numerusform>Oznak za flažolet</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
         <source>pick scrape out(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>drsenje trzalice</numerusform><numerusform>drsenji trzalice</numerusform><numerusform>drsenja trzalice</numerusform><numerusform>drsenj trzalice</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
         <source>Pick scrape out(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Drsenje trzalice</numerusform><numerusform>Drsenji trzalice</numerusform><numerusform>Drsenja trzalice</numerusform><numerusform>Drsenj trzalice</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
         <source>text line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>črta z napisom</numerusform><numerusform>črti z napisom</numerusform><numerusform>črte z napisom</numerusform><numerusform>črt z napisom</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
         <source>Text line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Črta z napisom</numerusform><numerusform>Črti z napisom</numerusform><numerusform>Črte z napisom</numerusform><numerusform>Črt z napisom</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
         <source>text line base(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>izhodišče črte z napisom</numerusform><numerusform>izhodišči črt z napisom</numerusform><numerusform>izhodišča črt z napisom</numerusform><numerusform>izhodišč črt z napisom</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="534"/>
         <source>Text line base(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Izhodišče črt z napisom</numerusform><numerusform>Izhodišči črt z napisom</numerusform><numerusform>Izhodišča črt z napisom</numerusform><numerusform>Izhodišč črt z napisom</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
         <source>note-anchored line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>na note sidrana črta</numerusform><numerusform>na note sidrani črti</numerusform><numerusform>na note sidrane črte</numerusform><numerusform>na note sidranih črt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="537"/>
         <source>Note-anchored line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Na note sidrana črta</numerusform><numerusform>Na note sidrani črti</numerusform><numerusform>Na note sidrane črte</numerusform><numerusform>Na note sidranih črt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="539"/>
         <source>extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>podaljševalna črta</numerusform><numerusform>podaljševalni črti</numerusform><numerusform>podaljševalne črt</numerusform><numerusform>podaljševalnih črt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="540"/>
         <source>Extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Podaljševalna črta</numerusform><numerusform>Podaljševalni črti</numerusform><numerusform>Podaljševalne črte</numerusform><numerusform>Podaljševalnih črt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
         <source>partial extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>delna podaljševalna črta</numerusform><numerusform>delni podaljševalni črti</numerusform><numerusform>delne podaljševalne črte</numerusform><numerusform>delnih podaljševalnih črt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="543"/>
         <source>Partial extension line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Delna podaljševalna črta</numerusform><numerusform>Delni podaljševalni črti</numerusform><numerusform>Delne podaljševalne črte</numerusform><numerusform>Delnih podaljševalnih črt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
@@ -12784,174 +12784,174 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="551"/>
         <source>segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek</numerusform><numerusform>odseka</numerusform><numerusform>odseki</numerusform><numerusform>odsekov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="552"/>
         <source>Segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek</numerusform><numerusform>Odseka</numerusform><numerusform>Odseki</numerusform><numerusform>Odsekov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
         <source>system(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>vrstica</numerusform><numerusform>vrstici</numerusform><numerusform>vrstice</numerusform><numerusform>vrstic</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="555"/>
         <source>System(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Vrstica</numerusform><numerusform>Vrstici</numerusform><numerusform>Vrstice</numerusform><numerusform>Vrstic</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="557"/>
         <source>chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>sozvok</numerusform><numerusform>sozvoka</numerusform><numerusform>sozvoki</numerusform><numerusform>sozvokov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="558"/>
         <source>Chord(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Sozvok</numerusform><numerusform>Sozvoka</numerusform><numerusform>Sozvoki</numerusform><numerusform>Sozvokov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="560"/>
         <source>slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>lok</numerusform><numerusform>loka</numerusform><numerusform>loki</numerusform><numerusform>lokov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="561"/>
         <source>Slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Lok</numerusform><numerusform>Loka</numerusform><numerusform>Loki</numerusform><numerusform>Lokov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="563"/>
         <source>horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>vrstični okvir</numerusform><numerusform>vrstična okvirja</numerusform><numerusform>vrstični okvirji</numerusform><numerusform>vrstičnih okvirjev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="564"/>
         <source>Horizontal frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Vrstični okvir</numerusform><numerusform>Vrstična okvirja</numerusform><numerusform>Vrstični okvirji</numerusform><numerusform>Vrstičnih okvirjev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="566"/>
         <source>vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>medvrstični okvir</numerusform><numerusform>medvrstična okvirja</numerusform><numerusform>medvrstični okvirji</numerusform><numerusform>medvrstičnih okvirjev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="567"/>
         <source>Vertical frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Medvrstični okvir</numerusform><numerusform>Medvrstična okvirja</numerusform><numerusform>Medvrstični okvirji</numerusform><numerusform>Medvrstičnih okvirjev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
         <source>text frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>napisni okvir</numerusform><numerusform>napisna okvirja</numerusform><numerusform>napisni okvirji</numerusform><numerusform>napisnih okvirjev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Text frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Napisni okvir</numerusform><numerusform>Napisna okvirja</numerusform><numerusform>Napisni okvirji</numerusform><numerusform>Napisnih okvirjev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="572"/>
         <source>fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>okvir prijemnega obrazca</numerusform><numerusform>okvirja prijemnih obrazcev</numerusform><numerusform>okvirji prijemnih obrazcev</numerusform><numerusform>okvirjev prijemnih obrazcev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="573"/>
         <source>Fretboard diagram frame(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Okvir prijemnega obrazca</numerusform><numerusform>Okvirja prijemnih obrazcev</numerusform><numerusform>Okvirji prijemnih obrazcev</numerusform><numerusform>Okvirjev prijemnih obrazcev</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>bagpipe embellishment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>okrasek dud</numerusform><numerusform>okraska dud</numerusform><numerusform>okraski dud</numerusform><numerusform>okraskov dud</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
         <source>Bagpipe embellishment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Okrasek dud</numerusform><numerusform>Okraska dud</numerusform><numerusform>Okraski dud</numerusform><numerusform>Okraskov dud</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="581"/>
         <source>sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>palični red</numerusform><numerusform>palična reda</numerusform><numerusform>palični redi</numerusform><numerusform>paličnih redov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="582"/>
         <source>Sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Palični red</numerusform><numerusform>Palična reda</numerusform><numerusform>Palični redi</numerusform><numerusform>Paličnih redov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="587"/>
         <source>guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>kitarski zateg strune</numerusform><numerusform>kitarska zatega strune</numerusform><numerusform>kitarski zategi strune</numerusform><numerusform>kitarskih zategov strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="588"/>
         <source>Guitar bend(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Kitarski zateg strune</numerusform><numerusform>Kitarska zatega strune</numerusform><numerusform>Kitarski zategi strune</numerusform><numerusform>Kitarskih zategov strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
         <source>guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek zategovanja strune</numerusform><numerusform>odseka zategovanja strune</numerusform><numerusform>odseki zategovanja strune</numerusform><numerusform>odsekov zategovanja strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="591"/>
         <source>Guitar bend segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek zategovanja strune</numerusform><numerusform>Odseka zategovanja strune</numerusform><numerusform>Odseki zategovanja strune</numerusform><numerusform>Odsekov zategovanja strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>guitar bend hold(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>držanje zatega strune</numerusform><numerusform>držanji zatega strune</numerusform><numerusform>držanja zatega strune</numerusform><numerusform>držanj zatega strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>Guitar bend hold(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Držanje zatega strune</numerusform><numerusform>Držanji zatega strune</numerusform><numerusform>Držanja zatega strune</numerusform><numerusform>Držanj zatega strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
         <source>guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>odsek držanja zatega strune</numerusform><numerusform>odseka držanja zatega strune</numerusform><numerusform>odseki držanja zatega strune</numerusform><numerusform>odsekov držanja zatega strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
         <source>Guitar bend hold segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Odsek držanja zatega strune</numerusform><numerusform>Odseka držanja zatega strune</numerusform><numerusform>Odseki držanja zatega strune</numerusform><numerusform>Odsekov držanja zatega strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <source>guitar bend text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>napis zatega strune</numerusform><numerusform>napisa zatega strune</numerusform><numerusform>napisi zatega strune</numerusform><numerusform>napisov zatega strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <source>Guitar bend text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Napis zatega strune</numerusform><numerusform>Napisa zatega strune</numerusform><numerusform>Napisi zatega strune</numerusform><numerusform>Napisov zatega strune</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
         <source>tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tremolo</numerusform><numerusform>tremola</numerusform><numerusform>tremoli</numerusform><numerusform>tremolov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tremolo</numerusform><numerusform>Tremola</numerusform><numerusform>Tremoli</numerusform><numerusform>Tremolov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>
         <source>time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>dobno sidro</numerusform><numerusform>dobni sidri</numerusform><numerusform>dobna sidra</numerusform><numerusform>dobnih sider</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="609"/>
         <source>Time tick anchor(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Dobno sidro</numerusform><numerusform>Dobni sidri</numerusform><numerusform>Dobna sidra</numerusform><numerusform>Dobnih sider</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
@@ -12986,12 +12986,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="620"/>
         <source>tapping</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tapkanje</numerusform><numerusform>tapkanji</numerusform><numerusform>tapkanja</numerusform><numerusform>tapkanj</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="621"/>
         <source>Tapping</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tapkanje</numerusform><numerusform>Tapkanji</numerusform><numerusform>Tapkanja</numerusform><numerusform>Tapkanj</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="623"/>
@@ -13016,12 +13016,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="629"/>
         <source>tapping text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>napis tapkanja</numerusform><numerusform>napisa tapkanja</numerusform><numerusform>napisi tapkanja</numerusform><numerusform>napisov tapkanja</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="630"/>
         <source>Tapping text(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Napis tapkanja</numerusform><numerusform>Napisa tapkanja</numerusform><numerusform>Napisi tapkanja</numerusform><numerusform>Napisov tapkanja</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="950"/>
@@ -15546,7 +15546,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="843"/>
         <source>Crescendo line</source>
-        <translation>Vilice naraščanja</translation>
+        <translation>Črta naraščanja</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="845"/>
@@ -17854,7 +17854,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="450"/>
         <source>guitar dive tab pos</source>
-        <translation type="unfinished"/>
+        <translation>položaj kitarskega spusta v tablaturi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="451"/>
@@ -17870,7 +17870,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="453"/>
         <source>guitar dive is slack</source>
-        <translation type="unfinished"/>
+        <translation>Strunski spust popuščen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
@@ -18220,17 +18220,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3216"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>Víšaj za 25 malih diesis, (25S, ~5:13S, ~37S, 5C plus 5C), víšaj za 2° [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3224"/>
         <source>35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up</source>
-        <translation type="unfinished"/>
+        <translation>Víšaj za 35 srednjih diesis, (35M, ~13M, ~125M, 5C plus 7C), víšaj za 2/9 tone</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3254"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation type="unfinished"/>
+        <translation>Višaj za 5:7-sko kleizmo, (5:7k, ~11:13k, 7C minus 5C)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3257"/>
@@ -20712,6 +20712,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="107"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="261"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="212"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="56"/>
         <source>OK</source>
         <translation>V redu</translation>
@@ -20787,7 +20788,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/ErrorDetailsView.qml" line="129"/>
         <source>Copy</source>
-        <translation>Kopiraj</translation>
+        <translation>Pomni</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/ErrorDetailsView.qml" line="173"/>
@@ -21222,9 +21223,9 @@ Fret %1 on strings %2</source>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="215"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="129"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TitleListView.qml" line="129"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="293"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="202"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="268"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="312"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="203"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="272"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/filteredflyoutmodel.cpp" line="130"/>
         <source>No results found</source>
         <translation>Nobenega zadetka</translation>
@@ -21272,6 +21273,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="165"/>
         <source>Don’t show again</source>
         <translation>Ne prikaži več</translation>
     </message>
@@ -21478,17 +21480,17 @@ Fret %1 on strings %2</source>
         <translation>Prikaži več …</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="255"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="263"/>
         <source>Move up</source>
         <translation>Premakni višje</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="269"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="277"/>
         <source>Move down</source>
         <translation>Premakni nižje</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="284"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="292"/>
         <source>Select more</source>
         <translation>Izberi več</translation>
     </message>
@@ -21502,9 +21504,20 @@ Fret %1 on strings %2</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="214"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="223"/>
         <source>Proceed</source>
         <translation>Nadaljuj</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="407"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="434"/>
+        <source>Dismiss</source>
+        <translation>Opusti</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="437"/>
+        <source>Try again</source>
+        <translation>Poskusi ponovno</translation>
     </message>
 </context>
 <context>
@@ -24252,32 +24265,32 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="52"/>
         <source>Gap to staff/frames</source>
-        <translation>Odmik črtovje/okvirji</translation>
+        <translation>Odmik od črtovja/okvirja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
         <source>Gap to staff/frames above</source>
-        <translation>Odmik črtovje/okvirji zgoraj</translation>
+        <translation>Odmik od črtovja/okvirja zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
         <source>Gap to staff/frames below</source>
-        <translation>Odmik črtovje/okvirji spodaj</translation>
+        <translation>Odmik od črtovja/okvirja spodaj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
         <source>Clearance for notation</source>
-        <translation>Prostor za note</translation>
+        <translation>Odmiki od notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
         <source>Clearance for notation above</source>
-        <translation>Prostor za note zgoraj</translation>
+        <translation>Odmiki od notnega zapisa zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
         <source>Clearance for notation below</source>
-        <translation>Prostor za note spodaj</translation>
+        <translation>Odmiki od notnega zapisa spodaj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -25309,7 +25322,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="66"/>
         <source>Dive</source>
-        <translation>Spust strune</translation>
+        <translation>Strunski spusti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="67"/>
@@ -28268,7 +28281,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="183"/>
         <source>Can’t explode or implode</source>
-        <translation>Ni mogoče razstreliti ali strniti</translation>
+        <translation>Ni mogoče razbiti ali strniti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="184"/>
@@ -28709,7 +28722,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/partlistmodel.cpp" line="286"/>
         <source>(copy)</source>
-        <translation>(kopija)</translation>
+        <translation>(dvojnik)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="79"/>
@@ -31203,7 +31216,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1286"/>
         <source>Text line</source>
-        <translation>Oklepaj z napisom</translation>
+        <translation>Črta z napisom</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1306"/>
@@ -34833,7 +34846,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="71"/>
         <location filename="../../src/project/internal/notationproject.cpp" line="88"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="200"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="199"/>
         <source>Untitled score</source>
         <translation>Nenaslovljeni notni zapis</translation>
     </message>
@@ -34890,7 +34903,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="105"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/recentscoresmodel.cpp" line="68"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/recentscoresmodel.cpp" line="79"/>
         <source>New score</source>
         <translation>Nov notni zapis</translation>
     </message>
@@ -35193,92 +35206,93 @@ je spodletelo: %2</translation>
         <translation>Pri branju datoteke je prišlo do napake.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1927"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1913"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="422"/>
         <source>All supported files</source>
         <translation>Vsi podprti zapisi</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1928"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1914"/>
         <source>MuseScore files</source>
         <translation>MuseScorove datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1915"/>
         <source>MusicXML files</source>
         <translation>MusicXML datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1930"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1916"/>
         <source>MIDI files</source>
         <translation>MIDI datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1931"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1917"/>
         <source>MNX files (experimental)</source>
         <translation>MNX datoteke (poskusno)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1932"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1918"/>
         <source>MuseData files</source>
         <translation>MuseData datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1933"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1919"/>
         <source>Capella files</source>
         <translation>Capella datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1934"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1920"/>
         <source>BB files (experimental)</source>
         <translation>BB datoteke (poskusno)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1935"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1921"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Overture / Score Writer datoteke (poskusno)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1936"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1922"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Bagpipe Music Writer datoteke (poskusno)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1937"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1923"/>
         <source>Guitar Pro files</source>
         <translation>Guitar Pro datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1938"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1924"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Power Tab Editor datoteke (poskusno)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1939"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1925"/>
         <source>MEI files</source>
         <translation>MEI datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1940"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1926"/>
         <source>TablEdit files (experimental)</source>
         <translation>TablEdit-ove datoteke (preizkusno)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1941"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1927"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>Nestisnjene MuseScorove mape (poskusno)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1942"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1928"/>
         <source>MuseScore developer files</source>
         <translation>Datoteke razvijalcev MuseScora</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1943"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
         <source>MuseScore backup files</source>
         <translation>Varnostne MuseScorove datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1945"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1931"/>
         <source>Open</source>
         <translation>Odprto</translation>
     </message>
@@ -35346,6 +35360,18 @@ je spodletelo: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/projectpropertiesmodel.cpp" line="70"/>
         <source>Audio.com URL</source>
         <translation>Audio.com URL</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="55"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="47"/>
+        <source>Processing %1</source>
+        <extracomment>%1 is the name of the score being converted</extracomment>
+        <translation>Obdelava zapisa %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="423"/>
+        <source>All</source>
+        <translation>Vse</translation>
     </message>
 </context>
 <context>
@@ -35455,12 +35481,12 @@ je spodletelo: %2</translation>
         <translation>Pretvori datoteko v notni zapis</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="86"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="114"/>
         <source>Convert audio to score (beta)</source>
         <translation>Pretvori zvok v notni zapis (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="87"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="115"/>
         <source>Convert a file to score</source>
         <translation>Pretvori datoteko v notni zapis</translation>
     </message>
@@ -35491,54 +35517,86 @@ je spodletelo: %2</translation>
         <translation>Uporabi PDF, slike ali MP3 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="190"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="398"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="177"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="765"/>
         <source>Log in or create a free account on MuseScore.com to convert a file.</source>
         <translation>Prijavite se ali ustvarite brezplačni račun na MuseScore.com, če želite pretvoriti datoteko.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="216"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="761"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="795"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="828"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="226"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1028"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1077"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1125"/>
         <source>Would you like to convert this file to a score?</source>
         <translation>Ali želite pretvoriti to datoteko v notni zapis?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="217"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="762"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="796"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="829"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="227"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1029"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1078"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1126"/>
         <source>This file needs to be converted online before it can be edited. Would you like to proceed?</source>
         <translation>Ta datoteko je treba pred urejanjem pretvoriti preko spleta. Ali želite nadaljevati?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="269"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="340"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="703"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="294"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="719"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="800"/>
         <source>Unable to connect to MuseScore.com</source>
         <translation>Ni se mogoče povezati z MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="270"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="341"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="704"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="295"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="720"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="801"/>
         <source>An internet connection is required to convert a file. Please check your internet connection or try again later.</source>
         <translation>Za pretvorbo je potrebna spletna povezava. Preverite, da ste povezani, in poskusite ponovno.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="278"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="512"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="523"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="302"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="497"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1000"/>
+        <source>Something went wrong</source>
+        <translation>Nekaj se je zalomilo</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="303"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="498"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1001"/>
+        <source>Check your internet connection and try again.</source>
+        <translation>Preverite spletno povezavo in poskusite ponovno.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="310"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="528"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="539"/>
         <source>The maximum file size is %1. Reduce the size of your file and try again.</source>
         <translation>Največja dovoljena velikost je %1. Zmanjšate velikost datoteke in poskusite ponovno.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="280"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="515"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="526"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="312"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="531"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="542"/>
         <source>This file is too large</source>
         <translation>Ta datoteka je prevelika</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="329"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="505"/>
+        <source>Make sure you’re importing a suitable PDF, image or MP3 file.</source>
+        <translation>Preverite, da uvažate primerno PDF, slikovno ali MP3 datoteko.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="368"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="561"/>
+        <source>You can convert up to %n audio file(s) at a time. Remove some files and try again.</source>
+        <translation><numerusform>Naenkrat je mogoče pretvoriti %1 zvočno datoteko. Odstranite višek in poskusite ponovno.</numerusform><numerusform>Naenkrat je mogoče pretvoriti do %1 zvočni datoteki. Odstranite višek in poskusite ponovno.</numerusform><numerusform>Naenkrat je mogoče pretvoriti do %1 zvočne datoteke. Odstranite višek in poskusite ponovno.</numerusform><numerusform>Naenkrat je mogoče pretvoriti do %1 zvočnih datotek. Odstranite višek in poskusite ponovno.</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="376"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="572"/>
+        <source>You can convert up to %n image(s) at a time. Remove some images and try again.</source>
+        <translation><numerusform>Naenkrat je mogoče pretvoriti %1 sliko. Odstranite višek in poskusite ponovno.</numerusform><numerusform>Naenkrat je mogoče pretvoriti do %1 sliki. Odstranite višek in poskusite ponovno.</numerusform><numerusform>Naenkrat je mogoče pretvoriti do %1 slike. Odstranite višek in poskusite ponovno.</numerusform><numerusform>Naenkrat je mogoče pretvoriti do %1 slik. Odstranite višek in poskusite ponovno.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="218"/>
@@ -35547,197 +35605,213 @@ je spodletelo: %2</translation>
         <translation>Smernice za nalaganje</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="287"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="534"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="319"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="550"/>
         <source>The maximum combined file size for all images is %1. Choose a smaller file or remove some images to continue.</source>
         <translation>Največja skupna velikost vseh slik je %1. Za nadaljevanje izberite manjšo datoteko ali odstranite nekaj slik.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="290"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="538"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="322"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="554"/>
         <source>Maximum file size exceeded</source>
         <translation>Največja dovoljena datoteka je presežena</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="296"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="488"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="732"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="328"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="504"/>
         <source>This file type is not compatible</source>
         <translation>Ta vrsta datoteke ni združljiva</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="297"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="489"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="733"/>
         <source>Make sure you’ve selected a PDF, image or MP3 file.</source>
         <translation>Preverite, da ste izbrali PDF, sliko ali MP3 datoteko.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="308"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="592"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="619"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="340"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="608"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="635"/>
         <source>Make sure you’re using a valid link from YouTube or Audio.com.</source>
         <translation>Prepričajte se, da je povezava na YouTube ali Audio.com veljavna.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="310"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="646"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="342"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="662"/>
         <source>Make sure you’re using a valid link from YouTube.</source>
         <translation>Prepričajte se, da je povezava na YouTube veljavna.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="312"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="673"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="344"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="689"/>
         <source>Make sure you’re using a valid link from Audio.com.</source>
         <translation>Prepričajte se, da je povezava na Audio.com veljavna.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="315"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="591"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="618"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="645"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="672"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="347"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="607"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="634"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="661"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="688"/>
         <source>Please use a compatible URL</source>
         <translation>Uporabite združljiv URL.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="321"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="495"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="353"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="511"/>
         <source>Please select files of the same type</source>
         <translation>Izberite datoteke enake vrste</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="322"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="496"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="354"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="512"/>
         <source>Per conversion, you may select either one MP3 file, one PDF file, or multiple image files.</source>
         <translation>Za pretvarjanje lahko na enkrat izberete ali eno datotekeo MP3 ali eno datoteko PDF oz. več slik.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="329"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="503"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="361"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="519"/>
         <source>Please select a single PDF file</source>
         <translation>Izberite le eno datoteko PDF</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="330"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="504"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="362"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="520"/>
         <source>Only one PDF file can be converted at a time.</source>
         <translation>Na enkrat je mogoče pretvoriti le eno datoteko PDF.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="336"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="545"/>
         <source>You can convert up to %1 audio files at a time. Remove some files and try again.</source>
         <translation>Naenkrat je mogoče pretvoriti do %1 zvočnih datotek. Odstranite presežno količino in poskusite ponovno.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="338"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="549"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="370"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="565"/>
         <source>Too many files selected</source>
         <translation>Izbranih preveč datotek</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="344"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="556"/>
         <source>You can convert up to %1 images at a time. Remove some images and try again.</source>
         <translation>Naenkrat je mogoče pretvoriti do %1 slik. Odstranite presežno količino in poskusite ponovno.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="346"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="559"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="378"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="575"/>
         <source>Too many images selected</source>
         <translation>Izbranih preveč slik</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="355"/>
         <source>Upload more</source>
         <translation>Naloži več</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="356"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="39"/>
+        <source>Home &gt; Scores</source>
+        <translation>Domov &gt; Notni zapisi</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="44"/>
+        <source>We’ll notify you once the score is ready to open. You can check the status of the score in %1.</source>
+        <translation>Obvestili vas bomo, ko bo notni zapis pripravljen. Kako daleč je obdelava notnega zapisa lahko preverite na %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="194"/>
+        <source>Convert more</source>
+        <translation>Pretvori več</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="203"/>
         <source>Go to scores</source>
         <translation>Pojdi v notni zapis</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="359"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="865"/>
         <source>We’ll notify you once the score is ready to open. You can check the status of the score in Home &gt; Scores.</source>
         <translation>Obvestili vas bomo, ko bo notni zapis pripravljen. Kako daleč je obdelava notnega zapisa lahko preverite na Domov&gt;Notni zapisi.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="363"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="864"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="144"/>
         <source>Your score is being processed</source>
         <translation>Obdelava vašega notnega zapisa še poteka</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="392"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="404"/>
         <source>Open score</source>
         <translation>Odpri notni zapis</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="393"/>
         <source>Dismiss</source>
         <translation>Opusti</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="396"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="195"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="411"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="234"/>
         <source>‘%1’ has finished processing and is ready to open.</source>
         <translation>Obdelava notnega zapisa &quot;%1&quot; je končana in ga lahko odprete.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="400"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="194"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="415"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="233"/>
         <source>Your score is ready!</source>
         <translation>Vaš notni zapis je pripravljen!</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="414"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="440"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="277"/>
+        <source>We weren’t able to convert ‘%1’. Please try again with a better quality file.</source>
+        <translation>Datoteke &quot;%1&quot; ni bilo mogoče pretvoriti. Poskusite s kakovostnejšo datoteko.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="444"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="276"/>
+        <source>Error processing score</source>
+        <translation>Napaka pri obdelavi notnega zapisa</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="459"/>
         <source>Good</source>
+        <extracomment>Button to rate the quality of a converted score as good</extracomment>
         <translation>Dobro</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="415"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="461"/>
         <source>Bad</source>
+        <extracomment>Button to rate the quality of a converted score as bad</extracomment>
         <translation>Slabo</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="419"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="261"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="293"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="465"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="385"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="417"/>
         <source>How does your score look?</source>
         <translation>Kako je vaš notni zapis videti?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="420"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="262"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenariotest.cpp" line="294"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="466"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="386"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="418"/>
         <source>We’re always improving our score conversion accuracy. Let us know how we did with this one.</source>
         <translation>Neprestano izboljšujemo natančnost pretvorbe notnega zapisa. Sporočite nam, kako smo bili tokrat uspešni.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="59"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="60"/>
         <source>%1 max</source>
+        <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max&quot;; shown as a short label/badge</extracomment>
         <translation>najv. %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="65"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="67"/>
         <source>%1 max combined</source>
+        <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max combined&quot;; shown as a short label/badge</extracomment>
         <translation>najv. %1 združenih</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="224"/>
         <source>%1 pages max</source>
         <translation>najv. %1 strani</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="228"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="231"/>
         <source>PDF</source>
         <translation>Zapis PDF</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="255"/>
         <source>Max %1 images</source>
         <translation>Najv. %1 slik</translation>
     </message>
@@ -35751,18 +35825,20 @@ je spodletelo: %2</translation>
         <translation>Slike bodo združene v enoten notni zapis v tukaj prikazanem zaporedju</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="268"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="269"/>
         <source>%1/%2 used</source>
+        <extracomment>%1 and %2 are pre-formatted file sizes including units, e.g. &quot;15 MB/20 MB used&quot;</extracomment>
         <translation>uporabljenih %1/%2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="259"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="258"/>
         <source>Images</source>
         <translation>Slike</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="267"/>
         <source>%1 format</source>
+        <extracomment>%1 is one or more file format names, e.g. &quot;MP3 format&quot; or &quot;MP3, WAV format&quot;</extracomment>
         <translation>zapis %1</translation>
     </message>
     <message>
@@ -35774,79 +35850,105 @@ je spodletelo: %2</translation>
         <translation>%1 datotek naenkrat naloženih</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="282"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="280"/>
         <source>Audio</source>
         <translation>Zvok</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="110"/>
         <source>Paste a link from %1 (beta)</source>
+        <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>Prilepi povezavo na %1 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="107"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="105"/>
         <source>Paste a link from %1 or %2 (beta)</source>
+        <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>Prilepi povezavo na %1 ali %2 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="227"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="275"/>
         <source>1 file per conversion</source>
         <translation>1 datotekav v eni pretvorbi</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="277"/>
         <source>%1 files per conversion</source>
         <translation>%1 datotek v eni pretvorbi</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="342"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="350"/>
         <source>Or paste a link from %1 or %2 (beta)</source>
+        <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>Ali prilepi povezavo na %1 ali %2 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="346"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="355"/>
         <source>Or paste a link from %1 (beta)</source>
+        <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>Ali prilepi povezavo na %1 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="406"/>
         <source>Supported files</source>
         <translation>Podprti zapisi</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="407"/>
         <source>All files</source>
         <translation>Vse datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="414"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="417"/>
         <source>Choose file</source>
         <translation>Izberite datoteko</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="496"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="532"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="554"/>
         <source>No, stay here</source>
         <translation>Ne, ostani</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="497"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="535"/>
+        <source>Yes, cancel</source>
+        <translation>Da, prekliči</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="539"/>
+        <source>Are you sure you want to cancel?</source>
+        <translation>Ali si prepričan, da želiš zaključiti?</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="557"/>
         <source>Yes, go back</source>
         <translation>Da, pojdi nazaj</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="500"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="561"/>
         <source>Are you sure you want to go back?</source>
         <translation>Ali res želite iti nazaj?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="501"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="540"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="562"/>
         <source>Your current selection will be lost.</source>
         <translation>Izgubili boste trenutni izbor.</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="224"/>
+        <source>%n page(s) max.</source>
+        <extracomment>%n is the maximum number of pages; shown as a short label/badge, e.g. &quot;20 pages max&quot;</extracomment>
+        <translation><numerusform>najv. %n stran</numerusform><numerusform>najv. %n strani</numerusform><numerusform>najv. %n strani</numerusform><numerusform>najv. %n strani</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="228"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="275"/>
+        <source>%n file(s) per conversion</source>
+        <translation><numerusform>%n datoteka v eni pretvorbi</numerusform><numerusform>%n datoteki v eni pretvorbi</numerusform><numerusform>%n datoteke v eni pretvorbi</numerusform><numerusform>%n datotek v eni pretvorbi</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="254"/>
+        <source>Max. %n image(s)</source>
+        <translation><numerusform>Najv. %n slika</numerusform><numerusform>Najv. %n sliki</numerusform><numerusform>Najv. %n slike</numerusform><numerusform>Najv. %n slik</numerusform></translation>
+    </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="485"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="521"/>
         <source>“%1” cannot be used as a file name. Please choose a different name.</source>
         <translation>“%1” ne morete uporabiti za poimenovanje datoteke. Izberite drugo ime.</translation>
     </message>
@@ -35863,17 +35965,22 @@ je spodletelo: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="131"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="281"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="279"/>
         <source>Recommended for solo arrangements only</source>
         <translation>Priporočljivo le za solistične priredbe</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="83"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="84"/>
         <source>Selected files</source>
         <translation>Izbrane datoteke</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="225"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="233"/>
+        <source>%1/%n file(s) max.</source>
+        <extracomment>%1 is the number of files currently selected, %2 is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
+        <translation>%1/najv. %n datotek</translation>
+    </message>
+    <message>
         <source>%1/%2 max files</source>
         <translation>%1/%2 največ datotek</translation>
     </message>
@@ -37012,7 +37119,7 @@ je spodletelo: %2</translation>
         <source>copy</source>
         <comment>a copy of a file</comment>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - copy&quot;</extracomment>
-        <translation>kopija</translation>
+        <translation>dvojnik</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="101"/>
@@ -37516,6 +37623,8 @@ je spodletelo: %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="131"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="450"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="453"/>
         <source>Choose file</source>
         <translation>Izberite datoteko</translation>
     </message>
@@ -38177,7 +38286,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="2212"/>
         <source>Copy range</source>
-        <translation>Kopiraj razpon</translation>
+        <translation>Pomni razpon</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="2326"/>

@@ -27,6 +27,11 @@ else()
     cmake_minimum_required(VERSION 3.28)
 endif()
 
+set(MUSE_FRAMEWORK_PATH "${CMAKE_CURRENT_LIST_DIR}/muse" CACHE PATH "Path to muse framework")
+set(MUSE_FRAMEWORK_SRC_PATH ${MUSE_FRAMEWORK_PATH}/framework)
+
+include(${MUSE_FRAMEWORK_PATH}/buildscripts/cmake/SetupMacOSDeploymentTarget.cmake)
+
 project(MuseScoreStudio LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -35,10 +40,6 @@ set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(MUSE_FRAMEWORK_PATH "${CMAKE_CURRENT_LIST_DIR}/muse" CACHE PATH "Path to muse framework")
-
-set(MUSE_FRAMEWORK_SRC_PATH ${MUSE_FRAMEWORK_PATH}/framework)
 
 set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}

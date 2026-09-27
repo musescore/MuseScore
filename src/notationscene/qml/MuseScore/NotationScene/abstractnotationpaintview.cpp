@@ -645,6 +645,10 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
 {
     TRACEFUNC;
 
+    if (m_readonly) {
+        return;
+    }
+
     QPointF _pos = pos;
     if (_pos.isNull()) {
         _pos = QPointF(width() / 2, height() / 2);
@@ -1483,12 +1487,23 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
     }
 }
 
+bool AbstractNotationPaintView::readonly() const
+{
+    return m_readonly;
+}
+
 void AbstractNotationPaintView::setReadonly(bool readonly)
 {
+    if (m_readonly == readonly) {
+        return;
+    }
+
     m_readonly = readonly;
     if (m_inputController) {
         m_inputController->setReadonly(m_readonly);
     }
+
+    emit readonlyChanged();
 }
 
 void AbstractNotationPaintView::clear()

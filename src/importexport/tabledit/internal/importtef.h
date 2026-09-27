@@ -29,6 +29,7 @@
 #include "engraving/engravingerrors.h"
 #include "io/iodevice.h"
 
+#include "note.h"
 #include "voiceallocator.h"
 
 namespace mu::iex::tabledit {
@@ -49,13 +50,6 @@ static const uint8_t OFFSET_INTERNETLINK = 0x84;
 static const uint8_t OFFSET_COPYRIGHT = 0x8C;
 static const uint8_t OFFSET_OLDNUM = 0xCA;
 
-// note attribute voice
-enum class Voice : uint8_t {
-    DEFAULT = 0,    // default: none set
-    UPPER = 2,      // upper set
-    LOWER = 3       // lower set
-};
-
 struct TefMeasure {
     int flag { 0 };
     bool isPickup { false };
@@ -63,26 +57,6 @@ struct TefMeasure {
     int size { 0 };
     int numerator { 0 };
     int denominator { 0 };
-};
-
-struct TefNote {
-    int position { 0 };
-    int string { 0 };
-    int fret { 0 };
-    bool tie { false };
-    bool rest { false };    // this is a bit of a hack
-    int duration { 0 };     // this is the duration as encoded in the .tef file
-    int length { 0 };
-    int dots { 0 };
-    bool triplet { false };
-    Voice voice { 0 };
-    bool hasGrace { false };
-    int graceEffect{ -1 };  // invalid
-    int graceFret { -1 };   // invalid
-    int fingeringLH { 0 };
-    int fingeringRH { 0 };
-    int simpleEffect { 0 };
-    int complexEffect { 0 };
 };
 
 struct TefReadingListItem {

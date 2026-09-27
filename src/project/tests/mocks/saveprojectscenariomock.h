@@ -30,12 +30,12 @@ namespace mu::project {
 class SaveProjectScenarioMock : public ISaveProjectScenario
 {
 public:
-    MOCK_METHOD(muse::Ret, saveProject, (SaveMode saveMode, SaveLocationType saveLocationType, bool force), (override));
-    MOCK_METHOD(bool, saveProject, (const muse::io::path_t& path), (override));
-    MOCK_METHOD(bool, saveProjectLocally, (const muse::io::path_t& path, SaveMode saveMode, bool createBackup), (override));
-    MOCK_METHOD(muse::Ret, saveProjectAt, (const muse::rcommand::Params& params), (override));
-    MOCK_METHOD(muse::Ret, publish, (), (override));
-    MOCK_METHOD(muse::Ret, shareAudio, (), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProject, (SaveMode saveMode, SaveLocationType saveLocationType, bool force),
+                (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProject, (const muse::io::path_t& path), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, saveProjectAt, (const muse::rcommand::Params& params), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, publish, (), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, shareAudio, (), (override));
     MOCK_METHOD(bool, isBusy, (BusyStatus status), (const, override));
     MOCK_METHOD(muse::async::Notification, busyChanged, (), (const, override));
 };

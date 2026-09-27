@@ -35,6 +35,7 @@ public:
 
     MOCK_METHOD(void, prependRecentFile, (const RecentFile& file), (override));
     MOCK_METHOD(void, moveRecentFile, (const muse::io::path_t& before, const RecentFile& after), (override));
+    MOCK_METHOD(void, removeRecentFile, (const muse::io::path_t& path), (override));
     MOCK_METHOD(void, clearRecentFiles, (), (override));
 
     MOCK_METHOD(muse::async::Promise<QPixmap>, thumbnail, (const muse::io::path_t& filePath), (const, override));

@@ -22,8 +22,6 @@
 
 #pragma once
 
-#include "iprojectfilescontroller.h"
-
 #include <QObject>
 #include <QString>
 
@@ -31,7 +29,6 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -42,23 +39,26 @@
 #include "multiwindows/imultiwindowsprovider.h"
 #include "multiwindows/iprojectprovider.h"
 #include "print/iprintprovider.h"
+#include "icloseprojectscenario.h"
 #include "iopenprojectscenario.h"
 #include "isaveprojectscenario.h"
+#include "iconvertfiletoscorescenario.h"
 
 #include "async/asyncable.h"
 
 #include "irecentfilescontroller.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectCommandsController, public IProjectFilesController, public muse::mi::IProjectProvider,
-    public muse::Contextable, public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
+class ProjectActionsController : public IProjectCommandsController, public muse::mi::IProjectProvider, public muse::Contextable,
+    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
 {
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
-    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
     muse::ContextInject<ISaveProjectScenario> saveProjectScenario = { this };
+    muse::ContextInject<ICloseProjectScenario> closeProjectScenario = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
@@ -84,8 +84,6 @@ public:
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
-    bool closeOpenedProject(bool goToHome = true) override;
-
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
@@ -107,17 +105,15 @@ private:
     muse::Ret openPageIfNeed(muse::Uri pageUri);
 
     muse::Ret closeProject();
+    muse::Ret runAsync(muse::async::Promise<muse::Ret> flow);
 
-    muse::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
+    muse::async::Promise<muse::Ret> saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
+                                                bool force = false);
+    muse::async::Promise<muse::Ret> publish();
+    muse::async::Promise<muse::Ret> sharedAudio();
+    muse::async::Promise<muse::Ret> saveProjectAt(const muse::rcommand::Params& params);
 
-    muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
-    muse::Ret saveProject(const muse::io::path_t& path = muse::io::path_t());
-    muse::Ret publish();
-    muse::Ret sharedAudio();
-    muse::Ret saveProjectAt(const muse::rcommand::Params& params);
-
-    muse::Ret importPdf();
-    muse::Ret importAudioToScore();
+    muse::Ret convertFileToScore();
 
     muse::Ret clearRecentScores();
 

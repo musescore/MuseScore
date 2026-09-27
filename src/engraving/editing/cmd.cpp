@@ -105,26 +105,6 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//    For use with Score::scanElements.
-//    Reset positions and autoplacement for the given
-//    element.
-//---------------------------------------------------------
-
-static void resetElementPosition(EngravingItem* e)
-{
-    if (e->generated()) {
-        return;
-    }
-
-    e->undoResetProperty(Pid::AUTOPLACE);
-    e->undoResetProperty(Pid::OFFSET);
-    e->undoResetProperty(Pid::LEADING_SPACE);
-    if (e->isSpanner()) {
-        e->undoResetProperty(Pid::OFFSET2);
-    }
-}
-
-//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
@@ -1648,28 +1628,6 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             select(elementToSelect, SelectType::SINGLE, 0);
         }
     }
-}
-
-static void resetBeamOffSet(EngravingItem* e)
-{
-    // Reset completely cross staff beams from MU1&2
-    if (e->isBeam() && toBeam(e)->fullCross()) {
-        e->reset();
-    }
-}
-
-void Score::resetAutoplace()
-{
-    TRACEFUNC;
-
-    scanElements(resetElementPosition);
-}
-
-void Score::resetCrossBeams()
-{
-    TRACEFUNC;
-
-    scanElements(resetBeamOffSet);
 }
 
 //---------------------------------------------------------

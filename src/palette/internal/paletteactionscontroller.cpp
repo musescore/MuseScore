@@ -40,6 +40,13 @@ static const muse::UriQuery SPECIAL_CHARACTERS_URI("musescore://palette/specialc
 static const muse::UriQuery TIME_SIGNATURE_PROPERTIES_URI("musescore://palette/timesignatureproperties");
 static const muse::UriQuery CUSTOMIZE_KIT_URI("musescore://palette/customizekit");
 
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+
+bool PaletteActionsController::canReceiveAction(const ActionCode&) const
+{
+    return interactive()->currentUri().val != NOTATION_REVIEW_PAGE_URI;
+}
+
 void PaletteActionsController::init()
 {
     auto cd = commandDispatcher();

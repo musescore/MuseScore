@@ -212,3 +212,31 @@ TEST_F(Engraving_PageLocksTests, togglePageLock)
 
     delete score;
 }
+
+TEST_F(Engraving_PageLocksTests, removePageLockOnExpandMMRest)
+{
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
+    ASSERT_TRUE(score);
+    score->startCmd(TranslatableString::untranslatable("Enable MM rests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Unlock pages"), [&](auto& tx) {
+        EditPageLocks::undoRemoveAllLocks(tx, score);
+    });
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Lock compressed layout"), [&](auto& tx) {
+        EditPageLocks::toggleScoreLock(tx, score);
+    });
+    ASSERT_FALSE(score->pageLocks()->allLocks().empty());
+    const RangeLock* firstLock = score->pageLocks()->allLocks().front();
+    ASSERT_TRUE(firstLock->endMB()->isMeasure());
+    ASSERT_TRUE(toMeasure(firstLock->endMB())->isMMRest());
+    score->startCmd(TranslatableString::untranslatable("Expand MM rests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, false);
+    score->endCmd();
+    bool retained = false;
+    for (const RangeLock* lock : score->pageLocks()->allLocks()) {
+        retained = retained || lock == firstLock;
+    }
+    EXPECT_FALSE(retained);
+    delete score;
+}

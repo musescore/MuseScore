@@ -39,6 +39,7 @@ FocusScope {
 
     property alias name: notationView.objectName
     property alias publishMode: notationView.publishMode
+    property alias readOnly: notationView.readOnly
 
     property alias paintView: notationView
 
@@ -49,6 +50,7 @@ FocusScope {
     property alias defaultNavigationControl: fakeNavCtrl
 
     readonly property alias navigationSection: navSec
+    readonly property alias navigationOrderEnd: searchPopup.navigationOrderEnd
 
     NavigationSection {
         id: navSec

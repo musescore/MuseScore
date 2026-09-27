@@ -46,6 +46,18 @@ void PaletteCommandsState::init()
         updateCommandStates();
     });
 
+    configuration()->isSingleClickToOpenPalette().ch.onReceive(this, [this](bool) {
+        updateCommandStates({ PALETTE_TOGGLE_SINGLE_CLICK_TO_OPEN_COMMAND });
+    });
+
+    configuration()->isSinglePalette().ch.onReceive(this, [this](bool) {
+        updateCommandStates({ PALETTE_TOGGLE_SINGLE_PALETTE_COMMAND });
+    });
+
+    configuration()->isPaletteDragEnabled().ch.onReceive(this, [this](bool) {
+        updateCommandStates({ PALETTE_TOGGLE_DRAG_ENABLED_COMMAND });
+    });
+
     updateCommandStates();
 }
 
@@ -64,6 +76,7 @@ void PaletteCommandsState::updateCommandStates(const std::vector<Command>& comma
 
     for (const auto& command : commandList) {
         CommandState newState = commandState(command);
+        LOGDA() << "command: " << command << " newState: " << newState.enabled << " " << newState.checked;
         if (m_commandStates[command] != newState) {
             m_commandStates[command] = newState;
             m_commandStateChanged.send(command, newState);
@@ -96,9 +109,9 @@ async::Channel<Command, CommandState> PaletteCommandsState::commandStateChanged(
 
 bool PaletteCommandsState::isProjectOpened() const
 {
-    if (!globalContext()->currentProject()) {
-        return false;
+    if (globalContext()->currentProject()) {
+        return true;
     }
 
-    return true;
+    return false;
 }

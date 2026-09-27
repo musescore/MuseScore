@@ -46,6 +46,11 @@ void RecentScoresModel::load()
     });
 }
 
+void RecentScoresModel::removeRecentScore(const QString& scorePath)
+{
+    recentFilesController()->removeRecentFile(scorePath);
+}
+
 void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 {
     if (m_items == items) {
@@ -62,7 +67,7 @@ void RecentScoresModel::updateRecentScores()
     const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
 
     std::vector<QVariantMap> items;
-    items.reserve(recentScores.size());
+    items.reserve(recentScores.size() + 2);
 
     QVariantMap addItem;
     addItem[NAME_KEY] = muse::qtrc("project", "New score");

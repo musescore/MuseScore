@@ -5795,7 +5795,7 @@
         <source>Melodica</source>
         <comment>melodica trackName</comment>
         <extracomment>trackName for Melodica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>メロディカ</translation>
+        <translation>鍵盤ハーモニカ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2065"/>
@@ -5851,7 +5851,7 @@
         <source>Sheng</source>
         <comment>sheng trackName</comment>
         <extracomment>trackName for Sheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>笙</translation>
+        <translation>中国笙</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2083"/>
@@ -20830,7 +20830,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>
         <source>Melodicas</source>
-        <translation>メロディカ</translation>
+        <translation>鍵盤ハーモニカ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="126"/>

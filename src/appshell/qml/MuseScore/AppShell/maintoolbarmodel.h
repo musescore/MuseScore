@@ -30,16 +30,20 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "iglobalconfiguration.h"
+#include "project/iopenprojectscenario.h"
 
 namespace mu::appshell {
 class MainToolBarModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString currentUri READ currentUri WRITE setCurrentUri NOTIFY currentUriChanged)
+
     QML_ELEMENT
 
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::ContextInject<project::IOpenProjectScenario> openProjectScenario = { this };
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);
@@ -50,15 +54,24 @@ public:
 
     Q_INVOKABLE void load();
 
+    QString currentUri() const;
+    void setCurrentUri(const QString& uri);
+
+signals:
+    void currentUriChanged();
+
 private:
     enum Roles {
         TitleRole = Qt::UserRole + 1,
         UriRole,
-        IsTitleBoldRole
+        IsTitleBoldRole,
+        IsCheckedRole
     };
 
     void updateNotationPageItem();
+    void updateCheckedState();
 
     QList<QVariantMap> m_items;
+    QString m_currentUri;
 };
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,16 +22,18 @@
 
 #pragma once
 
-#include "modularity/imoduleinterface.h"
+#include <QString>
+
+#include "global/types/uri.h"
 
 namespace mu::project {
-class IProjectFilesController : MODULE_CONTEXT_INTERFACE
-{
-    INTERFACE_ID(IProjectFilesController)
+inline const muse::Uri NOTATION_PAGE_URI("musescore://notation");
+inline const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+inline const muse::Uri HOME_PAGE_URI("musescore://home");
+inline const muse::Uri NEW_SCORE_URI("musescore://project/newscore");
+inline const muse::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
+inline const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 
-public:
-    virtual ~IProjectFilesController() = default;
-
-    virtual bool closeOpenedProject(bool goToHome = true) = 0;
-};
+inline const QString MUSESCORE_URL_SCHEME("musescore");
+inline const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 }

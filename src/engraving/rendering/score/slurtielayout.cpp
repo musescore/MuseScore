@@ -406,7 +406,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     // Gonville and MuseJazz have really weirdly-shaped hooks compared to Leland and Bravura and Emmentaler,
     // so we need to adjust the slope of our hook-avoidance line. this will be unnecessary when hooks have
     // SMuFL anchors
-    bool bulkyHook = ctx.engravingFont()->family() == "Gonville" || ctx.engravingFont()->family() == "MuseJazz";
+    bool bulkyHook = ctx.engravingFont()->name() == "Gonville" || ctx.engravingFont()->name() == "MuseJazz";
     const double fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
 
     if (item->endCR() == 0) {

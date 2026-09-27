@@ -24,6 +24,10 @@
 
 #include "uicomponents/qml/Muse/UiComponents/toolbaritem.h"
 
+#include "notationcommands.h"
+#include "appshell/appshellcommands.h"
+
+using namespace muse;
 using namespace mu::notation;
 using namespace muse::uicomponents;
 using namespace muse::actions;
@@ -34,15 +38,17 @@ void NotationToolBarModel::load()
         return;
     }
 
-    muse::actions::ActionCodeList itemsCodes = {
-        "parts",
-        "toggle-mixer",
-        "toggle-automation"
+    AbstractToolBarModel::load();
+
+    std::vector<rcommand::Command> commands = {
+        OPEN_PARTS_COMMAND,
+        appshell::DOCK_TOGGLE_MIXER_COMMAND,
+        TOGGLE_AUTOMATION_COMMAND
     };
 
     ToolBarItemList items;
-    for (const ActionCode& code : itemsCodes) {
-        ToolBarItem* item = makeItem(code);
+    for (const rcommand::Command& command : commands) {
+        ToolBarItem* item = makeItem(command);
         if (!item) {
             continue;
         }
@@ -58,8 +64,6 @@ void NotationToolBarModel::load()
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         load();
     });
-
-    AbstractToolBarModel::load();
 
     m_loaded = true;
 }

@@ -37,7 +37,6 @@
 #include "../editing/editpagelocks.h"
 #include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
-#include "../editing/mscoreview.h"
 #include "../editing/navigation.h"
 #include "../editing/transaction/transaction.h"
 
@@ -1367,7 +1366,6 @@ RectF Measure::staffPageBoundingRect(staff_idx_t staffIdx) const
 
 bool Measure::acceptDrop(EditData& data) const
 {
-    MuseScoreView* viewer = data.view();
     const EngravingItem* e = data.dropElement;
 
     if (data.track == muse::nidx || !system()) {
@@ -1375,13 +1373,6 @@ bool Measure::acceptDrop(EditData& data) const
     }
 
     const staff_idx_t staffIdx = track2staff(data.track);
-    const SysStaff* sysStaff = system()->staff(staffIdx);
-    IF_ASSERT_FAILED(sysStaff) {
-        return false;
-    }
-
-    RectF staffRect = sysStaff->bbox().translated(system()->canvasPos());
-    staffRect.intersect(canvasBoundingRect());
 
     //! NOTE: Should match NotationInteraction::dragMeasureAnchorElement
     switch (e->type()) {
@@ -1403,9 +1394,6 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::MARKER:
     case ElementType::LAYOUT_BREAK:
         // Always drop to all staves
-        if (viewer) {
-            viewer->setDropRectangles({ canvasBoundingRect() });
-        }
         return true;
 
     case ElementType::VOLTA:
@@ -1413,13 +1401,6 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::KEYSIG:
     case ElementType::TIMESIG:
         // Drop to all staves or single staff depending on modifier
-        if (viewer) {
-            if (data.modifiers & ControlModifier) {
-                viewer->setDropRectangles({ staffRect });
-            } else {
-                viewer->setDropRectangles({ canvasBoundingRect() });
-            }
-        }
         return true;
 
     case ElementType::BRACKET:
@@ -1432,18 +1413,10 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::CLEF:
     case ElementType::STAFFTYPE_CHANGE:
         // Always drop to single staff
-        if (viewer) {
-            viewer->setDropRectangles({ staffRect });
-        }
         return true;
 
-    case ElementType::STRING_TUNINGS: {
-        const bool canAdd = canAddStringTunings(staffIdx);
-        if (viewer && canAdd) {
-            viewer->setDropRectangles({ staffRect });
-        }
-        return canAdd;
-    }
+    case ElementType::STRING_TUNINGS:
+        return canAddStringTunings(staffIdx);
 
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
@@ -1458,60 +1431,19 @@ bool Measure::acceptDrop(EditData& data) const
                     return false;
                 }
             }
-            if (viewer) {
-                viewer->setDropRectangles({ canvasBoundingRect() });
-            }
             return true;
         }
         case ActionIconType::STAFF_TYPE_CHANGE:
-            if (!canAddStaffTypeChange(staffIdx)) {
-                return false;
-            }
-            if (viewer) {
-                viewer->setDropRectangles({ staffRect });
-            }
-            return true;
+            return canAddStaffTypeChange(staffIdx);
         case ActionIconType::SYSTEM_LOCK:
         {
             LayoutMode layoutMode = score()->layoutMode();
-            if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
-                if (viewer) {
-                    const MeasureBase* first = system() ? system()->first() : nullptr;
-                    const PointF topLeft = first ? first->canvasBoundingRect().topLeft() : PointF(0.0, 0.0);
-                    viewer->setDropRectangles({ RectF(topLeft, canvasBoundingRect().bottomRight()) });
-                }
-                return true;
-            }
-            return false;
+            return layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM;
         }
         case ActionIconType::PAGE_LOCK:
         {
             LayoutMode layoutMode = score()->layoutMode();
-            if (layoutMode == LayoutMode::PAGE) {
-                if (viewer) {
-                    std::vector<RectF> dropRects;
-                    for (System* sys : page()->systems()) {
-                        const bool lastSelectedSys = sys == system();
-                        const MeasureBase* first = sys ? sys->first() : nullptr;
-                        const MeasureBase* last = sys ? sys->last() : nullptr;
-                        if (lastSelectedSys) {
-                            last = this;
-                        }
-                        if (!first || !last) {
-                            continue;
-                        }
-                        dropRects.push_back(RectF(first->canvasBoundingRect().topLeft(),
-                                                  last->canvasBoundingRect().bottomRight()));
-
-                        if (lastSelectedSys) {
-                            break;
-                        }
-                    }
-                    viewer->setDropRectangles(dropRects);
-                }
-                return true;
-            }
-            return false;
+            return layoutMode == LayoutMode::PAGE;
         }
         default:
             break;

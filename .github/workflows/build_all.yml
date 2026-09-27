@@ -146,7 +146,7 @@ jobs:
         # Use same OS versions as used in real build workflows.
         os:
         - ubuntu-22.04 # linux_x64, backend, linux_arm64
-        - macos-latest
+        - xcode-27 # macos
         - windows-2025 # windows_x64, windows_portable
     runs-on: ${{ matrix.os }}
     steps:

@@ -130,7 +130,7 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
 
     const Part* part = item->part();
     const TrackRange trackRange = part->trackRange();
-    const PaddingTable& paddingTable = item->score()->paddingTable();
+    const PaddingTable& paddingTable = item->score()->paddingTables().horizontalPaddingTable();
 
     double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * item->mag();
     double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * item->mag();
@@ -249,7 +249,7 @@ double ArpeggioLayout::insetDistance(const Arpeggio* item, const LayoutContext& 
 
     const Segment* seg = item->chord()->segment();
     Chord* endChord = item->chord();
-    const PaddingTable& paddingTable = item->score()->paddingTable();
+    const PaddingTable& paddingTable = item->score()->paddingTables().horizontalPaddingTable();
     if (EngravingItem* e = seg->element(item->endTrack())) {
         endChord = e->isChord() ? toChord(e) : endChord;
     }

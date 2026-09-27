@@ -27,22 +27,23 @@
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "actions/actionable.h"
 
 #include "uicomponents/qml/Muse/UiComponents/menuitem.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "ui/iuiactionsregister.h"
+#include "rcommand/icommanddispatcher.h"
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
 #include "workspace/iworkspaceconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "global/iglobalconfiguration.h"
 
+#include "rcommand/commandtypes.h"
+
 namespace mu::appshell {
-class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable,
-    public muse::actions::Actionable
+class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -61,9 +62,10 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
 
 public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);
@@ -84,7 +86,7 @@ public:
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
 
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
     Q_INVOKABLE void handleWorkspacesMenuItem(const QString& itemId);
 
 public slots:
@@ -113,12 +115,12 @@ private:
     void initAvailableViewModeList();
     void initAvailableZoomList();
 
-    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode);
+    muse::uicomponents::MenuItem* makeMenuItem(const muse::rcommand::Command& command);
 
     void updateConcertPitchItem();
     void updateCurrentWorkspaceItem();
 
-    void dispatch(const muse::actions::ActionCode& code, const muse::actions::ActionData& args = muse::actions::ActionData());
+    void dispatch(const muse::rcommand::Command& command, const muse::rcommand::Params& params = {});
 
     notation::ZoomType currentZoomType() const;
 

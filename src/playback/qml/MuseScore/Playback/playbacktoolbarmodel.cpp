@@ -256,7 +256,7 @@ void PlaybackToolBarModel::rewind(secs_t secs)
         return;
     }
 
-    dispatch(rcommand::make_query(REWIND_COMMAND, { { "position", Val(secs) } }));
+    dispatchCommand(REWIND_COMMAND, { { "position", Val(secs) } });
 }
 
 void PlaybackToolBarModel::rewindToBeat(const MeasureBeat& beat)

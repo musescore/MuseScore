@@ -183,7 +183,7 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     m_rootItem = new RootItem(this);
     m_rootItem->init();
 
-    createPaddingTable();
+    updatePaddingTables();
 
     m_shadowNote = new ShadowNote(this);
     m_shadowNote->setVisible(false);
@@ -231,7 +231,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
     checkChordList();
     m_synthesizerState = parent->m_synthesizerState;
     m_mscVersion = parent->m_mscVersion;
-    createPaddingTable();
+    updatePaddingTables();
 }
 
 Score::Score(MasterScore* parent, const MStyle& s)
@@ -239,7 +239,7 @@ Score::Score(MasterScore* parent, const MStyle& s)
 {
     Score::validScores.insert(this);
     m_style  = s;
-    createPaddingTable();
+    updatePaddingTables();
 }
 
 //---------------------------------------------------------
@@ -1019,7 +1019,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
         staff->spatiumChanged(oldValue, newValue);
     }
     m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, newValue / style().defaultSpatium());
-    createPaddingTable();
+    updatePaddingTables();
 }
 
 //---------------------------------------------------------
@@ -1050,7 +1050,7 @@ void Score::styleChanged()
             st->styleChanged();
         }
     }
-    createPaddingTable();
+    updatePaddingTables();
     setLayoutAll();
 }
 
@@ -4868,21 +4868,11 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 
     renderer()->layoutScore(this, start, end);
-
-    if (m_resetAutoplace) {
-        m_resetAutoplace = false;
-        resetAutoplace();
-    }
-
-    if (m_resetCrossBeams) {
-        m_resetCrossBeams = false;
-        resetCrossBeams();
-    }
 }
 
-void Score::createPaddingTable()
+void Score::updatePaddingTables()
 {
-    m_paddingTable.createTable(style());
+    m_paddingTables.update(style());
 }
 
 //--------------------------------------------------------
@@ -4917,7 +4907,7 @@ void Score::autoUpdateSpatium()
     targetSpatium = (resultingStaffHeight / 4) * DPI / INCH;
 
     style().setSpatium(targetSpatium);
-    createPaddingTable();
+    updatePaddingTables();
 }
 
 void Score::addSystemLock(const RangeLock* lock)

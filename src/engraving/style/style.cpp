@@ -22,6 +22,10 @@
 
 #include "style.h"
 
+#include "global/modularity/ioc.h"
+
+#include "iengravingfontsprovider.h"
+
 #include "types/constants.h"
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"

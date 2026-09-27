@@ -21,10 +21,25 @@
 set(MODULE_TEST playback_test)
 
 set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackcontrollermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/playbackcontrollertests.cpp
+
+    # NOTE The playback module uses this utility, but it lives in notationscene,
+    # and linking the whole notationscene would drag the UI stack into the tests
+    ${CMAKE_CURRENT_LIST_DIR}/../../notationscene/utilities/percussionutilities.cpp
 )
 
-set(MODULE_TEST_LINK playback)
+set(MODULE_TEST_INCLUDE
+    ${CMAKE_CURRENT_LIST_DIR}/..
+)
+
+set(MODULE_TEST_LINK
+    playback
+    notation
+    engraving
+)
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 

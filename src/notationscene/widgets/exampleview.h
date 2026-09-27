@@ -56,7 +56,6 @@ public:
     void removeScore() override;
 
     void changeEditElement(engraving::EngravingItem*) override;
-    void setDropRectangles(const std::vector<muse::RectF>& rects) override;
     void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
 

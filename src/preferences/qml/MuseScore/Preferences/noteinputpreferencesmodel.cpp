@@ -22,6 +22,8 @@
 
 #include "noteinputpreferencesmodel.h"
 
+#include "notationscene/notationcommands.h"
+
 using namespace mu::preferences;
 
 NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
@@ -110,21 +112,22 @@ void NoteInputPreferencesModel::load()
 
 QVariantList NoteInputPreferencesModel::noteInputMethods() const
 {
+    using namespace mu::notation;
     using Method = mu::notation::NoteInputMethod;
 
-    std::vector<std::pair<muse::actions::ActionCode, Method > > noteInputActions {
-        { "command://notation/toggle-note-input-by-note-name", Method::BY_NOTE_NAME },
-        { "command://notation/toggle-note-input-by-duration", Method::BY_DURATION },
+    std::vector<std::pair<muse::rcommand::Command, Method > > noteInputCommands {
+        { TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, Method::BY_NOTE_NAME },
+        { TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, Method::BY_DURATION },
     };
 
     QVariantList methods;
 
-    for (const auto& pair : noteInputActions) {
-        const muse::ui::UiAction& action = uiActionsRegister()->action(pair.first);
+    for (const auto& pair : noteInputCommands) {
+        const muse::rcommand::CommandInfo& commandInfo = commandsRegister()->commandInfo(pair.first);
 
         QVariantMap method;
         method["value"] = static_cast<int>(pair.second);
-        method["text"] = action.title.qTranslatedWithoutMnemonic();
+        method["text"] = commandInfo.title.qTranslatedWithoutMnemonic();
 
         methods.emplace_back(std::move(method));
     }

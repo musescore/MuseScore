@@ -42,6 +42,11 @@ void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
         return;
     }
 
+    //! NOTE Hold the previous project (and its notation) until all the receivers
+    //! have disconnected from it in the notifications below
+    INotationProjectPtr prevProject = m_currentProject;
+    INotationPtr prevNotation = m_currentNotation;
+
     m_currentProject = project;
 
     INotationPtr notation = project ? project->masterNotation()->notation() : nullptr;
@@ -77,6 +82,10 @@ void GlobalContext::setCurrentNotation(const INotationPtr& notation)
     if (m_currentNotation == notation) {
         return;
     }
+
+    //! NOTE Hold the previous notation until all the receivers
+    //! have disconnected from it in the notification below
+    INotationPtr prevNotation = m_currentNotation;
 
     doSetCurrentNotation(notation);
     m_currentNotationChanged.notify();

@@ -29,10 +29,21 @@ import MuseScore.Project
 FocusScope {
     id: root
 
+    property string subSection: ""
+
     QtObject {
         id: prv
 
         readonly property int sideMargin: 46
+    }
+
+    onSubSectionChanged: applySubSection()
+
+    function applySubSection() {
+        switch (root.subSection) {
+        case "newAndRecent": scoresPageModel.tabIndex = 0; break
+        case "myOnlineScores": scoresPageModel.tabIndex = 1; break
+        }
     }
 
     NavigationSection {
@@ -49,9 +60,14 @@ FocusScope {
 
     ScoresPageModel {
         id: scoresPageModel
+
+        onTabIndexChanged: {
+            tabBar.currentIndex = scoresPageModel.tabIndex
+        }
     }
 
     Component.onCompleted: {
+        applySubSection()
         tabBar.currentIndex = scoresPageModel.tabIndex
         tabBar.completed = true
     }
@@ -261,6 +277,14 @@ FocusScope {
             onOpenScoreRequested: function(scorePath, displayName) {
                 Qt.callLater(scoresPageModel.openScore, scorePath, displayName)
             }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                Qt.callLater(scoresPageModel.revealInFileBrowser, scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                Qt.callLater(scoresPageModel.viewOnline, scoreId)
+            }
         }
     }
 
@@ -286,6 +310,14 @@ FocusScope {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 Qt.callLater(scoresPageModel.openScore, scorePath, displayName)
+            }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                Qt.callLater(scoresPageModel.revealInFileBrowser, scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                Qt.callLater(scoresPageModel.viewOnline, scoreId)
             }
 
             Connections {
@@ -349,6 +381,7 @@ FocusScope {
                 navigation.column: 2
 
                 text: qsTrc("project", "New")
+                accentButton: true
 
                 onClicked: {
                     scoresPageModel.createNewScore()
@@ -356,9 +389,21 @@ FocusScope {
             }
 
             FlatButton {
-                navigation.name: "Open other Score"
+                navigation.name: "ConvertFileToScore"
                 navigation.panel: navBottomPanel
                 navigation.column: 3
+
+                text: qsTrc("project", "Convert…")
+
+                onClicked: {
+                    scoresPageModel.convertFileToScore()
+                }
+            }
+
+            FlatButton {
+                navigation.name: "Open other Score"
+                navigation.panel: navBottomPanel
+                navigation.column: 4
 
                 text: qsTrc("project", "Open other…")
 

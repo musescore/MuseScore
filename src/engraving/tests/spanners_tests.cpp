@@ -21,6 +21,8 @@
  */
 
 #include <gtest/gtest.h>
+#include "engraving/dom/hairpin.h"
+#include "engraving/dom/linkedobjects.h"
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/excerpt.h"
@@ -47,6 +49,8 @@ static const String SPANNERS_DATA_DIR("spanners_data/");
 
 class Engraving_SpannersTests : public ::testing::Test
 {
+public:
+    void linkedHairpinRangeRoundTrip(bool existingIds);
 };
 
 //---------------------------------------------------------
@@ -596,4 +600,72 @@ TEST_F(Engraving_SpannersTests, spanners16)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"smallstaff01.mscx", SPANNERS_DATA_DIR + u"smallstaff01-ref.mscx"));
     delete score;
+}
+
+void Engraving_SpannersTests::linkedHairpinRangeRoundTrip(bool existingIds)
+{
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"linked-hairpin-range.mscx");
+    ASSERT_TRUE(score);
+    Hairpin* hairpin = Factory::createHairpin(score->dummy());
+    hairpin->setTrack(0);
+    hairpin->setTrack2(0);
+    hairpin->setTick(Fraction(0, 1));
+    hairpin->setTicks(Fraction(2, 1));
+    score->addSpanner(hairpin);
+    Staff* staff = score->staff(0);
+    Staff* linkedStaff = Factory::createStaff(staff->part());
+    linkedStaff->initFromStaffType(staff->staffType(Fraction(0, 1)));
+    score->undoInsertStaff(linkedStaff, 1, false);
+    Excerpt::cloneStaff(staff, linkedStaff);
+    score->doLayout();
+
+    auto deleteRange = [&](Measure* measure) {
+        score->startCmd(TranslatableString::untranslatable("Shorten linked hairpins"));
+        score->select(measure, SelectType::SINGLE, 0);
+        score->select(measure, SelectType::RANGE, 1);
+        score->cmdDeleteSelection();
+        score->endCmd();
+    };
+    deleteRange(score->firstMeasure());
+    score->undoRedo(true, nullptr);
+    score->undoRedo(false, nullptr);
+    score->undoRedo(true, nullptr);
+    deleteRange(score->firstMeasure()->nextMeasure());
+    score->undoRedo(true, nullptr);
+    score->undoRedo(false, nullptr);
+
+    ASSERT_EQ(score->spannerMap().map().size(), 2u);
+    Spanner* first = score->spannerMap().map().begin()->second;
+    ASSERT_TRUE(first->links());
+    EXPECT_NE(first->links()->mainElement(), first);
+    if (existingIds) {
+        for (const auto& entry : score->spannerMap().map()) {
+            entry.second->assignNewEID();
+        }
+    }
+    ASSERT_TRUE(ScoreRW::saveScore(score, u"linked-hairpin-range-test.mscx"));
+    MasterScore* reopened = ScoreRW::readScore(u"linked-hairpin-range-test.mscx", true);
+    ASSERT_TRUE(reopened);
+    ASSERT_EQ(reopened->spannerMap().map().size(), 2u);
+    for (const auto& entry : reopened->spannerMap().map()) {
+        Spanner* spanner = entry.second;
+        EXPECT_EQ(spanner->type(), ElementType::HAIRPIN);
+        EXPECT_EQ(spanner->tick(), Fraction(0, 1));
+        EXPECT_EQ(spanner->ticks(), Fraction(1, 1));
+        ASSERT_TRUE(spanner->links());
+        EXPECT_EQ(spanner->links()->size(), 2u);
+        EXPECT_EQ(spanner->links(), reopened->spannerMap().map().begin()->second->links());
+    }
+    delete reopened;
+    delete score;
+}
+
+TEST_F(Engraving_SpannersTests, linkedHairpinRangeFirstSave)
+{
+    linkedHairpinRangeRoundTrip(false);
+}
+
+TEST_F(Engraving_SpannersTests, linkedHairpinRangeExistingIds)
+{
+    linkedHairpinRangeRoundTrip(true);
 }

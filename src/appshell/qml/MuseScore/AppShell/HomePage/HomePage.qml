@@ -48,9 +48,7 @@ DockPage {
         if (Boolean(params["section"])) {
             setCurrentCentral(params["section"])
 
-            if (Boolean(params["subSection"])) {
-                subSection = params["subSection"]
-            }
+            subSection = Boolean(params["subSection"]) ? params["subSection"] : ""
         }
     }
 
@@ -100,6 +98,7 @@ DockPage {
                 iconsOnly: menuPanel.iconsOnly
 
                 onSelected: function(name) {
+                    root.subSection = ""
                     root.setCurrentCentral(name)
                 }
             }
@@ -117,7 +116,9 @@ DockPage {
     Component {
         id: scoresComp
 
-        ScoresPage {}
+        ScoresPage {
+            subSection: root.subSection
+        }
     }
 
     Component {

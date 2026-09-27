@@ -203,7 +203,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
         if (!(aboveStart || belowEnd)) {
             ElementType elType = spanArp->type();
-            const PaddingTable& paddingTable = item->score()->paddingTable();
+            const PaddingTable& paddingTable = item->score()->paddingTables().horizontalPaddingTable();
             double arpeggioNoteDistance = paddingTable.at(elType).at(ElementType::NOTE) * mag_;
             double arpeggioLedgerDistance = paddingTable.at(elType).at(ElementType::LEDGER_LINE) * mag_;
             int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;

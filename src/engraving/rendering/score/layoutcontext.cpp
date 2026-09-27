@@ -395,7 +395,7 @@ const RangeLocks* DomAccessor::pageLocks() const
 
 const PaddingTable& DomAccessor::paddingTable() const
 {
-    return score()->paddingTable();
+    return score()->paddingTables().horizontalPaddingTable();
 }
 
 const std::vector<BracketItem*>& DomAccessor::brackets(staff_idx_t staffIdx) const
