@@ -30,7 +30,12 @@
 #include "global/containers.h"
 #include "log.h"
 
+#include "audio/common/audioerrors.h"
+#include "global/async/notifylist.h"
+
 #include "notation/inotation.h"
+#include "notation/inotationparts.h"
+#include "engraving/dom/part.h"
 
 using namespace muse;
 using namespace muse::audio;
@@ -183,6 +188,155 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
     playback->saveSoundTrack(std::move(format), dstDevice)
     .onResolve(this, [this, playback, restorePlaybackState](const bool /*result*/) {
         LOGI() << "Successfully saved sound track";
+
+        restorePlaybackState();
+
+        m_writeRet = muse::make_ok();
+        m_isCompleted = true;
+        m_progress.finish(muse::make_ok());
+        playback->saveSoundTrackProgressChanged().disconnect(this);
+    })
+    .onReject(this, [this, playback, restorePlaybackState](int errorCode, const std::string& msg) {
+        restorePlaybackState();
+
+        m_writeRet = Ret(errorCode, msg);
+        m_isCompleted = true;
+        m_progress.finish(make_ret(errorCode, msg));
+        playback->saveSoundTrackProgressChanged().disconnect(this);
+    });
+}
+
+bool AbstractAudioWriter::supportsBatchPartExport() const
+{
+    return true;
+}
+
+Ret AbstractAudioWriter::writeParts(INotationPtr masterNotation, const PartExportTargetList& targets, const Options& options)
+{
+    IF_ASSERT_FAILED(masterNotation) {
+        return Ret(Ret::Code::InternalError);
+    }
+
+    //! NOTE Temporary fix for the context injection
+    m_iocContext = masterNotation->iocContext();
+
+    muse::ContextInject<playback::IPlaybackController> playbackController = { m_iocContext };
+
+    //! NOTE Waiting for the audio system to start if it is not already running
+    while (!startAudioController()->isAudioStarted()) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
+    m_isCompleted = false;
+    m_writeRet = muse::Ret();
+
+    playbackController()->setNotation(masterNotation);
+    playbackController()->setIsExportingAudio(true);
+
+    //! NOTE Playback (tracks, instrumentTrackIdMap and duration) loads asynchronously for the
+    //! notation that was just set; wait for it before mapping the requested parts to tracks.
+    while (!playbackController()->isPlaybackInited()) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
+    const playback::IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = playbackController()->instrumentTrackIdMap();
+
+    std::vector<muse::audio::SoundTrackTarget> engineTargets;
+    engineTargets.reserve(targets.size());
+
+    for (const PartExportTarget& target : targets) {
+        IF_ASSERT_FAILED(target.notation && target.device) {
+            continue;
+        }
+
+        bool foundTrack = false;
+
+        for (const mu::engraving::Part* part : target.notation->parts()->partList()) {
+            for (const mu::engraving::InstrumentTrackId& instrumentTrackId : part->instrumentTrackIdList()) {
+                auto it = instrumentTrackIdMap.find(instrumentTrackId);
+                if (it == instrumentTrackIdMap.cend()) {
+                    continue;
+                }
+
+                engineTargets.push_back({ it->second, target.device });
+                foundTrack = true;
+            }
+        }
+
+        if (!foundTrack) {
+            LOGE() << "Could not find a mixer track for part: " << target.notation->name();
+        }
+    }
+
+    if (engineTargets.empty()) {
+        playbackController()->setIsExportingAudio(false);
+        return make_ret(Err::NoAudioToExport);
+    }
+
+    SoundTrackFormat actualFormat = soundTrackFormat();
+
+    double leadingSilenceSec = muse::value(options, OptionKey::LEADING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.leadingSilenceDuration = std::isfinite(leadingSilenceSec)
+                                          ? static_cast<msecs_t>(leadingSilenceSec) : msecs_t(0);
+
+    double trailingSilenceSec = muse::value(options, OptionKey::TRAILING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.trailingSilenceDuration = std::isfinite(trailingSilenceSec)
+                                           ? static_cast<msecs_t>(trailingSilenceSec) : msecs_t(0);
+
+    doWriteParts(engineTargets, actualFormat);
+
+    const bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
+    if (waitForCompletion) {
+        while (!m_isCompleted) {
+            application()->processEvents();
+            QThread::yieldCurrentThread();
+        }
+    }
+
+    return m_writeRet;
+}
+
+void AbstractAudioWriter::doWriteParts(const std::vector<muse::audio::SoundTrackTarget>& engineTargets, const SoundTrackFormat& format)
+{
+    muse::ContextInject<muse::audio::IPlayback> playbackInj = { m_iocContext };
+
+    const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
+
+    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
+    m_notationForRestore = globalContext()->currentNotation();
+
+    auto restorePlaybackState = [this]() {
+        muse::ContextInject<playback::IPlaybackController> playbackController = { m_iocContext };
+        playbackController()->setIsExportingAudio(false);
+        playbackController()->setNotation(m_notationForRestore);
+    };
+
+    auto sendProgress = [this, processingOnlineSoundsMsg](int64_t current, int64_t total, SaveSoundTrackStage stage) {
+        switch (stage) {
+        case SaveSoundTrackStage::ProcessingOnlineSounds:
+            m_progress.progress(current, total, processingOnlineSoundsMsg);
+            break;
+        case SaveSoundTrackStage::WritingSoundTrack:
+        case SaveSoundTrackStage::Unknown:
+            m_progress.progress(current, total);
+            break;
+        }
+    };
+
+    m_progress.start();
+
+    auto playback = playbackInj();
+
+    playback->saveSoundTrackProgressChanged()
+    .onReceive(this, [sendProgress](int64_t current, int64_t total, SaveSoundTrackStage stage) {
+        sendProgress(current, total, stage);
+    });
+
+    playback->saveSoundTracks(format, engineTargets)
+    .onResolve(this, [this, playback, restorePlaybackState](const bool /*result*/) {
+        LOGI() << "Successfully saved sound tracks";
 
         restorePlaybackState();
 

@@ -22,6 +22,8 @@
 
 #include "exportprojectscenario.h"
 
+#include <memory>
+
 #include "global/io/fileinfo.h"
 #include "global/io/filestream.h"
 
@@ -157,8 +159,17 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     std::vector<ViewMode> viewModes = this->viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
 
+    //! NOTE When a writer can render several parts in a single pass (currently only audio),
+    //! take that path instead of doing a full separate write() per notation: it behaves like
+    //! a single export operation (one progress cycle), same as MULTI_PART below.
+    bool containsMainNotation = std::find_if(notations.cbegin(), notations.cend(), [this](INotationPtr notation) {
+        return isMainNotation(notation);
+    }) != notations.cend();
+    bool useBatchPartExport = unitType == INotationWriter::UnitType::PER_PART
+                              && writer->supportsBatchPartExport() && notations.size() > 1 && !containsMainNotation;
+
     Progress* writerProgress = writer->progress();
-    size_t fileCount = exportFileCount(notations, unitType);
+    size_t fileCount = useBatchPartExport ? 1 : exportFileCount(notations, unitType);
     size_t currentFileNum = 0;
 
     if (writerProgress) {
@@ -223,6 +234,14 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         }
     } break;
     case INotationWriter::UnitType::PER_PART: {
+        if (useBatchPartExport) {
+            Ret ret = exportPartsInOnePass(writer, notations, destinationPath, isCreatingOnlyOneFile, isExportingOnlyOneScore, options);
+            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                return false;
+            }
+            break;
+        }
+
         for (const INotationPtr& notation : notations) {
             muse::io::path_t definitivePath = isCreatingOnlyOneFile
                                               ? destinationPath
@@ -478,6 +497,56 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
     }
 
     return muse::make_ok();
+}
+
+Ret ExportProjectScenario::exportPartsInOnePass(INotationWriterPtr writer, const INotationPtrList& notations,
+                                                const muse::io::path_t& destinationPath, bool isCreatingOnlyOneFile,
+                                                bool isExportingOnlyOneScore, const INotationWriter::Options& options) const
+{
+    std::vector<std::unique_ptr<FileStream> > files;
+    files.reserve(notations.size());
+
+    INotationWriter::PartExportTargetList targets;
+    targets.reserve(notations.size());
+
+    for (const INotationPtr& notation : notations) {
+        muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                          ? destinationPath
+                                          : completeExportPath(destinationPath, notation, isMainNotation(
+                                                                   notation), isExportingOnlyOneScore);
+
+        String filename = FileInfo(definitivePath).fileName();
+        if (fileSystem()->exists(definitivePath) && !shouldReplaceFile(filename)) {
+            // Same semantics as the per-notation loop: skip just this one file and keep going.
+            continue;
+        }
+
+        Ret ret = fileSystem()->remove(definitivePath);
+        if (!ret) {
+            return ret;
+        }
+
+        auto file = std::make_unique<FileStream>(definitivePath);
+        file->setMeta("file_path", definitivePath.toStdString());
+        if (!file->open(IODevice::WriteOnly)) {
+            return make_ret(Ret::Code::InternalError);
+        }
+
+        targets.push_back({ notation, file.get() });
+        files.push_back(std::move(file));
+    }
+
+    if (targets.empty()) {
+        return make_ret(Ret::Code::Cancel);
+    }
+
+    Ret ret = writer->writeParts(masterNotation()->notation(), targets, options);
+
+    for (auto& file : files) {
+        file->close();
+    }
+
+    return ret;
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const

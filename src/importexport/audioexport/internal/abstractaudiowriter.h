@@ -52,6 +52,10 @@ public:
     muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
                         const Options& options = Options()) override;
 
+    bool supportsBatchPartExport() const override;
+    muse::Ret writeParts(notation::INotationPtr masterNotation, const PartExportTargetList& targets,
+                         const Options& options = Options()) override;
+
     muse::Progress* progress() override;
     void abort() override;
 
@@ -59,8 +63,13 @@ protected:
     muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format,
                              const Options& options = Options());
 
+    //! NOTE Implemented by each concrete format writer (WAV, MP3, ...), built from the
+    //! current export configuration. Shared by both write() and writeParts().
+    virtual muse::audio::SoundTrackFormat soundTrackFormat() const = 0;
+
 private:
     void doWrite(muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
+    void doWriteParts(const std::vector<muse::audio::SoundTrackTarget>& engineTargets, const muse::audio::SoundTrackFormat& format);
 
     UnitType unitTypeFromOptions(const Options& options) const;
 

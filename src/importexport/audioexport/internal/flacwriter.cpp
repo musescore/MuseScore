@@ -30,7 +30,12 @@ using namespace muse::io;
 
 muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options&)
 {
-    const SoundTrackFormat format {
+    return doWriteAndWait(notation, destinationDevice, soundTrackFormat());
+}
+
+SoundTrackFormat FlacWriter::soundTrackFormat() const
+{
+    return SoundTrackFormat {
         SoundTrackType::FLAC,
         {
             static_cast<sample_rate_t>(configuration()->exportSampleRate()),
@@ -40,6 +45,4 @@ muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice&
         configuration()->exportFlacSampleFormat(),
         0 /* bitRate */
     };
-
-    return doWriteAndWait(notation, destinationDevice, format);
 }

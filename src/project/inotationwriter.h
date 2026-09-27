@@ -58,12 +58,34 @@ public:
 
     using Options = std::map<OptionKey, muse::Val>;
 
+    //! NOTE One destination file for one part/excerpt notation, used by writeParts() below.
+    struct PartExportTarget {
+        notation::INotationPtr notation;
+        muse::io::IODevice* device = nullptr;
+    };
+    using PartExportTargetList = std::vector<PartExportTarget>;
+
     virtual std::vector<UnitType> supportedUnitTypes() const = 0;
     virtual bool supportsUnitType(UnitType unitType) const = 0;
 
     virtual muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) = 0;
     virtual muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& device,
                                 const Options& options = Options()) = 0;
+
+    //! NOTE Optional capability for writers (currently only audio) that are able to render
+    //! several parts/excerpts of masterNotation in a single pass instead of doing a full,
+    //! separate write() per notation. When supportsBatchPartExport() is true, writeParts()
+    //! must be implemented and produce one file per target, written to target.device, in the
+    //! same order as `targets`.
+    virtual bool supportsBatchPartExport() const { return false; }
+    virtual muse::Ret writeParts(notation::INotationPtr masterNotation, const PartExportTargetList& targets,
+                                 const Options& options = Options())
+    {
+        (void)masterNotation;
+        (void)targets;
+        (void)options;
+        return muse::Ret(muse::Ret::Code::NotSupported);
+    }
 
     virtual muse::Progress* progress() { return nullptr; }
     virtual void abort() {}

@@ -101,6 +101,8 @@ public:
 
     // Export
     MOCK_METHOD(async::Promise<bool>, saveSoundTrack, (const SoundTrackFormat& format, io::IODevice& dstDevice), (override));
+    MOCK_METHOD(async::Promise<bool>, saveSoundTracks, (const SoundTrackFormat& format, const SoundTrackTargetList& targets),
+                (override));
     MOCK_METHOD(void, abortSavingAllSoundTracks, (), (override));
     MOCK_METHOD(SaveSoundTrackProgress, saveSoundTrackProgressChanged, (), (const, override));
 };
