@@ -320,6 +320,7 @@ void MasterScore::addSnapshot(const mu::engraving::String& name, bool fileOpened
     Snapshot snap;
     snap.name = name;
     snap.scoreData = buffer.data();
+    snap.transient = fileOpened;
 
     AutomationDataConstPtr autoData = automationData();
     if (autoData && !autoData->isEmpty()) {
@@ -337,11 +338,20 @@ void MasterScore::addSnapshot(const mu::engraving::String& name, bool fileOpened
 
 void MasterScore::updateSnapshot(int index)
 {
+    if (index < 0 || size_t(index) >= m_snapshots.size()) {
+        LOGE() << "Invalid snapshot index: " << index;
+        return;
+    }
+
     auto buffer = Buffer::opened(IODevice::WriteOnly);
     rw::RWRegister::writer()->writeScore(this, &buffer);
     buffer.close();
 
     m_snapshots[index].scoreData = buffer.data();
+    AutomationDataConstPtr autoData = automationData();
+    m_snapshots[index].automationData = autoData && !autoData->isEmpty()
+                                        ? AutomationRW::write(*autoData, true /*writeGenerated*/)
+                                        : muse::ByteArray();
     return;
 }
 
@@ -365,6 +375,10 @@ void MasterScore::clearScore()
     while (first()) {
         MeasureBase* mb = first();
         m_measures.remove(mb);
+        if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
+            delete toMeasure(mb)->mmRest();
+        }
+        delete mb;
     }
 
     for (Staff* s : m_staves) {
@@ -384,10 +398,37 @@ void MasterScore::clearScore()
 
 void MasterScore::restoreSnapshot(size_t index)
 {
+    if (index >= m_snapshots.size()) {
+        LOGE() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    // Back up current score so we can roll back if the snapshot fails to load
+    auto backupBuffer = Buffer::opened(IODevice::WriteOnly);
+    rw::RWRegister::writer()->writeScore(this, &backupBuffer);
+    backupBuffer.close();
+    muse::ByteArray backupData = backupBuffer.data();
+
     clearScore();
+
     muse::ByteArray& data = m_snapshots[index].scoreData;
     XmlReader xmlReader(data);
-    MscLoader().readMasterScore(this, xmlReader, true);
+    muse::Ret ret = MscLoader().readMasterScore(this, xmlReader, true);
+
+    if (!ret) {
+        LOGE() << "Failed to restore snapshot " << index << ": " << ret.toString();
+
+        clearScore();
+        XmlReader backupReader(backupData);
+        muse::Ret rollbackRet = MscLoader().readMasterScore(this, backupReader, true);
+        if (!rollbackRet) {
+            LOGE() << "Failed to roll back after failed snapshot restore: " << rollbackRet.toString();
+        }
+
+        doLayout();
+        initAutomation();
+        return;
+    }
 
     doLayout();
 
@@ -423,11 +464,23 @@ void MasterScore::restoreSnapshot(size_t index)
     return;
 }
 
+void MasterScore::renameSnapshot(size_t index, const mu::engraving::String& name)
+{
+    TRACEFUNC;
+
+    if (index >= m_snapshots.size() || m_snapshots[index].transient) {
+        LOGE() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    m_snapshots[index].name = name;
+}
+
 void MasterScore::removeSnapshot(size_t index)
 {
     TRACEFUNC;
 
-    if (index >= m_snapshots.size()) {
+    if (index >= m_snapshots.size() || m_snapshots[index].transient) {
         LOGE() << "Invalid snapshot index: " << index;
         return;
     }

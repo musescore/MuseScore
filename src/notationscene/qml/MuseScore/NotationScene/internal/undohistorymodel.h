@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "project/isaveprojectscenario.h"
 
 namespace mu::notation {
 class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
@@ -47,6 +48,7 @@ class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, pub
 
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<project::ISaveProjectScenario> saveProjectScenario = { this };
 
 public:
     explicit UndoHistoryModel(QObject* parent = nullptr);

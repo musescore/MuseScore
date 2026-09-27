@@ -187,14 +187,20 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     // Write snapshots
     {
         const std::vector<MasterScore::Snapshot>& snapshots = score->snapshots();
-        if (snapshots.size() > 1) { // do not save the first snapshot - "File opened" snapshot
-            // Write index XML with names and timestamps
+
+        std::vector<size_t> persistedIndices;
+        for (size_t i = 0; i < snapshots.size(); ++i) {
+            if (!snapshots[i].transient) {
+                persistedIndices.push_back(i);
+            }
+        }
+        if (!persistedIndices.empty()) {
             ByteArray indexData;
             auto indexBuf = Buffer::opened(IODevice::WriteOnly, &indexData);
             XmlStreamWriter xml(&indexBuf);
             xml.startDocument();
             xml.startElement("snapshots");
-            for (size_t i = 1; i < snapshots.size(); ++i) {
+            for (size_t i : persistedIndices) {
                 xml.startElement("snapshot");
                 xml.element("index", int(i));
                 xml.element("name", snapshots[i].name);
@@ -204,8 +210,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
             xml.flush();
             mscWriter.writeSnapshotIndexFile(indexData);
 
-            // Write each snapshot's score data as a binary file
-            for (size_t i = 1; i < snapshots.size(); ++i) {
+            for (size_t i : persistedIndices) {
                 mscWriter.addSnapshotFile(i, snapshots[i].scoreData);
                 mscWriter.addSnapshotAutomationJsonFile(i, snapshots[i].automationData);
             }

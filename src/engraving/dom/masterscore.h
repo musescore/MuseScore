@@ -200,15 +200,17 @@ public:
         mu::engraving::String name;
         muse::ByteArray scoreData;
         muse::ByteArray automationData;
+        bool transient = false;
     };
 
     void addSnapshot(const mu::engraving::String& name, bool fileOpened = false);
     void updateSnapshot(int index);
     void removeSnapshot(size_t index);
     void restoreSnapshot(size_t index);
+    void renameSnapshot(size_t index, const mu::engraving::String& name);
     void clearScore();
     std::vector<Snapshot>& snapshots() { return m_snapshots; }
-    bool m_fileOpenedSnapshotExists = false;
+    bool hasFileOpenedSnapshot() const { return !m_snapshots.empty() && m_snapshots.front().transient; }
 
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);

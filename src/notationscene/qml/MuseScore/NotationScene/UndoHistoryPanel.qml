@@ -41,7 +41,7 @@ Item {
 
         ExpandableBlank {
             title: qsTr("Pinned score versions")
-            Layout.fillWidth: true            
+            Layout.fillWidth: true
             Layout.leftMargin: 12
             Layout.rightMargin: 12
 
@@ -55,8 +55,10 @@ Item {
                     id: snapshotListItem
                     height: snapshotText.implicitHeight + 16
 
-                    required property string name
+                    required property var modelData
                     required property int index
+                    readonly property string name: modelData.name
+                    readonly property bool isTransient: modelData.transient
                     property bool editing: false
 
                     onClicked: undoHistoryModel.restoreSnapshot(index)
@@ -95,7 +97,7 @@ Item {
                                 const snapshotName = textInputField.currentText.trim()
                                     if (!snapshotName.length) {
                                         return
-                                    }                                    
+                                    }
                                     undoHistoryModel.renameSnapshot(index, snapshotName)
                             }
 							onTextEditingFinished: snapshotListItem.editing = false
@@ -105,7 +107,7 @@ Item {
                         FlatButton {
                             id: options
                             Layout.alignment: Qt.AlignRight
-                            visible: index != 0
+                            visible: !snapshotListItem.isTransient
                             icon: IconCode.MENU_THREE_DOTS
                             transparent: true
                             onClicked: {
@@ -291,9 +293,9 @@ Item {
                                     const snapshotName = textInput.currentText.trim()
                                     if (!snapshotName.length) {
                                         popup.close()
-                                        return                                       
+                                        return
                                     }
-                                    undoHistoryModel.addSnapshot(snapshotName)                                    
+                                    undoHistoryModel.addSnapshot(snapshotName)
                                     popup.close()
                                 }
                                 onEscaped: popup.close()
