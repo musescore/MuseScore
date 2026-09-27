@@ -80,9 +80,8 @@ failure restore normal playback state and do not dirty the score.
   `docs/export-selection-test-plan.md`.
 - `SoundTrackSaveOptions` validation and RPC round-trip tests are included in
   the framework change.
-- The local Windows audio-test runner currently exits in `MSVCP140.dll` before
-  GoogleTest reports results; the same runner defect affects an existing audio
-  test. CI or a second supported platform must execute these tests.
+- MuseScore CI `run_tests` passed, including `muse_audio_tests`. The local
+  Windows runner did not report results, so no local test pass is claimed.
 
 ### Scope and known limitations
 
@@ -94,6 +93,14 @@ failure restore normal playback state and do not dirty the score.
   should later be transported atomically as part of the offline save request.
 - Complex repeated passages remain explicit validation coverage before claiming
   complete repeat-scenario support.
+- **FAIL (STATE-03):** Canceling an in-progress MP3 export leaves a playable
+  partial file on disk. Cancellation no longer crashes and restores playback
+  settings.
+- **FAIL (UI-02):** Keyboard focus order in the dialog is unintuitive; Tab
+  reaches only the Export button and audio format directly.
+- **FAIL (UI-03):** Mouse control of the sliders works, but Up/Down on an
+  individual instrument percentage changes it by 5% and then moves focus to
+  another control. Accessible-name verification is still pending.
 
 ### Localization
 

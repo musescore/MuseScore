@@ -31,6 +31,7 @@
 #include <QThread>
 
 #include "global/containers.h"
+#include "global/defer.h"
 #include "log.h"
 
 #include "notation/imasternotation.h"
@@ -122,6 +123,15 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
 
     m_isCompleted = false;
     m_writeRet = muse::Ret();
+
+    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
+    const notation::INotationPtr notationForRestore = globalContext()->currentNotation();
+    bool writeStarted = false;
+    muse::Defer restoreNotationOnValidationFailure([&]() {
+        if (!writeStarted) {
+            playbackController()->setNotation(notationForRestore);
+        }
+    });
 
     playbackController()->setNotation(notation);
 
@@ -261,6 +271,7 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
         playbackController()->setSelectionExportMetronomeEnabled(*selectionMetronomeEnabled);
     }
 
+    writeStarted = true;
     doWrite(dstDevice, actualFormat, saveOptions);
 
     const bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
