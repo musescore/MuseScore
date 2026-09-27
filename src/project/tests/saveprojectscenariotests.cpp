@@ -284,8 +284,9 @@ protected:
 
     void givenAudioExportSucceeds()
     {
-        ON_CALL(*m_exportScenario, exportScores(_, _, _, _))
-        .WillByDefault([this](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool) {
+        ON_CALL(*m_exportScenario, exportScores(_, _, _, _, _))
+        .WillByDefault([this](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool,
+                              const INotationWriter::Options&) {
             m_exportedMp3Paths.push_back(destinationPath.toQString());
             QFile file(destinationPath.toQString());
             return file.open(QIODevice::WriteOnly) && file.write("fake mp3 data") > 0;
