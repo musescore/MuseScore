@@ -66,6 +66,9 @@ public:
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
 
+    muse::Progress exportProgress() const override;
+    const ExportFilesProgress& exportFilesProgress() const override;
+
 private:
     enum class FileConflictPolicy {
         Undefined,
@@ -96,7 +99,7 @@ private:
     //! instead of looping write() once per notation.
     muse::Ret exportPartsInOnePass(INotationWriterPtr writer, const notation::INotationPtrList& notations,
                                    const muse::io::path_t& destinationPath, bool isCreatingOnlyOneFile, bool isExportingOnlyOneScore,
-                                   const INotationWriter::Options& options) const;
+                                   const INotationWriter::Options& options, bool showFilesProgress) const;
 
     void showExportProgress(bool isAudioExport) const;
 
@@ -108,6 +111,7 @@ private:
 
     mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable muse::Progress m_exportProgress;
+    mutable ExportFilesProgress m_exportFilesProgress;
     ExportInfo m_exportInfo;
 };
 }

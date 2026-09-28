@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "modularity/imoduleinterface.h"
 #include "notation/inotation_fwd.h"
 #include "inotationwriter.h"
@@ -34,6 +36,13 @@ struct ExportInfo {
     INotationWriter::UnitType unitType;
     std::vector<notation::INotationWeakPtr> notations;
 };
+
+//! NOTE Progress of one file of an export that writes several files at the same time
+struct ExportFileProgress {
+    QString name;
+    muse::Progress progress;
+};
+using ExportFilesProgress = std::vector<ExportFileProgress>;
 
 class IExportProjectScenario : MODULE_CONTEXT_INTERFACE
 {
@@ -52,5 +61,10 @@ public:
 
     virtual const ExportInfo& exportInfo() const = 0;
     virtual void setExportInfo(const ExportInfo& exportInfo) = 0;
+
+    //! NOTE The export in progress: its overall progress, and the progress of each file when the files are
+    //! written at the same time (multi-file audio export), for the audio export progress dialog
+    virtual muse::Progress exportProgress() const = 0;
+    virtual const ExportFilesProgress& exportFilesProgress() const = 0;
 };
 }

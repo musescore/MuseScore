@@ -40,6 +40,7 @@
 #include "notation/inotationpainting.h" // IWYU pragma: keep
 
 #include "inotationproject.h"
+#include "types/projecturis.h"
 
 using namespace muse;
 using namespace muse::io;
@@ -171,7 +172,10 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     size_t currentFileNum = 0;
 
     if (writerProgress) {
-        showExportProgress(isAudioExport(suffix));
+        //! NOTE A multi-file audio export shows its own progress dialog, with a bar per file (see exportPartsInOnePass)
+        if (!(useBatchPartExport && isAudioExport(suffix))) {
+            showExportProgress(isAudioExport(suffix));
+        }
         m_exportProgress.start();
 
         writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
@@ -233,7 +237,8 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     } break;
     case INotationWriter::UnitType::PER_PART: {
         if (useBatchPartExport) {
-            Ret ret = exportPartsInOnePass(writer, notations, destinationPath, isCreatingOnlyOneFile, isExportingOnlyOneScore, options);
+            Ret ret = exportPartsInOnePass(writer, notations, destinationPath, isCreatingOnlyOneFile, isExportingOnlyOneScore, options,
+                                           isAudioExport(suffix));
             if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
                 return false;
             }
@@ -499,8 +504,17 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
 
 Ret ExportProjectScenario::exportPartsInOnePass(INotationWriterPtr writer, const INotationPtrList& notations,
                                                 const muse::io::path_t& destinationPath, bool isCreatingOnlyOneFile,
-                                                bool isExportingOnlyOneScore, const INotationWriter::Options& options) const
+                                                bool isExportingOnlyOneScore, const INotationWriter::Options& options,
+                                                bool showFilesProgress) const
 {
+    m_exportFilesProgress.clear();
+    DEFER {
+        for (ExportFileProgress & fileProgress : m_exportFilesProgress) {
+            fileProgress.progress.finish(muse::make_ok());
+        }
+        m_exportFilesProgress.clear();
+    };
+
     std::vector<std::unique_ptr<FileStream> > files;
     files.reserve(notations.size());
 
@@ -530,12 +544,20 @@ Ret ExportProjectScenario::exportPartsInOnePass(INotationWriterPtr writer, const
             return make_ret(Ret::Code::InternalError);
         }
 
-        targets.push_back({ notation, file.get(), muse::Progress() });
+        muse::Progress fileProgress;
+        fileProgress.start();
+        m_exportFilesProgress.push_back({ notation->name(), fileProgress });
+
+        targets.push_back({ notation, file.get(), fileProgress });
         files.push_back(std::move(file));
     }
 
     if (targets.empty()) {
         return make_ret(Ret::Code::Cancel);
+    }
+
+    if (showFilesProgress) {
+        interactive()->open(AUDIO_EXPORT_PROGRESS_URI);
     }
 
     Ret ret = writer->writeParts(masterNotation()->notation(), targets, options);
@@ -545,6 +567,16 @@ Ret ExportProjectScenario::exportPartsInOnePass(INotationWriterPtr writer, const
     }
 
     return ret;
+}
+
+muse::Progress ExportProjectScenario::exportProgress() const
+{
+    return m_exportProgress;
+}
+
+const ExportFilesProgress& ExportProjectScenario::exportFilesProgress() const
+{
+    return m_exportFilesProgress;
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const

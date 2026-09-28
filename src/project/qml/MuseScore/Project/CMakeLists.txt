@@ -34,6 +34,8 @@ qt_add_qml_module(project_qml
         internal/ConvertFileToScore/filelistmodel.h
         internal/ConvertFileToScore/reviewscorequalitymodel.cpp
         internal/ConvertFileToScore/reviewscorequalitymodel.h
+        internal/Export/audioexportprogressmodel.cpp
+        internal/Export/audioexportprogressmodel.h
         internal/Export/exportdialogmodel.cpp
         internal/Export/exportdialogmodel.h
         internal/NewScore/additionalinfomodel.cpp
@@ -146,6 +148,7 @@ qt_add_qml_module(project_qml
         SaveToCloudDialog.qml
         ScoresPage.qml
         UploadProgressDialog.qml
+        AudioExportProgressDialog.qml
     RESOURCES
         internal/Migration/migration.png
         internal/SaveToCloud/images/Cloud.png
@@ -160,6 +163,7 @@ qt_add_qml_module(project_qml
         resources/ScoreProcessing.png
     IMPORTS
         TARGET muse_cloud_qml
+        TARGET muse_interactive_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
         TARGET notationscene_qml
