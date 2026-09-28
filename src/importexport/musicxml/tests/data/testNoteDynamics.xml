@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+     The dynamics attribute of <note> maps to the note's velocity as a
+     percentage of the MIDI 1.0 default forte value of 90. The expected
+     imported velocities (visible as <velocity> in the reference .mscx) are:
+       - no dynamics attribute -> no <velocity> element (unset)
+       - dynamics="0"          -> velocity 1   (silent note; 0 means "unset"
+                                                 in the model, so it is clamped
+                                                 to the lowest representable value)
+       - dynamics="50"         -> velocity 45  (50% of forte = 90)
+       - dynamics="200"        -> velocity 127 (clamped to the MIDI maximum)
+-->
+<score-partwise version="4.0">
+  <movement-title>Note dynamics attribute</movement-title>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Voice</part-name>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>480</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>5</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>480</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note dynamics="0">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>480</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notehead>x</notehead>
+      </note>
+      <note dynamics="50">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>480</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note dynamics="200">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>480</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>480</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+  </part>
+</score-partwise>

@@ -1063,6 +1063,9 @@ TEST_F(MusicXml_Tests, noteAttributes3) {
 TEST_F(MusicXml_Tests, noteColor) {
     musicXmlIoTest("testNoteColor");
 }
+TEST_F(MusicXml_Tests, noteDynamics) {
+    musicXmlImportTestRef("testNoteDynamics");
+}
 TEST_F(MusicXml_Tests, noteheadNames) {
     musicXmlIoTest("testNoteheadNames");
 }
