@@ -693,6 +693,36 @@ void ExportDialogModel::setSampleRate(int rate)
     emit sampleRateChanged(rate);
 }
 
+bool ExportDialogModel::multiStemRender() const
+{
+    return audioExportConfiguration()->multiStemRender();
+}
+
+void ExportDialogModel::setMultiStemRender(bool enabled)
+{
+    if (enabled == multiStemRender()) {
+        return;
+    }
+
+    audioExportConfiguration()->setMultiStemRender(enabled);
+    emit multiStemRenderChanged(enabled);
+}
+
+bool ExportDialogModel::idleUntilFirstNote() const
+{
+    return audioExportConfiguration()->idleUntilFirstNote();
+}
+
+void ExportDialogModel::setIdleUntilFirstNote(bool enabled)
+{
+    if (enabled == idleUntilFirstNote()) {
+        return;
+    }
+
+    audioExportConfiguration()->setIdleUntilFirstNote(enabled);
+    emit idleUntilFirstNoteChanged(enabled);
+}
+
 QList<int> ExportDialogModel::availableBitRates() const
 {
     const std::vector<int>& rates = audioExportConfiguration()->availableMp3BitRates();

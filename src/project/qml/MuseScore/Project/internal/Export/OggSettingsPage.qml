@@ -34,6 +34,12 @@ ExportSettingsPage {
         showSampleRateControl: false
     }
 
+    MultiStemRenderSettings {
+        model: root.model
+        navigationPanel: root.navigationPanel
+        navigationOrder: root.navigationOrder + 4
+    }
+
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")

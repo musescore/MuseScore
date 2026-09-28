@@ -91,6 +91,7 @@ qt_add_qml_module(project_qml
         internal/Export/MeiSettingsPage.qml
         internal/Export/MidiSettingsPage.qml
         internal/Export/MnxSettingsPage.qml
+        internal/Export/MultiStemRenderSettings.qml
         internal/Export/Mp3SettingsPage.qml
         internal/Export/OggSettingsPage.qml
         internal/Export/FlacSettingsPage.qml
