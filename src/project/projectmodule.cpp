@@ -22,6 +22,8 @@
 #include "projectmodule.h"
 
 #include "modularity/ioc.h"
+#include "global/api/ifilesystemapirestriction.h"
+
 #include "internal/projectcreator.h"
 #include "internal/projectautosaver.h"
 #include "internal/projectactionscontroller.h"
@@ -100,6 +102,21 @@ void ProjectModule::resolveImports()
     auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
     if (cr) {
         cr->reg(std::make_shared<ProjectCommandsRegister>());
+    }
+}
+
+void ProjectModule::registerApi()
+{
+    auto fsRestriction = globalIoc()->resolve<muse::api::IFileSystemApiRestriction>(moduleName());
+    if (fsRestriction) {
+        fsRestriction->addAllowedPathBase("userProjectsPath", m_configuration->userProjectsPath());
+        fsRestriction->addAllowedPathBase("userTemplatesPath", m_configuration->userTemplatesPath());
+        m_configuration->userProjectsPathChanged().onReceive(this, [fsRestriction](const muse::io::path_t& path) {
+            fsRestriction->addAllowedPathBase("userProjectsPath", path);
+        });
+        m_configuration->userTemplatesPathChanged().onReceive(this, [fsRestriction](const muse::io::path_t& path) {
+            fsRestriction->addAllowedPathBase("userTemplatesPath", path);
+        });
     }
 }
 

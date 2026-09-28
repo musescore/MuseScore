@@ -22,6 +22,8 @@
 
 #include "globalcontext.h"
 
+#include "global/io/fileinfo.h"
+
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
 #include "project/inotationproject.h"
@@ -47,7 +49,21 @@ void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
     INotationProjectPtr prevProject = m_currentProject;
     INotationPtr prevNotation = m_currentNotation;
 
+    if (m_currentProject) {
+        fsRestriction()->removeAllowedPathBase("project");
+    }
+
     m_currentProject = project;
+
+    if (m_currentProject) {
+        fsRestriction()->addAllowedPathBase("project", muse::io::dirpath(m_currentProject->path()));
+
+        m_currentProject->pathChanged().onNotify(this, [this]() {
+            fsRestriction()->addAllowedPathBase("project", muse::io::dirpath(m_currentProject->path()));
+        });
+    } else {
+        fsRestriction()->removeAllowedPathBase("project");
+    }
 
     INotationPtr notation = project ? project->masterNotation()->notation() : nullptr;
     doSetCurrentNotation(notation);
