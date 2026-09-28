@@ -83,8 +83,8 @@
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>A skipped open Volta at the end of the score
-should not swallow the remainder of the score</text>
+          <text>An open Volta beyond the exhausted repeats
+is played after them</text>
           </Text>
         </VBox>
       <TBox>
@@ -96,7 +96,7 @@ should not swallow the remainder of the score</text>
         <bottomMargin>1</bottomMargin>
         <Text>
           <style>Frame</style>
-          <text>1,2   1   4,5
+          <text>1,2   1   3,4,5
 </text>
           </Text>
         </TBox>
@@ -156,7 +156,7 @@ should not swallow the remainder of the score</text>
             </Spanner>
           <Spanner type="Volta">
             <Volta>
-              <beginText>3. (skip)</beginText>
+              <beginText>3.</beginText>
               <endings>3</endings>
               </Volta>
             <next>
