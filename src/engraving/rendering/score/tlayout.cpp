@@ -131,6 +131,7 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
+#include "dom/stringdata.h"
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/system.h"
@@ -1758,11 +1759,14 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
+    ldata->stringNames.clear();
+
     // determine current number of lines and line distance
     int lines = 5;
     Spatium lineDist = 1.0_sp;
     int stepOffset = 0;
     Spatium staffOffsetY = 0_sp;
+    const StaffType* clefStaffType = nullptr;
 
     Segment* clefSeg  = item->segment();
 
@@ -1807,6 +1811,37 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         lines      = st->lines();             // init values from staff type
         lineDist   = st->lineDistance();
         stepOffset = st->stepOffset();
+        clefStaffType = st;
+
+        if (item->clefType() == ClefType::TAB_STRING_NAMES) {
+            // Use the clef's own tick (not the measure-start tick used for staff-type
+            // selection above) so a mid-measure re-tuning takes effect exactly where it
+            // occurs, even for a clef segment at the very end of that measure.
+            const StringData* stringData = item->staff()->part()
+                                           ? item->staff()->part()->stringData(item->tick(), item->staffIdx())
+                                           : nullptr;
+            const int numStrings = stringData ? static_cast<int>(stringData->strings()) : 0;
+            if (numStrings > 0) {
+                const std::vector<instrString>& stringList = stringData->stringList();
+                for (int line = 0; line < lines; ++line) {
+                    const int index = numStrings - 1 - line;
+                    if (index < 0 || index >= numStrings) {
+                        ldata->stringNames.push_back(String());
+                        continue;
+                    }
+                    const instrString& openString = stringList[index];
+                    const String pitchStr = pitch2string(openString.pitch, openString.useFlat);
+                    String accidental;
+                    if (pitchStr.size() > 1) {
+                        Char sym(pitchStr[1]);
+                        if (!sym.isDigit()) {
+                            accidental = String(sym);
+                        }
+                    }
+                    ldata->stringNames.push_back(String(pitchStr[0]).toUpper() + accidental);
+                }
+            }
+        }
 
         const Spatium stOffset = st->yoffset();
         const Spatium stPrevOffset = stPrev && clefSeg->rtick() != Fraction(0, 1) ? stPrev->yoffset() : 0.0_sp;
@@ -1822,6 +1857,11 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         ldata->symId = SymId::noSym;
     }
 
+    if (item->clefType() == ClefType::TAB_STRING_NAMES && ldata->stringNames.empty()) {
+        // no real string data to draw (e.g. palette preview): fall back to the plain TAB glyph
+        ldata->symId = SymId::sixStringTabClef;
+    }
+
     switch (item->clefType()) {
     case ClefType::C_19C:                                    // 19th C clef is like a G clef
         yoff = lineDist * 1.5;
@@ -1830,6 +1870,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     case ClefType::TAB4:                                    // TAB clef 4 strings
     case ClefType::TAB_SERIF:                               // TAB clef alternate style
     case ClefType::TAB4_SERIF:                              // TAB clef alternate style
+    case ClefType::TAB_STRING_NAMES:                        // TAB clef showing the open string names
         // on tablature, position clef at half the number of spaces * line distance
         yoff = lineDist * (lines - 1) * .5;
         stepOffset = 0;           //  ignore stepOffset for TAB and percussion clefs
@@ -1846,6 +1887,55 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     default:
         break;
     }
+    if (item->clefType() == ClefType::TAB_STRING_NAMES && !ldata->stringNames.empty() && clefStaffType) {
+        // custom bbox for the stack of open-string names, instead of a symbol bbox.
+        double lineDistAbs = lineDist.toAbsolute(_spatium);
+        double halfHeight = lineDistAbs * (lines - 1) * 0.5;
+        // Store the line distance used here so TDraw::draw uses the exact same value,
+        // instead of re-deriving it from the staff type at the clef's own tick (which can
+        // pick a different staff-type instance than the one selected above for this clef).
+        ldata->stringNamesLineDist = lineDistAbs;
+
+        // Size the letters from the staff's own line distance rather than a fixed point
+        // size: a fixed size overlaps on a tightly-spaced tab staff (or leaves the letters
+        // too small on a widely-spaced one). Measure a probe font's cap height and scale so
+        // the drawn cap height is a fixed fraction of the space between two lines.
+        Font probeFont(u"Edwin", Font::Type::Text);
+        probeFont.setPointSizeF(10.0);
+        const double probeCapHeight = FontMetrics(probeFont).capHeight();
+        const double pointSize = probeCapHeight > 0.0
+                                 ? 10.0 * (lineDistAbs * 0.65) / probeCapHeight
+                                 : 10.0 * item->magS();
+
+        double width = 0.0;
+        double above = 0.0;    // tallest extent above the text baseline
+        double below = 0.0;    // tallest extent below the text baseline
+        for (const String& name : ldata->stringNames) {
+            // Build the font fresh for each letter rather than sharing one Font/FontMetrics
+            // pair across the loop: a plain text font ("Edwin" here, rather than
+            // Sid::staffTextFontFace, which is user/score-configurable and may point at a
+            // music-symbol font that remaps plain Latin letters to unrelated glyphs).
+            Font font(u"Edwin", Font::Type::Text);
+            font.setPointSizeF(pointSize);
+            FontMetrics fm(font);
+            RectF r = fm.boundingRect(name);
+            width = std::max(width, r.width());
+            above = std::max(above, -r.top());
+            below = std::max(below, r.bottom());
+        }
+        RectF bbox(-width * 0.5, -halfHeight - above, width, halfHeight * 2.0 + above + below);
+        Shape shape(bbox, item);
+        bool isMidMeasureClef = item->isMidMeasureClef();
+        double x = isMidMeasureClef ? -shape.right() : 0.0;
+        ldata->setPos(PointF(x, (yoff + (Spatium(stepOffset) * 0.5) + staffOffsetY).toAbsolute(_spatium)));
+        if (isMidMeasureClef) {
+            ldata->setShape(shape);
+        } else {
+            ldata->setBbox(bbox);
+        }
+        return;
+    }
+
     // clefs on palette or at start of system/measure are left aligned
     // other clefs are right aligned
     Shape shape(item->symShapeWithCutouts(ldata->symId));
