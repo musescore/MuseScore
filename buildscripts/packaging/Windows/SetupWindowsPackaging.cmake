@@ -86,4 +86,18 @@ if (MUSE_APP_IS_PRERELEASE)
     list(APPEND CPACK_WIX_CANDLE_EXTRA_FLAGS "-dMUSE_APP_IS_PRERELEASE=ON")
 endif()
 
+# By default CPack runs the install rules again into its own staging directory,
+# so it would take the binaries from the build directory and run windeployqt again.
+# That overwrites the binaries that have already been signed in the install directory,
+# therefore pack the install directory as is.
+option(MUE_PACK_INSTALL_DIR "Pack the content of CMAKE_INSTALL_PREFIX instead of running the install rules again" OFF)
+
+if (MUE_PACK_INSTALL_DIR)
+    get_filename_component(MUE_PACK_INSTALL_DIR_PATH "${CMAKE_INSTALL_PREFIX}" ABSOLUTE BASE_DIR "${CMAKE_BINARY_DIR}")
+    message(STATUS "[SetupWindowsPackaging.cmake] Pack install dir: ${MUE_PACK_INSTALL_DIR_PATH}")
+    set(CPACK_INSTALLED_DIRECTORIES "${MUE_PACK_INSTALL_DIR_PATH};.")
+    # must be empty, otherwise CPack would run the install rules on top of the installed directory
+    set(CPACK_INSTALL_CMAKE_PROJECTS "")
+endif()
+
 include(CPack)

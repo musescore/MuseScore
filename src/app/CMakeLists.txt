@@ -347,7 +347,7 @@ if (OS_IS_WIN)
     endif (WIN_PORTABLE)
 
     if (MUE_RUN_WINDEPLOYQT)
-        set(deploy_tool_options_arg "--plugindir bin --qmldir ${PROJECT_SOURCE_DIR}")
+        set(deploy_tool_options_arg "--plugindir bin --qmldir ${PROJECT_SOURCE_DIR} --no-compiler-runtime")
         qt_generate_deploy_qml_app_script(
             TARGET MuseScoreStudio
             OUTPUT_SCRIPT deploy_script
