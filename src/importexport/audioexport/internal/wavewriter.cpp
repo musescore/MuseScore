@@ -30,7 +30,12 @@ using namespace mu::iex::audioexport;
 
 Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
-    const SoundTrackFormat format {
+    return doWriteAndWait(notation, destinationDevice, soundTrackFormat());
+}
+
+SoundTrackFormat WaveWriter::soundTrackFormat() const
+{
+    return SoundTrackFormat {
         SoundTrackType::WAV,
         {
             static_cast<sample_rate_t>(configuration()->exportSampleRate()),
@@ -40,6 +45,4 @@ Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destination
         configuration()->exportWavSampleFormat(),
         0 /* bitRate */
     };
-
-    return doWriteAndWait(notation, destinationDevice, format);
 }
