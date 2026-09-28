@@ -906,7 +906,12 @@ void RepeatList::unwind()
             } break;
             case RepeatListElementType::VOLTA_START: {
                 activeVolta = toVolta((*repeatListElementIt)->element);
-                if (!(activeVolta->hasEnding(playbackCount))) {
+                // An open volta whose endings all lie beyond the exhausted repeats is played after them
+                const bool playAfterRepeats = (activeVolta->endHookType() == HookType::NONE)
+                                              && (playbackCount > 1)
+                                              && (playbackCount >= startRepeatReference->getRepeatCount())
+                                              && (activeVolta->firstEnding() > playbackCount);
+                if (!activeVolta->hasEnding(playbackCount) && !playAfterRepeats) {
                     // Should be skipped, remove our measure from rs
                     rs->popMeasure();
                     if (!rs->isEmpty()) {
