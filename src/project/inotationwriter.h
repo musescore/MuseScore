@@ -54,6 +54,14 @@ public:
 
         LEADING_SILENCE_SEC,
         TRAILING_SILENCE_SEC,
+
+        AUDIO_EXPORT_START_TICK,
+        AUDIO_EXPORT_END_TICK,
+        AUDIO_EXPORT_TEMPO_PERCENT,
+        AUDIO_EXPORT_PART_VOLUMES,
+        AUDIO_EXPORT_FADE_IN_SEC,
+        AUDIO_EXPORT_FADE_OUT_SEC,
+        AUDIO_EXPORT_METRONOME_ENABLED,
     };
 
     using Options = std::map<OptionKey, muse::Val>;

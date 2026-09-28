@@ -145,6 +145,11 @@ const engraving::InstrumentTrackId& NotationPlayback::metronomeTrackId() const
     return m_playbackModel.metronomeTrackId();
 }
 
+void NotationPlayback::setIsMetronomeEnabled(bool enabled)
+{
+    m_playbackModel.setIsMetronomeEnabled(enabled);
+}
+
 engraving::InstrumentTrackId NotationPlayback::chordSymbolsTrackId(const ID& partId) const
 {
     return m_playbackModel.chordSymbolsTrackId(partId);

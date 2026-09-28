@@ -279,6 +279,14 @@ void PlaybackControllerStub::setIsExportingAudio(bool)
 {
 }
 
+void PlaybackControllerStub::setSelectionExportTrackVolumes(const PartVolumeMap&)
+{
+}
+
+void PlaybackControllerStub::setSelectionExportMetronomeEnabled(bool)
+{
+}
+
 const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& PlaybackControllerStub::onlineSounds() const
 {
     static const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> dummy;

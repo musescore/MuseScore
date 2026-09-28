@@ -60,8 +60,8 @@ public:
                                                  muse::io::path_t defaultDirPath = "") const override;
 
     bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                      bool openDestinationFolderOnExport = false) const override;
+                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART, bool openDestinationFolderOnExport = false,
+                      const INotationWriter::Options& writerOptions = {}) const override;
 
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
