@@ -194,6 +194,7 @@ private:
         std::vector<CenterableItem> items;
     };
 
+    static bool snapChainShouldBeCenteredBetweenStaves(EngravingItem* item, const System* system);
     static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system, bool placeAbove);
     static bool mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system);
     static bool whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system);
@@ -202,16 +203,11 @@ private:
     static void collectCenterableItems(const System* system, std::vector<Gap>& gaps, std::vector<MMRest*>& mmRestsToCenter);
     static std::vector<std::vector<const CenterableItem*> > groupItemsToCenterTogether(const std::vector<const CenterableItem*>& items,
                                                                                        double minHorizontalClearance);
-    static void centerItemsInGap(const Gap& gap, const System* system, std::vector<EngravingItem*>& centeredItems,
-                                 double minHorizontalClearance);
+    static void centerItemsInGap(const Gap& gap, const System* system, double minHorizontalClearance);
     static double gapConvergeDistance(const std::vector<const CenterableItem*>& group, double yStaffDiff, double minHorizontalClearance);
     static double convergenceMoveFor(const CenterableItem* centerableItem, double convergeDistance);
     static void centerItemGroup(const std::vector<const CenterableItem*>& group, const System* system, const SkylineLine& upperSkyline,
-                                const SkylineLine& lowerSkyline, double yStaffDiff, std::vector<EngravingItem*>& centeredItems,
-                                double minHorizontalClearance);
-    static void updateStaffCenteringInfo(const std::vector<const CenterableItem*>& group, const std::vector<double>& spaceAbove,
-                                         const std::vector<double>& spaceBelow, double yMove, double convergeDistance,
-                                         double minHorizontalClearance);
+                                const SkylineLine& lowerSkyline, double yStaffDiff, double minHorizontalClearance);
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
