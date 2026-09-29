@@ -63,6 +63,7 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
     Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
     Q_PROPERTY(bool isStaveSharingEnabled READ isStaveSharingEnabled NOTIFY isStaveSharingEnabledChanged FINAL)
+    Q_PROPERTY(bool isHideEmptyStavesEnabled READ isHideEmptyStavesEnabled NOTIFY isHideEmptyStavesEnabledChanged FINAL)
 
     QML_ELEMENT
 
@@ -95,9 +96,11 @@ public:
     int selectedItemsType() const;
 
     bool isStaveSharingEnabled() const;
+    bool isHideEmptyStavesEnabled() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void toggleStaveSharing(bool on);
+    Q_INVOKABLE void toggleHideEmptyStaves(bool on);
     Q_INVOKABLE void setLayoutPanelVisible(bool visible);
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE void clearSelection();
@@ -129,6 +132,7 @@ signals:
     void addInstrumentsKeyboardShortcutChanged();
     void selectedItemsTypeChanged(int type);
     void isStaveSharingEnabledChanged(bool enabled);
+    void isHideEmptyStavesEnabledChanged(bool enabled);
 
 private slots:
     void updateRearrangementAvailability();
@@ -138,6 +142,8 @@ private slots:
     void updateSelectedItemsType();
     void updateIsAddingSystemMarkingsAvailable();
     void updateIsStaveSharingEnabled();
+    void updateIsHideEmptyStavesEnabled();
+    void updateSharedGroupRoles();
 
 private:
     void classBegin() override;
@@ -202,6 +208,7 @@ private:
     bool m_isAddingSystemMarkingsAvailable = false;
 
     bool m_isStaveSharingEnabled = false;
+    bool m_isHideEmptyStavesEnabled = false;
 
     LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 

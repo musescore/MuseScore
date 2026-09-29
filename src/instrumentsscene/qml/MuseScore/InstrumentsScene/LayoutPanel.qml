@@ -57,6 +57,8 @@ Item {
         }
     }
 
+
+
     LayoutPanelContextMenuModel {
         id: contextMenuModel
 
@@ -73,6 +75,106 @@ Item {
         id: prv
 
         property string currentItemNavigationName: ""
+
+        // Shared-staves groups the user has opened (keyed by shared part id). Groups start collapsed.
+        property var expandedGroups: ({})
+
+        readonly property int rowContentHeight: 30
+        readonly property int groupPadding: 4
+        readonly property int groupMemberSpacing: 2
+        readonly property int itemSpacing: 8
+
+        function isGroupExpanded(groupId) {
+            // Groups can't be collapsed while their instruments aren't combined
+            return !treeModel.isStaveSharingEnabled || Boolean(prv.expandedGroups[groupId])
+        }
+
+        function toggleGroupExpanded(groupId) {
+            let groups = Object.assign({}, prv.expandedGroups)
+            groups[groupId] = !groups[groupId]
+            prv.expandedGroups = groups
+        }
+
+        // Vertical layout of a tree row. Rows are laid out as "cards": a part and its expanded
+        // staves form one card, and consecutive rows of a shared-staves group sit on a common
+        // group background. Returns the padding above/below the row content (inside the group
+        // background) and the gap below the row (outside it).
+        // Interaction state of shared-staves group headers, which is shown on the whole group's background
+        // Number of hovered rows per group (rows hand over hover in either order when moving between them)
+        property var groupHoverCounts: ({})
+        property string pressedGroupId: ""
+
+        function setGroupRowHovered(groupId, hovered) {
+            let counts = Object.assign({}, prv.groupHoverCounts)
+            counts[groupId] = Math.max(0, (counts[groupId] || 0) + (hovered ? 1 : -1))
+            prv.groupHoverCounts = counts
+        }
+        property var selectedGroups: ({})
+
+        function setGroupSelected(groupId, selected) {
+            let groups = Object.assign({}, prv.selectedGroups)
+            groups[groupId] = selected
+            prv.selectedGroups = groups
+        }
+
+        // Bumped whenever rows are added, removed, moved, expanded or collapsed, to re-evaluate row heights
+        property int treeRevision: 0
+
+        function rowMetrics(item, index, isExpanded) {
+            let m = { hidden: false, top: 0, bottom: 0, gap: 0, height: 0, inGroup: false,
+                      groupTop: false, groupBottom: false, cardBottom: true }
+
+            if (!item || !index || !index.valid) {
+                return m
+            }
+
+            const depth = index.parent.valid ? 1 : 0
+            const role = item.sharedGroupRole
+
+            m.inGroup = role !== LayoutPanelItemType.NOT_IN_GROUP
+
+            const isMember = role === LayoutPanelItemType.GROUP_MEMBER || role === LayoutPanelItemType.GROUP_LAST_MEMBER
+            if ((isMember && !prv.isGroupExpanded(item.sharedGroupId))
+                    || (m.inGroup && item.type === LayoutPanelItemType.CONTROL_ADD_STAFF)) {
+                // Instruments in a group can't add staves, so the "Add staff" row is omitted
+                m.hidden = true
+                return m
+            }
+
+            // In groups, the (hidden) "Add staff" control is always the last child
+            const visibleSiblingCount = treeModel.rowCount(index.parent) - (depth > 0 && m.inGroup ? 1 : 0)
+            const isLastChild = index.row >= visibleSiblingCount - 1
+
+            m.cardBottom = depth === 0 ? !isExpanded : isLastChild
+
+            switch (role) {
+            case LayoutPanelItemType.GROUP_HEADER:
+                m.top = prv.groupPadding
+                m.bottom = prv.groupPadding
+                m.groupTop = true
+                if (!prv.isGroupExpanded(item.sharedGroupId)) {
+                    m.groupBottom = true
+                    m.gap = prv.itemSpacing
+                }
+                break
+            case LayoutPanelItemType.GROUP_MEMBER:
+                m.bottom = m.cardBottom ? prv.groupMemberSpacing : 0
+                break
+            case LayoutPanelItemType.GROUP_LAST_MEMBER:
+                if (m.cardBottom) {
+                    m.bottom = prv.groupPadding
+                    m.gap = prv.itemSpacing
+                    m.groupBottom = true
+                }
+                break
+            default:
+                m.gap = m.cardBottom ? prv.itemSpacing : 0
+                break
+            }
+
+            m.height = m.top + prv.rowContentHeight + m.bottom + m.gap
+            return m
+        }
     }
 
     ColumnLayout {
@@ -81,7 +183,8 @@ Item {
         anchors.fill: parent
 
         readonly property int sideMargin: 12
-        spacing: sideMargin
+        readonly property int listMargin: 8
+        spacing: 0
 
         LayoutControlPanel {
             id: controlPanel
@@ -123,14 +226,34 @@ Item {
         }
 
         ToggleButton {
+            Layout.topMargin: 8
             Layout.leftMargin: contentColumn.sideMargin
+            Layout.rightMargin: contentColumn.sideMargin
 
-            text: qsTrc("layoutpanel", "Enable stave sharing")
+            navigation.panel: controlPanel.navigation
+            navigation.order: 5
+
+            text: qsTrc("layoutpanel", "Automatically hide all empty staves")
+            checked: treeModel.isHideEmptyStavesEnabled
+            onToggled: treeModel.toggleHideEmptyStaves(!checked)
+        }
+
+        ToggleButton {
+            Layout.topMargin: 8
+            Layout.leftMargin: contentColumn.sideMargin
+            Layout.rightMargin: contentColumn.sideMargin
+
+            navigation.panel: controlPanel.navigation
+            navigation.order: 6
+
+            text: qsTrc("layoutpanel", "Combine instruments onto shared staves")
             checked: treeModel.isStaveSharingEnabled
             onToggled: treeModel.toggleStaveSharing(!checked)
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            Layout.topMargin: contentColumn.sideMargin
+        }
 
         StyledTextLabel {
             Layout.fillWidth: true
@@ -158,10 +281,14 @@ Item {
         LegacyTreeView {
             id: layoutPanelTreeView
 
+            // Approximate: rows have variable heights (see prv.rowMetrics)
             readonly property real delegateHeight: 38
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.topMargin: contentColumn.listMargin
+            Layout.leftMargin: contentColumn.listMargin
+            Layout.rightMargin: contentColumn.listMargin
 
             visible: !treeModel.isEmpty
 
@@ -170,6 +297,18 @@ Item {
             }
 
             selection: treeModel ? treeModel.selectionModel() : null
+
+            onExpanded: prv.treeRevision++
+            onCollapsed: prv.treeRevision++
+
+            Connections {
+                target: treeModel
+
+                function onRowsInserted() { prv.treeRevision++ }
+                function onRowsRemoved() { prv.treeRevision++ }
+                function onRowsMoved() { prv.treeRevision++ }
+                function onModelReset() { prv.treeRevision++ }
+            }
 
             alternatingRowColors: false
             headerVisible: false
@@ -227,14 +366,126 @@ Item {
                 branchDelegate: null
                 backgroundColor: "transparent"
 
+                // NOTE: the row delegate has no access to the row's model data (only to styleData),
+                // so the item is looked up by row. The view's (hidden) row filler has no row at all.
                 rowDelegate: Item {
-                    height: layoutPanelTreeView.delegateHeight
+                    id: rowDelegateItem
+
+                    readonly property real rowHeight: {
+                        prv.treeRevision
+                        if (typeof styleData.row === "undefined" || styleData.row < 0) {
+                            return 0
+                        }
+
+                        const index = layoutPanelTreeView.__model.mapRowToModelIndex(styleData.row)
+                        return prv.rowMetrics(treeModel.modelIndexToItem(index), index, layoutPanelTreeView.isExpanded(index)).height
+                    }
+
                     width: parent.width
+
+                    // The view's Loader resizes this item (which would discard a plain binding), so re-apply on every change
+                    Binding {
+                        target: rowDelegateItem
+                        property: "height"
+                        value: rowDelegateItem.rowHeight
+                    }
                 }
             }
 
             itemDelegate: DropArea {
                 id: dropArea
+
+                readonly property var metrics: { prv.treeRevision; return prv.rowMetrics(rowItem, styleData.index, styleData.isExpanded) }
+                readonly property AbstractLayoutPanelTreeItem rowItem: model ? model.item : null
+                readonly property AbstractLayoutPanelTreeItem parentRowItem: styleData.depth > 0 ? treeModel.modelIndexToItem(styleData.index.parent) : null
+
+                // Whether this row belongs to a shared-staves group whose instruments are currently combined
+                readonly property bool isGroupCombined: {
+                    if (!metrics.inGroup || !rowItem) {
+                        return false
+                    }
+
+                    if (rowItem.type === LayoutPanelItemType.SHARED_PART) {
+                        return rowItem.isEnabled
+                    }
+
+                    // Origin parts are disabled while their shared part is enabled
+                    const partItem = styleData.depth > 0 ? parentRowItem : rowItem
+                    return Boolean(partItem) && !partItem.isEnabled
+                }
+
+                visible: !metrics.hidden
+
+                // Hovering anywhere on a group (including its instruments) shows the group's hover state
+                HoverHandler {
+                    id: groupHover
+                    enabled: dropArea.metrics.inGroup
+                }
+
+                readonly property string groupId: rowItem ? rowItem.sharedGroupId : ""
+                readonly property bool isOverGroup: groupHover.hovered && groupHover.point.position.y < height - metrics.gap
+                property string hoverReportedGroupId: ""
+
+                function updateGroupHover() {
+                    const groupId = isOverGroup ? dropArea.groupId : ""
+                    if (groupId === hoverReportedGroupId) {
+                        return
+                    }
+                    if (hoverReportedGroupId !== "") {
+                        prv.setGroupRowHovered(hoverReportedGroupId, false)
+                    }
+                    if (groupId !== "") {
+                        prv.setGroupRowHovered(groupId, true)
+                    }
+                    hoverReportedGroupId = groupId
+                }
+
+                onIsOverGroupChanged: updateGroupHover()
+                onGroupIdChanged: updateGroupHover()
+                Component.onDestruction: {
+                    if (hoverReportedGroupId !== "") {
+                        prv.setGroupRowHovered(hoverReportedGroupId, false)
+                    }
+                }
+
+                // Shared-staves group background: one segment per row, rounded at the group's ends
+                Item {
+                    width: parent.width
+                    height: parent.height - dropArea.metrics.gap
+
+                    visible: dropArea.metrics.inGroup
+                    clip: true
+
+                    Rectangle {
+                        readonly property int overflow: 8
+
+                        readonly property string groupId: dropArea.rowItem ? dropArea.rowItem.sharedGroupId : ""
+                        readonly property bool isSelected: Boolean(prv.selectedGroups[groupId])
+                        readonly property bool isHovered: (prv.groupHoverCounts[groupId] || 0) > 0
+                        readonly property bool isPressed: prv.pressedGroupId === groupId
+                        readonly property bool isFilled: dropArea.isGroupCombined || isSelected || isHovered || isPressed
+
+                        width: parent.width
+                        y: dropArea.metrics.groupTop ? 0 : -overflow
+                        height: parent.height + (dropArea.metrics.groupTop ? 0 : overflow) + (dropArea.metrics.groupBottom ? 0 : overflow)
+
+                        radius: 6
+                        color: isSelected ? ui.theme.accentColor : isFilled ? ui.theme.buttonColor : "transparent"
+                        border.width: isFilled ? 0 : 1
+                        border.color: ui.theme.strokeColor
+
+                        opacity: {
+                            if (isSelected) {
+                                return isPressed ? 0.7 : isHovered ? 0.4 : 0.5
+                            }
+                            if (dropArea.isGroupCombined) {
+                                return isPressed ? 0.7 : isHovered ? 0.3 : 0.5
+                            }
+                            // Outline only (instruments not combined)
+                            return isPressed ? 0.5 : isHovered ? 0.3 : 1
+                        }
+                    }
+                }
 
                 Loader {
                     id: treeItemDelegateLoader
@@ -259,7 +510,14 @@ Item {
                             depth: styleData.depth
                             isExpanded: styleData.isExpanded
 
-                            sideMargin: contentColumn.sideMargin
+                            contentTopMargin: dropArea.metrics.top
+                            contentHeight: prv.rowContentHeight
+                            cardBottom: dropArea.metrics.cardBottom
+                            isInGroup: dropArea.metrics.inGroup
+                            isGroupCombined: dropArea.isGroupCombined
+                            isGroupExpanded: Boolean(item) && prv.isGroupExpanded(item.sharedGroupId)
+                            isStaveSharingEnabled: treeModel.isStaveSharingEnabled
+                            isLastRow: styleData.depth === 0 && !styleData.hasSibling
 
                             navigation.name: item?.title || "LayoutPanelItemDelegate"
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
@@ -277,7 +535,34 @@ Item {
                                 }
                             }
 
+                            readonly property bool isGroupHeader: type === LayoutPanelItemType.SHARED_PART
+                            readonly property string groupId: item ? item.sharedGroupId : ""
+
+                            readonly property bool isHeaderPressed: isGroupHeader && mouseArea.pressed
+                            onIsHeaderPressedChanged: {
+                                prv.pressedGroupId = isHeaderPressed ? groupId : (prv.pressedGroupId === groupId ? "" : prv.pressedGroupId)
+                            }
+
+                            readonly property bool isHeaderSelected: isGroupHeader && isSelected
+                            onIsHeaderSelectedChanged: prv.setGroupSelected(groupId, isHeaderSelected)
+                            Component.onCompleted: {
+                                if (isHeaderSelected) {
+                                    prv.setGroupSelected(groupId, true)
+                                }
+                            }
+
+                            onGroupExpandToggled: {
+                                prv.toggleGroupExpanded(item.sharedGroupId)
+                            }
+
                             onDoubleClicked: {
+                                if (type === LayoutPanelItemType.SHARED_PART) {
+                                    if (treeModel.isStaveSharingEnabled) {
+                                        prv.toggleGroupExpanded(item.sharedGroupId)
+                                    }
+                                    return
+                                }
+
                                 if (!isExpandable) {
                                     return
                                 }
@@ -328,13 +613,11 @@ Item {
 
                         LayoutPanelItemControl {
                             title: model?.item?.title || ""
-                            isSelected: model?.item?.isSelected || false
 
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
                             navigation.row: model?.index || 0
 
-                            depth: styleData.depth
-                            sideMargin: contentColumn.sideMargin
+                            contentHeight: prv.rowContentHeight
 
                             onClicked: {
                                 styleData.value.appendNewItem()
