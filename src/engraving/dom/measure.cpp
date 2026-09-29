@@ -1718,10 +1718,11 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     case ElementType::HBOX:
         return score()->insertBox(toMeasureBase(e), this);
 
-    default: break;
+    default:
+        return MeasureBase::drop(tx, data);
     }
 
-    return MeasureBase::drop(tx, data);
+    return nullptr;
 }
 
 //---------------------------------------------------------

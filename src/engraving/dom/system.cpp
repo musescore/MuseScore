@@ -401,6 +401,7 @@ staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
     if (startStaffIdx == 0 || m_staves.empty()) {
         return muse::nidx;
     }
+    startStaffIdx = std::min(startStaffIdx, static_cast<staff_idx_t>(m_staves.size()));
 
     for (staff_idx_t i = startStaffIdx - 1;; --i) {
         Staff* s  = score()->staff(i);
@@ -420,7 +421,7 @@ staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
 
 staff_idx_t System::lastVisibleStaff() const
 {
-    size_t nstaves = score()->nstaves();
+    const size_t nstaves = std::min(score()->nstaves(), m_staves.size());
     if (nstaves < 1 || m_staves.empty()) {
         return muse::nidx;
     }

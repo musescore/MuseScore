@@ -328,6 +328,34 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
                                             SELRANGE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets-ref.mscx")));
 }
 
+TEST_F(Engraving_SelectionRangeTests, rangeDeleteBoxes)
+{
+    MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + u"selectionrangedelete07_boxes.mscx");
+    EXPECT_TRUE(score);
+
+    score->doLayout();
+
+    score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));
+    score->cmdSelectAll();
+    score->endCmd();
+
+    const Selection& sel = score->selection();
+    EXPECT_TRUE(sel.isRange());
+    LOGD() << sel.startMeasureBase()->typeName();
+    EXPECT_TRUE(sel.startMeasureBase() && sel.startMeasureBase()->isVBox());
+    EXPECT_TRUE(sel.endMeasureBase() && sel.endMeasureBase()->isHBox());
+
+    score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    score->doLayout();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionrangedelete07_boxes.mscx"),
+                                            SELRANGE_DATA_DIR + String(u"selectionrangedelete07_boxes-ref.mscx")));
+    delete score;
+}
+
 TEST_F(Engraving_SelectionRangeTests, deleteSelectionListElements)
 {
     MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + u"list-delete-crash.mscx");

@@ -201,7 +201,7 @@ Page* MeasureBase::nextPage() const
 bool MeasureBase::acceptDrop(EditData& data) const
 {
     const EngravingItem* e = data.dropElement;
-    if (!e) {
+    if (!e || !system() || !page()) {
         return false;
     }
 
@@ -230,7 +230,7 @@ bool MeasureBase::acceptDrop(EditData& data) const
 EngravingItem* MeasureBase::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    if (!e) {
+    if (!e || !system() || !page()) {
         delete e;
         return nullptr;
     }

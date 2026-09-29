@@ -156,12 +156,14 @@ std::vector<muse::RectF> ScoreRangeUtilities::boundingArea(const Score* score,
         result.push_back(boxRunBoundingRect(toBox(first), /*forwards*/ true, toBox(last)));
     }
 
-    // Handle start/end boxes that exist on a different system to the start/end segment...
-    if (startBox && startBox->system() != firstSegmentSystem && boxSystems.find(startBox->system()) == boxSystems.end()) {
-        result.push_back(boxRunBoundingRect(startBox, /*forwards*/ true));
-    }
-    if (endBox && endBox->system() != lastSegmentSystem && boxSystems.find(endBox->system()) == boxSystems.end()) {
-        result.push_back(boxRunBoundingRect(endBox, /*forwards*/ false));
+    if (!score->linearMode()) {
+        // Handle start/end boxes that exist on a different system to the start/end segment...
+        if (startBox && startBox->system() != firstSegmentSystem && boxSystems.find(startBox->system()) == boxSystems.end()) {
+            result.push_back(boxRunBoundingRect(startBox, /*forwards*/ true));
+        }
+        if (endBox && endBox->system() != lastSegmentSystem && boxSystems.find(endBox->system()) == boxSystems.end()) {
+            result.push_back(boxRunBoundingRect(endBox, /*forwards*/ false));
+        }
     }
 
     for (size_t i = 0; i < sections.size(); ++i) {
