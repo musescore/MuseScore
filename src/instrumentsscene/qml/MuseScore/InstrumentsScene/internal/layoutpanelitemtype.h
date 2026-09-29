@@ -40,5 +40,14 @@ enum ItemType {
     CONTROL_ADD_STAFF,
 };
 Q_ENUM_NS(ItemType)
+
+// Position of a top-level part row within a shared-staves group
+enum SharedGroupRole {
+    NOT_IN_GROUP = 0,
+    GROUP_HEADER,
+    GROUP_MEMBER,
+    GROUP_LAST_MEMBER,
+};
+Q_ENUM_NS(SharedGroupRole)
 }
 }

@@ -23,6 +23,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -49,13 +50,34 @@ FocusableControl {
     readonly property bool settingsAvailable: item && item.settingsAvailable
     readonly property bool settingsEnabled: item && item.settingsEnabled
 
-    property int sideMargin: 0
+    // Vertical position of the row content within the row (the rest is group padding / spacing, see LayoutPanel.qml)
+    property int contentTopMargin: 0
+    property int contentHeight: 30
+
+    // Whether this row closes its card (a part together with its expanded staves)
+    property bool cardBottom: true
+
+    property bool isInGroup: false
+    property bool isGroupCombined: false
+    property bool isGroupExpanded: false
+    property bool isStaveSharingEnabled: false
+
+    property bool isLastRow: false
 
     property alias isPopupOpened: popupLoader.isPopupOpened
+
+    readonly property bool isCardTop: root.depth === 0
+    readonly property bool isInExpandedCard: root.depth > 0 || (root.isExpanded && root.type === LayoutPanelItemType.PART)
+    readonly property bool isHovered: rowHover.hovered && !prv.dragged
+
+    // Group headers show their hover / pressed / selected state on the whole group's background (see LayoutPanel.qml)
+    readonly property bool usesRowHighlight: root.type !== LayoutPanelItemType.SHARED_PART
+    readonly property int cardRadius: 3
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal removeSelectionRequested()
+    signal groupExpandToggled()
 
     signal changeVisibilityOfSelectedRowsRequested(bool visible)
     signal changeVisibilityRequested(var modelIndex, bool visible)
@@ -101,10 +123,11 @@ FocusableControl {
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
-    navigation.accessible.name: visibilityControls.title
+    navigation.accessible.name: titleLabel.text
 
     onNavigationTriggered: { root.clicked(null) }
 
+    mouseArea.anchors.fill: contentArea
     mouseArea.preventStealing: true
     mouseArea.propagateComposedEvents: true
 
@@ -129,12 +152,36 @@ FocusableControl {
         }
     }
 
+    background.anchors.fill: contentArea
+    background.color: "transparent"
+    background.border.width: 0
+    background.topLeftRadius: root.isCardTop ? root.cardRadius : 0
+    background.topRightRadius: root.isCardTop ? root.cardRadius : 0
+    background.bottomLeftRadius: root.cardBottom ? root.cardRadius : 0
+    background.bottomRightRadius: root.cardBottom ? root.cardRadius : 0
+
     StyledRectangularShadow {
         id: shadow
 
-        anchors.fill: root.background
+        anchors.fill: contentArea
         visible: false
+        z: -2
+    }
+
+    // Card background: expanded instruments (with their staves), and instruments in a shared-staves group
+    Rectangle {
+        id: cardBackground
+
+        anchors.fill: contentArea
         z: -1
+
+        visible: root.isInExpandedCard || (root.isInGroup && root.type === LayoutPanelItemType.PART) || prv.dragged
+        color: root.isInExpandedCard ? ui.theme.textFieldColor : ui.theme.backgroundPrimaryColor
+
+        topLeftRadius: root.background.topLeftRadius
+        topRightRadius: root.background.topRightRadius
+        bottomLeftRadius: root.background.bottomLeftRadius
+        bottomRightRadius: root.background.bottomRightRadius
     }
 
     Loader {
@@ -143,13 +190,26 @@ FocusableControl {
         readonly property StyledPopupView openedPopup: popupLoader.item as StyledPopupView
         readonly property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
 
-        function openPopup(comp: Component, btn: FlatButton, item) {
+        function openPopup(comp: Component, btn: FlatButton, anchor: Item, item) {
             popupLoader.sourceComponent = comp
             if (!openedPopup) {
                 return
             }
 
-            openedPopup.parent = btn
+            // Open to the right of the button, top-aligned and flush with it, without an arrow
+            openedPopup.showArrow = false
+            openedPopup.placementPolicies = PopupView.PreferRight
+            openedPopup.parent = anchor
+
+            // Top-aligned with the button, but moved up as far as needed to stay within the window
+            const popup = openedPopup
+            const windowMargin = 8
+            popup.y = Qt.binding(function() {
+                const anchorTop = anchor.mapToItem(null, 0, 0).y
+                const visibleHeight = popup.height - popup.padding * 2
+                const overflow = anchorTop + visibleHeight - (Window.height - windowMargin)
+                return -Math.max(0, Math.min(overflow, anchorTop - windowMargin))
+            })
             openedPopup.needActiveFirstItem = btn.navigation.highlight
 
             openedPopup.load(item)
@@ -191,6 +251,12 @@ FocusableControl {
     }
 
     Component {
+        id: sharedPartSettingsComp
+
+        SharedPartSettingsPopup {}
+    }
+
+    Component {
         id: staffSettingsComp
 
         StaffSettingsPopup {}
@@ -202,100 +268,222 @@ FocusableControl {
         SystemObjectsLayerSettingsPopup {}
     }
 
-    VisibilityControls {
-        id: visibilityControls
+    Item {
+        id: contentArea
 
-        anchors.fill: parent
-        anchors.leftMargin: root.sideMargin
-        anchors.rightMargin: root.sideMargin
+        x: 4
+        y: root.contentTopMargin
+        width: root.width - 8
+        height: root.contentHeight
 
-        navigationPanel: root.navigation.panel
-        navigationRow: root.navigation.row
-
-        title: root.item ? root.item.title : ""
-        isRootControl: Boolean(root.item) && (root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART)
-
-        useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-        isVisible: Boolean(root.item) && root.item.isVisible
-        onVisibilityButtonClicked: function(isVisible) {
-            if (root.isSelected) {
-                root.changeVisibilityOfSelectedRowsRequested(!isVisible)
-            } else {
-                root.changeVisibilityRequested(root.modelIndex, !isVisible)
-            }
+        HoverHandler {
+            id: rowHover
         }
 
-        showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+        RowLayout {
+            anchors.fill: parent
+            anchors.rightMargin: root.type === LayoutPanelItemType.SHARED_PART ? 5 : 0
 
-        isEnabled: root.isEnabled
+            spacing: 4
 
-        isExpandable: root.isExpandable
-        isExpanded: root.isExpanded
-        expandableDepth: root.depth
-        onExpandButtonClicked: function(expand) {
-            if (expand) {
-                root.treeView.expand(root.modelIndex)
-            } else {
-                root.treeView.collapse(root.modelIndex)
-            }
-        }
+            // Visibility (or the system markings icon)
+            Item {
+                Layout.preferredWidth: root.contentHeight
+                Layout.fillHeight: true
 
-        FlatButton {
-            id: settingsButton
+                FlatButton {
+                    id: visibilityButton
 
-            visible: root.settingsAvailable
-            enabled: root.visible && root.settingsEnabled
+                    anchors.fill: parent
 
-            objectName: "SettingsBtn"
-            navigation.panel: visibilityControls.navigationPanel
-            navigation.row: visibilityControls.navigationRow
-            navigation.column: 3
-            navigation.accessible.name: qsTrc("layoutpanel", "Settings")
+                    visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+                             && (root.type !== LayoutPanelItemType.SHARED_PART || root.isGroupCombined)
 
-            icon: IconCode.SETTINGS_COG
+                    // Instruments on combined shared staves take their visibility from the group
+                    enabled: root.isEnabled
 
-            onClicked: {
-                if (popupLoader.isPopupOpened) {
-                    popupLoader.closeOpenedPopup()
-                    return
+                    objectName: "VisibleBtn"
+                    navigation.panel: root.navigation.panel
+                    navigation.row: root.navigation.row
+                    navigation.column: 1
+                    accessible.name: (titleLabel.text ? titleLabel.text + ", " : "")
+                                     + (root.item && root.item.isVisible ? qsTrc("ui", "Visible") : qsTrc("ui", "Hidden"))
+
+                    transparent: true
+                    icon: root.item && root.item.isVisible ? IconCode.EYE_OPEN : IconCode.EYE_CLOSED
+
+                    onClicked: {
+                        const isVisible = root.item && root.item.isVisible
+                        if (root.isSelected) {
+                            root.changeVisibilityOfSelectedRowsRequested(!isVisible)
+                        } else {
+                            root.changeVisibilityRequested(root.modelIndex, !isVisible)
+                        }
+                    }
                 }
 
-                let comp = null
-                let item = {}
+                StyledIconLabel {
+                    anchors.centerIn: parent
 
-                if (root.type === LayoutPanelItemType.PART) {
-                    comp = instrumentSettingsComp
+                    visible: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+                    // System markings above (down arrow) / below the bottom staff (up arrow) - MusescoreIcon glyphs without an IconCode yet
+                    iconCode: root.isLastRow ? 0xF4CA : 0xF4C9
+                }
+            }
 
-                    item["partId"] = root.item.id
-                    item["instrumentId"] = (root.item as PartTreeItem).instrumentId()
-                } else if (root.type === LayoutPanelItemType.STAFF) {
-                    comp = staffSettingsComp
+            // Expand / collapse (an empty cell for staves, so that their names line up with the instrument's)
+            Item {
+                Layout.preferredWidth: root.contentHeight
+                Layout.fillHeight: true
 
-                    item["id"] = root.item.id
-                } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
-                    comp = systemObjectsLayerSettingsComp
+                visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
-                    item["staffId"] = (root.item as SystemObjectsLayerTreeItem).staffId()
+                FlatButton {
+                    id: expandButton
+
+                    readonly property bool isGroup: root.type === LayoutPanelItemType.SHARED_PART
+                    readonly property bool expanded: isGroup ? root.isGroupExpanded : root.isExpanded
+
+                    anchors.fill: parent
+
+                    visible: root.depth === 0 && root.isExpandable
+
+                    // Groups are always open while their instruments aren't combined
+                    enabled: !isGroup || root.isStaveSharingEnabled
+
+                    objectName: "ExpandBtn"
+                    navigation.panel: root.navigation.panel
+                    navigation.row: root.navigation.row
+                    navigation.column: 2
+                    navigation.accessible.name: expanded
+                                                //: Collapse a tree item
+                                                ? qsTrc("global", "Collapse")
+                                                //: Expand a tree item
+                                                : qsTrc("global", "Expand")
+
+                    transparent: true
+                    icon: expanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
+
+                    onClicked: {
+                        if (isGroup) {
+                            root.groupExpandToggled()
+                        } else if (root.isExpanded) {
+                            root.treeView.collapse(root.modelIndex)
+                        } else {
+                            root.treeView.expand(root.modelIndex)
+                        }
+                    }
+                }
+            }
+
+            StyledTextLabel {
+                id: titleLabel
+
+                Layout.fillWidth: true
+                Layout.leftMargin: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER ? -2 : 0
+
+                text: root.item ? root.item.title : ""
+                horizontalAlignment: Text.AlignLeft
+
+                readonly property bool isItemVisible: Boolean(root.item) && root.item.isVisible
+                readonly property bool isBold: {
+                    switch (root.type) {
+                    case LayoutPanelItemType.PART:
+                        // Instruments on combined shared staves are shown as regular text under their (bold) group
+                        return isItemVisible && !root.isGroupCombined
+                    case LayoutPanelItemType.SHARED_PART:
+                        return isItemVisible && root.isGroupCombined
+                    default:
+                        return false
+                    }
+                }
+                readonly property bool isDimmed: !isItemVisible && root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+                                                 || (root.type === LayoutPanelItemType.SHARED_PART && !root.isGroupCombined)
+
+                font: isBold ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+                opacity: isDimmed ? 0.7 : 1
+            }
+
+            FlatButton {
+                id: settingsButton
+
+                Layout.preferredWidth: root.contentHeight
+                Layout.preferredHeight: root.contentHeight
+
+                visible: root.settingsAvailable
+                enabled: root.visible && root.settingsEnabled
+
+                // Only shown on hover / press / selection; kept in the layout (transparent) so that it stays keyboard-accessible
+                opacity: root.isHovered || root.mouseArea.pressed || root.isSelected || popupLoader.isPopupOpened || navigation.highlight ? 1 : 0
+
+                objectName: "SettingsBtn"
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigation.row
+                navigation.column: 3
+                navigation.accessible.name: qsTrc("layoutpanel", "Settings")
+
+                // Accent state while its popup is open
+                transparent: !popupLoader.isPopupOpened
+                accentButton: popupLoader.isPopupOpened
+                icon: IconCode.SETTINGS_COG
+
+                // The popup window has a padding around its visible content (for the shadow); end this anchor
+                // that much before the button's right edge, so that the visible popup sits flush against the button
+                Item {
+                    id: popupAnchor
+
+                    width: parent.width - (popupLoader.openedPopup ? popupLoader.openedPopup.padding : 0)
+                    height: parent.height
                 }
 
-                popupLoader.openPopup(comp, this, item)
+                onClicked: {
+                    if (popupLoader.isPopupOpened) {
+                        popupLoader.closeOpenedPopup()
+                        return
+                    }
+
+                    let comp = null
+                    let item = {}
+
+                    if (root.type === LayoutPanelItemType.SHARED_PART) {
+                        comp = sharedPartSettingsComp
+                    } else if (root.type === LayoutPanelItemType.PART) {
+                        comp = instrumentSettingsComp
+
+                        item["partId"] = root.item.id
+                        item["instrumentId"] = (root.item as PartTreeItem).instrumentId()
+                    } else if (root.type === LayoutPanelItemType.STAFF) {
+                        comp = staffSettingsComp
+
+                        item["id"] = root.item.id
+                    } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
+                        comp = systemObjectsLayerSettingsComp
+
+                        item["staffId"] = (root.item as SystemObjectsLayerTreeItem).staffId()
+                    }
+
+                    popupLoader.openPopup(comp, this, popupAnchor, item)
+                }
             }
 
-            Behavior on opacity {
-                NumberAnimation { duration: 150 }
-            }
-        }
+            ToggleButton {
+                id: sharedPartToggle
 
-        ToggleButton {
-            id: sharedPartToggle
-            visible: root.type === LayoutPanelItemType.SHARED_PART
-            enabled: root.treeView.model.isStaveSharingEnabled
-            checked: root.item && root.item.isEnabled
-            onToggled: function() {
-                if (root.isSelected) {
-                    root.changeEnabledOfSelectedRowsRequested(!checked)
-                } else {
-                    root.changeEnabledRequested(root.modelIndex, !checked)
+                // The per-group switch only exists while instruments are being combined
+                visible: root.type === LayoutPanelItemType.SHARED_PART && root.isStaveSharingEnabled
+
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigation.row
+                navigation.column: 4
+                navigation.accessible.name: qsTrc("layoutpanel", "Combine onto shared staves")
+
+                checked: root.item && root.item.isEnabled
+                onToggled: function() {
+                    if (root.isSelected) {
+                        root.changeEnabledOfSelectedRowsRequested(!checked)
+                    } else {
+                        root.changeEnabledRequested(root.modelIndex, !checked)
+                    }
                 }
             }
         }
@@ -319,7 +507,7 @@ FocusableControl {
     background.states: [
         State {
             name: "HOVERED"
-            when: root.mouseArea.containsMouse && !root.mouseArea.pressed && !root.isSelected && !prv.dragged
+            when: root.usesRowHighlight && root.isHovered && !root.mouseArea.pressed && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -330,7 +518,7 @@ FocusableControl {
 
         State {
             name: "PRESSED"
-            when: root.mouseArea.pressed && !root.isSelected && !prv.dragged
+            when: root.usesRowHighlight && root.mouseArea.pressed && !root.isSelected && !prv.dragged
 
             PropertyChanges {
                 target: root.background
@@ -341,7 +529,7 @@ FocusableControl {
 
         State {
             name: "SELECTED"
-            when: root.isSelected && !root.mouseArea.containsMouse && !root.mouseArea.pressed
+            when: root.usesRowHighlight && root.isSelected && !root.isHovered && !root.mouseArea.pressed
 
             PropertyChanges {
                 target: root.background
@@ -352,7 +540,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_HOVERED"
-            when: root.isSelected && root.mouseArea.containsMouse && !root.mouseArea.pressed
+            when: root.usesRowHighlight && root.isSelected && root.isHovered && !root.mouseArea.pressed
 
             PropertyChanges {
                 target: root.background
@@ -363,37 +551,12 @@ FocusableControl {
 
         State {
             name: "SELECTED_PRESSED"
-            when: root.isSelected && root.mouseArea.pressed
+            when: root.usesRowHighlight && root.isSelected && root.mouseArea.pressed
 
             PropertyChanges {
                 target: root.background
                 color: ui.theme.accentColor
                 opacity: ui.theme.accentOpacityHit
-            }
-        },
-
-        State {
-            name: "PART_EXPANDED"
-            when: root.isExpanded && !root.isSelected &&
-                  root.type === LayoutPanelItemType.PART
-
-            PropertyChanges {
-                target: root.background
-                color: ui.theme.textFieldColor
-                opacity: 1
-            }
-        },
-
-        State {
-            name: "PARENT_EXPANDED"
-            when: root.visible && !root.isSelected &&
-                  (root.type === LayoutPanelItemType.INSTRUMENT ||
-                   root.type === LayoutPanelItemType.STAFF)
-
-            PropertyChanges {
-                target: root.background
-                color: ui.theme.textFieldColor
-                opacity: 1
             }
         }
     ]

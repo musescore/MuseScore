@@ -32,8 +32,6 @@ using namespace muse;
 SharedPartTreeItem::SharedPartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : PartTreeItem(masterNotation, notation, parent, LayoutPanelItemType::ItemType::SHARED_PART)
 {
-    setSettingsAvailable(false);
-
     listenEnabledChanged();
 }
 
@@ -41,7 +39,6 @@ void SharedPartTreeItem::init(const notation::Part* part)
 {
     PartTreeItem::init(part);
 
-    setSettingsAvailable(false);
     setIsExpandable(true);
     setIsEnabled(engraving::toSharedPart(part)->enabled());
 

@@ -65,6 +65,7 @@ qt_add_qml_module(instrumentsscene_qml
         internal/LayoutPanelAddButton.qml
         internal/LayoutPanelItemControl.qml
         internal/LayoutPanelItemDelegate.qml
+        internal/SharedPartSettingsPopup.qml
         internal/StaffSettingsPopup.qml
         internal/SystemObjectsLayerSettingsPopup.qml
         LayoutPanel.qml
