@@ -20,6 +20,15 @@
 
 muse_create_qml_module(project_qml FOR project)
 
+# Muse.Interactive (used by AudioExportProgressDialog.qml) isn't built in every configuration, e.g. unit tests
+if (MUSE_MODULE_INTERACTIVE_QML)
+    set(MAYBE_INTERACTIVE_QML
+        TARGET muse_interactive_qml
+    )
+else()
+    set(MAYBE_INTERACTIVE_QML)
+endif()
+
 qt_add_qml_module(project_qml
     URI MuseScore.Project
     VERSION 1.0
@@ -163,7 +172,7 @@ qt_add_qml_module(project_qml
         resources/ScoreProcessing.png
     IMPORTS
         TARGET muse_cloud_qml
-        TARGET muse_interactive_qml
+        ${MAYBE_INTERACTIVE_QML}
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
         TARGET notationscene_qml

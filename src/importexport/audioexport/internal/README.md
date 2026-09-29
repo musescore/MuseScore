@@ -18,7 +18,8 @@ the per-part export: the part's own tracks plus their aux sends (e.g. reverb).
 `IAudioExportConfiguration::multiStemRender()` (setting
 `export/audio/multiStemRender`, on by default) is the checkbox of the same name
 on the audio format pages of the export dialog
-(`MultiStemRenderCheckBox.qml`). When it's off,
+(`MultiStemRenderSettings.qml`, which also has the "Idle instruments until
+their first note" option). When it's off,
 `AbstractAudioWriter::supportsBatchPartExport()` returns false and every part
 is exported the original way, one after another. It's there as a fallback in
 case a plugin doesn't behave the same when the engine copies it (each render
@@ -59,24 +60,30 @@ thread gets its own copy of the aux effects).
   hold (see `useBatchPartExport`):
   - unit type is `PER_PART` (one file per part),
   - the writer opts in (`supportsBatchPartExport()`, i.e. the option is on),
-  - there's more than one notation to export,
-  - none of the selected notations is the main/full score, and
-  - no instrument is in two of the selected parts (`partsShareInstruments()`):
-    each part is rendered by its own thread, so a track can't be shared
-    (e.g. a combined percussion part plus the individual ones).
+  - there's more than one notation to export.
+
+  The full score and parts that share an instrument (e.g. a combined
+  percussion part plus the individual ones) take this path too: the engine
+  renders every track only once and mixes the files that share tracks from
+  the rendered output (see the engine README).
 
   Otherwise the original per-notation loop runs unchanged.
 
-  On this path it opens one output file per part up front (skipping any the
-  user declines to overwrite, same prompt as the per-notation path), builds
-  the `PartExportTargetList`, and makes a single `writer->writeParts()` call.
-  This is also why `fileCount`/progress is set to `1` "file" for this path —
-  it's one export operation with one progress cycle, not N.
+  On this path it asks about replacing existing files first (skipping any the
+  user declines, same prompt as the per-notation path; if all are skipped
+  there's nothing to do), then opens one output file per part, builds the
+  `PartExportTargetList`, and makes a single `writer->writeParts()` call. If
+  that fails, the incomplete files are removed and the user can retry, as in
+  the per-notation path; a cancelled export removes them as well. This is also
+  why `fileCount`/progress is set to `1` "file" for this path — it's one
+  export operation with one progress cycle, not N (the per-file progress is
+  shown in its own dialog).
 
 ## What did *not* change
 
-- Single-part export, full-score export, and every non-audio format still go
-  through the original `write()`/`writeList()` path exactly as before.
+- Exporting a single notation (one part, or only the full score), and every
+  non-audio format, still go through the original `write()`/`writeList()` path
+  exactly as before.
 - `AbstractAudioWriter::write()` (single notation) is untouched; `writeParts()`
   is new code alongside it, sharing only the small helpers
   (`soundTrackFormat()`, leading/trailing silence option parsing) so both paths

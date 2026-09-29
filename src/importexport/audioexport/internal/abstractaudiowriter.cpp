@@ -285,7 +285,10 @@ Ret AbstractAudioWriter::writeParts(INotationPtr masterNotation, const PartExpor
     }
 
     if (engineTargets.empty()) {
+        //! NOTE Switch playback back to the notation the user has open, as doWriteParts() does after an export
+        muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
         playbackController()->setIsExportingAudio(false);
+        playbackController()->setNotation(globalContext()->currentNotation());
         return make_ret(Err::NoAudioToExport);
     }
 

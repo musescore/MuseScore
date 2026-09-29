@@ -73,7 +73,7 @@ StyledDialogView {
         StyledTextLabel {
             Layout.fillWidth: true
 
-            visible: !isEmpty
+            visible: Boolean(overallModel.statusMessage)
             text: overallModel.statusMessage
             horizontalAlignment: Text.AlignLeft
         }
