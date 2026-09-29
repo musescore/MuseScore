@@ -277,6 +277,7 @@ protected:
 #define SVG_MOVE     'M'
 #define SVG_LINE     'L'
 #define SVG_CURVE    'C'
+#define SVG_CLOSE    'Z'
 
 #define SVG_CLASS    " class=\""
 
@@ -1258,17 +1259,26 @@ void SvgPaintEngine::drawPathData(const QPainterPath& p)
 {
     // Path data
     stream() << SVG_D;
+    int subpathStart = 0;
     for (int i = 0; i < p.elementCount(); ++i) {
         const QPainterPath::Element& e = p.elementAt(i);
         qreal x = e.x + _dx;
         qreal y = e.y + _dy;
         switch (e.type) {
         case QPainterPath::MoveToElement:
+            subpathStart = i;
             stream() << SVG_MOVE << x << SVG_COMMA << y;
             break;
-        case QPainterPath::LineToElement:
-            stream() << SVG_LINE << x << SVG_COMMA << y;
+        case QPainterPath::LineToElement: {
+            // closeSubpath() is stored as a line back to the start point; write it as Z so the corner is joined
+            const bool endsSubpath = i == p.elementCount() - 1 || p.elementAt(i + 1).isMoveTo();
+            if (endsSubpath && i - subpathStart > 1 && QPointF(e) == QPointF(p.elementAt(subpathStart))) {
+                stream() << SVG_CLOSE;
+            } else {
+                stream() << SVG_LINE << x << SVG_COMMA << y;
+            }
             break;
+        }
         case QPainterPath::CurveToElement:
             stream() << SVG_CURVE << x << SVG_COMMA << y;
             ++i;
