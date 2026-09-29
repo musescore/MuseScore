@@ -64,6 +64,36 @@ MuseScore {
 }
 ```
 
+## API reference
+
+`Part.mixerChannel` exposes the primary instrument channel for a part. It is
+`null` when the part has no instrument track.
+
+| Member        | Type      | Behavior                                                                                         |
+| ------------- | --------- | ------------------------------------------------------------------------------------------------ |
+| `volume`      | `Number`  | Output level in decibels, clamped to `-60` through `12`.                                         |
+| `balance`     | `Number`  | Stereo balance, clamped to `-1` (left) through `1` (right).                                      |
+| `muted`       | `Boolean` | Enables or disables mute. Enabling mute clears `solo`.                                           |
+| `solo`        | `Boolean` | Enables or disables solo. Enabling solo clears `muted` and may mute other channels in the Mixer. |
+| `midiBank`    | `Number`  | MIDI bank, from `0` through `255`; changes are undoable.                                         |
+| `midiProgram` | `Number`  | MIDI program, from `0` through `127`; changes are undoable.                                      |
+
+The following methods are asynchronous:
+
+```qml
+mixer.availableSounds(function(sounds, error) { ... });
+mixer.setSound(soundId, function(success, error) { ... });
+```
+
+`availableSounds` returns an array of objects with `id` and `name` fields. Pass
+an `id` from that array to `setSound`. Both methods report failures through the
+`error` callback argument; sound enumeration and selection do not block the
+plugin handler.
+
+Volume, balance, mute, solo, and sound changes are not undoable. MIDI bank and
+program changes must be wrapped in `score.startCmd()` and `score.endCmd()` when
+they should appear as undoable score operations.
+
 Run the plugin on the score and verify each control changes in the Mixer, then returns to its original value. Sound enumeration and selection are asynchronous; verify the callback returns resource IDs and display names and that selecting an ID submits a source change. Use a disposable score for the sound-selection check.
 
 MIDI bank and program changes are undoable and use the existing channel setter implementation.
