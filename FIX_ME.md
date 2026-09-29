@@ -2,9 +2,9 @@
 
 This branch points the `muse` submodule at a fork
 (`alfonslm/muse_framework`, branch `push-2`) instead of
-`musescore/muse_framework`. The audio export changes in this PR need
-engine features from musescore/muse_framework#320 (parallel multi-file
-export: `IPlayback::saveSoundTracks()`), which aren't upstream yet.
+`musescore/muse_framework`. The audio export optimisation in this PR
+needs the engine changes in musescore/muse_framework#320
+(`IPlayback::saveSoundTracks()`), which aren't upstream yet.
 Pointing at the fork keeps this PR buildable in CI until then.
 
 Once musescore/muse_framework#320 is merged:
