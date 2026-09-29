@@ -190,10 +190,14 @@ public:
     int sampleRate() const;
     void setSampleRate(int sampleRate);
 
+    //! NOTE Audio export setting, see IAudioExportConfiguration::multiStemRender()
     bool multiStemRender() const;
+    //! NOTE See multiStemRender()
     void setMultiStemRender(bool enabled);
 
+    //! NOTE Audio export setting, see IAudioExportConfiguration::idleUntilFirstNote()
     bool idleUntilFirstNote() const;
+    //! NOTE See idleUntilFirstNote()
     void setIdleUntilFirstNote(bool enabled);
 
     Q_INVOKABLE QList<int> availableBitRates() const;

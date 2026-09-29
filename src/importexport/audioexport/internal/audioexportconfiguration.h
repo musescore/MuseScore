@@ -41,10 +41,14 @@ public:
 
     muse::audio::samples_t exportBufferSize() const override;
 
+    //! NOTE See IAudioExportConfiguration::multiStemRender()
     bool multiStemRender() const override;
+    //! NOTE See IAudioExportConfiguration::setMultiStemRender()
     void setMultiStemRender(bool enabled) override;
 
+    //! NOTE See IAudioExportConfiguration::idleUntilFirstNote()
     bool idleUntilFirstNote() const override;
+    //! NOTE See IAudioExportConfiguration::setIdleUntilFirstNote()
     void setIdleUntilFirstNote(bool enabled) override;
 
     muse::audio::AudioSampleFormat exportWavSampleFormat() const override;

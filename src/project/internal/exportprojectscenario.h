@@ -66,7 +66,9 @@ public:
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
 
+    //! NOTE See IExportProjectScenario::exportProgress()
     muse::Progress exportProgress() const override;
+    //! NOTE See IExportProjectScenario::exportFilesProgress()
     const ExportFilesProgress& exportFilesProgress() const override;
 
 private:

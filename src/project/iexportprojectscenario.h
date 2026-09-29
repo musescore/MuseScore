@@ -65,6 +65,7 @@ public:
     //! NOTE The export in progress: its overall progress, and the progress of each file when the files are
     //! written at the same time (multi-file audio export), for the audio export progress dialog
     virtual muse::Progress exportProgress() const = 0;
+    //! NOTE One entry per file of the multi-file export in progress (empty otherwise)
     virtual const ExportFilesProgress& exportFilesProgress() const = 0;
 };
 }

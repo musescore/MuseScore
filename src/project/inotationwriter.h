@@ -75,11 +75,12 @@ public:
                                 const Options& options = Options()) = 0;
 
     //! NOTE Optional capability for writers (currently only audio) that are able to render
-    //! several parts/excerpts of masterNotation in a single pass instead of doing a full,
+    //! several parts/excerpts of masterNotation together instead of doing a full,
     //! separate write() per notation. When supportsBatchPartExport() is true, writeParts()
     //! must be implemented and produce one file per target, written to target.device, in the
     //! same order as `targets`.
     virtual bool supportsBatchPartExport() const { return false; }
+    //! NOTE Writes one file per target; see supportsBatchPartExport()
     virtual muse::Ret writeParts(notation::INotationPtr masterNotation, const PartExportTargetList& targets,
                                  const Options& options = Options())
     {

@@ -43,12 +43,16 @@ class AudioExportProgressModel : public QObject, public muse::Contextable
 public:
     explicit AudioExportProgressModel(QObject* parent = nullptr);
 
+    //! NOTE Reads the progress of the export in progress from IExportProjectScenario
     Q_INVOKABLE void load();
 
+    //! NOTE The overall muse::Progress, for a ProgressDialogModel
     QVariant overallProgress() const;
+    //! NOTE One { name, progress } entry per file
     QVariantList files() const;
 
 signals:
+    //! NOTE Emitted by load()
     void loaded();
 
 private:
