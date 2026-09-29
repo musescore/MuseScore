@@ -24,23 +24,19 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/dom/articulation.h"
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace ArticulationTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class Placement {
-    TYPE_TOP,
-    TYPE_BOTTOM,
-    TYPE_AUTO
+    TYPE_TOP = int(engraving::ArticulationAnchor::TOP),
+    TYPE_BOTTOM = int(engraving::ArticulationAnchor::BOTTOM),
+    TYPE_AUTO = int(engraving::ArticulationAnchor::AUTO)
 };
-
-enum class Style {
-    STYLE_STANDART = 0,
-    STYLE_BAROQUE
-};
-
 Q_ENUM_NS(Placement)
-Q_ENUM_NS(Style)
 }
 }

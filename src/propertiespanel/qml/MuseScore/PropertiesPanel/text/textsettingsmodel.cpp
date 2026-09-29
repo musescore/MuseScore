@@ -630,8 +630,7 @@ void TextSettingsModel::updateFramePropertiesAvailability()
 
 void TextSettingsModel::updateStaffPropertiesAvailability()
 {
-    bool isAvailable = static_cast<TextTypes::TextType>(m_textType->value().toInt())
-                       == TextTypes::TextType::TEXT_TYPE_STAFF;
+    bool isAvailable = static_cast<TextStyleType>(m_textType->value().toInt()) == TextStyleType::STAFF;
 
     setAreStaffTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
 }

@@ -224,13 +224,10 @@ qt_add_qml_module(propertiespanel_qml
         types/chordsymboltypes.h
         types/commontypes.h
         types/directiontypes.h
-        types/dynamictypes.h
         types/fretdiagramtypes.h
         types/glissandotypes.h
-        types/hairpintypes.h
         types/keysignaturetypes.h
         types/linetypes.h
-        types/markertypes.h
         types/noteheadtypes.h
         types/ornamenttypes.h
         types/slurtietypes.h
