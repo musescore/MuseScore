@@ -2620,9 +2620,16 @@ void SystemLayout::centerPendingSystems(LayoutContext& ctx)
     ctx.mutState().clearSystemsNeedingCentering();
 }
 
+static Shape shapeRelativeToStaff(const EngravingItem* item, double systemX)
+{
+    // Offsets are applied after centering, so measure from the non-offset position
+    const double x = item->pageX() - systemX - item->offset().x();
+    const double y = item->isLyrics() ? toLyrics(item)->yRelativeToStaff() - item->offset().y() : item->ldata()->pos().y();
+    return item->ldata()->shape().translated(PointF(x, y));
+}
+
 void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>& gaps, std::vector<MMRest*>& mmRestsToCenter)
 {
-    const double systemX = system->pageX();
     const staff_idx_t nStaves = static_cast<staff_idx_t>(system->staves().size());
     if (nStaves < 2) {
         return;
@@ -2648,7 +2655,9 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
         gaps.emplace_back(upperStaffIdx, lowerStaffIdx, system->staff(lowerStaffIdx)->y() - system->staff(upperStaffIdx)->y());
     }
 
-    auto addItem = [&](EngravingItem* item, Shape shape, bool above, bool isLyrics) {
+    const double systemX = system->pageX();
+
+    auto addItem = [&](EngravingItem* item, bool above, bool isLyrics) {
         const staff_idx_t staffIdx = item->staffIdx();
         if (staffIdx >= nStaves) {
             return;
@@ -2658,8 +2667,11 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
             // The staff is hidden, or there is no staff on that side to center against
             return;
         }
-        Gap& gap = gaps[gapIdx];
+
+        Shape shape = shapeRelativeToStaff(item, systemX);
         shape.remove_if([](ShapeElement& shapeEl) { return shapeEl.ignoreForLayout(); });
+
+        Gap& gap = gaps[gapIdx];
         if (above) {
             // Inside a gap, everything is expressed relative to its upper staff
             shape.translate(PointF(0.0, gap.yStaffDiff));
@@ -2670,11 +2682,11 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
         if ((spannerSeg->isHairpinSegment() && snapChainShouldBeCenteredBetweenStaves(spannerSeg, system))
             || (spannerSeg->isWhammyBarSegment() && whammyBarShouldBeCenteredBetweenStaves(toWhammyBarSegment(spannerSeg), system))) {
-            addItem(spannerSeg, spannerSeg->shape().translate(spannerSeg->pos()), spannerSeg->placeAbove(), false);
+            addItem(spannerSeg, spannerSeg->placeAbove(), false);
         } else if (spannerSeg->isLyricsLineSegment()) {
             bool above = toLyricsLineSegment(spannerSeg)->lyricsPlaceAbove();
             if (elementShouldBeCenteredBetweenStaves(spannerSeg, system, above)) {
-                addItem(spannerSeg, spannerSeg->shape().translate(spannerSeg->pos()), above, true);
+                addItem(spannerSeg, above, true);
             }
         }
     }
@@ -2695,8 +2707,7 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
                         for (Lyrics* lyrics : toChordRest(item)->lyrics()) {
                             bool above = lyrics->placeAbove();
                             if (elementShouldBeCenteredBetweenStaves(lyrics, system, above)) {
-                                addItem(lyrics, lyrics->shape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff())),
-                                        above, true);
+                                addItem(lyrics, above, true);
                             }
                         }
                     }
@@ -2704,8 +2715,7 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
             }
             for (EngravingItem* item : seg.annotations()) {
                 if ((item->isDynamic() || item->isExpression()) && snapChainShouldBeCenteredBetweenStaves(item, system)) {
-                    addItem(item, item->ldata()->shape().translated(PointF(item->pageX() - systemX, item->ldata()->pos().y())),
-                            item->placeAbove(), false);
+                    addItem(item, item->placeAbove(), false);
                 }
             }
         }
@@ -3060,7 +3070,8 @@ double SystemLayout::gapConvergeDistance(const std::vector<const CenterableItem*
                 // The distance between the top-staff and bottom-staff lyrics blocks will be like between verses:
                 const double verseSpace = std::max(upperLyrics->lineSpacing(), lowerLyrics->lineSpacing())
                                           * upperItem->style().styleD(Sid::lyricsLineHeight);
-                const double spaceBetweenLyrics = lowerLyrics->yRelativeToStaff() + yStaffDiff - upperLyrics->yRelativeToStaff();
+                const double spaceBetweenLyrics = (lowerLyrics->yRelativeToStaff() - lowerLyrics->offset().y()) + yStaffDiff
+                                                  - (upperLyrics->yRelativeToStaff() - upperLyrics->offset().y());
                 slack = std::min(slack, spaceBetweenLyrics - verseSpace);
                 continue;
             }
