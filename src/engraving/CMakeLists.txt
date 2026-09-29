@@ -103,6 +103,8 @@ target_sources(engraving PRIVATE
 
     editing/addremoveelement.cpp
     editing/addremoveelement.h
+    editing/autospatium.cpp
+    editing/autospatium.h
     editing/clonevoice.cpp
     editing/clonevoice.h
     editing/cmd.cpp

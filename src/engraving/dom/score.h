@@ -843,8 +843,6 @@ public:
     void updatePaddingTables();
     const PaddingTables& paddingTables() const { return m_paddingTables; }
 
-    void autoUpdateSpatium();
-
     const RangeLocks* systemLocks() const { return &m_systemLocks; }
     void addSystemLock(const RangeLock* lock);
     void removeSystemLock(const RangeLock* lock);

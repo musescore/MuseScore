@@ -42,6 +42,7 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
 
+#include "engraving/editing/autospatium.h"
 #include "engraving/editing/editkeysig.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -449,7 +450,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     }
 
     score->updateTicksAndTimeSigMap();
-    score->autoUpdateSpatium();
+    AutoSpatium::update(score);
 
     {
         mu::engraving::ScoreLoad sl;
