@@ -117,7 +117,7 @@ bool PropertiesPanelListModel::alwaysUpdateModelList(const QList<engraving::Engr
 }
 
 void PropertiesPanelListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                                              engraving::SelState selectionState)
+                                              engraving::SelState selectionState, bool selectionHasStartEndBox)
 {
     TRACEFUNC;
 
@@ -134,7 +134,7 @@ void PropertiesPanelListModel::setElementList(const QList<mu::engraving::Engravi
         }
     }
 
-    if (selectedElementList.isEmpty()) {
+    if (selectedElementList.isEmpty() && !selectionHasStartEndBox) {
         buildModelsForEmptySelection();
     } else {
         ElementKeySet newElementKeySet;
@@ -458,6 +458,16 @@ void PropertiesPanelListModel::updateElementList()
     }
 
     INotationSelectionPtr selection = notation->interaction()->selection();
+    IF_ASSERT_FAILED(selection) {
+        setElementList({});
+        return;
+    }
+
     const std::vector<EngravingItem*>& elements = selection->elements();
-    setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
+
+    const mu::engraving::MeasureBase* startMB = selection->startMeasureBase();
+    const mu::engraving::MeasureBase* endMB = selection->endMeasureBase();
+    const bool selectionHasStartEndBox = (startMB && startMB->isBox()) || (endMB && endMB->isBox());
+
+    setElementList(QList(elements.cbegin(), elements.cend()), selection->state(), selectionHasStartEndBox);
 }
