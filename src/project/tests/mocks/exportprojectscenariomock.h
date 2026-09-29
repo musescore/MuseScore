@@ -42,5 +42,8 @@ public:
 
     MOCK_METHOD(const ExportInfo&, exportInfo, (), (const, override));
     MOCK_METHOD(void, setExportInfo, (const ExportInfo& exportInfo), (override));
+
+    MOCK_METHOD(muse::Progress, exportProgress, (), (const, override));
+    MOCK_METHOD(const ExportFilesProgress&, exportFilesProgress, (), (const, override));
 };
 }

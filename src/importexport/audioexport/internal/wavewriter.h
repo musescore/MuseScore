@@ -33,6 +33,10 @@ public:
         : AbstractAudioWriter(iocCtx) {}
 
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+
+protected:
+    //! NOTE See AbstractAudioWriter::soundTrackFormat()
+    muse::audio::SoundTrackFormat soundTrackFormat() const override;
 };
 }
 

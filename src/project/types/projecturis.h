@@ -33,6 +33,7 @@ inline const muse::Uri HOME_PAGE_URI("musescore://home");
 inline const muse::Uri NEW_SCORE_URI("musescore://project/newscore");
 inline const muse::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
 inline const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
+inline const muse::Uri AUDIO_EXPORT_PROGRESS_URI("musescore://project/export/audioprogress");
 
 inline const QString MUSESCORE_URL_SCHEME("musescore");
 inline const QString OPEN_SCORE_URL_HOSTNAME("open-score");

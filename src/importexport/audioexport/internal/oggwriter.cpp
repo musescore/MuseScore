@@ -31,7 +31,12 @@ using namespace muse::io;
 
 Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
-    const SoundTrackFormat format {
+    return doWriteAndWait(notation, destinationDevice, soundTrackFormat());
+}
+
+SoundTrackFormat OggWriter::soundTrackFormat() const
+{
+    return SoundTrackFormat {
         SoundTrackType::OGG,
         {
             static_cast<sample_rate_t>(configuration()->exportSampleRate()),
@@ -41,6 +46,4 @@ Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
         AudioSampleFormat::Undefined,
         128 /* bitRate */
     };
-
-    return doWriteAndWait(notation, destinationDevice, format);
 }

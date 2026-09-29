@@ -66,6 +66,11 @@ public:
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
 
+    //! NOTE See IExportProjectScenario::exportProgress()
+    muse::Progress exportProgress() const override;
+    //! NOTE See IExportProjectScenario::exportFilesProgress()
+    const ExportFilesProgress& exportFilesProgress() const override;
+
 private:
     enum class FileConflictPolicy {
         Undefined,
@@ -91,6 +96,17 @@ private:
 
     muse::Ret doExportLoop(const muse::io::path_t& path, std::function<muse::Ret(muse::io::IODevice&)> exportFunction) const;
 
+    //! NOTE Used for writers that support INotationWriter::supportsBatchPartExport(): opens one
+    //! destination file per notation and renders them all in a single writer->writeParts() call
+    //! instead of looping write() once per notation.
+    muse::Ret exportPartsInOnePass(INotationWriterPtr writer, const notation::INotationPtrList& notations,
+                                   const muse::io::path_t& destinationPath, bool isCreatingOnlyOneFile, bool isExportingOnlyOneScore,
+                                   const INotationWriter::Options& options, bool showFilesProgress) const;
+    //! NOTE One attempt of exportPartsInOnePass(): opens the files, writes them, and removes them again on failure
+    muse::Ret doExportPartsInOnePass(INotationWriterPtr writer, const std::vector<notation::INotationPtr>& notations,
+                                     const std::vector<muse::io::path_t>& filePaths, const INotationWriter::Options& options,
+                                     bool showFilesProgress) const;
+
     void showExportProgress(bool isAudioExport) const;
 
     void openFolder(const muse::io::path_t& path) const;
@@ -101,6 +117,7 @@ private:
 
     mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable muse::Progress m_exportProgress;
+    mutable ExportFilesProgress m_exportFilesProgress;
     ExportInfo m_exportInfo;
 };
 }

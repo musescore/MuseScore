@@ -22,6 +22,8 @@
 
 #include "exportprojectscenario.h"
 
+#include <memory>
+
 #include "global/io/fileinfo.h"
 #include "global/io/filestream.h"
 
@@ -38,6 +40,7 @@
 #include "notation/inotationpainting.h" // IWYU pragma: keep
 
 #include "inotationproject.h"
+#include "types/projecturis.h"
 
 using namespace muse;
 using namespace muse::io;
@@ -157,12 +160,22 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     std::vector<ViewMode> viewModes = this->viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
 
+    //! NOTE When a writer can render several notations at the same time (currently only audio),
+    //! take that path instead of doing a full separate write() per notation: it behaves like a single
+    //! export operation (one progress cycle), same as MULTI_PART below. Parts sharing instruments and the
+    //! full score are fine: every track is still rendered only once (see ParallelSoundTrackWriter)
+    bool useBatchPartExport = unitType == INotationWriter::UnitType::PER_PART
+                              && writer->supportsBatchPartExport() && notations.size() > 1;
+
     Progress* writerProgress = writer->progress();
-    size_t fileCount = exportFileCount(notations, unitType);
+    size_t fileCount = useBatchPartExport ? 1 : exportFileCount(notations, unitType);
     size_t currentFileNum = 0;
 
     if (writerProgress) {
-        showExportProgress(isAudioExport(suffix));
+        //! NOTE A multi-file audio export shows its own progress dialog, with a bar per file (see exportPartsInOnePass)
+        if (!(useBatchPartExport && isAudioExport(suffix))) {
+            showExportProgress(isAudioExport(suffix));
+        }
         m_exportProgress.start();
 
         writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
@@ -223,6 +236,15 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         }
     } break;
     case INotationWriter::UnitType::PER_PART: {
+        if (useBatchPartExport) {
+            Ret ret = exportPartsInOnePass(writer, notations, destinationPath, isCreatingOnlyOneFile, isExportingOnlyOneScore, options,
+                                           isAudioExport(suffix));
+            if (!ret) {
+                return false;
+            }
+            break;
+        }
+
         for (const INotationPtr& notation : notations) {
             muse::io::path_t definitivePath = isCreatingOnlyOneFile
                                               ? destinationPath
@@ -478,6 +500,135 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
     }
 
     return muse::make_ok();
+}
+
+Ret ExportProjectScenario::exportPartsInOnePass(INotationWriterPtr writer, const INotationPtrList& notations,
+                                                const muse::io::path_t& destinationPath, bool isCreatingOnlyOneFile,
+                                                bool isExportingOnlyOneScore, const INotationWriter::Options& options,
+                                                bool showFilesProgress) const
+{
+    DEFER {
+        for (ExportFileProgress & fileProgress : m_exportFilesProgress) {
+            fileProgress.progress.finish(muse::make_ok());
+        }
+        m_exportFilesProgress.clear();
+    };
+
+    //! NOTE Replacing existing files is asked once; a retry after a failure keeps those choices
+    std::vector<INotationPtr> notationsToExport;
+    std::vector<muse::io::path_t> filePaths;
+    for (const INotationPtr& notation : notations) {
+        muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                          ? destinationPath
+                                          : completeExportPath(destinationPath, notation, isMainNotation(
+                                                                   notation), isExportingOnlyOneScore);
+
+        String filename = FileInfo(definitivePath).fileName();
+        if (fileSystem()->exists(definitivePath) && !shouldReplaceFile(filename)) {
+            // Same semantics as the per-notation loop: skip just this one file and keep going.
+            continue;
+        }
+
+        notationsToExport.push_back(notation);
+        filePaths.push_back(definitivePath);
+    }
+
+    //! NOTE Every file was skipped (the user declined to replace them): nothing to do, like the per-notation loop
+    if (notationsToExport.empty()) {
+        return muse::make_ok();
+    }
+
+    while (true) {
+        Ret ret = doExportPartsInOnePass(writer, notationsToExport, filePaths, options, showFilesProgress);
+        if (ret || ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return ret;
+        }
+
+        LOGE() << "Audio export of the parts failed: " << ret.toString();
+
+        //! NOTE Same prompt as the per-notation loop (see doExportLoop())
+        if (!askForRetry(FileInfo(filePaths.front()).fileName())) {
+            return make_ret(Ret::Code::Cancel);
+        }
+    }
+}
+
+Ret ExportProjectScenario::doExportPartsInOnePass(INotationWriterPtr writer, const std::vector<INotationPtr>& notations,
+                                                  const std::vector<muse::io::path_t>& filePaths,
+                                                  const INotationWriter::Options& options, bool showFilesProgress) const
+{
+    IF_ASSERT_FAILED(notations.size() == filePaths.size()) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    m_exportFilesProgress.clear();
+
+    std::vector<std::unique_ptr<FileStream> > files;
+    files.reserve(notations.size());
+
+    //! NOTE A failed or cancelled export leaves incomplete files behind: remove them, like doExportLoop() does
+    auto removeFiles = [this, &files, &filePaths]() {
+        for (auto& file : files) {
+            file->close();
+        }
+
+        for (size_t i = 0; i < files.size(); ++i) {
+            fileSystem()->remove(filePaths.at(i));
+        }
+    };
+
+    INotationWriter::PartExportTargetList targets;
+    targets.reserve(notations.size());
+
+    for (size_t i = 0; i < notations.size(); ++i) {
+        const muse::io::path_t& path = filePaths.at(i);
+
+        Ret ret = fileSystem()->remove(path);
+        if (!ret) {
+            removeFiles();
+            return ret;
+        }
+
+        auto file = std::make_unique<FileStream>(path);
+        file->setMeta("file_path", path.toStdString());
+        if (!file->open(IODevice::WriteOnly)) {
+            removeFiles();
+            return make_ret(Ret::Code::InternalError);
+        }
+
+        muse::Progress fileProgress;
+        fileProgress.start();
+        m_exportFilesProgress.push_back({ notations.at(i)->name(), fileProgress });
+
+        targets.push_back({ notations.at(i), file.get(), fileProgress });
+        files.push_back(std::move(file));
+    }
+
+    if (showFilesProgress) {
+        interactive()->open(AUDIO_EXPORT_PROGRESS_URI);
+    }
+
+    Ret ret = writer->writeParts(masterNotation()->notation(), targets, options);
+    if (!ret) {
+        removeFiles();
+        return ret;
+    }
+
+    for (auto& file : files) {
+        file->close();
+    }
+
+    return ret;
+}
+
+muse::Progress ExportProjectScenario::exportProgress() const
+{
+    return m_exportProgress;
+}
+
+const ExportFilesProgress& ExportProjectScenario::exportFilesProgress() const
+{
+    return m_exportFilesProgress;
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const

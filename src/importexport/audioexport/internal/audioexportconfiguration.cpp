@@ -34,6 +34,8 @@ static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/aud
 static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/mp3Bitrate");
 static const Settings::Key EXPORT_WAV_SAMPLE_FORMAT_KEY("iex_audioexport", "export/audio/wavSampleFormat");
 static const Settings::Key EXPORT_FLAC_SAMPLE_FORMAT_KEY("iex_audioexport", "export/audio/flacSampleFormat");
+static const Settings::Key EXPORT_MULTI_STEM_RENDER_KEY("iex_audioexport", "export/audio/multiStemRender");
+static const Settings::Key EXPORT_IDLE_UNTIL_FIRST_NOTE_KEY("iex_audioexport", "export/audio/idleUntilFirstNote");
 
 void AudioExportConfiguration::init()
 {
@@ -41,6 +43,8 @@ void AudioExportConfiguration::init()
     settings()->setDefaultValue(EXPORT_MP3_BITRATE, Val(128));
     settings()->setDefaultValue(EXPORT_WAV_SAMPLE_FORMAT_KEY, Val(static_cast<int>(AudioSampleFormat::Int24)));
     settings()->setDefaultValue(EXPORT_FLAC_SAMPLE_FORMAT_KEY, Val(static_cast<int>(AudioSampleFormat::Int16)));
+    settings()->setDefaultValue(EXPORT_MULTI_STEM_RENDER_KEY, Val(true));
+    settings()->setDefaultValue(EXPORT_IDLE_UNTIL_FIRST_NOTE_KEY, Val(true));
 }
 
 int AudioExportConfiguration::exportMp3Bitrate() const
@@ -83,6 +87,26 @@ const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
 samples_t AudioExportConfiguration::exportBufferSize() const
 {
     return 4096;
+}
+
+bool AudioExportConfiguration::multiStemRender() const
+{
+    return settings()->value(EXPORT_MULTI_STEM_RENDER_KEY).toBool();
+}
+
+void AudioExportConfiguration::setMultiStemRender(bool enabled)
+{
+    settings()->setSharedValue(EXPORT_MULTI_STEM_RENDER_KEY, Val(enabled));
+}
+
+bool AudioExportConfiguration::idleUntilFirstNote() const
+{
+    return settings()->value(EXPORT_IDLE_UNTIL_FIRST_NOTE_KEY).toBool();
+}
+
+void AudioExportConfiguration::setIdleUntilFirstNote(bool enabled)
+{
+    settings()->setSharedValue(EXPORT_IDLE_UNTIL_FIRST_NOTE_KEY, Val(enabled));
 }
 
 AudioSampleFormat AudioExportConfiguration::exportWavSampleFormat() const
