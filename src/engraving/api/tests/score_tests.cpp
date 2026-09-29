@@ -58,10 +58,10 @@ public:
 TEST_F(Engraving_ApiScoreTests, replaceInstrumentAtDomLevel)
 {
     // [GIVEN] A score with a part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
     // Create a part with a default instrument
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -101,9 +101,9 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentAtDomLevel)
 TEST_F(Engraving_ApiScoreTests, replaceInstrumentUndo)
 {
     // [GIVEN] A score with a part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -144,9 +144,9 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentUndo)
 TEST_F(Engraving_ApiScoreTests, replaceInstrumentRedo)
 {
     // [GIVEN] A score with a part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -186,9 +186,9 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentRedo)
 TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
 {
     // [GIVEN] A score with a part
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
@@ -202,7 +202,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
 
     // Create API wrappers
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     // [WHEN] We call replaceInstrument through the API with a valid instrument
     apiScore.replaceInstrument(apiPart, "violin");
@@ -214,6 +214,32 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
     delete domScore;
 }
 
+TEST_F(Engraving_ApiScoreTests, partMixerChannelApi)
+{
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    Part *domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    Instrument instrument;
+    instrument.setId(u"test.piano");
+    domPart->setInstrument(instrument);
+
+    apiv1::Part apiPart(domPart, apiv1::Ownership::SCORE);
+    apiv1::MixerChannel *mixerChannel = apiPart.mixerChannel();
+
+    ASSERT_NE(mixerChannel, nullptr);
+    EXPECT_EQ(apiPart.mixerChannel(), mixerChannel);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("volume"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("balance"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("muted"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("solo"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("midiBank"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("midiProgram"), -1);
+
+    delete domScore;
+}
+
 //---------------------------------------------------------
 //   testReplaceInstrumentApiNullPart
 //   Test that the API handles null part gracefully
@@ -222,7 +248,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
 TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiNullPart)
 {
     // [GIVEN] A score
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
     apiv1::Score apiScore(domScore);
 
     // [WHEN/THEN] Calling with null part should not crash
@@ -239,9 +265,9 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiNullPart)
 TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiInvalidInstrument)
 {
     // [GIVEN] A score with a part
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
@@ -251,7 +277,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiInvalidInstrument)
     domPart->setInstrument(initialInstrument);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     // [WHEN] Calling with invalid instrument ID
     apiScore.replaceInstrument(apiPart, "nonexistent.instrument.xyz");
@@ -271,9 +297,9 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApiInvalidInstrument)
 TEST_F(Engraving_ApiScoreTests, setPartVisible)
 {
     // [GIVEN] A score with a visible part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
     EXPECT_TRUE(part->show());
@@ -303,11 +329,11 @@ TEST_F(Engraving_ApiScoreTests, setPartVisible)
 TEST_F(Engraving_ApiScoreTests, setStaffVisible)
 {
     // [GIVEN] A score with a visible staff
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
     EXPECT_TRUE(staff->visible());
 
@@ -336,9 +362,9 @@ TEST_F(Engraving_ApiScoreTests, setStaffVisible)
 TEST_F(Engraving_ApiScoreTests, setPartSharpFlat)
 {
     // [GIVEN] A score with a part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -367,9 +393,9 @@ TEST_F(Engraving_ApiScoreTests, setPartSharpFlat)
 TEST_F(Engraving_ApiScoreTests, setInstrumentName)
 {
     // [GIVEN] A score with a part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -403,9 +429,9 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentName)
 TEST_F(Engraving_ApiScoreTests, setInstrumentAbbreviature)
 {
     // [GIVEN] A score with a part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -439,11 +465,11 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentAbbreviature)
 TEST_F(Engraving_ApiScoreTests, setStaffType)
 {
     // [GIVEN] A score with a standard staff
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     EXPECT_EQ(staff->staffType(Fraction(0, 1))->type(), StaffTypes::STANDARD);
@@ -473,14 +499,14 @@ TEST_F(Engraving_ApiScoreTests, setStaffType)
 TEST_F(Engraving_ApiScoreTests, setPartVisibleApi)
 {
     // [GIVEN] A score with a visible part
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     EXPECT_TRUE(domPart->show());
 
@@ -502,9 +528,9 @@ TEST_F(Engraving_ApiScoreTests, setPartVisibleApi)
 TEST_F(Engraving_ApiScoreTests, setInstrumentNameApi)
 {
     // [GIVEN] A score with a part
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
@@ -513,7 +539,7 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentNameApi)
     domPart->setInstrument(instr);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     // [WHEN] We set a new instrument name via API
     apiv1::Fraction tick(Fraction(0, 1));
@@ -534,15 +560,15 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentNameApi)
 TEST_F(Engraving_ApiScoreTests, setStaffTypeApi)
 {
     // [GIVEN] A score with a standard staff
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
-    Staff* domStaff = Factory::createStaff(domPart);
+    Staff *domStaff = Factory::createStaff(domPart);
     domScore->appendStaff(domStaff);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Staff* apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+    apiv1::Staff *apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
 
     EXPECT_EQ(domStaff->staffType(Fraction(0, 1))->type(), StaffTypes::STANDARD);
 
@@ -564,13 +590,13 @@ TEST_F(Engraving_ApiScoreTests, setStaffTypeApi)
 TEST_F(Engraving_ApiScoreTests, removeParts)
 {
     // [GIVEN] A score with two parts
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part1 = new Part(score);
+    Part *part1 = new Part(score);
     score->appendPart(part1);
     score->appendStaff(Factory::createStaff(part1));
 
-    Part* part2 = new Part(score);
+    Part *part2 = new Part(score);
     score->appendPart(part2);
     score->appendStaff(Factory::createStaff(part2));
 
@@ -578,7 +604,7 @@ TEST_F(Engraving_ApiScoreTests, removeParts)
 
     // [WHEN] We remove the first part
     score->startCmd(TranslatableString::untranslatable("Remove parts test"));
-    EditPart::removeParts(score, { part1 });
+    EditPart::removeParts(score, {part1});
     score->endCmd();
 
     // [THEN] Only one part should remain
@@ -602,20 +628,20 @@ TEST_F(Engraving_ApiScoreTests, removeParts)
 TEST_F(Engraving_ApiScoreTests, removeStaves)
 {
     // [GIVEN] A score with a part containing two staves
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff1 = Factory::createStaff(part);
+    Staff *staff1 = Factory::createStaff(part);
     score->appendStaff(staff1);
-    Staff* staff2 = Factory::createStaff(part);
+    Staff *staff2 = Factory::createStaff(part);
     score->appendStaff(staff2);
 
     ASSERT_EQ(score->nstaves(), 2);
 
     // [WHEN] We remove the second staff
     score->startCmd(TranslatableString::untranslatable("Remove staves test"));
-    EditPart::removeStaves(score, { staff2 });
+    EditPart::removeStaves(score, {staff2});
     score->endCmd();
 
     // [THEN] Only one staff should remain
@@ -638,17 +664,17 @@ TEST_F(Engraving_ApiScoreTests, removeStaves)
 TEST_F(Engraving_ApiScoreTests, moveParts)
 {
     // [GIVEN] A score with three parts
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part1 = new Part(score);
+    Part *part1 = new Part(score);
     score->appendPart(part1);
     score->appendStaff(Factory::createStaff(part1));
 
-    Part* part2 = new Part(score);
+    Part *part2 = new Part(score);
     score->appendPart(part2);
     score->appendStaff(Factory::createStaff(part2));
 
-    Part* part3 = new Part(score);
+    Part *part3 = new Part(score);
     score->appendPart(part3);
     score->appendStaff(Factory::createStaff(part3));
 
@@ -659,7 +685,7 @@ TEST_F(Engraving_ApiScoreTests, moveParts)
 
     // [WHEN] We move part3 before part1
     score->startCmd(TranslatableString::untranslatable("Move parts test"));
-    EditPart::moveParts(score, { part3 }, part1, false);
+    EditPart::moveParts(score, {part3}, part1, false);
     score->endCmd();
 
     // [THEN] The order should be part3, part1, part2
@@ -686,13 +712,13 @@ TEST_F(Engraving_ApiScoreTests, moveParts)
 TEST_F(Engraving_ApiScoreTests, moveStaves)
 {
     // [GIVEN] A score with a part containing two staves
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff1 = Factory::createStaff(part);
+    Staff *staff1 = Factory::createStaff(part);
     score->appendStaff(staff1);
-    Staff* staff2 = Factory::createStaff(part);
+    Staff *staff2 = Factory::createStaff(part);
     score->appendStaff(staff2);
 
     ASSERT_EQ(score->nstaves(), 2);
@@ -701,7 +727,7 @@ TEST_F(Engraving_ApiScoreTests, moveStaves)
 
     // [WHEN] We move staff2 before staff1
     score->startCmd(TranslatableString::untranslatable("Move staves test"));
-    EditPart::moveStaves(score, { staff2 }, staff1, false);
+    EditPart::moveStaves(score, {staff2}, staff1, false);
     score->endCmd();
 
     // [THEN] The order should be staff2, staff1
@@ -726,23 +752,23 @@ TEST_F(Engraving_ApiScoreTests, moveStaves)
 TEST_F(Engraving_ApiScoreTests, removePartsApi)
 {
     // [GIVEN] A score with two parts
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart1 = new Part(domScore);
+    Part *domPart1 = new Part(domScore);
     domScore->appendPart(domPart1);
     domScore->appendStaff(Factory::createStaff(domPart1));
 
-    Part* domPart2 = new Part(domScore);
+    Part *domPart2 = new Part(domScore);
     domScore->appendPart(domPart2);
     domScore->appendStaff(Factory::createStaff(domPart2));
 
     ASSERT_EQ(domScore->parts().size(), 2);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart1 = new apiv1::Part(domPart1, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart1 = new apiv1::Part(domPart1, apiv1::Ownership::SCORE);
 
     // [WHEN] We remove the first part via API
-    apiScore.removeParts({ apiPart1 });
+    apiScore.removeParts({apiPart1});
 
     // [THEN] Only one part should remain
     EXPECT_EQ(domScore->parts().size(), 1);
@@ -760,24 +786,24 @@ TEST_F(Engraving_ApiScoreTests, removePartsApi)
 TEST_F(Engraving_ApiScoreTests, movePartsApi)
 {
     // [GIVEN] A score with two parts
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart1 = new Part(domScore);
+    Part *domPart1 = new Part(domScore);
     domScore->appendPart(domPart1);
     domScore->appendStaff(Factory::createStaff(domPart1));
 
-    Part* domPart2 = new Part(domScore);
+    Part *domPart2 = new Part(domScore);
     domScore->appendPart(domPart2);
     domScore->appendStaff(Factory::createStaff(domPart2));
 
     ASSERT_EQ(domScore->parts().size(), 2);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart1 = new apiv1::Part(domPart1, apiv1::Ownership::SCORE);
-    apiv1::Part* apiPart2 = new apiv1::Part(domPart2, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart1 = new apiv1::Part(domPart1, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart2 = new apiv1::Part(domPart2, apiv1::Ownership::SCORE);
 
     // [WHEN] We move part2 before part1 (insertMode = 0 = BEFORE)
-    apiScore.moveParts({ apiPart2 }, apiPart1, 0);
+    apiScore.moveParts({apiPart2}, apiPart1, 0);
 
     // [THEN] The order should be part2, part1
     EXPECT_EQ(domScore->staves()[0]->part(), domPart2);
@@ -796,11 +822,11 @@ TEST_F(Engraving_ApiScoreTests, movePartsApi)
 TEST_F(Engraving_ApiScoreTests, staffVisiblePid)
 {
     // [GIVEN] A score with a visible staff
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     EXPECT_TRUE(staff->visible());
@@ -832,11 +858,11 @@ TEST_F(Engraving_ApiScoreTests, staffVisiblePid)
 TEST_F(Engraving_ApiScoreTests, staffCutawayPid)
 {
     // [GIVEN] A score with a staff (cutaway off by default)
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     EXPECT_FALSE(staff->cutaway());
@@ -866,11 +892,11 @@ TEST_F(Engraving_ApiScoreTests, staffCutawayPid)
 TEST_F(Engraving_ApiScoreTests, staffHideSystemBarLinePid)
 {
     // [GIVEN] A score with a staff
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     EXPECT_FALSE(staff->hideSystemBarLine());
@@ -900,11 +926,11 @@ TEST_F(Engraving_ApiScoreTests, staffHideSystemBarLinePid)
 TEST_F(Engraving_ApiScoreTests, staffMergeMatchingRestsPid)
 {
     // [GIVEN] A score with a staff (mergeMatchingRests defaults to AUTO)
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     EXPECT_EQ(staff->mergeMatchingRests(), AutoOnOff::AUTO);
@@ -934,11 +960,11 @@ TEST_F(Engraving_ApiScoreTests, staffMergeMatchingRestsPid)
 TEST_F(Engraving_ApiScoreTests, staffReflectTranspositionPid)
 {
     // [GIVEN] A score with a staff (reflectTransposition defaults to true)
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     EXPECT_TRUE(staff->reflectTranspositionInLinkedTab());
@@ -968,11 +994,11 @@ TEST_F(Engraving_ApiScoreTests, staffReflectTranspositionPid)
 TEST_F(Engraving_ApiScoreTests, staffPropertiesApi)
 {
     // [GIVEN] A score with a staff
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
-    Staff* domStaff = Factory::createStaff(domPart);
+    Staff *domStaff = Factory::createStaff(domPart);
     domScore->appendStaff(domStaff);
 
     // Wrap in API objects
@@ -1022,9 +1048,9 @@ TEST_F(Engraving_ApiScoreTests, staffPropertiesApi)
 TEST_F(Engraving_ApiScoreTests, appendStaff)
 {
     // [GIVEN] A score with a part containing one staff
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -1032,7 +1058,7 @@ TEST_F(Engraving_ApiScoreTests, appendStaff)
 
     // [WHEN] We append a new staff
     score->startCmd(TranslatableString::untranslatable("Append staff test"));
-    Staff* newStaff = EditPart::appendStaff(score, part);
+    Staff *newStaff = EditPart::appendStaff(score, part);
     score->endCmd();
 
     // [THEN] The part should have 2 staves
@@ -1056,18 +1082,18 @@ TEST_F(Engraving_ApiScoreTests, appendStaff)
 TEST_F(Engraving_ApiScoreTests, appendLinkedStaff)
 {
     // [GIVEN] A score with a part containing one staff
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* sourceStaff = Factory::createStaff(part);
+    Staff *sourceStaff = Factory::createStaff(part);
     score->appendStaff(sourceStaff);
 
     ASSERT_EQ(part->nstaves(), 1);
 
     // [WHEN] We append a linked staff
     score->startCmd(TranslatableString::untranslatable("Append linked staff test"));
-    Staff* linkedStaff = EditPart::appendLinkedStaff(score, sourceStaff, part);
+    Staff *linkedStaff = EditPart::appendLinkedStaff(score, sourceStaff, part);
     score->endCmd();
 
     // [THEN] The part should have 2 staves
@@ -1091,19 +1117,19 @@ TEST_F(Engraving_ApiScoreTests, appendLinkedStaff)
 TEST_F(Engraving_ApiScoreTests, appendStaffApi)
 {
     // [GIVEN] A score with a part containing one staff
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
     ASSERT_EQ(domPart->nstaves(), 1);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     // [WHEN] We append a staff via API
-    apiv1::Staff* apiStaff = apiScore.appendStaff(apiPart);
+    apiv1::Staff *apiStaff = apiScore.appendStaff(apiPart);
 
     // [THEN] The part should have 2 staves
     EXPECT_NE(apiStaff, nullptr);
@@ -1121,21 +1147,21 @@ TEST_F(Engraving_ApiScoreTests, appendStaffApi)
 TEST_F(Engraving_ApiScoreTests, appendLinkedStaffApi)
 {
     // [GIVEN] A score with a part containing one staff
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
-    Staff* domStaff = Factory::createStaff(domPart);
+    Staff *domStaff = Factory::createStaff(domPart);
     domScore->appendStaff(domStaff);
 
     ASSERT_EQ(domPart->nstaves(), 1);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
-    apiv1::Staff* apiSourceStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Staff *apiSourceStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
 
     // [WHEN] We append a linked staff via API
-    apiv1::Staff* apiLinkedStaff = apiScore.appendLinkedStaff(apiSourceStaff, apiPart);
+    apiv1::Staff *apiLinkedStaff = apiScore.appendLinkedStaff(apiSourceStaff, apiPart);
 
     // [THEN] The part should have 2 staves
     EXPECT_NE(apiLinkedStaff, nullptr);
@@ -1154,11 +1180,11 @@ TEST_F(Engraving_ApiScoreTests, appendLinkedStaffApi)
 TEST_F(Engraving_ApiScoreTests, setVoiceVisibleOnMainScore)
 {
     // [GIVEN] A main score (not an excerpt)
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(part);
+    Staff *staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     // [WHEN] We try to set voice visible on the main score
@@ -1178,15 +1204,15 @@ TEST_F(Engraving_ApiScoreTests, setVoiceVisibleOnMainScore)
 TEST_F(Engraving_ApiScoreTests, setVoiceVisibleApi)
 {
     // [GIVEN] A main score (not an excerpt)
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
-    Staff* domStaff = Factory::createStaff(domPart);
+    Staff *domStaff = Factory::createStaff(domPart);
     domScore->appendStaff(domStaff);
 
     apiv1::Score apiScore(domScore);
-    apiv1::Staff* apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+    apiv1::Staff *apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
 
     // [WHEN] We try to set voice visible via API on main score
     bool result = apiScore.setVoiceVisible(apiStaff, 0, false);
@@ -1206,9 +1232,9 @@ TEST_F(Engraving_ApiScoreTests, setVoiceVisibleApi)
 TEST_F(Engraving_ApiScoreTests, replaceDrumset)
 {
     // [GIVEN] A score with a percussion part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -1254,9 +1280,9 @@ TEST_F(Engraving_ApiScoreTests, replaceDrumset)
 TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
 {
     // [GIVEN] A score with a percussion part
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
@@ -1275,11 +1301,11 @@ TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
     EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Bass Drum");
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     // [WHEN] We clone the drumset via API, modify it, and replace
     apiv1::Instrument apiInstr(domPart->instrument(), domPart);
-    apiv1::Drumset* cloned = apiInstr.cloneDrumset();
+    apiv1::Drumset *cloned = apiInstr.cloneDrumset();
     ASSERT_NE(cloned, nullptr);
 
     cloned->setName(36, "Kick Drum");
@@ -1303,9 +1329,9 @@ TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
 TEST_F(Engraving_ApiScoreTests, insertPart)
 {
     // [GIVEN] A score with one part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part1 = new Part(score);
+    Part *part1 = new Part(score);
     score->appendPart(part1);
     score->appendStaff(Factory::createStaff(part1));
 
@@ -1316,8 +1342,9 @@ TEST_F(Engraving_ApiScoreTests, insertPart)
     ASSERT_EQ(score->parts().size(), 1);
 
     // Load instrument templates so searchTemplate works
-    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
-    if (!violinTempl) {
+    const InstrumentTemplate *violinTempl = searchTemplate(u"violin");
+    if (!violinTempl)
+    {
         GTEST_SKIP() << "Instrument templates not loaded";
     }
 
@@ -1347,9 +1374,9 @@ TEST_F(Engraving_ApiScoreTests, insertPart)
 TEST_F(Engraving_ApiScoreTests, replacePart)
 {
     // [GIVEN] A score with one part
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -1359,8 +1386,9 @@ TEST_F(Engraving_ApiScoreTests, replacePart)
 
     ASSERT_EQ(score->parts().size(), 1);
 
-    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
-    if (!violinTempl) {
+    const InstrumentTemplate *violinTempl = searchTemplate(u"violin");
+    if (!violinTempl)
+    {
         GTEST_SKIP() << "Instrument templates not loaded";
     }
 
@@ -1391,16 +1419,17 @@ TEST_F(Engraving_ApiScoreTests, replacePart)
 TEST_F(Engraving_ApiScoreTests, insertPartApi)
 {
     // [GIVEN] A score with one part
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
     ASSERT_EQ(domScore->parts().size(), 1);
 
-    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
-    if (!violinTempl) {
+    const InstrumentTemplate *violinTempl = searchTemplate(u"violin");
+    if (!violinTempl)
+    {
         GTEST_SKIP() << "Instrument templates not loaded";
     }
 
@@ -1424,9 +1453,9 @@ TEST_F(Engraving_ApiScoreTests, insertPartApi)
 TEST_F(Engraving_ApiScoreTests, replacePartApi)
 {
     // [GIVEN] A score with one part
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
@@ -1436,13 +1465,14 @@ TEST_F(Engraving_ApiScoreTests, replacePartApi)
 
     ASSERT_EQ(domScore->parts().size(), 1);
 
-    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
-    if (!violinTempl) {
+    const InstrumentTemplate *violinTempl = searchTemplate(u"violin");
+    if (!violinTempl)
+    {
         GTEST_SKIP() << "Instrument templates not loaded";
     }
 
     apiv1::Score apiScore(domScore);
-    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Part *apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
 
     // [WHEN] We replace the part via API
     apiScore.replacePart(apiPart, "violin");
@@ -1463,9 +1493,9 @@ TEST_F(Engraving_ApiScoreTests, replacePartApi)
 TEST_F(Engraving_ApiScoreTests, setScoreOrder)
 {
     // [GIVEN] A score
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* part = new Part(score);
+    Part *part = new Part(score);
     score->appendPart(part);
     score->appendStaff(Factory::createStaff(part));
 
@@ -1501,9 +1531,9 @@ TEST_F(Engraving_ApiScoreTests, setScoreOrder)
 TEST_F(Engraving_ApiScoreTests, setScoreOrderApi)
 {
     // [GIVEN] A score and an orchestral order available
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Part* domPart = new Part(domScore);
+    Part *domPart = new Part(domScore);
     domScore->appendPart(domPart);
     domScore->appendStaff(Factory::createStaff(domPart));
 
@@ -1536,8 +1566,8 @@ TEST_F(Engraving_ApiScoreTests, setScoreOrderApi)
 TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyAtDomLevel)
 {
     // [GIVEN] A score and a FretDiagram with no harmony
-    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+    MasterScore *score = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram *fd = Factory::createFretDiagram(score->dummy()->segment());
 
     EXPECT_EQ(fd->harmony(), nullptr);
     EXPECT_EQ(fd->harmonyPlainText(), String());
@@ -1563,15 +1593,14 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyAtDomLevel)
 TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
 {
     // [GIVEN] A score with a FretDiagram carrying a chord symbol
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram *domFd = Factory::createFretDiagram(domScore->dummy()->segment());
     domFd->setHarmony(u"Fdim7");
 
     // Construct the wrapper through the public dispatcher so that
     // the FretDiagram and Harmony branches added in elements.cpp are
     // exercised.
-    apiv1::FretDiagram* apiFd
-        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    apiv1::FretDiagram *apiFd = qobject_cast<apiv1::FretDiagram *>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
     ASSERT_NE(apiFd, nullptr);
 
     // [WHEN/THEN] The chord symbol is reachable via plainText.
@@ -1582,7 +1611,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
 
     // [WHEN/THEN] (A) The plugin-facing accessor returns the nested Harmony
     // wrapper (this is the path a real plugin would use).
-    apiv1::Harmony* apiHarmony = apiFd->harmony();
+    apiv1::Harmony *apiHarmony = apiFd->harmony();
     ASSERT_NE(apiHarmony, nullptr);
     EXPECT_EQ(apiHarmony->plainText(), QString("Fdim7"));
     apiHarmony->displayText();
@@ -1590,8 +1619,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
 
     // [WHEN/THEN] (B) The wrap() dispatcher returns the same wrapper too
     // (exercises the API_WRAP(Harmony) branch in elements.cpp).
-    apiv1::Harmony* apiHarmonyViaDispatcher
-        = qobject_cast<apiv1::Harmony*>(apiv1::wrap(domFd->harmony(), apiv1::Ownership::SCORE));
+    apiv1::Harmony *apiHarmonyViaDispatcher = qobject_cast<apiv1::Harmony *>(apiv1::wrap(domFd->harmony(), apiv1::Ownership::SCORE));
     ASSERT_NE(apiHarmonyViaDispatcher, nullptr);
     EXPECT_EQ(apiHarmonyViaDispatcher->plainText(), QString("Fdim7"));
 
@@ -1614,11 +1642,10 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
     // [GIVEN] A score and an empty FretDiagram, wrapped via the API.
     // FretDiagram::dot(s) returns a placeholder Dot(fret=0) when no dot is set,
     // so we check fret values rather than vector emptiness.
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram *domFd = Factory::createFretDiagram(domScore->dummy()->segment());
 
-    apiv1::FretDiagram* apiFd
-        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    apiv1::FretDiagram *apiFd = qobject_cast<apiv1::FretDiagram *>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
     ASSERT_NE(apiFd, nullptr);
 
     EXPECT_EQ(domFd->dot(0).front().fret, 0);
@@ -1657,11 +1684,10 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
 TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
 {
     // [GIVEN] A score and an empty FretDiagram, wrapped via the API
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram *domFd = Factory::createFretDiagram(domScore->dummy()->segment());
 
-    apiv1::FretDiagram* apiFd
-        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    apiv1::FretDiagram *apiFd = qobject_cast<apiv1::FretDiagram *>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
     ASSERT_NE(apiFd, nullptr);
 
     // [WHEN] We mute a string via the API inside a startCmd/endCmd transaction
@@ -1695,11 +1721,10 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
 TEST_F(Engraving_ApiScoreTests, fretDiagramSetBarreApi)
 {
     // [GIVEN] A score and an empty FretDiagram, wrapped via the API
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram *domFd = Factory::createFretDiagram(domScore->dummy()->segment());
 
-    apiv1::FretDiagram* apiFd
-        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    apiv1::FretDiagram *apiFd = qobject_cast<apiv1::FretDiagram *>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
     ASSERT_NE(apiFd, nullptr);
 
     EXPECT_FALSE(domFd->barre(2).exists());
@@ -1736,15 +1761,14 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetBarreApi)
 TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
 {
     // [GIVEN] A score and a FretDiagram populated with a dot and a marker
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram *domFd = Factory::createFretDiagram(domScore->dummy()->segment());
     domFd->setDot(0, 3);
     domFd->setMarker(1, FretMarkerType::CROSS);
 
     ASSERT_FALSE(domFd->isClear());
 
-    apiv1::FretDiagram* apiFd
-        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    apiv1::FretDiagram *apiFd = qobject_cast<apiv1::FretDiagram *>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
     ASSERT_NE(apiFd, nullptr);
 
     // [WHEN] We clear the diagram via the API inside a startCmd/endCmd transaction
@@ -1779,17 +1803,16 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
 TEST_F(Engraving_ApiScoreTests, fretDiagramGettersApi)
 {
     // [GIVEN] A FretDiagram populated with known content
-    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
-    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    MasterScore *domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram *domFd = Factory::createFretDiagram(domScore->dummy()->segment());
 
     // Set a dot on string 0 fret 3, a marker on string 1, and a barre at fret 2
     domFd->setDot(0, 3);
     domFd->setMarker(1, FretMarkerType::CROSS);
-    domFd->setBarre(2, 5, 2);     // startString=2, endString=5, fret=2
+    domFd->setBarre(2, 5, 2); // startString=2, endString=5, fret=2
     domFd->setFretOffset(3);
 
-    apiv1::FretDiagram* apiFd
-        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    apiv1::FretDiagram *apiFd = qobject_cast<apiv1::FretDiagram *>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
     ASSERT_NE(apiFd, nullptr);
 
     // [THEN] Scalar properties match the DOM state

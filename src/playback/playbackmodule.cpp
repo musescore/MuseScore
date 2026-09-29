@@ -37,6 +37,7 @@
 #include "internal/knownaudiopluginsconfigurator.h"
 #include "internal/playbackuiactions.h"
 #include "internal/playbackcommandscontroller.h"
+#include "internal/engravingpluginmixerapiv1.h"
 
 using namespace mu::playback;
 using namespace muse;
@@ -60,12 +61,14 @@ void PlaybackModule::registerExports()
 void PlaybackModule::resolveImports()
 {
     auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
-    if (ir) {
+    if (ir)
+    {
         ir->registerQmlUri(Uri("musescore://playback/soundprofiles"), "MuseScore.Playback", "SoundProfilesDialog");
     }
 
     auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
-    if (cr) {
+    if (cr)
+    {
         cr->reg(std::make_shared<PlaybackCommandsRegister>());
     }
 
@@ -73,12 +76,12 @@ void PlaybackModule::resolveImports()
     KnownAudioPluginsConfigurator().init();
 }
 
-void PlaybackModule::onInit(const IApplication::RunMode&)
+void PlaybackModule::onInit(const IApplication::RunMode &)
 {
     m_configuration->init();
 }
 
-IContextSetup* PlaybackModule::newContext(const muse::modularity::ContextPtr& ctx) const
+IContextSetup *PlaybackModule::newContext(const muse::modularity::ContextPtr &ctx) const
 {
     return new PlaybackContext(ctx);
 }
@@ -87,33 +90,38 @@ void PlaybackContext::registerExports()
 {
     m_commandsController = std::make_shared<PlaybackCommandsController>(iocContext());
     m_playbackController = std::make_shared<PlaybackController>(iocContext());
+    m_engravingPluginMixerApi = std::make_shared<EngravingPluginMixerApi>(iocContext());
     m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
     m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
 
     ioc()->registerExport<IPlaybackCommandsController>(mname, m_commandsController);
     ioc()->registerExport<IPlaybackController>(mname, m_playbackController);
+    ioc()->registerExport<engraving::IEngravingPluginMixerApi>(mname, m_engravingPluginMixerApi);
     ioc()->registerExport<ISoundProfilesRepository>(mname, m_soundProfileRepo);
 }
 
 void PlaybackContext::resolveImports()
 {
     auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
-    if (cs) {
+    if (cs)
+    {
         cs->reg(std::make_shared<PlaybackCommandsState>(iocContext()));
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
-    if (ar) {
+    if (ar)
+    {
         ar->reg(m_playbackUiActions);
     }
 }
 
-void PlaybackContext::onInit(const IApplication::RunMode& mode)
+void PlaybackContext::onInit(const IApplication::RunMode &mode)
 {
     m_playbackController->init();
     m_commandsController->init();
 
-    if (mode != IApplication::RunMode::GuiApp) {
+    if (mode != IApplication::RunMode::GuiApp)
+    {
         return;
     }
 

@@ -1,14 +1,17 @@
 {
-    "1_getting_started": {
-        "title": "Quick start"
-    },
-    "2_manifest": {
-        "title": "Manifest"
-    },
-    "3_form": {
-        "title": "Form"
-    },
-    "4_macros": {
-        "title": "Macros"
-    }
+  "1_getting_started": {
+    "title": "Quick start"
+  },
+  "2_manifest": {
+    "title": "Manifest"
+  },
+  "3_form": {
+    "title": "Form"
+  },
+  "4_macros": {
+    "title": "Macros"
+  },
+  "7_mixer_api": {
+    "title": "Mixer API"
+  }
 }

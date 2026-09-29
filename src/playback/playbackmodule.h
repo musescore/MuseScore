@@ -26,42 +26,44 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::playback {
-class PlaybackConfiguration;
-class PlaybackController;
-class SoundProfilesRepository;
-class PlaybackUiActions;
-class PlaybackCommandsController;
-class PlaybackModule : public muse::modularity::IModuleSetup
+namespace mu::playback
 {
-public:
+    class PlaybackConfiguration;
+    class PlaybackController;
+    class SoundProfilesRepository;
+    class PlaybackUiActions;
+    class PlaybackCommandsController;
+    class EngravingPluginMixerApi;
+    class PlaybackModule : public muse::modularity::IModuleSetup
+    {
+    public:
+        std::string moduleName() const override;
+        void registerExports() override;
+        void resolveImports() override;
+        void onInit(const muse::IApplication::RunMode &mode) override;
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const muse::IApplication::RunMode& mode) override;
+        muse::modularity::IContextSetup *newContext(const muse::modularity::ContextPtr &ctx) const override;
 
-    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+    private:
+        std::shared_ptr<PlaybackConfiguration> m_configuration;
+    };
 
-private:
-    std::shared_ptr<PlaybackConfiguration> m_configuration;
-};
+    class PlaybackContext : public muse::modularity::IContextSetup
+    {
+    public:
+        PlaybackContext(const muse::modularity::ContextPtr &ctx)
+            : muse::modularity::IContextSetup(ctx) {}
 
-class PlaybackContext : public muse::modularity::IContextSetup
-{
-public:
-    PlaybackContext(const muse::modularity::ContextPtr& ctx)
-        : muse::modularity::IContextSetup(ctx) {}
+        void registerExports() override;
+        void resolveImports() override;
+        void onInit(const muse::IApplication::RunMode &mode) override;
+        void onDeinit() override;
 
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const muse::IApplication::RunMode& mode) override;
-    void onDeinit() override;
-
-private:
-    std::shared_ptr<PlaybackCommandsController> m_commandsController;
-    std::shared_ptr<PlaybackController> m_playbackController;
-    std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
-    std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
-};
+    private:
+        std::shared_ptr<PlaybackCommandsController> m_commandsController;
+        std::shared_ptr<PlaybackController> m_playbackController;
+        std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
+        std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
+        std::shared_ptr<EngravingPluginMixerApi> m_engravingPluginMixerApi;
+    };
 }
