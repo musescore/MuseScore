@@ -239,6 +239,15 @@ StyledFlickable {
 
         Keys.onShortcutOverride: function(event) {
 
+           // Intercept Unicode Braille characters from Braille display
+            if (event.text.length === 1) {
+                var charCode = event.text.charCodeAt(0);
+                if (charCode >= 0x2800 && charCode <= 0x283F) {
+                    event.accepted = true;
+                    return;
+                }
+            }
+
             if (keyMap.get(event.key) === "") {
                 // Not interested in this key. Allow it to undergo normal
                 // shortcut processing (i.e. trigger an action, if it's been
