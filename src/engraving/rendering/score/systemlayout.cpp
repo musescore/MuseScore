@@ -2557,13 +2557,21 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     return dist;
 }
 
+static bool itemIsPlacedAbove(const EngravingItem* item)
+{
+    if (item->isArticulationFamily()) {
+        return toArticulation(item)->up();
+    }
+    if (item->isLyricsLineSegment()) {
+        return toLyricsLineSegment(item)->lyricsPlaceAbove();
+    }
+    return item->placeAbove();
+}
+
 void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System* system)
 {
     Skyline& skyline = system->staff(element->staffIdx())->skyline();
-    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up()
-                   : element->isLyricsLineSegment() ? toLyricsLineSegment(element)->lyricsPlaceAbove()
-                   : element->placeAbove();
-    SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
+    SkylineLine& skylineLine = itemIsPlacedAbove(element) ? skyline.north() : skyline.south();
 
     skylineLine.remove_if([element](ShapeElement& shapeEl) {
         return shapeEl.item() && (element == shapeEl.item() || element == shapeEl.item()->ownershipParent());
@@ -2573,10 +2581,7 @@ void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System
 void SystemLayout::updateSkylineForElement(EngravingItem* element, const System* system, double yMove)
 {
     Skyline& skyline = system->staff(element->staffIdx())->skyline();
-    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up()
-                   : element->isLyricsLineSegment() ? toLyricsLineSegment(element)->lyricsPlaceAbove()
-                   : element->placeAbove();
-    SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
+    SkylineLine& skylineLine = itemIsPlacedAbove(element) ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
         if (itemInSkyline && itemInSkyline->isText()) {
@@ -2630,7 +2635,7 @@ static Shape shapeRelativeToStaff(const EngravingItem* item, double systemX)
 
 void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>& gaps, std::vector<MMRest*>& mmRestsToCenter)
 {
-    const staff_idx_t nStaves = static_cast<staff_idx_t>(system->staves().size());
+    const size_t nStaves = system->staves().size();
     if (nStaves < 2) {
         return;
     }
@@ -2640,7 +2645,7 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
         size_t forItemsAbove = muse::nidx;
     };
     std::vector<GapsOfStaff> gapsOfStaff(nStaves);
-    gaps.reserve(nStaves);
+    gaps.reserve(nStaves - 1);
 
     staff_idx_t upperStaffIdx = system->firstVisibleStaff();
     staff_idx_t lowerStaffIdx = muse::nidx;
@@ -2935,7 +2940,7 @@ void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, double
         const SkylineLine lowerSkyline = skylineFacingGap(system, gap.lowerStaffIdx, false, gap.yStaffDiff, movableItems);
 
         std::vector<const CenterableItem*> itemsToCenter;
-        bool anythingGotStuck = false;
+        bool canCenterGroup = true;
         for (const CenterableItem& gapItem : gap.items) {
             const EngravingItem* item = gapItem.item;
             if (!muse::contains(movableItems, item)) {
@@ -2946,7 +2951,7 @@ void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, double
             const SkylineLine& ownSkyline = gapItem.onUpperGapStaff ? upperSkyline : lowerSkyline;
             if (!itemShape.empty() && elementHasAnotherStackedOutside(item, itemShape, ownSkyline)) {
                 movableItems.erase(item);
-                anythingGotStuck = true;
+                canCenterGroup = false;
 
                 // Snapped items stay together:
                 AlignmentLayout::scanConnectedItems(gapItem.item, system,
@@ -2969,7 +2974,7 @@ void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, double
             }
         }
 
-        if (anythingGotStuck) {
+        if (!canCenterGroup) {
             continue;
         }
 
