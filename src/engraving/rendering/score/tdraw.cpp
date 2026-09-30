@@ -1418,6 +1418,9 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
     symPen.setCapStyle(PenCapStyle::FlatCap);
+    // Raise the miter limit so the triangle's apex isn't bevelled (needs ~2.24)
+    symPen.setJoinStyle(PenJoinStyle::MiterJoin);
+    symPen.setMiterLimit(3.0);
     double symPenWidth = ldata->stringLineWidth * 1.2;
     symPen.setWidthF(symPenWidth);
 
@@ -1450,9 +1453,8 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
                 painter->drawRect(RectF(x, y, dotd, dotd));
                 break;
             case FretDotType::TRIANGLE:
-                painter->drawLine(LineF(x, y + dotd, x + .5 * dotd, y));
-                painter->drawLine(LineF(x + .5 * dotd, y, x + dotd, y + dotd));
-                painter->drawLine(LineF(x + dotd, y + dotd, x, y + dotd));
+                painter->setBrush(BrushStyle::NoBrush);
+                painter->drawPolygon(PolygonF({ PointF(x, y + dotd), PointF(x + .5 * dotd, y), PointF(x + dotd, y + dotd) }));
                 break;
             case FretDotType::NORMAL:
             default:
