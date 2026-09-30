@@ -2933,6 +2933,15 @@ void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, double
         movableItems.insert(gapItem.item);
     }
 
+    auto getVerse = [](const EngravingItem* item) {
+        if (item->isLyrics()) {
+            return toLyrics(item)->verse();
+        } else if (item->isLyricsLineSegment()) {
+            return toLyricsLineSegment(item)->verse();
+        }
+        return -1;
+    };
+
     /* An item with something non-centered stacked outside it has no gap to be centered in: it
      * stays where it is and joins the skyline, so that it constrains the items which do move */
     while (!movableItems.empty()) {
@@ -2957,15 +2966,12 @@ void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, double
                 AlignmentLayout::scanConnectedItems(gapItem.item, system,
                                                     [&movableItems](EngravingItem* chainItem) { movableItems.erase(chainItem); });
 
-                // A dash or melisma line and the lyric it belongs to stay together:
-                if (item->isLyricsLineSegment()) {
-                    if (const Lyrics* lyrics = toLyricsLineSegment(item)->lyrics()) {
-                        movableItems.erase(lyrics);
-                    }
-                } else if (item->isLyrics()) {
-                    if (const LyricsLine* separator = toLyrics(item)->separator()) {
-                        for (const SpannerSegment* segment : separator->spannerSegments()) {
-                            movableItems.erase(segment);
+                // A lyrics verse stays together:
+                if (gapItem.isLyrics) {
+                    int verse = getVerse(item);
+                    for (const CenterableItem& i : gap.items) {
+                        if (i.isLyrics && i.onUpperGapStaff == gapItem.onUpperGapStaff && getVerse(i.item) == verse) {
+                            movableItems.erase(i.item);
                         }
                     }
                 }
