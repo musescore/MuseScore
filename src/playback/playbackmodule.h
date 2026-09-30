@@ -32,6 +32,7 @@ class PlaybackController;
 class SoundProfilesRepository;
 class PlaybackUiActions;
 class PlaybackCommandsController;
+class EngravingPluginMixerApi;
 class PlaybackModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -63,5 +64,6 @@ private:
     std::shared_ptr<PlaybackController> m_playbackController;
     std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
     std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
+    std::shared_ptr<EngravingPluginMixerApi> m_engravingPluginMixerApi;
 };
 }

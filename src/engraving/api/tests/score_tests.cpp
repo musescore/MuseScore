@@ -214,6 +214,32 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentApi)
     delete domScore;
 }
 
+TEST_F(Engraving_ApiScoreTests, partMixerChannelApi)
+{
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    Instrument instrument;
+    instrument.setId(u"test.piano");
+    domPart->setInstrument(instrument);
+
+    apiv1::Part apiPart(domPart, apiv1::Ownership::SCORE);
+    apiv1::MixerChannel* mixerChannel = apiPart.mixerChannel();
+
+    ASSERT_NE(mixerChannel, nullptr);
+    EXPECT_EQ(apiPart.mixerChannel(), mixerChannel);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("volume"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("balance"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("muted"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("solo"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("midiBank"), -1);
+    EXPECT_NE(mixerChannel->metaObject()->indexOfProperty("midiProgram"), -1);
+
+    delete domScore;
+}
+
 //---------------------------------------------------------
 //   testReplaceInstrumentApiNullPart
 //   Test that the API handles null part gracefully
