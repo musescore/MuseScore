@@ -205,6 +205,34 @@ StyledFlickable {
             shortcutOverrideModel.init()
         }
 
+        // Convert a Unicode Braille character (U+2800-U+283F) to the
+        // S,D,F,J,K,L key format used by MuseScore's braille input system.
+        function unicodeBrailleToKeys(text) {
+            if (text.length !== 1) {
+                return "";
+            }
+
+            var charCode = text.charCodeAt(0);
+            if (charCode < 0x2800 || charCode > 0x283F) {
+                return "";
+            }
+
+            var dots = charCode - 0x2800;
+
+            if (dots === 0) {
+                return "Space";
+            }
+
+            var parts = [];
+            if (dots & 0x01) parts.push("F");   // Dot 1
+            if (dots & 0x02) parts.push("D");   // Dot 2
+            if (dots & 0x04) parts.push("S");   // Dot 3
+            if (dots & 0x08) parts.push("J");   // Dot 4
+            if (dots & 0x10) parts.push("K");   // Dot 5
+            if (dots & 0x20) parts.push("L");   // Dot 6
+            return parts.join("+");
+        }
+
         ShortcutOverrideModel {
             id: shortcutOverrideModel
         }
@@ -227,6 +255,19 @@ StyledFlickable {
         }
 
         Keys.onPressed: function(event) {
+                    // Handle Unicode Braille characters from Braille display.
+            if (event.text.length === 1) {
+                var brailleKeys = unicodeBrailleToKeys(event.text);
+                if (brailleKeys !== "") {
+                    brailleModel.keys = brailleKeys;
+                    // set the focus back to braille
+                    root.navigationPanel.setActive(true);
+                    fakeNavCtrl.setActive(true);
+                    event.accepted = true;
+                    return;
+                }
+            }
+
             if (event.key === Qt.Key_Tab
                     || event.key === Qt.Key_Backtab
                     || event.key === Qt.Key_F6
