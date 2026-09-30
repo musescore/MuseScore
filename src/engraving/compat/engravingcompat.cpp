@@ -402,7 +402,7 @@ static void doMigrateOffsetAfterAutoplace(EngravingItem* item)
 
     // We can't fix the offset for some types.
     // These are types where layout is spread out in multiple steps and cannot be accurately calculated with one TLayout::layoutItem call.
-    if (item->generated() || !item->autoplace() || !autoplaceAppliesToType(item->type()) || item->offset().isNull()
+    if (item->generated() || !autoplaceAppliesToType(item->type()) || !item->autoplace() || item->offset().isNull()
         || item->isRest()
         || item->isLyrics()
         || item->isLyricsLineSegment()
@@ -418,18 +418,14 @@ static void doMigrateOffsetAfterAutoplace(EngravingItem* item)
 
     // Calculate item's position without autoplace
     PropertyFlags autoplacePf = item->propertyFlags(Pid::AUTOPLACE);
-    PropertyFlags restorePf = autoplacePf == PropertyFlags::STYLED ? PropertyFlags::UNSTYLED : autoplacePf;
-    item->undoChangeProperty(Pid::AUTOPLACE, false, restorePf);
+    item->setProperty(Pid::AUTOPLACE, false);
 
     item->mutldata()->setPos(PointF());
     item->renderer()->layoutItem(item);
     PointF originPos = item->ldata()->pos();
 
-    if (autoplacePf == PropertyFlags::STYLED) {
-        item->undoResetProperty(Pid::AUTOPLACE);
-    } else {
-        item->undoChangeProperty(Pid::AUTOPLACE, true, autoplacePf);
-    }
+    item->setProperty(Pid::AUTOPLACE, true);
+    item->setPropertyFlags(Pid::AUTOPLACE, autoplacePf);
 
     // The difference is the amount autoplace moves the item
     const double difference = pushedPos.y() - originPos.y();
@@ -438,17 +434,15 @@ static void doMigrateOffsetAfterAutoplace(EngravingItem* item)
         return;
     }
 
-    PropertyFlags offsetPf = item->propertyFlags(Pid::OFFSET);
-    if (offsetPf == PropertyFlags::STYLED) {
-        offsetPf = PropertyFlags::UNSTYLED;
-    }
-
     PointF newOffset = item->offset();
     newOffset.ry() -= difference;
 
     newOffset.ry() = item->placeAbove() ? std::min(newOffset.y(), 0.0) : std::max(newOffset.y(), 0.0);
 
-    item->undoChangeProperty(Pid::OFFSET, newOffset, offsetPf);
+    item->setProperty(Pid::OFFSET, newOffset);
+    if (item->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+        item->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+    }
 }
 
 void EngravingCompat::migrateOffsetAfterAutoplace(MasterScore* masterScore)
