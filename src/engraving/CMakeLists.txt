@@ -154,6 +154,8 @@ target_sources(engraving PRIVATE
     editing/editparentheses.h
     editing/editpart.cpp
     editing/editpart.h
+    editing/editposition.cpp
+    editing/editposition.h
     editing/editproperty.cpp
     editing/editproperty.h
     editing/editrehearsalmark.cpp
