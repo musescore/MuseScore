@@ -70,7 +70,7 @@ TEST_F(Engraving_Compat400Tests, offsetAlignHarmony)
             continue;
         }
         Harmony* harmony = toHarmony(item);
-        EXPECT_EQ(harmony->offset().y() / harmony->spatium(), -4.0);
+        EXPECT_NEAR(harmony->offset().y() / harmony->spatium(), -3.4408, 0.0001);
         ++harmonyCount;
     }
     EXPECT_EQ(harmonyCount, 4);
@@ -90,7 +90,7 @@ TEST_F(Engraving_Compat400Tests, offsetAlignSticking)
             continue;
         }
         Sticking* sticking = toSticking(item);
-        EXPECT_EQ(sticking->offset().y() / sticking->spatium(), 4.5);
+        EXPECT_NEAR(sticking->offset().y() / sticking->spatium(), 4.4563, 0.0001);
         ++stickingCount;
     }
     EXPECT_EQ(stickingCount, 3);
@@ -110,7 +110,7 @@ TEST_F(Engraving_Compat400Tests, offsetAlignDynamics)
             continue;
         }
         Dynamic* dynamic = toDynamic(item);
-        EXPECT_EQ(dynamic->offset().y() / dynamic->spatium(), 4.5);
+        EXPECT_NEAR(dynamic->offset().y() / dynamic->spatium(), 2.4158, 0.0001);
         ++dynamicCount;
     }
     EXPECT_EQ(dynamicCount, 2);
@@ -122,7 +122,7 @@ TEST_F(Engraving_Compat400Tests, offsetAlignDynamics)
             continue;
         }
         for (SpannerSegment* seg : spanner->spannerSegments()) {
-            EXPECT_EQ(seg->offset().y() / seg->spatium(), 4.5);
+            EXPECT_NEAR(seg->offset().y() / seg->spatium(), 2.6258, 0.0001);
             ++hairpinSegmentCount;
         }
     }

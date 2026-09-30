@@ -384,9 +384,9 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     if (mscVersion < 500) {
         migrateOffset500(score);
-        migrateOffsetAfterAutoplace(score);
         AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(score);
         AlignmentMigration500::migrateHopoLetterAlignment(score);
+        migrateOffsetAfterAutoplace(score);
         needRelayout = true;
     }
 
