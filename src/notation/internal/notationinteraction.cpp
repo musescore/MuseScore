@@ -6733,6 +6733,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     mu::engraving::FontStyle fStyle = lyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = lyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
     mu::engraving::TextStyleType styleType = lyrics->textStyleType();
+    double yOffset = lyrics->offset().y();
 
     mu::engraving::Segment* nextSegment = segment;
     if (back) {
@@ -6810,6 +6811,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics->setSyllabic(mu::engraving::LyricsSyllabic::SINGLE);
         nextLyrics->setFontStyle(fStyle);
         nextLyrics->setPropertyFlags(mu::engraving::Pid::FONT_STYLE, fFlags);
+        nextLyrics->setOffset(PointF(0.0, yOffset));
         newLyrics = true;
     }
 
@@ -6892,6 +6894,7 @@ void NotationInteraction::navigateToNextSyllable()
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
     mu::engraving::TextStyleType styleType = lyrics->textStyleType();
+    double yOffset = lyrics->offset().y();
 
     // search next chord
     Segment* nextSegment = segment;
@@ -6991,6 +6994,7 @@ void NotationInteraction::navigateToNextSyllable()
             toLyrics->setSyllabic(LyricsSyllabic::END);
             toLyrics->setFontStyle(fStyle);
             toLyrics->setPropertyFlags(Pid::FONT_STYLE, fFlags);
+            toLyrics->setOffset(PointF(0.0, yOffset));
 
             score()->undoAddElement(toLyrics);
             score()->endCmd();
@@ -7073,6 +7077,7 @@ void NotationInteraction::navigateToNextSyllable()
         toLyrics->setSyllabic(LyricsSyllabic::END);
         toLyrics->setFontStyle(fStyle);
         toLyrics->setPropertyFlags(Pid::FONT_STYLE, fFlags);
+        toLyrics->setOffset(PointF(0.0, yOffset));
     } else {
         // as we arrived at toLyrics by a dash, it cannot be initial or isolated
         if (toLyrics->syllabic() == LyricsSyllabic::BEGIN) {
@@ -7752,6 +7757,7 @@ void NotationInteraction::addMelisma()
     PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
+    double yOffset = lyrics->offset().y();
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
     endEditText();
 
@@ -7913,6 +7919,7 @@ void NotationInteraction::addMelisma()
         toLyrics->setSyllabic(LyricsSyllabic::SINGLE);
         toLyrics->setFontStyle(fStyle);
         toLyrics->setPropertyFlags(Pid::FONT_STYLE, fFlags);
+        toLyrics->setOffset(PointF(0.0, yOffset));
     }
     // as we arrived at toLyrics by an underscore, it cannot have syllabic dashes before
     else if (toLyrics->syllabic() == LyricsSyllabic::MIDDLE) {
