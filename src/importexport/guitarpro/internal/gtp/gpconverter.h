@@ -153,6 +153,7 @@ private:
     void setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick);
     void addTuning();
     void addCapos();
+    int capoFret(const mu::engraving::Part* part) const;
 
     mu::engraving::Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
