@@ -34,6 +34,8 @@
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/scoreorder.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafflines.h"
 #include "engraving/dom/stafftype.h"
@@ -42,6 +44,7 @@
 #include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rendering/paintoptions.h"
 
+#include "engraving/editing/editpart.h"
 #include "engraving/editing/editproperty.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -647,4 +650,69 @@ TEST_F(Engraving_BarlineTests, spanStyleDashWidthAndOffsets)
     ASSERT_EQ(lines.size(), 1);
     EXPECT_EQ(lines[0].pen.style(), muse::draw::PenStyle::CustomDashLine);
     EXPECT_GT(lines[0].to.y(), lines[0].from.y());
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleSurvivesInstrumentReordering)
+{
+    for (bool customStyle : { false, true }) {
+        SCOPED_TRACE(customStyle ? "Independent connection style" : "Default connection style");
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+        ASSERT_TRUE(score);
+        ASSERT_EQ(score->parts().size(), 3);
+        Staff* first = score->staff(0);
+        Staff* second = score->staff(1);
+        const BarLineSpanStyle firstStyle = customStyle ? BarLineSpanStyle::DASHED : BarLineSpanStyle::DEFAULT;
+        const BarLineSpanStyle secondStyle = customStyle ? BarLineSpanStyle::DOTTED : BarLineSpanStyle::DEFAULT;
+        first->setBarLineSpanStyle(firstStyle);
+        second->setBarLineSpanStyle(secondStyle);
+
+        for (Part* part : score->parts()) {
+            part->instrument()->setId(u"flute");
+        }
+        ScoreOrder order;
+        ScoreGroup group;
+        group.family = u"flutes";
+        group.section = u"woodwind";
+        group.barLineSpan = false;
+        group.thinBracket = false;
+        order.groups.push_back(group);
+        score->setScoreOrder(order);
+        ASSERT_TRUE(first->barLineSpan());
+        ASSERT_TRUE(second->barLineSpan());
+
+        score->startCmd(TranslatableString::untranslatable("Move instruments"));
+        EditPart::moveParts(score.get(), { score->parts().back() }, first->part(), false);
+        score->endCmd();
+        EXPECT_EQ(first->idx(), 1);
+        EXPECT_EQ(second->idx(), 2);
+        // Existing score-order rules reset spans for both default and custom styles.
+        EXPECT_FALSE(first->barLineSpan());
+        EXPECT_FALSE(second->barLineSpan());
+        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
+        EXPECT_EQ(second->barLineSpanStyle(), secondStyle);
+        EXPECT_EQ(paintedBarLines(endBarLine(score->firstMeasure(), first->idx())).size(), 1);
+
+        score->startCmd(TranslatableString::untranslatable("Reconnect staves"));
+        first->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, true);
+        score->endCmd();
+        auto lines = paintedBarLines(endBarLine(score->firstMeasure(), first->idx()));
+        ASSERT_EQ(lines.size(), customStyle ? 2 : 1);
+        if (customStyle) {
+            EXPECT_EQ(lines[0].pen.style(), muse::draw::PenStyle::SolidLine);
+            EXPECT_EQ(lines[1].pen.style(), muse::draw::PenStyle::CustomDashLine);
+        }
+
+        score->undoRedo(true, nullptr);
+        EXPECT_FALSE(first->barLineSpan());
+        score->undoRedo(true, nullptr);
+        EXPECT_EQ(first->idx(), 0);
+        EXPECT_TRUE(first->barLineSpan());
+        EXPECT_TRUE(second->barLineSpan());
+        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
+        EXPECT_EQ(second->barLineSpanStyle(), secondStyle);
+        score->undoRedo(false, nullptr);
+        EXPECT_EQ(first->idx(), 1);
+        EXPECT_FALSE(first->barLineSpan());
+        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
+    }
 }
