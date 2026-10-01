@@ -38,8 +38,6 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-export MUSESCORE_BUILD_CRASHPAD_CLIENT=OFF
-
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
