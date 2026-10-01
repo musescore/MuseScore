@@ -1782,7 +1782,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
         // if not tab, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
         if (staffGroup != StaffGroup::TAB) {
-            staffGroup = item->staff()->part()->instrument(item->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+            staffGroup = item->originPart()->instrument(item->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
         }
 
         // check clef is compatible with staff type group:
@@ -1864,7 +1864,7 @@ void TLayout::layoutCapo(const Capo* item, Capo::LayoutData* ldata, const Layout
     LAYOUT_CALL_ITEM(item);
     //! NOTE Looks like it doesn't belong here
     if (item->shouldAutomaticallyGenerateText() || item->empty()) {
-        if (const Part* part = item->part()) {
+        if (const Part* part = item->originPart()) {
             if (const StringData* stringData = part->stringData(item->tick(), item->staff()->idx())) {
                 String text = item->generateText(stringData->strings());
                 const_cast<Capo*>(item)->setXmlText(text);

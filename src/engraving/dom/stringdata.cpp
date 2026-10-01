@@ -355,7 +355,7 @@ int StringData::frettedStrings() const
 
 int StringData::pitchOffsetAt(const Staff* staff)
 {
-    return -(staff ? staff->part()->instrument()->transpose().chromatic : 0);
+    return -(staff ? staff->originPart(Part::MAIN_INSTRUMENT_TICK)->instrument()->transpose().chromatic : 0);
 }
 
 int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick)
@@ -363,7 +363,7 @@ int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick)
     if (!staff) {
         return 0;
     }
-    int transp = staff->part()->instrument(tick)->transpose().chromatic;
+    int transp = staff->originPart(tick)->instrument(tick)->transpose().chromatic;
     int offset = -transp + staff->pitchOffset(tick);
     const CapoParams& capo = staff->capo(tick);
     if (capo.active) {
@@ -384,7 +384,7 @@ int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick, int stri
     if (!staff) {
         return 0;
     }
-    int transp = staff->part()->instrument(tick)->transpose().chromatic;
+    int transp = staff->originPart(tick)->instrument(tick)->transpose().chromatic;
     int offset = -transp + staff->pitchOffset(tick);
     const CapoParams& capo = staff->capo(tick);
     if (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)string)) {
@@ -764,7 +764,7 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
 {
     bool useSameString = chord->configuration()->preferSameStringForTranspose();
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
-    int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
+    int transp = chord->staff() ? chord->originPart()->instrument(chord->tick())->transpose().chromatic : 0;
     int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
 
     if (useSameString) {

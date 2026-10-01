@@ -104,6 +104,17 @@ staff_idx_t Staff::idx() const
     return muse::indexOf(score()->staves(), (Staff*)this);
 }
 
+Part* Staff::originPart(const Fraction& tick) const
+{
+    // Hides EngravingItem::originPart, whose track and tick are meaningless for a staff
+    // Always returns part of voice 0
+    if (!m_part || !m_part->isSharedPart()) {
+        return m_part;
+    }
+
+    return m_part->originPart(staff2track(idx(), 0), tick);
+}
+
 //---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
@@ -386,7 +397,7 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
         // Clef compatibility based on instrument (override StaffGroup)
         StaffGroup staffGroup = staffType(tick)->group();
         if (staffGroup != StaffGroup::TAB) {
-            staffGroup = part()->instrument(tick)->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+            staffGroup = originPart(tick)->instrument(tick)->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
         }
 
         switch (staffGroup) {
@@ -664,13 +675,14 @@ Interval Staff::transpose(const Fraction& tick) const
 {
     // get real transposition
 
-    Interval v = part()->instrument(tick)->transpose();
+    const Part* p = originPart(tick);
+    Interval v = p->instrument(tick)->transpose();
     if (v.isZero()) {
         return v;
     }
     Key cKey = concertKey(tick);
     v.flip();
-    Key tKey = Transpose::transposeKey(cKey, v, part()->preferSharpFlat());
+    Key tKey = Transpose::transposeKey(cKey, v, p->preferSharpFlat());
     v.flip();
 
     int chromatic = (7 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 12;
@@ -1663,7 +1675,7 @@ void Staff::setLocalSpatium(double oldVal, double newVal, Fraction tick)
 bool Staff::isPitchedStaff(const Fraction& tick) const
 {
     //return staffType(tick)->group() == StaffGroup::STANDARD;
-    return staffType(tick)->group() != StaffGroup::TAB && !part()->instrument(tick)->useDrumset();
+    return staffType(tick)->group() != StaffGroup::TAB && !originPart(tick)->instrument(tick)->useDrumset();
 }
 
 //---------------------------------------------------------
@@ -1682,7 +1694,7 @@ bool Staff::isTabStaff(const Fraction& tick) const
 bool Staff::isDrumStaff(const Fraction& tick) const
 {
     //check for instrument instead of staffType (for pitched to unpitched instr. changes)
-    return part()->instrument(tick)->useDrumset();
+    return originPart(tick)->instrument(tick)->useDrumset();
 }
 
 //---------------------------------------------------------

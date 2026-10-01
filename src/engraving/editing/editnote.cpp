@@ -286,7 +286,7 @@ void EditNote::changeAccidental2(Note* n, int pitch, int tpc)
             // as pitch has changed, calculate new
             // string & fret
             //
-            const StringData* stringData = n->part()->stringData(n->tick(), st->idx());
+            const StringData* stringData = n->originPart()->stringData(n->tick(), st->idx());
             if (stringData) {
                 stringData->convertPitch(pitch, st, &string, &fret);
             }
@@ -491,7 +491,7 @@ void EditNote::upDown(Score* score, bool up, UpDownMode mode)
     for (Note* oNote : el) {
         Fraction tick     = oNote->chord()->tick();
         Staff* staff = oNote->staff();
-        Part* part   = staff->part();
+        Part* part   = oNote->originPart();
         Key key      = staff->key(tick);
         int tpc1     = oNote->tpc1();
         int tpc2     = oNote->tpc2();
@@ -506,7 +506,7 @@ void EditNote::upDown(Score* score, bool up, UpDownMode mode)
         StaffGroup staffGroup = staff->staffType(oNote->chord()->tick())->group();
         // if not tab, check for instrument instead of staffType (for pitched to unpitched instrument changes)
         if (staffGroup != StaffGroup::TAB) {
-            staffGroup = staff->part()->instrument(oNote->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+            staffGroup = part->instrument(oNote->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
         }
 
         switch (staffGroup) {

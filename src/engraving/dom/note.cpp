@@ -866,7 +866,7 @@ int Note::tpc2default(int p) const
         Fraction tick = chord()->tick();
         key = staff()->key(tick);
         if (concertPitch()) {
-            Interval interval = part()->instrument(tick)->transpose();
+            Interval interval = originPart()->instrument(tick)->transpose();
             if (!interval.isZero()) {
                 interval.flip();
                 key = Transpose::transposeKey(key, interval);
@@ -952,7 +952,7 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
         // see Note::accessibleInfo(), but we return what we have
         return pitchName;
     }
-    if (staff()->isDrumStaff(tick()) && part()->instrument()->drumset()) {
+    if (staff()->isDrumStaff(tick()) && originPart()->instrument()->drumset()) {
         // see Note::accessibleInfo(), but we return what we have
         return pitchName;
     }
@@ -1046,7 +1046,7 @@ SymId Note::noteHead() const
         if (st) {
             if (st->staffTypeForElement(chord())->isDrumStaff()) {
                 Fraction t = chord()->tick();
-                Instrument* inst = st->part()->instrument(t);
+                Instrument* inst = originPart()->instrument(t);
                 Drumset* d = inst->drumset();
                 if (d) {
                     return d->noteHeads(m_pitch, ht);
@@ -1723,7 +1723,8 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 int Note::transposition() const
 {
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
-    return staff() ? part()->instrument(tick)->transpose().chromatic : 0;
+    Part* origin = originPart();
+    return origin ? origin->instrument(tick)->transpose().chromatic : 0;
 }
 
 //---------------------------------------------------------
@@ -2051,7 +2052,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
         const StaffGroup staffGroup = st->staffType(segment->tick())->group();
         DirectionV stemDirection = DirectionV::AUTO;
         if (staffGroup == StaffGroup::PERCUSSION) {
-            const Drumset* ds = st->part()->instrument(segment->tick())->drumset();
+            const Drumset* ds = originPart()->instrument(segment->tick())->drumset();
             DO_ASSERT(ds);
 
             if (ds) {
@@ -2096,7 +2097,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
 
             const Sid styleId = gliss->getPropertyStyle(Pid::GLISS_STYLE);
             if (gliss->isStyled(Pid::GLISS_STYLE) && score()->style().isDefault(styleId)) {
-                const GlissandoStyle instrumentStyle = part()->instrument(gliss->tick())->glissandoStyle();
+                const GlissandoStyle instrumentStyle = originPart()->instrument(gliss->tick())->glissandoStyle();
                 if (instrumentStyle != gliss->glissandoStyle()) {
                     gliss->setGlissandoStyle(instrumentStyle);
                     gliss->setPropertyFlags(Pid::GLISS_STYLE, PropertyFlags::UNSTYLED);
@@ -2660,7 +2661,7 @@ int Note::ppitch() const
         Fraction tick = ch->tick();
 
         if (staff && staff->isDrumStaff(tick)) {
-            const Drumset* ds = staff->part()->instrument(tick)->drumset();
+            const Drumset* ds = originPart()->instrument(tick)->drumset();
             if (ds) {
                 DrumInstrumentVariant div = ds->findVariant(m_pitch, ch->articulations(), ch->tremoloType());
                 if (div.pitch != INVALID_PITCH) {
@@ -2845,7 +2846,7 @@ void Note::dragInEditMode(EditData& editData)
 void Note::verticalDrag(EditData& ed)
 {
     Fraction _tick = chord()->tick();
-    if (part()->instrument(_tick)->useDrumset()) {
+    if (originPart()->instrument(_tick)->useDrumset()) {
         return;
     }
 
@@ -2856,7 +2857,7 @@ void Note::verticalDrag(EditData& ed)
     int lineOffset = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
-        const StringData* strData = part()->stringData(_tick, staffIdx());
+        const StringData* strData = originPart()->stringData(_tick, staffIdx());
         const int pitchOffset = staff()->pitchOffset(_tick);
         int nString = ned->string + (staffType()->upsideDown() ? -lineOffset : lineOffset);
         int nFret   = strData->fret(m_pitch + pitchOffset, nString, staff(), tick());
@@ -3415,7 +3416,7 @@ String Note::accessibleInfo() const
         }
     }
 
-    const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
+    const Drumset* drumset = originPart()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? muse::mtrc("engraving", "Beat slash") : muse::mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
@@ -3437,7 +3438,7 @@ String Note::accessibleInfo() const
 
 String Note::screenReaderInfo() const
 {
-    const Part* part = this->part();
+    const Part* part = originPart();
     if (!part) {
         return String(); // part is nullptr on Linux after an instrument is deleted.
     }

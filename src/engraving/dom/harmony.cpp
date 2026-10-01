@@ -1126,7 +1126,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
         offset = capo.fretPosition;
     }
 
-    Interval interval = st->part()->instrument(tick)->transpose();
+    Interval interval = originPart()->instrument(tick)->transpose();
     if (!style().styleB(Sid::concertPitch)) {
         offset += interval.chromatic;
     }

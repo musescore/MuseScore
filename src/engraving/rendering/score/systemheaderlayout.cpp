@@ -1133,23 +1133,6 @@ String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const 
     }
 }
 
-Part* SystemHeaderLayout::originPartForStaff(staff_idx_t staffIdx, const SharedTrackMap& trackMap,
-                                             const std::vector<Part*>& originParts)
-{
-    if (originParts.empty()) {
-        return nullptr;
-    }
-
-    Score* score = originParts.front()->score();
-    for (auto [originTrack, sharedTrack] : trackMap) {
-        if (track2staff(sharedTrack) == staffIdx && track2voice(sharedTrack) == 0) {
-            return score->staff(track2staff(originTrack))->part();
-        }
-    }
-
-    return nullptr;
-}
-
 String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap,
                                                      const std::vector<Part*>& originParts)
 {
@@ -1468,7 +1451,7 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
 
     for (size_t relStaffIdx = 0; relStaffIdx < sharedPart->nstaves(); ++relStaffIdx) {
         size_t globalStaffIdx = startStaffIdx + relStaffIdx;
-        Part* originPart = originPartForStaff(globalStaffIdx, trackMap, originParts);
+        Part* originPart = sharedPart->originPartForStaff(globalStaffIdx, tick);
 
         InstrumentLabelVisibility partVisibility
             = resolveInstrumentLabelVisibility(ctx.dom().staff(globalStaffIdx), tick, ctx, ctx.state().firstSystem());
