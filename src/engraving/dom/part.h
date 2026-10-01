@@ -115,9 +115,6 @@ public:
     int midiProgram() const;
     void setMidiProgram(int, int bank = 0);
 
-    int capoFret() const;
-    void setCapoFret(int capoFret);
-
     int midiChannel() const;
     int midiPort() const;
     void setMidiChannel(int ch, int port = -1, const Fraction& tick = { -1, 1 });  // tick != -1 for InstrumentChange
@@ -197,7 +194,6 @@ private:
     muse::ID m_id = INVALID_ID;       ///< used for MusicXML import
     bool m_show = false;              ///< show part in partitur if true
     bool m_soloist = false;           ///< used in score ordering
-    int m_capoFret = 0;
 
     /// Hide staves in this part when empty
     AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO;
