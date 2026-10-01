@@ -50,5 +50,9 @@ struct TupletOptions
     engraving::TupletNumberType numberType = engraving::TupletNumberType::SHOW_NUMBER;
     engraving::TupletBracketType bracketType = engraving::TupletBracketType::AUTO_BRACKET;
     bool autoBaseLen = false;
+
+    // SUBDIVISION: the selected duration is the subdivision (3:2 on an eighth: 3 eighths in the time of 2);
+    // TUPLET_LENGTH: the tuplet divides it
+    engraving::TupletSelectedDuration selectedDurationAs = engraving::TupletSelectedDuration::TUPLET_LENGTH;
 };
 }

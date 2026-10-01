@@ -746,16 +746,30 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
 
     const InputState& inputState = score()->inputState();
 
+    const bool durationAsSubdivision = options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
+    if (durationAsSubdivision
+        && !score()->canAddTuplet(inputState.segment(), inputState.track(), options.ratio, inputState.duration())) {
+        MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
+        m_interaction->checkAndShowError();
+        return;
+    }
+
     startEdit(TranslatableString("undoableAction", "Add tuplet"));
     score()->expandVoice();
     ChordRest* chordRest = inputState.cr();
     if (chordRest) {
-        Fraction ratio = options.ratio;
-        if (options.autoBaseLen) {
-            ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
+        Tuplet* tuplet = nullptr;
+        if (durationAsSubdivision) {
+            tuplet = score()->addTuplet(chordRest, options.ratio, inputState.duration(), options.numberType, options.bracketType);
+        } else {
+            Fraction ratio = options.ratio;
+            if (options.autoBaseLen) {
+                ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
+            }
+            score()->changeCRlen(chordRest, inputState.duration());
+            tuplet = score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
         }
-        score()->changeCRlen(chordRest, inputState.duration());
-        if (Tuplet* tuplet = score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType)) {
+        if (tuplet) {
             score()->selectNewTuplet(tuplet);
         }
     }
