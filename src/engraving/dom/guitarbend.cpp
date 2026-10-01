@@ -244,7 +244,7 @@ bool GuitarBend::isFullReleaseDive() const
 void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
 {
     Staff* curStaff =  startNote->staff();
-    Part* curPart = startNote->part();
+    Part* curPart = startNote->originPart();
     if (!curStaff || !curPart) {
         return;
     }
@@ -310,7 +310,7 @@ void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
 {
     // The start grace-note of bend must be on the same string as the main note
     int mainString = main->string();
-    const StringData* stringData = main->part()->stringData(main->tick(), main->staff()->idx());
+    const StringData* stringData = main->originPart()->stringData(main->tick(), main->staff()->idx());
     int staffPitchOffset = main->staff()->pitchOffset(main->tick());
     int graceFret = stringData->fret(grace->pitch() + staffPitchOffset, mainString, main->staff());
     if (graceFret > 0) {

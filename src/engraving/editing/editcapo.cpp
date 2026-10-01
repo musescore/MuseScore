@@ -56,7 +56,7 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
 
                 Chord* chord = toChord(e);
                 chord->sortNotes();
-                ctx.stringData = chord->part()->stringData(chord->tick(), staffIdx);
+                ctx.stringData = chord->originPart()->stringData(chord->tick(), staffIdx);
                 // Prefer not change strings for intervals and chords
                 ctx.possibleFretConflict
                     = chord->notes().size() > 1 || std::any_of(chord->notes().begin(), chord->notes().end(),

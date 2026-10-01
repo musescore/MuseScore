@@ -142,6 +142,7 @@ public:
     const StringData* stringData(const Fraction& tick, staff_idx_t staffIdx) const;
     void addStringTunings(StringTunings* stringTunings);
     void removeStringTunings(StringTunings* stringTunings);
+    StringTunings* nextStringTuning(const Fraction& tick) const;
 
     void insertTime(const Fraction& tick, const Fraction& len);
 
@@ -182,6 +183,9 @@ public:
 
     PreferSharpFlat preferSharpFlat() const { return m_preferSharpFlat; }
     void setPreferSharpFlat(PreferSharpFlat v) { m_preferSharpFlat = v; }
+
+    virtual const Part* originPart(track_idx_t track, const Fraction& tick) const;
+    Part* originPart(track_idx_t track, const Fraction& tick);
 
     SharedPart* sharedPart() const { return m_sharedPart; }
     void setSharedPart(SharedPart* p) { m_sharedPart = p; }

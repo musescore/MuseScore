@@ -153,6 +153,16 @@ Part* Part::masterPart()
     return const_cast<Part*>(const_cast<const Part*>(this)->masterPart());
 }
 
+const Part* Part::originPart(track_idx_t, const Fraction&) const
+{
+    return this;
+}
+
+Part* Part::originPart(track_idx_t track, const Fraction& tick)
+{
+    return const_cast<Part*>(const_cast<const Part*>(this)->originPart(track, tick));
+}
+
 size_t Part::nstaves() const
 {
     return m_staves.size();
@@ -468,6 +478,7 @@ const StringData* Part::stringData(const Fraction& tick, staff_idx_t staffIdx) c
 
 void Part::addStringTunings(StringTunings* stringTunings)
 {
+    DO_ASSERT(!isSharedPart());
     m_stringTunings[stringTunings->segment()->tick().ticks()] = stringTunings;
 }
 
@@ -479,6 +490,12 @@ void Part::removeStringTunings(StringTunings* stringTunings)
     if (it != m_stringTunings.end() && it->second == stringTunings) {
         m_stringTunings.erase(it);
     }
+}
+
+StringTunings* Part::nextStringTuning(const Fraction& tick) const
+{
+    auto i = m_stringTunings.upper_bound(tick.ticks());
+    return (i == m_stringTunings.end()) ? nullptr : i->second;
 }
 
 //---------------------------------------------------------
@@ -751,6 +768,7 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
 
 void Part::addHarpDiagram(HarpPedalDiagram* harpDiagram)
 {
+    DO_ASSERT(!isSharedPart());
     m_harpDiagrams[harpDiagram->segment()->tick().ticks()] = harpDiagram;
 }
 
