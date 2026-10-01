@@ -31,17 +31,17 @@ BaseSection {
 
     property bool isAppUpdatable: true
     property alias needCheckForNewAppVersion: needCheckEnable.checked
-    property alias autoDownloadNewAppVersion: autoDownloadCheckBox.checked
+    property alias autoUpdateNewAppVersion: autoUpdateCheckBox.checked
     property string museScorePrivacyPolicyUrl
 
     signal needCheckForNewAppVersionChangeRequested(bool check)
-    signal autoDownloadNewAppVersionChangeRequested(bool download)
+    signal autoUpdateNewAppVersionChangeRequested(bool enabled)
 
     ToggleButton {
         id: needCheckEnable
         width: parent.width
 
-        text: qsTrc("preferences", "Check automatically for updates to MuseScore Studio is available")
+        text: qsTrc("preferences", "Check automatically for updates to MuseScore Studio")
 
         visible: root.isAppUpdatable
 
@@ -55,20 +55,20 @@ BaseSection {
     }
 
     CheckBox {
-        id: autoDownloadCheckBox
+        id: autoUpdateCheckBox
         width: parent.width
 
-        text: qsTrc("preferences", "Download updates in the background")
+        text: qsTrc("preferences", "Download and install updates automatically")
 
         visible: root.isAppUpdatable
         enabled: needCheckEnable.checked
 
-        navigation.name: "AutoDownloadCheckBox"
+        navigation.name: "AutoUpdateCheckBox"
         navigation.panel: root.navigation
         navigation.row: 1
 
         onClicked: {
-            root.autoDownloadNewAppVersionChangeRequested(!checked)
+            root.autoUpdateNewAppVersionChangeRequested(!checked)
         }
     }
 
