@@ -138,14 +138,6 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         Chord* linkedChord = toChord(linkedObject);
         Score* linkedScore = linkedChord->score();
         Staff* linkedStaff = linkedChord->staff();
-        Parenthesis* linkedParenLeft = toParenthesis(leftParen->linkedClone());
-        linkedParenLeft->setScore(linkedScore);
-        linkedParenLeft->setParent(linkedChord);
-        linkedParenLeft->setTrack(linkedChord->track());
-        Parenthesis* linkedParenRight = toParenthesis(rightParen->linkedClone());
-        linkedParenRight->setScore(linkedScore);
-        linkedParenRight->setParent(linkedChord);
-        linkedParenRight->setTrack(linkedChord->track());
 
         std::vector<Note*> linkedNotes;
         for (Note* note : notes) {
@@ -155,6 +147,18 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
             }
             linkedNotes.push_back(linkedNote);
         }
+        if (linkedNotes.empty()) {
+            continue;
+        }
+
+        Parenthesis* linkedParenLeft = toParenthesis(leftParen->linkedClone());
+        linkedParenLeft->setScore(linkedScore);
+        linkedParenLeft->setParent(linkedChord);
+        linkedParenLeft->setTrack(linkedChord->track());
+        Parenthesis* linkedParenRight = toParenthesis(rightParen->linkedClone());
+        linkedParenRight->setScore(linkedScore);
+        linkedParenRight->setParent(linkedChord);
+        linkedParenRight->setTrack(linkedChord->track());
 
         doAddNoteParentheses(linkedChord, linkedNotes, linkedParenLeft, linkedParenRight);
     }
