@@ -89,13 +89,16 @@ struct ConvertFilesValidation {
     FileCategory category = FileCategory::Unknown;
 };
 
+struct PollingSuccess {};
+
 struct PollingFailure {
     muse::Ret ret;
-    int attempt = 0;
-    int maxAttempts = 0;
+    muse::secs_t elapsed = 0.;
     muse::secs_t nextInterval = 0.;
     bool gaveUp = false;
 };
+
+using PollingStatus = std::variant<PollingSuccess, PollingFailure>;
 
 struct WatchedScore {
     ScoreConversionInfo conversion;

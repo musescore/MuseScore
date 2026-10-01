@@ -272,11 +272,13 @@ ListItemBlank {
         isCloud: root.score.isCloud ?? false
         showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
 
-        visible: root.mouseArea.containsMouse
-                 || mouseArea.containsMouse
-                 || root.navigation.active
-                 || navigation.active
-                 || isMenuOpenedByButton
+        readonly property bool isHovered: root.mouseArea.containsMouse
+                                           || contextMenu.mouseArea.containsMouse
+                                           || root.navigation.active
+                                           || contextMenu.navigation.active
+                                           || contextMenu.isMenuOpenedByButton
+
+        visible: !root.isProcessing && contextMenu.isHovered
 
         navigation.panel: root.navigation.panel
         navigation.row: root.navigation.row

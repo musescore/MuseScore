@@ -38,6 +38,7 @@ Item {
 
         anchors.fill: parent
 
+        isMainView: true
         readOnly: true
     }
 
