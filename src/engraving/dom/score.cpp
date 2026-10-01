@@ -520,13 +520,6 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
         const Fraction& startTick = measure->tick();
         resetTempoRange(startTick, measure->endTick());
 
-        // Implement section break rest
-        for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
-            if (mb->pause()) {
-                tempomap()->setPause(startTick.ticks(), mb->pause());
-            }
-        }
-
         // Add pauses from the end of the previous measure (at measure->tick()):
         for (Segment* s = measure->first(); s && s->tick() == startTick; s = s->prev1()) {
             if (!s->isBreathType()) {
