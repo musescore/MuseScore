@@ -29,7 +29,6 @@ import QtQuick.Layouts
 import Muse.Ui
 import Muse.UiComponents
 import Muse.Cloud
-import Muse.Update
 
 Item {
     id: root
@@ -129,13 +128,6 @@ Item {
                     root.selected(name)
                 }
             }
-        }
-
-        UpdateBanner {
-            Layout.fillWidth: true
-            Layout.margins: 8
-
-            visible: (hasReadyUpdate || hasCompletedUpdate) && !root.iconsOnly
         }
     }
 }
