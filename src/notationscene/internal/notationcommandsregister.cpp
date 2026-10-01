@@ -1596,7 +1596,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "&Parts…"),
         TranslatableString("action", "Parts"),
         InputSchema(),
-        Decoration()
+        Decoration(IconCode::Code::PAGE)
     },
     CommandInfo{
         OPEN_EDITGRIDSIZE_COMMAND,
