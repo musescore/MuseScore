@@ -1252,6 +1252,14 @@ void TLayout::layoutBarLine2(BarLine* item, LayoutContext& ctx)
     bbox.setTop(ldata->y1);
     bbox.setBottom(ldata->y2);
 
+    if (ldata->spanStyle != BarLineSpanStyle::DEFAULT) {
+        double lineWidth = ctx.conf().styleAbsolute(item->barLineType() == BarLineType::BROKEN ? Sid::dashBarWidth : Sid::barWidth)
+                           * item->mag();
+        double spanWidth = ctx.conf().styleAbsolute(ldata->spanStyle == BarLineSpanStyle::DASHED ? Sid::dashBarWidth : Sid::barWidth)
+                           * item->mag();
+        bbox.unite(RectF((lineWidth - spanWidth) * .5, ldata->spanStartY, spanWidth, ldata->y2 - ldata->spanStartY));
+    }
+
     if (ctx.conf().styleB(Sid::repeatBarTips)) {
         switch (item->barLineType()) {
         case BarLineType::START_REPEAT:

@@ -712,6 +712,22 @@ static void drawTips(const BarLine* item, const BarLine::LayoutData* data, Paint
     }
 }
 
+static void drawSingleBarLine(const BarLine* item, Painter* painter, const rendering::PaintOptions& opt,
+                              BarLineType type, double x, double y1, double y2)
+{
+    const bool dashed = type == BarLineType::BROKEN;
+    double lw = item->style().styleAbsolute(dashed ? Sid::dashBarWidth : Sid::barWidth) * item->mag();
+    PenStyle penStyle = dashed ? PenStyle::DashLine : type == BarLineType::DOTTED ? PenStyle::DotLine : PenStyle::SolidLine;
+    Pen pen(item->curColor(opt), lw, penStyle, PenCapStyle::FlatCap);
+    if (dashed) {
+        double dl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarDash) * item->mag() / lw;
+        double gl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarGap) * item->mag() / lw;
+        pen.setDashPattern({ dl, gl });
+    }
+    painter->setPen(pen);
+    painter->drawLine(LineF(x, y1, x, y2));
+}
+
 void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
@@ -729,28 +745,25 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
     setMask(item, painter);
 
     switch (item->barLineType()) {
-    case BarLineType::NORMAL: {
-        double lw = item->style().styleAbsolute(Sid::barWidth) * item->mag();
-        painter->setPen(Pen(item->curColor(opt), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
-    }
-    break;
-
-    case BarLineType::BROKEN: {
-        double lw = item->style().styleAbsolute(Sid::dashBarWidth) * item->mag();
-        double dl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarDash) * item->mag() / lw;
-        double gl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarGap) * item->mag() / lw;
-        Pen pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap);
-        pen.setDashPattern({ dl, gl });
-        painter->setPen(pen);
-        painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
-    }
-    break;
-
+    case BarLineType::NORMAL:
+    case BarLineType::BROKEN:
     case BarLineType::DOTTED: {
-        double lw = item->style().styleAbsolute(Sid::barWidth) * item->mag();
-        painter->setPen(Pen(item->curColor(opt), lw, PenStyle::DotLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
+        double lw = item->style().styleAbsolute(item->barLineType() == BarLineType::BROKEN ? Sid::dashBarWidth : Sid::barWidth)
+                    * item->mag();
+        double x = lw * .5;
+        bool customSpan = data->spanStyle != BarLineSpanStyle::DEFAULT;
+        if (!customSpan || data->y1 < data->spanStartY) {
+            drawSingleBarLine(item, painter, opt, item->barLineType(), x, data->y1, customSpan ? data->spanStartY : data->y2);
+        }
+        if (customSpan) {
+            BarLineType spanType = BarLineType::NORMAL;
+            if (data->spanStyle == BarLineSpanStyle::DASHED) {
+                spanType = BarLineType::BROKEN;
+            } else if (data->spanStyle == BarLineSpanStyle::DOTTED) {
+                spanType = BarLineType::DOTTED;
+            }
+            drawSingleBarLine(item, painter, opt, spanType, x, data->spanStartY, data->y2);
+        }
     }
     break;
 

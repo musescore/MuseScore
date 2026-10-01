@@ -165,6 +165,8 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         double y1 = 0.0;
         double y2 = 0.0;
+        double spanStartY = 0.0;
+        BarLineSpanStyle spanStyle = BarLineSpanStyle::DEFAULT;
     };
 
     DECLARE_LAYOUTDATA_METHODS(BarLine)

@@ -53,6 +53,14 @@ enum class LineType {
 };
 Q_ENUM_NS(LineType)
 
+enum class SpanStyle {
+    SPAN_DEFAULT = int(engraving::BarLineSpanStyle::DEFAULT),
+    SPAN_SOLID = int(engraving::BarLineSpanStyle::SOLID),
+    SPAN_DASHED = int(engraving::BarLineSpanStyle::DASHED),
+    SPAN_DOTTED = int(engraving::BarLineSpanStyle::DOTTED),
+};
+Q_ENUM_NS(SpanStyle)
+
 enum class SpanPreset {
     PRESET_DEFAULT,
     PRESET_TICK_1,

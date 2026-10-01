@@ -4234,6 +4234,13 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         s->setBarLineFrom(e.readInt());
     } else if (tag == "barLineSpanTo") {
         s->setBarLineTo(e.readInt());
+    } else if (tag == "barLineSpanStyle") {
+        const int spanStyle = e.readInt();
+        if (spanStyle >= static_cast<int>(BarLineSpanStyle::DEFAULT) && spanStyle <= static_cast<int>(BarLineSpanStyle::DOTTED)) {
+            s->setBarLineSpanStyle(static_cast<BarLineSpanStyle>(spanStyle));
+        } else {
+            LOGW() << "Invalid barline connection style: " << spanStyle;
+        }
     } else if (tag == "distOffset") {
         s->setUserDist(Spatium(e.readDouble()));
     } else if (tag == "mag") {
