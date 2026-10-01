@@ -814,8 +814,7 @@ NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF
     mu::engraving::Segment* segment = nullptr;
     PointF offset;
 
-    MeasureBase* mb = score()->pos2measureBase(pos, /*scanMeasuresOnly*/ true, &staffIndex, 0, &segment, &offset);
-    Measure* measure = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
+    Measure* measure = score()->pos2measure(pos, &staffIndex, /*pitch*/ 0, &segment, &offset);
 
     HitMeasureData result;
     if (measure && measure->staffLines(staffIndex)->canvasHitShape().contains(pos)) {
@@ -2040,7 +2039,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(engraving::Transaction& tx, c
         mu::engraving::staff_idx_t staffIdx;
         mu::engraving::Segment* seg;
         PointF offset;
-        el = score()->pos2measureBase(pos, /*scanMeasuresOnly*/ true, &staffIdx, 0, &seg, &offset);
+        el = score()->pos2measure(pos, &staffIdx, /*pitch*/ 0, &seg, &offset);
         if (el && el->isMeasure()) {
             edd.ed.dropElement->setTrack(staff2track(staffIdx));
             edd.ed.dropElement->setOwnershipParent(seg);
@@ -3299,13 +3298,12 @@ bool NotationInteraction::prepareDropTimeAnchorElement(const PointF& pos)
 
     mu::engraving::staff_idx_t staffIdx = 0;
     mu::engraving::Segment* seg = nullptr;
-    mu::engraving::MeasureBase* mb = score()->pos2measureBase(pos, /*scanMeasuresOnly*/ true, &staffIdx, 0, &seg, 0);
+    mu::engraving::Measure* measure = score()->pos2measure(pos, &staffIdx, /*pitch*/ 0, &seg, /*offset*/ 0);
     mu::engraving::track_idx_t track = staff2track(staffIdx);
 
-    if (mb && mb->isMeasure() && seg->element(track)) {
-        mu::engraving::Measure* m = mu::engraving::toMeasure(mb);
-        mu::engraving::System* s  = m->system();
-        qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
+    if (measure && seg->element(track)) {
+        mu::engraving::System* s = measure->system();
+        qreal y = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
         PointF anchor(seg->canvasBoundingRect().x(), y);
         setAnchorLines({ LineF(pos, anchor) });
         edd.ed.dropElement->score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());

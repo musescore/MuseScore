@@ -586,6 +586,12 @@ MeasureBase* Score::pos2measureBase(const PointF& p, bool scanMeasuresOnly, staf
     return m;
 }
 
+Measure* Score::pos2measure(const PointF& p, staff_idx_t* staffIdx, int* pitch, Segment** seg, PointF* offset) const
+{
+    MeasureBase* mb = pos2measureBase(p, /*scanMeasuresOnly*/ true, staffIdx, pitch, seg, offset);
+    return mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
+}
+
 //---------------------------------------------------------
 //   dragPosition
 ///   \param p   drag position in canvas coordinates
@@ -749,7 +755,7 @@ std::vector<System*> Score::searchSystem(const PointF& pos, bool includeMeasurel
     size_t n = sl.size();
     for (size_t i = 0; i < n; ++i) {
         System* s = sl.at(i);
-        if (!includeMeasurelessSystems && !s->firstMeasure()) {
+        if (!s->first() || (!includeMeasurelessSystems && !s->firstMeasure())) {
             continue;
         }
         System* ns = 0;                   // next system row
@@ -2897,8 +2903,7 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
     return def;
 }
 
-static std::pair</*startStaff*/ staff_idx_t, /*endStaff*/ staff_idx_t> boxStartEndStaves(const Box* box,
-                                                                                         staff_idx_t scoreNstaves)
+static std::pair</*startStaff*/ staff_idx_t, /*endStaff*/ staff_idx_t> boxStartEndStaves(const Box* box, size_t scoreNstaves)
 {
     IF_ASSERT_FAILED(box) {
         return { muse::nidx, muse::nidx };
@@ -3735,7 +3740,7 @@ void Score::cmdSelectAll()
     }
     deselectAll();
     selectRange(firstMM(), 0);
-    selectRange(last(), nstaves() - 1);
+    selectRange(!last()->isMeasure() ? last() : lastMeasureMM(), nstaves() - 1);
     setUpdateAll();
     update();
 }

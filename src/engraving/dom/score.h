@@ -362,6 +362,7 @@ public:
     const std::vector<Staff*> systemObjectStavesWithTopStaff() const;
 
     MeasureBase* pos2measureBase(const PointF&, bool scanMeasuresOnly, staff_idx_t* staffIdx, int* pitch, Segment**, PointF* offset) const;
+    Measure* pos2measure(const PointF& p, staff_idx_t* staffIdx, int* pitch, Segment** seg, PointF* offset) const;
     void dragPosition(const PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5, bool allowTimeAnchor = false) const;
 
     void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true, bool ctrlModifier = false,

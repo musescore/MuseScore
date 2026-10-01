@@ -337,8 +337,6 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
     }
 
     ldata->setBbox(0.0, 0.0, width, height);
-
-    layoutBaseBox(item, ldata, ctx);
 }
 
 void BoxLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx)
