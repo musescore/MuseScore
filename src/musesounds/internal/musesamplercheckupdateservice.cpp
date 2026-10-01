@@ -98,7 +98,7 @@ Promise<RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
             return resolve(RetVal<bool>::make_ret(progress.ret));
         }
 
-        progress.val.finished().onReceive(this, [this, receivedData, localVersion, resolve](const ProgressResult& res) {
+        progress.val.finished().onReceive(this, [receivedData, localVersion, resolve](const ProgressResult& res) {
             RetVal<bool> result = RetVal<bool>::make_ok(false);
 
             if (res.ret) {
