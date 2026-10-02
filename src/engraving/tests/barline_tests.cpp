@@ -22,15 +22,29 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
+#include "draw/bufferedpaintprovider.h"
+#include "draw/painter.h"
+#include "modularity/ioc.h"
+
 #include "engraving/dom/barline.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/scoreorder.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stafflines.h"
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/rendering/iscorerenderer.h"
+#include "engraving/rendering/paintoptions.h"
 
+#include "engraving/editing/editpart.h"
 #include "engraving/editing/editproperty.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -432,4 +446,273 @@ TEST_F(Engraving_BarlineTests, deleteSkipBarlines)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("barlinedelete.mscx"), BARLINE_DATA_DIR + String("barlinedelete-ref.mscx")));
 
     delete score;
+}
+
+namespace {
+struct PaintedBarLine {
+    muse::draw::Pen pen;
+    muse::PointF from;
+    muse::PointF to;
+};
+
+void collectBarLines(const muse::draw::DrawData& data, const muse::draw::DrawData::Item& item,
+                     std::vector<PaintedBarLine>& lines)
+{
+    for (const auto& batch : item.datas) {
+        for (const auto& polygon : batch.polygons) {
+            if (polygon.mode == muse::draw::PolygonMode::Polyline && polygon.polygon.size() == 2) {
+                lines.push_back({ data.states.at(batch.state).pen, polygon.polygon.at(0), polygon.polygon.at(1) });
+            }
+        }
+    }
+    for (const auto& child : item.chilren) {
+        collectBarLines(data, child, lines);
+    }
+}
+
+std::vector<PaintedBarLine> paintedBarLines(const BarLine* bar)
+{
+    auto provider = std::make_shared<muse::draw::BufferedPaintProvider>();
+    muse::draw::Painter painter(provider, "barline-span-style");
+    auto renderer = muse::modularity::globalIoc()->resolve<rendering::IScoreRenderer>("barline_tests");
+    renderer->paintItem(painter, bar, rendering::PaintOptions());
+    painter.endDraw();
+    std::vector<PaintedBarLine> lines;
+    auto data = provider->drawData();
+    collectBarLines(*data, data->item, lines);
+    return lines;
+}
+
+BarLine* endBarLine(Measure* measure, staff_idx_t staff)
+{
+    return toBarLine(measure->findSegment(SegmentType::EndBarLine, measure->endTick())->element(staff * VOICES));
+}
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleIndependentConnections)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 3);
+    for (Measure* measure = score->firstMeasure(); measure != score->lastMeasure()->prevMeasure(); measure = measure->nextMeasure()) {
+        for (staff_idx_t staff = 0; staff < 2; ++staff) {
+            BarLine* bar = endBarLine(measure, staff);
+            ASSERT_TRUE(bar);
+            EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
+            auto lines = paintedBarLines(bar);
+            ASSERT_EQ(lines.size(), 2);
+            EXPECT_EQ(lines[0].pen.style(), muse::draw::PenStyle::SolidLine);
+            EXPECT_EQ(lines[1].pen.style(), staff == 0 ? muse::draw::PenStyle::CustomDashLine : muse::draw::PenStyle::DotLine);
+            EXPECT_DOUBLE_EQ(lines[0].to.y(), lines[1].from.y());
+            EXPECT_DOUBLE_EQ(lines[0].from.x(), lines[1].from.x());
+            EXPECT_GT(lines[1].to.y(), lines[1].from.y());
+            EXPECT_EQ(endBarLine(measure, 2)->ldata()->spanStyle, BarLineSpanStyle::DEFAULT);
+        }
+    }
+    score->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN_STYLE, static_cast<int>(BarLineSpanStyle::SOLID));
+    score->doLayout();
+    EXPECT_EQ(paintedBarLines(endBarLine(score->firstMeasure(), 0))[1].pen.style(), muse::draw::PenStyle::SolidLine);
+    EXPECT_EQ(paintedBarLines(endBarLine(score->firstMeasure(), 1))[1].pen.style(), muse::draw::PenStyle::DotLine);
+}
+
+TEST_F(Engraving_BarlineTests, spanStylePreservesInteriorAndSpecialBars)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    score->staff(0)->setBarLineSpanStyle(BarLineSpanStyle::SOLID);
+    for (BarLineType type : { BarLineType::BROKEN, BarLineType::DOTTED }) {
+        bar->setBarLineType(type);
+        bar->calcY();
+        auto lines = paintedBarLines(bar);
+        ASSERT_EQ(lines.size(), 2);
+        EXPECT_EQ(lines[0].pen.style(), type == BarLineType::BROKEN ? muse::draw::PenStyle::CustomDashLine : muse::draw::PenStyle::DotLine);
+        EXPECT_EQ(lines[1].pen.style(), muse::draw::PenStyle::SolidLine);
+    }
+    for (BarLineType type : { BarLineType::DOUBLE, BarLineType::END, BarLineType::REVERSE_END,
+                              BarLineType::START_REPEAT, BarLineType::END_REPEAT, BarLineType::END_START_REPEAT,
+                              BarLineType::HEAVY, BarLineType::DOUBLE_HEAVY }) {
+        bar->setBarLineType(type);
+        score->staff(0)->setBarLineSpanStyle(BarLineSpanStyle::DEFAULT);
+        bar->calcY();
+        auto original = paintedBarLines(bar);
+        score->staff(0)->setBarLineSpanStyle(BarLineSpanStyle::DASHED);
+        bar->calcY();
+        auto custom = paintedBarLines(bar);
+        EXPECT_EQ(bar->ldata()->spanStyle, BarLineSpanStyle::DEFAULT);
+        ASSERT_EQ(original.size(), custom.size());
+        for (size_t i = 0; i < original.size(); ++i) {
+            EXPECT_EQ(original[i].pen, custom[i].pen);
+            EXPECT_EQ(original[i].from, custom[i].from);
+            EXPECT_EQ(original[i].to, custom[i].to);
+        }
+    }
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleRoundTripAndReset)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    const String path(u"barline-span-style-roundtrip.mscx");
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), path));
+    std::unique_ptr<MasterScore> reloaded(ScoreRW::readScore(path, true));
+    ASSERT_TRUE(reloaded);
+    EXPECT_EQ(reloaded->staff(0)->barLineSpanStyle(), BarLineSpanStyle::DASHED);
+    EXPECT_EQ(reloaded->staff(1)->barLineSpanStyle(), BarLineSpanStyle::DOTTED);
+    EXPECT_EQ(reloaded->staff(2)->barLineSpanStyle(), BarLineSpanStyle::DEFAULT);
+    reloaded->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN_STYLE, reloaded->staff(0)->propertyDefault(Pid::STAFF_BARLINE_SPAN_STYLE));
+    ASSERT_TRUE(ScoreRW::saveScore(reloaded.get(), path));
+    reloaded.reset(ScoreRW::readScore(path, true));
+    ASSERT_TRUE(reloaded);
+    EXPECT_EQ(reloaded->staff(0)->barLineSpanStyle(), BarLineSpanStyle::DEFAULT);
+    EXPECT_EQ(paintedBarLines(endBarLine(reloaded->firstMeasure(), 0)).size(), 1);
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleUndoRedoAndStaffCopy)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    score->startCmd(TranslatableString::untranslatable("Change connection style"));
+    score->staff(0)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_STYLE, static_cast<int>(BarLineSpanStyle::SOLID));
+    score->endCmd();
+    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::SOLID);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::DASHED);
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::SOLID);
+    std::unique_ptr<Staff> copy(score->staff(0)->clone());
+    EXPECT_EQ(copy->barLineSpanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_FALSE(score->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN_STYLE, -1));
+    EXPECT_FALSE(score->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN_STYLE, 4));
+    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::SOLID);
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleStaffGeometry)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    for (int lineCount : { 1, 2, 5 }) {
+        StaffType type = *score->staff(0)->staffType(Fraction(0, 1));
+        type.setLines(lineCount);
+        type.setLineDistance(Spatium(1.3));
+        type.setUserMag(.7);
+        score->staff(0)->setStaffType(Fraction(0, 1), type);
+        score->doLayout();
+        BarLine* bar = endBarLine(score->firstMeasure(), 0);
+        const StaffType* current = score->staff(0)->staffType(Fraction(0, 1));
+        double expected = current->yoffset().val() * current->spatium()
+                          + (lineCount == 1 ? 2 : lineCount - 1) * current->lineDistance().val() * current->spatium()
+                          + score->style().styleS(Sid::staffLineWidth).val() * current->spatium() * .5;
+        EXPECT_NEAR(bar->ldata()->spanStartY, expected, 1e-6);
+        auto lines = paintedBarLines(bar);
+        ASSERT_EQ(lines.size(), 2);
+        EXPECT_NEAR(lines[1].from.y(), expected, 1e-6);
+    }
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleHiddenAndDisconnectedStaves)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    score->staff(1)->setProperty(Pid::VISIBLE, false);
+    score->doLayout();
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    EXPECT_EQ(bar->ldata()->spanStyle, BarLineSpanStyle::DASHED);
+    EXPECT_NEAR(bar->ldata()->y2, score->firstMeasure()->staffLines(2)->y1() - score->firstMeasure()->system()->staff(0)->y(), 1e-6);
+    bar->setSpanStaff(false);
+    bar->calcY();
+    EXPECT_EQ(bar->ldata()->spanStyle, BarLineSpanStyle::DEFAULT);
+    EXPECT_EQ(paintedBarLines(bar).size(), 1);
+    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::DASHED);
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleDashWidthAndOffsets)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    score->style().set(Sid::dashBarWidth, Spatium(.6));
+    score->style().set(Sid::dashBarDash, Spatium(1.2));
+    score->style().set(Sid::dashBarGap, Spatium(.8));
+    score->doLayout();
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    auto lines = paintedBarLines(bar);
+    ASSERT_EQ(lines.size(), 2);
+    EXPECT_NEAR(lines[1].pen.widthF(), score->style().styleAbsolute(Sid::dashBarWidth) * bar->mag(), 1e-6);
+    EXPECT_DOUBLE_EQ(lines[0].from.x(), lines[1].from.x());
+    ASSERT_EQ(lines[1].pen.dashPattern().size(), 2);
+    EXPECT_NEAR(lines[1].pen.dashPattern()[0], 2.0, 1e-6);
+    EXPECT_NEAR(lines[1].pen.dashPattern()[1], .8 / .6, 1e-6);
+    EXPECT_LE(bar->ldata()->bbox().left(), lines[1].from.x() - lines[1].pen.widthF() * .5);
+    EXPECT_GE(bar->ldata()->bbox().right(), lines[1].from.x() + lines[1].pen.widthF() * .5);
+    bar->setSpanFrom(10);
+    bar->calcY();
+    lines = paintedBarLines(bar);
+    ASSERT_EQ(lines.size(), 1);
+    EXPECT_EQ(lines[0].pen.style(), muse::draw::PenStyle::CustomDashLine);
+    EXPECT_GT(lines[0].to.y(), lines[0].from.y());
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleSurvivesInstrumentReordering)
+{
+    for (bool customStyle : { false, true }) {
+        SCOPED_TRACE(customStyle ? "Independent connection style" : "Default connection style");
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+        ASSERT_TRUE(score);
+        ASSERT_EQ(score->parts().size(), 3);
+        Staff* first = score->staff(0);
+        Staff* second = score->staff(1);
+        const BarLineSpanStyle firstStyle = customStyle ? BarLineSpanStyle::DASHED : BarLineSpanStyle::DEFAULT;
+        const BarLineSpanStyle secondStyle = customStyle ? BarLineSpanStyle::DOTTED : BarLineSpanStyle::DEFAULT;
+        first->setBarLineSpanStyle(firstStyle);
+        second->setBarLineSpanStyle(secondStyle);
+
+        for (Part* part : score->parts()) {
+            part->instrument()->setId(u"flute");
+        }
+        ScoreOrder order;
+        ScoreGroup group;
+        group.family = u"flutes";
+        group.section = u"woodwind";
+        group.barLineSpan = false;
+        group.thinBracket = false;
+        order.groups.push_back(group);
+        score->setScoreOrder(order);
+        ASSERT_TRUE(first->barLineSpan());
+        ASSERT_TRUE(second->barLineSpan());
+
+        score->startCmd(TranslatableString::untranslatable("Move instruments"));
+        EditPart::moveParts(score.get(), { score->parts().back() }, first->part(), false);
+        score->endCmd();
+        EXPECT_EQ(first->idx(), 1);
+        EXPECT_EQ(second->idx(), 2);
+        // Existing score-order rules reset spans for both default and custom styles.
+        EXPECT_FALSE(first->barLineSpan());
+        EXPECT_FALSE(second->barLineSpan());
+        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
+        EXPECT_EQ(second->barLineSpanStyle(), secondStyle);
+        EXPECT_EQ(paintedBarLines(endBarLine(score->firstMeasure(), first->idx())).size(), 1);
+
+        score->startCmd(TranslatableString::untranslatable("Reconnect staves"));
+        first->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, true);
+        score->endCmd();
+        auto lines = paintedBarLines(endBarLine(score->firstMeasure(), first->idx()));
+        ASSERT_EQ(lines.size(), customStyle ? 2 : 1);
+        if (customStyle) {
+            EXPECT_EQ(lines[0].pen.style(), muse::draw::PenStyle::SolidLine);
+            EXPECT_EQ(lines[1].pen.style(), muse::draw::PenStyle::CustomDashLine);
+        }
+
+        score->undoRedo(true, nullptr);
+        EXPECT_FALSE(first->barLineSpan());
+        score->undoRedo(true, nullptr);
+        EXPECT_EQ(first->idx(), 0);
+        EXPECT_TRUE(first->barLineSpan());
+        EXPECT_TRUE(second->barLineSpan());
+        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
+        EXPECT_EQ(second->barLineSpanStyle(), secondStyle);
+        score->undoRedo(false, nullptr);
+        EXPECT_EQ(first->idx(), 1);
+        EXPECT_FALSE(first->barLineSpan());
+        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
+    }
 }

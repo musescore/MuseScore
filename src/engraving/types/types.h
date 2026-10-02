@@ -556,6 +556,14 @@ enum class VeloType : unsigned char {
     OFFSET_VAL, USER_VAL
 };
 
+// Appearance of the connection from this staff to the next staff.
+enum class BarLineSpanStyle {
+    DEFAULT,
+    SOLID,
+    DASHED,
+    DOTTED,
+};
+
 // P_TYPE::BARLINE_TYPE
 enum class BarLineType {
     NORMAL           = 1,
