@@ -21,9 +21,10 @@
  */
 
 #include <gtest/gtest.h>
+
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/linkedobjects.h"
-
 #include "engraving/dom/chord.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
@@ -34,6 +35,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editexcerpt.h"

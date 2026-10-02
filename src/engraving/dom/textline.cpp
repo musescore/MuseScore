@@ -119,6 +119,7 @@ static const ElementStyle systemTextLineStyle {
     { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
     { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
     { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::systemTextLineFontSpatiumDependent, Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
 
 //---------------------------------------------------------

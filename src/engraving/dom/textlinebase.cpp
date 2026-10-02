@@ -119,7 +119,7 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
     m_endText->spatiumChanged(ov, nv);
 }
 
-static constexpr std::array<Pid, 44> TextLineBasePropertyId = { {
+static constexpr std::array<Pid, 45> TextLineBasePropertyId = { {
     Pid::LINE_VISIBLE,
     Pid::BEGIN_HOOK_TYPE,
     Pid::BEGIN_HOOK_HEIGHT,
@@ -164,9 +164,10 @@ static constexpr std::array<Pid, 44> TextLineBasePropertyId = { {
     Pid::END_FONT_SIZE,
     Pid::END_FONT_STYLE,
     Pid::END_TEXT_OFFSET,
+    Pid::TEXT_SIZE_SPATIUM_DEPENDENT
 } };
 
-const std::array<Pid, 44>& TextLineBase::textLineBasePropertyIds()
+const std::array<Pid, 45>& TextLineBase::textLineBasePropertyIds()
 {
     return TextLineBasePropertyId;
 }
