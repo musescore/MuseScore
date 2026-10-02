@@ -206,6 +206,8 @@ public:
     bool showLedgerLines() const { return m_showLedgerLines; }
     void setNoteHeadScheme(NoteHeadScheme s) { m_noteHeadScheme = s; }
     NoteHeadScheme noteHeadScheme() const { return m_noteHeadScheme; }
+    void setInstrumentLabelVisibility(InstrumentLabelVisibility v) { m_instrumentLabelVisibility = v; }
+    InstrumentLabelVisibility instrumentLabelVisibility() const { return m_instrumentLabelVisibility; }
 
     String fretString(int fret, int string, bool deadNote) const;     // returns a string with the text for fret
     String durationString(DurationType type, int dots) const;
@@ -336,6 +338,7 @@ private:
 
     // Standard: configurable properties
     NoteHeadScheme m_noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
+    InstrumentLabelVisibility m_instrumentLabelVisibility = InstrumentLabelVisibility::AUTO;
 
     // TAB: configurable propertiesm
     double m_durationFontSize = 15.0;       // the size (in points) for the duration symbol font
