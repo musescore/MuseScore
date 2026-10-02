@@ -281,6 +281,13 @@ public:
     void  setFretTextStyle(const TextStyleType& val);
     void  setFretPresetIdx(size_t idx);
     void  setFretPreset(const String& str);
+    void  setJianpuTextStyle(const TextStyleType& val);
+    void  setJianpuFontSize(double val);
+
+    TextStyleType jianpuTextStyle() const { return m_jianpuTextStyle; }
+    const muse::draw::Font& jianpuFont() const { return m_jianpuFont; }
+    double jianpuFontSize() const { return m_jianpuFontSize; }
+    double jianpuBoxH() const { return m_jianpuBoxH; }
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }
@@ -307,6 +314,7 @@ private:
     double defaultSpatium() const;
     void  setDurationMetrics();
     void  setFretMetrics();
+    void  setJianpuMetrics();
 
     static void initTabFonts();
 
@@ -385,6 +393,11 @@ private:
     double m_deadFretYOffset = 0.0;
     // (raster units); internally computed: depends upon _onString, _useNumbers
     // and the metrics of the fret font
+
+    TextStyleType m_jianpuTextStyle = TextStyleType::JIANPU_NUMBER;
+    muse::draw::Font m_jianpuFont;  // font used to draw jianpu; cached for efficiency
+    double m_jianpuFontSize  = 9.0; // the size (in points) for the jianpu font
+    double m_jianpuBoxH = 0.0;
 
     // the array of configured fonts
     static std::vector<TablatureFretFont> m_fretFonts;
