@@ -4875,41 +4875,6 @@ void Score::updatePaddingTables()
     m_paddingTables.update(style());
 }
 
-//--------------------------------------------------------
-// setAutoSpatium()
-// Reduces the spatium size as necessary to accommodate all
-// staves in the page. Caution: the spatium is expressed in
-// DPI, page dimensions in inches, staff sizes in mm.
-//--------------------------------------------------------
-void Score::autoUpdateSpatium()
-{
-    static constexpr double breathingSpace = 2.5; // allow breathing space between staves
-    static constexpr double minStaffHeight = 2.0; // never make staff smaller than 2.0 mm
-    static constexpr double maxStaffHeight = 7.0; // never make staff bigger than 7.0 mm (default value)
-
-    double availableHeight = (style().styleD(Sid::pageHeight)
-                              - style().styleD(Sid::pageOddTopMargin)
-                              - style().styleD(Sid::pageOddBottomMargin)) * DPI;                    // convert from inches to DPI
-    double titleHeight = (!measures()->empty() && measures()->first()->isVBox()) ? measures()->first()->height() : 0.0;
-    availableHeight -= titleHeight;
-    double totalNeededSpaces = 4 * m_staves.size() * breathingSpace;
-    double targetSpatium = availableHeight / totalNeededSpaces;
-
-    double resultingStaffHeight = 4 * targetSpatium / DPI * INCH; // conversion from DPI to mm
-    resultingStaffHeight = round(resultingStaffHeight * 10) / 10; // round to nearest 0.1 mm
-    if (resultingStaffHeight > maxStaffHeight) {
-        return;
-    }
-    if (resultingStaffHeight < minStaffHeight) {
-        resultingStaffHeight = minStaffHeight;
-    }
-
-    targetSpatium = (resultingStaffHeight / 4) * DPI / INCH;
-
-    style().setSpatium(targetSpatium);
-    updatePaddingTables();
-}
-
 void Score::addSystemLock(const RangeLock* lock)
 {
     m_systemLocks.add(lock);
