@@ -149,7 +149,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void setPropertyFlags(Pid, PropertyFlags) override;
 
-    static const std::array<Pid, 44>& textLineBasePropertyIds();
+    static const std::array<Pid, 45>& textLineBasePropertyIds();
 
     void reset() override;
 
