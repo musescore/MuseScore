@@ -130,6 +130,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lyricsMelismaMinLength,                     1.0_sp),
     styleDef(lyricsDashPosAtStartOfSystem,               int(LyricsDashSystemStart::STANDARD)),
     styleDef(lyricsAvoidBarlines,                        true),
+    styleDef(lyricsAutoCenterOnGrandStaff,               false),
+    styleDef(lyricsAutoCenterOnVocalStaves,              false),
+    styleDef(lyricsStackingOrder,                        int(LyricsStackingOrder::LYRICS_BEFORE_DYNAMICS)),
     styleDef(lyricsLimitDashCount,                       false),
     styleDef(lyricsMaxDashCount,                         1),
     styleDef(lyricsCenterDashedSyllables,                false),
@@ -804,6 +807,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(dynamicsHairpinVoiceBasedPlacement,         DirectionV::AUTO),
     styleDef(dynamicsHairpinsAutoCenterOnGrandStaff,     true),
+    styleDef(dynamicsHairpinsAutoCenterOnVocalStaves,    false),
     styleDef(dynamicsHairpinsAboveForVocalStaves,        true),
 
     styleDef(dynamicsOverrideFont,                       false),

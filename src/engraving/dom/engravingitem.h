@@ -604,17 +604,6 @@ public:
         EngravingItem* itemSnappedBefore() const { return m_itemSnappedBefore; }
         EngravingItem* itemSnappedAfter() const { return m_itemSnappedAfter; }
 
-        struct StaffCenteringInfo {
-            double availableVertSpaceAbove = 0.0;
-            double availableVertSpaceBelow = 0.0;
-        };
-        const StaffCenteringInfo& staffCenteringInfo() const { return m_staffCenteringInfo; }
-        void setStaffCenteringInfo(double availSpaceAbove, double availSpaceBelow)
-        {
-            m_staffCenteringInfo.availableVertSpaceAbove = availSpaceAbove;
-            m_staffCenteringInfo.availableVertSpaceBelow = availSpaceBelow;
-        }
-
         void dump(std::stringstream& ss) const;
 
     protected:
@@ -650,8 +639,6 @@ public:
         EngravingItem* m_itemSnappedBefore = nullptr;
         EngravingItem* m_itemSnappedAfter = nullptr;
 
-        StaffCenteringInfo m_staffCenteringInfo;
-
         // STAVE SHARING
         EngravingItem* m_sharedItem = nullptr;
         std::vector<EngravingItem*> m_originItems;
@@ -686,6 +673,12 @@ public:
     static void disconnectAllOriginItems(EngravingItem* sharedItem);
 
     virtual bool isBefore(const EngravingItem* item) const;
+
+    /** The staff this item would be centered against if it were centered between staves, or
+     * nullptr if there is none. `system` limits the search to the staves visible on that
+     * system; if null, the system this item is laid out on is used.
+     */
+    const Staff* staffToCenterAgainst(bool above, const System* system = nullptr) const;
 
     //! --- Old Interface ---
     void setbbox(const RectF& r) { mutldata()->setBbox(r); }
