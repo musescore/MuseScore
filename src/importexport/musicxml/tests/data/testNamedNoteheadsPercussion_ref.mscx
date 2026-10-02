@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="5.00">
+<museScore version="4.70">
   <Score>
     <eid>B_B</eid>
     <Division>480</Division>
@@ -13,6 +13,7 @@
       <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
       <pageOddTopMargin>0.590551</pageOddTopMargin>
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <romanNumeralFontFace>Edwin</romanNumeralFontFace>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <tupletFontSize>10</tupletFontSize>
@@ -52,19 +53,17 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Named noteheads percussion</metaTag>
     <Part id="1">
-      <eid>C_C</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>C_C</eid>
         <StaffType group="percussion">
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
         </Staff>
+      <trackName>Percussion</trackName>
       <Instrument id="percussion-synthesizer">
-        <InstrumentLabel>
-          <longName>Percussion</longName>
-          <shortName>Perc.</shortName>
-          </InstrumentLabel>
+        <longName>Percussion</longName>
+        <shortName>Perc.</shortName>
         <trackName>Percussion</trackName>
         <instrumentId>drum.group</instrumentId>
         <useDrumset>1</useDrumset>
@@ -129,64 +128,64 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
-          <eid>F_F</eid>
           <text>Named noteheads percussion</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
-          <eid>G_G</eid>
           <text>James M</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>H_H</eid>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>I_I</eid>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <BarLine>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             </BarLine>
           </voice>
         </Measure>
