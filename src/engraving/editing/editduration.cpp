@@ -23,6 +23,7 @@
 #include "editduration.h"
 
 #include <algorithm>
+#include <unordered_set>
 
 #include "rw/xmlreader.h"
 
@@ -113,7 +114,14 @@ void EditDuration::incDecDuration(Transaction& tx, Score* score, int nSteps, boo
         std::vector<ChordRest*> crs(crsSet.begin(), crsSet.end());
         std::sort(crs.begin(), crs.end(), [](const ChordRest* a, const ChordRest* b) { return a->tick() > b->tick(); });
 
+        // Make sure each linked group is handled only once
+        std::unordered_set<const LinkedObjects*> handledLinks;
+
         for (ChordRest* cr : crs) {
+            if (cr->links() && !handledLinks.insert(cr->links()).second) {
+                continue;
+            }
+
             // if measure rest is selected as input, then the correct initialDuration will be the
             // duration of the measure's time signature, else is just the ChordRest's duration
             TDuration initialDuration = cr->durationType();
