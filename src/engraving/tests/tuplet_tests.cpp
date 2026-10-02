@@ -198,3 +198,29 @@ TEST_F(Engraving_TupletTests, saveLoad)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"save-load.mscx", TUPLET_DATA_DIR + u"save-load.mscx"));
     delete score;
 }
+
+//-----------------------------------------
+//    nestedTupletsLengthen
+//     lengthening a chord inside a tuplet over a nested tuplet
+//     replaces the nested tuplet instead of overfilling the measure
+//-----------------------------------------
+TEST_F(Engraving_TupletTests, nestedTupletsLengthen)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"nestedTuplets_lengthen.mscx");
+    ASSERT_TRUE(score);
+
+    // 9:8 eighth tuplet: three eighths, a nested eighth triplet, four eighths
+    Segment* s = score->firstMeasure()->first(SegmentType::ChordRest);
+    s = s->next(SegmentType::ChordRest)->next(SegmentType::ChordRest);
+    ChordRest* third = toChordRest(s->element(0));
+    ASSERT_TRUE(third && third->tuplet());
+
+    // a quarter reaches into the nested triplet
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->changeCRlen(third, TDuration(DurationType::V_QUARTER));
+    score->endCmd();
+
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"nestedTuplets_lengthen.mscx", TUPLET_DATA_DIR + u"nestedTuplets_lengthen-ref.mscx"));
+    delete score;
+}
