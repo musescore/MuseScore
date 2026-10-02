@@ -818,12 +818,12 @@
         </HairPin>
       <HairPin>
         <subtype>3</subtype>
-        <beginText>diminuendo</beginText>
         <track2>4</track2>
         <startTick>46/4</startTick>
         <ticks>6/4</ticks>
         <eid>WC_WC</eid>
         <track>4</track>
+        <beginText>diminuendo</beginText>
         <lineStyle>dotted</lineStyle>
         </HairPin>
       </SpannerMap>
