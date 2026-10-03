@@ -39,6 +39,15 @@ class TieJumpPointList;
 class EditTie
 {
 public:
+    struct TieAnalysis {
+        std::vector<Note*> noteList;
+        std::vector<Note*> tieNoteList;
+        bool singleTick = true;
+        bool someHaveExistingNextNoteToTieTo = false;
+        bool allHaveExistingNextNoteToTieTo = true;
+        TranslatableString actionName;
+    };
+    static TieAnalysis analyzeTieTargets(Score* score);
     static void cmdAddTie(Score* score, bool addToChord = false);
     static Tie* cmdToggleTie(Score* score);
     static void cmdToggleLaissezVib(Score* score);
