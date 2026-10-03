@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <algorithm>
 #include <cfloat>
 
 #include "systemlayout.h"
@@ -440,8 +441,16 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 continue;
             }
             for (EngravingItem* item : segment.elist()) {
-                if (item && item->isChordRest()) {
-                    BeamLayout::layoutNonCrossBeams(toChordRest(item), ctx);
+                if (!item || !item->isChordRest()) {
+                    continue;
+                }
+                ChordRest* cr = toChordRest(item);
+                if (!BeamLayout::isStartOfNonCrossBeam(cr)) {
+                    continue;
+                }
+                const auto& elements = cr->beam()->elements();
+                if (std::any_of(elements.begin(), elements.end(), [](const ChordRest* element) { return element->isRest(); })) {
+                    BeamLayout::layoutNonCrossBeams(cr, ctx);
                 }
             }
         }
