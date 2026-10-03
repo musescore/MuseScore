@@ -3164,6 +3164,12 @@ constexpr const std::array<AsciiStringView, size_t(SymId::lastSym) + 1> SymNames
     "accidentalSharpParens",
     "accidentalDoubleSharpParens",
 
+    "noteheadBlackOversized",
+    "noteheadHalfOversized",
+    "noteheadWholeOversized",
+    "noteheadDoubleWholeOversized",
+    "noteheadDoubleWholeSquareOversized",
+
     "noteLongaUp",
     "noteLongaDown",
     "noteLongaSquareUp",
@@ -6251,6 +6257,12 @@ const std::array<muse::TranslatableString, size_t(SymId::lastSym) + 1> SymNames:
     muse::TranslatableString::untranslatable("Parenthesised natural accidental"),
     muse::TranslatableString::untranslatable("Parenthesised sharp accidental"),
     muse::TranslatableString::untranslatable("Parenthesised double sharp accidental"),
+
+    muse::TranslatableString::untranslatable("noteheadBlackOversized"),
+    muse::TranslatableString::untranslatable("noteheadHalfOversized"),
+    muse::TranslatableString::untranslatable("noteheadWholeOversized"),
+    muse::TranslatableString::untranslatable("noteheadDoubleWholeOversized"),
+    muse::TranslatableString::untranslatable("noteheadDoubleWholeSquareOversized"),
 
     muse::TranslatableString::untranslatable("noteLongaUp"),
     muse::TranslatableString::untranslatable("noteLongaDown"),
