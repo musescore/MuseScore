@@ -34,6 +34,7 @@
 #include "../dom/segment.h"
 #include "../dom/spanner.h"
 #include "../dom/staff.h"
+#include "../dom/elementmap.h"
 #include "../dom/tiemap.h"
 #include "../dom/tremolotwochord.h"
 #include "../dom/tupletmap.h"
@@ -49,6 +50,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
     Fraction start = sourceSeg->tick();
     TieMap tieMap;
     TupletMap tupletMap;      // tuplets cannot cross measure boundaries
+    ElementMap crMap;         // old ChordRest/grace chord -> its clone, for spanner reconnection
     TremoloTwoChord* tremolo = nullptr;
 
     auto maybeLinkedClone = [link](EngravingItem* item) -> EngravingItem* {
@@ -126,6 +128,10 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                     continue;
                 }
             }
+
+            // Only map ChordRests that actually survive into the destination score - a skipped full-measure
+            // rest above must never be found as a spanner endpoint, since it is never added anywhere.
+            crMap.add(ocr, ncr);
 
             auto cloneChord = [&](Chord* oldChord, Chord* newChord) {
                 size_t n = oldChord->notes().size();
@@ -205,6 +211,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                     Chord* ogc = toChord(ocr)->graceNotes().at(i);
                     Chord* ngc = toChord(ncr)->graceNotes().at(i);
                     cloneChord(ogc, ngc);
+                    crMap.add(ogc, ngc);
                 }
             }
 
@@ -285,32 +292,32 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
             ChordRest* cr1 = sp->startCR();
             ChordRest* cr2 = sp->endCR();
 
-            ns->setStartElement(0);
-            ns->setEndElement(0);
-            if (cr1 && cr1->links()) {
-                for (EngravingObject* e : *cr1->links()) {
-                    ChordRest* cr = toChordRest(e);
-                    if (cr == cr1) {
-                        continue;
-                    }
-                    if ((cr->score() == destScore) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
-                        ns->setStartElement(cr);
-                        break;
+            // Prefer the direct old-CR -> new-CR mapping built while cloning above: it also covers
+            // grace chords, which share their parent's tick and so can't be told apart by tick/track
+            // alone (the fallback below, kept for cross-staff endpoints not cloned here, cannot resolve them).
+            auto findNewCR = [&](ChordRest* cr, const Fraction& tick) -> ChordRest* {
+                if (!cr) {
+                    return nullptr;
+                }
+                if (EngravingItem* mapped = crMap.findNew(cr)) {
+                    return toChordRest(mapped);
+                }
+                if (cr->links()) {
+                    for (EngravingObject* e : *cr->links()) {
+                        ChordRest* linkedCr = toChordRest(e);
+                        if (linkedCr == cr) {
+                            continue;
+                        }
+                        if ((linkedCr->score() == destScore) && (linkedCr->tick() == tick) && linkedCr->track() == dstTrack) {
+                            return linkedCr;
+                        }
                     }
                 }
-            }
-            if (cr2 && cr2->links()) {
-                for (EngravingObject* e : *cr2->links()) {
-                    ChordRest* cr = toChordRest(e);
-                    if (cr == cr2) {
-                        continue;
-                    }
-                    if ((cr->score() == destScore) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack) {
-                        ns->setEndElement(cr);
-                        break;
-                    }
-                }
-            }
+                return nullptr;
+            };
+
+            ns->setStartElement(findNewCR(cr1, ns->tick()));
+            ns->setEndElement(findNewCR(cr2, ns->tick2()));
             if (link) {
                 destScore->doUndoAddElement(ns);
             } else {
