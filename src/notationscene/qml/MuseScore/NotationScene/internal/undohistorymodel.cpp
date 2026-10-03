@@ -21,6 +21,8 @@
  */
 
 #include "undohistorymodel.h"
+#include "engraving/dom/masterscore.h"
+#include "notation/imasternotation.h"
 
 #include "notation/inotation.h"
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
@@ -46,6 +48,8 @@ void UndoHistoryModel::init()
     context()->currentNotationChanged().onNotify(this, [this] {
         onCurrentNotationChanged();
     });
+
+    emit snapshotsChanged();
 }
 
 void UndoHistoryModel::onCurrentNotationChanged()
@@ -63,6 +67,7 @@ void UndoHistoryModel::onCurrentNotationChanged()
     endResetModel();
 
     emit currentIndexChanged();
+    addFileOpenedSnapshot();
 }
 
 void UndoHistoryModel::onUndoRedo()
@@ -102,6 +107,9 @@ QVariant UndoHistoryModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case Qt::DisplayRole:
         if (row == 0) {
+            if (!m_lastRestoredSnapshotName.isEmpty()) {
+                return qtrc("notation/undohistory", "Load version: %1").arg(std::move(m_lastRestoredSnapshotName));
+            }
             return qtrc("notation/undohistory", "File opened");
         }
         return stack->lastActionNameAtIdx(static_cast<size_t>(row)).qTranslated();
@@ -143,4 +151,202 @@ INotationUndoStackPtr UndoHistoryModel::undoStack() const
 {
     INotationPtr notation = context()->currentNotation();
     return notation ? notation->undoStack() : nullptr;
+}
+
+void UndoHistoryModel::addSnapshot(const QString& name)
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+    IMasterNotationPtr masterNotation = notation->masterNotation();
+    if (!masterNotation) {
+        return;
+    }
+    MasterScore* masterScore = masterNotation->masterScore();
+    if (!masterScore) {
+        return;
+    }
+
+    mu::engraving::String snapName(name);
+    masterScore->addSnapshot(snapName);
+    emit snapshotsChanged();
+}
+
+void UndoHistoryModel::updateSnapshot(int index)
+{
+    INotationPtr notation = context()->currentNotation();
+    IMasterNotationPtr masterNotation = notation ? notation->masterNotation() : nullptr;
+    MasterScore* masterScore = masterNotation ? masterNotation->masterScore() : nullptr;
+    if (!masterScore) {
+        return;
+    }
+
+    if (index < 0 || index >= int(masterScore->snapshots().size()) || masterScore->snapshots()[index].transient) {
+        LOGW() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    masterScore->updateSnapshot(index);
+    emit snapshotsChanged();
+}
+
+void UndoHistoryModel::removeSnapshot(int index)
+{
+    INotationPtr notation = context()->currentNotation();
+    IMasterNotationPtr masterNotation = notation ? notation->masterNotation() : nullptr;
+    MasterScore* masterScore = masterNotation ? masterNotation->masterScore() : nullptr;
+    if (!masterScore) {
+        return;
+    }
+
+    if (index < 0 || index >= int(masterScore->snapshots().size()) || masterScore->snapshots()[index].transient) {
+        LOGW() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    masterScore->removeSnapshot(index);
+    emit snapshotsChanged();
+}
+
+void UndoHistoryModel::restoreSnapshot(int index)
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    IMasterNotationPtr masterNotation = notation->masterNotation();
+    if (!masterNotation) {
+        return;
+    }
+
+    MasterScore* masterScore = masterNotation->masterScore();
+    if (!masterScore) {
+        LOGW() << "Could not get master score for restoring snapshot";
+        return;
+    }
+    if (index < 0 || index >= int(masterScore->snapshots().size())) {
+        LOGW() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    mu::engraving::String snapshotName = masterScore->snapshots()[index].name;
+    bool hasUnsavedChanges = notation->undoStack() && !notation->undoStack()->isStackClean();
+
+    if (hasUnsavedChanges) {
+        QString titleQ = muse::qtrc("notation/undohistory", "Do you want to save changes to the score before restoring snapshot %1?");
+        std::string title = titleQ.arg(snapshotName.toQString()).toStdString();
+        std::string body = muse::trc("notation/undohistory", "Your changes will be lost if you do not save them.");
+
+        interactive()->warning(title, body,
+        {
+            interactive()->buttonData(IInteractive::Button::Save),
+            interactive()->buttonData(IInteractive::Button::Discard),
+            interactive()->buttonData(IInteractive::Button::Cancel)
+        }, int(IInteractive::Button::Cancel))
+        .onResolve(this, [this, index, masterNotation](const IInteractive::Result& result) {
+            if (result.isButton(IInteractive::Button::Cancel)) {
+                return;
+            }
+
+            auto proceedWithRestore = [this, index, masterNotation]() {
+                MasterScore* currentMasterScore = masterNotation->masterScore();
+                if (!currentMasterScore || index < 0 || index >= int(currentMasterScore->snapshots().size())) {
+                    LOGW() << "Invalid snapshot index after save: " << index;
+                    return;
+                }
+                doRestoreSnapshot(index, currentMasterScore, masterNotation);
+            };
+
+            if (result.isButton(IInteractive::Button::Save)) {
+                saveProjectScenario()->saveProject(project::SaveMode::Save)
+                .onResolve(this, [proceedWithRestore](const muse::Ret& ret) {
+                    if (!ret) {
+                        LOGW() << "Save failed, aborting snapshot restore: " << ret.toString();
+                        return;
+                    }
+                    proceedWithRestore();
+                });
+                return;
+            }
+
+            proceedWithRestore();
+        });
+    } else {
+        doRestoreSnapshot(index, masterScore, masterNotation);
+    }
+}
+
+void UndoHistoryModel::doRestoreSnapshot(int index, MasterScore* masterScore, IMasterNotationPtr masterNotation)
+{
+    context()->setCurrentNotation(masterNotation->notation());
+    masterScore->restoreSnapshot(index);
+    m_lastRestoredSnapshotName = masterScore->snapshots()[index].name;
+    onCurrentNotationChanged();
+
+    if (INotationPtr notation = masterNotation->notation()) {
+        notation->notationChanged().send(muse::RectF());
+    }
+}
+
+QVariantList UndoHistoryModel::snapshots() const
+{
+    QVariantList result;
+
+    INotationPtr notation = context()->currentNotation();
+    IMasterNotationPtr masterNotation = notation ? notation->masterNotation() : nullptr;
+    MasterScore* masterScore = masterNotation ? masterNotation->masterScore() : nullptr;
+    if (!masterScore) {
+        return result;
+    }
+
+    for (MasterScore::Snapshot& snap : masterScore->snapshots()) {
+        QVariantMap item;
+        item["name"] = QString::fromStdString(snap.name.toStdString());
+        item["transient"] = snap.transient;
+        result.append(item);
+    }
+    return result;
+}
+
+void UndoHistoryModel::renameSnapshot(int index, const QString& newName)
+{
+    INotationPtr notation = context()->currentNotation();
+    IMasterNotationPtr masterNotation = notation ? notation->masterNotation() : nullptr;
+    MasterScore* masterScore = masterNotation ? masterNotation->masterScore() : nullptr;
+    if (!masterScore) {
+        return;
+    }
+
+    if (index < 0 || index >= int(masterScore->snapshots().size()) || masterScore->snapshots()[index].transient) {
+        LOGW() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    masterScore->renameSnapshot(index, mu::engraving::String(newName));
+    emit snapshotsChanged();
+}
+
+void UndoHistoryModel::addFileOpenedSnapshot()
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    IMasterNotationPtr masterNotation = notation->masterNotation();
+    if (!masterNotation) {
+        return;
+    }
+
+    MasterScore* masterScore = masterNotation->masterScore();
+    if (!masterScore) {
+        return;
+    }
+
+    if (!masterScore->hasFileOpenedSnapshot()) {
+        masterScore->addSnapshot(mu::engraving::String(u"File opened"), true /* fileOpened */);
+        emit snapshotsChanged();
+    }
 }
