@@ -559,16 +559,15 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
         return;
     }
 
-    m_score->changeCRlen(cr, fDuration);
+    const mu::engraving::MStyle& style = m_score->style();
+    const auto numberType = mu::engraving::TupletNumberType(style.styleI(mu::engraving::Sid::tupletNumberType));
+    const auto bracketType = mu::engraving::TupletBracketType(style.styleI(mu::engraving::Sid::tupletBracketType));
+    if (!m_score->addTuplet(cr, fRatio, TDuration(baseLen), numberType, bracketType)) {
+        LOGW("Cursor::addTuplet: cannot add tuplet for ratio %s and duration %s",
+             qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
 
-    mu::engraving::Tuplet* tuplet = new mu::engraving::Tuplet(tupletMeasure);
-    tuplet->setTrack(track());
-    tuplet->setTick(tupletTick);
-    tuplet->setRatio(fRatio);
-    tuplet->setTicks(fDuration);
-    tuplet->setBaseLen(baseLen);
-
-    m_score->cmdCreateTuplet(cr, tuplet);
+        return;
+    }
 
     inputState().setSegment(tupletMeasure->tick2segment(tupletTick));
     inputState().setDuration(baseLen);
