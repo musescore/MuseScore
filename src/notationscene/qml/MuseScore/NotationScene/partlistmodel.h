@@ -91,7 +91,8 @@ private:
         RoleTitle = Qt::UserRole + 1,
         RoleIsSelected,
         RoleIsInited,
-        RoleIsCustom
+        RoleIsCustom,
+        RolePartIndex
     };
 
     muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
