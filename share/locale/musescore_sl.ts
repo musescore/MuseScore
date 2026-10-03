@@ -36666,7 +36666,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TempoSettings.qml" line="99"/>
         <source>Show tempo marking on my score</source>
-        <translation>Dodaj notnemu zapisu oznako tempa</translation>
+        <translation>Dodaj notnemu zapisu oznako hitrosti izvajanja</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/additionalinfomodel.cpp" line="97"/>
