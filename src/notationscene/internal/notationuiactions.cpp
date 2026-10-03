@@ -403,6 +403,12 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Paste special"),
              TranslatableString("action", "Paste special")
              ),
+    UiAction("notation-paste-dynamics",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Paste &dynamics"),
+             TranslatableString("action", "Paste dynamics")
+             ),
     UiAction("notation-swap",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,

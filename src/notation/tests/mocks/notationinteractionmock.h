@@ -147,6 +147,7 @@ public:
     MOCK_METHOD(void, repeatSelection, (), (override));
     MOCK_METHOD(void, copyLyrics, (), (override));
     MOCK_METHOD(void, pasteSelection, (const Fraction&), (override));
+    MOCK_METHOD(void, pasteDynamics, (), (override));
     MOCK_METHOD(void, swapSelection, (), (override));
     MOCK_METHOD(void, deleteSelection, (), (override));
     MOCK_METHOD(void, flipSelection, (), (override));

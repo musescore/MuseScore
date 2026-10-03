@@ -353,7 +353,13 @@ bool Read500::preparePasteDurationElement(Score* score, const Fraction& tick, co
     return true;
 }
 
-bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
+bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff,
+                         Fraction scale)
+{
+    return pasteStaff(e, dst, dstStaff, scale, rw::PasteMode::Default);
+}
+
+bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale, rw::PasteMode mode)
 {
     assert(dst->isType(SegmentType::Duration));
 
@@ -420,7 +426,7 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
             }
             if (e.name() == "SpannerMap") {
                 spannerFound = true;
-                TRead::readScoreSpanners(score, e, ctx);
+                TRead::readScoreSpanners(score, e, ctx, mode);
                 continue;
             }
             if (e.name() != "Staff") {
@@ -459,6 +465,14 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 pasted = true;
                 const AsciiStringView tag(e.name());
 
+                if (mode == PasteMode::DynamicsOnly
+                    && tag != "transposeChromatic"
+                    && tag != "transposeDiatonic"
+                    && tag != "location"
+                    && tag != "Dynamic") {
+                    e.skipCurrentElement();
+                    continue;
+                }
                 if (tag == "transposeChromatic") {
                     ctx.setTransposeChromatic(static_cast<int8_t>(e.readInt()));
                 } else if (tag == "transposeDiatonic") {
@@ -707,9 +721,18 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     if (el->isFermata()) {
                         el->setPlacement(el->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
                     }
+                    const Fraction copyTick = mode == PasteMode::DynamicsOnly
+                                              ? Fraction::fromString(e.attribute("copyTick"))
+                                              : Fraction();
                     TRead::readItem(el, e, ctx);
 
-                    Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
+                    Fraction tick = ctx.tick();
+
+                    if (mode == PasteMode::DynamicsOnly && copyTick.isValid()) {
+                        tick = dstTick + (copyTick - tickStart);
+                    } else if (doScale) {
+                        tick = (tick - dstTick) * scale + dstTick;
+                    }
                     Measure* m = score->tick2measure(tick);
                     Segment* seg = el->isFretDiagram()
                                    ? m->undoGetSegment(SegmentType::ChordRest, tick)
@@ -879,6 +902,11 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
 void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
 {
+    pasteSymbols(e, dst, rw::PasteMode::Default);
+}
+
+void Read500::pasteSymbols(XmlReader& e, ChordRest* dst, rw::PasteMode mode)
+{
     Score* score = dst->score();
     Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
 
@@ -912,6 +940,16 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
                 break;
             }
             const AsciiStringView tag(e.name());
+
+            if (mode == PasteMode::DynamicsOnly
+                && tag != "trackOffset"
+                && tag != "tickOffset"
+                && tag != "segDelta"
+                && tag != "Dynamic"
+                && tag != "HairPin") {
+                e.skipCurrentElement();
+                continue;
+            }
 
             if (tag == "trackOffset") {
                 destTrack = startTrack + e.readInt();
