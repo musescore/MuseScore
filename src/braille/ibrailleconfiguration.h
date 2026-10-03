@@ -45,6 +45,10 @@ public:
     virtual BrailleIntervalDirection intervalDirection() const = 0;
     virtual void setIntervalDirection(const BrailleIntervalDirection direction) = 0;
 
+    virtual muse::async::Notification voiceOrderChanged() const = 0;
+    virtual BrailleVoiceOrder voiceOrder() const = 0;
+    virtual void setVoiceOrder(const BrailleVoiceOrder order) = 0;
+
     virtual muse::async::Notification brailleTableChanged() const = 0;
     virtual QString brailleTable() const = 0;
     virtual void setBrailleTable(const QString& table) = 0;
