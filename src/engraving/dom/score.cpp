@@ -48,6 +48,7 @@
 #include "editing/transpose.h"
 #include "editing/editstaffbrackets.h"
 
+#include "property.h"
 #include "rendering/iscorerenderer.h"
 
 #include "style/style.h"
@@ -3945,74 +3946,55 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
         return nullptr;
     }
 
-    auto newCR = cr;
-    auto currentMeasure = cr->measure();
-    auto currentSystem = currentMeasure->system() ? currentMeasure->system() : currentMeasure->coveringMMRestOrThis()->system();
-    if (!currentSystem) {
-        return cr;
-    }
-    auto destinationMeasure = currentSystem->firstMeasure();
-    if (!destinationMeasure) {
-        return cr;
-    }
+    auto systemOf = [](Measure* m) -> System* {
+        return m->system() ? m->system() : m->coveringMMRestOrThis()->system();
+    };
+    auto firstChordRestOf = [track = trackZeroVoice(cr->track())](Measure* m) -> ChordRest* {
+        return m->first()->nextChordRest(track, false);
+    };
 
-    auto firstSegment = destinationMeasure->first(SegmentType::ChordRest);
+    Measure* currentMeasure = cr->measure();
+    System* currentSystem = systemOf(currentMeasure);
+    Measure* destinationMeasure = currentSystem->firstMeasure();
+    Segment* firstSegment = destinationMeasure->first(SegmentType::ChordRest);
 
-    // Case: Go to next system
     if (next) {
-        if ((destinationMeasure = currentSystem->lastMeasure()->nextMeasure())) {
-            // There is a next system present: get it and accommodate for MMRest
-            currentSystem = destinationMeasure->system()
-                            ? destinationMeasure->system()
-                            : destinationMeasure->coveringMMRestOrThis()->system();
-            if (!currentSystem) {
-                return cr;
-            }
-            if ((destinationMeasure = currentSystem->firstMeasure())) {
-                if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false))) {
-                    cr = newCR;
-                }
-            }
-        } else if (currentMeasure != lastMeasure()) {
-            // There is no next system present: go to last measure of current system
-            if ((destinationMeasure = lastMeasure())) {
-                if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false))) {
-                    if (!destinationMeasure->isMMRest()) {
-                        cr = newCR;
-                    }
-                    // Last visual measure is a MMRest: go to very last measure within that MMRest
-                    else if ((destinationMeasure = lastMeasureMM())
-                             && (newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false))) {
-                        cr = newCR;
-                    }
-                }
-            }
+        if (Measure* nextSystemMeasure = currentSystem->lastMeasure()->nextMeasure()) {
+            // Next system exists: get it and accommodate for MMRest
+            System* nextSystem = systemOf(nextSystemMeasure);
+            destinationMeasure = nextSystem->firstMeasure();
+            ChordRest* newCR = firstChordRestOf(destinationMeasure);
+            return newCR ? newCR : cr;
         }
+        if (currentMeasure == lastMeasure()) {
+            return cr;
+        }
+
+        // No next system: go to the last measure of the score
+        destinationMeasure = lastMeasure();
+        if (Measure* lastMM = lastMeasureMM()) {
+            ChordRest* mmCR = firstChordRestOf(lastMM);
+            return mmCR;
+        }
+        ChordRest* newCR = firstChordRestOf(destinationMeasure);
+        return newCR;
     }
-    // Case: Go to previous system
-    else {
-        auto currentSegment = cr->segment();
-        // Only go to previous system's beginning if user is already at the absolute beginning of current system
-        // and not in first measure of entire score
-        if ((destinationMeasure != firstMeasure() && destinationMeasure != firstMeasureMM())
-            && (currentSegment == firstSegment || (currentMeasure->mmRest() && currentMeasure->mmRest()->isFirstInSystem()))) {
-            if (!(destinationMeasure = destinationMeasure->prevMeasureMM())) {
-                return cr;
-            }
-            if (!(currentSystem = destinationMeasure->system()
-                                  ? destinationMeasure->system()
-                                  : destinationMeasure->coveringMMRestOrThis()->system())) {
-                return cr;
-            }
-            destinationMeasure = currentSystem->firstMeasure();
-        }
-        if (destinationMeasure) {
-            if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false))) {
-                cr = newCR;
-            }
-        }
+
+    // Go to previous system
+    Segment* currentSegment = cr->segment();
+    bool atSystemStart = (currentSegment == firstSegment) || (currentMeasure->mmRest() && currentMeasure->mmRest()->isFirstInSystem());
+    bool notAtScoreStart = (destinationMeasure != firstMeasure() && destinationMeasure != firstMeasureMM());
+
+    // Only jump to previous system's start if we're at the absolute start
+    // of the current system and not in the score's first measure
+    if (notAtScoreStart && atSystemStart) {
+        destinationMeasure = destinationMeasure->prevMeasureMM();
+        currentSystem = systemOf(destinationMeasure);
+        destinationMeasure = currentSystem->firstMeasure();
     }
-    return cr;
+
+    ChordRest* newCR = firstChordRestOf(destinationMeasure);
+    return newCR ? newCR : cr;
 }
 
 //---------------------------------------------------------
@@ -4037,41 +4019,56 @@ Box* Score::cmdNextPrevFrame(MeasureBase* currentMeasureBase, bool next) const
 //    Return [Box* or ChordRest*] of next/previous section
 //---------------------------------------------------------
 
-EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool dir) const
+EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool next) const
 {
-    auto currentMeasureBase = el->findMeasureBase();
-    auto destination = currentMeasureBase;
-    if (currentMeasureBase) {
-        // -----------------------
-        // Next Section of Score
-        // -----------------------
-        if (dir) {
-            if ((destination = getNextPrevSectionBreak(currentMeasureBase, true))) {
-                el = getScoreElementOfMeasureBase(destination->next());
+    MeasureBase* currentMeasureBase = el->findMeasureBase();
+    if (!currentMeasureBase) {
+        return el;
+    }
+    track_idx_t track = el->isChordRest() ? trackZeroVoice(el->track()) : 0;
+
+    // Next Section of Score
+    if (next) {
+        MeasureBase* destination = getNextPrevSectionBreak(currentMeasureBase, true);
+        if (!destination) {
+            return el;
+        }
+        return getScoreElementOfMeasureBase(destination->next(), track);
+    }
+
+    // Previous Section of Score
+    Segment* currentSegment = el->isChordRest() ? toChordRest(el)->segment() : nullptr;
+    MeasureBase* destination = getNextPrevSectionBreak(currentMeasureBase, false);
+    if (!destination) {
+        return el;
+    }
+
+    if (currentSegment) {
+        MeasureBase* firstBreak = destination;
+        el = getScoreElementOfMeasureBase(destination->next(), track);
+        if (el && el->isChordRest() && (toChordRest(el)->segment() == currentSegment)) {
+            if (firstBreak == score()->first()) {
+                el = firstBreak;
+            } else if ((destination = getNextPrevSectionBreak(destination, false))) {
+                bool isFallbackSentinel = (destination == score()->first());
+                bool isRealBreak = !destination->sectionBreak() && !isFallbackSentinel;
+                el = isRealBreak ? destination : getScoreElementOfMeasureBase(destination->next(), track);
             }
         }
-        // -------------------------
-        // Previous Section of Score
-        // -------------------------
-        else {
-            auto currentSegment = el->isChordRest() ? toChordRest(el)->segment() : nullptr;
-            if ((destination = getNextPrevSectionBreak(currentMeasureBase, false))) {
-                if (currentSegment) {
-                    if ((el = getScoreElementOfMeasureBase((score()->first() == destination) ? destination : destination->next()))) {
-                        if (el->isChordRest() && (toChordRest(el)->segment() == currentSegment)) {
-                            if ((destination = getNextPrevSectionBreak(destination, false))) {
-                                el = !(destination->sectionBreak()) ? destination : getScoreElementOfMeasureBase(destination->next());
-                            }
-                        }
-                    }
-                } else if ((score()->first() != currentMeasureBase) && (el = getScoreElementOfMeasureBase(destination->next()))) {
-                    if (el->findMeasureBase() == currentMeasureBase) {
-                        if ((destination = getNextPrevSectionBreak(destination, false))) {
-                            el = !(destination->sectionBreak()) ? el : getScoreElementOfMeasureBase(destination->next());
-                        }
-                    }
-                }
-            }
+    }
+
+    // el is not a ChordRest
+    if (score()->first() == currentMeasureBase) {
+        return el;
+    }
+    el = getScoreElementOfMeasureBase(destination->next(), track);
+    if (!el) {
+        return el;
+    }
+    if (el->findMeasureBase() == currentMeasureBase) {
+        destination = getNextPrevSectionBreak(destination, false);
+        if (destination) {
+            el = destination->sectionBreak() ? getScoreElementOfMeasureBase(destination->next(), track) : el;
         }
     }
     return el;
@@ -4086,7 +4083,7 @@ EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool dir) const
 
 MeasureBase* Score::getNextPrevSectionBreak(MeasureBase* mb, bool dir) const
 {
-    auto destination = mb;
+    MeasureBase* destination = mb;
     if (destination) {
         if (dir) {
             // Find next section break
@@ -4126,7 +4123,7 @@ MeasureBase* Score::getNextPrevSectionBreak(MeasureBase* mb, bool dir) const
 //    MeasureBase
 //---------------------------------------------------------
 
-EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
+EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb, track_idx_t track = 0) const
 {
     EngravingItem* el { nullptr };
     ChordRest* cr { nullptr };
@@ -4139,7 +4136,7 @@ EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
             if (style().styleB(Sid::createMultiMeasureRests) && currentMeasure->hasMMRest()) {
                 currentMeasure = currentMeasure->coveringMMRestOrThis();
             }
-            if ((cr = currentMeasure->first()->nextChordRest(0, false))) {
+            if ((cr = currentMeasure->first()->nextChordRest(track, false))) {
                 el = cr;
             }
         }
@@ -4167,7 +4164,7 @@ size_t Score::nmeasures() const
 Measure* Score::firstTrailingMeasure(ChordRest** cr)
 {
     Measure* firstMeasure = nullptr;
-    auto m = lastMeasure();
+    Measure* m = lastMeasure();
 
     if (!cr) {
         // No active selection: prepare first empty trailing measure of entire score

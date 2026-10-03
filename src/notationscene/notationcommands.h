@@ -46,6 +46,8 @@ inline static const muse::rcommand::Command GOTO_NEXT_FRAME_COMMAND("command://n
 inline static const muse::rcommand::Command GOTO_PREV_FRAME_COMMAND("command://notation/goto-prev-frame");
 inline static const muse::rcommand::Command GOTO_NEXT_SYSTEM_COMMAND("command://notation/goto-next-system");
 inline static const muse::rcommand::Command GOTO_PREV_SYSTEM_COMMAND("command://notation/goto-prev-system");
+inline static const muse::rcommand::Command GOTO_NEXT_SECTION_COMMAND("command://notation/goto-next-section");
+inline static const muse::rcommand::Command GOTO_PREV_SECTION_COMMAND("command://notation/goto-prev-section");
 inline static const muse::rcommand::Command GOTO_UPNOTE_IN_CHORD_COMMAND("command://notation/goto-upnote-in-chord");
 inline static const muse::rcommand::Command GOTO_DOWNNOTE_IN_CHORD_COMMAND("command://notation/goto-downnote-in-chord");
 inline static const muse::rcommand::Command GOTO_TOPNOTE_IN_CHORD_COMMAND("command://notation/goto-topnote-in-chord");
