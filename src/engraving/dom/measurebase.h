@@ -208,6 +208,8 @@ public:
     MeasureBaseList();
     MeasureBase* first() const { return m_first; }
     MeasureBase* last()  const { return m_last; }
+    /** Returns the item at index, or null if out of bounds; rebuilds the index after list changes. */
+    MeasureBase* at(size_t index) const;
     void clear();
     void add(MeasureBase*);
     void remove(MeasureBase*);
@@ -232,6 +234,9 @@ private:
     int m_size = 0;
     MeasureBase* m_first = nullptr;
     MeasureBase* m_last = nullptr;
+
+    // Non-owning index, cleared by every structural mutation and rebuilt on demand.
+    mutable std::vector<MeasureBase*> m_index;
 
     // At a tick there can be any number of MeasureBases
     // There can only be one Measure

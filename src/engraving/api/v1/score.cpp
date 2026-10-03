@@ -560,6 +560,24 @@ QQmlListProperty<System> Score::systems() const
     return wrapContainerProperty<System>(this, score()->systems());
 }
 
+/** Exposes the score's live measure-base list without a shared temporary container. */
+QQmlListProperty<MeasureBase> Score::measures()
+{
+    return QQmlListProperty<MeasureBase>(this, score()->measures(),
+                                         /** Returns the current number of measures and frames. */
+                                         [](QQmlListProperty<MeasureBase>* list) -> qsizetype {
+        return static_cast<engraving::MeasureBaseList*>(list->data)->size();
+    }, /** Returns the wrapped item at index, or null when the index is invalid. */
+                                         [](QQmlListProperty<MeasureBase>* list, qsizetype index) -> MeasureBase* {
+        const auto* measures = static_cast<engraving::MeasureBaseList*>(list->data);
+        if (index < 0 || index >= measures->size()) {
+            return nullptr;
+        }
+        engraving::MeasureBase* measure = measures->at(static_cast<size_t>(index));
+        return qobject_cast<MeasureBase*>(wrap(measure, Ownership::SCORE));
+    });
+}
+
 QQmlListProperty<EngravingItem> Score::brackets(int staffIdx)
 {
     return wrapContainerProperty<EngravingItem>(this, score()->brackets(static_cast<staff_idx_t>(staffIdx)));
