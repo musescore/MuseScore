@@ -22,7 +22,7 @@
 #pragma once
 
 #include <map>
-#include <stack>
+#include <optional>
 #include <unordered_map>
 
 #include "engraving/types/propertyvalue.h"
@@ -36,6 +36,7 @@
 
 namespace mu::engraving {
 class Articulation;
+class Breath;
 class Chord;
 class ChordRest;
 class Dynamic;
@@ -58,6 +59,8 @@ enum class Pid : short;
 } // namespace mu::engraving
 
 namespace mu::iex::mnxio {
+struct PendingStaffTypeEdits;
+
 class MnxImporter
 {
 public:
@@ -81,11 +84,15 @@ private:
     void importParts();
     void createStaff(engraving::Part* part, const mnx::Part& mnxPart, int staffNum);
 
+    // staff types
+    PendingStaffTypeEdits collectStaffTypeEdits();
+    void applyStaffTypeEdits(const PendingStaffTypeEdits& edits, engraving::Measure* measure, size_t measureIndex);
+
     // brackets and barlines
     void importBrackets();
 
     // global measures
-    void importGlobalMeasures();
+    void importGlobalMeasures(const PendingStaffTypeEdits& staffTypeEdits);
     void buildLyricLineVerseMap();
     void createKeySig(engraving::Measure* measure, int keyFifths); // positive = sharps; negative = flats
     void createTimeSig(engraving::Measure* measure, const mnx::TimeSignature& timeSig);
@@ -107,7 +114,7 @@ private:
                            const GraceNeighborsMap& graceNeighbors);
     engraving::ChordRest* importEvent(const mnx::sequence::Event& event, engraving::track_idx_t, engraving::Measure* measure,
                                       const mnx::FractionValue& startTick, const mnx::FractionValue& actualDuration,
-                                      const std::stack<engraving::Tuplet*>& activeTuplets, engraving::TremoloTwoChord* activeTremolo);
+                                      engraving::Tuplet* tuplet, engraving::TremoloTwoChord* activeTremolo);
     engraving::Tuplet* createTuplet(const mnx::sequence::Tuplet& mnxTuplet, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
                                     const mnx::FractionValue& startTick);
     void createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremolo, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
@@ -139,8 +146,12 @@ private:
                         engraving::Measure* measure = nullptr);
     void importBowDirection(const mnx::sequence::BowDirection& bowDirection, engraving::ChordRest* cr);
     void importAccent(const mnx::sequence::Accent& accent, engraving::ChordRest* cr);
+    engraving::Breath* createBreath(engraving::ChordRest* cr, const engraving::Fraction& eventEndTick, engraving::Measure* measure,
+                                    engraving::SymId symId);
     void importBreath(const mnx::sequence::BreathMark& breath, engraving::ChordRest* cr, const engraving::Fraction& eventEndTick,
                       engraving::Measure* measure = nullptr);
+    void importCaesura(const mnx::sequence::Caesura& caesura, engraving::ChordRest* cr, const engraving::Fraction& eventEndTick,
+                       engraving::Measure* measure = nullptr);
     void importSoftAccent(const mnx::sequence::SoftAccent& softAccent, engraving::ChordRest* cr);
     void importSpiccato(const mnx::sequence::Spiccato& spiccato, engraving::ChordRest* cr);
     void importStaccatissimo(const mnx::sequence::Staccatissimo& staccatissimo, engraving::ChordRest* cr);
@@ -167,7 +178,7 @@ private:
     engraving::staff_idx_t resolveDynamicStaff(const mnx::Part& mnxPart, const mnx::part::DynamicGroupBase& mnxDynamic);
     std::optional<engraving::track_idx_t> resolveVoiceTrack(const mnx::part::Measure& mnxMeasure, engraving::staff_idx_t staffIdx,
                                                             const std::string& mnxVoiceId);
-    void applyDynamicOrient(engraving::EngravingItem* item, const mnx::Part& part, mnx::MultiStaffOrientation orient);
+    void applyDynamicPlacement(engraving::EngravingItem* item, const mnx::Part& part, mnx::MultiStaffPlacement placement);
     void createHairpin(const mnx::part::DynamicGradual& mnxHairpin, engraving::Segment* segment, const mnx::Part& mnxPart,
                        engraving::track_idx_t curTrackIdx, bool useVoiceAssignment);
 
