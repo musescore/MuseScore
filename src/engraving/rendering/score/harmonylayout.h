@@ -37,6 +37,7 @@ class HarmonyLayout
 {
 public:
     static void layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutCapoLabel(Harmony* firstHarmony, const LayoutContext& ctx);
 
 private:
 
