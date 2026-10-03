@@ -1695,6 +1695,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        ADD_GLISSANDO_COMMAND,
+        TranslatableString("action", "&Glissando"),
+        TranslatableString("action", "Insert glissando"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         ADD_IMAGE_COMMAND,
         TranslatableString("action", "Image"),
         TranslatableString("action", "Add image"),
