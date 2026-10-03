@@ -163,6 +163,9 @@ qt_add_qml_module(notationscene_qml
         styledialog/voltaspagemodel.h
         timelineview.cpp
         timelineview.h
+        transposedialogmodel.h
+        transposedialogmodel.cpp
+
 
     QML_FILES
         AbstractElementPopup.qml
@@ -247,6 +250,7 @@ qt_add_qml_module(notationscene_qml
         UndoRedoToolBar.qml
         ViewModeControl.qml
         ZoomControl.qml
+        TransposeDialog.qml
 
     RESOURCES
         styledialog/accidentalImages/followOffset-OFF.png
