@@ -118,6 +118,7 @@ public:
         int copyCount = 1;
         int trimMarginPixelSize = -1;
         int deviceDpi = -1;
+        bool applyWatermark = true;
 
         std::function<void(muse::draw::Painter* painter, const Page* page, const RectF& pageRect)> onPaintPageSheet;
         std::function<void()> onNewPage;

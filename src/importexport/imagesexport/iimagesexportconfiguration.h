@@ -66,6 +66,9 @@ public:
 
     virtual int trimMarginPixelSize() const = 0;
     virtual void setTrimMarginPixelSize(std::optional<int> pixelSize) = 0;
+
+    virtual bool exportApplyWatermark() const = 0;
+    virtual void setExportApplyWatermark(bool apply) = 0;
 };
 }
 
