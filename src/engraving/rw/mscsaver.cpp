@@ -37,6 +37,7 @@
 #include "dom/imageStore.h"
 #include "dom/mscore.h"
 #include "dom/page.h"
+#include "dom/part.h"
 
 #include "engraving/automation/internal/automationrw.h"
 
@@ -75,6 +76,8 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     if (ctx) {
         masterWriteOutData.ctx = *ctx;
     }
+
+    UnhidePartsForWrite unhideGuard(score);
 
     // Write MasterScore
     {
@@ -150,6 +153,8 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         }
     }
 
+    unhideGuard.rollback();
+
     // Write ChordList
     {
         ChordList* chordList = score->chordList();
@@ -218,6 +223,8 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
 
     // Write excerpt as main score
     {
+        UnhidePartsForWrite unhideGuard(partScore);
+
         ByteArray excerptData;
         auto excerptBuf = Buffer::opened(IODevice::WriteOnly, &excerptData);
 
@@ -282,4 +289,72 @@ std::shared_ptr<muse::draw::Pixmap> MscSaver::createThumbnail(Score* score)
         score->doLayout();
     }
     return pixmap;
+}
+
+UnhidePartsForWrite::UnhidePartsForWrite(Score* score)
+    : m_score(nullptr)
+{
+    TRACEFUNC;
+
+    std::vector<Score*> scores = { score };
+    if (score->isMaster()) {
+        for (const Excerpt* excerpt : score->masterScore()->excerpts()) {
+            if (Score* excerptScore = excerpt->excerptScore()) {
+                scores.push_back(excerptScore);
+            }
+        }
+    }
+
+    std::vector<std::pair<Score*, std::vector<Part*> > > toUnhide;
+    for (Score* s : scores) {
+        if (!s->style().styleB(Sid::createMultiMeasureRests)) {
+            continue;
+        }
+
+        std::vector<Part*> hiddenParts;
+        for (Part* part : s->parts()) {
+            if (!part->show()) {
+                hiddenParts.push_back(part);
+            }
+        }
+
+        if (!hiddenParts.empty()) {
+            toUnhide.emplace_back(s, std::move(hiddenParts));
+        }
+    }
+
+    if (toUnhide.empty()) {
+        return;
+    }
+
+    /* The undo stack and transaction manager are shared between the master score and its excerpts.
+     * So all scores must be handled within a single transaction: */
+    score->startCmd(TranslatableString::untranslatable("Unhide instruments for save"));
+
+    for (const auto& [s, hiddenParts] : toUnhide) {
+        for (Part* part : hiddenParts) {
+            part->undoChangeProperty(Pid::VISIBLE, true);
+        }
+        s->doLayout();
+        for (Part* part : hiddenParts) {
+            part->setShow(false);
+        }
+    }
+
+    m_score = score;
+}
+
+UnhidePartsForWrite::~UnhidePartsForWrite()
+{
+    rollback();
+}
+
+void UnhidePartsForWrite::rollback()
+{
+    TRACEFUNC;
+
+    if (m_score) {
+        m_score->endCmd(/*rollback*/ true, /*layoutAllParts*/ true);
+        m_score = nullptr;
+    }
 }
