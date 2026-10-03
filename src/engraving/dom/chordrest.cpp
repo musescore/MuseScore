@@ -683,7 +683,10 @@ void ChordRest::undoChangeProperty(Pid id, const PropertyValue& newValue, Proper
 {
     if (id == Pid::BEAM_MODE) {
         if (isChord() && m_durationType.hooks() == 0) {
-            return;
+            const StaffType* tab = staffType();
+            if (!tab || !tab->isTabStaff() || !tab->genDurations()) {
+                return;
+            }
         }
         BeamMode newBeamMode = newValue.value<BeamMode>();
         if ((newBeamMode == BeamMode::BEGIN16 && m_durationType.hooks() < 2)
