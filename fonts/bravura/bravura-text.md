@@ -1,13 +1,13 @@
 # An introduction to using Bravura Text
 
-*Version 1.1, 30 October 2015*
+*Version 1.2, 6 August 2026*
 
 Bravura Text is a [SMuFL-compliant] [1] font containing musical symbols intended for use in text-based applications such as word processors, text editors, desktop publishers, and it can also be used on the web.
 
 Bravura Text is licensed under the [SIL Open Font License] [2], which means it is free to use, redistribute, and modify, but please do respect the conditions set out in the license.
 
 ## Glyph repertoire
-Bravura Text is a reference implementation for SMuFL, the Standard Music Font Layout, and as such contains all of the symbols defined in the SMuFL specification. [Download the SMuFL specification] [3] for a complete list of the symbols in Bravura Text, including a description and code point.
+Bravura Text is a reference implementation for SMuFL, the Standard Music Font Layout, and as such contains all of the symbols defined in the SMuFL specification. [Refer to the SMuFL specification] [3] for a complete list of the symbols in Bravura Text, including a description and code point.
 
 SMuFL uses the Private Use Area of Unicode's Basic Multilingual Plane (U+E000 through U+FFFF) to encode all of the included symbols. This means that the symbols cannot be typed by using the alphanumeric keys on your computer's keyboard on their own.
 
@@ -37,24 +37,24 @@ The grid that occupies the main part of the Character Map window now displays al
 #### Other methods
 You may wish to experiment with third-party utilities that can assist with locating and inserting Unicode characters. No recommendation or warranty is implied by listing these free utilities, which you may try at your own risk:
 
-* [CatchChar] [5] allows you to add commonly-used Unicode characters to a menu that can be triggered from within any application via a keyboard shortcut.
-* [BabelMap] [6] is an advanced alternative to Windows's built-in Character Map application.
+* [BabelMap] [5] is an advanced alternative to Windows's built-in Character Map application.
 
-Other commercial (non-free) utilities are also available, including [PopChar] [7].
+Other commercial (non-free) utilities are also available, including [PopChar] [6].
 
 ### OS X
-For Mac computers running OS X, the simplest method to insert arbitrary Unicode characters is using the provided Unicode Hex Input input method. To enable it:
+For Mac computers, the simplest method to insert arbitrary Unicode characters is using the provided Unicode Hex Input input method. To enable it:
 
-* In System Preferences, choose **Keyboard**.
-* On the **Keyboard** tab, switch on **Show Keyboard & Character Viewers in menu bar**. When switched on, you will see a national flag corresponding to your computer keyboard's normal language and/or layout appear in the menu bar to the left of the Spotlight icon.
-* On the **Input Sources** tab, click **+**, and in the sheet that appears, select **Others** in the left-hand list, then select **Unicode Hex Input** in the right-hand list, then click **Add** to close the sheet.
-* Ensure **Show Input menu in menu bar** is switched on, then close System Preferences.
+* In System Settings, choose **Keyboard**.
+* On the **Keyboard** tab, under **Text Input**, click the **Edit** button next to **Input Sources**.
+* In the dialog that appears, switch on **Show Input menu in menu bar**. When switched on, you will see a national flag corresponding to your computer keyboard's normal language and/or layout appear in the menu bar to the left of the Spotlight icon.
+* In the left-hand sidebar, click **+**, and in the sheet that appears, select **Others** in the left-hand list, then select **Unicode Hex Input** in the right-hand list, then click **Add** to close the sheet.
+* Ensure **Show Input menu in menu bar** is switched on, then close System Settings.
 
-The Unicode Hex Input input method works in the majority of OS X applications. To try it out, for example, open a new text document in TextEdit. Bravura Text does not appear by default in the font menu in TextEdit's toolbar, because it is not an English-language font, so to choose Bravura Text you must show the Fonts panel by choosing `Format` ▸ `Font` ▸ `Show Fonts` or typing `⌘T`. In the Fonts panel, choose **All fonts** under **Collection**, then choose **Bravura Text** under **Family**, then close the Fonts panel (type `⌘T` again).
+The Unicode Hex Input input method works in the majority of macOS applications. To try it out, for example, open a new text document in TextEdit. Bravura Text does not appear by default in the font menu in TextEdit's toolbar, because it is not an English-language font, so to choose Bravura Text you must show the Fonts panel by choosing `Format` ▸ `Font` ▸ `Show Fonts` or typing `⌘T`. In the Fonts panel, choose **All fonts** under **Collection**, then choose **Bravura Text** under **Family**, then close the Fonts panel (type `⌘T` again).
 
 Bravura Text is now the chosen font (and will now appear in the font menu in TextEdit's toolbar for this document). To type a G (treble) clef, which has the code point U+E050, first choose the **Unicode Hex Input** input method from the input menu in the menu bar. Now hold down `Alt` and type `E050` (do not type the "U+" prefix), then release `Alt`.
 
-If you want to switch between your normal language input method and the Unicode Hex Input method quickly, you can assign a system keyboard shortcut in the **Keyboard** pane of System Preferences. Choose the **Shortcuts** tab, then in the left-hand list choose **Input Sources**. Switch on the checkbox for either or both of **Select the previous input source** and **Select the next input source**, and assign a keyboard shortcut. The default shortcut suggested by OS X is used for Spotlight by default, so you may wish to assign another shortcut, e.g. `^Space` (`^` is the symbol that corresponds to the `Ctrl` key).
+If you want to switch between your normal language input method and the Unicode Hex Input method quickly, you can assign a system keyboard shortcut in the **Keyboard** pane of System Settings. Choose the **Shortcuts** tab, then in the left-hand list choose **Input Sources**. Switch on the checkbox for either or both of **Select the previous input source** and **Select the next input source**, and assign a keyboard shortcut. The default shortcut suggested by OS X is used for Spotlight by default, so you may wish to assign another shortcut, e.g. `^Space` (`^` is the symbol that corresponds to the `Ctrl` key).
 
 ## Usage notes for Bravura Text
 
@@ -139,15 +139,14 @@ Special code points are provided to shift time signature digits to the correct v
 To enter the time signature 4/4, you would first enter U+E09E (position as numerator), followed immediately by U+E084 (time signature 4), then U+E09F (position as denominator), followed by U+E084 again. Finally, advance the input position by inputting one or more spaces.
 
 ### Further information
-Detailed technical support is not available for the use of Bravura Text, but if you encounter any problems using this font, please use the [**smufl-discuss** mailing list] [8] to contact the SMuFL community about your problem.
+Detailed technical support is not available for the use of Bravura Text, but if you encounter any problems using this font, please raise an issue in the [Bravura GitHub repository] [7] to contact the SMuFL community about your problem.
 
 
 
-[1]: http://www.smufl.org/ "SMuFL"
-[2]: http://scripts.sil.org/	"SIL Open Font License"
-[3]: http://www.smufl.org/files/smufl-0.9.pdf "SMuFL 0.9"
-[4]: http://scripts.sil.org/cms/scripts/page.php?item_id=inputtoollinks "SIL Unicode input resources"
-[5]: http://helpingthings.com/index.php/insert-unicode-characters "CatchChar"
-[6]: http://www.babelstone.co.uk/Software/BabelMap.html "BabelMap"
-[7]: http://www.ergonis.com/products/popcharwin/
-[8]: http://www.smufl.org/discuss "SMuFL mailing lists"
+[1]: https://w3c-cg.github.io/smufl/latest/ "SMuFL"
+[2]: https://scripts.sil.org/	"SIL Open Font License"
+[3]: https://www.w3.org/2021/03/smufl14/ "SMuFL 1.4"
+[4]: https://scripts.sil.org/cms/scripts/page.php?item_id=inputtoollinks "SIL Unicode input resources"
+[5]: https://www.babelstone.co.uk/Software/BabelMap.html "BabelMap"
+[6]: https://ergonis.com/en/popchar/
+[7]: https://github.com/steinbergmedia/bravura/issues "Bravura GitHub repository"
