@@ -936,14 +936,20 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
         ldata->symId = SymId::noSym;
     }
 
+    if (item->clefType() == ClefType::TAB_STRING_NAMES) {
+        // no per-staff string data outside a real score context: show the plain TAB glyph
+        ldata->symId = SymId::sixStringTabClef;
+    }
+
     switch (item->clefType()) {
     case ClefType::C_19C:                                    // 19th C clef is like a G clef
         yoff = lineDist * 1.5;
         break;
-    case ClefType::TAB:         // TAB clef
-    case ClefType::TAB4:        // TAB clef 4 strings
-    case ClefType::TAB_SERIF:   // TAB clef alternate style
-    case ClefType::TAB4_SERIF:  // TAB clef alternate style
+    case ClefType::TAB:               // TAB clef
+    case ClefType::TAB4:              // TAB clef 4 strings
+    case ClefType::TAB_SERIF:         // TAB clef alternate style
+    case ClefType::TAB4_SERIF:        // TAB clef alternate style
+    case ClefType::TAB_STRING_NAMES:  // TAB clef showing the open string names
         yoff = lineDist * (lines - 1) * 0.5;
         break;
     case ClefType::PERC:        // percussion clefs
