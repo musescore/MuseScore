@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/box.h"
 #include "engraving/dom/measure.h" // IWYU pragma: keep
 #include "engraving/dom/page.h"
 #include "engraving/editing/editpagelocks.h"
@@ -264,6 +265,63 @@ TEST_F(Engraving_PageLocksTests, lockSystemAtStartOfPageLock)
     EXPECT_TRUE(systemEnd->isEndOfSystemLock());
     EXPECT_TRUE(pageStart->isStartOfPageLock());
     EXPECT_EQ(pageStart->pageLock()->endMB(), pageEnd);
+
+    delete score;
+}
+
+// Create a new page with a range starting/ending on frames (boxes)...
+TEST_F(Engraving_PageLocksTests, pageLockFrameRange)
+{
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-frames.mscx");
+    EXPECT_TRUE(score);
+
+    HBox* startBox = nullptr;
+    TBox* endBox = nullptr;
+
+    //! [GIVEN] A range starting at the second HBox (horizontal frame) in the given score, and
+    //! ending at the first (non title) TBox...
+    int boxesFound = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (mb->isHBox() && !startBox) {
+            boxesFound++;
+            if (boxesFound > 1) {
+                startBox = toHBox(mb);
+            }
+        }
+        if (mb->isTBox() && !endBox) {
+            TBox* tBox = toTBox(mb);
+            if (!tBox->isTitleFrame()) {
+                endBox = tBox;
+            }
+            break;
+        }
+    }
+
+    IF_ASSERT_FAILED(startBox && endBox) {
+        delete score;
+        return;
+    }
+
+    score->select(startBox, SelectType::SINGLE);
+    score->select(endBox, SelectType::RANGE);
+
+    const Selection& sel = score->selection();
+    EXPECT_TRUE(sel.isRange());
+    EXPECT_TRUE(sel.startMeasureBase() && sel.startMeasureBase()->isHBox());
+    EXPECT_TRUE(sel.endMeasureBase() && sel.endMeasureBase()->isTBox());
+
+    //! [WHEN] Adding a page lock over the current selection...
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditPageLocks::applyLockToSelection(tx, score);
+    });
+
+    //! [THEN] The result matches our expectations...
+    EXPECT_TRUE(startBox->isStartOfPageLock());
+    EXPECT_TRUE(endBox->isEndOfPageLock());
+    const RangeLock* lock = score->pageLocks()->lockContaining(startBox);
+    ASSERT_TRUE(lock);
+    EXPECT_EQ(lock->startMB(), startBox);
+    EXPECT_EQ(lock->endMB(), endBox);
 
     delete score;
 }

@@ -321,7 +321,6 @@ bool Box::acceptDrop(EditData& data) const
     }
     ElementType t = data.dropElement->type();
     switch (t) {
-    case ElementType::LAYOUT_BREAK:
     case ElementType::TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::IMAGE:
@@ -344,14 +343,14 @@ bool Box::acceptDrop(EditData& data) const
     default:
         break;
     }
-    return false;
+    return MeasureBase::acceptDrop(data);
 }
 
 //---------------------------------------------------------
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Box::drop(Transaction&, EditData& data)
+EngravingItem* Box::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->flag(ElementFlag::ON_STAFF)) {
@@ -361,35 +360,6 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
         LOGD("<%s>", e->typeName());
     }
     switch (e->type()) {
-    case ElementType::LAYOUT_BREAK:
-    {
-        LayoutBreak* lb = toLayoutBreak(e);
-        if (pageBreak() || lineBreak()) {
-            if (
-                (lb->isPageBreak() && pageBreak())
-                || (lb->isLineBreak() && lineBreak())
-                || (lb->isSectionBreak() && sectionBreak())
-                ) {
-                //
-                // if break already set
-                //
-                delete lb;
-                break;
-            }
-            for (EngravingItem* elem : el()) {
-                if (elem->isLayoutBreak()) {
-                    score()->undoChangeElement(elem, e);
-                    break;
-                }
-            }
-            break;
-        }
-        lb->setTrack(0);
-        lb->setOwnershipParent(this);
-        score()->undoAddElement(lb);
-        return lb;
-    }
-
     case ElementType::STAFF_TEXT:
     {
         Text* text = Factory::createText(this, TextStyleType::FRAME);
@@ -429,9 +399,10 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
         score()->undoAddElement(e);
         return e;
     default:
-        return 0;
+        break;
     }
-    return 0;
+
+    return MeasureBase::drop(tx, data);
 }
 
 void Box::manageExclusionFromParts(bool exclude)

@@ -46,7 +46,14 @@ EmptyStavesVisibilitySettingsModel::EmptyStavesVisibilitySettingsModel(QObject* 
 bool EmptyStavesVisibilitySettingsModel::isEmpty() const
 {
     INotationSelectionPtr selection = this->selection();
-    return !selection || !selection->isRange();
+    if (!selection) {
+        return true;
+    }
+    if (selection->isRange()) {
+        return false;
+    }
+    const EngravingItem* element = selection->element();
+    return !element || !element->isBox();
 }
 
 bool EmptyStavesVisibilitySettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const

@@ -22,6 +22,8 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/box.h"
+#include "engraving/dom/measure.h" // IWYU pragma: keep
 #include "engraving/dom/system.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -210,6 +212,58 @@ TEST_F(Engraving_SystemLocksTests, toggleSystemLock)
     for (System* sys : score->systems()) {
         EXPECT_TRUE(sys->isLocked());
     }
+
+    delete score;
+}
+
+// Create a new system with a range starting/ending on frames (boxes)...
+TEST_F(Engraving_SystemLocksTests, systemLockFrameRange)
+{
+    MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-frames.mscx");
+    EXPECT_TRUE(score);
+
+    HBox* startBox = nullptr;
+
+    //! [GIVEN] A range starting at the second HBox (horizontal frame) in the given score, and
+    //! ending at the final HBox...
+    int boxesFound = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (mb->isHBox() && !startBox) {
+            boxesFound++;
+            if (boxesFound > 1) {
+                startBox = toHBox(mb);
+            }
+        }
+    }
+
+    MeasureBase* last = score->last();
+    HBox* endBox = last && last->isHBox() ? toHBox(last) : nullptr;
+
+    IF_ASSERT_FAILED(startBox && endBox) {
+        delete score;
+        return;
+    }
+
+    score->select(startBox, SelectType::SINGLE);
+    score->select(endBox, SelectType::RANGE);
+
+    const Selection& sel = score->selection();
+    EXPECT_TRUE(sel.isRange());
+    EXPECT_TRUE(sel.startMeasureBase() && sel.startMeasureBase()->isHBox());
+    EXPECT_TRUE(sel.endMeasureBase() && sel.endMeasureBase()->isHBox());
+
+    //! [WHEN] Adding a system lock over the current selection...
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::applyLockToSelection(tx, score);
+    });
+
+    //! [THEN] A system lock spans the selected frames...
+    EXPECT_TRUE(startBox->isStartOfSystemLock());
+    EXPECT_TRUE(endBox->isEndOfSystemLock());
+    const RangeLock* lock = score->systemLocks()->lockContaining(startBox);
+    ASSERT_TRUE(lock);
+    EXPECT_EQ(lock->startMB(), startBox);
+    EXPECT_EQ(lock->endMB(), endBox);
 
     delete score;
 }
