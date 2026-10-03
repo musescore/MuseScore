@@ -276,6 +276,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     }
 }
 
+/// Handles grip dragging, including updating a slur endpoint's note anchor.
 void SlurSegment::dragGrip(EditData& ed)
 {
     Grip g = ed.curGrip;
@@ -293,13 +294,13 @@ void SlurSegment::dragGrip(EditData& ed)
             EngravingItem* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
-                Fraction tick = note->chord()->tick();
-                if ((g == Grip::END && tick > slr->tick()) || (g == Grip::START && tick < slr->tick2())) {
+                Chord* chord = note->chord();
+                if ((g == Grip::END && slr->startCR()->isBefore(chord))
+                    || (g == Grip::START && chord->isBefore(slr->endCR()))) {
                     if (km != (ShiftModifier | ControlModifier)) {
-                        Chord* c = note->chord();
                         ed.view()->setDropTarget(note);
-                        if (c->part() == slr->part() && c != slr->endCR()) {
-                            changeAnchor(ed, c);
+                        if (chord->part() == slr->part() && chord != slr->endCR()) {
+                            changeAnchor(ed, chord);
                         }
                     }
                 }
