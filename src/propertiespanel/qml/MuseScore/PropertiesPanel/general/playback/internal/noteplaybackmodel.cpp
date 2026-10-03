@@ -39,6 +39,8 @@ void NotePlaybackModel::createProperties()
 {
     m_tuning = buildPropertyItem(mu::engraving::Pid::TUNING);
     m_velocity = buildPropertyItem(mu::engraving::Pid::USER_VELOCITY);
+    m_playbackStartOffset = buildPropertyItem(mu::engraving::Pid::PLAYBACK_START_OFFSET);
+    m_playbackDurationOffset = buildPropertyItem(mu::engraving::Pid::PLAYBACK_DURATION_OFFSET);
 }
 
 void NotePlaybackModel::requestElements()
@@ -53,6 +55,8 @@ void NotePlaybackModel::loadProperties()
         //! NOTE: display 64 instead of 0 in the Velocity field to avoid confusing the user
         return value.toInt() == 0 ? 64 : value;
     });
+    loadPropertyItem(m_playbackStartOffset);
+    loadPropertyItem(m_playbackDurationOffset);
 }
 
 PropertyItem* NotePlaybackModel::tuning() const
@@ -63,4 +67,14 @@ PropertyItem* NotePlaybackModel::tuning() const
 PropertyItem* NotePlaybackModel::velocity() const
 {
     return m_velocity;
+}
+
+PropertyItem* NotePlaybackModel::playbackStartOffset() const
+{
+    return m_playbackStartOffset;
+}
+
+PropertyItem* NotePlaybackModel::playbackDurationOffset() const
+{
+    return m_playbackDurationOffset;
 }

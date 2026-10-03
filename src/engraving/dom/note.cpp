@@ -738,6 +738,8 @@ Note::Note(const Note& n, bool link)
     m_harmonic          = n.m_harmonic;
     m_hasParens         = n.m_hasParens;
     m_hideGeneratedParens = n.m_hideGeneratedParens;
+    m_playbackStartOffset = n.m_playbackStartOffset;
+    m_playbackDurationOffset = n.m_playbackDurationOffset;
 
     if (n.m_accidental) {
         add(new Accidental(*(n.m_accidental)));
@@ -3134,6 +3136,10 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixed();
     case Pid::FIXED_LINE:
         return fixedLine();
+    case Pid::PLAYBACK_START_OFFSET:
+        return m_playbackStartOffset;
+    case Pid::PLAYBACK_DURATION_OFFSET:
+        return m_playbackDurationOffset;
     case Pid::HAS_PARENTHESES:
         return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
     case Pid::HIDE_GENERATED_PARENTHESES:
@@ -3242,6 +3248,12 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FIXED_LINE:
         setFixedLine(v.toInt());
         break;
+    case Pid::PLAYBACK_START_OFFSET:
+        setPlaybackStartOffset(v.toInt());
+        break;
+    case Pid::PLAYBACK_DURATION_OFFSET:
+        setPlaybackDurationOffset(v.toInt());
+        break;
     case Pid::HAS_PARENTHESES:
         if (v.value<ParenthesesMode>() != ParenthesesMode::BOTH && v.value<ParenthesesMode>() != ParenthesesMode::NONE) {
             ASSERT_X("Notes cannot set left & right parens individually");
@@ -3308,6 +3320,10 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         return 0;
     case Pid::TPC2:
         return getProperty(Pid::TPC1);
+    case Pid::PLAYBACK_START_OFFSET:
+        return 0;
+    case Pid::PLAYBACK_DURATION_OFFSET:
+        return 0;
     case Pid::PITCH:
     case Pid::TPC1:
         return PropertyValue();
