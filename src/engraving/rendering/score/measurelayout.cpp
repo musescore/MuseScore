@@ -2284,7 +2284,26 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         double relativeX = width * (relativeTick.toDouble() / refCRSeg->ticks().toDouble());
         double relativeWidth = width * (thisDuration.toDouble() / refSegDuration.toDouble());
 
-        segment.mutldata()->setPosX(refCRSeg->x() + relativeX);
+        double posX = refCRSeg->x() + relativeX;
+
+        if (segment.rtick().isZero()) {
+            bool hasStartingSignature = false;
+            for (const Segment* s = m->first(); s && s->rtick().isZero(); s = s->next()) {
+                if (s->enabled() && s->isType(SegmentType::HeaderClef | SegmentType::Clef
+                                            | SegmentType::KeySig | SegmentType::TimeSig
+                                            | SegmentType::StartRepeatBarLine)) {
+                    hasStartingSignature = true;
+                    break;
+                }
+            }
+
+            if (!hasStartingSignature) {
+                relativeWidth += posX;
+                posX = 0.0;
+            }
+        }
+
+        segment.mutldata()->setPosX(posX);
         segment.setWidth(relativeWidth);
 
         for (EngravingItem* item : segment.elist()) {
