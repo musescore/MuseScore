@@ -115,6 +115,10 @@ void NotationPlayback::init()
         }
     });
 
+    configuration()->pedalReleaseGapMsChanged().onReceive(this, [this](int) {
+        m_playbackModel.reload();
+    });
+
     score()->loopBoundaryTickChanged().onReceive(this, [this](LoopBoundaryType, unsigned) {
         updateLoopBoundaries();
     });
