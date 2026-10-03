@@ -39,6 +39,7 @@ class BraillePreferencesModel : public QObject, public muse::Contextable, public
     Q_PROPERTY(bool braillePanelEnabled READ braillePanelEnabled WRITE setBraillePanelEnabled NOTIFY braillePanelEnabledChanged)
     Q_PROPERTY(QString brailleTable READ brailleTable WRITE setBrailleTable NOTIFY brailleTableChanged)
     Q_PROPERTY(int intervalDirection READ intervalDirection WRITE setIntervalDirection NOTIFY intervalDirectionChanged)
+    Q_PROPERTY(bool signDoubling READ signDoubling WRITE setSignDoubling NOTIFY signDoublingChanged)
 
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
 
@@ -50,6 +51,7 @@ public:
     bool braillePanelEnabled() const;
     QString brailleTable() const;
     int intervalDirection() const;
+    bool signDoubling() const;
 
     Q_INVOKABLE QStringList brailleTables() const;
     Q_INVOKABLE QVariantList intervalDirections() const;
@@ -58,10 +60,12 @@ public slots:
     void setBraillePanelEnabled(bool value);
     void setBrailleTable(QString table);
     void setIntervalDirection(int direction);
+    void setSignDoubling(bool value);
 
 signals:
     void braillePanelEnabledChanged(bool value);
     void brailleTableChanged(QString value);
     void intervalDirectionChanged(int value);
+    void signDoublingChanged(bool value);
 };
 }
