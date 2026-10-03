@@ -1147,7 +1147,6 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
         int capoFret = staffProperties.capoFret;
 
-        part->setCapoFret(capoFret);
         m_capoParams.insert_or_assign(part->id().toUint64(), capoFret);
         auto tuning = staffProperties.tuning;
         bool usePresetTable = staffProperties.ignoreFlats;
@@ -1882,7 +1881,7 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     int harmonicFret = utils::harmonicOvertone(note, gpnote->harmonic().fret, gproHarmonicType);
     int string = harmonicNote->string();
     int harmonicPitch = harmonicNote->part()->instrument()->stringData()->getPitch(string,
-                                                                                   harmonicFret + harmonicNote->part()->capoFret(),
+                                                                                   harmonicFret + capoFret(harmonicNote->part()),
                                                                                    harmonicNote->staff());
 
     harmonicNote->setPitch(harmonicPitch);
@@ -2118,14 +2117,14 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         pitch = note->part()->instrument()->channel(0)->program();
     } else {
         if (stringDatas.empty()) {
-            pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
+            pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + capoFret(note->part()),
                                                                        nullptr) + note->part()->instrument()->transpose().chromatic;
         } else {
             if (const auto sd = stringDatas.find(note->part()->id().toUint64()); sd != stringDatas.end()) {
-                pitch = sd->second.getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
+                pitch = sd->second.getPitch(musescoreString, midiPitch.fret + capoFret(note->part()),
                                             nullptr) + note->part()->instrument()->transpose().chromatic;
             } else {
-                pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
+                pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + capoFret(note->part()),
                                                                            nullptr) + note->part()->instrument()->transpose().chromatic;
             }
         }
@@ -3057,6 +3056,12 @@ void GPConverter::addTuning()
             seg->add(tun);
         }
     }
+}
+
+int GPConverter::capoFret(const Part* part) const
+{
+    const auto it = m_capoParams.find(part->id().toUint64());
+    return it != m_capoParams.end() ? it->second : 0;
 }
 
 void GPConverter::addCapos()

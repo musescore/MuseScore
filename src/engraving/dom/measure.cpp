@@ -3588,7 +3588,7 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
         staffIdx = staff->idx();
     }
 
-    const StringData* stringData = staff->part()->instrument(tick())->stringData();
+    const StringData* stringData = staff->originPart(tick())->instrument(tick())->stringData();
     if (!stringData || stringData->frettedStrings() == 0) {
         return false;
     }

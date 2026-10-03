@@ -345,6 +345,7 @@ public:
     const StaffType* staffType() const;
     bool onTabStaff() const;
     Part* part() const;
+    Part* originPart() const; // Delegates to an origin part for items in shared parts
 
     virtual void add(EngravingItem*);
     virtual void remove(EngravingItem*);

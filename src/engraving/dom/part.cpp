@@ -58,7 +58,6 @@ const Fraction Part::MAIN_INSTRUMENT_TICK = Fraction(-1, 1);
 Part::Part(Score* s, ElementType type)
     : EngravingObject(type, s)
 {
-    m_color   = DEFAULT_COLOR;
     m_show    = true;
     m_soloist = false;
     m_instruments.setInstrument(new Instrument, -1);     // default instrument
@@ -152,6 +151,16 @@ const Part* Part::masterPart() const
 Part* Part::masterPart()
 {
     return const_cast<Part*>(const_cast<const Part*>(this)->masterPart());
+}
+
+const Part* Part::originPart(track_idx_t, const Fraction&) const
+{
+    return this;
+}
+
+Part* Part::originPart(track_idx_t track, const Fraction& tick)
+{
+    return const_cast<Part*>(const_cast<const Part*>(this)->originPart(track, tick));
 }
 
 size_t Part::nstaves() const
@@ -281,22 +290,6 @@ void Part::setMidiProgram(int program, int bank)
 int Part::midiProgram() const
 {
     return instrument()->playbackChannel(0, masterScore())->program();
-}
-
-//---------------------------------------------------------
-//   capoFret
-//---------------------------------------------------------
-int Part::capoFret() const
-{
-    return m_capoFret;
-}
-
-//---------------------------------------------------------
-//   setCapoFret
-//---------------------------------------------------------
-void Part::setCapoFret(int capoFret)
-{
-    m_capoFret = capoFret;
 }
 
 //---------------------------------------------------------
@@ -485,6 +478,7 @@ const StringData* Part::stringData(const Fraction& tick, staff_idx_t staffIdx) c
 
 void Part::addStringTunings(StringTunings* stringTunings)
 {
+    DO_ASSERT(!isSharedPart());
     m_stringTunings[stringTunings->segment()->tick().ticks()] = stringTunings;
 }
 
@@ -496,6 +490,12 @@ void Part::removeStringTunings(StringTunings* stringTunings)
     if (it != m_stringTunings.end() && it->second == stringTunings) {
         m_stringTunings.erase(it);
     }
+}
+
+StringTunings* Part::nextStringTuning(const Fraction& tick) const
+{
+    auto i = m_stringTunings.upper_bound(tick.ticks());
+    return (i == m_stringTunings.end()) ? nullptr : i->second;
 }
 
 //---------------------------------------------------------
@@ -739,7 +739,7 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         m_instruments.erase(si, ei);
 
         // remove harp pedal diagrams between tickpo >= tick
-        harpDiagrams.erase(harpDiagrams.lower_bound(tick.ticks()), harpDiagrams.lower_bound((tick - len).ticks()));
+        m_harpDiagrams.erase(m_harpDiagrams.lower_bound(tick.ticks()), m_harpDiagrams.lower_bound((tick - len).ticks()));
     }
 
     InstrumentList il;
@@ -753,13 +753,13 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
     m_instruments.insert(il.begin(), il.end());
 
     std::map<int, HarpPedalDiagram*> hd2;
-    for (auto h = harpDiagrams.lower_bound(tick.ticks()); h != harpDiagrams.end();) {
+    for (auto h = m_harpDiagrams.lower_bound(tick.ticks()); h != m_harpDiagrams.end();) {
         HarpPedalDiagram* diagram = h->second;
         int t = h->first;
-        harpDiagrams.erase(h++);
+        m_harpDiagrams.erase(h++);
         hd2[t + len.ticks()] = diagram;
     }
-    harpDiagrams.insert(hd2.begin(), hd2.end());
+    m_harpDiagrams.insert(hd2.begin(), hd2.end());
 }
 
 //---------------------------------------------------------
@@ -768,7 +768,8 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
 
 void Part::addHarpDiagram(HarpPedalDiagram* harpDiagram)
 {
-    harpDiagrams[harpDiagram->segment()->tick().ticks()] = harpDiagram;
+    DO_ASSERT(!isSharedPart());
+    m_harpDiagrams[harpDiagram->segment()->tick().ticks()] = harpDiagram;
 }
 
 //---------------------------------------------------------
@@ -778,10 +779,10 @@ void Part::addHarpDiagram(HarpPedalDiagram* harpDiagram)
 void Part::removeHarpDiagram(HarpPedalDiagram* harpDiagram)
 {
     int tick = harpDiagram->segment()->tick().ticks();
-    auto it = harpDiagrams.find(tick);
+    auto it = m_harpDiagrams.find(tick);
 
-    if (it != harpDiagrams.end() && it->second == harpDiagram) {
-        harpDiagrams.erase(it);
+    if (it != m_harpDiagrams.end() && it->second == harpDiagram) {
+        m_harpDiagrams.erase(it);
     }
 }
 
@@ -791,7 +792,7 @@ void Part::removeHarpDiagram(HarpPedalDiagram* harpDiagram)
 
 void Part::clearHarpDiagrams()
 {
-    harpDiagrams.clear();
+    m_harpDiagrams.clear();
 }
 
 //---------------------------------------------------------
@@ -800,11 +801,11 @@ void Part::clearHarpDiagrams()
 
 HarpPedalDiagram* Part::currentHarpDiagram(const Fraction& tick) const
 {
-    auto i = harpDiagrams.upper_bound(tick.ticks());
-    if (i != harpDiagrams.begin()) {
+    auto i = m_harpDiagrams.upper_bound(tick.ticks());
+    if (i != m_harpDiagrams.begin()) {
         --i;
     }
-    if (i == harpDiagrams.end()) {
+    if (i == m_harpDiagrams.end()) {
         return nullptr;
     } else if (tick < Fraction::fromTicks(i->first)) {
         return nullptr;
@@ -818,8 +819,8 @@ HarpPedalDiagram* Part::currentHarpDiagram(const Fraction& tick) const
 
 HarpPedalDiagram* Part::nextHarpDiagram(const Fraction& tick) const
 {
-    auto i = harpDiagrams.upper_bound(tick.ticks());
-    return (i == harpDiagrams.end()) ? nullptr : i->second;
+    auto i = m_harpDiagrams.upper_bound(tick.ticks());
+    return (i == m_harpDiagrams.end()) ? nullptr : i->second;
 }
 
 //---------------------------------------------------------
@@ -828,8 +829,8 @@ HarpPedalDiagram* Part::nextHarpDiagram(const Fraction& tick) const
 
 HarpPedalDiagram* Part::prevHarpDiagram(const Fraction& tick) const
 {
-    auto i = harpDiagrams.lower_bound(tick.ticks());
-    if (i == harpDiagrams.begin()) {
+    auto i = m_harpDiagrams.lower_bound(tick.ticks());
+    if (i == m_harpDiagrams.begin()) {
         return nullptr;
     }
     i--;
@@ -842,11 +843,11 @@ HarpPedalDiagram* Part::prevHarpDiagram(const Fraction& tick) const
 
 Fraction Part::currentHarpDiagramTick(const Fraction& tick) const
 {
-    if (harpDiagrams.empty()) {
+    if (m_harpDiagrams.empty()) {
         return Fraction(0, 1);
     }
-    auto i = harpDiagrams.upper_bound(tick.ticks());
-    if (i == harpDiagrams.begin()) {
+    auto i = m_harpDiagrams.upper_bound(tick.ticks());
+    if (i == m_harpDiagrams.begin()) {
         return Fraction(0, 1);
     }
     --i;

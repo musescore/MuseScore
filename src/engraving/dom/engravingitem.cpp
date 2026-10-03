@@ -687,6 +687,12 @@ Part* EngravingItem::part() const
     return s ? s->part() : 0;
 }
 
+Part* EngravingItem::originPart() const
+{
+    Part* p = part();
+    return p ? p->originPart(track(), tick()) : nullptr;
+}
+
 void EngravingItem::setColor(const Color& c)
 {
     m_color = c;
@@ -1543,7 +1549,7 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
     } else {
         VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
         if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
-            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
+            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && originPart()->instrument()->isVocalInstrument()) {
                 newPlacement = PlacementV::ABOVE;
             } else {
                 newPlacement = PlacementV::BELOW;
