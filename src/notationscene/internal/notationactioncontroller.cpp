@@ -1510,6 +1510,7 @@ muse::Ret NotationActionController::putTuplet(const muse::rcommand::Params& para
     options.numberType = Contract<TupletNumberType>::get(params);
     options.bracketType = Contract<TupletBracketType>::get(params);
     options.autoBaseLen = params.at("auto-baselen", Val(false)).toBool();
+    options.selectedDurationAs = Contract<TupletSelectedDuration>::get(params);
 
     putTuplet(options);
     return muse::make_ok();
