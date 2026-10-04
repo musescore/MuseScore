@@ -24,6 +24,7 @@
 
 #include "iengravingconfiguration.h" // IWYU pragma: keep
 
+#include "dummyparent.h"
 #include "mscore.h"
 #include "note.h"
 #include "score.h"
@@ -32,8 +33,8 @@
 #include "system.h"
 
 namespace mu::engraving {
-HammerOnPullOff::HammerOnPullOff(DummyParentOr<EngravingItem> parent)
-    : Slur(parent, ElementType::HAMMER_ON_PULL_OFF)
+HammerOnPullOff::HammerOnPullOff(DummyParent* parent)
+    : Slur(ElementType::HAMMER_ON_PULL_OFF, parent)
 {
 }
 

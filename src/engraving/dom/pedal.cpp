@@ -24,6 +24,7 @@
 
 #include "chord.h"
 #include "chordrest.h"
+#include "dummyparent.h"
 #include "measure.h"
 #include "note.h"
 #include "score.h"
@@ -107,7 +108,7 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 //   Pedal
 //---------------------------------------------------------
 
-Pedal::Pedal(DummyParentOr<EngravingItem> parent)
+Pedal::Pedal(DummyParent* parent)
     : TextLineBase(ElementType::PEDAL, parent)
 {
     initElementStyle(&pedalStyle);

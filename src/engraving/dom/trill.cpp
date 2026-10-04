@@ -27,6 +27,7 @@
 #include "../editing/addremoveelement.h"
 #include "types/typesconv.h"
 
+#include "dummyparent.h"
 #include "iengravingfont.h"
 
 #include "accidental.h"
@@ -158,7 +159,7 @@ EngravingObject* TrillSegment::propertyDelegate(Pid pid) const
 //   Trill
 //---------------------------------------------------------
 
-Trill::Trill(DummyParentOr<EngravingItem> parent)
+Trill::Trill(DummyParent* parent)
     : SLine(ElementType::TRILL, parent)
 {
     m_trillType     = TrillType::TRILL_LINE;

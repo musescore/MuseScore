@@ -171,21 +171,21 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     EngravingItem* parentItem = parent.as<EngravingItem>();
 
     switch (type) {
-    case ElementType::VOLTA:             return new Volta(parent);
-    case ElementType::OTTAVA:            return new Ottava(parent);
+    case ElementType::VOLTA:             return new Volta(dummy);
+    case ElementType::OTTAVA:            return new Ottava(dummy);
     case ElementType::TEXTLINE:          return new TextLine(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::NOTELINE:          return new NoteLine(parentOfTypeOrDummy<Note>(parentItem, dummy));
-    case ElementType::TRILL:             return new Trill(parent);
-    case ElementType::LET_RING:          return new LetRing(parent);
-    case ElementType::GRADUAL_TEMPO_CHANGE: return new GradualTempoChange(parent);
-    case ElementType::VIBRATO:           return new Vibrato(parent);
-    case ElementType::PALM_MUTE:         return new PalmMute(parent);
-    case ElementType::WHAMMY_BAR:        return new WhammyBar(parent);
-    case ElementType::RASGUEADO:         return new Rasgueado(parent);
-    case ElementType::HARMONIC_MARK:     return new HarmonicMark(parent);
-    case ElementType::PICK_SCRAPE:       return new PickScrape(parent);
-    case ElementType::PEDAL:             return new Pedal(parent);
-    case ElementType::HAIRPIN:           return new Hairpin(parent);
+    case ElementType::TRILL:             return new Trill(dummy);
+    case ElementType::LET_RING:          return new LetRing(dummy);
+    case ElementType::GRADUAL_TEMPO_CHANGE: return new GradualTempoChange(dummy);
+    case ElementType::VIBRATO:           return new Vibrato(dummy);
+    case ElementType::PALM_MUTE:         return new PalmMute(dummy);
+    case ElementType::WHAMMY_BAR:        return new WhammyBar(dummy);
+    case ElementType::RASGUEADO:         return new Rasgueado(dummy);
+    case ElementType::HARMONIC_MARK:     return new HarmonicMark(dummy);
+    case ElementType::PICK_SCRAPE:       return new PickScrape(dummy);
+    case ElementType::PEDAL:             return new Pedal(dummy);
+    case ElementType::HAIRPIN:           return new Hairpin(dummy);
     case ElementType::CLEF:              return new Clef(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::KEYSIG:            return new KeySig(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::TIMESIG:           return new TimeSig(parentOfTypeOrDummy<Segment>(parentItem, dummy));
@@ -250,8 +250,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::LYRICSLINE:        return new LyricsLine(parentOfTypeOrDummy<Lyrics>(parentItem, dummy));
     case ElementType::FIGURED_BASS:      return new FiguredBass(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::STEM:              return new Stem(parentOfTypeOrDummy<Chord>(parentItem, dummy));
-    case ElementType::SLUR:              return new Slur(parent);
-    case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(parent);
+    case ElementType::SLUR:              return new Slur(dummy);
+    case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(dummy);
     case ElementType::TIE:               return new Tie(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::TUPLET:            return new Tuplet(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::FINGERING:         return new Fingering(parentOfTypeOrDummy<Note>(parentItem, dummy));
@@ -542,8 +542,8 @@ Segment* Factory::createSegment(DummyParentOr<Measure> parent, SegmentType type,
     return s;
 }
 
-CREATE_ITEM_IMPL(Slur, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(Slur, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Slur, DummyParent*)
+MAKE_ITEM_IMPL(Slur, DummyParent*)
 
 CREATE_ITEM_IMPL(Spacer, DummyParentOr<Measure>)
 MAKE_ITEM_IMPL(Spacer, DummyParentOr<Measure>)
@@ -667,11 +667,11 @@ MAKE_ITEM_IMPL(TremoloBar, DummyParentOr<Segment>)
 CREATE_ITEM_IMPL(Tuplet, DummyParentOr<Measure>)
 COPY_ITEM_IMPL(Tuplet)
 
-CREATE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Hairpin, DummyParent*)
+MAKE_ITEM_IMPL(Hairpin, DummyParent*)
 
-CREATE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(HammerOnPullOff, DummyParent*)
+MAKE_ITEM_IMPL(HammerOnPullOff, DummyParent*)
 
 CREATE_ITEM_IMPL(Glissando, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(Glissando, DummyParentOr<Note>)
@@ -681,7 +681,7 @@ MAKE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>)
 
 CREATE_ITEM_IMPL(Jump, DummyParentOr<Measure>)
 
-CREATE_ITEM_IMPL(Trill, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Trill, DummyParent*)
 
 TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFeelType type, bool isAccessibleEnabled)
 {
@@ -691,14 +691,14 @@ TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFe
     return t;
 }
 
-CREATE_ITEM_IMPL(Vibrato, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Vibrato, DummyParent*)
 
 CREATE_ITEM_IMPL(TextLine, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(TextLine, DummyParentOr<Note>);
 
-CREATE_ITEM_IMPL(Ottava, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Ottava, DummyParent*)
 
-CREATE_ITEM_IMPL(LetRing, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(LetRing, DummyParent*)
 
 CREATE_ITEM_IMPL(Marker, DummyParentOr<Measure>)
 
@@ -712,22 +712,22 @@ Marker* Factory::createMarker(DummyParentOr<Measure> parent, TextStyleType tid, 
 
 MAKE_ITEM_IMPL(Marker, DummyParentOr<Measure>)
 
-CREATE_ITEM_IMPL(GradualTempoChange, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(GradualTempoChange, DummyParent*)
 
-CREATE_ITEM_IMPL(PalmMute, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(PalmMute, DummyParent*)
 
-CREATE_ITEM_IMPL(WhammyBar, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(WhammyBar, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(WhammyBar, DummyParent*)
+MAKE_ITEM_IMPL(WhammyBar, DummyParent*)
 
-CREATE_ITEM_IMPL(Rasgueado, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Rasgueado, DummyParent*)
 
-CREATE_ITEM_IMPL(HarmonicMark, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(HarmonicMark, DummyParent*)
 
-CREATE_ITEM_IMPL(PickScrape, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(PickScrape, DummyParent*)
 
-CREATE_ITEM_IMPL(Volta, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Volta, DummyParent*)
 
-CREATE_ITEM_IMPL(Pedal, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Pedal, DummyParent*)
 
 CREATE_ITEM_IMPL(Dynamic, DummyParentOr<Segment>)
 

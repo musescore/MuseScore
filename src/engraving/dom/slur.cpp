@@ -30,6 +30,7 @@
 #include "arpeggio.h"
 #include "beam.h"
 #include "chord.h"
+#include "dummyparent.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "note.h"
@@ -380,7 +381,12 @@ Slur::Slur(const Slur& s)
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(DummyParentOr<EngravingItem> parent, ElementType type)
+Slur::Slur(DummyParent* parent)
+    : SlurTie(ElementType::SLUR, parent)
+{
+}
+
+Slur::Slur(const ElementType& type, EngravingObject* parent)
     : SlurTie(type, parent)
 {
 }

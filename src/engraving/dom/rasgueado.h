@@ -57,7 +57,7 @@ class Rasgueado final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::RASGUEADO)
 
 public:
-    Rasgueado(DummyParentOr<EngravingItem> parent);
+    Rasgueado(DummyParent* parent);
 
     Rasgueado* clone() const override { return new Rasgueado(*this); }
 

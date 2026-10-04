@@ -97,7 +97,7 @@ TranslatableString Tapping::subtypeUserName() const
 }
 
 TappingHalfSlur::TappingHalfSlur(DummyParentOr<Tapping> parent)
-    : Slur(parent, ElementType::TAPPING_HALF_SLUR)
+    : Slur(ElementType::TAPPING_HALF_SLUR, parent)
 {
 }
 

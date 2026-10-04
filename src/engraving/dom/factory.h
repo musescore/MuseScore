@@ -172,8 +172,8 @@ public:
     static Segment* createSegment(DummyParentOr<Measure> parent, bool isAccessibleEnabled = true);
     static Segment* createSegment(DummyParentOr<Measure> parent, SegmentType type, const Fraction& t, bool isAccessibleEnabled = true);
 
-    static Slur* createSlur(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Slur> makeSlur(DummyParentOr<EngravingItem> parent);
+    static Slur* createSlur(DummyParent* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Slur> makeSlur(DummyParent* parent);
 
     static Spacer* createSpacer(DummyParentOr<Measure> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Spacer> makeSpacer(DummyParentOr<Measure> parent);
@@ -251,11 +251,11 @@ public:
     static Tuplet* createTuplet(DummyParentOr<Measure> parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);
 
-    static Hairpin* createHairpin(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Hairpin> makeHairpin(DummyParentOr<EngravingItem> parent);
+    static Hairpin* createHairpin(DummyParent* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Hairpin> makeHairpin(DummyParent* parent);
 
-    static HammerOnPullOff* createHammerOnPullOff(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<HammerOnPullOff> makeHammerOnPullOff(DummyParentOr<EngravingItem> parent);
+    static HammerOnPullOff* createHammerOnPullOff(DummyParent* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<HammerOnPullOff> makeHammerOnPullOff(DummyParent* parent);
 
     static Glissando* createGlissando(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Glissando> makeGlissando(DummyParentOr<Note> parent);
@@ -265,16 +265,16 @@ public:
 
     static Jump* createJump(DummyParentOr<Measure> parent, bool isAccessibleEnabled = true);
 
-    static Trill* createTrill(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Trill* createTrill(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static Vibrato* createVibrato(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Vibrato* createVibrato(DummyParent* parent, bool isAccessibleEnabled = true);
 
     static TextLine* createTextLine(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TextLine> makeTextLine(DummyParentOr<Note> parent);
 
-    static Ottava* createOttava(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Ottava* createOttava(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static LetRing* createLetRing(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static LetRing* createLetRing(DummyParent* parent, bool isAccessibleEnabled = true);
 
     static Marker* createMarker(DummyParentOr<Measure> parent, bool isAccessibleEnabled = true);
 
@@ -282,22 +282,22 @@ public:
 
     static std::shared_ptr<Marker> makeMarker(DummyParentOr<Measure> parent);
 
-    static GradualTempoChange* createGradualTempoChange(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static GradualTempoChange* createGradualTempoChange(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static PalmMute* createPalmMute(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static PalmMute* createPalmMute(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static WhammyBar* createWhammyBar(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<WhammyBar> makeWhammyBar(DummyParentOr<EngravingItem> parent);
+    static WhammyBar* createWhammyBar(DummyParent* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<WhammyBar> makeWhammyBar(DummyParent* parent);
 
-    static Rasgueado* createRasgueado(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Rasgueado* createRasgueado(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static HarmonicMark* createHarmonicMark(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static HarmonicMark* createHarmonicMark(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static PickScrape* createPickScrape(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static PickScrape* createPickScrape(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static Volta* createVolta(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Volta* createVolta(DummyParent* parent, bool isAccessibleEnabled = true);
 
-    static Pedal* createPedal(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Pedal* createPedal(DummyParent* parent, bool isAccessibleEnabled = true);
 
     static Dynamic* createDynamic(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
 

@@ -75,7 +75,7 @@ class Trill final : public SLine
     DECLARE_CLASSOF(ElementType::TRILL)
 
 public:
-    Trill(DummyParentOr<EngravingItem> parent);
+    Trill(DummyParent* parent);
     Trill(const Trill& t);
 
     Trill* clone() const override { return new Trill(*this); }
