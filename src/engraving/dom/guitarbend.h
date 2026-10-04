@@ -64,6 +64,7 @@ public:
     ~GuitarBend() override;
 
     GuitarBend* clone() const override { return new GuitarBend(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     LineSegment* createLineSegment() override;
 

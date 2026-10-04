@@ -92,6 +92,7 @@ public:
     Tie(const Tie& t);
 
     Tie* clone() const override { return new Tie(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Anchor anchor() const override { return Anchor::NOTE; }
 

@@ -46,6 +46,7 @@ public:
     ~Bracket();
 
     Bracket* clone() const override { return new Bracket(*this); }
+    void setOwnershipParent(DummyParentOr<System> parent) { EngravingItem::setOwnershipParent(parent); }
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 

@@ -73,6 +73,7 @@ public:
     Rest& operator=(const Rest&) = delete;
 
     Rest* clone() const override { return new Rest(*this, false); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
     EngravingItem* linkedClone() override { return new Rest(*this, true); }
     Measure* measure() const override { return ownershipParent() ? toMeasure(ownershipParent()->ownershipParent()) : 0; }
     double mag() const override;

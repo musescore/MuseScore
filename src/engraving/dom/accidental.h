@@ -237,6 +237,10 @@ class Accidental final : public EngravingItem
 public:
 
     Accidental* clone() const override { return new Accidental(*this); }
+    void setOwnershipParent(DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment> parent)
+    {
+        EngravingItem::setOwnershipParent(parent);
+    }
 
     Note* note() const;
 

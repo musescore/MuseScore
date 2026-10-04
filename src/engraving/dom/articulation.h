@@ -112,6 +112,7 @@ public:
     Articulation& operator=(const Articulation&) = delete;
 
     virtual Articulation* clone() const override { return new Articulation(*this); }
+    void setOwnershipParent(DummyParentOr<ChordRest, BarLine> parent) { EngravingItem::setOwnershipParent(parent); }
 
     virtual double mag() const override;
 

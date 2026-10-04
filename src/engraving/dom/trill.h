@@ -79,6 +79,7 @@ public:
     Trill(const Trill& t);
 
     Trill* clone() const override { return new Trill(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
     EngravingItem* linkedClone() override;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }

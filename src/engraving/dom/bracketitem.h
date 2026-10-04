@@ -41,6 +41,7 @@ class BracketItem final : public EngravingItem
 
 public:
     EngravingItem* clone() const override;
+    void setOwnershipParent(DummyParentOr<Staff> parent) { EngravingItem::setOwnershipParent(parent); }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

@@ -53,6 +53,7 @@ public:
     ~Lyrics();
 
     Lyrics* clone() const override { return new Lyrics(*this); }
+    void setOwnershipParent(DummyParentOr<ChordRest> parent) { EngravingItem::setOwnershipParent(parent); }
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;
 
@@ -137,6 +138,7 @@ public:
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
+    void setOwnershipParent(DummyParentOr<Lyrics> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
@@ -222,6 +224,7 @@ public:
     PartialLyricsLine(DummyParent* parent);
     PartialLyricsLine(const PartialLyricsLine&);
     PartialLyricsLine* clone() const override { return new PartialLyricsLine(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
     LineSegment* createLineSegment() override;
 
     Lyrics* lyrics() const override { return nullptr; }

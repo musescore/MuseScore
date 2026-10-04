@@ -39,6 +39,7 @@ public:
     GradualTempoChange(DummyParent* parent);
 
     GradualTempoChange* clone() const override;
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

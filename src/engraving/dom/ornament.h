@@ -34,6 +34,7 @@ class Ornament final : public Articulation
 public:
     Ornament(DummyParentOr<ChordRest> parent);
     Ornament* clone() const override { return new Ornament(*this); }
+    void setOwnershipParent(DummyParentOr<ChordRest> parent) { EngravingItem::setOwnershipParent(parent); }
     Ornament(const Ornament& o);
     ~Ornament();
 

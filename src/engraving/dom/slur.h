@@ -101,6 +101,7 @@ public:
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     void setTrack(track_idx_t val) override;
 

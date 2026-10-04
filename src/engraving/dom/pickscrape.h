@@ -60,6 +60,7 @@ public:
     PickScrape(DummyParent* parent);
 
     PickScrape* clone() const override { return new PickScrape(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

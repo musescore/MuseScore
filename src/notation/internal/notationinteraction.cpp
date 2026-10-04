@@ -8155,7 +8155,7 @@ void NotationInteraction::addFretboardDiagram()
         Harmony* harmony = toHarmony(element);
         diagram->updateDiagram(harmony->harmonyName());
 
-        diagram->setOwnershipParent(harmony->parent());
+        diagram->setOwnershipParent(parentOrDummy(harmony->getParentSeg(), score->dummy()));
         score->undoAddElement(diagram);
         created.push_back(diagram);
         lastAddedDiagram = diagram;

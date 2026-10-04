@@ -281,6 +281,9 @@ public:
     //! ownershipParent(), which reports "not attached to anything" as null.
     EngravingObject* parent() const;
 
+    //! A class whose constructor names the parent types it accepts hides this with an
+    //! overload that takes the same, so that no other parent can be set by accident.
+    //! One that never has a parent deletes it.
     void setOwnershipParent(EngravingObject* p);
     //! The parent this object is attached to. Null while it is parked on the dummy,
     //! i.e. not attached to anything.

@@ -53,6 +53,7 @@ public:
     ~NoteLine() {}
 
     NoteLine* clone() const override { return new NoteLine(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Anchor anchor() const override { return Anchor::NOTE; }
 

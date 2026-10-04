@@ -60,6 +60,7 @@ public:
     PalmMute(DummyParent* parent);
 
     PalmMute* clone() const override { return new PalmMute(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
 //      virtual void write(XmlWriter& xml) const override;
 

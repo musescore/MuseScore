@@ -60,6 +60,7 @@ public:
     HarmonicMark(DummyParent* parent);
 
     HarmonicMark* clone() const override { return new HarmonicMark(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

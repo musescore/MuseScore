@@ -145,6 +145,7 @@ public:
 
     EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
+    void setOwnershipParent(DummyParentOr<Segment, FBox> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Segment* segment() const;
 

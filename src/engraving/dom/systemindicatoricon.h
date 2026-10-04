@@ -31,6 +31,7 @@ class SystemIndicatorIcon : public IndicatorIcon
 
 public:
     SystemIndicatorIcon(const ElementType& type, DummyParentOr<System> parent, ElementFlags flags = ElementFlag::NOTHING);
+    void setOwnershipParent(DummyParentOr<System> parent) { EngravingItem::setOwnershipParent(parent); }
 
     System* system() const { return toSystem(ownershipParent()); }
 

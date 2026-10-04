@@ -87,6 +87,7 @@ public:
 
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     LineSegment* createLineSegment() override;
 

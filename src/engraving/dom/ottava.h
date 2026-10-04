@@ -115,6 +115,7 @@ public:
     Ottava(const Ottava&);
 
     Ottava* clone() const override { return new Ottava(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

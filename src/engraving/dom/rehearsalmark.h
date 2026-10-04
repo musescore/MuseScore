@@ -48,6 +48,7 @@ public:
     RectF drag(EditData& ed) override;
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Segment* segment() const { return (Segment*)ownershipParent(); }
 

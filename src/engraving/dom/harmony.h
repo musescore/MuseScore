@@ -220,6 +220,7 @@ public:
     ~Harmony();
 
     Harmony* clone() const override { return new Harmony(*this); }
+    void setOwnershipParent(DummyParentOr<Segment, FretDiagram> parent) { EngravingItem::setOwnershipParent(parent); }
 
     int id() const; // WILL BE DEPRECATED AFTER RelaizedHarmony IS UPDATED
 

@@ -87,6 +87,7 @@ class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
     OBJECT_ALLOCATOR(engraving, GraceNotesGroup)
 public:
     GraceNotesGroup* clone() const override { return new GraceNotesGroup(*this); }
+    void setOwnershipParent(DummyParentOr<Chord> parent) { EngravingItem::setOwnershipParent(parent); }
     GraceNotesGroup(DummyParentOr<Chord> c);
 
     Chord* parent() const { return _parent; }

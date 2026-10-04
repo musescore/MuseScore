@@ -41,6 +41,7 @@ public:
 
     TremoloSingleChord& operator=(const TremoloSingleChord&) = delete;
     TremoloSingleChord* clone() const override { return new TremoloSingleChord(*this); }
+    void setOwnershipParent(DummyParentOr<Chord> parent) { EngravingItem::setOwnershipParent(parent); }
     ~TremoloSingleChord() override;
 
     Chord* chord() const { return toChord(ownershipParent()); }

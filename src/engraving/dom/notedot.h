@@ -42,6 +42,7 @@ class NoteDot final : public EngravingItem
 public:
 
     NoteDot* clone() const override { return new NoteDot(*this); }
+    void setOwnershipParent(DummyParentOr<Note, Rest> parent) { EngravingItem::setOwnershipParent(parent); }
     double mag() const override;
 
     Note* note() const { return ownershipParent()->isNote() ? toNote(ownershipParent()) : 0; }

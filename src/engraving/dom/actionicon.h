@@ -41,6 +41,7 @@ public:
     ~ActionIcon() override = default;
 
     ActionIcon* clone() const override;
+    void setOwnershipParent(EngravingObject*) = delete;
 
     void setActionType(ActionIconType val);
     ActionIconType actionType() const;

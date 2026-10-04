@@ -68,6 +68,7 @@ public:
     Pedal(DummyParent* parent);
 
     Pedal* clone() const override { return new Pedal(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

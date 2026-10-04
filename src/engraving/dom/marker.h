@@ -60,6 +60,7 @@ public:
     inline bool isRightMarker() const { return muse::contains(Marker::RIGHT_MARKERS, m_markerType); }
 
     Marker* clone() const override { return new Marker(*this); }
+    void setOwnershipParent(DummyParentOr<Measure> parent) { EngravingItem::setOwnershipParent(parent); }
 
     int subtype() const override { return int(m_markerType); }
     TranslatableString subtypeUserName() const override;

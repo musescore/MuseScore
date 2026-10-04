@@ -60,6 +60,7 @@ public:
     WhammyBar(DummyParent* parent);
 
     WhammyBar* clone() const override { return new WhammyBar(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

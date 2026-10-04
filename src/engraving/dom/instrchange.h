@@ -46,6 +46,7 @@ public:
     ~InstrumentChange();
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Instrument* instrument() const { return m_instrument; }
     void setInstrument(Instrument* i) { m_instrument = i; }

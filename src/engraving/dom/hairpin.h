@@ -109,6 +109,7 @@ public:
     Hairpin(DummyParent* parent);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

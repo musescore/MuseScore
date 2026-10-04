@@ -39,6 +39,7 @@ public:
     Hook(DummyParentOr<Chord> parent);
 
     Hook* clone() const override { return new Hook(*this); }
+    void setOwnershipParent(DummyParentOr<Chord> parent) { EngravingItem::setOwnershipParent(parent); }
     double mag() const override { return layoutParent()->mag(); }
     EngravingItem* elementBase() const override;
 

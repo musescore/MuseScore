@@ -60,6 +60,7 @@ public:
     LetRing(DummyParent* parent);
 
     LetRing* clone() const override { return new LetRing(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

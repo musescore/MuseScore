@@ -65,6 +65,7 @@ public:
     BagpipeEmbellishment(DummyParent* parent);
 
     BagpipeEmbellishment* clone() const override { return new BagpipeEmbellishment(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     EmbellishmentType embelType() const { return m_embelType; }
     void setEmbelType(EmbellishmentType val) { m_embelType = val; }

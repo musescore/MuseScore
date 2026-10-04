@@ -39,6 +39,7 @@ class Tapping : public Articulation
 public:
     Tapping(const Tapping&);
     Tapping* clone() const override { return new Tapping(*this); }
+    void setOwnershipParent(DummyParentOr<ChordRest> parent) { EngravingItem::setOwnershipParent(parent); }
 
     struct LayoutData : public Articulation::LayoutData
     {
@@ -106,6 +107,7 @@ public:
     TappingHalfSlur(DummyParentOr<Tapping> parent);
     TappingHalfSlur(const TappingHalfSlur&);
     TappingHalfSlur* clone() const override { return new TappingHalfSlur(*this); }
+    void setOwnershipParent(DummyParentOr<Tapping> parent) { EngravingItem::setOwnershipParent(parent); }
     TappingHalfSlurSegment* newSlurTieSegment() override { return new TappingHalfSlurSegment(this); }
 
     Tapping* tapping() const { return toTapping(ownershipParent()); }

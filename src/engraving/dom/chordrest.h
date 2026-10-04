@@ -64,6 +64,7 @@ public:
     ChordRest(const ChordRest&, bool link = false);
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();
+    void setOwnershipParent(DummyParentOr<Segment, Chord> parent) { EngravingItem::setOwnershipParent(parent); }
 
     virtual void scanElements(std::function<void(EngravingItem*)> func) override;
 
