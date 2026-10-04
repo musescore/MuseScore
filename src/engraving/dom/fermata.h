@@ -85,7 +85,7 @@ public:
 private:
 
     friend class Factory;
-    Fermata(EngravingObject* parent);
+    Fermata(DummyParentOr<Segment> parent);
 
     SymId m_symId = SymId::noSym;
     double m_timeStretch = -1.0;

@@ -199,7 +199,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::ARTICULATION:      return new Articulation(parentOfTypeOrDummy<ChordRest, BarLine>(parentItem, dummy));
     case ElementType::TAPPING:           return new Tapping(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::ORNAMENT:          return new Ornament(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
-    case ElementType::FERMATA:           return new Fermata(parent);
+    case ElementType::FERMATA:           return new Fermata(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::CHORDLINE:         return new ChordLine(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::ACCIDENTAL:
         return new Accidental(parentOfTypeOrDummy<Note, Ambitus, Ornament, Trill, TrillSegment>(parentItem, dummy));
@@ -217,7 +217,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::CAPO:              return new Capo(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::SYSTEM_TEXT:       return new SystemText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parentOfTypeOrDummy<Segment>(parentItem, dummy));
-    case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
+    case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::SOUND_FLAG:        return new SoundFlag(parentOfTypeOrDummy<StaffText>(parentItem, dummy));
     case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parentOfTypeOrDummy<MeasureBase>(parentItem, dummy));
     case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parentOfTypeOrDummy<System>(parentItem, dummy));

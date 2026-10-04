@@ -56,14 +56,14 @@ static const ElementStyle instrumentChangeStyle {
 //   InstrumentChange
 //---------------------------------------------------------
 
-InstrumentChange::InstrumentChange(EngravingObject* parent)
+InstrumentChange::InstrumentChange(DummyParentOr<Segment> parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
     m_instrument = new Instrument();
 }
 
-InstrumentChange::InstrumentChange(const Instrument& i, EngravingObject* parent)
+InstrumentChange::InstrumentChange(const Instrument& i, DummyParentOr<Segment> parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
