@@ -13341,7 +13341,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1766"/>
         <source>Bends &amp; Dives</source>
-        <translation> Bends y dives</translation>
+        <translation>Bends y dives</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1768"/>

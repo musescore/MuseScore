@@ -364,7 +364,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="26"/>
         <source>Staff/Part properties</source>
-        <translation>Lastnosti črtovja/parta</translation>
+        <translation>Lastnosti črtovja/izvlečka</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="44"/>
@@ -461,7 +461,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="309"/>
         <source>Part properties</source>
-        <translation>Lastnosti parta</translation>
+        <translation>Lastnosti izvlečka</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="332"/>
@@ -4390,7 +4390,7 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/notationscene/widgets/pagesettings.ui" line="75"/>
         <source>Apply to all parts</source>
-        <translation>Spremeni za vse parte</translation>
+        <translation>Spremeni za vse izvlečke</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/pagesettings.ui" line="108"/>
@@ -5707,7 +5707,7 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="216"/>
         <source>Parts…</source>
-        <translation>Parti …</translation>
+        <translation>Izvlečki …</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="283"/>
@@ -6654,12 +6654,12 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="530"/>
         <source>Parts</source>
-        <translation>Parti</translation>
+        <translation>Izvlečki</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="531"/>
         <source>Manage parts</source>
-        <translation>Upravljanje s parti</translation>
+        <translation>Upravljanje z izvlečki</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="537"/>
@@ -6710,12 +6710,12 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="571"/>
         <source>Staff/Part properties…</source>
-        <translation>Lastnosti črtovja/parta ...</translation>
+        <translation>Lastnosti črtovja/izvlečka ...</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="572"/>
         <source>Staff/Part properties</source>
-        <translation>Lastnosti črtovja/parta</translation>
+        <translation>Lastnosti črtovja/izvlečka</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="577"/>
@@ -7485,12 +7485,12 @@ ki jim sledi vezaj</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1326"/>
         <source>&amp;Part name</source>
-        <translation>&amp;Ime parta</translation>
+        <translation>&amp;Ime izvlečka</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1327"/>
         <source>Add text: part name</source>
-        <translation>Dodaj napis: ime parta</translation>
+        <translation>Dodaj napis: ime izvlečka</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1332"/>
@@ -10799,7 +10799,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/check.cpp" line="149"/>
         <source>Part score: %1</source>
         <extracomment>%1 is the name of a part score.</extracomment>
-        <translation>Zapis parta: %1</translation>
+        <translation>Zapis izvlečka: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="191"/>
@@ -11592,12 +11592,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>part(s)</source>
-        <translation><numerusform>part</numerusform><numerusform>parta</numerusform><numerusform>parti</numerusform><numerusform>partov</numerusform></translation>
+        <translation><numerusform>parizvleček</numerusform><numerusform>izvlečka</numerusform><numerusform>izvlečki</numerusform><numerusform>izvlečkov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
         <source>Part(s)</source>
-        <translation><numerusform>Part</numerusform><numerusform>Parta</numerusform><numerusform>Parti</numerusform><numerusform>Partov</numerusform></translation>
+        <translation><numerusform>Izvleček</numerusform><numerusform>Izvlečka</numerusform><numerusform>Izvlečki</numerusform><numerusform>Izvlečkov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
@@ -13107,7 +13107,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1707"/>
         <source>Instrument name (Part)</source>
-        <translation>Naziv glasbila (za part)</translation>
+        <translation>Naziv glasbila (za izvleček)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1708"/>
@@ -17990,7 +17990,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="488"/>
         <source>exclude from parts</source>
-        <translation>izključi iz partov</translation>
+        <translation>izključi iz izvlečkov</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="490"/>
@@ -23073,7 +23073,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/importexport/mnx/internal/export/mnxexporter.cpp" line="103"/>
         <source>MNX export skipped because the score contains no exportable parts. (Tablature is not supported yet).</source>
-        <translation>Izvažanje v MNX je bilo preskočeno, ker notni zapis nima nobenega parta za izvoz. (Tablature še niso podprte)</translation>
+        <translation>Izvažanje v MNX je bilo preskočeno, ker notni zapis nima nobenega izvlečka za izvoz. (Tablature še niso podprte)</translation>
     </message>
     <message>
         <location filename="../../src/importexport/mnx/internal/notationmnxreader.cpp" line="62"/>
@@ -24425,7 +24425,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
         <source>Staff/Part properties</source>
-        <translation>Lastnosti črtovja/parta</translation>
+        <translation>Lastnosti črtovja/izvlečka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="48"/>
@@ -25387,7 +25387,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="114"/>
         <source>Exclude from parts</source>
-        <translation>Izključi iz partov</translation>
+        <translation>Izključi iz izvlečkov</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="115"/>
@@ -26308,7 +26308,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/parts/partssettingsmodel.cpp" line="33"/>
         <source>Score and part synchronization</source>
-        <translation>Uskladitev notnega zapisa in partov</translation>
+        <translation>Uskladitev notnega zapisa in izvlečkov</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/scoreappearancesettingsmodel.cpp" line="34"/>
@@ -26613,7 +26613,7 @@ predtakt</translation>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/layoutpaneltreemodel.cpp" line="1036"/>
         <source>This will remove the instrument(s) from the full score and all part scores.</source>
-        <translation><numerusform>S tem boste odstranili glasbilo iz skupnega zapisa in pripadajoči part.</numerusform><numerusform>S tem boste odstranili glasbili iz skupnega zapisa in oba parta.</numerusform><numerusform>S tem boste odstranili glasbila iz skupnega zapisa in vse parte.</numerusform><numerusform>S tem boste odstranili glasbila iz skupnega zapisa in vse parte.</numerusform></translation>
+        <translation><numerusform>S tem boste odstranili glasbilo iz skupnega zapisa in pripadajoči izvleček.</numerusform><numerusform>S tem boste odstranili glasbili iz skupnega zapisa in oba izvlečka.</numerusform><numerusform>S tem boste odstranili glasbila iz skupnega zapisa in vse izvlečke.</numerusform><numerusform>S tem boste odstranili glasbila iz skupnega zapisa in vse izvlečke.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/parttreeitem.cpp" line="258"/>
@@ -26669,7 +26669,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="76"/>
         <source>Name on part score</source>
-        <translation>Ime v partu</translation>
+        <translation>Ime v izvlečku</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="104"/>
@@ -27366,18 +27366,18 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="41"/>
         <source>Parts actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Parts&quot; dialog</extracomment>
-        <translation>Dejanja partov</translation>
+        <translation>Dejanja izvlečkov</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="54"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PartsDialog.qml" line="32"/>
         <source>Parts</source>
-        <translation>Parti</translation>
+        <translation>Izvlečki</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="59"/>
         <source>Create new part</source>
-        <translation>Ustvari nov part</translation>
+        <translation>Ustvari nov izvleček</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsView.qml" line="58"/>
@@ -27387,7 +27387,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsView.qml" line="84"/>
         <source>Parts view</source>
-        <translation>Pogled partov</translation>
+        <translation>Pogled izvlečkov</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="87"/>
@@ -28702,17 +28702,17 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/partlistmodel.cpp" line="129"/>
         <source>Part</source>
-        <translation>Part</translation>
+        <translation>Izvleček</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/partlistmodel.cpp" line="155"/>
         <source>Are you sure you want to reset this part?</source>
-        <translation>Ali ste prepričani, da želite ponastaviti ta part?</translation>
+        <translation>Ali ste prepričani, da želite ponastaviti ta izvleček?</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/partlistmodel.cpp" line="188"/>
         <source>Are you sure you want to delete this part?</source>
-        <translation>Ali ste prepričani, da želite izbrisatni ta part?</translation>
+        <translation>Ali ste prepričani, da želite izbrisatni ta izvleček?</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/partlistmodel.cpp" line="245"/>
@@ -28999,7 +28999,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="243"/>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1309"/>
         <source>Apply to all parts</source>
-        <translation>Uveljavi za vse parte</translation>
+        <translation>Uveljavi za vse izvlečke</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="746"/>
@@ -29116,12 +29116,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1391"/>
         <source>Part name, except on first page</source>
-        <translation>Ime parta, razen na prvi strani</translation>
+        <translation>Ime izvlečka, razen na prvi strani</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1393"/>
         <source>Part name, on all pages</source>
-        <translation>Ime parta, na vseh straneh</translation>
+        <translation>Ime izvlečka, na vseh straneh</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1395"/>
@@ -30495,7 +30495,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/staffvisibilitypopupmodel.cpp" line="340"/>
         <source>Change part visibility: %1</source>
-        <translation>Spremeni vidnost parta: %1</translation>
+        <translation>Spremeni vidnost izvlečka: %1</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/staffvisibilitypopupmodel.cpp" line="357"/>
@@ -33966,12 +33966,12 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="73"/>
         <source>Style for parts</source>
-        <translation>Slog partov</translation>
+        <translation>Slog izvlečkov</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="80"/>
         <source>Choose default style for parts</source>
-        <translation>zberite privzeti slog partov</translation>
+        <translation>zberite privzeti slog izvlečkov</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="81"/>
@@ -36000,7 +36000,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="62"/>
         <source>Select parts to export</source>
-        <translation>Izberite parte, ki jih želite izvoziti</translation>
+        <translation>Izberite izvlečke, ki jih želite izvoziti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="90"/>
@@ -36054,7 +36054,7 @@ je spodletelo: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/OggSettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/WavSettingsPage.qml" line="38"/>
         <source>Each selected part will be exported as a separate audio file.</source>
-        <translation>Vsak izbrani part se bo izvozil kot ločena zvočna datoteka.</translation>
+        <translation>Vsak izbrani izvleček se bo izvozil kot ločena zvočna datoteka.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="59"/>
@@ -36104,7 +36104,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="59"/>
         <source>Each selected part will be exported as a separate MIDI file.</source>
-        <translation>Vsak izbrani part se bo izvozil kot ločena MIDI datoteka.</translation>
+        <translation>Vsak izbrani izvleček se bo izvozil kot ločena MIDI datoteka.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
@@ -36164,7 +36164,7 @@ je spodletelo: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="89"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="59"/>
         <source>Each page of the selected parts will be exported as a separate %1 file.</source>
-        <translation>Vsaka stran izbranih partov se bo izvozila kot ločena datoteka %1.</translation>
+        <translation>Vsaka stran izbranih izvlečkov se bo izvozila kot ločena datoteka %1.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
@@ -36190,13 +36190,13 @@ je spodletelo: %2</translation>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="72"/>
         <source>Score_and_Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation>Notni_zapis_in_parti</translation>
+        <translation>Notni_zapis_in_izvlečki</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="75"/>
         <source>Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation>Parti</translation>
+        <translation>Izvlečki</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="360"/>
@@ -36416,12 +36416,12 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="371"/>
         <source>Each part to a separate file</source>
-        <translation>Vsak part v svojo datoteko</translation>
+        <translation>Vsak izvleček v svojo datoteko</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="372"/>
         <source>All parts combined in one file</source>
-        <translation>Vsi parti združeni v eno datoteko</translation>
+        <translation>Vsi izvlečki združeni v eno datoteko</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="628"/>
@@ -36485,7 +36485,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="165"/>
         <source>Each selected part will be exported as a separate video file.</source>
-        <translation>Vsak izbrani part se bo izvozil kot ločen video.</translation>
+        <translation>Vsak izbrani izvleček se bo izvozil kot ločen video.</translation>
     </message>
 </context>
 <context>
@@ -36666,7 +36666,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TempoSettings.qml" line="99"/>
         <source>Show tempo marking on my score</source>
-        <translation>Dodaj notnemu zapisu oznako tempa</translation>
+        <translation>Dodaj notnemu zapisu oznako hitrosti izvajanja</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/additionalinfomodel.cpp" line="97"/>
@@ -37994,7 +37994,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/engraving/dom/unrollrepeats.cpp" line="101"/>
         <source>Create parts</source>
-        <translation>Ustvari parte</translation>
+        <translation>Ustvari izvlečke</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/cmd.cpp" line="2909"/>
@@ -38178,17 +38178,17 @@ je spodletelo: %2</translation>
         <location filename="../../src/notation/internal/excerptnotation.cpp" line="110"/>
         <source>Rename part</source>
         <extracomment>Means: &quot;edit the name of a part score&quot;</extracomment>
-        <translation>Preimenuj part</translation>
+        <translation>Preimenuj izvleček</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="491"/>
         <source>Add/remove parts</source>
-        <translation>Dodaj/odstrani parte</translation>
+        <translation>Dodaj/odstrani izvlečke</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotation.cpp" line="536"/>
         <source>Reset part</source>
-        <translation>Ponastavi part</translation>
+        <translation>Ponastavi izvleček</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="71"/>
