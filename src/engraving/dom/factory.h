@@ -81,9 +81,9 @@ public:
     static Breath* createBreath(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Breath> makeBreath(DummyParentOr<Segment> parent);
 
-    static Chord* createChord(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
+    static Chord* createChord(DummyParentOr<Segment, Chord> parent, bool isAccessibleEnabled = true);
     static Chord* copyChord(const Chord& src, bool link = false);
-    static std::shared_ptr<Chord> makeChord(DummyParentOr<Segment> parent);
+    static std::shared_ptr<Chord> makeChord(DummyParentOr<Segment, Chord> parent);
 
     static ChordLine* createChordLine(DummyParentOr<Chord> parent, bool isAccessibleEnabled = true);
     static ChordLine* copyChordLine(const ChordLine& src);

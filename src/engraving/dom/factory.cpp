@@ -228,7 +228,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::NOTE:              return new Note(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::SYMBOL:            return new Symbol(parent);
     case ElementType::FSYMBOL:           return new FSymbol(parent);
-    case ElementType::CHORD:             return new Chord(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::CHORD:             return new Chord(parentOfTypeOrDummy<Segment, Chord>(parentItem, dummy));
     case ElementType::REST:              return new Rest(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::MMREST:            return new MMRest(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::DEAD_SLAPPED:      return new DeadSlapped(toRest(parentItem));
@@ -413,7 +413,7 @@ BracketItem* Factory::createBracketItem(DummyParentOr<EngravingItem> parent, Bra
 CREATE_ITEM_IMPL(Breath, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(Breath, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(Chord, DummyParentOr<Segment>)
+CREATE_ITEM_IMPL(Chord, DummyParentOr<Segment, Chord>)
 
 Chord* Factory::copyChord(const Chord& src, bool link)
 {
@@ -422,7 +422,7 @@ Chord* Factory::copyChord(const Chord& src, bool link)
 
     return copy;
 }
-MAKE_ITEM_IMPL(Chord, DummyParentOr<Segment>)
+MAKE_ITEM_IMPL(Chord, DummyParentOr<Segment, Chord>)
 
 CREATE_ITEM_IMPL(ChordLine, DummyParentOr<Chord>)
 COPY_ITEM_IMPL(ChordLine)

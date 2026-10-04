@@ -386,7 +386,7 @@ private:
 
     friend class Factory;
 
-    Chord(DummyParentOr<Segment> parent);
+    Chord(DummyParentOr<Segment, Chord> parent);
     Chord(const Chord&, bool link = false);
 
     // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed

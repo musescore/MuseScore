@@ -281,7 +281,7 @@ std::vector<int> Chord::noteDistances() const
 //   Chord
 //---------------------------------------------------------
 
-Chord::Chord(DummyParentOr<Segment> parent)
+Chord::Chord(DummyParentOr<Segment, Chord> parent)
     : ChordRest(ElementType::CHORD, parent)
 {
     m_stem             = 0;
