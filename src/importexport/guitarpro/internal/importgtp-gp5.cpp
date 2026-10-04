@@ -1197,7 +1197,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             Slur* slur1 = Factory::createSlur(score->dummy());
             slur1->setStartElement(gnote->chord());
             slur1->setEndElement(note->chord());
-            slur1->setOwnershipParent(0);
             slur1->setTrack(note->staffIdx());
             slur1->setTrack2(note->staffIdx());
             slur1->setTick(gnote->chord()->tick());

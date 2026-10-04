@@ -9098,7 +9098,6 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             cl->setChordLineType(ChordLineType::FALL);
             cl->setWavy(gliss->glissandoType() == GlissandoType::WAVY ? true : false);
             cl->setStraight(true);
-            cl->setOwnershipParent(note);
             note->chord()->add(cl);
             spanners.erase(gliss);
             delete gliss;
