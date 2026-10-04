@@ -181,8 +181,6 @@ public:
 
     bool isBefore(const EngravingItem*) const override;
 
-    void undoAddAnnotation(EngravingItem*);
-
     virtual double intrinsicMag() const = 0;
 
     TabDurationSymbol* tabDur() const { return m_tabDur; }

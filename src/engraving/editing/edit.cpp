@@ -625,6 +625,18 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     return slur;
 }
 
+/// The segment that holds the annotations of `chordRest`. For a multimeasure rest,
+/// that is the corresponding segment of the first underlying measure.
+static Segment* annotationSegment(const ChordRest* chordRest)
+{
+    const Measure* measure = chordRest->measure();
+    if (measure && measure->isMMRest()) {
+        return measure->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    }
+
+    return chordRest->segment();
+}
+
 TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 {
     TextBase* textBox = nullptr;
@@ -663,11 +675,11 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createRehearsalMark(chordRest->segment());
-        textBox->setTrack(0);
+        textBox = Factory::createRehearsalMark(annotationSegment(chordRest));
+        textBox->setTrack(chordRest->track());
         RehearsalMark* r = toRehearsalMark(textBox);
         textBox->setXmlText(EditRehearsalMark::createRehearsalMarkText(this, r));
-        chordRest->undoAddAnnotation(textBox);
+        undoAddElement(textBox);
         break;
     }
     case TextStyleType::STAFF: {
@@ -675,8 +687,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createStaffText(dummy(), TextStyleType::STAFF);
-        chordRest->undoAddAnnotation(textBox);
+        textBox = Factory::createStaffText(annotationSegment(chordRest), TextStyleType::STAFF);
+        textBox->setTrack(chordRest->track());
+        undoAddElement(textBox);
         break;
     }
     case TextStyleType::SYSTEM: {
@@ -684,8 +697,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createSystemText(dummy(), TextStyleType::SYSTEM);
-        chordRest->undoAddAnnotation(textBox);
+        textBox = Factory::createSystemText(annotationSegment(chordRest), TextStyleType::SYSTEM);
+        textBox->setTrack(chordRest->track());
+        undoAddElement(textBox);
         break;
     }
     case TextStyleType::DYNAMICS: {
@@ -693,8 +707,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createDynamic(dummy());
-        chordRest->undoAddAnnotation(textBox);
+        textBox = Factory::createDynamic(annotationSegment(chordRest));
+        textBox->setTrack(chordRest->track());
+        undoAddElement(textBox);
         break;
     }
     case TextStyleType::EXPRESSION: {
@@ -702,8 +717,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createExpression(dummy());
-        chordRest->undoAddAnnotation(textBox);
+        textBox = Factory::createExpression(annotationSegment(chordRest));
+        textBox->setTrack(chordRest->track());
+        undoAddElement(textBox);
         break;
     }
     case TextStyleType::INSTRUMENT_CHANGE: {
@@ -711,8 +727,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createInstrumentChange(dummy());
-        chordRest->undoAddAnnotation(textBox);
+        textBox = Factory::createInstrumentChange(annotationSegment(chordRest));
+        textBox->setTrack(chordRest->track());
+        undoAddElement(textBox);
         break;
     }
     case TextStyleType::STICKING: {
@@ -720,8 +737,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createSticking(dummy());
-        chordRest->undoAddAnnotation(textBox);
+        textBox = Factory::createSticking(annotationSegment(chordRest));
+        textBox->setTrack(chordRest->track());
+        undoAddElement(textBox);
         break;
     }
     case TextStyleType::FINGERING:
@@ -891,8 +909,9 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createHarpPedalDiagram(this->dummy());
-        chordRest->undoAddAnnotation(textBox);
+        textBox = Factory::createHarpPedalDiagram(annotationSegment(chordRest));
+        textBox->setTrack(chordRest->track());
+        undoAddElement(textBox);
         break;
     }
     default:
