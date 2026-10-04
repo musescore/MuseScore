@@ -830,6 +830,8 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
     case Pid::BARLINE_SHOW_TIPS:
         setShowTips(v.toBool());
         break;
+    case Pid::HAS_PARENTHESES: // not implemented for barlines, causes crash if tried via command://notation/add-parentheses
+        return true;
     default:
         return EngravingItem::setProperty(id, v);
     }
