@@ -54,8 +54,8 @@ public:
     static ChordBracket* createChordBracket(DummyParentOr<Chord> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<ChordBracket> makeChordBracket(DummyParentOr<Chord> parent);
 
-    static Articulation* createArticulation(DummyParentOr<ChordRest> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Articulation> makeArticulation(DummyParentOr<ChordRest> parent);
+    static Articulation* createArticulation(DummyParentOr<ChordRest, BarLine> parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Articulation> makeArticulation(DummyParentOr<ChordRest, BarLine> parent);
 
     static Tapping* createTapping(DummyParentOr<ChordRest> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Tapping> makeTapping(DummyParentOr<ChordRest> parent);

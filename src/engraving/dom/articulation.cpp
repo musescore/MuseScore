@@ -56,7 +56,7 @@ static const ElementStyle articulationStyle {
 //   Articulation
 //---------------------------------------------------------
 
-Articulation::Articulation(DummyParentOr<ChordRest> parent, ElementType type)
+Articulation::Articulation(DummyParentOr<ChordRest, BarLine> parent, ElementType type)
     : EngravingItem(type, parent, ElementFlag::MOVABLE)
 {
     m_symId         = SymId::noSym;
