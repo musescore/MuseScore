@@ -5580,7 +5580,7 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
     std::vector<mu::engraving::Hairpin*> hairpins = score()->addHairpins(type);
     apply();
 
-    if (!noteInput()->isNoteInputMode() && hairpins.size() == 1) {
+    if (!noteInput()->isNoteInputMode() && hairpins.size() == 1 && !hairpins.front()->segmentsEmpty()) {
         mu::engraving::LineSegment* segment = hairpins.front()->frontSegment();
         select({ segment });
         startEditGrip(segment, mu::engraving::Grip::END);
