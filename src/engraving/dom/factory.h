@@ -128,7 +128,7 @@ public:
     static Lyrics* createLyrics(DummyParentOr<ChordRest> parent, bool isAccessibleEnabled = true);
     static Lyrics* copyLyrics(const Lyrics& src);
 
-    static LyricsLine* createLyricsLine(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static LyricsLine* createLyricsLine(DummyParentOr<Lyrics> parent, bool isAccessibleEnabled = true);
     static LyricsLine* copyLyricsLine(const LyricsLine& src);
 
     static Measure* createMeasure(Score* parent, bool isAccessibleEnabled = true);
@@ -158,7 +158,7 @@ public:
     static PartialTie* createPartialTie(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static PartialTie* copyPartialTie(const PartialTie& src);
 
-    static PartialLyricsLine* createPartialLyricsLine(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static PartialLyricsLine* createPartialLyricsLine(DummyParent* parent, bool isAccessibleEnabled = true);
     static PartialLyricsLine* copyPartialLyricsLine(const PartialLyricsLine& src);
 
     static Rest* createRest(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);

@@ -247,7 +247,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::GUITAR_BEND:       return new GuitarBend(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::TREMOLOBAR:        return new TremoloBar(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::LYRICS:            return new Lyrics(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
-    case ElementType::LYRICSLINE:        return new LyricsLine(parent);
+    case ElementType::LYRICSLINE:        return new LyricsLine(parentOfTypeOrDummy<Lyrics>(parentItem, dummy));
     case ElementType::FIGURED_BASS:      return new FiguredBass(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::STEM:              return new Stem(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::SLUR:              return new Slur(parent);
@@ -270,7 +270,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::LAISSEZ_VIB:       return new LaissezVib(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::PARTIAL_TIE:       return new PartialTie(parentOfTypeOrDummy<Note>(parentItem, dummy));
-    case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
+    case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(dummy);
     case ElementType::PARENTHESIS:       return new Parenthesis(parent);
 
     case ElementType::TEXTLINE_BASE:
@@ -468,7 +468,7 @@ MAKE_ITEM_IMPL(LayoutBreak, DummyParentOr<MeasureBase>)
 CREATE_ITEM_IMPL(Lyrics, DummyParentOr<ChordRest>)
 COPY_ITEM_IMPL(Lyrics)
 
-CREATE_ITEM_IMPL(LyricsLine, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(LyricsLine, DummyParentOr<Lyrics>)
 COPY_ITEM_IMPL(LyricsLine)
 
 CREATE_ITEM_IMPL(Measure, Score*)
@@ -511,7 +511,7 @@ COPY_ITEM_IMPL(PageLockIndicator)
 CREATE_ITEM_IMPL(PartialTie, DummyParentOr<Note>)
 COPY_ITEM_IMPL(PartialTie)
 
-CREATE_ITEM_IMPL(PartialLyricsLine, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(PartialLyricsLine, DummyParent*)
 COPY_ITEM_IMPL(PartialLyricsLine)
 
 CREATE_ITEM_IMPL(Rest, DummyParentOr<Segment>)
