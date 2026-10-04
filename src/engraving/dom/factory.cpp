@@ -238,14 +238,14 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::MMREST:            return new MMRest(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::DEAD_SLAPPED:      return new DeadSlapped(toRest(parentItem));
     case ElementType::SPACER:            return new Spacer(parentOfTypeOrDummy<Measure>(parentItem, dummy));
-    case ElementType::STAFF_STATE:       return new StaffState(parent);
+    case ElementType::STAFF_STATE:       return new StaffState(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::TEMPO_TEXT:        return new TempoText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::HARMONY:           return new Harmony(parentOfTypeOrDummy<Segment, FretDiagram>(parentItem, dummy));
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parentOfTypeOrDummy<Segment, FBox>(parentItem, dummy));
     case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::BEND:              return new Bend(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::GUITAR_BEND:       return new GuitarBend(parentOfTypeOrDummy<Note>(parentItem, dummy));
-    case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
+    case ElementType::TREMOLOBAR:        return new TremoloBar(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::LYRICS:            return new Lyrics(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::LYRICSLINE:        return new LyricsLine(parent);
     case ElementType::FIGURED_BASS:      return new FiguredBass(parentOfTypeOrDummy<Segment>(parentItem, dummy));
@@ -558,7 +558,7 @@ Staff* Factory::createStaff(Part * parent)
 CREATE_ITEM_IMPL(StaffLines, DummyParentOr<Measure>)
 COPY_ITEM_IMPL(StaffLines)
 
-CREATE_ITEM_IMPL(StaffState, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(StaffState, DummyParentOr<Segment>)
 
 CREATE_ITEM_IMPL(StaffTypeChange, DummyParentOr<MeasureBase>)
 MAKE_ITEM_IMPL(StaffTypeChange, DummyParentOr<MeasureBase>)
@@ -661,8 +661,8 @@ CREATE_ITEM_IMPL(TremoloSingleChord, DummyParentOr<Chord>)
 COPY_ITEM_IMPL(TremoloSingleChord)
 MAKE_ITEM_IMPL(TremoloSingleChord, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(TremoloBar, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(TremoloBar, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(TremoloBar, DummyParentOr<Segment>)
+MAKE_ITEM_IMPL(TremoloBar, DummyParentOr<Segment>)
 
 CREATE_ITEM_IMPL(Tuplet, DummyParentOr<Measure>)
 COPY_ITEM_IMPL(Tuplet)

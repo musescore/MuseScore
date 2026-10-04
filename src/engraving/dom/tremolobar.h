@@ -78,7 +78,7 @@ public:
 private:
 
     friend class Factory;
-    TremoloBar(DummyParentOr<EngravingItem> parent);
+    TremoloBar(DummyParentOr<Segment> parent);
 
     TremoloBarType parseTremoloBarTypeFromCurve(const PitchValues& curve) const;
     void updatePointsByTremoloBarType(const TremoloBarType type);

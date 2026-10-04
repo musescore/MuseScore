@@ -183,7 +183,7 @@ public:
     static StaffLines* createStaffLines(DummyParentOr<Measure> parent, bool isAccessibleEnabled = true);
     static StaffLines* copyStaffLines(const StaffLines& src);
 
-    static StaffState* createStaffState(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static StaffState* createStaffState(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
 
     static StaffTypeChange* createStaffTypeChange(DummyParentOr<MeasureBase> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<StaffTypeChange> makeStaffTypeChange(DummyParentOr<MeasureBase> parent);
@@ -243,8 +243,8 @@ public:
     static std::shared_ptr<TremoloSingleChord> makeTremoloSingleChord(DummyParentOr<Chord> parent);
     static TremoloSingleChord* copyTremoloSingleChord(const TremoloSingleChord& src);
 
-    static TremoloBar* createTremoloBar(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<TremoloBar> makeTremoloBar(DummyParentOr<EngravingItem> parent);
+    static TremoloBar* createTremoloBar(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TremoloBar> makeTremoloBar(DummyParentOr<Segment> parent);
 
     static TripletFeel* createTripletFeel(DummyParentOr<Segment> parent, TripletFeelType type, bool isAccessibleEnabled = true);
 
