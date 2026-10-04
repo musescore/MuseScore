@@ -103,7 +103,7 @@ class TappingHalfSlur : public Slur
     void setIsHalfSlurAbove(bool v) { m_isHalfSlurAbove = v; }
 
 public:
-    TappingHalfSlur(EngravingItem* parent);
+    TappingHalfSlur(DummyParentOr<Tapping> parent);
     TappingHalfSlur(const TappingHalfSlur&);
     TappingHalfSlur* clone() const override { return new TappingHalfSlur(*this); }
     TappingHalfSlurSegment* newSlurTieSegment() override { return new TappingHalfSlurSegment(this); }
