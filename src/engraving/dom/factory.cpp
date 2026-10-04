@@ -235,7 +235,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::SPACER:            return new Spacer(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::STAFF_STATE:       return new StaffState(parent);
     case ElementType::TEMPO_TEXT:        return new TempoText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
-    case ElementType::HARMONY:           return new Harmony(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::HARMONY:           return new Harmony(parentOfTypeOrDummy<Segment, FretDiagram>(parentItem, dummy));
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parentOfTypeOrDummy<Segment, FBox>(parentItem, dummy));
     case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::BEND:              return new Bend(parentOfTypeOrDummy<Note>(parentItem, dummy));
@@ -622,7 +622,7 @@ Fingering* Factory::createFingering(DummyParentOr<Note> parent, TextStyleType te
     return fingering;
 }
 
-CREATE_ITEM_IMPL(Harmony, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Harmony, DummyParentOr<Segment, FretDiagram>)
 
 CREATE_ITEM_IMPL(TempoText, DummyParentOr<Segment>)
 

@@ -326,11 +326,9 @@ const ElementStyle chordSymbolStyle {
 //   Harmony
 //---------------------------------------------------------
 
-Harmony::Harmony(EngravingObject* parent)
+Harmony::Harmony(DummyParentOr<Segment, FretDiagram> parent)
     : TextBase(ElementType::HARMONY, parent, TextStyleType::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    assert(!parent || parent->isSegment() || parent->isFretDiagram() || parent->isType(ElementType::DUMMY));
-
     m_rootCase   = NoteCaseType::CAPITAL;
     m_bassCase   = NoteCaseType::CAPITAL;
     m_harmonyType = HarmonyType::STANDARD;

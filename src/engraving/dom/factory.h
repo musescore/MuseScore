@@ -220,7 +220,7 @@ public:
     static Fingering* createFingering(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static Fingering* createFingering(DummyParentOr<Note> parent, TextStyleType textStyleType, bool isAccessibleEnabled = true);
 
-    static Harmony* createHarmony(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Harmony* createHarmony(DummyParentOr<Segment, FretDiagram> parent, bool isAccessibleEnabled = true);
 
     static TempoText* createTempoText(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
 

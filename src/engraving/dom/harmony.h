@@ -215,7 +215,7 @@ class Harmony final : public TextBase
     DECLARE_CLASSOF(ElementType::HARMONY)
 
 public:
-    Harmony(EngravingObject* parent = 0); // Segment or FretDiagram
+    Harmony(DummyParentOr<Segment, FretDiagram> parent);
     Harmony(const Harmony&);
     ~Harmony();
 
