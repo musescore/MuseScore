@@ -141,8 +141,7 @@ public:
     static Note* copyNote(const Note& src, bool link = false);
     static std::shared_ptr<Note> makeNote(DummyParentOr<Chord> parent);
 
-    static NoteDot* createNoteDot(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
-    static NoteDot* createNoteDot(Rest* parent, bool isAccessibleEnabled = true);
+    static NoteDot* createNoteDot(DummyParentOr<Note, Rest> parent, bool isAccessibleEnabled = true);
     static NoteDot* copyNoteDot(const NoteDot& src);
 
     static NoteLine* createNoteLine(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);

@@ -222,15 +222,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parentOfTypeOrDummy<MeasureBase>(parentItem, dummy));
     case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parentOfTypeOrDummy<System>(parentItem, dummy));
     case ElementType::NOTEHEAD:          return new NoteHead(parentOfTypeOrDummy<Note>(parentItem, dummy));
-    case ElementType::NOTEDOT: {
-        if (parentItem && parentItem->isNote()) {
-            return new NoteDot(toNote(parentItem));
-        } else if (parentItem && parentItem->isRest()) {
-            return new NoteDot(toRest(parentItem));
-        } else {
-            return new NoteDot(dummy);
-        }
-    }
+    case ElementType::NOTEDOT:           return new NoteDot(parentOfTypeOrDummy<Note, Rest>(parentItem, dummy));
     case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parentOfTypeOrDummy<MeasureBase>(parentItem, dummy));
@@ -499,8 +491,7 @@ Note* Factory::copyNote(const Note& src, bool link)
 }
 MAKE_ITEM_IMPL(Note, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(NoteDot, DummyParentOr<Note>)
-CREATE_ITEM_IMPL(NoteDot, Rest*)
+CREATE_ITEM_IMPL(NoteDot, DummyParentOr<Note, Rest>)
 COPY_ITEM_IMPL(NoteDot)
 
 CREATE_ITEM_IMPL(NoteLine, DummyParentOr<Note>)
