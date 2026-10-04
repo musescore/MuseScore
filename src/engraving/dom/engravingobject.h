@@ -225,18 +225,25 @@ using EngravingItemList = std::vector<EngravingItem*>;
 template<typename ... ParentTypes>
 class DummyParentOr
 {
+    template<typename T>
+    static constexpr bool accepts = std::is_same_v<T, DummyParent> || (std::is_base_of_v<ParentTypes, T> || ...);
+
 public:
-    template<typename T, std::enable_if_t<std::is_same_v<T, DummyParent>
-                                          || (std::is_base_of_v<ParentTypes, T> || ...), int> = 0>
+    template<typename T, std::enable_if_t<accepts<T>, int> = 0>
     DummyParentOr(T* parent)
         : m_parent(parent) {}
+
+    //! From a DummyParentOr that accepts no more than this one does.
+    template<typename ... OtherParentTypes, std::enable_if_t<(accepts<OtherParentTypes> && ...), int> = 0>
+    DummyParentOr(DummyParentOr<OtherParentTypes...> other)
+        : m_parent(other) {}
 
     operator EngravingObject*() const {
         return m_parent;
     }
 
-    //! The parent as one of the accepted types, or null when it is the dummy - i.e.
-    //! when there is no parent to speak to yet.
+    //! The parent as the given type, or null when it is not of that type - which
+    //! includes the dummy, i.e. when there is no parent to speak to yet.
     template<typename T>
     T* as() const;
 
@@ -643,7 +650,12 @@ template<typename ... ParentTypes>
 template<typename T>
 T* DummyParentOr<ParentTypes...>::as() const
 {
-    return m_parent && !m_parent->isType(ElementType::DUMMY) ? static_cast<T*>(m_parent) : nullptr;
+    if constexpr (std::is_same_v<std::remove_const_t<T>, EngravingObject>) {
+        if (!m_parent || m_parent->isType(ElementType::DUMMY)) {
+            return nullptr;
+        }
+    }
+    return dynamic_cast<T*>(m_parent);
 }
 
 //---------------------------------------------------
