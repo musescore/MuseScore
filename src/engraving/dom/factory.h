@@ -276,11 +276,11 @@ public:
 
     static LetRing* createLetRing(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
 
-    static Marker* createMarker(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Marker* createMarker(DummyParentOr<Measure> parent, bool isAccessibleEnabled = true);
 
-    static Marker* createMarker(DummyParentOr<EngravingItem> parent, TextStyleType tid, bool isAccessibleEnabled = true);
+    static Marker* createMarker(DummyParentOr<Measure> parent, TextStyleType tid, bool isAccessibleEnabled = true);
 
-    static std::shared_ptr<Marker> makeMarker(DummyParentOr<EngravingItem> parent);
+    static std::shared_ptr<Marker> makeMarker(DummyParentOr<Measure> parent);
 
     static GradualTempoChange* createGradualTempoChange(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
 

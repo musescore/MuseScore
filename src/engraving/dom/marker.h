@@ -38,8 +38,8 @@ class Marker final : public TextBase
     DECLARE_CLASSOF(ElementType::MARKER)
 
 public:
-    Marker(DummyParentOr<EngravingItem> parent);
-    Marker(DummyParentOr<EngravingItem> parent, TextStyleType);
+    Marker(DummyParentOr<Measure> parent);
+    Marker(DummyParentOr<Measure> parent, TextStyleType);
 
     void setMarkerType(MarkerType t);
     MarkerType markerType() const { return m_markerType; }

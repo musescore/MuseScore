@@ -226,7 +226,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parentOfTypeOrDummy<MeasureBase>(parentItem, dummy));
-    case ElementType::MARKER:            return new Marker(parent);
+    case ElementType::MARKER:            return new Marker(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::JUMP:              return new Jump(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::ACTION_ICON:       return new ActionIcon(parent);
@@ -700,9 +700,9 @@ CREATE_ITEM_IMPL(Ottava, DummyParentOr<EngravingItem>)
 
 CREATE_ITEM_IMPL(LetRing, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Marker, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Marker, DummyParentOr<Measure>)
 
-Marker* Factory::createMarker(DummyParentOr<EngravingItem> parent, TextStyleType tid, bool isAccessibleEnabled)
+Marker* Factory::createMarker(DummyParentOr<Measure> parent, TextStyleType tid, bool isAccessibleEnabled)
 {
     Marker* m = new Marker(parent, tid);
     m->setAccessibleEnabled(isAccessibleEnabled);
@@ -710,7 +710,7 @@ Marker* Factory::createMarker(DummyParentOr<EngravingItem> parent, TextStyleType
     return m;
 }
 
-MAKE_ITEM_IMPL(Marker, DummyParentOr<EngravingItem>)
+MAKE_ITEM_IMPL(Marker, DummyParentOr<Measure>)
 
 CREATE_ITEM_IMPL(GradualTempoChange, DummyParentOr<EngravingItem>)
 
