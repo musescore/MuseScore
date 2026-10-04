@@ -127,7 +127,7 @@ public:
 private:
     friend class Factory;
 
-    Bracket(DummyParentOr<EngravingItem> parent);
+    Bracket(DummyParentOr<System> parent);
 
     BracketItem* m_bi = nullptr;
     double m_ay1 = 0.0;

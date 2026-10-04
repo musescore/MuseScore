@@ -74,10 +74,10 @@ public:
     static Bend* createBend(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bend> makeBend(DummyParentOr<Note> parent);
 
-    static Bracket* createBracket(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Bracket> makeBracket(DummyParentOr<EngravingItem> parent);
-    static BracketItem* createBracketItem(DummyParentOr<EngravingItem> parent);
-    static BracketItem* createBracketItem(DummyParentOr<EngravingItem> parent, BracketType bracketType, size_t span);
+    static Bracket* createBracket(DummyParentOr<System> parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Bracket> makeBracket(DummyParentOr<System> parent);
+    static BracketItem* createBracketItem(DummyParentOr<Staff> parent);
+    static BracketItem* createBracketItem(DummyParentOr<Staff> parent, BracketType bracketType, size_t span);
 
     static Breath* createBreath(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Breath> makeBreath(DummyParentOr<Segment> parent);

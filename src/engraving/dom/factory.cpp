@@ -195,7 +195,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::CHORD_BRACKET:     return new ChordBracket(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::BREATH:            return new Breath(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::GLISSANDO:         return new Glissando(parent);
-    case ElementType::BRACKET:           return new Bracket(parent);
+    case ElementType::BRACKET:           return new Bracket(parentOfTypeOrDummy<System>(parentItem, dummy));
     case ElementType::ARTICULATION:      return new Articulation(parentOfTypeOrDummy<ChordRest, BarLine>(parentItem, dummy));
     case ElementType::TAPPING:           return new Tapping(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::ORNAMENT:          return new Ornament(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
@@ -400,16 +400,16 @@ MAKE_ITEM_IMPL(Beam, Score*)
 CREATE_ITEM_IMPL(Bend, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(Bend, DummyParentOr<Note>)
 
-CREATE_ITEM_IMPL(Bracket, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(Bracket, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Bracket, DummyParentOr<System>)
+MAKE_ITEM_IMPL(Bracket, DummyParentOr<System>)
 
-BracketItem* Factory::createBracketItem(DummyParentOr<EngravingItem> parent)
+BracketItem* Factory::createBracketItem(DummyParentOr<Staff> parent)
 {
     BracketItem* bi = new BracketItem(parent);
     return bi;
 }
 
-BracketItem* Factory::createBracketItem(DummyParentOr<EngravingItem> parent, BracketType bracketType, size_t span)
+BracketItem* Factory::createBracketItem(DummyParentOr<Staff> parent, BracketType bracketType, size_t span)
 {
     BracketItem* bi = new BracketItem(parent, bracketType, span);
     return bi;
