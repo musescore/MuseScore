@@ -1039,7 +1039,7 @@ RectF FretDiagram::drag(EditData& ed)
 
 bool FretDiagram::acceptDrop(EditData& data) const
 {
-    return data.dropElement->isHarmony();
+    return data.dropElement->isHarmony() && segment();
 }
 
 //---------------------------------------------------------
@@ -1049,9 +1049,10 @@ bool FretDiagram::acceptDrop(EditData& data) const
 EngravingItem* FretDiagram::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    if (e->isHarmony()) {
+    Segment* seg = segment();
+    if (e->isHarmony() && seg) {
         Harmony* h = toHarmony(e);
-        h->setOwnershipParent(ownershipParent());
+        h->setOwnershipParent(seg);
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {

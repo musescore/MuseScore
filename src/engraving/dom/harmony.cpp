@@ -1437,7 +1437,8 @@ bool Harmony::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
-        return true;
+        EngravingObject* parent = ownershipParent();
+        return parent && parent->isSegment();
     } else if (e->isSymbol() || e->isFSymbol()) {
         // symbols can be added in edit mode
         if (data.getData(this)) {
@@ -1456,9 +1457,10 @@ bool Harmony::acceptDrop(EditData& data) const
 EngravingItem* Harmony::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    if (e->isFretDiagram()) {
+    EngravingObject* parent = ownershipParent();
+    if (e->isFretDiagram() && parent && parent->isSegment()) {
         FretDiagram* fd = toFretDiagram(e);
-        fd->setOwnershipParent(ownershipParent());
+        fd->setOwnershipParent(toSegment(parent));
         fd->setTrack(track());
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
