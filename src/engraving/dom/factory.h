@@ -42,8 +42,9 @@ public:
     static EngravingItem* createItemByName(const AsciiStringView& name, DummyParentOr<EngravingItem> parent,
                                            bool isAccessibleEnabled = true);
 
-    static Accidental* createAccidental(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Accidental> makeAccidental(DummyParentOr<EngravingItem> parent);
+    static Accidental* createAccidental(DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment> parent,
+                                        bool isAccessibleEnabled = true);
+    static std::shared_ptr<Accidental> makeAccidental(DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment> parent);
 
     static Ambitus* createAmbitus(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Ambitus> makeAmbitus(DummyParentOr<Segment> parent);

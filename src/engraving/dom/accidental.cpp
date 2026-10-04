@@ -243,7 +243,7 @@ AccidentalVal sym2accidentalVal(SymId id)
 //   Accidental
 //---------------------------------------------------------
 
-Accidental::Accidental(DummyParentOr<EngravingItem> parent)
+Accidental::Accidental(DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment> parent)
     : EngravingItem(ElementType::ACCIDENTAL, parent, ElementFlag::MOVABLE)
 {
 }

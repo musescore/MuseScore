@@ -141,12 +141,24 @@ EngravingItem* Factory::createItem(ElementType type, DummyParentOr<EngravingItem
     return item;
 }
 
-//! The parent if it is of the given type, the dummy otherwise: a parent of the wrong
-//! type is no parent at all.
-template<typename T>
-static DummyParentOr<T> parentOfTypeOrDummy(EngravingItem* parent, DummyParent* dummy)
+template<typename T, typename ... Ts>
+static bool assignIfOfType(DummyParentOr<Ts...>& result, EngravingItem* parent)
 {
-    return parentOrDummy(dynamic_cast<T*>(parent), dummy);
+    T* typedParent = dynamic_cast<T*>(parent);
+    if (typedParent) {
+        result = typedParent;
+    }
+    return typedParent != nullptr;
+}
+
+//! The parent if it is of one of the given types, the dummy otherwise: a parent of the
+//! wrong type is no parent at all.
+template<typename ... Ts>
+static DummyParentOr<Ts...> parentOfTypeOrDummy(EngravingItem* parent, DummyParent* dummy)
+{
+    DummyParentOr<Ts...> result = dummy;
+    (assignIfOfType<Ts>(result, parent) || ...);
+    return result;
 }
 
 EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingItem> parent)
@@ -189,7 +201,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::ORNAMENT:          return new Ornament(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::FERMATA:           return new Fermata(parent);
     case ElementType::CHORDLINE:         return new ChordLine(parentOfTypeOrDummy<Chord>(parentItem, dummy));
-    case ElementType::ACCIDENTAL:        return new Accidental(parent);
+    case ElementType::ACCIDENTAL:
+        return new Accidental(parentOfTypeOrDummy<Note, Ambitus, Ornament, Trill, TrillSegment>(parentItem, dummy));
     case ElementType::DYNAMIC:           return new Dynamic(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::EXPRESSION:        return new Expression(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::TEXT:              return new Text(parent);
@@ -364,8 +377,8 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, DummyParen
         return copy; \
     } \
 
-CREATE_ITEM_IMPL(Accidental, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(Accidental, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Accidental, DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment>)
+MAKE_ITEM_IMPL(Accidental, DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment>)
 
 CREATE_ITEM_IMPL(Ambitus, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(Ambitus, DummyParentOr<Segment>)
