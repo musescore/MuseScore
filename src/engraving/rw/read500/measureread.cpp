@@ -351,10 +351,11 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Clef") {
             Clef* clef = Factory::createClef(ctx.dummy());
             clef->setTrack(ctx.track());
-            TRead::read(clef, e, ctx);
+            bool isHeader = false;
+            TRead::read(clef, e, ctx, &isHeader);
             clef->setGenerated(false);
 
-            segment = measure->getSegment(clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
+            segment = measure->getSegment(isHeader ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             segment->add(clef);
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy());

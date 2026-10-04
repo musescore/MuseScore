@@ -432,7 +432,6 @@ enum class Pid : short {
     CLEF_TYPE_CONCERT,
     CLEF_TYPE_TRANSPOSING,
     CLEF_TO_BARLINE_POS,
-    IS_HEADER, // for clefs
     KEY_CONCERT,
     KEY,
     ACTION,   // for ActionIcon

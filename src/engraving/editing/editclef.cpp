@@ -257,7 +257,6 @@ void EditClef::undoChangeClef(Transaction&, Score* score, Staff* ostaff, Engravi
                 gclef = clef;
             }
             clef->setTrack(track);
-            clef->setIsHeader(st == SegmentType::HeaderClef);
             staffScore->doUndoAddElement(clef);
         }
         if (forInstrumentChange) {

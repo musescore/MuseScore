@@ -409,7 +409,6 @@ void Cursor::add(EngravingItem* wrapped)
         mu::engraving::Segment* destSeg = measure->undoGetSegmentR(st, rt);
         clef->setOwnershipParent(destSeg);
         clef->setTrack(m_track);
-        clef->setIsHeader(st == SegmentType::HeaderClef);
         m_score->undoAddElement(clef);
         break;
     }
