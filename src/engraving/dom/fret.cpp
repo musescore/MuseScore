@@ -165,7 +165,7 @@ static DiagramInfo resolveDiagram(const std::vector<DiagramInfo>& diagrams)
     return result;
 }
 
-FretDiagram::FretDiagram(DummyParentOr<Segment> parent)
+FretDiagram::FretDiagram(DummyParentOr<Segment, FBox> parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initDefaultValues();

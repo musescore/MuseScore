@@ -236,7 +236,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::STAFF_STATE:       return new StaffState(parent);
     case ElementType::TEMPO_TEXT:        return new TempoText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::HARMONY:           return new Harmony(parentOfTypeOrDummy<Segment>(parentItem, dummy));
-    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parentOfTypeOrDummy<Segment>(parentItem, dummy));
+    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parentOfTypeOrDummy<Segment, FBox>(parentItem, dummy));
     case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::BEND:              return new Bend(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::GUITAR_BEND:       return new GuitarBend(parentOfTypeOrDummy<Note>(parentItem, dummy));
@@ -441,9 +441,9 @@ MAKE_ITEM_IMPL(Fermata, DummyParentOr<Segment>)
 CREATE_ITEM_IMPL(FiguredBass, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(FiguredBass, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(FretDiagram, DummyParentOr<Segment>)
+CREATE_ITEM_IMPL(FretDiagram, DummyParentOr<Segment, FBox>)
 COPY_ITEM_IMPL(FretDiagram)
-MAKE_ITEM_IMPL(FretDiagram, DummyParentOr<Segment>)
+MAKE_ITEM_IMPL(FretDiagram, DummyParentOr<Segment, FBox>)
 
 CREATE_ITEM_IMPL(HarpPedalDiagram, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(HarpPedalDiagram)

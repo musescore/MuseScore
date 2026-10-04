@@ -99,9 +99,9 @@ public:
     static FiguredBass* createFiguredBass(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<FiguredBass> makeFiguredBass(DummyParentOr<Segment> parent);
 
-    static FretDiagram* createFretDiagram(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
+    static FretDiagram* createFretDiagram(DummyParentOr<Segment, FBox> parent, bool isAccessibleEnabled = true);
     static FretDiagram* copyFretDiagram(const FretDiagram& src);
-    static std::shared_ptr<FretDiagram> makeFretDiagram(DummyParentOr<Segment> parent);
+    static std::shared_ptr<FretDiagram> makeFretDiagram(DummyParentOr<Segment, FBox> parent);
 
     static HarpPedalDiagram* createHarpPedalDiagram(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
     static HarpPedalDiagram* copyHarpPedalDiagram(const HarpPedalDiagram& src);
