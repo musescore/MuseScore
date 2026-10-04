@@ -229,7 +229,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::MARKER:            return new Marker(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::JUMP:              return new Jump(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parentOfTypeOrDummy<Segment>(parentItem, dummy));
-    case ElementType::ACTION_ICON:       return new ActionIcon(parent);
+    case ElementType::ACTION_ICON:       return new ActionIcon(dummy);
     case ElementType::NOTE:              return new Note(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::SYMBOL:            return new Symbol(parent);
     case ElementType::FSYMBOL:           return new FSymbol(parent);
@@ -262,7 +262,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::MEASURE:           return new Measure(score);
     case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
     case ElementType::IMAGE:             return new Image(parent);
-    case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
+    case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(dummy);
     case ElementType::AMBITUS:           return new Ambitus(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::STICKING:          return new Sticking(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::TRIPLET_FEEL:      return new TripletFeel(parentOfTypeOrDummy<Segment>(parentItem, dummy));

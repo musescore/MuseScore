@@ -37,7 +37,7 @@ class ActionIcon final : public EngravingItem
     DECLARE_CLASSOF(ElementType::ACTION_ICON)
 
 public:
-    ActionIcon(DummyParentOr<EngravingItem> score);
+    ActionIcon(DummyParent* parent);
     ~ActionIcon() override = default;
 
     ActionIcon* clone() const override;
