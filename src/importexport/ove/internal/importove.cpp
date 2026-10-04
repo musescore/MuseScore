@@ -2474,7 +2474,7 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
             int absTick = m_mtt->getTick(measure->measureNumber(), glissandoPtr->getTick());
             ChordRest* cr = measure->findChordRest(Fraction::fromTicks(absTick), track);
             if (cr != 0) {
-                Glissando* g = Factory::createGlissando(cr);
+                Glissando* g = Factory::createGlissando(cr->score()->dummy());
                 g->setGlissandoType(GlissandoType::WAVY);
                 g->setGlissandoStyle(cr->part()->instrument(cr->tick())->glissandoStyle());
                 cr->add(g);

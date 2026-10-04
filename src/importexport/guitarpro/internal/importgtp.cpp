@@ -692,7 +692,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
     UNUSED(note);
     // shift / legato slide
     if (sl == SHIFT_SLIDE || sl == LEGATO_SLIDE) {
-        Glissando* s = mu::engraving::Factory::createGlissando(cr);
+        Glissando* s = mu::engraving::Factory::createGlissando(cr->score()->dummy());
         //s->setXmlText("");
         s->setGlissandoType(GlissandoType::STRAIGHT);
         cr->add(s);

@@ -228,7 +228,7 @@ public:
                             bool isAccessibleEnabled = true);
     static Text* copyText(const Text& src);
 
-    static Tie* createTie(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static Tie* createTie(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static Tie* copyTie(const Tie& src);
 
     static TimeSig* createTimeSig(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
@@ -257,8 +257,8 @@ public:
     static HammerOnPullOff* createHammerOnPullOff(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<HammerOnPullOff> makeHammerOnPullOff(DummyParentOr<EngravingItem> parent);
 
-    static Glissando* createGlissando(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Glissando> makeGlissando(DummyParentOr<EngravingItem> parent);
+    static Glissando* createGlissando(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Glissando> makeGlissando(DummyParentOr<Note> parent);
 
     static GuitarBend* createGuitarBend(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<GuitarBend> makeGuitarBend(DummyParentOr<Note> parent);
@@ -269,8 +269,8 @@ public:
 
     static Vibrato* createVibrato(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
 
-    static TextLine* createTextLine(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<TextLine> makeTextLine(DummyParentOr<EngravingItem> parent);
+    static TextLine* createTextLine(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TextLine> makeTextLine(DummyParentOr<Note> parent);
 
     static Ottava* createOttava(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
 

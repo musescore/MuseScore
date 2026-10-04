@@ -59,7 +59,7 @@ class TextLine final : public TextLineBase
     DECLARE_CLASSOF(ElementType::TEXTLINE)
 
 public:
-    TextLine(DummyParentOr<EngravingItem> parent, bool system=false);
+    TextLine(DummyParentOr<Note> parent, bool system=false);
     TextLine(const TextLine&);
     ~TextLine() {}
 

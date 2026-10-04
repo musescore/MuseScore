@@ -48,7 +48,7 @@ class NoteLine final : public TextLineBase
     DECLARE_CLASSOF(ElementType::NOTELINE)
 
 public:
-    NoteLine(EngravingObject* parent);
+    NoteLine(DummyParentOr<Note> parent);
     NoteLine(const NoteLine&);
     ~NoteLine() {}
 

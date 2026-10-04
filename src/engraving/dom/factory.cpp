@@ -173,8 +173,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     switch (type) {
     case ElementType::VOLTA:             return new Volta(parent);
     case ElementType::OTTAVA:            return new Ottava(parent);
-    case ElementType::TEXTLINE:          return new TextLine(parent);
-    case ElementType::NOTELINE:          return new NoteLine(parent);
+    case ElementType::TEXTLINE:          return new TextLine(parentOfTypeOrDummy<Note>(parentItem, dummy));
+    case ElementType::NOTELINE:          return new NoteLine(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::TRILL:             return new Trill(parent);
     case ElementType::LET_RING:          return new LetRing(parent);
     case ElementType::GRADUAL_TEMPO_CHANGE: return new GradualTempoChange(parent);
@@ -194,7 +194,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::ARPEGGIO:          return new Arpeggio(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::CHORD_BRACKET:     return new ChordBracket(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::BREATH:            return new Breath(parentOfTypeOrDummy<Segment>(parentItem, dummy));
-    case ElementType::GLISSANDO:         return new Glissando(parent);
+    case ElementType::GLISSANDO:         return new Glissando(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::BRACKET:           return new Bracket(parentOfTypeOrDummy<System>(parentItem, dummy));
     case ElementType::ARTICULATION:      return new Articulation(parentOfTypeOrDummy<ChordRest, BarLine>(parentItem, dummy));
     case ElementType::TAPPING:           return new Tapping(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
@@ -252,7 +252,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::STEM:              return new Stem(parentOfTypeOrDummy<Chord>(parentItem, dummy));
     case ElementType::SLUR:              return new Slur(parent);
     case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(parent);
-    case ElementType::TIE:               return new Tie(parent);
+    case ElementType::TIE:               return new Tie(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::TUPLET:            return new Tuplet(parentOfTypeOrDummy<Measure>(parentItem, dummy));
     case ElementType::FINGERING:         return new Fingering(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::HBOX:              return new HBox(score);
@@ -640,7 +640,7 @@ Text* Factory::createText(DummyParentOr<EngravingItem> parent, TextStyleType tid
 
 COPY_ITEM_IMPL(Text)
 
-CREATE_ITEM_IMPL(Tie, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Tie, DummyParentOr<Note>)
 Tie* Factory::copyTie(const Tie& src)
 {
     Tie* copy = src.isLaissezVib() ? new LaissezVib(*toLaissezVib(&src)) : new Tie(src);
@@ -673,8 +673,8 @@ MAKE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>)
 CREATE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Glissando, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(Glissando, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(Glissando, DummyParentOr<Note>)
+MAKE_ITEM_IMPL(Glissando, DummyParentOr<Note>)
 
 CREATE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>)
@@ -693,8 +693,8 @@ TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFe
 
 CREATE_ITEM_IMPL(Vibrato, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(TextLine, DummyParentOr<EngravingItem>)
-MAKE_ITEM_IMPL(TextLine, DummyParentOr<EngravingItem>);
+CREATE_ITEM_IMPL(TextLine, DummyParentOr<Note>)
+MAKE_ITEM_IMPL(TextLine, DummyParentOr<Note>);
 
 CREATE_ITEM_IMPL(Ottava, DummyParentOr<EngravingItem>)
 

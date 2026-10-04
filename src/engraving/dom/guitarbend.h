@@ -59,7 +59,7 @@ class GuitarBend final : public SLine
     M_PROPERTY2(float, endTimeFactor, setEndTimeFactor, 1.f)
 
 public:
-    GuitarBend(EngravingObject* parent);
+    GuitarBend(DummyParentOr<Note> parent);
     GuitarBend(const GuitarBend&);
     ~GuitarBend() override;
 
