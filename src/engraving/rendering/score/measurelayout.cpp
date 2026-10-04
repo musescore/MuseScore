@@ -1782,7 +1782,6 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
             clef = Factory::createClef(cSegment);
             clef->setTrack(track);
             clef->setGenerated(true);
-            clef->setIsHeader(true);
             clef->setShowCourtesy(showCourtesy);
             cSegment->add(clef);
         }

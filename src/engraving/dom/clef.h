@@ -147,8 +147,7 @@ public:
 
     ClefToBarlinePosition clefToBarlinePosition() const { return m_clefToBarlinePosition; }
     void setClefToBarlinePosition(ClefToBarlinePosition val) { m_clefToBarlinePosition = val; }
-    bool isHeader() const { return m_isHeader; }
-    void setIsHeader(bool val) { m_isHeader = val; }
+    bool isHeader() const;
 
     bool isTrailer() const { return m_isTrailer; }
     void setIsTrailer(bool val) { m_isTrailer = val; }
@@ -171,7 +170,6 @@ private:
     bool m_showCourtesy = true;
     bool m_isSmall = false;
     bool m_forInstrumentChange = false;
-    bool m_isHeader = false;
     bool m_isCourtesy = false;
     bool m_isTrailer = false;
     ClefToBarlinePosition m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;

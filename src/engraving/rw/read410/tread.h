@@ -212,7 +212,8 @@ public:
 
     static void read(Chord* ch, XmlReader& xml, ReadContext& ctx);
     static void read(ChordLine* l, XmlReader& xml, ReadContext& ctx);
-    static void read(Clef* c, XmlReader& xml, ReadContext& ctx);
+    /// @param isHeader receives whether the clef belongs in a header clef segment
+    static void read(Clef* c, XmlReader& xml, ReadContext& ctx, bool* isHeader = nullptr);
     static void read(Capo* c, XmlReader& xml, ReadContext& ctx);
 
     static void read(Excerpt* item, XmlReader& xml, ReadContext& ctx);

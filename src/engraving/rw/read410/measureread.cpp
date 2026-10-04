@@ -346,11 +346,9 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Clef") {
             Clef* clef = Factory::createClef(ctx.dummy());
             clef->setTrack(ctx.track());
-            TRead::read(clef, e, ctx);
+            bool header = false;
+            TRead::read(clef, e, ctx, &header);
             clef->setGenerated(false);
-
-            bool header = clef->isHeader();
-
             if (ctx.score()->mscVersion() < 450) {
                 // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
                 if (ctx.tick() != Fraction(0, 1) && ctx.tick() == measure->tick()

@@ -907,7 +907,6 @@ void MnxImporter::createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::pa
             clef->setConcertClef(clefType);
             clef->setTransposingClef(clefType);
             clef->setGenerated(false);
-            clef->setIsHeader(isHeader);
             clefSeg->add(clef);
         } else {
             LOGE() << "Unsupported clef encountered at " << mnxClef.pointer().to_string();

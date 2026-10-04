@@ -2571,7 +2571,7 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
+void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx, bool* isHeader)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -2586,7 +2586,10 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
         } else if (tag == "clefToBarlinePos") {
             c->setClefToBarlinePosition(ClefToBarlinePosition(e.readInt()));
         } else if (tag == "isHeader") {
-            c->setIsHeader(e.readBool());
+            const bool header = e.readBool();
+            if (isHeader) {
+                *isHeader = header;
+            }
         } else if (!readItemProperties(c, e, ctx)) {
             e.unknown();
         }

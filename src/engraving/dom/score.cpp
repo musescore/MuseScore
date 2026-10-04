@@ -1928,7 +1928,6 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     Clef* clef = Factory::createClef(seg);
     clef->setClefType(ClefType::F);
     clef->setTrack((staffIdx + 1) * VOICES);
-    clef->setIsHeader(true);
     undoAddElement(clef);
 
     Transaction& tx = transactionManager()->currentOrDummyTransaction();

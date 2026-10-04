@@ -353,7 +353,8 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Clef") {
             Clef* clef = Factory::createClef(ctx.dummy());
             clef->setTrack(ctx.track());
-            TRead::read(clef, e, ctx);
+            bool isHeader = false;
+            TRead::read(clef, e, ctx, &isHeader);
             clef->setGenerated(false);
 
             bool header = false;
@@ -380,7 +381,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                     }
                 }
             } else {
-                header = clef->isHeader();
+                header = isHeader;
             }
 
             // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
@@ -391,7 +392,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
 
             segment = measure->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             segment->add(clef);
-            clef->setIsHeader(header);
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy());
             ts->setTrack(ctx.track());
