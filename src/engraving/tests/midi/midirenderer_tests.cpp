@@ -42,11 +42,20 @@ static NPlayEvent noteEvent(int pitch, int volume, int channel)
     return NPlayEvent(EventType::ME_NOTEON, channel, pitch, volume);
 }
 
+// Several events can share a tick (e.g. a note-on and a pitch bend). std::multimap::find() may return any of
+// them: libstdc++ returns the first, libc++ does not. lower_bound() always returns the first one.
+template<class EventsMap>
+static auto findFirstEventAt(EventsMap& events, int tick)
+{
+    auto it = events.lower_bound(tick);
+    return (it != events.end() && it->first == tick) ? it : events.end();
+}
+
 static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd, int pitch, int volume,
                                MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
                                int channel = DEFAULT_CHANNEL)
 {
-    auto it = events[channel].find(tickStart);
+    auto it = findFirstEventAt(events[channel], tickStart);
     EXPECT_NE(it, events[channel].end());
     if (it == events[channel].end()) {
         return;
@@ -59,7 +68,7 @@ static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd,
 
     events[channel].erase(it);
 
-    it = events[channel].find(tickEnd);
+    it = findFirstEventAt(events[channel], tickEnd);
     EXPECT_NE(it, events[channel].end());
     if (it == events[channel].end()) {
         return;
@@ -76,7 +85,7 @@ static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd,
 static void checkPitchBend(EventsHolder& events, int tick, int pitchValue, MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
                            int channel = DEFAULT_CHANNEL)
 {
-    auto it = events[channel].find(tick);
+    auto it = findFirstEventAt(events[channel], tick);
     EXPECT_NE(it, events[channel].end());
     if (it == events[channel].end()) {
         return;
