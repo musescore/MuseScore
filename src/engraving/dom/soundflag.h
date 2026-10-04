@@ -33,7 +33,7 @@ class SoundFlag final : public EngravingItem
     DECLARE_CLASSOF(ElementType::SOUND_FLAG)
 
 public:
-    explicit SoundFlag(DummyParentOr<EngravingItem> parent);
+    explicit SoundFlag(DummyParentOr<StaffText> parent);
 
     SoundFlag* clone() const override;
     bool isEditable() const override;

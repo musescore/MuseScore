@@ -218,7 +218,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::SYSTEM_TEXT:       return new SystemText(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parentOfTypeOrDummy<Segment>(parentItem, dummy));
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
-    case ElementType::SOUND_FLAG:        return new SoundFlag(parent);
+    case ElementType::SOUND_FLAG:        return new SoundFlag(parentOfTypeOrDummy<StaffText>(parentItem, dummy));
     case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parentOfTypeOrDummy<MeasureBase>(parentItem, dummy));
     case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parentOfTypeOrDummy<System>(parentItem, dummy));
     case ElementType::NOTEHEAD:          return new NoteHead(parentOfTypeOrDummy<Note>(parentItem, dummy));
@@ -579,7 +579,7 @@ StaveSharingLabel* Factory::createStaveSharingLabel(DummyParentOr<Segment> paren
     return staveSharingLabel;
 }
 
-CREATE_ITEM_IMPL(SoundFlag, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(SoundFlag, DummyParentOr<StaffText>)
 
 CREATE_ITEM_IMPL(Expression, DummyParentOr<Segment>)
 

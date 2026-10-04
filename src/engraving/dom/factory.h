@@ -195,7 +195,7 @@ public:
                                                       TextStyleType textStyleType = TextStyleType::STAVE_SHARING,
                                                       bool isAccessibleEnabled = true);
 
-    static SoundFlag* createSoundFlag(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+    static SoundFlag* createSoundFlag(DummyParentOr<StaffText> parent, bool isAccessibleEnabled = true);
 
     static Expression* createExpression(DummyParentOr<Segment> parent, bool isAccessibleEnabled = true);
 
