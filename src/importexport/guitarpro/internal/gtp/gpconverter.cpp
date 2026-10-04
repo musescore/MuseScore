@@ -1691,7 +1691,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
     }
 
     Segment* s = lastMeasure->getSegment(SegmentType::HeaderClef, tick);
-    Clef* cl = mu::engraving::Factory::createClef(_score->dummy());
+    Clef* cl = mu::engraving::Factory::createClef(s);
     cl->setTrack(curTrack);
     cl->setClefType(clef);
 
