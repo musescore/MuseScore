@@ -35,7 +35,11 @@
 namespace mu::iex::tabledit {
 class MeasureHandler;
 
+// header size
+static const size_t HEADER_SIZE = 256;
+
 // offsets into the file header
+static const uint8_t OFFSET_SECURITYCODE = 0x10;
 static const uint8_t OFFSET_TBED = 0x38;
 static const uint8_t OFFSET_CONTENTS = 0x3C;
 static const uint8_t OFFSET_TITLE = 0x40;
@@ -49,6 +53,7 @@ static const uint8_t OFFSET_READINGLIST = 0x80;
 static const uint8_t OFFSET_INTERNETLINK = 0x84;
 static const uint8_t OFFSET_COPYRIGHT = 0x8C;
 static const uint8_t OFFSET_OLDNUM = 0xCA;
+static const uint8_t OFFSET_WFORMAT = 0xCC;
 
 struct TefMeasure {
     int flag { 0 };
@@ -67,6 +72,7 @@ struct TefReadingListItem {
 
 class TablEdit
 {
+    muse::String _errorMessage;
     muse::io::IODevice* _file = nullptr;
     mu::engraving::MasterScore* score = nullptr;
 
@@ -138,12 +144,14 @@ class TablEdit
     void initializeVoiceAllocators(std::vector<VoiceAllocator>& allocators);
     engraving::part_idx_t partIdx(size_t stringIdx, bool& ok) const;
     int stringNumberPreviousParts(engraving::part_idx_t partIdx) const;
+    uint32_t readSignature();
     void readTefContents();
-    void readTefHeader();
+    mu::engraving::Err readTefHeader();
     void readTefInstruments();
     void readTefMeasures();
     void readTefReadingList();
     void readTefTexts();
+    uint16_t readWFormat();
 
     TefHeader tefHeader;
     std::vector<TefTextMarker> tefTextMarkers;
@@ -156,8 +164,9 @@ class TablEdit
     std::map<const TefNote* const, mu::engraving::Note*> effectMap;
 
 public:
-    TablEdit(muse::io::IODevice* f, mu::engraving::MasterScore* s)
-        : _file(f), score(s) {}
-    mu::engraving::Err import();
+    TablEdit(mu::engraving::MasterScore* s)
+        : score(s) {}
+    mu::engraving::Err import(const muse::io::path_t& path);
+    muse::String errorMessage() { return _errorMessage; }
 };
 } // namespace mu::iex::tabledit
