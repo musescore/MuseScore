@@ -342,7 +342,7 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, DummyParen
     return createItem(type, parent, isAccessibleEnabled);
 }
 
-#define CREATE_ITEM_IMPL(T, P, isAccessibleEnabled) \
+#define CREATE_ITEM_IMPL(T, P) \
     T* Factory::create##T(P parent, bool isAccessibleEnabled) \
     { \
         T* e = new T(parent); \
@@ -363,38 +363,38 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, DummyParen
         return copy; \
     } \
 
-CREATE_ITEM_IMPL(Accidental, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Accidental, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(Accidental, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Ambitus, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Ambitus, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(Ambitus, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(Arpeggio, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Arpeggio, DummyParentOr<Chord>)
 MAKE_ITEM_IMPL(Arpeggio, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(ChordBracket, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(ChordBracket, DummyParentOr<Chord>)
 MAKE_ITEM_IMPL(ChordBracket, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(Articulation, DummyParentOr<ChordRest>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Articulation, DummyParentOr<ChordRest>)
 MAKE_ITEM_IMPL(Articulation, DummyParentOr<ChordRest>)
 
-CREATE_ITEM_IMPL(Tapping, DummyParentOr<ChordRest>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Tapping, DummyParentOr<ChordRest>)
 MAKE_ITEM_IMPL(Tapping, DummyParentOr<ChordRest>)
 
-CREATE_ITEM_IMPL(Ornament, DummyParentOr<ChordRest>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Ornament, DummyParentOr<ChordRest>)
 MAKE_ITEM_IMPL(Ornament, DummyParentOr<ChordRest>)
 
-CREATE_ITEM_IMPL(BarLine, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(BarLine, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(BarLine)
 MAKE_ITEM_IMPL(BarLine, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(Beam, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Beam, Score*)
 MAKE_ITEM_IMPL(Beam, Score*)
 
-CREATE_ITEM_IMPL(Bend, DummyParentOr<Note>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Bend, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(Bend, DummyParentOr<Note>)
 
-CREATE_ITEM_IMPL(Bracket, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Bracket, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(Bracket, DummyParentOr<EngravingItem>)
 
 BracketItem* Factory::createBracketItem(DummyParentOr<EngravingItem> parent)
@@ -409,10 +409,10 @@ BracketItem* Factory::createBracketItem(DummyParentOr<EngravingItem> parent, Bra
     return bi;
 }
 
-CREATE_ITEM_IMPL(Breath, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Breath, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(Breath, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(Chord, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Chord, DummyParentOr<Segment>)
 
 Chord* Factory::copyChord(const Chord& src, bool link)
 {
@@ -423,59 +423,59 @@ Chord* Factory::copyChord(const Chord& src, bool link)
 }
 MAKE_ITEM_IMPL(Chord, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(ChordLine, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(ChordLine, DummyParentOr<Chord>)
 COPY_ITEM_IMPL(ChordLine)
 MAKE_ITEM_IMPL(ChordLine, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(Clef, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Clef, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(Clef)
 MAKE_ITEM_IMPL(Clef, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(DeadSlapped, Rest*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(DeadSlapped, Rest*)
 COPY_ITEM_IMPL(DeadSlapped)
 
-CREATE_ITEM_IMPL(Fermata, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Fermata, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(Fermata, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(FiguredBass, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(FiguredBass, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(FiguredBass, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(FretDiagram, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(FretDiagram, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(FretDiagram)
 MAKE_ITEM_IMPL(FretDiagram, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(HarpPedalDiagram, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(HarpPedalDiagram, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(HarpPedalDiagram)
 MAKE_ITEM_IMPL(HarpPedalDiagram, DummyParentOr<Segment>);
 
-CREATE_ITEM_IMPL(KeySig, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(KeySig, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(KeySig)
 MAKE_ITEM_IMPL(KeySig, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(LaissezVib, DummyParentOr<Note>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(LaissezVib, DummyParentOr<Note>)
 COPY_ITEM_IMPL(LaissezVib);
 
-CREATE_ITEM_IMPL(LayoutBreak, DummyParentOr<MeasureBase>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(LayoutBreak, DummyParentOr<MeasureBase>)
 COPY_ITEM_IMPL(LayoutBreak)
 MAKE_ITEM_IMPL(LayoutBreak, DummyParentOr<MeasureBase>)
 
-CREATE_ITEM_IMPL(Lyrics, DummyParentOr<ChordRest>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Lyrics, DummyParentOr<ChordRest>)
 COPY_ITEM_IMPL(Lyrics)
 
-CREATE_ITEM_IMPL(LyricsLine, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(LyricsLine, DummyParentOr<EngravingItem>)
 COPY_ITEM_IMPL(LyricsLine)
 
-CREATE_ITEM_IMPL(Measure, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Measure, Score*)
 COPY_ITEM_IMPL(Measure)
 
-CREATE_ITEM_IMPL(MeasureRepeat, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(MeasureRepeat, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(MeasureRepeat)
 
-CREATE_ITEM_IMPL(StringTunings, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StringTunings, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(StringTunings)
 MAKE_ITEM_IMPL(StringTunings, DummyParentOr<Segment>);
 
-CREATE_ITEM_IMPL(Note, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Note, DummyParentOr<Chord>)
 Note* Factory::copyNote(const Note& src, bool link)
 {
     Note* copy = new Note(src, link);
@@ -485,14 +485,14 @@ Note* Factory::copyNote(const Note& src, bool link)
 }
 MAKE_ITEM_IMPL(Note, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(NoteDot, DummyParentOr<Note>, isAccessibleEnabled)
-CREATE_ITEM_IMPL(NoteDot, Rest*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(NoteDot, DummyParentOr<Note>)
+CREATE_ITEM_IMPL(NoteDot, Rest*)
 COPY_ITEM_IMPL(NoteDot)
 
-CREATE_ITEM_IMPL(NoteLine, DummyParentOr<Note>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(NoteLine, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(NoteLine, DummyParentOr<Note>);
 
-CREATE_ITEM_IMPL(Page, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Page, Score*)
 
 PageLockIndicator* Factory::createPageLockIndicator(DummyParentOr<System> parent, const RangeLock * lock, bool isAccessibleEnabled)
 {
@@ -503,13 +503,13 @@ PageLockIndicator* Factory::createPageLockIndicator(DummyParentOr<System> parent
 
 COPY_ITEM_IMPL(PageLockIndicator)
 
-CREATE_ITEM_IMPL(PartialTie, DummyParentOr<Note>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PartialTie, DummyParentOr<Note>)
 COPY_ITEM_IMPL(PartialTie)
 
-CREATE_ITEM_IMPL(PartialLyricsLine, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PartialLyricsLine, DummyParentOr<EngravingItem>)
 COPY_ITEM_IMPL(PartialLyricsLine)
 
-CREATE_ITEM_IMPL(Rest, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Rest, DummyParentOr<Segment>)
 
 Rest* Factory::createRest(DummyParentOr<Segment> parent, const TDuration& t, bool isAccessibleEnabled)
 {
@@ -527,7 +527,7 @@ Rest* Factory::copyRest(const Rest& src, bool link)
     return copy;
 }
 
-CREATE_ITEM_IMPL(Segment, DummyParentOr<Measure>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Segment, DummyParentOr<Measure>)
 
 Segment* Factory::createSegment(DummyParentOr<Measure> parent, SegmentType type, const Fraction& t, bool isAccessibleEnabled)
 {
@@ -537,10 +537,10 @@ Segment* Factory::createSegment(DummyParentOr<Measure> parent, SegmentType type,
     return s;
 }
 
-CREATE_ITEM_IMPL(Slur, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Slur, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(Slur, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Spacer, DummyParentOr<Measure>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Spacer, DummyParentOr<Measure>)
 MAKE_ITEM_IMPL(Spacer, DummyParentOr<Measure>)
 
 Staff* Factory::createStaff(Part * parent)
@@ -550,12 +550,12 @@ Staff* Factory::createStaff(Part * parent)
     return staff;
 }
 
-CREATE_ITEM_IMPL(StaffLines, DummyParentOr<Measure>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StaffLines, DummyParentOr<Measure>)
 COPY_ITEM_IMPL(StaffLines)
 
-CREATE_ITEM_IMPL(StaffState, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StaffState, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(StaffTypeChange, DummyParentOr<MeasureBase>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StaffTypeChange, DummyParentOr<MeasureBase>)
 MAKE_ITEM_IMPL(StaffTypeChange, DummyParentOr<MeasureBase>)
 
 StaffText* Factory::createStaffText(DummyParentOr<Segment> parent, TextStyleType textStyleType, bool isAccessibleEnabled)
@@ -566,7 +566,7 @@ StaffText* Factory::createStaffText(DummyParentOr<Segment> parent, TextStyleType
     return staffText;
 }
 
-CREATE_ITEM_IMPL(StaveSharingChange, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StaveSharingChange, DummyParentOr<Segment>)
 StaveSharingLabel* Factory::createStaveSharingLabel(DummyParentOr<Segment> parent, TextStyleType textStyleType, bool isAccessibleEnabled)
 {
     StaveSharingLabel* staveSharingLabel = new StaveSharingLabel(parent, textStyleType);
@@ -574,19 +574,19 @@ StaveSharingLabel* Factory::createStaveSharingLabel(DummyParentOr<Segment> paren
     return staveSharingLabel;
 }
 
-CREATE_ITEM_IMPL(SoundFlag, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(SoundFlag, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Expression, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Expression, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(RehearsalMark, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(RehearsalMark, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(Stem, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Stem, DummyParentOr<Chord>)
 COPY_ITEM_IMPL(Stem)
 
-CREATE_ITEM_IMPL(StemSlash, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StemSlash, DummyParentOr<Chord>)
 COPY_ITEM_IMPL(StemSlash)
 
-CREATE_ITEM_IMPL(System, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(System, Score*)
 
 SystemText* Factory::createSystemText(DummyParentOr<Segment> parent, TextStyleType textStyleType, ElementType type,
                                       bool isAccessibleEnabled)
@@ -597,7 +597,7 @@ SystemText* Factory::createSystemText(DummyParentOr<Segment> parent, TextStyleTy
     return systemText;
 }
 
-CREATE_ITEM_IMPL(InstrumentChange, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(InstrumentChange, DummyParentOr<Segment>)
 
 InstrumentChange* Factory::createInstrumentChange(DummyParentOr<Segment> parent, const Instrument& instrument,
                                                   bool isAccessibleEnabled)
@@ -608,9 +608,9 @@ InstrumentChange* Factory::createInstrumentChange(DummyParentOr<Segment> parent,
     return instrumentChange;
 }
 
-CREATE_ITEM_IMPL(Sticking, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Sticking, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(Fingering, DummyParentOr<Note>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Fingering, DummyParentOr<Note>)
 
 Fingering* Factory::createFingering(DummyParentOr<Note> parent, TextStyleType textStyleType,
                                     bool isAccessibleEnabled)
@@ -621,9 +621,9 @@ Fingering* Factory::createFingering(DummyParentOr<Note> parent, TextStyleType te
     return fingering;
 }
 
-CREATE_ITEM_IMPL(Harmony, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Harmony, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(TempoText, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TempoText, DummyParentOr<Segment>)
 
 Text* Factory::createText(DummyParentOr<EngravingItem> parent, TextStyleType tid, bool isAccessibleEnabled)
 {
@@ -635,7 +635,7 @@ Text* Factory::createText(DummyParentOr<EngravingItem> parent, TextStyleType tid
 
 COPY_ITEM_IMPL(Text)
 
-CREATE_ITEM_IMPL(Tie, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Tie, DummyParentOr<EngravingItem>)
 Tie* Factory::copyTie(const Tie& src)
 {
     Tie* copy = src.isLaissezVib() ? new LaissezVib(*toLaissezVib(&src)) : new Tie(src);
@@ -644,39 +644,39 @@ Tie* Factory::copyTie(const Tie& src)
     return copy;
 }
 
-CREATE_ITEM_IMPL(TimeSig, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TimeSig, DummyParentOr<Segment>)
 COPY_ITEM_IMPL(TimeSig)
 MAKE_ITEM_IMPL(TimeSig, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(TremoloTwoChord, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TremoloTwoChord, DummyParentOr<Chord>)
 COPY_ITEM_IMPL(TremoloTwoChord)
 MAKE_ITEM_IMPL(TremoloTwoChord, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(TremoloSingleChord, DummyParentOr<Chord>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TremoloSingleChord, DummyParentOr<Chord>)
 COPY_ITEM_IMPL(TremoloSingleChord)
 MAKE_ITEM_IMPL(TremoloSingleChord, DummyParentOr<Chord>)
 
-CREATE_ITEM_IMPL(TremoloBar, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TremoloBar, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(TremoloBar, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Tuplet, DummyParentOr<Measure>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Tuplet, DummyParentOr<Measure>)
 COPY_ITEM_IMPL(Tuplet)
 
-CREATE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(Hairpin, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(HammerOnPullOff, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Glissando, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Glissando, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(Glissando, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(GuitarBend, DummyParentOr<Note>)
 
-CREATE_ITEM_IMPL(Jump, DummyParentOr<Measure>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Jump, DummyParentOr<Measure>)
 
-CREATE_ITEM_IMPL(Trill, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Trill, DummyParentOr<EngravingItem>)
 
 TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFeelType type, bool isAccessibleEnabled)
 {
@@ -686,16 +686,16 @@ TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFe
     return t;
 }
 
-CREATE_ITEM_IMPL(Vibrato, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Vibrato, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(TextLine, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TextLine, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(TextLine, DummyParentOr<EngravingItem>);
 
-CREATE_ITEM_IMPL(Ottava, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Ottava, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(LetRing, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(LetRing, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Marker, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Marker, DummyParentOr<EngravingItem>)
 
 Marker* Factory::createMarker(DummyParentOr<EngravingItem> parent, TextStyleType tid, bool isAccessibleEnabled)
 {
@@ -707,28 +707,28 @@ Marker* Factory::createMarker(DummyParentOr<EngravingItem> parent, TextStyleType
 
 MAKE_ITEM_IMPL(Marker, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(GradualTempoChange, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(GradualTempoChange, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(PalmMute, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PalmMute, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(WhammyBar, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(WhammyBar, DummyParentOr<EngravingItem>)
 MAKE_ITEM_IMPL(WhammyBar, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Rasgueado, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Rasgueado, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(HarmonicMark, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(HarmonicMark, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(PickScrape, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PickScrape, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Volta, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Volta, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Pedal, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Pedal, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(Dynamic, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Dynamic, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(MMRest, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(MMRest, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(VBox, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(VBox, Score*)
 
 VBox* Factory::createTitleVBox(Score * parent, bool isAccessibleEnabled)
 {
@@ -740,11 +740,11 @@ VBox* Factory::createTitleVBox(Score * parent, bool isAccessibleEnabled)
     return b;
 }
 
-CREATE_ITEM_IMPL(HBox, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(HBox, Score*)
 
-CREATE_ITEM_IMPL(TBox, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TBox, Score*)
 
-CREATE_ITEM_IMPL(FBox, Score*, isAccessibleEnabled)
+CREATE_ITEM_IMPL(FBox, Score*)
 
 Image* Factory::createImage(DummyParentOr<EngravingItem> parent)
 {
@@ -753,10 +753,10 @@ Image* Factory::createImage(DummyParentOr<EngravingItem> parent)
     return image;
 }
 
-CREATE_ITEM_IMPL(Symbol, DummyParentOr<EngravingItem>, isAccessibleEnabled)
-CREATE_ITEM_IMPL(FSymbol, DummyParentOr<EngravingItem>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Symbol, DummyParentOr<EngravingItem>)
+CREATE_ITEM_IMPL(FSymbol, DummyParentOr<EngravingItem>)
 
-CREATE_ITEM_IMPL(PlayCountText, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(PlayCountText, DummyParentOr<Segment>)
 
 PlayTechAnnotation* Factory::createPlayTechAnnotation(DummyParentOr<Segment> parent, PlayingTechniqueType techniqueType,
                                                       TextStyleType styleType,
@@ -768,12 +768,12 @@ PlayTechAnnotation* Factory::createPlayTechAnnotation(DummyParentOr<Segment> par
     return annotation;
 }
 
-CREATE_ITEM_IMPL(Capo, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Capo, DummyParentOr<Segment>)
 MAKE_ITEM_IMPL(Capo, DummyParentOr<Segment>);
 
-CREATE_ITEM_IMPL(TimeTickAnchor, DummyParentOr<Segment>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(TimeTickAnchor, DummyParentOr<Segment>)
 
-CREATE_ITEM_IMPL(StaffVisibilityIndicator, DummyParentOr<System>, isAccessibleEnabled)
+CREATE_ITEM_IMPL(StaffVisibilityIndicator, DummyParentOr<System>)
 
 SystemLockIndicator* Factory::createSystemLockIndicator(DummyParentOr<System> parent, const RangeLock * lock, bool isAccessibleEnabled)
 {
@@ -784,5 +784,5 @@ SystemLockIndicator* Factory::createSystemLockIndicator(DummyParentOr<System> pa
 
 COPY_ITEM_IMPL(SystemLockIndicator)
 
-CREATE_ITEM_IMPL(Parenthesis, DummyParentOr<EngravingItem>, isAccessibleEnabled);
+CREATE_ITEM_IMPL(Parenthesis, DummyParentOr<EngravingItem>);
 COPY_ITEM_IMPL(Parenthesis)
