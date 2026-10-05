@@ -1367,7 +1367,7 @@ void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx)
 
     InstrumentNameType type = longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT;
 
-    // Override for video export
+    // We do not show instrument names for video export
     if (!ctx.conf().isShowInstrumentNames()) {
         for (staff_idx_t idx = 0; idx < system->staves().size(); ++idx) {
             updateName(system, idx, ctx, String(), type, InstrumentNameRole::STAFF);
@@ -1425,10 +1425,9 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
     InstrumentLabelVisibility visibility
         = resolveInstrumentLabelVisibility(ctx.dom().staff(startStaffIdx), tick, ctx, ctx.state().firstSystem());
     InstrumentNameType type = resolveInstrumentNameType(visibility);
-    bool hide = visibility == InstrumentLabelVisibility::HIDE;
-    bool longName = type == InstrumentNameType::LONG;
+    bool hideStartStaff = visibility == InstrumentLabelVisibility::HIDE;
 
-    if (!sharedPart->show() || sharedPart->visibleStavesCount() == 0 || hide) {
+    if (!sharedPart->show() || sharedPart->visibleStavesCount() == 0) {
         for (size_t relStaffIdx = 0; relStaffIdx < sharedPart->nstaves(); ++relStaffIdx) {
             size_t globalStaffIdx = startStaffIdx + relStaffIdx;
             updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::GROUP);
@@ -1447,7 +1446,6 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
 
     const Instrument* instr = sharedPart->instrument();
     bool useGroup = useGroupNames(instr->group(), ctx) && sharedPart->isSameInstrumentsAtTick(tick);
-    String formattedSharedStavesName = formattedGroupName(system, sharedPart, tick, longName);
 
     const SharedTrackMap& trackMap = sharedPart->trackMapAtTick(tick);
     const std::vector<Part*> originParts = sharedPart->originParts();
@@ -1470,22 +1468,34 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
 
         InstrumentLabelVisibility partVisibility
             = resolveInstrumentLabelVisibility(ctx.dom().staff(globalStaffIdx), tick, ctx, ctx.state().firstSystem());
-        bool partLongName = resolveInstrumentNameType(partVisibility) == InstrumentNameType::LONG;
+        InstrumentNameType partNameType = resolveInstrumentNameType(partVisibility);
+        bool partLongName = partNameType == InstrumentNameType::LONG;
+        bool hidePartName = partVisibility == InstrumentLabelVisibility::HIDE;
 
-        String staffGroupName = formattedGroupName(system, originPart ? originPart : sharedPart, tick, partLongName);
-
-        if (useGroup) {
-            if (relStaffIdx == 0) {
-                updateName(system, globalStaffIdx, ctx, staffGroupName, type, InstrumentNameRole::PART);
-            }
-
-            updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::SHARED_STAFF);
-        } else {
-            updateName(system, globalStaffIdx, ctx, staffGroupName, type, InstrumentNameRole::SHARED_STAFF);
+        String staffGroupName;
+        if (!hidePartName) {
+            staffGroupName = formattedGroupName(system, originPart ? originPart : sharedPart, tick, partLongName);
         }
 
-        String staffLabel = formattedSharedStaffLabel(globalStaffIdx, trackMap, originParts);
-        updateName(system, globalStaffIdx, ctx, staffLabel, type, InstrumentNameRole::STAFF);
+        if (useGroup && !hideStartStaff) {
+            if (relStaffIdx == 0) {
+                updateName(system, globalStaffIdx, ctx, staffGroupName, partNameType, InstrumentNameRole::PART);
+            }
+
+            updateName(system, globalStaffIdx, ctx, String(), partNameType, InstrumentNameRole::SHARED_STAFF);
+        } else {
+            if (relStaffIdx == 0) {
+                updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::PART);
+            }
+            updateName(system, globalStaffIdx, ctx, staffGroupName, partNameType, InstrumentNameRole::SHARED_STAFF);
+        }
+
+        String staffLabel;
+        if (!hidePartName) {
+            staffLabel = formattedSharedStaffLabel(globalStaffIdx, trackMap, originParts);
+        }
+
+        updateName(system, globalStaffIdx, ctx, staffLabel, partNameType, InstrumentNameRole::STAFF);
     }
 }
 
