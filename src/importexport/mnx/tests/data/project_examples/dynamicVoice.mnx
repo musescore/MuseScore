@@ -49,14 +49,14 @@
         "_x": {
             "mnxdom": {
                 "client": {
-                    "commit": "cb7c616c47a7",
+                    "commit": "fbcdd1de5f26",
                     "name": "denigma",
                     "version": "4.0.0"
                 },
-                "createdAt": "2026-07-31T22:16:10Z",
-                "mnxSchema": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/27",
+                "createdAt": "2026-09-24T22:51:03Z",
+                "mnxSchema": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/40",
                 "mnxdom": {
-                    "commit": "45bf462",
+                    "commit": "8c5056c",
                     "version": "3.1.0"
                 },
                 "provenanceSchemaVersion": 1,
@@ -69,7 +69,7 @@
         "support": {
             "useBeams": true
         },
-        "version": 27
+        "version": 40
     },
     "parts": [
         {
@@ -90,7 +90,7 @@
                             "glyphs": [
                                 "dynamicMF"
                             ],
-                            "orient": "below",
+                            "placement": "below",
                             "position": {
                                 "fraction": [
                                     0,
@@ -106,7 +106,7 @@
                             "glyphs": [
                                 "dynamicPiano"
                             ],
-                            "orient": "above",
+                            "placement": "above",
                             "position": {
                                 "fraction": [
                                     0,
@@ -146,6 +146,7 @@
                                     "rest": {}
                                 }
                             ],
+                            "directionHint": "upper",
                             "staff": 1,
                             "voice": "s1layer1"
                         },
@@ -174,6 +175,7 @@
                                     "rest": {}
                                 }
                             ],
+                            "directionHint": "lower",
                             "staff": 1,
                             "voice": "s1layer2"
                         }

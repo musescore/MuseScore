@@ -58,12 +58,19 @@ struct MnxDynamicMapping
     mnx::DynamicSuffix accentSuffix = mnx::DynamicSuffix::None; ///< meaningful only when #isAccent
 };
 
+/// The MNX description of a MuseScore caesura glyph.
+struct MnxCaesura {
+    mnx::CaesuraShape shape = mnx::CaesuraShape::Normal;
+    unsigned marks = 2;
+};
+
 // MNX values -> MuseScore values
-extern engraving::ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient);
+extern engraving::ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Placement placement);
 extern engraving::BarLineType toMuseScoreBarLineType(mnx::BarlineType blt);
 extern engraving::BeamMode toMuseScoreBeamMode(int lowestBeamStart);
 extern engraving::BracketType toMuseScoreBracketType(mnx::LayoutSymbol lys);
-extern engraving::SymId toMuseScoreBreathMarkSym(std::optional<mnx::BreathMarkSymbol> brSym);
+extern engraving::SymId toMuseScoreBreathMarkSym(mnx::BreathMarkSymbol brSym);
+extern engraving::SymId toMuseScoreCaesuraSym(mnx::CaesuraShape shape, unsigned marks);
 extern engraving::ClefType toMuseScoreClefType(const mnx::part::Clef& mnxClef);
 extern std::vector<std::string> toMuseScoreDynamicGlyphNames(mnx::DynamicValue value);
 extern std::string toMuseScoreDynamicGlyphName(mnx::DynamicPrefix prefix);
@@ -78,9 +85,11 @@ extern engraving::LyricsSyllabic toMuseScoreLyricsSyllabic(mnx::LyricLineType ll
 extern engraving::NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch, engraving::Key key, int octaveShift);
 extern engraving::OttavaType toMuseScoreOttavaType(mnx::OttavaAmount ottavaAmount);
 extern engraving::PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt);
-extern engraving::PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const engraving::EngravingItem* item);
+extern engraving::DirectionV toMuseScoreDirectionV(mnx::Placement placement);
+extern engraving::PlacementV toMuseScorePlacementV(const mnx::Placement placement, const engraving::EngravingItem* item);
 extern engraving::Fraction toMuseScoreRTick(const mnx::RhythmicPosition& position);
 extern engraving::SlurStyleType toMuseScoreSlurStyleType(mnx::LineType lineType);
+extern engraving::DirectionV toMuseScoreSlurTieDirection(mnx::SlurTieSide side);
 extern engraving::TimeSigType toMuseScoreTimeSigType(std::optional<mnx::TimeSignatureDisplay> display);
 extern engraving::TremoloType toMuseScoreTremoloType(int numberOfBeams);
 extern engraving::TupletBracketType toMuseScoreTupletBracketType(mnx::AutoYesNo bracketOption);
@@ -88,8 +97,10 @@ extern engraving::TupletNumberType toMuseScoreTupletNumberType(mnx::TupletDispla
 
 // MuseScore values -> MNX values
 extern mnx::BarlineType toMnxBarLineType(engraving::BarLineType blt);
-extern std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(engraving::SymId sym);
+extern mnx::BreathMarkSymbol toMnxBreathMarkSym(engraving::SymId sym);
+extern MnxCaesura toMnxCaesura(engraving::SymId sym);
 extern std::optional<mnx::part::Clef::Required> toMnxClef(engraving::ClefType clefType);
+extern std::optional<std::string> toMnxClefGlyph(engraving::ClefType clefType);
 extern MnxDynamicMapping toMnxDynamicType(engraving::DynamicType type);
 /// Recovers an MNX dynamic from the letters that spell it, for dynamics MuseScore renders but
 /// has no DynamicType for. Takes arbitrary text rather than pre-validated letters, and returns
@@ -110,8 +121,9 @@ extern std::optional<mnx::JumpType> toMnxJumpType(engraving::JumpType jt);
 extern int toMnxKeyFifthsFlipValue(engraving::PreferSharpFlat prefer, const engraving::Interval& keyTransposition);
 extern mnx::LayoutSymbol toMnxLayoutSymbol(engraving::BracketType bracketType);
 extern mnx::LyricLineType toMnxLyricLineType(engraving::LyricsSyllabic ls);
-extern mnx::Orientation toMnxOrientation(engraving::ArticulationAnchor anchor);
-extern mnx::Orientation toMnxOrientation(engraving::PlacementV placement);
+extern mnx::Placement toMnxPlacement(engraving::ArticulationAnchor anchor);
+extern mnx::Placement toMnxPlacement(engraving::PlacementV placement);
+extern mnx::Placement toMnxPlacement(engraving::DirectionV direction);
 extern mnx::LineType toMnxSlurLineType(engraving::SlurStyleType sst);
 extern std::optional<mnx::NoteValue::Required> toMnxNoteValue(const engraving::TDuration& duration);
 extern std::optional<mnx::OttavaAmount> toMnxOttavaAmount(engraving::OttavaType ottavaType);

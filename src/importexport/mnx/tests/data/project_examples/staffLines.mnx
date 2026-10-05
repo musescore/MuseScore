@@ -1,0 +1,400 @@
+{
+    "mnx": {
+        "version": 40
+    },
+    "global": {
+        "measures": [
+            {
+                "id": "m1",
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {
+                "id": "m2"
+            },
+            {
+                "id": "m3"
+            },
+            {
+                "id": "m4"
+            }
+        ],
+        "sounds": {
+            "drum-midi-38": {
+                "name": "Acoustic Snare",
+                "midiNumber": 38
+            }
+        }
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "name": "Piano",
+            "staves": 2,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        },
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p1m1s1",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            },
+                                            "id": "p1m1s1n1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p1m1s2",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "C"
+                                            },
+                                            "id": "p1m1s2n1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2
+                        }
+                    ]
+                },
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2,
+                                "hide": true
+                            }
+                        }
+                    ],
+                    "staffConfigs": [
+                        {
+                            "config": {
+                                "lines": 1
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p1m2s1",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            },
+                                            "id": "p1m2s1n1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p1m2s2",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "D"
+                                            },
+                                            "id": "p1m2s2n1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2
+                        }
+                    ]
+                },
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p1m3s1",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "E"
+                                            },
+                                            "id": "p1m3s1n1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p1m3s2",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "E"
+                                            },
+                                            "id": "p1m3s2n1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2
+                        }
+                    ]
+                },
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2,
+                                "hide": true
+                            },
+                            "position": {
+                                "fraction": [
+                                    1,
+                                    2
+                                ]
+                            }
+                        }
+                    ],
+                    "staffConfigs": [
+                        {
+                            "config": {},
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "p1m4s1a",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            },
+                                            "id": "p1m4s1an1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "p1m4s1b",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "F"
+                                            },
+                                            "id": "p1m4s1bn1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p1m4s2",
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "F"
+                                            },
+                                            "id": "p1m4s2n1"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "P2",
+            "name": "Snare Drum",
+            "kit": {
+                "drum-midi-38": {
+                    "name": "Acoustic Snare",
+                    "sound": "drum-midi-38",
+                    "staffPosition": 0
+                }
+            },
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "P",
+                                "staffPosition": 0,
+                                "hide": true
+                            }
+                        }
+                    ],
+                    "staffConfigs": [
+                        {
+                            "config": {
+                                "lines": 1
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p2m1",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-38",
+                                            "id": "p2m1n1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p2m2",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-38",
+                                            "id": "p2m2n1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p2m3",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-38",
+                                            "id": "p2m3n1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "p2m4",
+                                    "kitNotes": [
+                                        {
+                                            "kitComponent": "drum-midi-38",
+                                            "id": "p2m4n1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

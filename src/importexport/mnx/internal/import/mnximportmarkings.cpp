@@ -60,7 +60,7 @@ Articulation* MnxImporter::addArticulation(ChordRest* cr, const mnx::sequence::E
     }
     Articulation* articulation = Factory::createArticulation(cr);
     articulation->setSymId(symId);
-    setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(toMuseScoreArticulationAnchor(marking.orient())));
+    setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(toMuseScoreArticulationAnchor(marking.placement())));
     cr->add(articulation);
     return articulation;
 }
@@ -83,7 +83,7 @@ void MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata, track
     /// Therefore, we ignore the `duration` value in MNX in favor of the `symbol` to determine
     /// the Fermata's symbol.
     fermata->setSymIdAndTimeStretch(toMuseScoreFermataSymId(mnxFermata.symbol()));
-    setAndStyleProperty(fermata, Pid::PLACEMENT, toMuseScorePlacementV(mnxFermata.orient(), fermata));
+    setAndStyleProperty(fermata, Pid::PLACEMENT, toMuseScorePlacementV(mnxFermata.placement(), fermata));
     seg->add(fermata);
 }
 
@@ -104,7 +104,15 @@ void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest
     if (const auto bowDirection = markings.bowDirection()) {
         importBowDirection(bowDirection.value(), cr);
     }
-    if (const auto breath = markings.breath()) {
+    // MuseScore draws breath marks and caesuras with the same element, and a segment holds
+    // only one per track, so an event cannot keep both.
+    if (const auto caesura = markings.caesura()) {
+        if (markings.breath()) {
+            LOGW() << "Event " << mnxEvent.pointer().to_string()
+                   << " has both a breath mark and a caesura; the breath mark is dropped.";
+        }
+        importCaesura(caesura.value(), cr, eventEndTick, measure);
+    } else if (const auto breath = markings.breath()) {
         importBreath(breath.value(), cr, eventEndTick, measure);
     }
     if (const auto softAccent = markings.softAccent()) {
@@ -164,15 +172,15 @@ void MnxImporter::importBowDirection(const mnx::sequence::BowDirection& bowDirec
 }
 
 //---------------------------------------------------------
-//   importBreath
-//   Import MNX breath mark.
+//   createBreath
+//   Create a breath mark or caesura after an event.
 //---------------------------------------------------------
 
-void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
+Breath* MnxImporter::createBreath(ChordRest* cr, const Fraction& eventEndTick, Measure* measure, SymId symId)
 {
     // cr->track() is read unconditionally below, so a null cr is not survivable here.
     IF_ASSERT_FAILED(cr) {
-        return;
+        return nullptr;
     }
     Measure* targetMeasure = measure;
     if (!targetMeasure) {
@@ -181,15 +189,37 @@ void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRes
     }
     IF_ASSERT_FAILED(targetMeasure) {
         LOGE() << "cr has no measure when importing breath mark";
-        return;
+        return nullptr;
     }
 
     Segment* segment = targetMeasure->getSegmentR(SegmentType::Breath, eventEndTick);
     Breath* breathMark = Factory::createBreath(segment);
     breathMark->setTrack(cr->track());
-    breathMark->setSymId(toMuseScoreBreathMarkSym(breath.symbol()));
-    setAndStyleProperty(breathMark, Pid::PLACEMENT, toMuseScorePlacementV(breath.orient(), breathMark));
+    breathMark->setSymId(symId);
     segment->add(breathMark);
+    return breathMark;
+}
+
+//---------------------------------------------------------
+//   importBreath
+//   Import MNX breath mark.
+//---------------------------------------------------------
+
+void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
+{
+    if (Breath* breathMark = createBreath(cr, eventEndTick, measure, toMuseScoreBreathMarkSym(breath.symbol()))) {
+        setAndStyleProperty(breathMark, Pid::PLACEMENT, toMuseScorePlacementV(breath.placement(), breathMark));
+    }
+}
+
+//---------------------------------------------------------
+//   importCaesura
+//   Import MNX caesura.
+//---------------------------------------------------------
+
+void MnxImporter::importCaesura(const mnx::sequence::Caesura& caesura, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
+{
+    createBreath(cr, eventEndTick, measure, toMuseScoreCaesuraSym(caesura.shape(), caesura.marks()));
 }
 
 //---------------------------------------------------------
