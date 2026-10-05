@@ -463,6 +463,12 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         };
 
         if (completed) {
+            if (m_previewingNewPoint) {
+                // We added a point and immediately started dragging it - commit the changes...
+                requestAddPoint(key, x, y);
+                m_previewingNewPoint = false;
+                return;
+            }
             if (!requestEditPoint(oldPointData, key, clampedX, y)) {
                 // Edit was rejected - snap the point back to where it actually is instead of
                 // leaving the live-drag preview stuck at the rejected position
@@ -498,6 +504,8 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         points.insert(insertIdx, { x, y });
         polyline->setPoints(points);
         applyPolylineColorsUnderLine(polyline, key);
+
+        m_previewingNewPoint = true;
     });
 
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointRemoved,
