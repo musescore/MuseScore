@@ -103,6 +103,7 @@ public:
 
     bool isNoteInputActionAllowed() const override;
     bool isNoteOrRestSelected() const override;
+    bool isHairpinSelected() const override;
     bool isMoveSelectionAvailable(MoveSelectionType type) const override;
 
     bool isToggleLayoutBreakAvailable() const override;
@@ -179,6 +180,7 @@ private:
     void insertClef(mu::engraving::ClefType type);
 
     void addText(TextStyleType type);
+    void addDynamic();
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
