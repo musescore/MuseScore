@@ -342,16 +342,17 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, DummyParen
     return createItem(type, parent, isAccessibleEnabled);
 }
 
-#define CREATE_ITEM_IMPL(T, P) \
-    T* Factory::create##T(P parent, bool isAccessibleEnabled) \
+// The parent type is variadic, as it may contain commas
+#define CREATE_ITEM_IMPL(T, ...) \
+    T* Factory::create##T(__VA_ARGS__ parent, bool isAccessibleEnabled) \
     { \
         T* e = new T(parent); \
         e->setAccessibleEnabled(isAccessibleEnabled); \
         return e; \
     } \
 
-#define MAKE_ITEM_IMPL(T, P) \
-    std::shared_ptr<T> Factory::make##T(P parent) \
+#define MAKE_ITEM_IMPL(T, ...) \
+    std::shared_ptr<T> Factory::make##T(__VA_ARGS__ parent) \
     { \
         return std::shared_ptr<T>(create##T(parent)); \
     } \
