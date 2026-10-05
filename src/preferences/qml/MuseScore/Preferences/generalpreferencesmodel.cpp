@@ -281,21 +281,25 @@ void GeneralPreferencesModel::setNeedCheckForNewAppVersion(bool value)
 
     updateConfiguration()->setNeedCheckForUpdate(value);
     emit needCheckForNewAppVersionChanged(value);
+
+    //! NOTE: Updates can not be downloaded without checking for them; once checking
+    //! is turned on again, downloading is turned on with it, whatever it was before
+    setAutoUpdateNewAppVersion(value);
 }
 
-bool GeneralPreferencesModel::autoDownloadNewAppVersion() const
+bool GeneralPreferencesModel::autoUpdateNewAppVersion() const
 {
-    return updateConfiguration()->autoDownloadEnabled();
+    return updateConfiguration()->autoUpdateEnabled();
 }
 
-void GeneralPreferencesModel::setAutoDownloadNewAppVersion(bool value)
+void GeneralPreferencesModel::setAutoUpdateNewAppVersion(bool value)
 {
-    if (value == autoDownloadNewAppVersion()) {
+    if (value == autoUpdateNewAppVersion()) {
         return;
     }
 
-    updateConfiguration()->setAutoDownloadEnabled(value);
-    emit autoDownloadNewAppVersionChanged(value);
+    updateConfiguration()->setAutoUpdateEnabled(value);
+    emit autoUpdateNewAppVersionChanged(value);
 }
 
 QString GeneralPreferencesModel::museScorePrivacyPolicyUrl() const
