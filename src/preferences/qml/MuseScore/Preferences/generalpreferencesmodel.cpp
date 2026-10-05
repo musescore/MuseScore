@@ -281,6 +281,10 @@ void GeneralPreferencesModel::setNeedCheckForNewAppVersion(bool value)
 
     updateConfiguration()->setNeedCheckForUpdate(value);
     emit needCheckForNewAppVersionChanged(value);
+
+    //! NOTE: Updates can not be downloaded without checking for them; once checking
+    //! is turned on again, downloading is turned on with it, whatever it was before
+    setAutoUpdateNewAppVersion(value);
 }
 
 bool GeneralPreferencesModel::autoUpdateNewAppVersion() const
