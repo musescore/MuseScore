@@ -132,7 +132,8 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (AbstractElementPopupModel::hasElementEditPopup(selectedItem)) {
+        if (!(QApplication::mouseButtons() & Qt::RightButton)
+            && AbstractElementPopupModel::hasElementEditPopup(selectedItem)) {
             m_view->showElementPopup(type);
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
