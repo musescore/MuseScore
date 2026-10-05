@@ -173,5 +173,7 @@ private:
     mu::engraving::AutomationChanges m_pendingChanges;
     PendingScoreState m_pendingScoreState;
     bool m_updateScheduled = false;
+
+    bool m_previewingNewPoint = false;
 };
 }
