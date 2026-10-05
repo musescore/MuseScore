@@ -42,11 +42,18 @@ static NPlayEvent noteEvent(int pitch, int volume, int channel)
     return NPlayEvent(EventType::ME_NOTEON, channel, pitch, volume);
 }
 
+/// The first event at `tick`. (`std::multimap::find` may return any of the events with an equal tick.)
+static std::multimap<int, NPlayEvent>::iterator findFirstEventAt(std::multimap<int, NPlayEvent>& events, int tick)
+{
+    auto it = events.lower_bound(tick);
+    return it != events.end() && it->first == tick ? it : events.end();
+}
+
 static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd, int pitch, int volume,
                                MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
                                int channel = DEFAULT_CHANNEL)
 {
-    auto it = events[channel].find(tickStart);
+    auto it = findFirstEventAt(events[channel], tickStart);
     EXPECT_NE(it, events[channel].end());
     if (it == events[channel].end()) {
         return;
@@ -59,7 +66,7 @@ static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd,
 
     events[channel].erase(it);
 
-    it = events[channel].find(tickEnd);
+    it = findFirstEventAt(events[channel], tickEnd);
     EXPECT_NE(it, events[channel].end());
     if (it == events[channel].end()) {
         return;
@@ -76,7 +83,7 @@ static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd,
 static void checkPitchBend(EventsHolder& events, int tick, int pitchValue, MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
                            int channel = DEFAULT_CHANNEL)
 {
-    auto it = events[channel].find(tick);
+    auto it = findFirstEventAt(events[channel], tick);
     EXPECT_NE(it, events[channel].end());
     if (it == events[channel].end()) {
         return;
@@ -224,7 +231,7 @@ TEST_F(MidiRenderer_Tests, onePercussionNote)
     EXPECT_EQ(events.size(), 1);
     EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
 
-    EXPECT_EQ(events[DEFAULT_CHANNEL].find(0)->second, noteEvent(41, defVol, DEFAULT_CHANNEL));
+    EXPECT_EQ(findFirstEventAt(events[DEFAULT_CHANNEL], 0)->second, noteEvent(41, defVol, DEFAULT_CHANNEL));
 }
 
 TEST_F(MidiRenderer_Tests, graceBeforeBeat)
