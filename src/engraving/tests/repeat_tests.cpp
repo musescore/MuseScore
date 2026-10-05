@@ -431,3 +431,8 @@ TEST_F(Engraving_RepeatTests, repeat71) {
     // Same as repeat70 with a Marker inside the open volta: it must not affect playback
     repeat("repeat71.mscx", u"1;2; 1; 3;4;5");
 }
+
+TEST_F(Engraving_RepeatTests, repeat72) {
+    // Same as repeat70 with a closed volta: it is played after the exhausted repeats as well
+    repeat("repeat72.mscx", u"1;2; 1; 3;4;5");
+}

@@ -906,9 +906,8 @@ void RepeatList::unwind()
             } break;
             case RepeatListElementType::VOLTA_START: {
                 activeVolta = toVolta((*repeatListElementIt)->element);
-                // An open volta whose endings all lie beyond the exhausted repeats is played after them
-                const bool playAfterRepeats = (activeVolta->endHookType() == HookType::NONE)
-                                              && (playbackCount > 1)
+                // A volta whose endings all lie beyond the exhausted repeats is played after them
+                const bool playAfterRepeats = (playbackCount > 1)
                                               && (playbackCount >= startRepeatReference->getRepeatCount())
                                               && (activeVolta->firstEnding() > playbackCount);
                 if (!activeVolta->hasEnding(playbackCount) && !playAfterRepeats) {
