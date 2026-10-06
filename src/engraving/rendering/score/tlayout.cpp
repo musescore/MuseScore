@@ -6600,7 +6600,7 @@ void TLayout::fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata)
     ldata->setShape(s);
 }
 
-void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
+void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext&)
 {
     LAYOUT_CALL_ITEM(item);
     VibratoSegment::LayoutData* ldata = item->mutldata();
