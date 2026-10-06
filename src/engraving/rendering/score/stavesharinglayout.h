@@ -74,8 +74,10 @@ private:
     static bool canGoToSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx, const TrackGroup& curTrackGroup,
                                  std::unordered_set<Note*>& localUnisonNotes);
 
-    static bool checkAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
-    static bool checkBreathsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
+    static bool checkClefKeyTimeSigForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
+    static bool checkSegmentAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
+    static bool checkItemsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack,
+                                       const std::function<bool(const EngravingItem*, const EngravingItem*)>& isEqual);
     static bool checkNoteSpannersForUnison(const Note* note1, const Note* note2);
     static bool checkSpannersForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
     static bool checkArticulationsForSameVoice(Chord* chord1, Chord* chord2);
@@ -86,7 +88,12 @@ private:
     static void computeSegmentsToUpdate(StaveSharingContext& ctx);
     static void disconnectAll(StaveSharingContext& ctx);
 
+    static EngravingItem* makeSharedItem(EngravingItem* originItem, EngravingItem* possibleSharedItem, track_idx_t sharedTrack,
+                                         EngravingObject* sharedParent, const std::function<bool(const EngravingItem*,
+                                                                                                 const EngravingItem*)>& isEqual);
+
     static void makeSharedNotation(StaveSharingContext& ctx);
+    static void makeSharedClefKeyTimeSigs(StaveSharingContext& ctx);
     static void makeSharedChordRests(StaveSharingContext& ctx);
     static void makeSharedBreaths(StaveSharingContext& ctx);
     static void makeSharedArticulations(Chord* originChord, Chord* sharedChord);
