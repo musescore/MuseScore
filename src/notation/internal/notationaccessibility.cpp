@@ -189,9 +189,9 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     if (element->hasStaff()) {
         QString staff = muse::qtrc("notation", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
-        QString staffName = element->staff()->part()->longName(element->tick());
+        QString staffName = element->originPart()->longName(element->tick());
         if (staffName.isEmpty()) {
-            staffName = element->staff()->partName();
+            staffName = element->originPart()->partName();
         }
 
         if (staffName.isEmpty()) {
