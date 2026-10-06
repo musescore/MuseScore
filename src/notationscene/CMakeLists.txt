@@ -29,6 +29,7 @@ target_sources(notationscene PRIVATE
     iselectinstrumentscenario.h
 
     notationcommands.h
+    notationmenus.h
 
     internal/inotationviewcontroller.h
     internal/notationsceneconfiguration.cpp
