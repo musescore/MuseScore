@@ -35,8 +35,10 @@
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
 #include "notation/inotationselection.h"
-
 #include "notation/notationcommands.h"
+
+#include "notationscene/notationmenus.h"
+
 #include "palette/palettecommands.h"
 #include "instrumentsscene/instrumentscommands.h"
 
@@ -137,6 +139,8 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeSeparator();
 
+    items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
+
     MenuItem* clearItem = makeMenuItem(DeleteCommand::id);
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     clearItem->setIcon(ui::IconCode::Code::ERASER);
@@ -147,19 +151,18 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeSeparator();
 
-    if (isDrumsetStaff()) {
-        items << makeMenuItem(OPEN_CUSTOMIZE_KIT_COMMAND);
-    }
-
-    items << makeMenuItem(OpenStaffPropertiesCommand::id);
-    items << makeSeparator();
-    items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
     if (projectSession()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
         items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
     }
     items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
+
     items << makeSeparator();
+
     items << makeMenuItem(OpenMeasurePropertiesCommand::id);
+    items << makeMenuItem(OpenStaffPropertiesCommand::id);
+    if (isDrumsetStaff()) {
+        items << makeMenuItem(OPEN_CUSTOMIZE_KIT_COMMAND);
+    }
 
     return items;
 }
@@ -312,15 +315,7 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 
 MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 {
-    MenuItemList items {
-        makeMenuItem(InsertMeasuresAfterSelectionCommand::id, TranslatableString("notation", "After selection…")),
-        makeMenuItem(InsertMeasuresCommand::id, TranslatableString("notation", "Before selection…")),
-        makeSeparator(),
-        makeMenuItem(InsertMeasuresAtStartOfScoreCommand::id, TranslatableString("notation", "At start of score…")),
-        makeMenuItem(AppendMeasuresCommand::id, TranslatableString("notation", "At end of score…"))
-    };
-
-    return items;
+    return makeItems(MEASURES_MENU_COMMANDS);
 }
 
 MenuItemList NotationContextMenuModel::makeMoveMeasureItems()
