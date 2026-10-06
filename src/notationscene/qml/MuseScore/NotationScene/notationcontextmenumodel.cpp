@@ -140,6 +140,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     MenuItem* clearItem = makeMenuItem(DELETE_COMMAND);
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
+    clearItem->setIcon(ui::IconCode::Code::ERASER);
     MenuItem* deleteItem = makeMenuItem(REMOVE_SELECTED_RANGE_COMMAND);
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
     items << clearItem;
