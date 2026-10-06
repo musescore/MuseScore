@@ -76,7 +76,6 @@
         {"command": "command://notation/insert-note-f",  "sequences": ["Ctrl+Shift+F"]},
         {"command": "command://notation/insert-note-g",  "sequences": ["Ctrl+Shift+G"]},
         {"command": "command://notation/enter-rest",  "sequences": ["0","Num+0"]},
-        {"command": "command://notation/realtime-advance",  "sequences": ["Enter"]},
         {"command": "command://notation/toggle-staccato",  "sequences": ["Shift+S"]},
         {"command": "command://notation/toggle-tenuto",  "sequences": ["Shift+N"]},
         {"command": "command://notation/toggle-marcato",  "sequences": ["Shift+O"]},
@@ -192,14 +191,6 @@
         {"command": "command://notation/enharmonic-spell-both",  "sequences": ["J"]},
         {"command": "command://notation/enharmonic-spell-current",  "sequences": ["Ctrl+J"]},
         {"command": "command://notation/add-figured-bass",  "sequences": ["Ctrl+G"]},
-        {"command": "command://notation/edittext-next-word",  "sequences": ["Space"]},
-        {"command": "command://notation/edittext-next-element",  "sequences": ["Right"]},
-        {"command": "command://notation/edittext-prev-element",  "sequences": ["Shift+Space","Left","Backspace"]},
-        {"command": "command://notation/editlyrics-next-syllable",  "sequences": ["-","Num+-"]},
-        {"command": "command://notation/editlyrics-add-melisma",  "sequences": ["Shift+-"]},
-        {"command": "command://notation/editlyrics-next-verse",  "sequences": ["Down"]},
-        {"command": "command://notation/editlyrics-prev-verse",  "sequences": ["Up"]},
-        {"command": "command://notation/editlyrics-add-verse",  "sequences": ["Return","Enter"]},
         {"command": "command://notation/toggle-visible",  "sequences": ["V"]},
         {"command": "command://notation/toggle-score-lock",  "sequences": ["Ctrl+Alt+L"]},
         {"command": "command://notation/toggle-system-lock",  "sequences": ["Alt+L"]},
@@ -242,6 +233,25 @@
         {"command": "command://notation/add-standard-bend",  "sequences": ["Alt+B"]},
         {"command": "command://notation/add-grace-note-bend",  "sequences": ["Ctrl+Alt+B"]}
       ]
+    },
+    {
+        "scope": "NOTATION_NOTE_INPUT",
+        "shortcuts": [
+            { "command": "command://notation/realtime-advance", "sequences": ["Enter"] }
+        ]
+    },
+    {
+        "scope": "NOTATION_TEXT_EDITING",
+        "shortcuts": [
+            {"command": "command://notation/edittext-next-word", "sequences": ["Space"] },
+            {"command": "command://notation/edittext-next-element", "sequences": ["Right"] },
+            {"command": "command://notation/edittext-prev-element", "sequences": ["Left", "Shift+Space", "Backspace"] },
+            {"command": "command://notation/editlyrics-next-syllable",  "sequences": ["-","Num+-"]},
+            {"command": "command://notation/editlyrics-add-melisma",  "sequences": ["Shift+-"]},
+            {"command": "command://notation/editlyrics-next-verse",  "sequences": ["Down"]},
+            {"command": "command://notation/editlyrics-prev-verse",  "sequences": ["Up"]},
+            {"command": "command://notation/editlyrics-add-verse",  "sequences": ["Return","Enter"]}
+        ]
     },
     {
       "scope": "PROJECT",

@@ -27,6 +27,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::shortcuts;
 using namespace mu::context;
 
@@ -35,6 +36,17 @@ static const std::string PLAYBACK_SCOPE = "PLAYBACK";
 static const std::string NOTATION_SCOPE = "NOTATION";
 static const std::string NOTATION_NOTE_INPUT_SCOPE = "NOTATION_NOTE_INPUT";
 static const std::string NOTATION_TEXT_EDITING_SCOPE = "NOTATION_TEXT_EDITING";
+static const std::string PROJECT_SCOPE = "PROJECT";
+static const std::string APP_SCOPE = "APP";
+static const std::string PALETTE_SCOPE = "PALETTE";
+static const std::string INSTRUMENTS_SCOPE = "INSTRUMENTS";
+static const std::string EXTENSIONS_SCOPE = "EXTENSIONS";
+static const std::string AUDIO_SCOPE = "AUDIO";
+static const std::string DOCK_SCOPE = "DOCK";
+static const std::string WORKSPACE_SCOPE = "WORKSPACE";
+static const std::string UPDATE_SCOPE = "UPDATE";
+static const std::string DIAGNOSTICS_SCOPE = "DIAGNOSTICS";
+static const std::string TESTFLOW_SCOPE = "TESTFLOW";
 
 static const QString NOTATION_PANEL_NAME("ScoreView");
 
@@ -54,6 +66,7 @@ int ShortcutResolver::scopePriority(const std::string& scope) const
     if (priority) {
         return priority();
     }
+    LOGD() << "Unknown scope: " << scope;
     return 0;
 }
 
@@ -74,15 +87,41 @@ Shortcut ShortcutResolver::selectOne(const ShortcutList& list) const
         return Shortcut();
     }
 
-    LOGD() << "selectOne: " << list.size();
-    for (const Shortcut& shortcut : list) {
-        LOGD() << "shortcut: " << shortcut.command;
-    }
-
     ShortcutList sorted = list;
-    sorted.sort([this](const Shortcut& a, const Shortcut& b) {
+    std::stable_sort(sorted.begin(), sorted.end(), [this](const Shortcut& a, const Shortcut& b) {
         return scopePriority(a.scope) > scopePriority(b.scope);
     });
 
     return sorted.front();
+}
+
+muse::TranslatableString ShortcutResolver::scopeTitle(const std::string& scopeCode) const
+{
+    const static std::map<std::string, TranslatableString> scopeTitles = {
+        { NAVIGATION_SCOPE, TranslatableString("shortcuts", "NAVIGATION") },
+        { PLAYBACK_SCOPE, TranslatableString("shortcuts", "PLAYBACK") },
+        { NOTATION_SCOPE, TranslatableString("shortcuts", "NOTATION") },
+        { NOTATION_NOTE_INPUT_SCOPE, TranslatableString("shortcuts", "NOTATION: NOTE INPUT") },
+        { NOTATION_TEXT_EDITING_SCOPE, TranslatableString("shortcuts", "NOTATION: TEXT EDITING") },
+        { PROJECT_SCOPE, TranslatableString("shortcuts", "PROJECT") },
+        { APP_SCOPE, TranslatableString("shortcuts", "APP") },
+        { PALETTE_SCOPE, TranslatableString("shortcuts", "PALETTE") },
+        { INSTRUMENTS_SCOPE, TranslatableString("shortcuts", "INSTRUMENTS") },
+        { EXTENSIONS_SCOPE, TranslatableString("shortcuts", "EXTENSIONS") },
+        { AUDIO_SCOPE, TranslatableString("shortcuts", "AUDIO") },
+        { DOCK_SCOPE, TranslatableString("shortcuts", "DOCK") },
+        { WORKSPACE_SCOPE, TranslatableString("shortcuts", "WORKSPACE") },
+        { UPDATE_SCOPE, TranslatableString("shortcuts", "UPDATE") },
+        { DIAGNOSTICS_SCOPE, TranslatableString("shortcuts", "DIAGNOSTICS") },
+        { TESTFLOW_SCOPE, TranslatableString("shortcuts", "TESTFLOW") },
+    };
+
+    const std::string upperScopeCode = strings::toUpper(scopeCode);
+
+    auto it = scopeTitles.find(upperScopeCode);
+    if (it != scopeTitles.end()) {
+        return it->second;
+    }
+    LOGW() << "Unknown scope: " << scopeCode;
+    return TranslatableString::untranslatable(String::fromStdString(upperScopeCode));
 }
