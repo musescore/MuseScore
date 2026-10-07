@@ -1559,7 +1559,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     CommandInfo{
         OPEN_BREAKS_COMMAND,
         TranslatableString("action", "Measures per s&ystem…"),
-        TranslatableString("action", "Measures per system"),
+        TranslatableString("action", "Measures per system"), // note: description used as is for the breaksdialog's window title
         InputSchema(),
         Decoration()
     },
