@@ -49,6 +49,16 @@ public:
     explicit NewScoreModel(QObject* parent = nullptr);
 
     Q_INVOKABLE QString preferredScoreCreationMode() const;
+
+    //! Languages that the names of the instruments in the new score can be shown in: a list of { code, name }.
+    //! The first one (with an empty code) means the language of the interface. It is followed by the recently
+    //! used languages, and then by the others. The language of the interface itself is not listed.
+    Q_INVOKABLE QVariantList instrumentNamesLanguages() const;
+    Q_INVOKABLE QString lastInstrumentNamesLanguage() const;
+
+    //! An example of the names of an instrument as it would be added in the language, e.g. "Example: Clarinette in Si♭"
+    Q_INVOKABLE QString instrumentNamesExample(const QString& languageCode) const;
+
     Q_INVOKABLE bool createScore(const QVariant& info);
 
 private:

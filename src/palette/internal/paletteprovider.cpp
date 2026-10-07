@@ -33,7 +33,9 @@
 
 #include "notation/inotation.h"
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h"
 
+#include "palettecell.h"
 #include "palettecreator.h"
 
 #include "io/path.h"
@@ -626,6 +628,36 @@ void PaletteProvider::init()
     configuration()->isPaletteDragEnabled().ch.onReceive(this, [this](bool) {
         emit isPaletteDragEnabledChanged();
     });
+
+    // The texts in the palettes are in the language of the current score, which can be changed in
+    // the project properties, so the changes of the score are followed too (including undo and redo)
+    if (globalContext()) {
+        globalContext()->currentNotationChanged().onNotify(this, [this]() {
+            updateTextLanguage();
+
+            if (notation::INotationPtr notation = globalContext()->currentNotation()) {
+                notation->undoStack()->stackChanged().onNotify(this, [this]() {
+                    updateTextLanguage();
+                });
+            }
+        });
+    }
+}
+
+void PaletteProvider::updateTextLanguage()
+{
+    const QString language = currentScoreTextLanguage(globalContext().get());
+    if (language == m_textLanguage) {
+        return;
+    }
+
+    m_textLanguage = language;
+
+    for (PaletteTreeModel* model : { m_userPaletteModel, m_masterPaletteModel, m_defaultPaletteModel }) {
+        if (model) {
+            model->retranslate();
+        }
+    }
 }
 
 void PaletteProvider::setFilter(const QString& filter)

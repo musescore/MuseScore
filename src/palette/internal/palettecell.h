@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
 #include "engraving/ipalettescoreprovider.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::engraving {
 class XmlReader;
@@ -64,11 +65,16 @@ private:
     PaletteCell* m_cell = nullptr;
 };
 
+//! The language of the texts of the current score, if the score has its own (see SCORE_TEXT_LANGUAGE_META_TAG).
+//! Empty means the language of the interface.
+QString currentScoreTextLanguage(const context::IGlobalContext* globalContext);
+
 class PaletteCell : public QObject, public muse::Contextable
 {
     Q_OBJECT
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 public:
     explicit PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
     PaletteCell(const muse::modularity::ContextPtr& iocCtx, mu::engraving::ElementPtr e, const QString& _name, qreal _mag = 1.0,

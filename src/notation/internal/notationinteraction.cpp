@@ -133,6 +133,8 @@
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
 
+#include "engraving/iscoretexttranslator.h"
+
 #include "inotationviewstate.h"
 #include "notationerrors.h"
 #include "notation.h"
@@ -2159,7 +2161,15 @@ bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* inst
     QEventLoop loop;
     async::Promise<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
     templ.onResolve(this, [this, instrumentChange, &loop, &result](const InstrumentTemplate& val) {
-        Instrument newInstrument = Instrument::fromTemplate(&val);
+        // If the score has its own language, the names of the new instrument are written in it too
+        InstrumentTemplate instrumentTemplate = val;
+        static muse::GlobalInject<IScoreTextTranslator> scoreTextTranslator;
+        const String language = score()->masterScore()->metaTag(SCORE_TEXT_LANGUAGE_META_TAG);
+        if (!language.empty() && scoreTextTranslator()) {
+            scoreTextTranslator()->translateInstrumentNames(language, instrumentTemplate);
+        }
+
+        Instrument newInstrument = Instrument::fromTemplate(&instrumentTemplate);
 
         // If switching back to the part's original instrument, restore its player number
         if (Part* part = instrumentChange->part()) {
