@@ -115,6 +115,8 @@ public:
 
     bool isTablatureStaff() const override;
 
+    INotationAutomationPtr automation() const;
+
     bool isAutomationModeEnabled() const override;
     muse::async::Notification automationModeEnabledChanged() const override;
 
