@@ -26,6 +26,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
@@ -41,9 +42,17 @@ static const String TUPLET_DATA_DIR(u"tuplet_data/");
 class Engraving_TupletTests : public ::testing::Test
 {
 public:
+    struct LongNoteEntry {
+        int bar;
+        int chordRest;
+        Fraction duration;
+        bool rest = false;
+    };
+
     bool createTuplet(int n, ChordRest* cr);
     void tuplet(const char16_t* p1, const char16_t* p2);
     void split(const char16_t* p1, const char16_t* p2);
+    void enterLongNotes(const String& file, const std::vector<LongNoteEntry>& entries);
 };
 
 bool Engraving_TupletTests::createTuplet(int n, ChordRest* cr)
@@ -197,4 +206,69 @@ TEST_F(Engraving_TupletTests, saveLoad)
     //simply load and save
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"save-load.mscx", TUPLET_DATA_DIR + u"save-load.mscx"));
     delete score;
+}
+
+//-----------------------------------------
+//    longNoteIntoSpaceLeft
+//     a note or rest longer than the space left in a tuplet writes
+//     all of that space as tuplet notes, even when it needs two values,
+//     and continues with ordinary notes or in the next or outer tuplet
+//-----------------------------------------
+
+void Engraving_TupletTests::enterLongNotes(const String& file, const std::vector<LongNoteEntry>& entries)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + file + u".mscx");
+    ASSERT_TRUE(score);
+
+    for (const LongNoteEntry& e : entries) {
+        Measure* m = score->firstMeasure();
+        for (int i = 0; i < e.bar; ++i) {
+            m = m->nextMeasure();
+        }
+        Segment* s = m->first(SegmentType::ChordRest);
+        for (int i = 0; i < e.chordRest; ++i) {
+            s = s->next(SegmentType::ChordRest);
+        }
+        ASSERT_TRUE(toChordRest(s->element(0))->tuplet());
+
+        score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+        score->setNoteRest(s, 0, e.rest ? NoteVal() : NoteVal(72), e.duration, DirectionV::AUTO);
+        score->endCmd();
+    }
+
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, file + u".mscx", TUPLET_DATA_DIR + file + u"-ref.mscx"));
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, longNoteIntoSpaceLeft)
+{
+    enterLongNotes(u"spaceLeft_longNote", {
+        { 0, 0, Fraction(1, 2) },        // 16th quintuplet: space left 5/16, two values
+        { 1, 0, Fraction(1, 1) },        // eighth quintuplet: space left 5/8, two values
+        { 2, 0, Fraction(1, 2), true },  // 16th quintuplet, a rest: space left 5/16, two values
+        { 3, 0, Fraction(1, 1), true },  // eighth quintuplet, a rest: space left 5/8, two values
+        { 4, 1, Fraction(1, 2) },        // 16th quintuplet from its 2nd note: space left 4/16
+        { 5, 0, Fraction(1, 2) },        // 16th septuplet: space left 7/16
+        { 6, 0, Fraction(1, 1) },        // spills from one eighth triplet into the next
+        { 7, 1, Fraction(1, 2) },        // 16th sextuplet from its 2nd note: space left 5/16
+        { 8, 0, Fraction(1, 1) },        // 9:8 16ths: space left 9/16
+        { 9, 0, Fraction(1, 1) },        // two 16th quintuplets: two values in each
+        { 10, 0, Fraction(3, 4) },       // 5:3 eighths in 6/8: space left 5/8
+    });
+}
+
+//-----------------------------------------
+//    longNoteIntoNestedSpaceLeft
+//     the same, from the innermost of three nested tuplets,
+//     continuing in the tuplets it is nested in
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, longNoteIntoNestedSpaceLeft)
+{
+    enterLongNotes(u"spaceLeft_nested", {
+        { 0, 2, Fraction(1, 1) },        // half triplet > eighth quintuplet > 16th septuplet, from its 3rd note
+        { 1, 2, Fraction(1, 1), true },  // the same nested tuplets, a rest
+        { 2, 1, Fraction(1, 1) },        // quarter quintuplet > eighth triplet > 32nd sextuplet, from its 2nd note
+    });
 }
