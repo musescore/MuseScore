@@ -142,13 +142,7 @@ void EditPageLocks::undoRemoveAllLocks(Transaction& tx, Score* score)
 
 void EditPageLocks::togglePageLock(Transaction& tx, Score* score, const std::vector<Page*>& pages)
 {
-    bool unlockAll = true;
-    for (const Page* page : pages) {
-        if (!page->isLocked()) {
-            unlockAll = false;
-            break;
-        }
-    }
+    const bool unlockAll = Page::allLocked(pages);
 
     for (Page* page : pages) {
         MeasureBase* startMeas = page->firstMeasureBase();
@@ -165,13 +159,7 @@ void EditPageLocks::togglePageLock(Transaction& tx, Score* score, const std::vec
 
 void EditPageLocks::toggleScoreLock(Transaction& tx, Score* score)
 {
-    bool unlockAll = true;
-    for (const Page* page : score->pages()) {
-        if (!page->isLocked()) {
-            unlockAll = false;
-            break;
-        }
-    }
+    const bool unlockAll = Page::allLocked(score->pages());
 
     for (Page* page : score->pages()) {
         MeasureBase* startMeas = page->firstMeasureBase();

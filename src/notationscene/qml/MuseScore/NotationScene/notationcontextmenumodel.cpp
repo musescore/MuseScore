@@ -329,8 +329,8 @@ MenuItemList NotationContextMenuModel::makeSystemAndPageLayoutItems()
     int nSystems = static_cast<int>(systems.size());
     int nMeasures = static_cast<int>(sel->selectedMeasuresCount());
     int nPages = static_cast<int>(pages.size());
-    bool systemslocked = allSystemsAreLocked(systems);
-    bool pageslocked = allPagesAreLocked(pages);
+    bool systemslocked = System::allLocked(systems);
+    bool pageslocked = Page::allLocked(pages);
 
     items << makeSystemLayoutItems(systemslocked, nSystems, nMeasures);
     items << makeSeparator();
@@ -533,34 +533,6 @@ bool NotationContextMenuModel::isDrumsetStaff() const
 
     Fraction tick = ctx.element ? ctx.element->tick() : Fraction { -1, 1 };
     return ctx.staff->part()->instrument(tick)->drumset() != nullptr;
-}
-
-bool NotationContextMenuModel::allSystemsAreLocked(const std::vector<engraving::System*>& systems) const
-{
-    if (systems.empty()) {
-        return false;
-    }
-
-    for (System* system : systems) {
-        if (!system->isLocked()) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool NotationContextMenuModel::allPagesAreLocked(const std::vector<engraving::Page*>& pages) const
-{
-    if (pages.empty()) {
-        return false;
-    }
-
-    for (Page* page : pages) {
-        if (!page->isLocked()) {
-            return false;
-        }
-    }
-    return true;
 }
 
 MenuItemList NotationContextMenuModel::makeAutomationTypeItems()

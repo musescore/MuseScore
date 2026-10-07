@@ -221,6 +221,7 @@ public:
     void setHasStaffVisibilityIndicator(bool has);
 
     bool isLocked() const;
+    static bool allLocked(const std::vector<System*>& systems);
     const RangeLock* systemLock() const;
 
     const std::vector<SystemLockIndicator*> systemLockIndicators() const { return m_systemLockIndicators; }

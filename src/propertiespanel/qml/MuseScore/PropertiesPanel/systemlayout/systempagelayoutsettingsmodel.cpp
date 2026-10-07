@@ -27,6 +27,7 @@
 
 #include "engraving/dom/score.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/system.h"
 
 #include "translation.h"
 
@@ -190,15 +191,7 @@ void SystemPageLayoutSettingsModel::updateAllSystemsAreLocked()
         return;
     }
 
-    std::vector<System*> systems = selection()->selectedSystems();
-
-    bool allLocked = true;
-    for (System* system : systems) {
-        if (!system->isLocked()) {
-            allLocked = false;
-            break;
-        }
-    }
+    const bool allLocked = System::allLocked(selection()->selectedSystems());
 
     if (m_allSystemsAreLocked != allLocked) {
         m_allSystemsAreLocked = allLocked;
@@ -212,15 +205,7 @@ void SystemPageLayoutSettingsModel::updateAllPagesAreLocked()
         return;
     }
 
-    std::vector<Page*> pages = selection()->pagesContainingSelection();
-
-    bool allLocked = true;
-    for (Page* page : pages) {
-        if (!page->isLocked()) {
-            allLocked = false;
-            break;
-        }
-    }
+    const bool allLocked = Page::allLocked(selection()->pagesContainingSelection());
 
     if (m_allPagesAreLocked != allLocked) {
         m_allPagesAreLocked = allLocked;
