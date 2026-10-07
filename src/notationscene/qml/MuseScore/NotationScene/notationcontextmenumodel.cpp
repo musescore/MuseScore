@@ -337,7 +337,7 @@ MenuItemList NotationContextMenuModel::makeSystemAndPageLayoutItems()
     items << makeSeparator();
     items << makePageLayoutItems(pageslocked, nPages, nSystems);
     items << makeSeparator();
-    items << makeMenuItem(OPEN_BREAKS_COMMAND);
+    items << makeMenuItem(OpenBreaksCommand::id);
 
     return items;
 }
