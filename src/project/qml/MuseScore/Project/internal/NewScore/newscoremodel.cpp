@@ -22,10 +22,12 @@
 
 #include "newscoremodel.h"
 
+#include "global/translation.h"
 #include "log.h"
 
 #include "ui/view/musicalsymbolcodes.h"
 
+#include "project/internal/instrumentnamestranslator.h"
 #include "types/projectcreateoptions.h"
 
 using namespace mu::project;
@@ -50,6 +52,33 @@ QString NewScoreModel::preferredScoreCreationMode() const
     return "";
 }
 
+QVariantList NewScoreModel::instrumentNamesLanguages() const
+{
+    return InstrumentNamesTranslator().languageChoices(configuration()->recentInstrumentNamesLanguages());
+}
+
+QString NewScoreModel::lastInstrumentNamesLanguage() const
+{
+    return configuration()->lastInstrumentNamesLanguage();
+}
+
+QString NewScoreModel::instrumentNamesExample(const QString& languageCode) const
+{
+    //! An instrument whose name shows both the language and the names of the keys
+    static const muse::String EXAMPLE_INSTRUMENT_ID = u"bb-clarinet";
+
+    const mu::engraving::InstrumentTemplate& templ = instrumentsRepository()->instrumentTemplate(EXAMPLE_INSTRUMENT_ID);
+    if (!templ.isValid()) {
+        return QString();
+    }
+
+    InstrumentNamesTranslator translator;
+    translator.load(languageCode.isEmpty() ? translator.interfaceLanguageCode() : languageCode);
+
+    //: An example of the names of instruments in the chosen language, e.g. "Example: Clarinet in B♭"
+    return muse::qtrc("project/newscore", "Example: %1").arg(translator.exampleName(templ).toQString());
+}
+
 bool NewScoreModel::createScore(const QVariant& info)
 {
     ProjectCreateOptions options = parseOptions(info.toMap());
@@ -67,6 +96,10 @@ bool NewScoreModel::createScore(const QVariant& info)
     bool isScoreCreatedFromInstruments = options.templatePath.empty();
     updatePreferredScoreCreationMode(isScoreCreatedFromInstruments);
 
+    configuration()->setLastInstrumentNamesLanguage(options.instrumentNamesLanguage);
+    configuration()->setRecentInstrumentNamesLanguages(
+        InstrumentNamesTranslator::addRecentLanguage(configuration()->recentInstrumentNamesLanguages(), options.instrumentNamesLanguage));
+
     return true;
 }
 
@@ -81,6 +114,7 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     projectOptions.copyright = info["copyright"].toString();
 
     projectOptions.templatePath = info["templatePath"].toString();
+    projectOptions.instrumentNamesLanguage = info["instrumentNamesLanguage"].toString();
 
     ScoreCreateOptions& scoreOptions = projectOptions.scoreOptions;
 

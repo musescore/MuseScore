@@ -214,6 +214,24 @@ void ProjectConfigurationStub::setPreferredScoreCreationMode(PreferredScoreCreat
 {
 }
 
+QString ProjectConfigurationStub::lastInstrumentNamesLanguage() const
+{
+    return QString();
+}
+
+void ProjectConfigurationStub::setLastInstrumentNamesLanguage(const QString&)
+{
+}
+
+QStringList ProjectConfigurationStub::recentInstrumentNamesLanguages() const
+{
+    return QStringList();
+}
+
+void ProjectConfigurationStub::setRecentInstrumentNamesLanguages(const QStringList&)
+{
+}
+
 MigrationOptions ProjectConfigurationStub::migrationOptions(MigrationType) const
 {
     return MigrationOptions();

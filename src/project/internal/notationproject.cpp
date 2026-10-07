@@ -51,6 +51,7 @@
 #include "engraving/rw/inoutdata.h"
 #include "engraving/rw/write/writecontext.h"
 
+#include "engraving/iscoretexttranslator.h"
 #include "iprojectautosaver.h"
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h" // IWYU pragma: keep
@@ -378,6 +379,12 @@ Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     mu::engraving::MasterScore* masterScore = m_engravingProject->masterScore();
     setupScoreMetaTags(masterScore, projectOptions);
 
+    // Remember the language of the score, if one was chosen. The instruments are then added with their names
+    // in that language (see NotationParts), and texts added later (e.g. from the palettes) are in it too.
+    if (!projectOptions.instrumentNamesLanguage.isEmpty()) {
+        masterScore->setMetaTag(engraving::SCORE_TEXT_LANGUAGE_META_TAG, String::fromQString(projectOptions.instrumentNamesLanguage));
+    }
+
     // Setup new master score
     Ret ret = m_masterNotation->setupNewScore(masterScore, projectOptions.scoreOptions);
     if (!ret) {
@@ -412,6 +419,12 @@ Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)
 
         mu::engraving::MasterScore* masterScore = m_masterNotation->masterScore();
         setupScoreMetaTags(masterScore, projectOptions);
+
+        // The names of the instruments of the template are kept as they are. Only instruments that are
+        // added later get their names in the language of the score, as do texts (e.g. from the palettes).
+        if (!projectOptions.instrumentNamesLanguage.isEmpty()) {
+            masterScore->setMetaTag(engraving::SCORE_TEXT_LANGUAGE_META_TAG, String::fromQString(projectOptions.instrumentNamesLanguage));
+        }
 
         m_masterNotation->notation()->undoStack()->lock();
         m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
