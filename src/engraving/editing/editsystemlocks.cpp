@@ -141,13 +141,7 @@ void EditSystemLocks::undoRemoveAllLocks(Transaction& tx, Score* score)
 
 void EditSystemLocks::toggleSystemLock(Transaction& tx, Score* score, const std::vector<System*>& systems)
 {
-    bool unlockAll = true;
-    for (const System* system : systems) {
-        if (!system->isLocked()) {
-            unlockAll = false;
-            break;
-        }
-    }
+    const bool unlockAll = System::allLocked(systems);
 
     for (System* system : systems) {
         MeasureBase* startMeas = system->first();
