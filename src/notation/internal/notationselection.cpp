@@ -167,6 +167,23 @@ MeasureBase* NotationSelection::endMeasureBase() const
     return score()->selection().endMeasureBase();
 }
 
+size_t NotationSelection::selectedMeasuresCount() const
+{
+    const engraving::MeasureBase* startMeasure = startMeasureBase();
+    const engraving::MeasureBase* endMeasure = endMeasureBase();
+    if (!startMeasure || !endMeasure) {
+        return 0;
+    }
+
+    size_t count = 0;
+    for (const engraving::MeasureBase* mb = startMeasure; mb && mb->isBeforeOrEqual(endMeasure); mb = mb->nextMM()) {
+        if (mb->isMeasure()) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 std::vector<System*> NotationSelection::selectedSystems() const
 {
     return score()->selection().selectedSystems();
