@@ -41,20 +41,20 @@ protected:
 
 void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)
 {
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* measure = score->firstMeasure();
-    EXPECT_TRUE(measure);
+    ASSERT_TRUE(measure);
     static const String FRET_PATTERN_REF = u"XO[4-O][2-O]OO";
 
     while (measure) {
         Segment* s1 = measure->first(SegmentType::ChordRest);
-        EXPECT_TRUE(s1);
+        ASSERT_TRUE(s1);
 
         Harmony* harmony = toHarmony(s1->findAnnotation(ElementType::HARMONY, 0, 0));
-        EXPECT_TRUE(harmony);
+        ASSERT_TRUE(harmony);
 
         FretDiagram* diagram = Factory::createFretDiagram(score->dummy());
-        EXPECT_TRUE(diagram);
+        ASSERT_TRUE(diagram);
         diagram->updateDiagram(harmony->harmonyName());
         String pattern = diagram->patternFromDiagram();
         EXPECT_EQ(pattern, FRET_PATTERN_REF);

@@ -78,13 +78,13 @@ void Engraving_PartsTests::createLinkedStaff(MasterScore* masterScore)
 {
     masterScore->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     Staff* sourceStaff = masterScore->staff(0);
-    EXPECT_TRUE(sourceStaff);
+    ASSERT_TRUE(sourceStaff);
     Staff* linkedStaff = Factory::createStaff(sourceStaff->part());
     linkedStaff->setPart(sourceStaff->part());
     masterScore->undoInsertStaff(linkedStaff, 1, false);
     Excerpt::cloneStaff(sourceStaff, linkedStaff);
     masterScore->endCmd();
-    EXPECT_TRUE(masterScore->staff(1));
+    ASSERT_TRUE(masterScore->staff(1));
 }
 
 //---------------------------------------------------------
@@ -111,7 +111,7 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);
-    EXPECT_TRUE(nscore);
+    ASSERT_TRUE(nscore);
     ex->setVoiceVisible(nscore->staff(0), 0, false);
 
     //nscore->setName(parts.front()->partName());
@@ -130,7 +130,7 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);
-    EXPECT_TRUE(nscore);
+    ASSERT_TRUE(nscore);
     ex->setVoiceVisible(nscore->staff(0), 0, false);
     ex->setVoiceVisible(nscore->staff(0), 1, false);
     ex->setVoiceVisible(nscore->staff(0), 2, false);
@@ -149,7 +149,7 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);
-    EXPECT_TRUE(nscore);
+    ASSERT_TRUE(nscore);
     ex->setVoiceVisible(nscore->staff(0), 1, false);
     ex->setVoiceVisible(nscore->staff(0), 2, false);
     ex->setVoiceVisible(nscore->staff(0), 3, false);
@@ -325,7 +325,7 @@ TEST_F(Engraving_PartsTests, createEmptyPart)
     // Check that measures have correct ticks set
     for (Excerpt* excerpt : score->excerpts()) {
         Score* excerptScore = excerpt->excerptScore();
-        EXPECT_TRUE(excerptScore);
+        ASSERT_TRUE(excerptScore);
         for (MeasureBase* mb = excerptScore->first(); mb; mb = mb->next()) {
             if (mb->isMeasure()) {
                 EXPECT_GT(mb->ticks(), Fraction(0, 1));
@@ -1154,10 +1154,10 @@ TEST_F(Engraving_PartsTests, partExclusion)
 {
     MasterScore* masterScore = ScoreRW::readScore(PARTS_DATA_DIR + u"partExclusion.mscx");
 
-    EXPECT_TRUE(masterScore);
+    ASSERT_TRUE(masterScore);
 
     Score* partScore = TestUtils::createPart(masterScore);
-    EXPECT_TRUE(partScore);
+    ASSERT_TRUE(partScore);
 
     ScoreRW::saveScore(masterScore, u"partExclusion.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
@@ -1213,10 +1213,10 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
 {
     MasterScore* masterScore = ScoreRW::readScore(PARTS_DATA_DIR + u"partPropertyLinking.mscx");
 
-    EXPECT_TRUE(masterScore);
+    ASSERT_TRUE(masterScore);
 
     Score* partScore = TestUtils::createPart(masterScore);
-    EXPECT_TRUE(partScore);
+    ASSERT_TRUE(partScore);
 
     ScoreRW::saveScore(masterScore, u"partPropertyLinking.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
@@ -1233,7 +1233,7 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
         }
     }
     Dynamic* testItem = toDynamic(dynamic->findLinkedInScore(partScore));
-    EXPECT_TRUE(testItem);
+    ASSERT_TRUE(testItem);
 
     testItem->undoChangeProperty(Pid::PLACEMENT, PropertyValue::fromValue(PlacementV::ABOVE), PropertyFlags::NOSTYLE);
     testItem->undoChangeProperty(Pid::MUSICAL_SYMBOLS_SCALE, PropertyValue::fromValue(1.2), PropertyFlags::NOSTYLE);
@@ -1267,7 +1267,7 @@ TEST_F(Engraving_PartsTests, partTies) {
 
 TEST_F(Engraving_PartsTests, partVisibleTracks) {
     Score* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-visible-tracks.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Score* part = nullptr;
     for (Score* s : score->scoreList()) {
@@ -1276,13 +1276,13 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
             break;
         }
     }
-    EXPECT_TRUE(part);
+    ASSERT_TRUE(part);
     Measure* m = part->firstMeasure();
-    EXPECT_TRUE(m);
+    ASSERT_TRUE(m);
     Chord* c = m->findChord(Fraction(0, 1), 0);
-    EXPECT_TRUE(c);
+    ASSERT_TRUE(c);
     Note* n = c->downNote();
-    EXPECT_TRUE(n);
+    ASSERT_TRUE(n);
 
     part->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     part->select(n);
@@ -1300,7 +1300,7 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
     // Enter notes *in parts* and check that they are correctly cloned to the score.
 
     Score* score = ScoreRW::readScore(PARTS_DATA_DIR + u"input-from-parts.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     staff_idx_t fluteStaff = 0;
     staff_idx_t oboeStaff = 1;
     staff_idx_t clarinetStaff = 2;
@@ -1322,44 +1322,47 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
             bassoonPart = part;
         }
     }
-    EXPECT_TRUE(flutePart && oboePart && clarinetPart && bassoonPart);
+    ASSERT_TRUE(flutePart);
+    ASSERT_TRUE(oboePart);
+    ASSERT_TRUE(clarinetPart);
+    ASSERT_TRUE(bassoonPart);
 
     track_idx_t voice = 3;
     Segment* partSegment = flutePart->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
-    EXPECT_TRUE(partSegment);
+    ASSERT_TRUE(partSegment);
     flutePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     Segment* scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
-    EXPECT_TRUE(scoreSegment);
+    ASSERT_TRUE(scoreSegment);
     Chord* chord = toChord(scoreSegment->element(staff2track(fluteStaff) + voice));
-    EXPECT_TRUE(chord);
+    ASSERT_TRUE(chord);
 
     voice = 2;
     partSegment = oboePart->firstMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
-    EXPECT_TRUE(partSegment);
+    ASSERT_TRUE(partSegment);
     oboePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
-    EXPECT_TRUE(scoreSegment);
+    ASSERT_TRUE(scoreSegment);
     chord = toChord(scoreSegment->element(staff2track(oboeStaff) + voice));
-    EXPECT_TRUE(chord);
+    ASSERT_TRUE(chord);
 
     voice = 1;
     partSegment = clarinetPart->firstMeasure()->nextMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
-    EXPECT_TRUE(partSegment);
+    ASSERT_TRUE(partSegment);
     clarinetPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
-    EXPECT_TRUE(scoreSegment);
+    ASSERT_TRUE(scoreSegment);
     chord = toChord(scoreSegment->element(staff2track(clarinetStaff) + voice));
-    EXPECT_TRUE(chord);
+    ASSERT_TRUE(chord);
 
     voice = 0;
     partSegment = bassoonPart->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0,
                                                                                                                                         1));
-    EXPECT_TRUE(partSegment);
+    ASSERT_TRUE(partSegment);
     bassoonPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
     scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
-    EXPECT_TRUE(scoreSegment);
+    ASSERT_TRUE(scoreSegment);
     chord = toChord(scoreSegment->element(staff2track(bassoonStaff) + voice));
-    EXPECT_TRUE(chord);
+    ASSERT_TRUE(chord);
 }
 
 //---------------------------------------------------------
@@ -1370,7 +1373,7 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
 TEST_F(Engraving_PartsTests, staffStyles)
 {
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part1.mscx");
-    /*ASSERT_TRUE*/ EXPECT_TRUE(score);
+    /*ASSERT_TRUE*/ ASSERT_TRUE(score);
 
     //int numOfStaffTypes = score->staffTypes().count();
     createParts(score);

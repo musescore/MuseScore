@@ -49,7 +49,7 @@ class Engraving_VoiceSwitchingTests : public ::testing::Test
 TEST_F(Engraving_VoiceSwitchingTests, voiceSwitching)
 {
     Score* score = ScoreRW::readScore(VOICESWITCHING_DATA_DIR + "voiceswitching.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     InputState& inputState = score->inputState();
     score->doLayout();
@@ -85,7 +85,8 @@ TEST_F(Engraving_VoiceSwitchingTests, voiceSwitching)
         }
 
         //! [GIVEN] A starting ChordRest, and an expected destination ChordRest...
-        EXPECT_TRUE(startCR && destinationCR);
+        ASSERT_TRUE(startCR);
+        ASSERT_TRUE(destinationCR);
 
         //! [WHEN] The starting ChordRest is selected...
         score->select(startCR);
@@ -109,7 +110,7 @@ TEST_F(Engraving_VoiceSwitchingTests, articulationsAfterVoiceSwitch)
 {
     //! [GIVEN] A measure with two voices, each beat having articulations in both voices
     Score* score = ScoreRW::readScore(VOICESWITCHING_DATA_DIR + "voiceswitching-articulation.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     //! [WHEN] The first bar is range selected and all elements are moved to voice 0
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving voice switching tests"), [&](Transaction& tx) {
@@ -199,14 +200,14 @@ TEST_F(Engraving_VoiceSwitchingTests, articulationsAfterVoiceSwitch)
 TEST_F(Engraving_VoiceSwitchingTests, voicesSwitchingGapRests)
 {
     Score* score = ScoreRW::readScore(VOICESWITCHING_DATA_DIR + "voiceswitching-2.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Segment* segment = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
-    EXPECT_TRUE(segment);
+    ASSERT_TRUE(segment);
 
     //! [GIVEN] A measure with some notes in voice zero
     Chord* chord = toChord(segment->element(0));
-    EXPECT_TRUE(chord);
+    ASSERT_TRUE(chord);
 
     //! [WHEN] The last note of the measure is selected and moved to voice one
     score->select(chord->upNote());
@@ -216,10 +217,12 @@ TEST_F(Engraving_VoiceSwitchingTests, voicesSwitchingGapRests)
 
     //! [THEN] Voice 1 should be filled with gap rests from the start of the measure
     Segment* firstSeg = score->firstSegment(SegmentType::ChordRest);
-    EXPECT_TRUE(firstSeg);
+    ASSERT_TRUE(firstSeg);
 
     EngravingItem* item = firstSeg->element(1);
-    EXPECT_TRUE(item && item->isRest() && toRest(item)->isGap());
+    ASSERT_TRUE(item);
+    ASSERT_TRUE(item->isRest());
+    EXPECT_TRUE(toRest(item)->isGap());
 
     delete score;
 }

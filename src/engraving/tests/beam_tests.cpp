@@ -56,7 +56,7 @@ public:
 void Engraving_BeamTests::beam(const char* path)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + String::fromUtf8(path));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(path), BEAM_DATA_DIR + String::fromUtf8(path)));
     delete score;
 }
@@ -121,7 +121,7 @@ TEST_F(Engraving_BeamTests, wideBeams)
 TEST_F(Engraving_BeamTests, flatBeams)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"flatBeams.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"flatBeams.mscx", BEAM_DATA_DIR + u"flatBeams-ref.mscx"));
     delete score;
 }
@@ -155,21 +155,21 @@ TEST_F(Engraving_BeamTests, DISABLED_beamCrossMeasure4)
 TEST_F(Engraving_BeamTests, DISABLED_beamCrossMeasure1)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"Beam-CrossM1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* first_measure = score->firstMeasure();
-    EXPECT_TRUE(first_measure);
+    ASSERT_TRUE(first_measure);
 
     // find the first segment that has a chord
     Segment* s = first_measure->first(SegmentType::ChordRest);
     while (s && !s->element(0)->isChord()) {
         s = s->next(SegmentType::ChordRest);
     }
-    EXPECT_TRUE(s);
+    ASSERT_TRUE(s);
 
     // locate the first beam
     ChordRest* first_note = toChordRest(s->element(0));
-    EXPECT_TRUE(first_note);
+    ASSERT_TRUE(first_note);
 
     Beam* b = first_note->beam();
     score->update();
@@ -190,7 +190,7 @@ TEST_F(Engraving_BeamTests, DISABLED_beamCrossMeasure1)
 TEST_F(Engraving_BeamTests, beamStemDir)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"beamStemDir.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
@@ -215,7 +215,7 @@ TEST_F(Engraving_BeamTests, beamStemDir)
 TEST_F(Engraving_BeamTests, flipBeamStemDir)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"flipBeamStemDir.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
@@ -245,7 +245,7 @@ TEST_F(Engraving_BeamTests, flipBeamStemDir)
 TEST_F(Engraving_BeamTests, flipTremoloStemDir)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipTremoloStemDir.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
@@ -269,17 +269,17 @@ TEST_F(Engraving_BeamTests, flipTremoloStemDir)
 TEST_F(Engraving_BeamTests, deleteBeamStemDirection)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "deleteBeamStemDirection.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
     ChordRest* cr1 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(0, 8))->element(0));
-    EXPECT_TRUE(cr1);
+    ASSERT_TRUE(cr1);
     ChordRest* cr2 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(1, 8))->element(0));
-    EXPECT_TRUE(cr2);
+    ASSERT_TRUE(cr2);
     ChordRest* cr3 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(2, 8))->element(0));
-    EXPECT_TRUE(cr3);
+    ASSERT_TRUE(cr3);
     ChordRest* cr4 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(3, 8))->element(0));
-    EXPECT_TRUE(cr4);
+    ASSERT_TRUE(cr4);
 
     for (ChordRest* cr : { cr1, cr2, cr3, cr4 }) {
         EXPECT_TRUE(cr->ldata()->up);
@@ -311,18 +311,18 @@ TEST_F(Engraving_BeamTests, deleteBeamStemDirection)
 TEST_F(Engraving_BeamTests, drumKitBeam)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "drumKitBeam.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->setLayoutAll();
     score->doLayout();
     Measure* m = score->firstMeasure();
     Chord* cr1 = toChord(m->findSegment(SegmentType::ChordRest, Fraction(0, 1))->element(0));
-    EXPECT_TRUE(cr1);
+    ASSERT_TRUE(cr1);
     EXPECT_TRUE(cr1->up() && cr1->stemDirection() == DirectionV::UP);
     Chord* cr2 = toChord(m->findSegment(SegmentType::ChordRest, Fraction(2, 8))->element(0));
-    EXPECT_TRUE(cr2);
+    ASSERT_TRUE(cr2);
     EXPECT_TRUE(cr2->up() && cr2->stemDirection() == DirectionV::UP);
     Chord* cr3 = toChord(m->findSegment(SegmentType::ChordRest, Fraction(3, 8))->element(0));
-    EXPECT_TRUE(cr3);
+    ASSERT_TRUE(cr3);
     EXPECT_TRUE(cr3->up() && cr3->stemDirection() == DirectionV::UP);
 
     score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));

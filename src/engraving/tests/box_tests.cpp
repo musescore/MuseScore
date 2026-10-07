@@ -51,7 +51,7 @@ TEST_F(Engraving_BoxTests, undoRemoveVBox)
     String reference2(BOX_DATA_DIR + u"undoRemoveVBox2-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->doLayout();
 

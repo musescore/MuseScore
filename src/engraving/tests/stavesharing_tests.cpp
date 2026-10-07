@@ -90,7 +90,7 @@ bool checkSharedPartNotExist(SharedPart* sharedPart, const std::vector<Part*>& o
 TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
 {
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
@@ -108,7 +108,7 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
 TEST_F(Engraving_StaveSharingTests, testCreateSharedPartUndoRedo)
 {
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
@@ -134,7 +134,7 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPartUndoRedo)
 TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
 {
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
@@ -180,7 +180,7 @@ TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
 TEST_F(Engraving_StaveSharingTests, testSaveReloadStaveSharing)
 {
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
@@ -191,7 +191,7 @@ TEST_F(Engraving_StaveSharingTests, testSaveReloadStaveSharing)
     delete score;
 
     score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00_ref.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->doLayout();
 

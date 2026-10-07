@@ -509,11 +509,15 @@ TEST_F(Engraving_NoteTests, alteredUnison)
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"altered-unison.mscx");
     Measure* m = score->firstMeasure();
     Chord* c = m->findChord(Fraction(0, 1), 0);
-    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == AccidentalType::FLAT);
-    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == AccidentalType::NATURAL);
+    ASSERT_TRUE(c->downNote()->accidental());
+    EXPECT_EQ(c->downNote()->accidental()->accidentalType(), AccidentalType::FLAT);
+    ASSERT_TRUE(c->upNote()->accidental());
+    EXPECT_EQ(c->upNote()->accidental()->accidentalType(), AccidentalType::NATURAL);
     c = m->findChord(Fraction(1, 4), 0);
-    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == AccidentalType::NATURAL);
-    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == AccidentalType::SHARP);
+    ASSERT_TRUE(c->downNote()->accidental());
+    EXPECT_EQ(c->downNote()->accidental()->accidentalType(), AccidentalType::NATURAL);
+    ASSERT_TRUE(c->upNote()->accidental());
+    EXPECT_EQ(c->upNote()->accidental()->accidentalType(), AccidentalType::SHARP);
 }
 
 //---------------------------------------------------------
@@ -541,11 +545,13 @@ TEST_F(Engraving_NoteTests, LongNoteAfterShort_183746)
     NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 47, 0, 0);
 
     Segment* s = score->tick2segment(TDuration(DurationType::V_128TH).ticks());
-    EXPECT_TRUE(s && s->segmentType() == SegmentType::ChordRest);
+    ASSERT_TRUE(s);
+    EXPECT_EQ(s->segmentType(), SegmentType::ChordRest);
     EXPECT_TRUE(s->tick() == Fraction(1, 128));
 
     EngravingItem* e = s->firstElementForNavigation(0);
-    EXPECT_TRUE(e && e->isNote());
+    ASSERT_TRUE(e);
+    ASSERT_TRUE(e->isNote());
 
     std::vector<Note*> nl = toNote(e)->tiedNotes();
     EXPECT_TRUE(nl.size() >= 3);   // the breve must be divided across at least 3 measures
@@ -572,14 +578,16 @@ TEST_F(Engraving_NoteTests, PreserveLyricsOnRepitch)
     score->addLyrics(tick, 0, u"la");
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 1u);
     EXPECT_EQ(cr->lyrics().front()->xmlText(), u"la");
 
     score->setNoteRest(cr->segment(), 0, NoteVal(62), duration, DirectionV::AUTO);
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 1u);
     EXPECT_EQ(cr->lyrics().front()->xmlText(), u"la");
 
@@ -600,15 +608,18 @@ TEST_F(Engraving_NoteTests, RepitchDoesNotDuplicateLyrics)
     score->addLyrics(tick, 0, u"la");
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
 
     score->setNoteRest(cr->segment(), 0, NoteVal(62), duration, DirectionV::AUTO);
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
 
     score->setNoteRest(cr->segment(), 0, NoteVal(64), duration, DirectionV::AUTO);
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
 
     ASSERT_EQ(cr->lyrics().size(), 1u);
     EXPECT_EQ(cr->lyrics().front()->xmlText(), u"la");
@@ -630,14 +641,16 @@ TEST_F(Engraving_NoteTests, ReplacingNoteWithRestDoesNotPreserveLyrics)
     score->addLyrics(tick, 0, u"la");
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 1u);
 
     score->setNoteRest(cr->segment(), 0, NoteVal(), duration, DirectionV::AUTO);
 
     cr = chordRestAtTick(score, tick, 0);
     // replacing with a rest intentionally drops attached lyrics
-    ASSERT_TRUE(cr && cr->isRest());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isRest());
     EXPECT_TRUE(cr->lyrics().empty());
 
     delete score;
@@ -656,12 +669,14 @@ TEST_F(Engraving_NoteTests, RepitchWithoutLyricsStaysEmpty)
     // edge case: no lyrics on source note
     score->setNoteRest(cr->segment(), 0, NoteVal(60), duration, DirectionV::AUTO);
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
     EXPECT_TRUE(cr->lyrics().empty());
 
     score->setNoteRest(cr->segment(), 0, NoteVal(62), duration, DirectionV::AUTO);
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
     EXPECT_TRUE(cr->lyrics().empty());
 
     delete score;
@@ -679,7 +694,8 @@ TEST_F(Engraving_NoteTests, RepitchPreservesMultipleLyricsAndFormatting)
 
     score->setNoteRest(cr->segment(), 0, NoteVal(62), duration, DirectionV::AUTO);
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
 
     // edge case: multiple lyrics and formatted text
     score->addLyrics(tick, 0, u"do");
@@ -695,7 +711,8 @@ TEST_F(Engraving_NoteTests, RepitchPreservesMultipleLyricsAndFormatting)
     score->setNoteRest(cr->segment(), 0, NoteVal(65), duration, DirectionV::AUTO);
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 2u);
 
     Lyrics* verse0 = cr->lyrics(0);
@@ -726,7 +743,8 @@ TEST_F(Engraving_NoteTests, RepitchLyricsUndoRedoPreservesLyrics)
     score->endCmd();
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    ASSERT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 1u);
     EXPECT_EQ(cr->lyrics().front()->xmlText(), u"la");
     EXPECT_EQ(toChord(cr)->upNote()->pitch(), 60);
@@ -736,7 +754,8 @@ TEST_F(Engraving_NoteTests, RepitchLyricsUndoRedoPreservesLyrics)
     score->endCmd();
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    ASSERT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 1u);
     EXPECT_EQ(cr->lyrics().front()->xmlText(), u"la");
     EXPECT_EQ(toChord(cr)->upNote()->pitch(), 67);
@@ -744,7 +763,8 @@ TEST_F(Engraving_NoteTests, RepitchLyricsUndoRedoPreservesLyrics)
     score->undoRedo(true, nullptr);
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    ASSERT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 1u);
     EXPECT_EQ(cr->lyrics().front()->xmlText(), u"la");
     EXPECT_EQ(toChord(cr)->upNote()->pitch(), 60);
@@ -753,7 +773,8 @@ TEST_F(Engraving_NoteTests, RepitchLyricsUndoRedoPreservesLyrics)
     score->undoRedo(false, nullptr);
 
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    ASSERT_TRUE(cr->isChord());
     ASSERT_EQ(cr->lyrics().size(), 1u);
     EXPECT_EQ(cr->lyrics().front()->xmlText(), u"la");
     EXPECT_EQ(toChord(cr)->upNote()->pitch(), 67);
@@ -773,7 +794,8 @@ TEST_F(Engraving_NoteTests, RepeatedRepitchWithTwoLyricsPreservesBoth)
 
     score->setNoteRest(cr->segment(), 0, NoteVal(60), duration, DirectionV::AUTO);
     cr = chordRestAtTick(score, tick, 0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    EXPECT_TRUE(cr->isChord());
 
     score->addLyrics(tick, 0, u"do");
     Lyrics* lyricVerse1 = Factory::createLyrics(cr);
@@ -789,7 +811,8 @@ TEST_F(Engraving_NoteTests, RepeatedRepitchWithTwoLyricsPreservesBoth)
     for (int pitch : pitches) {
         score->setNoteRest(cr->segment(), 0, NoteVal(pitch), duration, DirectionV::AUTO);
         cr = chordRestAtTick(score, tick, 0);
-        ASSERT_TRUE(cr && cr->isChord());
+        ASSERT_TRUE(cr);
+        EXPECT_TRUE(cr->isChord());
         ASSERT_EQ(cr->lyrics().size(), 2u);
 
         Lyrics* verse0 = cr->lyrics(0);
@@ -822,15 +845,18 @@ TEST_F(Engraving_NoteTests, RepitchInVoiceTwoDoesNotAffectVoiceOneLyrics)
     score->setNoteRest(segment, 1, NoteVal(55), duration, DirectionV::AUTO);
 
     ChordRest* voice2Cr = chordRestAtTick(score, tick, 1);
-    ASSERT_TRUE(voice2Cr && voice2Cr->isChord());
+    ASSERT_TRUE(voice2Cr);
+    ASSERT_TRUE(voice2Cr->isChord());
     EXPECT_TRUE(voice2Cr->lyrics().empty());
 
     score->setNoteRest(voice2Cr->segment(), 1, NoteVal(57), duration, DirectionV::AUTO);
 
     voice1Cr = chordRestAtTick(score, tick, 0);
     voice2Cr = chordRestAtTick(score, tick, 1);
-    ASSERT_TRUE(voice1Cr && voice1Cr->isChord());
-    ASSERT_TRUE(voice2Cr && voice2Cr->isChord());
+    ASSERT_TRUE(voice1Cr);
+    EXPECT_TRUE(voice1Cr->isChord());
+    ASSERT_TRUE(voice2Cr);
+    ASSERT_TRUE(voice2Cr->isChord());
 
     ASSERT_EQ(voice1Cr->lyrics().size(), 1u);
     EXPECT_EQ(voice1Cr->lyrics().front()->xmlText(), u"solo");

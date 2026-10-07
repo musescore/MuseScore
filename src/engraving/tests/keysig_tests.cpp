@@ -54,7 +54,8 @@ protected:
         Segment* segment = score->tick2measure(tick)->findSegment(SegmentType::KeySig, tick);
         ASSERT_TRUE(segment);
         EngravingItem* item = segment->element(0);
-        ASSERT_TRUE(item && item->isKeySig());
+        ASSERT_TRUE(item);
+        ASSERT_TRUE(item->isKeySig());
         const KeySigEvent actual = toKeySig(item)->keySigEvent();
         EXPECT_TRUE(actual.forInstrumentChange());
         EXPECT_EQ(actual.concertKey(), concertKey);
@@ -79,9 +80,9 @@ TEST_F(Engraving_KeySigTests, keysig)
 
     // read file
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m2 = score->firstMeasure()->nextMeasure();
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     // add a key signature (D major) in measure 2
     KeySigEvent ke2;
@@ -131,14 +132,14 @@ TEST_F(Engraving_KeySigTests, keysig)
 TEST_F(Engraving_KeySigTests, keysig_78216)
 {
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig_78216.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
     Measure* m3 = m2->nextMeasure();
-    EXPECT_TRUE(m3);
+    ASSERT_TRUE(m3);
 
     // verify no keysig exists in segment of final tick of m1, m2, m3
     EXPECT_EQ(m1->findSegment(SegmentType::KeySig, m1->endTick()), nullptr) << "Should be no keysig at end of measure 1.";
@@ -151,7 +152,7 @@ TEST_F(Engraving_KeySigTests, keysig_78216)
 TEST_F(Engraving_KeySigTests, concertPitch)
 {
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "concert-pitch.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->cmdConcertPitchChanged(true);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-01-test.mscx", KEYSIG_DATA_DIR + u"concert-pitch-01-ref.mscx"));
@@ -164,7 +165,7 @@ TEST_F(Engraving_KeySigTests, concertPitch)
 TEST_F(Engraving_KeySigTests, preferSharpFlat)
 {
     MasterScore* score1 = ScoreRW::readScore(KEYSIG_DATA_DIR + u"preferSharpFlat-1.mscx");
-    EXPECT_TRUE(score1);
+    ASSERT_TRUE(score1);
     auto parts = score1->parts();
     Part* part1 = parts[0];
     part1->setPreferSharpFlat(PreferSharpFlat::FLATS);
@@ -175,7 +176,7 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
     delete score1;
 
     MasterScore* score2 = ScoreRW::readScore(KEYSIG_DATA_DIR + u"preferSharpFlat-2.mscx");
-    EXPECT_TRUE(score2);
+    ASSERT_TRUE(score2);
     score2->cmdSelectAll();
     score2->transactionManager()->transaction(TranslatableString::untranslatable("Key signature tests"), [&](auto& tx) {
         // transpose augmented unison up
@@ -188,7 +189,7 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
 TEST_F(Engraving_KeySigTests, keysigMode)
 {
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m1 = score->firstMeasure();
     KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
     ke->setProperty(Pid::KEYSIG_MODE, KeyMode::DORIAN);
@@ -245,7 +246,8 @@ TEST_F(Engraving_KeySigTests, linkedPrecedingKeyDeletion)
         Segment* segment = owner->firstMeasure()->findSegment(SegmentType::KeySig, Fraction(1, 2));
         ASSERT_TRUE(segment);
         EngravingItem* item = segment->element(0);
-        ASSERT_TRUE(item && item->isKeySig());
+        ASSERT_TRUE(item);
+        ASSERT_TRUE(item->isKeySig());
         ASSERT_FALSE(toKeySig(item)->forInstrumentChange());
         ASSERT_EQ(item->linkList().size(), 2u);
         owner->select(item, SelectType::SINGLE, 0);

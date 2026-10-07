@@ -46,7 +46,7 @@ public:
 void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
 {
     MasterScore* score = ScoreRW::readScore(SPLIT_DATA_DIR + String::fromUtf8(f1));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     for (int i = 0; i < index; ++i) {
@@ -128,17 +128,18 @@ TEST_F(Engraving_SplitTests, split295207)
 TEST_F(Engraving_SplitTests, splitTieAtStart) {
     // Test splitting a measure when there is a tie ending on the first chord on the split range
     MasterScore* score = ScoreRW::readScore(SPLIT_DATA_DIR + u"splitTieAtStart.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     Segment* s1 = m1->last(SegmentType::ChordRest);
     ChordRest* cr1 = toChordRest(s1->element(0));
-    EXPECT_TRUE(cr1 && cr1->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
     Chord* c1 = toChord(cr1);
     Note* n1 = c1->upNote();
-    EXPECT_TRUE(n1);
+    ASSERT_TRUE(n1);
 
     auto checkTie = [&]() -> Tie* {
         Tie* t = n1->tieFor();

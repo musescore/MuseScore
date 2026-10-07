@@ -71,7 +71,7 @@ static void dropClef(EngravingItem* m, ClefType t)
 TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy01.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // drop G1 clef to 4th measure
     Measure* m1 = getMeasure(score, 4);
@@ -85,27 +85,27 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
     Clef* clefCourt = 0;
     Measure* m = m1->prevMeasure();
     Segment* seg = m->findSegment(SegmentType::Clef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 3.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 3.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
     EXPECT_GT(clefCourt->ldata()->bbox().width(), 0) << "Courtesy clef in measure 3 is hidden.";
 
     // check the not required courtesy clef element is there but it is not shown
     clefCourt = nullptr;
     m   = m2->prevMeasure();
     seg = m->findSegment(SegmentType::Clef, m2->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 6.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 6.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 6.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef element in measure 6.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 6 is NOT hidden.";
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy01.mscx", CLEFCOURTESY_DATA_DIR + u"clef_courtesy01-ref.mscx"));
 
     Clef* clef = nullptr;
     seg = m1->findSegment(SegmentType::HeaderClef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 4.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 4.";
 
     clef = toClef(seg->element(0));
     score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
@@ -119,10 +119,10 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
     // check the required courtesy clef is there but hidden
     m = m1->prevMeasure();
     seg = m->findSegment(SegmentType::Clef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 3.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 3.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 3 is not hidden when showCourtesy is false.";
 
     EXPECT_EQ(clef->clefType(), ClefType::G8_VA) << "Clef type in measure 4 is wrong";
@@ -139,7 +139,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
 TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy02.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // 'go' to 4th measure
     Measure* m1 = score->firstMeasure();
@@ -171,19 +171,19 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
     Clef* clefCourt = nullptr;
     Measure* m = m1->prevMeasure();
     Segment* seg = m->findSegment(SegmentType::Clef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 3.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 3.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 3 is NOT hidden.";
 
     clefCourt = nullptr;
     m = m2->prevMeasure();
     seg = m->findSegment(SegmentType::Clef, m2->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 6.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 6.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 6.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef element in measure 6.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 6 is NOT hidden.";
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy02.mscx", CLEFCOURTESY_DATA_DIR + u"clef_courtesy02-ref.mscx"));
@@ -198,7 +198,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
 TEST_F(Engraving_ClefCourtesyTests, clef_courtesy03)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy03.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
@@ -215,10 +215,10 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy03)
     // verify the not required courtesy clef element is on end of m1 but is not shown
     Clef* clefCourt = nullptr;
     Segment* seg = m1->findSegment(SegmentType::Clef, m2->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 1.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 1.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 1.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef element in measure 1.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 1 is NOT hidden.";
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy03.mscx", CLEFCOURTESY_DATA_DIR + u"clef_courtesy03-ref.mscx"));
@@ -232,7 +232,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy03)
 TEST_F(Engraving_ClefCourtesyTests, clef_courtesy_78196)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy_78196.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
@@ -248,26 +248,26 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy_78196)
 
     // verify clef exists in segment of final tick of m2, but that it is not visible
     seg = m2->findSegment(SegmentType::Clef, m3->tick());
-    EXPECT_TRUE(seg) << "No SegClef at end of measure 2.";
+    ASSERT_TRUE(seg) << "No SegClef at end of measure 2.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef at end of measure 2.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef at end of measure 2.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef at end of measure 2 is NOT hidden.";
 
     // verify clef exists in segment of final tick of m4, but that it is not visible
     seg = m4->findSegment(SegmentType::Clef, m5->tick());
-    EXPECT_TRUE(seg) << "No SegClef at end of measure 4.";
+    ASSERT_TRUE(seg) << "No SegClef at end of measure 4.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef at end of measure 4.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef at end of measure 4.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef at end of measure 4 is NOT hidden.";
 
     // verify clef exists in segment of final tick of m6, but that it is not visible
     seg = m6->findSegment(SegmentType::Clef, m7->tick());
-    EXPECT_TRUE(seg) << "No SegClef at end of measure 6.";
+    ASSERT_TRUE(seg) << "No SegClef at end of measure 6.";
 
     clefCourt = toClef(seg->element(0));
-    EXPECT_TRUE(clefCourt) << "No courtesy clef at end of measure 6.";
+    ASSERT_TRUE(clefCourt) << "No courtesy clef at end of measure 6.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef at end of measure 6 is NOT hidden.";
 }
 
@@ -279,7 +279,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy_78196)
 TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
 {
     MasterScore* score = ScoreRW::readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy04.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Clef* clef = nullptr;
     Segment* seg = nullptr;
@@ -287,36 +287,36 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
     // drop G1 clef to 4th measure, track 0 and track 4
     Measure* m1 = getMeasure(score, 4);
     seg = m1->findSegment(SegmentType::HeaderClef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 4.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 4.";
     clef = toClef(seg->element(0));
-    EXPECT_TRUE(clef) << "No Clef in measure 4, track 0.";
+    ASSERT_TRUE(clef) << "No Clef in measure 4, track 0.";
     dropClef(clef, ClefType::G8_VA);
     clef = toClef(seg->element(4));
-    EXPECT_TRUE(clef) << "No Clef in measure 4, track 4.";
+    ASSERT_TRUE(clef) << "No Clef in measure 4, track 4.";
     dropClef(clef, ClefType::G8_VA);
 
     // drop G clef to 7th measure, track 4
     Measure* m2 = getMeasure(score, 7);
     seg = m2->findSegment(SegmentType::HeaderClef, m2->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 7.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 7.";
     clef = toClef(seg->element(4));
-    EXPECT_TRUE(clef) << "No Clef in measure 7, track 4.";
+    ASSERT_TRUE(clef) << "No Clef in measure 7, track 4.";
     dropClef(clef, ClefType::G);
 
     // check the required courtesy clefs are there and they are shown
     Measure* m = m1->prevMeasure();
     seg = m->findSegment(SegmentType::Clef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 3.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 3.";
     clef = toClef(seg->element(0));
-    EXPECT_TRUE(clef) << "No courtesy clef element in measure 3, track 0.";
+    ASSERT_TRUE(clef) << "No courtesy clef element in measure 3, track 0.";
     EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Courtesy clef in measure 3 is hidden.";
     clef = toClef(seg->element(4));
-    EXPECT_TRUE(clef) << "No courtesy clef element in measure 3, track 4.";
+    ASSERT_TRUE(clef) << "No courtesy clef element in measure 3, track 4.";
     EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Courtesy clef in measure 3 is hidden.";
 
     // change "show courtesy" property for the clef in one of the staves
     seg = m1->findSegment(SegmentType::HeaderClef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 4.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 4.";
     clef = toClef(seg->element(0));
     score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     clef->undoChangeProperty(Pid::SHOW_COURTESY, false);
@@ -329,26 +329,26 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
 
     // check the required courtesy clef is there but hidden, and the other one is not hidden
     seg = m->findSegment(SegmentType::Clef, m1->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 3.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 3.";
     clef = toClef(seg->element(0));
-    EXPECT_TRUE(clef) << "No courtesy clef element in measure 3 for track 0.";
+    ASSERT_TRUE(clef) << "No courtesy clef element in measure 3 for track 0.";
     EXPECT_DOUBLE_EQ(clef->ldata()->bbox().width(),
                      0.) << "Courtesy clef in measure 3, track 0, is not hidden when showCourtesy is false.";
     clef = toClef(seg->element(4));
-    EXPECT_TRUE(clef) << "No courtesy clef element in measure 3 for track 4.";
+    ASSERT_TRUE(clef) << "No courtesy clef element in measure 3 for track 4.";
     EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Courtesy clef in measure 3, track 4, is hidden when showCourtesy is true.";
 
     // drop clefs after a horizontal frame
     Measure* m3 = getMeasure(score, 8);
     seg = m3->findSegment(SegmentType::HeaderClef, m3->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 8.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 8.";
     // drop G clef to 8th measure, track 0
     clef = toClef(seg->element(0));
-    EXPECT_TRUE(clef) << "No Clef in measure 8, track 0.";
+    ASSERT_TRUE(clef) << "No Clef in measure 8, track 0.";
     dropClef(clef, ClefType::G);
     // drop G1 clef to 8th measure, track 4
     clef = toClef(seg->element(4));
-    EXPECT_TRUE(clef) << "No Clef in measure 8, track 4.";
+    ASSERT_TRUE(clef) << "No Clef in measure 8, track 4.";
     dropClef(clef, ClefType::G8_VA);
     score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     clef->undoChangeProperty(Pid::SHOW_COURTESY, false);
@@ -361,22 +361,22 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
 
     // check the required courtesy clef is there but hidden, and the other one is not hidden
     seg = m2->findSegment(SegmentType::Clef, m3->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 7.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 7.";
     clef = toClef(seg->element(4));
-    EXPECT_TRUE(clef) << "No courtesy clef element in measure 7 for track 4.";
+    ASSERT_TRUE(clef) << "No courtesy clef element in measure 7 for track 4.";
     EXPECT_DOUBLE_EQ(clef->ldata()->bbox().width(),
                      0.) << "Courtesy clef in measure 7, track 4, is not hidden when showCourtesy is false.";
     clef = toClef(seg->element(0));
-    EXPECT_TRUE(clef) << "No courtesy clef element in measure 7 for track 0.";
+    ASSERT_TRUE(clef) << "No courtesy clef element in measure 7 for track 0.";
     EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Courtesy clef in measure 7, track 0, is hidden when showCourtesy is true.";
 
     // for the section break case,
     // check the not required courtesy clef element is there but it is not shown
     m   = m2->prevMeasure();
     seg = m->findSegment(SegmentType::Clef, m2->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 6.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 6.";
     clef = toClef(seg->element(4));
-    EXPECT_TRUE(clef) << "No courtesy clef element in measure 6, track 4.";
+    ASSERT_TRUE(clef) << "No courtesy clef element in measure 6, track 4.";
     EXPECT_DOUBLE_EQ(clef->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 6, track 4, is NOT hidden.";
 
     Measure* m4 = getMeasure(score, 9);
@@ -384,9 +384,9 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
     dropClef(m4, ClefType::G8_VA);
     m = m4->prevMeasure();
     seg = m->findSegment(SegmentType::Clef, m4->tick());
-    EXPECT_TRUE(seg) << "No SegClef in measure 8.";
+    ASSERT_TRUE(seg) << "No SegClef in measure 8.";
     clef = toClef(seg->element(0));
-    EXPECT_TRUE(clef) << "No Clef change in measure 8, track 0.";
+    ASSERT_TRUE(clef) << "No Clef change in measure 8, track 0.";
     EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Clef change in measure 8, track 0, is hidden.";
     score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     clef->undoChangeProperty(Pid::SHOW_COURTESY, false);

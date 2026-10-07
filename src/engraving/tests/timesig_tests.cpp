@@ -52,7 +52,7 @@ class Engraving_TimesigTests : public ::testing::Test
 TEST_F(Engraving_TimesigTests, timesig01)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig01.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m  = score->firstMeasure()->nextMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -76,7 +76,7 @@ TEST_F(Engraving_TimesigTests, timesig01)
 TEST_F(Engraving_TimesigTests, timesig02)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-02.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -102,7 +102,7 @@ TEST_F(Engraving_TimesigTests, timesig02)
 TEST_F(Engraving_TimesigTests, timesig03)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-03.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -123,7 +123,7 @@ TEST_F(Engraving_TimesigTests, timesig03)
 TEST_F(Engraving_TimesigTests, timesig04)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-04.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(6, 4), TimeSigType::NORMAL);
@@ -147,7 +147,7 @@ TEST_F(Engraving_TimesigTests, timesig04)
 TEST_F(Engraving_TimesigTests, timesig05)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-05.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -167,7 +167,7 @@ TEST_F(Engraving_TimesigTests, timesig05)
 TEST_F(Engraving_TimesigTests, timesig06)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-06.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(5, 4), TimeSigType::NORMAL);
@@ -193,7 +193,7 @@ TEST_F(Engraving_TimesigTests, timesig06)
 TEST_F(Engraving_TimesigTests, timesig07)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timesig-07.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -226,7 +226,7 @@ TEST_F(Engraving_TimesigTests, timesig08)
     Segment* seg = m1->findSegment(SegmentType::TimeSigAnnounce, m1->endTick());
     EngravingItem* el = seg->element(staff2track(1));
 
-    EXPECT_TRUE(el) << "Should be a courtesy signature in the second staff at the end of measure 1.";
+    ASSERT_TRUE(el) << "Should be a courtesy signature in the second staff at the end of measure 1.";
     delete score;
 }
 
@@ -238,7 +238,7 @@ TEST_F(Engraving_TimesigTests, timesig08)
 TEST_F(Engraving_TimesigTests, DISABLED_timesig09)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + "timesig-09.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(Fraction(9, 8), TimeSigType::NORMAL);
@@ -314,7 +314,7 @@ TEST_F(Engraving_TimesigTests, timesig_78216)
 TEST_F(Engraving_TimesigTests, timesig_11)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"timeSig-11.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     TimeSig* timeSig1 = Factory::createTimeSig(score->dummy());
@@ -337,11 +337,11 @@ TEST_F(Engraving_TimesigTests, timesig_11)
     score->endCmd();
     // Check timeSig exist at meas 3 and is only on Clarinet
     Segment* timeSigSegment = thirdMeas->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
-    EXPECT_TRUE(timeSigSegment);
+    ASSERT_TRUE(timeSigSegment);
     for (staff_idx_t stfIdx = 0; stfIdx < score->nstaves(); ++stfIdx) {
         EngravingItem* timeSig = timeSigSegment->element(staff2track(stfIdx));
         if (stfIdx == clarinetStaff) {
-            EXPECT_TRUE(timeSig);
+            ASSERT_TRUE(timeSig);
         } else {
             EXPECT_FALSE(timeSig);
         }
@@ -353,11 +353,11 @@ TEST_F(Engraving_TimesigTests, timesig_11)
     score->endCmd();
     // Check timeSig exist at meas 2 and is only on Clarinet
     Segment* timeSigSegment2 = secondMeas->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
-    EXPECT_TRUE(timeSigSegment2);
+    ASSERT_TRUE(timeSigSegment2);
     for (staff_idx_t stfIdx = 0; stfIdx < score->nstaves(); ++stfIdx) {
         EngravingItem* timeSig = timeSigSegment2->element(staff2track(stfIdx));
         if (stfIdx == clarinetStaff) {
-            EXPECT_TRUE(timeSig);
+            ASSERT_TRUE(timeSig);
         } else {
             EXPECT_FALSE(timeSig);
         }
@@ -366,7 +366,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
     for (staff_idx_t stfIdx = 0; stfIdx < score->nstaves(); ++stfIdx) {
         EngravingItem* timeSig = timeSigSegment->element(staff2track(stfIdx));
         if (stfIdx == clarinetStaff) {
-            EXPECT_TRUE(timeSig);
+            ASSERT_TRUE(timeSig);
         } else {
             EXPECT_FALSE(timeSig);
         }
@@ -380,7 +380,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
     for (staff_idx_t stfIdx = 0; stfIdx < score->nstaves(); ++stfIdx) {
         EngravingItem* timeSig = timeSigSegment2->element(staff2track(stfIdx));
         if (stfIdx == oboeStaff || stfIdx == clarinetStaff) {
-            EXPECT_TRUE(timeSig);
+            ASSERT_TRUE(timeSig);
         } else {
             EXPECT_FALSE(timeSig);
         }
@@ -389,7 +389,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
     for (staff_idx_t stfIdx = 0; stfIdx < score->nstaves(); ++stfIdx) {
         EngravingItem* timeSig = timeSigSegment->element(staff2track(stfIdx));
         if (stfIdx == clarinetStaff) {
-            EXPECT_TRUE(timeSig);
+            ASSERT_TRUE(timeSig);
         } else {
             EXPECT_FALSE(timeSig);
         }
@@ -402,14 +402,14 @@ TEST_F(Engraving_TimesigTests, timesig_11)
         }
         Segment* timeSigSeg1 = partScore->tick2segment(secondMeas->tick(), true, SegmentType::TimeSig);
         Segment* timeSigSeg2 = partScore->tick2segment(thirdMeas->tick(), true, SegmentType::TimeSig);
-        EXPECT_TRUE(timeSigSeg1);
-        EXPECT_TRUE(timeSigSeg2);
+        ASSERT_TRUE(timeSigSeg1);
+        ASSERT_TRUE(timeSigSeg2);
         if (partScore->name() == u"Oboe") {
-            EXPECT_TRUE(timeSigSeg1->element(0));
+            ASSERT_TRUE(timeSigSeg1->element(0));
             EXPECT_FALSE(timeSigSeg2->element(0));
         } else if (partScore->name() == u"Clarinet in B♭") {
-            EXPECT_TRUE(timeSigSeg1->element(0));
-            EXPECT_TRUE(timeSigSeg2->element(0));
+            ASSERT_TRUE(timeSigSeg1->element(0));
+            ASSERT_TRUE(timeSigSeg2->element(0));
         } else {
             EXPECT_FALSE(timeSigSeg1->element(0));
             EXPECT_FALSE(timeSigSeg2->element(0));
@@ -422,7 +422,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureChange.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // Check underlying measures in all scores are the lengths expected
 
@@ -437,7 +437,7 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
     // Check measures with MMRests turned on in the part are the lengths expected
 
     Score* part = score->scoreList().back();
-    EXPECT_TRUE(part);
+    ASSERT_TRUE(part);
     std::array<Fraction, 3> expectedTimeSigsMM = { Fraction(4, 4), Fraction(3, 4), Fraction(4, 4) };
 
     size_t measureCount = 0;
@@ -455,7 +455,7 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
 TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
 {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureMMRChange.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // Open score
     Score* part1 = score->excerpts().at(0)->excerptScore();
@@ -478,7 +478,7 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     // Drop end repeat barline onto measure
     Segment* endBlSeg = scoreM1->findSegment(SegmentType::EndBarLine, scoreM1->endTick());
     BarLine* endBl = toBarLine(endBlSeg->element(0));
-    EXPECT_TRUE(endBl);
+    ASSERT_TRUE(endBl);
 
     EditData dropData(0);
     BarLine* barLine = Factory::createBarLine(score->dummy());
@@ -492,7 +492,7 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
 
     // Check part1 m1 (mmr) has end of measure ts
     Segment* part1M1MMREndSeg = part1M1MM->findSegmentR(SegmentType::TimeSigAnnounce, part1M1MM->ticks());
-    EXPECT_TRUE(part1M1MMREndSeg);
+    ASSERT_TRUE(part1M1MMREndSeg);
 
     // Check part1 m2 (mmr) has NO beginning ts
     Segment* part1M2MMREndSeg = part2M1MM->findSegmentR(SegmentType::TimeSigAnnounce, part1M2MM->ticks());
@@ -505,31 +505,31 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
 
     // Check part2 m1 (mmr) ts is 6/8
     Segment* part2M1MMRTimeSigSeg = part2M1MM->findSegmentR(SegmentType::TimeSigTypes, part2M1MM->ticks());
-    EXPECT_TRUE(part2M1MMRTimeSigSeg);
+    ASSERT_TRUE(part2M1MMRTimeSigSeg);
     TimeSig* topTimeSig = toTimeSig(part2M1MMRTimeSigSeg->element(0));
-    EXPECT_TRUE(topTimeSig);
+    ASSERT_TRUE(topTimeSig);
     EXPECT_EQ(topTimeSig->sig(), Fraction(6, 8));
 }
 
 TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureTie.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     Segment* tieSeg = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
-    EXPECT_TRUE(tieSeg);
+    ASSERT_TRUE(tieSeg);
 
     Chord* tieChord = toChord(tieSeg->element(0));
-    EXPECT_TRUE(tieChord);
+    ASSERT_TRUE(tieChord);
 
     Note* tieNote = tieChord->upNote();
-    EXPECT_TRUE(tieNote);
+    ASSERT_TRUE(tieNote);
 
     Tie* tie = tieNote->tieFor();
-    EXPECT_TRUE(tie);
-    EXPECT_TRUE(tie->endNote());
+    ASSERT_TRUE(tie);
+    ASSERT_TRUE(tie->endNote());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
         TimeSig* newSig = Factory::createTimeSig(score->dummy());
@@ -540,49 +540,49 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
     // No suitable note to tie to after time sig has been changed, no tie should be present
 
     Segment* noTieSeg = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
-    EXPECT_TRUE(noTieSeg);
+    ASSERT_TRUE(noTieSeg);
 
     Chord* noTieChord = toChord(noTieSeg->element(0));
-    EXPECT_TRUE(noTieChord);
+    ASSERT_TRUE(noTieChord);
 
     Note* noTieNote = noTieChord->upNote();
-    EXPECT_TRUE(noTieNote);
+    ASSERT_TRUE(noTieNote);
 
     EXPECT_FALSE(noTieNote->tieFor());
 
     score->undoRedo(true, nullptr);
 
     Segment* undoTieSeg = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
-    EXPECT_TRUE(undoTieSeg);
+    ASSERT_TRUE(undoTieSeg);
 
     Chord* undoTieChord = toChord(undoTieSeg->element(0));
-    EXPECT_TRUE(undoTieChord);
+    ASSERT_TRUE(undoTieChord);
 
     Note* undoTieNote = tieChord->upNote();
-    EXPECT_TRUE(undoTieNote);
+    ASSERT_TRUE(undoTieNote);
 
     Tie* undoTie = undoTieNote->tieFor();
-    EXPECT_TRUE(undoTie);
-    EXPECT_TRUE(undoTie->endNote());
+    ASSERT_TRUE(undoTie);
+    ASSERT_TRUE(undoTie->endNote());
 }
 
 TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
 {
     // Open score
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"deleteMMRTimeSig.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     EXPECT_EQ(score->measures()->size(), 34);
 
     {
         // Delete time sig
         Measure* tsMeasure = score->firstMeasureMM()->nextMeasureMM();
-        EXPECT_TRUE(tsMeasure);
+        ASSERT_TRUE(tsMeasure);
         EXPECT_TRUE(tsMeasure->isMMRest());
         EXPECT_EQ(tsMeasure->timesig(), Fraction(3, 4));
 
         Segment* tsSeg = tsMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
-        EXPECT_TRUE(ts);
+        ASSERT_TRUE(ts);
 
         score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
             EditTimeSig::removeTimeSig(tx, score, ts);
@@ -598,13 +598,13 @@ TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
     {
         // Delete time sig
         Measure* endMeasure = score->lastMeasureMM();
-        EXPECT_TRUE(endMeasure);
+        ASSERT_TRUE(endMeasure);
         EXPECT_TRUE(endMeasure->isMMRest());
         EXPECT_EQ(endMeasure->timesig(), Fraction(3, 4));
 
         Segment* tsSeg = endMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
-        EXPECT_TRUE(ts);
+        ASSERT_TRUE(ts);
 
         score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
             EditTimeSig::removeTimeSig(tx, score, ts);

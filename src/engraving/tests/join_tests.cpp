@@ -49,17 +49,17 @@ public:
 void Engraving_JoinTests::join(const char* p1, const char* p2, int index)
 {
     MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + String::fromUtf8(p1));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     for (int i = 0; i < index; ++i) {
         m1 = m1->nextMeasure();
     }
 
     Measure* m2 = m1->nextMeasure();
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     EXPECT_NE(m1, m2);
 
@@ -74,13 +74,13 @@ void Engraving_JoinTests::join(const char* p1, const char* p2, int index)
 void Engraving_JoinTests::join1(const char* p1)
 {
     MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + String::fromUtf8(p1));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     Measure* m2 = m1->nextMeasure();
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     EXPECT_NE(m1, m2);
 
@@ -153,17 +153,18 @@ TEST_F(Engraving_JoinTests, join10)
 TEST_F(Engraving_JoinTests, joinTieAtStart) {
     // Test splitting a measure when there is a tie ending on the first chord on the split range
     MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + u"joinTieAtStart.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     Segment* s1 = m1->last(SegmentType::ChordRest);
     ChordRest* cr1 = toChordRest(s1->element(0));
-    EXPECT_TRUE(cr1 && cr1->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
     Chord* c1 = toChord(cr1);
     Note* n1 = c1->upNote();
-    EXPECT_TRUE(n1);
+    ASSERT_TRUE(n1);
 
     auto checkTie = [&]() -> Tie* {
         Tie* t = n1->tieFor();

@@ -257,7 +257,7 @@ TEST_F(Engraving_TextBaseTests, lineBreakTest)
         ASSERT_TRUE(seg);
 
         StaffText* staffText = toStaffText(seg->findAnnotation(ElementType::STAFF_TEXT, 0, 0));
-        EXPECT_TRUE(staffText);
+        ASSERT_TRUE(staffText);
 
         EXPECT_EQ(staffText->xmlText(), TEXT);
     }

@@ -85,7 +85,7 @@ protected:
     static void checkAllNotesHaveParenInfo(const std::vector<Note*>& notes)
     {
         for (const Note* note : notes) {
-            EXPECT_TRUE(note->parenthesisInfo());
+            ASSERT_TRUE(note->parenthesisInfo());
         }
     }
 
@@ -130,7 +130,7 @@ TEST_F(Engraving_ParenthesesTests, addParen)
     Measure* m1 = score->firstMeasure();
     Chord* singleNoteChord = findChordInMeasure(m1, Fraction(0, 1), 0);
     Note* note = singleNoteChord->notes().front();
-    EXPECT_TRUE(note);
+    ASSERT_TRUE(note);
 
     checkChordHasNoParens(singleNoteChord);
 
@@ -140,7 +140,7 @@ TEST_F(Engraving_ParenthesesTests, addParen)
     checkChordHasParens(singleNoteChord, 1);
 
     // Check that paren info has been created
-    EXPECT_TRUE(note->parenthesisInfo());
+    ASSERT_TRUE(note->parenthesisInfo());
 
     undoAndCheckRemoved(score, singleNoteChord);
 
@@ -157,9 +157,9 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
     Chord* singleNoteChordStd = findChordInMeasure(m1, Fraction(0, 1), 0);
     Chord* singleNoteChordTab = findChordInMeasure(m1, Fraction(0, 1), 4);
     Note* noteStd = singleNoteChordStd->notes().front();
-    EXPECT_TRUE(noteStd);
+    ASSERT_TRUE(noteStd);
     Note* noteTab = singleNoteChordTab->notes().front();
-    EXPECT_TRUE(noteTab);
+    ASSERT_TRUE(noteTab);
 
     checkChordHasNoParens(singleNoteChordStd);
 
@@ -168,8 +168,8 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
     checkChordHasParens(singleNoteChordStd, 1);
     checkChordHasParens(singleNoteChordTab, 1);
 
-    EXPECT_TRUE(noteStd->parenthesisInfo());
-    EXPECT_TRUE(noteTab->parenthesisInfo());
+    ASSERT_TRUE(noteStd->parenthesisInfo());
+    ASSERT_TRUE(noteTab->parenthesisInfo());
 
     EXPECT_TRUE(noteStd->parenthesisInfo()->leftParen()->isLinked(noteTab->parenthesisInfo()->leftParen()));
     EXPECT_TRUE(noteStd->parenthesisInfo()->rightParen()->isLinked(noteTab->parenthesisInfo()->rightParen()));

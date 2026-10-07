@@ -161,7 +161,8 @@ TEST_F(Engraving_StaveCenteringTests, staffToCenterAgainst_grandStaff)
 {
     Dynamic* topStaffDynamic = dynamicOnStaff(0);
     Dynamic* bottomStaffDynamic = dynamicOnStaff(1);
-    ASSERT_TRUE(topStaffDynamic && bottomStaffDynamic);
+    ASSERT_TRUE(topStaffDynamic);
+    ASSERT_TRUE(bottomStaffDynamic);
 
     // Nothing above the topmost staff of the score
     EXPECT_EQ(topStaffDynamic->staffToCenterAgainst(true), nullptr);
@@ -177,7 +178,9 @@ TEST_F(Engraving_StaveCenteringTests, staffToCenterAgainst_vocalStaves)
     Dynamic* sopranoDynamic = dynamicOnStaff(2);
     Dynamic* altoDynamic = dynamicOnStaff(3);
     Dynamic* tenorDynamic = dynamicOnStaff(4);
-    ASSERT_TRUE(sopranoDynamic && altoDynamic && tenorDynamic);
+    ASSERT_TRUE(sopranoDynamic);
+    ASSERT_TRUE(altoDynamic);
+    ASSERT_TRUE(tenorDynamic);
 
     // The staff above the soprano is the piano's, which is not vocal
     EXPECT_EQ(sopranoDynamic->staffToCenterAgainst(true), nullptr);
@@ -250,7 +253,8 @@ TEST_F(Engraving_StaveCenteringTests, placement_grandStaff)
 {
     Dynamic* topStaffDynamic = dynamicOnStaff(0);
     Dynamic* bottomStaffDynamic = dynamicOnStaff(1);
-    ASSERT_TRUE(topStaffDynamic && bottomStaffDynamic);
+    ASSERT_TRUE(topStaffDynamic);
+    ASSERT_TRUE(bottomStaffDynamic);
 
     setCenterBetweenStaves(topStaffDynamic, AutoOnOff::ON);
     EXPECT_EQ(topStaffDynamic->placement(), PlacementV::BELOW);
@@ -283,7 +287,9 @@ TEST_F(Engraving_StaveCenteringTests, placement_vocalStaves)
     Dynamic* sopranoDynamic = dynamicOnStaff(2);
     Dynamic* altoDynamic = dynamicOnStaff(3);
     Hairpin* sopranoHairpin = hairpin(); // hairpins are placed the same as dynamics
-    ASSERT_TRUE(sopranoDynamic && altoDynamic && sopranoHairpin);
+    ASSERT_TRUE(sopranoDynamic);
+    ASSERT_TRUE(altoDynamic);
+    ASSERT_TRUE(sopranoHairpin);
 
     // Dynamics on vocal staves go above the staff by default:
     ASSERT_EQ(sopranoDynamic->placement(), PlacementV::ABOVE);
