@@ -78,8 +78,6 @@ private:
     bool canSelectSimilarInRange() const;
     bool canSelectSimilar() const;
     bool isDrumsetStaff() const;
-    bool allSystemsAreLocked(const std::vector<engraving::System*>& systems) const;
-    bool allPagesAreLocked(const std::vector<engraving::Page*>& pages) const;
 
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
