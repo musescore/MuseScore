@@ -674,6 +674,21 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     CommandInfo{
+        VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND,
+        TranslatableString("action", "All voices on instrument"),
+        TranslatableString("action", "Use all voices on instrument"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND,
+        TranslatableString("action", "All voices on staff"),
+        TranslatableString("action", "Use all voices on staff"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
         FLIP_COMMAND,
         TranslatableString("action", "Flip direction"),
         TranslatableString("action", "Flip direction"),
