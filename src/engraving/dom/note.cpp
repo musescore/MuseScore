@@ -952,7 +952,7 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
         // see Note::accessibleInfo(), but we return what we have
         return pitchName;
     }
-    if (staff()->isDrumStaff(tick()) && originPart()->instrument()->drumset()) {
+    if (staff()->isDrumStaff(tick()) && originPart()->instrument(tick())->drumset()) {
         // see Note::accessibleInfo(), but we return what we have
         return pitchName;
     }
