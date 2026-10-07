@@ -70,6 +70,18 @@ public:
 };
 
 //---------------------------------------------------------
+//   applyTraitName
+//---------------------------------------------------------
+
+//! Sets the name of \a trait from the (translated) \a name. The name may contain markers:
+//! '*' marks the default trait, and parentheses hide the trait on the score.
+void applyTraitName(Trait& trait, String name);
+
+//! Sets the markers of \a trait from the untranslated \a sourceName, and its name from \a translatedName.
+//! (Translations do not always keep the markers, e.g. "Si♭" for "*B♭".)
+void applyTraitName(Trait& trait, const String& sourceName, const String& translatedName);
+
+//---------------------------------------------------------
 //   InstrumentTemplate
 //---------------------------------------------------------
 
@@ -92,6 +104,16 @@ public:
     int sequenceOrder = 0;
 
     Trait trait;
+
+    //! The name strings exactly as written in instruments.xml, i.e. before translation.
+    //! Kept so that the names can later be translated into a language other than the UI language.
+    struct NameSources {
+        String longName;
+        String shortName;
+        String traitName;
+        String trackName;
+    };
+    NameSources nameSources;
 
     int minPitchA = 0;           // pitch range playable by an amateur
     int maxPitchA = 0;
