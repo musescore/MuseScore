@@ -1563,6 +1563,7 @@ void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata
         text->setXmlText(item->labelType() == InstrumentNameType::LONG ? bracketItem->longName() : bracketItem->shortName());
         layoutText(text, text->mutldata());
     } else {
+        // Vertical labels ignore labelType(): use the long name if it fits, otherwise the short name
         text->setXmlText(bracketItem->longName());
         layoutText(text, text->mutldata());
         if (text->ldata()->bbox().height() > minHeight) {
