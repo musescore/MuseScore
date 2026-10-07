@@ -89,7 +89,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
     //_instrument = new Instrument(i);
 }
 
-void InstrumentChange::setupInstrument(const Instrument* instrument)
+void InstrumentChange::setupInstrument(const Instrument* instrument, bool updateText)
 {
     if (!m_init) {
         return;
@@ -154,6 +154,10 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             tickEnd = Fraction::fromTicks(i->first);
         }
         Transpose::transpositionChanged(tx, score(), part, oldKv, tickStart, tickEnd);
+    }
+
+    if (!updateText) {
+        return;
     }
 
     //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.

@@ -383,7 +383,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             score()->undoAddElement(ic);
 
             if (!fromPalette) {
-                ic->setupInstrument(&instr);
+                ic->setupInstrument(&instr, /*updateText*/ false);
             }
             return e;
         }
