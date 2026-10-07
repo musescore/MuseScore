@@ -753,7 +753,6 @@ void BarLine::add(EngravingItem* e)
         break;
     default:
         LOGD("BarLine::add() not impl. %s", e->typeName());
-        delete e;
         break;
     }
 }
