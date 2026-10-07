@@ -22,10 +22,14 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
+#include "engraving/dom/tie.h"
 
 #include "engraving/editing/editstavesharing.h"
+#include "engraving/editing/flip.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -196,6 +200,183 @@ TEST_F(Engraving_StaveSharingTests, testSaveReloadStaveSharing)
     collectSharedAndOriginParts(score, &sharedPart, originParts);
 
     EXPECT_TRUE(checkSharedPartExist(sharedPart, originParts));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testChangeDurationAfterUndoingStaveSharing)
+{
+    // [GIVEN] A score of 1 measure with 2 staves and stave sharing disabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_01.mscx");
+    ASSERT_TRUE(score);
+
+    // [THEN] Check rest has no shared item yet
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr1 = m1->findChordRest(Fraction(0, 1), 0);
+    EXPECT_TRUE(cr1 && cr1->isRest());
+    ASSERT_FALSE(cr1->sharedItem());
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    // [THEN] Rest should have a shared item now
+    ASSERT_TRUE(cr1->sharedItem());
+
+    // [WHEN] Stave sharing is disabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, false);
+    });
+
+    // [THEN] Rest should stll have a shared item, as the shared parts still exist
+    ASSERT_TRUE(cr1->sharedItem());
+
+    // [WHEN] Undo twice
+    // Undo "Disable stave sharing"
+    score->undoRedo(true, nullptr);
+    // Undo "Enable stave sharing" - creation of the stave sharing groups is now undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The shared item should have been removed from the score and disconnected from the origin rest
+    ASSERT_FALSE(cr1->sharedItem());
+
+    // [THEN] Shared parts should have been removed
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
+
+    // [WHEN] The rest's duration is changed
+    score->startCmd(muse::TranslatableString("staveSharingTest", "Change rest duration"));
+    score->changeCRlen(cr1, TDuration(DurationType::V_QUARTER));
+    score->endCmd();
+
+    // [THEN] We should not crash
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testChangeChordAfterUndoingStaveSharing)
+{
+    // [GIVEN] A score of 1 measure with 2 staves, each starting with a chord with a staccato, and stave sharing disabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_02.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    std::vector<Chord*> chords;
+    for (track_idx_t track : { track_idx_t(0), track_idx_t(VOICES) }) {
+        ChordRest* cr = m1->findChordRest(Fraction(0, 1), track);
+        ASSERT_TRUE(cr && cr->isChord());
+        chords.push_back(toChord(cr));
+    }
+
+    for (Chord* chord : chords) {
+        ASSERT_EQ(chord->notes().size(), 1);
+        ASSERT_EQ(chord->articulations().size(), 1);
+    }
+
+    // [THEN] Check the chord's children have no shared items yet
+    for (Chord* chord : chords) {
+        ASSERT_FALSE(chord->notes().front()->sharedItem());
+        ASSERT_FALSE(chord->articulations().front()->sharedItem());
+    }
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    // [THEN] Notes and articulations should have shared items now, but chords should not
+    for (Chord* chord : chords) {
+        ASSERT_FALSE(chord->sharedItem());
+        ASSERT_TRUE(chord->notes().front()->sharedItem());
+        ASSERT_TRUE(chord->articulations().front()->sharedItem());
+    }
+
+    // [WHEN] Stave sharing is disabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, false);
+    });
+
+    // [THEN] Notes and articulations should still have shared items, as the shared parts still exist
+    for (Chord* chord : chords) {
+        ASSERT_TRUE(chord->notes().front()->sharedItem());
+        ASSERT_TRUE(chord->articulations().front()->sharedItem());
+    }
+
+    // [WHEN] Undo twice
+    // Undo "Disable stave sharing"
+    score->undoRedo(true, nullptr);
+    // Undo "Enable stave sharing" - creation of the stave sharing groups is now undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The shared chord's children should have been removed from the score and disconnected from the origin items
+    for (Chord* chord : chords) {
+        EXPECT_FALSE(chord->notes().front()->sharedItem());
+        EXPECT_FALSE(chord->articulations().front()->sharedItem());
+    }
+
+    // [THEN] Shared parts should have been removed
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
+
+    // [WHEN] The chord's duration is changed
+    score->startCmd(muse::TranslatableString("staveSharingTest", "Change chord duration"));
+    score->changeCRlen(chords.front(), TDuration(DurationType::V_HALF));
+    score->endCmd();
+
+    // [THEN] We should not crash
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testFlipTieAfterUndoingStaveSharing)
+{
+    // [GIVEN] A score of 1 measure with 2 staves, the first containing a tie, and stave sharing disabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_03.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr = m1->findChordRest(Fraction(0, 1), 0);
+    ASSERT_TRUE(cr && cr->isChord());
+    Tie* tie = toChord(cr)->notes().front()->tieFor();
+    ASSERT_TRUE(tie);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    // [WHEN] Stave sharing is disabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, false);
+    });
+
+    // [WHEN] Undo twice
+    // Undo "Disable stave sharing"
+    score->undoRedo(true, nullptr);
+    // Undo "Enable stave sharing" - creation of the stave sharing groups is now undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Shared parts should have been removed
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
+
+    // [WHEN] The tie is selected and its direction flipped twice
+    ASSERT_FALSE(tie->segmentsEmpty());
+    for (int i = 0; i < 2; ++i) {
+        score->select(tie->frontSegment());
+        score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Flip tie direction"), [&](Transaction& tx) {
+            Flip::flip(tx, score);
+        });
+    }
+
+    // [THEN] We should not crash
 
     delete score;
 }

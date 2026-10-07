@@ -668,6 +668,7 @@ public:
     static void connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
     static void disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
     static void disconnectAllOriginItems(EngravingItem* sharedItem);
+    static void disconnectSharedTree(EngravingItem* item);
 
     virtual bool isBefore(const EngravingItem* item) const;
 
