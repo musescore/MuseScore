@@ -1396,14 +1396,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Move system to previous page"),
         TranslatableString("action", "Move system to previous page"),
         InputSchema(),
-        Decoration()
+        Decoration(IconCode::Code::ARROW_UP)
     },
     CommandInfo{
         MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND,
         TranslatableString("action", "Move system to next page"),
         TranslatableString("action", "Move system to next page"),
         InputSchema(),
-        Decoration()
+        Decoration(IconCode::Code::ARROW_DOWN)
     },
     CommandInfo{
         SPLIT_MEASURE_COMMAND,

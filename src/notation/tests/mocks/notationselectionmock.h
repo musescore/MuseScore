@@ -51,6 +51,7 @@ public:
 
     MOCK_METHOD(mu::engraving::MeasureBase*, startMeasureBase, (), (const, override));
     MOCK_METHOD(mu::engraving::MeasureBase*, endMeasureBase, (), (const, override));
+    MOCK_METHOD(size_t, selectedMeasuresCount, (), (const, override));
     MOCK_METHOD(std::vector<System*>, selectedSystems, (), (const, override));
     MOCK_METHOD(std::vector<Page*>, pagesContainingSelection, (), (const, override));
 

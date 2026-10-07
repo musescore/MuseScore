@@ -152,11 +152,9 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeSeparator();
 
     if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
-        items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
+        items << makeMenu(TranslatableString("notation", "System & page layout"), makeSystemAndPageLayoutItems());
+        items << makeSeparator();
     }
-    items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
-
-    items << makeSeparator();
 
     items << makeMenuItem(OPEN_MEASURE_PROPERTIES_COMMAND);
     items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
@@ -317,14 +315,64 @@ MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
     return makeItems(MEASURES_MENU_COMMANDS);
 }
 
-MenuItemList NotationContextMenuModel::makeMoveMeasureItems()
+MenuItemList NotationContextMenuModel::makeSystemAndPageLayoutItems()
 {
-    MenuItemList items {
-        makeMenuItem(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND, TranslatableString("notation", "To previous system")),
-        makeMenuItem(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND, TranslatableString("notation", "To next system"))
-    };
+    MenuItemList items;
+
+    INotationSelectionPtr sel = selection();
+    if (!sel) {
+        return items;
+    }
+
+    std::vector<engraving::System*> systems = sel->selectedSystems();
+    std::vector<engraving::Page*> pages = sel->pagesContainingSelection();
+    int nSystems = static_cast<int>(systems.size());
+    int nMeasures = static_cast<int>(sel->selectedMeasuresCount());
+    int nPages = static_cast<int>(pages.size());
+    bool systemslocked = allSystemsAreLocked(systems);
+    bool pageslocked = allPagesAreLocked(pages);
+
+    items << makeSystemLayoutItems(systemslocked, nSystems, nMeasures);
+    items << makeSeparator();
+    items << makePageLayoutItems(pageslocked, nPages, nSystems);
+    items << makeSeparator();
+    items << makeMenuItem(OPEN_BREAKS_COMMAND);
 
     return items;
+}
+
+MenuItemList NotationContextMenuModel::makeSystemLayoutItems(bool locked, int nSystems, int nMeasures)
+{
+    TranslatableString lockLabel = locked ? TranslatableString("notation", "Unlock selected system(s)", nullptr, nSystems)
+                                   : TranslatableString("notation", "Lock selected system(s)", nullptr, nSystems);
+    MenuItem* systemLockMenuItem = makeMenuItem(TOGGLE_SYSTEM_LOCK_COMMAND, lockLabel);
+    systemLockMenuItem->setIcon(locked ? ui::IconCode::Code::LOCK_CLOSED : ui::IconCode::Code::LOCK_OPEN);
+
+    return {
+        systemLockMenuItem,
+        makeMenuItem(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
+                     TranslatableString("notation", "Move measure(s) to previous system", nullptr, nMeasures)),
+        makeMenuItem(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND,
+                     TranslatableString("notation", "Move measure(s) to next system", nullptr, nMeasures)),
+        makeMenuItem(MAKE_INTO_SYSTEM_COMMAND)
+    };
+}
+
+MenuItemList NotationContextMenuModel::makePageLayoutItems(bool locked, int nPages, int nSystems)
+{
+    TranslatableString lockLabel = locked ? TranslatableString("notation", "Unlock selected page(s)", nullptr, nPages)
+                                   : TranslatableString("notation", "Lock selected page(s)", nullptr, nPages);
+    MenuItem* pageLockMenuItem = makeMenuItem(TOGGLE_PAGE_LOCK_COMMAND, lockLabel);
+    pageLockMenuItem->setIcon(locked ? ui::IconCode::Code::LOCK_CLOSED : ui::IconCode::Code::LOCK_OPEN);
+
+    return {
+        pageLockMenuItem,
+        makeMenuItem(MOVE_SYSTEM_TO_PREV_PAGE_COMMAND,
+                     TranslatableString("notation", "Move system(s) to previous page", nullptr, nSystems)),
+        makeMenuItem(MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND,
+                     TranslatableString("notation", "Move system(s) to next page", nullptr, nSystems)),
+        makeMenuItem(MAKE_INTO_PAGE_COMMAND)
+    };
 }
 
 MenuItemList NotationContextMenuModel::makeChangeInstrumentItems()
@@ -485,6 +533,34 @@ bool NotationContextMenuModel::isDrumsetStaff() const
 
     Fraction tick = ctx.element ? ctx.element->tick() : Fraction { -1, 1 };
     return ctx.staff->part()->instrument(tick)->drumset() != nullptr;
+}
+
+bool NotationContextMenuModel::allSystemsAreLocked(const std::vector<engraving::System*>& systems) const
+{
+    if (systems.empty()) {
+        return false;
+    }
+
+    for (System* system : systems) {
+        if (!system->isLocked()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool NotationContextMenuModel::allPagesAreLocked(const std::vector<engraving::Page*>& pages) const
+{
+    if (pages.empty()) {
+        return false;
+    }
+
+    for (Page* page : pages) {
+        if (!page->isLocked()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 MenuItemList NotationContextMenuModel::makeAutomationTypeItems()
