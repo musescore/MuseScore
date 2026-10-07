@@ -263,6 +263,42 @@ static const std::vector<Command> TAB_COMMANDS = {
     GOTO_STRING_BELOW_COMMAND
 };
 
+static const std::vector<Command> VIEW_COMMANDS = {
+    ZOOM_IN_COMMAND,
+    ZOOM_OUT_COMMAND,
+    ZOOM_TO_PAGE_WIDTH_COMMAND,
+    ZOOM_TO_WHOLE_PAGE_COMMAND,
+    ZOOM_TO_TWO_PAGES_COMMAND,
+    ZOOM_TO_100_COMMAND,
+    ZOOM_TO_PERCENT_COMMAND,
+    VIEW_MODE_PAGE_COMMAND,
+    VIEW_MODE_FLOAT_COMMAND,
+    VIEW_MODE_CONTINUOUS_COMMAND,
+    VIEW_MODE_SINGLE_COMMAND,
+    NEXT_SCREEN_COMMAND,
+    PREV_SCREEN_COMMAND,
+    NEXT_PAGE_COMMAND,
+    PREV_PAGE_COMMAND,
+    TOP_OF_FIRST_PAGE_COMMAND,
+    BOTTOM_OF_LAST_PAGE_COMMAND,
+    CONTEXT_MENU_OF_SELECTION_COMMAND,
+    SHOW_SEARCH_COMMAND,
+};
+
+static const std::vector<Command> ALLOWED_IN_AUTOMATION_COMMANDS = {
+    TOGGLE_AUTOMATION_COMMAND,
+    SELECT_AUTOMATION_TYPE_COMMAND,
+    CANCEL_COMMAND,
+    UNDO_COMMAND,
+    REDO_COMMAND,
+    CUT_COMMAND,
+    COPY_COMMAND,
+    PASTE_COMMAND,
+    DELETE_COMMAND,
+    INCREASE_DYNAMIC_COMMAND,
+    DECREASE_DYNAMIC_COMMAND,
+};
+
 static const std::vector<Command> DEBUG_COMMANDS = {
     SHOW_ELEMENT_BOUNDING_RECTS_COMMAND,
     COLOR_ELEMENT_SHAPES_COMMAND,
@@ -348,7 +384,7 @@ void NotationCommandsState::init()
     });
 
     controller()->automationModeEnabledChanged().onNotify(this, [this]() {
-        updateCommandStates({ TOGGLE_AUTOMATION_COMMAND });
+        updateCommandStates();
     });
 
     controller()->debuggingOptionsChanged().onNotify(this, [this]() {
@@ -396,6 +432,14 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 {
     if (!isProjectOpened()) {
         return CommandState(false, false);
+    }
+
+    if (controller()->isAutomationModeEnabled()) {
+        // Only a handful of commands are allowed in automation mode...
+        if (!muse::contains(ALLOWED_IN_AUTOMATION_COMMANDS, command)
+            && !muse::contains(VIEW_COMMANDS, command)) {
+            return CommandState(false, false);
+        }
     }
 
     if (muse::contains(HAS_SELECTION_REQUIRED_COMMANDS, command)) {
