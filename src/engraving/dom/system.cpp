@@ -342,6 +342,20 @@ bool System::isLocked() const
     return m_ml.front()->isStartOfSystemLock();
 }
 
+bool System::allLocked(const std::vector<System*>& systems)
+{
+    if (systems.empty()) {
+        return false;
+    }
+
+    for (System* system : systems) {
+        if (!system->isLocked()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 const RangeLock* System::systemLock() const
 {
     return m_ml.front()->systemLock();
