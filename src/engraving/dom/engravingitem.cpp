@@ -1396,6 +1396,14 @@ void EngravingItem::disconnectSharedTree(EngravingItem* item)
         disconnectAllOriginItems(item);
     };
 
+    if (item->isSpanner()) {
+        disconnect(item);
+        for (SpannerSegment* ss : toSpanner(item)->spannerSegments()) {
+            ss->scanElements(disconnect);
+        }
+        return;
+    }
+
     item->scanElements(disconnect);
 }
 

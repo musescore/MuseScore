@@ -26,8 +26,10 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
+#include "engraving/dom/tie.h"
 
 #include "engraving/editing/editstavesharing.h"
+#include "engraving/editing/flip.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -325,6 +327,54 @@ TEST_F(Engraving_StaveSharingTests, testChangeChordAfterUndoingStaveSharing)
     score->startCmd(muse::TranslatableString("staveSharingTest", "Change chord duration"));
     score->changeCRlen(chords.front(), TDuration(DurationType::V_HALF));
     score->endCmd();
+
+    // [THEN] We should not crash
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testFlipTieAfterUndoingStaveSharing)
+{
+    // [GIVEN] A score of 1 measure with 2 staves, the first containing a tie, and stave sharing disabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_03.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr = m1->findChordRest(Fraction(0, 1), 0);
+    ASSERT_TRUE(cr && cr->isChord());
+    Tie* tie = toChord(cr)->notes().front()->tieFor();
+    ASSERT_TRUE(tie);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    // [WHEN] Stave sharing is disabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, false);
+    });
+
+    // [WHEN] Undo twice
+    // Undo "Disable stave sharing"
+    score->undoRedo(true, nullptr);
+    // Undo "Enable stave sharing" - creation of the stave sharing groups is now undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Shared parts should have been removed
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
+
+    // [WHEN] The tie is selected and its direction flipped twice
+    ASSERT_FALSE(tie->segmentsEmpty());
+    for (int i = 0; i < 2; ++i) {
+        score->select(tie->frontSegment());
+        score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Flip tie direction"), [&](Transaction& tx) {
+            Flip::flip(tx, score);
+        });
+    }
 
     // [THEN] We should not crash
 
