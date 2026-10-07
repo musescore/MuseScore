@@ -989,7 +989,7 @@ void NotationActionController::init()
             { "resequence-rehearsal-marks", RESEQUENCE_REHEARSAL_MARKS_COMMAND, {} },
             { "unroll-repeats", UNROLL_REPEATS_COMMAND, {} },
             { "copy-lyrics-to-clipboard", COPY_LYRICS_COMMAND, {} },
-            { "repeat-selection", REPEAT_SELECTION_COMMAND, {} },
+            { "repeat-sel", REPEAT_SELECTION_COMMAND, {} },
             { "add-up-bow", ADD_UP_BOW_COMMAND, {} },
             { "add-down-bow", ADD_DOWN_BOW_COMMAND, {} },
             { "transpose-up", TRANSPOSE_UP_COMMAND, {} },

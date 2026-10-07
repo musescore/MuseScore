@@ -120,8 +120,6 @@
         {"command": "command://notation/add-to-selection-end-system",  "sequences": ["Shift+End"]},
         {"command": "command://notation/add-to-selection-begin-score",  "sequences": ["Ctrl+Shift+Home"]},
         {"command": "command://notation/add-to-selection-end-score",  "sequences": ["Ctrl+Shift+End"], "autorepeat": false},
-        {"command": "command://notation/add-to-selection-begin-system",  "sequences": ["Shift+Home"]},
-        {"command": "command://notation/add-to-selection-end-system",  "sequences": ["Shift+End"]},
         {"command": "command://notation/add-to-selection-above-staff",  "sequences": ["Shift+Up"]},
         {"command": "command://notation/add-to-selection-below-staff",  "sequences": ["Shift+Down"]},
         {"command": "command://notation/view/prev-screen",  "sequences": ["PgUp"]},
@@ -235,7 +233,8 @@
         {"command": "command://notation/toggle-insert-mode",  "sequences": ["Ctrl+I"]},
         {"command": "command://notation/view/context-menu-of-selection",  "sequences": ["Shift+F10","Ctrl+Shift+F10"]},
         {"command": "command://notation/add-standard-bend",  "sequences": ["Alt+B"]},
-        {"command": "command://notation/add-grace-note-bend",  "sequences": ["Ctrl+Alt+B"]}
+        {"command": "command://notation/add-grace-note-bend",  "sequences": ["Ctrl+Alt+B"]},
+        {"command": "command://notation/repeat-selection",  "sequences": ["R"]}
       ]
     },
     {
