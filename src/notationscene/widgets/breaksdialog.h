@@ -29,6 +29,7 @@
 
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
+#include "rcommand/icommandsregister.h"
 
 namespace mu::notation {
 //---------------------------------------------------------
@@ -39,6 +40,7 @@ class BreaksDialog : public muse::ui::WidgetDialog, private Ui::BreaksDialog
 {
     Q_OBJECT
 
+    muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
