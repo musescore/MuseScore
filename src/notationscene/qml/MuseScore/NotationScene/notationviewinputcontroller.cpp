@@ -42,7 +42,9 @@
 #include "engraving/dom/shadownote.h"
 #include "engraving/dom/staff.h"
 
+#include "notation/imasternotation.h"
 #include "notation/inotation.h"
+#include "notation/inotationautomation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationpainting.h" // IWYU pragma: keep
@@ -650,6 +652,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     };
 
     m_shouldStartEditOnLeftClickRelease = false;
+    m_shouldSelectOnLeftClickRelease = false;
+    m_hitElementWasAlreadySingleSelected = false;
     m_ignoreNextMouseContextMenuEvent = false;
 
     // When using MiddleButton, just start moving the canvas
@@ -667,6 +671,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->setHitElementContext(context);
 
         hitElement = context.element;
+        if (itemEditBlockedByAutomation(hitElement)) {
+            return;
+        }
+
         hitStaffIndex = context.staff ? context.staff->idx() : muse::nidx;
     }
 
@@ -1011,6 +1019,28 @@ void NotationViewInputController::updateTextCursorPosition()
     }
 }
 
+bool NotationViewInputController::automationMode() const
+{
+    const IMasterNotationPtr master = globalContext()->currentMasterNotation();
+    const INotationAutomationPtr automation = master ? master->automation() : nullptr;
+    return automation && automation->isAutomationModeEnabled();
+}
+
+bool NotationViewInputController::itemEditBlockedByAutomation(const EngravingItem* item) const
+{
+    if (!automationMode() || !item) {
+        return false;
+    }
+    // Only dynamics/hairpins are editable in automation mode...
+    switch (item->type()) {
+    case ElementType::DYNAMIC:
+    case ElementType::HAIRPIN_SEGMENT:
+        return false;
+    default: break;
+    }
+    return true;
+}
+
 bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
 {
     INotationNoteInputPtr noteInput = viewInteraction()->noteInput();
@@ -1105,14 +1135,14 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         m_view->hideElementPopup();
     }
 
+    const EngravingItem* hitElement = hitElementContext().element;
     const PointF logicPos = m_view->toLogical(event->pos());
 
     const bool isNoteEnterMode = m_view->isNoteEnterMode();
     const bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
-    const bool isDragObjectsAllowed = !(readonly() || isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
+    const bool isDragObjectsAllowed = !readonly() && !isNoteEnterMode && !playbackController()->isPlaying()
+                                      && !isMiddleButton && !itemEditBlockedByAutomation(hitElement);
     if (isDragObjectsAllowed) {
-        const EngravingItem* hitElement = hitElementContext().element;
-
         // drag element
         if ((hitElement && (hitElement->isMovable() || viewInteraction()->isEditingElement()))
             || viewInteraction()->isGripEditStarted()) {
@@ -1310,7 +1340,8 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if (m_view->isNoteEnterMode()) {
+    EngravingItem* hitElement = hitElementContext().element;
+    if (m_view->isNoteEnterMode() || itemEditBlockedByAutomation(hitElement)) {
         return;
     }
 
@@ -1326,7 +1357,6 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    EngravingItem* hitElement = hitElementContext().element;
     if (!hitElement) {
         return;
     }
