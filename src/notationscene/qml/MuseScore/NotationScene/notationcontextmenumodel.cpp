@@ -139,8 +139,6 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeSeparator();
 
-    items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
-
     MenuItem* clearItem = makeMenuItem(DELETE_COMMAND);
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     clearItem->setIcon(ui::IconCode::Code::ERASER);
@@ -151,14 +149,18 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeSeparator();
 
+    items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
+
     if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
-        items << makeMenu(TranslatableString("notation", "System & page layout"), makeSystemAndPageLayoutItems());
+        items << makeMenu(TranslatableString("notation", "System && page layout"), makeSystemAndPageLayoutItems());
         items << makeSeparator();
     }
 
     items << makeMenuItem(OPEN_MEASURE_PROPERTIES_COMMAND);
     items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
+
     if (isDrumsetStaff()) {
+        items << makeSeparator();
         items << makeMenuItem(OPEN_CUSTOMIZE_KIT_COMMAND);
     }
 
