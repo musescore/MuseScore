@@ -55,6 +55,13 @@ public:
 
     virtual void addTuplet(const TupletOptions& options) = 0;
 
+    // In By duration and Rhythm input, a tuplet waits for the next duration
+    virtual bool tupletPending() const = 0;
+    virtual void setPendingTuplet(const TupletOptions& options) = 0;
+    virtual void cancelPendingTuplet() = 0;
+    // Escape: the tuplets that waited so far don't come back with undo
+    virtual void forgetPendingTuplets() = 0;
+
     virtual void doubleNoteInputDuration() = 0;
     virtual void halveNoteInputDuration() = 0;
 
