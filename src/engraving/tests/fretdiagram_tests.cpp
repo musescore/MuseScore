@@ -66,6 +66,7 @@ void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)
 TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagram)
 {
     MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    ASSERT_TRUE(score);
 
     testChordSymToFretDiagram(score);
 }
@@ -73,6 +74,7 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagram)
 TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
 {
     MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Fret diagram tests"));
     score->undoChangeStyleVal(Sid::chordSymbolSpelling, NoteSpellingType::SOLFEGGIO);
@@ -84,6 +86,7 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
 TEST_F(Engraving_FretDiagramTests, enharmonicFallbackRootAndBass)
 {
     MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    ASSERT_TRUE(score);
     FretDiagram* fd = Factory::createFretDiagram(score->dummy());
 
     // Root fallback: Fbdim7 -> Edim7 (Fb->E)

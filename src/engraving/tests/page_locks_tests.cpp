@@ -125,9 +125,9 @@ TEST_F(Engraving_PageLocksTests, makeIntoPage)
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
     ASSERT_TRUE(score);
 
-    MeasureBase* thirdMeasure = score->first()->next()->next();
+    MeasureBase* thirdMeasure = score->measure(2);
     ASSERT_TRUE(thirdMeasure);
-    MeasureBase* sixthMeasure = thirdMeasure->next()->next()->next();
+    MeasureBase* sixthMeasure = score->measure(5);
     ASSERT_TRUE(sixthMeasure);
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
@@ -151,9 +151,9 @@ TEST_F(Engraving_PageLocksTests, moveToPreviousNext)
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
     ASSERT_TRUE(score);
 
-    MeasureBase* thirdMeasure = score->first()->next()->next();
+    MeasureBase* thirdMeasure = score->measure(2);
     ASSERT_TRUE(thirdMeasure);
-    MeasureBase* sixthMeasure = thirdMeasure->next()->next()->next();
+    MeasureBase* sixthMeasure = score->measure(5);
     ASSERT_TRUE(sixthMeasure);
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());

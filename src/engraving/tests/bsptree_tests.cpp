@@ -59,7 +59,7 @@ TEST_F(Engraving_BspTreeTests, NearestNeighbor)
         }
     }
 
-    EXPECT_FALSE(notes.empty());
+    ASSERT_FALSE(notes.empty());
 
     // [WHEN] Iterating through the set of notes, and passing each note's position to nearestNeighbor
     for (EngravingItem* note : notes) {

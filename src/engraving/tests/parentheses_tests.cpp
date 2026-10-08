@@ -61,14 +61,12 @@ protected:
     static MasterScore* loadScore(const String& filename)
     {
         MasterScore* score = ScoreRW::readScore(PAREN_DATA + filename);
-        EXPECT_TRUE(score);
         return score;
     }
 
     static Chord* findChordInMeasure(Measure* m, Fraction time, staff_idx_t staff)
     {
         Chord* chord = m->findChord(time, staff);
-        EXPECT_TRUE(chord);
         return chord;
     }
 
@@ -85,7 +83,7 @@ protected:
     static void checkAllNotesHaveParenInfo(const std::vector<Note*>& notes)
     {
         for (const Note* note : notes) {
-            ASSERT_TRUE(note->parenthesisInfo());
+            EXPECT_TRUE(note->parenthesisInfo());
         }
     }
 
