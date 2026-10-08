@@ -538,6 +538,38 @@ bool StaveSharingLayout::checkClefKeyTimeSigForSameVoice(Segment* segment, track
     return true;
 }
 
+bool StaveSharingLayout::segHasLocalKeySig(const Segment* segment, const SharedPart* sharedPart)
+{
+    // Key signatures applying to all staves are added to the shared staves at the same time as the origin staves,
+    // so only key signatures which differ between origin staves need copying to the shared staves
+    const KeySig* firstKeySig = nullptr;
+    for (const Part* originPart : sharedPart->originParts()) {
+        for (const Staff* staff : originPart->staves()) {
+            if (staff->isDrumStaff(segment->tick())) {
+                continue;
+            }
+
+            const EngravingItem* item = segment->element(staff->idx() * VOICES);
+            if (!item || !item->isKeySig()) {
+                return true;
+            }
+
+            const KeySig* keySig = toKeySig(item);
+            if (keySig->forInstrumentChange()) {
+                return true;
+            }
+
+            if (!firstKeySig) {
+                firstKeySig = keySig;
+            } else if (!(*firstKeySig == *keySig)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 bool StaveSharingLayout::checkSegmentAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack)
 {
     std::multimap<ElementType, EngravingItem*> annotationsOnPrevTrack;
@@ -972,6 +1004,9 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
 
     for (Segment* seg : ctx.segmentsToUpdate) {
         if (seg->header() || (!seg->isClefType() && !seg->isKeySigType() && !seg->isTimeSigType())) {
+            continue;
+        }
+        if (seg->isKeySigType() && !segHasLocalKeySig(seg, ctx.curSharedPart)) {
             continue;
         }
         for (const auto& [originTrack, sharedTrack] : ctx.curTrackMap) {
@@ -1694,7 +1729,7 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
             }
         }
 
-        if (seg->isKeySigType()) {
+        if (seg->isKeySigType() && segHasLocalKeySig(seg, p)) {
             for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
                 if (EngravingItem* keySig = seg->element(track); keySig && keySig->originItems().empty()) {
                     ctx.score->undoRemoveElement(keySig);
