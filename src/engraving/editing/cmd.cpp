@@ -979,7 +979,6 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             if (tuplet) {
                 ncr->setTuplet(tuplet);
             }
-            tuplet = 0;
             undoAddCR(ncr, measure, tick);
 
             if (shouldPreserveLyrics && !lyricsPreserved) {
