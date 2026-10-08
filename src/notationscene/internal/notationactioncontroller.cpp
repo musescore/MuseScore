@@ -220,8 +220,8 @@ void NotationActionController::init()
     registerCommand(SET_DURATION_512TH_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
     registerCommand(SET_DURATION_1024TH_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
 
-    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
-    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
+    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
+    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
     registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
     registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
 
@@ -2021,9 +2021,9 @@ void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDo
 
     if (noteInput->isNoteInputMode()) {
         if (steps > 0) {
-            noteInput->doubleNoteInputDuration();
-        } else {
             noteInput->halveNoteInputDuration();
+        } else {
+            noteInput->doubleNoteInputDuration();
         }
     } else {
         interaction->increaseDecreaseDuration(steps, stepByDots);
