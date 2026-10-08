@@ -137,6 +137,74 @@ void InputState::setDots(int n)
     m_duration.setDots(n);
 }
 
+//---------------------------------------------------------
+//   pendingTupletHere
+//    Whether a tuplet waits at the input position: moving
+//    elsewhere cancels it
+//---------------------------------------------------------
+
+bool InputState::pendingTupletHere() const
+{
+    return m_pendingTuplet && m_pendingTuplet->tick == tick() && m_pendingTuplet->track == m_track
+           && m_pendingTuplet->beyondScore == m_beyondScore;
+}
+
+//---------------------------------------------------------
+//   movePendingTupletHere
+//    The pending tuplet waits at the input position
+//---------------------------------------------------------
+
+void InputState::movePendingTupletHere()
+{
+    if (m_pendingTuplet) {
+        m_pendingTuplet->tick = tick();
+        m_pendingTuplet->track = m_track;
+        m_pendingTuplet->beyondScore = m_beyondScore;
+    }
+}
+
+//---------------------------------------------------------
+//   setPendingTuplet
+//    A tuplet that starts waiting gets the next number
+//---------------------------------------------------------
+
+void InputState::setPendingTuplet(const std::optional<PendingTuplet>& t)
+{
+    m_pendingTuplet = t;
+    if (m_pendingTuplet && m_pendingTuplet->number == 0) {
+        m_pendingTuplet->number = ++m_pendingTupletNumber;
+    }
+}
+
+//---------------------------------------------------------
+//   forgetPendingTuplets
+//    Escape: the tuplets that waited so far don't come
+//    back with undo
+//---------------------------------------------------------
+
+void InputState::forgetPendingTuplets()
+{
+    m_cancelledPendingTupletNumber = m_pendingTupletNumber;
+}
+
+//---------------------------------------------------------
+//   restoreFromUndoStack
+//    The state saved with an undo step, without a tuplet
+//    cancelled since
+//---------------------------------------------------------
+
+void InputState::restoreFromUndoStack(const InputState& state)
+{
+    const int pendingTupletNumber = m_pendingTupletNumber;
+    const int cancelledPendingTupletNumber = m_cancelledPendingTupletNumber;
+    *this = state;
+    m_pendingTupletNumber = pendingTupletNumber;
+    m_cancelledPendingTupletNumber = cancelledPendingTupletNumber;
+    if (m_pendingTuplet && m_pendingTuplet->number <= m_cancelledPendingTupletNumber) {
+        m_pendingTuplet = std::nullopt;
+    }
+}
+
 void InputState::setVoice(voice_idx_t v)
 {
     const Score* score = m_segment ? m_segment->score() : nullptr;
