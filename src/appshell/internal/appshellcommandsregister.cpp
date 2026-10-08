@@ -38,21 +38,24 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema({
         { "all_instances", Arg(DataType::Boolean, u"All instances (optional)") },
         { "installer_path", Arg(DataType::String, u"Installer path (optional)") } }),
-        Decoration()
+        Decoration(),
+        Availability::All
         ),
     CommandInfo(
         APP_RESTART_COMMAND,
         TranslatableString("action", "Restart"),
         TranslatableString("action", "Restart"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::All
         ),
     CommandInfo(
         APP_FULLSCREEN_COMMAND,
         TranslatableString("action", "&Full screen"),
         TranslatableString("action", "Full screen"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
 
     CommandInfo(
@@ -60,63 +63,72 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "&About MuseScore Studio…"),
         TranslatableString("action", "About MuseScore Studio"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch
         ),
     CommandInfo(
         APP_ABOUT_QT_COMMAND,
         TranslatableString("action", "About &Qt…"),
         TranslatableString("action", "About Qt"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch
         ),
     CommandInfo(
         APP_ABOUT_MUSICXML_COMMAND,
         TranslatableString("action", "About &MusicXML…"),
         TranslatableString("action", "About MusicXML"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch
         ),
     CommandInfo(
         APP_ONLINE_HANDBOOK_COMMAND,
         TranslatableString("action", "Online &handbook"),
         TranslatableString("action", "Open online handbook"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch
         ),
     CommandInfo(
         APP_ASK_HELP_COMMAND,
         TranslatableString("action", "As&k for help"),
         TranslatableString("action", "Ask for help"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch
         ),
     CommandInfo(
         APP_ACCESSIBILITY_STATEMENT_COMMAND,
         TranslatableString("action", "Accessibility &statement"),
         TranslatableString("action", "Accessibility statement"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch
         ),
     CommandInfo(
         APP_PREFERENCES_COMMAND,
         TranslatableString("action", "&Preferences…"),
         TranslatableString("action", "Preferences"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::All
         ),
     CommandInfo(
         APP_REVERT_TO_FACTORY_COMMAND,
         TranslatableString("action", "Revert to factory settings"),
         TranslatableString("action", "Revert to factory settings"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch
         ),
     CommandInfo(
         APP_EXTENSIONS_COMMAND,
         TranslatableString("action", "Manage &extensions"),
         TranslatableString("action", "Manage extensions"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::All
         ),
 
     // docks commands
@@ -125,98 +137,112 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "&Playback controls"),
         TranslatableString("action", "Show/hide playback controls"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_NOTEINPUT_COMMAND,
         TranslatableString("action", "&Note input"),
         TranslatableString("action", "Show/hide note input toolbar"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_PALETTES_COMMAND,
         TranslatableString("action", "&Palettes"),
         TranslatableString("action", "Show/hide palettes"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_INSTRUMENTS_COMMAND,
         TranslatableString("action", "&Layout"),
         TranslatableString("action", "Show/hide layout panel"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_PROPERTIES_COMMAND,
         TranslatableString("action", "Propert&ies"),
         TranslatableString("action", "Show/hide properties"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_SELECTION_FILTER_COMMAND,
         TranslatableString("action", "S&election filter"),
         TranslatableString("action", "Show/hide selection filter"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_UNDO_HISTORY_COMMAND,
         TranslatableString("action", "&History"),
         TranslatableString("action", "Show/hide undo history"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_NAVIGATOR_COMMAND,
         TranslatableString("action", "&Navigator"),
         TranslatableString("action", "Show/hide navigator"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_BRAILLE_COMMAND,
         TranslatableString("action", "&Braille"),
         TranslatableString("action", "Show/hide braille panel"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_TIMELINE_COMMAND,
         TranslatableString("action", "Tim&eline"),
         TranslatableString("action", "Show/hide timeline"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_MIXER_COMMAND,
         TranslatableString("action", "Mixer"),
         TranslatableString("action", "Show/hide mixer"),
         InputSchema(),
-        Decoration(IconCode::Code::MIXER, rcommand::Checkable::Yes)
+        Decoration(IconCode::Code::MIXER, rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND,
         TranslatableString("action", "Piano &keyboard"),
         TranslatableString("action", "Show/hide piano keyboard"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_PERCUSSION_COMMAND,
         TranslatableString("action", "Percussion"),
         TranslatableString("action", "Show/hide percussion panel"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
     CommandInfo(
         DOCK_TOGGLE_STATUSBAR_COMMAND,
         TranslatableString("action", "&Status bar"),
         TranslatableString("action", "Show/hide status bar"),
         InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
+        Decoration(rcommand::Checkable::Yes),
+        Availability::All
         ),
 };
 
