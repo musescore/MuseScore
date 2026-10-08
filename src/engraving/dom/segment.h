@@ -227,6 +227,7 @@ public:
     void clearAnnotations();
     void removeAnnotation(EngravingItem* e);
     bool hasAnnotationOrElement(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
+    bool hasAnnotationOrElement(staff_idx_t staffIdx) const;
     EngravingItem* findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
     std::vector<EngravingItem*> findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
     bool hasElements() const;

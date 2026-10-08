@@ -1403,6 +1403,16 @@ bool Segment::hasAnnotationOrElement(ElementType type, track_idx_t minTrack, tra
     return hasElements(minTrack, maxTrack);
 }
 
+bool Segment::hasAnnotationOrElement(staff_idx_t staffIdx) const
+{
+    for (const EngravingItem* e : m_annotations) {
+        if (e->staffIdx() == staffIdx) {
+            return true;
+        }
+    }
+    return hasElements(staffIdx);
+}
+
 //---------------------------------------------------------
 //   findAnnotation
 ///  Returns the first found annotation of type type
