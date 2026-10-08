@@ -1138,6 +1138,7 @@ void NotationActionController::init()
             if (const IMasterNotationPtr masterNotation = notation->masterNotation()) {
                 masterNotation->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
                     m_automationModeEnabledChanged.notify();
+                    m_isNoteInputAllowedChanged.send(isNoteInputAllowed());
                 }, Asyncable::Mode::SetReplace);
             }
         }
@@ -1321,11 +1322,15 @@ void NotationActionController::resetState()
     if (!interaction->selection()->isNone()) {
         interaction->clearSelection();
     }
+
+    if (automation()) {
+        automation()->resetEditStateRequested().notify();
+    }
 }
 
 bool NotationActionController::isNoteInputAllowed() const
 {
-    return !globalContext()->playbackState()->isPlaying();
+    return !isAutomationModeEnabled() && !globalContext()->playbackState()->isPlaying();
 }
 
 muse::async::Channel<bool> NotationActionController::isNoteInputAllowedChanged() const
@@ -2044,12 +2049,18 @@ void NotationActionController::realtimeAdvance()
 
 bool NotationActionController::isMoveSelectionAvailable(MoveSelectionType type) const
 {
+    if (isAutomationModeEnabled()) {
+        return false;
+    }
     auto interaction = currentNotationInteraction();
     return interaction && interaction->moveSelectionAvailable(type);
 }
 
 bool NotationActionController::isToggleLayoutBreakAvailable() const
 {
+    if (isAutomationModeEnabled()) {
+        return false;
+    }
     auto interaction = currentNotationInteraction();
     return interaction && interaction->toggleLayoutBreakAvailable();
 }
@@ -3195,9 +3206,14 @@ bool NotationActionController::isTablatureStaff() const
     return isNotEditingElement() && currentNotationScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
 }
 
+INotationAutomationPtr NotationActionController::automation() const
+{
+    return currentMasterNotation() ? currentMasterNotation()->automation() : nullptr;
+}
+
 bool NotationActionController::isAutomationModeEnabled() const
 {
-    return currentMasterNotation() ? currentMasterNotation()->automation()->isAutomationModeEnabled() : false;
+    return automation() ? automation()->isAutomationModeEnabled() : false;
 }
 
 muse::async::Notification NotationActionController::automationModeEnabledChanged() const
@@ -3292,10 +3308,12 @@ muse::Ret NotationActionController::selectAutomationType(const muse::rcommand::P
 
 bool NotationActionController::isNoteInputActionAllowed() const
 {
+    if (isAutomationModeEnabled()) {
+        return false;
+    }
     if (!isNoteInputMode() && !toggleNoteInputAllowed()) {
         return false;
     }
-
     return !isTablatureStaff();
 }
 

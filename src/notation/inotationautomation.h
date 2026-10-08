@@ -50,6 +50,8 @@ public:
 
     virtual AutomationDataConstPtr automationData() const = 0;
     virtual void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) = 0;
+
+    virtual muse::async::Notification resetEditStateRequested() const = 0;
 };
 
 using INotationAutomationPtr = std::shared_ptr<INotationAutomation>;

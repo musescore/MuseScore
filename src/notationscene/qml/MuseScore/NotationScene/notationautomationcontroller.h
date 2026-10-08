@@ -167,11 +167,18 @@ private:
     mu::engraving::Score* score() const;
 
     QQuickItem* m_linesParent = nullptr;
+
     SysStaffToPolylinesMap m_stavesToLinesMap;
     PointsDataMap m_pointsDataByStaff;
+
     muse::draw::Transform m_viewMatrix;
+
     mu::engraving::AutomationChanges m_pendingChanges;
     PendingScoreState m_pendingScoreState;
     bool m_updateScheduled = false;
+
+    muse::uicomponents::PolylinePlot* m_currentlyEditedPolyline = nullptr;
+
+    bool m_previewingNewPoint = false;
 };
 }
