@@ -1,5 +1,12 @@
 [
     {
+        "scope": "NOTATION",
+        "shortcuts": [
+            {"command": "command://notation/add-hairpin",  "sequences": ["Shift+,"]},
+            {"command": "command://notation/add-hairpin-reverse",  "sequences": ["Shift+."]}
+        ]
+    },
+    {
         "scope": "PLAYBACK",
         "shortcuts": [
             { "command": "command://playback/pause-and-select", "sequences": ["Alt+Space"], "autorepeat": 0 }
