@@ -222,8 +222,8 @@ void NotationActionController::init()
 
     registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
     registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
-    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
-    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
