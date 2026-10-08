@@ -2694,7 +2694,7 @@ void TWrite::writeProperties(const Part* item, XmlWriter& xml, WriteContext& ctx
             xml.tag("preferSharpFlat", "flats");
             break;
         case PreferSharpFlat::SHARPS:
-            xml.tag("preferSharpFlat", "flats");
+            xml.tag("preferSharpFlat", "sharps");
             break;
         case PreferSharpFlat::NONE:
             xml.tag("preferSharpFlat", "none");
