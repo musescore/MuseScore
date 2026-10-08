@@ -52,11 +52,18 @@ protected:
     Note* getNoteAtTick(const Fraction& tick)
     {
         Segment* seg = m_masterScore->tick2segment(tick, false, SegmentType::ChordRest);
-        EXPECT_TRUE(seg);
-        EXPECT_TRUE(seg->element(0) && seg->element(0)->isChord());
+        if (!seg) {
+            ADD_FAILURE() << "No ChordRest segment at tick " << tick.toString().toStdString();
+            return nullptr;
+        }
 
-        Chord* chord = toChord(seg->element(0));
-        Note* note = chord->upNote();
+        EngravingItem* item = seg->element(0);
+        if (!item || !item->isChord()) {
+            ADD_FAILURE() << "No chord at tick " << tick.toString().toStdString();
+            return nullptr;
+        }
+
+        Note* note = toChord(item)->upNote();
         EXPECT_TRUE(note);
 
         return note;
@@ -64,11 +71,11 @@ protected:
 
     void testPartialTies(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
     {
-        openScore(score, startPointLocation, jumpPointLocations);
+        ASSERT_NO_FATAL_FAILURE(openScore(score, startPointLocation, jumpPointLocations));
 
         addTie();
 
-        saveAndLoad(score, startPointLocation, jumpPointLocations);
+        ASSERT_NO_FATAL_FAILURE(saveAndLoad(score, startPointLocation, jumpPointLocations));
 
         toggleJumpPoint();
 
@@ -89,9 +96,12 @@ protected:
 
         // Find start note
         m_startNote = getNoteAtTick(startPointLocation);
+        ASSERT_TRUE(m_startNote);
         // Find jump points
         for (const Fraction& jumpPointTick : jumpPointLocations) {
-            m_jumpPoints.push_back(getNoteAtTick(jumpPointTick));
+            Note* jumpPoint = getNoteAtTick(jumpPointTick);
+            ASSERT_TRUE(jumpPoint);
+            m_jumpPoints.push_back(jumpPoint);
         }
     }
 
@@ -258,11 +268,13 @@ protected:
         TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
 
         Note* noteAfterSegno = getNoteAtTick(tickAfterSegno);
+        ASSERT_TRUE(noteAfterSegno);
         Tie* initialTie = noteAfterSegno->tieBack();
         ASSERT_TRUE(initialTie);
         EXPECT_TRUE(initialTie->isPartialTie());
 
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
+        ASSERT_TRUE(noteBeforeSegno);
         m_masterScore->select(noteBeforeSegno);
         Tie* tieBeforeSegno = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
 
@@ -297,11 +309,13 @@ protected:
     {
         // Add a full tie to the note preceding a segno, then add a tie to the D.S which should add the previous tie to the list of jump points
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
+        ASSERT_TRUE(noteBeforeSegno);
         m_masterScore->select(noteBeforeSegno);
         Tie* tieBeforeSegno = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
         ASSERT_TRUE(tieBeforeSegno);
 
         Tie* startTie = addTie();
+        ASSERT_TRUE(startTie);
 
         EXPECT_EQ(startTie->tieJumpPoints()->size(), 1);
 
@@ -328,7 +342,7 @@ protected:
         m_jumpPoints.clear();
 
         // Load
-        openScore(score + u"-ref", startPointLocation, jumpPointLocations);
+        ASSERT_NO_FATAL_FAILURE(openScore(score + u"-ref", startPointLocation, jumpPointLocations));
 
         // Expect start tie has jumpPoints
         // Expect each jumpPoint to have an incoming tie
@@ -349,7 +363,7 @@ protected:
     void testPartialTieListSelection(const String& score, const Fraction& startPointLocation, const Fraction& secondNoteLocation,
                                      const std::vector<Fraction>& jumpPointLocations)
     {
-        openScore(score, startPointLocation, jumpPointLocations);
+        ASSERT_NO_FATAL_FAILURE(openScore(score, startPointLocation, jumpPointLocations));
 
         Note* secondTieNote = getNoteAtTick(secondNoteLocation);
         ASSERT_TRUE(secondTieNote);
@@ -365,7 +379,7 @@ protected:
             ASSERT_TRUE(note->tieBack());
         }
 
-        saveAndLoad(score, startPointLocation, jumpPointLocations);
+        ASSERT_NO_FATAL_FAILURE(saveAndLoad(score, startPointLocation, jumpPointLocations));
 
         toggleJumpPoint();
 
@@ -391,7 +405,7 @@ TEST_F(Engraving_PartialTieTests, repeatBarlines)
     const Fraction startPointTick = Fraction(7, 4);
     const std::vector<Fraction> jumpPoints = { Fraction(8, 4), Fraction(0, 4) };
 
-    testPartialTies(test, startPointTick, jumpPoints);
+    ASSERT_NO_FATAL_FAILURE(testPartialTies(test, startPointTick, jumpPoints));
 }
 
 TEST_F(Engraving_PartialTieTests, voltaCoda)
@@ -401,7 +415,7 @@ TEST_F(Engraving_PartialTieTests, voltaCoda)
     const Fraction startPointTick = Fraction(3, 4);
     const std::vector<Fraction> jumpPoints = { Fraction(4, 4), Fraction(8, 4), Fraction(12, 4), Fraction(16, 4) };
 
-    testPartialTies(test, startPointTick, jumpPoints);
+    ASSERT_NO_FATAL_FAILURE(testPartialTies(test, startPointTick, jumpPoints));
 }
 
 TEST_F(Engraving_PartialTieTests, coda)
@@ -411,7 +425,7 @@ TEST_F(Engraving_PartialTieTests, coda)
     const Fraction startPointTick = Fraction(3, 4);
     const std::vector<Fraction> jumpPoints = { Fraction(4, 4), Fraction(8, 4) };
 
-    testPartialTies(test, startPointTick, jumpPoints);
+    ASSERT_NO_FATAL_FAILURE(testPartialTies(test, startPointTick, jumpPoints));
 }
 
 TEST_F(Engraving_PartialTieTests, segnoBefore)
@@ -421,7 +435,7 @@ TEST_F(Engraving_PartialTieTests, segnoBefore)
     const Fraction startPointTick = Fraction(11, 4);
     const std::vector<Fraction> jumpPoints = { Fraction(4, 4) };
 
-    openScore(test, startPointTick, jumpPoints);
+    ASSERT_NO_FATAL_FAILURE(openScore(test, startPointTick, jumpPoints));
 
     // Add tie to 3,4.  Replace incoming partial tie at 4,4 with full tie
     testSegnoPartialTieFirst(Fraction(3, 4), Fraction(4, 4));
@@ -434,7 +448,7 @@ TEST_F(Engraving_PartialTieTests, segnoAfter)
     const Fraction startPointTick = Fraction(11, 4);
     const std::vector<Fraction> jumpPoints = { Fraction(4, 4) };
 
-    openScore(test, startPointTick, jumpPoints);
+    ASSERT_NO_FATAL_FAILURE(openScore(test, startPointTick, jumpPoints));
 
     testSegnoPartialTieAfter(Fraction(3, 4));
 }

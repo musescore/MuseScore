@@ -35,6 +35,10 @@ Score* TestUtils::createPart(MasterScore* masterScore, size_t partNumber)
     std::vector<Part*> parts;
     parts.push_back(masterScore->parts().at(partNumber));
     Score* nscore = masterScore->createScore();
+    if (!nscore) {
+        ADD_FAILURE() << "nscore is null";
+        return nullptr;
+    }
 
     Excerpt* ex = new Excerpt(masterScore);
     ex->setExcerptScore(nscore);
@@ -45,13 +49,16 @@ Score* TestUtils::createPart(MasterScore* masterScore, size_t partNumber)
     masterScore->excerpts().push_back(ex);
     masterScore->setExcerptsChanged(true);
 
-    EXPECT_TRUE(nscore);
     return nscore;
 }
 
 Score* TestUtils::createEmptyPart(MasterScore* masterScore)
 {
     Score* nscore = masterScore->createScore();
+    if (!nscore) {
+        ADD_FAILURE() << "nscore is null";
+        return nullptr;
+    }
 
     Excerpt* ex = new Excerpt(masterScore);
     ex->setExcerptScore(nscore);
@@ -61,7 +68,6 @@ Score* TestUtils::createEmptyPart(MasterScore* masterScore)
     masterScore->excerpts().push_back(ex);
     masterScore->setExcerptsChanged(true);
 
-    EXPECT_TRUE(nscore);
     return nscore;
 }
 

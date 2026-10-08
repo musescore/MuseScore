@@ -143,10 +143,16 @@ TEST_F(Engraving_SplitTests, splitTieAtStart) {
 
     auto checkTie = [&]() -> Tie* {
         Tie* t = n1->tieFor();
-        EXPECT_TRUE(t);
+        if (!t) {
+            ADD_FAILURE() << "t is null";
+            return nullptr;
+        }
 
         Note* n2 = t->endNote();
-        EXPECT_TRUE(n2);
+        if (!n2) {
+            ADD_FAILURE() << "n2 is null";
+            return nullptr;
+        }
         EXPECT_EQ(n2->tick(), Fraction(1, 1));
         EXPECT_EQ(n2->chord()->measure(), m1->nextMeasure());
 
@@ -154,17 +160,20 @@ TEST_F(Engraving_SplitTests, splitTieAtStart) {
     };
 
     Tie* tie1 = checkTie();
+    ASSERT_TRUE(tie1);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving split tests"), [&](auto& tx) {
         SplitJoinMeasure::splitMeasure(tx, score, Fraction(3, 2));
     });
 
     Tie* tie2 = checkTie();
+    ASSERT_TRUE(tie2);
     EXPECT_NE(tie2, tie1);
 
     score->undoRedo(true, nullptr);
 
     Tie* tie3 = checkTie();
+    ASSERT_TRUE(tie3);
     EXPECT_EQ(tie3, tie1);
 
     delete score;

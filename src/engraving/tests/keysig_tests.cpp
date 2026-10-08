@@ -209,7 +209,7 @@ TEST_F(Engraving_KeySigTests, linkedPrecedingKeyChange)
         ASSERT_TRUE(excerpt);
         Score* owner = fromExcerpt ? excerpt : score.get();
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::G, Key::A);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::G, Key::A));
         }
         KeySigEvent key;
         key.setConcertKey(Key::D);
@@ -218,15 +218,15 @@ TEST_F(Engraving_KeySigTests, linkedPrecedingKeyChange)
                                      owner->staff(0), Fraction(1, 2), key);
         owner->endCmd();
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::D, Key::E);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::D, Key::E));
         }
         owner->undoRedo(true, nullptr);
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::G, Key::A);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::G, Key::A));
         }
         owner->undoRedo(false, nullptr);
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::D, Key::E);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::D, Key::E));
         }
     }
 }
@@ -241,7 +241,7 @@ TEST_F(Engraving_KeySigTests, linkedPrecedingKeyDeletion)
         ASSERT_TRUE(excerpt);
         Score* owner = fromExcerpt ? excerpt : score.get();
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::G, Key::A);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::G, Key::A));
         }
         Segment* segment = owner->firstMeasure()->findSegment(SegmentType::KeySig, Fraction(1, 2));
         ASSERT_TRUE(segment);
@@ -255,15 +255,15 @@ TEST_F(Engraving_KeySigTests, linkedPrecedingKeyDeletion)
         owner->cmdDeleteSelection();
         owner->endCmd();
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::C, Key::D);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::C, Key::D));
         }
         owner->undoRedo(true, nullptr);
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::G, Key::A);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::G, Key::A));
         }
         owner->undoRedo(false, nullptr);
         for (Score* target : { static_cast<Score*>(score.get()), excerpt }) {
-            checkInstrumentChangeKey(target, Key::C, Key::D);
+            ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::C, Key::D));
         }
     }
 }
