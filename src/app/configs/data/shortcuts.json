@@ -240,7 +240,9 @@
     {
         "scope": "NOTATION_NOTE_INPUT",
         "shortcuts": [
-            { "command": "command://notation/realtime-advance", "sequences": ["Enter"] }
+            { "command": "command://notation/realtime-advance", "sequences": ["Enter"] },
+            {"command": "command://notation/swap-left", "sequences": ["Shift+Left"]},
+            {"command": "command://notation/swap-right", "sequences": ["Shift+Right"]}
         ]
     },
     {
