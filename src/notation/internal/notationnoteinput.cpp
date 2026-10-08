@@ -94,6 +94,8 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
                 setupInputNote();
             }
         }
+
+        cancelPendingTupletIfMoved();
     });
 }
 
@@ -400,6 +402,9 @@ void NotationNoteInput::endNoteInput(bool resetState)
 
     InputState& is = score()->inputState();
     is.setNoteEntryMode(false);
+    is.setPendingTuplet(std::nullopt);
+    // the tuplets that waited so far don't come back with undo
+    is.forgetPendingTuplets();
 
     if (is.slur()) {
         const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
@@ -450,6 +455,9 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
     }
 
     is.setNoteEntryMethod(method);
+    // the tuplets that waited so far don't come back with undo
+    is.forgetPendingTuplets();
+    is.setPendingTuplet(std::nullopt);
     if (shouldSetupInputNote()) {
         setupInputNote();
     }
@@ -627,7 +635,7 @@ void NotationNoteInput::setInputNotes(const NoteValList& notes)
         if (const Drumset* drumset = is.drumset()) {
             const int pitch = notes.front().pitch;
             is.setDrumNote(pitch);
-            is.setVoice(drumset->voice(pitch));
+            is.moveToDrumVoice(drumset->voice(pitch));
         }
     }
 
@@ -752,6 +760,7 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
     }
 
     inputState.setVoice(voiceIndex);
+    cancelPendingTupletIfMoved();
     notifyAboutStateChanged();
 }
 
@@ -760,6 +769,7 @@ void NotationNoteInput::setCurrentTrack(track_idx_t trackIndex)
     TRACEFUNC;
 
     score()->inputState().setTrack(trackIndex);
+    cancelPendingTupletIfMoved();
     notifyAboutStateChanged();
 }
 
@@ -807,6 +817,55 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     notifyAboutStateChanged();
 
     m_interaction->checkAndShowError();
+}
+
+bool NotationNoteInput::tupletPending() const
+{
+    return isNoteInputMode() && score()->inputState().pendingTupletHere();
+}
+
+void NotationNoteInput::setPendingTuplet(const TupletOptions& options)
+{
+    NoteInputState& is = score()->inputState();
+
+    // the tuplet waits in the voice the next drum goes into
+    if (const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice()) {
+        is.setVoice(*drumVoice);
+    }
+
+    PendingTuplet pending;
+    pending.ratio = options.ratio;
+    pending.numberType = options.numberType;
+    pending.bracketType = options.bracketType;
+    pending.autoBaseLen = options.autoBaseLen;
+    pending.durationAsSubdivision = options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
+    pending.tick = is.tick();
+    pending.track = is.track();
+    pending.beyondScore = is.beyondScore();
+    is.setPendingTuplet(pending);
+
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::cancelPendingTuplet()
+{
+    score()->inputState().setPendingTuplet(std::nullopt);
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::forgetPendingTuplets()
+{
+    score()->inputState().forgetPendingTuplets();
+}
+
+// Moving the input position elsewhere cancels a pending tuplet
+void NotationNoteInput::cancelPendingTupletIfMoved()
+{
+    NoteInputState& is = score()->inputState();
+    if (is.pendingTuplet() && !is.pendingTupletHere()) {
+        is.setPendingTuplet(std::nullopt);
+        notifyAboutStateChanged();
+    }
 }
 
 static muse::RectF segmentContentRect(const Segment* segment, track_idx_t track)

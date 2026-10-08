@@ -75,6 +75,11 @@ public:
 
     void addTuplet(const TupletOptions& options) override;
 
+    bool tupletPending() const override;
+    void setPendingTuplet(const TupletOptions& options) override;
+    void cancelPendingTuplet() override;
+    void forgetPendingTuplets() override;
+
     void addSlur(mu::engraving::Slur* slur) override;
     void resetSlur() override;
     void addTie() override;
@@ -110,6 +115,8 @@ private:
     EngravingItem* resolveNoteInputStartPosition() const;
 
     bool shouldSetupInputNote() const;
+
+    void cancelPendingTupletIfMoved();
     void setupInputNote();
 
     NoteVal noteValForLine(int line) const;
