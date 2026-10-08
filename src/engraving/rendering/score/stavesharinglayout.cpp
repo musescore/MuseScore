@@ -975,10 +975,15 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
             continue;
         }
         for (const auto& [originTrack, sharedTrack] : ctx.curTrackMap) {
+            if (track2voice(sharedTrack) != 0) {
+                // Clefs, key, and time signatures can only appear in the 1st voice
+                // At this point, any items in subsequent voices should match what is in voice 1
+                continue;
+            }
+
             if (seg->isClefType()) {
                 Clef* originClef = toClef(seg->element(originTrack));
                 if (originClef) {
-                    assert(track2voice(sharedTrack) == 0);
                     makeSharedItem(originClef, seg->element(sharedTrack), sharedTrack, seg,
                                    [](const EngravingItem* origin, const EngravingItem* shared) {
                         return toClef(shared)->clefType() == toClef(origin)->clefType();
@@ -989,7 +994,6 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
             if (seg->isTimeSigType()) {
                 TimeSig* originTimeSig = toTimeSig(seg->element(originTrack));
                 if (originTimeSig && originTimeSig->isLocal()) {
-                    assert(track2voice(sharedTrack) == 0);
                     makeSharedItem(originTimeSig, seg->element(sharedTrack), sharedTrack, seg,
                                    [](const EngravingItem* origin, const EngravingItem* shared) {
                         IF_ASSERT_FAILED(origin->isTimeSig() && shared->isTimeSig()) {
@@ -1003,7 +1007,6 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
             if (seg->isKeySigType()) {
                 KeySig* originKeySig = toKeySig(seg->element(originTrack));
                 if (originKeySig) {
-                    assert(track2voice(sharedTrack) == 0);
                     makeSharedItem(originKeySig, seg->element(sharedTrack), sharedTrack, seg,
                                    [](const EngravingItem* origin, const EngravingItem* shared) {
                         IF_ASSERT_FAILED(origin->isKeySig() && shared->isKeySig()) {
