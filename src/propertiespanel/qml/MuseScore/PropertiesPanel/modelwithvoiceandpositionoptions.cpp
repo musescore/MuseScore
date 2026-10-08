@@ -24,8 +24,11 @@
 
 #include "engraving/dom/part.h"
 
+#include "notationscene/notationcommands.h"
+
 using namespace mu::propertiespanel;
 using namespace mu::engraving;
+using namespace mu::notation;
 
 ModelWithVoiceAndPositionOptions::ModelWithVoiceAndPositionOptions(QObject* parent,
                                                                    const muse::modularity::ContextPtr& iocCtx,
@@ -135,30 +138,30 @@ void ModelWithVoiceAndPositionOptions::changeVoice(int voice)
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice1() const
 {
-    return shortcutsForActionCode("voice-1");
+    return shortcutsForCommand(USE_VOICE_1_COMMAND);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice2() const
 {
-    return shortcutsForActionCode("voice-2");
+    return shortcutsForCommand(USE_VOICE_2_COMMAND);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice3() const
 {
-    return shortcutsForActionCode("voice-3");
+    return shortcutsForCommand(USE_VOICE_3_COMMAND);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice4() const
 {
-    return shortcutsForActionCode("voice-4");
+    return shortcutsForCommand(USE_VOICE_4_COMMAND);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseAllVoicesInstrument() const
 {
-    return shortcutsForActionCode("voice-assignment-all-in-instrument");
+    return shortcutsForCommand(VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseAllVoicesStaff() const
 {
-    return shortcutsForActionCode("voice-assignment-all-in-staff");
+    return shortcutsForCommand(VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND);
 }

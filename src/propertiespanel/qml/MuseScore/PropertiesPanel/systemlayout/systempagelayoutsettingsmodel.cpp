@@ -22,13 +22,15 @@
 
 #include "systempagelayoutsettingsmodel.h"
 
+#include "global/translation.h"
+
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 
 #include "engraving/dom/score.h"
 #include "engraving/dom/page.h"
 
-#include "translation.h"
+#include "notationscene/notationcommands.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::notation;
@@ -83,17 +85,17 @@ void SystemPageLayoutSettingsModel::moveSystemUpPage()
 
 QString SystemPageLayoutSettingsModel::shortcutMoveSystemUpPage() const
 {
-    return shortcutsForActionCode("move-system-to-prev-page");
+    return shortcutsForCommand(MOVE_SYSTEM_TO_PREV_PAGE_COMMAND);
 }
 
 QString SystemPageLayoutSettingsModel::shortcutMoveSystemDownPage() const
 {
-    return shortcutsForActionCode("move-system-to-next-page");
+    return shortcutsForCommand(MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND);
 }
 
 QString SystemPageLayoutSettingsModel::shortcutMakeIntoPage() const
 {
-    return shortcutsForActionCode("make-into-page");
+    return shortcutsForCommand(MAKE_INTO_PAGE_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::makeIntoPage()
@@ -122,7 +124,7 @@ void SystemPageLayoutSettingsModel::moveMeasureUpSystem()
 
 QString SystemPageLayoutSettingsModel::shortcutMoveMeasureUpSystem() const
 {
-    return shortcutsForActionCode("move-measure-to-prev-system");
+    return shortcutsForCommand(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::moveMeasureDownSystem()
@@ -136,7 +138,7 @@ void SystemPageLayoutSettingsModel::moveMeasureDownSystem()
 
 QString SystemPageLayoutSettingsModel::shortcutMoveMeasureDownSystem() const
 {
-    return shortcutsForActionCode("move-measure-to-next-system");
+    return shortcutsForCommand(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::toggleSystemLock()
@@ -150,7 +152,7 @@ void SystemPageLayoutSettingsModel::toggleSystemLock()
 
 QString SystemPageLayoutSettingsModel::shortcutToggleSystemLock() const
 {
-    return shortcutsForActionCode("toggle-system-lock");
+    return shortcutsForCommand(TOGGLE_SYSTEM_LOCK_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::togglePageLock()
@@ -164,7 +166,7 @@ void SystemPageLayoutSettingsModel::togglePageLock()
 
 QString SystemPageLayoutSettingsModel::shortcutTogglePageLock() const
 {
-    return shortcutsForActionCode("toggle-page-lock");
+    return shortcutsForCommand(TOGGLE_PAGE_LOCK_COMMAND);
 }
 
 bool SystemPageLayoutSettingsModel::allSystemsAreLocked() const
@@ -330,5 +332,5 @@ void SystemPageLayoutSettingsModel::makeIntoSystem()
 
 QString SystemPageLayoutSettingsModel::shortcutMakeIntoSystem() const
 {
-    return shortcutsForActionCode("make-into-system");
+    return shortcutsForCommand(MAKE_INTO_SYSTEM_COMMAND);
 }

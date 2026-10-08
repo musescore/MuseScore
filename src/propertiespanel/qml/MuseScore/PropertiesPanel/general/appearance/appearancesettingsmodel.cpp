@@ -22,20 +22,24 @@
 
 #include "appearancesettingsmodel.h"
 
+#include "global/translation.h"
+
 #include "engraving/dom/page.h"
 #include "engraving/dom/score.h"
 
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/editposition.h"
 
+#include "notationscene/notationcommands.h"
+
 #include "types/commontypes.h"
-#include "translation.h"
 
 #include "log.h"
 
 using namespace mu::propertiespanel;
 using namespace muse::actions;
 using namespace mu::engraving;
+using namespace mu::notation;
 
 static constexpr int REARRANGE_ORDER_STEP = 50;
 
@@ -357,7 +361,7 @@ bool AppearanceSettingsModel::isSnappedToGrid() const
 
 QString AppearanceSettingsModel::freezeCurrentPlacementShortcut() const
 {
-    return shortcutsForActionCode("freeze-current-placement");
+    return shortcutsForCommand(FREEZE_CURRENT_PLACEMENT_COMMAND);
 }
 
 void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
