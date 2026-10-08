@@ -261,7 +261,7 @@ bool StaveSharingLayout::sameInstrument(track_idx_t prevTrack, track_idx_t nextT
         return false;
     }
 
-    return nextInstrument->id() == prevInstrument->id();
+    return nextInstrument->id() == prevInstrument->id() && nextInstrument->transpose() == prevInstrument->transpose();
 }
 
 bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx)
