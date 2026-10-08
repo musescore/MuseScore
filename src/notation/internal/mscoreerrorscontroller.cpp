@@ -44,6 +44,13 @@ void MScoreErrorsController::checkAndShowMScoreError()
     MScore::setError(MsError::MS_NO_ERROR); // reset
 
     if (!configuration()->needToShowMScoreError(MScore::errorToString(err))) {
+        // screen reader users still need to know why nothing was entered
+        if (err == MsError::NO_SPACE_FOR_TUPLET) {
+            accessibilityController()->announce(muse::mtrc("notation", "No space for the tuplet with this duration. "
+                                                                       "Choose a shorter duration, or press Escape to cancel it."));
+        } else if (err == MsError::TUPLET_NOTE_VALUE_TOO_SHORT) {
+            accessibilityController()->announce(muse::mtrc("notation", "Cannot create tuplet: note value is too short"));
+        }
         return;
     }
 
