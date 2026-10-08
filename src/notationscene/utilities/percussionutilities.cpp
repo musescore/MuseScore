@@ -145,14 +145,12 @@ muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const 
     query.addParam("drumsWithShortcut", muse::Val::fromQVariant(drumsWithShortcut));
 
     QVariantList applicationShortcuts;
-    for (const muse::ui::UiAction& action : uiactionsRegister()->actionList()) {
-        muse::shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
-        if (!shortcut.isValid()) {
-            continue;
-        }
+    muse::shortcuts::ShortcutList shortcuts = commandShortcutsRegister()->shortcuts();
+    for (const muse::shortcuts::Shortcut& shortcut : shortcuts) {
+        const auto& info = commandsRegister()->commandInfo(shortcut.command);
         for (const std::string& str : shortcut.sequences) {
             QVariantMap sc;
-            sc ["title"] = action.title.qTranslatedWithoutMnemonic();
+            sc ["title"] = info.title.qTranslatedWithoutMnemonic();
             sc ["shortcut"] = QString::fromStdString(str);
             applicationShortcuts << sc;
         }
