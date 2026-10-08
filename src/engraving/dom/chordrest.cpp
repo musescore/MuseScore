@@ -517,35 +517,7 @@ String ChordRest::durationUserName() const
 {
     String tupletType;
     if (tuplet()) {
-        switch (tuplet()->ratio().numerator()) {
-        case 2:
-            tupletType = muse::mtrc("engraving", "Duplet");
-            break;
-        case 3:
-            tupletType = muse::mtrc("engraving", "Triplet");
-            break;
-        case 4:
-            tupletType = muse::mtrc("engraving", "Quadruplet");
-            break;
-        case 5:
-            tupletType = muse::mtrc("engraving", "Quintuplet");
-            break;
-        case 6:
-            tupletType = muse::mtrc("engraving", "Sextuplet");
-            break;
-        case 7:
-            tupletType = muse::mtrc("engraving", "Septuplet");
-            break;
-        case 8:
-            tupletType = muse::mtrc("engraving", "Octuplet");
-            break;
-        case 9:
-            tupletType = muse::mtrc("engraving", "Nonuplet");
-            break;
-        default:
-            //: %1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)
-            tupletType = muse::mtrc("engraving", "%1 note tuplet").arg(tuplet()->ratio().numerator());
-        }
+        tupletType = Tuplet::typeUserName(tuplet()->ratio().numerator());
     }
     String dotString;
     if (!tupletType.isEmpty()) {

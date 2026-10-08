@@ -65,6 +65,8 @@ public:
     void resetNumberProperty();
     static void resetNumberProperty(Text* number);
 
+    static String typeUserName(int numerator);
+
     bool isEditable() const override;
     void startDragGrip(EditData&) override;
     void dragGrip(EditData&) override;
