@@ -33,7 +33,6 @@
 #include "notation/inotationundostack.h"
 
 #include "modularity/ioc.h"
-#include "shortcuts/shortcutstypes.h"
 
 #include "types/texttypes.h"
 
@@ -157,9 +156,9 @@ static const QMap<mu::engraving::TempoTextType, PropertiesPanelModelType> TEMPO_
     { mu::engraving::TempoTextType::TEMPO_PRIMO, PropertiesPanelModelType::TYPE_TEMPO_PRIMO },
 };
 
-QString PropertiesPanelAbstractModel::shortcutsForActionCode(std::string code) const
+QString PropertiesPanelAbstractModel::shortcutsForCommand(const muse::rcommand::Command& command) const
 {
-    std::vector<std::string> shortcuts = shortcutsRegister()->shortcut(code).sequences;
+    std::vector<std::string> shortcuts = commandShortcutsRegister()->shortcut(command).sequences;
     return muse::shortcuts::sequencesToNativeText(shortcuts);
 }
 
