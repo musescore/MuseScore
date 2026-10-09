@@ -29,6 +29,7 @@
 #include "rcommand/commandtypes.h"
 
 #include "notation/types/noteinputtypes.h"
+#include "notation/types/viewmode.h"
 #include "notation/notationtypes.h"
 #include "notation/inotationstyle.h"
 
@@ -77,6 +78,9 @@ public:
     virtual bool isMoveSelectionAvailable(MoveSelectionType type) const = 0;
 
     virtual bool isToggleLayoutBreakAvailable() const = 0;
+
+    virtual ViewMode viewMode() const = 0;
+    virtual muse::async::Notification viewModeChanged() const = 0;
 
     virtual ScoreConfig scoreConfig() const = 0;
     virtual muse::async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;

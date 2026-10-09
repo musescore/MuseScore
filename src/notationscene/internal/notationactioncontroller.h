@@ -107,6 +107,9 @@ public:
 
     bool isToggleLayoutBreakAvailable() const override;
 
+    ViewMode viewMode() const override;
+    muse::async::Notification viewModeChanged() const override;
+
     ScoreConfig scoreConfig() const override;
     muse::async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
@@ -311,6 +314,7 @@ private:
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
     muse::async::Notification m_currentNotationStyleChanged;
     muse::async::Notification m_automationModeEnabledChanged;
+    muse::async::Notification m_viewModeChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
