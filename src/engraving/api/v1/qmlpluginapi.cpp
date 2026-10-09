@@ -23,7 +23,10 @@
 #include "qmlpluginapi.h"
 
 #include <QQmlEngine>
+#include <QQmlContext>
+#include <QQmlError>
 #include <QJSValueIterator>
+#include <QWindow>
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
@@ -33,6 +36,8 @@
 
 #include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
+
+#include "translation.h"
 
 // api
 #include "engravingapiv1.h"
@@ -238,6 +243,77 @@ void PluginAPI::setup(QQmlEngine* e)
     m_engine = engravingApi->engine();
 }
 
+//! Runs the plug-in and reports runtime QML errors to the user.
+void PluginAPI::runPlugin()
+{
+    QQmlEngine* engine = qmlEngine(this);
+    QQmlContext* context = QQmlEngine::contextForObject(this);
+    if (engine && context) {
+        const QUrl pluginUrl = context->baseUrl();
+        const QUrl pluginDirectory = pluginUrl.adjusted(QUrl::RemoveFilename | QUrl::NormalizePathSegments);
+
+        connect(engine, &QQmlEngine::warnings, this,
+                [this, context, pluginDirectory](const QList<QQmlError>& warnings) {
+            if (m_errorReported) {
+                return;
+            }
+
+            QStringList errorMessages;
+            QStringList errorDetails;
+            for (const QQmlError& warning : warnings) {
+                bool belongsToPlugin = pluginDirectory.isParentOf(warning.url().adjusted(QUrl::NormalizePathSegments));
+                if (QObject* object = warning.object()) {
+                    QQmlContext* warningContext = QQmlEngine::contextForObject(object);
+                    while (warningContext && warningContext != context) {
+                        warningContext = warningContext->parentContext();
+                    }
+                    belongsToPlugin = warningContext != nullptr;
+                }
+                if (belongsToPlugin) {
+                    errorMessages << warning.description();
+                    errorDetails << warning.toString();
+                    break;
+                }
+            }
+
+            if (errorMessages.empty()) {
+                return;
+            }
+
+            m_errorReported = true;
+            closePluginWindows();
+            quit();
+
+            const QString details = errorDetails.join('\n');
+            muse::IInteractive::Text text(
+                muse::qtrc("extensions", "An error occurred in the plug-in: %1. Please contact the developer.")
+                .arg(errorMessages.join('\n')).toStdString(),
+                muse::IInteractive::TextFormat::PlainText);
+            text.detailedText = details.toStdString();
+            interactive()->error(muse::trc("extensions", "Plug-in error"), text);
+        });
+    }
+
+    emit run();
+}
+
+//! Closes windows owned by this plug-in instance.
+void PluginAPI::closePluginWindows()
+{
+    const QList<QObject*> objects = findChildren<QObject*>();
+    for (QObject* object : objects) {
+        QWindow* window = qobject_cast<QWindow*>(object);
+        if (!window) {
+            window = object->property("window").value<QWindow*>();
+        }
+        if (window) {
+            window->hide();
+            window->close();
+        }
+    }
+}
+
+//! Creates a plug-in API object with the given visual parent.
 PluginAPI::PluginAPI(QQuickItem* parent)
     : QQuickItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
