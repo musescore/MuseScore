@@ -2726,8 +2726,8 @@ class FretDiagram : public EngravingItem
     Q_PROPERTY(int strings READ strings)
     /// Number of frets displayed in this diagram.
     Q_PROPERTY(int frets READ frets)
-    /// Starting fret number (0 means no offset, nut is shown).
-    Q_PROPERTY(int fretOffset READ fretOffset)
+    // The starting fret number is EngravingItem::fretOffset (API_PROPERTY_T on Pid::FRET_OFFSET),
+    // which is writable and undoable; a read-only property of the same name here would shadow it.
 
 public:
     /// \cond MS_INTERNAL

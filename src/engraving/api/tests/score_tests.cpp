@@ -1770,6 +1770,45 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
 }
 
 //---------------------------------------------------------
+//   fretDiagramFretOffsetApi
+//   fretOffset must stay writable through the API, as it has
+//   been since 3.x (EngravingItem::fretOffset): a plugin sets
+//   the position of a diagram with `fd.fretOffset = 5`.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramFretOffsetApi)
+{
+    // [GIVEN] A score and a FretDiagram at the nut, wrapped via the API
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
+    ASSERT_EQ(domFd->fretOffset(), 0);
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+    EXPECT_EQ(apiFd->property("fretOffset").toInt(), 0);
+
+    // [WHEN] We set fretOffset through the Qt property, as QML assignment does
+    domScore->startCmd(TranslatableString::untranslatable("fret offset api test"));
+    EXPECT_TRUE(apiFd->setProperty("fretOffset", 5));
+    domScore->endCmd();
+
+    // [THEN] The DOM element moved and the property reads back
+    EXPECT_EQ(domFd->fretOffset(), 5);
+    EXPECT_EQ(apiFd->property("fretOffset").toInt(), 5);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The diagram is back at the nut
+    EXPECT_EQ(domFd->fretOffset(), 0);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
 //   fretDiagramGettersApi
 //   Test the read-only getters: scalar properties (strings,
 //   frets, fretOffset) and collection methods (dots, markers,
