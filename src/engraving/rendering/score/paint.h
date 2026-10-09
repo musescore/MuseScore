@@ -43,5 +43,9 @@ public:
 
     static SizeF pageSizeInch(const Score* score);
     static SizeF pageSizeInch(const Score* score, const IScoreRenderer::ScorePaintOptions& opt);
+
+    static void paintWatermark(muse::draw::Painter* painter, const Score* score, const muse::RectF& pageRect, const IScoreRenderer::ScorePaintOptions& opt);
+
+private:
 };
 }
