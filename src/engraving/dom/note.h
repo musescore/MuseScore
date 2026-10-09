@@ -303,6 +303,8 @@ public:
 
     bool hidden() const { return m_hidden; }
     void setHidden(bool val) { m_hidden = val; }
+    bool hideNotehead() const { return m_hideNotehead; }
+    void setHideNotehead(bool val) { m_hideNotehead = val; }
     bool dotsHidden() const { return m_dotsHidden; }
     void setDotsHidden(bool val) { m_dotsHidden = val; }
 
@@ -498,6 +500,8 @@ private:
     bool m_hidden = false;                 // marks this note as the hidden one if there are
                                            // overlapping notes; hidden notes are not played
                                            // and heads + accidentals are not shown
+    bool m_hideNotehead = false;      // hides notehead glyph only for unison sharing;
+                                      // unlike m_hidden, does not affect playback or accidentals
     bool m_dotsHidden = false;        // dots of hidden notes are hidden too
                                       // except if only one note is dotted
     bool m_fretConflict = false;      // used by TAB staves to mark a fretting conflict:
