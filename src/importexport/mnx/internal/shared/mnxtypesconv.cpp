@@ -219,6 +219,7 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
     case ClefType::TAB4:
     case ClefType::TAB_SERIF:
     case ClefType::TAB4_SERIF:
+    case ClefType::TAB_STRING_NAMES:
     case ClefType::MAX:
         return std::nullopt;
     }

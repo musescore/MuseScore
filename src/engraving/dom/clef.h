@@ -159,6 +159,8 @@ public:
 
     struct LayoutData : public EngravingItem::LayoutData {
         SymId symId = SymId::noSym;
+        std::vector<String> stringNames;   // used by TAB_STRING_NAMES clef, one entry per staff line, top to bottom
+        double stringNamesLineDist = 0.0;  // line distance (in the same units as stringNames' positions) used to lay them out
     };
     DECLARE_LAYOUTDATA_METHODS(Clef)
 

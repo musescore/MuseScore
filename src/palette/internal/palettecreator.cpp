@@ -1086,7 +1086,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
         ClefType::F, ClefType::F_8VA, ClefType::F_15MA,
         ClefType::F8_VB, ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
         ClefType::PERC,
-        ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
+        ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF, ClefType::TAB_STRING_NAMES
     };
 
     for (ClefType clefType : defaultPalette ? clefsDefault : clefsMaster) {

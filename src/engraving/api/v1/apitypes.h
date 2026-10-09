@@ -1113,6 +1113,7 @@ enum class ClefType {
     TAB4       = int(mu::engraving::ClefType::TAB4),
     TAB_SERIF  = int(mu::engraving::ClefType::TAB_SERIF),
     TAB4_SERIF = int(mu::engraving::ClefType::TAB4_SERIF),
+    TAB_STRING_NAMES = int(mu::engraving::ClefType::TAB_STRING_NAMES),
     C4_8VB     = int(mu::engraving::ClefType::C4_8VB),
     G8_VB_C    = int(mu::engraving::ClefType::G8_VB_C),
     MAX        = int(mu::engraving::ClefType::MAX),

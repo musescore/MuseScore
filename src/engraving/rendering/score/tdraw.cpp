@@ -1224,11 +1224,58 @@ void TDraw::draw(const Clef* item, Painter* painter, const PaintOptions& opt)
         return;
     }
 
-    if (ldata->symId == SymId::noSym || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
+    const bool drawStringNames = item->clefType() == ClefType::TAB_STRING_NAMES && !ldata->stringNames.empty();
+
+    if ((ldata->symId == SymId::noSym && !drawStringNames)
+        || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
         return;
     }
 
     painter->setPen(item->curColor(opt));
+
+    if (drawStringNames) {
+        // Use the line distance layoutClef computed the bbox from, rather than re-deriving
+        // it from the staff type at the clef's own tick: that lookup can select a different
+        // staff-type instance than the one layoutClef used for this clef (e.g. around a
+        // staff-type change coinciding with the clef), leaving the drawn text out of sync
+        // with its measured/laid-out bbox.
+        const double lineDistAbs = ldata->stringNamesLineDist;
+        const int lines = static_cast<int>(ldata->stringNames.size());
+        const double halfHeight = lineDistAbs * (lines - 1) * 0.5;
+
+        // Size the letters from the staff's own line distance rather than a fixed point
+        // size: a fixed size overlaps on a tightly-spaced tab staff (or leaves the letters
+        // too small on a widely-spaced one). Measure a probe font's cap height and scale so
+        // the drawn cap height is a fixed fraction of the space between two lines.
+        Font probeFont(u"Edwin", Font::Type::Text);
+        probeFont.setPointSizeF(10.0);
+        const double probeCapHeight = FontMetrics(probeFont).capHeight();
+        const double pointSize = probeCapHeight > 0.0
+                                 ? 10.0 * (lineDistAbs * 0.65) / probeCapHeight
+                                 : 10.0 * item->magS();
+
+        for (int i = 0; i < lines; ++i) {
+            const String& name = ldata->stringNames[i];
+            if (name.empty()) {
+                continue;
+            }
+            // Build the font fresh for each letter rather than sharing one Font/FontMetrics
+            // pair across the loop: a plain text font ("Edwin" here, rather than
+            // Sid::staffTextFontFace, which is user/score-configurable and may point at a
+            // music-symbol font that remaps plain Latin letters to unrelated glyphs).
+            Font font(u"Edwin", Font::Type::Text);
+            font.setPointSizeF(pointSize);
+            FontMetrics fm(font);
+            const RectF r = fm.boundingRect(name);
+            const double lineY = -halfHeight + i * lineDistAbs;
+            const double x = -(r.left() + r.width() * 0.5);
+            const double y = lineY - (r.top() + r.bottom()) * 0.5;
+            painter->setFont(font);
+            painter->drawText(PointF(x, y), name);
+        }
+        return;
+    }
+
     item->drawSymbol(ldata->symId, painter);
 }
 
