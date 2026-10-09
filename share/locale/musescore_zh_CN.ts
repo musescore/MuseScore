@@ -9917,7 +9917,7 @@ followed by dashes</source>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>此操作将会重置您的所有应用程序偏好，并删除所有自定义面板和自定义快捷键。最近打开的乐谱列表也会被清除。
+        <translation>此操作将会重置所有您的应用偏好设置，并删除所有自定义面板和自定义快捷键。最近打开的乐谱列表也会被清除。
 
 此操作不会删除您的任何乐谱。</translation>
     </message>
@@ -10006,9 +10006,9 @@ This action will not delete any of your scores.</source>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation>此操作将会重置您的所有应用偏好和删除所有自定义快捷键。但这不会删除您的任何乐谱。
+        <translation>此操作将会重置所有您的应用偏好设置，并删除所有自定义快捷键。但不会删除您的任何乐谱。
 
-此操作不能撤销。</translation>
+此操作无法撤销。</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="225"/>
@@ -10053,8 +10053,8 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>版权所有 © 1999-2026 MuseScore 有限公司等。
-依照 &lt;a href=&quot;%1&quot;&gt;GNU 通用公共许可协议第 3 版&lt;/a&gt; 发布。</translation>
+        <translation>版权所有 © 1999-2026 MuseScore Limited 及其他。
+根据 &lt;a href=&quot;%1&quot;&gt;GNU 通用公共许可协议第 3 版&lt;/a&gt; 发布。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -10069,7 +10069,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="72"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>版权所有 © 2004-2021《MusicXML 规范》的贡献者，由 W3C 社区最终规范协议（FSA）下的 Music Notation Community Group 发布</translation>
+        <translation>版权所有 © 2004-2021 MusicXML 规范的贡献者，由 Music Notation Community Group 根据 W3C 社区最终规范协议（FSA）发布：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="96"/>
@@ -10167,7 +10167,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="76"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>为保护您的隐私，MuseScore Studio不收集任何个人信息。详情请阅&lt;a href=&quot;%1&quot;&gt;隐私条款&lt;/a&gt; 。</translation>
+        <translation>为保护您的隐私，MuseScore Studio 不收集任何个人信息。更多信息请参阅我们的&lt;a href=&quot;%1&quot;&gt;隐私条款&lt;/a&gt; 。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/firstlaunchsetupmodel.cpp" line="103"/>
@@ -10468,7 +10468,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="52"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation>在 MuseScore.com 上保存你的私人乐谱，以访问它们的历史版本、或者邀请他人来查看和评价。当你准备好的时候，将你的音乐分享到全世界！</translation>
+        <translation>在 MuseScore.com 上保存您的私人乐谱，以便回顾它们的过往版本，并邀请他人来查看和评论——当您准备好时，再将您的音乐分享给全世界。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="54"/>
@@ -10498,7 +10498,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
         <source>Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow.</source>
-        <translation>包括必不可少的新记谱工具、针对回放系统的重大优化、视频导出、吉他下压记号，以及一些为了提效工作流而设计的新特性。</translation>
+        <translation>包括必不可少的新制谱工具、回放系统的重大改进、视频导出、吉他下压记号，以及一些为加速工作流而设计的新特性。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="46"/>
@@ -10970,7 +10970,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1295"/>
         <source>and ending string %1</source>
-        <translation>结束弦 %1</translation>
+        <translation>终止弦 %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1298"/>
@@ -11193,7 +11193,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End beat: %1</source>
-        <translation>终拍：%1</translation>
+        <translation>终止拍：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1126"/>
@@ -11452,7 +11452,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8042"/>
         <source>Remove invalid incoming partial slur</source>
-        <translation>移除非法的圆滑线进入部分</translation>
+        <translation>移除无效的圆滑线进入部分</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8050"/>
@@ -11462,7 +11462,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8065"/>
         <source>Remove invalid outgoing partial slur</source>
-        <translation>移除非法的圆滑线引出部分</translation>
+        <translation>移除无效的圆滑线引出部分</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8073"/>
@@ -26622,7 +26622,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/parttreeitem.cpp" line="259"/>
         <source>This action can not be undone</source>
-        <translation>此操作不能撤消</translation>
+        <translation>此操作无法撤销</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffcontroltreeitem.cpp" line="33"/>
@@ -26767,7 +26767,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="272"/>
         <source>Linked staves contain identical notation (e.g. for guitar tablature)</source>
-        <translation>联动谱表包含等同记谱（譬如供吉他指法谱）</translation>
+        <translation>联动谱表包含相同的记谱（例如用于吉他的指法谱）</translation>
     </message>
 </context>
 <context>
@@ -26834,13 +26834,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation>欢迎来到《精通 MuseScore》——这里有学习全世界最流行的音乐记谱软件：Musescore 的最全面的资源！我的名字是马克·萨巴泰拉。MuseScore 首次发布后的十多年里，我一直致力于帮助开发、支持和宣传 MuseScore。
+        <translation>欢迎来到精通MuseScore——这里有学习全球最受欢迎的音乐记谱软件的最全面资源！我的名字是Marc Sabatella，在MuseScore首次发布后的十多年里，我一直参与着其开发、支持和宣传工作。
 
-无论您是音乐记谱软件的初学者，还是渴望探索进阶排版和声音播放技巧的高级用户，我旗舰的在线课程《精通 MuseScore》里拥有您需要知晓的有关 MuseScore 的一切。
+无论您是刚上手音乐记谱软件的初学者，还是想要探索更深入的制谱与播放技术的资深用户，我的旗舰在线课程“精通MuseScore”都涵盖了您充分利用MuseScore所需了解的一切。
 
-此外，《精通 MuseScore》的特色在于它有一个支持性的音乐人社区，带有讨论空间、现场直播和其他相关课程和服务，以帮助您创建您最棒的音乐。抓住机会，从其最受公认的专家之一那里学习 MuseScore！
+此外，精通MuseScore还有一个互帮互助的音乐人社区，提供讨论区、直播以及其他相关课程和服务，帮助您创作出最出色的音乐。抓住这个机会，从最知名的MuseScore专家之一那里学习MuseScore吧！
 
-（注意：《精通 MuseScore》只提供英文版本）</translation>
+（注：精通MuseScore仅提供英文版本）</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/learnpagemodel.cpp" line="97"/>
@@ -26947,7 +26947,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="136"/>
         <source>Take me to MuseHub</source>
-        <translation>转至Muse Hub</translation>
+        <translation>转至MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="142"/>
@@ -28198,7 +28198,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Please select all notes that are part of this tremolo and try again.</source>
-        <translation>请选中该震音的所有音符然后重试</translation>
+        <translation>请选中该震音的所有音符后重试</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
@@ -28229,7 +28229,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="159"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation>这份乐谱已经有分谱了。尚不支持在有分谱时更改局部拍号。</translation>
+        <translation>此乐谱已有分谱。暂不支持在有分谱时更改局部拍号。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="163"/>
@@ -28264,7 +28264,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="175"/>
         <source>Make a list selection of notes or rests on the same beat or any range selection and retry.</source>
-        <translation>使用相同节拍上的音符或休止符的列表选区或任意范围选区，再重试。</translation>
+        <translation>使用相同节拍上的音符或休止符的列表选区或进行任意范围选区后重试。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="178"/>
@@ -28941,7 +28941,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.cpp" line="222"/>
         <source>Always open</source>
-        <translation>常开音</translation>
+        <translation>常空弦</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.cpp" line="223"/>
@@ -28951,7 +28951,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.cpp" line="224"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;始终开放&lt;/b&gt;&lt;br&gt;在指法谱上，除了标有‘0’的弦位置外，不能在其他标记为“始终开放”的弦上录入品位。适用于带有不在品格上的弦的乐器，例如短双颈琉特琴。</translation>
+        <translation>&lt;b&gt;常空弦&lt;/b&gt;&lt;br&gt;在指法谱中，被标记为“常空弦”的弦不能输入“0”以外的品位。这对带有不在指板上的弦的乐器很有用，例如西奥伯琴。</translation>
     </message>
 </context>
 <context>
@@ -29159,7 +29159,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1409"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation>本乐谱上次保存时的MuseScore Studio修订号</translation>
+        <translation>此乐谱上次保存时所用的 MuseScore Studio 修订号</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1411"/>
@@ -30356,7 +30356,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="120"/>
         <source>Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?</source>
-        <translation>您还想移动触发这些声音的MIDI音符和键盘快捷键吗？</translation>
+        <translation>您也想移动用于触发这些声音的MIDI音符和键盘快捷键吗？</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="132"/>
@@ -30660,12 +30660,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="53"/>
         <source>Metronome real-time input mode</source>
-        <translation>实时（节拍器）输入模式</translation>
+        <translation>节拍器实时输入模式</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="54"/>
         <source>Pedal real-time input mode</source>
-        <translation>实时（踏板）输入模式</translation>
+        <translation>踏板实时输入模式</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="55"/>
@@ -33440,7 +33440,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="627"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation>当你在工作时，音频会在后台进行处理。如果您想自己触发音频处理，请在 偏好设置 &gt; 音频与MIDI &gt; 在线音色 中禁用此功能。</translation>
+        <translation>当您工作时，音频会在后台进行处理。如果您想自己触发音频处理，请在 偏好设置 &gt; 音频与MIDI &gt; 在线音色 中禁用此功能。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="641"/>
@@ -33631,7 +33631,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="220"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
-        <translation>您已经达到了您目前的 %1 限额。您暂时无法使用在线音色处理，直到您的限额在 %2 重置。更多信息请参考：&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;。</translation>
+        <translation>您已经达到当前 %1 的限额。您将暂时无法使用在线音色处理，直到您的限额在 %2 重置。更多信息：&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="227"/>
@@ -33724,7 +33724,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="687"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>这可能会重置此乐器上的音色标志，但会保留谱表文本。此操作不能撤销。</translation>
+        <translation>此乐器上的音色标志可能会被重置，但谱表文本会被保留。此操作无法撤销。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -33754,7 +33754,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
-        <translation>您已经达到了您目前的 %1 限额。您暂时无法使用在线音色处理，直到您的限额在 %2 重置。</translation>
+        <translation>您已经达到当前 %1 的限额。您将暂时无法使用在线音色处理，直到您的限额在 %2 重置。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="132"/>
@@ -33809,7 +33809,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="165"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>这可能会重置音色标志，但会保留谱表文本。此操作不能撤销。</translation>
+        <translation>音色标志可能会被重置，但谱表文本会被保留。此操作无法撤销。</translation>
     </message>
 </context>
 <context>
@@ -33884,7 +33884,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>检查软件更新需要访问网络。为了保护您的隐私，MuseScore Studio 不存储任何个人信息。更多信息请参阅我们的《&lt;a href=&quot;%1&quot;&gt;隐私政策&lt;/a&gt;》。</translation>
+        <translation>检查更新需要访问网络。为保护您的隐私，MuseScore Studio 不存储任何个人信息。更多信息请参阅我们的&lt;a href=&quot;%1&quot;&gt;隐私条款&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -34754,7 +34754,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="65"/>
         <source>The selected audio driver does not have any available audio devices. MuseScore Studio will use the default audio driver instead. To use %1, ensure your hardware is set up correctly, then restart MuseScore Studio and try again.</source>
-        <translation>所选的音频驱动没有任何可用设备。MuseScore Studio 将会使用默认音频驱动作为替代。要想使用 %1，请确保你的硬件已正确配置，随后重启 MuseScore Studio 并重试。</translation>
+        <translation>所选的音频驱动没有任何可用的音频设备。MuseScore Studio 将会使用默认音频驱动来替代。若要使用 %1，请确保您的硬件已正确设置，随后重启 MuseScore Studio 并重试。</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/PlaybackQualitySection.qml" line="30"/>
@@ -35113,12 +35113,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1574"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on MuseScore.org.</source>
-        <translation>尽管该文件或将无法使用，但您仍然可以继续将其保存到本地。您可以尝试手动修复这些错误，或到 MuseScore.org 上获取此问题的帮助。</translation>
+        <translation>您可以继续将其保存到本地，但文件可能无法使用。您可以尝试手动修复这些错误，或到 MuseScore.org 上获取此问题的帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</source>
-        <translation>尽管该文件或将无法使用，但您仍然可以继续将其保存到本地。为了妥善地保留您的乐谱，请恢复它到上次保存的版本，或手动修复错误。您也可以到 MuseScore.org 上获取此问题的帮助。</translation>
+        <translation>您可以继续将其保存到本地，但文件可能无法使用。为了保护您的乐谱，请恢复它到上次保存的版本，或手动修复错误。您也可以到 MuseScore.org 上获取此问题的帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1584"/>
@@ -35548,7 +35548,7 @@ failed: %2</source>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="720"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="801"/>
         <source>An internet connection is required to convert a file. Please check your internet connection or try again later.</source>
-        <translation>文件转换要求有互联网连接。请检查您的互联网连接并稍后重试。</translation>
+        <translation>文件转换需要有互联网连接。请检查您的互联网连接并稍后重试。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="302"/>
@@ -35588,13 +35588,13 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="368"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="561"/>
         <source>You can convert up to %n audio file(s) at a time. Remove some files and try again.</source>
-        <translation><numerusform>您最多只能同时转换 %1 个音频文件。请您移除一些文件后重试。</numerusform></translation>
+        <translation><numerusform>您最多只能同时转换 %n 个音频文件。请移除一些文件后重试。</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="376"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="572"/>
         <source>You can convert up to %n image(s) at a time. Remove some images and try again.</source>
-        <translation><numerusform>您最多只能同时转换 %1 个图片文件。请您移除一些图片后重试。</numerusform></translation>
+        <translation><numerusform>您最多只能同时转换 %n 个图片文件。请移除一些图片后重试。</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="218"/>
@@ -35678,7 +35678,7 @@ failed: %2</source>
     </message>
     <message>
         <source>You can convert up to %1 audio files at a time. Remove some files and try again.</source>
-        <translation>您最多只能同时转换 %1 个音频文件。请您移除一些文件后重试。</translation>
+        <translation>您最多只能同时转换 %1 个音频文件。请移除一些文件后重试。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="370"/>
@@ -35688,7 +35688,7 @@ failed: %2</source>
     </message>
     <message>
         <source>You can convert up to %1 images at a time. Remove some images and try again.</source>
-        <translation>您最多只能同时转换 %1 个图片文件。请您移除一些图片后重试。</translation>
+        <translation>您最多只能同时转换 %1 个图片文件。请移除一些图片后重试。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="378"/>
@@ -35754,7 +35754,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="440"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="277"/>
         <source>We weren’t able to convert ‘%1’. Please try again with a better quality file.</source>
-        <translation>我们无法转换 ‘%1’。请您使用质量更好的文件重试。</translation>
+        <translation>我们无法转换 ‘%1’。请使用质量更好的文件重试。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="444"/>
@@ -35766,13 +35766,13 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="459"/>
         <source>Good</source>
         <extracomment>Button to rate the quality of a converted score as good</extracomment>
-        <translation>良好</translation>
+        <translation>很好</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="461"/>
         <source>Bad</source>
         <extracomment>Button to rate the quality of a converted score as bad</extracomment>
-        <translation>糟糕</translation>
+        <translation>很差</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="465"/>
@@ -35786,7 +35786,7 @@ failed: %2</source>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="386"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="418"/>
         <source>We’re always improving our score conversion accuracy. Let us know how we did with this one.</source>
-        <translation>我们一直致力于提升乐谱转换的准确率。请让我们知道这次我们做的如何。</translation>
+        <translation>我们一直都在不断地提升乐谱转换的准确率。请让我们知道这次我们做的如何。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="60"/>
@@ -36458,7 +36458,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
         <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
-        <translation>要导出为此文件格式，需安装FFmpeg。您也可在“偏好设置”&gt;“视频”中对其进行配置。</translation>
+        <translation>要导出为此文件格式，需安装FFmpeg。您也可在 偏好设置 &gt; 视频 中对其进行配置。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
@@ -37031,12 +37031,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation>将此乐谱及其音频在MuseScore.com上分享</translation>
+        <translation>将此乐谱及其音频分享到MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="49"/>
         <source>Share the audio from this score on Audio.com</source>
-        <translation>将此乐谱的音频在Audio.com上分享</translation>
+        <translation>将此乐谱的音频分享到Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="162"/>

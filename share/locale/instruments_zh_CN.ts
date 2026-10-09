@@ -18887,21 +18887,21 @@
         <source>14-course theorbo.</source>
         <comment>theorbo-14-course description</comment>
         <extracomment>description for Theorbo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>14复弦双首琴。</translation>
+        <translation>14复弦西奥伯琴。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6143"/>
         <source>Theorbo</source>
         <comment>theorbo-14-course trackName</comment>
         <extracomment>trackName for Theorbo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>双首琴</translation>
+        <translation>西奥伯琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
         <source>Theorbo</source>
         <comment>theorbo-14-course longName</comment>
         <extracomment>longName for Theorbo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>双首琴</translation>
+        <translation>西奥伯琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>
@@ -18915,7 +18915,7 @@
         <source>14-course archlute.</source>
         <comment>archlute-14-course description</comment>
         <extracomment>description for Archlute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>14复弦首席诗琴。</translation>
+        <translation>14复弦长颈鲁特琴。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6152"/>
@@ -21321,22 +21321,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3457"/>
         <source>Percussion - Pitched</source>
-        <translation>有音高打击乐</translation>
+        <translation>有音高打击乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3874"/>
         <source>Percussion - Unpitched</source>
-        <translation>无音高打击乐</translation>
+        <translation>无音高打击乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4768"/>
         <source>Percussion - Marching</source>
-        <translation>行进打击乐</translation>
+        <translation>行进打击乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4816"/>
         <source>Percussion - Body</source>
-        <translation>人体打击乐</translation>
+        <translation>人体打击乐器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4855"/>
@@ -21409,17 +21409,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6764"/>
         <source>Woodwind Ensemble</source>
-        <translation>木管乐团</translation>
+        <translation>木管合奏团</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6765"/>
         <source>Brass Ensemble</source>
-        <translation>铜管乐团</translation>
+        <translation>铜管合奏团</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6766"/>
         <source>String Ensemble</source>
-        <translation>弦乐团</translation>
+        <translation>弦乐合奏团</translation>
     </message>
 </context>
 <context>

@@ -35978,7 +35978,7 @@ a eșuat: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="233"/>
         <source>%1/%n file(s) max.</source>
         <extracomment>%1 is the number of files currently selected, %2 is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1/%n fișiere max.</translation>
     </message>
     <message>
         <source>%1/%2 max files</source>
