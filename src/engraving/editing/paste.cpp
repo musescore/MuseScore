@@ -75,11 +75,12 @@ namespace mu::engraving {
 //   pasteStaff
 //    return false if paste fails
 //---------------------------------------------------------
-bool Paste::pasteStaff(Transaction&, Score*, XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
+bool Paste::pasteStaff(Transaction&, Score*, XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale,
+                       rw::PasteMode mode)
 {
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
-    return rw::RWRegister::reader()->pasteStaff(e, dst, dstStaff, scale);
+    return rw::RWRegister::reader()->pasteStaff(e, dst, dstStaff, scale, mode);
 }
 
 //---------------------------------------------------------
@@ -278,11 +279,11 @@ void Paste::pasteChordRest(Transaction& tx, Score* score, ChordRest* cr, const F
 //
 //    (Note: info about delta ticks is currently ignored)
 //---------------------------------------------------------
-void Paste::pasteSymbols(Transaction&, XmlReader& e, ChordRest* dst)
+void Paste::pasteSymbols(Transaction&, XmlReader& e, ChordRest* dst, rw::PasteMode mode)
 {
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
-    rw::RWRegister::reader()->pasteSymbols(e, dst);
+    rw::RWRegister::reader()->pasteSymbols(e, dst, mode);
 }
 
 bool Paste::repeatListSelection(Transaction& tx, Score* score)
@@ -544,7 +545,8 @@ static EngravingItem* pasteSystemObject(Transaction& tx, EditData& srcData, Engr
 //   cmdPaste
 //---------------------------------------------------------
 
-bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreView* view, Fraction scale)
+bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreView* view, Fraction scale,
+                  rw::PasteMode mode)
 {
     if (!ms) {
         LOGE() << "No MIME data given";
@@ -559,17 +561,17 @@ bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreV
 
     if (ms->hasFormat(mimeSymbolFormat)) {
         muse::ByteArray data = ms->data(mimeSymbolFormat);
-        return pasteSymbol(tx, score, data, view, scale);
+        return pasteSymbol(tx, score, data, view, scale, mode);
     }
 
     if (ms->hasFormat(mimeStaffListFormat)) {
         muse::ByteArray data = ms->data(mimeStaffListFormat);
-        return pasteStaffList(tx, score, data, scale);
+        return pasteStaffList(tx, score, data, scale, mode);
     }
 
     if (ms->hasFormat(mimeSymbolListFormat)) {
         muse::ByteArray data = ms->data(mimeSymbolListFormat);
-        return pasteSymbolList(tx, score, data);
+        return pasteSymbolList(tx, score, data, mode);
     }
 
     if (ms->hasImage()) {
@@ -614,7 +616,7 @@ bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreV
 }
 }
 
-bool Paste::pasteSymbol(Transaction& tx, Score* score, muse::ByteArray& data, MuseScoreView* view, Fraction scale)
+bool Paste::pasteSymbol(Transaction& tx, Score* score, muse::ByteArray& data, MuseScoreView* view, Fraction scale, rw::PasteMode mode)
 {
     std::vector<EngravingItem*> droppedElements;
 
@@ -624,6 +626,11 @@ bool Paste::pasteSymbol(Transaction& tx, Score* score, muse::ByteArray& data, Mu
     std::unique_ptr<EngravingItem> el(EngravingItem::readMimeData(score, data, &dragOffset, &duration));
     if (!el) {
         return false;
+    }
+    if (mode == rw::PasteMode::DynamicsOnly
+        && el->type() != ElementType::DYNAMIC
+        && el->type() != ElementType::HAIRPIN) {
+        return true;
     }
 
     duration *= scale;
@@ -683,7 +690,7 @@ bool Paste::pasteSymbol(Transaction& tx, Score* score, muse::ByteArray& data, Mu
     return true;
 }
 
-bool Paste::pasteStaffList(Transaction& tx, Score* score, muse::ByteArray& data, Fraction scale)
+bool Paste::pasteStaffList(Transaction& tx, Score* score, muse::ByteArray& data, Fraction scale, rw::PasteMode mode)
 {
     if (MScore::debugMode) {
         LOGD() << "Pasting staff list: " << data.data();
@@ -714,10 +721,10 @@ bool Paste::pasteStaffList(Transaction& tx, Score* score, muse::ByteArray& data,
     }
 
     XmlReader xmlReader(data);
-    return pasteStaff(tx, score, xmlReader, cr->segment(), cr->staffIdx(), scale);
+    return pasteStaff(tx, score, xmlReader, cr->segment(), cr->staffIdx(), scale, mode);
 }
 
-bool Paste::pasteSymbolList(Transaction& tx, Score* score, muse::ByteArray& data)
+bool Paste::pasteSymbolList(Transaction& tx, Score* score, muse::ByteArray& data, rw::PasteMode mode)
 {
     if (MScore::debugMode) {
         LOGD() << "Pasting element list: " << data.data();
