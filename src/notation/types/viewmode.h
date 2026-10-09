@@ -26,4 +26,16 @@
 
 namespace mu::notation {
 using ViewMode = engraving::LayoutMode;
+
+// Whether system layout editing (system locks, moving measures between systems...) has an effect in the given view mode
+inline bool isSystemLayoutAvailable(ViewMode viewMode)
+{
+    return viewMode == ViewMode::PAGE || viewMode == ViewMode::SYSTEM;
+}
+
+// Whether page layout editing (page locks, moving systems between pages...) has an effect in the given view mode
+inline bool isPageLayoutAvailable(ViewMode viewMode)
+{
+    return viewMode == ViewMode::PAGE;
+}
 }
