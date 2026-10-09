@@ -21,9 +21,9 @@
  */
 
 #include <gtest/gtest.h>
+
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/linkedobjects.h"
-
 #include "engraving/dom/chord.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"

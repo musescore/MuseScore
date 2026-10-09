@@ -824,9 +824,7 @@ void TWrite::writeProperties(const Articulation* item, XmlWriter& xml, WriteCont
 
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ORNAMENT_STYLE);
-    for (const StyledProperty& spp : *item->styledProperties()) {
-        writeProperty(item, xml, spp.pid);
-    }
+    writeStyledProperties(item, xml);
     writeItemProperties(item, xml, ctx);
 }
 
@@ -1381,11 +1379,8 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
     writeProperty(item, xml, Pid::TEXT_STYLE);
     writeItemProperties(item, xml, ctx);
 
-    for (const StyledProperty& spp : *item->styledProperties()) {
-        if (!item->isStyled(spp.pid)) {
-            writeProperty(item, xml, spp.pid);
-        }
-    }
+    writeStyledProperties(item, xml);
+
     for (const auto& spp : *textStyle(item->textStyleType())) {
         if (item->isStyled(spp.pid)
             || (spp.pid == Pid::FONT_SIZE && item->getProperty(spp.pid).toDouble() == TextBase::UNDEFINED_FONT_SIZE)
@@ -1439,9 +1434,7 @@ void TWrite::write(const FiguredBass* item, XmlWriter& xml, WriteContext& ctx)
         for (FiguredBassItem* fBItem : item->items()) {
             write(fBItem, xml, ctx);
         }
-        for (const StyledProperty& spp : *item->styledProperties()) {
-            writeProperty(item, xml, spp.pid);
-        }
+        writeStyledProperties(item, xml);
         writeItemProperties(item, xml, ctx);
     }
     xml.endElement();
@@ -1580,9 +1573,6 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
     for (auto id : { Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
         writeProperty(item, xml, id);
     }
-    for (const StyledProperty& spp : *item->styledProperties()) {
-        writeProperty(item, xml, spp.pid);
-    }
 
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
@@ -1643,10 +1633,17 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
     if (item->diagonal()) {
         xml.tag("diagonal", item->diagonal());
     }
-    writeProperty(item, xml, Pid::LINE_WIDTH);
-    writeProperty(item, xml, Pid::LINE_STYLE);
-    writeProperty(item, xml, Pid::DASH_LINE_LEN);
-    writeProperty(item, xml, Pid::DASH_GAP_LEN);
+
+    for (Pid pid : { Pid::LINE_WIDTH,
+                     Pid::LINE_STYLE,
+                     Pid::DASH_LINE_LEN,
+                     Pid::DASH_GAP_LEN }) {
+        if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
+            writeProperty(item, xml, pid);
+        }
+    }
+
+    writeStyledProperties(item, xml);
 
     if (!item->isUserModified()) {
         return;
@@ -1707,11 +1704,14 @@ void TWrite::writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& 
 void TWrite::write(const GradualTempoChange* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    writeProperty(item, xml, Pid::TEMPO_CHANGE_TYPE);
-    writeProperty(item, xml, Pid::TEMPO_EASING_METHOD);
-    writeProperty(item, xml, Pid::TEMPO_CHANGE_FACTOR);
-    writeProperty(item, xml, Pid::PLACEMENT);
-    writeProperty(item, xml, Pid::SNAP_AFTER);
+    for (Pid pid : { Pid::TEMPO_CHANGE_TYPE,
+                     Pid::TEMPO_EASING_METHOD,
+                     Pid::TEMPO_CHANGE_FACTOR,
+                     Pid::SNAP_AFTER }) {
+        if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
+            writeProperty(item, xml, pid);
+        }
+    }
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
@@ -1719,7 +1719,7 @@ void TWrite::write(const GradualTempoChange* item, XmlWriter& xml, WriteContext&
 void TWrite::writeProperties(const TextLineBase* item, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid pid : TextLineBase::textLineBasePropertyIds()) {
-        if (!item->isStyled(pid)) {
+        if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
             writeProperty(item, xml, pid);
         }
     }
@@ -1743,20 +1743,22 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("subtype", int(item->hairpinType()));
-    writeProperty(item, xml, Pid::VELO_CHANGE);
-    writeProperty(item, xml, Pid::HAIRPIN_CIRCLEDTIP);
-    writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
-    writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
 
-    writeProperty(item, xml, Pid::VOICE_ASSIGNMENT);
-    writeProperty(item, xml, Pid::DIRECTION);
-    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
-
-    writeProperty(item, xml, Pid::SNAP_BEFORE);
-    writeProperty(item, xml, Pid::SNAP_AFTER);
-
-    writeProperty(item, xml, Pid::HAIRPIN_HEIGHT);
-    writeProperty(item, xml, Pid::HAIRPIN_CONT_HEIGHT);
+    for (Pid pid : { Pid::VELO_CHANGE,
+                     Pid::HAIRPIN_CIRCLEDTIP,
+                     Pid::SINGLE_NOTE_DYNAMICS,
+                     Pid::VELO_CHANGE_METHOD,
+                     Pid::VOICE_ASSIGNMENT,
+                     Pid::DIRECTION,
+                     Pid::CENTER_BETWEEN_STAVES,
+                     Pid::SNAP_BEFORE,
+                     Pid::SNAP_AFTER,
+                     Pid::HAIRPIN_HEIGHT,
+                     Pid::HAIRPIN_CONT_HEIGHT }) {
+        if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
+            writeProperty(item, xml, pid);
+        }
+    }
 
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
@@ -2573,11 +2575,11 @@ void TWrite::write(const Ottava* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    writeProperty(item, xml, Pid::OTTAVA_TYPE);
-    writeProperty(item, xml, Pid::PLACEMENT);
-    writeProperty(item, xml, Pid::NUMBERS_ONLY);
-//      for (const StyledProperty& spp : *styledProperties())
-//            writeProperty(xml, spp.pid);
+    for (Pid pid : { Pid::OTTAVA_TYPE, Pid::NUMBERS_ONLY }) {
+        if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
+            writeProperty(item, xml, pid);
+        }
+    }
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
@@ -2722,10 +2724,12 @@ void TWrite::write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& 
         return;
     }
     xml.startElement(item);
-    writeProperty(item, xml, Pid::VERSE);
+    for (Pid pid : { Pid::VERSE, Pid::CENTER_BETWEEN_STAVES }) {
+        if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
+            writeProperty(item, xml, pid);
+        }
+    }
     xml.tag("isEndMelisma", item->isEndMelisma());
-    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
-    writeProperty(item, xml, Pid::PLACEMENT);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
@@ -3374,9 +3378,6 @@ void TWrite::write(const TextLine* item, XmlWriter& xml, WriteContext& ctx)
     } else {
         xml.startElement(item);
     }
-    // other styled properties are included in TextLineBase pids list
-    writeProperty(item, xml, Pid::PLACEMENT);
-    writeProperty(item, xml, Pid::OFFSET);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
@@ -3481,9 +3482,12 @@ void TWrite::write(const Trill* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("subtype", TConv::toXml(item->trillType()));
-    writeProperty(item, xml, Pid::ORNAMENT_STYLE);
-    writeProperty(item, xml, Pid::PLACEMENT);
+
+    if (item->propertyFlags(Pid::ORNAMENT_STYLE) == PropertyFlags::NOSTYLE) {
+        writeProperty(item, xml, Pid::ORNAMENT_STYLE);
+    }
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
+
     if (item->ornament()) {
         write(item->ornament(), xml, ctx);
     }
@@ -3524,9 +3528,6 @@ void TWrite::write(const Vibrato* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("subtype", TConv::toXml(item->vibratoType()));
-    for (const StyledProperty& spp : *item->styledProperties()) {
-        writeProperty(item, xml, spp.pid);
-    }
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }

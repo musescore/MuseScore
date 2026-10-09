@@ -55,6 +55,7 @@ static const ElementStyle whammyBarStyle {
     { Sid::whammyBarEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::whammyBarLineWidth,                     Pid::LINE_WIDTH },
     { Sid::whammyBarText,                          Pid::BEGIN_TEXT },
+    { Sid::whammyBarPlacement,                     Pid::PLACEMENT },
 
     { Sid::whammyBarMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::whammyBarMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
@@ -169,7 +170,7 @@ Sid WhammyBar::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return Sid::ottava8VAPlacement; // TODO: fix the style
+        return Sid::whammyBarPlacement;
     case Pid::BEGIN_FONT_FACE:
         return Sid::whammyBarFontFace;
     case Pid::BEGIN_FONT_SIZE:
