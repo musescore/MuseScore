@@ -1608,6 +1608,23 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="gaita-navarra">
+                  <family>dulzainas</family>
+                  <trackName>Gaita Navarra</trackName>
+                  <longName>Gaita Navarra</longName>
+                  <shortName>Gta.</shortName>
+                  <description>Spanish double-reed folk instrument from Navarre, the Basque Country, Aragón and La Rioja.</description>
+                  <musicXMLid>wind.reed.dulzaina</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>65-88</aPitchRange>
+                  <pPitchRange>65-88</pPitchRange>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 68; MS General: Oboe-->
+                        <program value="68"/> <!--Oboe-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="piccolo-heckelphone">
                   <family>oboes</family>
                   <trackName>Piccolo Heckelphone</trackName>
