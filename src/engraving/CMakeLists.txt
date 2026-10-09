@@ -72,6 +72,7 @@ target_sources(engraving PRIVATE
     iengravingcontextconfiguration.h
     iengravingfont.h
     iengravingfontsprovider.h
+    iscoretexttranslator.h
 
     infrastructure/messagebox.cpp
     infrastructure/messagebox.h

@@ -23,10 +23,14 @@
 
 #include "translation.h"
 
+#include "modularity/ioc.h"
+
 #include "engraving/dom/barline.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/page.h"
 #include "engraving/editing/addremoveelement.h"
 #include "engraving/editing/editexcerpt.h"
@@ -37,6 +41,7 @@
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
+#include "engraving/iscoretexttranslator.h"
 
 #include "igetscore.h"
 #include "inotationnoteinput.h" // IWYU pragma: keep
@@ -766,6 +771,41 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
     notifyAboutPartReplaced(part, newPart);
 }
 
+//! If the score has its own language, returns the instrument with its default names in that language
+static Instrument instrumentInScoreLanguage(const Score* score, const Instrument& instrument)
+{
+    static muse::GlobalInject<IScoreTextTranslator> scoreTextTranslator;
+    const String language = score->masterScore()->metaTag(SCORE_TEXT_LANGUAGE_META_TAG);
+    if (language.empty() || !scoreTextTranslator()) {
+        return instrument;
+    }
+
+    const InstrumentTemplate* templ = searchTemplate(instrument.id());
+    if (!templ) {
+        return instrument;
+    }
+
+    InstrumentTemplate translatedTemplate = *templ;
+    scoreTextTranslator()->translateInstrumentNames(language, translatedTemplate);
+
+    // Only replace the names that are the default names (in the language of the interface)
+    Instrument result = instrument;
+    if (instrument.longName() == templ->instrumentName.longName()) {
+        result.setLongName(translatedTemplate.instrumentName.longName());
+    }
+    if (instrument.shortName() == templ->instrumentName.shortName()) {
+        result.setShortName(translatedTemplate.instrumentName.shortName());
+    }
+    if (instrument.trait().name == templ->trait.name) {
+        result.setTrait(translatedTemplate.trait);
+        if (!instrument.transposition().empty() && instrument.transposition() == templ->trait.name) {
+            result.setTransposition(translatedTemplate.trait.isHiddenOnScore ? String() : translatedTemplate.trait.name);
+        }
+    }
+
+    return result;
+}
+
 void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument, const StaffType* newStaffType)
 {
     TRACEFUNC;
@@ -775,12 +815,14 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
         return;
     }
 
+    const Instrument instrument = instrumentInScoreLanguage(score(), newInstrument);
+
     startEdit(TranslatableString("undoableAction", "Replace instrument"));
 
     if (isMainInstrumentForPart(instrumentKey, part)) {
-        mu::engraving::EditPart::replacePartInstrument(score(), part, newInstrument, newStaffType);
+        mu::engraving::EditPart::replacePartInstrument(score(), part, instrument, newStaffType);
     } else {
-        if (!mu::engraving::EditPart::replaceInstrumentAtTick(score(), part, instrumentKey.tick, newInstrument)) {
+        if (!mu::engraving::EditPart::replaceInstrumentAtTick(score(), part, instrumentKey.tick, instrument)) {
             rollback();
             return;
         }
@@ -1211,7 +1253,21 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
             continue;
         }
 
-        Instrument instrument = Instrument::fromTemplate(&pi.instrumentTemplate);
+        // If the score has its own language, the instruments are added with their names in that language
+        const InstrumentTemplate* instrumentTemplate = &pi.instrumentTemplate;
+        InstrumentTemplate translatedTemplate;
+        bool hasTranslatedNames = false;
+
+        static muse::GlobalInject<IScoreTextTranslator> scoreTextTranslator;
+        const String language = score()->masterScore()->metaTag(SCORE_TEXT_LANGUAGE_META_TAG);
+        if (!language.empty() && scoreTextTranslator()) {
+            translatedTemplate = pi.instrumentTemplate;
+            scoreTextTranslator()->translateInstrumentNames(language, translatedTemplate);
+            instrumentTemplate = &translatedTemplate;
+            hasTranslatedNames = true;
+        }
+
+        Instrument instrument = Instrument::fromTemplate(instrumentTemplate);
         const String& longN = instrument.longName();
         const String& shortN = instrument.shortName();
 
@@ -1222,9 +1278,15 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         part->setSoloist(pi.isSoloist);
         part->setInstrument(instrument);
 
-        part->setLongName(muse::qtrc("notation", longN));
-        part->setShortName(muse::qtrc("notation", shortN));
-        part->setTransposition(muse::qtrc("notation", transp));
+        if (hasTranslatedNames) {
+            part->setLongName(longN);
+            part->setShortName(shortN);
+            part->setTransposition(transp);
+        } else {
+            part->setLongName(muse::qtrc("notation", longN));
+            part->setShortName(muse::qtrc("notation", shortN));
+            part->setTransposition(muse::qtrc("notation", transp));
+        }
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
         part->setNumber(instrumentNumber);

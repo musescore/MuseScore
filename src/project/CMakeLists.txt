@@ -63,6 +63,10 @@ target_sources(project PRIVATE
     internal/notationproject.h
     internal/projectcreator.cpp
     internal/projectcreator.h
+    internal/instrumentnamestranslator.cpp
+    internal/instrumentnamestranslator.h
+    internal/scoretexttranslator.cpp
+    internal/scoretexttranslator.h
     internal/projectaudiosettings.cpp
     internal/projectaudiosettings.h
     internal/notationreadersregister.cpp

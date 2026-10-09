@@ -57,8 +57,23 @@ StyledDialogView {
         id: projectPropertiesModel
     }
 
+    //! The language of the score, see ProjectPropertiesModel::instrumentNamesLanguages()
+    property var instrumentNamesLanguages: []
+    property string instrumentNamesLanguage: ""
+
+    NavigationPanel {
+        id: instrumentNamesLanguageNavPanel
+
+        name: "InstrumentNamesLanguagePanel"
+        section: root.navigationSection
+        order: 3
+    }
+
     Component.onCompleted: {
         projectPropertiesModel.load()
+
+        instrumentNamesLanguages = projectPropertiesModel.instrumentNamesLanguages()
+        instrumentNamesLanguage = projectPropertiesModel.instrumentNamesLanguage()
     }
 
     ColumnLayout {
@@ -79,6 +94,44 @@ StyledDialogView {
 
             navigationPanel: root.navigationPanel
             navigationColumnStart: propertiesFileInfoPanel.navigationColumnEnd + 1
+        }
+
+        SeparatorLine {}
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.rightMargin: root.propertyRowRightMargin
+
+            spacing: root.propertyRowHorizontalSpacing
+
+            StyledTextLabel {
+                Layout.preferredWidth: root.propertyNameWidth
+
+                text: qsTrc("project/properties", "Language")
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            StyledDropdown {
+                id: instrumentNamesLanguageDropdown
+
+                Layout.fillWidth: true
+
+                model: root.instrumentNamesLanguages
+                textRole: "name"
+                valueRole: "code"
+
+                currentIndex: indexOfValue(root.instrumentNamesLanguage)
+
+                navigation.name: "InstrumentNamesLanguageDropdown"
+                navigation.panel: instrumentNamesLanguageNavPanel
+                navigation.row: 0
+                navigation.accessible.name: qsTrc("project/properties", "Language of the score") + ": " + currentText
+
+                onActivated: function(index, value) {
+                    root.instrumentNamesLanguage = value
+                    projectPropertiesModel.setInstrumentNamesLanguage(value)
+                }
+            }
         }
 
         SeparatorLine {}

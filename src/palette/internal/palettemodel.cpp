@@ -926,6 +926,9 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
 void PaletteTreeModel::retranslate()
 {
     _paletteTree->retranslate();
+
+    // Redraw the cells, whose texts may have changed
+    notifyAboutCellsChanged(Qt::DecorationRole);
 }
 
 //---------------------------------------------------------

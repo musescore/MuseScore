@@ -251,6 +251,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     singleNoteDynamics = t.singleNoteDynamics;
     sequenceOrder = t.sequenceOrder;
     trait = t.trait;
+    nameSources = t.nameSources;
     groupId = t.groupId;
     glissandoStyle = t.glissandoStyle;
     barlineSpan = t.barlineSpan;
@@ -420,6 +421,22 @@ String translateInstrumentName(const String& instrumentId, const String& nameTyp
     return muse::mtrc("engraving/instruments", text, disambiguation);
 }
 
+void applyTraitName(Trait& trait, String name)
+{
+    trait.isDefault = name.contains(u'*');
+    trait.isHiddenOnScore = name.contains(u'(') && name.contains(u')');
+    trait.name = name.remove(u'*').remove(u'(').remove(u')');
+}
+
+void applyTraitName(Trait& trait, const String& sourceName, const String& translatedName)
+{
+    applyTraitName(trait, sourceName);
+
+    Trait translatedTrait;
+    applyTraitName(translatedTrait, translatedName);
+    trait.name = translatedTrait.name;
+}
+
 void InstrumentTemplate::read(XmlReader& e)
 {
     id = e.attribute("id");
@@ -432,13 +449,16 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "longName" || tag == "name") {                   // "name" is obsolete
             int pos = e.intAttribute("pos", 0);
             UNUSED(pos);
-            instrumentName.setLongName(translateInstrumentName(id, u"longName", e.readText()));
+            nameSources.longName = e.readText();
+            instrumentName.setLongName(translateInstrumentName(id, u"longName", nameSources.longName));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
             UNUSED(pos);
-            instrumentName.setShortName(translateInstrumentName(id, u"shortName", e.readText()));
+            nameSources.shortName = e.readText();
+            instrumentName.setShortName(translateInstrumentName(id, u"shortName", nameSources.shortName));
         } else if (tag == "trackName") {
-            trackName = translateInstrumentName(id, u"trackName", e.readText());
+            nameSources.trackName = e.readText();
+            trackName = translateInstrumentName(id, u"trackName", nameSources.trackName);
         } else if (tag == "description") {
             description = translateInstrumentName(id, u"description", e.readText());
         } else if (tag == "extended") {
@@ -491,10 +511,8 @@ void InstrumentTemplate::read(XmlReader& e)
             transpose.diatonic = e.readInt();
         } else if (tag == "traitName") {
             trait.type = traitTypeFromString(e.attribute("type"));
-            String traitName = translateInstrumentName(id, u"traitName", e.readText());
-            trait.isDefault = traitName.contains(u'*');
-            trait.isHiddenOnScore = traitName.contains(u'(') && traitName.contains(u')');
-            trait.name = traitName.remove(u'*').remove(u'(').remove(u')');
+            nameSources.traitName = e.readText();
+            applyTraitName(trait, nameSources.traitName, translateInstrumentName(id, u"traitName", nameSources.traitName));
         } else if (tag == "StringData") {
             read400::TRead::read(&stringData, e);
         } else if (tag == "drumset") {
