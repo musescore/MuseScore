@@ -83,6 +83,14 @@ TEST_F(TablEdit_Tests, tef_bass) {
     tefReadTest("bass");
 }
 
+TEST_F(TablEdit_Tests, tef_capo_1) {
+    tefReadTest("capo_1");
+}
+
+TEST_F(TablEdit_Tests, tef_capo_2) {
+    tefReadTest("capo_2");
+}
+
 TEST_F(TablEdit_Tests, tef_chord_C_D) {
     tefReadTest("chord_C_D");
 }
