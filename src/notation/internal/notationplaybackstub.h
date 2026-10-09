@@ -38,6 +38,7 @@ public:
     muse::async::Channel<InstrumentTrackIdSet> tracksDataChanged() const override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
+    void setIsMetronomeEnabled(bool enabled) override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const override;
     bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const override;
 

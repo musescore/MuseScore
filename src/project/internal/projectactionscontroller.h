@@ -78,6 +78,7 @@ public:
     bool isBusy(BusyStatus status) const override;
     muse::async::Notification busyChanged() const override;
     bool hasSelection() const override;
+    bool hasRangeSelection() const override;
     muse::async::Notification hasSelectionChanged() const override;
     // --------
 
@@ -121,6 +122,7 @@ private:
     muse::Ret openProjectProperties();
 
     muse::Ret exportScore();
+    muse::Ret exportSelection();
     muse::Ret printScore();
 
     void setBusy(BusyStatus status, bool isBusy);

@@ -29,7 +29,7 @@ using namespace mu::iex::audioexport;
 using namespace muse;
 using namespace muse::io;
 
-Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     const SoundTrackFormat format {
         SoundTrackType::OGG,
@@ -42,5 +42,5 @@ Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
         128 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(notation, destinationDevice, format, options);
 }

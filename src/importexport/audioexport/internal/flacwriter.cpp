@@ -28,7 +28,7 @@ using namespace muse::audio;
 using namespace mu::iex::audioexport;
 using namespace muse::io;
 
-muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options&)
+muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options& options)
 {
     const SoundTrackFormat format {
         SoundTrackType::FLAC,
@@ -41,5 +41,5 @@ muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice&
         0 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(notation, destinationDevice, format, options);
 }
