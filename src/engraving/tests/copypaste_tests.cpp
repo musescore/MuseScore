@@ -65,13 +65,12 @@ void Engraving_CopyPasteTests::copypaste(const char* idx)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();      // src
-    Measure* m3 = m2->nextMeasure();
-    Measure* m4 = m3->nextMeasure();      // dst
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();      // src
     ASSERT_TRUE(m2);
+    Measure* m3 = m2->nextMeasure();
     ASSERT_TRUE(m3);
+    Measure* m4 = m3->nextMeasure();      // dst
     ASSERT_TRUE(m4);
 
     score->select(m2);
@@ -203,9 +202,8 @@ void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     // create a range selection on 2 and 3 beat of first measure
@@ -240,9 +238,8 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     // select 2 chord rests at the start of the first measure
@@ -356,9 +353,8 @@ TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     score->select(m1, SelectType::RANGE, 0);
@@ -396,9 +392,8 @@ void Engraving_CopyPasteTests::copypastestaff(const char* idx)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();      // src
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();      // src
     ASSERT_TRUE(m2);
 
     score->select(m2, SelectType::RANGE, 0);
@@ -465,9 +460,8 @@ void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     Segment* s = m1->first(SegmentType::ChordRest);
@@ -509,9 +503,8 @@ void Engraving_CopyPasteTests::copypastenote(const String& idx, Fraction scale)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
@@ -595,9 +588,8 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBar)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
@@ -622,9 +614,8 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitTiedNoteOverBar)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     // create a range selection on 1st to 2nd beat (voice 1) of 2nd measure
@@ -656,9 +647,8 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverManyBars)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     Segment* s = m1->first(SegmentType::ChordRest);
@@ -684,9 +674,8 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBarDrumStave)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
@@ -714,11 +703,10 @@ TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
     ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-    Measure* m3 = m2->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
+    Measure* m3 = m2->nextMeasure();
     ASSERT_TRUE(m3);
 
     // create a range selection on 2nd to 3rd beat (voice 1) of first measure
@@ -774,13 +762,12 @@ TEST_F(Engraving_CopyPasteTests, copypasteparts)
 
     // select measures 1-3
     Measure* m1 = score->firstMeasure();
-    Measure* m2 = m1->nextMeasure();
-    Measure* m3 = m2->nextMeasure();
-    Measure* m4 = m3->nextMeasure();
-
     ASSERT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
     ASSERT_TRUE(m2);
+    Measure* m3 = m2->nextMeasure();
     ASSERT_TRUE(m3);
+    Measure* m4 = m3->nextMeasure();
     ASSERT_TRUE(m4);
 
     score->select(m1);

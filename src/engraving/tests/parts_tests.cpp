@@ -103,6 +103,7 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
 
     parts.push_back(masterScore->parts().at(0));
     Score* nscore = masterScore->createScore();
+    ASSERT_TRUE(nscore);
 
     Excerpt* ex = new Excerpt(masterScore);
     ex->setExcerptScore(nscore);
@@ -111,7 +112,6 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);
-    ASSERT_TRUE(nscore);
     ex->setVoiceVisible(nscore->staff(0), 0, false);
 
     //nscore->setName(parts.front()->partName());
@@ -122,6 +122,7 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     parts.clear();
     parts.push_back(masterScore->parts().at(1));
     nscore = masterScore->createScore();
+    ASSERT_TRUE(nscore);
 
     ex = new Excerpt(masterScore);
     ex->setExcerptScore(nscore);
@@ -130,7 +131,6 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);
-    ASSERT_TRUE(nscore);
     ex->setVoiceVisible(nscore->staff(0), 0, false);
     ex->setVoiceVisible(nscore->staff(0), 1, false);
     ex->setVoiceVisible(nscore->staff(0), 2, false);
@@ -141,6 +141,7 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     parts.clear();
     parts.push_back(masterScore->parts().at(1));
     nscore = masterScore->createScore();
+    ASSERT_TRUE(nscore);
 
     ex = new Excerpt(masterScore);
     ex->setExcerptScore(nscore);
@@ -149,7 +150,6 @@ TEST_F(Engraving_PartsTests, voicesExcerpt)
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);
-    ASSERT_TRUE(nscore);
     ex->setVoiceVisible(nscore->staff(0), 1, false);
     ex->setVoiceVisible(nscore->staff(0), 2, false);
     ex->setVoiceVisible(nscore->staff(0), 3, false);
@@ -1445,7 +1445,7 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
 TEST_F(Engraving_PartsTests, staffStyles)
 {
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part1.mscx");
-    /*ASSERT_TRUE*/ ASSERT_TRUE(score);
+    ASSERT_TRUE(score);
 
     //int numOfStaffTypes = score->staffTypes().count();
     createParts(score);

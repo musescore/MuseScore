@@ -98,16 +98,16 @@ void Engraving_TupletTests::tuplet(const char16_t* p1, const char16_t* p2)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
+    ASSERT_TRUE(m2);
 
-    ASSERT_TRUE(m1 != 0);
-    ASSERT_TRUE(m2 != 0);
     EXPECT_TRUE(m1 != m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
-    ASSERT_TRUE(s != 0);
+    ASSERT_TRUE(s);
     Chord* c = toChord(s->element(0));
-    ASSERT_TRUE(c != 0);
+    ASSERT_TRUE(c);
 
     EXPECT_TRUE(createTuplet(3, c));
 

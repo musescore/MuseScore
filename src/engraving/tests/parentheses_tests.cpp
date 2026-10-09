@@ -129,6 +129,7 @@ TEST_F(Engraving_ParenthesesTests, addParen)
     Measure* m1 = score->firstMeasure();
     Chord* singleNoteChord = findChordInMeasure(m1, Fraction(0, 1), 0);
     ASSERT_TRUE(singleNoteChord);
+    ASSERT_FALSE(singleNoteChord->notes().empty());
     Note* note = singleNoteChord->notes().front();
     ASSERT_TRUE(note);
 
@@ -157,6 +158,7 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
     Measure* m1 = score->firstMeasure();
     Chord* singleNoteChordStd = findChordInMeasure(m1, Fraction(0, 1), 0);
     ASSERT_TRUE(singleNoteChordStd);
+    ASSERT_FALSE(singleNoteChordStd->notes().empty());
     Chord* singleNoteChordTab = findChordInMeasure(m1, Fraction(0, 1), 4);
     ASSERT_TRUE(singleNoteChordTab);
     Note* noteStd = singleNoteChordStd->notes().front();

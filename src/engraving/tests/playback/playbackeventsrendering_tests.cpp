@@ -2406,7 +2406,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
 
     const Note* firstTiedNote = chord->notes().front();
     ASSERT_TRUE(firstTiedNote->tieFor());
-    EXPECT_FALSE(firstTiedNote->tieBack());
+    ASSERT_FALSE(firstTiedNote->tieBack());
 
     // [WHEN] Request to render the 1st chord
     PlaybackEventsMap result;
@@ -2428,7 +2428,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
 
     const Note* lastTiedNote = chord->notes().front();
     ASSERT_TRUE(lastTiedNote->tieBack());
-    EXPECT_FALSE(lastTiedNote->tieFor());
+    ASSERT_FALSE(lastTiedNote->tieFor());
 
     // [WHEN] Request to render the 2nd chord
     result.clear();
@@ -2479,7 +2479,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote_Pla
 
     const Note* lastTiedNote = chord->notes().front();
     ASSERT_TRUE(lastTiedNote->tieBack());
-    EXPECT_FALSE(lastTiedNote->tieFor());
+    ASSERT_FALSE(lastTiedNote->tieFor());
 
     // [GIVEN] Disable tremolo playback - this simulates the user unchecking "Play tremolo"
     TremoloSingleChord* tremoloSingle = chord->tremoloSingleChord();
@@ -2506,7 +2506,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote_Pla
 
     const Note* firstTiedNote = firstChord->notes().front();
     ASSERT_TRUE(firstTiedNote->tieFor());
-    EXPECT_FALSE(firstTiedNote->tieBack());
+    ASSERT_FALSE(firstTiedNote->tieBack());
 
     // [WHEN] Request to render the first chord (without tremolo)
     PlaybackEventsMap result;

@@ -205,16 +205,16 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts
+    Score* nscore = score->createScore();
+    ASSERT_TRUE(nscore);
     score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
-    Score* nscore = score->createScore();
     Excerpt ex(score);
     ex.setExcerptScore(nscore);
     ex.setName(u"voice");
     ex.setParts(parts);
     Excerpt::createExcerpt(&ex);
-    ASSERT_TRUE(nscore);
     score->undo(new AddExcerpt(&ex));
     score->endCmd();
 
@@ -304,16 +304,16 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(e->links()->size() == 2);
 
     // create parts
+    Score* nscore = score->createScore();
+    ASSERT_TRUE(nscore);
     score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
-    Score* nscore = score->createScore();
     Excerpt ex(score);
     ex.setExcerptScore(nscore);
     ex.setName(u"Guitar");
     ex.setParts(parts);
     Excerpt::createExcerpt(&ex);
-    ASSERT_TRUE(nscore);
     //nscore->setName(parts.front()->partName());
     score->undo(new AddExcerpt(&ex));
     score->endCmd();
@@ -409,16 +409,16 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts//
+    Score* nscore = score->createScore();
+    ASSERT_TRUE(nscore);
     score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
-    Score* nscore = score->createScore();
     Excerpt ex(score);
     ex.setExcerptScore(nscore);
     ex.setName(u"Guitar");
     ex.setParts(parts);
     Excerpt::createExcerpt(&ex);
-    ASSERT_TRUE(nscore);
     score->undo(new AddExcerpt(&ex));
     score->endCmd();
 
@@ -500,9 +500,7 @@ TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
     ASSERT_TRUE(tempoText);
 
     // Make element invisible
-    if (tempoText) {
-        tempoText->undoSetVisible(false);
-    }
+    tempoText->undoSetVisible(false);
 
     // Check we have a linked item in the MMR
     EXPECT_EQ(tempoText->linkList().size(), 2);
