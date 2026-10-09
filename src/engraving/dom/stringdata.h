@@ -23,8 +23,11 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <vector>
 #include <map>
+#include <utility>
+#include <tuple>
 
 #include "../types/fraction.h"
 #include "../types/types.h"
@@ -87,20 +90,42 @@ public:
     bool        useFlats() const { return m_useFlats; }
 
 private:
-
     int         fret(int pitch, int string, int pitchOffset) const;
+    int         scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const;
+    int         resolveForcedString(const Note* note) const;
+    void        assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, const std::pair<int, int>& bassFretting) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const;
     void        sortChordNotesUseSameString(const Chord* chord) const;
     bool        hasPendingPitchChange(const Chord* chord) const;
     void        updateFretsOnSameStrings(const Chord* chord) const;
     void        preferBassStringForNegativeFret(const Chord* chord) const;
     void        reassignNegativeFretNotes(const Chord* chord) const;
+    void        assignBestFrettingForBassNote(std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const;
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
+    bool        stringSupportsGlissando(const Note* note, int candidateString) const;
+    bool        fretReachableFromAll(int candidate, const std::vector<int>& placedFrets) const;
 
-    //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
-    //      int         _frets = 19;
+    Note* glissandoFrom(const Note* note) const;
+    Note* glissandoTo(const Note* note) const;
+    Note* getBassNote(const Chord* chord) const;
+    Note* getBassNoteOfVoicings(const Chord* chord) const;
+
+    Chord* findPrecedingChordAcrossRests(Chord* chord) const;
+
+    std::vector<std::pair<int, int> > allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const;
+    std::vector<Note*> collectNotesAtSameTick(const Chord* chord) const;
+    std::pair<Note*, std::pair<int, int> > getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const;
+    std::pair<int, int> defaultFretboardAnchor() const;
+    std::pair<int, int> findLastNonOpenAnchor(Chord* chord) const;
+
     std::vector<instrString> m_stringTable;                      // no strings by default
+
+    static constexpr int MAX_FRET_SPAN = 4; // reasonable amount that a hand can stretch for a chord
+    static constexpr int DEFAULT_ANCHOR_FRET = 7;
+    // approximate middle of the fretboard for most fretted instruments
+    // this is technically a magic number, however it functions as an incredibly powerful heuristic
+
     int m_frets = 0;
 
     static bool bFretting;
