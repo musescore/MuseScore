@@ -459,9 +459,10 @@ void EditSystemLocks::updateLayoutBreaksOnAddSystemLock(Transaction& tx, const R
             mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
         }
 
-        if (mb->isStartOfPageLock()) {
+        if (mb != lock->startMB() && mb->isStartOfPageLock()) {
             // Page lock starting within range of new system lock
             // Move start of page lock to measure following end of system lock
+            // (a page lock starting together with the system lock does not conflict with it)
             const RangeLock* pageLock = mb->pageLock();
             MeasureBase* pageLockEndMB = pageLock->endMB();
 

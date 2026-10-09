@@ -93,7 +93,6 @@ void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ld
             text = new TappingText(item);
         }
         item->setText(text);
-        text->setOwnershipParent(item);
         text->setTrack(item->track());
         text->setXmlText("T");
         text->setFrameType(FrameType::CIRCLE);
@@ -218,7 +217,6 @@ void TappingLayout::layoutRightHandTapping(Tapping* item, Tapping::LayoutData* l
             text = new TappingText(item);
         }
         item->setText(text);
-        text->setOwnershipParent(item);
         text->setTrack(item->track());
         text->setXmlText("T");
         text->setAlign(Align(AlignH::LEFT, AlignV::BASELINE));

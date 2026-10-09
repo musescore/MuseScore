@@ -15,4 +15,6 @@ IF NOT "%1" == "" GOTO GETOPTS
 
 ECHO "Try sign FILE_PATH: %FILE_PATH%"
 
-bash ./buildscripts/ci/windows/sign_service_aws.sh --s3_key %SIGN_KEY% --s3_secret %SIGN_SECRET% --file_path %FILE_PATH%
+bash ./buildscripts/ci/windows/sign_service_aws.sh --s3_key %SIGN_KEY% --s3_secret %SIGN_SECRET% --file_path %FILE_PATH% || EXIT /b 1
+
+EXIT /b 0

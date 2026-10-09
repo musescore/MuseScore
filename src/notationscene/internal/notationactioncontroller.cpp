@@ -530,6 +530,9 @@ void NotationActionController::init()
     registerCommand(RESET_SHAPES_AND_POSITIONS_COMMAND, &Interaction::resetShapesAndPosition);
     registerCommand(RESET_TO_DEFAULT_LAYOUT_COMMAND, &Interaction::resetToDefaultLayout);
 
+    // appearance commands
+    registerCommand(FREEZE_CURRENT_PLACEMENT_COMMAND, &Interaction::freezeSelectionPosition);
+
     // show commands
     registerCommand(SHOW_INVISIBLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
     registerCommand(SHOW_UNPRINTABLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
@@ -920,6 +923,7 @@ void NotationActionController::init()
             { "reset-beammode", RESET_BEAMS_COMMAND, {} },
             { "reset", RESET_SHAPES_AND_POSITIONS_COMMAND, {} },
             { "reset-to-default-layout", RESET_TO_DEFAULT_LAYOUT_COMMAND, {} },
+            { "freeze-current-placement", FREEZE_CURRENT_PLACEMENT_COMMAND, {} },
             { "show-invisible", SHOW_INVISIBLE_COMMAND, {} },
             { "show-unprintable", SHOW_UNPRINTABLE_COMMAND, {} },
             { "show-frames", SHOW_FRAMES_COMMAND, {} },
@@ -1168,7 +1172,7 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
     }
 
     // All actions are disabled on the review page
-    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
+    if (interactive() && interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
         return false;
     }
 

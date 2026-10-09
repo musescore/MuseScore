@@ -409,7 +409,6 @@ void Cursor::add(EngravingItem* wrapped)
         mu::engraving::Segment* destSeg = measure->undoGetSegmentR(st, rt);
         clef->setOwnershipParent(destSeg);
         clef->setTrack(m_track);
-        clef->setIsHeader(st == SegmentType::HeaderClef);
         m_score->undoAddElement(clef);
         break;
     }
@@ -563,7 +562,6 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
     m_score->changeCRlen(cr, fDuration);
 
     mu::engraving::Tuplet* tuplet = new mu::engraving::Tuplet(tupletMeasure);
-    tuplet->setOwnershipParent(tupletMeasure);
     tuplet->setTrack(track());
     tuplet->setTick(tupletTick);
     tuplet->setRatio(fRatio);

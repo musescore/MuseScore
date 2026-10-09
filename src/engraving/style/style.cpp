@@ -350,8 +350,8 @@ void MStyle::applyCompatStyleVals(int mscVersion)
         set(Sid::vocalsNameByGroup, false);
         set(Sid::maskSlurs, false);
         set(Sid::maskTies, false);
-
         set(Sid::dashBarWidth, value(Sid::barWidth));
+        set(Sid::lyricsStackingOrder, int(LyricsStackingOrder::LYRICS_AFTER_PEDALS));
     }
 
     if (mscVersion < 470) {

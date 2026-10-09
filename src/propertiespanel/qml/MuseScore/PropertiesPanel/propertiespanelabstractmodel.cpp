@@ -383,6 +383,18 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
 {
     PropertiesPanelSectionTypeSet types;
 
+    static const std::unordered_set<ElementType> boxTypes {
+        ElementType::HBOX,
+        ElementType::VBOX,
+        ElementType::TBOX,
+        ElementType::FBOX,
+    };
+
+    static const PropertiesPanelSectionTypeSet measureBaseModels {
+        PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT,
+        PropertiesPanelSectionType::SECTION_EMPTY_STAVES,
+    };
+
     for (const ElementKey& key : elementKeySet) {
         if (NOTATION_ELEMENT_MODEL_TYPES.contains(key.type)
             && (modelTypeByElementKey(key) != PropertiesPanelModelType::TYPE_UNDEFINED)) {
@@ -402,12 +414,18 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
         if (key.type != mu::engraving::ElementType::INSTRUMENT_NAME) {
             types << PropertiesPanelSectionType::SECTION_GENERAL;
         }
+
+        if (boxTypes.contains(key.type)) {
+            types.insert(measureBaseModels.begin(), measureBaseModels.end());
+        }
     }
 
     if (isRange) {
-        types << PropertiesPanelSectionType::SECTION_MEASURES;
-        types << PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT;
-        types << PropertiesPanelSectionType::SECTION_EMPTY_STAVES;
+        if (!selectedElementList.empty()) {
+            //! NOTE: "Box only" selections will be empty...
+            types << PropertiesPanelSectionType::SECTION_MEASURES;
+        }
+        types.insert(measureBaseModels.begin(), measureBaseModels.end());
     }
 
     if (showPartsSection(selectedElementList)) {

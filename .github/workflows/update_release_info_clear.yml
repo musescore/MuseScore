@@ -29,7 +29,7 @@ jobs:
 
           bash ./buildscripts/ci/release/make_empty_release_info_file.sh
 
-          bash ./buildscripts/ci/tools/s3_push_file.sh \
+          bash ./muse/buildscripts/ci/tools/s3_push_file.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_URL} \

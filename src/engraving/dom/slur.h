@@ -76,7 +76,7 @@ class Slur : public SlurTie
     DECLARE_CLASSOF(ElementType::SLUR)
 
 public:
-    Slur(EngravingItem* parent, ElementType type = ElementType::SLUR);
+    Slur(DummyParentOr<EngravingItem> parent, ElementType type = ElementType::SLUR);
     Slur(const Slur&);
 
     Anchor anchor() const override { return Anchor::CHORDREST; }

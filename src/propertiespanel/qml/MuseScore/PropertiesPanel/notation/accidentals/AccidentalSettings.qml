@@ -54,7 +54,7 @@ Column {
         model: [
             { text: qsTrc("propertiespanel", "None", "bracket type"), value: AccidentalTypes.BRACKET_TYPE_NONE },
             { iconCode: IconCode.BRACKET_PARENTHESES, value: AccidentalTypes.BRACKET_TYPE_PARENTHESIS, title: qsTrc("propertiespanel", "Parentheses", "bracket type") },
-            { iconCode: IconCode.BRACKET_PARENTHESES_SQUARE, value: AccidentalTypes.BRACKET_TYPE_SQUARE, title: qsTrc("propertiespanel", "Brackets", "bracket type") }
+            { iconCode: IconCode.BRACKET_PARENTHESES_SQUARE, value: AccidentalTypes.BRACKET_TYPE_BRACKET, title: qsTrc("propertiespanel", "Brackets", "bracket type") }
         ]
     }
 

@@ -42,6 +42,7 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
 
+#include "engraving/editing/autospatium.h"
 #include "engraving/editing/editkeysig.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -248,7 +249,7 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
         measure->adjustToLen(scoreOptions.withPickupMeasure ? scoreOptions.pickupTimesig : scoreOptions.globalTimesig);
 
         // Add timesigs...
-        TimeSig* timesig = Factory::createTimeSig(masterScore->dummy()->segment());
+        TimeSig* timesig = Factory::createTimeSig(masterScore->dummy());
         timesig->setSig(scoreOptions.globalTimesig, scoreOptions.timesigType);
         Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
         EditTimeSig::addTimeSig(tx, masterScore, measure, /*staffIdx*/ 0, timesig, /*local*/ false);
@@ -449,7 +450,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     }
 
     score->updateTicksAndTimeSigMap();
-    score->autoUpdateSpatium();
+    AutoSpatium::update(score);
 
     {
         mu::engraving::ScoreLoad sl;

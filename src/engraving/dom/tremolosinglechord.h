@@ -93,7 +93,7 @@ public:
 private:
     friend class Factory;
 
-    TremoloSingleChord(Chord* parent);
+    TremoloSingleChord(DummyParentOr<Chord> parent);
     TremoloSingleChord(const TremoloSingleChord&);
 
     TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;

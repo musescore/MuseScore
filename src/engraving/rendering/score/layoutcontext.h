@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <set>
+#include <unordered_set>
 
 #include "../../types/fraction.h"
 #include "../../types/types.h"
@@ -54,6 +55,7 @@
 #endif
 
 namespace mu::engraving {
+class DummyParent;
 class EngravingItem;
 class MeasureBase;
 class Part;
@@ -74,10 +76,6 @@ class UndoableCommand;
 class EditData;
 
 class Selection;
-}
-
-namespace mu::engraving::compat {
-class DummyElement;
 }
 
 namespace mu::engraving::rendering::score {
@@ -201,7 +199,7 @@ public:
     // Create/Remove
     const Score* score() const;
     Score* score();
-    compat::DummyElement* dummyParent() const;
+    DummyParent* dummyParent() const;
     void doUndoAddElement(EngravingItem*);
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);
@@ -249,6 +247,8 @@ public:
 
     bool rangeDone() const { return m_rangeDone; }
 
+    const std::unordered_set<System*>& systemsNeedingCentering() const { return m_systemsNeedingCentering; }
+
     bool mustRecomputeHeadersFooters() const { return m_mustRecomputeHeadersFooters; }
 
     double totalBracketsWidth() const { return m_totalBracketsWidth; }
@@ -286,6 +286,10 @@ public:
 
     void setRangeDone(bool val) { m_rangeDone = val; }
 
+    void addSystemNeedingCentering(System* s) { m_systemsNeedingCentering.insert(s); }
+    void removeSystemNeedingCentering(System* s) { m_systemsNeedingCentering.erase(s); }
+    void clearSystemsNeedingCentering() { m_systemsNeedingCentering.clear(); }
+
     void setMustRecomputeHeadersFooters(bool val) { m_mustRecomputeHeadersFooters = val; }
 
     void setTotalBracketsWidth(double val) { m_totalBracketsWidth = val; }
@@ -316,6 +320,8 @@ private:
     int m_measureNumber = 0;
 
     bool m_rangeDone = false;
+
+    std::unordered_set<System*> m_systemsNeedingCentering; // systems which have been laid out and still need SystemLayout::centerElementsBetweenStaves
 
     bool m_mustRecomputeHeadersFooters = false; // we may need to re-compute headers/footers after laying out all pages if they contained a page count
 

@@ -57,7 +57,7 @@ class Image final : public BSymbol
     muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
 
 public:
-    Image(EngravingItem* parent);
+    Image(DummyParentOr<EngravingItem> parent);
     Image(const Image&);
     ~Image();
 

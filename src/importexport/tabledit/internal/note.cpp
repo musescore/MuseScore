@@ -80,7 +80,6 @@ EffectType TefNote::combinationEffect() const
     case 0xB0: return EffectType::VARIATION;
     default: return EffectType::INVALID;
     }
-    return EffectType::NONE;  // not reached
 }
 
 // return TablEdit note length in 64th (including triplets rounded down to nearest note length)

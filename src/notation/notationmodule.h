@@ -24,18 +24,20 @@
 #include <memory>
 
 #include "modularity/imodulesetup.h"
+#include "global/async/asyncable.h"
 
 namespace mu::notation {
 class NotationConfiguration;
 class InstrumentsRepository;
 class EngravingFontsController;
-class NotationModule : public muse::modularity::IModuleSetup
+class NotationModule : public muse::modularity::IModuleSetup, public muse::async::Asyncable
 {
 public:
     std::string moduleName() const override;
 
     void registerExports() override;
     void resolveImports() override;
+    void registerApi() override;
     void onInit(const muse::IApplication::RunMode&) override;
 
     muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;

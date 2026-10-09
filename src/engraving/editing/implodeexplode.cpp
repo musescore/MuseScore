@@ -322,7 +322,7 @@ bool ImplodeExplode::implode(Score* score)
                                 for (Note* tn : tied->notes()) {
                                     if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
                                         // found note to tie
-                                        Tie* tie = Factory::createTie(score->dummy());
+                                        Tie* tie = Factory::createTie(tn);
                                         tie->setStartNote(tn);
                                         tie->setEndNote(nn);
                                         tie->setTick(tie->startNote()->tick());

@@ -42,7 +42,7 @@ static const ElementStyle stickingStyle {
 //   Sticking
 //---------------------------------------------------------
 
-Sticking::Sticking(Segment* parent)
+Sticking::Sticking(DummyParentOr<Segment> parent)
     : TextBase(ElementType::STICKING, parent, TextStyleType::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&stickingStyle);

@@ -192,8 +192,9 @@ case $TARGET in
 
         mkdir -p build.release
         cd build.release
-        do_build RELEASE
-        ninja install
+        do_build RelWithDebInfo
+
+        ninja install/strip
 
         build_dir="$(pwd)"
         install_dir="$(cat $build_dir/PREFIX.txt)"

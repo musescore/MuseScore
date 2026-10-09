@@ -32,7 +32,7 @@ class Ornament final : public Articulation
     DECLARE_CLASSOF(ElementType::ORNAMENT)
 
 public:
-    Ornament(ChordRest* parent);
+    Ornament(DummyParentOr<ChordRest> parent);
     Ornament* clone() const override { return new Ornament(*this); }
     Ornament(const Ornament& o);
     ~Ornament();

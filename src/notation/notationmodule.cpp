@@ -23,6 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "project/inotationwritersregister.h"
+#include "global/api/ifilesystemapirestriction.h"
 
 #include "internal/notationconfiguration.h"
 #include "internal/notationcontextconfiguration.h"
@@ -65,6 +66,17 @@ void NotationModule::resolveImports()
         writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
         writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
         writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
+    }
+}
+
+void NotationModule::registerApi()
+{
+    auto fsRestriction = globalIoc()->resolve<muse::api::IFileSystemApiRestriction>(moduleName());
+    if (fsRestriction) {
+        fsRestriction->addAllowedPathBase("userStylesPath", m_configuration->userStylesPath());
+        m_configuration->userStylesPathChanged().onReceive(this, [fsRestriction](const muse::io::path_t& path) {
+            fsRestriction->addAllowedPathBase("userStylesPath", path);
+        });
     }
 }
 

@@ -76,6 +76,7 @@ public:
     //! Detach from the current system's segment list and attach to the given one.
     void moveToSystem(System* s);
     EngravingItem* layoutParent() const override;
+    EngravingItem* accessibleParentItem() const override;
 
     //! A segment is owned by its spanner; a system merely places it, see
     //! setSystem()/moveToSystem(). This overload hides EngravingItem::setOwnershipParent,
@@ -285,7 +286,7 @@ public:
 
 protected:
 
-    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const ElementType& type, EngravingObject* parent, ElementFlags = ElementFlag::NOTHING);
     Spanner(const Spanner&);
 
     virtual void doComputeStartElement();

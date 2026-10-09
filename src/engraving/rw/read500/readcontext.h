@@ -34,6 +34,7 @@
 
 namespace mu::engraving {
 class Beam;
+class DummyParent;
 class EngravingObject;
 class LinkedObjects;
 class Measure;
@@ -42,10 +43,6 @@ class Score;
 class Spanner;
 class Staff;
 class Tuplet;
-}
-
-namespace mu::engraving::compat {
-class DummyElement;
 }
 
 namespace mu::engraving::read500 {
@@ -83,7 +80,7 @@ public:
     bool forcePageMode() const { return m_forcePageMode; }
     void setForcePageMode(bool v) { m_forcePageMode = v; }
 
-    compat::DummyElement* dummy() const;
+    DummyParent* dummy() const;
 
     Staff* staff(staff_idx_t n);
 

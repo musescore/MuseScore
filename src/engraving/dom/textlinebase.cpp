@@ -44,8 +44,6 @@ TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, TextLineBase* 
 {
     m_text    = Factory::createText(this, TextStyleType::DEFAULT, false);
     m_endText = Factory::createText(this, TextStyleType::DEFAULT, false);
-    m_text->setOwnershipParent(this);
-    m_endText->setOwnershipParent(this);
     m_text->setFlag(ElementFlag::MOVABLE, false);
     m_endText->setFlag(ElementFlag::MOVABLE, false);
 }
@@ -214,7 +212,7 @@ EngravingObject* TextLineBaseSegment::propertyDelegate(Pid pid) const
 //   TextLineBase
 //---------------------------------------------------------
 
-TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
+TextLineBase::TextLineBase(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : SLine(type, parent, f)
 {
     setBeginHookHeight(1.9_sp);

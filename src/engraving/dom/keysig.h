@@ -101,7 +101,7 @@ public:
 private:
     friend class Factory;
 
-    KeySig(Segment* = 0);
+    KeySig(DummyParentOr<Segment>);
     KeySig(const KeySig&);
 
     void addLayout(SymId sym, int line);

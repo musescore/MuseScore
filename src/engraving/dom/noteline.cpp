@@ -79,7 +79,7 @@ EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
     return TextLineBaseSegment::propertyDelegate(pid);
 }
 
-NoteLine::NoteLine(EngravingItem* parent)
+NoteLine::NoteLine(EngravingObject* parent)
     : TextLineBase(ElementType::NOTELINE, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&noteLineStyle);

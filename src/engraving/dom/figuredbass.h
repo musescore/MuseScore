@@ -198,7 +198,7 @@ private:
 
     friend class FiguredBass;
 
-    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
+    FiguredBassItem(FiguredBass* parent, int line = 0);
     FiguredBassItem(const FiguredBassItem&);
 
     // part parsing
@@ -321,7 +321,7 @@ public:
 private:
 
     friend class Factory;
-    FiguredBass(Segment* parent = 0);
+    FiguredBass(DummyParentOr<Segment> parent);
     FiguredBass(const FiguredBass&);
 
     Sid getPropertyStyle(Pid) const override;

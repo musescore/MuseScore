@@ -580,7 +580,6 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         }
 
         Note* note = Factory::createNote(chord);
-        note->setOwnershipParent(chord);
         note->setTrack(chord->track());
         note->setNval(nval, tick);
         undoAddElement(note);
@@ -589,7 +588,6 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             Accidental* a = Factory::createAccidental(note);
             a->setAccidentalType(m_is.accidentalType());
             a->setRole(AccidentalRole::USER);
-            a->setOwnershipParent(note);
             undoAddElement(a);
         }
         if (on->tieBack() && prevTied) {
@@ -603,7 +601,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
         Tie* tieFor = on->tieFor();
         if (tieFor) {
-            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()->note()) : Factory::createTie(this->dummy());
+            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(note) : Factory::createTie(note);
             tie->setStartNote(note);
             tie->setTick(note->tick());
             tie->setTrack(note->track());
@@ -643,7 +641,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
 Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 {
-    Chord* chord = Factory::createChord(this->dummy()->segment());
+    Chord* chord = Factory::createChord(this->dummy());
     Note* note = Factory::createNote(chord);
 
     // allow grace notes to be added to other grace notes
@@ -746,7 +744,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
     }
 
-    GuitarBend* bend = new GuitarBend(score()->dummy()->note());
+    GuitarBend* bend = new GuitarBend(score()->dummy());
     bend->setTick(chord->tick());
     bend->setTrack(chord->track());
 
@@ -853,7 +851,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
             for (unsigned int i = 0; i < oc->notes().size(); ++i) {
                 Note* on = oc->notes()[i];
                 Note* nn = nc->notes()[i];
-                Tie* tie = Factory::createTie(this->dummy());
+                Tie* tie = Factory::createTie(on);
                 tie->setStartNote(on);
                 tie->setEndNote(nn);
                 tie->setTick(tie->startNote()->tick());
@@ -934,19 +932,19 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             Note* note = nullptr;
             Tie* addTie = nullptr;
             if (isRest) {
-                nr = ncr = Factory::createRest(this->dummy()->segment());
+                nr = ncr = Factory::createRest(this->dummy());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
                 ncr->setTicks(d.isMeasure() ? measure->ticks() * timeStretch : d.fraction());
             } else {
-                nr = note = Factory::createNote(this->dummy()->chord());
+                nr = note = Factory::createNote(this->dummy());
 
                 if (tie) {
                     tie->setEndNote(note);
                     note->setTieBack(tie);
                     addTie = tie;
                 }
-                Chord* chord = Factory::createChord(this->dummy()->segment());
+                Chord* chord = Factory::createChord(this->dummy());
                 chord->setTrack(track);
                 chord->setDurationType(d);
                 chord->setTicks(d.fraction());
@@ -971,7 +969,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 
                 ncr = chord;
                 if (i + 1 < n) {
-                    tie = Factory::createTie(this->dummy());
+                    tie = Factory::createTie(note);
                     tie->setStartNote(note);
                     tie->setTick(tie->startNote()->tick());
                     tie->setTrack(track);
@@ -981,7 +979,6 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             if (tuplet) {
                 ncr->setTuplet(tuplet);
             }
-            tuplet = 0;
             undoAddCR(ncr, measure, tick);
 
             if (shouldPreserveLyrics && !lyricsPreserved) {
@@ -1036,7 +1033,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
         //  Note does not fit on current measure, create Tie to
         //  next part of note
         if (!isRest) {
-            tie = Factory::createTie(this->dummy());
+            tie = Factory::createTie((Note*)nr);
             tie->setStartNote((Note*)nr);
             tie->setTick(tie->startNote()->tick());
             tie->setTrack(nr->track());
@@ -1698,23 +1695,23 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
     std::vector<MeasureBase*> mbl;
     bool allNoBreaks = true; // NOBREAK is not removed unless every measure in selection already has one
     if (selection().isRange()) {
-        Measure* startMeasure = nullptr;
-        Measure* endMeasure = nullptr;
-        if (!selection().measureRange(&startMeasure, &endMeasure)) {
+        MeasureBase* startMeasureBase = nullptr;
+        MeasureBase* endMeasureBase = nullptr;
+        if (!selection().measureBaseRange(&startMeasureBase, &endMeasureBase)) {
             return;
         }
-        if (!startMeasure || !endMeasure) {
+        if (!startMeasureBase || !endMeasureBase) {
             return;
         }
         if (type == LayoutBreakType::NOBREAK) {
             // add throughout the selection
             // or remove if already on every measure
-            if (startMeasure == endMeasure) {
-                mbl.push_back(startMeasure);
-                allNoBreaks = startMeasure->noBreak();
+            if (startMeasureBase == endMeasureBase) {
+                mbl.push_back(startMeasureBase);
+                allNoBreaks = startMeasureBase->noBreak();
             } else {
-                for (Measure* m = startMeasure; m; m = m->nextMeasureMM()) {
-                    if (m == endMeasure) {
+                for (MeasureBase* m = startMeasureBase; m; m = m->nextMM()) {
+                    if (m == endMeasureBase) {
                         break;
                     }
                     mbl.push_back(m);
@@ -1725,11 +1722,11 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             }
         } else {
             // toggle break on the last measure of the range
-            mbl.push_back(endMeasure);
+            mbl.push_back(endMeasureBase);
             // if more than one measure selected,
             // also toggle break *before* the range (to try to fit selection on a single line)
-            if (startMeasure != endMeasure && startMeasure->prev()) {
-                mbl.push_back(startMeasure->prev());
+            if (startMeasureBase != endMeasureBase && startMeasureBase->prev()) {
+                mbl.push_back(startMeasureBase->prev());
             }
         }
     } else {

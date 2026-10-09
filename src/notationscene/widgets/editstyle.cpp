@@ -419,6 +419,9 @@ void EditStyle::classBegin()
         { StyleId::lyricsMelismaForce,      false, lyricsMelismaForce,   resetLyricsMelismaForce },
         { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
         { StyleId::lyricsAvoidBarlines, false, lyricsAvoidBarlines, resetLyricsAvoidBarlines },
+        { StyleId::lyricsAutoCenterOnGrandStaff, false, lyricsAutoCenterOnGrandStaff, resetLyricsAutoCenterOnGrandStaff },
+        { StyleId::lyricsAutoCenterOnVocalStaves, false, lyricsAutoCenterOnVocalStaves, resetLyricsAutoCenterOnVocalStaves },
+        { StyleId::lyricsStackingOrder,    false, lyricsUseLegacyStackingOrder, resetLyricsStackingOrder },
         { StyleId::lyricsLimitDashCount, false, limitDashCount, 0 },
         { StyleId::lyricsMaxDashCount, false, lyricsMaxDashCount, resetLyricsMaxDashCount },
         { StyleId::lyricsCenterDashedSyllables, false, lyricsCenterDashedSyllables, lyricsResetCenterDashedSyllables },
@@ -646,6 +649,7 @@ void EditStyle::classBegin()
 
         { StyleId::dynamicsHairpinVoiceBasedPlacement, false, dynamicsAndHairpinPos, resetDynamicsAndHairpinPos },
         { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff, false, dynamicsAndHairpinsCenterOnGrandStaff, 0 },
+        { StyleId::dynamicsHairpinsAutoCenterOnVocalStaves, false, dynamicsAndHairpinsCenterOnVocalStaves, 0 },
         { StyleId::dynamicsHairpinsAboveForVocalStaves, false, dynamicsAndHairpinsAboveOnVocalStaves, 0 },
 
         { StyleId::tempoPlacement,          false, tempoTextPlacement,          resetTempoTextPlacement },
@@ -1850,7 +1854,11 @@ PropertyValue EditStyle::getValue(StyleId idx)
     case P_TYPE::TIMESIG_STYLE:
     case P_TYPE::TIMESIG_MARGIN:
     case P_TYPE::INT: {
-        if (qobject_cast<QComboBox*>(sw.widget)) {
+        if (sw.idx == StyleId::lyricsStackingOrder) { // special case for enum represented by a checkbox
+            return int(sw.widget->property("checked").toBool()
+                       ? LyricsStackingOrder::LYRICS_AFTER_PEDALS
+                       : LyricsStackingOrder::LYRICS_BEFORE_DYNAMICS);
+        } else if (qobject_cast<QComboBox*>(sw.widget)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             return cb->currentData().toInt();
         } else if (qobject_cast<QSpinBox*>(sw.widget)) {
@@ -1988,7 +1996,9 @@ void EditStyle::setValues()
         case P_TYPE::TIMESIG_MARGIN:
         case P_TYPE::INT: {
             int value = val.toInt();
-            if (qobject_cast<QComboBox*>(sw.widget)) {
+            if (sw.idx == StyleId::lyricsStackingOrder) { // special case for enum represented by a checkbox
+                sw.widget->setProperty("checked", value == int(LyricsStackingOrder::LYRICS_AFTER_PEDALS));
+            } else if (qobject_cast<QComboBox*>(sw.widget)) {
                 QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
                 cb->setCurrentIndex(cb->findData(value));
             } else if (qobject_cast<QSpinBox*>(sw.widget)) {
@@ -2179,6 +2189,7 @@ bool EditStyle::hasDefaultStyleValue(StyleId id) const
 bool EditStyle::dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue() const
 {
     return hasDefaultStyleValue(StyleId::dynamicsHairpinsAutoCenterOnGrandStaff)
+           && hasDefaultStyleValue(StyleId::dynamicsHairpinsAutoCenterOnVocalStaves)
            && hasDefaultStyleValue(StyleId::dynamicsHairpinsAboveForVocalStaves)
            && hasDefaultStyleValue(StyleId::dynamicsHairpinVoiceBasedPlacement);
 }
@@ -2388,7 +2399,7 @@ void EditStyle::valueChanged(int i)
     }
 
     if (idx == StyleId::dynamicsHairpinVoiceBasedPlacement || idx == StyleId::dynamicsHairpinsAutoCenterOnGrandStaff
-        || idx == StyleId::dynamicsHairpinsAboveForVocalStaves) {
+        || idx == StyleId::dynamicsHairpinsAutoCenterOnVocalStaves || idx == StyleId::dynamicsHairpinsAboveForVocalStaves) {
         resetDynamicsAndHairpinPos->setEnabled(!dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue());
     }
 
@@ -2431,7 +2442,9 @@ void EditStyle::resetStyleValue(int i)
 
     setStyleValue(idx, defaultStyleValue(idx));
     if (idx == StyleId::dynamicsHairpinVoiceBasedPlacement) {
-        for (StyleId id : { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff, StyleId::dynamicsHairpinsAboveForVocalStaves }) {
+        for (StyleId id : { StyleId::dynamicsHairpinsAutoCenterOnGrandStaff,
+                            StyleId::dynamicsHairpinsAutoCenterOnVocalStaves,
+                            StyleId::dynamicsHairpinsAboveForVocalStaves }) {
             setStyleValue(id, defaultStyleValue(id));
         }
     }

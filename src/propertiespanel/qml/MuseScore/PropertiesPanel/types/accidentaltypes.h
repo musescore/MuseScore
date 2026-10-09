@@ -24,15 +24,17 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/dom/accidental.h"
+
 namespace mu::propertiespanel {
 namespace AccidentalTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class BracketType {
-    BRACKET_TYPE_NONE = 0,
-    BRACKET_TYPE_PARENTHESIS,
-    BRACKET_TYPE_SQUARE,
+    BRACKET_TYPE_NONE = int(engraving::AccidentalBracket::NONE),
+    BRACKET_TYPE_PARENTHESIS = int(engraving::AccidentalBracket::PARENTHESIS),
+    BRACKET_TYPE_BRACKET = int(engraving::AccidentalBracket::BRACKET)
 };
 
 Q_ENUM_NS(BracketType)

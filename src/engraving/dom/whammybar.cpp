@@ -75,7 +75,7 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp)
 //   WhammyBar
 //---------------------------------------------------------
 
-WhammyBar::WhammyBar(EngravingItem* parent)
+WhammyBar::WhammyBar(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::WHAMMY_BAR, parent)
 {
     initElementStyle(&whammyBarStyle);

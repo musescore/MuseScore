@@ -533,14 +533,12 @@ void setMusicNotesFromMidi(Score*,
     }
 }
 
-void setTies(Chord* chord,
-             Score* score,
-             QList<MidiNote>& midiNotes)
+void setTies(Chord* chord, QList<MidiNote>& midiNotes)
 {
     for (int i = 0; i < midiNotes.size(); ++i) {
         const MidiNote& midiNote = midiNotes[i];
         Note* note = chord->findNote(midiNote.pitch);
-        midiNotes[i].tie = new Tie(score->dummy());
+        midiNotes[i].tie = new Tie(note);
         midiNotes[i].tie->setStartNote(note);
         note->setTieFor(midiNotes[i].tie);
     }
@@ -608,7 +606,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& midiChords,
                 --k;
                 continue;
             }
-            setTies(chord, score, midiChord.notes);
+            setTies(chord, midiChord.notes);
         }
         startChordTick += len;
     }

@@ -256,7 +256,6 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
                     }
                     Lyrics* lyric = Factory::createLyrics(cr);
                     lyric->setTrack(cr->track());
-                    lyric->setOwnershipParent(cr);
                     lyric->setVerse(verse);
                     lyric->setXmlText(String::fromStdString(it->second.text()));
                     lyric->setSyllabic(toMuseScoreLyricsSyllabic(it->second.type()));
@@ -272,7 +271,6 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
                 }
                 Lyrics* lyric = Factory::createLyrics(cr);
                 lyric->setTrack(cr->track());
-                lyric->setOwnershipParent(cr);
                 int verse = 0;
                 if (staffIt != m_lyricLineToVerse.end()) {
                     const auto mapped = staffIt->second.find(lineId);
@@ -366,7 +364,6 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
         tie->setStartNote(startNote);
         tie->setTick(startNote->tick());
         tie->setTrack(startNote->track());
-        tie->setOwnershipParent(startNote);
         startNote->setTieFor(tie);
         DirectionV tieDir = DirectionV::AUTO;
         if (const auto side = mnxTie.side()) {
@@ -432,7 +429,6 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
             tie->setStartNote(startNote);
             tie->setTick(startNote->tick());
             tie->setTrack(startNote->track());
-            tie->setOwnershipParent(startNote);
             startNote->setTieFor(tie);
             startTie = tie;
             setAndStyleProperty(tie, Pid::SLUR_DIRECTION, tieDir);
@@ -550,7 +546,6 @@ Note* MnxImporter::createNote(const mnx::sequence::Note& mnxNote, Chord* chord, 
                               const Fraction& tick, int ottavaDisplacement, track_idx_t curTrackIdx)
 {
     Note* note = Factory::createNote(chord);
-    note->setOwnershipParent(chord);
     note->setTrack(curTrackIdx);
     auto pitch = mnxNote.pitch();
     NoteVal nval = toMuseScoreNoteVal(pitch, baseStaff->concertKey(tick), ottavaDisplacement);
@@ -582,7 +577,6 @@ Tuplet* MnxImporter::createTuplet(const mnx::sequence::Tuplet& mnxTuplet, Measur
 
     Tuplet* t = Factory::createTuplet(measure);
     t->setTrack(curTrackIdx);
-    t->setOwnershipParent(measure);
     t->setTick(measure->tick() + toMuseScoreFraction(startTick));
     t->setRatio(tupletRatio);
     t->setBaseLen(baseLen);
@@ -637,7 +631,6 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
     tremolo->setTremoloType(TremoloType(tremoloBeamsNum));
     tremolo->setTrack(curTrackIdx);
     tremolo->setVisible(c1->notes().front()->visible());
-    tremolo->setOwnershipParent(c1);
     tremolo->setChords(c1, c2);
     c1->setTremoloTwoChord(tremolo);
 }
@@ -724,7 +717,6 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                         nval.headGroup = drumset->noteHead(midiPitch);
                     }
                     engraving::Note* note = Factory::createNote(chord);
-                    note->setOwnershipParent(chord);
                     note->setTrack(curTrackIdx);
                     note->setNval(nval);
                     chord->add(note);
@@ -1117,7 +1109,6 @@ void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, S
     }
 
     Dynamic* dyn = Factory::createDynamic(segment);
-    dyn->setOwnershipParent(segment);
     dyn->setTrack(curTrackIdx);
 
     // An accent spells itself out as accentPrefix + value + accentSuffix + residualValue.
@@ -1230,7 +1221,7 @@ void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Seg
         }
     }
 
-    Hairpin* hairpin = Factory::createHairpin(segment);
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setHairpinType(mnxHairpin.wedgeType() == mnx::DynamicWedgeType::Increasing
                             ? HairpinType::CRESC_HAIRPIN
                             : HairpinType::DIM_HAIRPIN);
@@ -1551,7 +1542,6 @@ void MnxImporter::createArpeggios(const mnx::part::Measure& mnxMeasure)
                 }
             }
         }
-        arpeggio->setOwnershipParent(chordTop);
         chordTop->setArpeggio(arpeggio);
     };
 

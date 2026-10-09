@@ -57,7 +57,7 @@ static bool defaultSizeIsSpatium    = true;
 //   Image
 //---------------------------------------------------------
 
-Image::Image(EngravingItem* parent)
+Image::Image(DummyParentOr<EngravingItem> parent)
     : BSymbol(ElementType::IMAGE, parent, ElementFlag::MOVABLE)
 {
     m_imageType        = ImageType::NONE;
@@ -307,7 +307,6 @@ void Image::dragGrip(EditData& ed)
 {
     if (ed.curGrip == Grip::MIDDLE) {
         setOffset(offset() + ed.evtDelta);
-        setOffsetChanged(true);
         triggerLayout();
         return;
     }

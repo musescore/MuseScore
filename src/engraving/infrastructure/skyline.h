@@ -62,7 +62,7 @@ public:
     double minDistanceToShapeAbove(const Shape&, double minHorizontalClearance = 0.0) const;
     double minDistanceToShapeBelow(const Shape&, double minHorizontalClearance = 0.0) const;
     double verticalClearanceAbove(const Shape& shapeAbove) const;
-    double verticalClaranceBelow(const Shape& shapeBelow) const;
+    double verticalClearanceBelow(const Shape& shapeBelow) const;
     double max() const;
     bool valid() const;
 

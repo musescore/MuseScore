@@ -429,7 +429,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     const double spacingFactor = 0.5;   // defines the point where canvas is divided between segments, systems etc.
 
     System* sys = system();
-    const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
+    const std::vector<System*> foundSystems = score()->searchSystem(pos, /*includeMeasurelessSystems*/ false, sys, spacingFactor);
 
     if (!foundSystems.empty() && !muse::contains(foundSystems, sys) && foundSystems[0]->staves().size()) {
         sys = foundSystems[0];
@@ -579,7 +579,6 @@ void LineSegment::rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, 
     if (grip == Grip::START) {
         setOffset(offset() + delta);
         m_offset2 -= delta;
-        setOffsetChanged(true);
     } else {
         m_offset2 += delta;
     }
@@ -722,7 +721,6 @@ void LineSegment::dragGrip(EditData& ed)
         // Only for moving, no y limitation
         const PointF deltaMove(ed.evtDelta);
         setOffset(offset() + deltaMove);
-        setOffsetChanged(true);
         rebaseAnchors(ed, ed.curGrip);
     }
     break;
@@ -809,7 +807,6 @@ std::vector<LineF> LineSegment::dragAnchorLines() const
 RectF LineSegment::drag(EditData& ed)
 {
     setOffset(offset() + ed.evtDelta);
-    setOffsetChanged(true);
     rebaseAnchors(ed, Grip::MIDDLE);
 
     return canvasBoundingRect();
@@ -869,7 +866,7 @@ void LineSegment::undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, 
 //   SLine
 //---------------------------------------------------------
 
-SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
+SLine::SLine(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);

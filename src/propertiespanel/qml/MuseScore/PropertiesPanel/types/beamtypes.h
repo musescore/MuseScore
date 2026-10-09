@@ -24,20 +24,22 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace BeamTypes {
 Q_NAMESPACE;
 QML_NAMED_ELEMENT(Beam);
 
 enum class Mode {
-    MODE_INVALID = -1,
-    MODE_AUTO,
-    MODE_NONE,
-    MODE_BEGIN,
-    MODE_BEGIN32,
-    MODE_BEGIN64,
-    MODE_MID,
-    MODE_END
+    MODE_INVALID = int(engraving::BeamMode::INVALID),
+    MODE_AUTO = int(engraving::BeamMode::AUTO),
+    MODE_NONE = int(engraving::BeamMode::NONE),
+    MODE_BEGIN = int(engraving::BeamMode::BEGIN),
+    MODE_BEGIN32 = int(engraving::BeamMode::BEGIN16),
+    MODE_BEGIN64 = int(engraving::BeamMode::BEGIN32),
+    MODE_MID = int(engraving::BeamMode::MID),
+    MODE_END = int(engraving::BeamMode::END)
 };
 Q_ENUM_NS(Mode)
 

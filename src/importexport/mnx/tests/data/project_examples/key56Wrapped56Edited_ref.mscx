@@ -231,7 +231,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <preferSharpFlat>flats</preferSharpFlat>
+      <preferSharpFlat>sharps</preferSharpFlat>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Cl. A Wrap -5</longName>

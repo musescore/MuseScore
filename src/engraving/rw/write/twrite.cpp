@@ -1301,7 +1301,9 @@ void TWrite::write(const Clef* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::CLEF_TYPE_CONCERT);
     writeProperty(item, xml, Pid::CLEF_TYPE_TRANSPOSING);
     writeProperty(item, xml, Pid::CLEF_TO_BARLINE_POS);
-    writeProperty(item, xml, Pid::IS_HEADER);
+    if (item->isHeader()) {
+        xml.tag("isHeader", true);
+    }
     writeProperty(item, xml, Pid::IS_COURTESY);
     if (!item->showCourtesy()) {
         xml.tag("showCourtesyClef", item->showCourtesy());
@@ -1645,19 +1647,6 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
     writeProperty(item, xml, Pid::LINE_STYLE);
     writeProperty(item, xml, Pid::DASH_LINE_LEN);
     writeProperty(item, xml, Pid::DASH_GAP_LEN);
-
-    // TO PREVENT CRASH IN VERSIONS <4.6.5
-    if (item->score()->isPaletteScore()) {
-        const double COMPAT_SCALE = 0.5;
-        // when used as icon
-        if (!item->spannerSegments().empty()) {
-            const LineSegment* s = item->frontSegment();
-            xml.tag("length", s->pos2().x() * COMPAT_SCALE);
-        } else {
-            xml.tag("length", item->spatium() * 4 * COMPAT_SCALE);
-        }
-        return;
-    }
 
     if (!item->isUserModified()) {
         return;
@@ -2397,6 +2386,7 @@ void TWrite::write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("syllabic", TConv::toXml(item->syllabic()));
     }
     writeProperty(item, xml, Pid::LYRIC_TICKS);
+    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
 
     writeProperties(toTextBase(item), xml, ctx, true);
     if (item->separator() && !item->separator()->generated()) {
@@ -2704,7 +2694,7 @@ void TWrite::writeProperties(const Part* item, XmlWriter& xml, WriteContext& ctx
             xml.tag("preferSharpFlat", "flats");
             break;
         case PreferSharpFlat::SHARPS:
-            xml.tag("preferSharpFlat", "flats");
+            xml.tag("preferSharpFlat", "sharps");
             break;
         case PreferSharpFlat::NONE:
             xml.tag("preferSharpFlat", "none");
@@ -2734,6 +2724,8 @@ void TWrite::write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& 
     xml.startElement(item);
     writeProperty(item, xml, Pid::VERSE);
     xml.tag("isEndMelisma", item->isEndMelisma());
+    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
+    writeProperty(item, xml, Pid::PLACEMENT);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
@@ -3601,7 +3593,7 @@ static bool writeVoiceMove(XmlWriter& xml, WriteContext& ctx, Segment* seg, cons
 static void writeTimeSig(Score* score, const Fraction& tick, XmlWriter& xml, WriteContext& ctx)
 {
     Fraction tsf = score->sigmap()->timesig(tick).nominal();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
     ts->setSig(tsf);
     TWrite::write(ts, xml, ctx);
     ts->masterScore()->eidRegister()->removeItem(ts);
@@ -3733,7 +3725,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                 if (!keySigWritten) {
                     Key ck = score->staff(track2staff(track))->concertKey(segment->tick());
                     Key tk = score->staff(track2staff(track))->key(segment->tick());
-                    KeySig* ks = Factory::createKeySig(score->dummy()->segment());
+                    KeySig* ks = Factory::createKeySig(score->dummy());
                     ks->setKey(ck, tk);
                     TWrite::write(ks, xml, ctx);
                     ks->masterScore()->eidRegister()->removeItem(ks);

@@ -21,7 +21,9 @@
  */
 
 #include <gtest/gtest.h>
+#include <QMimeData>
 
+#include "engraving/internal/qmimedataadapter.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/masterscore.h"
@@ -31,6 +33,8 @@
 #include "engraving/dom/staff.h"
 #include "engraving/editing/editinstrumentchange.h"
 #include "engraving/editing/editpart.h"
+#include "engraving/editing/paste.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "engraving/compat/midi/midipatch.h"
 
@@ -71,7 +75,6 @@ TEST_F(Engraving_InstrumentChangeTests, testAdd)
     Measure* m = score->firstMeasure()->nextMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = new InstrumentChange(s);
-    ic->setOwnershipParent(s);
     ic->setTrack(0);
     ic->setXmlText("Instrument");
     score->startCmd(TranslatableString::untranslatable("Instrument change tests"));
@@ -143,4 +146,36 @@ TEST_F(Engraving_InstrumentChangeTests, testCopy)
     score->undoAddElement(nic);
     score->doLayout();
     test_post(score, u"copy");
+}
+
+TEST_F(Engraving_InstrumentChangeTests, testPasteKeepsCustomText)
+{
+    MasterScore* score = test_pre(u"copy");
+    Measure* m = score->firstMeasure()->nextMeasure();
+    Segment* s = m->first(SegmentType::ChordRest);
+    InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
+    ic->setInit(true);
+    ic->setXmlText(u"Custom label");
+
+    score->select(ic);
+    ASSERT_TRUE(score->selection().canCopy());
+    QMimeData* mimeData = new QMimeData;
+    mimeData->setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
+
+    Measure* target = m->nextMeasure()->nextMeasure();
+    Segment* targetSeg = target->first(SegmentType::ChordRest);
+    score->select(targetSeg->element(0));
+
+    score->startCmd(TranslatableString::untranslatable("Instrument change tests"));
+    QMimeDataAdapter ma(mimeData);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    score->endCmd();
+
+    EngravingItem* pasted = targetSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE, 0, 0);
+    ASSERT_TRUE(pasted);
+    InstrumentChange* nic = toInstrumentChange(pasted);
+    EXPECT_EQ(nic->plainText(), u"Custom label");
+    EXPECT_EQ(nic->instrument()->id(), ic->instrument()->id());
+
+    delete score;
 }

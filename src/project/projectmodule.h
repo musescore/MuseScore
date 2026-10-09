@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "modularity/imodulesetup.h"
+#include "global/async/asyncable.h"
 
 namespace mu::project {
 class ProjectConfiguration;
@@ -34,13 +35,14 @@ class ProjectAutoSaver;
 class EngravingPluginAPIHelper;
 class ConvertFileToScoreService;
 class ConvertFileToScoreScenario;
-class ProjectModule : public muse::modularity::IModuleSetup
+class ProjectModule : public muse::modularity::IModuleSetup, public muse::async::Asyncable
 {
 public:
 
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
+    void registerApi() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
 
     muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;

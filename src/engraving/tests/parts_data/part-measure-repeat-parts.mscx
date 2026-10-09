@@ -22,6 +22,7 @@
       <lyricsMelismaPad>0.2</lyricsMelismaPad>
       <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
       <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
+      <lyricsStackingOrder>1</lyricsStackingOrder>
       <lyricsOddFontFace>Edwin</lyricsOddFontFace>
       <lyricsOddFontSize>10</lyricsOddFontSize>
       <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>

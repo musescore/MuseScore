@@ -886,6 +886,9 @@ TEST_F(MusicXml_Tests, inferredTempoText2) {
 TEST_F(MusicXml_Tests, inferredCrescLines2) {
     musicXmlImportTestRef("testInferredCrescLines2");
 }
+TEST_F(MusicXml_Tests, inferredPercStemDir) {
+    musicXmlImportTestRef("testInferredPercStemDir");
+}
 TEST_F(MusicXml_Tests, instrumentChangeMIDIportExport) {
     musicXmlMscxExportTestRef("testInstrumentChangeMIDIportExport");
 }
@@ -1030,6 +1033,9 @@ TEST_F(MusicXml_Tests, multipleNotations) {
 TEST_F(MusicXml_Tests, namedNoteheads) {
     musicXmlImportTestRef("testNamedNoteheads");
 }
+TEST_F(MusicXml_Tests, namedNoteheadsPercussion) {
+    musicXmlImportTestRef("testNamedNoteheadsPercussion");
+}
 TEST_F(MusicXml_Tests, negativeOffset) {
     musicXmlImportTestRef("testNegativeOffset");
 }
@@ -1062,6 +1068,9 @@ TEST_F(MusicXml_Tests, noteAttributes3) {
 }
 TEST_F(MusicXml_Tests, noteColor) {
     musicXmlIoTest("testNoteColor");
+}
+TEST_F(MusicXml_Tests, noteDynamics) {
+    musicXmlImportTestRef("testNoteDynamics");
 }
 TEST_F(MusicXml_Tests, noteheadNames) {
     musicXmlIoTest("testNoteheadNames");

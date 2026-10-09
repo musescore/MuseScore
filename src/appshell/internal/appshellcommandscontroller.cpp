@@ -349,10 +349,7 @@ void AppshellCommandsController::doQuit(bool isAllInstances, const muse::io::pat
         //! in-place, falling back to handing the package to the user.
         bool applied = false;
         if (appUpdateService()->canAutoInstall()) {
-            const muse::RetVal<muse::io::path_t> prepared = appUpdateService()->prepareUpdate(installerPath);
-            if (prepared.ret) {
-                applied = bool(appUpdateService()->finalizeUpdate(prepared.val));
-            }
+            applied = bool(appUpdateService()->installUpdate());
         }
 
         if (!applied) {
