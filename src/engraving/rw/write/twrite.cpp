@@ -3114,6 +3114,9 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
     }
     if (item->group() == StaffGroup::STANDARD) {
         xml.tag("noteheadScheme", TConv::toXml(item->noteHeadScheme()), TConv::toXml(NoteHeadScheme::HEAD_NORMAL));
+        if (item->xmlName() == u"stdJianpu") {
+            xml.tag("jianpuTextStyle", TConv::toXml(item->jianpuTextStyle()));
+        }
     }
     xml.tag("instrumentLabelVisibility", TConv::toXml(item->instrumentLabelVisibility()),
             TConv::toXml(InstrumentLabelVisibility::AUTO));
