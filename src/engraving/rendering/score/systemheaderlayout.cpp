@@ -152,6 +152,10 @@ Bracket* SystemHeaderLayout::createBracket(System* system, LayoutContext& ctx, B
 
         b->setStaffSpan(firstStaff, lastStaff);
 
+        InstrumentLabelVisibility visibility
+            = resolveInstrumentLabelVisibility(ctx.dom().staff(firstStaff), measure->tick(), ctx, ctx.state().firstSystem());
+        b->setLabelType(resolveInstrumentNameType(visibility));
+
         return b;
     }
 
@@ -331,6 +335,7 @@ void SystemHeaderLayout::layoutBracketsVertical(System* system, LayoutContext& c
 bool SystemHeaderLayout::stackLabelsVertically(System* system)
 {
     const MStyle& style = system->style();
+    // Ignore long/short overrides
     bool longName = system->ldata()->useLongNames();
     InstrumentNamesAlign align
         = style.styleV(longName ? Sid::instrumentNamesAlignLong : Sid::instrumentNamesAlignShort).value<InstrumentNamesAlign>();
@@ -474,7 +479,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
         const Staff* staff = ctx.dom().staff(staffIdx);
 
         if (InstrumentName* groupName = sysStaff->name(InstrumentNameRole::GROUP)) {
-            if (ldata->useLongNames() && groupName->effectiveStaffIdx() == muse::nidx) {
+            if (groupName->instrumentNameType() == InstrumentNameType::LONG && groupName->effectiveStaffIdx() == muse::nidx) {
                 // NOTE: We can only do this for long-name systems because they don't need to have
                 // the left barline aligned with the other systems across the page.
                 groupName->mutldata()->setIsSkipDraw(true);
@@ -497,7 +502,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
         }
 
         if (InstrumentName* name = sysStaff->name(InstrumentNameRole::STAFF)) {
-            if (ldata->useLongNames() && !sysStaff->show()) {
+            if (name->instrumentNameType() == InstrumentNameType::LONG && !sysStaff->show()) {
                 // NOTE: We can only do this for long-name systems because they don't need to have
                 // the left barline aligned with the other systems across the page.
                 name->mutldata()->setIsSkipDraw(true);
@@ -530,7 +535,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
             continue;
         }
 
-        if (ldata->useLongNames() && instrName->effectiveStaffIdx() == muse::nidx) {
+        if (instrName->instrumentNameType() == InstrumentNameType::LONG && instrName->effectiveStaffIdx() == muse::nidx) {
             // NOTE: We can only do this for long-name systems because they don't need to have
             // the left barline aligned with the other systems across the page.
             instrName->mutldata()->setIsSkipDraw(true);
@@ -587,7 +592,8 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
     for (InstrumentName* groupName : groupNames) {
         staff_idx_t startStaff = groupName->staffIdx();
         staff_idx_t endStaff = groupName->ldata()->endIdxOfGroup();
-        if (ldata->useLongNames() && system->visiblePartsOfGroup(startStaff, endStaff).size() % 2 == 0) {
+        if (groupName->instrumentNameType() == InstrumentNameType::LONG
+            && system->visiblePartsOfGroup(startStaff, endStaff).size() % 2 == 0) {
             continue;
         }
         for (staff_idx_t idx = startStaff; idx < endStaff; ++idx) {
@@ -605,7 +611,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
             continue;
         }
         Part* part = ctx.dom().staff(instrName->staffIdx())->part();
-        if (ldata->useLongNames() && system->visibleStavesOfPart(part).size() % 2 == 0) {
+        if (instrName->instrumentNameType() == InstrumentNameType::LONG && system->visibleStavesOfPart(part).size() % 2 == 0) {
             continue;
         }
         for (staff_idx_t idx : part->staveIdxList()) {
@@ -808,6 +814,7 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
     System::LayoutData* ldata = system->mutldata();
     double totalNamesWidth = ldata->totalNamesWidth();
     double firstColumnWidth = ldata->firstColumnWidth();
+    // Ignore long/short overrides
     InstrumentNamesAlign align = system->style().styleV(
         ldata->useLongNames() ? Sid::instrumentNamesAlignLong : Sid::instrumentNamesAlignShort).value<InstrumentNamesAlign>();
 
@@ -999,11 +1006,11 @@ InstrumentName* SystemHeaderLayout::updateName(System* system, staff_idx_t staff
         iname->setGenerated(true);
         iname->setSysStaff(sysStaff);
         iname->setTrack(staffIdx * VOICES);
-        iname->setInstrumentNameType(type);
         iname->setInstrumentNameRole(role);
         ctx.mutDom().addElement(iname);
     }
 
+    iname->setInstrumentNameType(type);
     iname->setAlign(Align(iname->align().horizontal, AlignV::BASELINE));
     iname->setXmlText(name);
 
@@ -1013,9 +1020,8 @@ InstrumentName* SystemHeaderLayout::updateName(System* system, staff_idx_t staff
     return iname;
 }
 
-String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, const Fraction& tick)
+String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, const Fraction& tick, bool longNames)
 {
-    bool longNames = system->ldata()->useLongNames();
     Instrument* instr = part->instrument(tick);
     const InstrumentLabel& label = instr->instrumentLabel();
 
@@ -1084,11 +1090,10 @@ String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, c
     }
 }
 
-String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const Fraction& tick)
+String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const Fraction& tick, bool longNames)
 {
     const MStyle& style = system->style();
 
-    bool longNames = system->ldata()->useLongNames();
     Instrument* instr = part->instrument(tick);
     const InstrumentLabel& label = instr->instrumentLabel();
 
@@ -1313,33 +1318,35 @@ String& SystemHeaderLayout::resolveTokens(String& str, const String& name, const
     return str;
 }
 
-bool SystemHeaderLayout::showNames(LayoutContext& ctx)
+InstrumentLabelVisibility SystemHeaderLayout::resolveInstrumentLabelVisibility(const Staff* staff, const Fraction& tick,
+                                                                               LayoutContext& ctx, bool firstSystem)
 {
-    if (!ctx.conf().isShowInstrumentNames()) {
-        return false;
+    const InstrumentLabelVisibility local = staff->staffType(tick)->instrumentLabelVisibility();
+    if (local != InstrumentLabelVisibility::AUTO) {
+        return local;
     }
 
     if (ctx.conf().styleB(Sid::hideInstrumentNameIfOneInstrument) && ctx.dom().visiblePartCount() <= 1) {
         std::vector<Part*> visibleParts = ctx.dom().visibleParts();
         if (visibleParts.size() == 0) {
-            return false;
+            return InstrumentLabelVisibility::HIDE;
         }
         if (visibleParts.size() == 1 && !visibleParts.front()->isSharedPart()) {
-            return false;
+            return InstrumentLabelVisibility::HIDE;
         }
     }
 
-    if (ctx.state().firstSystem()
-        && ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE) {
-        return false;
+    const Sid sid = firstSystem ? Sid::firstSystemInstNameVisibility : Sid::subsSystemInstNameVisibility;
+    const InstrumentLabelVisibility styleVisibility = ctx.conf().styleV(sid).value<InstrumentLabelVisibility>();
+    if (firstSystem && styleVisibility == InstrumentLabelVisibility::LONG && !ctx.state().startWithLongNames()) {
+        return InstrumentLabelVisibility::SHORT;
     }
+    return styleVisibility;
+}
 
-    if (!ctx.state().firstSystem()
-        && ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE) {
-        return false;
-    }
-
-    return true;
+InstrumentNameType SystemHeaderLayout::resolveInstrumentNameType(InstrumentLabelVisibility visibility)
+{
+    return visibility == InstrumentLabelVisibility::LONG ? InstrumentNameType::LONG : InstrumentNameType::SHORT;
 }
 
 void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx)
@@ -1364,7 +1371,8 @@ void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx)
 
     InstrumentNameType type = longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT;
 
-    if (!showNames(ctx)) {
+    // We do not show instrument names for video export
+    if (!ctx.conf().isShowInstrumentNames()) {
         for (staff_idx_t idx = 0; idx < system->staves().size(); ++idx) {
             updateName(system, idx, ctx, String(), type, InstrumentNameRole::STAFF);
             updateName(system, idx, ctx, String(), type, InstrumentNameRole::SHARED_STAFF);
@@ -1376,32 +1384,39 @@ void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx)
 
     updateGroupNames(system, ctx, tick);
 
+    bool firstSystem = ctx.state().firstSystem();
+
     for (size_t staffIdx = 0; staffIdx < system->staves().size(); /*empty*/) {
         Part* part = ctx.dom().staff(staffIdx)->part();
         size_t partNstaves = part->nstaves();
         size_t visibleStavesCount = part->visibleStavesCount();
 
         if (part->isSharedPart() && part->show()) {
-            setSharedPartNames(toSharedPart(part), staffIdx, system, ctx, longName, tick);
+            setSharedPartNames(toSharedPart(part), staffIdx, system, ctx, tick);
             staffIdx += partNstaves;
             continue;
         }
 
         for (size_t idxInPart = 0; idxInPart < partNstaves; ++idxInPart) {
             staff_idx_t globalIdx = staffIdx + idxInPart;
+            const Staff* staff = ctx.dom().staff(globalIdx);
+
+            InstrumentLabelVisibility visibility = resolveInstrumentLabelVisibility(staff, tick, ctx, firstSystem);
+            InstrumentNameType staffNameType = resolveInstrumentNameType(visibility);
+            bool hide = visibility == InstrumentLabelVisibility::HIDE;
+            bool staffLongName = staffNameType == InstrumentNameType::LONG;
 
             String instrumentName;
-            if (idxInPart == 0 && part->show() && visibleStavesCount > 0) {
-                instrumentName = formattedInstrumentName(system, part, tick);
+            if (idxInPart == 0 && part->show() && visibleStavesCount > 0 && !hide) {
+                instrumentName = formattedInstrumentName(system, part, tick, staffLongName);
             }
-            updateName(system, globalIdx, ctx, instrumentName, type, InstrumentNameRole::PART);
+            updateName(system, globalIdx, ctx, instrumentName, staffNameType, InstrumentNameRole::PART);
 
-            const Staff* staff = ctx.dom().staff(globalIdx);
             String staffName;
-            if (staff->show()) {
-                staffName = longName ? staff->individualStaffNameLong(tick) : staff->individualStaffNameShort(tick);
+            if (staff->show() && !hide) {
+                staffName = staffLongName ? staff->individualStaffNameLong(tick) : staff->individualStaffNameShort(tick);
             }
-            updateName(system, globalIdx, ctx, staffName, type, InstrumentNameRole::STAFF);
+            updateName(system, globalIdx, ctx, staffName, staffNameType, InstrumentNameRole::STAFF);
         }
 
         staffIdx += partNstaves;
@@ -1409,9 +1424,12 @@ void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx)
 }
 
 void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t startStaffIdx, System* system, LayoutContext& ctx,
-                                            bool longName, const Fraction& tick)
+                                            const Fraction& tick)
 {
-    InstrumentNameType type = longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT;
+    InstrumentLabelVisibility visibility
+        = resolveInstrumentLabelVisibility(ctx.dom().staff(startStaffIdx), tick, ctx, ctx.state().firstSystem());
+    InstrumentNameType type = resolveInstrumentNameType(visibility);
+    bool hideStartStaff = visibility == InstrumentLabelVisibility::HIDE;
 
     if (!sharedPart->show() || sharedPart->visibleStavesCount() == 0) {
         for (size_t relStaffIdx = 0; relStaffIdx < sharedPart->nstaves(); ++relStaffIdx) {
@@ -1451,26 +1469,43 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
     for (size_t relStaffIdx = 0; relStaffIdx < sharedPart->nstaves(); ++relStaffIdx) {
         size_t globalStaffIdx = startStaffIdx + relStaffIdx;
         Part* originPart = originPartForStaff(globalStaffIdx, trackMap, originParts);
-        String staffGroupName = formattedGroupName(system, originPart ? originPart : sharedPart, tick);
 
-        if (useGroup) {
-            if (relStaffIdx == 0) {
-                updateName(system, globalStaffIdx, ctx, staffGroupName, type, InstrumentNameRole::PART);
-            }
+        InstrumentLabelVisibility partVisibility
+            = resolveInstrumentLabelVisibility(ctx.dom().staff(globalStaffIdx), tick, ctx, ctx.state().firstSystem());
+        InstrumentNameType partNameType = resolveInstrumentNameType(partVisibility);
+        bool partLongName = partNameType == InstrumentNameType::LONG;
+        bool hidePartName = partVisibility == InstrumentLabelVisibility::HIDE;
 
-            updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::SHARED_STAFF);
-        } else {
-            updateName(system, globalStaffIdx, ctx, staffGroupName, type, InstrumentNameRole::SHARED_STAFF);
+        String staffGroupName;
+        if (!hidePartName) {
+            staffGroupName = formattedGroupName(system, originPart ? originPart : sharedPart, tick, partLongName);
         }
 
-        String staffLabel = formattedSharedStaffLabel(globalStaffIdx, trackMap, originParts);
-        updateName(system, globalStaffIdx, ctx, staffLabel, type, InstrumentNameRole::STAFF);
+        if (useGroup && !hideStartStaff) {
+            if (relStaffIdx == 0) {
+                updateName(system, globalStaffIdx, ctx, staffGroupName, partNameType, InstrumentNameRole::PART);
+            }
+
+            updateName(system, globalStaffIdx, ctx, String(), partNameType, InstrumentNameRole::SHARED_STAFF);
+        } else {
+            if (relStaffIdx == 0) {
+                updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::PART);
+            }
+            updateName(system, globalStaffIdx, ctx, staffGroupName, partNameType, InstrumentNameRole::SHARED_STAFF);
+        }
+
+        String staffLabel;
+        if (!hidePartName) {
+            staffLabel = formattedSharedStaffLabel(globalStaffIdx, trackMap, originParts);
+        }
+
+        updateName(system, globalStaffIdx, ctx, staffLabel, partNameType, InstrumentNameRole::STAFF);
     }
 }
 
 void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, const Fraction& tick)
 {
-    InstrumentNameType type = system->ldata()->useLongNames() ? InstrumentNameType::LONG : InstrumentNameType::SHORT;
+    bool firstSystem = ctx.state().firstSystem();
 
     System::LayoutData* ldata = system->mutldata();
     ldata->clearPartsWithGroupNames();
@@ -1483,6 +1518,11 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
             ++startOfGroup;
             continue;
         }
+
+        InstrumentLabelVisibility visibility
+            = resolveInstrumentLabelVisibility(ctx.dom().staff(startOfGroup), tick, ctx, firstSystem);
+        InstrumentNameType type = resolveInstrumentNameType(visibility);
+        bool hide = visibility == InstrumentLabelVisibility::HIDE;
 
         std::vector<Part*> partsInThisGroup;
 
@@ -1517,8 +1557,8 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
             endOfGroup += nextPart->nstaves();
         }
 
-        if (partsInThisGroup.size() > 1 && useGroupNames(curInstrument->group(), ctx)) {
-            String name = formattedGroupName(system, curPart, tick);
+        if (!hide && partsInThisGroup.size() > 1 && useGroupNames(curInstrument->group(), ctx)) {
+            String name = formattedGroupName(system, curPart, tick, type == InstrumentNameType::LONG);
             InstrumentName* groupName = updateName(system, startOfGroup, ctx, name, type, InstrumentNameRole::GROUP);
 
             if (groupName) {
@@ -1545,7 +1585,8 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
         if (system->staff(staffIdx)->name(InstrumentNameRole::GROUP)) {
             Part* part = ctx.dom().staff(staffIdx)->part();
             if (!muse::contains(ldata->partsWithGroupName(), part)) {
-                updateName(system, staffIdx, ctx, String(), type, InstrumentNameRole::GROUP);
+                // name is empty here, so the InstrumentNameType is unused (see updateName)
+                updateName(system, staffIdx, ctx, String(), InstrumentNameType::SHORT, InstrumentNameRole::GROUP);
             }
         }
     }
