@@ -68,6 +68,7 @@ target_sources(engraving PRIVATE
     engravingproject.cpp
     engravingproject.h
     iengravingpluginapihelper.h
+    iengravingpluginmixerapiv1.h
     iengravingconfiguration.h
     iengravingcontextconfiguration.h
     iengravingfont.h

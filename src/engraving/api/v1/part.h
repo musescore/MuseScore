@@ -25,7 +25,10 @@
 
 #include <QQmlListProperty>
 
+#include "async/asyncable.h"
 #include "engraving/dom/part.h"
+#include "engraving/iengravingpluginmixerapiv1.h"
+#include "modularity/ioc.h"
 
 // api
 #include "scoreelement.h"
@@ -34,6 +37,7 @@ namespace mu::engraving::apiv1 {
 class EngravingItem;
 class Fraction;
 class Instrument;
+class MixerChannel;
 class Part;
 class Staff;
 
@@ -49,6 +53,95 @@ public:
 
     static qsizetype count(QQmlListProperty<Instrument>* l);
     static Instrument* at(QQmlListProperty<Instrument>* l, qsizetype i);
+};
+
+/** APIDOC
+ * Controls playback settings for the part's primary instrument channel.
+ * Volume, balance, mute, solo, and sound changes are not undoable. MIDI bank
+ * and program changes are undoable.
+ * @class MixerChannel
+ * @memberof Engraving
+ * @hideconstructor
+ * @since MuseScore 4.7
+ */
+class MixerChannel : public QObject, public muse::Contextable, public muse::async::Asyncable
+{
+    Q_OBJECT
+
+    /** APIDOC
+     * Volume in decibels, from -60 to +12.
+     * @q_property {Number}
+     * @since MuseScore 4.7
+     */
+    Q_PROPERTY(float volume READ volume WRITE setVolume)
+    /** APIDOC
+     * Balance from -1 (left) to 1 (right).
+     * @q_property {Number}
+     * @since MuseScore 4.7
+     */
+    Q_PROPERTY(float balance READ balance WRITE setBalance)
+    /** APIDOC
+     * Whether the channel is muted.
+     * @q_property {Boolean}
+     * @since MuseScore 4.7
+     */
+    Q_PROPERTY(bool muted READ muted WRITE setMuted)
+    /** APIDOC
+     * Whether the channel is soloed.
+     * @q_property {Boolean}
+     * @since MuseScore 4.7
+     */
+    Q_PROPERTY(bool solo READ solo WRITE setSolo)
+    /** APIDOC
+     * MIDI bank number, from 0 to 255. Changes are undoable.
+     * @q_property {Number}
+     * @since MuseScore 4.7
+     */
+    Q_PROPERTY(int midiBank READ midiBank WRITE setMidiBank)
+    /** APIDOC
+     * MIDI program number, from 0 to 127. Changes are undoable.
+     * @q_property {Number}
+     * @since MuseScore 4.7
+     */
+    Q_PROPERTY(int midiProgram READ midiProgram WRITE setMidiProgram)
+
+    muse::ContextInject<IEngravingPluginMixerApi> mixerApi;
+    mu::engraving::InstrumentTrackId m_instrumentTrackId;
+    mu::engraving::Part* m_part = nullptr;
+
+public:
+    MixerChannel(const mu::engraving::InstrumentTrackId& instrumentTrackId, mu::engraving::Part* part, QObject* parent = nullptr);
+
+    float volume() const;
+    void setVolume(float volume);
+    float balance() const;
+    void setBalance(float balance);
+    bool muted() const;
+    void setMuted(bool muted);
+    bool solo() const;
+    void setSolo(bool solo);
+    int midiBank() const;
+    void setMidiBank(int bank);
+    int midiProgram() const;
+    void setMidiProgram(int program);
+
+    /** APIDOC
+     * Asynchronously return available sound resources to callback(sounds, error).
+     * Each sound has an id and name.
+     * @method
+     * @param {Function} callback Called with the sound list and an error string.
+     * @since MuseScore 4.7
+     */
+    Q_INVOKABLE void availableSounds(QJSValue callback);
+
+    /** APIDOC
+     * Asynchronously request a sound resource and call callback(success, error).
+     * @method
+     * @param {String} soundId ID returned by availableSounds.
+     * @param {Function} callback Called when the source change is submitted to playback.
+     * @since MuseScore 4.7
+     */
+    Q_INVOKABLE void setSound(const QString& soundId, QJSValue callback);
 };
 
 //---------------------------------------------------------
@@ -114,6 +207,14 @@ class Part : public ScoreElement
     /// \since MuseScore 3.5
     Q_PROPERTY(QQmlListProperty<apiv1::Instrument> instruments READ instruments);
 
+    /** APIDOC
+     * Mixer controls for the primary instrument channel.
+     * @readonly
+     * @q_property {Engraving.MixerChannel}
+     * @since MuseScore 4.7
+     */
+    Q_PROPERTY(apiv1::MixerChannel * mixerChannel READ mixerChannel)
+
     /// List of staves belonging to this part.
     /// \since MuseScore 4.6
     Q_PROPERTY(QQmlListProperty<apiv1::Staff> staves READ staves);
@@ -149,6 +250,7 @@ public:
     apiv1::Part* masterPart() { return wrap<apiv1::Part>(part()->masterPart()); }
 
     InstrumentListProperty instruments();
+    apiv1::MixerChannel* mixerChannel();
     QQmlListProperty<apiv1::Staff> staves();
     /// \endcond
 
@@ -194,6 +296,9 @@ public:
     /// \param tick Tick location in the score, as a fraction.
     /// \since MuseScore 4.6
     Q_INVOKABLE apiv1::Fraction* tickOfCurrentHarpDiagram(apiv1::Fraction* tick);
+
+private:
+    apiv1::MixerChannel* m_mixerChannel = nullptr;
 };
 }
 
