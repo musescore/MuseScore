@@ -77,15 +77,15 @@ protected:
 
         ASSERT_NO_FATAL_FAILURE(saveAndLoad(score, startPointLocation, jumpPointLocations));
 
-        toggleJumpPoint();
+        ASSERT_NO_FATAL_FAILURE(toggleJumpPoint());
 
-        deleteJumpTie();
+        ASSERT_NO_FATAL_FAILURE(deleteJumpTie());
 
-        deleteJumpNote();
+        ASSERT_NO_FATAL_FAILURE(deleteJumpNote());
 
-        toggleFirstJumpPoint();
+        ASSERT_NO_FATAL_FAILURE(toggleFirstJumpPoint());
 
-        deleteStartTie();
+        ASSERT_NO_FATAL_FAILURE(deleteStartTie());
     }
 
     void openScore(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
@@ -381,15 +381,15 @@ protected:
 
         ASSERT_NO_FATAL_FAILURE(saveAndLoad(score, startPointLocation, jumpPointLocations));
 
-        toggleJumpPoint();
+        ASSERT_NO_FATAL_FAILURE(toggleJumpPoint());
 
-        deleteJumpTie();
+        ASSERT_NO_FATAL_FAILURE(deleteJumpTie());
 
-        deleteJumpNote();
+        ASSERT_NO_FATAL_FAILURE(deleteJumpNote());
 
-        toggleFirstJumpPoint();
+        ASSERT_NO_FATAL_FAILURE(toggleFirstJumpPoint());
 
-        deleteStartTie();
+        ASSERT_NO_FATAL_FAILURE(deleteStartTie());
     }
 
 private:
@@ -526,7 +526,7 @@ TEST_F(Engraving_PartialTieTests, partialTieListSelection)
     const Fraction secondTieNoteTick = Fraction(5, 4);
     const std::vector<Fraction> jumpPoints = { Fraction(5, 4), Fraction(2, 1) };
 
-    testPartialTieListSelection(test, startPointTick, secondTieNoteTick, jumpPoints);
+    ASSERT_NO_FATAL_FAILURE(testPartialTieListSelection(test, startPointTick, secondTieNoteTick, jumpPoints));
 }
 
 TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
