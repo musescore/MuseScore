@@ -264,6 +264,7 @@ public:
     void changeSelectedElementsVoice(voice_idx_t voiceIndex) override;
     void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) override;
     void addAnchoredLineToSelectedNotes() override;
+    void addGlissandoToSelectedNote() override;
 
     void addTextToTopFrame(TextStyleType type) override;
     void addTextToItem(TextStyleType type, EngravingItem* item) override;

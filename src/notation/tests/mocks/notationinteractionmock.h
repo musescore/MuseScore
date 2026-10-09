@@ -199,6 +199,7 @@ public:
     MOCK_METHOD(void, changeSelectedElementsVoice, (voice_idx_t), (override));
     MOCK_METHOD(void, changeSelectedElementsVoiceAssignment, (VoiceAssignment), (override));
     MOCK_METHOD(void, addAnchoredLineToSelectedNotes, (), (override));
+    MOCK_METHOD(void, addGlissandoToSelectedNote, (), (override));
 
     MOCK_METHOD(void, addTextToTopFrame, (TextStyleType), (override));
     MOCK_METHOD(void, addTextToItem, (TextStyleType, EngravingItem*), (override));
