@@ -5692,7 +5692,14 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
 
     startEdit(TranslatableString("undoableAction", "Add tuplet"));
 
+    // Make sure each linked group is handled only once
+    std::unordered_set<const LinkedObjects*> handledLinks;
+
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
+        if (chordRest->links() && !handledLinks.insert(chordRest->links()).second) {
+            continue;
+        }
+
         if (!chordRest->isGrace() && !(chordRest->isChord() && toChord(chordRest)->isTrillCueNote())) {
             Fraction ratio = options.ratio;
             if (options.autoBaseLen) {
