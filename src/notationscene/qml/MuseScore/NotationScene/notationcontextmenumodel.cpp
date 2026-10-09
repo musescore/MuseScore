@@ -37,6 +37,7 @@
 #include "notation/inotationselection.h"
 
 #include "notationscene/notationcommands.h"
+#include "notationscene/notationmenus.h"
 #include "palette/palettecommands.h"
 #include "instrumentsscene/instrumentscommands.h"
 
@@ -140,6 +141,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     MenuItem* clearItem = makeMenuItem(DELETE_COMMAND);
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
+    clearItem->setIcon(ui::IconCode::Code::ERASER);
     MenuItem* deleteItem = makeMenuItem(REMOVE_SELECTED_RANGE_COMMAND);
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
     items << clearItem;
@@ -147,19 +149,18 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeSeparator();
 
+    items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
+
+    items << makeMenu(TranslatableString("notation", "System && page layout"), makeSystemAndPageLayoutItems());
+    items << makeSeparator();
+
+    items << makeMenuItem(OPEN_MEASURE_PROPERTIES_COMMAND);
+    items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
+
     if (isDrumsetStaff()) {
+        items << makeSeparator();
         items << makeMenuItem(OPEN_CUSTOMIZE_KIT_COMMAND);
     }
-
-    items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
-    items << makeSeparator();
-    items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
-    if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
-        items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
-    }
-    items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
-    items << makeSeparator();
-    items << makeMenuItem(OPEN_MEASURE_PROPERTIES_COMMAND);
 
     return items;
 }
@@ -311,25 +312,67 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 
 MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 {
-    MenuItemList items {
-        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND, TranslatableString("notation", "After selection…")),
-        makeMenuItem(INSERT_MEASURES_COMMAND, TranslatableString("notation", "Before selection…")),
-        makeSeparator(),
-        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, TranslatableString("notation", "At start of score…")),
-        makeMenuItem(APPEND_MEASURES_COMMAND, TranslatableString("notation", "At end of score…"))
-    };
+    return makeItems(MEASURES_MENU_COMMANDS);
+}
+
+MenuItemList NotationContextMenuModel::makeSystemAndPageLayoutItems()
+{
+    MenuItemList items;
+
+    INotationSelectionPtr sel = selection();
+    if (!sel) {
+        return items;
+    }
+
+    std::vector<engraving::System*> systems = sel->selectedSystems();
+    std::vector<engraving::Page*> pages = sel->pagesContainingSelection();
+    int nSystems = static_cast<int>(systems.size());
+    int nMeasures = static_cast<int>(sel->selectedMeasuresCount());
+    int nPages = static_cast<int>(pages.size());
+    bool systemslocked = System::allLocked(systems);
+    bool pageslocked = Page::allLocked(pages);
+
+    items << makeSystemLayoutItems(systemslocked, nSystems, nMeasures);
+    items << makeSeparator();
+    items << makePageLayoutItems(pageslocked, nPages, nSystems);
+    items << makeSeparator();
+    items << makeMenuItem(OPEN_BREAKS_COMMAND);
 
     return items;
 }
 
-MenuItemList NotationContextMenuModel::makeMoveMeasureItems()
+MenuItemList NotationContextMenuModel::makeSystemLayoutItems(bool locked, int nSystems, int nMeasures)
 {
-    MenuItemList items {
-        makeMenuItem(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND, TranslatableString("notation", "To previous system")),
-        makeMenuItem(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND, TranslatableString("notation", "To next system"))
-    };
+    TranslatableString lockLabel = locked ? TranslatableString("notation", "Unlock selected system(s)", nullptr, nSystems)
+                                   : TranslatableString("notation", "Lock selected system(s)", nullptr, nSystems);
+    MenuItem* systemLockMenuItem = makeMenuItem(TOGGLE_SYSTEM_LOCK_COMMAND, lockLabel);
+    systemLockMenuItem->setIcon(locked ? ui::IconCode::Code::LOCK_CLOSED : ui::IconCode::Code::LOCK_OPEN);
 
-    return items;
+    return {
+        systemLockMenuItem,
+        makeMenuItem(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
+                     TranslatableString("notation", "Move measure(s) to previous system", nullptr, nMeasures)),
+        makeMenuItem(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND,
+                     TranslatableString("notation", "Move measure(s) to next system", nullptr, nMeasures)),
+        makeMenuItem(MAKE_INTO_SYSTEM_COMMAND)
+    };
+}
+
+MenuItemList NotationContextMenuModel::makePageLayoutItems(bool locked, int nPages, int nSystems)
+{
+    TranslatableString lockLabel = locked ? TranslatableString("notation", "Unlock selected page(s)", nullptr, nPages)
+                                   : TranslatableString("notation", "Lock selected page(s)", nullptr, nPages);
+    MenuItem* pageLockMenuItem = makeMenuItem(TOGGLE_PAGE_LOCK_COMMAND, lockLabel);
+    pageLockMenuItem->setIcon(locked ? ui::IconCode::Code::LOCK_CLOSED : ui::IconCode::Code::LOCK_OPEN);
+
+    return {
+        pageLockMenuItem,
+        makeMenuItem(MOVE_SYSTEM_TO_PREV_PAGE_COMMAND,
+                     TranslatableString("notation", "Move system(s) to previous page", nullptr, nSystems)),
+        makeMenuItem(MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND,
+                     TranslatableString("notation", "Move system(s) to next page", nullptr, nSystems)),
+        makeMenuItem(MAKE_INTO_PAGE_COMMAND)
+    };
 }
 
 MenuItemList NotationContextMenuModel::makeChangeInstrumentItems()

@@ -1140,11 +1140,16 @@ void NotationActionController::init()
                     m_automationModeEnabledChanged.notify();
                 }, Asyncable::Mode::SetReplace);
             }
+
+            notation->viewModeChanged().onNotify(this, [this]() {
+                m_viewModeChanged.notify();
+            }, Asyncable::Mode::SetReplace);
         }
 
         m_textEditingChanged.send(isTextEditing());
         m_noteInputStateChanged.notify();
         m_currentNotationStyleChanged.notify();
+        m_viewModeChanged.notify();
     });
 
     globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
@@ -2052,6 +2057,17 @@ bool NotationActionController::isToggleLayoutBreakAvailable() const
 {
     auto interaction = currentNotationInteraction();
     return interaction && interaction->toggleLayoutBreakAvailable();
+}
+
+ViewMode NotationActionController::viewMode() const
+{
+    INotationPtr notation = currentNotation();
+    return notation ? notation->viewMode() : ViewMode::PAGE;
+}
+
+muse::async::Notification NotationActionController::viewModeChanged() const
+{
+    return m_viewModeChanged;
 }
 
 ScoreConfig NotationActionController::scoreConfig() const

@@ -1396,14 +1396,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Move system to previous page"),
         TranslatableString("action", "Move system to previous page"),
         InputSchema(),
-        Decoration()
+        Decoration(IconCode::Code::ARROW_UP)
     },
     CommandInfo{
         MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND,
         TranslatableString("action", "Move system to next page"),
         TranslatableString("action", "Move system to next page"),
         InputSchema(),
-        Decoration()
+        Decoration(IconCode::Code::ARROW_DOWN)
     },
     CommandInfo{
         SPLIT_MEASURE_COMMAND,
@@ -1559,7 +1559,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     CommandInfo{
         OPEN_BREAKS_COMMAND,
         TranslatableString("action", "Measures per s&ystem…"),
-        TranslatableString("action", "Measures per system"),
+        TranslatableString("action", "Measures per system"), // note: description used as is for the breaksdialog's window title
         InputSchema(),
         Decoration()
     },

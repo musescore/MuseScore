@@ -10,9 +10,6 @@
     <height>167</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Measures per system</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
