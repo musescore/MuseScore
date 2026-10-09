@@ -1321,7 +1321,7 @@ String& SystemHeaderLayout::resolveTokens(String& str, const String& name, const
 InstrumentLabelVisibility SystemHeaderLayout::resolveInstrumentLabelVisibility(const Staff* staff, const Fraction& tick,
                                                                                LayoutContext& ctx, bool firstSystem)
 {
-    InstrumentLabelVisibility local = staff->staffType(tick)->instrumentLabelVisibility();
+    const InstrumentLabelVisibility local = staff->staffType(tick)->instrumentLabelVisibility();
     if (local != InstrumentLabelVisibility::AUTO) {
         return local;
     }
@@ -1336,8 +1336,12 @@ InstrumentLabelVisibility SystemHeaderLayout::resolveInstrumentLabelVisibility(c
         }
     }
 
-    Sid sid = firstSystem ? Sid::firstSystemInstNameVisibility : Sid::subsSystemInstNameVisibility;
-    return ctx.conf().styleV(sid).value<InstrumentLabelVisibility>();
+    const Sid sid = firstSystem ? Sid::firstSystemInstNameVisibility : Sid::subsSystemInstNameVisibility;
+    const InstrumentLabelVisibility styleVisibility = ctx.conf().styleV(sid).value<InstrumentLabelVisibility>();
+    if (firstSystem && styleVisibility == InstrumentLabelVisibility::LONG && !ctx.state().startWithLongNames()) {
+        return InstrumentLabelVisibility::SHORT;
+    }
+    return styleVisibility;
 }
 
 InstrumentNameType SystemHeaderLayout::resolveInstrumentNameType(InstrumentLabelVisibility visibility)
