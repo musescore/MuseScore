@@ -101,7 +101,7 @@ StyledFlickable {
                 currentValue: beamsPageModel.beamWidth.value
 
                 minValue: 0
-                maxValue: 99
+                maxValue: 1
                 step: 0.01
                 decimals: 2
                 measureUnitsSymbol: qsTrc("global", "sp")
