@@ -35,6 +35,7 @@
 #include "../dom/masterscore.h"
 #include "../dom/score.h"
 #include "../dom/symbol.h"
+#include "../dom/tempotext.h"
 #include "../dom/utils.h"
 
 #include "../rendering/iscorerenderer.h"
@@ -994,6 +995,17 @@ void TextBase::paste(const String& txt)
     if (state == 2) {
         insertText(u"&");
         insertText(token);
+    }
+    // Update playback in the paste transaction rather than waiting for text editing to end.
+    if (isTempoText()) {
+        TempoText* tempo = toTempoText(this);
+        TempoText pastedTempo(tempo->segment());
+        pastedTempo.setXmlText(txt);
+        if (!tempo->followText() && TempoText::isMetronomeMark(pastedTempo.plainText())) {
+            undoChangeProperty(Pid::TEMPO_FOLLOW_TEXT, true);
+        } else if (tempo->followText()) {
+            tempo->updateTempo();
+        }
     }
     score()->endCmd();
 }

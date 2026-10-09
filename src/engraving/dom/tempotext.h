@@ -81,6 +81,8 @@ public:
     void setFollowText(bool v) { m_followText = v; }
 
     void updateTempo();
+    /** Checks plain text for an explicit numeric metronome marking. */
+    static bool isMetronomeMark(const String& text);
 
     TDuration duration() const;
 
