@@ -176,6 +176,8 @@ inline static const muse::rcommand::Command SWAP_VOICE_X14_COMMAND("command://no
 inline static const muse::rcommand::Command SWAP_VOICE_X23_COMMAND("command://notation/swap-voice-x23");
 inline static const muse::rcommand::Command SWAP_VOICE_X24_COMMAND("command://notation/swap-voice-x24");
 inline static const muse::rcommand::Command SWAP_VOICE_X34_COMMAND("command://notation/swap-voice-x34");
+inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND("command://notation/voice-assignment-all-in-instrument");
+inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
 
 inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
 inline static const muse::rcommand::Command FLIP_HORIZONTALLY_COMMAND("command://notation/flip-horizontally");
@@ -485,8 +487,6 @@ inline static const muse::rcommand::Command SET_VISIBLE_COMMAND("command://notat
 inline static const muse::rcommand::Command UNSET_VISIBLE_COMMAND("command://notation/unset-visible");
 inline static const muse::rcommand::Command TOGGLE_AUTOPLACE_COMMAND("command://notation/toggle-autoplace");
 inline static const muse::rcommand::Command AUTOPLACE_ENABLED_COMMAND("command://notation/autoplace-enabled");
-inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND("command://notation/voice-assignment-all-in-instrument");
-inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
 inline static const muse::rcommand::Command TOGGLE_AUTOMATION_COMMAND("command://notation/toggle-automation");
 inline static const muse::rcommand::Command SELECT_AUTOMATION_TYPE_COMMAND("command://notation/select-automation-type"); // with params
 

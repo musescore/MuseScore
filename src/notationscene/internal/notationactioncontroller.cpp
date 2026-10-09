@@ -220,10 +220,10 @@ void NotationActionController::init()
     registerCommand(SET_DURATION_512TH_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
     registerCommand(SET_DURATION_1024TH_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
 
-    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
-    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
-    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
-    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
+    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
+    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
@@ -969,8 +969,8 @@ void NotationActionController::init()
             { "select-prev-chord", ADD_TO_SELECTION_PREV_CHORD_COMMAND, {} },
             { "select-next-measure", ADD_TO_SELECTION_NEXT_MEASURE_COMMAND, {} },
             { "select-prev-measure", ADD_TO_SELECTION_PREV_MEASURE_COMMAND, {} },
-            { "select-above-staff", ADD_TO_SELECTION_ABOVE_STAFF_COMMAND, {} },
-            { "select-below-staff", ADD_TO_SELECTION_BELOW_STAFF_COMMAND, {} },
+            { "select-staff-above", ADD_TO_SELECTION_ABOVE_STAFF_COMMAND, {} },
+            { "select-staff-below", ADD_TO_SELECTION_BELOW_STAFF_COMMAND, {} },
             { "select-begin-line", ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND, {} },
             { "select-end-line", ADD_TO_SELECTION_END_SYSTEM_COMMAND, {} },
             { "select-begin-score", ADD_TO_SELECTION_BEGIN_SCORE_COMMAND, {} },
@@ -989,7 +989,7 @@ void NotationActionController::init()
             { "resequence-rehearsal-marks", RESEQUENCE_REHEARSAL_MARKS_COMMAND, {} },
             { "unroll-repeats", UNROLL_REPEATS_COMMAND, {} },
             { "copy-lyrics-to-clipboard", COPY_LYRICS_COMMAND, {} },
-            { "repeat-selection", REPEAT_SELECTION_COMMAND, {} },
+            { "repeat-sel", REPEAT_SELECTION_COMMAND, {} },
             { "add-up-bow", ADD_UP_BOW_COMMAND, {} },
             { "add-down-bow", ADD_DOWN_BOW_COMMAND, {} },
             { "transpose-up", TRANSPOSE_UP_COMMAND, {} },
@@ -2021,9 +2021,9 @@ void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDo
 
     if (noteInput->isNoteInputMode()) {
         if (steps > 0) {
-            noteInput->doubleNoteInputDuration();
-        } else {
             noteInput->halveNoteInputDuration();
+        } else {
+            noteInput->doubleNoteInputDuration();
         }
     } else {
         interaction->increaseDecreaseDuration(steps, stepByDots);
