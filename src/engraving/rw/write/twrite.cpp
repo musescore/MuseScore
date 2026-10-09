@@ -2949,6 +2949,7 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN);
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_FROM);
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_TO);
+    writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_STYLE);
     writeProperty(item, xml, Pid::STAFF_USERDIST);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE1);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE2);

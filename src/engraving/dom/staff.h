@@ -131,9 +131,11 @@ public:
     bool barLineSpan() const { return m_barLineSpan; }
     int barLineFrom() const { return m_barLineFrom; }
     int barLineTo() const { return m_barLineTo; }
+    BarLineSpanStyle barLineSpanStyle() const { return m_barLineSpanStyle; }
     void setBarLineSpan(const bool val) { m_barLineSpan = val; }
     void setBarLineFrom(int val) { m_barLineFrom = val; }
     void setBarLineTo(int val) { m_barLineTo = val; }
+    void setBarLineSpanStyle(BarLineSpanStyle val) { m_barLineSpanStyle = val; }
     double staffHeight() const;
     double staffHeight(const Fraction& tick) const;
 
@@ -273,6 +275,8 @@ private:
     bool m_barLineSpan = false;          // true - span barline to next staff
     int m_barLineFrom = 0;              // line of start staff to draw the barline from (0 = staff top line, ...)
     int m_barLineTo = 0;                // line of end staff to draw the bar line to (0= staff bottom line, ...)
+
+    BarLineSpanStyle m_barLineSpanStyle = BarLineSpanStyle::DEFAULT;
 
     bool m_cutaway = false;
     bool m_showIfEntireSystemEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true

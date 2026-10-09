@@ -1174,6 +1174,7 @@ void Staff::init(const Staff* s)
     setDefaultClefType(s->defaultClefType());
     m_barLineFrom       = s->m_barLineFrom;
     m_barLineTo         = s->m_barLineTo;
+    m_barLineSpanStyle  = s->m_barLineSpanStyle;
     m_hideWhenEmpty     = s->m_hideWhenEmpty;
     m_cutaway           = s->m_cutaway;
     m_showIfEntireSystemEmpty = s->m_showIfEntireSystemEmpty;
@@ -1446,6 +1447,8 @@ PropertyValue Staff::getProperty(Pid id) const
         return barLineFrom();
     case Pid::STAFF_BARLINE_SPAN_TO:
         return barLineTo();
+    case Pid::STAFF_BARLINE_SPAN_STYLE:
+        return static_cast<int>(barLineSpanStyle());
     case Pid::STAFF_USERDIST:
         return userDist();
     case Pid::GENERATED:
@@ -1541,6 +1544,12 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::STAFF_BARLINE_SPAN_TO:
         setBarLineTo(v.toInt());
         break;
+    case Pid::STAFF_BARLINE_SPAN_STYLE:
+        if (v.toInt() < static_cast<int>(BarLineSpanStyle::DEFAULT) || v.toInt() > static_cast<int>(BarLineSpanStyle::DOTTED)) {
+            return false;
+        }
+        setBarLineSpanStyle(static_cast<BarLineSpanStyle>(v.toInt()));
+        break;
     case Pid::STAFF_USERDIST:
         setUserDist(v.value<Spatium>());
         break;
@@ -1599,6 +1608,8 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::STAFF_BARLINE_SPAN_FROM:
     case Pid::STAFF_BARLINE_SPAN_TO:
         return 0;
+    case Pid::STAFF_BARLINE_SPAN_STYLE:
+        return static_cast<int>(BarLineSpanStyle::DEFAULT);
     case Pid::STAFF_USERDIST:
         return 0.0_sp;
     case Pid::SHOW_MEASURE_NUMBERS:
