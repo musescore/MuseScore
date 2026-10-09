@@ -26,12 +26,17 @@
 #include "global/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "toast/itoastservice.h"
+#include "multiwindows/imultiwindowsprovider.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 #include "project/iprojectconfiguration.h"
 #include "project/iconvertfiletoscorescenario.h"
 #include "project/iconvertfiletoscoreservice.h"
+
+namespace muse {
+class Val;
+}
 
 namespace mu::project {
 class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public muse::async::Asyncable, public muse::Contextable
@@ -42,6 +47,7 @@ public:
     muse::GlobalInject<muse::toast::IToastService> toastService;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::ContextInject<IConvertFileToScoreService> service = { this };
 
 public:
@@ -64,15 +70,21 @@ public:
 
     void cancelConversion(ConvertType type, int convertId) override;
 
-    muse::async::Channel<PollingFailure> pollingFailed() const override;
+    muse::async::Channel<PollingStatus> pollingStatusChanged() const override;
 
     void retryPolling() override;
 
 private:
+    struct ConvertSelection {
+        ConvertInput input;
+        muse::String convertedScoreName;
+    };
+
     muse::async::Promise<muse::Ret> checkConvertIsAllowed();
     muse::async::Promise<muse::Ret> ensureAuthorization();
 
     muse::async::Promise<ConvertSelection> selectFilesToConvert(const muse::io::paths_t& paths = {}, ConvertType type = ConvertType::Omr);
+    ConvertSelection toConvertSelection(const muse::Val& val) const;
 
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
 
@@ -93,7 +105,7 @@ private:
 
     void showFileProcessingDialog();
     void showScoreReadyNotification(const WatchedScore& watched);
-    void showConvertFailedNotification(const muse::Ret& ret);
+    void showConvertFailedNotification(const WatchedScore& watched);
     void showPollingFailureNotification();
     void showPollingGaveUpNotification();
 

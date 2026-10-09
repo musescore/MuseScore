@@ -50,6 +50,25 @@ StyledDialogView {
     property int currentPageIndex: 0
     property bool skipCloseConfirmation: false
 
+    readonly property string pageTitle: {
+        if (root.currentPageIndex === 2) {
+            return qsTrc("project/convert", "Convert audio to score (beta)")
+        }
+
+        switch (convertModel.fileListModel.fileCategory) {
+        case FileListModel.Audio:
+            return qsTrc("project/convert", "Convert audio to score (beta)")
+        case FileListModel.Pdf:
+            return qsTrc("project/convert", "Convert PDF to score")
+        case FileListModel.Image:
+            return qsTrc("project/convert", "Convert images to score")
+        case FileListModel.Unknown:
+            break
+        }
+
+        return qsTrc("project/convert", "Convert a file to score")
+    }
+
     ConvertFileToScoreModel {
         id: convertModel
 
@@ -110,9 +129,7 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
 
-                text: root.currentPageIndex === 2
-                      ? qsTrc("project/convert", "Convert audio to score (beta)")
-                      : qsTrc("project/convert", "Convert a file to score")
+                text: root.pageTitle
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -167,7 +184,7 @@ StyledDialogView {
             }
 
             onFilesDropped: function(urls) {
-                if (convertModel.validateAndApplyFiles(urls)) {
+                if (convertModel.validateAndAddFiles(urls)) {
                     root.currentPageIndex = 1
                 }
             }
@@ -187,24 +204,21 @@ StyledDialogView {
             saveAsName: convertModel.defaultSaveAsName
             saveAsErrorText: convertModel.validateFileName(filesPage.saveAsTrimmed)
             navigationSection: root.navigationSection
-            files: convertModel.selectedPaths
+            fileListModel: convertModel.fileListModel
             canSelectMultipleFiles: convertModel.canSelectMultipleFiles
             fileRequirements: convertModel.fileRequirements
-            convertLimits: convertModel.convertLimits
 
             onCancelRequested: convertModel.confirmCancel()
             onBackRequested: convertModel.confirmGoingBack()
 
-            onConvertRequested: function(paths, convertedScoreName) {
-                root.finish(convertModel.convertType, paths, "", convertedScoreName)
+            onConvertRequested: function(convertedScoreName) {
+                root.finish(convertModel.convertType, convertModel.fileListModel.paths(), "", convertedScoreName)
             }
 
-            onSelectMoreFilesRequested: function(existingPaths) {
-                convertModel.selectAndValidateFiles(existingPaths)
-            }
+            onSelectMoreFilesRequested: convertModel.selectAndValidateFiles()
 
-            onApplyFilesRequested: function(paths) {
-                convertModel.validateAndApplyFiles(paths)
+            onAddFilesRequested: function(urls) {
+                convertModel.validateAndAddFiles(urls)
             }
         }
     }
