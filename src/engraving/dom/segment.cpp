@@ -727,7 +727,10 @@ void Segment::add(EngravingItem* el)
 
     case ElementType::STRING_TUNINGS: {
         m_annotations.push_back(el);
-        el->part()->addStringTunings(toStringTunings(el));
+        // Shared parts display copies of their origin parts' string tunings. Tunings should not be registered in them
+        if (!el->part()->isSharedPart()) {
+            el->part()->addStringTunings(toStringTunings(el));
+        }
         break;
     }
 
@@ -756,8 +759,13 @@ void Segment::add(EngravingItem* el)
     }
 
     case ElementType::HARP_DIAGRAM:
+        // Shared parts display copies of their origin parts' diagrams; the origin parts own them
+        if (el->part()->isSharedPart()) {
+            m_annotations.push_back(el);
+            break;
+        }
         // already a diagram in this segment
-        if (el->part()->harpDiagrams.count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
+        if (el->part()->harpDiagrams().count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
             break;
         }
         el->part()->addHarpDiagram(toHarpPedalDiagram(el));
@@ -932,7 +940,9 @@ void Segment::remove(EngravingItem* el)
         break;
 
     case ElementType::STRING_TUNINGS:
-        el->part()->removeStringTunings(toStringTunings(el));
+        if (!el->part()->isSharedPart()) {
+            el->part()->removeStringTunings(toStringTunings(el));
+        }
         removeAnnotation(el);
         break;
 
@@ -950,7 +960,9 @@ void Segment::remove(EngravingItem* el)
         break;
 
     case ElementType::HARP_DIAGRAM:
-        el->part()->removeHarpDiagram(toHarpPedalDiagram(el));
+        if (!el->part()->isSharedPart()) {
+            el->part()->removeHarpDiagram(toHarpPedalDiagram(el));
+        }
         removeAnnotation(el);
         break;
 

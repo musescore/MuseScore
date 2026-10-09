@@ -27,6 +27,9 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
 #include "engraving/dom/tie.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/sharedpart.h"
+#include "engraving/dom/staff.h"
 
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/flip.h"
@@ -377,6 +380,48 @@ TEST_F(Engraving_StaveSharingTests, testFlipTieAfterUndoingStaveSharing)
     }
 
     // [THEN] We should not crash
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testLocalClefKeyTimeSigsCopiedToSharedStaves)
+{
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_04.mscx");
+    ASSERT_TRUE(score);
+
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    const track_idx_t firstSharedTrack = sharedPart->staff(0)->idx() * VOICES;
+    const track_idx_t secondSharedTrack = sharedPart->staff(1)->idx() * VOICES;
+
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    Measure* m4 = score->crMeasure(3);
+    ASSERT_TRUE(m2 && m3 && m4);
+
+    Segment* clefSeg = m3->findSegmentR(SegmentType::Clef, m3->ticks());
+    ASSERT_TRUE(clefSeg);
+    EXPECT_TRUE(clefSeg->element(firstSharedTrack) && clefSeg->element(firstSharedTrack)->isClef());
+    EXPECT_FALSE(clefSeg->element(secondSharedTrack));
+
+    Segment* timeSigSeg = m4->findSegment(SegmentType::TimeSig, m4->tick());
+    ASSERT_TRUE(timeSigSeg);
+    EXPECT_TRUE(timeSigSeg->element(firstSharedTrack) && timeSigSeg->element(firstSharedTrack)->isTimeSig());
+    EXPECT_FALSE(timeSigSeg->element(secondSharedTrack));
+
+    Segment* keySigSeg = m2->findSegment(SegmentType::KeySig, m2->tick());
+    ASSERT_TRUE(keySigSeg);
+    EXPECT_TRUE(keySigSeg->element(secondSharedTrack) && keySigSeg->element(secondSharedTrack)->isKeySig());
+    EXPECT_FALSE(keySigSeg->element(firstSharedTrack));
 
     delete score;
 }

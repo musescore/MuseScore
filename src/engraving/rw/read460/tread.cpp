@@ -3589,7 +3589,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "name") {
         p->instrument()->setLongName(e.readText());
     } else if (tag == "color") {
-        p->setColor(e.readInt());
+        e.skipCurrentElement(); // Unused
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
     } else if (tag == "show") {

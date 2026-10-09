@@ -114,10 +114,11 @@ void KeySig::setKey(Key concertKey)
     KeySigEvent e;
     e.setConcertKey(concertKey);
     if (staff() && !style().styleB(Sid::concertPitch)) {
-        Interval v = staff()->part()->instrument(tick())->transpose();
+        const Part* part = staff()->originPart(tick());
+        Interval v = part->instrument(tick())->transpose();
         if (!v.isZero()) {
             v.flip();
-            Key transposedKey = Transpose::transposeKey(concertKey, v, staff()->part()->preferSharpFlat());
+            Key transposedKey = Transpose::transposeKey(concertKey, v, part->preferSharpFlat());
             e.setKey(transposedKey);
         }
     }

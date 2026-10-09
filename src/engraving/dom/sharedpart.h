@@ -40,6 +40,10 @@ public:
     void removeOriginPart(Part* p);
     const std::vector<Part*>& originParts() const { return m_originParts; }
 
+    const Part* originPart(track_idx_t sharedTrack, const Fraction& tick) const override;
+    using Part::originPart;
+    Part* originPartForStaff(staff_idx_t sharedStaffIdx, const Fraction& tick) const;
+
     String partName() const override;
 
     PropertyValue getProperty(Pid pid) const override;
@@ -58,6 +62,8 @@ public:
     bool isSameInstruments() const { return m_isSameInstruments; }
 
 private:
+    Part* mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const;
+
     void computeIsSameInstruments();
     bool m_isSameInstruments = true;
 

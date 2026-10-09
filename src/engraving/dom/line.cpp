@@ -321,8 +321,8 @@ bool LineSegment::edit(EditData& ed)
         if (!note1 || !note2
             || !note1->isNote() || !note2->isNote()
             || note1->chord()->tick() >= note2->chord()->tick()
-            || note1->chord()->staff()->part()->instrument(note1->chord()->tick())
-            != note2->chord()->staff()->part()->instrument(note2->chord()->tick())) {
+            || note1->chord()->originPart()->instrument(note1->chord()->tick())
+            != note2->chord()->originPart()->instrument(note2->chord()->tick())) {
             return true;
         }
         if (note1 != oldNote1 || note2 != oldNote2) {

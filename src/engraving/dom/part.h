@@ -24,13 +24,8 @@
 
 #include <vector>
 
-#include "mscore.h"
 #include "instrument.h"
 #include "../types/types.h"
-
-namespace mu::engraving::read206 {
-class Read206;
-}
 
 namespace mu::engraving {
 class Staff;
@@ -70,7 +65,6 @@ class Part : public EngravingObject
 
 public:
     static const Fraction MAIN_INSTRUMENT_TICK;
-    static const int DEFAULT_COLOR = 0x3399ff;
 
     Part(Score* score = nullptr, ElementType type = ElementType::PART);
     void initFromInstrTemplate(const InstrumentTemplate*);
@@ -79,9 +73,6 @@ public:
     void setId(const muse::ID& id);
 
     Part* clone() const;
-
-    void read(XmlReader&);
-    bool readProperties(XmlReader&);
 
     size_t nstaves() const;
     size_t visibleStavesCount() const;
@@ -124,9 +115,6 @@ public:
     int midiProgram() const;
     void setMidiProgram(int, int bank = 0);
 
-    int capoFret() const;
-    void setCapoFret(int capoFret);
-
     int midiChannel() const;
     int midiPort() const;
     void setMidiChannel(int ch, int port = -1, const Fraction& tick = { -1, 1 });  // tick != -1 for InstrumentChange
@@ -150,12 +138,15 @@ public:
     void removeNonPrimaryInstruments();
     const InstrumentList& instruments() const;
 
+    const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
     const StringData* stringData(const Fraction& tick, staff_idx_t staffIdx) const;
     void addStringTunings(StringTunings* stringTunings);
     void removeStringTunings(StringTunings* stringTunings);
+    StringTunings* nextStringTuning(const Fraction& tick) const;
 
     void insertTime(const Fraction& tick, const Fraction& len);
 
+    const std::map<int, HarpPedalDiagram*>& harpDiagrams() const { return m_harpDiagrams; }
     void addHarpDiagram(HarpPedalDiagram*);
     void removeHarpDiagram(HarpPedalDiagram*);
     void clearHarpDiagrams();
@@ -165,9 +156,6 @@ public:
     Fraction currentHarpDiagramTick(const Fraction&) const;
 
     virtual String partName() const;
-
-    int color() const { return m_color; }
-    void setColor(int value) { m_color = value; }
 
     bool isVisible() const;
 
@@ -196,19 +184,13 @@ public:
     PreferSharpFlat preferSharpFlat() const { return m_preferSharpFlat; }
     void setPreferSharpFlat(PreferSharpFlat v) { m_preferSharpFlat = v; }
 
-    // Allows not reading the same instrument twice on importing 2.X scores.
-    // TODO: do we need instruments info in parts at all?
-    friend void readPart206(Part*, XmlReader&);
-
-    std::map<int, HarpPedalDiagram*> harpDiagrams;
-
-    const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
+    virtual const Part* originPart(track_idx_t track, const Fraction& tick) const;
+    Part* originPart(track_idx_t track, const Fraction& tick);
 
     SharedPart* sharedPart() const { return m_sharedPart; }
     void setSharedPart(SharedPart* p) { m_sharedPart = p; }
 
 private:
-    friend class read206::Read206;
     friend class SharedPart;
 
     InstrumentList m_instruments;
@@ -216,8 +198,6 @@ private:
     muse::ID m_id = INVALID_ID;       ///< used for MusicXML import
     bool m_show = false;              ///< show part in partitur if true
     bool m_soloist = false;           ///< used in score ordering
-    int m_capoFret = 0;
-    int m_color = 0;                  ///User specified color for helping to label parts
 
     /// Hide staves in this part when empty
     AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO;
@@ -227,6 +207,7 @@ private:
 
     PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
+    std::map<int, HarpPedalDiagram*> m_harpDiagrams;
     std::map<int, StringTunings*> m_stringTunings;
 
     SharedPart* m_sharedPart = nullptr;
