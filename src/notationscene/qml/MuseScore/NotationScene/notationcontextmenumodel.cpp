@@ -151,10 +151,8 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
 
-    if (projectSession()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
-        items << makeMenu(TranslatableString("notation", "System && page layout"), makeSystemAndPageLayoutItems());
-        items << makeSeparator();
-    }
+    items << makeMenu(TranslatableString("notation", "System && page layout"), makeSystemAndPageLayoutItems());
+    items << makeSeparator();
 
     items << makeMenuItem(OpenMeasurePropertiesCommand::id);
     items << makeMenuItem(OpenStaffPropertiesCommand::id);
