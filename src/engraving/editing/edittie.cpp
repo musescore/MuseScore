@@ -140,6 +140,8 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
             // tie grace note before to main note
             cr = toChord(c->ownershipParent());
             addToChord = true;
+            is.setTrack(cr->track());
+            is.setSegment(cr->segment());
         } else {
             is.setTrack(note->chord()->track());
             is.setSegment(note->chord()->segment());
@@ -261,7 +263,19 @@ Tie* EditTie::cmdToggleTie(Score* score)
 
     const bool shouldTieListSelection = noteList.size() >= 2 && !singleTick;
 
-    if (singleTick /* i.e. all notes are in the same tick */ && !allHaveExistingNextNoteToTieTo) {
+    // A same-tick list of 2+ notes (e.g. several grace notes anchored at the same main note)
+    // where only SOME of them already have a real note to tie to (typically because they can
+    // be tied directly to each other) must not be routed to cmdAddTie() as a whole: it treats
+    // every note in the list independently and unconditionally creates/reuses a note to tie
+    // each one forward - for the already-resolved notes this fabricates a spurious extra note,
+    // since cmdAddTie's own note creation for an earlier note in the list pollutes the chord
+    // that a later note's search then matches against. Let the main loop below tie the
+    // resolved notes directly instead (same "someHaveExistingNextNoteToTieTo && tieToNote"
+    // handling already used for non-singleTick lists), and only fall back to cmdAddTie when
+    // nothing in the list has any existing tie target at all.
+    const bool mixedSingleTickList = singleTick && someHaveExistingNextNoteToTieTo && !allHaveExistingNextNoteToTieTo;
+
+    if (singleTick /* i.e. all notes are in the same tick */ && !allHaveExistingNextNoteToTieTo && !mixedSingleTickList) {
         cmdAddTie(score);
         return nullptr;
     }
