@@ -24,7 +24,7 @@
 #include <QQuickItem>
 
 #include "extensions/api/v1/ipluginapiv1.h"
-
+#include "async/asyncable.h"
 #include "global/api/apiutils.h"
 
 #include "modularity/ioc.h"
@@ -92,7 +92,7 @@ class Score;
 //   @P scores               array[mu::engraving::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
-class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV1, public muse::Contextable
+class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV1, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -592,6 +592,11 @@ public:
 
 private:
     mu::engraving::Score* currentScore() const;
+    void initScoreStateNotifications();
+    void subscribeToNotationState(notation::INotationPtr notation);
+
+    struct NotationSubscriptions : public muse::async::Asyncable {};
+    NotationSubscriptions m_notationSubscriptions;
 
     muse::api::IApiEngine* m_engine = nullptr;
     QString m_pluginType;
