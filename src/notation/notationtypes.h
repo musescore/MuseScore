@@ -129,6 +129,8 @@ enum class SelectionTarget : unsigned char
     PrevFrame,
     NextSystem,
     PrevSystem,
+    NextSection,
+    PrevSection,
     AboveStaff,
     BelowStaff,
     UpNoteInChord,
@@ -225,6 +227,7 @@ enum class MoveSelectionType : unsigned char
     Track,
     Frame,
     System,
+    Section,
     String // TAB Staff
 };
 
