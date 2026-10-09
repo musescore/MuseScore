@@ -40,7 +40,7 @@ class Engraving_SystemLocksTests : public ::testing::Test
 TEST_F(Engraving_SystemLocksTests, createAndSaveLocks)
 {
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"systemDividers-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // Enable system dividers
     score->startCmd(TranslatableString::untranslatable("Engraving system divider test"));
@@ -50,13 +50,13 @@ TEST_F(Engraving_SystemLocksTests, createAndSaveLocks)
     EXPECT_TRUE(score->systemDividers().size());
 
     System* firstSystem = score->systems().front();
-    EXPECT_TRUE(firstSystem);
+    ASSERT_TRUE(firstSystem);
 
     // Check system dividers has been created
     SystemDivider* dividerLeft = firstSystem->systemDividerLeft();
-    EXPECT_TRUE(dividerLeft);
+    ASSERT_TRUE(dividerLeft);
     SystemDivider* dividerRight = firstSystem->systemDividerRight();
-    EXPECT_TRUE(dividerRight);
+    ASSERT_TRUE(dividerRight);
 
     // Make manual edits to system dividers so they get written to file
     score->startCmd(TranslatableString::untranslatable("Edit divider"));

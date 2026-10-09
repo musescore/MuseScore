@@ -102,7 +102,10 @@ static void checkPitchBend(EventsHolder& events, int tick, int pitchValue, MidiI
 static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
 {
     MasterScore* score = ScoreRW::readScore(MIDIRENDERER_TESTS_DIR + fileName);
-    EXPECT_TRUE(score);
+    if (!score) {
+        ADD_FAILURE() << "score is null";
+        return {};
+    }
 
     EventsHolder events;
     CompatMidiRendererInternal::Context ctx;
@@ -118,7 +121,10 @@ static EventsHolder renderMidiEventsWithPause(const String& fileName,
                                               CompatMidiRendererInternal::Context& ctx)
 {
     MasterScore* score = ScoreRW::readScore(MIDIRENDERER_TESTS_DIR + fileName);
-    EXPECT_TRUE(score);
+    if (!score) {
+        ADD_FAILURE() << "score is null";
+        return {};
+    }
 
     EventsHolder events;
     ctx.applyCaesuras = true;

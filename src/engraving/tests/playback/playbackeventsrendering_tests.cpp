@@ -2405,7 +2405,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
     ASSERT_EQ(chord->notes().size(), 1);
 
     const Note* firstTiedNote = chord->notes().front();
-    ASSERT_TRUE(firstTiedNote->tieFor() && !firstTiedNote->tieBack());
+    ASSERT_TRUE(firstTiedNote->tieFor());
+    ASSERT_FALSE(firstTiedNote->tieBack());
 
     // [WHEN] Request to render the 1st chord
     PlaybackEventsMap result;
@@ -2426,7 +2427,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
     ASSERT_EQ(chord->notes().size(), 1);
 
     const Note* lastTiedNote = chord->notes().front();
-    ASSERT_TRUE(lastTiedNote->tieBack() && !lastTiedNote->tieFor());
+    ASSERT_TRUE(lastTiedNote->tieBack());
+    ASSERT_FALSE(lastTiedNote->tieFor());
 
     // [WHEN] Request to render the 2nd chord
     result.clear();
@@ -2476,7 +2478,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote_Pla
     ASSERT_EQ(chord->notes().size(), 1);
 
     const Note* lastTiedNote = chord->notes().front();
-    ASSERT_TRUE(lastTiedNote->tieBack() && !lastTiedNote->tieFor());
+    ASSERT_TRUE(lastTiedNote->tieBack());
+    ASSERT_FALSE(lastTiedNote->tieFor());
 
     // [GIVEN] Disable tremolo playback - this simulates the user unchecking "Play tremolo"
     TremoloSingleChord* tremoloSingle = chord->tremoloSingleChord();
@@ -2502,7 +2505,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote_Pla
     ASSERT_EQ(firstChord->notes().size(), 1);
 
     const Note* firstTiedNote = firstChord->notes().front();
-    ASSERT_TRUE(firstTiedNote->tieFor() && !firstTiedNote->tieBack());
+    ASSERT_TRUE(firstTiedNote->tieFor());
+    ASSERT_FALSE(firstTiedNote->tieBack());
 
     // [WHEN] Request to render the first chord (without tremolo)
     PlaybackEventsMap result;
@@ -3313,7 +3317,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
     ASSERT_TRUE(firstSegment);
 
     const ChordRest* cr = firstSegment->nextChordRest(0);
-    ASSERT_TRUE(cr && cr->isChord());
+    ASSERT_TRUE(cr);
+    ASSERT_TRUE(cr->isChord());
 
     const Chord* chord = toChord(cr);
     ASSERT_EQ(chord->notes().size(), 1);

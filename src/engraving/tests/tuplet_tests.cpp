@@ -107,16 +107,16 @@ void Engraving_TupletTests::tuplet(const char16_t* p1, const char16_t* p2)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
+    ASSERT_TRUE(m2);
 
-    EXPECT_TRUE(m1 != 0);
-    EXPECT_TRUE(m2 != 0);
     EXPECT_TRUE(m1 != m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s != 0);
+    ASSERT_TRUE(s);
     Chord* c = toChord(s->element(0));
-    EXPECT_TRUE(c != 0);
+    ASSERT_TRUE(c);
 
     EXPECT_TRUE(createTuplet(3, c));
 
@@ -178,7 +178,7 @@ TEST_F(Engraving_TupletTests, split4)
 TEST_F(Engraving_TupletTests, addStaff)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "nestedTuplets_addStaff.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // add a staff to the existing staff
     // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
@@ -202,7 +202,7 @@ TEST_F(Engraving_TupletTests, addStaff)
 TEST_F(Engraving_TupletTests, saveLoad)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "save-load.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     //simply load and save
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"save-load.mscx", TUPLET_DATA_DIR + u"save-load.mscx"));
     delete score;

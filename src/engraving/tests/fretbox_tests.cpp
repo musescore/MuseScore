@@ -42,7 +42,10 @@ public:
     {
         String readFile(FRET_BOX_DATA_DIR + u"empty.mscx");
         MasterScore* score = ScoreRW::readScore(readFile);
-        EXPECT_TRUE(score);
+        if (!score) {
+            ADD_FAILURE() << "score is null";
+            return nullptr;
+        }
 
         score->doLayout();
         return score;
@@ -201,6 +204,7 @@ TEST_F(Engraving_FretBoxTests, Init)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A", u"B", u"C", u"D" });
@@ -219,6 +223,7 @@ TEST_F(Engraving_FretBoxTests, ReorderChords)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A", u"B", u"C", u"D" });
@@ -245,6 +250,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_AddChords)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -270,6 +276,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_AddChords)
 TEST_F(Engraving_FretBoxTests, AddChords_SameChordAfterPreviousOne) {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -297,6 +304,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_AddChords_SameChordBeforePreviousOne)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -324,6 +332,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RemoveChords)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -351,6 +360,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RemoveChords_SameChord_RemoveFirst)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -381,6 +391,7 @@ TEST_F(Engraving_FretBoxTests, RemoveChords_SameChord_RemoveSecond)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -411,6 +422,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -437,6 +449,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordBefore)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -464,6 +477,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -491,6 +505,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordBefore_NoDuplicate
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -519,6 +534,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter_NoDuplicates
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -547,6 +563,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter_NoDuplicates
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -574,6 +591,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_AfterMoving)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
@@ -611,6 +629,7 @@ TEST_F(Engraving_FretBoxTests, TestChordCase)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
+    ASSERT_TRUE(score);
 
     // [GIVEN] Add chords to the score
     // With default style settings applied, Am == am, AM != Am or am

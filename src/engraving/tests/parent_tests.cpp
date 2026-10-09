@@ -255,7 +255,8 @@ TEST_F(Engraving_ParentTests, layoutParentDefaultsToTheOwner)
     ASSERT_TRUE(measure);
     Segment* segment = measure->first(SegmentType::ChordRest);
     ASSERT_TRUE(segment);
-    ASSERT_TRUE(segment->element(0) && segment->element(0)->isChord());
+    ASSERT_TRUE(segment->element(0));
+    ASSERT_TRUE(segment->element(0)->isChord());
     Chord* chord = toChord(segment->element(0));
     Note* note = chord->notes().front();
 

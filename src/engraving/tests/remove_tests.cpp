@@ -81,7 +81,7 @@ static bool staffHasElements(Score* score, staff_idx_t staffIdx)
 TEST_F(Engraving_RemoveTests, removeStaff)
 {
     MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + u"remove_staff.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // Remove the second staff and see what happens
     score->startCmd(TranslatableString::untranslatable("Engraving remove tests"));
@@ -100,7 +100,7 @@ TEST_F(Engraving_RemoveTests, removeStaff)
 TEST_F(Engraving_RemoveTests, removeStaffWithCourtesyClefs)
 {
     MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + u"remove_staff_courtesy.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving remove tests"));
     score->cmdRemoveStaff(0);
@@ -110,14 +110,14 @@ TEST_F(Engraving_RemoveTests, removeStaffWithCourtesyClefs)
 
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
     Segment* courtesyClefSeg = m2->findSegmentR(SegmentType::ClefRepeatAnnounce, m2->ticks());
-    EXPECT_TRUE(courtesyClefSeg);
+    ASSERT_TRUE(courtesyClefSeg);
     Clef* courtesyClef = toClef(courtesyClefSeg->element(0));
 
-    EXPECT_TRUE(courtesyClef);
-    EXPECT_TRUE(courtesyClef->leftParen());
-    EXPECT_TRUE(courtesyClef->rightParen());
+    ASSERT_TRUE(courtesyClef);
+    ASSERT_TRUE(courtesyClef->leftParen());
+    ASSERT_TRUE(courtesyClef->rightParen());
 }
 
 //! A bracket is only a rendering of its bracket item, so it must not outlive it:

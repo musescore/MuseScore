@@ -48,7 +48,7 @@ TEST_F(Engraving_BreathTests, breath)
     String reference2(BREATH_DATA_DIR + u"breath02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->doLayout();
 

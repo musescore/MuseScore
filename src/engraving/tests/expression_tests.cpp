@@ -45,7 +45,7 @@ class Engraving_ExpressionTests : public ::testing::Test
 TEST_F(Engraving_ExpressionTests, expression1)
 {
     MasterScore* score = ScoreRW::readScore(EXPRESSION_DATA_DIR + u"expression-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"expression-1.mscx", EXPRESSION_DATA_DIR + u"expression-1-ref.mscx"));
     delete score;
@@ -57,7 +57,7 @@ TEST_F(Engraving_ExpressionTests, expression1)
 TEST_F(Engraving_ExpressionTests, expression2)
 {
     MasterScore* score = ScoreRW::readScore(EXPRESSION_DATA_DIR + u"expression-2.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* measure = score->firstMeasure();
     Segment* segment = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));

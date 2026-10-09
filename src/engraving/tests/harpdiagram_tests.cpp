@@ -81,23 +81,23 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     const String write(u"textdiagram-test01.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
     Segment* s1 = m1->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s1);
+    ASSERT_TRUE(s1);
 
     Measure* m2 = m1->nextMeasure();
     Segment* s2 = m2->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s2);
+    ASSERT_TRUE(s2);
 
     Measure* m3 = m2->nextMeasure();
     Segment* s3 = m3->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s3);
+    ASSERT_TRUE(s3);
 
     Measure* m4 = m3->nextMeasure();
     Segment* s4 = m4->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s4);
+    ASSERT_TRUE(s4);
 
     // set first diagram all natural
     HarpPedalDiagram* diagram1 = Factory::createHarpPedalDiagram(s1);
@@ -181,10 +181,10 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     const String writeFile(u"textdiagram-test02.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Segment* s2 = m2->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s2);
+    ASSERT_TRUE(s2);
     Part* p = score->partById(1);
 
     // check final diagram is Ab, Db
@@ -225,10 +225,10 @@ TEST_F(Engraving_HarpDiagramTests, testmap)
     const String initFile(HARPDIAGRAM_DATA_DIR + u"textdiagram02.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Segment* s2 = m2->first();
-    EXPECT_TRUE(s2);
+    ASSERT_TRUE(s2);
 
     Part* p = score->partById(1);
 
