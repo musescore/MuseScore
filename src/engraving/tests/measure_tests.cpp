@@ -35,6 +35,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/spacer.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/editing/edittimesig.h"
@@ -1117,4 +1118,39 @@ TEST_F(Engraving_MeasureTests, timeDeleteNoteWithAnnotationUndo)
     const Segment* textSeg = m2->findSegment(SegmentType::ChordRest, m2->tick());
     ASSERT_TRUE(textSeg);
     EXPECT_TRUE(textSeg->element(0) && textSeg->element(0)->isChord());
+}
+
+TEST_F(Engraving_MeasureTests, undoReplaceSpacer)
+{
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrest-breath.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m = score->firstMeasure();
+    ASSERT_TRUE(m);
+
+    auto dropSpacer = [&](SpacerType type) {
+        Spacer* spacer = Factory::createSpacer(score->dummy());
+        spacer->setSpacerType(type);
+        EditData dd(nullptr);
+        dd.dropElement = spacer;
+        dd.track = 0;
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
+            m->drop(tx, dd);
+        });
+    };
+
+    dropSpacer(SpacerType::DOWN);
+    dropSpacer(SpacerType::FIXED);
+    ASSERT_TRUE(m->vspacerDown(0));
+    EXPECT_EQ(m->vspacerDown(0)->spacerType(), SpacerType::FIXED);
+
+    score->undoRedo(true, nullptr);
+    ASSERT_TRUE(m->vspacerDown(0));
+    EXPECT_EQ(m->vspacerDown(0)->spacerType(), SpacerType::DOWN);
+
+    score->undoRedo(false, nullptr);
+    ASSERT_TRUE(m->vspacerDown(0));
+    EXPECT_EQ(m->vspacerDown(0)->spacerType(), SpacerType::FIXED);
+
+    delete score;
 }
