@@ -230,6 +230,30 @@ String Tuplet::typeUserName(int numerator)
 }
 
 //---------------------------------------------------------
+//   numberText
+//    The number shown above a tuplet, as XML text
+//---------------------------------------------------------
+
+String Tuplet::numberText(const Fraction& ratio, TupletNumberType numberType, bool useSymbols)
+{
+    String numberString = (numberType == TupletNumberType::SHOW_NUMBER)
+                          ? String(u"%1").arg(ratio.numerator())
+                          : String(u"%1:%2").arg(ratio.numerator(), ratio.denominator());
+    if (!useSymbols) {
+        return numberString;
+    }
+
+    String smuflNum;
+    for (size_t i = 0; i < numberString.size(); ++i) {
+        smuflNum.append(u"<sym>tuplet");
+        smuflNum.append(numberString.at(i).unicode());
+        smuflNum.append(u"</sym>");
+    }
+    smuflNum.replace(String(u":"), String(u"Colon"));
+    return smuflNum;
+}
+
+//---------------------------------------------------------
 //   calcHasBracket
 //---------------------------------------------------------
 

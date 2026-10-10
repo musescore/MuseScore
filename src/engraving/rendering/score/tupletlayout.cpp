@@ -182,21 +182,7 @@ void TupletLayout::createNumber(Tuplet* item, LayoutContext& ctx)
 
     const MStyle& style = ctx.conf().style();
 
-    String numberString = (item->numberType() == TupletNumberType::SHOW_NUMBER)
-                          ? String(u"%1").arg(item->ratio().numerator())
-                          : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
-    if (style.styleB(Sid::tupletUseSymbols)) {
-        String smuflNum;
-        for (size_t i = 0; i < numberString.size(); ++i) {
-            smuflNum.append(u"<sym>tuplet");
-            smuflNum.append(numberString.at(i).unicode());
-            smuflNum.append(u"</sym>");
-        }
-        smuflNum.replace(String(u":"), String(u"Colon"));
-        item->number()->setXmlText(smuflNum);
-    } else {
-        item->number()->setXmlText(numberString);
-    }
+    item->number()->setXmlText(Tuplet::numberText(item->ratio(), item->numberType(), style.styleB(Sid::tupletUseSymbols)));
 
     item->setIsSmall(true);
     for (const DurationElement* e : item->elements()) {
