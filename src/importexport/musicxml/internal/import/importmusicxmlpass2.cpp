@@ -9001,9 +9001,12 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             }
             gliss->setText(glissandoText);
             gliss->setGlissandoType(glissandoTag || (lineType == u"wavy") ? GlissandoType::WAVY : GlissandoType::STRAIGHT);
-            gliss->setGlissandoStyle(note->part()->instrument(tick)->glissandoStyle());
-            // the instrument's style, not the score's: keep it when the score is saved
-            gliss->setPropertyFlags(Pid::GLISS_STYLE, PropertyFlags::UNSTYLED);
+            const GlissandoStyle instrumentStyle = note->part()->instrument(tick)->glissandoStyle();
+            if (instrumentStyle != gliss->glissandoStyle()) {
+                gliss->setGlissandoStyle(instrumentStyle);
+                // the instrument's style, not the score's: keep it when the score is saved
+                gliss->setPropertyFlags(Pid::GLISS_STYLE, PropertyFlags::UNSTYLED);
+            }
             spanners[gliss] = std::pair<int, int>(tick.ticks(), -1);
             // LOGD("glissando/slide=%p inserted at first tick %d", gliss, tick);
         }
