@@ -1574,6 +1574,10 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             }
             spacer->setGap(Spatium::fromAbsolute(gap, spatium()));
         }
+        Spacer* oldSpacer = (spacer->spacerType() == SpacerType::UP) ? vspacerUp(staffIdx) : vspacerDown(staffIdx);
+        if (oldSpacer) {
+            score()->undoRemoveElement(oldSpacer);
+        }
         score()->undoAddElement(spacer);
         triggerLayout();
         return spacer;
