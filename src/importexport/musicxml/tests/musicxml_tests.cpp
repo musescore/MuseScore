@@ -684,6 +684,9 @@ TEST_F(MusicXml_Tests, fractionTicks) {
 TEST_F(MusicXml_Tests, glissandoLines) {
     musicXmlIoTest("testGlissandoLines");
 }
+TEST_F(MusicXml_Tests, glissandoStyle) {
+    musicXmlImportTestRef("testGlissandoStyle");
+}
 TEST_F(MusicXml_Tests, glissFall) {
     musicXmlImportTestRef("testGlissFall");
 }
