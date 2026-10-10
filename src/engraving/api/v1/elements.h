@@ -2726,8 +2726,7 @@ class FretDiagram : public EngravingItem
     Q_PROPERTY(int strings READ strings)
     /// Number of frets displayed in this diagram.
     Q_PROPERTY(int frets READ frets)
-    /// Starting fret number (0 means no offset, nut is shown).
-    Q_PROPERTY(int fretOffset READ fretOffset)
+    // fretOffset comes writable from EngravingItem; redeclaring it here would make it read-only
 
 public:
     /// \cond MS_INTERNAL
@@ -2747,7 +2746,6 @@ public:
 
     int strings() const { return fretDiagram()->strings(); }
     int frets() const { return fretDiagram()->frets(); }
-    int fretOffset() const { return fretDiagram()->fretOffset(); }
     /// \endcond
 
     /** APIDOC
