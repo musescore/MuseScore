@@ -51,6 +51,9 @@ void MScoreErrorsController::checkAndShowMScoreError()
             accessibilityController()->announce(muse::mtrc("notation", "Cannot create tuplet: note value is too short"));
         } else if (err == MsError::TUPLET_RATIO_NOT_POSSIBLE) {
             accessibilityController()->announce(muse::mtrc("notation", "This ratio cannot be used for a tuplet of this duration."));
+        } else if (err == MsError::CANNOT_INSERT_TUPLET_IN_TUPLET) {
+            accessibilityController()->announce(muse::mtrc("notation", "Cannot create tuplet: a tuplet can’t be inserted "
+                                                                       "inside another tuplet"));
         }
         return;
     }

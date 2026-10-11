@@ -873,7 +873,7 @@ void NotationNoteInput::setPendingTuplet(const TupletOptions& options)
     pending.bracketType = options.bracketType;
     pending.autoBaseLen = options.autoBaseLen;
     pending.durationAsSubdivision = options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
-    if (is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME)) {
+    if (is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME) || is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE)) {
         // sized by the input duration now; the engine sets any error
         if (!NoteInput::setPendingTuplet(score(), pending)) {
             m_interaction->checkAndShowError();
