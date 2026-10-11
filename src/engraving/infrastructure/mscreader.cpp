@@ -233,6 +233,27 @@ std::vector<String> MscReader::imageFileNames() const
     return names;
 }
 
+ByteArray MscReader::readAudioFile(const String& fileName) const
+{
+    return fileData(u"Audio/" + fileName);
+}
+
+std::vector<String> MscReader::audioFileNames() const
+{
+    if (!reader()->isContainer()) {
+        return std::vector<String>();
+    }
+
+    std::vector<String> names;
+    StringList files = reader()->fileList();
+    for (const String& filePath : files) {
+        if (filePath.startsWith(u"Audio/")) {
+            names.push_back(FileInfo(filePath).fileName());
+        }
+    }
+    return names;
+}
+
 ByteArray MscReader::readAudioSettingsJsonFile(const muse::io::path_t& pathPrefix) const
 {
     return fileData(pathPrefix.toString() + u"audiosettings.json");
