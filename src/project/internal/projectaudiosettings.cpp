@@ -62,7 +62,8 @@ static void doCompatibilityConversions(AudioResourceMeta& meta)
 
 bool ProjectAudioSettings::hasAnyAudioSettings() const
 {
-    return !m_trackInputParamsMap.empty() || !m_trackOutputParamsMap.empty() || !m_auxOutputParams.empty();
+    return !m_trackInputParamsMap.empty() || !m_trackOutputParamsMap.empty() || !m_auxOutputParams.empty()
+           || m_audioClip.isValid();
 }
 
 const AudioOutputParams& ProjectAudioSettings::masterAudioOutputParams() const
@@ -258,6 +259,43 @@ void ProjectAudioSettings::setActiveSoundProfile(const playback::SoundProfileNam
     m_settingsChanged.notify();
 }
 
+const AudioClipInfo& ProjectAudioSettings::audioClip() const
+{
+    return m_audioClip;
+}
+
+void ProjectAudioSettings::setAudioClip(const AudioClipInfo& clip)
+{
+    if (m_audioClip == clip) {
+        return;
+    }
+
+    m_audioClip = clip;
+    m_audioClipChanged.notify();
+    m_settingsChanged.notify();
+}
+
+muse::ByteArray ProjectAudioSettings::audioClipData() const
+{
+    return m_audioClipData;
+}
+
+void ProjectAudioSettings::setAudioClipData(const muse::ByteArray& data)
+{
+    if (m_audioClipData == data) {
+        return;
+    }
+
+    m_audioClipData = data;
+    m_audioClipChanged.notify();
+    m_settingsChanged.notify();
+}
+
+muse::async::Notification ProjectAudioSettings::audioClipChanged() const
+{
+    return m_audioClipChanged;
+}
+
 muse::async::Notification ProjectAudioSettings::settingsChanged() const
 {
     return m_settingsChanged;
@@ -305,6 +343,18 @@ Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
         m_trackOutputParamsMap.emplace(id, std::move(outParams));
     }
 
+    QJsonObject audioClipObj = rootObj.value("audioClip").toObject();
+    m_audioClip = audioClipFromJson(audioClipObj);
+
+    if (m_audioClip.isValid()) {
+        m_audioClipData = reader.readAudioFile(m_audioClip.fileName);
+
+        if (m_audioClipData.empty()) {
+            //! NOTE The file is missing from the package, so there is nothing to play
+            m_audioClip = AudioClipInfo();
+        }
+    }
+
     m_activeSoundProfileName = rootObj.value("activeSoundProfile").toString();
     if (m_activeSoundProfileName.empty()) {
         m_activeSoundProfileName = playbackConfig()->defaultProfileForNewProjects();
@@ -334,6 +384,11 @@ Ret ProjectAudioSettings::write(engraving::MscWriter& writer, notation::INotatio
 
     rootObj["tracks"] = tracksArray;
     rootObj["activeSoundProfile"] = m_activeSoundProfileName.toQString();
+
+    if (m_audioClip.isValid()) {
+        rootObj["audioClip"] = audioClipToJson(m_audioClip);
+        writer.addAudioFile(m_audioClip.fileName, m_audioClipData);
+    }
 
     QByteArray json = QJsonDocument(rootObj).toJson();
     writer.writeAudioSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json));
@@ -542,6 +597,33 @@ QJsonObject ProjectAudioSettings::resourceMetaToJson(const AudioResourceMeta& me
     result.insert("vendor", QString::fromStdString(meta.vendor));
     result.insert("type", audioResourceTypeToString(meta.type).toQString());
     result.insert("attributes", attributesToJson(meta.attributes));
+
+    return result;
+}
+
+AudioClipInfo ProjectAudioSettings::audioClipFromJson(const QJsonObject& object) const
+{
+    AudioClipInfo result;
+
+    if (object.isEmpty()) {
+        return result;
+    }
+
+    result.fileName = String::fromQString(object.value("fileName").toString());
+    result.startTick = object.value("startTick").toInt();
+    result.inOffset = object.value("inOffset").toDouble();
+    result.outOffset = object.value("outOffset").toDouble(-1.0);
+
+    return result;
+}
+
+QJsonObject ProjectAudioSettings::audioClipToJson(const AudioClipInfo& clip) const
+{
+    QJsonObject result;
+    result.insert("fileName", clip.fileName.toQString());
+    result.insert("startTick", clip.startTick);
+    result.insert("inOffset", clip.inOffset);
+    result.insert("outOffset", clip.outOffset);
 
     return result;
 }

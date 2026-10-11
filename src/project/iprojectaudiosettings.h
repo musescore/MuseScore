@@ -24,6 +24,9 @@
 
 #include <memory>
 
+#include "types/string.h"
+#include "types/bytearray.h"
+
 #include "async/notification.h"
 #include "audio/common/audiotypes.h"
 #include "engraving/types/types.h"
@@ -76,6 +79,27 @@ struct AudioOutputParams {
     }
 };
 
+//! NOTE Describes an audio clip attached to the score.
+//! In the first version only a single clip is supported.
+struct AudioClipInfo {
+    muse::String fileName;      //! name of the file inside the score package, i.e. Audio/<fileName>
+    int startTick = 0;          //! score position (in ticks) the clip is aligned to
+    double inOffset = 0.0;      //! offset into the audio file, in seconds (trim the head)
+    double outOffset = -1.0;    //! offset at which playback stops, in seconds; negative means "until the end"
+
+    bool isValid() const { return !fileName.isEmpty(); }
+
+    bool operator==(const AudioClipInfo& other) const
+    {
+        return fileName == other.fileName
+               && startTick == other.startTick
+               && muse::is_equal(inOffset, other.inOffset)
+               && muse::is_equal(outOffset, other.outOffset);
+    }
+
+    bool operator!=(const AudioClipInfo& other) const { return !this->operator==(other); }
+};
+
 class IProjectAudioSettings
 {
 public:
@@ -113,6 +137,13 @@ public:
 
     virtual const playback::SoundProfileName& activeSoundProfile() const = 0;
     virtual void setActiveSoundProfile(const playback::SoundProfileName& profileName) = 0;
+
+    //! NOTE Audio clip that is played along with the score (v1: at most one)
+    virtual const AudioClipInfo& audioClip() const = 0;
+    virtual void setAudioClip(const AudioClipInfo& clip) = 0;
+    virtual muse::ByteArray audioClipData() const = 0;
+    virtual void setAudioClipData(const muse::ByteArray& data) = 0;
+    virtual muse::async::Notification audioClipChanged() const = 0;
 
     virtual muse::async::Notification settingsChanged() const = 0;
 };

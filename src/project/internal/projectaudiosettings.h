@@ -70,6 +70,12 @@ public:
     const playback::SoundProfileName& activeSoundProfile() const override;
     void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;
 
+    const AudioClipInfo& audioClip() const override;
+    void setAudioClip(const AudioClipInfo& clip) override;
+    muse::ByteArray audioClipData() const override;
+    void setAudioClipData(const muse::ByteArray& data) override;
+    muse::async::Notification audioClipChanged() const override;
+
     muse::async::Notification settingsChanged() const override;
 
     muse::Ret read(const engraving::MscReader& reader);
@@ -102,6 +108,9 @@ private:
     QJsonArray auxSendsToJson(const muse::audio::AuxSendsParams& auxSends) const;
     QJsonObject auxSendParamsToJson(const muse::audio::AuxSendParams& auxParams) const;
     QJsonObject resourceMetaToJson(const muse::audio::AudioResourceMeta& meta) const;
+
+    AudioClipInfo audioClipFromJson(const QJsonObject& object) const;
+    QJsonObject audioClipToJson(const AudioClipInfo& clip) const;
     QJsonObject unitConfigToJson(const muse::audio::AudioUnitConfig& config) const;
     QJsonObject attributesToJson(const muse::audio::AudioResourceAttributes& attributes) const;
 
@@ -126,6 +135,10 @@ private:
     muse::async::Channel<engraving::InstrumentTrackId> m_trackInputParamsChanged;
 
     mu::playback::SoundProfileName m_activeSoundProfileName;
+
+    AudioClipInfo m_audioClip;
+    muse::ByteArray m_audioClipData;
+    muse::async::Notification m_audioClipChanged;
 };
 
 using ProjectAudioSettingsPtr = std::shared_ptr<ProjectAudioSettings>;
