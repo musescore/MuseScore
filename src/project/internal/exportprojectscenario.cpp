@@ -22,6 +22,8 @@
 
 #include "exportprojectscenario.h"
 
+#include <utility>
+
 #include "global/io/fileinfo.h"
 #include "global/io/filestream.h"
 
@@ -29,6 +31,7 @@
 #include "defer.h"
 #include "log.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/score.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
@@ -38,6 +41,9 @@
 #include "notation/inotationpainting.h" // IWYU pragma: keep
 
 #include "inotationproject.h"
+#include "barloopexport.h"
+
+#include "notation/inotationplayback.h"
 
 using namespace muse;
 using namespace muse::io;
@@ -152,6 +158,35 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
             score->doLayout();
         }
     }
+
+    const SelectedBarsExport barLoop = std::exchange(m_barLoop, {});
+    std::unique_ptr<BarLoopPrepared> prepared;
+    if (barLoop.active) {
+        prepared = prepareBarLoopExport(masterNotation(), notations, barLoop);
+        if (!prepared) {
+            interactive()->errorSync(
+                muse::trc("project/export", "Export selected bars"),
+                muse::trc("project/export", "The selected bars could not be exported. Select a range of bars and try again."));
+            return false;
+        }
+
+        notations = prepared->notations;
+        if (INotationPlaybackPtr playback = masterNotation()->playback()) {
+            playback->setPlaybackScore(prepared->playbackScore);
+        }
+    }
+
+    DEFER {
+        if (!prepared) {
+            return;
+        }
+
+        if (const IMasterNotationPtr master = masterNotation()) {
+            if (const INotationPlaybackPtr playback = master->playback()) {
+                playback->setPlaybackScore(nullptr);
+            }
+        }
+    };
 
     // Backup view modes
     std::vector<ViewMode> viewModes = this->viewModes(notations);
@@ -268,6 +303,11 @@ const ExportInfo& ExportProjectScenario::exportInfo() const
 void ExportProjectScenario::setExportInfo(const ExportInfo& exportInfo)
 {
     m_exportInfo = exportInfo;
+}
+
+void ExportProjectScenario::setSelectedBarsExport(const SelectedBarsExport& selectedBars)
+{
+    m_barLoop = selectedBars;
 }
 
 bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations,

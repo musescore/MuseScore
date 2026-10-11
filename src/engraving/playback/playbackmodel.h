@@ -59,6 +59,9 @@ public:
     void load(Score* score);
     void reload();
 
+    //! Point playback at another score and push its events, without re-adding tracks that already exist.
+    void assignScore(Score* score);
+
     void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send);
     void sendEventsForChangedTracks();
 

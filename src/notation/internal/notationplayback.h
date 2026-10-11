@@ -44,6 +44,7 @@ public:
 
     void init() override;
     void reload() override;
+    void setPlaybackScore(engraving::Score* score) override;
 
     void setSendEventsOnScoreChange(const engraving::InstrumentTrackId& trackId, bool send) override;
     void sendEventsForChangedTracks() override;
@@ -101,6 +102,7 @@ private:
     void addLoopOut(int tick);
     void updateLoopBoundaries();
     void updateTotalPlayTime();
+    const mu::engraving::Score* effectiveScore() const;
 
     bool doAddSoundFlag(mu::engraving::StaffText* staffText);
 
@@ -108,6 +110,7 @@ private:
                                                             bool withSoundFlags) const;
 
     IGetScore* m_getScore = nullptr;
+    mu::engraving::Score* m_playbackScoreOverride = nullptr;
 
     muse::async::Channel<muse::RectF> m_notationChanged;
 

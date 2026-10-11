@@ -125,6 +125,24 @@ void NotationPlayback::reload()
     m_playbackModel.reload();
 }
 
+void NotationPlayback::setPlaybackScore(Score* score)
+{
+    m_playbackScoreOverride = score;
+
+    Score* target = score ? score : this->score();
+    if (!target) {
+        return;
+    }
+
+    m_playbackModel.assignScore(target);
+    updateTotalPlayTime();
+}
+
+const Score* NotationPlayback::effectiveScore() const
+{
+    return m_playbackScoreOverride ? m_playbackScoreOverride : score();
+}
+
 void NotationPlayback::setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send)
 {
     m_playbackModel.setSendEventsOnScoreChange(trackId, send);
@@ -233,7 +251,7 @@ void NotationPlayback::updateLoopBoundaries()
 
 void NotationPlayback::updateTotalPlayTime()
 {
-    const mu::engraving::Score* score = m_getScore->score();
+    const mu::engraving::Score* score = effectiveScore();
     if (!score) {
         return;
     }
@@ -264,7 +282,7 @@ muse::async::Channel<muse::audio::secs_t> NotationPlayback::totalPlayTimeChanged
 
 muse::audio::secs_t NotationPlayback::playedTickToSec(tick_t tick) const
 {
-    const mu::engraving::Score* sc = score();
+    const mu::engraving::Score* sc = effectiveScore();
     if (!sc) {
         return 0;
     }
@@ -274,7 +292,7 @@ muse::audio::secs_t NotationPlayback::playedTickToSec(tick_t tick) const
 
 tick_t NotationPlayback::secToPlayedTick(muse::audio::secs_t sec) const
 {
-    const mu::engraving::Score* sc = score();
+    const mu::engraving::Score* sc = effectiveScore();
     if (!sc) {
         return 0;
     }
@@ -284,7 +302,7 @@ tick_t NotationPlayback::secToPlayedTick(muse::audio::secs_t sec) const
 
 tick_t NotationPlayback::secToTick(muse::audio::secs_t sec) const
 {
-    const mu::engraving::Score* sc = score();
+    const mu::engraving::Score* sc = effectiveScore();
     if (!sc) {
         return 0;
     }
@@ -298,11 +316,12 @@ tick_t NotationPlayback::secToTick(muse::audio::secs_t sec) const
 
 RetVal<muse::midi::tick_t> NotationPlayback::playPositionTickByRawTick(muse::midi::tick_t tick) const
 {
-    if (!score()) {
+    const Score* sc = effectiveScore();
+    if (!sc) {
         return make_ret(Err::Undefined);
     }
 
-    muse::midi::tick_t playbackTick = score()->repeatList(m_playbackModel.isPlayRepeatsEnabled()).tick2utick(tick);
+    muse::midi::tick_t playbackTick = sc->repeatList(m_playbackModel.isPlayRepeatsEnabled()).tick2utick(tick);
 
     return RetVal<muse::midi::tick_t>::make_ok(std::move(playbackTick));
 }

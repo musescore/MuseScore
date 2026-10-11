@@ -63,6 +63,8 @@ public:
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
+    void setSelectedBarsExport(const SelectedBarsExport& selectedBars) override;
+
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
 
@@ -102,5 +104,6 @@ private:
     mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable muse::Progress m_exportProgress;
     ExportInfo m_exportInfo;
+    mutable SelectedBarsExport m_barLoop;
 };
 }

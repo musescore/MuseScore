@@ -31,6 +31,7 @@ public:
 
     void init() override;
     void reload() override;
+    void setPlaybackScore(engraving::Score* score) override;
 
     void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send) override;
     void sendEventsForChangedTracks() override;

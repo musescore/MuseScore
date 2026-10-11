@@ -35,6 +35,14 @@ struct ExportInfo {
     std::vector<notation::INotationWeakPtr> notations;
 };
 
+//! A practice loop: the selected bars, written out `repeats` times.
+struct SelectedBarsExport {
+    bool active = false;
+    int repeats = 1;
+    int startTick = 0;
+    int endTick = 0;
+};
+
 class IExportProjectScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IExportProjectScenario)
@@ -49,6 +57,8 @@ public:
     virtual bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                               INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                               bool openDestinationFolderOnExport = false) const = 0;
+
+    virtual void setSelectedBarsExport(const SelectedBarsExport& selectedBars) = 0;
 
     virtual const ExportInfo& exportInfo() const = 0;
     virtual void setExportInfo(const ExportInfo& exportInfo) = 0;

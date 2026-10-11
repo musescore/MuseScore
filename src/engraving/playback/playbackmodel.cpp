@@ -145,6 +145,75 @@ void PlaybackModel::reload()
     m_changedTrackIdSet.clear();
 }
 
+void PlaybackModel::assignScore(Score* score)
+{
+    if (!score || score->measures()->empty() || !score->lastMeasure()) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    if (m_score && m_score != score) {
+        m_score->changesChannel().disconnect(this);
+    }
+
+    m_score = score;
+    m_playbackCtx = std::make_shared<PlaybackContext>(score);
+
+    auto changesChannel = score->changesChannel();
+    changesChannel.disconnect(this);
+    changesChannel.onReceive(this, [this](const ScoreChanges& changes) {
+        if (shouldSkipChanges(changes)) {
+            return;
+        }
+
+        const TickBoundaries tickRange = tickBoundaries(changes);
+        const TrackBoundaries trackRange = trackBoundaries(changes);
+        ChangedTrackIdSet trackChanges;
+
+        clearExpiredTracks();
+        m_playbackCtx->clear(trackRange.trackFrom, trackRange.trackTo, tickRange.tickFrom, tickRange.tickTo);
+        clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
+
+        const InstrumentTrackIdSet oldTracks = existingTrackIdSet();
+        update(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
+
+        notifyAboutChanges(oldTracks, trackChanges);
+    });
+
+    const InstrumentTrackIdSet oldTracks = existingTrackIdSet();
+
+    const int trackFrom = 0;
+    const size_t trackTo = m_score->ntracks();
+    const int tickFrom = 0;
+    const int tickTo = m_score->lastMeasure()->endTick().ticks();
+
+    clearExpiredTracks();
+    m_playbackCtx->clear(trackFrom, trackTo, tickFrom, tickTo);
+
+    for (auto& pair : m_playbackDataMap) {
+        pair.second.originEvents.clear();
+    }
+
+    update(tickFrom, tickTo, trackFrom, trackTo);
+
+    InstrumentTrackIdSet changedTracks;
+    changedTracks.reserve(m_playbackDataMap.size());
+
+    for (auto& pair : m_playbackDataMap) {
+        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamics);
+        changedTracks.insert(pair.first);
+        if (!muse::contains(oldTracks, pair.first)) {
+            m_trackAdded.send(pair.first);
+        }
+    }
+
+    if (!changedTracks.empty()) {
+        m_tracksDataChanged.send(changedTracks);
+    }
+    m_changedTrackIdSet.clear();
+}
+
 void PlaybackModel::setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send)
 {
     m_sendEventsOnScoreChangeMap[trackId] = send;

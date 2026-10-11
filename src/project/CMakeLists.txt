@@ -88,6 +88,8 @@ target_sources(project PRIVATE
     internal/exporttype.h
     internal/exportprojectscenario.cpp
     internal/exportprojectscenario.h
+    internal/barloopexport.cpp
+    internal/barloopexport.h
     iopenprojectscenario.h
     isaveprojectscenario.h
     icloseprojectscenario.h

@@ -27,9 +27,15 @@
 #include <QItemSelectionModel>
 #include <QTimer>
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
+#include "notation/inotationelements.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 
 #include "translation.h"
 #include "log.h"
@@ -37,6 +43,7 @@
 using namespace muse;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::iex::musicxml;
 
 using UnitType = INotationWriter::UnitType;
@@ -186,6 +193,7 @@ void ExportDialogModel::init()
 
     selectCurrentNotation();
     selectSavedNotations();
+    readSelectedBars();
 
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     videoEncoderResolver()->loadedFFmpegChanged().onNotify(this, [this]() {
@@ -452,10 +460,19 @@ bool ExportDialogModel::exportScores()
     Params params{ notations, exportPath.val, m_selectedUnitType,
                    shouldDestinationFolderBeOpenedOnExport() };
 
+    SelectedBarsExport selectedBars;
+    if (m_exportSelectedBars && m_canExportSelectedBars) {
+        selectedBars.active = true;
+        selectedBars.repeats = std::max(1, m_selectedBarsRepeats);
+        selectedBars.startTick = m_selectedStartTick;
+        selectedBars.endTick = m_selectedEndTick;
+    }
+
     //! NOTE We can't use Async here
     // because the async::processMessages is called deep within the functions,
     // and this can't be done in Async's callback.
-    QTimer::singleShot(0, [scenario, params]() {
+    QTimer::singleShot(0, [scenario, params, selectedBars]() {
+        scenario->setSelectedBarsExport(selectedBars);
         scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport);
     });
 
@@ -915,6 +932,109 @@ void ExportDialogModel::setShouldDestinationFolderBeOpenedOnExport(bool enabled)
 
     configuration()->setShouldDestinationFolderBeOpenedOnExport(enabled);
     emit shouldDestinationFolderBeOpenedOnExportChanged(enabled);
+}
+
+bool ExportDialogModel::canExportSelectedBars() const
+{
+    return m_canExportSelectedBars;
+}
+
+int ExportDialogModel::selectedBarStart() const
+{
+    return m_selectedBarStart;
+}
+
+int ExportDialogModel::selectedBarEnd() const
+{
+    return m_selectedBarEnd;
+}
+
+bool ExportDialogModel::exportSelectedBars() const
+{
+    return m_exportSelectedBars;
+}
+
+void ExportDialogModel::setExportSelectedBars(bool exportSelected)
+{
+    const bool enabled = exportSelected && m_canExportSelectedBars;
+    if (m_exportSelectedBars == enabled) {
+        return;
+    }
+
+    m_exportSelectedBars = enabled;
+    emit exportSelectedBarsChanged();
+}
+
+int ExportDialogModel::selectedBarsRepeats() const
+{
+    return m_selectedBarsRepeats;
+}
+
+void ExportDialogModel::setSelectedBarsRepeats(int repeats)
+{
+    repeats = std::clamp(repeats, 1, 99);
+    if (m_selectedBarsRepeats == repeats) {
+        return;
+    }
+
+    m_selectedBarsRepeats = repeats;
+    emit selectedBarsRepeatsChanged();
+}
+
+void ExportDialogModel::readSelectedBars()
+{
+    m_canExportSelectedBars = false;
+    m_selectedBarStart = 0;
+    m_selectedBarEnd = 0;
+    m_selectedStartTick = 0;
+    m_selectedEndTick = 0;
+    m_exportSelectedBars = false;
+
+    const INotationPtr notation = context()->currentNotation();
+    if (!notation || !notation->interaction() || !notation->elements()) {
+        emit selectedBarsChanged();
+        emit exportSelectedBarsChanged();
+        return;
+    }
+
+    const INotationSelectionPtr selection = notation->interaction()->selection();
+    if (!selection || !selection->isRange() || !selection->range()) {
+        emit selectedBarsChanged();
+        emit exportSelectedBarsChanged();
+        return;
+    }
+
+    const Fraction startTick = selection->range()->startTick();
+    const Fraction endTick = selection->range()->endTick();
+    if (endTick <= startTick) {
+        emit selectedBarsChanged();
+        emit exportSelectedBarsChanged();
+        return;
+    }
+
+    Score* score = notation->elements()->msScore();
+    if (!score) {
+        emit selectedBarsChanged();
+        emit exportSelectedBarsChanged();
+        return;
+    }
+
+    const Measure* startMeasure = score->tick2measure(startTick);
+    const Measure* endMeasure = score->tick2measure(endTick - Fraction::fromTicks(1));
+    if (!startMeasure || !endMeasure || endMeasure->tick() < startMeasure->tick()) {
+        emit selectedBarsChanged();
+        emit exportSelectedBarsChanged();
+        return;
+    }
+
+    m_canExportSelectedBars = true;
+    m_selectedBarStart = startMeasure->measureNumber() + 1;
+    m_selectedBarEnd = endMeasure->measureNumber() + 1;
+    m_selectedStartTick = startMeasure->tick().ticks();
+    m_selectedEndTick = endMeasure->endTick().ticks();
+
+    emit selectedBarsChanged();
+    emit exportSelectedBarsChanged();
 }
 
 void ExportDialogModel::updateExportInfo()
