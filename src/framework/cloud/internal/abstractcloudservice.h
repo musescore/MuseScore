@@ -24,11 +24,11 @@
 
 #include <QObject>
 
-#include "iauthorizationservice.h"
+#include "cloud/iauthorizationservice.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "icloudconfiguration.h"
+#include "cloud/icloudconfiguration.h"
 #include "ui/iuiconfiguration.h"
 #include "io/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"

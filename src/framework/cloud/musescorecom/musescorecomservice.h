@@ -25,20 +25,17 @@
 #include <memory>
 
 #include "modularity/ioc.h"
-#include "icloudconfiguration.h"
-#include "network/inetworkmanagercreator.h"
 #include "global/iapplication.h"
 
-#include "internal/abstractcloudservice.h"
+#include "cloud/internal/abstractcloudservice.h"
 
-#include "musescorecom/imusescorecomservice.h"
+#include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace muse::cloud {
 class MuseScoreComService : public IMuseScoreComService, public IMuseScoreComConvertService, public AbstractCloudService,
     public std::enable_shared_from_this<MuseScoreComService>
 {
-    GlobalInject<ICloudConfiguration> configuration;
-    GlobalInject<network::INetworkManagerCreator> networkManagerCreator;
+public:
     ContextInject<IApplication> application = { this };
 
 public:
