@@ -23,9 +23,11 @@ set(MODULE_TEST project_qml_tests)
 set(MODULE_TEST_SRC
     ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/projectconfigurationmock.h
     ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/convertfiletoscorescenariomock.h
+    ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/deletecloudscorescenariomock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/filelistmodel_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/convertfiletoscoremodel_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cloudscoresmodel_tests.cpp
 )
 
 set(MODULE_TEST_LINK
