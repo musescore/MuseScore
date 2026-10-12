@@ -18,6 +18,40 @@
       ]
     },
     {
+      "scope": "NOTATION_PAGE",
+      "shortcuts": [
+        {"command": "command://app/dock/toggle-instruments",  "sequences": ["F7"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-palettes",  "sequences": ["F9"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-mixer",  "sequences": ["F10"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-braille",  "sequences": ["Alt+F11"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-timeline",  "sequences": ["F12"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-piano-keyboard",  "sequences": ["P"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-percussion",  "sequences": ["O"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-properties",  "sequences": ["F8"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-playback",  "sequences": []},
+        {"command": "command://app/dock/toggle-noteinput",  "sequences": []},
+        {"command": "command://app/dock/toggle-selection-filter",  "sequences": []},
+        {"command": "command://app/dock/toggle-undo-history",  "sequences": []},
+        {"command": "command://app/dock/toggle-navigator",  "sequences": []},
+        {"command": "command://app/dock/toggle-statusbar",  "sequences": []},
+        {"command": "command://instruments/select",  "sequences": ["I"]},
+        {"command": "command://instruments/change",  "sequences": []},
+        {"command": "command://palette/search",  "sequences": ["Ctrl+F9"], "autorepeat": false},
+        {"command": "command://palette/toggle-special-characters",  "sequences": ["Shift+F2"]},
+        {"command": "command://palette/toggle-master-palette",  "sequences": ["Shift+F9"], "autorepeat": false},
+        {"command": "command://palette/open-time-signature-properties",  "sequences": []},
+        {"command": "command://palette/open-customize-kit",  "sequences": []},
+        {"command": "command://palette/apply-current-element",  "sequences": []},
+        {"command": "command://palette/toggle-single-click-to-open",  "sequences": []},
+        {"command": "command://palette/toggle-single-palette",  "sequences": []},
+        {"command": "command://palette/toggle-drag-enabled",  "sequences": []},
+        {"command": "command://palette/expand-all",  "sequences": []},
+        {"command": "command://palette/collapse-all",  "sequences": []},
+        {"command": "command://workspace/configure",  "sequences": []},
+        {"command": "command://workspace/create",  "sequences": []}
+      ]
+    },
+    {
       "scope": "NOTATION",
       "shortcuts": [
         {"command": "command://notation/copy",  "sequences": ["Ctrl+C"]},
@@ -111,10 +145,8 @@
         {"command": "command://notation/move-right",  "sequences": ["Right"]},
         {"command": "command://notation/move-right-quickly",  "sequences": ["Ctrl+Right"]},
         {"command": "command://notation/add-to-selection-prev-chord",  "sequences": ["Shift+Left"]},
-        {"command": "command://notation/add-to-selection-prev-measure",  "sequences": ["Ctrl+Shift+Left"]},
         {"command": "command://notation/add-to-selection-next-chord",  "sequences": ["Shift+Right"]},
-        {"command": "command://notation/swap-right",  "sequences": ["Shift+Right"]},
-        {"command": "command://notation/swap-left",  "sequences": ["Shift+Left"]},
+        {"command": "command://notation/add-to-selection-prev-measure",  "sequences": ["Ctrl+Shift+Left"]},
         {"command": "command://notation/add-to-selection-next-measure",  "sequences": ["Ctrl+Shift+Right"]},
         {"command": "command://notation/add-to-selection-begin-system",  "sequences": ["Shift+Home"]},
         {"command": "command://notation/add-to-selection-end-system",  "sequences": ["Shift+End"]},
@@ -240,9 +272,10 @@
     {
         "scope": "NOTATION_NOTE_INPUT",
         "shortcuts": [
-            { "command": "command://notation/realtime-advance", "sequences": ["Enter"] },
+            {"command": "command://notation/realtime-advance", "sequences": ["Enter"] },
             {"command": "command://notation/swap-left", "sequences": ["Shift+Left"]},
-            {"command": "command://notation/swap-right", "sequences": ["Shift+Right"]}
+            {"command": "command://notation/swap-right", "sequences": ["Shift+Right"]},
+            {"command": "command://none", "sequences": ["Shift+Up","Shift+Down"], "_comment": "Disabled Shift+Up/Down for note input"}
         ]
     },
     {
@@ -270,33 +303,12 @@
       ]
     },
     {
-      "scope": "INSTRUMENTS",
-      "shortcuts": [
-        {"command": "command://instruments/select",  "sequences": ["I"]}
-      ]
-    },
-    {
-      "scope": "PALETTE",
-      "shortcuts": [
-        {"command": "command://palette/search",  "sequences": ["Ctrl+F9"], "autorepeat": false},
-        {"command": "command://palette/toggle-special-characters",  "sequences": ["Shift+F2"]},
-        {"command": "command://palette/toggle-master-palette",  "sequences": ["Shift+F9"], "autorepeat": false}
-      ]
-    },
-    {
       "scope": "APP",
       "shortcuts": [
-        {"command": "command://app/dock/toggle-instruments",  "sequences": ["F7"], "autorepeat": false},
-        {"command": "command://app/dock/toggle-palettes",  "sequences": ["F9"], "autorepeat": false},
-        {"command": "command://app/dock/toggle-mixer",  "sequences": ["F10"], "autorepeat": false},
-        {"command": "command://app/dock/toggle-braille",  "sequences": ["Alt+F11"], "autorepeat": false},
-        {"command": "command://app/dock/toggle-timeline",  "sequences": ["F12"], "autorepeat": false},
-        {"command": "command://app/dock/toggle-piano-keyboard",  "sequences": ["P"], "autorepeat": false},
-        {"command": "command://app/dock/toggle-percussion",  "sequences": ["O"], "autorepeat": false},
-        {"command": "command://app/dock/toggle-properties",  "sequences": ["F8"], "autorepeat": false},
         {"command": "command://app/quit",  "sequences": ["Ctrl+Q"], "autorepeat": false},
         {"command": "command://app/fullscreen",  "sequences": ["F11"], "autorepeat": false},
-        {"command": "command://app/preferences",  "sequences": ["Ctrl+,"], "autorepeat": false}
+        {"command": "command://app/preferences",  "sequences": ["Ctrl+,"], "autorepeat": false},
+        {"command": "command://dock/restore-default-layout",  "sequences": []}
       ]
     },
     {
