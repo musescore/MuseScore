@@ -181,3 +181,7 @@ target_include_directories(project_qml PRIVATE
     internal/Properties
     internal/ScoresPage
 )
+
+if (MUE_BUILD_PROJECT_TESTS)
+    add_subdirectory(tests)
+endif()

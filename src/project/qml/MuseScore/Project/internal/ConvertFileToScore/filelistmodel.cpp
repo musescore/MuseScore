@@ -22,8 +22,6 @@
 
 #include "filelistmodel.h"
 
-#include <QFileInfo>
-
 #include "project/types/filecategory.h"
 
 #include "ui/view/iconcodes.h"
@@ -60,9 +58,9 @@ QVariant FileListModel::data(const QModelIndex& index, int role) const
     case PathRole:
         return path;
     case FileNameRole:
-        return QFileInfo(path).fileName();
+        return muse::io::filename(path).toQString();
     case FileSizeRole:
-        return muse::DataFormatter::formatFileSize(size_t(QFileInfo(path).size())).toQString();
+        return muse::DataFormatter::formatFileSize(size_t(fileSize(path))).toQString();
     }
 
     return QVariant();
@@ -224,11 +222,17 @@ void FileListModel::move(int from, int to)
     emit pathsChanged();
 }
 
+qint64 FileListModel::fileSize(const QString& path) const
+{
+    const muse::RetVal<uint64_t> size = fileSystem()->fileSize(muse::io::path_t(path));
+    return size.ret ? qint64(size.val) : 0;
+}
+
 void FileListModel::updateTotalSizeBytes()
 {
     m_totalSizeBytes = 0;
     for (const QString& path : m_paths) {
-        m_totalSizeBytes += QFileInfo(path).size();
+        m_totalSizeBytes += fileSize(path);
     }
 }
 

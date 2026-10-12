@@ -63,6 +63,7 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
 
     QML_ELEMENT
 
+public:
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
