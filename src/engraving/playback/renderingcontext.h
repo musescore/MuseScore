@@ -33,7 +33,6 @@
 
 namespace mu::engraving {
 struct RenderingContext {
-    RenderingContext() = default;
 
     muse::mpe::timestamp_t nominalTimestamp = 0;
     muse::mpe::duration_t nominalDuration = 0;
