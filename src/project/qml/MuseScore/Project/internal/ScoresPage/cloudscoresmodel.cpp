@@ -76,6 +76,10 @@ void CloudScoresModel::load()
         m_pollingGaveUp = gaveUp;
         updateWatchedItems();
     });
+
+    deleteCloudScoreScenario()->scoreDeleted().onReceive(this, [this](int scoreId) {
+        removeScore(scoreId);
+    });
 }
 
 void CloudScoresModel::reload()
@@ -110,6 +114,30 @@ void CloudScoresModel::retryAllConversions()
 void CloudScoresModel::cancelConversion(int convertType, int convertId)
 {
     convertFileToScoreScenario()->cancelConversion(static_cast<ConvertType>(convertType), convertId);
+}
+
+void CloudScoresModel::removeScore(int scoreId)
+{
+    for (size_t i = m_watchedItemCount; i < m_items.size(); ++i) {
+        if (m_items.at(i).value(CLOUD_SCORE_ID_KEY).toInt() != scoreId) {
+            continue;
+        }
+
+        const int row = static_cast<int>(i);
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_items.erase(m_items.begin() + row);
+        endRemoveRows();
+
+        if (m_totalItems != muse::nidx && m_totalItems > 0) {
+            --m_totalItems;
+        }
+
+        emit hasMoreChanged();
+        loadItemsIfNecessary();
+
+        return;
+    }
 }
 
 CloudScoresModel::State CloudScoresModel::state() const

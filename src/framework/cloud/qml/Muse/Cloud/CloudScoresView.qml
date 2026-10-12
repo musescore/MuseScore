@@ -92,6 +92,10 @@ ScoresView {
             onViewOnlineRequested: function(scoreId) {
                 root.viewOnlineRequested(scoreId)
             }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
+            }
         }
     }
 
@@ -124,6 +128,10 @@ ScoresView {
 
             onViewOnlineRequested: function(scoreId) {
                 root.viewOnlineRequested(scoreId)
+            }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
             }
         }
     }

@@ -43,6 +43,7 @@ ListItemBlank {
     signal revealInFileBrowserRequested(string scorePath)
     signal viewOnlineRequested(int scoreId)
     signal removeFromRecentFilesRequested(string scorePath)
+    signal deleteScoreRequested(int scoreId, string scoreName)
     signal retryRequested()
     signal cancelRequested(int convertType, int convertId)
 
@@ -288,6 +289,7 @@ ListItemBlank {
         onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
         onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
         onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
+        onDeleteScoreRequested: root.deleteScoreRequested(root.score.scoreId ?? 0, root.score.name ?? "")
 
         Connections {
             target: root.ListView.view

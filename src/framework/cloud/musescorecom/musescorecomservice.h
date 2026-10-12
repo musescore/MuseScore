@@ -64,6 +64,8 @@ public:
     ProgressPtr downloadScore(int scoreId, DevicePtr scoreData, const QString& hash = QString(),
                               const QString& secret = QString()) override;
 
+    async::Promise<Ret> deleteScore(int scoreId) override;
+
     // IMuseScoreComConvertService
     async::Promise<RetVal<ConvertConfig> > fetchConfig() override;
 
@@ -88,6 +90,8 @@ private:
     void doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished);
 
     async::Promise<Ret> doDownloadScore(int scoreId, DevicePtr scoreData, const QString& hash, const QString& secret, ProgressPtr progress);
+
+    async::Promise<Ret> doDeleteScore(int scoreId);
 
     async::Promise<RetVal<bool> > checkScoreAlreadyUploaded(const ID& scoreId);
 

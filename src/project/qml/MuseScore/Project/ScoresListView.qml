@@ -50,6 +50,7 @@ Item {
     signal revealInFileBrowserRequested(var scorePath)
     signal viewOnlineRequested(var scoreId)
     signal removeFromRecentFilesRequested(var scorePath)
+    signal deleteScoreRequested(var scoreId, var scoreName)
     signal retryRequested()
     signal cancelRequested(int convertType, int convertId)
 
@@ -245,6 +246,10 @@ Item {
 
                         onRemoveFromRecentFilesRequested: function(scorePath) {
                             root.removeFromRecentFilesRequested(scorePath)
+                        }
+
+                        onDeleteScoreRequested: function(scoreId, scoreName) {
+                            root.deleteScoreRequested(scoreId, scoreName)
                         }
 
                         onRetryRequested: root.retryRequested()

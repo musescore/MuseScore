@@ -44,6 +44,7 @@ target_sources(project PRIVATE
     iprojectwriter.h
     iconvertfiletoscorescenario.h
     iconvertfiletoscoreservice.h
+    ideletecloudscorescenario.h
 
     types/projecttypes.h
     types/projectmeta.h
@@ -66,6 +67,8 @@ target_sources(project PRIVATE
     internal/convertfiletoscorescenario.h
     internal/convertfiletoscoreservice.cpp
     internal/convertfiletoscoreservice.h
+    internal/deletecloudscorescenario.cpp
+    internal/deletecloudscorescenario.h
     internal/projectactionscontroller.cpp
     internal/projectactionscontroller.h
     internal/engravingpluginapihelper.cpp

@@ -68,6 +68,7 @@ qt_add_qml_module(project_qml
         ExportDialog.qml
         ConvertFileProcessingDialog.qml
         ConvertFileToScoreDialog.qml
+        DeleteCloudScoreDialog.qml
         ReviewScoreQualityPanel.qml
         internal/ConvertFileToScore/SelectFilePage.qml
         internal/ConvertFileToScore/LinkPastePanel.qml
