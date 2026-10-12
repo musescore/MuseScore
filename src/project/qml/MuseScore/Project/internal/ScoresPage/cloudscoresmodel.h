@@ -32,9 +32,9 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iprojectconfiguration.h"
-#include "iconvertfiletoscorescenario.h"
-#include "ideletecloudscorescenario.h"
+#include "project/iprojectconfiguration.h"
+#include "project/iconvertfiletoscorescenario.h"
+#include "project/ideletecloudscorescenario.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
@@ -49,6 +49,7 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
 
     QML_ELEMENT
 
+public:
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
