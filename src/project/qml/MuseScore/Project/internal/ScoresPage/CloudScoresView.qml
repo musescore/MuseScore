@@ -91,6 +91,10 @@ ScoresView {
                 root.viewOnlineRequested(scoreId)
             }
 
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
+            }
+
             onRetryRequested: cloudScoresModel.retryAllConversions()
 
             onCancelRequested: function(convertType, convertId) {
@@ -128,6 +132,10 @@ ScoresView {
 
             onViewOnlineRequested: function(scoreId) {
                 root.viewOnlineRequested(scoreId)
+            }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
             }
 
             onRetryRequested: cloudScoresModel.retryAllConversions()

@@ -67,6 +67,7 @@ qt_add_qml_module(project_qml
         AudioGenerationSettingsDialog.qml
         ConvertFileProcessingDialog.qml
         ConvertFileToScoreDialog.qml
+        DeleteCloudScoreDialog.qml
         internal/ConvertFileToScore/ConvertButtonBox.qml
         internal/ConvertFileToScore/ConvertFromLinkPanel.qml
         internal/ConvertFileToScore/FileItem.qml
