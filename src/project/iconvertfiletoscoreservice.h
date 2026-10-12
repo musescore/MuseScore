@@ -64,8 +64,8 @@ public:
     //! Returns a previously converted/watched score by its cloud score id
     virtual const WatchedScore* watchedScoreById(int scoreId) const = 0;
 
-    //! Emitted whenever checking the conversion status fails
-    virtual muse::async::Channel<PollingFailure> pollingFailed() const = 0;
+    //! Emitted after every conversion status check, whether it succeeded or failed
+    virtual muse::async::Channel<PollingStatus> pollingStatusChanged() const = 0;
 
     //! Resumes polling for any still-pending items - e.g. in response to the user pressing "Retry"
     virtual void retryPolling() = 0;
