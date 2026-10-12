@@ -995,7 +995,7 @@ TEST_F(Cloud_MuseScoreComServiceTest, DeleteScore_Success)
     EXPECT_TRUE(*ret);
 }
 
-TEST_F(Cloud_MuseScoreComServiceTest, DISABLED_DeleteScore_TokenExpired_RefreshesTokensAndRetries)
+TEST_F(Cloud_MuseScoreComServiceTest, DeleteScore_TokenExpired_RefreshesTokensAndRetries)
 {
     // [GIVEN] The service is initialized
     initService();
@@ -1191,7 +1191,7 @@ TEST_F(Cloud_MuseScoreComServiceTest, UploadScore_ScoreOfOtherUser_Posts)
     EXPECT_EQ(pendingRequest(SCORE_UPLOAD_PATH).verb, POST);
 }
 
-TEST_F(Cloud_MuseScoreComServiceTest, DISABLED_UploadScore_ScoreNotFoundOnServer_Posts)
+TEST_F(Cloud_MuseScoreComServiceTest, UploadScore_ScoreNotFoundOnServer_Posts)
 {
     // [GIVEN] The service is initialized
     initService();
