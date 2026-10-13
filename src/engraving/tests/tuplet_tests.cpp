@@ -319,7 +319,8 @@ TEST_F(Engraving_TupletTests, longNoteIntoSpaceLeft)
 //-----------------------------------------
 //    longNoteIntoNestedSpaceLeft
 //     the same, from the innermost of three nested tuplets,
-//     continuing in the tuplets it is nested in
+//     continuing in the tuplets it is nested in,
+//     and replacing a nested tuplet in its way as a whole
 //-----------------------------------------
 
 TEST_F(Engraving_TupletTests, longNoteIntoNestedSpaceLeft)
@@ -331,6 +332,8 @@ TEST_F(Engraving_TupletTests, longNoteIntoNestedSpaceLeft)
         { 1, 2, Fraction(1, 1), "3:2[ 5:4[ 7:4[r16 r16 r4 r16] r4.] r4 r16 r16 r8 r2]", true },
         // quarter quintuplet > eighth triplet > 32nd sextuplet, from its 2nd note
         { 2, 1, Fraction(1, 1), "5:4[ 3:2[ 6:4[r32 8~ 32~] 4~] 2~ 16. r32 r8 r4]" },
+        // quarter quintuplet > two eighth triplets, from the 1st triplet's 3rd note into the 2nd triplet
+        { 3, 2, Fraction(1, 2), "5:4[ 3:2[r8 r8 8~] 4. r8 r4 r4]" },
     });
 }
 
