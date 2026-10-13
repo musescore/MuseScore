@@ -720,7 +720,7 @@ void TWrite::write(const Accidental* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const ActionIcon* item, XmlWriter& xml, WriteContext&)
 {
     xml.startElement(item);
-    xml.tag("action", String::fromStdString(item->actionCode()));
+    xml.tag("action", TConv::toXml(item->actionType()));
     xml.endElement();
 }
 

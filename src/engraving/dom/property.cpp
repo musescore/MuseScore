@@ -427,7 +427,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CLEF_TO_BARLINE_POS,                 P_TYPE::CLEF_TO_BARLINE_POS,       PropertyGroup::APPEARANCE, true,  "clefToBarlinePos",                QT_TRANSLATE_NOOP("engraving/propertyName", "clef to barline position") },
     { Pid::KEY_CONCERT,                         P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "concertKey",                      QT_TRANSLATE_NOOP("engraving/propertyName", "concert key") },
     { Pid::KEY,                                 P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "actualKey",                       QT_TRANSLATE_NOOP("engraving/propertyName", "key") },
-    { Pid::ACTION,                              P_TYPE::STRING,                    PropertyGroup::APPEARANCE, false, "action",                          nullptr },
+    { Pid::ACTION,                              P_TYPE::ACTION_TYPE,               PropertyGroup::APPEARANCE, false, "action",                          nullptr },
     { Pid::MIN_DISTANCE,                        P_TYPE::SPATIUM,                   PropertyGroup::POSITION,   false, "minDistance",                     QT_TRANSLATE_NOOP("engraving/propertyName", "autoplace minimum distance") },
 
     { Pid::ARPEGGIO_TYPE,                       P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "subtype",                         QT_TRANSLATE_NOOP("engraving/propertyName", "arpeggio type") },
