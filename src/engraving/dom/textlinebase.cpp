@@ -578,6 +578,29 @@ PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
     }
 }
 
+PropertyFlags TextLineBase::propertyFlags(Pid id) const
+{
+    switch (id) {
+    case Pid::ALIGN:
+        return propertyFlags(Pid::BEGIN_TEXT_ALIGN);
+    case Pid::POSITION:
+        return propertyFlags(Pid::BEGIN_TEXT_POSITION);
+    case Pid::FONT_FACE:
+        return propertyFlags(Pid::BEGIN_FONT_FACE);
+    case Pid::FONT_SIZE:
+        return propertyFlags(Pid::BEGIN_FONT_SIZE);
+    case Pid::FONT_STYLE:
+        return propertyFlags(Pid::BEGIN_FONT_STYLE);
+    case Pid::MUSICAL_SYMBOLS_SCALE:
+        return propertyFlags(Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE);
+    case Pid::MUSIC_SYMBOL_SIZE:
+        return propertyFlags(Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE);
+
+    default:
+        return SLine::propertyFlags(id);
+    }
+}
+
 void TextLineBase::setPropertyFlags(Pid id, PropertyFlags f)
 {
     switch (id) {
