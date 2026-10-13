@@ -741,6 +741,18 @@ TEST_F(Cloud_MuseScoreComServiceTest, DownloadScoreInfo_Failed_ReturnsCloudError
     EXPECT_EQ(info.ret.code(), code(cloud::Err::Status403_NotOwner));
 }
 
+TEST_F(Cloud_MuseScoreComServiceTest, DownloadScoreInfo_NoAccessToken_ReturnsError)
+{
+    // [GIVEN] The service is initialized without the tokens file
+    initServiceWithoutTokens();
+
+    // [WHEN] Download the score info
+    RetVal<ScoreInfo> info = m_service->downloadScoreInfo(SCORE_ID);
+
+    // [THEN] The error is returned without waiting for a request
+    EXPECT_EQ(info.ret.code(), code(cloud::Err::AccessTokenIsEmpty));
+}
+
 // =============================================
 // Scores list
 // =============================================

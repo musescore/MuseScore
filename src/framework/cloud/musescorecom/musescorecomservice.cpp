@@ -735,13 +735,18 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     TRACEFUNC;
 
     RetVal<ScoreInfo> result = RetVal<ScoreInfo>::make_ok(ScoreInfo());
+    bool isFinished = false;
 
     QEventLoop loop;
-    doDownloadScoreInfo(scoreId, [&result, &loop](const RetVal<ScoreInfo>& info) {
+    doDownloadScoreInfo(scoreId, [&result, &loop, &isFinished](const RetVal<ScoreInfo>& info) {
         result = info;
+        isFinished = true;
         loop.quit();
     });
-    loop.exec();
+
+    if (!isFinished) {
+        loop.exec();
+    }
 
     return result;
 }
