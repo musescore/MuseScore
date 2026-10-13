@@ -90,7 +90,7 @@ private:
     void saveWatchedScores();
 
     void watch(ConvertType type, int itemId, const muse::String& convertedScoreName);
-    bool hasAnyProcessingScores() const;
+    bool hasAnyScoresToPoll() const;
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);
     void giveUpPolling(const muse::Ret& ret, muse::secs_t elapsed);

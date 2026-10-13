@@ -911,6 +911,38 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AllTerminal_DoesNotP
     EXPECT_EQ(watchedScores.at(1).name, u"Other Score");
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_UnrecognizedStatus_LoadedAsUnknownAndPolled)
+{
+    // [GIVEN] A persisted conversion with a status this version doesn't recognize
+    JsonObject obj;
+    obj["id"] = TEST_QUEUE_ID;
+    obj["type"] = int(ConvertType::Omr);
+    obj["status"] = 99;
+
+    JsonArray array;
+    array << obj;
+    JsonDocument json(array);
+
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
+
+    // [THEN] The queue is checked to find out the actual status
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .WillOnce(Invoke([] {
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    // [WHEN] Resuming
+    m_service->resumeConvert();
+
+    // [THEN] The persisted item is restored with an unknown status
+    const WatchedScoreList watchedScores = m_service->watchedScores().val;
+    ASSERT_FALSE(watchedScores.empty());
+    EXPECT_EQ(watchedScores.front().conversion.status, ConvertStatus::Unknown);
+}
+
 // ==================================================
 // polling / score info fetch pipeline
 // ==================================================

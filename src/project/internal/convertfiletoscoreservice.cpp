@@ -495,10 +495,16 @@ void ConvertFileToScoreService::loadWatchedScores()
             continue;
         }
 
+        int statusInt = obj.value("status").toInt();
+        if (statusInt < 0 || statusInt > static_cast<int>(ConvertStatus::Unknown)) {
+            LOGW() << "Unknown conversion status: " << statusInt;
+            statusInt = static_cast<int>(ConvertStatus::Unknown);
+        }
+
         WatchedScore& watched = m_watchedScores.emplace_back();
         watched.conversion.id = obj.value("id").toInt();
         watched.conversion.type = static_cast<ConvertType>(typeInt);
-        watched.conversion.status = static_cast<ConvertStatus>(obj.value("status").toInt());
+        watched.conversion.status = static_cast<ConvertStatus>(statusInt);
         watched.scoreId = obj.contains("scoreId") ? std::optional<int>(obj.value("scoreId").toInt()) : std::nullopt;
         watched.startedLocally = obj.value("startedLocally").toBool();
         watched.name = muse::String::fromStdString(obj.value("convertedScoreName").toStdString());
@@ -563,16 +569,17 @@ void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::
     }
 }
 
-bool ConvertFileToScoreService::hasAnyProcessingScores() const
+bool ConvertFileToScoreService::hasAnyScoresToPoll() const
 {
     return std::any_of(m_watchedScores.begin(), m_watchedScores.end(), [](const WatchedScore& watched) {
-        return watched.conversion.status == ConvertStatus::Processing;
+        return watched.conversion.status == ConvertStatus::Processing
+               || watched.conversion.status == ConvertStatus::Unknown;
     });
 }
 
 void ConvertFileToScoreService::poll()
 {
-    if (!hasAnyProcessingScores()) {
+    if (!hasAnyScoresToPoll()) {
         LOGDA() << "Nothing active to poll, stopping timer";
         m_timer.stop();
         m_manualRetryRequested = false;
