@@ -233,7 +233,8 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
         return RetVal<ConvertFilesValidation>::make_ok(ConvertFilesValidation { ConvertType::Audio2Score, FileCategory::Audio });
     }
 
-    if (m_config.omr.images.maxFiles > 0 && paths.size() > 1 && int(paths.size()) > m_config.omr.images.maxFiles) {
+    if (firstCategory == FileCategory::Image
+        && m_config.omr.images.maxFiles > 0 && int(paths.size()) > m_config.omr.images.maxFiles) {
         return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyImages));
     }
 
