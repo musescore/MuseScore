@@ -552,9 +552,8 @@ void TWrite::writeScoreSpanners(const Score* score, track_idx_t startTrack, trac
 
     std::vector<Spanner*> spannersToWrite;
     Fraction startTick = startSegment->tick();
-    Fraction endTick = endSegment->tick();
-    const SpannerMap::IntervalList& spanners
-        = score->spannerMap().findContained(startTick.ticks(), endTick.ticks());
+    Fraction endTick = endSegment ? endSegment->tick() : score->endTick();
+    const SpannerMap::IntervalList& spanners = score->spannerMap().findContained(startTick.ticks(), endTick.ticks());
     for (auto& i : spanners) {
         Spanner* s = i.value;
         if (s->generated() || s->track() < startTrack || s->effectiveTrack2() >= endTrack || !ctx.canWrite(s)) {
