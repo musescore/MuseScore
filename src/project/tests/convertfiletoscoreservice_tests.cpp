@@ -489,6 +489,23 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_TooManyImages_TooMan
     EXPECT_EQ(result.ret.code(), int(mu::project::Err::ConvertTooManyImages));
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_MultiplePdfFiles_IgnoresImageLimit)
+{
+    // [GIVEN] No PDF limits, and a maximum image count of one
+    ConvertConfig config = testConfig();
+    config.omr.pdf.maxFiles = 0;
+    config.omr.pdf.maxFileSizeBytes = 0;
+    config.omr.images.maxFiles = 1;
+    setConfig(config);
+
+    // [WHEN] Validating two PDF files
+    RetVal<ConvertFilesValidation> result = m_service->validateFiles(io::paths_t { "/some/a.pdf", "/some/b.pdf" });
+
+    // [THEN] It succeeds, since the image limit doesn't apply to PDF files
+    EXPECT_TRUE(result.ret);
+    EXPECT_EQ(result.val.category, FileCategory::Pdf);
+}
+
 TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_CombinedImageTooLarge_CombinedImageTooLarge)
 {
     // [GIVEN] A configured maximum combined image size, exceeded by the combined file sizes
