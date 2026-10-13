@@ -145,12 +145,12 @@
               <tpc>19</tpc>
               <Glissando>
                 <text></text>
-                <glissandoStyle>portamento</glissandoStyle>
                 <startElement>K_K</startElement>
                 <endElement>M_M</endElement>
                 <eid>N_N</eid>
                 <track>0</track>
                 <diagonal>1</diagonal>
+                <glissandoStyle>portamento</glissandoStyle>
                 </Glissando>
               </Note>
             </Chord>
