@@ -492,7 +492,7 @@ QString NavigableAppMenuModel::openedMenuId() const
 
 bool NavigableAppMenuModel::menuItemMatchesSymbol(MenuItem* menuItem, const QChar& symbol)
 {
-    QString title = menuItem->action().title.qTranslatedWithMnemonicAmpersand();
+    QString title = menuItem->titleWithMnemonicAmpersand();
 
     int activateKeyIndex = title.indexOf('&');
     if (activateKeyIndex == -1) {
@@ -511,7 +511,7 @@ bool NavigableAppMenuModel::menuItemMatchesSymbol(MenuItem* menuItem, const QCha
 QString NavigableAppMenuModel::menuItemId(const MenuItemList& items, const QSet<int>& activatePossibleKeys)
 {
     for (const MenuItem* item : items) {
-        QString title = item->action().title.qTranslatedWithMnemonicAmpersand();
+        QString title = item->titleWithMnemonicAmpersand();
 
         int activateKeyIndex = title.indexOf('&');
         if (activateKeyIndex == -1) {

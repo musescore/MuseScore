@@ -55,7 +55,6 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace muse::actions;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
 
