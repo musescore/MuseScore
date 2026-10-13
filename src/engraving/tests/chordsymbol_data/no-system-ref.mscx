@@ -271,8 +271,8 @@
           <eid>c_c</eid>
           <linkedTo>G_G</linkedTo>
           <Text>
-            <eid>d_d</eid>
             <style>instrument_excerpt</style>
+            <eid>d_d</eid>
             <text>Flute</text>
             </Text>
           </VBox>
@@ -393,8 +393,8 @@
           <eid>q_q</eid>
           <linkedTo>G_G</linkedTo>
           <Text>
-            <eid>r_r</eid>
             <style>instrument_excerpt</style>
+            <eid>r_r</eid>
             <text>Alto Saxophone</text>
             </Text>
           </VBox>

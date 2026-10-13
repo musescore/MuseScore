@@ -82,6 +82,20 @@ ScoresView {
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
             }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
+            }
+
+            onRetryRequested: cloudScoresModel.retryAllConversions()
+
+            onCancelRequested: function(convertType, convertId) {
+                cloudScoresModel.cancelConversion(convertType, convertId)
+            }
         }
     }
 
@@ -106,6 +120,20 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
+            }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
+            }
+
+            onRetryRequested: cloudScoresModel.retryAllConversions()
+
+            onCancelRequested: function(convertType, convertId) {
+                cloudScoresModel.cancelConversion(convertType, convertId)
             }
         }
     }

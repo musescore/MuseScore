@@ -24,15 +24,17 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace LineTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class LineStyle {
-    LINE_STYLE_SOLID,
-    LINE_STYLE_DASHED,
-    LINE_STYLE_DOTTED
+    LINE_STYLE_SOLID = int(engraving::LineType::SOLID),
+    LINE_STYLE_DASHED = int(engraving::LineType::DASHED),
+    LINE_STYLE_DOTTED = int(engraving::LineType::DOTTED)
 };
 
 Q_ENUM_NS(LineStyle)

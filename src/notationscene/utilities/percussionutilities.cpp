@@ -70,7 +70,7 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
         up = line > 4;
     }
 
-    auto chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    auto chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy());
     chord->setDurationType(DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setIsUiItem(true);
@@ -78,7 +78,6 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
 
     Note* note = Factory::createNote(chord.get());
     note->setMark(true);
-    note->setOwnershipParent(chord.get());
     note->setTrack(voice);
     note->setPitch(pitch);
     note->setTpcFromPitch();
@@ -97,7 +96,6 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
     chord->add(note);
 
     Stem* stem = Factory::createStem(chord.get());
-    stem->setOwnershipParent(chord.get());
     stem->setBaseLength(up ? -3.0_sp : 3.0_sp);
     engravingRender()->layoutItem(stem);
     chord->add(stem);
@@ -147,14 +145,12 @@ muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const 
     query.addParam("drumsWithShortcut", muse::Val::fromQVariant(drumsWithShortcut));
 
     QVariantList applicationShortcuts;
-    for (const muse::ui::UiAction& action : uiactionsRegister()->actionList()) {
-        muse::shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
-        if (!shortcut.isValid()) {
-            continue;
-        }
+    muse::shortcuts::ShortcutList shortcuts = commandShortcutsRegister()->shortcuts();
+    for (const muse::shortcuts::Shortcut& shortcut : shortcuts) {
+        const auto& info = commandsRegister()->commandInfo(shortcut.command);
         for (const std::string& str : shortcut.sequences) {
             QVariantMap sc;
-            sc ["title"] = action.title.qTranslatedWithoutMnemonic();
+            sc ["title"] = info.title.qTranslatedWithoutMnemonic();
             sc ["shortcut"] = QString::fromStdString(str);
             applicationShortcuts << sc;
         }

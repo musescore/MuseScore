@@ -425,8 +425,8 @@
         <height>10</height>
         <eid>K_K</eid>
         <Text>
-          <eid>L_L</eid>
           <style>title</style>
+          <eid>L_L</eid>
           <text><font size="22.0128"/>Title</text>
           </Text>
         </VBox>

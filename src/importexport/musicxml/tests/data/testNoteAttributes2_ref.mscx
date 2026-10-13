@@ -97,18 +97,18 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Note Attributes 2</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>MuseScore testfile</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Leon Vinken</text>
           </Text>
         </VBox>
@@ -498,8 +498,8 @@
             <Note>
               <eid>YB_YB</eid>
               <Fingering>
-                <eid>ZB_ZB</eid>
                 <style>guitar_fingering_rh</style>
+                <eid>ZB_ZB</eid>
                 <placement>below</placement>
                 <text>p</text>
                 </Fingering>
@@ -514,8 +514,8 @@
             <Note>
               <eid>bB_bB</eid>
               <Fingering>
-                <eid>cB_cB</eid>
                 <style>string_number</style>
+                <eid>cB_cB</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>67</pitch>

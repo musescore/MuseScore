@@ -25,6 +25,7 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "actions/iactionsdispatcher.h"
@@ -34,7 +35,7 @@
 class QString;
 
 namespace mu::project {
-class ScoresPageModel : public QObject, public muse::Contextable
+class ScoresPageModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -64,8 +65,11 @@ public:
     void setViewType(ViewType type);
 
     Q_INVOKABLE void createNewScore();
+    Q_INVOKABLE void convertFileToScore();
     Q_INVOKABLE void openOther();
     Q_INVOKABLE void openScore(const QString& scorePath, const QString& displayNameOverride);
+    Q_INVOKABLE void revealInFileBrowser(const QString& scorePath);
+    Q_INVOKABLE void viewOnline(int scoreId);
     Q_INVOKABLE void openScoreManager();
 
 signals:

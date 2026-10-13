@@ -30,6 +30,7 @@ namespace mu::engraving {
 class Bracket;
 class BracketItem;
 class InstrumentName;
+class Staff;
 class System;
 class SysStaff;
 }
@@ -63,22 +64,25 @@ private:
     static void computeStackedBracketsWidth(Bracket* first, const std::vector<Bracket*>& allGroupBracketsOrderedByColumn, double& width,
                                             std::vector<Bracket*>& stack);
 
-    static void setSharedPartNames(SharedPart* sharedPart, staff_idx_t startStaffIdx, System* system, LayoutContext& ctx, bool longName,
+    static void setSharedPartNames(SharedPart* sharedPart, staff_idx_t startStaffIdx, System* system, LayoutContext& ctx,
                                    const Fraction& tick = { 0, 1 });
 
     static void updateGroupNames(System* system, LayoutContext& ctx, const Fraction& tick);
     static bool useGroupNames(const String& instrumentGroup, LayoutContext& ctx);
     static InstrumentName* updateName(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const String& name, InstrumentNameType type,
                                       InstrumentNameRole role);
-    static String formattedInstrumentName(System* system, Part* part, const Fraction& tick);
-    static String formattedGroupName(System* system, Part* part, const Fraction& tick);
+    static String formattedInstrumentName(System* system, Part* part, const Fraction& tick, bool longNames);
+    static String formattedGroupName(System* system, Part* part, const Fraction& tick, bool longNames);
+
+    static InstrumentLabelVisibility resolveInstrumentLabelVisibility(const Staff* staff, const Fraction& tick, LayoutContext& ctx,
+                                                                      bool firstSystem);
+    static InstrumentNameType resolveInstrumentNameType(InstrumentLabelVisibility visibility);
 
     static String formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
     static Part* originPartForStaff(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
     static String formatVerticalSharedLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle);
 
     static String& resolveTokens(String& str, const String& name, const String& transposition, const String& number);
-    static bool showNames(LayoutContext& ctx);
     static double nameWidthIncludingGroupBrackets(InstrumentName* name, System* system);
 
     static bool stackLabelsVertically(System* system);

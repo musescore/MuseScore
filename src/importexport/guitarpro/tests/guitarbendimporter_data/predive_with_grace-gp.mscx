@@ -79,8 +79,8 @@
               <string useFlat="1">70</string>
               <string useFlat="1">75</string>
               </StringData>
-            <eid>I_I</eid>
             <style>string_tunings</style>
+            <eid>I_I</eid>
             <text/>
             </StringTunings>
           <Rest>

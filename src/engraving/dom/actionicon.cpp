@@ -31,7 +31,7 @@ using namespace mu;
 using namespace muse::draw;
 using namespace mu::engraving;
 
-ActionIcon::ActionIcon(EngravingItem* parent)
+ActionIcon::ActionIcon(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::ACTION_ICON, parent)
 {
     m_iconFont = Font(configuration()->iconsFontFamily(), Font::Type::Icon);

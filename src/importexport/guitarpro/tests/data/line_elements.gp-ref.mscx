@@ -624,8 +624,8 @@
               <string useFlat="1">38</string>
               <string useFlat="1">43</string>
               </StringData>
-            <eid>XB_XB</eid>
             <style>string_tunings</style>
+            <eid>XB_XB</eid>
             <text/>
             </StringTunings>
           <Chord>
@@ -769,8 +769,8 @@
               <string useFlat="1">38</string>
               <string useFlat="1">43</string>
               </StringData>
-            <eid>uB_uB</eid>
             <style>string_tunings</style>
+            <eid>uB_uB</eid>
             <text/>
             </StringTunings>
           <Rest>

@@ -45,13 +45,13 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Laissez vibrer test</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>composer</style>
+          <eid>G_G</eid>
           <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>

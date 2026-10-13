@@ -93,23 +93,23 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>title</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>subtitle</style>
+          <eid>H_H</eid>
           <text>subtitle</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>composer</style>
+          <eid>I_I</eid>
           <text>Composer</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>poet</style>
+          <eid>J_J</eid>
           <text>Lyrics</text>
           </Text>
         </VBox>

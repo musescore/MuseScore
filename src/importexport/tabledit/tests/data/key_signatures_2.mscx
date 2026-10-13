@@ -139,8 +139,8 @@
         <height>10</height>
         <eid>I_I</eid>
         <Text>
-          <eid>J_J</eid>
           <style>title</style>
+          <eid>J_J</eid>
           <text>Key signatures (multi-track)</text>
           </Text>
         </VBox>

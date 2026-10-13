@@ -1430,8 +1430,8 @@ String StaveSharingLayout::formatInstrumentChangeLable(const InstrumentChange* o
 
     String prefix;
     std::vector<const Instrument*> originInstruments;
-    for (const EngravingItem* originChange : sharedChange->originItems()) {
-        const Part* originPart = originChange->part();
+    for (const EngravingItem* sharedOriginChange : sharedChange->originItems()) {
+        const Part* originPart = sharedOriginChange->part();
         originInstruments.push_back(originPart->instrument());
     }
     prefix = SystemHeaderLayout::formatSharedVoiceLabel(originInstruments, trailingDotSingle, trailingDotMultiple,

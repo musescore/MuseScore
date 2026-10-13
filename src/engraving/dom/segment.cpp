@@ -146,17 +146,15 @@ void Segment::removeElement(track_idx_t track)
 //   Segment
 //---------------------------------------------------------
 
-Segment::Segment(Measure* m)
-    : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+Segment::Segment(DummyParentOr<Measure> m)
+    : EngravingItem(ElementType::SEGMENT, m, ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setOwnershipParent(m);
     init();
 }
 
-Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
-    : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+Segment::Segment(DummyParentOr<Measure> m, SegmentType st, const Fraction& t)
+    : EngravingItem(ElementType::SEGMENT, m, ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setOwnershipParent(m);
 //      assert(t >= Fraction(0,1));
 //      assert(t <= m->ticks());
     m_segmentType = st;
@@ -191,7 +189,7 @@ Segment::Segment(const Segment& s)
     m_shapes  = s.m_shapes;
 }
 
-void Segment::setOwnershipParent(Measure* parent)
+void Segment::setOwnershipParent(DummyParentOr<Measure> parent)
 {
     EngravingItem::setOwnershipParent(parent);
 }

@@ -75,7 +75,7 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp)
 //   HarmonicMark
 //---------------------------------------------------------
 
-HarmonicMark::HarmonicMark(EngravingItem* parent)
+HarmonicMark::HarmonicMark(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::HARMONIC_MARK, parent)
 {
     initElementStyle(&harmonicMarkStyle);

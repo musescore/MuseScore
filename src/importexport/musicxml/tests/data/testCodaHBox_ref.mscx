@@ -134,13 +134,13 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
@@ -216,8 +216,8 @@
       <Measure>
         <eid>W_W</eid>
         <Marker>
-          <eid>X_X</eid>
           <style>repeat_left</style>
+          <eid>X_X</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>
@@ -261,8 +261,8 @@
       <Measure>
         <eid>f_f</eid>
         <Marker>
-          <eid>g_g</eid>
           <style>repeat_left</style>
+          <eid>g_g</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>

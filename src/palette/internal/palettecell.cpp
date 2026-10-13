@@ -220,9 +220,9 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
         } else if (s == "visible") {
             visible = e.readBool();
         } else if (s == "Tremolo") {
-            compat::TremoloCompat tc;
-            tc.parent = paletteScoreProvider()->paletteScore()->dummy()->chord();
-            rw::RWRegister::reader(paletteScoreProvider()->paletteScore()->mscVersion())->readTremoloCompat(&tc, e);
+            Score* paletteScore = paletteScoreProvider()->paletteScore();
+            compat::TremoloCompat tc { paletteScore->dummy() };
+            rw::RWRegister::reader(paletteScore->mscVersion())->readTremoloCompat(&tc, e);
             if (tc.single) {
                 element.reset(tc.single);
             } else if (tc.two) {

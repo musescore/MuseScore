@@ -70,6 +70,8 @@ static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
 
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
+
 using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
 static const std::map<muse::rcommand::Command, bool EngravingDebuggingOptions::*> s_debuggingCommands = {
     { SHOW_ELEMENT_BOUNDING_RECTS_COMMAND, &EngravingDebuggingOptions::showElementBoundingRects },
@@ -218,10 +220,10 @@ void NotationActionController::init()
     registerCommand(SET_DURATION_512TH_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
     registerCommand(SET_DURATION_1024TH_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
 
-    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
-    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
-    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
-    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
+    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
+    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
@@ -527,6 +529,9 @@ void NotationActionController::init()
     registerCommand(RESET_BEAMS_COMMAND, &Controller::resetBeamMode);
     registerCommand(RESET_SHAPES_AND_POSITIONS_COMMAND, &Interaction::resetShapesAndPosition);
     registerCommand(RESET_TO_DEFAULT_LAYOUT_COMMAND, &Interaction::resetToDefaultLayout);
+
+    // appearance commands
+    registerCommand(FREEZE_CURRENT_PLACEMENT_COMMAND, &Interaction::freezeSelectionPosition);
 
     // show commands
     registerCommand(SHOW_INVISIBLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
@@ -918,6 +923,7 @@ void NotationActionController::init()
             { "reset-beammode", RESET_BEAMS_COMMAND, {} },
             { "reset", RESET_SHAPES_AND_POSITIONS_COMMAND, {} },
             { "reset-to-default-layout", RESET_TO_DEFAULT_LAYOUT_COMMAND, {} },
+            { "freeze-current-placement", FREEZE_CURRENT_PLACEMENT_COMMAND, {} },
             { "show-invisible", SHOW_INVISIBLE_COMMAND, {} },
             { "show-unprintable", SHOW_UNPRINTABLE_COMMAND, {} },
             { "show-frames", SHOW_FRAMES_COMMAND, {} },
@@ -963,8 +969,8 @@ void NotationActionController::init()
             { "select-prev-chord", ADD_TO_SELECTION_PREV_CHORD_COMMAND, {} },
             { "select-next-measure", ADD_TO_SELECTION_NEXT_MEASURE_COMMAND, {} },
             { "select-prev-measure", ADD_TO_SELECTION_PREV_MEASURE_COMMAND, {} },
-            { "select-above-staff", ADD_TO_SELECTION_ABOVE_STAFF_COMMAND, {} },
-            { "select-below-staff", ADD_TO_SELECTION_BELOW_STAFF_COMMAND, {} },
+            { "select-staff-above", ADD_TO_SELECTION_ABOVE_STAFF_COMMAND, {} },
+            { "select-staff-below", ADD_TO_SELECTION_BELOW_STAFF_COMMAND, {} },
             { "select-begin-line", ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND, {} },
             { "select-end-line", ADD_TO_SELECTION_END_SYSTEM_COMMAND, {} },
             { "select-begin-score", ADD_TO_SELECTION_BEGIN_SCORE_COMMAND, {} },
@@ -983,7 +989,7 @@ void NotationActionController::init()
             { "resequence-rehearsal-marks", RESEQUENCE_REHEARSAL_MARKS_COMMAND, {} },
             { "unroll-repeats", UNROLL_REPEATS_COMMAND, {} },
             { "copy-lyrics-to-clipboard", COPY_LYRICS_COMMAND, {} },
-            { "repeat-selection", REPEAT_SELECTION_COMMAND, {} },
+            { "repeat-sel", REPEAT_SELECTION_COMMAND, {} },
             { "add-up-bow", ADD_UP_BOW_COMMAND, {} },
             { "add-down-bow", ADD_DOWN_BOW_COMMAND, {} },
             { "transpose-up", TRANSPOSE_UP_COMMAND, {} },
@@ -1162,6 +1168,11 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
     // If no notation is loaded, we cannot handle any action.
     auto masterNotation = currentMasterNotation();
     if (!masterNotation) {
+        return false;
+    }
+
+    // All actions are disabled on the review page
+    if (interactive() && interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
         return false;
     }
 
@@ -2010,9 +2021,9 @@ void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDo
 
     if (noteInput->isNoteInputMode()) {
         if (steps > 0) {
-            noteInput->doubleNoteInputDuration();
-        } else {
             noteInput->halveNoteInputDuration();
+        } else {
+            noteInput->doubleNoteInputDuration();
         }
     } else {
         interaction->increaseDecreaseDuration(steps, stepByDots);

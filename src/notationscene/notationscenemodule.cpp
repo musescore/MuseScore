@@ -31,7 +31,6 @@
 #include "internal/notationactioncontroller.h"
 #include "internal/midiinputoutputcontroller.h"
 #include "internal/notationuiactions.h"
-#include "internal/notationactionsshortcutsmigrator.h"
 #include "internal/notationcommandsregister.h"
 #include "internal/notationcommandsstate.h"
 #include "internal/notationactioncontroller.h"
@@ -136,12 +135,5 @@ void NotationSceneContext::onInit(const IApplication::RunMode& mode)
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();
-    }
-}
-
-void NotationSceneContext::onAllInited(const IApplication::RunMode& mode)
-{
-    if (mode == IApplication::RunMode::GuiApp) {
-        NotationActionsShortcutsMigrator::migrate(iocContext());
     }
 }

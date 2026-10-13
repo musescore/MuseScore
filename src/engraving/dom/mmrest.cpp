@@ -33,7 +33,7 @@ using namespace mu::engraving;
 //    MMRest
 //--------------------------------------------------------
 
-MMRest::MMRest(Segment* s)
+MMRest::MMRest(DummyParentOr<Segment> s)
     : Rest(ElementType::MMREST, s)
 {
     m_numberVisible = true;

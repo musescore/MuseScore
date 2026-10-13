@@ -757,7 +757,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
         for (size_t i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
             Note* note = chord->findNote(mn.pitch());
-            n->ties[static_cast<int>(i)] = Factory::createTie(score->dummy());
+            n->ties[static_cast<int>(i)] = Factory::createTie(note);
             n->ties[static_cast<int>(i)]->setStartNote(note);
             note->setTieFor(n->ties[static_cast<int>(i)]);
         }

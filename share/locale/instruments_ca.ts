@@ -17894,7 +17894,7 @@
         <source>Acoustic bass guitar.</source>
         <comment>acoustic-bass description</comment>
         <extracomment>description for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Baix acústic.</translation>
+        <translation>Guitarra baixa acústica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5824"/>

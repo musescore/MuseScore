@@ -133,6 +133,7 @@ enum class P_TYPE : unsigned char {
 
     INSTRUMENT_NAMES_ALIGN,
     INSTRUMENT_NAMES_FORMAT,
+    INSTRUMENT_LABEL_VISIBILITY,
 
     // Other
     GROUPS,
@@ -374,6 +375,9 @@ public:
 
     PropertyValue(const InstrumentNamesFormat& v)
         : m_type(P_TYPE::INSTRUMENT_NAMES_FORMAT), m_data(make_data<InstrumentNamesFormat>(v)) {}
+
+    PropertyValue(InstrumentLabelVisibility v)
+        : m_type(P_TYPE::INSTRUMENT_LABEL_VISIBILITY), m_data(make_data<InstrumentLabelVisibility>(v)) {}
 
     bool isValid() const;
 

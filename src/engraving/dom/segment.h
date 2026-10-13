@@ -128,7 +128,7 @@ public:
 
     ~Segment();
 
-    void setOwnershipParent(Measure* parent);
+    void setOwnershipParent(DummyParentOr<Measure> parent);
 
     Segment* clone() const override { return new Segment(*this); }
 
@@ -352,8 +352,8 @@ private:
     void addArticulationsToShape(const Chord* chord, Shape& shape);
 
     friend class Factory;
-    Segment(Measure* m = 0);
-    Segment(Measure*, SegmentType, const Fraction&);
+    Segment(DummyParentOr<Measure> m);
+    Segment(DummyParentOr<Measure>, SegmentType, const Fraction&);
     Segment(const Segment&);
 
     void init();

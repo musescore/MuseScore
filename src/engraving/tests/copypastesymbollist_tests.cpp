@@ -92,7 +92,7 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
 void Engraving_CopyPasteSymbolListTests::copypaste(const char16_t* name, ElementType type)
 {
     MasterScore* score = ScoreRW::readScore(CPSYMBOLLIST_DATA_DIR + String("copypastesymbollist-%1.mscx").arg(name));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     EngravingItem* el = Factory::createItem(type, score->dummy());
     score->selectSimilar(el, false);
@@ -163,7 +163,7 @@ TEST_F(Engraving_CopyPasteSymbolListTests, DISABLED_copypasteFermataRest)
 void Engraving_CopyPasteSymbolListTests::copypastepart(const char16_t* name, ElementType type)
 {
     MasterScore* score = ScoreRW::readScore(CPSYMBOLLIST_DATA_DIR + String("copypastesymbollist-%1.mscx").arg(name));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     //select all
@@ -189,7 +189,7 @@ TEST_F(Engraving_CopyPasteSymbolListTests, copypasteRange)
 void Engraving_CopyPasteSymbolListTests::copypastedifferentvoice(const char16_t* name, ElementType type)
 {
     MasterScore* score = ScoreRW::readScore(CPSYMBOLLIST_DATA_DIR + String(u"copypastesymbollist-%1.mscx").arg(name));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     //select all

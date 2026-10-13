@@ -108,7 +108,7 @@ static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_
     { GradualTempoChangeType::Stringendo, 1.5 }
 };
 
-GradualTempoChange::GradualTempoChange(EngravingItem* parent)
+GradualTempoChange::GradualTempoChange(DummyParentOr<EngravingItem> parent)
     : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoStyle);

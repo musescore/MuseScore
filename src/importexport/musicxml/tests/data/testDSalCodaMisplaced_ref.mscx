@@ -121,18 +121,18 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text><font size="22"/>D.S al Codas</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Henry Ives</text>
           </Text>
         </VBox>
@@ -188,8 +188,8 @@
       <Measure>
         <eid>S_S</eid>
         <Marker>
-          <eid>T_T</eid>
           <style>repeat_left</style>
+          <eid>T_T</eid>
           <text><sym>segno</sym></text>
           <label>segno</label>
           <markerType>segno</markerType>
@@ -234,8 +234,8 @@
       <Measure>
         <eid>b_b</eid>
         <Marker>
-          <eid>c_c</eid>
           <style>repeat_right</style>
+          <eid>c_c</eid>
           <text>To Coda<br/><sym>coda</sym></text>
           <label>coda</label>
           <markerType>coda</markerType>
@@ -396,8 +396,8 @@
       <Measure>
         <eid>9_9</eid>
         <Jump>
-          <eid>+_+</eid>
           <style>repeat_right</style>
+          <eid>+_+</eid>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
@@ -431,8 +431,8 @@
       <Measure>
         <eid>EB_EB</eid>
         <Marker>
-          <eid>FB_FB</eid>
           <style>repeat_left</style>
+          <eid>FB_FB</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>

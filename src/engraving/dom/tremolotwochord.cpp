@@ -54,7 +54,7 @@ static const ElementStyle TREMOLO_STYLE {
 //   Tremolo
 //---------------------------------------------------------
 
-TremoloTwoChord::TremoloTwoChord(Chord* parent)
+TremoloTwoChord::TremoloTwoChord(DummyParentOr<Chord> parent)
     : BeamBase(ElementType::TREMOLO_TWOCHORD, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&TREMOLO_STYLE);

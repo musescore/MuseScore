@@ -23,15 +23,17 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace SlurTieTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum TiePlacement {
-    TIE_PLACEMENT_AUTO,
-    TIE_PLACEMENT_INSIDE,
-    TIE_PLACEMENT_OUTSIDE,
+    TIE_PLACEMENT_AUTO = int(engraving::TiePlacement::AUTO),
+    TIE_PLACEMENT_INSIDE = int(engraving::TiePlacement::INSIDE),
+    TIE_PLACEMENT_OUTSIDE = int(engraving::TiePlacement::OUTSIDE),
 };
 
 Q_ENUM_NS(TiePlacement)

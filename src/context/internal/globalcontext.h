@@ -24,11 +24,17 @@
 
 #include "../iglobalcontext.h"
 
+#include "global/async/asyncable.h"
+
+#include "global/modularity/ioc.h"
+#include "global/api/ifilesystemapirestriction.h"
+
 #include "playbackstate.h"
 
 namespace mu::context {
-class GlobalContext : public IGlobalContext
+class GlobalContext : public IGlobalContext, public muse::async::Asyncable
 {
+    muse::GlobalInject<muse::api::IFileSystemApiRestriction> fsRestriction;
 public:
 
     GlobalContext();

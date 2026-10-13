@@ -90,8 +90,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>fing</text>
           </Text>
         </VBox>
@@ -132,8 +132,8 @@
             <Note>
               <eid>O_O</eid>
               <Fingering>
-                <eid>P_P</eid>
                 <style>string_number</style>
+                <eid>P_P</eid>
                 <text><font size="8"/>2</text>
                 </Fingering>
               <pitch>55</pitch>
