@@ -272,3 +272,76 @@ TEST_F(Engraving_TupletTests, longNoteIntoNestedSpaceLeft)
         { 2, 1, Fraction(1, 1) },        // quarter quintuplet > eighth triplet > 32nd sextuplet, from its 2nd note
     });
 }
+
+// the rhythm of track 0 in a measure, e.g. "3:5[8 r8 r8] 8. 4": durations as note values
+// (r = rest, . = dot, R = measure rest), tuplets as actual:normal[...]
+static std::string rhythm(Measure* measure)
+{
+    std::string result;
+    std::vector<const Tuplet*> open;
+    for (Segment* s = measure->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        const ChordRest* cr = toChordRest(s->element(0));
+        if (!cr) {
+            continue;
+        }
+
+        std::vector<const Tuplet*> tuplets;
+        for (const Tuplet* t = cr->tuplet(); t; t = t->tuplet()) {
+            tuplets.insert(tuplets.begin(), t);
+        }
+        size_t common = 0;
+        while (common < open.size() && common < tuplets.size() && open[common] == tuplets[common]) {
+            ++common;
+        }
+        for (; open.size() > common; open.pop_back()) {
+            result += "]";
+        }
+        for (size_t i = common; i < tuplets.size(); ++i) {
+            result += " " + std::to_string(tuplets[i]->ratio().numerator()) + ":"
+                      + std::to_string(tuplets[i]->ratio().denominator()) + "[";
+            open.push_back(tuplets[i]);
+        }
+
+        result += (result.empty() || result.back() == '[') ? "" : " ";
+        if (cr->durationType().type() == DurationType::V_MEASURE) {
+            result += "R";
+            continue;
+        }
+        result += cr->isRest() ? "r" : "";
+        result += std::to_string(1 << (static_cast<int>(cr->durationType().type()) - static_cast<int>(DurationType::V_WHOLE)));
+        result += std::string(cr->durationType().dots(), '.');
+    }
+    result += std::string(open.size(), ']');
+    return result.substr(result.find_first_not_of(' '));
+}
+
+//-----------------------------------------
+//    nestedTupletsLengthen
+//     lengthening a chord inside a tuplet over a nested tuplet
+//     replaces the nested tuplet instead of overfilling the measure
+//-----------------------------------------
+TEST_F(Engraving_TupletTests, nestedTupletsLengthen)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"nestedTuplets_lengthen.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = score->firstMeasure();
+
+    // 9:8 eighth tuplet: three eighths, a nested eighth triplet, four eighths
+    ASSERT_EQ(rhythm(m1), "9:8[8 8 8 3:2[8 8 8] 8 8 8 8]");
+    Segment* s = m1->first(SegmentType::ChordRest);
+    s = s->next(SegmentType::ChordRest)->next(SegmentType::ChordRest);
+    ChordRest* third = toChordRest(s->element(0));
+    ASSERT_TRUE(third && third->tuplet());
+
+    // a quarter reaches into the nested triplet
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->changeCRlen(third, TDuration(DurationType::V_QUARTER));
+    score->endCmd();
+
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "9:8[8 8 4 r8 8 8 8 8]");
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m1), "9:8[8 8 8 3:2[8 8 8] 8 8 8 8]");
+    delete score;
+}

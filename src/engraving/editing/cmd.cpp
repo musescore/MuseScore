@@ -1156,7 +1156,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             bool tupletEnd = true;
             Tuplet* t = cr->tuplet();
             while (t) {
-                if (cr->tuplet() == tuplet) {
+                if (t == tuplet) {
                     tupletEnd = false;
                     break;
                 }
@@ -1181,8 +1181,8 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             // Current location points to the start of a (nested)tuplet.
             // We have to remove the complete tuplet.
 
-            // get top level tuplet
-            while (ltuplet->tuplet()) {
+            // get the outermost tuplet inside the current one
+            while (ltuplet->tuplet() != tuplet) {
                 ltuplet = ltuplet->tuplet();
             }
 
@@ -1196,7 +1196,6 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             // now delete the full tuplet
             td = ltuplet->ticks();
             cmdDeleteTuplet(ltuplet, false);
-            tuplet = 0;
         } else {
             if (seg != firstSegment || !keepChord) {
                 undoRemoveElement(cr);
@@ -1230,7 +1229,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             for (TDuration d : dList) {
                 if (ltuplet) {
                     // take care not to recreate tuplet we just deleted
-                    Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
+                    Rest* r = setRest(tick, track, d.fraction(), false, tuplet, false);
                     tick += r->actualTicks();
                 } else {
                     tick += addClone(cr, tick, d)->actualTicks();
