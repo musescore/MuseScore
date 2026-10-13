@@ -1124,6 +1124,31 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_NoProcessing
     pumpEvents();
 }
 
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_SchemelessLink_StartsAudio2ScoreConvertWithScheme)
+{
+    // [GIVEN] The user enters a link without a scheme in the picker dialog
+    const QVariantMap selectionMap {
+        { "type", int(ConvertType::Audio2Score) },
+        { "link", QString("link.xyz/song") },
+        { "convertedScoreName", QString("song") }
+    };
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillOnce(Invoke([selectionMap](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(selectionMap));
+    }));
+
+    // [THEN] The conversion is started with the link completed with a scheme
+    EXPECT_CALL(*m_service, startConvert(Truly([](const ConvertInput& input) {
+        return convertTypeOf(input) == ConvertType::Audio2Score && convertLinkOf(input) == QUrl("http://link.xyz/song");
+    }), muse::String(u"song")))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_ShowsUnknownError)
 {
     // [GIVEN] The service fails to start the conversion

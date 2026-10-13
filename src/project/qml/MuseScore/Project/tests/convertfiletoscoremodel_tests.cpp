@@ -778,6 +778,16 @@ TEST_F(Project_ConvertFileToScoreModelTest, ValidateLink_DelegatesToScenario)
     EXPECT_FALSE(m_model.validateLink("test://bad-link"));
 }
 
+TEST_F(Project_ConvertFileToScoreModelTest, ValidateLink_AddsSchemeToSchemelessLink)
+{
+    // [THEN] The scenario receives the link with a scheme
+    EXPECT_CALL(*m_scenario, validateLink(QUrl("http://link.xyz/song")))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Validating a link typed without a scheme
+    EXPECT_TRUE(m_model.validateLink("link.xyz/song"));
+}
+
 // ==================================================
 // validateFileName()
 // ==================================================
