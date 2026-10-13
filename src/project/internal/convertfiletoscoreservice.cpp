@@ -259,6 +259,11 @@ Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
         return make_ret(Err::ConvertUnsupportedLink, link.errorString().toStdString());
     }
 
+    const int maxLength = m_config.audio2score.link.maxLength;
+    if (maxLength > 0 && link.toString().length() > maxLength) {
+        return make_ret(Err::ConvertUnsupportedLink);
+    }
+
     const QString host = link.host().toLower();
 
     if (m_config.audio2score.link.allowedSources.testFlag(LinkSource::YouTube)
