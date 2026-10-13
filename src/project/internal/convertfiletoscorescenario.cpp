@@ -284,7 +284,7 @@ ConvertFileToScoreScenario::ConvertSelection ConvertFileToScoreScenario::toConve
     selection.convertedScoreName = map.value("convertedScoreName").toString();
 
     if (type == ConvertType::Audio2Score && !link.isEmpty()) {
-        selection.input = Audio2ScoreConvertInput { QUrl(link) };
+        selection.input = Audio2ScoreConvertInput { QUrl::fromUserInput(link) };
     } else if (type == ConvertType::Audio2Score) {
         selection.input = Audio2ScoreConvertInput { paths };
     } else {
