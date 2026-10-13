@@ -44,6 +44,7 @@
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
@@ -2036,7 +2037,295 @@ Err MusicXmlParserPass2::parse()
         return Err::FileBadFormat;
     }
 
+    linkAlternateStaves();
+
     return Err::NoError;
+}
+
+//---------------------------------------------------------
+//   notesByPitch
+//---------------------------------------------------------
+
+/**
+ The notes of \a chord in order of pitch (a tablature chord keeps them in string order).
+ */
+
+static std::vector<Note*> notesByPitch(const Chord* chord)
+{
+    std::vector<Note*> notes = chord->notes();
+    std::stable_sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) { return a->pitch() < b->pitch(); });
+    return notes;
+}
+
+//---------------------------------------------------------
+//   sameNotes
+//---------------------------------------------------------
+
+/**
+ Do \a chord1 and \a chord2 have the same notes and the same grace notes?
+ */
+
+static bool sameNotes(const Chord* chord1, const Chord* chord2)
+{
+    const std::vector<Note*> notes1 = notesByPitch(chord1);
+    const std::vector<Note*> notes2 = notesByPitch(chord2);
+    if (notes1.size() != notes2.size() || chord1->graceNotes().size() != chord2->graceNotes().size()) {
+        return false;
+    }
+    for (size_t i = 0; i < notes1.size(); ++i) {
+        if (notes1.at(i)->pitch() != notes2.at(i)->pitch()) {
+            return false;
+        }
+    }
+    for (size_t i = 0; i < chord1->graceNotes().size(); ++i) {
+        if (!sameNotes(chord1->graceNotes().at(i), chord2->graceNotes().at(i))) {
+            return false;
+        }
+    }
+    return true;
+}
+
+//---------------------------------------------------------
+//   sameMusic
+//---------------------------------------------------------
+
+/**
+ Do \a staff1 and \a staff2 have the same music: in every voice, the same chords and rests with the same
+ durations and the same notes? If not, \a difference tells where they first differ.
+ */
+
+static bool sameMusic(Score* score, const Staff* staff1, const Staff* staff2, String& difference)
+{
+    for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+            EngravingItem* e1 = s->element(staff1->idx() * VOICES + voice);
+            EngravingItem* e2 = s->element(staff2->idx() * VOICES + voice);
+            if (!e1 && !e2) {
+                continue;
+            }
+            if (!e1 || !e2 || e1->type() != e2->type() || toChordRest(e1)->ticks() != toChordRest(e2)->ticks()
+                || (e1->isChord() && !sameNotes(toChord(e1), toChord(e2)))) {
+                difference = String(u"measure %1, voice %2").arg(s->measure()->measureIndex() + 1).arg(voice + 1);
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+//---------------------------------------------------------
+//   copyStringsAndFrets
+//---------------------------------------------------------
+
+/**
+ Give the notes of \a chord the strings and frets of the same notes in \a tabChord (sameNotes() is true).
+ */
+
+static void copyStringsAndFrets(const Chord* tabChord, Chord* chord)
+{
+    const std::vector<Note*> tabNotes = notesByPitch(tabChord);
+    const std::vector<Note*> notes = notesByPitch(chord);
+    for (size_t i = 0; i < notes.size(); ++i) {
+        notes.at(i)->setString(tabNotes.at(i)->string());
+        notes.at(i)->setFret(tabNotes.at(i)->fret());
+    }
+    for (size_t i = 0; i < chord->graceNotes().size(); ++i) {
+        copyStringsAndFrets(tabChord->graceNotes().at(i), chord->graceNotes().at(i));
+    }
+}
+
+//---------------------------------------------------------
+//   linkStaff
+//---------------------------------------------------------
+
+/**
+ Make \a target a linked staff of \a source (sameMusic() is true), as when adding a linked staff: its chords
+ and rests are replaced by linked clones of \a source's, with their glissandos and fermatas. The rest
+ follows the file: a spanner it has on both staves becomes linked, one on \a source alone stays there, and
+ one on \a target alone (such as a let ring line under the tablature) stays too, unless it is attached to
+ \a target's chords (a slur). \a target keeps its lyrics and the look of its tuplets, and a tablature
+ written without stems or rests keeps that look in its staff type.
+ */
+
+static void linkStaff(Score* score, Staff* source, Staff* target)
+{
+    const track_idx_t sourceTrack = source->idx() * VOICES;
+    const track_idx_t targetTrack = target->idx() * VOICES;
+    auto onTarget = [targetTrack](track_idx_t track) {
+        return track >= targetTrack && track < targetTrack + VOICES;
+    };
+    auto twinOnSource = [score, sourceTrack, onTarget](const Spanner* spanner) -> Spanner* {
+        for (const auto& pair : score->spanner()) {
+            Spanner* s = pair.second;
+            if (s->track() == sourceTrack + spanner->voice() && !onTarget(s->track2()) && s->type() == spanner->type()
+                && s->tick() == spanner->tick() && s->tick2() == spanner->tick2()) {
+                return s;
+            }
+        }
+        return nullptr;
+    };
+
+    // the target's spanners: those the source has too are replaced by linked clones of the source's; those
+    // attached to its chords go with them (and glissandos with their notes), as does a slur between the two
+    // staves; the others stay
+    std::vector<Spanner*> twins;
+    std::vector<Spanner*> removedSpanners;
+    for (const auto& pair : score->spanner()) {
+        Spanner* spanner = pair.second;
+        if (spanner->anchor() == Spanner::Anchor::NOTE) {
+            continue;
+        }
+        const bool startsOnTarget = onTarget(spanner->track());
+        if (spanner->anchor() == Spanner::Anchor::CHORDREST && startsOnTarget != onTarget(spanner->track2())) {
+            removedSpanners.push_back(spanner);
+            continue;
+        }
+        if (!startsOnTarget) {
+            continue;
+        }
+        Spanner* twin = twinOnSource(spanner);
+        if (twin) {
+            twins.push_back(twin);
+        }
+        if (twin || spanner->anchor() == Spanner::Anchor::CHORDREST) {
+            removedSpanners.push_back(spanner);
+        }
+    }
+    for (Spanner* spanner : removedSpanners) {
+        score->undoRemoveElement(spanner, false);
+    }
+
+    // the target's chords, rests and fermatas, noting its lyrics and the look of its tuplets, stems and rests
+    std::vector<std::pair<Segment*, Lyrics*> > lyrics;
+    std::map<std::pair<Segment*, track_idx_t>, std::pair<TupletBracketType, TupletNumberType> > tuplets;
+    size_t chords = 0;
+    size_t chordsWithoutStem = 0;
+    size_t rests = 0;
+    size_t hiddenRests = 0;
+    for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        const std::vector<EngravingItem*> annotations = s->annotations();
+        for (EngravingItem* annotation : annotations) {
+            if (annotation->isFermata() && onTarget(annotation->track())) {
+                score->undoRemoveElement(annotation, false);
+            }
+        }
+        for (track_idx_t track = targetTrack; track < targetTrack + VOICES; ++track) {
+            ChordRest* cr = toChordRest(s->element(track));
+            if (!cr) {
+                continue;
+            }
+            if (cr->isChord()) {
+                ++chords;
+                chordsWithoutStem += toChord(cr)->noStem() ? 1 : 0;
+            } else {
+                ++rests;
+                hiddenRests += cr->visible() ? 0 : 1;
+            }
+            for (Lyrics* l : cr->lyrics()) {
+                lyrics.emplace_back(s, toLyrics(l->clone()));
+            }
+            Tuplet* tuplet = cr->tuplet();
+            if (tuplet && tuplet->elements().front() == cr) {
+                tuplets[{ s, track }] = { tuplet->bracketType(), tuplet->numberType() };
+            }
+            score->undoRemoveElement(cr, false);
+        }
+    }
+
+    // the target's items in other segments (key signatures, barlines, breath marks) where the source has one too:
+    // cloneStaff() puts a linked clone of the source's in the same place, which would leave the target's out of
+    // the score (it clones no time signature, and a clef only where the target's differs)
+    for (Segment* s = score->firstSegment(SegmentType::All); s; s = s->next1()) {
+        if (s->isChordRestType()) {
+            continue;
+        }
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+            EngravingItem* own = s->element(targetTrack + voice);
+            const EngravingItem* other = s->element(sourceTrack + voice);
+            if (own && other && !own->generated() && !other->generated() && !other->isTimeSig() && !other->isClef()) {
+                score->undoRemoveElement(own, false);
+            }
+        }
+    }
+
+    Excerpt::cloneStaff(source, target, false);
+    for (Spanner* twin : twins) {
+        Excerpt::cloneSpanner(twin, score, targetTrack + twin->voice(), targetTrack + twin->track2() % VOICES);
+    }
+
+    for (auto& [segment, lyric] : lyrics) {
+        EngravingItem* e = segment->element(lyric->track());
+        if (e && e->isChordRest()) {
+            toChordRest(e)->add(lyric);
+        } else {
+            delete lyric;
+        }
+    }
+    for (const auto& [position, look] : tuplets) {
+        EngravingItem* e = position.first->element(position.second);
+        if (e && e->isChordRest() && toChordRest(e)->tuplet()) {
+            toChordRest(e)->tuplet()->setBracketType(look.first);
+            toChordRest(e)->tuplet()->setNumberType(look.second);
+        }
+    }
+    if (target->isTabStaff(Fraction(0, 1))
+        && ((chords && chordsWithoutStem == chords) || (rests && hiddenRests == rests))) {
+        StaffType staffType = *target->staffType(Fraction(0, 1));
+        if (chords && chordsWithoutStem == chords) {
+            staffType.setStemless(true);
+        }
+        if (rests && hiddenRests == rests) {
+            staffType.setShowRests(false);
+        }
+        target->setStaffType(Fraction(0, 1), staffType);
+    }
+}
+
+//---------------------------------------------------------
+//   linkAlternateStaves
+//---------------------------------------------------------
+
+/**
+ A staff with staff-type "alternate" shows the same music as the staff above it, another way (MuseScore
+ writes a linked staff, such as a guitar's tablature, so). Make the two linked staves, if their music is
+ the same, so the music plays once and edits show on both. The standard staff's music is kept, with the
+ strings and frets of the tablature's notes; a staff above that is already linked keeps its music.
+ */
+
+void MusicXmlParserPass2::linkAlternateStaves()
+{
+    ScoreLoad sl; // edits outside a transaction, as when reading a score
+
+    for (const staff_idx_t staffIdx : m_alternateStaves) {
+        Staff* alternate = m_score->staff(staffIdx);
+        Staff* above = staffIdx > 0 ? m_score->staff(staffIdx - 1) : nullptr;
+        if (!alternate || !above || alternate->part() != above->part()) {
+            continue;
+        }
+
+        String difference;
+        if (!sameMusic(m_score, above, alternate, difference)) {
+            m_logger->logDebugInfo(String(u"staff %1 is marked alternate, but its music differs from the staff above (%2): "
+                                          u"not linked").arg(staffIdx + 1).arg(difference));
+            continue;
+        }
+
+        const bool keepAlternate = !above->links() && above->isTabStaff(Fraction(0, 1)) && !alternate->isTabStaff(Fraction(0, 1));
+        Staff* source = keepAlternate ? alternate : above;
+        Staff* target = keepAlternate ? above : alternate;
+        if (target->isTabStaff(Fraction(0, 1)) && !source->isTabStaff(Fraction(0, 1))) {
+            for (Segment* s = m_score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+                for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                    EngravingItem* tabChord = s->element(target->idx() * VOICES + voice);
+                    if (tabChord && tabChord->isChord()) {
+                        copyStringsAndFrets(toChord(tabChord), toChord(s->element(source->idx() * VOICES + voice)));
+                    }
+                }
+            }
+        }
+
+        linkStaff(m_score, source, target);
+    }
 }
 
 //---------------------------------------------------------
@@ -3207,6 +3496,11 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
             m_e.skipCurrentElement();
         } else if (m_e.name() == "staff-tuning") {
             staffTuning(&stringData);
+        } else if (m_e.name() == "staff-type") {
+            // the same music as the staff above, shown another way: linked once the score is read
+            if (m_e.readText() == u"alternate" && n > 0) {
+                m_alternateStaves.insert(staffIdx);
+            }
         } else if (m_e.name() == "staff-size") {
             const double scaling = m_e.doubleAttribute("scaling", 100.0);
             const Spatium val(m_e.readDouble() / scaling);
