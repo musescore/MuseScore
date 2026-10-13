@@ -191,9 +191,9 @@ PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& n
     return cell;
 }
 
-PaletteCellPtr PaletteWidget::appendActionIcon(mu::engraving::ActionIconType type, ActionCode code)
+PaletteCellPtr PaletteWidget::appendActionIcon(mu::engraving::ActionIconType type)
 {
-    PaletteCellPtr cell = m_palette->appendActionIcon(type, code);
+    PaletteCellPtr cell = m_palette->appendActionIcon(type);
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();
@@ -901,14 +901,6 @@ void PaletteWidget::dropEvent(QDropEvent* event)
             if (element) {
                 rw::RWRegister::reader()->readItem(element.get(), xml);
                 element->setTrack(0);
-
-                if (element->isActionIcon()) {
-                    ActionIcon* icon = toActionIcon(element.get());
-                    const muse::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
-                    if (actionItem.isValid()) {
-                        icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
-                    }
-                }
             }
         }
     }

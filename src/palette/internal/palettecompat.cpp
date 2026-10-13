@@ -315,18 +315,18 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
 
     if (!containsGuitarDives) {
         int defaultPosition = std::min(6, guitarPalette.cellsCount());
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, "scoop", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, "dip", 1.4);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, "pre-dive", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, "dive", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, 1.5);
     }
 
     if (!containsGuitarBends) {
         int defaultPosition = std::min(10, guitarPalette.cellsCount());
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, 1.5);
     }
 
     if (!containsTapping) {
@@ -363,7 +363,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 
     if (!containsFFrame) {
-        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
+        guitarPalette.appendActionIcon(ActionIconType::FFRAME, COMPAT_FRAME_MAG);
     }
 }
 
@@ -455,7 +455,7 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
 
     if (!containsNoteAnchoredLine) {
         int defaultPosition = std::min(22, linesPalette.cellsCount());
-        linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
+        linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, 2);
     }
 
     if (!containsChordBrackets) {
@@ -533,7 +533,7 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette, engraving::Score* 
 
     if (!containsFFrame) {
         int defaultPosition = std::min(10, layoutPalette.cellsCount());
-        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, COMPAT_FRAME_MAG);
     }
 
     if (!containsNoBreak) {
@@ -545,7 +545,7 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette, engraving::Score* 
 
     if (!containsLock) {
         int defaultPosition = std::min(5, layoutPalette.cellsCount());
-        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::PAGE_LOCK, "toggle-page-lock");
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::PAGE_LOCK);
     }
 }
 

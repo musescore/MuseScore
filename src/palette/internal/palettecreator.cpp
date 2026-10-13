@@ -231,15 +231,14 @@ PalettePtr PaletteCreator::newBeamPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    sp->appendActionIcon(ActionIconType::BEAM_AUTO, "beam-auto")->mag = 1.4;
-    sp->appendActionIcon(ActionIconType::BEAM_NONE, "beam-none")->mag = 1.4;
-    sp->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT, "beam-break-left")->mag = 1.4;
-    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH, "beam-break-inner-8th")->mag = 1.4;
-    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th")->mag = 1.4;
-    sp->appendActionIcon(ActionIconType::BEAM_JOIN, "beam-join")->mag = 1.4;
-
-    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_DECELERATE, "beam-feathered-decelerate");
-    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_ACCELERATE, "beam-feathered-accelerate");
+    sp->appendActionIcon(ActionIconType::BEAM_AUTO)->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_NONE)->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT)->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH)->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH)->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_JOIN)->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_DECELERATE)->mag = 1.4;
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_ACCELERATE)->mag = 1.4;
 
     return sp;
 }
@@ -349,8 +348,8 @@ PalettePtr PaletteCreator::newAccidentalsPalette(bool defaultPalette)
     }
 
     if (!defaultPalette) {
-        sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");
-        sp->appendActionIcon(ActionIconType::BRACKETS, "add-brackets");
+        sp->appendActionIcon(ActionIconType::PARENTHESES);
+        sp->appendActionIcon(ActionIconType::BRACKETS);
     }
 
     return sp;
@@ -549,8 +548,8 @@ PalettePtr PaletteCreator::newLayoutPalette()
         sp->appendElement(lb, TConv::userName(layoutBreakType));
     }
 
-    sp->appendActionIcon(ActionIconType::SYSTEM_LOCK, "toggle-system-lock");
-    sp->appendActionIcon(ActionIconType::PAGE_LOCK, "toggle-page-lock");
+    sp->appendActionIcon(ActionIconType::SYSTEM_LOCK);
+    sp->appendActionIcon(ActionIconType::PAGE_LOCK);
 
     static const std::vector<SpacerType> spacers  {
         SpacerType::DOWN,
@@ -565,12 +564,12 @@ PalettePtr PaletteCreator::newLayoutPalette()
         cell->mag = .7;
     }
 
-    sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox", FRAME_MAG);
-    sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox", FRAME_MAG);
-    sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe", FRAME_MAG);
-    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
-    sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change");
-    sp->appendActionIcon(ActionIconType::MEASURE, "insert-measure");
+    sp->appendActionIcon(ActionIconType::VFRAME, FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::HFRAME, FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::TFRAME, FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::FFRAME, FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE);
+    sp->appendActionIcon(ActionIconType::MEASURE);
 
     return sp;
 }
@@ -686,7 +685,7 @@ PalettePtr PaletteCreator::newNoteHeadsPalette()
         sp->appendElement(nh, TConv::userName((NoteHeadGroup(i))));
     }
 
-    sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");
+    sp->appendActionIcon(ActionIconType::PARENTHESES);
 
     return sp;
 }
@@ -1106,14 +1105,14 @@ PalettePtr PaletteCreator::newGraceNotePalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    sp->appendActionIcon(ActionIconType::ACCIACCATURA,  "acciaccatura");
-    sp->appendActionIcon(ActionIconType::APPOGGIATURA,  "appoggiatura");
-    sp->appendActionIcon(ActionIconType::GRACE4,        "grace4");
-    sp->appendActionIcon(ActionIconType::GRACE16,       "grace16");
-    sp->appendActionIcon(ActionIconType::GRACE32,       "grace32");
-    sp->appendActionIcon(ActionIconType::GRACE8_AFTER,  "grace8after");
-    sp->appendActionIcon(ActionIconType::GRACE16_AFTER, "grace16after");
-    sp->appendActionIcon(ActionIconType::GRACE32_AFTER, "grace32after");
+    sp->appendActionIcon(ActionIconType::ACCIACCATURA);
+    sp->appendActionIcon(ActionIconType::APPOGGIATURA);
+    sp->appendActionIcon(ActionIconType::GRACE4);
+    sp->appendActionIcon(ActionIconType::GRACE16);
+    sp->appendActionIcon(ActionIconType::GRACE32);
+    sp->appendActionIcon(ActionIconType::GRACE8_AFTER);
+    sp->appendActionIcon(ActionIconType::GRACE16_AFTER);
+    sp->appendActionIcon(ActionIconType::GRACE32_AFTER);
 
     return sp;
 }
@@ -1312,7 +1311,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     leftArrowLine->setBeginHookType(HookType::ARROW);
     sp->appendElement(leftArrowLine, QT_TRANSLATE_NOOP("palette", "Line (left arrowhead)"));
 
-    sp->appendActionIcon(ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
+    sp->appendActionIcon(ActionIconType::NOTE_ANCHORED_LINE, 2);
 
     auto a = Factory::makeAmbitus(paletteScore()->dummy());
     sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
@@ -1741,7 +1740,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
     }
 
     if (!defaultPalette) {
-        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
+        sp->appendActionIcon(ActionIconType::FFRAME, FRAME_MAG);
     }
 
     return sp;
@@ -1780,15 +1779,15 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
-    sp->appendActionIcon(ActionIconType::DIVE, "dive", 1.5);
-    sp->appendActionIcon(ActionIconType::PRE_DIVE, "pre-dive", 1.5);
-    sp->appendActionIcon(ActionIconType::DIP, "dip", 1.4);
-    sp->appendActionIcon(ActionIconType::SCOOP, "scoop", 1.5);
+    sp->appendActionIcon(ActionIconType::DIVE, 1.5);
+    sp->appendActionIcon(ActionIconType::PRE_DIVE, 1.5);
+    sp->appendActionIcon(ActionIconType::DIP, 1.4);
+    sp->appendActionIcon(ActionIconType::SCOOP, 1.5);
 
-    sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
-    sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend", 1.5);
-    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
-    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, "slight-bend", 1.5);
+    sp->appendActionIcon(ActionIconType::STANDARD_BEND, 1.5);
+    sp->appendActionIcon(ActionIconType::PRE_BEND, 1.5);
+    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, 1.4);
+    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, 1.5);
 
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {
@@ -1865,7 +1864,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(pta, TConv::userName(playTechAnnotation.playTechType), 0.8)->setElementTranslated(true);
     }
 
-    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::FFRAME, FRAME_MAG);
 
     return sp;
 }

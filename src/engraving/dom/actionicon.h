@@ -25,56 +25,11 @@
 #include "engravingitem.h"
 
 #include "draw/types/font.h"
+#include "global/types/translatablestring.h"
+
+#include "../types/types.h"
 
 namespace mu::engraving {
-enum class ActionIconType : signed char {
-    UNDEFINED = -1,
-
-    ACCIACCATURA,
-    APPOGGIATURA,
-    GRACE4,
-    GRACE16,
-    GRACE32,
-    GRACE8_AFTER,
-    GRACE16_AFTER,
-    GRACE32_AFTER,
-
-    BEAM_AUTO,
-    BEAM_NONE,
-    BEAM_BREAK_LEFT,
-    BEAM_BREAK_INNER_8TH,
-    BEAM_BREAK_INNER_16TH,
-    BEAM_JOIN,
-
-    BEAM_FEATHERED_DECELERATE,
-    BEAM_FEATHERED_ACCELERATE,
-
-    VFRAME,
-    HFRAME,
-    TFRAME,
-    FFRAME,
-    STAFF_TYPE_CHANGE,
-    MEASURE,
-
-    PARENTHESES,
-    BRACKETS,
-
-    STANDARD_BEND,
-    PRE_BEND,
-    GRACE_NOTE_BEND,
-    SLIGHT_BEND,
-
-    DIVE,
-    PRE_DIVE,
-    DIP,
-    SCOOP,
-
-    NOTE_ANCHORED_LINE,
-
-    SYSTEM_LOCK,
-    PAGE_LOCK
-};
-
 //! Dummy element, used for drag&drop
 class ActionIcon final : public EngravingItem
 {
@@ -87,13 +42,11 @@ public:
 
     ActionIcon* clone() const override;
 
-    ActionIconType actionType() const;
-    const std::string& actionCode() const;
-
     void setActionType(ActionIconType val);
-    void setAction(const std::string& actionCode, char16_t icon);
+    ActionIconType actionType() const;
 
-    char16_t icon() const { return m_icon; }
+    const muse::TranslatableString& title() const;
+    char16_t icon() const;
 
     const muse::draw::Font& iconFont() const { return m_iconFont; }
 
@@ -102,7 +55,7 @@ public:
 
 private:
     ActionIconType m_actionType = ActionIconType::UNDEFINED;
-    std::string m_actionCode;
+    muse::TranslatableString m_title;
     char16_t m_icon = 0;
     muse::draw::Font m_iconFont;
 };

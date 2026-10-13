@@ -127,15 +127,11 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const muse
     return insertElement(idx, element, name.str, mag, offset, tag);
 }
 
-PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, ActionCode code, double mag)
+PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, double mag)
 {
-    const muse::ui::UiAction& action = actionsRegister()->action(code);
-    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
     auto icon = std::make_shared<ActionIcon>(paletteScoreProvider()->paletteScore()->dummy());
     icon->setActionType(type);
-    icon->setAction(code, static_cast<char16_t>(action.iconCode));
-
-    return insertElement(idx, icon, name, mag);
+    return insertElement(idx, icon, icon->title().qTranslated(), mag);
 }
 
 PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
@@ -162,15 +158,11 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const muse::Translatab
     return appendElement(element, name.str, mag, offset, tag);
 }
 
-PaletteCellPtr Palette::appendActionIcon(ActionIconType type, ActionCode code, double mag)
+PaletteCellPtr Palette::appendActionIcon(ActionIconType type, double mag)
 {
-    const muse::ui::UiAction& action = actionsRegister()->action(code);
-    const QString name = !action.description.isEmpty() ? action.description.str : action.title.raw().str;
     auto icon = std::make_shared<ActionIcon>(paletteScoreProvider()->paletteScore()->dummy());
     icon->setActionType(type);
-    icon->setAction(code, static_cast<char16_t>(action.iconCode));
-
-    return appendElement(icon, name, mag);
+    return appendElement(icon, icon->title().qTranslated(), mag);
 }
 
 bool Palette::insertCell(size_t idx, PaletteCellPtr cell)
@@ -625,15 +617,46 @@ Palette::Type Palette::guessType() const
         return Type::StringTunings;
     case ElementType::ACTION_ICON: {
         const ActionIcon* action = toActionIcon(e);
-        QString actionCode = QString::fromStdString(action->actionCode());
+        ActionIconType actionType = action->actionType();
 
-        if (actionCode.contains("beam")) {
+        static const std::set<ActionIconType> beamTypes = {
+            ActionIconType::BEAM_AUTO,
+            ActionIconType::BEAM_NONE,
+            ActionIconType::BEAM_BREAK_LEFT,
+            ActionIconType::BEAM_BREAK_INNER_8TH,
+            ActionIconType::BEAM_BREAK_INNER_16TH,
+            ActionIconType::BEAM_JOIN,
+            ActionIconType::BEAM_FEATHERED_DECELERATE,
+            ActionIconType::BEAM_FEATHERED_ACCELERATE
+        };
+
+        static const std::set<ActionIconType> graceTypes = {
+            ActionIconType::ACCIACCATURA,
+            ActionIconType::APPOGGIATURA,
+            ActionIconType::GRACE4,
+            ActionIconType::GRACE16,
+            ActionIconType::GRACE32,
+            ActionIconType::GRACE8_AFTER,
+            ActionIconType::GRACE16_AFTER,
+            ActionIconType::GRACE32_AFTER
+        };
+
+        static const std::set<ActionIconType> layoutTypes = {
+            ActionIconType::VFRAME,
+            ActionIconType::HFRAME,
+            ActionIconType::TFRAME,
+            ActionIconType::FFRAME,
+            ActionIconType::STAFF_TYPE_CHANGE,
+            ActionIconType::MEASURE
+        };
+
+        if (beamTypes.contains(actionType)) {
             return Type::Beam;
         }
-        if (actionCode.contains("grace") || actionCode.contains("acciaccatura") || actionCode.contains("appoggiatura")) {
+        if (graceTypes.contains(actionType)) {
             return Type::GraceNote;
         }
-        if (actionCode.contains("frame") || actionCode.contains("box") || actionCode.contains("measure")) {
+        if (layoutTypes.contains(actionType)) {
             return Type::Layout;
         }
         return Type::Custom;

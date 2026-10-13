@@ -1730,7 +1730,7 @@ void TRead::read(ActionIcon* i, XmlReader& e, ReadContext&)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "action") {
-            i->setAction(e.readText().toStdString(), 0);
+            i->setActionType(TConv::fromXml(e.readAsciiText(), ActionIconType::UNDEFINED));
         } else if (tag == "subtype") {
             i->setActionType(static_cast<ActionIconType>(e.readInt()));
         } else {
