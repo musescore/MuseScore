@@ -426,8 +426,8 @@
         <height>10</height>
         <eid>K_K</eid>
         <Text>
-          <eid>L_L</eid>
           <style>poet</style>
+          <eid>L_L</eid>
           <family>Edwin</family>
           <align>left,top</align>
           <text><font size="10"/><font face="Edwin"/>2</text>

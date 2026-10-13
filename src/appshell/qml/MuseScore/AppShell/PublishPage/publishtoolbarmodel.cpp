@@ -24,17 +24,20 @@
 
 #include "uicomponents/qml/Muse/UiComponents/toolbaritem.h"
 
+#include "project/projectcommands.h"
+
 using namespace mu::appshell;
 using namespace muse::uicomponents;
-using namespace muse::actions;
+using namespace muse::rcommand;
+using namespace mu::project;
 
 void PublishToolBarModel::load()
 {
     AbstractToolBarModel::load();
 
     ToolBarItemList items;
-    const auto addItem = [this, &items](const muse::actions::ActionCode& code, const muse::TranslatableString& description = {}) {
-        auto* item = makeItem(code);
+    const auto addItem = [this, &items](const Command& command, const muse::TranslatableString& description = {}) {
+        auto* item = makeItem(command);
         item->setShowTitle(true);
 
         if (!description.isEmpty()) {
@@ -44,10 +47,10 @@ void PublishToolBarModel::load()
         items << item;
     };
 
-    addItem("print");
-    addItem("file-publish", muse::TranslatableString("project/save", "Share this score and its audio on MuseScore.com"));
-    addItem("file-share-audio", muse::TranslatableString("project/save", "Share the audio from this score on Audio.com"));
-    addItem("file-export");
+    addItem(PROJECT_PRINT_COMMAND);
+    addItem(PROJECT_PUBLISH_COMMAND, muse::TranslatableString("project/save", "Share this score and its audio on MuseScore.com"));
+    addItem(PROJECT_SHARE_AUDIO_COMMAND, muse::TranslatableString("project/save", "Share the audio from this score on Audio.com"));
+    addItem(PROJECT_EXPORT_COMMAND);
 
     setItems(items);
 }

@@ -81,8 +81,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>O_O</eid>
         <Text>
-          <eid>P_P</eid>
           <style>title</style>
+          <eid>P_P</eid>
           <text>voice-paste1</text>
           </Text>
         </VBox>

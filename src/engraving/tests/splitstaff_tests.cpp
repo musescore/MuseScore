@@ -40,7 +40,7 @@ public:
 void Engraving_SplitStaffTests::splitstaff(int idx, int staffIdx)
 {
     MasterScore* score = ScoreRW::readScore(SPLITSTAFF_DATA_DIR + String(u"splitstaff0%1.mscx").arg(idx));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving split staff tests"));
     score->splitStaff(staffIdx, 60);

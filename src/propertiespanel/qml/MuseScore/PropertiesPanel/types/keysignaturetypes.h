@@ -24,23 +24,25 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace KeySignatureTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class Mode {
-    MODE_UNKNOWN = -1,
-    MODE_NONE,
-    MODE_MAJOR,
-    MODE_MINOR,
-    MODE_DORIAN,
-    MODE_PHRYGIAN,
-    MODE_LYDIAN,
-    MODE_MIXOLYDIAN,
-    MODE_AEOLIAN,
-    MODE_IONIAN,
-    MODE_LOCRIAN
+    MODE_UNKNOWN = int(engraving::KeyMode::UNKNOWN),
+    MODE_NONE = int(engraving::KeyMode::NONE),
+    MODE_MAJOR = int(engraving::KeyMode::MAJOR),
+    MODE_MINOR = int(engraving::KeyMode::MINOR),
+    MODE_DORIAN = int(engraving::KeyMode::DORIAN),
+    MODE_PHRYGIAN = int(engraving::KeyMode::PHRYGIAN),
+    MODE_LYDIAN = int(engraving::KeyMode::LYDIAN),
+    MODE_MIXOLYDIAN = int(engraving::KeyMode::MIXOLYDIAN),
+    MODE_AEOLIAN = int(engraving::KeyMode::AEOLIAN),
+    MODE_IONIAN = int(engraving::KeyMode::IONIAN),
+    MODE_LOCRIAN = int(engraving::KeyMode::LOCRIAN)
 };
 
 Q_ENUM_NS(Mode)

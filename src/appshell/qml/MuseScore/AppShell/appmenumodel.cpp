@@ -48,6 +48,7 @@
 #include "audio/main/audiocommands.h"
 #include "multiwindows/multiwindowscommands.h"
 #include "extensions/extensionscommands.h"
+#include "testflow/testflowcommands.h"
 
 using namespace muse;
 using namespace mu::appshell;
@@ -67,6 +68,7 @@ using namespace muse::musesampler;
 using namespace muse::vst;
 using namespace muse::audio;
 using namespace muse::mi;
+using namespace muse::testflow;
 
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -205,11 +207,10 @@ MenuItem* AppMenuModel::makeFileMenu()
         }),
         makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), {
             makeMenuItem(PROJECT_PUBLISH_COMMAND),
-            makeMenuItem(PROJECT_SHARED_AUDIO_COMMAND),
+            makeMenuItem(PROJECT_SHARE_AUDIO_COMMAND),
         }),
         makeSeparator(),
-        makeMenuItem(PROJECT_IMPORT_PDF_COMMAND),
-        makeMenuItem(PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND),
+        makeMenuItem(PROJECT_CONVERT_TO_SCORE_COMMAND),
         makeMenuItem(PROJECT_EXPORT_COMMAND),
         makeSeparator(),
         makeMenuItem(PROJECT_PROPERTIES_COMMAND),
@@ -515,11 +516,11 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
         };
 
         MenuItemList extensionsItems {
-            makeMenuItem("command://extensions/open-apidump"),
+            makeMenuItem(OPEN_APIDUMP_COMMAND),
         };
 
         MenuItemList testflowItems {
-            makeMenuItem("testflow-show-scripts"),
+            makeMenuItem(TESTFLOW_OPEN_SCRIPTS_COMMAND),
         };
 
 #ifdef MUSE_MODULE_VST

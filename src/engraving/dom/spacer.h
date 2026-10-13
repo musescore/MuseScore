@@ -85,7 +85,7 @@ public:
 private:
 
     friend class Factory;
-    Spacer(Measure* parent);
+    Spacer(DummyParentOr<Measure> parent);
     Spacer(const Spacer&);
 
     SpacerType m_spacerType = SpacerType::UP;

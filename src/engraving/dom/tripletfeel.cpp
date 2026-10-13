@@ -114,7 +114,7 @@ static const std::map<TripletFeelType, TranslatableString> tripletFeelNames =
     { TripletFeelType::NONE,            TranslatableString("engraving/tripletfeel", "No triplet feel") }
 };
 
-TripletFeel::TripletFeel(Segment* parent, TripletFeelType tripletFillType)
+TripletFeel::TripletFeel(DummyParentOr<Segment> parent, TripletFeelType tripletFillType)
     : SystemText(parent, TextStyleType::SYSTEM, ElementType::TRIPLET_FEEL)
 {
     m_tripletFeelType = tripletFillType;

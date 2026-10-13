@@ -190,6 +190,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::CAPO_TRANSPOSE_MODE:  return static_cast<int>(value<CapoParams::TransposeMode>());
     case P_TYPE::INSTRUMENT_NAMES_ALIGN: return static_cast<int>(value<InstrumentNamesAlign>());
     case P_TYPE::INSTRUMENT_NAMES_FORMAT: return static_cast<int>(value<InstrumentNamesFormat>());
+    case P_TYPE::INSTRUMENT_LABEL_VISIBILITY: return static_cast<int>(value<InstrumentLabelVisibility>());
 
     // Other
     case P_TYPE::GROUPS: {
@@ -315,6 +316,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::CAPO_TRANSPOSE_MODE: return PropertyValue(CapoParams::TransposeMode(v.toInt()));
     case P_TYPE::INSTRUMENT_NAMES_ALIGN: return PropertyValue(InstrumentNamesAlign(v.toInt()));
     case P_TYPE::INSTRUMENT_NAMES_FORMAT: return PropertyValue(InstrumentNamesFormat(v.toInt()));
+    case P_TYPE::INSTRUMENT_LABEL_VISIBILITY: return PropertyValue(InstrumentLabelVisibility(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

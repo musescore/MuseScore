@@ -24,15 +24,17 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace VoiceTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class VoiceAssignment {
-    VOICE_ALL_IN_INSTRUMENT,
-    VOICE_ALL_IN_STAFF,
-    VOICE_CURRENT_ONLY,
+    VOICE_ALL_IN_INSTRUMENT = int(engraving::VoiceAssignment::ALL_VOICE_IN_INSTRUMENT),
+    VOICE_ALL_IN_STAFF = int(engraving::VoiceAssignment::ALL_VOICE_IN_STAFF),
+    VOICE_CURRENT_ONLY = int(engraving::VoiceAssignment::CURRENT_VOICE_ONLY),
 };
 
 Q_ENUM_NS(VoiceAssignment)

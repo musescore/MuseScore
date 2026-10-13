@@ -82,8 +82,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>ovq+ANqVmeH_jAdlmIDSh7O</eid>
         <Text>
-          <eid>kXf/DzeV0kJ_AhCxyONjrRN</eid>
           <style>title</style>
+          <eid>kXf/DzeV0kJ_AhCxyONjrRN</eid>
           <text>copypastesymbollist-articulation-rest</text>
           </Text>
         </VBox>

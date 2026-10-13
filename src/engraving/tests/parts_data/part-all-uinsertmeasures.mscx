@@ -118,8 +118,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>testpart2</text>
           </Text>
         </VBox>
@@ -1137,14 +1137,14 @@
           <eid>7C_7C</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>8C_8C</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>testpart2</text>
             </Text>
           <Text>
-            <eid>9C_9C</eid>
             <style>instrument_excerpt</style>
+            <eid>9C_9C</eid>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1850,14 +1850,14 @@
           <eid>1E_1E</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>2E_2E</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>testpart2</text>
             </Text>
           <Text>
-            <eid>3E_3E</eid>
             <style>instrument_excerpt</style>
+            <eid>3E_3E</eid>
             <text>Tenor</text>
             </Text>
           </VBox>

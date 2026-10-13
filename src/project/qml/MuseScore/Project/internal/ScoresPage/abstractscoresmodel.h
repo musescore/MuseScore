@@ -54,6 +54,7 @@ protected:
     enum Roles {
         NameRole = Qt::UserRole + 1,
         IsNoResultsFoundRole,
+        ProcessingStatusRole,
         ScoreRole
     };
 
@@ -65,6 +66,9 @@ protected:
     static const QString TIME_SINCE_MODIFIED_KEY;
     static const QString IS_CREATE_NEW_KEY;
     static const QString IS_NO_RESULTS_FOUND_KEY;
+    static const QString PROCESSING_STATUS_KEY;
+    static const QString CONVERT_ID_KEY;
+    static const QString CONVERT_TYPE_KEY;
     static const QString IS_CLOUD_KEY;
     static const QString CLOUD_SCORE_ID_KEY;
     static const QString CLOUD_VISIBILITY_KEY;

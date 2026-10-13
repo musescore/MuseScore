@@ -613,8 +613,8 @@
           <eid>cB_cB</eid>
           <linkedTo>YB_YB</linkedTo>
           <Text>
-            <eid>dB_dB</eid>
             <style>instrument_excerpt</style>
+            <eid>dB_dB</eid>
             <text>Flute</text>
             </Text>
           </VBox>
@@ -924,8 +924,8 @@
           <eid>JC_JC</eid>
           <linkedTo>YB_YB</linkedTo>
           <Text>
-            <eid>KC_KC</eid>
             <style>instrument_excerpt</style>
+            <eid>KC_KC</eid>
             <text>Oboe</text>
             </Text>
           </VBox>

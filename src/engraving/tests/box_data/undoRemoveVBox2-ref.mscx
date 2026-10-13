@@ -93,8 +93,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>N_N</eid>
         <Text>
-          <eid>O_O</eid>
           <style>title</style>
+          <eid>O_O</eid>
           <text>VBox</text>
           </Text>
         </VBox>

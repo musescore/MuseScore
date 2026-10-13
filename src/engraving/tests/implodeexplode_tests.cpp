@@ -49,7 +49,7 @@ void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
     String reference2(IMPLODEEXP_DATA_DIR + fileName + "02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -80,7 +80,7 @@ void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
     String reference2(IMPLODEEXP_DATA_DIR + filename + "02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     // select all

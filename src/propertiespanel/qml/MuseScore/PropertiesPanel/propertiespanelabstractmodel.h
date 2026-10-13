@@ -36,13 +36,14 @@
 #include "notation/inotation.h"
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
-#include "shortcuts/ishortcutsregister.h"
 #include "modularity/ioc.h"
 #include "propertyitem.h"
 #include "pointfpropertyitem.h"
 #include "ui/view/iconcodes.h"
 #include "ui/iuiactionsregister.h"
 #include "types/commontypes.h"
+
+#include "shortcuts_v2/icommandshortcutsregister.h"
 
 namespace mu::propertiespanel {
 using MeasurementUnits = CommonTypes::MeasurementUnits;
@@ -64,10 +65,10 @@ class PropertiesPanelAbstractModel : public QObject, public muse::async::Asyncab
     QML_UNCREATABLE("Not creatable as it is abstract base class")
 
 public:
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     enum class PropertiesPanelSectionType {
@@ -261,7 +262,7 @@ protected:
 
     QList<mu::engraving::EngravingItem*> m_elementList;
 
-    QString shortcutsForActionCode(std::string code) const;
+    QString shortcutsForCommand(const muse::rcommand::Command& command) const;
 
 protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);

@@ -24,28 +24,30 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/dom/realizedharmony.h"
+
 namespace mu::propertiespanel {
 namespace ChordSymbolTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class VoicingType {
-    VOICING_INVALID = -1,
-    VOICING_AUTO,
-    VOICING_ROOT_ONLY,
-    VOICING_CLOSE,
-    VOICING_DROP_TWO,
-    VOICING_SIX_NOTE,
-    VOICING_FOUR_NOTE,
-    VOICING_THREE_NOTE
+    VOICING_INVALID = int(engraving::Voicing::INVALID),
+    VOICING_AUTO = int(engraving::Voicing::AUTO),
+    VOICING_ROOT_ONLY = int(engraving::Voicing::ROOT_ONLY),
+    VOICING_CLOSE = int(engraving::Voicing::CLOSE),
+    VOICING_DROP_TWO = int(engraving::Voicing::DROP_2),
+    VOICING_SIX_NOTE = int(engraving::Voicing::SIX_NOTE),
+    VOICING_FOUR_NOTE = int(engraving::Voicing::FOUR_NOTE),
+    VOICING_THREE_NOTE = int(engraving::Voicing::THREE_NOTE)
 };
 Q_ENUM_NS(VoicingType)
 
 enum class DurationType {
-    DURATION_INVALID = -1,
-    DURATION_UNTIL_NEXT_CHORD_SYMBOL,
-    DURATION_STOP_AT_MEASURE_END,
-    DURATION_SEGMENT_DURATION
+    DURATION_INVALID = int(engraving::HDuration::INVALID),
+    DURATION_UNTIL_NEXT_CHORD_SYMBOL = int(engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL),
+    DURATION_STOP_AT_MEASURE_END = int(engraving::HDuration::STOP_AT_MEASURE_END),
+    DURATION_SEGMENT_DURATION = int(engraving::HDuration::SEGMENT_DURATION)
 };
 
 Q_ENUM_NS(DurationType)

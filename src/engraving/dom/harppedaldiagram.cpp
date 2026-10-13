@@ -100,7 +100,7 @@ void HarpPedalDiagram::setPlayableTpcs()
     m_playableTpcs = playableTpcs;
 }
 
-HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
+HarpPedalDiagram::HarpPedalDiagram(DummyParentOr<Segment> parent)
     : TextBase(ElementType::HARP_DIAGRAM, parent, TextStyleType::HARP_PEDAL_DIAGRAM, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&harpPedalDiagramStyle);

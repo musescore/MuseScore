@@ -130,8 +130,8 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <eid>I_I</eid>
             <style>instrument_change</style>
+            <eid>I_I</eid>
             <text>Simplify tied eighth notes to indicate rhythms - Compound Meter<br/>6/8 N = 1</text>
             </StaffText>
           <Chord>
@@ -179,8 +179,8 @@
         <eid>S_S</eid>
         <voice>
           <StaffText>
-            <eid>T_T</eid>
             <style>instrument_change</style>
+            <eid>T_T</eid>
             <text>N = 2</text>
             </StaffText>
           <Chord>
@@ -246,8 +246,8 @@
         <eid>h_h</eid>
         <voice>
           <StaffText>
-            <eid>i_i</eid>
             <style>instrument_change</style>
+            <eid>i_i</eid>
             <text>N = 3</text>
             </StaffText>
           <Chord>
@@ -353,8 +353,8 @@
         <eid>4_4</eid>
         <voice>
           <StaffText>
-            <eid>5_5</eid>
             <style>instrument_change</style>
+            <eid>5_5</eid>
             <text>N = 4</text>
             </StaffText>
           <Chord>
@@ -467,8 +467,8 @@
         <eid>QB_QB</eid>
         <voice>
           <StaffText>
-            <eid>RB_RB</eid>
             <style>instrument_change</style>
+            <eid>RB_RB</eid>
             <text>N = 5</text>
             </StaffText>
           <Chord>
@@ -544,8 +544,8 @@
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>hB_hB</eid>
             <style>instrument_change</style>
+            <eid>hB_hB</eid>
             <text>N = 6</text>
             </StaffText>
           <Chord>
@@ -569,8 +569,8 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <eid>mB_mB</eid>
             <style>instrument_change</style>
+            <eid>mB_mB</eid>
             <text>9/8 N = 5</text>
             </StaffText>
           <Rest>
@@ -631,8 +631,8 @@
         <eid>yB_yB</eid>
         <voice>
           <StaffText>
-            <eid>zB_zB</eid>
             <style>instrument_change</style>
+            <eid>zB_zB</eid>
             <text>N = 6</text>
             </StaffText>
           <Chord>
@@ -790,8 +790,8 @@
         <eid>TC_TC</eid>
         <voice>
           <StaffText>
-            <eid>UC_UC</eid>
             <style>instrument_change</style>
+            <eid>UC_UC</eid>
             <text>N = 7</text>
             </StaffText>
           <Chord>
@@ -924,8 +924,8 @@
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>wC_wC</eid>
             <style>instrument_change</style>
+            <eid>wC_wC</eid>
             <text>N = 9</text>
             </StaffText>
           <Chord>
@@ -965,8 +965,8 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <eid>4C_4C</eid>
             <style>instrument_change</style>
+            <eid>4C_4C</eid>
             <text>12/8 N = 6</text>
             </StaffText>
           <Chord>
@@ -1015,8 +1015,8 @@
         <eid>BD_BD</eid>
         <voice>
           <StaffText>
-            <eid>CD_CD</eid>
             <style>instrument_change</style>
+            <eid>CD_CD</eid>
             <text>N = 7</text>
             </StaffText>
           <Rest>
@@ -1102,8 +1102,8 @@
         <eid>TD_TD</eid>
         <voice>
           <StaffText>
-            <eid>UD_UD</eid>
             <style>instrument_change</style>
+            <eid>UD_UD</eid>
             <text>N = 8</text>
             </StaffText>
           <Rest>
@@ -1164,8 +1164,8 @@
         <eid>gD_gD</eid>
         <voice>
           <StaffText>
-            <eid>hD_hD</eid>
             <style>instrument_change</style>
+            <eid>hD_hD</eid>
             <text>N = 12</text>
             </StaffText>
           <Chord>

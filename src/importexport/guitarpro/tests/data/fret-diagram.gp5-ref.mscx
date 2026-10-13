@@ -66,8 +66,8 @@
           <Capo>
             <fretPosition>6</fretPosition>
             <transposeMode>2</transposeMode>
-            <eid>H_H</eid>
             <style>staff</style>
+            <eid>H_H</eid>
             <text>Capo 6</text>
             </Capo>
           <Tempo>

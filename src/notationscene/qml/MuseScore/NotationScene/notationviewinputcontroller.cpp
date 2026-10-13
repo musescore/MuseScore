@@ -132,7 +132,8 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (AbstractElementPopupModel::hasElementEditPopup(selectedItem)) {
+        if (!(QApplication::mouseButtons() & Qt::RightButton)
+            && AbstractElementPopupModel::hasElementEditPopup(selectedItem)) {
             m_view->showElementPopup(type);
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
@@ -1555,6 +1556,11 @@ QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery quer
 
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 {
+    if (m_readonly) {
+        event->ignore();
+        return;
+    }
+
     const QMimeData* mimeData = dragController()->mimeData(event);
     IF_ASSERT_FAILED(mimeData) {
         return;
@@ -1681,6 +1687,10 @@ void NotationViewInputController::dropEvent(QDropEvent* event)
 
 bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QMimeData* mimeData)
 {
+    if (m_readonly) {
+        return false;
+    }
+
     if (!mimeData) {
         mimeData = dragController()->mimeData();
     }

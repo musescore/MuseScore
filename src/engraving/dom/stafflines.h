@@ -62,7 +62,7 @@ public:
 
 private:
     friend class Factory;
-    StaffLines(Measure* parent);
+    StaffLines(DummyParentOr<Measure> parent);
 
     double m_lw = 0.0;
     std::vector<LineF> m_lines;

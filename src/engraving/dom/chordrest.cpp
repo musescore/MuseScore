@@ -77,7 +77,7 @@ namespace mu::engraving {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(const ElementType& type, Segment* parent)
+ChordRest::ChordRest(const ElementType& type, DummyParentOr<Segment> parent)
     : DurationElement(type, parent)
 {
     m_staffMove    = 0;
@@ -314,7 +314,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 
         Segment* seg = segment();
         score()->undoRemoveElement(this);
-        Chord* chord = Factory::createChord(score()->dummy()->segment());
+        Chord* chord = Factory::createChord(score()->dummy());
         chord->setTrack(track());
         chord->setDurationType(durationType());
         chord->setTicks(ticks());
@@ -383,7 +383,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             score()->undoAddElement(ic);
 
             if (!fromPalette) {
-                ic->setupInstrument(&instr);
+                ic->setupInstrument(&instr, /*updateText*/ false);
             }
             return e;
         }
@@ -1288,23 +1288,6 @@ bool ChordRest::isBefore(const EngravingItem* o) const
     }
 
     return false;
-}
-
-//---------------------------------------------------------
-//   undoAddAnnotation
-//---------------------------------------------------------
-
-void ChordRest::undoAddAnnotation(EngravingItem* a)
-{
-    Segment* seg = segment();
-    Measure* m = measure();
-    if (m && m->isMMRest()) {
-        seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-    }
-
-    a->setTrack(/*a->systemFlag() ? 0 : */ track());
-    a->setOwnershipParent(seg);
-    score()->undoAddElement(a);
 }
 
 bool ChordRest::isBelowCrossBeam(const BeamBase* beamBase) const

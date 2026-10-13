@@ -45,28 +45,28 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>instrument_excerpt</style>
+          <eid>F_F</eid>
           <text>Flute part</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>Title of the score</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>subtitle</style>
+          <eid>H_H</eid>
           <text>Sub-title of the score</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>poet</style>
+          <eid>I_I</eid>
           <text>Lyricist</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>composer</style>
+          <eid>J_J</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>

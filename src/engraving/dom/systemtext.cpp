@@ -38,7 +38,7 @@ static const ElementStyle systemStyle {
 //   SystemText
 //---------------------------------------------------------
 
-SystemText::SystemText(Segment* parent, TextStyleType tid, ElementType type)
+SystemText::SystemText(DummyParentOr<Segment> parent, TextStyleType tid, ElementType type)
     : StaffTextBase(type, parent, tid, ElementFlag::SYSTEM | ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&systemStyle);

@@ -34,7 +34,7 @@
 using namespace muse::draw;
 using namespace mu::engraving;
 
-SoundFlag::SoundFlag(EngravingItem* parent)
+SoundFlag::SoundFlag(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
     String fontFamily = configuration()->iconsFontFamily();

@@ -22,18 +22,24 @@
 #include "projectmodule.h"
 
 #include "modularity/ioc.h"
+#include "global/api/ifilesystemapirestriction.h"
+
 #include "internal/projectcreator.h"
 #include "internal/projectautosaver.h"
 #include "internal/projectactionscontroller.h"
 #include "internal/engravingpluginapihelper.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
-#include "internal/opensaveprojectscenario.h"
+#include "internal/openprojectscenario.h"
+#include "internal/saveprojectscenario.h"
+#include "internal/closeprojectscenario.h"
 #include "internal/exportprojectscenario.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
 #include "internal/projectmigrator.h"
 #include "internal/projectautosaver.h"
+#include "internal/convertfiletoscoreservice.h"
+#include "internal/convertfiletoscorescenario.h"
 
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
@@ -89,11 +95,28 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore.Project", "UploadProgressDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore.Project", "ProjectUploadedDialog");
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
+        ir->registerQmlUri(Uri("musescore://project/convert/selectfiles"), "MuseScore.Project", "ConvertFileToScoreDialog");
+        ir->registerQmlUri(Uri("musescore://project/convert/processing"), "MuseScore.Project", "ConvertFileProcessingDialog");
     }
 
     auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
     if (cr) {
         cr->reg(std::make_shared<ProjectCommandsRegister>());
+    }
+}
+
+void ProjectModule::registerApi()
+{
+    auto fsRestriction = globalIoc()->resolve<muse::api::IFileSystemApiRestriction>(moduleName());
+    if (fsRestriction) {
+        fsRestriction->addAllowedPathBase("userProjectsPath", m_configuration->userProjectsPath());
+        fsRestriction->addAllowedPathBase("userTemplatesPath", m_configuration->userTemplatesPath());
+        m_configuration->userProjectsPathChanged().onReceive(this, [fsRestriction](const muse::io::path_t& path) {
+            fsRestriction->addAllowedPathBase("userProjectsPath", path);
+        });
+        m_configuration->userTemplatesPathChanged().onReceive(this, [fsRestriction](const muse::io::path_t& path) {
+            fsRestriction->addAllowedPathBase("userTemplatesPath", path);
+        });
     }
 }
 
@@ -116,6 +139,8 @@ void ProjectContext::registerExports()
     m_actionsController = std::make_shared<ProjectActionsController>(iocContext());
     m_projectAutoSaver = std::make_shared<ProjectAutoSaver>(iocContext());
     m_engravingPluginAPIHelper = std::make_shared<EngravingPluginAPIHelper>(iocContext());
+    m_convertFileToScoreService = std::make_shared<ConvertFileToScoreService>(iocContext());
+    m_convertFileToScoreScenario = std::make_shared<ConvertFileToScoreScenario>(iocContext());
 
 #ifdef Q_OS_MAC
     m_recentFilesController = std::make_shared<MacOSRecentFilesController>();
@@ -126,15 +151,18 @@ void ProjectContext::registerExports()
 #endif
 
     ioc()->registerExport<IProjectCommandsController>(mname, m_actionsController);
-    ioc()->registerExport<IProjectFilesController>(mname, m_actionsController);
     ioc()->registerExport<mi::IProjectProvider>(mname, m_actionsController);
-    ioc()->registerExport<IOpenSaveProjectScenario>(mname, new OpenSaveProjectScenario(iocContext()));
+    ioc()->registerExport<IOpenProjectScenario>(mname, new OpenProjectScenario(iocContext()));
+    ioc()->registerExport<ISaveProjectScenario>(mname, new SaveProjectScenario(iocContext()));
+    ioc()->registerExport<ICloseProjectScenario>(mname, new CloseProjectScenario(iocContext()));
     ioc()->registerExport<IExportProjectScenario>(mname, new ExportProjectScenario(iocContext()));
     ioc()->registerExport<IRecentFilesController>(mname, m_recentFilesController);
     ioc()->registerExport<ITemplatesRepository>(mname, new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(mname, new ProjectMigrator(iocContext()));
     ioc()->registerExport<IProjectAutoSaver>(mname, m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(mname, m_engravingPluginAPIHelper);
+    ioc()->registerExport<IConvertFileToScoreService>(mname, m_convertFileToScoreService);
+    ioc()->registerExport<IConvertFileToScoreScenario>(mname, m_convertFileToScoreScenario);
 }
 
 void ProjectContext::resolveImports()
@@ -159,4 +187,17 @@ void ProjectContext::onInit(const IApplication::RunMode& mode)
     m_actionsController->init();
     m_recentFilesController->init();
     m_projectAutoSaver->init();
+    m_convertFileToScoreService->init();
+    m_convertFileToScoreScenario->init();
+}
+
+void ProjectContext::onAllInited(const IApplication::RunMode& mode)
+{
+    if (IApplication::RunMode::GuiApp != mode) {
+        return;
+    }
+
+    //! NOTE: resuming polling can show dialogs (errors, review prompts), so it must wait
+    //! until the main window is up rather than running during onInit()
+    m_convertFileToScoreService->resumeConvert();
 }

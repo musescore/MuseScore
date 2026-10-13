@@ -50,17 +50,16 @@ static std::map<Command, PCondition> PROJECT_COMMAND_CONDITIONS = {
     { PROJECT_SAVE_TO_CLOUD_COMMAND, PCondition::NotBusy },
     { PROJECT_SAVE_AT_COMMAND, PCondition::NotBusy },
     { PROJECT_PUBLISH_COMMAND, PCondition::NotBusy },
-    { PROJECT_SHARED_AUDIO_COMMAND, PCondition::NotBusy },
+    { PROJECT_SHARE_AUDIO_COMMAND, PCondition::NotBusy },
     { PROJECT_EXPORT_COMMAND, PCondition::HasProject },
-    { PROJECT_IMPORT_PDF_COMMAND, PCondition::Any },
-    { PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND, PCondition::Any },
+    { PROJECT_CONVERT_TO_SCORE_COMMAND, PCondition::Any },
     { PROJECT_PRINT_COMMAND, PCondition::HasProject },
     { PROJECT_CLEAR_RECENT_COMMAND, PCondition::Any },
     { PROJECT_CONTINUE_LAST_SESSION_COMMAND, PCondition::Any },
     { PROJECT_PROPERTIES_COMMAND, PCondition::HasProject },
 };
 
-using BusyStatus = IProjectCommandsController::BusyStatus;
+using BusyStatus = BusyStatus;
 static std::map<Command, BusyStatus> PROJECT_COMMAND_BUSY_STATUSES = {
     { PROJECT_CLOSE_COMMAND, BusyStatus::Closing },
     { PROJECT_SAVE_COMMAND, BusyStatus::Saving },
@@ -70,7 +69,7 @@ static std::map<Command, BusyStatus> PROJECT_COMMAND_BUSY_STATUSES = {
     { PROJECT_SAVE_TO_CLOUD_COMMAND, BusyStatus::Uploading },
     { PROJECT_SAVE_AT_COMMAND, BusyStatus::Uploading },
     { PROJECT_PUBLISH_COMMAND, BusyStatus::Publishing },
-    { PROJECT_SHARED_AUDIO_COMMAND, BusyStatus::AudioSharing },
+    { PROJECT_SHARE_AUDIO_COMMAND, BusyStatus::AudioSharing },
 };
 
 static inline std::vector<Command> commands(const PCondition& condition)

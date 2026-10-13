@@ -125,6 +125,7 @@ PreferencesPage {
         AutomaticUpdateSection {
             isAppUpdatable: preferencesModel.isAppUpdatable()
             needCheckForNewAppVersion: preferencesModel.needCheckForNewAppVersion
+            autoUpdateNewAppVersion: preferencesModel.autoUpdateNewAppVersion
             museScorePrivacyPolicyUrl: preferencesModel.museScorePrivacyPolicyUrl()
 
             navigation.section: root.navigationSection
@@ -132,6 +133,10 @@ PreferencesPage {
 
             onNeedCheckForNewAppVersionChangeRequested: function(check) {
                 preferencesModel.needCheckForNewAppVersion = check
+            }
+
+            onAutoUpdateNewAppVersionChangeRequested: function(enabled) {
+                preferencesModel.autoUpdateNewAppVersion = enabled
             }
         }
     }

@@ -55,7 +55,7 @@ class LaissezVib : public Tie
     DECLARE_CLASSOF(ElementType::LAISSEZ_VIB);
 
 public:
-    LaissezVib(Note* parent);
+    LaissezVib(DummyParentOr<Note> parent);
 
     LaissezVib* clone() const override { return new LaissezVib(*this); }
 

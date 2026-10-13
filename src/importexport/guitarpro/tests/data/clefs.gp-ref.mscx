@@ -96,6 +96,7 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             <eid>N_N</eid>
             </Clef>
           <Chord>
@@ -120,6 +121,7 @@
           <Clef>
             <concertClefType>G8va</concertClefType>
             <transposingClefType>G8va</transposingClefType>
+            <isHeader>1</isHeader>
             <eid>S_S</eid>
             </Clef>
           <Chord>
@@ -144,6 +146,7 @@
           <Clef>
             <concertClefType>G15ma</concertClefType>
             <transposingClefType>G15ma</transposingClefType>
+            <isHeader>1</isHeader>
             <eid>X_X</eid>
             </Clef>
           <Chord>
@@ -168,6 +171,7 @@
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
             <eid>c_c</eid>
             </Clef>
           <Chord>
@@ -192,6 +196,7 @@
           <Clef>
             <concertClefType>C3</concertClefType>
             <transposingClefType>C3</transposingClefType>
+            <isHeader>1</isHeader>
             <eid>h_h</eid>
             </Clef>
           <Chord>
@@ -216,6 +221,7 @@
           <Clef>
             <concertClefType>C4</concertClefType>
             <transposingClefType>C4</transposingClefType>
+            <isHeader>1</isHeader>
             <eid>m_m</eid>
             </Clef>
           <Chord>

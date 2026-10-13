@@ -40,8 +40,8 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Chord Test1</text>
           </Text>
         </VBox>

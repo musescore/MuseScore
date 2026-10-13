@@ -45,7 +45,7 @@ namespace mu::engraving {
 //   KeySig
 //---------------------------------------------------------
 
-KeySig::KeySig(Segment* s)
+KeySig::KeySig(DummyParentOr<Segment> s)
     : EngravingItem(ElementType::KEYSIG, s, ElementFlag::ON_STAFF)
 {
     m_showCourtesy = true;

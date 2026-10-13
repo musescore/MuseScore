@@ -170,8 +170,8 @@
             </Chord>
           <PlayCountText>
             <playCountCustomText></playCountCustomText>
-            <eid>P_P</eid>
             <style>repeat_play_count</style>
+            <eid>P_P</eid>
             <text>4x</text>
             </PlayCountText>
           </voice>

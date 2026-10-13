@@ -311,7 +311,6 @@ Note* NoteInput::addNote(Transaction&, Score* score, Chord* chord, const NoteVal
     InputState& is = externalInputState ? (*externalInputState) : score->inputState();
 
     Note* note = Factory::createNote(chord);
-    note->setOwnershipParent(chord);
     note->setTrack(chord->track());
     note->setNval(noteVal);
     score->undoAddElement(note);
@@ -322,7 +321,6 @@ Note* NoteInput::addNote(Transaction&, Score* score, Chord* chord, const NoteVal
         Accidental* a = Factory::createAccidental(note);
         a->setAccidentalType(at);
         a->setRole(AccidentalRole::USER);
-        a->setOwnershipParent(note);
         score->undoAddElement(a);
     }
 
@@ -427,12 +425,15 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
     InputState& is = externalInputState ? (*externalInputState) : score->inputState();
 
     if (addFlag) {
-        ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
+        const Segment* lastSegment = is.lastSegment();
+        IF_ASSERT_FAILED(lastSegment) {
+            return nullptr;
+        }
+        ChordRest* c = toChordRest(lastSegment->element(is.track()));
         if (!c || !c->isChord()) {
             LOGD("NoteInput::addPitch: cr %s", c ? c->typeName() : "zero");
             return nullptr;
         }
-
         return addPitchToChord(tx, score, nval, toChord(c), externalInputState);
     }
 
@@ -606,7 +607,7 @@ Note* NoteInput::addTiedMidiPitch(Transaction& tx, Score* score, int pitch, bool
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
-            Tie* tie = Factory::createTie(score->dummy());
+            Tie* tie = Factory::createTie(nn);
             tie->setStartNote(nn);
             tie->setEndNote(n);
             tie->setTick(tie->startNote()->tick());
@@ -628,7 +629,6 @@ std::pair<Note*, Note*> NoteInput::repitchReplaceNote(Transaction&, Score* score
                                                       bool forceAccidental)
 {
     Note* note = Factory::createNote(chord);
-    note->setOwnershipParent(chord);
     note->setTrack(chord->track());
     note->setNval(nval);
 
@@ -705,7 +705,6 @@ std::pair<Note*, Note*> NoteInput::repitchReplaceNote(Transaction&, Score* score
         Accidental* a = Factory::createAccidental(note);
         a->setAccidentalType(at);
         a->setRole(AccidentalRole::USER);
-        a->setOwnershipParent(note);
         score->undoAddElement(a);
     }
     score->setPlayNote(true);

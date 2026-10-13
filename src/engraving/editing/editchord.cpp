@@ -61,7 +61,7 @@ void EditChord::toggleArticulation(Score* score, SymId attr)
                     continue;
                 }
             }
-            Articulation* na = Factory::createArticulation(score->dummy()->chord());
+            Articulation* na = Factory::createArticulation(score->dummy());
             na->setSymId(attr);
             if (!EditChord::toggleArticulation(score, el, na)) {
                 delete na;
@@ -189,12 +189,10 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
 {
     track_idx_t track = chord->track();
     Parenthesis* leftParen = Factory::createParenthesis(chord);
-    leftParen->setOwnershipParent(chord);
     leftParen->setTrack(track);
     leftParen->setDirection(DirectionH::LEFT);
     leftParen->setGenerated(generated);
     Parenthesis* rightParen = Factory::createParenthesis(chord);
-    rightParen->setOwnershipParent(chord);
     rightParen->setTrack(track);
     rightParen->setDirection(DirectionH::RIGHT);
     rightParen->setGenerated(generated);
@@ -213,6 +211,20 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         Chord* linkedChord = toChord(linkedObject);
         Score* linkedScore = linkedChord->score();
         Staff* linkedStaff = linkedChord->staff();
+
+        std::vector<Note*> linkedNotes;
+        linkedNotes.reserve(notes.size());
+        for (Note* note : notes) {
+            Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
+            if (!linkedNote) {
+                continue;
+            }
+            linkedNotes.push_back(linkedNote);
+        }
+        if (linkedNotes.empty()) {
+            continue;
+        }
+
         Parenthesis* linkedParenLeft = toParenthesis(leftParen->linkedClone());
         linkedParenLeft->setScore(linkedScore);
         linkedParenLeft->setOwnershipParent(linkedChord);
@@ -221,13 +233,6 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         linkedParenRight->setScore(linkedScore);
         linkedParenRight->setOwnershipParent(linkedChord);
         linkedParenRight->setTrack(linkedChord->track());
-
-        std::vector<Note*> linkedNotes;
-        linkedNotes.reserve(notes.size());
-        for (Note* note : notes) {
-            Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
-            linkedNotes.push_back(linkedNote);
-        }
 
         doAddNoteParentheses(linkedChord, linkedNotes, linkedParenLeft, linkedParenRight);
     }
@@ -252,7 +257,11 @@ void EditChord::undoRemoveParenthesesFromNote(Chord* chord, Note* note, Parenthe
         if (!linkedLeftParen) {
             continue;
         }
+
         Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
+        if (!linkedNote) {
+            continue;
+        }
 
         const NoteParenthesisInfo* noteParenInfo = linkedChord->findNoteParenthesisInfo(linkedNote);
         if (noteParenInfo) {
@@ -288,6 +297,9 @@ void EditChord::undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes
         linkedNotes.reserve(notes.size());
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
+            if (!linkedNote) {
+                continue;
+            }
             linkedNotes.push_back(linkedNote);
         }
 

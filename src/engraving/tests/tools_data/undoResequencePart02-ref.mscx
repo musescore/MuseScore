@@ -403,8 +403,8 @@
           <eid>8_8</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
-            <eid>9_9</eid>
             <style>instrument_excerpt</style>
+            <eid>9_9</eid>
             <text>Flute</text>
             </Text>
           </VBox>

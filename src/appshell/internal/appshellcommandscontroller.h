@@ -39,7 +39,9 @@
 #include "interactive/iplatforminteractive.h"
 #include "iappshellconfiguration.h"
 #include "multiwindows/imultiwindowsprovider.h"
-#include "project/iprojectfilescontroller.h"
+#include "project/iopenprojectscenario.h"
+#include "project/icloseprojectscenario.h"
+#include "project/iconvertfiletoscorescenario.h"
 #include "update/iappupdateservice.h"
 #include "audio/main/isoundfontinstallscenario.h"
 #include "istartupscenario.h"
@@ -69,7 +71,9 @@ class AppshellCommandsController : public QObject, public IAppshellCommandsContr
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
+    muse::ContextInject<project::IOpenProjectScenario> openProjectScenario = { this };
+    muse::ContextInject<project::ICloseProjectScenario> closeProjectScenario = { this };
+    muse::ContextInject<project::IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::ContextInject<muse::update::IAppUpdateService> appUpdateService = { this };
     muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
@@ -99,7 +103,8 @@ private:
         Unknown = 0,
         ProjectFile,
         SoundFont,
-        Extension
+        Extension,
+        ConvertibleFile
     };
 
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -113,8 +118,11 @@ private:
 
     void setupConnections();
 
-    muse::Ret quit(const muse::rcommand::Params& params);
-    muse::Ret quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
+    static muse::async::Promise<muse::Ret> resolvedPromise(const muse::Ret& ret);
+
+    muse::async::Promise<muse::Ret> quit(const muse::rcommand::Params& params);
+    muse::async::Promise<muse::Ret> quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
+    void doQuit(bool isAllInstances, const muse::io::path_t& installerPath);
     void restart();
 
     void toggleFullScreen();

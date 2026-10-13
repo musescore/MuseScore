@@ -76,6 +76,8 @@ qt_add_qml_module(appshell_qml
         MainToolBar.qml
         NotationPage/NotationPage.qml
         NotationPage/NotationStatusBar.qml
+        NotationReviewPage/NotationReviewPage.qml
+        NotationReviewPage/ReviewNotationView.qml
         platform/AppButtonBackground.qml
         platform/AppMenuBar.qml
         platform/PlatformMenuBar.qml
@@ -91,7 +93,6 @@ qt_add_qml_module(appshell_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
         TARGET muse_cloud_qml
-        TARGET muse_update_qml
         TARGET muse_dockwindow_qml
         TARGET muse_diagnostics_qml
         TARGET muse_extensions_qml

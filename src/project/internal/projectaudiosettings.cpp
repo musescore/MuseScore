@@ -60,6 +60,11 @@ static void doCompatibilityConversions(AudioResourceMeta& meta)
     }
 }
 
+bool ProjectAudioSettings::hasAnyAudioSettings() const
+{
+    return !m_trackInputParamsMap.empty() || !m_trackOutputParamsMap.empty() || !m_auxOutputParams.empty();
+}
+
 const AudioOutputParams& ProjectAudioSettings::masterAudioOutputParams() const
 {
     return m_masterOutputParams;
@@ -90,7 +95,7 @@ const AudioOutputParams& ProjectAudioSettings::auxOutputParams(aux_channel_idx_t
     return _dummy;
 }
 
-void ProjectAudioSettings::setAuxOutputParams(aux_channel_idx_t index, const AudioOutputParams& params)
+void ProjectAudioSettings::setAuxOutputParams(aux_channel_idx_t index, const AudioOutputParams& params, bool notifySettingsChanged)
 {
     auto it = m_auxOutputParams.find(index);
     if (it != m_auxOutputParams.end() && it->second == params) {
@@ -98,7 +103,10 @@ void ProjectAudioSettings::setAuxOutputParams(aux_channel_idx_t index, const Aud
     }
 
     m_auxOutputParams.insert_or_assign(index, params);
-    m_settingsChanged.notify();
+
+    if (notifySettingsChanged) {
+        m_settingsChanged.notify();
+    }
 }
 
 const TrackInputParamsMap& ProjectAudioSettings::allTrackInputParams() const
@@ -117,7 +125,8 @@ const AudioInputParams& ProjectAudioSettings::trackInputParams(const InstrumentT
     return it->second;
 }
 
-void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, const AudioInputParams& params)
+void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, const AudioInputParams& params,
+                                               bool notifySettingsChanged)
 {
     auto it = m_trackInputParamsMap.find(partId);
     if (it != m_trackInputParamsMap.end() && it->second == params) {
@@ -126,7 +135,10 @@ void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, 
 
     m_trackInputParamsMap.insert_or_assign(partId, params);
     m_trackInputParamsChanged.send(partId);
-    m_settingsChanged.notify();
+
+    if (notifySettingsChanged) {
+        m_settingsChanged.notify();
+    }
 }
 
 void ProjectAudioSettings::clearTrackInputParams()
@@ -167,7 +179,8 @@ const AudioOutputParams& ProjectAudioSettings::trackOutputParams(const Instrumen
     return search->second;
 }
 
-void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId, const AudioOutputParams& params)
+void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId, const AudioOutputParams& params,
+                                                bool notifySettingsChanged)
 {
     auto it = m_trackOutputParamsMap.find(partId);
     bool paramsChanged = it == m_trackOutputParamsMap.cend();
@@ -181,7 +194,7 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
 
     m_trackOutputParamsMap.insert_or_assign(partId, params);
 
-    if (paramsChanged) {
+    if (paramsChanged && notifySettingsChanged) {
         m_settingsChanged.notify();
     }
 }
