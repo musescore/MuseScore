@@ -831,6 +831,9 @@ TEST_F(MusicXml_Tests, linkedStaves1) {
 TEST_F(MusicXml_Tests, linkedStaves2) {
     musicXmlIoTest("testLinkedStaves2");
 }
+TEST_F(MusicXml_Tests, linkedStaves3) {
+    musicXmlIoTest("testLinkedStaves3");
+}
 TEST_F(MusicXml_Tests, localTimesig1) {
     musicXmlMscxExportTestRef("testLocalTimesig1");
 }
