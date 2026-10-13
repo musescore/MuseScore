@@ -608,6 +608,22 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_AudioComOnlyConfig_Re
     EXPECT_FALSE(ret);
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_LongerThanMaxLength_Fails)
+{
+    // [GIVEN] A configured maximum link length
+    ConvertConfig config = testConfig();
+    config.audio2score.link.maxLength = 21;
+    setConfig(config);
+
+    // [THEN] A link of exactly the maximum length is accepted
+    EXPECT_TRUE(m_service->validateLink(QUrl("https://youtube.com/x")));
+
+    // [THEN] A longer link from the same host is rejected
+    Ret ret = m_service->validateLink(QUrl("https://youtube.com/xy"));
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(mu::project::Err::ConvertUnsupportedLink));
+}
+
 // ==================================================
 // startConvert()
 // ==================================================
