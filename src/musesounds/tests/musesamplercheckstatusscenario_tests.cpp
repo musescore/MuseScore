@@ -78,6 +78,13 @@ Matcher<const IInteractive::Text&> TextContains(const std::string& substr)
 {
     return Field(&IInteractive::Text::text, HasSubstr(substr));
 }
+
+Matcher<const IInteractive::Options&> HasDontShowAgainCheckBox()
+{
+    return Truly([](const IInteractive::Options& options) {
+        return options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox);
+    });
+}
 }
 
 namespace mu::musesounds {
@@ -109,6 +116,9 @@ protected:
 
         ON_CALL(*m_service, canCheckForUpdate())
         .WillByDefault(Return(true));
+
+        ON_CALL(*m_configuration, showLoadingFailedWarning())
+        .WillByDefault(Return(true));
     }
 
     void expectNoDialogs()
@@ -130,7 +140,7 @@ protected:
 
         EXPECT_CALL(*m_interactive, warning("MuseSounds could not be loaded", TextContains("Open " + appName),
                                             ButtonIdsAre({ int(IInteractive::Button::Close), TROUBLESHOOT_BUTTON }),
-                                            TROUBLESHOOT_BUTTON, _, _))
+                                            TROUBLESHOOT_BUTTON, HasDontShowAgainCheckBox(), _))
         .WillOnce(Invoke([result](auto&&...) {
             return resolvedResultPromise(result);
         }));
@@ -224,9 +234,70 @@ TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInit
     EXPECT_CALL(*m_interactive, openUrl(Matcher<const QUrl&>(_))).Times(0);
     EXPECT_CALL(*m_interactive, openUrl(Matcher<const std::string&>(_))).Times(0);
 
+    // [THEN] The warning stays enabled
+    EXPECT_CALL(*m_configuration, setShowLoadingFailedWarning(_)).Times(0);
+
     // [WHEN] Checking the status
     m_scenario->checkAndShowStatusIfNeed();
     muse::async::processMessages();
+}
+
+TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInitFailed_DontShowAgainChecked_DisablesWarning)
+{
+    // [GIVEN] MuseSampler failed to init
+    ON_CALL(*m_service, libInitFailed()).WillByDefault(Return(true));
+
+    // [GIVEN] The user checks "Don't show again" and clicks Close
+    expectLoadingFailedWarning(IInteractive::Result(int(IInteractive::Button::Close), false /*showAgain*/));
+
+    // [THEN] The warning is disabled
+    EXPECT_CALL(*m_configuration, setShowLoadingFailedWarning(false)).Times(1);
+
+    // [WHEN] Checking the status
+    m_scenario->checkAndShowStatusIfNeed();
+    muse::async::processMessages();
+}
+
+TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInitFailed_DontShowAgainAndTroubleshoot_OpensUrl)
+{
+    // [GIVEN] MuseSampler failed to init
+    ON_CALL(*m_service, libInitFailed()).WillByDefault(Return(true));
+
+    // [GIVEN] The troubleshoot URL
+    const QUrl troubleshootUrl("test://troubleshoot");
+    ON_CALL(*m_configuration, museSoundsTroubleshootUrl()).WillByDefault(Return(troubleshootUrl));
+
+    // [GIVEN] The user checks "Don't show again" and clicks Troubleshoot
+    expectLoadingFailedWarning(IInteractive::Result(TROUBLESHOOT_BUTTON, false /*showAgain*/));
+
+    // [THEN] The warning is disabled, and the troubleshoot page is opened
+    EXPECT_CALL(*m_configuration, setShowLoadingFailedWarning(false)).Times(1);
+    EXPECT_CALL(*m_interactive, openUrl(troubleshootUrl))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Checking the status
+    m_scenario->checkAndShowStatusIfNeed();
+    muse::async::processMessages();
+}
+
+TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInitFailed_WarningDisabled_ShowsNothing)
+{
+    // [GIVEN] MuseSampler failed to init
+    ON_CALL(*m_service, libInitFailed()).WillByDefault(Return(true));
+
+    // [GIVEN] The user previously chose "Don't show again"
+    ON_CALL(*m_configuration, showLoadingFailedWarning()).WillByDefault(Return(false));
+
+    // [THEN] Nothing is checked or shown
+    expectNoDialogs();
+    EXPECT_CALL(*m_service, checkForUpdate()).Times(0);
+
+    // [WHEN] Checking the status
+    m_scenario->checkAndShowStatusIfNeed();
+    muse::async::processMessages();
+
+    // [THEN] The status is checked
+    EXPECT_TRUE(m_scenario->alreadyChecked());
 }
 
 TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_CannotCheckForUpdate_DoesNothing)

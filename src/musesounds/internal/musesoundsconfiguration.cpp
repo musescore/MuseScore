@@ -35,6 +35,7 @@ static const std::string module_name("musesounds");
 static const Settings::Key CHECK_FOR_MUSESOUNDS_UPDATE_KEY(module_name, "musesounds/checkForUpdate");
 static const Settings::Key GET_SOUNDS_TEST_MODE_KEY(module_name, "musesounds/getSoundsTestMode");
 static const Settings::Key LAST_MUSESOUNDS_SHOWN_VERSION_KEY(module_name, "application/lastShownMuseSoundsReleaseVersion");
+static const Settings::Key SHOW_LOADING_FAILED_WARNING_KEY(module_name, "musesounds/showLoadingFailedWarning");
 
 static const Settings::Key MUSESOUNDS_CHECK_FOR_UPDATE_TEST_MODE(module_name, "musesounds/checkForUpdateTestMode");
 
@@ -61,6 +62,7 @@ void MuseSoundsConfiguration::init()
     settings()->setDescription(CHECK_FOR_MUSESOUNDS_UPDATE_KEY, muse::trc("musesounds", "Show occasional MuseHub promotions"));
     settings()->setDefaultValue(GET_SOUNDS_TEST_MODE_KEY, Val(false));
     settings()->setDefaultValue(MUSESOUNDS_CHECK_FOR_UPDATE_TEST_MODE, Val(false));
+    settings()->setDefaultValue(SHOW_LOADING_FAILED_WARNING_KEY, Val(true));
 }
 
 bool MuseSoundsConfiguration::needCheckForMuseSoundsUpdate() const
@@ -120,6 +122,16 @@ std::string MuseSoundsConfiguration::lastShownMuseSoundsReleaseVersion() const
 void MuseSoundsConfiguration::setLastShownMuseSoundsReleaseVersion(const std::string& version)
 {
     settings()->setSharedValue(LAST_MUSESOUNDS_SHOWN_VERSION_KEY, Val(version));
+}
+
+bool MuseSoundsConfiguration::showLoadingFailedWarning() const
+{
+    return settings()->value(SHOW_LOADING_FAILED_WARNING_KEY).toBool();
+}
+
+void MuseSoundsConfiguration::setShowLoadingFailedWarning(bool show)
+{
+    settings()->setSharedValue(SHOW_LOADING_FAILED_WARNING_KEY, Val(show));
 }
 
 bool MuseSoundsConfiguration::museSoundsCheckForUpdateTestMode() const
