@@ -37,13 +37,46 @@ PropertiesPanelSection {
 
     required property SystemPageLayoutSettingsModel model
 
-    implicitHeight: contentColumn.implicitHeight
+    implicitHeight: contentColumn.visible ? contentColumn.implicitHeight : switchToPageViewColumn.implicitHeight
+
+    Column {
+        id: switchToPageViewColumn
+
+        width: parent.width
+        spacing: 12
+
+        visible: !contentColumn.visible
+
+        StyledTextLabel {
+            width: parent.width
+
+            text: qsTrc("propertiespanel", "System and page layout options are available in page view.")
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.WordWrap
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "SwitchToPageView"
+            navigation.row: root.navigationRowStart + 1
+
+            text: qsTrc("propertiespanel", "Switch to page view")
+
+            onClicked: {
+                root.model.switchToPageView()
+            }
+        }
+    }
 
     Column {
         id: contentColumn
 
         width: parent.width
         spacing: 12
+
+        visible: root.model ? root.model.isSystemLayoutAvailable : false
 
         PropertiesPanelTabBar {
             id: tabBar
