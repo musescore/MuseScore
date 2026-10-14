@@ -461,8 +461,12 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         }
 
         const PointData& oldPointData = pointsDataIt->second[pointIdx];
-        const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, oldPointData.tick);
-        const bool editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
+        const bool isPending = oldPointData.isPending;
+        bool editRestricted = false;
+        if (!isPending) {
+            const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, oldPointData.tick);
+            editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
+        }
         const qreal clampedX = editRestricted ? oldPointData.qPointF.x() : std::clamp(x, minX, maxX);
 
         const auto setPreviewPoint = [this, polyline, pointIdx, key](const QPointF& point) {
@@ -475,6 +479,11 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
 
         if (completed) {
             m_currentlyEditedPolyline = nullptr;
+            if (isPending) {
+                requestAddPoint(key, clampedX, y);
+                discardPendingPoint(polyline, key);
+                return;
+            }
             if (!requestEditPoint(oldPointData, key, clampedX, y)) {
                 // Edit was rejected - snap the point back to where it actually is instead of
                 // leaving the live-drag preview stuck at the rejected position
@@ -494,6 +503,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         if (completed) {
             m_currentlyEditedPolyline = nullptr;
             requestAddPoint(key, x, y);
+            discardPendingPoint(polyline, key);
             return;
         }
 
@@ -509,7 +519,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         while (insertIdx < pointsData.size() && pointsData.at(insertIdx).tick < *tick) {
             ++insertIdx;
         }
-        pointsData.insert(insertIdx, PointData(-1, *tick, { x, y }, PointData::PointType::BOTH));
+        pointsData.insert(insertIdx, PointData(-1, *tick, { x, y }, PointData::PointType::BOTH, /*isPending*/ true));
 
         QVector<QPointF> points = polyline->points();
         points.insert(insertIdx, { x, y });
@@ -1185,6 +1195,32 @@ bool NotationAutomationController::requestAddPoint(const SysStaffKey& key, qreal
     editAutomationPoints(curveKey, edits);
 
     return true;
+}
+
+void NotationAutomationController::discardPendingPoint(PolylinePlot* polyline, const SysStaffKey& key)
+{
+    const auto pointsDataIt = m_pointsDataByStaff.find(key);
+    if (pointsDataIt == m_pointsDataByStaff.end()) {
+        return;
+    }
+
+    QVector<PointData>& pointsData = pointsDataIt->second;
+    for (int i = 0; i < pointsData.size(); ++i) {
+        if (!pointsData.at(i).isPending) {
+            continue;
+        }
+
+        pointsData.removeAt(i);
+
+        QVector<QPointF> points = polyline->points();
+        if (i < points.size()) {
+            points.removeAt(i);
+            polyline->setPoints(points);
+            applyPolylineColorsUnderLine(polyline, key);
+            polyline->update();
+        }
+        return;
+    }
 }
 
 bool NotationAutomationController::requestRemovePoint(const PointData& pointData, const SysStaffKey& key)

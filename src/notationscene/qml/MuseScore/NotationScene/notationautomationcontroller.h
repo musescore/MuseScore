@@ -110,6 +110,7 @@ private:
         int tick = -1;
         QPointF qPointF;
         PointType pointType = PointType::UNKNOWN;
+        bool isPending = false;
     };
 
     using PointsDataMap = std::map<SysStaffKey, QVector<PointData> >;
@@ -157,6 +158,7 @@ private:
     bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
     bool requestAddPoint(const SysStaffKey& key, qreal x, qreal y);
     bool requestRemovePoint(const PointData& pointData, const SysStaffKey& key);
+    void discardPendingPoint(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key);
     void editAutomationPoints(const mu::engraving::AutomationCurveKey& key, mu::engraving::AutomationPointEdits& edits);
 
     const mu::engraving::AutomationPoint* automationPointAt(const SysStaffKey& key, int tick) const;
