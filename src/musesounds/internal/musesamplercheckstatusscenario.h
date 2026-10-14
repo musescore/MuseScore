@@ -58,8 +58,8 @@ private:
     void showCriticalUpdateNotification();
     void showNewVersionNotification();
 
-    void openMuseHubAndQuit();
-    void openMuseHubWebsiteAndQuit();
+    void openMuseHub(bool quit);
+    void openMuseHubWebsite(bool quit);
 
     bool m_alreadyChecked = false;
 };
