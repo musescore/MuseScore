@@ -61,6 +61,7 @@
 #include "editing/editkeysig.h"
 #include "editing/editrehearsalmark.h"
 #include "editing/navigation.h"
+#include "editing/editstavesharing.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
@@ -186,6 +187,9 @@ bool ChordRest::acceptDrop(EditData& data) const
         case ActionIconType::BEAM_BREAK_INNER_16TH:
         case ActionIconType::BEAM_JOIN:
             return true;
+        case ActionIconType::STAVE_SHARING_CHANGE:
+        case ActionIconType::RESET_STAVE_SHARING_CHANGE:
+            return part() && part()->isSharedPart();
         default: break;
         }
         break;
@@ -415,6 +419,12 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
         };
         if (muse::contains(beamModeTable, actionType)) {
             undoChangeProperty(Pid::BEAM_MODE, muse::value(beamModeTable, actionType));
+            delete e;
+            return nullptr;
+        }
+        if (actionType == ActionIconType::STAVE_SHARING_CHANGE || actionType == ActionIconType::RESET_STAVE_SHARING_CHANGE) {
+            bool reset = actionType == ActionIconType::RESET_STAVE_SHARING_CHANGE;
+            EditStaveSharing::addStaveSharingChange(tx, segment(), part(), reset);
             delete e;
             return nullptr;
         }

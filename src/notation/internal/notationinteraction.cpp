@@ -3113,7 +3113,7 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
 
             const bool dropAccepted = targetMeasure->acceptDrop(edd.ed);
             if (dropAccepted) {
-                setDropRects(dropHighlightRects(dropElem, targetMeasure, measureRect, edd.ed.modifiers));
+                setDropRects(dropHighlightRects(dropElem, targetElem, edd.ed.modifiers));
             }
             return dropAccepted;
         }
@@ -3122,6 +3122,7 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
     setDropTarget(targetElem, true);
     edd.ed.pos = targetElem->canvasBoundingRect().center();
     setAnchorLines({ LineF(pos, targetElem->canvasBoundingRect().center()) });
+    setDropRects(dropHighlightRects(dropElem, targetElem, edd.ed.modifiers));
 
     return true;
 }
@@ -3193,7 +3194,11 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
         const bool dropAccepted = mb->acceptDrop(edd.ed);
         if (dropAccepted) {
             setAnchorLines({ LineF(pos, mbRect.topLeft()) });
-            setDropRects(dropHighlightRects(dropElem, mb, mbRect, edd.ed.modifiers));
+
+            StaffLines* staffLines = mb->isMeasure() ? toMeasure(mb)->staffLines(staffIdx) : nullptr;
+            const EngravingItem* targetElem = staffLines ? static_cast<const EngravingItem*>(staffLines)
+                                              : static_cast<const EngravingItem*>(mb);
+            setDropRects(dropHighlightRects(dropElem, targetElem, edd.ed.modifiers));
         }
 
         return dropAccepted;
@@ -3203,9 +3208,23 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
     return false;
 }
 
-std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* dropElem, const MeasureBase* targetMeasureBase,
-                                                           const RectF& staffRect, KeyboardModifiers modifiers) const
+std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* dropElem, const EngravingItem* targetElem,
+                                                           KeyboardModifiers modifiers) const
 {
+    const MeasureBase* targetMeasureBase = targetElem->findMeasureBase();
+    if (!targetMeasureBase) {
+        return {};
+    }
+
+    const staff_idx_t staffIdx = targetElem->staffIdx() != muse::nidx ? targetElem->staffIdx() : 0;
+    RectF staffRect = targetMeasureBase->isMeasure() ? toMeasure(targetMeasureBase)->staffPageBoundingRect(staffIdx)
+                      : targetMeasureBase->pageBoundingRect();
+    if (const System* sys = targetMeasureBase->system()) {
+        if (const Page* page = sys->page()) {
+            staffRect.adjust(page->x(), page->y(), page->x(), page->y());
+        }
+    }
+
     switch (dropElem->type()) {
     case ElementType::VBOX:
     case ElementType::TBOX:
@@ -3257,6 +3276,15 @@ std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* 
             return { RectF(topLeft, targetMeasureBase->canvasBoundingRect().bottomRight()) };
         }
 
+        case ActionIconType::STAVE_SHARING_CHANGE:
+        case ActionIconType::RESET_STAVE_SHARING_CHANGE: {
+            const System* sys = targetMeasureBase->system();
+            const MeasureBase* last = sys ? sys->last() : nullptr;
+            const double right = last ? last->canvasBoundingRect().right() : staffRect.right();
+            const double left = targetElem->canvasBoundingRect().left();
+            return { RectF(PointF(left, staffRect.top()), PointF(right, staffRect.bottom())) };
+        }
+
         case ActionIconType::PAGE_LOCK: {
             std::vector<RectF> dropRects;
             for (System* sys : targetMeasureBase->page()->systems()) {
@@ -3306,6 +3334,7 @@ bool NotationInteraction::prepareDropTimeAnchorElement(const PointF& pos)
         qreal y = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
         PointF anchor(seg->canvasBoundingRect().x(), y);
         setAnchorLines({ LineF(pos, anchor) });
+        setDropRects(dropHighlightRects(edd.ed.dropElement, seg->element(track), edd.ed.modifiers));
         edd.ed.dropElement->score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
         edd.ed.dropElement->setTrack(track);
         edd.ed.dropElement->score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());

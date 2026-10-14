@@ -164,7 +164,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             for (Part* p : ctx.dom().parts()) {
                 if (p->isSharedPart()) {
                     SharedPart* sp = toSharedPart(p);
-                    prevMeasureState.sharedTrackMaps[sp] = sp->trackMapAtTick(ctx.mutState().curMeasure()->tick());
+                    prevMeasureState.staveSharingStates[sp] = sp->exactStaveSharingStateAtTick(ctx.mutState().curMeasure()->tick());
                 }
             }
 
@@ -534,7 +534,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     lockIndicator->setTrack(0);
     system->addSystemLockIndicator(lockIndicator);
 
-    TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
+    TLayout::layoutSystemIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
 
 void SystemLayout::layoutPageLockIndicators(System* system)
@@ -1439,6 +1439,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         TLayout::layoutItem(image, ctx);
     }
 
+    for (StaveSharingChange* ssc : elementsToLayout.staveSharingChanges) {
+        TLayout::layoutItem(ssc, ctx);
+    }
+
     layoutParenthesisAndBigTimeSigs(elementsToLayout);
 }
 
@@ -1576,6 +1580,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             case ElementType::STAFF_TEXT:
             case ElementType::STAVE_SHARING_LABEL:
                 elements.staffText.push_back(toStaffTextBase(item));
+                break;
+            case ElementType::STAVE_SHARING_CHANGE:
+                elements.staveSharingChanges.push_back(toStaveSharingChange(item));
                 break;
             case ElementType::INSTRUMENT_CHANGE:
                 elements.instrChanges.push_back(toInstrumentChange(item));
@@ -3193,18 +3200,24 @@ void SystemLayout::MeasureState::clear()
     measurePos = 0.0;
     elementPositions.clear();
     elementWidths.clear();
-    sharedTrackMaps.clear();
+    staveSharingStates.clear();
 }
 
 void SystemLayout::MeasureState::restoreMeasure(LayoutContext& ctx)
 {
     bool mapChanged = false;
     Fraction tick = measure->tick();
-    for (auto& [sharedPart, sharedTrackMap] : sharedTrackMaps) {
-        if (sharedPart->trackMapAtTick(tick) != sharedTrackMap) {
-            sharedPart->setTrackMapAtTick(sharedTrackMap, tick);
-            mapChanged = true;
+    for (auto& [sharedPart, savedState] : staveSharingStates) {
+        std::optional<StaveSharingState> curState = sharedPart->exactStaveSharingStateAtTick(tick);
+        if (curState == savedState) {
+            continue;
         }
+        if (savedState) {
+            sharedPart->setStaveSharingStateAtTick(*savedState, tick);
+        } else {
+            sharedPart->removeStaveSharingStateAtTick(tick);
+        }
+        mapChanged = true;
     }
     if (mapChanged) {
         StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(measure, ctx);

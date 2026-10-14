@@ -114,6 +114,7 @@
 #include "editstaff.h"
 #include "editstyle.h"
 #include "editsystemlocks.h"
+#include "editstavesharing.h"
 #include "edittimesig.h"
 #include "edittremolo.h"
 #include "inserttime.h"
@@ -1084,6 +1085,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         case ElementType::PLAY_COUNT_TEXT:
         case ElementType::LYRICSLINE_SEGMENT:
+        case ElementType::STAVE_SHARING_CHANGE:
             break;
         // All other types cannot be removed if generated
         default:
@@ -1593,6 +1595,9 @@ void Score::deleteItem(EngravingItem* el)
         }
     }
     break;
+    case ElementType::STAVE_SHARING_CHANGE:
+        EditStaveSharing::removeStaveSharingChange(tx, toStaveSharingChange(el));
+        break;
     default:
         undoRemoveElement(el);
         break;
