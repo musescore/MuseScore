@@ -43,6 +43,7 @@ using namespace muse;
 
 namespace {
 constexpr int TROUBLESHOOT_BUTTON = int(IInteractive::Button::CustomButton) + 1;
+constexpr int OPEN_MUSEHUB_BUTTON = int(IInteractive::Button::CustomButton) + 2;
 
 //! NOTE: keep the body queued, don't run it eagerly
 //! otherwise resolve() can fire before onResolve is attached
@@ -141,9 +142,9 @@ protected:
         ON_CALL(*m_interactive, buttonData(IInteractive::Button::Close))
         .WillByDefault(Return(IInteractive::ButtonData(IInteractive::Button::Close, "")));
 
-        EXPECT_CALL(*m_interactive, warning("MuseSounds could not be loaded", TextContains("Open " + appName),
-                                            ButtonIdsAre({ int(IInteractive::Button::Close), TROUBLESHOOT_BUTTON }),
-                                            TROUBLESHOOT_BUTTON, HasDontShowAgainCheckBox(), _))
+        EXPECT_CALL(*m_interactive, warning("MuseSounds could not be loaded", TextContains("open " + appName),
+                                            ButtonIdsAre({ int(IInteractive::Button::Close), TROUBLESHOOT_BUTTON, OPEN_MUSEHUB_BUTTON }),
+                                            OPEN_MUSEHUB_BUTTON, HasDontShowAgainCheckBox(), _))
         .WillOnce(Invoke([result](auto&&...) {
             return resolvedResultPromise(result);
         }));
@@ -224,6 +225,35 @@ TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInit
     // [WHEN] Checking the status
     m_scenario->checkAndShowStatusIfNeed();
     muse::async::processMessages();
+}
+
+TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInitFailed_OpenMuseHubClicked_OpensMuseHubWithoutQuitting)
+{
+    // [GIVEN] MuseSampler failed to init
+    ON_CALL(*m_service, libInitFailed()).WillByDefault(Return(true));
+
+    // [GIVEN] The user clicks "Open MuseHub"
+    expectLoadingFailedWarning(IInteractive::Result(OPEN_MUSEHUB_BUTTON));
+
+    // [THEN] MuseHub is opened
+#ifdef Q_OS_LINUX
+    EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", _))
+    .WillOnce(Return(true));
+#else
+    ON_CALL(*m_platformInteractive, canOpenApp(_)).WillByDefault(Return(make_ok()));
+    EXPECT_CALL(*m_platformInteractive, openApp(_))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedPromise<Ret>(make_ok());
+    }));
+#endif
+
+    // [THEN] The app keeps running
+    EXPECT_CALL(*m_commandDispatcher, dispatch(_)).Times(0);
+
+    // [WHEN] Checking the status
+    m_scenario->checkAndShowStatusIfNeed();
+    muse::async::processMessages(); // warning
+    muse::async::processMessages(); // openApp
 }
 
 TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInitFailed_CloseClicked_DoesNotOpenUrl)
