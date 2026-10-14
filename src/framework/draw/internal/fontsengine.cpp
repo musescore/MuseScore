@@ -454,10 +454,6 @@ std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string&
         return std::vector<GlyphImage>();
     }
 
-    static const std::set<glyph_idx_t> NOT_RENDER_GLYPHS = {
-        3 // space
-    };
-
     std::vector<GlyphImage> images;
 
     if (text.empty()) {
@@ -493,7 +489,7 @@ std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string&
         std::vector<GlyphPos> glyphs = layoutFace->glyphs(ffBlock.text.text, ffBlock.text.lenght);
 
         for (const GlyphPos& g : glyphs) {
-            if (NOT_RENDER_GLYPHS.find(g.idx) == NOT_RENDER_GLYPHS.end()) {
+            if (!layoutFace->glyphBbox(g.idx).isEmpty()) {
                 GlyphImage image = m_renderCache.load(sdfFace->key(), g.idx);
                 if (image.isNull()) {
                     image = sdfFace->glyphImage(g.idx);
