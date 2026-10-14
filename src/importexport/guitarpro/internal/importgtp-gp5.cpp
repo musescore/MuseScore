@@ -1299,7 +1299,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
             note->setHarmonicFret(harmonicFret);
             auto staff = note->staff();
-            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), harmonicOvertone, staff);
+            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), harmonicOvertone, staff, note->tick());
 
             note->setPitch(clampPitch(pitch));
             note->setTpcFromPitch(Prefer::SHARPS);
@@ -1359,7 +1359,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             harmonicNote->setFret(note->fret());
             harmonicNote->setHarmonicFret(harmonicFret + fret);
 
-            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret + note->part()->capoFret(), staff);
+            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret, staff, note->tick());
 
             harmonicNote->setPitch(clampPitch(pitch));
             harmonicNote->setTpcFromPitch(Prefer::SHARPS);
