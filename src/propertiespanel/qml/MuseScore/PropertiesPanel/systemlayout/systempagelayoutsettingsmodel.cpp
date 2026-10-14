@@ -109,6 +109,11 @@ void SystemPageLayoutSettingsModel::makeIntoPage()
     currentNotation()->interaction()->makeIntoPage();
 }
 
+void SystemPageLayoutSettingsModel::switchToPageView()
+{
+    commandDispatcher()->dispatch(VIEW_MODE_PAGE_COMMAND);
+}
+
 bool SystemPageLayoutSettingsModel::isEmpty() const
 {
     INotationSelectionPtr selection = this->selection();
