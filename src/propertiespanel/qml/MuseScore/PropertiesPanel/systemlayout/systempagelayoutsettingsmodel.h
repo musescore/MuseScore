@@ -27,6 +27,8 @@
 #include "propertiespanelabstractmodel.h"
 #include "notation/notationtypes.h"
 
+#include "rcommand/icommanddispatcher.h"
+
 namespace mu::propertiespanel {
 class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
 {
@@ -54,6 +56,8 @@ class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
 
     Q_PROPERTY(int systemCount READ systemCount NOTIFY systemCountChanged)
     Q_PROPERTY(int pageCount READ pageCount NOTIFY pageCountChanged)
+
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     explicit SystemPageLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
@@ -89,6 +93,8 @@ public:
     QString shortcutMakeIntoPage() const;
 
     bool isBoxOnlySelection() const;
+    Q_INVOKABLE void switchToPageView();
+
     bool isSystemLayoutAvailable() const;
     bool isPageLayoutAvailable() const;
     bool isMakeIntoSystemAvailable() const;
