@@ -21,18 +21,19 @@
  */
 #pragma once
 
-#include "imusesamplercheckstatusservice.h"
+#include "musesounds/imusesamplercheckstatusservice.h"
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "musesampler/imusesamplerinfo.h"
 #include "musesampler/imusesamplerconfiguration.h"
 #include "network/inetworkmanagercreator.h"
-#include "imusesoundsconfiguration.h"
+#include "musesounds/imusesoundsconfiguration.h"
 
 namespace mu::musesounds {
 class MuseSamplerCheckStatusService : public IMuseSamplerCheckStatusService, public muse::Contextable, public muse::async::Asyncable
 {
+public:
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
     muse::GlobalInject<muse::network::INetworkManagerCreator> networkManagerCreator;
     muse::GlobalInject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration;
