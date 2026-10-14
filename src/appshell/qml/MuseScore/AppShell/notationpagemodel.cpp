@@ -35,7 +35,6 @@
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationselection.h"
 
-#include "internal/applicationuiactions.h"
 #include "dockwindow/idockwindow.h"
 
 using namespace mu::appshell;
