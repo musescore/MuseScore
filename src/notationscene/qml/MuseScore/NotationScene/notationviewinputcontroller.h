@@ -229,6 +229,9 @@ private:
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
 
+    bool automationMode() const;
+    bool itemEditBlockedByAutomation(const EngravingItem* item) const;
+
     bool isAnchorEditingEvent(QKeyEvent* event) const;
 
     bool tryPercussionShortcut(QKeyEvent* event);
