@@ -30,7 +30,6 @@
 using namespace muse;
 using namespace mu::notation;
 using namespace muse::uicomponents;
-using namespace muse::actions;
 
 void NotationToolBarModel::load()
 {
