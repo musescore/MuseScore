@@ -23,6 +23,7 @@
 #include "musesamplercheckstatusscenario.h"
 
 #include "translation.h"
+#include "ui/view/iconcodes.h"
 
 using namespace mu::musesounds;
 
@@ -73,6 +74,7 @@ void MuseSamplerCheckStatusScenario::showLoadingFailedNotification()
     muse::IInteractive::ButtonData closeBtn = interactive()->buttonData(muse::IInteractive::Button::Close);
     muse::IInteractive::ButtonData troubleshootBtn(int(muse::IInteractive::Button::CustomButton) + 1,
                                                    muse::trc("musesounds", "Troubleshoot"), true /*accent*/);
+    troubleshootBtn.icon = int(muse::ui::IconCode::Code::OPEN_LINK);
 
 #ifdef Q_OS_LINUX
     std::string msg = muse::trc("musesounds", "Open MuseSounds Manager and ensure you’re running the latest version. "

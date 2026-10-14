@@ -121,6 +121,7 @@ UriQuery Interactive::makeQuery(const std::string& type, const std::string& cont
             customButton["role"] = Val(static_cast<int>(buttonData.role));
             customButton["isAccent"] = Val(buttonData.accent);
             customButton["isLeftSide"] = Val(buttonData.leftSide);
+            customButton["icon"] = Val(buttonData.icon);
             customButtonsList.push_back(Val(customButton));
         }
     }

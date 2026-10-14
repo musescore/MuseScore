@@ -92,6 +92,7 @@ public:
         bool accent = false;
         bool leftSide = false;
         ButtonRole role = ButtonRole::CustomRole;
+        int icon = 0; // ui::IconCode::Code, 0 = no icon
 
         ButtonData(int btn, const std::string& text)
             : btn(btn), text(text) {}
