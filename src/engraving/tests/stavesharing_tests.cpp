@@ -27,8 +27,6 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
 #include "engraving/dom/tie.h"
-#include "engraving/dom/part.h"
-#include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
 
 #include "engraving/editing/editstavesharing.h"

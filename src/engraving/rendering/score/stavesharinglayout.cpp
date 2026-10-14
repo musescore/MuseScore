@@ -344,22 +344,7 @@ bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, 
     }
 
     for (Segment* segment : ctx.allSegments) {
-        if (segment->header()) {
-            continue;
-        }
-
-        if (!checkClefKeyTimeSigForSameVoice(segment, prevTrack, nextTrack)) {
-            return false;
-        }
-
-        if (segment->isBreathType()
-            && !checkItemsForSameVoice(segment, prevTrack, nextTrack, [](const EngravingItem* item1, const EngravingItem* item2) {
-            return toBreath(item1)->symId() == toBreath(item2)->symId();
-        })) {
-            return false;
-        }
-
-        if (!checkSegmentAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
+        if (!checkSegmentForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
     }
@@ -476,21 +461,7 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
     }
 
     for (Segment* segment : ctx.allSegments) {
-        if (segment->header()) {
-            continue;
-        }
-        if (!checkClefKeyTimeSigForSameVoice(segment, prevTrack, nextTrack)) {
-            return false;
-        }
-
-        if (segment->isBreathType()
-            && !checkItemsForSameVoice(segment, prevTrack, nextTrack, [](const EngravingItem* item1, const EngravingItem* item2) {
-            return toBreath(item1)->symId() == toBreath(item2)->symId();
-        })) {
-            return false;
-        }
-
-        if (!checkSegmentAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
+        if (!checkSegmentForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
     }
@@ -501,6 +472,30 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
 
     for (Note* unisonNote : potentialUnisonNotes) {
         localUnisonNotes.insert(unisonNote);
+    }
+
+    return true;
+}
+
+bool StaveSharingLayout::checkSegmentForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack)
+{
+    if (segment->header()) {
+        return true;
+    }
+
+    if (!checkClefKeyTimeSigForSameVoice(segment, prevTrack, nextTrack)) {
+        return false;
+    }
+
+    if (segment->isBreathType()
+        && !checkItemsForSameVoice(segment, prevTrack, nextTrack, [](const EngravingItem* item1, const EngravingItem* item2) {
+        return toBreath(item1)->symId() == toBreath(item2)->symId();
+    })) {
+        return false;
+    }
+
+    if (!checkSegmentAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
+        return false;
     }
 
     return true;
@@ -848,36 +843,15 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
             continue;
         }
 
-        if (seg->isBreathType()) {
+        if (seg->isType(SegmentType::Breath | SegmentType::Clef | SegmentType::TimeSig | SegmentType::KeySig)) {
             for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* breath = seg->element(track)) {
-                    EngravingItem::disconnectAllOriginItems(breath);
+                EngravingItem* item = seg->element(track);
+                if (!item || (item->isTimeSig() && !toTimeSig(item)->isLocal())) {
+                    continue;
                 }
+                EngravingItem::disconnectAllOriginItems(item);
             }
-        }
-
-        if (seg->isClefType()) {
-            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* clef = seg->element(track)) {
-                    EngravingItem::disconnectAllOriginItems(clef);
-                }
-            }
-        }
-
-        if (seg->isTimeSigType()) {
-            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* timeSig = seg->element(track); timeSig && timeSig->isTimeSig() && toTimeSig(timeSig)->isLocal()) {
-                    EngravingItem::disconnectAllOriginItems(timeSig);
-                }
-            }
-        }
-
-        if (seg->isKeySigType()) {
-            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* keySig = seg->element(track)) {
-                    EngravingItem::disconnectAllOriginItems(keySig);
-                }
-            }
+            continue;
         }
 
         if (!seg->isChordRestType()) {
@@ -1704,37 +1678,16 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
             continue;
         }
 
-        if (seg->isBreathType()) {
+        if (seg->isType(SegmentType::Breath | SegmentType::Clef | SegmentType::TimeSig)
+            || (seg->isKeySigType() && segHasLocalKeySig(seg, p))) {
             for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* breath = seg->element(track); breath && breath->originItems().empty()) {
-                    ctx.score->undoRemoveElement(breath);
+                EngravingItem* item = seg->element(track);
+                if (!item || !item->originItems().empty() || (item->isTimeSig() && !toTimeSig(item)->isLocal())) {
+                    continue;
                 }
+                ctx.score->undoRemoveElement(item);
             }
-        }
-
-        if (seg->isClefType()) {
-            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* clef = seg->element(track); clef && clef->originItems().empty()) {
-                    ctx.score->undoRemoveElement(clef);
-                }
-            }
-        }
-
-        if (seg->isTimeSigType()) {
-            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* timeSig = seg->element(track);
-                    timeSig && timeSig->originItems().empty() && toTimeSig(timeSig)->isLocal()) {
-                    ctx.score->undoRemoveElement(timeSig);
-                }
-            }
-        }
-
-        if (seg->isKeySigType() && segHasLocalKeySig(seg, p)) {
-            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
-                if (EngravingItem* keySig = seg->element(track); keySig && keySig->originItems().empty()) {
-                    ctx.score->undoRemoveElement(keySig);
-                }
-            }
+            continue;
         }
 
         if (!seg->isChordRestType()) {

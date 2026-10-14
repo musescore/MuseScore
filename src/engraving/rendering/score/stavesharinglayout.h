@@ -74,6 +74,7 @@ private:
     static bool canGoToSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx, const TrackGroup& curTrackGroup,
                                  std::unordered_set<Note*>& localUnisonNotes);
 
+    static bool checkSegmentForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool checkClefKeyTimeSigForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool segHasLocalKeySig(const Segment* segment, const SharedPart* sharedPart);
     static bool checkSegmentAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
