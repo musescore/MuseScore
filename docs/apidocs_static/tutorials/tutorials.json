@@ -10,5 +10,8 @@
     },
     "4_macros": {
         "title": "Macros"
+    },
+    "7_mixer_api": {
+        "title": "Mixer API"
     }
 }

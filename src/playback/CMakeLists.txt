@@ -28,6 +28,8 @@ target_sources(playback PRIVATE
     isoundprofilesrepository.h
     playbacktypes.h
     playbackcommands.h
+    internal/engravingpluginmixerapiv1.cpp
+    internal/engravingpluginmixerapiv1.h
 
     internal/iplaybackcommandscontroller.h
     internal/playbackuiactions.cpp

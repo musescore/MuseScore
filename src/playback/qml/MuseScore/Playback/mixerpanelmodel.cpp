@@ -28,6 +28,7 @@
 #include "translation.h"
 
 #include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationautomation.h"
 #include "notation/inotationparts.h"
 #include "notation/inotationplayback.h"
@@ -267,6 +268,25 @@ void MixerPanelModel::clear()
 
 void MixerPanelModel::setupConnections()
 {
+    playback()->controlParamsChanged().onReceive(this, [this](const TrackId trackId, const ControlParams& params) {
+        if (MixerChannelItem* item = findChannelItem(trackId)) {
+            AudioOutputParams outParams = audioSettings()->trackOutputParams(item->instrumentTrackId());
+            outParams.setControl(params);
+            loadOutputParams(item, outParams);
+        }
+    });
+
+    currentProject()->masterNotation()->notation()->soloMuteState()->trackSoloMuteStateChanged().onReceive(
+        this, [this](const InstrumentTrackId trackId, const notation::INotationSoloMuteState::SoloMuteState state) {
+        const auto& trackIds = controller()->instrumentTrackIdMap();
+        const auto trackIt = trackIds.find(trackId);
+        if (trackIt != trackIds.end()) {
+            if (MixerChannelItem* item = findChannelItem(trackIt->second)) {
+                item->loadSoloMuteState(state);
+            }
+        }
+    });
+
     audioSettings()->auxSoloMuteStateChanged().onReceive(
         this, [this](const aux_channel_idx_t index,
                      notation::INotationSoloMuteState::SoloMuteState newSoloMuteState) {
