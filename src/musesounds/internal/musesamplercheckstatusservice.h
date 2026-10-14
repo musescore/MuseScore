@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "imusesamplercheckupdateservice.h"
+#include "imusesamplercheckstatusservice.h"
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
@@ -31,7 +31,7 @@
 #include "imusesoundsconfiguration.h"
 
 namespace mu::musesounds {
-class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, public muse::Contextable, public muse::async::Asyncable
+class MuseSamplerCheckStatusService : public IMuseSamplerCheckStatusService, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
     muse::GlobalInject<muse::network::INetworkManagerCreator> networkManagerCreator;
@@ -39,9 +39,10 @@ class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, pub
     muse::ContextInject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
 
 public:
-    MuseSamplerCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
+    MuseSamplerCheckStatusService(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
+    bool libInitFailed() const override;
     bool canCheckForUpdate() const override;
     bool incompatibleLocalVersion() const override;
 

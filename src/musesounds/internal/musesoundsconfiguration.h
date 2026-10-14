@@ -46,6 +46,7 @@ public:
 
     QUrl checkForMuseSoundsUpdateUrl() const override;
     QUrl checkForMuseSamplerUpdateUrl() const override;
+    QUrl museSoundsTroubleshootUrl() const override;
 
     QString getMuseSamplerVersionQuery() const override;
 

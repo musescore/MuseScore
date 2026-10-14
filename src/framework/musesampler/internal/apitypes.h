@@ -33,6 +33,22 @@ typedef enum ms_Result
     ms_Result_TimeoutErr = -2
 } ms_Result;
 
+typedef enum ms_InitResult
+{
+    ms_InitResult_OK = 0,
+    ms_InitResult_ProtectionRejected = -1,
+    ms_InitResult_ConfigurationMissing = -2,
+    ms_InitResult_ConfigurationUnreadable = -3,
+    ms_InitResult_ConfigurationInvalid = -4,
+    ms_InitResult_InstrumentMapMissing = -5,
+    ms_InitResult_ReceiptMissing = -6,
+    ms_InitResult_ReceiptRejected = -7,
+    ms_InitResult_DatabaseOpenFailed = -8,
+    ms_InitResult_InstrumentMapReadFailed = -9,
+    ms_InitResult_NoInstalledInstruments = -10,
+    ms_InitResult_NoUsableInstruments = -11,
+} ms_InitResult;
+
 // Functions to return the major + minor version of the core code. Note that this is independent of the UI version.
 typedef int (* ms_get_version_major)();
 typedef int (* ms_get_version_minor)();
@@ -448,6 +464,10 @@ typedef ms_Result (* ms_deinit)();
 typedef void (* ms_MuseSampler_set_lazy_render)(ms_MuseSampler ms, bool enabled);
 typedef void (* ms_MuseSampler_set_rendering_state_changed_callback_2)(ms_MuseSampler ms, ms_rendering_state_changed_callback callback,
                                                                        void* user_data);
+// ------------------------------------------------------------
+
+// added in v0.106
+typedef ms_InitResult (* ms_init_3)();
 // ------------------------------------------------------------
 
 namespace muse::musesampler {

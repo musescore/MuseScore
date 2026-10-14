@@ -21,12 +21,13 @@
  */
 #pragma once
 
-#include "imusesamplercheckupdatescenario.h"
+#include "imusesamplercheckstatusscenario.h"
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "imusesamplercheckupdateservice.h"
+#include "imusesamplercheckstatusservice.h"
+#include "imusesoundsconfiguration.h"
 #include "global/iinteractive.h"
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
@@ -34,23 +35,25 @@
 #include "multiwindows/imultiwindowsprovider.h"
 
 namespace mu::musesounds {
-class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
+class MuseSamplerCheckStatusScenario : public IMuseSamplerCheckStatusScenario, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::IProcess> process;
-    muse::ContextInject<IMuseSamplerCheckUpdateService> service = { this };
+    muse::GlobalInject<IMuseSoundsConfiguration> configuration;
+    muse::ContextInject<IMuseSamplerCheckStatusService> service = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    MuseSamplerCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
+    MuseSamplerCheckStatusScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
     bool alreadyChecked() const override;
-    void checkAndShowUpdateIfNeed() override;
+    void checkAndShowStatusIfNeed() override;
 
 private:
+    void showLoadingFailedNotification();
     void showCriticalUpdateNotification();
     void showNewVersionNotification();
 

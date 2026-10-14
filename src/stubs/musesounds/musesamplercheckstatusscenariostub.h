@@ -22,15 +22,13 @@
 
 #pragma once
 
-#include "musesounds/imusesamplercheckupdateservice.h"
+#include "musesounds/imusesamplercheckstatusscenario.h"
 
 namespace mu::musesounds {
-class MuseSamplerCheckUpdateServiceStub : public IMuseSamplerCheckUpdateService
+class MuseSamplerCheckStatusScenarioStub : public IMuseSamplerCheckStatusScenario
 {
 public:
-    bool canCheckForUpdate() const override;
-    bool incompatibleLocalVersion() const override;
-
-    muse::async::Promise<muse::RetVal<bool> > checkForUpdate() override;
+    bool alreadyChecked() const override;
+    void checkAndShowStatusIfNeed() override;
 };
 }

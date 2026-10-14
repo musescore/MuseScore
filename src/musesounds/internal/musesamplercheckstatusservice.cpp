@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "musesamplercheckupdateservice.h"
+#include "musesamplercheckstatusservice.h"
 
 #include <QBuffer>
 
@@ -57,12 +57,17 @@ static RetVal<Version> parseVersion(const QByteArray& json)
     return RetVal<Version>::make_ok(version);
 }
 
-bool MuseSamplerCheckUpdateService::canCheckForUpdate() const
+bool MuseSamplerCheckStatusService::libInitFailed() const
+{
+    return museSampler() && museSampler()->initFailed();
+}
+
+bool MuseSamplerCheckStatusService::canCheckForUpdate() const
 {
     return museSampler() && !museSampler()->version().isNull();
 }
 
-bool MuseSamplerCheckUpdateService::incompatibleLocalVersion() const
+bool MuseSamplerCheckStatusService::incompatibleLocalVersion() const
 {
     if (!museSampler()) {
         return true;
@@ -71,7 +76,7 @@ bool MuseSamplerCheckUpdateService::incompatibleLocalVersion() const
     return museSampler()->version() < museSamplerConfiguration()->minSupportedVersion();
 }
 
-Promise<RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
+Promise<RetVal<bool> > MuseSamplerCheckStatusService::checkForUpdate()
 {
     const Version localVersion = museSampler() ? museSampler()->version() : Version();
 

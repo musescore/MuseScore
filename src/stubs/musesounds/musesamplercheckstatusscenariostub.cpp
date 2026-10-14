@@ -1,8 +1,8 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -19,25 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include "types/retval.h"
+#include "musesamplercheckstatusscenariostub.h"
 
-#include "modularity/imoduleinterface.h"
+using namespace mu::musesounds;
 
-#include "async/promise.h"
-
-namespace mu::musesounds {
-class IMuseSamplerCheckUpdateService : MODULE_CONTEXT_INTERFACE
+bool MuseSamplerCheckStatusScenarioStub::alreadyChecked() const
 {
-    INTERFACE_ID(IMuseSamplerCheckUpdateService)
+    return false;
+}
 
-public:
-    virtual ~IMuseSamplerCheckUpdateService() = default;
-
-    virtual bool canCheckForUpdate() const = 0;
-    virtual bool incompatibleLocalVersion() const = 0;
-
-    virtual muse::async::Promise<muse::RetVal<bool> > checkForUpdate() = 0;
-};
+void MuseSamplerCheckStatusScenarioStub::checkAndShowStatusIfNeed()
+{
 }

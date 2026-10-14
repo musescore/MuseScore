@@ -24,6 +24,8 @@
 
 #include <memory>
 #include <cstring>
+#include <string>
+#include <variant>
 
 #include "dlib.h"
 #include "apitypes.h"
@@ -82,14 +84,24 @@ public:
         bool at_least_v_0_103 = (m_version.major() == 0 && m_version.minor() >= 103) || m_version.major() > 0;
         bool at_least_v_0_104 = (m_version.major() == 0 && m_version.minor() >= 104) || m_version.major() > 0;
         bool at_least_v_0_105 = (m_version.major() == 0 && m_version.minor() >= 105) || m_version.major() > 0;
+        bool at_least_v_0_106 = (m_version.major() == 0 && m_version.minor() >= 106) || m_version.major() > 0;
+
+        if (at_least_v_0_106) {
+            if (auto initLibFunc = (ms_init_3)libFunc("ms_init_3")) {
+                initLib = [initLibFunc]() -> std::variant<ms_InitResult, ms_Result> { return initLibFunc(); };
+            }
+        } else if (at_least_v_0_105) {
+            if (auto initLibFunc = (ms_init_2)libFunc("ms_init_2")) {
+                initLib = [initLibFunc]() -> std::variant<ms_InitResult, ms_Result> { return initLibFunc(); };
+            }
+        } else {
+            if (auto initLibFunc = (ms_init)libFunc("ms_init")) {
+                initLib = [initLibFunc]() -> std::variant<ms_InitResult, ms_Result> { return initLibFunc(); };
+            }
+        }
 
         if (at_least_v_0_105) {
-            auto initLibFunc = (ms_init_2)libFunc("ms_init_2");
-            initLib = [initLibFunc]() { return initLibFunc(); };
             deinitLib = (ms_deinit)libFunc("ms_deinit");
-        } else {
-            auto initLibFunc= (ms_init)libFunc("ms_init");
-            initLib = [initLibFunc]() { return initLibFunc(); };
         }
 
         getInstrumentList = (ms_get_instrument_list)libFunc("ms_get_instrument_list");
@@ -281,7 +293,13 @@ public:
             return false;
         }
 
-        if (initLib() != ms_Result_OK) {
+        const std::variant<ms_InitResult, ms_Result> initResult = initLib();
+        if (const ms_InitResult* result = std::get_if<ms_InitResult>(&initResult)) {
+            if (*result != ms_InitResult_OK) {
+                LOGE() << "Could not init lib, error code: " << initResultToString(*result);
+                return false;
+            }
+        } else if (std::get<ms_Result>(initResult) != ms_Result_OK) {
             LOGE() << "Could not init lib";
             return false;
         }
@@ -516,7 +534,27 @@ private:
         return muse::getLibFunc(m_lib, funcName);
     }
 
-    std::function<ms_Result()> initLib = nullptr;
+    static std::string initResultToString(ms_InitResult result)
+    {
+        switch (result) {
+        case ms_InitResult_OK: return "OK";
+        case ms_InitResult_ProtectionRejected: return "ProtectionRejected";
+        case ms_InitResult_ConfigurationMissing: return "ConfigurationMissing";
+        case ms_InitResult_ConfigurationUnreadable: return "ConfigurationUnreadable";
+        case ms_InitResult_ConfigurationInvalid: return "ConfigurationInvalid";
+        case ms_InitResult_InstrumentMapMissing: return "InstrumentMapMissing";
+        case ms_InitResult_ReceiptMissing: return "ReceiptMissing";
+        case ms_InitResult_ReceiptRejected: return "ReceiptRejected";
+        case ms_InitResult_DatabaseOpenFailed: return "DatabaseOpenFailed";
+        case ms_InitResult_InstrumentMapReadFailed: return "InstrumentMapReadFailed";
+        case ms_InitResult_NoInstalledInstruments: return "NoInstalledInstruments";
+        case ms_InitResult_NoUsableInstruments: return "NoUsableInstruments";
+        }
+
+        return std::to_string(static_cast<int>(result));
+    }
+
+    std::function<std::variant<ms_InitResult, ms_Result>()> initLib = nullptr;
     ms_deinit deinitLib = nullptr;
     ms_disable_reverb disableReverb = nullptr;
 
