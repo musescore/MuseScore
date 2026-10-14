@@ -20,21 +20,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "musesamplercheckupdatescenario.h"
+#include "musesamplercheckstatusscenario.h"
 
 #include "rcommand/commandtypes.h"
 #include "translation.h"
+#include "ui/view/iconcodes.h"
 
 using namespace mu::musesounds;
 
-bool MuseSamplerCheckUpdateScenario::alreadyChecked() const
+bool MuseSamplerCheckStatusScenario::alreadyChecked() const
 {
     return m_alreadyChecked;
 }
 
-void MuseSamplerCheckUpdateScenario::checkAndShowUpdateIfNeed()
+void MuseSamplerCheckStatusScenario::checkAndShowStatusIfNeed()
 {
-    if (!service()->canCheckForUpdate() || !multiwindowsProvider()->isFirstWindow()) {
+    if (!multiwindowsProvider()->isFirstWindow()) {
+        return;
+    }
+
+    if (service()->libInitFailed()) {
+        m_alreadyChecked = true;
+        showLoadingFailedNotification();
+        return;
+    }
+
+    if (!service()->canCheckForUpdate()) {
         return;
     }
 
@@ -59,7 +70,33 @@ void MuseSamplerCheckUpdateScenario::checkAndShowUpdateIfNeed()
     });
 }
 
-void MuseSamplerCheckUpdateScenario::showCriticalUpdateNotification()
+void MuseSamplerCheckStatusScenario::showLoadingFailedNotification()
+{
+    muse::IInteractive::ButtonData closeBtn = interactive()->buttonData(muse::IInteractive::Button::Close);
+    muse::IInteractive::ButtonData troubleshootBtn(int(muse::IInteractive::Button::CustomButton) + 1,
+                                                   muse::trc("musesounds", "Troubleshoot"), true /*accent*/);
+    troubleshootBtn.icon = int(muse::ui::IconCode::Code::OPEN_LINK);
+
+#ifdef Q_OS_LINUX
+    std::string msg = muse::trc("musesounds", "Open MuseSounds Manager and ensure you’re running the latest version. "
+                                              "Update if needed, then restart your machine.");
+#else
+    std::string msg = muse::trc("musesounds", "Open MuseHub and ensure you’re running the latest version. "
+                                              "Update if needed, then restart your machine.");
+#endif
+
+    msg += "\n\n" + muse::trc("musesounds", "If the issue persists, please follow the steps at the link below to troubleshoot.");
+
+    interactive()->warning(muse::trc("musesounds", "MuseSounds could not be loaded"), msg,
+                           { closeBtn, troubleshootBtn }, troubleshootBtn.btn)
+    .onResolve(this, [this, troubleshootBtn](const muse::IInteractive::Result& res) {
+        if (res.isButton(troubleshootBtn.btn)) {
+            platformInteractive()->openUrl(configuration()->museSoundsTroubleshootUrl());
+        }
+    });
+}
+
+void MuseSamplerCheckStatusScenario::showCriticalUpdateNotification()
 {
     muse::IInteractive::ButtonData notNowBtn(int(muse::IInteractive::Button::CustomButton) + 1,
                                              muse::trc("musesounds", "Not now"));
@@ -87,7 +124,7 @@ void MuseSamplerCheckUpdateScenario::showCriticalUpdateNotification()
     });
 }
 
-void MuseSamplerCheckUpdateScenario::showNewVersionNotification()
+void MuseSamplerCheckStatusScenario::showNewVersionNotification()
 {
     muse::IInteractive::ButtonData notNowBtn(int(muse::IInteractive::Button::CustomButton) + 1,
                                              muse::trc("musesounds", "Not now"));
@@ -117,7 +154,7 @@ void MuseSamplerCheckUpdateScenario::showNewVersionNotification()
     });
 }
 
-void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
+void MuseSamplerCheckStatusScenario::openMuseHubAndQuit()
 {
 #ifdef Q_OS_LINUX
     if (process()->startDetached("muse-sounds-manager",
@@ -152,7 +189,7 @@ void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
 #endif
 }
 
-void MuseSamplerCheckUpdateScenario::openMuseHubWebsiteAndQuit()
+void MuseSamplerCheckStatusScenario::openMuseHubWebsiteAndQuit()
 {
 #ifdef Q_OS_LINUX
     platformInteractive()->openUrl(updateConfiguration()->appWebSiteUrl());

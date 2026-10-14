@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
  * MuseScore Studio
  * Music Composition & Notation
@@ -19,19 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include "modularity/imoduleinterface.h"
+#include "musesamplercheckstatusscenariostub.h"
 
-namespace mu::musesounds {
-class IMuseSamplerCheckUpdateScenario : MODULE_CONTEXT_INTERFACE
+using namespace mu::musesounds;
+
+bool MuseSamplerCheckStatusScenarioStub::alreadyChecked() const
 {
-    INTERFACE_ID(IMuseSamplerCheckUpdateScenario)
+    return false;
+}
 
-public:
-    virtual ~IMuseSamplerCheckUpdateScenario() = default;
-
-    virtual bool alreadyChecked() const = 0;
-    virtual void checkAndShowUpdateIfNeed() = 0;
-};
+void MuseSamplerCheckStatusScenarioStub::checkAndShowStatusIfNeed()
+{
 }

@@ -20,15 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "musesamplercheckupdatescenariostub.h"
+#pragma once
 
-using namespace mu::musesounds;
+#include "musesounds/imusesamplercheckstatusservice.h"
 
-bool MuseSamplerCheckUpdateScenarioStub::alreadyChecked() const
+namespace mu::musesounds {
+class MuseSamplerCheckStatusServiceStub : public IMuseSamplerCheckStatusService
 {
-    return false;
-}
+public:
+    bool libInitFailed() const override;
+    bool canCheckForUpdate() const override;
+    bool incompatibleLocalVersion() const override;
 
-void MuseSamplerCheckUpdateScenarioStub::checkAndShowUpdateIfNeed()
-{
+    muse::async::Promise<muse::RetVal<bool> > checkForUpdate() override;
+};
 }

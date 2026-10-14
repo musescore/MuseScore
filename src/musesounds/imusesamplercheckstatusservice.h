@@ -19,24 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#include "musesamplercheckupdateservicestub.h"
+#include "types/retval.h"
 
-using namespace mu::musesounds;
+#include "modularity/imoduleinterface.h"
 
-bool MuseSamplerCheckUpdateServiceStub::canCheckForUpdate() const
+#include "async/promise.h"
+
+namespace mu::musesounds {
+class IMuseSamplerCheckStatusService : MODULE_GLOBAL_INTERFACE
 {
-    return false;
-}
+    INTERFACE_ID(IMuseSamplerCheckStatusService)
 
-bool MuseSamplerCheckUpdateServiceStub::incompatibleLocalVersion() const
-{
-    return false;
-}
+public:
+    virtual ~IMuseSamplerCheckStatusService() = default;
 
-muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateServiceStub::checkForUpdate()
-{
-    return muse::async::Promise<muse::RetVal<bool> >([](auto /*resolve*/, auto reject) {
-        return reject(int(muse::Ret::Code::UnknownError), "stub");
-    });
+    virtual bool libInitFailed() const = 0;
+    virtual bool canCheckForUpdate() const = 0;
+    virtual bool incompatibleLocalVersion() const = 0;
+
+    virtual muse::async::Promise<muse::RetVal<bool> > checkForUpdate() = 0;
+};
 }

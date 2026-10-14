@@ -44,6 +44,7 @@ public:
 
     virtual QUrl checkForMuseSoundsUpdateUrl() const = 0;
     virtual QUrl checkForMuseSamplerUpdateUrl() const = 0;
+    virtual QUrl museSoundsTroubleshootUrl() const = 0;
 
     virtual QString getMuseSamplerVersionQuery() const = 0;
 

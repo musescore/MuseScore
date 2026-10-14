@@ -21,6 +21,8 @@
  */
 #include "musesoundsconfiguration.h"
 
+#include <QLocale>
+
 #include "settings.h"
 #include "translation.h"
 #include "log.h"
@@ -96,6 +98,12 @@ QUrl MuseSoundsConfiguration::checkForMuseSoundsUpdateUrl() const
 QUrl MuseSoundsConfiguration::checkForMuseSamplerUpdateUrl() const
 {
     return QUrl("https://customers-api.musehub.com/graphql/v3");
+}
+
+QUrl MuseSoundsConfiguration::museSoundsTroubleshootUrl() const
+{
+    return QUrl(QString("https://support.musehub.com/%1/articles/15070619-musesounds-missing-in-musescore-studio")
+                .arg(QLocale().bcp47Name()));
 }
 
 QString MuseSoundsConfiguration::getMuseSamplerVersionQuery() const
