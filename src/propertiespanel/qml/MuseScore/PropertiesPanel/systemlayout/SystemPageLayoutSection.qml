@@ -39,15 +39,13 @@ PropertiesPanelSection {
 
     readonly property bool isSystemTabAvailable: root.model ? root.model.isSystemTabAvailable : false
 
-    implicitHeight: contentColumn.visible ? contentColumn.implicitHeight : 0
+    implicitHeight: contentColumn.implicitHeight
 
     Column {
         id: contentColumn
 
         width: parent.width
         spacing: 12
-
-        visible: root.model ? root.model.scoreIsInPageView : false
 
         PropertiesPanelTabBar {
             id: tabBar
@@ -119,6 +117,7 @@ PropertiesPanelSection {
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
                 makeIntoNavigationName: "MakeSystem"
                 isMakeIntoAvailable: root.model ? root.model.isMakeIntoSystemAvailable : false
+                isLockAndMoveAvailable: root.model ? root.model.isSystemLayoutAvailable : false
 
                 controller: ({
                     movePrevious: () => root.model.moveMeasureUpSystem(),
@@ -163,6 +162,7 @@ PropertiesPanelSection {
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoPage : ""
                 makeIntoNavigationName: "MakePage"
                 isMakeIntoAvailable: root.model ? root.model.isMakeIntoPageAvailable : false
+                isLockAndMoveAvailable: root.model ? root.model.isPageLayoutAvailable : false
 
                 controller: ({
                     movePrevious: () => root.model.moveSystemUpPage(),
