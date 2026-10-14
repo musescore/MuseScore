@@ -33,7 +33,6 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "ui/imainwindow.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuicontextresolver.h"
 #include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
@@ -79,7 +78,6 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);
