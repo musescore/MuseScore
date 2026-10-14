@@ -21,14 +21,14 @@
  */
 #pragma once
 
-#include "imusesamplercheckstatusscenario.h"
+#include "musesounds/imusesamplercheckstatusscenario.h"
 
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "rcommand/icommanddispatcher.h"
-#include "imusesamplercheckstatusservice.h"
-#include "imusesoundsconfiguration.h"
+#include "musesounds/imusesamplercheckstatusservice.h"
+#include "musesounds/imusesoundsconfiguration.h"
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
 #include "interactive/iinteractive.h"
@@ -39,6 +39,7 @@
 namespace mu::musesounds {
 class MuseSamplerCheckStatusScenario : public IMuseSamplerCheckStatusScenario, public muse::Contextable, public muse::async::Asyncable
 {
+public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
