@@ -1385,6 +1385,13 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Add note-anchored line"),
              IconCode::Code::NOTE_ANCHORED_LINE
              ),
+    UiAction("add-glissando",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "&Glissando"),
+             TranslatableString("action", "Insert glissando"),
+             IconCode::Code::GLISSANDO
+             ),
     UiAction("chord-tie",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
