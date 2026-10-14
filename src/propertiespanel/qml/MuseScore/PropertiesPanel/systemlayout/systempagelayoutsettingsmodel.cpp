@@ -26,6 +26,7 @@
 
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
+#include "notation/types/viewmode.h"
 
 #include "engraving/dom/score.h"
 #include "engraving/dom/page.h"
@@ -49,7 +50,7 @@ void SystemPageLayoutSettingsModel::loadProperties()
 {
     updateAllSystemsAreLocked();
     updateAllPagesAreLocked();
-    updateScoreIsInPageView();
+    updateLayoutAvailability();
     updateIsMakeIntoSystemAvailable();
     updateIsMakeIntoPageAvailable();
     updateSystemCount();
@@ -215,9 +216,14 @@ void SystemPageLayoutSettingsModel::updateAllPagesAreLocked()
     }
 }
 
-bool SystemPageLayoutSettingsModel::scoreIsInPageView() const
+bool SystemPageLayoutSettingsModel::isSystemLayoutAvailable() const
 {
-    return m_scoreIsInPageView;
+    return m_isSystemLayoutAvailable;
+}
+
+bool SystemPageLayoutSettingsModel::isPageLayoutAvailable() const
+{
+    return m_isPageLayoutAvailable;
 }
 
 bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
@@ -240,17 +246,24 @@ int SystemPageLayoutSettingsModel::pageCount() const
     return static_cast<int>(m_pageCount);
 }
 
-void SystemPageLayoutSettingsModel::updateScoreIsInPageView()
+void SystemPageLayoutSettingsModel::updateLayoutAvailability()
 {
     if (!currentNotation()) {
         return;
     }
 
-    bool isInPageView = currentNotation()->viewMode() != LayoutMode::LINE;
+    const ViewMode viewMode = currentNotation()->viewMode();
 
-    if (m_scoreIsInPageView != isInPageView) {
-        m_scoreIsInPageView = isInPageView;
-        emit scoreIsInPageViewChanged(m_scoreIsInPageView);
+    const bool systemLayoutAvailable = mu::notation::isSystemLayoutAvailable(viewMode);
+    if (m_isSystemLayoutAvailable != systemLayoutAvailable) {
+        m_isSystemLayoutAvailable = systemLayoutAvailable;
+        emit isSystemLayoutAvailableChanged(m_isSystemLayoutAvailable);
+    }
+
+    const bool pageLayoutAvailable = mu::notation::isPageLayoutAvailable(viewMode);
+    if (m_isPageLayoutAvailable != pageLayoutAvailable) {
+        m_isPageLayoutAvailable = pageLayoutAvailable;
+        emit isPageLayoutAvailableChanged(m_isPageLayoutAvailable);
     }
 }
 
