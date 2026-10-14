@@ -42,4 +42,5 @@ Loader {
     signal openScoreRequested(var scorePath, var displayName)
     signal revealInFileBrowserRequested(var scorePath)
     signal viewOnlineRequested(var scoreId)
+    signal deleteScoreRequested(var scoreId, var scoreName)
 }

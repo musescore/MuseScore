@@ -67,5 +67,7 @@ public:
 
     virtual ProgressPtr downloadScore(int scoreId, DevicePtr scoreData, const QString& hash = QString(),
                                       const QString& secret = QString()) = 0;
+
+    virtual async::Promise<Ret> deleteScore(int scoreId) = 0;
 };
 }

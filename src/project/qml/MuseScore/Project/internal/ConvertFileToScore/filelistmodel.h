@@ -25,6 +25,9 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
+#include "modularity/ioc.h"
+#include "io/ifilesystem.h"
+
 #include "project/types/filecategory.h"
 #include "project/types/converttypes.h"
 
@@ -42,6 +45,9 @@ class FileListModel : public QAbstractListModel
     Q_PROPERTY(bool exceedsLimits READ exceedsLimits NOTIFY exceedsLimitsChanged)
 
     QML_ELEMENT
+
+public:
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     //! NOTE: must be in sync with mu::project::FileCategory
@@ -90,6 +96,8 @@ private:
         FileNameRole,
         FileSizeRole
     };
+
+    qint64 fileSize(const QString& path) const;
 
     void updateTotalSizeBytes();
     void updateConvertLimits();

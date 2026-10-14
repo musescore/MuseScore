@@ -44,5 +44,7 @@ public:
     MOCK_METHOD(async::Promise<ScoresList>, downloadScoresList, (int, int), (override));
 
     MOCK_METHOD(ProgressPtr, downloadScore, (int, DevicePtr, const QString&, const QString&), (override));
+
+    MOCK_METHOD(async::Promise<Ret>, deleteScore, (int), (override));
 };
 }

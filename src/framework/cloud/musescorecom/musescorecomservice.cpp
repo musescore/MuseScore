@@ -54,6 +54,7 @@ static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_API_URL(MUSESCORECOM_API_ROOT_URL 
 static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download-shared");
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
+static const QUrl MUSESCORECOM_SCORE_DELETE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/score");
 
 static const QUrl MUSESCORECOM_CONVERT_CONFIG_URL("https://musescore.com/static/musescore/studio/upload-config.json");
 static const QUrl MUSESCORECOM_CONVERT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/convert/convert");
@@ -859,6 +860,44 @@ Promise<Ret> MuseScoreComService::doDownloadScore(int scoreId, DevicePtr scoreDa
 
         getProgress.val.finished().onReceive(this, [this, resolve](const ProgressResult& res) {
             (void)resolve(uploadingDownloadingRetFromRawRet(res.ret));
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
+Promise<Ret> MuseScoreComService::deleteScore(int scoreId)
+{
+    return executeAsyncRequest([this, scoreId]() {
+        return doDeleteScore(scoreId);
+    });
+}
+
+Promise<Ret> MuseScoreComService::doDeleteScore(int scoreId)
+{
+    return Promise<Ret>([this, scoreId](auto resolve, auto) {
+        QVariantMap params;
+        params[SCORE_ID_KEY] = scoreId;
+
+        RetVal<QUrl> url = prepareUrlForRequest(MUSESCORECOM_SCORE_DELETE_API_URL, params);
+        if (!url.ret) {
+            return resolve(url.ret);
+        }
+
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->del(url.val, receivedData, headers());
+        if (!progress.ret) {
+            return resolve(progress.ret);
+        }
+
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                (void)resolve(uploadingDownloadingRetFromRawRet(res.ret));
+                return;
+            }
+
+            (void)resolve(make_ok());
         });
 
         return Promise<Ret>::dummy_result();

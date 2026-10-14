@@ -51,6 +51,7 @@ FocusScope {
     signal revealInFileBrowserRequested(string scorePath)
     signal viewOnlineRequested(int scoreId)
     signal removeFromRecentFilesRequested(string scorePath)
+    signal deleteScoreRequested(int scoreId, string scoreName)
     signal retryRequested()
     signal cancelRequested(int convertType, int convertId)
 
@@ -236,6 +237,7 @@ FocusScope {
                 onViewOnlineRequested: root.viewOnlineRequested(root.cloudScoreId)
                 onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.path)
                 onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.path)
+                onDeleteScoreRequested: root.deleteScoreRequested(root.cloudScoreId, root.name)
             }
 
             Loader {
