@@ -46,6 +46,9 @@ public:
     MOCK_METHOD(std::string, lastShownMuseSoundsReleaseVersion, (), (const, override));
     MOCK_METHOD(void, setLastShownMuseSoundsReleaseVersion, (const std::string&), (override));
 
+    MOCK_METHOD(bool, showLoadingFailedWarning, (), (const, override));
+    MOCK_METHOD(void, setShowLoadingFailedWarning, (bool), (override));
+
     MOCK_METHOD(bool, museSoundsCheckForUpdateTestMode, (), (const, override));
 
     MOCK_METHOD(bool, getSoundsTestMode, (), (const, override));

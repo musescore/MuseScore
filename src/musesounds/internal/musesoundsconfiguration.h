@@ -52,6 +52,9 @@ public:
     std::string lastShownMuseSoundsReleaseVersion() const override;
     void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
 
+    bool showLoadingFailedWarning() const override;
+    void setShowLoadingFailedWarning(bool show) override;
+
     bool museSoundsCheckForUpdateTestMode() const override;
 
     bool getSoundsTestMode() const override;

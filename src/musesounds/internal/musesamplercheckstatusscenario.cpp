@@ -41,7 +41,9 @@ void MuseSamplerCheckStatusScenario::checkAndShowStatusIfNeed()
 
     if (service()->libInitFailed()) {
         m_alreadyChecked = true;
-        showLoadingFailedNotification();
+        if (configuration()->showLoadingFailedWarning()) {
+            showLoadingFailedNotification();
+        }
         return;
     }
 
@@ -88,8 +90,13 @@ void MuseSamplerCheckStatusScenario::showLoadingFailedNotification()
     msg += "\n\n" + muse::trc("musesounds", "If the issue persists, please follow the steps at the link below to troubleshoot.");
 
     interactive()->warning(muse::trc("musesounds", "MuseSounds could not be loaded"), msg,
-                           { closeBtn, troubleshootBtn }, troubleshootBtn.btn)
+                           { closeBtn, troubleshootBtn }, troubleshootBtn.btn,
+                           muse::IInteractive::Option::WithIcon | muse::IInteractive::Option::WithDontShowAgainCheckBox)
     .onResolve(this, [this, troubleshootBtn](const muse::IInteractive::Result& res) {
+        if (!res.showAgain()) {
+            configuration()->setShowLoadingFailedWarning(false);
+        }
+
         if (res.isButton(troubleshootBtn.btn)) {
             platformInteractive()->openUrl(configuration()->museSoundsTroubleshootUrl());
         }
