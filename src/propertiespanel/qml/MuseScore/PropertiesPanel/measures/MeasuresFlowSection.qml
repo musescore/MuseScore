@@ -65,11 +65,13 @@ Column {
     property string makeIntoNavigationName: ""
 
     property bool isMakeIntoAvailable: false
+    property bool isLockAndMoveAvailable: true
 
     property var controller
 
     FlatButton {
         id: toggleLockButton
+        enabled: root.isLockAndMoveAvailable
         width: parent.width
 
         navigation.panel: root.navigationPanel
@@ -103,6 +105,7 @@ Column {
 
         Row {
             id: moveButtons
+            enabled: root.isLockAndMoveAvailable
             width: parent.width
             spacing: 4
 
