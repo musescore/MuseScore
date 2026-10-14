@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <set>
 #include <vector>
 
 namespace mu::engraving {
@@ -67,7 +66,5 @@ public:
 private:
     static bool rowItemIsAbove(const EngravingItem* item);
     static void alignItemOffsetGroup(const std::vector<EngravingItem*>& group);
-    static void scanConnectedItemsInSnappingChain(EngravingItem* item, const System* system, std::set<EngravingItem*>& visited,
-                                                  std::vector<EngravingItem*>& group);
 };
 } // namespace mu::engraving::compat

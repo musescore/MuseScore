@@ -22,7 +22,7 @@
 
 #include "engravingcompat.h"
 
-#include <vector>
+#include <set>
 
 #include "dom/beam.h"
 #include "dom/box.h"
@@ -602,30 +602,6 @@ void AlignmentMigration500::alignItemOffsetGroup(const std::vector<EngravingItem
     }
 }
 
-void AlignmentMigration500::scanConnectedItemsInSnappingChain(EngravingItem* item, const System* system, std::set<EngravingItem*>& visited,
-                                                              std::vector<EngravingItem*>& group)
-{
-    if (muse::contains(visited, item)) {
-        return;
-    }
-    visited.insert(item);
-    group.push_back(item);
-
-    EngravingItem* before = item->ldata()->itemSnappedBefore();
-    while (before && before->findAncestor(ElementType::SYSTEM) == system && !muse::contains(visited, before)) {
-        visited.insert(before);
-        group.push_back(before);
-        before = before->ldata()->itemSnappedBefore();
-    }
-
-    EngravingItem* after = item->ldata()->itemSnappedAfter();
-    while (after && after->findAncestor(ElementType::SYSTEM) == system && !muse::contains(visited, after)) {
-        visited.insert(after);
-        group.push_back(after);
-        after = after->ldata()->itemSnappedAfter();
-    }
-}
-
 void AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(MasterScore* masterScore)
 {
     // For items aligned by AlignmentLayout::alignItemsWithTheirSnappingChain
@@ -691,7 +667,11 @@ void AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(MasterScore* 
             }
             const System* system = toSystem(item->findAncestor(ElementType::SYSTEM));
             std::vector<EngravingItem*> group;
-            scanConnectedItemsInSnappingChain(item, system, visited, group);
+            item->ldata()->scanConnectedItemsInSnappingChain(system, [&visited, &group](EngravingItem* chainItem) {
+                if (visited.insert(chainItem).second) {
+                    group.push_back(chainItem);
+                }
+            });
             alignItemOffsetGroup(group);
         }
 

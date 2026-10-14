@@ -2952,6 +2952,35 @@ void EngravingItem::LayoutData::disconnectItemSnappedAfter()
     m_itemSnappedAfter = nullptr;
 }
 
+void EngravingItem::LayoutData::scanConnectedItemsInSnappingChain(const System* system,
+                                                                  const std::function<void(EngravingItem*)>& func) const
+{
+    EngravingItem* item = const_cast<EngravingItem*>(m_item);
+    func(item);
+
+    std::vector<EngravingItem*> visited = { item }; // To break out of circular snap chains
+
+    EngravingItem* snappedBefore = m_itemSnappedBefore;
+    while (snappedBefore && snappedBefore->findAncestor(ElementType::SYSTEM) == system) {
+        IF_ASSERT_FAILED(!muse::contains(visited, snappedBefore)) {
+            break;
+        }
+        visited.push_back(snappedBefore);
+        func(snappedBefore);
+        snappedBefore = snappedBefore->ldata()->itemSnappedBefore();
+    }
+
+    EngravingItem* snappedAfter = m_itemSnappedAfter;
+    while (snappedAfter && snappedAfter->findAncestor(ElementType::SYSTEM) == system) {
+        IF_ASSERT_FAILED(!muse::contains(visited, snappedAfter)) {
+            break;
+        }
+        visited.push_back(snappedAfter);
+        func(snappedAfter);
+        snappedAfter = snappedAfter->ldata()->itemSnappedAfter();
+    }
+}
+
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
 {
     //! NOTE Temporary disabled CHECK - a lot of messages
