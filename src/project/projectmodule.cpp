@@ -28,7 +28,6 @@
 #include "internal/projectautosaver.h"
 #include "internal/projectactionscontroller.h"
 #include "internal/engravingpluginapihelper.h"
-#include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
 #include "internal/openprojectscenario.h"
 #include "internal/saveprojectscenario.h"
@@ -55,7 +54,6 @@
 #endif
 
 #include "rcommand/icommandsstate.h"
-#include "ui/iuiactionsregister.h"
 #include "interactive/iinteractiveuriregister.h"
 
 using namespace mu::project;
@@ -170,11 +168,6 @@ void ProjectContext::resolveImports()
     auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
     if (cs) {
         cs->reg(std::make_shared<ProjectCommandsState>(iocContext()));
-    }
-
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
-    if (ar) {
-        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 }
 

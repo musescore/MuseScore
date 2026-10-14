@@ -80,8 +80,6 @@ target_sources(project PRIVATE
     internal/projectactionscontroller.h
     internal/engravingpluginapihelper.cpp
     internal/engravingpluginapihelper.h
-    internal/projectuiactions.cpp
-    internal/projectuiactions.h
     internal/projectconfiguration.cpp
     internal/projectconfiguration.h
     internal/exporttype.cpp

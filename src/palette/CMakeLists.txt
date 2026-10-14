@@ -32,8 +32,6 @@ target_sources(palette PRIVATE
     internal/paletteconfiguration.h
     internal/paletteworkspacesetup.cpp
     internal/paletteworkspacesetup.h
-    internal/paletteuiactions.cpp
-    internal/paletteuiactions.h
     internal/paletteactionscontroller.cpp
     internal/paletteactionscontroller.h
     internal/palettecommandsregister.cpp
