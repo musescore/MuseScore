@@ -332,6 +332,17 @@ void NotationAutomationController::init()
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
+    automation()->resetEditStateRequested().onNotify(this, [this]() {
+        if (m_currentlyEditedPolyline) {
+            m_currentlyEditedPolyline->cancelEdit();
+            // Rebuild all because changes to this polyline may have affected those on other systems...
+            // TODO: As above - e.g. changes to the end of a polyline in one system should affect the polyline on
+            // the next system (probably requires the implementation of "startY" in PolylinePlot)...
+            rebuildAllPolylines();
+        }
+        m_currentlyEditedPolyline = nullptr;
+    }, Asyncable::Mode::SetReplace /* FIXME */);
+
     notationConfiguration()->currentAutomationTypeChanged().onNotify(this, [this]() {
         rebuildAllPolylines();
     }, Asyncable::Mode::SetReplace /* FIXME */);
@@ -463,6 +474,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         };
 
         if (completed) {
+            m_currentlyEditedPolyline = nullptr;
             if (!requestEditPoint(oldPointData, key, clampedX, y)) {
                 // Edit was rejected - snap the point back to where it actually is instead of
                 // leaving the live-drag preview stuck at the rejected position
@@ -471,6 +483,8 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
             return;
         }
 
+        m_currentlyEditedPolyline = polyline;
+
         // Live drag preview
         setPreviewPoint({ clampedX, y });
     });
@@ -478,6 +492,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointAdded,
                      [this, key, polyline, system, staffCanvasRect](qreal x, qreal y, bool completed) {
         if (completed) {
+            m_currentlyEditedPolyline = nullptr;
             requestAddPoint(key, x, y);
             return;
         }
@@ -486,6 +501,8 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         if (!tick) {
             return;
         }
+
+        m_currentlyEditedPolyline = polyline;
 
         QVector<PointData>& pointsData = m_pointsDataByStaff[key];
         int insertIdx = 0;
@@ -901,6 +918,8 @@ void NotationAutomationController::processPendingChanges()
 
 void NotationAutomationController::rebuildAllPolylines()
 {
+    m_currentlyEditedPolyline = nullptr;
+
     // TODO: More efficient if we don't clear/recreate the polylines every time...
     for (const auto& [staff, polylines] : m_stavesToLinesMap) {
         for (PolylinePlot* polyline : polylines) {
