@@ -88,3 +88,8 @@ qt_add_qml_module(playback_qml
 )
 
 fixup_qml_module_dependencies(playback_qml)
+
+target_link_libraries(playback_qml PRIVATE
+    muse::uicomponents_qml
+    notationscene_qml
+)

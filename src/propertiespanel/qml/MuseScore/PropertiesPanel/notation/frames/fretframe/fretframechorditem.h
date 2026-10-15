@@ -27,7 +27,7 @@
 #include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 namespace mu::propertiespanel {
-class FretFrameChordItem : public muse::uicomponents::SelectableItemListModel::Item
+class FretFrameChordItem : public muse::uicomponents::SelectableItem
 {
     Q_OBJECT
     QML_ELEMENT;
