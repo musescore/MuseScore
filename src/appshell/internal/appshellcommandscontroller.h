@@ -25,14 +25,11 @@
 #include <QObject>
 
 #include "async/asyncable.h"
-#include "actions/actionable.h"
 #include "rcommand/commandable.h"
 #include "rcommand/commandtypes.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/icommanddispatcher.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/imainwindow.h"
 #include "languages/ilanguagesservice.h"
 #include "interactive/iinteractive.h"
@@ -58,7 +55,7 @@ class QDropEvent;
 
 namespace mu::appshell {
 class AppshellCommandsController : public QObject, public IAppshellCommandsController, public muse::Contextable,
-    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
+    public muse::async::Asyncable, public muse::rcommand::Commandable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
@@ -66,8 +63,6 @@ class AppshellCommandsController : public QObject, public IAppshellCommandsContr
     muse::GlobalInject<muse::IApplication> application;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
@@ -142,7 +137,6 @@ private:
     bool m_quiting = false;
 
     muse::async::Channel<DockName> m_dockToggleRequested;
-    muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

@@ -27,6 +27,8 @@
 
 #include <private/qkeymapper_p.h>
 
+#include "ui/navigationcommands.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -182,7 +184,7 @@ void NavigableAppMenuModel::setOpenedMenuId(QString openedMenuId)
 
     //! NOTE: after opening the menu, position on the first control
     if (navigationStarted && menuOpened) {
-        actionsDispatcher()->dispatch("command://navigation/first-control");
+        commandDispatcher()->dispatch(FIRST_CONTROL_COMMAND);
     }
 
     emit openedMenuIdChanged(m_openedMenuId);

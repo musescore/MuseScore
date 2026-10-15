@@ -56,7 +56,6 @@ using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace mu::project;
 using namespace muse::workspace;
-using namespace muse::actions;
 using namespace muse::extensions;
 using namespace mu::notation;
 using namespace mu::playback;

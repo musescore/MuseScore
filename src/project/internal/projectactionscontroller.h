@@ -30,8 +30,6 @@
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "context/iglobalcontext.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"
 #include "rcommand/commandable.h"
@@ -50,7 +48,7 @@
 
 namespace mu::project {
 class ProjectActionsController : public IProjectCommandsController, public muse::mi::IProjectProvider, public muse::Contextable,
-    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
+    public muse::async::Asyncable, public muse::rcommand::Commandable
 {
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
@@ -59,7 +57,6 @@ public:
     muse::ContextInject<ISaveProjectScenario> saveProjectScenario = { this };
     muse::ContextInject<ICloseProjectScenario> closeProjectScenario = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
@@ -80,8 +77,6 @@ public:
     bool hasSelection() const override;
     muse::async::Notification hasSelectionChanged() const override;
     // --------
-
-    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;

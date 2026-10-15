@@ -49,7 +49,6 @@ using namespace mu::palette;
 using namespace mu::engraving;
 using namespace muse;
 using namespace muse::io;
-using namespace muse::actions;
 
 Palette::Palette(const muse::modularity::ContextPtr& iocCtx, Type t, QObject* parent)
     : QObject(parent), muse::Contextable(iocCtx), m_type(t)

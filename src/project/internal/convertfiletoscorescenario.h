@@ -24,7 +24,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "toast/itoastservice.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
@@ -38,10 +38,10 @@ class ConvertFileToScoreScenario : public IConvertFileToScoreScenario, public mu
 {
 public:
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
-    muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::GlobalInject<muse::toast::IToastService> toastService;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<IConvertFileToScoreService> service = { this };
 
 public:

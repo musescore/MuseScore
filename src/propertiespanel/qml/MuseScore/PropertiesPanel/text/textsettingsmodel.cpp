@@ -23,6 +23,9 @@
 
 #include <QFont>
 
+#include "translation.h"
+#include "realfn.h"
+
 #include "types/commontypes.h"
 #include "types/texttypes.h"
 
@@ -34,12 +37,15 @@
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 
-#include "translation.h"
+#include "palette/palettecommands.h"
+#include "notationscene/notationcommands.h"
+
 #include "log.h"
-#include "realfn.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::engraving;
+using namespace mu::palette;
+using namespace mu::notation;
 
 TextSettingsModel::TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
     : PropertiesPanelAbstractModel(parent, iocCtx, repository)
@@ -295,12 +301,12 @@ void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds
 
 void TextSettingsModel::insertSpecialCharacters()
 {
-    dispatcher()->dispatch("show-keys");
+    commandDispatcher()->dispatch(TOGGLE_SPECIAL_CHARACTERS_COMMAND);
 }
 
 void TextSettingsModel::showStaffTextProperties()
 {
-    dispatcher()->dispatch("staff-text-properties");
+    commandDispatcher()->dispatch(OPEN_STAFF_TEXT_PROPERTIES_COMMAND);
 }
 
 PropertyItem* TextSettingsModel::fontFamily() const

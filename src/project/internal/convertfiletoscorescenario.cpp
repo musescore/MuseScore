@@ -23,13 +23,12 @@
 
 #include <QUrl>
 
-#include "actions/actiontypes.h"
-
-#include "project/projecterrors.h"
-
 #include "global/translation.h"
 #include "global/dataformatter.h"
 #include "global/log.h"
+
+#include "project/projecterrors.h"
+#include "project/projectcommands.h"
 
 using namespace mu::project;
 using namespace muse;
@@ -499,7 +498,7 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const WatchedScore& 
     }).onResolve(this, [this, scoreId, openScoreBtn](const toast::ToastResult& result) {
         if (result.isCode(openScoreBtn)) {
             const QUrl url(QString("musescore://open-score/%1").arg(scoreId));
-            dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
+            commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND, { { "url", muse::Val(url.toString()) } });
         }
     });
 }

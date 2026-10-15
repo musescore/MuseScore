@@ -27,7 +27,6 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "actions/actiontypes.h"
 #include "context/iglobalcontext.h"
 #include "engraving/types/types.h"
 #include "notation/inotationautomation.h"
@@ -145,8 +144,6 @@ public:
     void setMasterNotation(notation::IMasterNotationPtr masterNotation);
 
     void setIsExportingAudio(bool exporting) override;
-
-    bool canReceiveAction(const muse::actions::ActionCode& code) const;
 
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;

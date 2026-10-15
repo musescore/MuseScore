@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectconfiguration.h"
@@ -41,7 +41,7 @@ class SessionsManager : public ISessionsManager, public muse::Contextable, publi
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
