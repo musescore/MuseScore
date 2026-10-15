@@ -308,16 +308,31 @@ RetVal<Progress> ConvertFileToScoreService::uploadToConvert(const ConvertInput& 
                                                                               convertedScoreName.toQString() });
     ProgressPtr uploadProgress = museScoreComService()->convert()->uploadToConvert(data);
 
+    LOGI() << "Uploading \"" << convertedScoreName << "\" for conversion (type: " << convertTypeToString(type) << ")";
+
+    const int uploadId = ++m_lastUploadId;
+    m_uploadingScores.push_back(UploadingScore { uploadId, convertedScoreName });
+    m_uploadProgresses[uploadId] = uploadProgress;
+    m_uploadingScoresChanged.notify();
+
     Progress progress;
     progress.start();
 
     uploadProgress->progressChanged().onReceive(this, [convertedScoreName, progress](int64_t current, int64_t total,
                                                                                      const std::string& msg) mutable {
-        LOGI() << "Uploading for convert \"" << convertedScoreName << "\": " << current << "/" << total;
+        LOGI() << "Uploading \"" << convertedScoreName << "\" for conversion: " << current << "/" << total;
         progress.progress(current, total, msg);
     });
 
-    uploadProgress->finished().onReceive(this, [this, type, convertedScoreName, progress](const ProgressResult& res) mutable {
+    uploadProgress->finished().onReceive(this, [this, type, uploadId, convertedScoreName, progress](const ProgressResult& res) mutable {
+        removeUpload(uploadId);
+
+        if (res.ret.code() == int(Ret::Code::Cancel)) {
+            LOGI() << "Upload of \"" << convertedScoreName << "\" was canceled";
+            progress.finish(res.ret);
+            return;
+        }
+
         if (!res.ret) {
             LOGE() << "Could not upload files for \"" << convertedScoreName << "\" (type: "
                    << convertTypeToString(type) << "): " << res.ret.toString();
@@ -336,6 +351,15 @@ RetVal<Progress> ConvertFileToScoreService::uploadToConvert(const ConvertInput& 
 async::Channel<Ret, WatchedScore> ConvertFileToScoreService::convertFinished() const
 {
     return m_convertFinished;
+}
+
+ValNt<UploadingScoreList> ConvertFileToScoreService::uploadingScores() const
+{
+    ValNt<UploadingScoreList> result;
+    result.val = m_uploadingScores;
+    result.notification = m_uploadingScoresChanged;
+
+    return result;
 }
 
 ValNt<WatchedScoreList> ConvertFileToScoreService::watchedScores() const
@@ -435,7 +459,19 @@ void ConvertFileToScoreService::submitReviewComment(int scoreId, const QString& 
     });
 }
 
-void ConvertFileToScoreService::deleteConversion(ConvertType type, int convertId)
+void ConvertFileToScoreService::cancelUpload(int uploadId)
+{
+    auto it = m_uploadProgresses.find(uploadId);
+    if (it == m_uploadProgresses.end()) {
+        return;
+    }
+
+    //! NOTE: the upload's finished() handler removes it
+    ProgressPtr progress = it->second;
+    progress->cancel();
+}
+
+void ConvertFileToScoreService::cancelConversion(ConvertType type, int convertId)
 {
     museScoreComService()->convert()->deleteConversion(type, convertId)
     .onResolve(this, [this, type, convertId](const Ret& ret) {
@@ -546,6 +582,19 @@ void ConvertFileToScoreService::saveWatchedScores()
         }
     }
     m_isSaving = false;
+}
+
+void ConvertFileToScoreService::removeUpload(int uploadId)
+{
+    m_uploadProgresses.erase(uploadId);
+
+    auto it = std::find_if(m_uploadingScores.begin(), m_uploadingScores.end(), [uploadId](const UploadingScore& uploading) {
+        return uploading.uploadId == uploadId;
+    });
+    if (it != m_uploadingScores.end()) {
+        m_uploadingScores.erase(it);
+        m_uploadingScoresChanged.notify();
+    }
 }
 
 void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::String& convertedScoreName)

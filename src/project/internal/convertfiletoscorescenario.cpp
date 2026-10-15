@@ -153,6 +153,11 @@ async::Channel<Ret, WatchedScore> ConvertFileToScoreScenario::convertFinished() 
     return m_convertFinished;
 }
 
+ValNt<UploadingScoreList> ConvertFileToScoreScenario::uploadingScores() const
+{
+    return service()->uploadingScores();
+}
+
 ValNt<WatchedScoreList> ConvertFileToScoreScenario::watchedScores() const
 {
     return service()->watchedScores();
@@ -164,7 +169,21 @@ bool ConvertFileToScoreScenario::isAwaitingReview(int scoreId) const
     return watched && watched->conversion.status == ConvertStatus::AwaitingReview;
 }
 
+void ConvertFileToScoreScenario::cancelUpload(int uploadId)
+{
+    confirmCancel([this, uploadId]() {
+        service()->cancelUpload(uploadId);
+    });
+}
+
 void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertId)
+{
+    confirmCancel([this, type, convertId]() {
+        service()->cancelConversion(type, convertId);
+    });
+}
+
+void ConvertFileToScoreScenario::confirmCancel(const std::function<void()>& onCancel)
 {
     constexpr int keepConvertingBtn = int(IInteractive::Button::No);
     constexpr int cancelBtn = int(IInteractive::Button::Yes);
@@ -179,9 +198,9 @@ void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertI
         muse::trc("project/convert", "Are you sure you want to cancel this file conversion?"),
         muse::trc("project/convert", "Processing will be canceled and this score will be removed from your scores."),
         { keepConverting, cancel }, keepConvertingBtn, IInteractive::WithIcon)
-    .onResolve(this, [this, type, convertId, cancelBtn](const IInteractive::Result& result) {
+    .onResolve(this, [onCancel, cancelBtn](const IInteractive::Result& result) {
         if (result.isButton(cancelBtn)) {
-            service()->deleteConversion(type, convertId);
+            onCancel();
         }
     });
 }
@@ -342,7 +361,7 @@ void ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const m
     }
 
     progress.val.finished().onReceive(this, [this, input, convertedScoreName](const ProgressResult& res) {
-        if (!res.ret) {
+        if (!res.ret && res.ret.code() != static_cast<int>(Ret::Code::Cancel)) {
             showUploadError(res.ret, input, convertedScoreName);
         }
     });

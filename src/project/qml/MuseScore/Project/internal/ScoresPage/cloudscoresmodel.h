@@ -70,6 +70,7 @@ public:
     Q_INVOKABLE void reload();
 
     Q_INVOKABLE void retryAllConversions();
+    Q_INVOKABLE void cancelUpload(int uploadId);
     Q_INVOKABLE void cancelConversion(int convertType, int convertId);
 
     State state() const;

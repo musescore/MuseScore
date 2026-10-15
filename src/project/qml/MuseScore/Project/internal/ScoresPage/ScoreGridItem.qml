@@ -41,6 +41,7 @@ FocusScope {
     readonly property bool isProcessing: root.processingStatus !== undefined
     property int convertType: 0
     property int convertId: 0
+    property var uploadId: undefined
     property bool isCloud: false
     property int cloudScoreId: 0
     property bool showRemoveFromRecentFiles: false
@@ -53,7 +54,8 @@ FocusScope {
     signal removeFromRecentFilesRequested(string scorePath)
     signal deleteScoreRequested(int scoreId, string scoreName)
     signal retryRequested()
-    signal cancelRequested(int convertType, int convertId)
+    signal cancelUploadRequested(int uploadId)
+    signal cancelConversionRequested(int convertType, int convertId)
 
     NavigationControl {
         id: navCtrl
@@ -363,7 +365,13 @@ FocusScope {
             navigationColumn: root.navigation.column + 2
 
             onRetryRequested: root.retryRequested()
-            onCancelRequested: root.cancelRequested(root.convertType, root.convertId)
+            onCancelRequested: {
+                if (Boolean(root.uploadId)) {
+                    root.cancelUploadRequested(root.uploadId)
+                } else {
+                    root.cancelConversionRequested(root.convertType, root.convertId)
+                }
+            }
         }
     }
 

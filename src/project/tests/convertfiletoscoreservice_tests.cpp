@@ -626,11 +626,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadFails_Finish
     ON_CALL(*m_convertService, uploadToConvert(_))
     .WillByDefault(Return(uploadProgress));
 
-    // [THEN] The failure is not reported as a finished conversion
+    // [THEN] The failure is not reported as a finished conversion, and nothing is saved
     bool convertFinishedReceived = false;
     m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
         convertFinishedReceived = true;
     });
+
+    EXPECT_CALL(*m_fileSystem, writeFile(_, _)).Times(0);
 
     // [WHEN] Uploading
     RetVal<Progress> progress = m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
@@ -644,12 +646,20 @@ TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadFails_Finish
         finishedRet = res.ret;
     });
 
+    bool uploadingChanged = false;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        uploadingChanged = true;
+    });
+
     uploadProgress->finish(make_ret(Ret::Code::UnknownError, std::string("network error")));
 
-    // [THEN] The progress finishes with the upload failure
+    // [THEN] The progress finishes with the upload failure, and the score is removed
     ASSERT_TRUE(finished);
     EXPECT_EQ(finishedRet.code(), static_cast<int>(mu::project::Err::ConvertUploadFailed));
     EXPECT_FALSE(convertFinishedReceived);
+    EXPECT_TRUE(uploadingChanged);
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
 TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadSucceeds_ReportsProgressAndPersistsWatchedItem)
@@ -752,46 +762,112 @@ TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadSucceeds_Per
 }
 
 // ==================================================
-// watchedScores()
+// uploadingScores() / cancelUpload()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_Initially_Empty)
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadingScores_WhileUploading_ContainsScoreAndFiresChanged)
 {
+    // [GIVEN] Nothing is being uploaded or converted yet
+    ASSERT_TRUE(m_service->uploadingScores().val.empty());
+    ASSERT_TRUE(m_service->watchedScores().val.empty());
+
+    // [GIVEN] An upload that hasn't finished yet
+    ON_CALL(*m_convertService, uploadToConvert(_))
+    .WillByDefault(Return(std::make_shared<Progress>()));
+
+    bool changed = false;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        changed = true;
+    });
+
+    // [WHEN] Uploading
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+
+    // [THEN] The score being uploaded is reported, and the change is signaled
+    EXPECT_TRUE(changed);
+    EXPECT_THAT(m_service->uploadingScores().val, ElementsAre(Field(&UploadingScore::name, String(u"My Score"))));
     EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterUpload_ContainsScoreAndFiresChanged)
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadingScores_UploadSucceeds_MovesScoreToWatched)
 {
-    // [GIVEN] The upload succeeds, and polling is left pending (the item stays watched)
+    // [GIVEN] An upload in progress, with polling left pending
     ON_CALL(*m_configuration, watchedConvertsJsonPath())
     .WillByDefault(Return(io::path_t("/watched.json")));
     ON_CALL(*m_fileSystem, writeFile(_, _))
     .WillByDefault(Return(make_ok()));
-
-    auto uploadProgress = std::make_shared<Progress>();
-    const io::paths_t paths { "/some/path/file.pdf" };
-    ON_CALL(*m_convertService, uploadToConvert(_))
-    .WillByDefault(Return(uploadProgress));
     ON_CALL(*m_convertService, fetchQueue())
     .WillByDefault(Invoke([] {
         return pendingPromise<RetVal<ConvertQueueList> >();
     }));
 
-    bool changed = false;
-    m_service->watchedScores().notification.onNotify(nullptr, [&] {
-        changed = true;
+    auto uploadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, uploadToConvert(_))
+    .WillByDefault(Return(uploadProgress));
+
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+
+    int uploadingChangedCount = 0;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        ++uploadingChangedCount;
     });
 
-    // [WHEN] Starting the conversion and letting the upload finish
-    m_service->uploadToConvert(OmrConvertInput { paths }, u"My Score");
+    int watchedChangedCount = 0;
+    m_service->watchedScores().notification.onNotify(nullptr, [&] {
+        ++watchedChangedCount;
+    });
+
+    // [WHEN] The upload succeeds
     finishUpload(uploadProgress, TEST_QUEUE_ID);
 
-    // [THEN] The score being converted is reported, and the change is signaled
-    EXPECT_TRUE(changed);
-    const WatchedScoreList watchedScores = m_service->watchedScores().val;
-    ASSERT_EQ(watchedScores.size(), 1u);
-    EXPECT_EQ(watchedScores.front().name, u"My Score");
+    // [THEN] The score moves from uploading to watched, and both changes are signaled
+    EXPECT_EQ(uploadingChangedCount, 1);
+    EXPECT_EQ(watchedChangedCount, 1);
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
+    EXPECT_THAT(m_service->watchedScores().val, ElementsAre(Field(&WatchedScore::name, String(u"My Score"))));
 }
+
+TEST_F(Project_ConvertFileToScoreServiceTest, CancelUpload_RemovesFromUploadingScores)
+{
+    // [GIVEN] An upload in progress
+    auto uploadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, uploadToConvert(_))
+    .WillByDefault(Return(uploadProgress));
+
+    RetVal<Progress> progress = m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+    ASSERT_TRUE(progress.ret);
+
+    Ret finishedRet;
+    progress.val.finished().onReceive(nullptr, [&](const ProgressResult& res) {
+        finishedRet = res.ret;
+    });
+
+    bool watchedChanged = false;
+    m_service->watchedScores().notification.onNotify(nullptr, [&] {
+        watchedChanged = true;
+    });
+
+    // [THEN] Nothing is saved
+    EXPECT_CALL(*m_fileSystem, writeFile(_, _)).Times(0);
+
+    // [WHEN] Canceling the upload
+    const UploadingScoreList uploadingScores = m_service->uploadingScores().val;
+    ASSERT_FALSE(uploadingScores.empty());
+    m_service->cancelUpload(uploadingScores.front().uploadId);
+
+    // [THEN] The upload is canceled, its progress finishes with Cancel, and the score is removed
+    EXPECT_TRUE(uploadProgress->isCanceled());
+    EXPECT_EQ(finishedRet.code(), static_cast<int>(Ret::Code::Cancel));
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
+
+    // [THEN] The watched scores are not affected
+    EXPECT_FALSE(watchedChanged);
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
+}
+
+// ==================================================
+// watchedScores()
+// ==================================================
 
 TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterDone_NoLongerContainsScore)
 {
@@ -1755,10 +1831,10 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToCon
 }
 
 // ==================================================
-// deleteConversion()
+// cancelConversion()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Success_RemovesFromWatchedScores)
+TEST_F(Project_ConvertFileToScoreServiceTest, CancelConversion_RemovesFromWatchedScores)
 {
     // [GIVEN] A watched, still-processing conversion
     ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
@@ -1766,21 +1842,30 @@ TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Success_RemovesFr
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
     ASSERT_EQ(m_service->watchedScores().val.size(), 1u);
 
+    bool uploadingChanged = false;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        uploadingChanged = true;
+    });
+
     // [THEN] The deletion is delegated to the convert service
     EXPECT_CALL(*m_convertService, deleteConversion(ConvertType::Omr, TEST_QUEUE_ID))
     .WillOnce(Invoke([](auto, auto) {
         return resolvedPromise<Ret>(make_ok());
     }));
 
-    // [WHEN] Deleting the conversion
-    m_service->deleteConversion(ConvertType::Omr, TEST_QUEUE_ID);
+    // [WHEN] Canceling the conversion
+    m_service->cancelConversion(ConvertType::Omr, TEST_QUEUE_ID);
     pumpEvents();
 
     // [THEN] It is no longer watched
     EXPECT_TRUE(m_service->watchedScores().val.empty());
+
+    // [THEN] The uploading scores are not affected
+    EXPECT_FALSE(uploadingChanged);
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Fails_KeepsWatching)
+TEST_F(Project_ConvertFileToScoreServiceTest, CancelConversion_Fails_KeepsWatching)
 {
     // [GIVEN] A watched, still-processing conversion
     ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
@@ -1794,8 +1879,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Fails_KeepsWatchi
         return resolvedPromise<Ret>(make_ret(muse::cloud::Err::UnknownError));
     }));
 
-    // [WHEN] Deleting the conversion
-    m_service->deleteConversion(ConvertType::Omr, TEST_QUEUE_ID);
+    // [WHEN] Canceling the conversion
+    m_service->cancelConversion(ConvertType::Omr, TEST_QUEUE_ID);
     pumpEvents();
 
     // [THEN] It is still watched

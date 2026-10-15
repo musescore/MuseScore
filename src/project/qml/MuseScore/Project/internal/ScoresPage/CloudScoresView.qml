@@ -97,7 +97,11 @@ ScoresView {
 
             onRetryRequested: cloudScoresModel.retryAllConversions()
 
-            onCancelRequested: function(convertType, convertId) {
+            onCancelUploadRequested: function(uploadId) {
+                cloudScoresModel.cancelUpload(uploadId)
+            }
+
+            onCancelConversionRequested: function(convertType, convertId) {
                 cloudScoresModel.cancelConversion(convertType, convertId)
             }
         }
@@ -140,7 +144,11 @@ ScoresView {
 
             onRetryRequested: cloudScoresModel.retryAllConversions()
 
-            onCancelRequested: function(convertType, convertId) {
+            onCancelUploadRequested: function(uploadId) {
+                cloudScoresModel.cancelUpload(uploadId)
+            }
+
+            onCancelConversionRequested: function(convertType, convertId) {
                 cloudScoresModel.cancelConversion(convertType, convertId)
             }
         }
