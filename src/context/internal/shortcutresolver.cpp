@@ -94,10 +94,7 @@ Shortcut ShortcutResolver::selectOne(const ShortcutList& list) const
         if (a.scope != b.scope) {
             return scopePriority(a.scope) > scopePriority(b.scope);
         }
-        if (a.command == rcommand::NONE_COMMAND) {
-            return false;
-        }
-        return true;
+        return a.command != rcommand::NONE_COMMAND && b.command == rcommand::NONE_COMMAND;
     });
 
     return sorted.front();
