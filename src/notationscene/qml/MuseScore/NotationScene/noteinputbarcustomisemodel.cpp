@@ -45,7 +45,7 @@ void NoteInputBarCustomiseModel::load()
 {
     TRACEFUNC;
 
-    QList<Item*> items;
+    ItemList items;
 
     ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NoteInputBarModel::defaultNoteInputConfig());
 
@@ -258,7 +258,7 @@ void NoteInputBarCustomiseModel::saveActions()
     TRACEFUNC;
 
     ToolConfig config;
-    for (const Item* item : items()) {
+    for (const QObject* item : items()) {
         auto customiseItem = dynamic_cast<const NoteInputBarCustomiseItem*>(item);
         if (!customiseItem) {
             continue;
