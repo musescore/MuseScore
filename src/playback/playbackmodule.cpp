@@ -39,7 +39,6 @@
 using namespace mu::playback;
 using namespace muse;
 using namespace muse::modularity;
-using namespace muse::actions;
 
 static const std::string mname("playback");
 

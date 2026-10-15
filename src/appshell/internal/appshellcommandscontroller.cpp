@@ -37,12 +37,10 @@
 
 #include "audio/common/soundfonttypes.h"
 
-#include "rcommand/actiontocommand.h"
-
 #include "../appshellcommands.h"
+#include "project/projectcommands.h"
 
 #include "log.h"
-#include "rcommand/commandtypes.h"
 
 using namespace muse;
 using namespace mu::appshell;
@@ -93,41 +91,6 @@ void AppshellCommandsController::init()
             return muse::make_ok();
         });
     }
-
-    // compat
-    {
-        using namespace muse::rcommand;
-        static const std::vector<ActionToCommand> actionToCommands = {
-            { "quit", APP_QUIT_COMMAND, make_conv({ { "all_instances", param<bool> }, { "installer_path", param<io::path_t> } }) },
-            { "restart", APP_RESTART_COMMAND, {} },
-            { "fullscreen", APP_FULLSCREEN_COMMAND, {} },
-            { "about-musescore", APP_ABOUT_MUSESCORE_COMMAND, {} },
-            { "about-qt", APP_ABOUT_QT_COMMAND, {} },
-            { "about-musicxml", APP_ABOUT_MUSICXML_COMMAND, {} },
-            { "online-handbook", APP_ONLINE_HANDBOOK_COMMAND, {} },
-            { "ask-help", APP_ASK_HELP_COMMAND, {} },
-            { "accessibility-statement", APP_ACCESSIBILITY_STATEMENT_COMMAND, {} },
-            { "preference-dialog", APP_PREFERENCES_COMMAND, {} },
-            { "revert-factory", APP_REVERT_TO_FACTORY_COMMAND, {} },
-            { "manage-plugins", APP_EXTENSIONS_COMMAND, {} },
-            { "toggle-transport", DOCK_TOGGLE_PLAYBACK_COMMAND, {} },
-            { "toggle-noteinput", DOCK_TOGGLE_NOTEINPUT_COMMAND, {} },
-            { "toggle-palettes", DOCK_TOGGLE_PALETTES_COMMAND, {} },
-            { "toggle-instruments", DOCK_TOGGLE_INSTRUMENTS_COMMAND, {} },
-            { "toggle-properties-panel", DOCK_TOGGLE_PROPERTIES_COMMAND, {} },
-            { "toggle-selection-filter", DOCK_TOGGLE_SELECTION_FILTER_COMMAND, {} },
-            { "toggle-undo-history-panel", DOCK_TOGGLE_UNDO_HISTORY_COMMAND, {} },
-            { "toggle-navigator", DOCK_TOGGLE_NAVIGATOR_COMMAND, {} },
-            { "toggle-braille-panel", DOCK_TOGGLE_BRAILLE_COMMAND, {} },
-            { "toggle-timeline", DOCK_TOGGLE_TIMELINE_COMMAND, {} },
-            { "toggle-mixer", DOCK_TOGGLE_MIXER_COMMAND, {} },
-            { "toggle-piano-keyboard", DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND, {} },
-            { "toggle-percussion-panel", DOCK_TOGGLE_PERCUSSION_COMMAND, {} },
-            { "toggle-statusbar", DOCK_TOGGLE_STATUSBAR_COMMAND, {} },
-        };
-
-        rcommand::registerActionToCommand(this, actionToCommands, commandDispatcher(), dispatcher());
-    }
 }
 
 bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
@@ -148,7 +111,7 @@ bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
 
             if (openProjectScenario()->isUrlSupported(url)) {
                 if (startupScenario()->startupCompleted()) {
-                    dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
+                    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND, { { "url", muse::Val(url.toString()) } });
                 } else {
                     startupScenario()->setStartupScoreFile(project::ProjectFile { url });
                 }

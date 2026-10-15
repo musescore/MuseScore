@@ -32,6 +32,7 @@
 
 #include "async/async.h"
 #include "defer.h"
+#include "types/ret.h"
 #include "rcommand/commandtypes.h"
 
 #include "notation/imasternotation.h"
@@ -39,30 +40,17 @@
 #include "notation/inotationselection.h"
 
 #include "inotationproject.h"
-
-#include "../projectcommands.h"
-#include "rcommand/actiontocommand.h"
 #include "types/projecturis.h"
 
+#include "../projectcommands.h"
+#include "appshell/appshellcommands.h"
+
 #include "log.h"
-#include "types/ret.h"
 
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
 using namespace muse;
-using namespace muse::actions;
-
-auto openArgs = [](const rcommand::Command& command, const ActionData& args) -> muse::rcommand::CommandQuery {
-    rcommand::CommandQuery query(command);
-    if (args.count() > 0) {
-        query.set("url", Val(args.arg<QUrl>(0).toString().toStdString()));
-    }
-    if (args.count() > 1) {
-        query.set("display_name", Val(args.arg<QString>(1).toStdString()));
-    }
-    return query;
-};
 
 void ProjectActionsController::init()
 {
@@ -91,33 +79,6 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_CLEAR_RECENT_COMMAND, [this]() { return clearRecentScores(); });
     d->onRequest(this, PROJECT_CONTINUE_LAST_SESSION_COMMAND, [this]() { return continueLastSession(); });
     d->onRequest(this, PROJECT_PROPERTIES_COMMAND, [this]() { return openProjectProperties(); });
-
-    // compat
-    {
-        using namespace muse::rcommand;
-        static const std::vector<ActionToCommand> actionToCommand = {
-            { "file-new", PROJECT_NEW_COMMAND, {} },
-            { "file-open", PROJECT_OPEN_COMMAND, openArgs },
-            { "file-close", PROJECT_CLOSE_COMMAND, {} },
-            { "file-save", PROJECT_SAVE_COMMAND, {} },
-            { "file-save-as", PROJECT_SAVE_AS_COMMAND, {} },
-            { "file-save-a-copy", PROJECT_SAVE_A_COPY_COMMAND, {} },
-            { "file-save-selection", PROJECT_SAVE_SELECTION_COMMAND, {} },
-            { "file-save-to-cloud", PROJECT_SAVE_TO_CLOUD_COMMAND, {} },
-            { "file-save-at", PROJECT_SAVE_AT_COMMAND, make_conv({ { "path", param<io::path_t> } }) },
-            { "file-publish", PROJECT_PUBLISH_COMMAND, {} },
-            { "file-share-audio", PROJECT_SHARE_AUDIO_COMMAND, {} },
-            { "file-export", PROJECT_EXPORT_COMMAND, {} },
-            { "file-convert-to-score", PROJECT_CONVERT_TO_SCORE_COMMAND, {} },
-            { "export", PROJECT_EXPORT_COMMAND, {} },
-            { "print", PROJECT_PRINT_COMMAND, {} },
-            { "clear-recent", PROJECT_CLEAR_RECENT_COMMAND, {} },
-            { "continue-last-session", PROJECT_CONTINUE_LAST_SESSION_COMMAND, {} },
-            { "project-properties", PROJECT_PROPERTIES_COMMAND, {} },
-        };
-
-        rcommand::registerActionToCommand(this, actionToCommand, commandDispatcher(), dispatcher());
-    }
 
     saveProjectScenario()->busyChanged().onNotify(this, [this]() {
         m_busyChanged.notify();
@@ -233,37 +194,6 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
-{
-    if (!currentNotationProject()) {
-        static const std::unordered_set<ActionCode> DONT_REQUIRE_OPEN_PROJECT {
-            "file-new",
-            "file-open",
-            "file-convert-to-score",
-            "continue-last-session",
-            "clear-recent",
-        };
-
-        return muse::contains(DONT_REQUIRE_OPEN_PROJECT, code);
-    }
-
-    if (isBusy(BusyStatus::Uploading)) {
-        if (code == "file-save-to-cloud" || code == "file-publish") {
-            return false;
-        }
-    }
-
-    if (interactive()->currentUri().val == NOTATION_REVIEW_PAGE_URI) {
-        static const std::unordered_set<ActionCode> ALLOWED_ON_REVIEW_PAGE {
-            "file-close",
-        };
-
-        return muse::contains(ALLOWED_ON_REVIEW_PAGE, code);
-    }
-
-    return true;
-}
-
 muse::Ret ProjectActionsController::openPageIfNeed(muse::Uri pageUri)
 {
     if (!interactive()->isOpened(pageUri).val) {
@@ -355,7 +285,7 @@ muse::Ret ProjectActionsController::closeProject()
         if (ret && anyInstanceWithoutProject) {
             //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
             async::Async::call(this, [this]() {
-                dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
+                commandDispatcher()->dispatch(appshell::APP_QUIT_COMMAND, { { "all_instances", muse::Val(false) } });
             });
             multiwindowsProvider()->activateWindowWithoutProject();
         }

@@ -26,7 +26,6 @@
 
 #include "containers.h"
 #include "defer.h"
-#include "log.h"
 
 #include "midi/miditypes.h"
 
@@ -41,6 +40,9 @@
 #include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "playback/playbackcommands.h"
+#include "notationscene/notationcommands.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -242,7 +244,7 @@ void NotationMidiInput::startNoteInputIfNeed()
 
     if (configuration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKey()) {
         if (m_notationInteraction->selection()->elementsSelected(NOTE_REST_TYPES) && containsNoteOn()) {
-            dispatcher()->dispatch("command://notation/toggle-note-input");
+            commandsDispatcher()->dispatch(TOGGLE_NOTE_INPUT_COMMAND);
         }
     }
 }

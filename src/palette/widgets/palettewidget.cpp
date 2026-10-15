@@ -41,8 +41,6 @@
 #include "translation.h"
 #include "types/bytearray.h"
 
-#include "actions/actiontypes.h"
-
 #include "draw/types/color.h"
 #include "draw/types/pen.h"
 
@@ -75,7 +73,6 @@ using namespace muse::io;
 using namespace mu::palette;
 using namespace mu::engraving;
 using namespace muse::draw;
-using namespace muse::actions;
 
 PaletteWidget::PaletteWidget(QWidget* parent, bool setIocContext)
     : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))

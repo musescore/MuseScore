@@ -28,8 +28,6 @@
 #include "global/types/ret.h"
 
 #include "modularity/ioc.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/commandable.h"
 #include "rcommand/icommanddispatcher.h"
 #include "async/asyncable.h"
@@ -38,11 +36,10 @@
 #include "ipaletteconfiguration.h"
 
 namespace mu::palette {
-class PaletteActionsController : public IPaletteCommandsController, public muse::actions::Actionable, public muse::async::Asyncable,
-    public muse::Contextable, public muse::rcommand::Commandable
+class PaletteActionsController : public IPaletteCommandsController, public muse::async::Asyncable, public muse::Contextable,
+    public muse::rcommand::Commandable
 {
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
@@ -54,8 +51,6 @@ public:
     }
 
     void init();
-
-    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     muse::ValCh<bool> isMasterPaletteOpened() const;
 
@@ -76,7 +71,6 @@ private:
     notation::INotationInteractionPtr notationInteraction() const;
 
     muse::ValCh<bool> m_masterPaletteOpened;
-    muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 
     muse::async::Notification m_paletteSearchRequested;
     muse::async::Notification m_applyElementRequested;

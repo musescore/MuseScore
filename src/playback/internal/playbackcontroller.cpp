@@ -2013,15 +2013,6 @@ void PlaybackController::setIsExportingAudio(bool exporting)
     }
 }
 
-bool PlaybackController::canReceiveAction(const muse::actions::ActionCode&) const
-{
-    if (!m_masterNotation || !m_masterNotation->hasParts()) {
-        return false;
-    }
-
-    return interactive()->currentUri().val != NOTATION_REVIEW_PAGE_URI;
-}
-
 const std::map<TrackId, AudioResourceMeta>& PlaybackController::onlineSounds() const
 {
     return m_onlineSoundsController->onlineSounds();

@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "interactive/iplatforminteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
@@ -47,7 +47,7 @@ class ScoresPageModel : public QObject, public muse::Contextable, public muse::a
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);

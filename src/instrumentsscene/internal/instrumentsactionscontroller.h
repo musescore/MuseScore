@@ -22,11 +22,9 @@
 
 #pragma once
 
-#include "actions/actionable.h"
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/commandable.h"
 #include "rcommand/icommanddispatcher.h"
 #include "notationscene/iselectinstrumentscenario.h"
@@ -34,10 +32,8 @@
 #include "interactive/iinteractive.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsActionsController : public muse::actions::Actionable, public muse::rcommand::Commandable, public muse::async::Asyncable,
-    public muse::Contextable
+class InstrumentsActionsController : public muse::rcommand::Commandable, public muse::async::Asyncable, public muse::Contextable
 {
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
@@ -51,8 +47,6 @@ public:
     }
 
     virtual ~InstrumentsActionsController() = default;
-
-    bool canReceiveAction(const muse::actions::ActionCode&) const override;
 
     void init();
 

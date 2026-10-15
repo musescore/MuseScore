@@ -32,11 +32,13 @@
 
 #include "project/internal/convertfiletoscorescenario.h"
 #include "project/projecterrors.h"
+#include "project/projectcommands.h"
 
 #include "mocks/convertfiletoscoreservicemock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "interactive/tests/mocks/interactivemock.h"
-#include "actions/tests/mocks/actionsdispatchermock.h"
+#include "rcommand/commandtypes.h"
+#include "rcommand/tests/mocks/commanddispatchermock.h"
 #include "cloud/tests/mocks/musescorecomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
 #include "toast/tests/mocks/toastservicemock.h"
@@ -159,7 +161,7 @@ protected:
 
         m_service = std::make_shared<NiceMock<ConvertFileToScoreServiceMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
-        m_dispatcher = std::make_shared<NiceMock<muse::actions::ActionsDispatcherMock> >();
+        m_commandDispatcher = std::make_shared<NiceMock<muse::rcommand::CommandDispatcherMock> >();
         m_configuration = std::make_shared<NiceMock<ProjectConfigurationMock> >();
         m_museScoreComService = std::make_shared<NiceMock<MuseScoreComServiceMock> >();
         m_authorization = std::make_shared<NiceMock<AuthorizationServiceMock> >();
@@ -168,7 +170,7 @@ protected:
         m_scenario->service.set(m_service);
         m_scenario->interactive.set(m_interactive);
         m_scenario->toastService.set(m_toastService);
-        m_scenario->dispatcher.set(m_dispatcher);
+        m_scenario->commandDispatcher.set(m_commandDispatcher);
         m_scenario->configuration.set(m_configuration);
         m_scenario->museScoreComService.set(m_museScoreComService);
 
@@ -232,7 +234,7 @@ protected:
     std::shared_ptr<ConvertFileToScoreServiceMock> m_service;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<toast::ToastServiceMock> m_toastService;
-    std::shared_ptr<muse::actions::ActionsDispatcherMock> m_dispatcher;
+    std::shared_ptr<muse::rcommand::CommandDispatcherMock> m_commandDispatcher;
     std::shared_ptr<ProjectConfigurationMock> m_configuration;
     std::shared_ptr<MuseScoreComServiceMock> m_museScoreComService;
     std::shared_ptr<AuthorizationServiceMock> m_authorization;
@@ -310,10 +312,16 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_Disp
     }));
 
     // [THEN] The score is opened via the cloud open-score URL, not a local path
-    EXPECT_CALL(*m_dispatcher, dispatch(actions::ActionCode("file-open"), Truly([](const actions::ActionData& data) {
-        return data.arg<QUrl>(0) == QUrl("musescore://open-score/555");
+    EXPECT_CALL(*m_commandDispatcher, dispatch(Truly([](const rcommand::Request& request) {
+        return request.command == PROJECT_OPEN_COMMAND
+               && QUrl(request.params.at("url").toQString()) == QUrl("musescore://open-score/555");
     })))
-    .Times(1);
+    .Times(1)
+    .WillOnce([](const rcommand::Request& request) {
+        return async::make_promise<rcommand::Response>([request](auto resolve) {
+            return resolve(rcommand::make_response(request, make_ok()));
+        });
+    });
 
     // [WHEN] The service reports a successful conversion
     convertFinished.send(make_ok(), watched);

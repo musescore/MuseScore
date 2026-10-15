@@ -27,9 +27,7 @@
 #include <QMimeData>
 
 #include "async/async.h"
-#include "log.h"
 
-#include "actions/actiontypes.h"
 #include "engraving/dom/shadownote.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
@@ -42,12 +40,13 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::draw;
-using namespace muse::actions;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
