@@ -52,7 +52,8 @@ Item {
     signal removeFromRecentFilesRequested(var scorePath)
     signal deleteScoreRequested(var scoreId, var scoreName)
     signal retryRequested()
-    signal cancelRequested(int convertType, int convertId)
+    signal cancelConversionRequested(int convertType, int convertId)
+    signal cancelUploadRequested(int uploadId)
 
     component ColumnItem : QtObject {
         property string header
@@ -254,8 +255,12 @@ Item {
 
                         onRetryRequested: root.retryRequested()
 
-                        onCancelRequested: function(convertType, convertId) {
-                            root.cancelRequested(convertType, convertId)
+                        onCancelUploadRequested: function(uploadId) {
+                            root.cancelUploadRequested(uploadId)
+                        }
+
+                        onCancelConversionRequested: function(convertType, convertId) {
+                            root.cancelConversionRequested(convertType, convertId)
                         }
                     }
                 }

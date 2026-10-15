@@ -36,7 +36,11 @@ ScoresListView {
 
     onRetryRequested: model.retryAllConversions()
 
-    onCancelRequested: function(convertType, convertId) {
+    onCancelUploadRequested: function(uploadId) {
+        model.cancelUpload(uploadId)
+    }
+
+    onCancelConversionRequested: function(convertType, convertId) {
         model.cancelConversion(convertType, convertId)
     }
 

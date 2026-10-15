@@ -61,6 +61,9 @@ public:
     //! Emits the final result of a processed conversion (failure, or success with the WatchedScore)
     virtual muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const = 0;
 
+    //! Uploads in progress (not saved, not polled)
+    virtual muse::ValNt<UploadingScoreList> uploadingScores() const = 0;
+
     //! All pending/reviewable conversions from the server's convert queue
     virtual muse::ValNt<WatchedScoreList> watchedScores() const = 0;
 
@@ -76,8 +79,11 @@ public:
     virtual void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) = 0;
     virtual void submitReviewComment(int scoreId, const QString& comment) = 0;
 
-    //! Deletes a watched conversion, both server-side and from watchedScores()
-    virtual void deleteConversion(ConvertType type, int convertId) = 0;
+    //! Aborts an upload in progress
+    virtual void cancelUpload(int uploadId) = 0;
+
+    //! Cancels a watched conversion, removing it both server-side and from watchedScores()
+    virtual void cancelConversion(ConvertType type, int convertId) = 0;
 };
 
 using IConvertFileToScoreServicePtr = std::shared_ptr<IConvertFileToScoreService>;

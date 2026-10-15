@@ -1458,6 +1458,45 @@ TEST_F(Cloud_MuseScoreComServiceTest, UploadToConvert_ReportsProgress)
     EXPECT_EQ(total, 10);
 }
 
+TEST_F(Cloud_MuseScoreComServiceTest, UploadToConvert_Canceled_CancelsRequest)
+{
+    // [GIVEN] The service is initialized, and the files are being uploaded
+    initService();
+
+    ProgressPtr progress = m_service->uploadToConvert(makeConvertUploadData());
+    watch(progress);
+    processMessages();
+
+    // [WHEN] The uploading is canceled
+    progress->cancel();
+    processMessages();
+
+    // [THEN] The request is canceled, and the uploading is finished once, as canceled
+    EXPECT_TRUE(pendingRequest(CONVERT_PATH).progress.isCanceled());
+    EXPECT_EQ(progressResult().ret.code(), static_cast<int>(Ret::Code::Cancel));
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, UploadToConvert_CanceledWhileRefreshingTokens_NoRetry)
+{
+    // [GIVEN] The service is initialized, and the access token has expired during the upload
+    initService();
+
+    willReply(REFRESH_TOKENS_PATH, NEW_TOKENS_JSON);
+
+    ProgressPtr progress = m_service->uploadToConvert(makeConvertUploadData());
+    watch(progress);
+    processMessages();
+    finishRequest(CONVERT_PATH, TOKEN_EXPIRED_RET);
+
+    // [WHEN] The uploading is canceled before the tokens are refreshed
+    progress->cancel();
+    finishRequest(REFRESH_TOKENS_PATH);
+
+    // [THEN] The upload is not retried, and the uploading is finished once, as canceled
+    EXPECT_TRUE(findPendingRequest(CONVERT_PATH) == m_pendingRequests.end());
+    EXPECT_EQ(progressResult().ret.code(), static_cast<int>(Ret::Code::Cancel));
+}
+
 TEST_F(Cloud_MuseScoreComServiceTest, UploadToConvert_Failed_ReturnsServerErrorCode)
 {
     // [GIVEN] The service is initialized

@@ -61,11 +61,17 @@ public:
     //! is already available in the user's MuseScore.com account, described by the WatchedScore
     virtual muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const = 0;
 
+    //! Uploads in progress, before they reach the convert queue
+    virtual muse::ValNt<UploadingScoreList> uploadingScores() const = 0;
+
     //! All pending/reviewable conversions from the server's convert queue
     virtual muse::ValNt<WatchedScoreList> watchedScores() const = 0;
 
     //! Whether the cloud score with the given id is a converted score still awaiting a quality review
     virtual bool isAwaitingReview(int scoreId) const = 0;
+
+    //! Confirms with the user, then aborts an upload in progress
+    virtual void cancelUpload(int uploadId) = 0;
 
     //! Confirms with the user, then cancels a watched conversion
     virtual void cancelConversion(ConvertType type, int convertId) = 0;

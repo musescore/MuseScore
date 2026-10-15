@@ -118,7 +118,7 @@ Matcher<const std::vector<toast::ToastAction>&> ToastActionCodesAre(const std::v
     return FieldsAre(&toast::ToastAction::code, expectedCodes);
 }
 
-//! NOTE: shared by the ConvertFiles_NoPaths_* tests, which resolve the picker with a single OMR file
+//! NOTE: shared by the ConvertFiles_* tests, which resolve the picker with a single OMR file
 QVariantMap pickedOmrFileSelection()
 {
     return {
@@ -200,6 +200,12 @@ protected:
 
         // [THEN] Validation fails
         EXPECT_FALSE(result.ret);
+    }
+
+    void expectNoErrorDialog()
+    {
+        EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
+        EXPECT_CALL(*m_interactive, error(_, _, _, _, _, _)).Times(0);
     }
 
     std::shared_ptr<ConvertFileToScoreScenario> m_scenario;
@@ -541,7 +547,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateFiles_Success_NoDialog)
     .WillByDefault(Return(RetVal<ConvertFilesValidation>::make_ok(validation)));
 
     // [THEN] No error dialog is shown
-    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
+    expectNoErrorDialog();
 
     // [WHEN] Validating the files
     RetVal<ConvertFilesValidation> result = m_scenario->validateFiles(paths);
@@ -650,7 +656,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Success_NoDialog)
     .WillByDefault(Return(make_ok()));
 
     // [THEN] No error dialog is shown
-    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
+    expectNoErrorDialog();
 
     // [WHEN] Validating the link
     Ret ret = m_scenario->validateLink(link);
@@ -766,7 +772,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
 // convertFiles()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsError_WhenCloudUnavailable)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_ShowsError_WhenCloudUnavailable)
 {
     // [GIVEN] The cloud is unavailable
     ON_CALL(*m_authorization, checkCloudIsAvailableAsync())
@@ -795,7 +801,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsError_W
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_OpensPicker_WhenAlreadyAuthorized)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_OpensPicker_WhenAlreadyAuthorized)
 {
     // [GIVEN] The cloud is available and the user is already authorized (default SetUp state)
 
@@ -812,7 +818,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_OpensPicker_
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_PromptsAuthorization_WhenNotAuthorized)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_PromptsAuthorization_WhenNotAuthorized)
 {
     // [GIVEN] The cloud is available but the user isn't authorized
     ON_CALL(*m_authorization, userAuthorized())
@@ -843,7 +849,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_PromptsAutho
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_WithPaths_StopsWhenNotAllowed)
 {
     // [GIVEN] The cloud is unavailable
     ON_CALL(*m_authorization, checkCloudIsAvailableAsync())
@@ -872,7 +878,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationFails)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_WithPaths_StopsWhenValidationFails)
 {
     // [GIVEN] The service rejects the files (the exact error dialog per code is covered by the validateFiles() tests)
     const io::paths_t paths { "/some/file.xyz" };
@@ -893,7 +899,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationF
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsProcessingDialog_WhenEnabled)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_ShowsProcessingDialog_WhenEnabled)
 {
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
@@ -921,7 +927,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsProcess
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_OpensHomeScoresPage)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_GoToScores_OpensHomeScoresPage)
 {
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
@@ -954,7 +960,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_O
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_DontShowAgain_UpdatesConfig)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_DontShowAgain_UpdatesConfig)
 {
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
@@ -985,7 +991,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_DontShowAgai
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ProcessingDialogDismissed_DoesNotChangeConfig)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_ProcessingDialogDismissed_DoesNotChangeConfig)
 {
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
@@ -1019,7 +1025,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ProcessingDi
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_NoProcessingDialog_WhenDisabled)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoProcessingDialog_WhenDisabled)
 {
     // [GIVEN] The processing dialog is disabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
@@ -1042,7 +1048,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_NoProcessing
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_SchemelessLink_StartsAudio2ScoreConvertWithScheme)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_SchemelessLink_StartsAudio2ScoreConvertWithScheme)
 {
     // [GIVEN] The user enters a link without a scheme in the picker dialog
     const QVariantMap selectionMap {
@@ -1067,7 +1073,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_SchemelessLi
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_FileReadFailure_ShowsFileReadError)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_FileReadFailure_ShowsFileReadError)
 {
     // [GIVEN] The service fails to read the picked file
     ON_CALL(*m_service, uploadToConvert(_, _))
@@ -1097,7 +1103,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_FileReadFail
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_MultipleFilesReadFailure_ShowsPluralFileReadError)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_MultipleFilesReadFailure_ShowsPluralFileReadError)
 {
     // [GIVEN] The service fails to read one of the picked files
     ON_CALL(*m_service, uploadToConvert(_, _))
@@ -1132,7 +1138,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_MultipleFile
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_ShowsUnknownError)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Failure_ShowsUnknownError)
 {
     // [GIVEN] The service fails to start the conversion
     ON_CALL(*m_service, uploadToConvert(_, _))
@@ -1162,7 +1168,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_Show
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailure_ShowsUploadFailedNotification)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UploadFailure_ShowsUploadFailedNotification)
 {
     // [GIVEN] The upload starts
     Progress uploadProgress;
@@ -1188,7 +1194,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailur
     }));
 
     // [THEN] No error dialog is shown
-    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
+    expectNoErrorDialog();
 
     // [WHEN] Converting with no pre-selected files, and the upload then fails
     m_scenario->convertFiles();
@@ -1198,7 +1204,32 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailur
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailure_Retry_ReuploadsSameInput)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UploadCanceled_ShowsNoError)
+{
+    // [GIVEN] The upload starts
+    Progress uploadProgress;
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted(uploadProgress)));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    // [THEN] Neither a notification nor an error dialog is shown
+    EXPECT_CALL(*m_toastService, show(_, _, _, _, _)).Times(0);
+    expectNoErrorDialog();
+
+    // [WHEN] Converting with no pre-selected files, and the upload is then canceled
+    m_scenario->convertFiles();
+    pumpEvents();
+
+    uploadProgress.finish(make_ret(Ret::Code::Cancel));
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UploadFailure_Retry_ReuploadsSameInput)
 {
     // [GIVEN] The user picks a file via the picker dialog, only once
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1228,7 +1259,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailur
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsOmrConvert)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_WithPaths_Proceeds_StartsOmrConvert)
 {
     // [GIVEN] The service accepts the file as an OMR candidate
     const io::paths_t paths { "/some/path/file.xyz" };
@@ -1276,7 +1307,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsOmrCo
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsAudio2ScoreConvert)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_WithPaths_Proceeds_StartsAudio2ScoreConvert)
 {
     // [GIVEN] The service accepts the file as an Audio2Score candidate
     const io::paths_t paths { "/some/path/song.xyz" };
@@ -1325,7 +1356,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsAudio
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UserCancelsConfirm_DoesNotStartConvert)
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_WithPaths_UserCancelsConfirm_DoesNotStartConvert)
 {
     // [GIVEN] The service accepts the file
     const io::paths_t paths { "/some/path/file.xyz" };
@@ -1388,10 +1419,57 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_RepeatedCallsWhilePe
 }
 
 // ==================================================
+// cancelUpload()
+// ==================================================
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelUpload_UserConfirms_CancelsUpload)
+{
+    constexpr int uploadId = 7;
+
+    const std::string title = muse::trc("project/convert", "Are you sure you want to cancel this file conversion?");
+    const std::string text = muse::trc("project/convert",
+                                       "Processing will be canceled and this score will be removed from your scores.");
+
+    // [GIVEN] The user confirms with "Yes, cancel"
+    EXPECT_CALL(*m_interactive,
+                question(title, TextIs(text),
+                         ButtonIdsAre({ int(IInteractive::Button::No), int(IInteractive::Button::Yes) }),
+                         int(IInteractive::Button::No), IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::Yes)));
+    }));
+
+    // [THEN] The upload is canceled
+    EXPECT_CALL(*m_service, cancelUpload(uploadId));
+
+    // [WHEN] Cancelling the upload
+    m_scenario->cancelUpload(uploadId);
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelUpload_UserKeepsConverting_DoesNotCancelUpload)
+{
+    // [GIVEN] The user dismisses with "Continue converting"
+    ON_CALL(*m_interactive, question(_, _, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::No)));
+    }));
+
+    // [THEN] The upload is not canceled
+    EXPECT_CALL(*m_service, cancelUpload(_)).Times(0);
+
+    // [WHEN] Cancelling the upload
+    m_scenario->cancelUpload(7);
+
+    pumpEvents();
+}
+
+// ==================================================
 // cancelConversion()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserConfirms_DeletesConversion)
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserConfirms_CancelsConversion)
 {
     constexpr int convertId = 42;
 
@@ -1408,8 +1486,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserConfirms_Del
         return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::Yes)));
     }));
 
-    // [THEN] The conversion is deleted
-    EXPECT_CALL(*m_service, deleteConversion(ConvertType::Omr, convertId))
+    // [THEN] The conversion is canceled
+    EXPECT_CALL(*m_service, cancelConversion(ConvertType::Omr, convertId))
     .Times(1);
 
     // [WHEN] Cancelling the conversion
@@ -1418,7 +1496,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserConfirms_Del
     pumpEvents();
 }
 
-TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserKeepsConverting_DoesNotDeleteConversion)
+TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserKeepsConverting_DoesNotCancelConversion)
 {
     // [GIVEN] The user dismisses with "Continue converting"
     ON_CALL(*m_interactive, question(_, _, _, _, _, _))
@@ -1426,8 +1504,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, CancelConversion_UserKeepsConvert
         return resolvedResultPromise(IInteractive::Result(int(IInteractive::Button::No)));
     }));
 
-    // [THEN] The conversion is not deleted
-    EXPECT_CALL(*m_service, deleteConversion(_, _)).Times(0);
+    // [THEN] The conversion is not canceled
+    EXPECT_CALL(*m_service, cancelConversion(_, _)).Times(0);
 
     // [WHEN] Cancelling the conversion
     m_scenario->cancelConversion(ConvertType::Omr, 42);

@@ -64,10 +64,12 @@ public:
     void convertFiles(const muse::io::paths_t& paths = {}) override;
     muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const override;
 
+    muse::ValNt<UploadingScoreList> uploadingScores() const override;
     muse::ValNt<WatchedScoreList> watchedScores() const override;
 
     bool isAwaitingReview(int scoreId) const override;
 
+    void cancelUpload(int uploadId) override;
     void cancelConversion(ConvertType type, int convertId) override;
 
     muse::async::Channel<PollingStatus> pollingStatusChanged() const override;
@@ -87,6 +89,7 @@ private:
     ConvertSelection toConvertSelection(const muse::Val& val) const;
 
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
+    void confirmCancel(const std::function<void()>& onCancel);
 
     void startConvert(const ConvertInput& input, const muse::String& convertedScoreName);
 

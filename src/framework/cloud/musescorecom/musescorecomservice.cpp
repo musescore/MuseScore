@@ -1088,7 +1088,8 @@ ProgressPtr MuseScoreComService::uploadToConvert(const ConvertUploadDataPtr& dat
     executeAsyncRequest([this, data, progress]() {
         return doUploadToConvert(data, progress);
     }).onResolve(this, [progress](const Ret& ret) {
-        if (progress->isStarted()) {
+        //! NOTE: cancel() finishes it by itself
+        if (progress->isStarted() && !progress->isCanceled()) {
             progress->finish(ret);
         }
     });
@@ -1103,6 +1104,11 @@ Promise<Ret> MuseScoreComService::doUploadToConvert(const ConvertUploadDataPtr& 
     return make_promise<Ret>([this, data, progress](auto resolve, auto) {
         IF_ASSERT_FAILED(data->type != ConvertType::Unknown) {
             return resolve(make_ret(cloud::Err::InvalidData));
+        }
+
+        //! NOTE: possible when canceled while the tokens were being updated
+        if (progress->isCanceled()) {
+            return resolve(make_ret(Ret::Code::Cancel));
         }
 
         RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_CONVERT_UPLOAD_API_URL);
@@ -1122,7 +1128,16 @@ Promise<Ret> MuseScoreComService::doUploadToConvert(const ConvertUploadDataPtr& 
             progress->progress(current, total, msg);
         });
 
-        uploadProgress.val.finished().onReceive(this, [this, data, receivedData, resolve, progress](const ProgressResult& res) {
+        progress->canceled().onNotify(this, [uploadProgress]() mutable {
+            uploadProgress.val.cancel();
+        });
+
+        uploadProgress.val.finished().onReceive(this, [this, data, receivedData, resolve, progress,
+                                                       uploadProgress](const ProgressResult& res) mutable {
+            //! NOTE: cancel() finishes it again after the aborted reply did
+            uploadProgress.val.finished().disconnect(this);
+            progress->canceled().disconnect(this);
+
             if (!res.ret) {
                 printServerReply(*receivedData);
                 Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
