@@ -54,6 +54,7 @@ class Segment;
 class SkylineLine;
 class Spanner;
 class StaffText;
+class StaveSharingChange;
 class Sticking;
 class System;
 class SystemText;
@@ -101,7 +102,7 @@ private:
         double measurePos = 0.0;
         std::map<EngravingItem*, PointF> elementPositions;
         std::map<EngravingItem*, double> elementWidths;
-        std::map<SharedPart*, SharedTrackMap> sharedTrackMaps;
+        std::map<SharedPart*, std::optional<StaveSharingState> > staveSharingStates;
         bool curHeader = false;
         bool curTrailer = false;
 
@@ -133,6 +134,7 @@ private:
         std::vector<HarpPedalDiagram*> harpDiagrams;
         std::vector<FretDiagram*> fretDiagrams;
         std::vector<StaffTextBase*> staffText;
+        std::vector<StaveSharingChange*> staveSharingChanges;
         std::vector<InstrumentChange*> instrChanges;
         std::vector<SystemText*> systemText;
         std::vector<EngravingItem*> playTechCapoStringTunTripletFeel;

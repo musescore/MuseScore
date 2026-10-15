@@ -28,6 +28,8 @@
 #include "dom/score.h"
 #include "dom/sharedpart.h"
 #include "dom/staff.h"
+#include "dom/stavesharingchange.h"
+#include "dom/system.h"
 
 #include "transaction/transaction.h"
 #include "transaction/undoablecommand.h"
@@ -88,6 +90,128 @@ public:
     UNDO_TYPE(CommandType::DisconnectSharedPart)
     UNDO_NAME("Disconnect shared part")
 };
+
+class AddStaveSharingChange : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddStaveSharingChange)
+
+    SharedPart* m_sharedPart = nullptr;
+    Fraction m_tick = Fraction();
+    StaveSharingState m_staveSharingState = StaveSharingState();
+
+public:
+    AddStaveSharingChange(SharedPart* s, Fraction t, StaveSharingState m)
+        : m_sharedPart(s), m_tick(t), m_staveSharingState(m) {}
+
+    void undo() override
+    {
+        m_sharedPart->removeStaveSharingStateAtTick(m_tick);
+    }
+
+    void redo() override
+    {
+        m_sharedPart->setStaveSharingStateAtTick(m_staveSharingState, m_tick);
+    }
+
+    UNDO_TYPE(CommandType::AddStaveSharingChange)
+    UNDO_NAME("Add stave sharing change")
+};
+
+class ChangeStaveSharingState : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeStaveSharingState)
+
+    SharedPart* m_sharedPart = nullptr;
+    Fraction m_tick = Fraction();
+    StaveSharingState m_staveSharingState = StaveSharingState();
+
+    void flip() override
+    {
+        std::optional<StaveSharingState> oldState = m_sharedPart->exactStaveSharingStateAtTick(m_tick);
+        IF_ASSERT_FAILED(oldState) {
+            return;
+        }
+        m_sharedPart->setStaveSharingStateAtTick(m_staveSharingState, m_tick);
+        m_staveSharingState = *oldState;
+    }
+
+public:
+    // Only for ticks with an existing state - use AddStaveSharingChange otherwise
+    ChangeStaveSharingState(SharedPart* s, Fraction t, StaveSharingState m)
+        : m_sharedPart(s), m_tick(t), m_staveSharingState(m) {}
+
+    UNDO_TYPE(CommandType::ChangeStaveSharingState)
+    UNDO_NAME("Change stave sharing state")
+};
+
+class ChangeStaveSharingIsReset : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeStaveSharingIsReset)
+
+    SharedPart* m_sharedPart = nullptr;
+    Fraction m_tick = Fraction();
+    bool m_isReset = false;
+
+    void flip() override
+    {
+        std::optional<StaveSharingState> state = m_sharedPart->exactStaveSharingStateAtTick(m_tick);
+        IF_ASSERT_FAILED(state) {
+            return;
+        }
+        bool oldIsReset = state->isReset();
+        state->setIsReset(m_isReset);
+        m_sharedPart->setStaveSharingStateAtTick(*state, m_tick);
+        m_isReset = oldIsReset;
+    }
+
+public:
+    // Only for ticks with an existing state
+    ChangeStaveSharingIsReset(SharedPart* s, Fraction t, bool r)
+        : m_sharedPart(s), m_tick(t), m_isReset(r) {}
+
+    UNDO_TYPE(CommandType::ChangeStaveSharingIsReset)
+    UNDO_NAME("Change stave sharing is reset")
+};
+
+class RemoveStaveSharingChange : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveStaveSharingChange)
+
+    SharedPart* m_sharedPart = nullptr;
+    Fraction m_tick = Fraction();
+    StaveSharingState m_staveSharingState = StaveSharingState();
+
+public:
+    RemoveStaveSharingChange(SharedPart* s, Fraction t)
+        : m_sharedPart(s), m_tick(t) {}
+
+    void undo() override
+    {
+        m_sharedPart->setStaveSharingStateAtTick(m_staveSharingState, m_tick);
+    }
+
+    void redo() override
+    {
+        std::optional<StaveSharingState> oldState = m_sharedPart->exactStaveSharingStateAtTick(m_tick);
+        IF_ASSERT_FAILED(oldState) {
+            return;
+        }
+        m_staveSharingState = oldState.value();
+        m_sharedPart->removeStaveSharingStateAtTick(m_tick);
+    }
+
+    UNDO_TYPE(CommandType::RemoveStaveSharingChange)
+    UNDO_NAME("Remove stave sharing change")
+};
+
+void undoSetStaveSharingState(Transaction& tx, SharedPart* sharedPart, const Fraction& tick, const StaveSharingState& state)
+{
+    if (sharedPart->exactStaveSharingStateAtTick(tick)) {
+        tx.push(new ChangeStaveSharingState(sharedPart, tick, state));
+    } else {
+        tx.push(new AddStaveSharingChange(sharedPart, tick, state));
+    }
+}
 }
 
 //-------------------------------------------------------------------
@@ -283,4 +407,90 @@ void EditStaveSharing::handleRemovePart(Transaction& tx, Part* part)
             tx.push(new DisconnectSharedPart(sharedPart, originPart));
         }
     }
+}
+
+void EditStaveSharing::addStaveSharingChange(Transaction& tx, Segment* seg, Part* part, bool reset)
+{
+    Score* score = seg ? seg->score() : nullptr;
+    IF_ASSERT_FAILED(part && part->isSharedPart()) {
+        return;
+    }
+    SharedPart* sharedPart = toSharedPart(part);
+
+    // Use current state to initialise map
+    StaveSharingState newStaveSharingState = sharedPart->staveSharingStateAtTick(seg->tick());
+    newStaveSharingState.setUserTrackMap(newStaveSharingState.sharedTrackMap());
+    newStaveSharingState.setIsReset(reset);
+
+    undoSetStaveSharingState(tx, sharedPart, seg->tick(), newStaveSharingState);
+
+    // When adding a stave sharing change, reset at the start of the next system if there is no user change there already
+    const System* curSys = !reset ? seg->system() : nullptr;
+    const Fraction nextSysTick = curSys ? curSys->endTick() : score->endTick();
+    if (nextSysTick < score->endTick()) {
+        std::optional<StaveSharingState> existingState = sharedPart->exactStaveSharingStateAtTick(nextSysTick);
+        if (!existingState || !existingState->isUserModified()) {
+            StaveSharingState resetState = existingState ? existingState.value() : newStaveSharingState;
+            resetState.setUserTrackMap(resetState.sharedTrackMap());
+            resetState.setIsReset(true);
+
+            undoSetStaveSharingState(tx, sharedPart, nextSysTick, resetState);
+        }
+    }
+
+    seg->triggerLayout();
+}
+
+void EditStaveSharing::setTrackMapping(Transaction& tx, Segment* seg, Part* part, track_idx_t originTrack, track_idx_t sharedTrack)
+{
+    IF_ASSERT_FAILED(part && part->isSharedPart()) {
+        return;
+    }
+    SharedPart* sharedPart = toSharedPart(part);
+
+    StaveSharingState newStaveSharingState = sharedPart->staveSharingStateAtTick(seg->tick());
+
+    SharedTrackMap map = newStaveSharingState.userTrackMap().value_or(newStaveSharingState.sharedTrackMap());
+    map[originTrack] = sharedTrack;
+    newStaveSharingState.setUserTrackMap(map);
+    newStaveSharingState.setIsReset(false);
+
+    undoSetStaveSharingState(tx, sharedPart, seg->tick(), newStaveSharingState);
+
+    seg->triggerLayout();
+}
+
+void EditStaveSharing::setIsReset(Transaction& tx, StaveSharingChange* staveSharingChange, bool reset)
+{
+    Part* part = staveSharingChange ? staveSharingChange->part() : nullptr;
+    IF_ASSERT_FAILED(part && part->isSharedPart()) {
+        return;
+    }
+
+    SharedPart* sharedPart = toSharedPart(part);
+    const Fraction tick = staveSharingChange->tick();
+    std::optional<StaveSharingState> state = sharedPart->exactStaveSharingStateAtTick(tick);
+    IF_ASSERT_FAILED(state) {
+        return;
+    }
+
+    if (state->isReset() == reset) {
+        return;
+    }
+
+    tx.push(new ChangeStaveSharingIsReset(sharedPart, tick, reset));
+    staveSharingChange->triggerLayout();
+}
+
+void EditStaveSharing::removeStaveSharingChange(Transaction& tx, StaveSharingChange* staveSharingChange)
+{
+    Part* part = staveSharingChange->part();
+    IF_ASSERT_FAILED(part->isSharedPart()) {
+        return;
+    }
+
+    SharedPart* sharedPart = toSharedPart(part);
+
+    tx.push(new RemoveStaveSharingChange(sharedPart, staveSharingChange->tick()));
+    staveSharingChange->triggerLayout();
 }
