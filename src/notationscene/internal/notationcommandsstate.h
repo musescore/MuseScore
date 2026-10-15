@@ -32,11 +32,13 @@
 #include "context/iglobalcontext.h"
 #include "rcommand/icommandsregister.h"
 #include "../inotationcommandscontroller.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
 class NotationCommandsState : public muse::rcommand::IModuleCommandsState, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<INotationCommandsController> controller = { this };

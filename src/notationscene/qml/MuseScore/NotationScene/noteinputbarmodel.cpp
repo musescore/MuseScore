@@ -21,6 +21,8 @@
  */
 #include "noteinputbarmodel.h"
 
+#include <set>
+
 #include "rcommand/commandtypes.h"
 #include "types/translatablestring.h"
 
@@ -32,6 +34,7 @@
 #include "notation/inotationselection.h"
 #include "notation/inotationundostack.h"
 
+#include "automationuiutils.h"
 #include "notationcommands.h"
 
 using namespace mu;
@@ -41,6 +44,17 @@ using namespace muse::ui;
 using namespace muse::uicomponents;
 
 static const QString TOOLBAR_NAME("noteInput");
+
+static const std::set<rcommand::Command> NOTE_INPUT_MODE_COMMANDS {
+    TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND,
+    TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND,
+    TOGGLE_NOTE_INPUT_RHYTHM_COMMAND,
+    TOGGLE_NOTE_INPUT_REPITCH_COMMAND,
+    TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND,
+    TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND,
+    TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND,
+    TOGGLE_AUTOMATION_COMMAND
+};
 
 const std::string NoteInputBarModel::CROSS_STAFF_BEAMING_SUBITEMS("cross-staff-beaming-subitems");
 const std::string NoteInputBarModel::TUPLET_SUBITEMS("tuplets-subitems");
@@ -92,6 +106,20 @@ void NoteInputBarModel::init()
         emit isInputAllowedChanged();
     });
 
+    commandsController()->automationModeEnabledChanged().onNotify(this, [this]() {
+        load();
+        emit isAutomationToolbarActiveChanged();
+    });
+
+    notationConfiguration()->automationUiVariantChanged().onNotify(this, [this]() {
+        load();
+        emit isAutomationToolbarActiveChanged();
+    });
+
+    notationConfiguration()->currentAutomationTypeChanged().onNotify(this, [this]() {
+        emit currentAutomationTypeChanged();
+    });
+
     load();
 }
 
@@ -102,6 +130,7 @@ const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
         config.items = {
             { TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, true },
             { TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, true },
+            { TOGGLE_AUTOMATION_COMMAND, true },
             { TOGGLE_NOTE_INPUT_RHYTHM_COMMAND, false },
             { TOGGLE_NOTE_INPUT_REPITCH_COMMAND, false },
             { TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND, false },
@@ -162,9 +191,21 @@ void NoteInputBarModel::load()
 
     ToolConfig noteInputConfig = uiState()->toolConfig(TOOLBAR_NAME, NoteInputBarModel::defaultNoteInputConfig());
 
+    //! NOTE: in automation mode, only the note input mode buttons (and the automation toggle) are shown
+    const bool automationMode = isAutomationToolbarActive();
+    const AutomationUiVariant automationUiVariant = notationConfiguration()->automationUiVariant();
+
     int section = 0;
     for (const ToolConfig::Item& citem : noteInputConfig.items) {
         if (!citem.show) {
+            continue;
+        }
+
+        if (!isItemAvailable(citem.intent, automationUiVariant)) {
+            continue;
+        }
+
+        if (automationMode && NOTE_INPUT_MODE_COMMANDS.count(rcommand::Command(citem.intent)) == 0) {
             continue;
         }
 
@@ -187,13 +228,119 @@ void NoteInputBarModel::load()
         }
     }
 
-    items << makeAddItem(QString::number(++section));
+    if (!automationMode) {
+        items << makeAddItem(QString::number(++section));
+    }
+
     setItems(items);
 }
 
 bool NoteInputBarModel::isInputAllowed() const
 {
     return commandsController()->isNoteInputAllowed();
+}
+
+bool NoteInputBarModel::isToolbarAutomationUi() const
+{
+    return notationConfiguration()->automationUiVariant() == AutomationUiVariant::Toolbar;
+}
+
+bool NoteInputBarModel::isAutomationToolbarActive() const
+{
+    return isToolbarAutomationUi() && commandsController()->isAutomationModeEnabled();
+}
+
+bool NoteInputBarModel::isItemAvailable(const std::string& intent, AutomationUiVariant variant)
+{
+    //! NOTE: the automation button only lives in this toolbar in the Toolbar variant
+    if (rcommand::Command(intent) == TOGGLE_AUTOMATION_COMMAND) {
+        return variant == AutomationUiVariant::Toolbar;
+    }
+
+    return true;
+}
+
+QVariantList NoteInputBarModel::automationTypes() const
+{
+    auto makeType = [](const TranslatableString& title, engraving::AutomationType type) {
+        return QVariantMap { { "text", title.qTranslated() }, { "value", static_cast<int>(type) } };
+    };
+
+    return {
+        makeType(TranslatableString::untranslatable("Dynamics"), engraving::AutomationType::Dynamics),
+        makeType(TranslatableString::untranslatable("Volume"), engraving::AutomationType::Volume),
+        makeType(TranslatableString::untranslatable("Pan"), engraving::AutomationType::Pan),
+        makeType(TranslatableString::untranslatable("Tempo"), engraving::AutomationType::Tempo),
+    };
+}
+
+int NoteInputBarModel::currentAutomationType() const
+{
+    return static_cast<int>(notationConfiguration()->currentAutomationType());
+}
+
+void NoteInputBarModel::setCurrentAutomationType(int type)
+{
+    if (currentAutomationType() == type) {
+        return;
+    }
+
+    notationConfiguration()->setCurrentAutomationType(static_cast<engraving::AutomationType>(type));
+}
+
+bool NoteInputBarModel::isVoiceSelectionAvailable() const
+{
+    return notationConfiguration()->currentAutomationType() == engraving::AutomationType::Dynamics;
+}
+
+bool NoteInputBarModel::isTempoRangeAvailable() const
+{
+    return notationConfiguration()->currentAutomationType() == engraving::AutomationType::Tempo;
+}
+
+int NoteInputBarModel::currentAutomationVoice() const
+{
+    return m_automationVoice;
+}
+
+void NoteInputBarModel::setCurrentAutomationVoice(int voice)
+{
+    if (m_automationVoice == voice) {
+        return;
+    }
+
+    m_automationVoice = voice;
+    emit currentAutomationVoiceChanged();
+}
+
+int NoteInputBarModel::automationVoicesCount() const
+{
+    return automationui::VOICES_COUNT;
+}
+
+QVariantList NoteInputBarModel::automationResetMenuItems()
+{
+    qDeleteAll(m_automationResetItems);
+    m_automationResetItems = automationui::makeResetItems(notationConfiguration()->currentAutomationType(), this);
+
+    QVariantList result;
+    for (MenuItem* item : m_automationResetItems) {
+        result << QVariant::fromValue(item);
+    }
+
+    return result;
+}
+
+void NoteInputBarModel::handleAutomationMenuItem(const QString& itemId)
+{
+    if (automationui::isResetItem(itemId)) {
+        automationui::handleResetItem(itemId);
+    }
+}
+
+void NoteInputBarModel::openTempoRangeDialog()
+{
+    interactive()->open(automationui::SET_TEMPO_RANGE_DIALOG_URI);
 }
 
 NoteInputBarModel::ServiceItemInfo NoteInputBarModel::serviceItemInfo(const std::string& intent)
@@ -220,6 +367,7 @@ MenuItem* NoteInputBarModel::makeCommandItem(const muse::rcommand::Command& comm
 {
     const rcommand::CommandInfo info = commandsRegister()->commandInfo(command);
     MenuItem* item = new MenuItem(info, this);
+    item->setCommandState(commandsState()->commandState(command));
     item->setSection(section);
     return item;
 }

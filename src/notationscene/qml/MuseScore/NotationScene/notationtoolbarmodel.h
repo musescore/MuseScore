@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "notation/inotationconfiguration.h"
 
 #include "uicomponents/qml/Muse/UiComponents/abstracttoolbarmodel.h"
 
@@ -36,11 +37,14 @@ class NotationToolBarModel : public muse::uicomponents::AbstractToolBarModel
     QML_ELEMENT;
 
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
 
 public:
     Q_INVOKABLE void load() override;
 
 private:
+    void updateItems();
+
     bool m_loaded = false;
 };
 }

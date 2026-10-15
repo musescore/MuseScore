@@ -68,6 +68,7 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key CURRENT_AUTOMATION_TYPE(module_name, "notation/automation/currentType");
+static const Settings::Key AUTOMATION_UI_VARIANT(module_name, "notation/automation/uiVariant");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 static const Settings::Key USER_MUSIC_FONTS_PATH(module_name, "application/paths/myMusicFonts");
@@ -234,6 +235,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(CURRENT_AUTOMATION_TYPE, Val(engraving::AutomationType::Dynamics));
     settings()->valueChanged(CURRENT_AUTOMATION_TYPE).onReceive(this, [this](const Val&) {
         m_currentAutomationTypeChanged.notify();
+    });
+
+    settings()->setDefaultValue(AUTOMATION_UI_VARIANT, Val(AutomationUiVariant::Widget));
+    settings()->valueChanged(AUTOMATION_UI_VARIANT).onReceive(this, [this](const Val&) {
+        m_automationUiVariantChanged.notify();
     });
 
     settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
@@ -714,7 +720,8 @@ QList<int> NotationConfiguration::possibleZoomPercentageList() const
 
 engraving::AutomationType NotationConfiguration::currentAutomationType() const
 {
-    return settings()->value(CURRENT_AUTOMATION_TYPE).toEnum<engraving::AutomationType>();
+    const engraving::AutomationType type = settings()->value(CURRENT_AUTOMATION_TYPE).toEnum<engraving::AutomationType>();
+    return type != engraving::AutomationType::Unknown ? type : engraving::AutomationType::Dynamics;
 }
 
 void NotationConfiguration::setCurrentAutomationType(engraving::AutomationType type)
@@ -725,6 +732,21 @@ void NotationConfiguration::setCurrentAutomationType(engraving::AutomationType t
 Notification NotationConfiguration::currentAutomationTypeChanged() const
 {
     return m_currentAutomationTypeChanged;
+}
+
+AutomationUiVariant NotationConfiguration::automationUiVariant() const
+{
+    return settings()->value(AUTOMATION_UI_VARIANT).toEnum<AutomationUiVariant>();
+}
+
+void NotationConfiguration::setAutomationUiVariant(AutomationUiVariant variant)
+{
+    settings()->setSharedValue(AUTOMATION_UI_VARIANT, Val(variant));
+}
+
+Notification NotationConfiguration::automationUiVariantChanged() const
+{
+    return m_automationUiVariantChanged;
 }
 
 int NotationConfiguration::mouseZoomPrecision() const

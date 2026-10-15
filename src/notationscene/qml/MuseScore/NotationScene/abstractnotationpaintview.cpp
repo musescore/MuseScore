@@ -28,7 +28,11 @@
 
 #include "async/async.h"
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/shadownote.h"
+#include "engraving/dom/system.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationaccessibility.h" // IWYU pragma: keep
@@ -66,6 +70,14 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
     connect(this, &AbstractNotationPaintView::verticalScrollChanged, [this]() {
         m_previousVerticalScrollPosition = startVerticalScrollPosition();
+    });
+
+    connect(this, &AbstractNotationPaintView::viewportChanged, this, [this]() {
+        updateAutomationWidgetAnchors();
+    });
+
+    connect(this, &AbstractNotationPaintView::automationModeChanged, this, [this]() {
+        updateAutomationWidgetAnchors();
     });
 
     m_enableAutoScrollTimer.setSingleShot(true);
@@ -278,6 +290,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         m_pageCache.clear();
         updateLoopMarkers();
         updateShadowNoteVisibility();
+        updateAutomationWidgetAnchors();
         scheduleRedraw(updateRect.isValid() ? fromLogical(updateRect) : RectF());
     });
 
@@ -1777,5 +1790,54 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
         connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
             m_playbackCursorItem = nullptr;
         });
+    }
+}
+
+QVariantList AbstractNotationPaintView::automationWidgetAnchors() const
+{
+    return m_automationWidgetAnchors;
+}
+
+void AbstractNotationPaintView::updateAutomationWidgetAnchors()
+{
+    QVariantList anchors;
+
+    const INotationElementsPtr elements = notationElements();
+    const mu::engraving::Score* score = elements ? elements->msScore() : nullptr;
+
+    if (score && automationMode()) {
+        const RectF viewRect = viewport();
+
+        for (const mu::engraving::System* system : score->systems()) {
+            if (!system->firstMeasure() || system->firstVisibleStaff() == muse::nidx) {
+                continue;
+            }
+
+            const RectF systemRect = system->canvasBoundingRect();
+            if (!systemRect.intersects(viewRect)) {
+                continue;
+            }
+
+            const mu::engraving::SysStaff* sysStaff = system->staff(system->firstVisibleStaff());
+            const RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+
+            // Align with the start of the automation lane, i.e. the system's first chord/rest
+            const mu::engraving::Segment* firstSeg = system->firstMeasure()->first(mu::engraving::SegmentType::Duration);
+            const qreal x = firstSeg ? firstSeg->canvasX() : staffCanvasRect.x();
+
+            const PointF topLeft = fromLogical(PointF(x, staffCanvasRect.y()));
+            const PointF bottom = fromLogical(PointF(x, systemRect.bottom()));
+
+            anchors << QVariantMap {
+                { "x", topLeft.x() },
+                { "y", topLeft.y() },
+                { "bottom", bottom.y() },
+            };
+        }
+    }
+
+    if (anchors != m_automationWidgetAnchors) {
+        m_automationWidgetAnchors = anchors;
+        emit automationWidgetAnchorsChanged();
     }
 }

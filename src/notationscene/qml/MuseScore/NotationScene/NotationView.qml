@@ -230,6 +230,18 @@ FocusScope {
                         notationViewRect: Qt.rect(notationView.x, notationView.y, notationView.width, notationView.height)
                         notationViewMatrix: notationView.matrix
                     }
+
+                    // One automation widget per system in view
+                    // NOTE: keyed on the count, so scrolling updates the existing widgets instead of recreating them
+                    Repeater {
+                        model: notationView.automationWidgetAnchors.length
+
+                        AutomationWidget {
+                            required property int index
+
+                            anchorData: notationView.automationWidgetAnchors[index] ?? null
+                        }
+                    }
                 }
 
                 onPinchToZoom: function(scale, pos) {
