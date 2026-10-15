@@ -61,7 +61,7 @@ public:
     muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) const override;
     muse::Ret validateLink(const QUrl& link) const override;
 
-    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName) override;
+    muse::RetVal<muse::Progress> uploadToConvert(const ConvertInput& input, const muse::String& convertedScoreName) override;
     muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const override;
 
     muse::ValNt<WatchedScoreList> watchedScores() const override;

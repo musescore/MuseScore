@@ -279,17 +279,17 @@ Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
     return make_ret(Err::ConvertUnsupportedLink);
 }
 
-Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
+RetVal<Progress> ConvertFileToScoreService::uploadToConvert(const ConvertInput& input, const muse::String& convertedScoreName)
 {
     const io::paths_t paths = convertPathsOf(input);
     const QUrl link = convertLinkOf(input);
 
     IF_ASSERT_FAILED(!paths.empty() || link.isValid()) {
-        return make_ret(Err::ConvertValidationFailed);
+        return RetVal<Progress>::make_ret(make_ret(Err::ConvertValidationFailed));
     }
 
     IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedScoreName))) {
-        return make_ret(Err::ConvertValidationFailed);
+        return RetVal<Progress>::make_ret(make_ret(Err::ConvertValidationFailed));
     }
 
     ConvertFileDataList files;
@@ -297,7 +297,7 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
     for (const io::path_t& path : paths) {
         RetVal<ByteArray> fileData = fileSystem()->readFile(path);
         if (!fileData.ret) {
-            return fileData.ret;
+            return RetVal<Progress>::make_ret(fileData.ret);
         }
 
         files.push_back(ConvertFileData { std::move(fileData.val), io::filename(path) });
@@ -306,30 +306,31 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
     const ConvertType type = convertTypeOf(input);
     auto data = std::make_shared<const ConvertUploadData>(ConvertUploadData { type, std::move(files), link,
                                                                               convertedScoreName.toQString() });
-    ProgressPtr progress = museScoreComService()->convert()->startConvert(data);
+    ProgressPtr uploadProgress = museScoreComService()->convert()->uploadToConvert(data);
 
-    progress->progressChanged().onReceive(this, [convertedScoreName](int64_t current, int64_t total, const std::string&) {
+    Progress progress;
+    progress.start();
+
+    uploadProgress->progressChanged().onReceive(this, [convertedScoreName, progress](int64_t current, int64_t total,
+                                                                                     const std::string& msg) mutable {
         LOGI() << "Uploading for convert \"" << convertedScoreName << "\": " << current << "/" << total;
+        progress.progress(current, total, msg);
     });
 
-    progress->finished().onReceive(this, [this, type, convertedScoreName](const ProgressResult& res) {
+    uploadProgress->finished().onReceive(this, [this, type, convertedScoreName, progress](const ProgressResult& res) mutable {
         if (!res.ret) {
             LOGE() << "Could not upload files for \"" << convertedScoreName << "\" (type: "
                    << convertTypeToString(type) << "): " << res.ret.toString();
-            WatchedScore watched;
-            watched.conversion.type = type;
-            watched.conversion.status = ConvertStatus::Failed;
-            watched.startedLocally = true;
-            watched.name = convertedScoreName;
-            m_convertFinished.send(res.ret, watched);
+            progress.finish(make_ret(Err::ConvertUploadFailed, res.ret.toString()));
             return;
         }
 
         const int itemId = res.val.toMap()["id"].toInt();
         watch(type, itemId, convertedScoreName);
+        progress.finish(make_ok());
     });
 
-    return make_ok();
+    return RetVal<Progress>::make_ok(progress);
 }
 
 async::Channel<Ret, WatchedScore> ConvertFileToScoreService::convertFinished() const

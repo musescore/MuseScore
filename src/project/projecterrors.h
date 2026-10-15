@@ -53,6 +53,7 @@ enum class Err {
     ConvertTooManyImages,
     ConvertUnsupportedLink,
     ConvertProcessingFailed,
+    ConvertUploadFailed,
 };
 
 inline muse::Ret make_ret(Err e)

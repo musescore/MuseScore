@@ -26,6 +26,7 @@
 #include "async/channel.h"
 #include "async/notification.h"
 #include "io/path.h"
+#include "progress.h"
 #include "types/retval.h"
 
 #include "types/converttypes.h"
@@ -52,10 +53,12 @@ public:
     //! Checks that the given link is from a supported source
     virtual muse::Ret validateLink(const QUrl& link) const = 0;
 
-    //! Sends the conversion request to the server
-    virtual muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName) = 0;
+    //! Starts uploading the input to the server, returning the upload's progress
+    //! (or an error if the upload couldn't be started, e.g. the files couldn't be read).
+    //! The conversion's final result is reported via convertFinished()
+    virtual muse::RetVal<muse::Progress> uploadToConvert(const ConvertInput& input, const muse::String& convertedScoreName) = 0;
 
-    //! Emits the final result of a conversion (upload or processing failure, or success with the WatchedScore)
+    //! Emits the final result of a processed conversion (failure, or success with the WatchedScore)
     virtual muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const = 0;
 
     //! All pending/reviewable conversions from the server's convert queue

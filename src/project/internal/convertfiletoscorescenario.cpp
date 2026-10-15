@@ -329,27 +329,39 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
     });
 }
 
-Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
+void ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
 {
-    Ret ret = service()->startConvert(input, convertedScoreName);
-    if (!ret) {
-        switch (static_cast<io::Err>(ret.code())) {
-        case io::Err::FSNotExist:
-        case io::Err::FSReadError:
-            showFileReadError(convertPathsOf(input).size());
-            break;
-        default:
-            showUnknownError();
-            break;
-        }
-        return ret;
+    RetVal<Progress> progress = service()->uploadToConvert(input, convertedScoreName);
+    if (!progress.ret) {
+        showUploadError(progress.ret, input, convertedScoreName);
+        return;
     }
 
     if (configuration()->showConvertFileProcessingDialog()) {
         showFileProcessingDialog();
     }
 
-    return ret;
+    progress.val.finished().onReceive(this, [this, input, convertedScoreName](const ProgressResult& res) {
+        if (!res.ret) {
+            showUploadError(res.ret, input, convertedScoreName);
+        }
+    });
+}
+
+void ConvertFileToScoreScenario::showUploadError(const Ret& ret, const ConvertInput& input, const muse::String& convertedScoreName)
+{
+    switch (ret.code()) {
+    case static_cast<int>(Err::ConvertUploadFailed):
+        showUploadFailedNotification(input, convertedScoreName);
+        break;
+    case static_cast<int>(io::Err::FSNotExist):
+    case static_cast<int>(io::Err::FSReadError):
+        showFileReadError(convertPathsOf(input).size());
+        break;
+    default:
+        showUnknownError();
+        break;
+    }
 }
 
 void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
@@ -553,6 +565,23 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const WatchedScor
     }).onResolve(this, [this](const toast::ToastResult& result) {
         if (result.isCode(toast::ToastActionCode::TryAgain)) {
             convertFiles();
+        }
+    });
+}
+
+void ConvertFileToScoreScenario::showUploadFailedNotification(const ConvertInput& input, const muse::String& convertedScoreName)
+{
+    std::string msg = muse::qtrc("project/convert", "We weren’t able to upload ‘%1’. Check your internet connection and try again.")
+                      .arg(convertedScoreName.toQString()).toStdString();
+
+    toastService()->show(muse::trc("project/convert", "Error uploading score"), msg,
+                         muse::ui::IconCode::Code::ERROR_FILLED, true,
+    {
+        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
+        { muse::trc("global", "Retry"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+    }).onResolve(this, [this, input, convertedScoreName](const toast::ToastResult& result) {
+        if (result.isCode(toast::ToastActionCode::TryAgain)) {
+            startConvert(input, convertedScoreName);
         }
     });
 }
