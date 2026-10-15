@@ -199,6 +199,15 @@ void EditSystemLocks::addRemoveSystemLocks(Transaction& tx, Score* score, int in
     }
 
     if (lock) {
+        /* System locks only have an effect in page and system view, so in other views, we lock the systems as they would appear
+         * in page view. To do that, we temporarily layout the score in page view, and then re-layout in the current view mode. */
+        const LayoutMode layoutMode = score->layoutMode();
+        const bool needsPageLayout = layoutMode != LayoutMode::PAGE && layoutMode != LayoutMode::SYSTEM;
+        if (needsPageLayout) {
+            score->switchToPageMode();
+        }
+
+        std::vector<std::pair<MeasureBase*, MeasureBase*> > systemsToLock;
         for (const System* system : score->systems()) {
             if (system->last()->isBefore(startMeasure)) {
                 continue;
@@ -207,8 +216,17 @@ void EditSystemLocks::addRemoveSystemLocks(Transaction& tx, Score* score, int in
                 break;
             }
             if (!system->isLocked()) {
-                undoAddSystemLock(tx, new RangeLock(system->first(), system->last()));
+                systemsToLock.emplace_back(system->first(), system->last());
             }
+        }
+
+        if (needsPageLayout) {
+            score->setLayoutMode(layoutMode);
+            score->doLayout();
+        }
+
+        for (const auto& [first, last] : systemsToLock) {
+            undoAddSystemLock(tx, new RangeLock(first, last));
         }
         return;
     }
