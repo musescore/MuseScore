@@ -22,12 +22,11 @@
 
 #pragma once
 
+#include <QObject>
 #include <qqmlintegration.h>
 
-#include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
-
 namespace mu::propertiespanel {
-class FretFrameChordItem : public muse::uicomponents::SelectableItem
+class FretFrameChordItem : public QObject
 {
     Q_OBJECT
     QML_ELEMENT;
