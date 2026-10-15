@@ -139,7 +139,7 @@ void MusicXmlNotePitch::pitch(muse::XmlStreamReader& e)
             const String alter = e.readText();
             bool ok;
             m_alter = MusicXmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
-            if (!ok || m_alter < -2 || m_alter > 2) {
+            if (!ok || m_alter < -3 || m_alter > 3) {
                 m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
                 const double altervalue = alter.toDouble(&ok2);
