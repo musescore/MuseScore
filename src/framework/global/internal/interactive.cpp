@@ -121,6 +121,7 @@ UriQuery Interactive::makeQuery(const std::string& type, const std::string& cont
             customButton["role"] = Val(static_cast<int>(buttonData.role));
             customButton["isAccent"] = Val(buttonData.accent);
             customButton["isLeftSide"] = Val(buttonData.leftSide);
+            customButton["icon"] = Val(buttonData.icon);
             customButtonsList.push_back(Val(customButton));
         }
     }
@@ -154,7 +155,7 @@ async::Promise<IInteractive::Result> Interactive::openStandardAsync(const std::s
     },
         [](int code, const std::string& msg, auto resolve, auto reject) {
         //! NOTE To simplify writing the handlers
-        (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel, false));
+        (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel));
         return reject(code, msg);
     });
 }

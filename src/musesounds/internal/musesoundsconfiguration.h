@@ -46,11 +46,15 @@ public:
 
     QUrl checkForMuseSoundsUpdateUrl() const override;
     QUrl checkForMuseSamplerUpdateUrl() const override;
+    QUrl museSoundsTroubleshootUrl() const override;
 
     QString getMuseSamplerVersionQuery() const override;
 
     std::string lastShownMuseSoundsReleaseVersion() const override;
     void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
+
+    bool showLoadingFailedWarning() const override;
+    void setShowLoadingFailedWarning(bool show) override;
 
     bool museSoundsCheckForUpdateTestMode() const override;
 

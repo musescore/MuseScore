@@ -58,6 +58,11 @@ Row {
 
             var button = buttons.addButton(customButton.text, customButton.buttonId, customButton.role, customButton.isAccent, customButton.isLeftSide)
 
+            if (Boolean(customButton.icon)) {
+                button.icon = customButton.icon
+                button.orientation = Qt.Horizontal
+            }
+
             const buttonId = customButton.buttonId
             button.clicked.connect(function() {
                 root.clicked(buttonId, !dontShowAgainCheckBox.checked)

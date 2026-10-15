@@ -55,6 +55,7 @@ public:
 
     const Version& version() const override;
     bool isLoaded() const override;
+    bool initFailed() const override;
 
     float defaultReverbLevel(const String& instrumentSoundId) const override;
 
@@ -70,5 +71,6 @@ private:
 
     Version m_samplerVersion;
     int m_samplerBuildNumber = -1;
+    bool m_initFailed = false;
 };
 }

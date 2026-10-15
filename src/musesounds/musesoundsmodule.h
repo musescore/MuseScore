@@ -31,8 +31,8 @@ class MuseSoundsConfiguration;
 class MuseSoundsRepository;
 class MuseSoundsCheckUpdateScenario;
 class MuseSoundsCheckUpdateService;
-class MuseSamplerCheckUpdateService;
-class MuseSamplerCheckUpdateScenario;
+class MuseSamplerCheckStatusService;
+class MuseSamplerCheckStatusScenario;
 class MuseSoundsModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -47,7 +47,7 @@ private:
     std::shared_ptr<MuseSoundsRepository> m_repository;
     std::shared_ptr<MuseSoundsCheckUpdateScenario> m_museSoundsCheckUpdateScenario;
     std::shared_ptr<MuseSoundsCheckUpdateService> m_museSoundsCheckUpdateService;
-    std::shared_ptr<MuseSamplerCheckUpdateService> m_museSamplerCheckUpdateService;
-    std::shared_ptr<MuseSamplerCheckUpdateScenario> m_museSamplerCheckUpdateScenario;
+    std::shared_ptr<MuseSamplerCheckStatusService> m_museSamplerCheckStatusService;
+    std::shared_ptr<MuseSamplerCheckStatusScenario> m_museSamplerCheckStatusScenario;
 };
 }

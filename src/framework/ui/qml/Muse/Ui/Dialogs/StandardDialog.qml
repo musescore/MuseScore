@@ -53,6 +53,7 @@ StyledDialogView {
         property int role: ButtonBoxModel.CustomRole
         property bool isAccent: false
         property bool isLeftSide: true
+        property int icon: 0
     }
 
     contentWidth: mainPanel.implicitWidth

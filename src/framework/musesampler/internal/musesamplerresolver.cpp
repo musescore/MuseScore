@@ -109,6 +109,7 @@ void MuseSamplerResolver::init()
     if (!m_libHandler->init()) {
         LOGE() << "Could not init MuseSampler: " << libraryPath << ", version: " << m_samplerVersion.toString();
         m_libHandler.reset();
+        m_initFailed = true;
         return;
     }
 
@@ -278,6 +279,11 @@ bool MuseSamplerResolver::isLoaded() const
     }
 
     return false;
+}
+
+bool MuseSamplerResolver::initFailed() const
+{
+    return m_initFailed;
 }
 
 float MuseSamplerResolver::defaultReverbLevel(const String& instrumentSoundId) const
