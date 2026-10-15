@@ -28,6 +28,7 @@
 #include "async/processevents.h"
 #include "modularity/ioc.h"
 #include "global/dataformatter.h"
+#include "global/io/ioretcodes.h"
 
 #include "project/internal/convertfiletoscorescenario.h"
 #include "project/projecterrors.h"
@@ -1133,6 +1134,73 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_SchemelessLi
         return convertTypeOf(input) == ConvertType::Audio2Score && convertLinkOf(input) == QUrl("http://link.xyz/song");
     }), muse::String(u"song")))
     .WillOnce(Return(make_ok()));
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_FileReadFailure_ShowsFileReadError)
+{
+    // [GIVEN] The service fails to read the picked file
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(io::make_ret(io::Err::FSReadError)));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    const std::string title = muse::trc("project/convert", "This file could not be read");
+    const std::string text = muse::trc("project/convert", "Make sure the file still exists and that you have permission to open it.");
+
+    // [THEN] The "file could not be read" dialog is shown, and no processing dialog is shown
+    EXPECT_CALL(*m_interactive,
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise();
+    }));
+    EXPECT_CALL(*m_toastService, show(_, _, _, _, _)).Times(0);
+
+    // [WHEN] Converting with no pre-selected files
+    m_scenario->convertFiles();
+
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_MultipleFilesReadFailure_ShowsPluralFileReadError)
+{
+    // [GIVEN] The service fails to read one of the picked files
+    ON_CALL(*m_service, startConvert(_, _))
+    .WillByDefault(Return(io::make_ret(io::Err::FSNotExist)));
+
+    // [GIVEN] The user picks multiple images via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        QVariantMap selection {
+            { "type", int(ConvertType::Omr) },
+            { "paths", QStringList { "/some/a.png", "/some/b.png" } },
+            { "convertedScoreName", QString("file") }
+        };
+        return resolvedValPromise(Val::fromQVariant(selection));
+    }));
+
+    const std::string title = muse::trc("project/convert", "One or more files could not be read");
+    const std::string text = muse::trc("project/convert", "Make sure the files still exist and that you have permission to open them.");
+
+    // [THEN] The plural "files could not be read" dialog is shown, and no processing dialog is shown
+    EXPECT_CALL(*m_interactive,
+                warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
+                        IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedResultPromise();
+    }));
+    EXPECT_CALL(*m_toastService, show(_, _, _, _, _)).Times(0);
 
     // [WHEN] Converting with no pre-selected files
     m_scenario->convertFiles();

@@ -28,6 +28,7 @@
 #include "project/projecterrors.h"
 
 #include "global/dataformatter.h"
+#include "global/io/ioretcodes.h"
 #include "global/log.h"
 
 using namespace mu::project;
@@ -332,7 +333,15 @@ Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const mu
 {
     Ret ret = service()->startConvert(input, convertedScoreName);
     if (!ret) {
-        showUnknownError();
+        switch (static_cast<io::Err>(ret.code())) {
+        case io::Err::FSNotExist:
+        case io::Err::FSReadError:
+            showFileReadError(convertPathsOf(input).size());
+            break;
+        default:
+            showUnknownError();
+            break;
+        }
         return ret;
     }
 
@@ -391,6 +400,19 @@ void ConvertFileToScoreScenario::showUnknownError()
     interactive()->warning(muse::trc("project/convert", "Something went wrong"),
                            muse::trc("project/convert", "Check your internet connection and try again."),
                            { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showFileReadError(size_t fileCount)
+{
+    if (fileCount > 1) {
+        interactive()->warning(muse::trc("project/convert", "One or more files could not be read"),
+                               muse::trc("project/convert", "Make sure the files still exist and that you have permission to open them."),
+                               { interactive()->buttonData(IInteractive::Button::Ok) });
+    } else {
+        interactive()->warning(muse::trc("project/convert", "This file could not be read"),
+                               muse::trc("project/convert", "Make sure the file still exists and that you have permission to open it."),
+                               { interactive()->buttonData(IInteractive::Button::Ok) });
+    }
 }
 
 void ConvertFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)

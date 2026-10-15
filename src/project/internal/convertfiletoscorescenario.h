@@ -94,6 +94,7 @@ private:
 
     void showCloudIsNotAvailableError();
     void showUnknownError();
+    void showFileReadError(size_t fileCount);
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError();
