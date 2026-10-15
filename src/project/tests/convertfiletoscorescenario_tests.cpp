@@ -21,11 +21,8 @@
  */
 #include <gmock/gmock.h>
 
-#include <thread>
-
 #include <QUrl>
 
-#include "async/processevents.h"
 #include "modularity/ioc.h"
 #include "global/dataformatter.h"
 #include "global/io/ioretcodes.h"
@@ -33,6 +30,7 @@
 #include "project/internal/convertfiletoscorescenario.h"
 #include "project/projecterrors.h"
 
+#include "utils/testutils.h"
 #include "mocks/convertfiletoscoreservicemock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "global/tests/mocks/interactivemock.h"
@@ -57,25 +55,6 @@ using namespace muse;
 using namespace muse::cloud;
 
 namespace {
-void pumpEvents(int iterations = 10)
-{
-    const std::thread::id thisThId = std::this_thread::get_id();
-    for (int i = 0; i < iterations; ++i) {
-        muse::async::processMessages(thisThId);
-    }
-}
-
-//! NOTE: keep the body queued, don't run it eagerly
-//! otherwise resolve() can fire before onResolve/onReject are attached
-template<typename T>
-async::Promise<T> resolvedPromise(const T& val)
-{
-    return async::make_promise<T>([val](auto resolve, auto reject) {
-        (void)reject;
-        return resolve(val);
-    });
-}
-
 async::Promise<Val> resolvedValPromise(const Val& val = Val())
 {
     return resolvedPromise<Val>(val);
@@ -85,11 +64,7 @@ async::Promise<Val> resolvedValPromise(const Val& val = Val())
 //! Val would otherwise cascade into unrelated (and unmocked) downstream calls
 async::Promise<Val> pendingValPromise()
 {
-    return async::make_promise<Val>([](auto resolve, auto reject) {
-        (void)resolve;
-        (void)reject;
-        return async::Promise<Val>::dummy_result();
-    });
+    return pendingPromise<Val>();
 }
 
 async::Promise<Ret> resolvedRetPromise(const Ret& ret)
@@ -122,36 +97,25 @@ Matcher<const IInteractive::Text&> TextIs(const std::string& text)
     return Field(&IInteractive::Text::text, text);
 }
 
-//! NOTE: ButtonData has no operator==, so match button lists by their btn ids, in order
-Matcher<const IInteractive::ButtonDatas&> ButtonIdsAre(const std::vector<int>& expectedIds)
+//! NOTE: ButtonData and ToastAction have no operator==, so match lists by one int field, in order
+template<typename T>
+Matcher<const std::vector<T>&> FieldsAre(int T::* field, const std::vector<int>& expected)
 {
-    return Truly([expectedIds](const IInteractive::ButtonDatas& buttons) {
-        if (buttons.size() != expectedIds.size()) {
-            return false;
-        }
-        for (size_t i = 0; i < buttons.size(); ++i) {
-            if (buttons[i].btn != expectedIds[i]) {
-                return false;
-            }
-        }
-        return true;
-    });
+    std::vector<Matcher<const T&> > matchers;
+    for (int value : expected) {
+        matchers.push_back(Field(field, value));
+    }
+    return ElementsAreArray(matchers);
 }
 
-//! NOTE: ToastAction has no operator==, so match action lists by their codes, in order
+Matcher<const IInteractive::ButtonDatas&> ButtonIdsAre(const std::vector<int>& expectedIds)
+{
+    return FieldsAre(&IInteractive::ButtonData::btn, expectedIds);
+}
+
 Matcher<const std::vector<toast::ToastAction>&> ToastActionCodesAre(const std::vector<int>& expectedCodes)
 {
-    return Truly([expectedCodes](const std::vector<toast::ToastAction>& actions) {
-        if (actions.size() != expectedCodes.size()) {
-            return false;
-        }
-        for (size_t i = 0; i < actions.size(); ++i) {
-            if (actions[i].code != expectedCodes[i]) {
-                return false;
-            }
-        }
-        return true;
-    });
+    return FieldsAre(&toast::ToastAction::code, expectedCodes);
 }
 
 //! NOTE: shared by the ConvertFiles_NoPaths_* tests, which resolve the picker with a single OMR file
@@ -195,31 +159,22 @@ protected:
 
         ON_CALL(*m_service, config())
         .WillByDefault(ReturnRef(m_config));
+        ON_CALL(*m_service, convertFinished())
+        .WillByDefault(Return(m_convertFinished));
+        ON_CALL(*m_service, pollingStatusChanged())
+        .WillByDefault(Return(m_pollingStatusChanged));
 
         ON_CALL(*m_interactive, buttonData(_))
         .WillByDefault(Invoke([](IInteractive::Button b) {
             return IInteractive::ButtonData(b, "");
         }));
 
-        //! NOTE: safe fallback for dialogs a test doesn't stub itself -- these mocks have no
-        //! usable default return value, so an unstubbed call would otherwise throw
-        ON_CALL(*m_interactive, warning(_, _, _, _, _, _))
-        .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
-        ON_CALL(*m_interactive, info(_, _, _, _, _, _))
-        .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
-        ON_CALL(*m_interactive, question(_, _, _, _, _, _))
-        .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
-        ON_CALL(*m_toastService, show(_, _, _, _, _))
-        .WillByDefault(Invoke([](auto&&...) { return resolvedToastResultPromise(); }));
-        ON_CALL(*m_service, uploadToConvert(_, _))
-        .WillByDefault(Return(uploadStarted()));
-
         ON_CALL(*m_authorization, userAuthorized())
         .WillByDefault(Return(ValCh<bool> { true, {} }));
 
         ON_CALL(*m_authorization, checkCloudIsAvailableAsync())
         .WillByDefault(Invoke([] {
-            return resolvedPromise<Ret>(make_ok());
+            return resolvedRetPromise(make_ok());
         }));
     }
 
@@ -236,7 +191,6 @@ protected:
         EXPECT_CALL(*m_interactive,
                     warning(expectedTitle, TextIs(expectedText), ButtonIdsAre({ int(IInteractive::Button::Ok) }),
                             int(IInteractive::Button::NoButton), IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-        .Times(1)
         .WillOnce(Invoke([](auto&&...) {
             return resolvedResultPromise();
         }));
@@ -259,6 +213,8 @@ protected:
     std::shared_ptr<muse::mi::MultiWindowsProviderMock> m_multiwindowsProvider;
 
     ConvertConfig m_config;
+    async::Channel<Ret, WatchedScore> m_convertFinished;
+    async::Channel<PollingStatus> m_pollingStatusChanged;
 };
 }
 
@@ -268,9 +224,7 @@ protected:
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotificationAndForwards)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     WatchedScore watched;
@@ -287,7 +241,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
     EXPECT_CALL(*m_toastService,
                 show(title, text, muse::ui::IconCode::Code::TICK_FILLED, true,
                      ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), openScoreBtn })))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedToastResultPromise();
     }));
@@ -302,7 +255,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
     });
 
     // [WHEN] The service reports a successful conversion
-    convertFinished.send(make_ok(), watched);
+    m_convertFinished.send(make_ok(), watched);
 
     // [THEN] The result, including the WatchedScore payload, is forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
@@ -314,9 +267,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ShowsScoreReadyNotif
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_DispatchesOpenScoreUrl)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     WatchedScore watched;
@@ -337,15 +288,13 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_Disp
     .Times(1);
 
     // [WHEN] The service reports a successful conversion
-    convertFinished.send(make_ok(), watched);
+    m_convertFinished.send(make_ok(), watched);
     pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ScoreAlreadyOpen_DoesNotShowNotification)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     WatchedScore watched;
@@ -368,7 +317,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ScoreAlreadyOpen_Doe
     });
 
     // [WHEN] The service reports a successful conversion
-    convertFinished.send(make_ok(), watched);
+    m_convertFinished.send(make_ok(), watched);
 
     // [THEN] The result is still forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
@@ -376,9 +325,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_ScoreAlreadyOpen_Doe
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNotificationAndForwards)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     Ret ret = make_ret(Err::ConvertProcessingFailed);
@@ -394,7 +341,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     EXPECT_CALL(*m_toastService,
                 show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
                      ToastActionCodesAre({ int(toast::ToastActionCode::TryAgain), int(toast::ToastActionCode::Dismiss) })))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedToastResultPromise();
     }));
@@ -407,7 +353,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
     });
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(ret, watched);
+    m_convertFinished.send(ret, watched);
 
     // [THEN] The failure is still forwarded to the scenario's own convertFinished channel
     EXPECT_TRUE(forwarded);
@@ -416,9 +362,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_ShowsConvertFailedNo
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsConvert)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     // [GIVEN] The user clicks "Try another file" on the failure toast
@@ -428,14 +372,9 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     }));
 
     // [GIVEN] The user re-selects a file to convert
-    const QVariantMap selectionMap {
-        { "type", int(ConvertType::Omr) },
-        { "paths", QStringList { "/some/file.xyz" } },
-        { "convertedScoreName", QString("file") }
-    };
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
-    .WillByDefault(Invoke([selectionMap](auto&&...) {
-        return resolvedValPromise(Val::fromQVariant(selectionMap));
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
     }));
 
     // [THEN] Conversion is restarted with the newly selected file
@@ -448,16 +387,14 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     Ret ret = make_ret(Err::ConvertProcessingFailed);
     WatchedScore watched;
     watched.name = u"My Score";
-    convertFinished.send(ret, watched);
+    m_convertFinished.send(ret, watched);
 
     pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Ok_DoesNotRestartConvert)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     // [GIVEN] The user clicks "OK" on the failure toast
@@ -471,7 +408,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Ok_DoesNotRestartCon
     EXPECT_CALL(*m_service, uploadToConvert(_, _)).Times(0);
 
     // [WHEN] The service reports a failed conversion
-    convertFinished.send(make_ret(Err::ConvertProcessingFailed), WatchedScore());
+    m_convertFinished.send(make_ret(Err::ConvertProcessingFailed), WatchedScore());
 
     pumpEvents();
 }
@@ -482,11 +419,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Ok_DoesNotRestartCon
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_ShowsToastOnceAfterThreshold)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingStatus> pollingStatusChanged;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     const std::string title = muse::trc("project/convert", "We’re having trouble connecting to MuseScore.com.");
@@ -495,25 +428,17 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_ShowsTo
     // [THEN] The connectivity toast is shown exactly once
     EXPECT_CALL(*m_toastService, showWarning(title, text)).Times(1);
 
-    // [WHEN] Polling fails below the elapsed threshold (5 minutes), then reaches and passes it,
-    // and eventually gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(0.0), secs_t(0.0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(60.0), secs_t(0.0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(180.0), secs_t(0.0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(300.0), secs_t(0.0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(420.0), secs_t(0.0), false });
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
-
-    pumpEvents();
+    // [WHEN] Polling fails below the elapsed threshold (5 minutes), then reaches and passes it
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(0.0), secs_t(0.0), false });
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(60.0), secs_t(0.0), false });
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(180.0), secs_t(0.0), false });
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(300.0), secs_t(0.0), false });
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(420.0), secs_t(0.0), false });
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_ShowsConnectionLostToast)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingStatus> pollingStatusChanged;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
@@ -524,24 +449,17 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_
     EXPECT_CALL(*m_toastService,
                 show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
                      ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), int(toast::ToastActionCode::TryAgain) })))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedToastResultPromise();
     }));
 
     // [WHEN] Polling gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
-
-    pumpEvents();
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_Retry_RetriesPolling)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingStatus> pollingStatusChanged;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     // [GIVEN] The user clicks "Retry" on the connection lost toast
@@ -554,18 +472,14 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_
     EXPECT_CALL(*m_service, retryPolling()).Times(1);
 
     // [WHEN] Polling gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
 
 TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_Dismiss_DoesNotRetryPolling)
 {
-    // [GIVEN] The service's channels, wired up via init()
-    async::Channel<Ret, WatchedScore> convertFinished;
-    async::Channel<PollingStatus> pollingStatusChanged;
-    ON_CALL(*m_service, convertFinished()).WillByDefault(Return(convertFinished));
-    ON_CALL(*m_service, pollingStatusChanged()).WillByDefault(Return(pollingStatusChanged));
+    // [GIVEN] The scenario is wired up to the service's channels
     m_scenario->init();
 
     // [GIVEN] The user dismisses the connection lost toast
@@ -578,7 +492,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_PollingStatusChanged_GaveUp_
     EXPECT_CALL(*m_service, retryPolling()).Times(0);
 
     // [WHEN] Polling gives up
-    pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
+    m_pollingStatusChanged.send(PollingFailure { Ret(), secs_t(600.0), secs_t(0.0), true });
 
     pumpEvents();
 }
@@ -760,7 +674,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -786,7 +699,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(std::string()), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -813,7 +725,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -840,7 +751,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ValidateLink_Unsupported_ShowsDia
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -861,7 +771,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsError_W
     // [GIVEN] The cloud is unavailable
     ON_CALL(*m_authorization, checkCloudIsAvailableAsync())
     .WillByDefault(Invoke([] {
-        return resolvedPromise<Ret>(Ret(false));
+        return resolvedRetPromise(Ret(false));
     }));
 
     const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
@@ -872,7 +782,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsError_W
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -893,7 +802,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_OpensPicker_
     // [THEN] No authorization dialog is shown, and the flow proceeds to open the picker
     EXPECT_CALL(*m_interactive, open(UriQuery("muse://cloud/requireauthorization"))).Times(0);
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return pendingValPromise();
     }));
@@ -919,14 +827,12 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_PromptsAutho
 
     // [THEN] The authorization dialog is opened, and the user completes it
     EXPECT_CALL(*m_interactive, open(expectedAuthQuery))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedValPromise();
     }));
 
     // [THEN] Once authorized, the flow proceeds to open the picker
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return pendingValPromise();
     }));
@@ -942,7 +848,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
     // [GIVEN] The cloud is unavailable
     ON_CALL(*m_authorization, checkCloudIsAvailableAsync())
     .WillByDefault(Invoke([] {
-        return resolvedPromise<Ret>(Ret(false));
+        return resolvedRetPromise(Ret(false));
     }));
 
     const std::string title = muse::trc("project/convert", "Unable to connect to MuseScore.com");
@@ -953,7 +859,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -973,6 +878,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationF
     const io::paths_t paths { "/some/file.xyz" };
     ON_CALL(*m_service, validateFiles(paths))
     .WillByDefault(Return(RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertUnsupportedFormat))));
+
+    // [THEN] The validation error dialog is shown
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillOnce(Invoke([](auto&&...) { return resolvedResultPromise(); }));
 
     // [THEN] Neither confirmation nor conversion is attempted
     EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
@@ -1002,7 +911,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsProcess
 
     // [THEN] The processing dialog is shown while the upload is still in progress
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/processing")))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedValPromise();
     }));
@@ -1036,7 +944,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_O
 
     // [THEN] The app navigates to Home > Scores page, on the "My online scores" tab
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://home?section=scores&subSection=myOnlineScores")))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedValPromise();
     }));
@@ -1179,7 +1086,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_FileReadFail
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -1215,7 +1121,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_MultipleFile
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -1246,7 +1151,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_Show
     EXPECT_CALL(*m_interactive,
                 warning(title, TextIs(text), ButtonIdsAre({ int(IInteractive::Button::Ok) }), int(IInteractive::Button::NoButton),
                         IInteractive::Options(IInteractive::Option::WithIcon), std::string()))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedResultPromise();
     }));
@@ -1266,8 +1170,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailur
     .WillByDefault(Return(uploadStarted(uploadProgress)));
 
     // [GIVEN] The user picks a file via the picker dialog
-    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
-    .WillByDefault(Invoke([](auto&&...) {
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillOnce(Invoke([](auto&&...) {
         return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
     }));
 
@@ -1279,7 +1183,6 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailur
     EXPECT_CALL(*m_toastService,
                 show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
                      ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), int(toast::ToastActionCode::TryAgain) })))
-    .Times(1)
     .WillOnce(Invoke([](auto&&...) {
         return resolvedToastResultPromise();
     }));
