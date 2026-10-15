@@ -155,7 +155,7 @@ async::Promise<IInteractive::Result> Interactive::openStandardAsync(const std::s
     },
         [](int code, const std::string& msg, auto resolve, auto reject) {
         //! NOTE To simplify writing the handlers
-        (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel, false));
+        (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel));
         return reject(code, msg);
     });
 }
