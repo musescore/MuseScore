@@ -28,7 +28,7 @@
 #include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 namespace mu::notation {
-class NoteInputBarCustomiseItem : public muse::uicomponents::SelectableItemListModel::Item
+class NoteInputBarCustomiseItem : public muse::uicomponents::SelectableItem
 {
     Q_OBJECT
 

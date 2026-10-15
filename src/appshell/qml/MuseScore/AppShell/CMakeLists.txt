@@ -147,6 +147,8 @@ endif(NOT OS_IS_MAC)
 
 fixup_qml_module_dependencies(appshell_qml)
 
+target_link_libraries(appshell_qml PRIVATE muse::uicomponents_qml)
+
 # Not adding this to the QML module because it isn't really part of the QML code
 qt_add_resources(appshell_qml appshell_qml_resources
     PREFIX
