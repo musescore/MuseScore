@@ -228,8 +228,7 @@ bool FontFaceXT::load(const FaceKey& key, const FontData& fontData, bool isSymbo
         // atlas texture
         muse::ByteArray metaData = m_zip->fileData("atlatInfo.txt");
         if (metaData.empty()) {
-            LOGE() << "atlatInfo is empty";
-            return false;
+            return true;
         }
         m_atlastexture.loadAtlasMetaInfo(metaData);
 
