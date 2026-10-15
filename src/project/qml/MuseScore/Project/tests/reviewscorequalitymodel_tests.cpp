@@ -24,11 +24,11 @@
 #include <QCoreApplication>
 #include <QUrl>
 
-#include "async/promise.h"
 #include "global/types/uri.h"
 
 #include "project/qml/MuseScore/Project/internal/ConvertFileToScore/reviewscorequalitymodel.h"
 
+#include "project/tests/utils/testutils.h"
 #include "project/tests/mocks/convertfiletoscoreservicemock.h"
 #include "project/tests/mocks/notationprojectmock.h"
 #include "context/tests/mocks/globalcontextmock.h"
@@ -77,10 +77,7 @@ protected:
             m_events.push_back(Event::Open);
             m_openedUris.push_back(uri);
 
-            return async::make_promise<Val>([](auto resolve, auto reject) {
-                (void)reject;
-                return resolve(Val());
-            });
+            return resolvedPromise(Val());
         }));
 
         QObject::connect(&m_model, &ReviewScoreQualityModel::closeRequested, [this]() { m_events.push_back(Event::Close); });

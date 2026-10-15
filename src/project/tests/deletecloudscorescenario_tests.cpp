@@ -30,6 +30,7 @@
 
 #include "project/internal/deletecloudscorescenario.h"
 
+#include "utils/testutils.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/recentfilescontrollermock.h"
 #include "global/tests/mocks/filesystemmock.h"
@@ -45,17 +46,6 @@ namespace {
 constexpr int SCORE_ID = 555;
 
 const io::path_t LOCAL_PATH = "/cloud/555.mscz";
-
-//! NOTE: keep the body queued, don't run it eagerly
-//! otherwise resolve() can fire before onResolve/onReject are attached
-template<typename T>
-async::Promise<T> resolvedPromise(const T& val)
-{
-    return async::make_promise<T>([val](auto resolve, auto reject) {
-        (void)reject;
-        return resolve(val);
-    });
-}
 
 UriQuery deleteDialogQuery(const QString& scoreName)
 {
