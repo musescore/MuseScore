@@ -88,9 +88,10 @@ private:
 
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
 
-    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName);
+    void startConvert(const ConvertInput& input, const muse::String& convertedScoreName);
 
     void showValidationError(const muse::Ret& ret);
+    void showUploadError(const muse::Ret& ret, const ConvertInput& input, const muse::String& convertedScoreName);
 
     void showCloudIsNotAvailableError();
     void showUnknownError();
@@ -107,6 +108,7 @@ private:
     void showFileProcessingDialog();
     void showScoreReadyNotification(const WatchedScore& watched);
     void showConvertFailedNotification(const WatchedScore& watched);
+    void showUploadFailedNotification(const ConvertInput& input, const muse::String& convertedScoreName);
     void showPollingFailureNotification();
     void showPollingGaveUpNotification();
 

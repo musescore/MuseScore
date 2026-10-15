@@ -92,6 +92,11 @@ async::Promise<Val> pendingValPromise()
     });
 }
 
+async::Promise<Ret> resolvedRetPromise(const Ret& ret)
+{
+    return resolvedPromise<Ret>(ret);
+}
+
 async::Promise<IInteractive::Result> resolvedResultPromise(const IInteractive::Result& result = IInteractive::Result())
 {
     return resolvedPromise<IInteractive::Result>(result);
@@ -100,6 +105,16 @@ async::Promise<IInteractive::Result> resolvedResultPromise(const IInteractive::R
 async::Promise<toast::ToastResult> resolvedToastResultPromise(const toast::ToastResult& result = toast::ToastResult())
 {
     return resolvedPromise<toast::ToastResult>(result);
+}
+
+RetVal<Progress> uploadStarted(const Progress& progress = Progress())
+{
+    return RetVal<Progress>::make_ok(progress);
+}
+
+RetVal<Progress> uploadNotStarted(const Ret& ret)
+{
+    return RetVal<Progress>::make_ret(ret);
 }
 
 Matcher<const IInteractive::Text&> TextIs(const std::string& text)
@@ -196,6 +211,8 @@ protected:
         .WillByDefault(Invoke([](auto&&...) { return resolvedResultPromise(); }));
         ON_CALL(*m_toastService, show(_, _, _, _, _))
         .WillByDefault(Invoke([](auto&&...) { return resolvedToastResultPromise(); }));
+        ON_CALL(*m_service, uploadToConvert(_, _))
+        .WillByDefault(Return(uploadStarted()));
 
         ON_CALL(*m_authorization, userAuthorized())
         .WillByDefault(Return(ValCh<bool> { true, {} }));
@@ -422,10 +439,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_TryAgain_RestartsCon
     }));
 
     // [THEN] Conversion is restarted with the newly selected file
-    EXPECT_CALL(*m_service, startConvert(Truly([](const ConvertInput& input) {
+    EXPECT_CALL(*m_service, uploadToConvert(Truly([](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Omr && convertPathsOf(input) == io::paths_t { "/some/file.xyz" };
     }), muse::String(u"file")))
-    .WillOnce(Return(make_ok()));
+    .WillOnce(Return(uploadStarted()));
 
     // [WHEN] The service reports a failed conversion
     Ret ret = make_ret(Err::ConvertProcessingFailed);
@@ -451,7 +468,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Failure_Ok_DoesNotRestartCon
 
     // [THEN] No new conversion is started
     EXPECT_CALL(*m_interactive, open(_)).Times(0);
-    EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
+    EXPECT_CALL(*m_service, uploadToConvert(_, _)).Times(0);
 
     // [WHEN] The service reports a failed conversion
     convertFinished.send(make_ret(Err::ConvertProcessingFailed), WatchedScore());
@@ -942,7 +959,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenNotAllowed)
     }));
     EXPECT_CALL(*m_service, validateFiles(_)).Times(0);
     EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
-    EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
+    EXPECT_CALL(*m_service, uploadToConvert(_, _)).Times(0);
 
     // [WHEN] Converting files
     m_scenario->convertFiles(io::paths_t { "/some/file.xyz" });
@@ -959,7 +976,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_StopsWhenValidationF
 
     // [THEN] Neither confirmation nor conversion is attempted
     EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
-    EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
+    EXPECT_CALL(*m_service, uploadToConvert(_, _)).Times(0);
 
     // [WHEN] Converting files
     m_scenario->convertFiles(paths);
@@ -972,8 +989,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsProcess
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
     .WillByDefault(Return(true));
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
+
+    // [GIVEN] The upload starts, but doesn't finish
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted()));
 
     // [GIVEN] The user picks a file via the picker dialog
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -981,7 +1000,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ShowsProcess
         return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
     }));
 
-    // [THEN] The processing dialog is shown
+    // [THEN] The processing dialog is shown while the upload is still in progress
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/processing")))
     .Times(1)
     .WillOnce(Invoke([](auto&&...) {
@@ -999,8 +1018,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_GoToScores_O
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
     .WillByDefault(Return(true));
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted()));
 
     // [GIVEN] The user picks a file via the picker dialog
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1033,8 +1052,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_DontShowAgai
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
     .WillByDefault(Return(true));
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted()));
 
     // [GIVEN] The user picks a file via the picker dialog
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1064,8 +1083,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_ProcessingDi
     // [GIVEN] The processing dialog is enabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
     .WillByDefault(Return(true));
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted()));
 
     // [GIVEN] The user picks a file via the picker dialog
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1098,8 +1117,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_NoProcessing
     // [GIVEN] The processing dialog is disabled in the config
     ON_CALL(*m_configuration, showConvertFileProcessingDialog())
     .WillByDefault(Return(false));
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted()));
 
     // [GIVEN] The user picks a file via the picker dialog
     EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1130,10 +1149,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_SchemelessLi
     }));
 
     // [THEN] The conversion is started with the link completed with a scheme
-    EXPECT_CALL(*m_service, startConvert(Truly([](const ConvertInput& input) {
+    EXPECT_CALL(*m_service, uploadToConvert(Truly([](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Audio2Score && convertLinkOf(input) == QUrl("http://link.xyz/song");
     }), muse::String(u"song")))
-    .WillOnce(Return(make_ok()));
+    .WillOnce(Return(uploadStarted()));
 
     // [WHEN] Converting with no pre-selected files
     m_scenario->convertFiles();
@@ -1144,8 +1163,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_SchemelessLi
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_FileReadFailure_ShowsFileReadError)
 {
     // [GIVEN] The service fails to read the picked file
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(io::make_ret(io::Err::FSReadError)));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadNotStarted(io::make_ret(io::Err::FSReadError))));
 
     // [GIVEN] The user picks a file via the picker dialog
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1175,8 +1194,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_FileReadFail
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_MultipleFilesReadFailure_ShowsPluralFileReadError)
 {
     // [GIVEN] The service fails to read one of the picked files
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(io::make_ret(io::Err::FSNotExist)));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadNotStarted(io::make_ret(io::Err::FSNotExist))));
 
     // [GIVEN] The user picks multiple images via the picker dialog
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1211,8 +1230,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_MultipleFile
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_ShowsUnknownError)
 {
     // [GIVEN] The service fails to start the conversion
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ret(Err::ConvertProcessingFailed)));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadNotStarted(make_ret(Err::ConvertProcessingFailed))));
 
     // [GIVEN] The user picks a file via the picker dialog
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
@@ -1236,6 +1255,73 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_Failure_Show
     // [WHEN] Converting with no pre-selected files
     m_scenario->convertFiles();
 
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailure_ShowsUploadFailedNotification)
+{
+    // [GIVEN] The upload starts
+    Progress uploadProgress;
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted(uploadProgress)));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    const std::string title = muse::trc("project/convert", "Error uploading score");
+    const std::string text = muse::qtrc("project/convert", "We weren’t able to upload ‘%1’. Check your internet connection and try again.")
+                             .arg("file").toStdString();
+
+    // [THEN] The "upload failed" notification is shown, with a Dismiss and an accented Retry action
+    EXPECT_CALL(*m_toastService,
+                show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
+                     ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss), int(toast::ToastActionCode::TryAgain) })))
+    .Times(1)
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedToastResultPromise();
+    }));
+
+    // [THEN] No error dialog is shown
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
+
+    // [WHEN] Converting with no pre-selected files, and the upload then fails
+    m_scenario->convertFiles();
+    pumpEvents();
+
+    uploadProgress.finish(make_ret(Err::ConvertUploadFailed));
+    pumpEvents();
+}
+
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_NoPaths_UploadFailure_Retry_ReuploadsSameInput)
+{
+    // [GIVEN] The user picks a file via the picker dialog, only once
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    // [GIVEN] The user clicks "Retry" on the upload failed toast
+    ON_CALL(*m_toastService, show(_, _, _, _, _))
+    .WillByDefault(Invoke([](auto&&...) {
+        return resolvedToastResultPromise(toast::ToastResult(int(toast::ToastActionCode::TryAgain)));
+    }));
+
+    // [THEN] The same input is uploaded again: the first upload fails, the retry succeeds
+    Progress firstUploadProgress;
+    EXPECT_CALL(*m_service, uploadToConvert(Truly([](const ConvertInput& input) {
+        return convertTypeOf(input) == ConvertType::Omr && convertPathsOf(input) == io::paths_t { "/some/file.xyz" };
+    }), muse::String(u"file")))
+    .WillOnce(Return(uploadStarted(firstUploadProgress)))
+    .WillOnce(Return(uploadStarted()));
+
+    // [WHEN] Converting with no pre-selected files, and the first upload then fails
+    m_scenario->convertFiles();
+    pumpEvents();
+
+    firstUploadProgress.finish(make_ret(Err::ConvertUploadFailed));
     pumpEvents();
 }
 
@@ -1276,10 +1362,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsOmrCo
     }));
 
     // [THEN] The conversion is started as an OMR conversion of the given paths
-    EXPECT_CALL(*m_service, startConvert(Truly([&](const ConvertInput& input) {
+    EXPECT_CALL(*m_service, uploadToConvert(Truly([&](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Omr && convertPathsOf(input) == paths;
     }), muse::String(u"file")))
-    .WillOnce(Return(make_ok()));
+    .WillOnce(Return(uploadStarted()));
 
     // [WHEN] Converting files
     m_scenario->convertFiles(paths);
@@ -1325,10 +1411,10 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_Proceeds_StartsAudio
     }));
 
     // [THEN] The conversion is started as an Audio2Score conversion of the given paths
-    EXPECT_CALL(*m_service, startConvert(Truly([&](const ConvertInput& input) {
+    EXPECT_CALL(*m_service, uploadToConvert(Truly([&](const ConvertInput& input) {
         return convertTypeOf(input) == ConvertType::Audio2Score && convertPathsOf(input) == paths;
     }), muse::String(u"song")))
-    .WillOnce(Return(make_ok()));
+    .WillOnce(Return(uploadStarted()));
 
     // [WHEN] Converting files
     m_scenario->convertFiles(paths);
@@ -1359,7 +1445,7 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UserCancelsConfirm_D
 
     // [THEN] The file-specific step is never opened, and the conversion is not started
     EXPECT_CALL(*m_interactive, open(_)).Times(0);
-    EXPECT_CALL(*m_service, startConvert(_, _)).Times(0);
+    EXPECT_CALL(*m_service, uploadToConvert(_, _)).Times(0);
 
     // [WHEN] Converting files
     m_scenario->convertFiles(paths);
@@ -1370,8 +1456,8 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UserCancelsConfirm_D
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_RepeatedCallsWhilePending_OnlyOpensPickerOnce_ThenAllowsNewConvert)
 {
     // [GIVEN] The user will eventually pick a file and complete a conversion
-    ON_CALL(*m_service, startConvert(_, _))
-    .WillByDefault(Return(make_ok()));
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Invoke([](auto&&...) { return uploadStarted(); }));
     ON_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
     .WillByDefault(Invoke([](auto&&...) {
         return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));

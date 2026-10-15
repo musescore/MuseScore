@@ -1080,13 +1080,13 @@ Promise<RetVal<ConvertConfig> > MuseScoreComService::fetchConfig()
     });
 }
 
-ProgressPtr MuseScoreComService::startConvert(const ConvertUploadDataPtr& data)
+ProgressPtr MuseScoreComService::uploadToConvert(const ConvertUploadDataPtr& data)
 {
     ProgressPtr progress = std::make_shared<Progress>();
     progress->start();
 
     executeAsyncRequest([this, data, progress]() {
-        return doUpload(data, progress);
+        return doUploadToConvert(data, progress);
     }).onResolve(this, [progress](const Ret& ret) {
         if (progress->isStarted()) {
             progress->finish(ret);
@@ -1096,7 +1096,7 @@ ProgressPtr MuseScoreComService::startConvert(const ConvertUploadDataPtr& data)
     return progress;
 }
 
-Promise<Ret> MuseScoreComService::doUpload(const ConvertUploadDataPtr& data, ProgressPtr progress)
+Promise<Ret> MuseScoreComService::doUploadToConvert(const ConvertUploadDataPtr& data, ProgressPtr progress)
 {
     TRACEFUNC;
 
