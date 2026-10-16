@@ -32,14 +32,18 @@ Item {
     id: root
 
     property alias orientation: gridView.orientation
+    Shortcut {sequence:"Ctrl+Alt+D";context:Qt.WindowShortcut;enabled:drawingButton.enabled;onActivated:DrawingSession.setDrawingMode(!DrawingSession.modeActive)}
 
     property bool floating: false
 
     property int maximumWidth: 0
     property int maximumHeight: 0
 
-    width: gridView.isHorizontal ? childrenRect.width : 76
+    implicitWidth: gridView.isHorizontal ? gridView.contentWidth + 104 : 76
+    implicitHeight: gridView.isHorizontal ? 40 : gridView.contentHeight + 104
+    width: gridView.isHorizontal ? (floating ? implicitWidth : maximumWidth) : 76
     height: !gridView.isHorizontal ? childrenRect.height : 40
+    clip: true
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "NoteInputBar"
@@ -59,13 +63,8 @@ Item {
                 return gridView.contentWidth
             }
 
-            var requiredFreeSpace = gridView.cellWidth * 3 + gridView.rowSpacing * 4
-
-            if (root.maximumWidth - gridView.contentWidth < requiredFreeSpace) {
-                return gridView.contentWidth - requiredFreeSpace
-            }
-
-            return gridView.contentWidth
+            var available = root.maximumWidth - customizeButton.width - drawingButton.width - 20
+            return Math.max(0, Math.min(gridView.contentWidth, available))
         }
 
         function resolveVerticalGridViewHeight() {
@@ -73,13 +72,8 @@ Item {
                 return gridView.contentHeight
             }
 
-            var requiredFreeSpace = gridView.cellHeight * 3 + gridView.rowSpacing * 4
-
-            if (root.maximumHeight - gridView.contentHeight < requiredFreeSpace) {
-                return gridView.contentHeight - requiredFreeSpace
-            }
-
-            return gridView.contentHeight
+            var available = root.maximumHeight - customizeButton.height - drawingButton.height - 20
+            return Math.max(0, Math.min(gridView.contentHeight, available))
         }
     }
 
@@ -114,7 +108,10 @@ Item {
             required property var itemModel
 
             readonly property MenuItem item: Boolean(itemModel) ? itemModel.item : null
+            // MenuItemList is a QML sequence; its generated type omits length.
+            // qmllint disable missing-property
             readonly property bool hasMenu: Boolean(item) && item.subitems.length !== 0
+            // qmllint enable missing-property
 
             width: gridView.cellWidth
             height: gridView.cellWidth
@@ -144,10 +141,12 @@ Item {
             }
 
             function toggleMenuOpened() {
+                DrawingSession.setDrawingMode(false)
                 menuLoader.toggleOpened(item.subitems)
             }
 
             function handleMenuItem() {
+                DrawingSession.setDrawingMode(false)
                 Qt.callLater(noteInputModel.handleMenuItem, item.id)
             }
 
@@ -172,6 +171,7 @@ Item {
                 id: menuLoader
 
                 onHandleMenuItem: function(itemId) {
+                    DrawingSession.setDrawingMode(false)
                     noteInputModel.handleMenuItem(itemId)
                 }
             }
@@ -209,6 +209,49 @@ Item {
         }
     }
 
+    FlatButton {
+        id: drawingButton
+        width: 56; height: gridView.cellHeight
+        anchors.margins: 8
+        enabled: DrawingSession.editor !== null && noteInputModel.isInputAllowed
+        accentButton: DrawingSession.modeActive
+        transparent: !accentButton
+        iconFont: ui.theme.toolbarIconsFont
+        toolTipTitle: qsTrc("drawing-tools", "Draw on score")
+        toolTipDescription: qsTrc("drawing-tools", "Draw and edit vector shapes on the score. Ctrl+Alt+D toggles drawing mode; Esc exits.")
+        navigation.panel: root.navigationPanel
+        navigation.order: 101
+        navigation.name: "vector-drawing-mode"
+        toolTipShortcut:"Ctrl+Alt+D"
+        onClicked: DrawingSession.setDrawingMode(!DrawingSession.modeActive)
+        contentItem: Component {
+            Item {
+                width: 56; height: 32
+                Canvas {
+                    anchors.fill: parent
+                    property color ink: drawingButton.iconColor
+                    onInkChanged: requestPaint()
+                    onPaint: {
+                        var ctx = getContext("2d")
+                        ctx.reset(); ctx.clearRect(0, 0, width, height)
+                        ctx.strokeStyle = ink; ctx.fillStyle = ink; ctx.lineWidth = 1.4
+                        ctx.lineCap = "round"
+                        ctx.beginPath(); ctx.arc(4, 24, 2.4, 0, Math.PI * 2); ctx.fill()
+                        ctx.beginPath(); ctx.moveTo(4, 24)
+                        ctx.bezierCurveTo(12, 13, 18, 32, 25, 24)
+                        ctx.quadraticCurveTo(29, 20, 33, 24); ctx.stroke()
+                    }
+                }
+                StyledIconLabel {
+                    x: 28; width: 28; height: 32
+                    iconCode: IconCode.EDIT
+                    font: drawingButton.iconFont
+                    color: drawingButton.iconColor
+                }
+            }
+        }
+    }
+
     states: [
         State {
             when: gridView.isHorizontal
@@ -226,6 +269,11 @@ Item {
             AnchorChanges {
                 target: customizeButton
                 anchors.left: gridView.right
+                anchors.verticalCenter: root.verticalCenter
+            }
+            AnchorChanges {
+                target: drawingButton
+                anchors.right: root.right
                 anchors.verticalCenter: root.verticalCenter
             }
         },
@@ -246,6 +294,11 @@ Item {
                 target: customizeButton
                 anchors.top: gridView.bottom
                 anchors.right: parent.right
+            }
+            AnchorChanges {
+                target: drawingButton
+                anchors.top: customizeButton.bottom
+                anchors.horizontalCenter: root.horizontalCenter
             }
         }
     ]

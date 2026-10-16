@@ -23,6 +23,8 @@
 #include "paletteprovider.h"
 
 #include <QFileDialog>
+#include <QCoreApplication>
+#include <QDir>
 #include <QStandardItemModel>
 #include <QJsonDocument>
 #include <QQmlEngine>

@@ -367,6 +367,7 @@ qt_add_qml_module(inspector_qml
         text/TextSettings.qml
         text/textstylepopup/FrameSubPopup.qml
         text/textstylepopup/TextStylePopup.qml
+        text/textstylepopup/TextStyleFormatting.qml
         text/textstylepopup/TextStyleSubPopup.qml
 
     IMPORTS
@@ -438,3 +439,6 @@ target_include_directories(inspector_qml PRIVATE
     text/textstylepopup
     types
 )
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(inspector_qml PROPERTIES UNITY_BUILD OFF)

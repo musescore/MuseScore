@@ -230,6 +230,10 @@ DockPage {
 
             thickness: orientation === Qt.Horizontal ? 40 : 76
             resizable: !floating
+            // A docked toolbar can scroll its note buttons. Its minimum must
+            // not depend on the full content width or on its assigned width.
+            minimumWidth: orientation === Qt.Horizontal ? 180 : 76
+            minimumHeight: orientation === Qt.Horizontal ? 40 : 180
 
             navigationSection: root.noteInputKeyNavSec
 
@@ -237,8 +241,10 @@ DockPage {
                 orientation: noteInputBar.orientation
                 floating: noteInputBar.floating
 
-                maximumWidth: noteInputBar.width
-                maximumHeight: noteInputBar.height
+                // The content is reparented by the dock system. Use its real
+                // viewport, including during restoration of the main window.
+                maximumWidth: Math.max(0, parent && parent.parent ? parent.parent.width - 28 : noteInputBar.width - 28)
+                maximumHeight: parent && parent.parent ? parent.parent.height : noteInputBar.height
 
                 navigationPanel.section: noteInputBar.navigationSection
                 navigationPanel.order: 1
@@ -247,6 +253,46 @@ DockPage {
     ]
 
     panels: [
+        DockPanel {
+            id: drawingToolsPanel
+            objectName: "vectorDrawingPanel"
+            floatable:false
+            // Width is fixed below; height must remain available to the dock
+            // layout rather than being locked to minimumHeight as well.
+            resizable:true
+            title: qsTrc("drawing-tools", "Vector drawing")
+            width: 64
+            minimumWidth: 64
+            maximumWidth: 64
+            minimumHeight: root.panelMinDimension
+            maximumHeight: root.panelMaxDimension
+            groupName: "vectorDrawingTools"
+            location: Location.Right
+            visible: false
+            property bool closingPanel:false
+            property DrawingPanelMenuModel drawingMenu:DrawingPanelMenuModel {
+                Component.onCompleted:load()
+                onKeepVisibleChanged:drawingToolsPanel.syncVisibility()
+            }
+            contextMenuModel:drawingMenu
+            function syncVisibility(){
+                if(!inited||closingPanel)return
+                var show=DrawingSession.modeActive||drawingMenu.keepVisible
+                if(show!==isOpen()){if(show)open();else close()}
+            }
+            onInitedChanged:if(inited)Qt.callLater(syncVisibility)
+            onVisibleChanged:if(inited&&!visible&&DrawingSession.modeActive){
+                closingPanel=true
+                DrawingSession.setDrawingMode(false)
+                closingPanel=false
+            }
+            property Connections drawingModeConnection:Connections {
+                target:DrawingSession
+                function onModeActiveChanged(){drawingToolsPanel.syncVisibility()}
+            }
+            dropDestinations: root.verticalPanelDropDestinations
+            NativeDrawingTools { anchors.fill: parent }
+        },
         DockPanel {
             id: palettesPanel
 

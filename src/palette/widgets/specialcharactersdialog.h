@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "actions/iactionsdispatcher.h"
 
 class QListWidget;
 
@@ -41,11 +42,15 @@ class PaletteWidget;
 class SpecialCharactersDialog : public muse::uicomponents::TopLevelDialog, public Ui::SpecialCharactersDialog
 {
     Q_OBJECT
+    Q_PROPERTY(bool drawingMode READ drawingMode WRITE setDrawingMode)
 
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     SpecialCharactersDialog(QWidget* parent = nullptr);
+    bool drawingMode() const {return m_drawingMode;}
+    void setDrawingMode(bool active);
 
 private slots:
     void populateSmufl();
@@ -59,6 +64,7 @@ private:
     void populateCommon();
 
     muse::draw::Font m_font;
+    bool m_drawingMode = false;
     PaletteWidget* m_pCommon = nullptr;
     PaletteWidget* m_pSmufl = nullptr;
     PaletteWidget* m_pUnicode = nullptr;

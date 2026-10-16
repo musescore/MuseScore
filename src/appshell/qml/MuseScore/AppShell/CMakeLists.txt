@@ -159,3 +159,6 @@ target_include_directories(appshell_qml PRIVATE
     FirstLaunchSetup
     PublishPage
 )
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(appshell_qml PROPERTIES UNITY_BUILD OFF)

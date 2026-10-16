@@ -33,6 +33,8 @@
 #include <QFileInfo>
 #include <QMenu>
 #include <QMimeData>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QResizeEvent>
 #include <QToolTip>
 #include <QWindow>
@@ -56,6 +58,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/symbol.h"
+#include "engraving/iengravingfont.h"
 #include "engraving/dom/factory.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
@@ -467,6 +470,11 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
         return;
     }
 
+    if(captureDrawingSymbol) {
+        emit drawingSymbolActivated(cell->element.get());
+        mainWindow()->qWindow()->requestActivate();
+        return;
+    }
     notation->interaction()->applyPaletteElement(cell->element.get(), modifiers);
     mainWindow()->qWindow()->requestActivate();
 }
@@ -745,7 +753,17 @@ void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
             QMimeData* mimeData = new QMimeData;
             const ElementPtr el   = cell->element;
 
-            mimeData->setData(mimeSymbolFormat, el->mimeData().toQByteArray());
+            if(captureDrawingSymbol) {
+                QString text,family;
+                if(el->isSymbol()) {
+                    const auto symbol=toSymbol(el.get());
+                    const auto font=symbol->scoreFont()?symbol->scoreFont():gpaletteScore->engravingFont();
+                    text=font->toString(symbol->sym()).toQString();family=QString::fromStdString(font->family());
+                }else if(el->isFSymbol()) {
+                    const auto symbol=toFSymbol(el.get());text=symbol->toString().toQString();family=symbol->font().family().id().toQString();
+                }
+                mimeData->setData("application/x-musedraw-character",QJsonDocument(QJsonObject{{"text",text},{"family",family}}).toJson(QJsonDocument::Compact));
+            }else mimeData->setData(mimeSymbolFormat, el->mimeData().toQByteArray());
             drag->setMimeData(mimeData);
 
             drag->setPixmap(pixmapForCellAt(m_currentIdx));

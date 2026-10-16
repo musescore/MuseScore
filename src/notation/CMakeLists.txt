@@ -102,6 +102,9 @@ target_sources(notation PRIVATE
     utilities/scorerangeutilities.h
 )
 
+# Keep the insertion batching boundary out of generated unity translation units.
+set_source_files_properties(internal/notationinteraction.cpp PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+
 if(MUE_BUILD_ENGRAVING_PLAYBACK)
     target_sources(notation PRIVATE
         internal/notationplayback.cpp

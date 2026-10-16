@@ -108,6 +108,11 @@ FocusScope {
                     id: notationView
                     anchors.fill: parent
 
+                    DrawingOverlay {
+                        scoreView: notationView
+                        z: 10
+                    }
+
                     property NavigationPanel navigationPanel: NavigationPanel {
                         name: "ScoreView"
                         section: navSec

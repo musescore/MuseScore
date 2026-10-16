@@ -298,6 +298,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("fullscreen"),
 #endif
         makeMenuItem("toggle-palettes"),
+        makeMenuItem("toggle-drawing-tools"),
         makeMenuItem("masterpalette"),
         makeMenuItem("toggle-instruments"),
         makeMenuItem("inspector"),
