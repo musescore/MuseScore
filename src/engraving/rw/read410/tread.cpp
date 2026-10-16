@@ -2540,65 +2540,18 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
 {
-    //! NOTE Need separated "given" data and layout data
-    ChordLine::LayoutData* ldata = l->mutldata();
-    ldata->path = PainterPath();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Path") {
-            PainterPath path;
-            PointF curveTo;
-            PointF p1;
-            int state = 0;
-            while (e.readNextStartElement()) {
-                const AsciiStringView nextTag(e.name());
-                if (nextTag == "Element") {
-                    int type = e.intAttribute("type");
-                    double x  = e.doubleAttribute("x");
-                    double y  = e.doubleAttribute("y");
-                    double spatium = ctx.spatium();
-                    x *= spatium;
-                    y *= spatium;
-                    switch (PainterPath::ElementType(type)) {
-                    case PainterPath::ElementType::MoveToElement:
-                        path.moveTo(x, y);
-                        break;
-                    case PainterPath::ElementType::LineToElement:
-                        path.lineTo(x, y);
-                        break;
-                    case PainterPath::ElementType::CurveToElement:
-                        curveTo.rx() = x;
-                        curveTo.ry() = y;
-                        state = 1;
-                        break;
-                    case PainterPath::ElementType::CurveToDataElement:
-                        if (state == 1) {
-                            p1.rx() = x;
-                            p1.ry() = y;
-                            state = 2;
-                        } else if (state == 2) {
-                            path.cubicTo(curveTo, p1, PointF(x, y));
-                            state = 0;
-                        }
-                        break;
-                    }
-                    e.skipCurrentElement();           //needed to go to next EngravingItem in Path
-                } else {
-                    e.unknown();
-                }
-            }
-            ldata->path = path;
-            l->setModified(true);
+            compat::CompatUtils::readChordLinePath(l, e);
         } else if (tag == "subtype") {
             l->setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
         } else if (tag == "straight") {
             l->setStraight(e.readInt());
         } else if (tag == "wavy") {
             l->setWavy(e.readInt());
-        } else if (tag == "lengthX") {
-            l->setLengthX(e.readInt());
-        } else if (tag == "lengthY") {
-            l->setLengthY(e.readInt());
+        } else if (tag == "lengthX" || tag == "lengthY") { // obsolete
+            e.skipCurrentElement();
         } else if (tag == "play") {
             l->setPlayChordLine(e.readBool());
         } else if (!readItemProperties(l, e, ctx)) {

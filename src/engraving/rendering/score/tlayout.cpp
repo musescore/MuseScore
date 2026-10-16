@@ -1661,31 +1661,7 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
 
     ldata->setMag(item->chord()->mag());
 
-    if (!item->modified()) {
-        double x2 = 0;
-        double y2 = 0;
-        double baseLength = spatium * item->chord()->intrinsicMag();
-        double horBaseLength = 1.2 * baseLength;     // let the symbols extend a bit more horizontally
-        x2 += item->isToTheLeft() ? -horBaseLength : horBaseLength;
-        y2 += item->isBelow() ? baseLength : -baseLength;
-        if (item->chordLineType() != ChordLineType::NOTYPE && !item->isWavy()) {
-            PainterPath path;
-            if (!item->isToTheLeft()) {
-                if (item->isStraight()) {
-                    path.lineTo(x2, y2);
-                } else {
-                    path.cubicTo(x2 / 2, 0.0, x2, y2 / 2, x2, y2);
-                }
-            } else {
-                if (item->isStraight()) {
-                    path.lineTo(x2, y2);
-                } else {
-                    path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
-                }
-            }
-            ldata->path = path;
-        }
-    }
+    layoutChordLinePath(item, ldata, item->baseLength());
 
     double x = 0.0;
     double y = noteLD->pos().y();
@@ -1752,6 +1728,31 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
 
         ldata->setBbox(r);
     }
+}
+
+void TLayout::layoutChordLinePath(const ChordLine* item, ChordLine::LayoutData* ldata, double baseLength)
+{
+    ldata->path = PainterPath();
+    if (item->chordLineType() == ChordLineType::NOTYPE || item->isWavy()) {
+        return;
+    }
+
+    const ChordLine::Points defaultPoints = item->defaultPoints();
+    const ChordLine::Points& offsets = item->gripOffsets();
+    ChordLine::Points points;
+    for (size_t i = 0; i < points.size(); ++i) {
+        points[i] = (defaultPoints[i] + offsets[i]) * baseLength;
+    }
+
+    using Point = ChordLine::Point;
+    PainterPath path;
+    path.moveTo(points[size_t(Point::START)]);
+    if (item->isStraight()) {
+        path.lineTo(points[size_t(Point::END)]);
+    } else {
+        path.cubicTo(points[size_t(Point::BEZIER1)], points[size_t(Point::BEZIER2)], points[size_t(Point::END)]);
+    }
+    ldata->path = path;
 }
 
 void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const LayoutConfiguration& conf)
