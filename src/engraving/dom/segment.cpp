@@ -1264,13 +1264,12 @@ bool Segment::splitsTuplet() const
         if (!(e && e->isChordRest())) {
             continue;
         }
-        ChordRest* cr = toChordRest(e);
-        Tuplet* t = cr->tuplet();
-        while (t) {
-            if (cr != t->elements().front()) {
+        // an outer tuplet's first element is the inner tuplet, not the chord or rest
+        const DurationElement* el = toChordRest(e);
+        for (const Tuplet* t = el->tuplet(); t; el = t, t = t->tuplet()) {
+            if (el != t->elements().front()) {
                 return true;
             }
-            t = t->tuplet();
         }
     }
     return false;
