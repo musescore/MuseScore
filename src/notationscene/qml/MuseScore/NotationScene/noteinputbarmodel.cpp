@@ -33,6 +33,7 @@
 #include "notation/inotationundostack.h"
 
 #include "notationcommands.h"
+#include "notationmenus.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -329,18 +330,7 @@ MenuItemList NoteInputBarModel::makeIntervalsItems()
 
 MenuItemList NoteInputBarModel::makeMeasuresItems()
 {
-    MenuItemList items {
-        makeMenuItem(INSERT_MEASURES_COMMAND),
-        makeMenuItem(APPEND_MEASURES_COMMAND),
-        makeSeparator(),
-        makeMenuItem(INSERT_MEASURES_COMMAND),
-        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND),
-        makeSeparator(),
-        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND),
-        makeMenuItem(APPEND_MEASURES_COMMAND)
-    };
-
-    return items;
+    return makeItems(MEASURES_MENU_COMMANDS);
 }
 
 MenuItemList NoteInputBarModel::makeFramesItems()
