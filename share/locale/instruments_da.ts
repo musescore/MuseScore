@@ -10590,35 +10590,35 @@
         <source>Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.</source>
         <comment>glockenspiel description</comment>
         <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stemte metalstave arrangeret som klavertangenter. Spilles med køller. Lyder to oktaver højere, end de er noteret.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3577"/>
         <source>Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.</source>
         <comment>xylophone description</comment>
         <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stemte træstave arrangeret som klavertangenter, undertiden med resonansrør nedenunder. Spilles med køller. Lyder en oktav højere, end de er noteret.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3595"/>
         <source>Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</source>
         <comment>vibraphone description</comment>
         <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stemte aluminiumsstave, der er arrangeret som klavertangenter, med resonansrør og en sustainpedal. Nogle har elmotorer med variabel hastighed, der hurtigt åbner og lukker resonansrørene for at skabe tremolo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3622"/>
         <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
         <comment>marimba description</comment>
         <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stemte træstave arrangeret som klavertangenter med resonansrør nedenunder. Spilles med køller. Har en dybere og blødere klang end xylofonen og lyder, som det er noteret.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3631"/>
         <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
         <comment>marimba-single description</comment>
         <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stemte træstave arrangeret som klavertangenter med resonansrør nedenunder. Spilles med køller. Har en dybere og blødere klang end xylofonen og lyder, som det er noteret.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
@@ -10737,98 +10737,98 @@
         <source>Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.</source>
         <comment>celesta description</comment>
         <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Klokkepiano. I bund og grund et klokkespil, der betjenes via tangenter, og som er udstyret med en sustainpedal. Det lyder en oktav højere, end det er noteret.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5040"/>
         <source>Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.</source>
         <comment>clavichord description</comment>
         <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Benytter tangenter (små blade) til at slå på metalstrengene og samtidig bestemme deres længde (dvs. tonehøjde). Udtryksfuldt, men meget svagtlydende.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5049"/>
         <source>Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.</source>
         <comment>clavinet description</comment>
         <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Klavikord med elektrisk forstærkede strenge. Dette ændrer lyden og fjerner begrænsningerne for lydstyrken.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5058"/>
         <source>Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.</source>
         <comment>harpsichord description</comment>
         <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Knipser i strengene, hvilket frembringer en skarpere lyd med et mindre dynamisk omfang sammenlignet med klaveret.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5067"/>
         <source>Small harpsichord with only one string per key, which limits the dynamic range and timbre.</source>
         <comment>virginal description</comment>
         <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lille cembalo med kun én streng pr. tangent, hvilket begrænser det dynamiske omfang og klangfarven.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5076"/>
         <source>Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Klaver med elektrisk forstærkede strenge, tunger eller stemmegafler. (Eller et digitalt klaver, der er indstillet til at lyde som et elektrisk klaver.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5085"/>
         <source>Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.</source>
         <comment>grand-piano description</comment>
         <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Har en større vandret ramme, hvilket kan give en fyldigere klang og mere præcis kontrol over tangentanslaget sammenlignet med et opretstående klaver.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5094"/>
         <source>Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Honky-tonk-klaver (et meget urent stemt opretstående klaver), der ofte forbindes med barer, countrymusik og varieté.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5103"/>
         <source>Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.</source>
         <comment>piano description</comment>
         <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Opretstående klaver eller flygel. Slår strengene an med en hammer, hvilket muliggør et stort dynamisk spænd. Toner kan fastholdes ved hjælp af en pedal. </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5112"/>
         <source>Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lille klaver med metalstænger i stedet for strenge, der benytter en mekanisme svarende til en celestas. Det mangler typisk pedaler og blev oprindeligt designet til børn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5121"/>
         <source>Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.</source>
         <comment>upright-piano description</comment>
         <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Har en mindre, opretstående ramme, hvilket gør det mere kompakt end et flygel. Bruges typisk til øvning eller optræden i uformelle rammer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5541"/>
         <source>Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).</source>
         <comment>electric-guitar description</comment>
         <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Solid-body-guitar med elektrisk forstærkede strenge (nodeskrift, med diskantnøgle og 8va bassa). </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5562"/>
         <source>Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).</source>
         <comment>electric-guitar-treble-clef description</comment>
         <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Solidbody-guitar med elektrisk forstærkede strenge (nodeskrift, med almindelig G-nøgle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5621"/>
         <source>Solid-body guitar with electrically amplified strings (tablature).</source>
         <comment>electric-guitar-tablature description</comment>
         <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Solidbody-guitar med elektrisk forstærkede strenge (tabulatur).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6253"/>
