@@ -25,6 +25,7 @@
 #include "dom/articulation.h"
 #include "dom/capo.h"
 #include "dom/chord.h"
+#include "dom/chordline.h"
 #include "dom/dynamic.h"
 #include "dom/excerpt.h"
 #include "dom/expression.h"
@@ -61,6 +62,8 @@
 #include "style/defaultstyle.h"
 #include "style/styledef.h"
 #include "style/textstyle.h"
+
+#include "../xmlreader.h"
 
 #include "types/string.h"
 
@@ -1218,5 +1221,49 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
         if (removedInstrumentChange) {
             reregisterInstrumentChanges(score);
         }
+    }
+}
+
+void CompatUtils::readChordLinePath(ChordLine* chordLine, XmlReader& e)
+{
+    /* Before 5.0, a manually edited chord line stored its whole path, in spatium units.
+     * Now only the offsets of its points from the default shape are stored. */
+
+    std::vector<PointF> points;
+    while (e.readNextStartElement()) {
+        if (e.name() == "Element") {
+            points.emplace_back(e.doubleAttribute("x"), e.doubleAttribute("y"));
+            e.skipCurrentElement();
+        } else {
+            e.unknown();
+        }
+    }
+
+    std::vector<ChordLine::Point> pointTypes;
+    if (points.size() == 2) {
+        pointTypes = { ChordLine::Point::START, ChordLine::Point::END };
+    } else if (points.size() == size_t(ChordLine::Point::POINTS_COUNT)) {
+        pointTypes = { ChordLine::Point::START, ChordLine::Point::BEZIER1, ChordLine::Point::BEZIER2, ChordLine::Point::END };
+    } else {
+        LOGW() << "Unexpected number of chord line path elements: " << points.size();
+        return;
+    }
+
+    // The saved path already included the chord's intrinsic mag, but the new ChordLine offsets don't, so we'll remove it before storing:
+    const EngravingObject* parent = chordLine->ownershipParent();
+    const double mag = parent && parent->isChord() ? toChord(parent)->intrinsicMag() : 1.0;
+    const ChordLine::Points defaultPoints = chordLine->defaultPoints();
+
+    for (size_t i = 0; i < points.size(); ++i) {
+        const ChordLine::Point point = pointTypes.at(i);
+        PointF offset = (points.at(i) / mag) - defaultPoints[size_t(point)];
+        // ignore rounding errors, so unedited points remain unedited:
+        if (std::abs(offset.x()) < 0.001) {
+            offset.setX(0.0);
+        }
+        if (std::abs(offset.y()) < 0.001) {
+            offset.setY(0.0);
+        }
+        chordLine->setGripOffset(point, offset);
     }
 }

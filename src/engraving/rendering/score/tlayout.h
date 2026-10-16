@@ -229,6 +229,7 @@ public:
 
     static void layoutChord(Chord* item, LayoutContext& ctx);
     static void layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layoutChordLinePath(const ChordLine* item, ChordLine::LayoutData* ldata, double baseLength);
     static void layoutClef(const Clef* item, Clef::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutCapo(const Capo* item, Capo::LayoutData* ldata, const LayoutContext& ctx);
 

@@ -435,6 +435,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CHORD_LINE_TYPE,                     P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "subtype",                         QT_TRANSLATE_NOOP("engraving/propertyName", "chord line type") },
     { Pid::CHORD_LINE_STRAIGHT,                 P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "straight",                        QT_TRANSLATE_NOOP("engraving/propertyName", "straight chord line") },
     { Pid::CHORD_LINE_WAVY,                     P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "wavy",                            QT_TRANSLATE_NOOP("engraving/propertyName", "wavy chord line") },
+    { Pid::CHORD_LINE_GRIP_OFFSET1,             P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "gripOffset1",                     QT_TRANSLATE_NOOP("engraving/propertyName", "chord line start offset") },
+    { Pid::CHORD_LINE_GRIP_OFFSET2,             P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "gripOffset2",                     QT_TRANSLATE_NOOP("engraving/propertyName", "chord line first control point offset") },
+    { Pid::CHORD_LINE_GRIP_OFFSET3,             P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "gripOffset3",                     QT_TRANSLATE_NOOP("engraving/propertyName", "chord line second control point offset") },
+    { Pid::CHORD_LINE_GRIP_OFFSET4,             P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "gripOffset4",                     QT_TRANSLATE_NOOP("engraving/propertyName", "chord line end offset") },
     { Pid::TREMOLO_TYPE,                        P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "subtype",                         QT_TRANSLATE_NOOP("engraving/propertyName", "tremolo type") },
     { Pid::TREMOLO_STYLE,                       P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "strokeStyle",                     QT_TRANSLATE_NOOP("engraving/propertyName", "tremolo style") },
     { Pid::HARMONY_TYPE,                        P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "harmonyType",                     QT_TRANSLATE_NOOP("engraving/propertyName", "harmony type") },
@@ -464,8 +468,6 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::START_WITH_LONG_NAMES,               P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "startWithLongNames",              QT_TRANSLATE_NOOP("engraving/propertyName", "start with long names") },
     { Pid::START_WITH_MEASURE_ONE,              P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "startWithMeasureOne",             QT_TRANSLATE_NOOP("engraving/propertyName", "start with measure one") },
     { Pid::FIRST_SYSTEM_INDENTATION,            P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "firstSystemIndentation",          QT_TRANSLATE_NOOP("engraving/propertyName", "first system indentation") },
-
-    { Pid::PATH,                                P_TYPE::DRAW_PATH,                 PropertyGroup::APPEARANCE, false, "path",                            QT_TRANSLATE_NOOP("engraving/propertyName", "path") },
 
     { Pid::PREFER_SHARP_FLAT,                   P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "preferSharpFlat",                 QT_TRANSLATE_NOOP("engraving/propertyName", "prefer sharps or flats") },
 

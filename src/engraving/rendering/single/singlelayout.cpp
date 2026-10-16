@@ -876,31 +876,7 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
 {
     ChordLine::LayoutData* ldata = item->mutldata();
     ldata->setMag(1.0);
-    if (!item->modified()) {
-        double x2 = 0;
-        double y2 = 0;
-        double baseLength = item->spatium();
-        double horBaseLength = 1.2 * baseLength;     // let the symbols extend a bit more horizontally
-        x2 += item->isToTheLeft() ? -horBaseLength : horBaseLength;
-        y2 += item->isBelow() ? baseLength : -baseLength;
-        if (item->chordLineType() != ChordLineType::NOTYPE && !item->isWavy()) {
-            PainterPath path;
-            if (!item->isToTheLeft()) {
-                if (item->isStraight()) {
-                    path.lineTo(x2, y2);
-                } else {
-                    path.cubicTo(x2 / 2, 0.0, x2, y2 / 2, x2, y2);
-                }
-            } else {
-                if (item->isStraight()) {
-                    path.lineTo(x2, y2);
-                } else {
-                    path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
-                }
-            }
-            ldata->path = path;
-        }
-    }
+    TLayout::layoutChordLinePath(item, ldata, item->baseLength());
 
     ldata->setPos(0.0, 0.0);
 

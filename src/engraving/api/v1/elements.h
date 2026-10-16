@@ -1171,10 +1171,6 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, firstSystemIndentation, FIRST_SYSTEM_INDENTATION)
 
-    /// For chord lines: Their line path.
-    ///\since MuseScore 4.6
-    API_PROPERTY(path,                    PATH)
-
     /// For parts: Whether this part prefers sharps or flats,
     /// one of PluginAPI::PluginAPI::PreferSharpFlat values.
     ///\since MuseScore 4.6

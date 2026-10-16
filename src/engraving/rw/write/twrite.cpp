@@ -1271,23 +1271,14 @@ void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::CHORD_LINE_STRAIGHT);
     writeProperty(item, xml, Pid::CHORD_LINE_WAVY);
     writeProperty(item, xml, Pid::PLAY);
-    xml.tag("lengthX", item->lengthX(), 0.0);
-    xml.tag("lengthY", item->lengthY(), 0.0);
     writeItemProperties(item, xml, ctx);
-    if (item->modified()) {
-        //! NOTE Need separated "given" data and layout data
-        const ChordLine::LayoutData* ldata = item->ldata();
-        const PainterPath& path = ldata->path;
-        size_t n = path.elementCount();
-        xml.startElement("Path");
-        for (size_t i = 0; i < n; ++i) {
-            const PainterPath::Element& e = path.elementAt(i);
-            double spatium = item->spatium();
-            double x = e.x / spatium;
-            double y = e.y / spatium;
-            xml.tag("Element", { { "type", int(e.type) }, { "x", x }, { "y", y } });
+    // Grip offsets are stored in units of the chord line's base length, so they can't be written with writeProperty
+    for (size_t i = 0; i < size_t(ChordLine::Point::POINTS_COUNT); ++i) {
+        const ChordLine::Point point = ChordLine::Point(i);
+        const PointF& offset = item->gripOffset(point);
+        if (!offset.isNull()) {
+            xml.tagPoint(propertyName(ChordLine::gripOffsetPid(point)), offset);
         }
-        xml.endElement();
     }
     xml.endElement();
 }
