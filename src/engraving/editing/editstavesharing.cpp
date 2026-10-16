@@ -441,6 +441,54 @@ void EditStaveSharing::addStaveSharingChange(Transaction& tx, Segment* seg, Part
     seg->triggerLayout();
 }
 
+void EditStaveSharing::addStaveSharingChangeToRange(Transaction& tx, Segment* startSeg, Segment* endSeg, staff_idx_t startStaff,
+                                                    staff_idx_t endStaffIdx)
+{
+    const Score* score = startSeg->score();
+    const Fraction& startTick = startSeg->tick();
+    const Fraction& endTick = endSeg->tick();
+
+    for (staff_idx_t staffIdx = startStaff; staffIdx <= endStaffIdx;) {
+        Staff* staff = score->staff(staffIdx);
+        Part* part = staff->part();
+        if (!part->isSharedPart()) {
+            staffIdx = track2staff(part->trackRange().endTrack) + 1;
+            continue;
+        }
+        SharedPart* sharedPart = toSharedPart(part);
+
+        // Create change
+        StaveSharingState prevStaveSharingState = sharedPart->staveSharingStateAtTick(startTick);
+
+        StaveSharingState newStaveSharingState = prevStaveSharingState;
+        newStaveSharingState.setUserTrackMap(newStaveSharingState.sharedTrackMap());
+        newStaveSharingState.setIsReset(false);
+
+        undoSetStaveSharingState(tx, sharedPart, startTick, newStaveSharingState);
+
+        std::optional<StaveSharingState> existingState = sharedPart->exactStaveSharingStateAtTick(endTick);
+        if (!existingState || !existingState->isUserModified()) {
+            StaveSharingState nextState;
+            if (prevStaveSharingState.isUserModified() && !prevStaveSharingState.isReset()) {
+                // Resume previous user sharing state
+                nextState = prevStaveSharingState;
+            } else {
+                // Create reset
+                nextState = existingState ? existingState.value() : newStaveSharingState;
+                nextState.setUserTrackMap(nextState.sharedTrackMap());
+                nextState.setIsReset(true);
+            }
+
+            undoSetStaveSharingState(tx, sharedPart, endTick, nextState);
+        }
+
+        // Next part
+        staffIdx = track2staff(part->trackRange().endTrack) + 1;
+    }
+    startSeg->triggerLayout();
+    endSeg->triggerLayout();
+}
+
 void EditStaveSharing::setTrackMapping(Transaction& tx, Segment* seg, Part* part, track_idx_t originTrack, track_idx_t sharedTrack)
 {
     IF_ASSERT_FAILED(part && part->isSharedPart()) {
