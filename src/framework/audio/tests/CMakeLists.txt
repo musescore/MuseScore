@@ -26,7 +26,6 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/audiodrivermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/rpcchannelmock.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rpcpacker_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/alignbuffer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiodrivercontroller_tests.cpp
 )
@@ -36,3 +35,5 @@ set(MODULE_TEST_LINK
 )
 
 include(SetupGTest)
+
+add_subdirectory(rpcpacker)
