@@ -119,9 +119,10 @@ void StaveSharingLayout::updateStaveSharing(StaveSharingContext& ctx)
     }
 }
 
-bool StaveSharingLayout::isValid(SharedTrackMap userMap, StaveSharingLayout::StaveSharingContext& ctx)
+bool StaveSharingLayout::isValid(const SharedTrackMap& userMap, StaveSharingLayout::StaveSharingContext& ctx)
 {
     // Make sure that the origin tracks which are mapped to shared tracks can be combined
+    // Make sure we don't leave voice 1 of a shared stave empty when subsequent voices are filled
 
     // Group origin tracks by the shared track they map to
     std::map<track_idx_t, TrackGroup> originTracksBySharedTrack;
@@ -153,6 +154,19 @@ bool StaveSharingLayout::isValid(SharedTrackMap userMap, StaveSharingLayout::Sta
 
         prevSharedTrack = sharedTrack;
         lastTrackOnPrevVoice = originTracks.back();
+    }
+
+    // Shared staves must have a mapping to voice 1 if they have mappings to voices 2, 3 or 4
+    std::unordered_set<staff_idx_t> stavesWithVoice1;
+    for (const auto& [sharedTrack, originTrack] : originTracksBySharedTrack) {
+        if (track2voice(sharedTrack) == 0) {
+            stavesWithVoice1.insert(track2staff(sharedTrack));
+        }
+    }
+    for (const auto& [sharedTrack, originTrack] : originTracksBySharedTrack) {
+        if (track2voice(sharedTrack) != 0 && !muse::contains(stavesWithVoice1, track2staff(sharedTrack))) {
+            return false;
+        }
     }
 
     return true;
