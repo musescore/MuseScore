@@ -1,8 +1,8 @@
-name: 'Drawing 4.x: checks and portable build'
+name: 'Drawing 4.8: checks and portable build'
 
 on:
   push:
-    branches: [drawing-4.7]
+    branches: [drawing-4.8]
   workflow_dispatch:
 
 permissions:

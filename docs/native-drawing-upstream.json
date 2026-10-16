@@ -1,0 +1,19 @@
+{
+  "developmentVersion": "4.8.0-dev",
+  "upstreamRepository": "musescore/MuseScore",
+  "upstreamBranch": "4.7",
+  "integratedCommit": "5f5d26161b5253e59a205871442a7cb846bfcc49",
+  "upstreamVersionAtIntegration": "4.7.5",
+  "upstreamValidation": "Windows, Linux and macOS build checks succeeded at the recorded commit.",
+  "forkApplicationValidation": "Pending successful CI build and score-level validation.",
+  "nextReleaseToReconcile": "v4.7.6",
+  "policy": {
+    "requireMaintainerAcceptance": true,
+    "requireSuccessfulRequiredChecks": true,
+    "excludeOpenPullRequests": true,
+    "preserveChangeDependencies": true,
+    "preserveDrawingVersionOnMaintenanceMerge": true,
+    "requireForkValidationBeforeApproval": true,
+    "keepFiveXPortSeparate": true
+  }
+}
