@@ -5695,16 +5695,54 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
         return;
     }
 
+    Selection& selection = score()->selection();
+    const bool wasRangeSelection = selection.isRange();
+    const Fraction startTick = selection.tickStart();
+    const Fraction endTick = selection.tickEnd();
+    const staff_idx_t startStaff = selection.staffStart();
+    const staff_idx_t endStaff = selection.staffEnd();
+    Box* startBox = selection.startBox();
+    Box* endBox = selection.endBox();
+
+    // Score order, not pointer order
+    const std::set<ChordRest*> selectedChordRests = score()->getSelectedChordRests();
+    std::vector<ChordRest*> chordRests(selectedChordRests.begin(), selectedChordRests.end());
+    std::sort(chordRests.begin(), chordRests.end(), [](const ChordRest* a, const ChordRest* b) {
+        return a->tick() != b->tick() ? a->tick() < b->tick() : a->track() < b->track();
+    });
+
     startEdit(TranslatableString("undoableAction", "Add tuplet"));
 
-    for (ChordRest* chordRest : score()->getSelectedChordRests()) {
+    Tuplet* firstTuplet = nullptr;
+    for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isGrace() && !(chordRest->isChord() && toChord(chordRest)->isTrillCueNote())) {
             Fraction ratio = options.ratio;
             if (options.autoBaseLen) {
                 ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), chordRest->ticks()));
             }
-            score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
+            Tuplet* tuplet = score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
+            if (!firstTuplet) {
+                firstTuplet = tuplet;
+            }
         }
+    }
+
+    if (wasRangeSelection) {
+        selection.setRangeTicks(startTick, endTick, startStaff, endStaff, startBox, endBox);
+        selection.updateSelectedElements();
+    } else if (firstTuplet && !firstTuplet->elements().empty()) {
+        DurationElement* firstElement = firstTuplet->elements().front();
+        score()->deselectAll();
+        if (firstElement->isChord()) {
+            const std::vector<Note*>& notes = toChord(firstElement)->notes();
+            score()->select({ notes.begin(), notes.end() }, SelectType::ADD);
+        } else {
+            score()->select(firstElement, SelectType::ADD);
+        }
+    }
+
+    if (firstTuplet) {
+        score()->inputState().setDuration(firstTuplet->baseLen());
     }
 
     apply();
