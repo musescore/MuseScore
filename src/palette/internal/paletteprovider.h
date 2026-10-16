@@ -314,7 +314,7 @@ private:
     bool m_isSearching = false;
 
     QSortFilterProxyModel* m_visibilityFilterModel = nullptr;
-    QSortFilterProxyModel* m_searchFilterModel = nullptr;
+    PaletteCellFilterProxyModel* m_searchFilterModel = nullptr;
 
     QAbstractItemModel* m_mainPalette = nullptr; // visible userPalette entries
     // PaletteTreeModel* poolPalette; // masterPalette entries not yet added to mainPalette
