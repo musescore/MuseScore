@@ -116,6 +116,7 @@
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
+#include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/editstretch.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
@@ -2613,6 +2614,11 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         }
         case ActionIconType::PARENTHESES: {
             EditParentheses::addParenthesesToNotes(tx, score);
+            return;
+        }
+        case ActionIconType::STAVE_SHARING_CHANGE: {
+            EditStaveSharing::addStaveSharingChangeToRange(tx, sel.startSegment(), sel.endSegment(), sel.staffStart(),
+                                                           sel.staffEnd());
             return;
         }
         case ActionIconType::STANDARD_BEND:
