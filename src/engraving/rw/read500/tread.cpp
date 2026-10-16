@@ -2616,7 +2616,7 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Path") {
-            compat::CompatUtils::readChordLinePath(l, e);
+            compat::CompatUtils::readChordLinePath(l, e, ctx.mscVersion());
         } else if (tag == "subtype") {
             l->setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
         } else if (tag == "straight") {
