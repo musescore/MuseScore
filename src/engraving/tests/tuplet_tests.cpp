@@ -26,10 +26,13 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -343,5 +346,66 @@ TEST_F(Engraving_TupletTests, nestedTupletsLengthen)
 
     score->undoRedo(true, nullptr);
     EXPECT_EQ(rhythm(m1), "9:8[8 8 8 3:2[8 8 8] 8 8 8 8]");
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, nestedTupletStartDoesNotSplitTuplet)
+{
+    // quarter, a quarter triplet starting with an eighth triplet, quarter
+    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (DurationType duration : { DurationType::V_QUARTER, DurationType::V_HALF, DurationType::V_QUARTER }) {
+            is.setDuration(duration);
+            NoteVal nval(60);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    Measure* m1 = score->firstMeasure();
+    auto crAt = [&](const Fraction& tick) {
+        Segment* s = m1->findSegment(SegmentType::ChordRest, tick);
+        return s ? toChordRest(s->element(0)) : nullptr;
+    };
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->addTuplet(crAt(Fraction(1, 4)), Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+    });
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->addTuplet(crAt(Fraction(1, 4)), Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+    });
+    ASSERT_EQ(rhythm(m1), "4 3:2[ 3:2[8 r8 r8] r4 r4] 4");
+
+    // only the start of both tuplets doesn't split one
+    Segment* start = m1->findSegment(SegmentType::ChordRest, Fraction(1, 4));
+    EXPECT_FALSE(start->splitsTuplet());
+    EXPECT_TRUE(m1->findSegment(SegmentType::ChordRest, Fraction(1, 4) + Fraction(1, 18))->splitsTuplet());
+    EXPECT_TRUE(m1->findSegment(SegmentType::ChordRest, Fraction(1, 4) + Fraction(1, 6))->splitsTuplet());
+
+    // Insert adds a quarter before the tuplets
+    is.setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    is.setSegment(start);
+    score->select(toChord(crAt(Fraction(1, 4)))->upNote());
+    is.setTrack(0);
+    is.setDuration(DurationType::V_QUARTER);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(tx, score, NoteInputParams { 0 }, false, false);
+    });
+    EXPECT_EQ(rhythm(m1), "4 4 3:2[ 3:2[8 r8 r8] r4 r4] 4");
+    score->undoRedo(true, nullptr);
+    ASSERT_EQ(rhythm(m1), "4 3:2[ 3:2[8 r8 r8] r4 r4] 4");
+
+    // the measure splits before the tuplets
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        SplitJoinMeasure::splitMeasure(tx, score, Fraction(1, 4));
+    });
+    m1 = score->firstMeasure();
+    EXPECT_EQ(rhythm(m1), "4");
+    EXPECT_EQ(rhythm(m1->nextMeasure()), "3:2[ 3:2[8 r8 r8] r4 r4] 4");
+    EXPECT_TRUE(score->sanityCheck());
+
     delete score;
 }
