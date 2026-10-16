@@ -50,7 +50,7 @@ on:
 
 jobs:
   windows_x64:
-    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x64')
+    if: inputs.platforms == '' || contains(inputs.platforms, 'windows_x64')
     runs-on: windows-2025
     steps:
     - name: Cancel Previous Runs
@@ -231,6 +231,7 @@ jobs:
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
+        retention-days: 1
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
@@ -251,7 +252,7 @@ jobs:
     # Disable on pull_request
     if: |
       github.event_name != 'pull_request' &&
-      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable'))
+      (inputs.platforms == '' || contains(inputs.platforms, 'windows_portable'))
     runs-on: windows-2025
     steps:
     - name: Cancel Previous Runs
@@ -379,6 +380,7 @@ jobs:
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
+        retention-days: 1
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache

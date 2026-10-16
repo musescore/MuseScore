@@ -1,0 +1,55 @@
+name: 'Drawing 4.x: checks and portable build'
+
+on:
+  push:
+    branches: [drawing-4.7]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: drawing-4x-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  editor_checks:
+    runs-on: windows-2025
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.2
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+          modules: qt5compat
+          cache: true
+      - name: Run drawing interaction checks
+        shell: pwsh
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          $report = Join-Path $env:GITHUB_WORKSPACE 'drawing-tests.txt'
+          qmltestrunner -input src/notationscene/tests/drawing -o "$report,txt"
+          $result = $LASTEXITCODE
+          Get-Content $report
+          exit $result
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: drawing-editor-checks
+          path: drawing-tests.txt
+          retention-days: 1
+
+  windows_portable:
+    needs: editor_checks
+    uses: ./.github/workflows/build_windows.yml
+    with:
+      platforms: windows_portable
+      build_mode: devel
+      publish: 'off'
