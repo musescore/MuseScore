@@ -255,7 +255,7 @@ muse::Ret ProjectActionsController::newProject()
 
     if (globalContext()->currentProject()) {
         if (multiwindowsProvider()->isHasWindowWithoutProject()) {
-            multiwindowsProvider()->activateWindowWithoutProject({ "file-new" });
+            multiwindowsProvider()->activateWindowWithoutProject({ QString::fromStdString(PROJECT_NEW_COMMAND.toString()) });
             return make_ok();
         }
         QStringList args;
