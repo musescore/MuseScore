@@ -8513,7 +8513,8 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     double _spatium    = score()->style().spatium();
     const qreal border = _spatium * 3;
     RectF showRect;
-    if (staffIndex == -1) {
+    const SysStaff* staff = staffIndex >= 0 ? sys->staff(staffIndex) : nullptr;
+    if (!staff) {
         showRect = RectF(mRect.x(), sysRect.y(), mRect.width(), sysRect.height())
                    .adjusted(-border, -border, border, border);
     } else {
@@ -8521,7 +8522,7 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
         RectF stave = RectF(sys->canvasBoundingRect().left(),
                             sys->staffCanvasYpage(staffIndex),
                             sys->width(),
-                            sys->staff(staffIndex)->bbox().height());
+                            staff->bbox().height());
         showRect = mRect.intersected(stave).adjusted(-border, -border, border, border);
     }
 
