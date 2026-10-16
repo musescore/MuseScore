@@ -82,6 +82,7 @@
 
 #include "dom/image.h"
 #include "dom/imageStore.h"
+#include "dom/svgdrawing.h"
 #include "dom/instrument.h"
 #include "dom/instrchange.h"
 
@@ -1890,10 +1891,21 @@ void TWrite::writeProperties(const BSymbol* item, XmlWriter& xml, WriteContext& 
 
 void TWrite::write(const Image* item, XmlWriter& xml, WriteContext& ctx)
 {
+    const_cast<Image*>(item)->updateDrawingStore();
     xml.startElement(item);
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
 
     xml.tag("path", item->storeItem() ? item->storeItem()->hashName() : std::string());
+
+    if (!item->drawingData().empty()) {
+#ifndef NO_QT_SUPPORT
+        xml.tag("drawingData", SvgDrawing::serializedData(item));
+        xml.tag("drawingPart", SvgDrawing::serializedPart(item));
+#else
+        xml.tag("drawingData", item->drawingData());
+        xml.tag("drawingPart", item->drawingPart());
+#endif
+    }
 
     writeProperty(item, xml, Pid::AUTOSCALE);
     writeProperty(item, xml, Pid::SIZE);

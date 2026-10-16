@@ -53,3 +53,6 @@ fixup_qml_module_dependencies(engraving_qml)
 
 # Necessary for the auto-generated sources
 target_include_directories(engraving_qml PRIVATE devtools)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(engraving_qml PROPERTIES UNITY_BUILD OFF)

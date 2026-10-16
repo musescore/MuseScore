@@ -22,6 +22,9 @@
 
 #include <map>
 #include <set>
+#ifndef NO_QT_SUPPORT
+#include "../dom/svgdrawing.h"
+#endif
 
 #include "../dom/accidental.h"
 #include "../dom/anchors.h"
@@ -6953,6 +6956,14 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
     std::vector<Staff*> staves;
     if (addToLinkedStaves) {
         staves = ostaff->staffList();
+#ifndef NO_QT_SUPPORT
+        // A drawing may be attached to more than its owning staff. Include one
+        // destination in every corresponding part, without duplicating it on
+        // the other staves of the full score.
+        if (element->isImage() && !toImage(element)->drawingData().empty()) {
+            staves = SvgDrawing::linkedStaves(toImage(element));
+        }
+#endif
     } else {
         staves.push_back(ostaff);
     }

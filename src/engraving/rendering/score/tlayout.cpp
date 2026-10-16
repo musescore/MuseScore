@@ -22,6 +22,7 @@
 #include <cfloat>
 
 #include "tlayout.h"
+#include "dom/svgdrawing.h"
 
 #include "global/realfn.h"
 #include "global/types/number.h"
@@ -3259,6 +3260,12 @@ void TLayout::layoutImage(const Image* item, Image::LayoutData* ldata)
 
     ldata->setPos(0.0, 0.0);
     const_cast<Image*>(item)->init();
+
+#ifndef NO_QT_SUPPORT
+    if (SvgDrawing::layout(item, ldata)) {
+        return;
+    }
+#endif
 
     SizeF imageSize = item->size();
 

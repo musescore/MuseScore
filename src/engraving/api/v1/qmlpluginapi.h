@@ -529,6 +529,8 @@ public:
 
     Q_INVOKABLE apiv1::Score* newScore(const QString& name, const QString& part, int measures);
     Q_INVOKABLE apiv1::EngravingItem* newElement(int);
+    Q_INVOKABLE QString insertSvgDrawing(const QString& svg, const QString& document, const QString& mode);
+    Q_INVOKABLE QString selectedSvgDrawing() const;
     Q_INVOKABLE void removeElement(apiv1::EngravingItem* wrapped);
     Q_INVOKABLE void cmd(const QString&);
     /// \cond PLUGIN_API \private \endcond

@@ -1494,6 +1494,10 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
             img->setSizeIsSpatium(e.readBool());
         } else if (tag == "path") {
             loaded = img->loadFromStore(e.readText().toStdString());
+        } else if (tag == "drawingData") {
+            img->setDrawingData(e.readText().toStdString());
+        } else if (tag == "drawingPart") {
+            img->setDrawingPart(e.readText().toStdString());
         } else if (tag == "linkPath") {
             if (img->configuration()->allowReadingImagesFromOutsideMscz() && !loaded) {
                 loaded = img->loadFromFile(e.readText());

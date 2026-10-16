@@ -133,7 +133,15 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     // Write images
     {
         for (ImageStoreItem* ip : imageStore) {
-            if (!ip->isUsed(score)) {
+            bool used=ip->isUsed(score);
+            // A part can reflow a native drawing into SVG fragments with a
+            // different image-store hash from the full score's fragments.
+            if (!used && (!ctx || !ctx->shouldWriteRange())) {
+                for (const Excerpt* excerpt : score->excerpts()) {
+                    if (excerpt->excerptScore() && ip->isUsed(excerpt->excerptScore())) {used=true;break;}
+                }
+            }
+            if (!used) {
                 continue;
             }
             ByteArray data = ip->buffer();
@@ -204,6 +212,14 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
 
     // restore in-memory part score's metaTags
     partScore->setMetaTags(partTags);
+
+    // An extracted part is a standalone score and must carry its own image
+    // assets. Metadata alone is not enough for stock MuseScore readers.
+    for (ImageStoreItem* image : imageStore) {
+        if (image->isUsed(partScore)) {
+            mscWriter.addImageFile(String::fromStdString(image->hashName()),image->buffer());
+        }
+    }
 
     // Write thumbnail
     {

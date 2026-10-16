@@ -28,6 +28,7 @@
 #include "dom/beam.h"
 #include "dom/factory.h"
 #include "dom/keysig.h"
+#include "dom/image.h"
 #include "dom/layoutbreak.h"
 #include "dom/lyrics.h"
 #include "dom/marker.h"
@@ -596,6 +597,10 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             if (e->staffIdx() >= nstaves || !e->staff()->show() || !e->visible()) {
                 continue;
             }
+            // The editable image has musical points in this measure. Folding
+            // it into a multi-measure rest would remove its layout and lose
+            // the drawing when opening or exporting the individual part.
+            if(e->isImage()&&!toImage(e)->drawingPart().empty())return false;
             if (muse::contains(BREAK_TYPES, e->type()) && !s->rtick().isZero()) {
                 // play count text is permitted at the end of a measure
                 if (!e->isPlayCountText()) {
