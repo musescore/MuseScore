@@ -23,6 +23,9 @@
 
 #include <QFont>
 
+#include "translation.h"
+#include "realfn.h"
+
 #include "types/commontypes.h"
 #include "types/texttypes.h"
 
@@ -34,12 +37,15 @@
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 
-#include "translation.h"
+#include "palette/palettecommands.h"
+#include "notationscene/notationcommands.h"
+
 #include "log.h"
-#include "realfn.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::engraving;
+using namespace mu::palette;
+using namespace mu::notation;
 
 TextSettingsModel::TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
     : PropertiesPanelAbstractModel(parent, iocCtx, repository)
@@ -295,12 +301,12 @@ void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds
 
 void TextSettingsModel::insertSpecialCharacters()
 {
-    dispatcher()->dispatch("show-keys");
+    commandDispatcher()->dispatch(TOGGLE_SPECIAL_CHARACTERS_COMMAND);
 }
 
 void TextSettingsModel::showStaffTextProperties()
 {
-    dispatcher()->dispatch("staff-text-properties");
+    commandDispatcher()->dispatch(OPEN_STAFF_TEXT_PROPERTIES_COMMAND);
 }
 
 PropertyItem* TextSettingsModel::fontFamily() const
@@ -630,8 +636,7 @@ void TextSettingsModel::updateFramePropertiesAvailability()
 
 void TextSettingsModel::updateStaffPropertiesAvailability()
 {
-    bool isAvailable = static_cast<TextTypes::TextType>(m_textType->value().toInt())
-                       == TextTypes::TextType::TEXT_TYPE_STAFF;
+    bool isAvailable = static_cast<TextStyleType>(m_textType->value().toInt()) == TextStyleType::STAFF;
 
     setAreStaffTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
 }
@@ -712,7 +717,7 @@ void TextSettingsModel::updateIsPositionAvailable()
 {
     bool available = false;
     for (EngravingItem* item : m_elementList) {
-        if (item->isTextLineBase() || item->isMeasureNumber()) {
+        if (item->isTextLineBase() || item->isMeasureNumber() || item->isLyrics()) {
             available = false;
             break;
         } else if (!item->hasVoiceAssignmentProperties()) {

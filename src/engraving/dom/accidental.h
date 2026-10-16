@@ -315,7 +315,7 @@ private:
 
     friend class Factory;
 
-    Accidental(EngravingItem* parent);
+    Accidental(DummyParentOr<EngravingItem> parent);
 
     AccidentalType m_accidentalType = AccidentalType::NONE;
     AccidentalBracket m_bracket = AccidentalBracket::NONE;

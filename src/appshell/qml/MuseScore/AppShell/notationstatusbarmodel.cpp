@@ -24,9 +24,11 @@
 
 #include "defer.h"
 #include "log.h"
+#include "thirdparty/kors_logger/src/log_base.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
+#include <algorithm>
 
 #ifdef MUSE_MODULE_WORKSPACE
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
@@ -40,10 +42,13 @@
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 #include "notation/inotationviewstate.h" // IWYU pragma: keep
 
+#include "notationscene/notationcommands.h"
+#include "workspace/workspacecommands.h"
+
 using namespace mu::appshell;
 using namespace mu::notation;
 using namespace muse;
-using namespace muse::actions;
+using namespace muse::rcommand;
 using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace muse::workspace;
@@ -55,28 +60,25 @@ static const QString TYPE_KEY("type");
 static const QString ID_KEY("id");
 static const QString VALUE_KEY("value");
 
-static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
-static const ActionCode SELECT_WORKSPACE_CODE("configure-workspaces");
-
 static constexpr int MIN_DISPLAYED_ZOOM_PERCENTAGE = 25;
 
-static const std::map<ViewMode, ActionCode> ALL_VIEW_MODE_MAP {
-    { ViewMode::PAGE, "view-mode-page" },
-    { ViewMode::LINE, "view-mode-continuous" },
-    { ViewMode::SYSTEM, "view-mode-single" },
-    { ViewMode::FLOAT, "view-mode-float" },
+static const std::map<ViewMode, Command> ALL_VIEW_MODE_MAP {
+    { ViewMode::PAGE, VIEW_MODE_PAGE_COMMAND },
+    { ViewMode::LINE, VIEW_MODE_CONTINUOUS_COMMAND },
+    { ViewMode::SYSTEM, VIEW_MODE_SINGLE_COMMAND },
+    { ViewMode::FLOAT, VIEW_MODE_FLOAT_COMMAND },
 };
 
-static ActionCode zoomTypeToActionCode(ZoomType type)
+static Command zoomTypeToCommand(ZoomType type)
 {
     switch (type) {
-    case ZoomType::Percentage: return "zoom-x-percent";
-    case ZoomType::PageWidth: return "zoom-page-width";
-    case ZoomType::WholePage: return "zoom-whole-page";
-    case ZoomType::TwoPages: return "zoom-two-pages";
+    case ZoomType::Percentage: return ZOOM_TO_PERCENT_COMMAND;
+    case ZoomType::PageWidth: return ZOOM_TO_PAGE_WIDTH_COMMAND;
+    case ZoomType::WholePage: return ZOOM_TO_WHOLE_PAGE_COMMAND;
+    case ZoomType::TwoPages: return ZOOM_TO_TWO_PAGES_COMMAND;
     }
 
-    return "";
+    return {};
 }
 
 NotationStatusBarModel::NotationStatusBarModel(QObject* parent)
@@ -96,8 +98,8 @@ void NotationStatusBarModel::init()
 {
     TRACEFUNC;
 
-    m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_CODE);
-    m_currentWorkspaceItem = makeMenuItem(SELECT_WORKSPACE_CODE);
+    m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_COMMAND);
+    m_currentWorkspaceItem = makeMenuItem(WORKSPACES_CONFIGURE_COMMAND);
 
     setNotation(context()->currentNotation());
 
@@ -130,10 +132,8 @@ MenuItem* NotationStatusBarModel::concertPitchItem()
 
 void NotationStatusBarModel::updateConcertPitchItem()
 {
-    UiActionState state;
-    state.enabled = m_notation ? true : false;
-    state.checked = m_notation ? m_notation->style()->styleValue(StyleId::concertPitch).toBool() : false;
-    m_concertPitchItem->setState(state);
+    m_concertPitchItem->setEnabled(m_notation ? true : false);
+    m_concertPitchItem->setChecked(m_notation ? m_notation->style()->styleValue(StyleId::concertPitch).toBool() : false);
 }
 
 MenuItem* NotationStatusBarModel::currentWorkspaceItem()
@@ -153,12 +153,10 @@ void NotationStatusBarModel::updateCurrentWorkspaceItem()
 #endif
 }
 
-MenuItem* NotationStatusBarModel::makeMenuItem(const ActionCode& actionCode)
+MenuItem* NotationStatusBarModel::makeMenuItem(const Command& command)
 {
-    MenuItem* item = new MenuItem(actionsRegister()->action(actionCode), this);
-    item->setId(QString::fromStdString(item->action().code));
-    item->setState(actionsRegister()->actionState(actionCode));
-
+    MenuItem* item = new MenuItem(commandsRegister()->commandInfo(command), this);
+    item->setCommandState(commandsState()->commandState(command));
     return item;
 }
 
@@ -167,7 +165,7 @@ MenuItem* NotationStatusBarModel::currentViewMode()
     ViewMode viewMode = m_notation ? m_notation->viewMode() : ViewMode::PAGE;
 
     for (MenuItem* modeItem : m_availableViewModeList) {
-        ViewMode mode = muse::key(ALL_VIEW_MODE_MAP, modeItem->id().toStdString());
+        ViewMode mode = muse::key(ALL_VIEW_MODE_MAP, modeItem->command());
 
         if (mode == viewMode) {
             if (viewMode == ViewMode::LINE || viewMode == ViewMode::SYSTEM) {
@@ -205,14 +203,8 @@ void NotationStatusBarModel::initAvailableViewModeList()
             continue;
         }
 
-        const UiAction& action = actionsRegister()->action(pair.second);
-        MenuItem* viewModeItem = new MenuItem(action, this);
-
-        UiActionState state;
-        state.enabled = true;
-        viewModeItem->setState(state);
-
-        viewModeItem->setId(QString::fromStdString(pair.second));
+        MenuItem* viewModeItem = makeMenuItem(pair.second);
+        viewModeItem->setEnabled(true);
         viewModeItem->setSelectable(true);
         viewModeItem->setSelected(currentViewMode == pair.first);
 
@@ -240,7 +232,7 @@ void NotationStatusBarModel::setCurrentZoomPercentage(int zoomPercentage)
         return;
     }
 
-    dispatch(zoomTypeToActionCode(ZoomType::Percentage), ActionData::make_arg1<int>(zoomPercentage));
+    dispatch(zoomTypeToCommand(ZoomType::Percentage), { { "percent", Val(zoomPercentage) } });
 }
 
 ZoomType NotationStatusBarModel::currentZoomType() const
@@ -305,12 +297,12 @@ void NotationStatusBarModel::setNotation(const INotationPtr& notation)
 
 void NotationStatusBarModel::toggleConcertPitch()
 {
-    dispatch(TOGGLE_CONCERT_PITCH_CODE);
+    dispatch(TOGGLE_CONCERT_PITCH_COMMAND);
 }
 
 void NotationStatusBarModel::setCurrentViewMode(const QString& modeCode)
 {
-    dispatch(codeFromQString(modeCode));
+    dispatch(Command(modeCode.toStdString()));
 }
 
 void NotationStatusBarModel::initAvailableZoomList()
@@ -340,21 +332,13 @@ void NotationStatusBarModel::initAvailableZoomList()
         = [this, currZoomType, currZoomPercentage](ZoomType type, const muse::TranslatableString& title = {}, int value = 0) {
         MenuItem* menuItem = new MenuItem(this);
         menuItem->setId(QString::number(static_cast<int>(type)) + QString::number(value));
-
-        UiAction action;
-        action.title = title.isEmpty() ? zoomTypeTitle(type) : title;
-        menuItem->setAction(action);
-
-        UiActionState state;
-        state.enabled = true;
-        menuItem->setState(state);
-
+        menuItem->setTitle(title.isEmpty() ? zoomTypeTitle(type) : title);
         menuItem->setSelectable(true);
         if (currZoomType == type) {
             menuItem->setSelected(type == ZoomType::Percentage ? value == currZoomPercentage : true);
         }
 
-        menuItem->setArgs(ActionData::make_arg2<ZoomType, int>(type, value));
+        menuItem->setParams({ { "type", Val(type) }, { "percent", Val(value) } });
 
         return menuItem;
     };
@@ -379,26 +363,21 @@ void NotationStatusBarModel::initAvailableZoomList()
 
 void NotationStatusBarModel::setCurrentZoom(const QString& zoomId)
 {
-    int zoomIndex = -1;
-    for (int i = 0; i < m_availableZoomList.size(); ++i) {
-        const MenuItem* zoomItem = m_availableZoomList[i];
-        if (zoomItem->id() == zoomId) {
-            zoomIndex = i;
-            break;
-        }
-    }
+    auto it = std::find_if(m_availableZoomList.begin(), m_availableZoomList.end(), [zoomId](const MenuItem* item) {
+        return item->id() == zoomId;
+    });
 
-    if (zoomIndex < 0 || zoomIndex >= m_availableZoomList.size()) {
+    if (it == m_availableZoomList.end()) {
         return;
     }
 
-    const MenuItem* zoom = m_availableZoomList[zoomIndex];
-    ZoomType type = zoom->args().arg<ZoomType>(0);
-    int value = zoom->args().arg<int>(1);
+    const Params& params = (*it)->params();
+    ZoomType type = params.at("type").toEnum<ZoomType>();
+    int percent = params.at("percent").toInt();
+
+    dispatch(zoomTypeToCommand(type), { { "percent", Val(percent) } });
 
     emit availableZoomListChanged();
-
-    dispatch(zoomTypeToActionCode(type), ActionData::make_arg1<int>(value));
 }
 
 int NotationStatusBarModel::minZoomPercentage() const
@@ -413,17 +392,24 @@ int NotationStatusBarModel::maxZoomPercentage() const
 
 void NotationStatusBarModel::zoomIn()
 {
-    dispatch("zoomin");
+    dispatch(ZOOM_IN_COMMAND);
 }
 
 void NotationStatusBarModel::zoomOut()
 {
-    dispatch("zoomout");
+    dispatch(ZOOM_OUT_COMMAND);
 }
 
-void NotationStatusBarModel::handleAction(const QString& actionCode)
+void NotationStatusBarModel::handleMenuItem(const QString& itemId)
 {
-    dispatch(codeFromQString(actionCode));
+    LOGDA() << itemId;
+    if (m_concertPitchItem->id() == itemId) {
+        dispatch(m_concertPitchItem->command());
+    } else if (m_currentWorkspaceItem->id() == itemId) {
+        dispatch(m_currentWorkspaceItem->command());
+    } else {
+        UNREACHABLE;
+    }
 }
 
 void NotationStatusBarModel::handleWorkspacesMenuItem(const QString& itemId)
@@ -445,9 +431,9 @@ INotationAccessibilityPtr NotationStatusBarModel::accessibility() const
     return notation() ? notation()->accessibility() : nullptr;
 }
 
-void NotationStatusBarModel::dispatch(const ActionCode& code, const ActionData& args)
+void NotationStatusBarModel::dispatch(const muse::rcommand::Command& command, const muse::rcommand::Params& params)
 {
-    dispatcher()->dispatch(code, args);
+    dispatcher()->dispatch(command, params);
 }
 
 QList<int> NotationStatusBarModel::possibleZoomPercentageList() const

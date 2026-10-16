@@ -1060,13 +1060,13 @@
       <HairPin>
         <subtype>0</subtype>
         <veloChange>10</veloChange>
-        <beginText>cresc.</beginText>
-        <continueText>(cresc.)</continueText>
         <track2>0</track2>
         <startTick>1/1</startTick>
         <ticks>1/4</ticks>
         <eid>T_T</eid>
         <track>0</track>
+        <beginText>cresc.</beginText>
+        <continueText>(cresc.)</continueText>
         </HairPin>
       <Slur>
         <startElement>q_q</startElement>
@@ -1772,14 +1772,14 @@
         <HairPin>
           <subtype>0</subtype>
           <veloChange>10</veloChange>
-          <beginText>cresc.</beginText>
-          <continueText>(cresc.)</continueText>
           <track2>0</track2>
           <startTick>1/1</startTick>
           <ticks>1/4</ticks>
           <eid>wE_wE</eid>
           <linkedTo>T_T</linkedTo>
           <track>0</track>
+          <beginText>cresc.</beginText>
+          <continueText>(cresc.)</continueText>
           </HairPin>
         <Slur>
           <startElement>jD_jD</startElement>

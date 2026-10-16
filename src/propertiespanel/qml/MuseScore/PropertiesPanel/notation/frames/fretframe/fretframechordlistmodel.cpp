@@ -43,7 +43,7 @@ void FretFrameChordListModel::load()
         return;
     }
 
-    QList<Item*> items;
+    ItemList items;
 
     for (EngravingItem* element : m_fretBox->el()) {
         FretDiagram* diagram = toFretDiagram(element);
@@ -178,7 +178,7 @@ void FretFrameChordListModel::saveOrder()
 {
     StringList newOrder;
 
-    for (const Item* item: items()) {
+    for (const QObject* item: items()) {
         const FretFrameChordItem* chordItem = dynamic_cast<const FretFrameChordItem*>(item);
         newOrder.push_back(String::fromQString(chordItem->title()));
     }

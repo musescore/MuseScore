@@ -144,9 +144,10 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleIt
             auto element = newItem->element();
             QString staff = muse::qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
-            QString staffName = element->staff()->part()->longName(element->tick());
-            if (staffName.isEmpty()) {
-                staffName = element->staff()->partName();
+            const Part* origin = element->originPart();
+            QString staffName = origin ? origin->longName(element->tick()).toQString() : QString();
+            if (staffName.isEmpty() && origin) {
+                staffName = origin->partName().toQString();
             }
 
             if (staffName.isEmpty()) {
@@ -195,15 +196,17 @@ QString AccessibleRoot::rangeSelectionInfo()
     staff_idx_t endStaff = selection.staffEnd() - 1;
 
     if (startStaff != endStaff) {
-        Staff* staff1 = score->staff(startStaff);
-        Staff* staff2 = score->staff(endStaff);
-        if (staff1 && staff2) {
+        const Staff* staff1 = score->staff(startStaff);
+        const Staff* staff2 = score->staff(endStaff);
+        const Part* part1 = staff1 ? staff1->originPart(startSegment->tick()) : nullptr;
+        const Part* part2 = staff2 ? staff2->originPart(endSegment->tick()) : nullptr;
+        if (staff1 && staff2 && part1 && part2) {
             staffInstrument1 = muse::qtrc("engraving", "Staff %1 (%2)")
                                .arg(QString::number(startStaff + 1))
-                               .arg(staff1 ? staff1->partName().toQString() : "");
+                               .arg(staff1 ? part1->partName().toQString() : "");
             staffInstrument2 = muse::qtrc("engraving", "Staff %1 (%2)")
                                .arg(QString::number(endStaff + 1))
-                               .arg(staff2 ? staff2->partName().toQString() : "");
+                               .arg(staff2 ? part2->partName().toQString() : "");
         }
     }
 

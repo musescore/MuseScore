@@ -21,6 +21,9 @@
  */
 
 #include "alignmentlayout.h"
+
+#include <set>
+
 #include "systemlayout.h"
 
 #include "dom/dynamic.h"
@@ -117,47 +120,8 @@ void AlignmentLayout::alignItemsWithTheirSnappingChain(const std::vector<Engravi
             continue;
         }
         firstItem = true;
-        scanConnectedItems(item, system, computeOutermostY);
-        scanConnectedItems(item, system, moveElementsToOutermostY);
-    }
-}
-
-void AlignmentLayout::alignStaffCenteredItems(const std::vector<EngravingItem*>& elements, const System* system)
-{
-    std::vector<double> vecOfCurrentY;
-
-    auto collectCurrentYandComputeEdges = [&vecOfCurrentY](EngravingItem* item) {
-        vecOfCurrentY.push_back(yOpticalCenter(item));
-    };
-
-    double averageY = 0.0;
-    auto limitAverageYInsideAvailableSpace = [&averageY](EngravingItem* item) {
-        double yCur = yOpticalCenter(item);
-        double intendedMove = averageY - yCur;
-        const EngravingItem::LayoutData::StaffCenteringInfo& staffCenteringInfo = item->ldata()->staffCenteringInfo();
-        double maxMoveAbove = -staffCenteringInfo.availableVertSpaceAbove;
-        double maxMoveBelow = staffCenteringInfo.availableVertSpaceBelow;
-        double maxAllowedMove = std::clamp(intendedMove, maxMoveAbove, maxMoveBelow);
-        if (!muse::RealIsEqual(maxAllowedMove, intendedMove)) {
-            averageY += -intendedMove + maxAllowedMove;
-        }
-    };
-
-    std::set<EngravingItem*> alignedItems;
-    auto moveElementsToAverageY = [&averageY, &alignedItems, system](EngravingItem* item) {
-        alignedItems.insert(item);
-        moveItemToY(item, averageY, system);
-    };
-
-    for (EngravingItem* item : elements) {
-        if (muse::contains(alignedItems, item)) {
-            continue;
-        }
-        vecOfCurrentY.clear();
-        scanConnectedItems(item, system, collectCurrentYandComputeEdges);
-        averageY = computeAverageY(vecOfCurrentY);
-        scanConnectedItems(item, system, limitAverageYInsideAvailableSpace);
-        scanConnectedItems(item, system, moveElementsToAverageY);
+        item->ldata()->scanConnectedItemsInSnappingChain(system, computeOutermostY);
+        item->ldata()->scanConnectedItemsInSnappingChain(system, moveElementsToOutermostY);
     }
 }
 
@@ -193,7 +157,7 @@ void AlignmentLayout::moveItemToY(EngravingItem* item, double y, const System* s
 
 double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
 {
-    double curY = item->pos().y();
+    double curY = item->ldata()->pos().y();
     switch (item->type()) {
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
@@ -251,29 +215,6 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
         break;
     }
     return curY;
-}
-
-void AlignmentLayout::scanConnectedItems(EngravingItem* item, const System* system, std::function<void(EngravingItem*)> func)
-{
-    func(item);
-
-    EngravingItem* snappedBefore = item->ldata()->itemSnappedBefore();
-    while (snappedBefore && snappedBefore->findAncestor(ElementType::SYSTEM) == system) {
-        func(snappedBefore);
-        snappedBefore = snappedBefore->ldata()->itemSnappedBefore();
-    }
-
-    EngravingItem* snappedAfter = item->ldata()->itemSnappedAfter();
-    while (snappedAfter && snappedAfter->findAncestor(ElementType::SYSTEM) == system) {
-        func(snappedAfter);
-        snappedAfter = snappedAfter->ldata()->itemSnappedAfter();
-    }
-}
-
-double AlignmentLayout::computeAverageY(const std::vector<double>& vecOfY)
-{
-    double sum = std::accumulate(vecOfY.begin(), vecOfY.end(), 0.0);
-    return sum / static_cast<double>(vecOfY.size());
 }
 
 bool AlignmentLayout::isAbove(const EngravingItem* item)

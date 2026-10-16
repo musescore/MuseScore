@@ -196,14 +196,14 @@
     <SpannerMap>
       <Ottava>
         <subtype>8va</subtype>
-        <endHookHeight>1.5</endHookHeight>
-        <beginText>&lt;font size=&quot;12&quot;/&gt;8va</beginText>
-        <continueText>&lt;font size=&quot;12&quot;/&gt;(8va)</continueText>
         <track2>0</track2>
         <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>Y_Y</eid>
         <track>0</track>
+        <beginText>&lt;font size=&quot;12&quot;/&gt;8va</beginText>
+        <continueText>&lt;font size=&quot;12&quot;/&gt;(8va)</continueText>
+        <endHookHeight>1.5</endHookHeight>
         <lineWidth>0.15</lineWidth>
         <lineStyle>solid</lineStyle>
         </Ottava>

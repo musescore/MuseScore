@@ -31,7 +31,6 @@
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
 #include "audio/main/iaudioconfiguration.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
 #include "tours/itoursservice.h"
@@ -53,7 +52,6 @@ class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, p
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::ContextInject<IPlaybackController> playbackController = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
 

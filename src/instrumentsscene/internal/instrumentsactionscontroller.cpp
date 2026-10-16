@@ -22,8 +22,6 @@
 
 #include "instrumentsactionscontroller.h"
 
-#include "rcommand/actiontocommand.h"
-
 #include "engraving/dom/instrchange.h"
 
 #include "notation/imasternotation.h"
@@ -38,28 +36,13 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
-using namespace muse::actions;
+
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
 
 void InstrumentsActionsController::init()
 {
     commandDispatcher()->onRequest(this, INSTRUMENTS_SELECT_COMMAND, [this]() { selectInstruments(); return muse::make_ok(); });
     commandDispatcher()->onRequest(this, INSTRUMENTS_CHANGE_COMMAND, [this]() { changeInstrument(); return muse::make_ok(); });
-
-    // compat
-    {
-        using namespace muse::rcommand;
-        static const std::vector<ActionToCommand> actions = {
-            { "instruments", INSTRUMENTS_SELECT_COMMAND, {} },
-            { "change-instrument", INSTRUMENTS_CHANGE_COMMAND, {} },
-        };
-
-        registerActionToCommand(this, actions, commandDispatcher(), dispatcher());
-    }
-}
-
-bool InstrumentsActionsController::canReceiveAction(const ActionCode&) const
-{
-    return context()->currentMasterNotation() != nullptr;
 }
 
 void InstrumentsActionsController::selectInstruments()

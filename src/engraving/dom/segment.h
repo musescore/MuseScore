@@ -128,7 +128,7 @@ public:
 
     ~Segment();
 
-    void setOwnershipParent(Measure* parent);
+    void setOwnershipParent(DummyParentOr<Measure> parent);
 
     Segment* clone() const override { return new Segment(*this); }
 
@@ -229,6 +229,7 @@ public:
     void clearAnnotations();
     void removeAnnotation(EngravingItem* e);
     bool hasAnnotationOrElement(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
+    bool hasAnnotationOrElement(staff_idx_t staffIdx) const;
     EngravingItem* findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
     std::vector<EngravingItem*> findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
     bool hasElements() const;
@@ -352,8 +353,8 @@ private:
     void addArticulationsToShape(const Chord* chord, Shape& shape);
 
     friend class Factory;
-    Segment(Measure* m = 0);
-    Segment(Measure*, SegmentType, const Fraction&);
+    Segment(DummyParentOr<Measure> m);
+    Segment(DummyParentOr<Measure>, SegmentType, const Fraction&);
     Segment(const Segment&);
 
     void init();

@@ -40,8 +40,8 @@ class InstrumentChange final : public TextBase
     DECLARE_CLASSOF(ElementType::INSTRUMENT_CHANGE)
 
 public:
-    InstrumentChange(EngravingItem* parent);
-    InstrumentChange(const Instrument&, EngravingItem* parent);
+    InstrumentChange(EngravingObject* parent);
+    InstrumentChange(const Instrument&, EngravingObject* parent);
     InstrumentChange(const InstrumentChange&);
     ~InstrumentChange();
 
@@ -51,7 +51,7 @@ public:
     void setInstrument(Instrument* i) { m_instrument = i; }
     void setInstrument(Instrument&& i) { *m_instrument = i; }
     void setInstrument(const Instrument& i);
-    void setupInstrument(const Instrument* instrument);
+    void setupInstrument(const Instrument* instrument, bool updateText = true);
 
     std::vector<KeySig*> keySigs(bool all=false) const;
     std::vector<Clef*> clefs() const;

@@ -354,7 +354,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     mu::engraving::DirectionV sd = mu::engraving::DirectionV::AUTO;
 
     // create chord
-    mu::engraving::Chord* cr = Factory::createChord(score->dummy()->segment());
+    mu::engraving::Chord* cr = Factory::createChord(score->dummy());
     //ws cr->setTick(tick);
     cr->setBeamMode(bm);
     cr->setTrack(0);
@@ -377,7 +377,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     note->setTrack(0);
     xmlSetPitch(note, sao.s.toLatin1(), sao.a, sao.o);
     if (tieStart) {
-        mu::engraving::Tie* tie = new mu::engraving::Tie(score->dummy());
+        mu::engraving::Tie* tie = new mu::engraving::Tie(note);
         note->setTieFor(tie);
         tie->setStartNote(note);
         tie->setTrack(0);

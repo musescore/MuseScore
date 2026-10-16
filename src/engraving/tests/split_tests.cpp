@@ -46,7 +46,7 @@ public:
 void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
 {
     MasterScore* score = ScoreRW::readScore(SPLIT_DATA_DIR + String::fromUtf8(f1));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     for (int i = 0; i < index; ++i) {
@@ -128,24 +128,31 @@ TEST_F(Engraving_SplitTests, split295207)
 TEST_F(Engraving_SplitTests, splitTieAtStart) {
     // Test splitting a measure when there is a tie ending on the first chord on the split range
     MasterScore* score = ScoreRW::readScore(SPLIT_DATA_DIR + u"splitTieAtStart.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     Segment* s1 = m1->last(SegmentType::ChordRest);
     ChordRest* cr1 = toChordRest(s1->element(0));
-    EXPECT_TRUE(cr1 && cr1->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
     Chord* c1 = toChord(cr1);
     Note* n1 = c1->upNote();
-    EXPECT_TRUE(n1);
+    ASSERT_TRUE(n1);
 
     auto checkTie = [&]() -> Tie* {
         Tie* t = n1->tieFor();
-        EXPECT_TRUE(t);
+        if (!t) {
+            ADD_FAILURE() << "t is null";
+            return nullptr;
+        }
 
         Note* n2 = t->endNote();
-        EXPECT_TRUE(n2);
+        if (!n2) {
+            ADD_FAILURE() << "n2 is null";
+            return nullptr;
+        }
         EXPECT_EQ(n2->tick(), Fraction(1, 1));
         EXPECT_EQ(n2->chord()->measure(), m1->nextMeasure());
 
@@ -153,17 +160,20 @@ TEST_F(Engraving_SplitTests, splitTieAtStart) {
     };
 
     Tie* tie1 = checkTie();
+    ASSERT_TRUE(tie1);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving split tests"), [&](auto& tx) {
         SplitJoinMeasure::splitMeasure(tx, score, Fraction(3, 2));
     });
 
     Tie* tie2 = checkTie();
+    ASSERT_TRUE(tie2);
     EXPECT_NE(tie2, tie1);
 
     score->undoRedo(true, nullptr);
 
     Tie* tie3 = checkTie();
+    ASSERT_TRUE(tie3);
     EXPECT_EQ(tie3, tie1);
 
     delete score;

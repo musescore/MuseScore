@@ -23,6 +23,7 @@
 #include "elements.h"
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/clef.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurenumber.h"
@@ -80,6 +81,11 @@ static QRectF scaleRect(const mu::engraving::RectF& rect, double spatium)
 QRectF EngravingItem::bbox() const
 {
     return scaleRect(element()->ldata()->bbox(), element()->spatium());
+}
+
+bool EngravingItem::isHeader() const
+{
+    return element()->isClef() && toClef(element())->isHeader();
 }
 
 bool EngravingItem::up() const

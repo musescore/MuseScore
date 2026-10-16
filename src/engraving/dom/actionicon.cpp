@@ -26,12 +26,13 @@
 
 #include "mscore.h"
 #include "property.h"
+#include "types/typesconv.h"
 
 using namespace mu;
 using namespace muse::draw;
 using namespace mu::engraving;
 
-ActionIcon::ActionIcon(EngravingItem* parent)
+ActionIcon::ActionIcon(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::ACTION_ICON, parent)
 {
     m_iconFont = Font(configuration()->iconsFontFamily(), Font::Type::Icon);
@@ -43,32 +44,31 @@ ActionIcon* ActionIcon::clone() const
     return new ActionIcon(*this);
 }
 
-ActionIconType ActionIcon::actionType() const
-{
-    return m_actionType;
-}
-
 void ActionIcon::setActionType(ActionIconType val)
 {
     m_actionType = val;
 }
 
-const std::string& ActionIcon::actionCode() const
+ActionIconType ActionIcon::actionType() const
 {
-    return m_actionCode;
+    return m_actionType;
 }
 
-void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
+const muse::TranslatableString& ActionIcon::title() const
 {
-    m_actionCode = actionCode;
-    m_icon = icon;
+    return TConv::userName(m_actionType);
+}
+
+char16_t ActionIcon::icon() const
+{
+    return TConv::iconCode(m_actionType);
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
 {
     switch (pid) {
     case Pid::ACTION:
-        return String::fromStdString(actionCode());
+        return PropertyValue(m_actionType);
     default:
         break;
     }
@@ -79,7 +79,7 @@ bool ActionIcon::setProperty(Pid pid, const PropertyValue& v)
 {
     switch (pid) {
     case Pid::ACTION:
-        m_actionCode = v.value<String>().toStdString();
+        m_actionType = v.value<ActionIconType>();
         triggerLayout();
         break;
     default:

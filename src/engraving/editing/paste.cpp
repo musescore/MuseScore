@@ -244,7 +244,7 @@ void Paste::pasteChordRest(Transaction& tx, Score* score, ChordRest* cr, const F
         MeasureRepeat* mr = toMeasureRepeat(cr);
         std::vector<TDuration> list = toDurationList(mr->ticks(), true);
         for (auto dur : list) {
-            Rest* r = Factory::createRest(score->dummy()->segment(), dur);
+            Rest* r = Factory::createRest(score->dummy(), dur);
             r->setTrack(cr->track());
             Fraction rest = r->ticks();
             while (!rest.isZero()) {

@@ -32,7 +32,7 @@
 #include "midiremote/imidiremoteconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
-#include "ui/iuiactionsregister.h"
+#include "rcommand/icommandsregister.h"
 
 namespace mu::preferences {
 class NoteInputPreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -83,7 +83,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Contextable, publ
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);

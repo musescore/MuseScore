@@ -31,7 +31,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-Hook::Hook(Chord* parent)
+Hook::Hook(DummyParentOr<Chord> parent)
     : Symbol(ElementType::HOOK, parent, ElementFlag::NOTHING)
 {
     setZ(int(type()) * 100);

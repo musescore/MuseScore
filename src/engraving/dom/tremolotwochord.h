@@ -126,7 +126,7 @@ public:
 private:
     friend class Factory;
 
-    TremoloTwoChord(Chord* parent);
+    TremoloTwoChord(DummyParentOr<Chord> parent);
     TremoloTwoChord(const TremoloTwoChord&);
 
     void setBeamPos(const PairF& bp);

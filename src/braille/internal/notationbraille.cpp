@@ -39,6 +39,7 @@
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notationscene/notationcommands.h"
 
 #include "braille.h"
 #include "braillecode.h"
@@ -718,14 +719,16 @@ bool NotationBraille::addTie()
     }
 
     score()->startCmd(TranslatableString("undoableAction", "Add tie"));
-    Note* note = toNote(currentEngravingItem());
 
-    Tie* tie = Factory::createTie(score()->dummy());
-    tie->setStartNote(brailleInput()->tieStartNote());
-    tie->setEndNote(note);
-    tie->setTrack(brailleInput()->tieStartNote()->track());
-    tie->setTick(brailleInput()->tieStartNote()->chord()->segment()->tick());
-    tie->setTicks(note->chord()->segment()->tick() - brailleInput()->tieStartNote()->chord()->segment()->tick());
+    Note* startNote = brailleInput()->tieStartNote();
+    Note* endNote = toNote(currentEngravingItem());
+
+    Tie* tie = Factory::createTie(startNote);
+    tie->setStartNote(startNote);
+    tie->setEndNote(endNote);
+    tie->setTrack(startNote->track());
+    tie->setTick(startNote->chord()->segment()->tick());
+    tie->setTicks(endNote->chord()->segment()->tick() - startNote->chord()->segment()->tick());
     score()->undoAddElement(tie);
     score()->endCmd();
     return true;
@@ -745,7 +748,7 @@ bool NotationBraille::addSlur()
 
             score()->startCmd(TranslatableString("undoableAction", "Add slur"));
 
-            Slur* slur = Factory::createSlur(firstChordRest->measure()->system());
+            Slur* slur = Factory::createSlur(firstChordRest->score()->dummy());
             slur->setScore(firstChordRest->score());
             slur->setTick(firstChordRest->tick());
             slur->setTick2(secondChordRest->tick());
@@ -790,7 +793,7 @@ bool NotationBraille::addLongSlur()
 
             score()->startCmd(TranslatableString("undoableAction", "Add long slur"));
 
-            Slur* slur = Factory::createSlur(firstChordRest->measure()->system());
+            Slur* slur = Factory::createSlur(firstChordRest->score()->dummy());
             slur->setScore(firstChordRest->score());
             slur->setTick(firstChordRest->tick());
             slur->setTick2(secondChordRest->tick());
@@ -881,7 +884,7 @@ void NotationBraille::toggleMode()
         break;
     }
 
-    dispatcher()->dispatch("command://notation/toggle-note-input");
+    commandDispatcher()->dispatch(notation::TOGGLE_NOTE_INPUT_COMMAND);
 
     const QString stateTitle = interaction()->noteInput()->isNoteInputMode()
                                //: Braille input with 6 keyboard keys (F,D,S & J,K,L) to represent the 6 dots in a braille cell.

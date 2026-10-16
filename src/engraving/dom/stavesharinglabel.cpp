@@ -27,7 +27,7 @@ static const ElementStyle STAVE_SHARING_LABEL_STYLE {
     { Sid::staveSharingLabelMinDistance, Pid::MIN_DISTANCE },
 };
 
-StaveSharingLabel::StaveSharingLabel(Segment* parent, TextStyleType tid)
+StaveSharingLabel::StaveSharingLabel(DummyParentOr<Segment> parent, TextStyleType tid)
     : StaffTextBase(ElementType::STAVE_SHARING_LABEL, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&STAVE_SHARING_LABEL_STYLE);

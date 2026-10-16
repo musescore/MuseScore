@@ -76,6 +76,9 @@ public:
     static String translatedUserName(NoteHeadScheme v);
     static AsciiStringView toXml(NoteHeadScheme v);
     static NoteHeadScheme fromXml(const AsciiStringView& tag, NoteHeadScheme def);
+    static String translatedUserName(InstrumentLabelVisibility v);
+    static AsciiStringView toXml(InstrumentLabelVisibility v);
+    static InstrumentLabelVisibility fromXml(const AsciiStringView& tag, InstrumentLabelVisibility def);
     static const TranslatableString& userName(NoteHeadGroup v);
     static String translatedUserName(NoteHeadGroup v);
     static AsciiStringView toXml(NoteHeadGroup v);
@@ -317,5 +320,10 @@ public:
 
     static AsciiStringView toXml(InstrumentNamesFormat v);
     static InstrumentNamesFormat fromXml(const AsciiStringView& str, InstrumentNamesFormat def);
+
+    static const TranslatableString& userName(ActionIconType v);
+    static char16_t iconCode(ActionIconType v);
+    static AsciiStringView toXml(ActionIconType v);
+    static ActionIconType fromXml(const AsciiStringView& str, ActionIconType def);
 };
 }

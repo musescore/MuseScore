@@ -27,9 +27,7 @@
 #include <QMimeData>
 
 #include "async/async.h"
-#include "log.h"
 
-#include "actions/actiontypes.h"
 #include "engraving/dom/shadownote.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
@@ -42,12 +40,13 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::draw;
-using namespace muse::actions;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
@@ -644,6 +643,10 @@ bool AbstractNotationPaintView::isNoteEnterMode() const
 void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
 {
     TRACEFUNC;
+
+    if (m_readonly) {
+        return;
+    }
 
     QPointF _pos = pos;
     if (_pos.isNull()) {
@@ -1483,12 +1486,23 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
     }
 }
 
+bool AbstractNotationPaintView::readonly() const
+{
+    return m_readonly;
+}
+
 void AbstractNotationPaintView::setReadonly(bool readonly)
 {
+    if (m_readonly == readonly) {
+        return;
+    }
+
     m_readonly = readonly;
     if (m_inputController) {
         m_inputController->setReadonly(m_readonly);
     }
+
+    emit readonlyChanged();
 }
 
 void AbstractNotationPaintView::clear()

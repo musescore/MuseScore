@@ -21,20 +21,20 @@
  */
 #include "pianokeyboardpanelcontextmenumodel.h"
 
-#include "actions/actiontypes.h"
 #include "pianokeyboardtypes.h"
+#include "types/number.h"
 #include "types/translatablestring.h"
+
+#include "notationscene/notationcommands.h"
 
 #include "log.h"
 
 using namespace mu::notation;
 using namespace muse;
-using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;
 
-static const ActionCode SET_KEY_WIDTH_SCALING_CODE("piano-keyboard-set-key-width-scaling");
-static const ActionCode SET_NUMBER_OF_KEYS_CODE("piano-keyboard-set-number-of-keys");
+static const QString SET_KEY_WIDTH_SCALING_ID_PREFIX("piano-keyboard-key-width-scaling");
 
 PianoKeyboardPanelContextMenuModel::PianoKeyboardPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -53,9 +53,9 @@ void PianoKeyboardPanelContextMenuModel::load()
 
 void PianoKeyboardPanelContextMenuModel::handleMenuItem(const QString& itemId)
 {
-    MenuItem& item = findItem(itemId);
-    if (item.action().code == SET_KEY_WIDTH_SCALING_CODE) {
-        emit setKeyWidthScalingRequested(item.args().arg<qreal>(0));
+    const MenuItem& item = findItem(itemId);
+    if (item.id().startsWith(SET_KEY_WIDTH_SCALING_ID_PREFIX)) {
+        emit setKeyWidthScalingRequested(item.params().at("scaling").toDouble());
     } else {
         AbstractMenuModel::handleMenuItem(itemId);
     }
@@ -122,15 +122,11 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
 MenuItem* PianoKeyboardPanelContextMenuModel::makeKeyWidthScalingItem(const muse::TranslatableString& title,
                                                                       qreal scaling)
 {
-    UiAction action;
-    action.title = title;
-    action.code = SET_KEY_WIDTH_SCALING_CODE;
-    action.checkable = Checkable::Yes;
-
-    MenuItem* item = new MenuItem(action, this);
-    item->setId(QString("scaling-%1").arg(scaling));
-    item->setState(UiActionState::make_enabled());
-    item->setArgs(ActionData::make_arg1<qreal>(scaling));
+    MenuItem* item = new MenuItem(this);
+    item->setId(SET_KEY_WIDTH_SCALING_ID_PREFIX + "-" + QString::number(scaling));
+    item->setTitle(title);
+    item->setCheckable(true);
+    item->setParams({ { "scaling", Val(scaling) } });
 
     m_keyWidthScalingItems << item;
 
@@ -139,25 +135,22 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeKeyWidthScalingItem(const muse
 
 MenuItem* PianoKeyboardPanelContextMenuModel::makeNumberOfKeysItem(const muse::TranslatableString& title, int numberOfKeys)
 {
-    UiAction action;
-    action.title = title;
-    action.code = SET_NUMBER_OF_KEYS_CODE;
-    action.checkable = Checkable::Yes;
-
-    MenuItem* item = new MenuItem(action, this);
-    item->setId(QString::number(numberOfKeys));
+    MenuItem* item = new MenuItem(this);
+    item->setTitle(title);
+    item->setCheckable(true);
+    item->setCommand(PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND);
+    item->setId(QString("piano-keyboard-number-of-keys-%1").arg(numberOfKeys));
+    item->setParams({ { "keys", Val(numberOfKeys) } });
 
     ValCh<int> currentNumberOfKeys = configuration()->pianoKeyboardNumberOfKeys();
 
     bool checked = numberOfKeys == currentNumberOfKeys.val;
-    item->setState(UiActionState::make_enabled(checked));
+    item->setChecked(checked);
 
     currentNumberOfKeys.ch.onReceive(item, [item, numberOfKeys](int num) {
         bool checked = numberOfKeys == num;
-        item->setState(UiActionState::make_enabled(checked));
+        item->setChecked(checked);
     });
-
-    item->setArgs(ActionData::make_arg1<int>(numberOfKeys));
 
     return item;
 }
@@ -176,11 +169,12 @@ void PianoKeyboardPanelContextMenuModel::updateKeyWidthScalingItems()
     }
 
     for (MenuItem* item : m_keyWidthScalingItems) {
-        IF_ASSERT_FAILED(item->args().count() > 0) {
+        const auto& params = item->params();
+        IF_ASSERT_FAILED(params.contains("scaling")) {
             continue;
         }
 
-        bool checked = qFuzzyCompare(item->args().arg<qreal>(0), roundedCurrentScaling);
-        item->setState(UiActionState::make_enabled(checked));
+        bool checked = muse::is_equal(params.at("scaling").toDouble(), roundedCurrentScaling);
+        item->setChecked(checked);
     }
 }

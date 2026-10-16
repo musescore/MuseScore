@@ -91,10 +91,10 @@ void NoteGroups::classBegin()
     iconPalette->setGridSize(27, 40);
     iconPalette->setDrawGrid(true);
 
-    iconPalette->appendActionIcon(ActionIconType::BEAM_JOIN, "beam-join");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT, "beam-break-left");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH, "beam-break-inner-8th");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_JOIN);
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_LEFT);
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_8TH);
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BREAK_INNER_16TH);
 
     iconPalette->setReadOnly(true);
     iconPalette->setApplyingElementsDisabled(true);

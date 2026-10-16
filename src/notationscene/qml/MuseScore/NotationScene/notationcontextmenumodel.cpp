@@ -47,7 +47,6 @@ using namespace mu::palette;
 using namespace mu::instrumentsscene;
 using namespace muse;
 using namespace muse::uicomponents;
-using namespace muse::actions;
 
 void NotationContextMenuModel::loadItems(int elementType)
 {
