@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<museScore version="5.00">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.76389</Spatium>
+    </Style>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+        <barLineSpan>1</barLineSpan>
+        <barLineSpanStyle>2</barLineSpanStyle>
+        <defaultClef>G</defaultClef>
+      </Staff>
+      <trackName>Voice 1</trackName>
+      <Instrument>
+        <longName>Voice 1</longName>
+        <shortName>V1</shortName>
+        <trackName>Voice 1</trackName>
+        <Channel>
+          <program value="73" />
+        </Channel>
+      </Instrument>
+    </Part>
+    <Part id="2">
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+        <barLineSpan>1</barLineSpan>
+        <barLineSpanStyle>3</barLineSpanStyle>
+        <defaultClef>G</defaultClef>
+      </Staff>
+      <trackName>Voice 2</trackName>
+      <Instrument>
+        <longName>Voice 2</longName>
+        <shortName>V2</shortName>
+        <trackName>Voice 2</trackName>
+        <Channel>
+          <program value="73" />
+        </Channel>
+      </Instrument>
+    </Part>
+    <Part id="3">
+      <Staff id="3">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+        <barLineSpan>0</barLineSpan>
+        <defaultClef>G</defaultClef>
+      </Staff>
+      <trackName>Voice 3</trackName>
+      <Instrument>
+        <longName>Voice 3</longName>
+        <shortName>V3</shortName>
+        <trackName>Voice 3</trackName>
+        <Channel>
+          <program value="73" />
+        </Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+          </BarLine>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+          </BarLine>
+        </voice>
+      </Measure>
+    </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+          </BarLine>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+          </BarLine>
+        </voice>
+      </Measure>
+    </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>0</span>
+          </BarLine>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>0</span>
+          </BarLine>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>

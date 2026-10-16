@@ -37,6 +37,7 @@ class BarlineSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * playCountText READ playCountText CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * playCountTextSetting READ playCountTextSetting CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * isSpanToNextStaff READ isSpanToNextStaff CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * spanStyle READ spanStyle CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * spanFrom READ spanFrom CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * spanTo READ spanTo CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * hasToShowTips READ hasToShowTips CONSTANT)
@@ -55,6 +56,7 @@ public:
     PropertyItem* playCountText() const;
     PropertyItem* playCountTextSetting() const;
     PropertyItem* isSpanToNextStaff() const;
+    PropertyItem* spanStyle() const;
     PropertyItem* spanFrom() const;
     PropertyItem* spanTo() const;
     PropertyItem* hasToShowTips() const;
@@ -77,6 +79,8 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
+    QList<mu::engraving::EngravingItem*> selectedStaves() const;
+
     void updateShowPlayCount();
     void updateShowPlayCountSettings();
 
@@ -85,6 +89,7 @@ private:
     PropertyItem* m_playCountText = nullptr;
     PropertyItem* m_playCountTextSetting = nullptr;
     PropertyItem* m_isSpanToNextStaff = nullptr;
+    PropertyItem* m_spanStyle = nullptr;
     PropertyItem* m_spanFrom = nullptr;
     PropertyItem* m_spanTo = nullptr;
     PropertyItem* m_hasToShowTips = nullptr;
