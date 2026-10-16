@@ -24,8 +24,6 @@
 #include "rcommand/commandtypes.h"
 #include "types/translatablestring.h"
 
-#include "context/shortcutcontext.h"
-
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"

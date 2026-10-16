@@ -33,7 +33,6 @@
 #include "rcommand/icommandsstate.h"
 #include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
-#include "context/iuicontextresolver.h"
 #include "playback/iplaybackcontroller.h"
 #include "engraving/iengravingconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -54,7 +53,6 @@ class NotationActionController : public INotationCommandsController, public muse
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
@@ -258,8 +256,6 @@ private:
     const mu::engraving::Harmony* editedChordSymbol() const;
 
     bool elementHasPopup(const EngravingItem* e) const;
-
-    bool isNotationPage() const;
 
     void checkForScoreCorruptions();
 
