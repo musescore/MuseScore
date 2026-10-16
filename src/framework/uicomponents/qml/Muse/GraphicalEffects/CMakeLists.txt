@@ -39,3 +39,6 @@ qt_add_shaders(muse_graphicaleffects_qml muse_graphicaleffects_qml_shaders
     FILES
         "shaders/roundcorners.frag"
 )
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_graphicaleffects_qml PROPERTIES UNITY_BUILD OFF)

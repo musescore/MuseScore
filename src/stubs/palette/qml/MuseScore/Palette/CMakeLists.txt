@@ -31,3 +31,6 @@ qt_add_qml_module(palette_qml
 )
 
 fixup_qml_module_dependencies(palette_qml)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(palette_qml PROPERTIES UNITY_BUILD OFF)

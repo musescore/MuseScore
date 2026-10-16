@@ -24,3 +24,6 @@ if (OS_IS_LIN OR OS_IS_FBSD)
 endif()
 
 target_link_libraries(muse_vst_qml PRIVATE vst3sdk)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_vst_qml PROPERTIES UNITY_BUILD OFF)

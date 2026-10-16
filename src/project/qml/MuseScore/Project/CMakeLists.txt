@@ -181,3 +181,6 @@ target_include_directories(project_qml PRIVATE
 if (MUE_BUILD_PROJECT_TESTS)
     add_subdirectory(tests)
 endif()
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(project_qml PROPERTIES UNITY_BUILD OFF)

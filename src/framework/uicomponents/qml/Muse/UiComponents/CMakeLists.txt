@@ -234,3 +234,6 @@ if (MUSE_MODULE_UI_TESTS)
 endif()
 
 add_subdirectory(LegacyTreeView)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_uicomponents_qml PROPERTIES UNITY_BUILD OFF)

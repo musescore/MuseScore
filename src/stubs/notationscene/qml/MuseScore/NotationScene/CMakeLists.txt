@@ -26,3 +26,6 @@ qt_add_qml_module(notationscene_qml
 )
 
 fixup_qml_module_dependencies(notationscene_qml)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(notationscene_qml PROPERTIES UNITY_BUILD OFF)

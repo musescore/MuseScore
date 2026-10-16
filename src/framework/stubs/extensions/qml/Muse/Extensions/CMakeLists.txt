@@ -33,3 +33,6 @@ qt_add_qml_module(muse_extensions_qml
 )
 
 fixup_qml_module_dependencies(muse_extensions_qml)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_extensions_qml PROPERTIES UNITY_BUILD OFF)

@@ -56,3 +56,6 @@ fixup_qml_module_dependencies(muse_extensions_qml)
 
 # Necessary for the auto-generated sources
 target_include_directories(muse_extensions_qml PRIVATE devtools)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_extensions_qml PROPERTIES UNITY_BUILD OFF)

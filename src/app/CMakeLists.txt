@@ -347,12 +347,15 @@ if (OS_IS_WIN)
     endif (WIN_PORTABLE)
 
     if (MUE_RUN_WINDEPLOYQT)
-        set(deploy_tool_options_arg "--plugindir bin --qmldir ${PROJECT_SOURCE_DIR} --no-compiler-runtime")
+        if (Qt6_VERSION VERSION_GREATER_EQUAL "6.12.0")
+            # Preserve quoted paths in Qt's generated deployment script.
+            qt_policy(SET QTP0007 NEW)
+        endif()
         qt_generate_deploy_qml_app_script(
             TARGET MuseScoreStudio
             OUTPUT_SCRIPT deploy_script
             NO_UNSUPPORTED_PLATFORM_ERROR
-            DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
+            DEPLOY_TOOL_OPTIONS --plugindir bin --qmldir "${PROJECT_SOURCE_DIR}" --no-compiler-runtime
         )
 
         install(SCRIPT ${deploy_script})

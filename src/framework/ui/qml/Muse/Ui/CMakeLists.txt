@@ -67,3 +67,6 @@ target_include_directories(muse_ui_qml PRIVATE dev internal)
 if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)
 endif()
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_ui_qml PROPERTIES UNITY_BUILD OFF)
