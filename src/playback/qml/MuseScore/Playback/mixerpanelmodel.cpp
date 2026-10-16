@@ -517,8 +517,15 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
         playback()->setSourceParams(trackId, params);
     });
 
-    connect(item, &MixerChannelItem::controlParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
+    connect(item, &MixerChannelItem::controlParamsChanged, this, [this, trackId, instrumentTrackId](const AudioOutputParams& params) {
         playback()->setControlParams(trackId, params.control());
+
+        //! NOTE Only persist volume/balance here; solo/mute/forceMute are owned by
+        //! INotationSoloMuteState and must not be echoed back into the saved output params.
+        AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentTrackId);
+        outParams.volume = params.volume;
+        outParams.balance = params.balance;
+        audioSettings()->setTrackOutputParams(instrumentTrackId, outParams);
     });
 
     connect(item, &MixerChannelItem::fxChainParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
@@ -575,8 +582,13 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
                << ", " << text;
     });
 
-    connect(item, &MixerChannelItem::controlParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
+    connect(item, &MixerChannelItem::controlParamsChanged, this, [this, trackId, index](const AudioOutputParams& params) {
         playback()->setControlParams(trackId, params.control());
+
+        AudioOutputParams outParams = audioSettings()->auxOutputParams(index);
+        outParams.volume = params.volume;
+        outParams.balance = params.balance;
+        audioSettings()->setAuxOutputParams(index, outParams);
     });
     connect(item, &MixerChannelItem::fxChainParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
         playback()->setFxChainParams(trackId, params.fxChain);
@@ -615,6 +627,11 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 
     connect(item, &MixerChannelItem::controlParamsChanged, this, [this](const AudioOutputParams& params) {
         playback()->setMasterControlParams(params.control());
+
+        AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
+        outParams.volume = params.volume;
+        outParams.balance = params.balance;
+        audioSettings()->setMasterAudioOutputParams(outParams);
     });
 
     connect(item, &MixerChannelItem::fxChainParamsChanged, this, [this](const AudioOutputParams& params) {
