@@ -38660,4 +38660,345 @@ failed: %2</translation>
         <translation>Name already exists</translation>
     </message>
 </context>
+
+
+
+
+
+
+
+
+
+
+
+
+<context>
+    <name>drawing-tools</name>
+    <message><source>Keep visible</source>
+        <translation>Keep visible</translation></message>
+    <message><source>Vector drawing</source>
+        <translation>Vector drawing</translation></message>
+    <message><source>Draw</source>
+        <translation>Draw</translation></message>
+    <message><source>Select</source>
+        <translation>Select</translation></message>
+    <message><source>Pencil</source>
+        <translation>Pencil</translation></message>
+    <message><source>Bézier pen</source>
+        <translation>Bézier pen</translation></message>
+    <message><source>Edit points</source>
+        <translation>Edit points</translation></message>
+    <message><source>Line</source>
+        <translation>Line</translation></message>
+    <message><source>Rectangle</source>
+        <translation>Rectangle</translation></message>
+    <message><source>Ellipse</source>
+        <translation>Ellipse</translation></message>
+    <message><source>Link points</source>
+        <translation>Link points</translation></message>
+    <message><source>Add point</source>
+        <translation>Add point</translation></message>
+    <message><source>Eraser</source>
+        <translation>Eraser</translation></message>
+    <message><source>Delete point</source>
+        <translation>Delete point</translation></message>
+    <message><source>Join points</source>
+        <translation>Join points</translation></message>
+    <message><source>Transform selection</source>
+        <translation>Transform selection</translation></message>
+    <message><source>Resize / stretch</source>
+        <translation>Resize / stretch</translation></message>
+    <message><source>Distort / skew</source>
+        <translation>Distort / skew</translation></message>
+    <message><source>Flip horizontally</source>
+        <translation>Flip horizontally</translation></message>
+    <message><source>Flip vertically</source>
+        <translation>Flip vertically</translation></message>
+    <message><source>Import SVG</source>
+        <translation>Import SVG</translation></message>
+    <message><source>Point curvature: </source>
+        <translation>Point curvature: </translation></message>
+    <message><source>Drag resistance: </source>
+        <translation>Drag resistance: </translation></message>
+    <message><source>Pencil smoothing</source>
+        <translation>Pencil smoothing</translation></message>
+    <message><source>Pencil pointer</source>
+        <translation>Pencil pointer</translation></message>
+    <message><source>Dynamic (follows zoom)</source>
+        <translation>Dynamic (follows zoom)</translation></message>
+    <message><source>Fixed (constant screen size)</source>
+        <translation>Fixed (constant screen size)</translation></message>
+    <message><source>Pointer size: </source>
+        <translation>Pointer size: </translation></message>
+    <message><source>Stroke width: </source>
+        <translation>Stroke width: </translation></message>
+    <message><source>Erase entire line</source>
+        <translation>Erase entire line</translation></message>
+    <message><source>Erase touched areas</source>
+        <translation>Erase touched areas</translation></message>
+    <message><source>Eraser size: </source>
+        <translation>Eraser size: </translation></message>
+    <message><source>Stroke colour (hexadecimal)</source>
+        <translation>Stroke colour (hexadecimal)</translation></message>
+    <message><source>Fill shapes</source>
+        <translation>Fill shapes</translation></message>
+    <message><source>Opacity</source>
+        <translation>Opacity</translation></message>
+    <message><source>Apply style to selection</source>
+        <translation>Apply style to selection</translation></message>
+    <message><source>Undo</source>
+        <translation>Undo</translation></message>
+    <message><source>Redo</source>
+        <translation>Redo</translation></message>
+    <message><source>Delete</source>
+        <translation>Delete</translation></message>
+    <message><source>Clear</source>
+        <translation>Clear</translation></message>
+    <message><source>Continuation after break: </source>
+        <translation>Continuation after break: </translation></message>
+    <message><source>Start after break: </source>
+        <translation>Start after break: </translation></message>
+    <message><source>Musical attachment</source>
+        <translation>Musical attachment</translation></message>
+    <message><source>Note (without deformation)</source>
+        <translation>Note (without deformation)</translation></message>
+    <message><source>Measures / rhythmic spacing</source>
+        <translation>Measures / rhythmic spacing</translation></message>
+    <message><source>Rhythmic subdivision</source>
+        <translation>Rhythmic subdivision</translation></message>
+    <message><source>Attach selection to rhythm</source>
+        <translation>Attach selection to rhythm</translation></message>
+    <message><source>Export SVG</source>
+        <translation>Export SVG</translation></message>
+    <message><source>Open a score.</source>
+        <translation>Open a score.</translation></message>
+    <message><source>Turn off to select and edit the score.</source>
+        <translation>Turn off to select and edit the score.</translation></message>
+    <message><source>Click a drawing or drag a selection box. Delete removes the selection.</source>
+        <translation>Click a drawing or drag a selection box. Delete removes the selection.</translation></message>
+    <message><source>Drag to draw. The circle shows the width of the new stroke.</source>
+        <translation>Drag to draw. The circle shows the width of the new stroke.</translation></message>
+    <message><source>Click to create Bézier points; drag to adjust handles. Enter finishes.</source>
+        <translation>Click to create Bézier points; drag to adjust handles. Enter finishes.</translation></message>
+    <message><source>Drag visible points to reshape the drawing.</source>
+        <translation>Drag visible points to reshape the drawing.</translation></message>
+    <message><source>Align the point horizontally to change its rhythmic attachment.</source>
+        <translation>Align the point horizontally to change its rhythmic attachment.</translation></message>
+    <message><source>Drag to draw a line.</source>
+        <translation>Drag to draw a line.</translation></message>
+    <message><source>Drag to draw a rectangle.</source>
+        <translation>Drag to draw a rectangle.</translation></message>
+    <message><source>Drag to draw an ellipse.</source>
+        <translation>Drag to draw an ellipse.</translation></message>
+    <message><source>Click the stroke to add an editable point.</source>
+        <translation>Click the stroke to add an editable point.</translation></message>
+    <message><source>Click a visible point. Endpoints trim the line; interior points reconnect their neighbours.</source>
+        <translation>Click a visible point. Endpoints trim the line; interior points reconnect their neighbours.</translation></message>
+    <message><source>Click the endpoints of two open lines to join them. The first drawing keeps its style.</source>
+        <translation>Click the endpoints of two open lines to join them. The first drawing keeps its style.</translation></message>
+    <message><source>Erase the entire stroke or only the areas touched by the eraser.</source>
+        <translation>Erase the entire stroke or only the areas touched by the eraser.</translation></message>
+    <message><source>Shift: mirrored sides. Ctrl: proportional size. Centre point: rotate.</source>
+        <translation>Shift: mirrored sides. Ctrl: proportional size. Centre point: rotate.</translation></message>
+    <message><source>0% follows the mouse; 100% keeps the point still.</source>
+        <translation>0% follows the mouse; 100% keeps the point still.</translation></message>
+    <message><source>Applies only to new pencil drawings.</source>
+        <translation>Applies only to new pencil drawings.</translation></message>
+    <message><source>Drag to set the size from 1 to 1000.</source>
+        <translation>Drag to set the size from 1 to 1000.</translation></message>
+    <message><source>0% stops at the barline; 100% extends to the page edge.</source>
+        <translation>0% stops at the barline; 100% extends to the page edge.</translation></message>
+    <message><source>0% starts at the barline; 100% extends to the left page edge.</source>
+        <translation>0% starts at the barline; 100% extends to the left page edge.</translation></message>
+    <message><source>Attaches the selected drawing to rhythmic staff positions, preserving its height.</source>
+        <translation>Attaches the selected drawing to rhythmic staff positions, preserving its height.</translation></message>
+    <message><source>Pen: drag to create handles; Enter finishes. Edit points: drag nodes; double-click the stroke to add a node. Esc cancels.</source>
+        <translation>Pen: drag to create handles; Enter finishes. Edit points: drag nodes; double-click the stroke to add a node. Esc cancels.</translation></message>
+    <message><source>Text</source>
+        <translation>Text</translation></message>
+    <message><source>Text size</source>
+        <translation>Text size</translation></message>
+    <message><source>Above the line</source>
+        <translation>Above the line</translation></message>
+    <message><source>After the line</source>
+        <translation>After the line</translation></message>
+    <message><source>Middle of the line</source>
+        <translation>Middle of the line</translation></message>
+    <message><source>Add text to selection</source>
+        <translation>Add text to selection</translation></message>
+    <message><source>Update selected text</source>
+        <translation>Update selected text</translation></message>
+    <message><source>Change staff when moving</source>
+        <translation>Change staff when moving</translation></message>
+    <message><source>Merge drawings</source>
+        <translation>Merge drawings</translation></message>
+    <message><source>Unlink points</source>
+        <translation>Unlink points</translation></message>
+    <message><source>Triangle</source>
+        <translation>Triangle</translation></message>
+    <message><source>Right triangle</source>
+        <translation>Right triangle</translation></message>
+    <message><source>Arrow</source>
+        <translation>Arrow</translation></message>
+    <message><source>Double arrow</source>
+        <translation>Double arrow</translation></message>
+    <message><source>Filled arrow</source>
+        <translation>Filled arrow</translation></message>
+    <message><source>Rectangular eraser</source>
+        <translation>Rectangular eraser</translation></message>
+    <message><source>Elliptical eraser</source>
+        <translation>Elliptical eraser</translation></message>
+    <message><source>Triangular eraser</source>
+        <translation>Triangular eraser</translation></message>
+    <message><source>Draw and edit vector shapes on the score. Ctrl+Alt+D toggles drawing mode; Esc exits.</source>
+        <translation>Draw and edit vector shapes on the score. Ctrl+Alt+D toggles drawing mode; Esc exits.</translation></message>
+    <message><source>Anchor to notes</source>
+        <translation>Anchor to notes</translation></message>
+    <message><source>Anchor to subdivisions</source>
+        <translation>Anchor to subdivisions</translation></message>
+    <message><source>Click to switch between note positions and rhythmic subdivisions.</source>
+        <translation>Click to switch between note positions and rhythmic subdivisions.</translation></message>
+    <message><source>Special and musical characters</source>
+        <translation>Special and musical characters</translation></message>
+    <message><source>Click a drawing or drag a selection box. Shift mirrors resizing; Ctrl keeps proportions.</source>
+        <translation>Click a drawing or drag a selection box. Shift mirrors resizing; Ctrl keeps proportions.</translation></message>
+    <message><source>Drag points to reshape the drawing. Green endpoints belong to a derived fragment.</source>
+        <translation>Drag points to reshape the drawing. Green endpoints belong to a derived fragment.</translation></message>
+    <message><source>Drag a point or text close to a drawing point or rhythmic anchor to attach it.</source>
+        <translation>Drag a point or text close to a drawing point or rhythmic anchor to attach it.</translation></message>
+    <message><source>Click an attachment line to unlink it. The red cross appears only over attachment lines.</source>
+        <translation>Click an attachment line to unlink it. The red cross appears only over attachment lines.</translation></message>
+    <message><source>Drag an eraser shape. Only drawing areas inside it are removed.</source>
+        <translation>Drag an eraser shape. Only drawing areas inside it are removed.</translation></message>
+    <message><source>Erase only the areas touched by the circular eraser.</source>
+        <translation>Erase only the areas touched by the circular eraser.</translation></message>
+    <message><source>Erase the entire drawing touched by the eraser.</source>
+        <translation>Erase the entire drawing touched by the eraser.</translation></message>
+    <message><source>Enter the text, then click the score. Use Link points to attach it.</source>
+        <translation>Enter the text, then click the score. Use Link points to attach it.</translation></message>
+    <message><source>Drag to draw. Alt constrains the stroke to horizontal, vertical or diagonal movement.</source>
+        <translation>Drag to draw. Alt constrains the stroke to horizontal, vertical or diagonal movement.</translation></message>
+    <message><source>Shift draws from the centre; Ctrl keeps proportions; Alt constrains direction.</source>
+        <translation>Shift draws from the centre; Ctrl keeps proportions; Alt constrains direction.</translation></message>
+    <message><source>Font</source>
+        <translation>Font</translation></message>
+    <message><source>Drag a box on the score to type. Double-click existing text to edit. Ctrl+Enter finishes.</source>
+        <translation>Drag a box on the score to type. Double-click existing text to edit. Ctrl+Enter finishes.</translation></message>
+    <message><source>Colours</source>
+        <translation>Colours</translation></message>
+    <message><source>Primary colour</source>
+        <translation>Primary colour</translation></message>
+    <message><source>Secondary colour</source>
+        <translation>Secondary colour</translation></message>
+    <message><source>Swap colours</source>
+        <translation>Swap colours</translation></message>
+    <message><source>Pen pressure controls size</source>
+        <translation>Pen pressure controls size</translation></message>
+    <message><source>Edit selected text</source>
+        <translation>Edit selected text</translation></message>
+    <message><source>Choose primary and secondary colours. X switches the active colour.</source>
+        <translation>Choose primary and secondary colours. X switches the active colour.</translation></message>
+    <message><source>Click or drag nodes. Enter or double-click the last node finishes a path. Connect to the first node to close a shape and keep drawing.</source>
+        <translation>Click or drag nodes. Enter or double-click the last node finishes a path. Connect to the first node to close a shape and keep drawing.</translation></message>
+    <message><source>Use pen pressure</source>
+        <translation>Use pen pressure</translation></message>
+    <message><source>Show anchors while moving</source>
+        <translation>Show anchors while moving</translation></message>
+    <message><source>Paint fill</source>
+        <translation>Paint fill</translation></message>
+    <message><source>Paint stroke</source>
+        <translation>Paint stroke</translation></message>
+    <message><source>Fill gradient</source>
+        <translation>Fill gradient</translation></message>
+    <message><source>Stroke gradient</source>
+        <translation>Stroke gradient</translation></message>
+    <message><source>Painting and gradients</source>
+        <translation>Painting and gradients</translation></message>
+    <message><source>Selected gradient colour</source>
+        <translation>Selected gradient colour</translation></message>
+    <message><source>Add gradient colour</source>
+        <translation>Add gradient colour</translation></message>
+    <message><source>Remove gradient colour</source>
+        <translation>Remove gradient colour</translation></message>
+    <message><source>Use the primary colour for painting. Gradients start with the primary and secondary colours.</source>
+        <translation>Use the primary colour for painting. Gradients start with the primary and secondary colours.</translation></message>
+    <message><source>Click a drawing to paint its fill or stroke. Painting applies to the selected drawings together.</source>
+        <translation>Click a drawing to paint its fill or stroke. Painting applies to the selected drawings together.</translation></message>
+    <message><source>Drag to set the gradient transition. Drag its ends to change the extent. Select a colour square to edit it; slide it along the axis to space colours. Add colours in this panel. Controls appear only in Gradient mode.</source>
+        <translation>Drag to set the gradient transition. Drag its ends to change the extent. Select a colour square to edit it; slide it along the axis to space colours. Add colours in this panel. Controls appear only in Gradient mode.</translation></message>
+    <message><source>Apply paint to selection</source>
+        <translation>Apply paint to selection</translation></message>
+    <message><source>Group drawings</source>
+        <translation>Group drawings</translation></message>
+    <message><source>Ungroup drawings</source>
+        <translation>Ungroup drawings</translation></message>
+    <message><source>Fuse drawings</source>
+        <translation>Fuse drawings</translation></message>
+    <message><source>Group and fuse drawings</source>
+        <translation>Group and fuse drawings</translation></message>
+    <message><source>Scroll tools up</source>
+        <translation>Scroll tools up</translation></message>
+    <message><source>Scroll tools down</source>
+        <translation>Scroll tools down</translation></message>
+    <message><source>Click or drag a box to select drawings. Shift-click adds or removes a drawing. Drag the selection to move it.</source>
+        <translation>Click or drag a box to select drawings. Shift-click adds or removes a drawing. Drag the selection to move it.</translation></message>
+    <message><source>Grouping keeps individual points and attachments. Fusing creates one editable drawing with one initial anchor.</source>
+        <translation>Grouping keeps individual points and attachments. Fusing creates one editable drawing with one initial anchor.</translation></message>
+    <message><source>These drawings cannot be fused as editable paths. Use Group to preserve them.</source>
+        <translation>These drawings cannot be fused as editable paths. Use Group to preserve them.</translation></message>
+    <message><source>Draw on score</source>
+        <translation>Draw on score</translation></message>
+    <message><source>Open vector drawing tools</source>
+        <translation>Open vector drawing tools</translation></message>
+    <message><source>Basic shapes</source>
+        <translation>Basic shapes</translation></message>
+    <message><source>Points and attachments</source>
+        <translation>Points and attachments</translation></message>
+    <message><source>Delete selection</source>
+        <translation>Delete selection</translation></message>
+    <message><source>SVG files (*.svg)</source>
+        <translation>SVG files (*.svg)</translation></message>
+    <message><source>SVG saved.</source>
+        <translation>SVG saved.</translation></message>
+    <message><source>Edit vector drawing</source>
+        <translation>Edit vector drawing</translation></message>
+    <message><source>Insert vector drawing</source>
+        <translation>Insert vector drawing</translation></message>
+    <message><source>The drawing contains invalid data.</source>
+        <translation>The drawing contains invalid data.</translation></message>
+    <message><source>The score layout is not available yet.</source>
+        <translation>The score layout is not available yet.</translation></message>
+    <message><source>Could not load the SVG.</source>
+        <translation>Could not load the SVG.</translation></message>
+    <message><source>Activate Draw on score to create or edit drawings.</source>
+        <translation>Activate Draw on score to create or edit drawings.</translation></message>
+    <message><source>Select a drawing to attach to rhythm.</source>
+        <translation>Select a drawing to attach to rhythm.</translation></message>
+    <message><source>Drawings attached to rhythmic staff positions.</source>
+        <translation>Drawings attached to rhythmic staff positions.</translation></message>
+    <message><source>Click a visible point to delete it.</source>
+        <translation>Click a visible point to delete it.</translation></message>
+    <message><source>There is no other point in this section.</source>
+        <translation>There is no other point in this section.</translation></message>
+    <message><source>Click a drawing endpoint.</source>
+        <translation>Click a drawing endpoint.</translation></message>
+    <message><source>Choose the endpoint of an open line to join drawings.</source>
+        <translation>Choose the endpoint of an open line to join drawings.</translation></message>
+    <message><source>Now click the endpoint of the second drawing.</source>
+        <translation>Now click the endpoint of the second drawing.</translation></message>
+    <message><source>Choose two different drawings.</source>
+        <translation>Choose two different drawings.</translation></message>
+    <message><source>Drawings joined. The first drawing keeps its style.</source>
+        <translation>Drawings joined. The first drawing keeps its style.</translation></message>
+    <message><source>SVG imported. Use the handles to transform it and the centre point to rotate.</source>
+        <translation>SVG imported. Use the handles to transform it and the centre point to rotate.</translation></message>
+    <message><source>Click the stroke to add a point.</source>
+        <translation>Click the stroke to add a point.</translation></message>
+    <message><source>Point added. You can edit it or attach it to the score.</source>
+        <translation>Point added. You can edit it or attach it to the score.</translation></message>
+    <message><source>Select a drawing and drag a node or handle. Add point creates new stroke nodes.</source>
+        <translation>Select a drawing and drag a node or handle. Add point creates new stroke nodes.</translation></message>
+    <message><source>%1 drawing(s) selected. Delete to remove.</source>
+        <translation>%1 drawing(s) selected. Delete to remove.</translation></message>
+</context>
 </TS>
