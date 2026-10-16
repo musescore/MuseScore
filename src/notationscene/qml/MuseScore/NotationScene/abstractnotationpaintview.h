@@ -34,7 +34,6 @@
 #include "context/iglobalcontext.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
-#include "ui/iuicontextresolver.h"
 #include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 #include "notationscene/inotationsceneconfiguration.h"
@@ -76,7 +75,6 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
 
 public:

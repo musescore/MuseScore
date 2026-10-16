@@ -2712,11 +2712,6 @@ muse::async::Notification NotationActionController::stackChanged() const
     return m_stackChanged;
 }
 
-bool NotationActionController::isNotationPage() const
-{
-    return uiContextResolver()->matchWithCurrent(context::UiCtxProjectOpened);
-}
-
 bool NotationActionController::isTablatureStaff() const
 {
     return isNotEditingElement() && currentNotationScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
