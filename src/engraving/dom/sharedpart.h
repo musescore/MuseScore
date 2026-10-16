@@ -97,6 +97,7 @@ public:
     bool show() const override;
 
     const StaveSharingState& staveSharingStateAtTick(const Fraction& tick) const;
+    StaveSharingState& staveSharingStateAtTick(const Fraction& tick);
     std::optional<StaveSharingState> exactStaveSharingStateAtTick(const Fraction& tick) const;
     void setStaveSharingStateAtTick(const StaveSharingState& state, const Fraction& tick);
     void removeStaveSharingStateAtTick(const Fraction& tick);

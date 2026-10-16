@@ -177,8 +177,30 @@ void StaveSharingLayout::updateTrackMaps(StaveSharingContext& ctx)
     // Only user states remain
     std::map<Fraction, StaveSharingState> states = sharedPart->staveSharingStatesBetweenTicks(sTick, eTick);
 
-    // Systems must start with a track map if not preceded by a user track map
-    if (!muse::contains(states, sTick) && (sTick == Fraction(0, 1) || sharedPart->staveSharingStateAtTick(sTick).isReset())) {
+    // Systems must start with a computed track map if not preceded by a user track map
+    auto precededByValidUserTrackMap = [&]() {
+        if (sTick.isZero()) {
+            return false;
+        }
+        StaveSharingState& prevState = sharedPart->staveSharingStateAtTick(sTick);
+        if (!prevState.isUserModified() || prevState.isReset()) {
+            return false;
+        }
+
+        // Get the tick for the next user state. Check the active change is valid up to this or the end of the system
+        // The active change is on a previous system
+        const Fraction nextUserTick = !states.empty() ? states.begin()->first : eTick;
+
+        ctx.eTick = nextUserTick;
+        const SharedTrackMap& userMap = prevState.userTrackMap().value();
+        const bool valid = isValid(userMap, ctx);
+        ctx.eTick = eTick;
+
+        prevState.setIsUserMapValid(valid);
+        return valid;
+    };
+
+    if (!muse::contains(states, sTick) && !precededByValidUserTrackMap()) {
         states.emplace(sTick, StaveSharingState());
     }
 

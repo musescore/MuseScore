@@ -423,3 +423,53 @@ TEST_F(Engraving_StaveSharingTests, testLocalClefKeyTimeSigsCopiedToSharedStaves
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testDefualtStaveSharingPatterns)
+{
+    // [GIVEN] A score of 5 measures with 2 flute staves
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_05.mscz");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+
+    const track_idx_t firstOriginTrack = originParts.at(0)->staff(0)->idx() * VOICES;
+    const track_idx_t secondOriginTrack = originParts.at(1)->staff(0)->idx() * VOICES;
+    const track_idx_t sharedVoice1Track = sharedPart->staff(0)->idx() * VOICES;
+    const track_idx_t sharedVoice2Track = sharedVoice1Track + 1;
+
+    EXPECT_EQ(firstOriginTrack,  8);
+    EXPECT_EQ(secondOriginTrack, 12);
+    EXPECT_EQ(sharedVoice1Track, 0);
+    EXPECT_EQ(sharedVoice2Track, 1);
+
+    // [THEN] Each measure should have the expected default track mapping
+    const std::vector<SharedTrackMap> expectedTrackMaps = {
+        { { firstOriginTrack, sharedVoice1Track }, { secondOriginTrack, sharedVoice1Track } }, // m1: unison
+        { { firstOriginTrack, sharedVoice1Track }, { secondOriginTrack, sharedVoice2Track } }, // m2: different rhythms, 2
+        { { firstOriginTrack, sharedVoice1Track }, { secondOriginTrack, sharedVoice1Track } }, // m3: unison
+        { { firstOriginTrack, sharedVoice1Track }, { secondOriginTrack, sharedVoice2Track } }, // m4: 2nd staff has bar rest
+        { { firstOriginTrack, sharedVoice1Track }, { secondOriginTrack, sharedVoice2Track } }, // m5: 1st staff has bar rest
+    };
+
+    for (size_t i = 0; i < expectedTrackMaps.size(); ++i) {
+        Measure* m = score->crMeasure(static_cast<int>(i));
+        ASSERT_TRUE(m);
+        const SharedTrackMap& trackMap = sharedPart->staveSharingStateAtTick(m->tick()).sharedTrackMap();
+        EXPECT_EQ(trackMap, expectedTrackMaps.at(i)) << "Measure " << i + 1 << ": " << dump(trackMap);
+    }
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}

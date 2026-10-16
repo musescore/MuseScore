@@ -129,6 +129,11 @@ const StaveSharingState& SharedPart::staveSharingStateAtTick(const Fraction& tic
     return upperBound->second;
 }
 
+StaveSharingState& SharedPart::staveSharingStateAtTick(const Fraction& tick)
+{
+    return const_cast<StaveSharingState&>(std::as_const(*this).staveSharingStateAtTick(tick));
+}
+
 std::optional<StaveSharingState> SharedPart::exactStaveSharingStateAtTick(const Fraction& tick) const
 {
     auto it = m_staveSharingStateByTick.find(tick);
