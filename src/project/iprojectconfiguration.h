@@ -116,6 +116,14 @@ public:
     virtual PreferredScoreCreationMode preferredScoreCreationMode() const = 0;
     virtual void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) = 0;
 
+    //! Language of the instrument names that was last chosen in the New Score dialog. Empty means the interface language.
+    virtual QString lastInstrumentNamesLanguage() const = 0;
+    virtual void setLastInstrumentNamesLanguage(const QString& languageCode) = 0;
+
+    //! Languages of instrument names that were chosen recently in the New Score dialog, the most recent first
+    virtual QStringList recentInstrumentNamesLanguages() const = 0;
+    virtual void setRecentInstrumentNamesLanguages(const QStringList& languageCodes) = 0;
+
     virtual MigrationOptions migrationOptions(MigrationType type) const = 0;
     virtual void setMigrationOptions(MigrationType type, const MigrationOptions& opt, bool persistent = true) = 0;
 

@@ -55,6 +55,8 @@ static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD(module_na
 static const Settings::Key HOME_SCORES_PAGE_TAB_INDEX(module_name, "project/homeScoresPageTabIndex");
 static const Settings::Key HOME_SCORES_PAGE_VIEW_TYPE(module_name, "project/homeScoresPageViewType");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
+static const Settings::Key LAST_INSTRUMENT_NAMES_LANGUAGE_KEY(module_name, "project/lastInstrumentNamesLanguage");
+static const Settings::Key RECENT_INSTRUMENT_NAMES_LANGUAGES_KEY(module_name, "project/recentInstrumentNamesLanguages");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
@@ -93,6 +95,9 @@ void ProjectConfiguration::init()
 
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
+
+    settings()->setDefaultValue(LAST_INSTRUMENT_NAMES_LANGUAGE_KEY, Val(QString()));
+    settings()->setDefaultValue(RECENT_INSTRUMENT_NAMES_LANGUAGES_KEY, Val(ValList()));
 
     settings()->setDefaultValue(HOME_SCORES_PAGE_TAB_INDEX, Val(0));
 
@@ -477,6 +482,37 @@ ProjectConfiguration::PreferredScoreCreationMode ProjectConfiguration::preferred
 void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
     settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(mode));
+}
+
+QString ProjectConfiguration::lastInstrumentNamesLanguage() const
+{
+    return settings()->value(LAST_INSTRUMENT_NAMES_LANGUAGE_KEY).toQString();
+}
+
+void ProjectConfiguration::setLastInstrumentNamesLanguage(const QString& languageCode)
+{
+    settings()->setSharedValue(LAST_INSTRUMENT_NAMES_LANGUAGE_KEY, Val(languageCode));
+}
+
+QStringList ProjectConfiguration::recentInstrumentNamesLanguages() const
+{
+    QStringList languageCodes;
+    for (const Val& val : settings()->value(RECENT_INSTRUMENT_NAMES_LANGUAGES_KEY).toList()) {
+        languageCodes << val.toQString();
+    }
+
+    return languageCodes;
+}
+
+void ProjectConfiguration::setRecentInstrumentNamesLanguages(const QStringList& languageCodes)
+{
+    ValList vals;
+    vals.reserve(languageCodes.size());
+    for (const QString& languageCode : languageCodes) {
+        vals.emplace_back(languageCode);
+    }
+
+    settings()->setSharedValue(RECENT_INSTRUMENT_NAMES_LANGUAGES_KEY, Val(vals));
 }
 
 static MigrationType migrationTypeFromString(const QString& str)

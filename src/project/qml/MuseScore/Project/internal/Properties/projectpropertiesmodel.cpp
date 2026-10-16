@@ -26,6 +26,9 @@
 #include "translation.h"
 
 #include "inotationproject.h"
+#include "project/internal/instrumentnamestranslator.h"
+
+#include "engraving/iscoretexttranslator.h"
 
 using namespace muse;
 using namespace muse::modularity;
@@ -72,6 +75,8 @@ void ProjectPropertiesModel::load()
         { SOURCE_TAG, muse::qtrc("project", "Source"), m_projectMetaInfo.source, true },
         { AUDIO_COM_URL_TAG, muse::qtrc("project", "Audio.com URL"), m_projectMetaInfo.audioComUrl, true }
     };
+
+    m_textLanguage = additionalProperties.take(mu::engraving::SCORE_TEXT_LANGUAGE_META_TAG.toQString()).toString();
 
     for (const QString& propertyName : additionalProperties.keys()) {
         if (!isStandardTag(propertyName)) {
@@ -242,7 +247,27 @@ void ProjectPropertiesModel::saveProperties()
         }
     }
 
+    // The language, which is not in the list of properties
+    if (!m_textLanguage.isEmpty()) {
+        meta.additionalTags[mu::engraving::SCORE_TEXT_LANGUAGE_META_TAG.toQString()] = m_textLanguage;
+    }
+
     project->setMetaInfo(meta, true);
+}
+
+QVariantList ProjectPropertiesModel::instrumentNamesLanguages() const
+{
+    return InstrumentNamesTranslator().languageChoices(configuration()->recentInstrumentNamesLanguages(), /*withInterfaceLanguage*/ true);
+}
+
+QString ProjectPropertiesModel::instrumentNamesLanguage() const
+{
+    return m_textLanguage;
+}
+
+void ProjectPropertiesModel::setInstrumentNamesLanguage(const QString& languageCode)
+{
+    m_textLanguage = languageCode;
 }
 
 void ProjectPropertiesModel::openFileLocation()

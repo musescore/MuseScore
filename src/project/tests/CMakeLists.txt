@@ -42,6 +42,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/saveprojectscenariotests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/closeprojectscenariotests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentnamestranslatortests.cpp
 )
 
 set(MODULE_TEST_INCLUDE

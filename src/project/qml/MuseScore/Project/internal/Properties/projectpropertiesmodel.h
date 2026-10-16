@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
+#include "project/iprojectconfiguration.h"
 
 #include "types/projectmeta.h"
 
@@ -49,6 +50,7 @@ class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatu
 
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
     explicit ProjectPropertiesModel(QObject* parent = nullptr);
@@ -68,6 +70,12 @@ public:
     Q_INVOKABLE void deleteProperty(int index);
     Q_INVOKABLE void saveProperties();
     Q_INVOKABLE void openFileLocation();
+
+    //! The language of the score, as in the New Score dialog (see NewScoreModel). It is saved by saveProperties().
+    //! Changing it does not change the instruments that are already in the score.
+    Q_INVOKABLE QVariantList instrumentNamesLanguages() const;
+    Q_INVOKABLE QString instrumentNamesLanguage() const;
+    Q_INVOKABLE void setInstrumentNamesLanguage(const QString& languageCode);
 
 signals:
     void propertyAdded(int index);
@@ -92,5 +100,8 @@ private:
 
     project::ProjectMeta m_projectMetaInfo;
     QList<Property> m_properties;
+
+    // The meta tag of the language is not shown as a property, but with a dropdown
+    QString m_textLanguage;
 };
 }

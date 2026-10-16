@@ -32,6 +32,7 @@
 #include "engraving/dom/textbase.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
+#include "engraving/iscoretexttranslator.h"
 
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/compat/tremolocompat.h"
@@ -40,6 +41,8 @@
 
 #include "log.h"
 #include "translation.h"
+
+#include "notation/imasternotation.h"
 
 using namespace muse;
 using namespace mu::palette;
@@ -164,14 +167,37 @@ QString PaletteCell::translatedName() const
     return trName;
 }
 
+QString mu::palette::currentScoreTextLanguage(const context::IGlobalContext* globalContext)
+{
+    if (!globalContext) {
+        return QString();
+    }
+
+    const notation::IMasterNotationPtr masterNotation = globalContext->currentMasterNotation();
+    if (!masterNotation || !masterNotation->masterScore()) {
+        return QString();
+    }
+
+    return masterNotation->masterScore()->metaTag(SCORE_TEXT_LANGUAGE_META_TAG).toQString();
+}
+
 /// Retranslates cell content, e.g. text if the element is TextBase.
+/// Texts are in the language of the current score, so that they are added to the score in that language.
+/// (The name of the cell, shown in the tooltip, stays in the language of the interface.)
 void PaletteCell::retranslate()
 {
     if (untranslatedElement && element->isTextBase()) {
         TextBase* target = toTextBase(element.get());
         TextBase* orig = toTextBase(untranslatedElement.get());
         const QString& text = orig->xmlText();
-        target->setXmlText(muse::qtrc("palette", text.toUtf8().constData()));
+
+        static muse::GlobalInject<IScoreTextTranslator> scoreTextTranslator;
+        const QString language = currentScoreTextLanguage(globalContext().get());
+        if (!language.isEmpty() && scoreTextTranslator()) {
+            target->setXmlText(scoreTextTranslator()->translate(String::fromQString(language), "palette", String::fromQString(text)));
+        } else {
+            target->setXmlText(muse::qtrc("palette", text.toUtf8().constData()));
+        }
     }
 }
 

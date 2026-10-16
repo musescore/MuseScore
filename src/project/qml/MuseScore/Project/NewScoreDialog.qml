@@ -52,6 +52,8 @@ StyledDialogView {
             result[key] = scoreInfoPageResult[key]
         }
 
+        result["instrumentNamesLanguage"] = root.instrumentNamesLanguage
+
         if (newScoreModel.createScore(result)) {
             root.activateParentOnClose = false
             root.accept()
@@ -62,8 +64,33 @@ StyledDialogView {
         chooseInstrumentsAndTemplatePage.focusOnSelected()
     }
 
+    //! The languages that the names of the instruments can be shown in, see NewScoreModel::instrumentNamesLanguages()
+    property var instrumentNamesLanguages: []
+    property string instrumentNamesLanguage: ""
+
+    Component.onCompleted: {
+        instrumentNamesLanguages = newScoreModel.instrumentNamesLanguages()
+
+        // Preselect the language that was chosen last time, if it is still available
+        var lastLanguage = newScoreModel.lastInstrumentNamesLanguage()
+        for (var i = 0; i < instrumentNamesLanguages.length; ++i) {
+            if (instrumentNamesLanguages[i].code === lastLanguage) {
+                instrumentNamesLanguage = lastLanguage
+                break
+            }
+        }
+    }
+
     NewScoreModel {
         id: newScoreModel
+    }
+
+    NavigationPanel {
+        id: instrumentNamesLanguageNavPanel
+
+        name: "InstrumentNamesLanguagePanel"
+        section: root.navigationSection
+        order: 99
     }
 
     Item {
@@ -132,6 +159,48 @@ StyledDialogView {
             opacity: 0.7
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
+        }
+
+        StyledTextLabel {
+            id: instrumentNamesLanguageLabel
+
+            visible: instrumentNamesLanguageDropdown.visible
+
+            text: qsTrc("project/newscore", "Instrument names:")
+        }
+
+        StyledDropdown {
+            id: instrumentNamesLanguageDropdown
+
+            Layout.preferredWidth: 240
+
+            visible: root.instrumentNamesLanguages.length > 1
+
+            model: root.instrumentNamesLanguages
+            textRole: "name"
+            valueRole: "code"
+
+            currentIndex: indexOfValue(root.instrumentNamesLanguage)
+
+            navigation.name: "InstrumentNamesLanguageDropdown"
+            navigation.panel: instrumentNamesLanguageNavPanel
+            navigation.row: 0
+            navigation.accessible.name: qsTrc("project/newscore", "Language of instrument names") + ": " + currentText
+
+            onActivated: function(index, value) {
+                root.instrumentNamesLanguage = value
+            }
+        }
+
+        StyledTextLabel {
+            id: instrumentNamesExampleLabel
+
+            Layout.maximumWidth: 200
+
+            visible: instrumentNamesLanguageDropdown.visible
+
+            text: newScoreModel.instrumentNamesExample(root.instrumentNamesLanguage)
+            elide: Text.ElideRight
         }
 
         ButtonBox {

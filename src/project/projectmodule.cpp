@@ -44,6 +44,7 @@
 #include "internal/notationwritersregister.h"
 #include "internal/projectcommandsregister.h"
 #include "internal/projectcommandsstate.h"
+#include "internal/scoretexttranslator.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosrecentfilescontroller.h"
@@ -77,6 +78,8 @@ void ProjectModule::registerExports()
 
     globalIoc()->registerExport<INotationReadersRegister>(mname, new NotationReadersRegister());
     globalIoc()->registerExport<INotationWritersRegister>(mname, new NotationWritersRegister());
+
+    globalIoc()->registerExport<engraving::IScoreTextTranslator>(mname, new ScoreTextTranslator());
 }
 
 void ProjectModule::resolveImports()

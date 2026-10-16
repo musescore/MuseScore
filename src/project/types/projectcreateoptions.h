@@ -35,6 +35,9 @@ struct ProjectCreateOptions
 
     muse::io::path_t templatePath;
 
+    //! Language of the instrument names in the new score. Empty means the language of the interface.
+    QString instrumentNamesLanguage;
+
     notation::ScoreCreateOptions scoreOptions;
 };
 }
