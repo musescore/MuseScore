@@ -59,7 +59,7 @@ public:
     static PointF getAdjustedOffset(EngravingItem* item, PointF offset);
     static void migrateOffset500(EngravingItem* item, PropertyValue& offset);
     static void migrateOffsetPre302(EngravingItem* item, int mscVersion);
-    static void readChordLinePath(ChordLine* chordLine, XmlReader& e);
+    static void readChordLinePath(ChordLine* chordLine, XmlReader& e, int mscVersion);
 
 private:
     static Sid positionStyleFromAlign(Sid align);

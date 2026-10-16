@@ -1224,9 +1224,9 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
     }
 }
 
-void CompatUtils::readChordLinePath(ChordLine* chordLine, XmlReader& e)
+void CompatUtils::readChordLinePath(ChordLine* chordLine, XmlReader& e, int mscVersion)
 {
-    /* Before 5.0, a manually edited chord line stored its whole path, in spatium units.
+    /* Before 5.0, a manually edited chord line stored its whole path.
      * Now only the offsets of its points from the default shape are stored. */
 
     std::vector<PointF> points;
@@ -1249,9 +1249,10 @@ void CompatUtils::readChordLinePath(ChordLine* chordLine, XmlReader& e)
         return;
     }
 
-    // The saved path already included the chord's intrinsic mag, but the new ChordLine offsets don't, so we'll remove it before storing:
+    // Since 4.1, the saved path already included the chord's intrinsic mag, but the new ChordLine offsets don't, so we'll remove it before storing.
+    // Older versions didn't scale chord lines by the chord's mag, so their paths are used as they are.
     const EngravingObject* parent = chordLine->ownershipParent();
-    const double mag = parent && parent->isChord() ? toChord(parent)->intrinsicMag() : 1.0;
+    const double mag = (mscVersion >= 410 && parent && parent->isChord()) ? toChord(parent)->intrinsicMag() : 1.0;
     const ChordLine::Points defaultPoints = chordLine->defaultPoints();
 
     for (size_t i = 0; i < points.size(); ++i) {
