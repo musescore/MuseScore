@@ -37,6 +37,13 @@ enum class BrailleIntervalDirection
     Up,
     Down,
 };
+
+enum class BrailleVoiceOrder
+{
+    Auto = 0,
+    Up,
+    Down,
+};
 }
 
 #endif // MU_BRAILLE_BRAILLETYPES_H

@@ -27,6 +27,6 @@
 namespace mu::engraving {
 bool BrailleConverter::write(Score* score, QIODevice& device)
 {
-    return Braille(score).write(device);
+    return Braille(score, mu::braille::BrailleIntervalDirection::Auto, mu::braille::BrailleVoiceOrder::Auto).write(device);
 }
 }

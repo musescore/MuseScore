@@ -23,6 +23,7 @@
 
 #include <QIODevice>
 
+#include "../brailletypes.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
@@ -161,16 +162,24 @@ struct BrailleContext {
 class Braille
 {
 public:
-    Braille(Score* s);
+    Braille(Score* s, mu::braille::BrailleIntervalDirection intervalDirection, mu::braille::BrailleVoiceOrder voiceOrder);
     bool write(QIODevice& device);
     bool convertMeasure(Measure* m, BrailleEngravingItemList* beis);
     bool convertItem(EngravingItem* el, BrailleEngravingItemList* beis);
+
+    // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
+    // In Treble, Soprano, Alto clefs: intervals are written downward from the highest note.
+    // In Tenor, Baritone, Bass clefs: intervals are written upward from the lowest note.
+    // Shared with the live Braille input so both sides of the round-trip agree for a given clef.
+    static bool ascendingChordsForClef(ClefType clefType);
 
 private:
     static constexpr int MAX_CHARS_PER_LINE = 40;
 
     Score* m_score = nullptr;
     BrailleContext m_context;
+    mu::braille::BrailleIntervalDirection m_intervalDirection = mu::braille::BrailleIntervalDirection::Auto;
+    mu::braille::BrailleVoiceOrder m_voiceOrder = mu::braille::BrailleVoiceOrder::Auto;
 
     void resetOctave(size_t stave);
     void resetOctaves();
@@ -189,6 +198,8 @@ private:
     bool isLongLongSlurConvergence(const std::vector<Slur*>& slurs);
     bool hasTies(ChordRest* chordRest);
     bool ascendingChords(ClefType clefType);
+    bool ascendingVoices(ClefType clefType);
+    ClefType clefForStaff(size_t staffIdx) const;
     BarLine* firstBarline(Measure* measure, track_idx_t track);
     BarLine* lastBarline(Measure* measure, track_idx_t track);
     /* --------------------------------------------------------------- */
