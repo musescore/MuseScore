@@ -528,3 +528,68 @@ TEST_F(Engraving_TupletTests, insertTimeThenDeleteTupletKeepsMeasureComplete)
 
     delete score;
 }
+
+TEST_F(Engraving_TupletTests, insertMeasureMovesOuterTuplets)
+{
+    // a quarter triplet made of three eighth triplets, then a half
+    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setDuration(DurationType::V_HALF);
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (int pitch : { 60, 62 }) {
+            NoteVal nval(pitch);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    auto crAt = [&](const Fraction& tick) {
+        Segment* s = score->tick2segment(tick, false, SegmentType::ChordRest);
+        return s ? toChordRest(s->element(0)) : nullptr;
+    };
+    for (const Fraction& tick : { Fraction(0, 1), Fraction(0, 1), Fraction(1, 6), Fraction(2, 6) }) {
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+            score->addTuplet(crAt(tick), Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+        });
+    }
+    ASSERT_TRUE(crAt(Fraction(0, 1))->tuplet());
+    Tuplet* outer = crAt(Fraction(0, 1))->tuplet()->tuplet();
+    ASSERT_TRUE(outer);
+    for (const DurationElement* element : outer->elements()) {
+        ASSERT_TRUE(element->isTuplet());
+    }
+
+    // a measure inserted before moves the outer triplet along with the inner ones
+    score->startCmd(TranslatableString::untranslatable("Tuplet tests"));
+    score->insertMeasure(score->firstMeasure());
+    score->endCmd();
+    EXPECT_EQ(outer->tick(), Fraction(1, 1));
+
+    // deleting the outer triplet leaves a half rest in its place
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdDeleteTuplet(outer, true);
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    ChordRest* rest = crAt(Fraction(1, 1));
+    EXPECT_TRUE(rest && rest->isRest() && rest->ticks() == Fraction(1, 2));
+    ChordRest* half = crAt(Fraction(3, 2));
+    EXPECT_TRUE(half && half->isChord());
+    auto insertedMeasureIsRest = [&]() {
+        ChordRest* cr = crAt(Fraction(0, 1));
+        return cr && cr->isRest() && cr->ticks() == Fraction(1, 1);
+    };
+    EXPECT_TRUE(insertedMeasureIsRest());
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(outer->tick(), Fraction(1, 1));
+    EXPECT_TRUE(insertedMeasureIsRest());
+    EXPECT_TRUE(score->sanityCheck());
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(outer->tick(), Fraction(0, 1));
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}
