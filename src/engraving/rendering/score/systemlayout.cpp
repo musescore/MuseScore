@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <algorithm>
 #include <cfloat>
 #include <unordered_set>
 
@@ -424,6 +425,37 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     // Relayout system to account for newly hidden/unhidden staves
     SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth);
+
+    // Locked systems skip incremental spacing, so establish geometry for the beam pass.
+    if (systemLock) {
+        HorizontalSpacing::computeSpacingForFullSystem(system);
+    }
+
+    // Update beamed rest positions now that the system has provisional geometry,
+    // so their shapes account for the displacement during horizontal spacing.
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& segment : toMeasure(mb)->segments()) {
+            if (!segment.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* item : segment.elist()) {
+                if (!item || !item->isChordRest()) {
+                    continue;
+                }
+                ChordRest* cr = toChordRest(item);
+                if (!BeamLayout::isStartOfNonCrossBeam(cr)) {
+                    continue;
+                }
+                const auto& elements = cr->beam()->elements();
+                if (std::any_of(elements.begin(), elements.end(), [](const ChordRest* element) { return element->isRest(); })) {
+                    BeamLayout::layoutNonCrossBeams(cr, ctx);
+                }
+            }
+        }
+    }
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
