@@ -47,6 +47,9 @@ target_sources(muse_audio_main PRIVATE
     internal/player.h
     internal/audiodrivercontroller.cpp
     internal/audiodrivercontroller.h
+    internal/iaudiodriverfactory.h
+    internal/audiodriverfactory.cpp
+    internal/audiodriverfactory.h
 )
 
 if (OS_IS_WASM)
