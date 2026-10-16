@@ -442,6 +442,10 @@ enum class Pid : short {
     CHORD_LINE_TYPE,
     CHORD_LINE_STRAIGHT,
     CHORD_LINE_WAVY,
+    CHORD_LINE_GRIP_OFFSET1,
+    CHORD_LINE_GRIP_OFFSET2,
+    CHORD_LINE_GRIP_OFFSET3,
+    CHORD_LINE_GRIP_OFFSET4,
     TREMOLO_TYPE,
     TREMOLO_STYLE,
     HARMONY_TYPE,
@@ -470,8 +474,6 @@ enum class Pid : short {
     START_WITH_LONG_NAMES,
     START_WITH_MEASURE_ONE,
     FIRST_SYSTEM_INDENTATION,
-
-    PATH,   // for ChordLine to make its shape changes undoable
 
     PREFER_SHARP_FLAT,
     PLAY_TECH_TYPE,
