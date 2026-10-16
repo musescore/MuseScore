@@ -41,5 +41,7 @@ public:
     const StaveSharingState* staveSharingState() const;
 
     Segment* segment() const { return toSegment(ownershipParent()); }
+
+    String accessibleInfo() const override;
 };
 }

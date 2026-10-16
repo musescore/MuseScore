@@ -62,3 +62,12 @@ const StaveSharingState* StaveSharingChange::staveSharingState() const
 
     return &sharedPart->staveSharingStateAtTick(tick());
 }
+
+String StaveSharingChange::accessibleInfo() const
+{
+    if (staveSharingState() && staveSharingState()->isReset()) {
+        return TranslatableString("engraving", u"Reset stave sharing change(s)", nullptr, 1).translated();
+    }
+
+    return EngravingItem::accessibleInfo();
+}
