@@ -109,12 +109,6 @@
           <text>Example 8.5</text>
           </Text>
         <Text>
-          <eid>9pDG+prjjW_brDlOaWRTsP</eid>
-          <style>subtitle</style>
-          <size>9</size>
-          <text><font size="9"/>CAVEAT: Currently MuseScore doesn’t double the braille tuplet sign for a run<br/>of four or more tuplets of equal duration. Instead, each tuplet gets its own sign.</text>
-          </Text>
-        <Text>
           <eid>cjjFYOMXfj_3tgEcuNSU8J</eid>
           <style>composer</style>
           <text>BANA Music Braille Code 2015</text>

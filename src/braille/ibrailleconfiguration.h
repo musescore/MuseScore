@@ -49,6 +49,10 @@ public:
     virtual QString brailleTable() const = 0;
     virtual void setBrailleTable(const QString& table) = 0;
     virtual QStringList brailleTableList() const = 0;
+
+    virtual muse::async::Notification signDoublingChanged() const = 0;
+    virtual bool signDoubling() const = 0;
+    virtual void setSignDoubling(const bool enabled) = 0;
 };
 }
 
