@@ -248,12 +248,12 @@ void TempoText::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags
 //   updateTempo
 //---------------------------------------------------------
 
-void TempoText::updateTempo()
+/** Normalizes supported spacing and equivalence notation before matching tempo text. */
+static String normalizedTempoText(String s)
 {
-    // cache regexp, they are costly to create
-    static std::unordered_map<String, std::regex> regexps;
-    static std::unordered_map<String, std::regex> regexps2;
-    String s = plainText();
+    // UTF-8 regex whitespace does not match these spaces used in metronome markings.
+    s.replace(u"\u00a0", u" ");
+    s.replace(u"\u2009", u" ");
     s.replace(u",", u".");
     s.replace(u"<sym>space</sym>", u" ");
     s.replace(u"≒", u"=");
@@ -262,15 +262,40 @@ void TempoText::updateTempo()
     s.replace(u"ca.", u"");
     s.replace(u"c.", u"");
     s.replace(u"approx.", u"");
+    return s;
+}
+
+/** Returns the cached numeric metronome expression for a note-duration pattern. */
+static const std::regex& metronomeRegex(const String& pattern)
+{
+    static std::unordered_map<String, std::regex> regexps;
+    auto it = regexps.find(pattern);
+    if (it == regexps.end()) {
+        it = regexps.emplace(pattern, std::regex(String(u"%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pattern).toStdString())).first;
+    }
+    return it->second;
+}
+
+/** Checks plain text for an explicit numeric metronome marking without changing score state. */
+bool TempoText::isMetronomeMark(const String& text)
+{
+    const std::string normalized = normalizedTempoText(text).toStdString();
+    for (const TempoPattern& pattern : tp) {
+        if (std::regex_search(normalized, metronomeRegex(String::fromUtf8(pattern.pattern)))) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void TempoText::updateTempo()
+{
+    static std::unordered_map<String, std::regex> regexps2;
+    const String s = normalizedTempoText(plainText());
     std::string su8 = s.toStdString();
     for (const TempoPattern& pa : tp) {
         String pattern = String::fromUtf8(pa.pattern);
-        std::regex re;
-        if (!muse::contains(regexps, String::fromUtf8(pa.pattern))) {
-            re = std::regex(String(u"%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pattern).toStdString());
-            regexps[pattern] = re;
-        }
-        re = muse::value(regexps, pattern);
+        const std::regex& re = metronomeRegex(pattern);
         std::smatch match;
         std::regex_search(su8, match, re);
         if (!match.empty()) {
