@@ -539,6 +539,12 @@ QQmlListProperty<Staff> Score::staves() const
     return wrapContainerProperty<Staff>(this, score()->staves());
 }
 
+/** Exposes the score's additional system-object staves as read-only API staff wrappers. */
+QQmlListProperty<Staff> Score::systemObjectStaves() const
+{
+    return wrapContainerProperty<Staff>(this, score()->systemObjectStaves());
+}
+
 QQmlListProperty<Part> Score::parts() const
 {
     return wrapContainerProperty<Part>(this, score()->parts());
