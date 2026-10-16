@@ -352,7 +352,7 @@ TEST_F(Engraving_TupletTests, nestedTupletsLengthen)
 TEST_F(Engraving_TupletTests, nestedTupletStartDoesNotSplitTuplet)
 {
     // quarter, a quarter triplet starting with an eighth triplet, quarter
-    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
     ASSERT_TRUE(score);
     InputState& is = score->inputState();
     is.setTrack(0);
@@ -413,7 +413,7 @@ TEST_F(Engraving_TupletTests, nestedTupletStartDoesNotSplitTuplet)
 TEST_F(Engraving_TupletTests, insertTimeMovesLaterTuplets)
 {
     // voice 1: four quarters; voice 2: an eighth triplet on beat 2
-    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
     ASSERT_TRUE(score);
     InputState& is = score->inputState();
     is.setTrack(0);
@@ -478,7 +478,7 @@ TEST_F(Engraving_TupletTests, insertTimeMovesLaterTuplets)
 TEST_F(Engraving_TupletTests, insertTimeThenDeleteTupletKeepsMeasureComplete)
 {
     // four quarters, the second made into an eighth triplet
-    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
     ASSERT_TRUE(score);
     InputState& is = score->inputState();
     is.setTrack(0);
@@ -532,7 +532,7 @@ TEST_F(Engraving_TupletTests, insertTimeThenDeleteTupletKeepsMeasureComplete)
 TEST_F(Engraving_TupletTests, insertMeasureMovesOuterTuplets)
 {
     // a quarter triplet made of three eighth triplets, then a half
-    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
     ASSERT_TRUE(score);
     InputState& is = score->inputState();
     is.setTrack(0);
