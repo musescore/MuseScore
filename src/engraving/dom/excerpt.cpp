@@ -1343,7 +1343,9 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             ncr->setTuplet(0);               //TODO nested tuplets
                         }
                     }
-                    score->undoAddElement(ne);
+                    // add it to this staff only: the staves are linked already, and undoAddElement() would also
+                    // add a copy of a breath mark or clef to the source staff, in place of the original
+                    score->doUndoAddElement(ne);
                 }
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
