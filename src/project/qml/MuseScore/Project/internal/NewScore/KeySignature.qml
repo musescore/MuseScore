@@ -41,7 +41,6 @@ Column {
         height: 50
 
         font.pixelSize: 64
-        renderType: Text.NativeRendering
     }
 
     StyledTextLabel {
