@@ -70,7 +70,7 @@ RowLayout {
         id: resetButton
         visible: root.hasReset
         icon: IconCode.UNDO
-        enabled: root.resetEnabled ? root.resetEnabled : !root.styleItem.isDefault
-        onClicked: root.resetOnClicked ? root.resetOnClicked : root.styleItem.value = root.styleItem.defaultValue
+        enabled: root.resetEnabled !== null ? root.resetEnabled : !root.styleItem.isDefault
+        onClicked: root.resetOnClicked ? root.resetOnClicked() : root.styleItem.value = root.styleItem.defaultValue
     }
 }

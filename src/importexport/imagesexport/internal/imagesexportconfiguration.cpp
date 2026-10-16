@@ -37,6 +37,7 @@ static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "
 static const Settings::Key EXPORT_PNG_USE_GRAYSCALE_KEY("iex_imagesexport", "export/png/useGrayscale");
 static const Settings::Key EXPORT_SVG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/svg/useTransparency");
 static const Settings::Key EXPORT_SVG_ILLUSTRATOR_COMPAT("iex_imagesexport", "export/svg/illustratorCompat");
+static const Settings::Key EXPORT_APPLY_WATERMARK_KEY("iex_imagesexport", "export/applyWatermark");
 
 void ImagesExportConfiguration::init()
 {
@@ -44,6 +45,7 @@ void ImagesExportConfiguration::init()
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(mu::engraving::DPI));
     settings()->setDefaultValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(false));
     settings()->setDefaultValue(EXPORT_SVG_ILLUSTRATOR_COMPAT, Val(false));
+    settings()->setDefaultValue(EXPORT_APPLY_WATERMARK_KEY, Val(true));
 }
 
 int ImagesExportConfiguration::exportPdfDpiResolution() const
@@ -143,4 +145,14 @@ int ImagesExportConfiguration::trimMarginPixelSize() const
 void ImagesExportConfiguration::setTrimMarginPixelSize(std::optional<int> pixelSize)
 {
     m_trimMarginPixelSize = pixelSize;
+}
+
+bool ImagesExportConfiguration::exportApplyWatermark() const
+{
+    return settings()->value(EXPORT_APPLY_WATERMARK_KEY).toBool();
+}
+
+void ImagesExportConfiguration::setExportApplyWatermark(bool apply)
+{
+    settings()->setSharedValue(EXPORT_APPLY_WATERMARK_KEY, Val(apply));
 }

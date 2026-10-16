@@ -125,6 +125,7 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
     opt.deviceDpi = pdfWriter.logicalDpiX();
     opt.onNewPage = [&pdfWriter]() { pdfWriter.newPage(); };
     opt.printPageBackground = !TRANSPARENT_BACKGROUND;
+    opt.applyWatermark = muse::value(options, OptionKey::APPLY_WATERMARK, Val(true)).toBool();
 
     for (const auto& notation : notations) {
         IF_ASSERT_FAILED(notation) {
