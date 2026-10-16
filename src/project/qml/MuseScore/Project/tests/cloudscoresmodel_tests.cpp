@@ -89,6 +89,15 @@ WatchedScore makeWatchedScore(int convertId, ConvertStatus status = ConvertStatu
 
     return score;
 }
+
+UploadingScore makeUploadingScore(int uploadId)
+{
+    UploadingScore score;
+    score.uploadId = uploadId;
+    score.name = String::fromStdString("Upload " + std::to_string(uploadId));
+
+    return score;
+}
 }
 
 namespace mu::project {
@@ -122,6 +131,8 @@ protected:
 
         ON_CALL(*m_scenario, watchedScores())
         .WillByDefault(ReturnPointee(&m_watchedScores));
+        ON_CALL(*m_scenario, uploadingScores())
+        .WillByDefault(ReturnPointee(&m_uploadingScores));
         ON_CALL(*m_scenario, pollingStatusChanged())
         .WillByDefault(Return(m_pollingStatusChanged));
 
@@ -199,6 +210,7 @@ protected:
 
     ValCh<bool> m_userAuthorized;
     ValNt<WatchedScoreList> m_watchedScores;
+    ValNt<UploadingScoreList> m_uploadingScores;
     async::Channel<PollingStatus> m_pollingStatusChanged;
     async::Channel<int> m_scoreDeleted;
 
@@ -334,7 +346,9 @@ TEST_F(Project_CloudScoresModelTest, ScoresLoaded_FillsModel)
     resolveLastRequest(makeScoresList({ 1, 2, 3 }, 3));
 
     // [THEN] They are shown, in order
-    EXPECT_EQ(names(), QStringList({ "Score 1", "Score 2", "Score 3" }));
+    const QStringList expectedNames = { "Score 1", "Score 2", "Score 3" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_EQ(m_model.state(), CloudScoresModel::State::Fine);
 
     // [THEN] There is nothing more to load
@@ -528,7 +542,9 @@ TEST_F(Project_CloudScoresModelTest, Reload_AfterError_AllowsLoadingAgain)
     resolveLastRequest(makeScoresList({ 1 }, 1));
 
     // [THEN] The error is gone
-    EXPECT_EQ(names(), QStringList({ "Score 1" }));
+    const QStringList expectedNames = { "Score 1" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_EQ(m_model.state(), CloudScoresModel::State::Fine);
 }
 
@@ -539,13 +555,17 @@ TEST_F(Project_CloudScoresModelTest, Reload_KeepsScoresBeingProcessed)
     m_watchedScores.set({ makeWatchedScore(10) });
     m_model.setDesiredRowCount(BATCH_SIZE);
     resolveLastRequest(makeScoresList({ 1, 2 }, 2));
-    ASSERT_EQ(names(), QStringList({ "Conversion 10", "Score 1", "Score 2" }));
+    QStringList expectedNames = { "Conversion 10", "Score 1", "Score 2" };
+    ASSERT_EQ(m_model.rowCount(), expectedNames.size());
+    ASSERT_EQ(names(), expectedNames);
 
     // [WHEN] Reloading
     m_model.reload();
 
     // [THEN] Only the score that is being processed remains
-    EXPECT_EQ(names(), QStringList({ "Conversion 10" }));
+    expectedNames = { "Conversion 10" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
 }
 
 TEST_F(Project_CloudScoresModelTest, Reload_WhileRequestPending_DiscardsItsResult)
@@ -573,7 +593,9 @@ TEST_F(Project_CloudScoresModelTest, Reload_WhileRequestPending_DiscardsItsResul
     resolveLastRequest(makeScoresList({ 4, 5 }, 2));
 
     // [THEN] Its result is shown
-    EXPECT_EQ(names(), QStringList({ "Score 4", "Score 5" }));
+    const QStringList expectedNames = { "Score 4", "Score 5" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_EQ(m_model.state(), CloudScoresModel::State::Fine);
 }
 
@@ -653,7 +675,9 @@ TEST_F(Project_CloudScoresModelTest, WatchedScores_ProcessingOnesAreShownFirst)
     });
 
     // [THEN] Only the ones that are being processed are shown, above the loaded scores
-    EXPECT_EQ(names(), QStringList({ "Conversion 10", "Conversion 14", "Score 1", "Score 2" }));
+    const QStringList expectedNames = { "Conversion 10", "Conversion 14", "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_EQ(m_requests.size(), 1);
 }
 
@@ -692,7 +716,9 @@ TEST_F(Project_CloudScoresModelTest, WatchedScores_AlreadyLoadedScore_IsNotShown
     m_watchedScores.set({ makeWatchedScore(10, ConvertStatus::Processing, 2) });
 
     // [THEN] It is not shown twice
-    EXPECT_EQ(names(), QStringList({ "Score 1", "Score 2" }));
+    const QStringList expectedNames = { "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
 }
 
 TEST_F(Project_CloudScoresModelTest, WatchedScores_DownloadedScore_ReplacesPlaceholder)
@@ -700,14 +726,18 @@ TEST_F(Project_CloudScoresModelTest, WatchedScores_DownloadedScore_ReplacesPlace
     // [GIVEN] A watched conversion whose score isn't loaded yet
     loadModel();
     m_watchedScores.set({ makeWatchedScore(10, ConvertStatus::Processing, 2) });
-    ASSERT_EQ(names(), QStringList({ "Conversion 10" }));
+    QStringList expectedNames = { "Conversion 10" };
+    ASSERT_EQ(m_model.rowCount(), expectedNames.size());
+    ASSERT_EQ(names(), expectedNames);
 
     // [WHEN] The score arrives with the scores list
     m_model.setDesiredRowCount(BATCH_SIZE);
     resolveLastRequest(makeScoresList({ 1, 2 }, 2));
 
     // [THEN] The placeholder is gone, and no refresh is needed
-    EXPECT_EQ(names(), QStringList({ "Score 1", "Score 2" }));
+    expectedNames = { "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_EQ(m_requests.size(), 1);
 }
 
@@ -726,7 +756,9 @@ TEST_F(Project_CloudScoresModelTest, WatchedScoreFinished_RefreshesFirstPage)
     m_watchedScores.set({ makeWatchedScore(10, ConvertStatus::Done, 4), makeWatchedScore(11) });
 
     // [THEN] Its placeholder is removed, and the first page is requested in the background
-    EXPECT_EQ(names(), QStringList({ "Conversion 11", "Score 1", "Score 2", "Score 3" }));
+    QStringList expectedNames = { "Conversion 11", "Score 1", "Score 2", "Score 3" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     ASSERT_EQ(m_requests.size(), 2);
     EXPECT_EQ(m_requests.back().page, 1);
 
@@ -734,7 +766,9 @@ TEST_F(Project_CloudScoresModelTest, WatchedScoreFinished_RefreshesFirstPage)
     resolveLastRequest(makeScoresList({ 4, 1, 2, 3 }, 4));
 
     // [THEN] The new score is inserted above the loaded ones
-    EXPECT_EQ(names(), QStringList({ "Conversion 11", "Score 4", "Score 1", "Score 2", "Score 3" }));
+    expectedNames = { "Conversion 11", "Score 4", "Score 1", "Score 2", "Score 3" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_FALSE(m_model.hasMore());
     EXPECT_EQ(m_model.state(), CloudScoresModel::State::Fine);
     EXPECT_EQ(stateChangedCount, 0);
@@ -753,7 +787,9 @@ TEST_F(Project_CloudScoresModelTest, WatchedScoreFinished_RefreshFailed_KeepsLoa
     rejectLastRequest();
 
     // [THEN] The loaded scores remain, and no error is reported
-    EXPECT_EQ(names(), QStringList({ "Score 1", "Score 2", "Score 3" }));
+    const QStringList expectedNames = { "Score 1", "Score 2", "Score 3" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_EQ(m_model.state(), CloudScoresModel::State::Fine);
 }
 
@@ -775,7 +811,9 @@ TEST_F(Project_CloudScoresModelTest, WatchedScoreFinished_WhileRequestPending_Re
     resolveLastRequest(makeScoresList({ 1, 2 }, 2));
 
     // [THEN] The first page is requested again
-    EXPECT_EQ(names(), QStringList({ "Score 1", "Score 2" }));
+    QStringList expectedNames = { "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     ASSERT_EQ(m_requests.size(), 2);
     EXPECT_EQ(m_requests.back().page, 1);
 
@@ -783,8 +821,85 @@ TEST_F(Project_CloudScoresModelTest, WatchedScoreFinished_WhileRequestPending_Re
     resolveLastRequest(makeScoresList({ 3, 1, 2 }, 3));
 
     // [THEN] The new score is inserted above the loaded ones
-    EXPECT_EQ(names(), QStringList({ "Score 3", "Score 1", "Score 2" }));
+    expectedNames = { "Score 3", "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_EQ(m_requests.size(), 2);
+}
+
+// ==================================================
+// Scores being uploaded
+// ==================================================
+
+TEST_F(Project_CloudScoresModelTest, UploadingScores_AreShownAboveProcessingOnes)
+{
+    // [GIVEN] Some loaded scores, and a conversion that is being processed
+    loadScores(makeScoresList({ 1, 2 }, 2));
+    m_watchedScores.set({ makeWatchedScore(10) });
+
+    // [WHEN] Some scores are being uploaded
+    m_uploadingScores.set({ makeUploadingScore(1), makeUploadingScore(2) });
+
+    // [THEN] They are shown above the ones being processed
+    const QStringList expectedNames = { "Upload 1", "Upload 2", "Conversion 10", "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
+    EXPECT_EQ(m_requests.size(), 1);
+}
+
+TEST_F(Project_CloudScoresModelTest, UploadingScores_ItemFields)
+{
+    // [WHEN] A score is being uploaded
+    loadModel();
+    m_uploadingScores.set({ makeUploadingScore(7) });
+
+    // [THEN] It is shown as being processed, identified by its upload id
+    ASSERT_EQ(m_model.rowCount(), 1);
+    const QVariantMap map = score(0);
+
+    EXPECT_EQ(map.value("name").toString(), "Upload 7");
+    EXPECT_EQ(map.value("processingStatus").toInt(), STATUS_PROCESSING);
+    EXPECT_EQ(map.value("uploadId").toInt(), 7);
+    EXPECT_FALSE(map.contains("convertId"));
+    EXPECT_FALSE(map.value("isCloud").toBool());
+    EXPECT_EQ(map.value("cloudVisibility").toInt(), int(cloud::Visibility::Private));
+    EXPECT_FALSE(map.value("isCreateNew").toBool());
+    EXPECT_FALSE(map.value("isNoResultsFound").toBool());
+}
+
+TEST_F(Project_CloudScoresModelTest, UploadingScoreRemoved_DoesNotRefresh)
+{
+    // [GIVEN] Some loaded scores, and a score that is being uploaded
+    loadScores(makeScoresList({ 1, 2 }, 2));
+    m_uploadingScores.set({ makeUploadingScore(1) });
+    ASSERT_EQ(m_requests.size(), 1);
+
+    // [WHEN] The upload fails or is canceled
+    m_uploadingScores.set({});
+
+    // [THEN] Its row disappears, and no refresh is requested
+    const QStringList expectedNames = { "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
+    EXPECT_EQ(m_requests.size(), 1);
+}
+
+TEST_F(Project_CloudScoresModelTest, UploadSucceeded_ShownAsProcessing_DoesNotRefresh)
+{
+    // [GIVEN] Some loaded scores, and a score that is being uploaded
+    loadScores(makeScoresList({ 1, 2 }, 2));
+    m_uploadingScores.set({ makeUploadingScore(1) });
+    ASSERT_EQ(m_requests.size(), 1);
+
+    // [WHEN] The upload succeeds, and its conversion is watched
+    m_uploadingScores.set({});
+    m_watchedScores.set({ makeWatchedScore(10) });
+
+    // [THEN] The conversion takes its place, and no refresh is requested
+    const QStringList expectedNames = { "Conversion 10", "Score 1", "Score 2" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
+    EXPECT_EQ(m_requests.size(), 1);
 }
 
 // ==================================================
@@ -833,7 +948,7 @@ TEST_F(Project_CloudScoresModelTest, PollingFailed_NotGivenUp_DoesNothing)
 }
 
 // ==================================================
-// retryAllConversions() / cancelConversion()
+// retryAllConversions() / cancelUpload() / cancelConversion()
 // ==================================================
 
 TEST_F(Project_CloudScoresModelTest, RetryAllConversions_RestartsPolling)
@@ -853,6 +968,15 @@ TEST_F(Project_CloudScoresModelTest, RetryAllConversions_RestartsPolling)
     // [THEN] The conversion is shown as being processed
     ASSERT_EQ(m_model.rowCount(), 1);
     EXPECT_EQ(score(0).value("processingStatus").toInt(), STATUS_PROCESSING);
+}
+
+TEST_F(Project_CloudScoresModelTest, CancelUpload_DelegatesToScenario)
+{
+    // [THEN] The scenario is asked to cancel the upload
+    EXPECT_CALL(*m_scenario, cancelUpload(7));
+
+    // [WHEN] Cancelling
+    m_model.cancelUpload(7);
 }
 
 TEST_F(Project_CloudScoresModelTest, CancelConversion_DelegatesToScenario)
@@ -878,7 +1002,9 @@ TEST_F(Project_CloudScoresModelTest, ScoreDeleted_RemovesScore)
     m_scoreDeleted.send(2);
 
     // [THEN] It is removed
-    EXPECT_EQ(names(), QStringList({ "Conversion 10", "Score 1", "Score 3" }));
+    const QStringList expectedNames = { "Conversion 10", "Score 1", "Score 3" };
+    EXPECT_EQ(m_model.rowCount(), expectedNames.size());
+    EXPECT_EQ(names(), expectedNames);
     EXPECT_FALSE(m_model.hasMore());
     EXPECT_EQ(m_model.state(), CloudScoresModel::State::Fine);
     EXPECT_EQ(m_requests.size(), 1);

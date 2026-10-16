@@ -23,7 +23,7 @@
 
 #include <algorithm>
 #include <functional>
-#include <thread>
+#include <optional>
 #include <vector>
 
 #include <QUrl>
@@ -34,13 +34,14 @@
 #include "cloud/clouderrors.h"
 #include "network/networkerrors.h"
 
-#include "global/async/processevents.h"
+#include "global/io/ioretcodes.h"
 #include "global/modularity/ioc.h"
 #include "global/progress.h"
 #include "global/types/val.h"
 #include "global/types/bytearray.h"
 #include "global/serialization/json.h"
 
+#include "utils/testutils.h"
 #include "mocks/projectconfigurationmock.h"
 #include "global/tests/mocks/filesystemmock.h"
 #include "cloud/tests/mocks/musescorecomservicemock.h"
@@ -54,25 +55,6 @@ using namespace muse::cloud;
 
 namespace {
 constexpr int TEST_QUEUE_ID = 42;
-
-void pumpEvents(int iterations = 10)
-{
-    const std::thread::id thisThId = std::this_thread::get_id();
-    for (int i = 0; i < iterations; ++i) {
-        muse::async::processMessages(thisThId);
-    }
-}
-
-//! NOTE: keep the body queued, don't run it eagerly
-//! otherwise resolve() can fire before onResolve/onReject are attached
-template<typename T>
-async::Promise<T> resolvedPromise(const T& val)
-{
-    return async::make_promise<T>([val](auto resolve, auto reject) {
-        (void)reject;
-        return resolve(val);
-    });
-}
 
 //! NOTE: the hardcoded values ConvertFileToScoreService::init() falls back to
 void expectFallbackConfig(const ConvertConfig& config)
@@ -91,26 +73,19 @@ void expectFallbackConfig(const ConvertConfig& config)
     EXPECT_TRUE(config.audio2score.link.allowedSources.testFlag(LinkSource::AudioCom));
 }
 
-//! NOTE: a promise that never resolves, for tests that don't care about the outcome
-template<typename T>
-async::Promise<T> pendingPromise()
+ConvertQueueItem queueItem(int id, ConvertType type, ConvertStatus status, std::optional<int> scoreId = std::nullopt)
 {
-    return async::make_promise<T>([](auto resolve, auto reject) {
-        (void)resolve;
-        (void)reject;
-        return async::Promise<T>::dummy_result();
-    });
+    ConvertQueueItem item;
+    item.id = id;
+    item.type = type;
+    item.status = status;
+    item.scoreId = scoreId;
+    return item;
 }
 
-//! NOTE: resolved manually by calling "resolver", once set (after a pumpEvents())
-template<typename T>
-async::Promise<T> deferredPromise(std::function<void(const T&)>& resolver)
+void finishUpload(const ProgressPtr& progress, int queueId)
 {
-    return async::make_promise<T>([&resolver](auto resolve, auto reject) {
-        (void)reject;
-        resolver = [resolve](const T& val) { (void)resolve(val); };
-        return async::Promise<T>::dummy_result();
-    });
+    progress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(queueId) } })));
 }
 
 bool uploadDataMatchesPaths(const ConvertUploadData& data, const io::paths_t& paths)
@@ -192,7 +167,7 @@ protected:
         return config;
     }
 
-    //! NOTE: uploads the given file, resolves it, and manually polls
+    //! NOTE: uploads the given file, finishes the upload, and manually polls
     void deliverQueueStatus(const ConvertQueueList& queueList, ConvertType type, int queueId, const QString& convertedScoreName)
     {
         ON_CALL(*m_convertService, fetchQueue())
@@ -201,7 +176,7 @@ protected:
         }));
 
         auto uploadProgress = std::make_shared<Progress>();
-        ON_CALL(*m_convertService, startConvert(_))
+        ON_CALL(*m_convertService, uploadToConvert(_))
         .WillByDefault(Return(uploadProgress));
 
         const io::paths_t paths { "/some/path/file.pdf" };
@@ -209,26 +184,26 @@ protected:
                                    ? ConvertInput(OmrConvertInput { paths })
                                    : ConvertInput(Audio2ScoreConvertInput { paths });
 
-        m_service->startConvert(input, convertedScoreName);
+        m_service->uploadToConvert(input, convertedScoreName);
 
-        uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(queueId) } })));
+        finishUpload(uploadProgress, queueId);
         m_service->poll();
         pumpEvents();
     }
 
-    //! NOTE: uploads the given file, resolves with queueId, and manually polls, without touching
+    //! NOTE: uploads the given file, finishes the upload with queueId, and manually polls, without touching
     //! the fetchQueue mock, which the caller owns
-    void uploadAndResolve(int queueId, const QString& convertedScoreName, const io::paths_t& paths)
+    void uploadAndFinish(int queueId, const QString& convertedScoreName, const io::paths_t& paths)
     {
         auto uploadProgress = std::make_shared<Progress>();
-        EXPECT_CALL(*m_convertService, startConvert(Truly([paths](const ConvertUploadDataPtr& data) {
+        EXPECT_CALL(*m_convertService, uploadToConvert(Truly([paths](const ConvertUploadDataPtr& data) {
             return uploadDataMatchesPaths(*data, paths);
         })))
         .WillOnce(Return(uploadProgress));
 
-        m_service->startConvert(OmrConvertInput { paths }, convertedScoreName);
+        m_service->uploadToConvert(OmrConvertInput { paths }, convertedScoreName);
 
-        uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(queueId) } })));
+        finishUpload(uploadProgress, queueId);
         m_service->poll();
         pumpEvents();
     }
@@ -489,6 +464,23 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_TooManyImages_TooMan
     EXPECT_EQ(result.ret.code(), int(mu::project::Err::ConvertTooManyImages));
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_MultiplePdfFiles_IgnoresImageLimit)
+{
+    // [GIVEN] No PDF limits, and a maximum image count of one
+    ConvertConfig config = testConfig();
+    config.omr.pdf.maxFiles = 0;
+    config.omr.pdf.maxFileSizeBytes = 0;
+    config.omr.images.maxFiles = 1;
+    setConfig(config);
+
+    // [WHEN] Validating two PDF files
+    RetVal<ConvertFilesValidation> result = m_service->validateFiles(io::paths_t { "/some/a.pdf", "/some/b.pdf" });
+
+    // [THEN] It succeeds, since the image limit doesn't apply to PDF files
+    EXPECT_TRUE(result.ret);
+    EXPECT_EQ(result.val.category, FileCategory::Pdf);
+}
+
 TEST_F(Project_ConvertFileToScoreServiceTest, ValidateFiles_CombinedImageTooLarge_CombinedImageTooLarge)
 {
     // [GIVEN] A configured maximum combined image size, exceeded by the combined file sizes
@@ -591,39 +583,86 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_AudioComOnlyConfig_Re
     EXPECT_FALSE(ret);
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ValidateLink_LongerThanMaxLength_Fails)
+{
+    // [GIVEN] A configured maximum link length
+    ConvertConfig config = testConfig();
+    config.audio2score.link.maxLength = 21;
+    setConfig(config);
+
+    // [THEN] A link of exactly the maximum length is accepted
+    EXPECT_TRUE(m_service->validateLink(QUrl("https://youtube.com/x")));
+
+    // [THEN] A longer link from the same host is rejected
+    Ret ret = m_service->validateLink(QUrl("https://youtube.com/xy"));
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(mu::project::Err::ConvertUnsupportedLink));
+}
+
 // ==================================================
-// startConvert()
+// uploadToConvert()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadFails_ForwardsFailureWithFileName)
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_FileReadFails_ReturnsErrorWithoutUploading)
+{
+    // [GIVEN] The file can't be read
+    ON_CALL(*m_fileSystem, readFile(_))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ret(io::make_ret(io::Err::FSReadError))));
+
+    // [THEN] Nothing is uploaded
+    EXPECT_CALL(*m_convertService, uploadToConvert(_)).Times(0);
+
+    // [WHEN] Uploading
+    RetVal<Progress> progress = m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+
+    // [THEN] The read error is returned right away
+    EXPECT_EQ(progress.ret.code(), static_cast<int>(io::Err::FSReadError));
+}
+
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadFails_FinishesWithUploadFailed)
 {
     // [GIVEN] The upload fails
     auto uploadProgress = std::make_shared<Progress>();
-    ON_CALL(*m_convertService, startConvert(_))
+    ON_CALL(*m_convertService, uploadToConvert(_))
     .WillByDefault(Return(uploadProgress));
 
-    bool received = false;
-    Ret receivedRet;
-    WatchedScore receivedWatched;
-    m_service->convertFinished().onReceive(nullptr, [&](const Ret& ret, const WatchedScore& watched) {
-        received = true;
-        receivedRet = ret;
-        receivedWatched = watched;
+    // [THEN] The failure is not reported as a finished conversion, and nothing is saved
+    bool convertFinishedReceived = false;
+    m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
+        convertFinishedReceived = true;
     });
 
-    // [WHEN] Starting the conversion
-    const io::paths_t paths { "/some/path/file.pdf" };
-    Ret ret = m_service->startConvert(OmrConvertInput { paths }, u"My Score");
-    EXPECT_TRUE(ret);
+    EXPECT_CALL(*m_fileSystem, writeFile(_, _)).Times(0);
 
-    // [THEN] The failure is forwarded synchronously, carrying the intended file name
+    // [WHEN] Uploading
+    RetVal<Progress> progress = m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+    ASSERT_TRUE(progress.ret);
+    EXPECT_TRUE(progress.val.isStarted());
+
+    bool finished = false;
+    Ret finishedRet;
+    progress.val.finished().onReceive(nullptr, [&](const ProgressResult& res) {
+        finished = true;
+        finishedRet = res.ret;
+    });
+
+    bool uploadingChanged = false;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        uploadingChanged = true;
+    });
+
     uploadProgress->finish(make_ret(Ret::Code::UnknownError, std::string("network error")));
-    ASSERT_TRUE(received);
-    EXPECT_FALSE(receivedRet);
-    EXPECT_EQ(receivedWatched.name, u"My Score");
+
+    // [THEN] The progress finishes with the upload failure, and the score is removed
+    ASSERT_TRUE(finished);
+    EXPECT_EQ(finishedRet.code(), static_cast<int>(mu::project::Err::ConvertUploadFailed));
+    EXPECT_FALSE(convertFinishedReceived);
+    EXPECT_TRUE(uploadingChanged);
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_PersistsWatchedItemAndPolls)
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadSucceeds_ReportsProgressAndPersistsWatchedItem)
 {
     // [GIVEN] The upload succeeds with queue id TEST_QUEUE_ID
     ON_CALL(*m_configuration, watchedConvertsJsonPath())
@@ -632,14 +671,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
     auto uploadProgress = std::make_shared<Progress>();
     const io::paths_t paths { "/some/path/file.pdf" };
 
-    EXPECT_CALL(*m_convertService, startConvert(Truly([&](const ConvertUploadDataPtr& data) {
+    EXPECT_CALL(*m_convertService, uploadToConvert(Truly([&](const ConvertUploadDataPtr& data) {
         return data->type == ConvertType::Omr && uploadDataMatchesPaths(*data, paths);
     })))
     .WillOnce(Return(uploadProgress));
 
     // [THEN] Polling begins, and the watched item is persisted with its id, type and file name
     EXPECT_CALL(*m_convertService, fetchQueue())
-    .Times(1)
     .WillOnce(Invoke([] {
         return pendingPromise<RetVal<ConvertQueueList> >();
     }));
@@ -658,24 +696,44 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
         return make_ok();
     }));
 
-    // [WHEN] Starting the conversion
-    Ret ret = m_service->startConvert(OmrConvertInput { paths }, u"My Score");
-    EXPECT_TRUE(ret);
+    // [WHEN] Uploading
+    RetVal<Progress> progress = m_service->uploadToConvert(OmrConvertInput { paths }, u"My Score");
+    ASSERT_TRUE(progress.ret);
 
-    uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    int64_t reportedCurrent = -1;
+    int64_t reportedTotal = -1;
+    progress.val.progressChanged().onReceive(nullptr, [&](int64_t current, int64_t total, const std::string&) {
+        reportedCurrent = current;
+        reportedTotal = total;
+    });
+
+    bool finished = false;
+    Ret finishedRet;
+    progress.val.finished().onReceive(nullptr, [&](const ProgressResult& res) {
+        finished = true;
+        finishedRet = res.ret;
+    });
+
+    uploadProgress->progress(30, 100);
+    finishUpload(uploadProgress, TEST_QUEUE_ID);
     m_service->poll();
 
+    // [THEN] The upload progress is reported, and the watched item is persisted
+    EXPECT_EQ(reportedCurrent, 30);
+    EXPECT_EQ(reportedTotal, 100);
+    ASSERT_TRUE(finished);
+    EXPECT_TRUE(finishedRet);
     EXPECT_TRUE(savedExpectedEntry);
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_PersistsAudio2ScoreType)
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadSucceeds_PersistsAudio2ScoreType)
 {
     // [GIVEN] The upload succeeds for an Audio2Score conversion
     ON_CALL(*m_configuration, watchedConvertsJsonPath())
     .WillByDefault(Return(io::path_t("/watched.json")));
 
     auto uploadProgress = std::make_shared<Progress>();
-    ON_CALL(*m_convertService, startConvert(_))
+    ON_CALL(*m_convertService, uploadToConvert(_))
     .WillByDefault(Return(uploadProgress));
     ON_CALL(*m_convertService, fetchQueue())
     .WillByDefault(Invoke([] {
@@ -696,63 +754,125 @@ TEST_F(Project_ConvertFileToScoreServiceTest, StartConvert_UploadSucceeds_Persis
 
     // [WHEN] Starting an Audio2Score conversion
     const io::paths_t paths { "/some/path/file.mp3" };
-    m_service->startConvert(Audio2ScoreConvertInput { paths }, u"My Song");
-    uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->uploadToConvert(Audio2ScoreConvertInput { paths }, u"My Song");
+    finishUpload(uploadProgress, TEST_QUEUE_ID);
 
     // [THEN] The persisted type is Audio2Score
     EXPECT_TRUE(savedExpectedType);
 }
 
 // ==================================================
-// watchedScores()
+// uploadingScores() / cancelUpload()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_Initially_Empty)
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadingScores_WhileUploading_ContainsScoreAndFiresChanged)
 {
+    // [GIVEN] Nothing is being uploaded or converted yet
+    ASSERT_TRUE(m_service->uploadingScores().val.empty());
+    ASSERT_TRUE(m_service->watchedScores().val.empty());
+
+    // [GIVEN] An upload that hasn't finished yet
+    ON_CALL(*m_convertService, uploadToConvert(_))
+    .WillByDefault(Return(std::make_shared<Progress>()));
+
+    bool changed = false;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        changed = true;
+    });
+
+    // [WHEN] Uploading
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+
+    // [THEN] The score being uploaded is reported, and the change is signaled
+    EXPECT_TRUE(changed);
+    EXPECT_THAT(m_service->uploadingScores().val, ElementsAre(Field(&UploadingScore::name, String(u"My Score"))));
     EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterStartConvert_ContainsScoreAndFiresChanged)
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadingScores_UploadSucceeds_MovesScoreToWatched)
 {
-    // [GIVEN] The upload succeeds, and polling is left pending (the item stays watched)
+    // [GIVEN] An upload in progress, with polling left pending
     ON_CALL(*m_configuration, watchedConvertsJsonPath())
     .WillByDefault(Return(io::path_t("/watched.json")));
     ON_CALL(*m_fileSystem, writeFile(_, _))
     .WillByDefault(Return(make_ok()));
-
-    auto uploadProgress = std::make_shared<Progress>();
-    const io::paths_t paths { "/some/path/file.pdf" };
-    ON_CALL(*m_convertService, startConvert(_))
-    .WillByDefault(Return(uploadProgress));
     ON_CALL(*m_convertService, fetchQueue())
     .WillByDefault(Invoke([] {
         return pendingPromise<RetVal<ConvertQueueList> >();
     }));
 
-    bool changed = false;
-    m_service->watchedScores().notification.onNotify(nullptr, [&] {
-        changed = true;
+    auto uploadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, uploadToConvert(_))
+    .WillByDefault(Return(uploadProgress));
+
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+
+    int uploadingChangedCount = 0;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        ++uploadingChangedCount;
     });
 
-    // [WHEN] Starting the conversion and letting the upload resolve
-    m_service->startConvert(OmrConvertInput { paths }, u"My Score");
-    uploadProgress->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    int watchedChangedCount = 0;
+    m_service->watchedScores().notification.onNotify(nullptr, [&] {
+        ++watchedChangedCount;
+    });
 
-    // [THEN] The score being converted is reported, and the change is signaled
-    EXPECT_TRUE(changed);
-    const WatchedScoreList watchedScores = m_service->watchedScores().val;
-    ASSERT_EQ(watchedScores.size(), 1u);
-    EXPECT_EQ(watchedScores.front().name, u"My Score");
+    // [WHEN] The upload succeeds
+    finishUpload(uploadProgress, TEST_QUEUE_ID);
+
+    // [THEN] The score moves from uploading to watched, and both changes are signaled
+    EXPECT_EQ(uploadingChangedCount, 1);
+    EXPECT_EQ(watchedChangedCount, 1);
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
+    EXPECT_THAT(m_service->watchedScores().val, ElementsAre(Field(&WatchedScore::name, String(u"My Score"))));
 }
+
+TEST_F(Project_ConvertFileToScoreServiceTest, CancelUpload_RemovesFromUploadingScores)
+{
+    // [GIVEN] An upload in progress
+    auto uploadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, uploadToConvert(_))
+    .WillByDefault(Return(uploadProgress));
+
+    RetVal<Progress> progress = m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+    ASSERT_TRUE(progress.ret);
+
+    Ret finishedRet;
+    progress.val.finished().onReceive(nullptr, [&](const ProgressResult& res) {
+        finishedRet = res.ret;
+    });
+
+    bool watchedChanged = false;
+    m_service->watchedScores().notification.onNotify(nullptr, [&] {
+        watchedChanged = true;
+    });
+
+    // [THEN] Nothing is saved
+    EXPECT_CALL(*m_fileSystem, writeFile(_, _)).Times(0);
+
+    // [WHEN] Canceling the upload
+    const UploadingScoreList uploadingScores = m_service->uploadingScores().val;
+    ASSERT_FALSE(uploadingScores.empty());
+    m_service->cancelUpload(uploadingScores.front().uploadId);
+
+    // [THEN] The upload is canceled, its progress finishes with Cancel, and the score is removed
+    EXPECT_TRUE(uploadProgress->isCanceled());
+    EXPECT_EQ(finishedRet.code(), static_cast<int>(Ret::Code::Cancel));
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
+
+    // [THEN] The watched scores are not affected
+    EXPECT_FALSE(watchedChanged);
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
+}
+
+// ==================================================
+// watchedScores()
+// ==================================================
 
 TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterDone_NoLongerContainsScore)
 {
     // [GIVEN] The queue reports the conversion as done, with its scoreId
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::Done;
-    item.scoreId = 555;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Done, 555);
 
     bool changed = false;
     m_service->watchedScores().notification.onNotify(nullptr, [&] {
@@ -769,19 +889,12 @@ TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_AfterDone_NoLongerCo
 
 TEST_F(Project_ConvertFileToScoreServiceTest, WatchedScores_ExternalProcessingItem_AddedToWatchedScores)
 {
-    // [GIVEN] The queue reports an item that was never started via startConvert() locally,
+    // [GIVEN] The queue reports an item that was never started via uploadToConvert() locally,
     // alongside the one that was
     const int externalId = TEST_QUEUE_ID + 1;
 
-    ConvertQueueItem ownItem;
-    ownItem.id = TEST_QUEUE_ID;
-    ownItem.type = ConvertType::Omr;
-    ownItem.status = ConvertStatus::Processing;
-
-    ConvertQueueItem externalItem;
-    externalItem.id = externalId;
-    externalItem.type = ConvertType::Omr;
-    externalItem.status = ConvertStatus::Processing;
+    ConvertQueueItem ownItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
+    ConvertQueueItem externalItem = queueItem(externalId, ConvertType::Omr, ConvertStatus::Processing);
     externalItem.filename = "Externally Started Score";
 
     // [WHEN] Uploading and polling the status
@@ -878,6 +991,38 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AllTerminal_DoesNotP
     EXPECT_EQ(watchedScores.at(1).name, u"Other Score");
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_UnrecognizedStatus_LoadedAsUnknownAndPolled)
+{
+    // [GIVEN] A persisted conversion with a status this version doesn't recognize
+    JsonObject obj;
+    obj["id"] = TEST_QUEUE_ID;
+    obj["type"] = int(ConvertType::Omr);
+    obj["status"] = 99;
+
+    JsonArray array;
+    array << obj;
+    JsonDocument json(array);
+
+    ON_CALL(*m_configuration, watchedConvertsJsonPath())
+    .WillByDefault(Return(io::path_t("/watched.json")));
+    ON_CALL(*m_fileSystem, readFile(io::path_t("/watched.json")))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(json.toJson())));
+
+    // [THEN] The queue is checked to find out the actual status
+    EXPECT_CALL(*m_convertService, fetchQueue())
+    .WillOnce(Invoke([] {
+        return pendingPromise<RetVal<ConvertQueueList> >();
+    }));
+
+    // [WHEN] Resuming
+    m_service->resumeConvert();
+
+    // [THEN] The persisted item is restored with an unknown status
+    const WatchedScoreList watchedScores = m_service->watchedScores().val;
+    ASSERT_FALSE(watchedScores.empty());
+    EXPECT_EQ(watchedScores.front().conversion.status, ConvertStatus::Unknown);
+}
+
 // ==================================================
 // polling / score info fetch pipeline
 // ==================================================
@@ -885,11 +1030,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, ResumeConvert_AllTerminal_DoesNotP
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_FinishesImmediatelyWithWatchedScore)
 {
     // [GIVEN] The queue reports the conversion as done, with its scoreId
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::Done;
-    item.scoreId = 555;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Done, 555);
 
     bool received = false;
     Ret receivedRet;
@@ -915,11 +1056,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_DoneStatus_FinishesImmediatel
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithoutScoreId_DoesNotReportYet)
 {
     // [GIVEN] The queue reports the conversion as awaiting review, but hasn't assigned a scoreId yet
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::AwaitingReview;
-    item.scoreId = std::nullopt; // no scoreId
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::AwaitingReview);
 
     bool convertFinished = false;
     m_service->convertFinished().onReceive(nullptr, [&](const Ret&, const WatchedScore&) {
@@ -936,11 +1073,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithoutScoreId_
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AwaitingReviewWithScoreId_EmitsConvertFinished)
 {
     // [GIVEN] The queue reports the conversion as awaiting review, with its scoreId
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::AwaitingReview;
-    item.scoreId = 555;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::AwaitingReview, 555);
 
     bool convertFinished = false;
     Ret convertFinishedRet;
@@ -990,11 +1123,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     }));
 
     auto uploadProgressA = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressA));
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
-    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    finishUpload(uploadProgressA, TEST_QUEUE_ID);
     m_service->poll();
     pumpEvents();
 
@@ -1004,22 +1137,17 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     // fetchQueue() request finishes
     const int secondId = TEST_QUEUE_ID + 1;
     auto uploadProgressB = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressB));
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
-    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
-    pumpEvents();
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    finishUpload(uploadProgressB, secondId);
 
     // [AND] The first request finally resolves - with a snapshot the server built before the
     // second conversion ever existed, so it doesn't include it
-    ConvertQueueItem firstItem;
-    firstItem.id = TEST_QUEUE_ID;
-    firstItem.type = ConvertType::Omr;
-    firstItem.status = ConvertStatus::Processing;
+    ConvertQueueItem firstItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
 
     resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem }));
-    pumpEvents();
 
     // [THEN] The second conversion must still be watched - it was added after the request started,
     // so the old response must not treat it as missing
@@ -1041,11 +1169,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     }));
 
     auto uploadProgressA = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressA));
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
-    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    finishUpload(uploadProgressA, TEST_QUEUE_ID);
     m_service->poll();
     pumpEvents();
 
@@ -1055,27 +1183,18 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     // fetchQueue() request finishes
     const int secondId = TEST_QUEUE_ID + 1;
     auto uploadProgressB = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressB));
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
-    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
-    pumpEvents();
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    finishUpload(uploadProgressB, secondId);
 
     // [AND] The first request finally resolves - and, by unlucky timing, the server had already
     // processed the second conversion's upload by the time it answered, so the response includes it too
-    ConvertQueueItem firstItem;
-    firstItem.id = TEST_QUEUE_ID;
-    firstItem.type = ConvertType::Omr;
-    firstItem.status = ConvertStatus::Processing;
-
-    ConvertQueueItem secondItem;
-    secondItem.id = secondId;
-    secondItem.type = ConvertType::Omr;
-    secondItem.status = ConvertStatus::Processing;
+    ConvertQueueItem firstItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
+    ConvertQueueItem secondItem = queueItem(secondId, ConvertType::Omr, ConvertStatus::Processing);
 
     resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem, secondItem }));
-    pumpEvents();
 
     // [THEN] The second conversion is watched exactly once, still known to have started locally
     const WatchedScoreList watched = m_service->watchedScores().val;
@@ -1102,11 +1221,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     }));
 
     auto uploadProgressA = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressA));
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
-    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    finishUpload(uploadProgressA, TEST_QUEUE_ID);
     m_service->poll();
     pumpEvents();
 
@@ -1116,7 +1235,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     // fetchQueue() request finishes
     const int secondId = TEST_QUEUE_ID + 1;
     auto uploadProgressB = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressB));
 
     bool convertFinished = false;
@@ -1128,25 +1247,15 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
         }
     });
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
-    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
-    pumpEvents();
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    finishUpload(uploadProgressB, secondId);
 
     // [AND] The first request finally resolves - and, by unlucky timing, the server had already
     // finished reviewing the second conversion by the time it answered
-    ConvertQueueItem firstItem;
-    firstItem.id = TEST_QUEUE_ID;
-    firstItem.type = ConvertType::Omr;
-    firstItem.status = ConvertStatus::Processing;
-
-    ConvertQueueItem secondItem;
-    secondItem.id = secondId;
-    secondItem.type = ConvertType::Omr;
-    secondItem.status = ConvertStatus::AwaitingReview;
-    secondItem.scoreId = 777;
+    ConvertQueueItem firstItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
+    ConvertQueueItem secondItem = queueItem(secondId, ConvertType::Omr, ConvertStatus::AwaitingReview, 777);
 
     resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem, secondItem }));
-    pumpEvents();
 
     // [THEN] Even though it reached AwaitingReview on the very poll that first merged it in, it's
     // still recognized as started locally, and reported as finished
@@ -1166,11 +1275,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     }));
 
     auto uploadProgressA = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressA));
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
-    uploadProgressA->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(TEST_QUEUE_ID) } })));
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/a.pdf" } }, u"TEST 1");
+    finishUpload(uploadProgressA, TEST_QUEUE_ID);
     m_service->poll();
     pumpEvents();
 
@@ -1180,7 +1289,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
     // fetchQueue() request finishes
     const int secondId = TEST_QUEUE_ID + 1;
     auto uploadProgressB = std::make_shared<Progress>();
-    EXPECT_CALL(*m_convertService, startConvert(_))
+    EXPECT_CALL(*m_convertService, uploadToConvert(_))
     .WillOnce(Return(uploadProgressB));
 
     bool convertFinished = false;
@@ -1192,25 +1301,15 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NewItemWatchedWhilePollInProg
         }
     });
 
-    m_service->startConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
-    uploadProgressB->finish(ProgressResult::make_ok(Val(ValMap { { "id", Val(secondId) } })));
-    pumpEvents();
+    m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/b.pdf" } }, u"TEST 2");
+    finishUpload(uploadProgressB, secondId);
 
     // [AND] The first request finally resolves - and, by unlucky timing, the server had already
     // finished processing the second conversion entirely, skipping straight to Done
-    ConvertQueueItem firstItem;
-    firstItem.id = TEST_QUEUE_ID;
-    firstItem.type = ConvertType::Omr;
-    firstItem.status = ConvertStatus::Processing;
-
-    ConvertQueueItem secondItem;
-    secondItem.id = secondId;
-    secondItem.type = ConvertType::Omr;
-    secondItem.status = ConvertStatus::Done;
-    secondItem.scoreId = 777;
+    ConvertQueueItem firstItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
+    ConvertQueueItem secondItem = queueItem(secondId, ConvertType::Omr, ConvertStatus::Done, 777);
 
     resolveFirstFetch(RetVal<ConvertQueueList>::make_ok(ConvertQueueList { firstItem, secondItem }));
-    pumpEvents();
 
     // [THEN] Even though it skipped straight to Done on the very poll that first merged it in, it's
     // still recognized as started locally, reported as finished, and no longer watched
@@ -1231,16 +1330,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFr
     // then disappears from the queue entirely on the second poll
     const int otherQueueId = TEST_QUEUE_ID + 1;
 
-    ConvertQueueItem awaitingItem;
-    awaitingItem.id = TEST_QUEUE_ID;
-    awaitingItem.type = ConvertType::Omr;
-    awaitingItem.status = ConvertStatus::AwaitingReview;
-    awaitingItem.scoreId = 555;
-
-    ConvertQueueItem otherItem;
-    otherItem.id = otherQueueId;
-    otherItem.type = ConvertType::Omr;
-    otherItem.status = ConvertStatus::Processing;
+    ConvertQueueItem awaitingItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::AwaitingReview, 555);
+    ConvertQueueItem otherItem = queueItem(otherQueueId, ConvertType::Omr, ConvertStatus::Processing);
 
     EXPECT_CALL(*m_convertService, fetchQueue())
     .Times(2)
@@ -1258,11 +1349,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_PreviouslyReportedItemDropsFr
     });
 
     // [WHEN] Starting the conversion - the first poll reports it as awaiting review, already reporting it once
-    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
+    uploadAndFinish(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
     EXPECT_EQ(convertFinishedCount, 1);
 
     // [WHEN] Starting an unrelated conversion triggers a second poll; the original item has now dropped
-    uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
+    uploadAndFinish(otherQueueId, "Other Score", { "/some/path/b.pdf" });
 
     // [THEN] No duplicate report
     EXPECT_EQ(convertFinishedCount, 1);
@@ -1297,18 +1388,11 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
 
     // [GIVEN] The queue reports the Omr item as failed, and the Audio2Score item as done; they
     // must not be mistaken for each other just because they share the same numeric id
-    ConvertQueueItem failedOmrItem;
-    failedOmrItem.id = TEST_QUEUE_ID;
-    failedOmrItem.type = ConvertType::Omr;
-    failedOmrItem.status = ConvertStatus::Failed;
+    ConvertQueueItem failedOmrItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Failed);
     failedOmrItem.errorCode = ConvertErrorCode::FileTooLarge;
     failedOmrItem.filename = "Omr Score";
 
-    ConvertQueueItem doneAudioItem;
-    doneAudioItem.id = TEST_QUEUE_ID;
-    doneAudioItem.type = ConvertType::Audio2Score;
-    doneAudioItem.status = ConvertStatus::Done;
-    doneAudioItem.scoreId = 999;
+    ConvertQueueItem doneAudioItem = queueItem(TEST_QUEUE_ID, ConvertType::Audio2Score, ConvertStatus::Done, 999);
     doneAudioItem.filename = "Audio Score";
 
     ON_CALL(*m_convertService, fetchQueue())
@@ -1341,10 +1425,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SameIdDifferentType_DoesNotCr
 TEST_F(Project_ConvertFileToScoreServiceTest, Poll_FailedStatus_ForwardsProcessingFailure)
 {
     // [GIVEN] The queue reports the conversion as failed
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::Failed;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Failed);
     item.errorCode = ConvertErrorCode::FileTooLarge;
     item.filename = "My Score";
 
@@ -1371,10 +1452,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_AllTerminalAfterFailure_Stops
 {
     // [GIVEN] The queue reports the conversion as failed - it stays watched,
     // but nothing about it can change anymore
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::Failed;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Failed);
     item.errorCode = ConvertErrorCode::FileTooLarge;
     item.filename = "My Score";
 
@@ -1412,7 +1490,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_NonRetryableFetchFailure_Fini
     });
 
     // [WHEN] Starting the conversion, triggering the first poll
-    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
+    uploadAndFinish(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
 
     // [THEN] Polling gives up on the first attempt, forwarding the permanent error
     ASSERT_TRUE(gaveUp);
@@ -1425,16 +1503,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
     // the second succeeds, reporting the originally watched item as done
     const int otherQueueId = TEST_QUEUE_ID + 1;
 
-    ConvertQueueItem watchedItem;
-    watchedItem.id = TEST_QUEUE_ID;
-    watchedItem.type = ConvertType::Omr;
-    watchedItem.status = ConvertStatus::Done;
-    watchedItem.scoreId = 555;
-
-    ConvertQueueItem otherItem;
-    otherItem.id = otherQueueId;
-    otherItem.type = ConvertType::Omr;
-    otherItem.status = ConvertStatus::Processing;
+    ConvertQueueItem watchedItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Done, 555);
+    ConvertQueueItem otherItem = queueItem(otherQueueId, ConvertType::Omr, ConvertStatus::Processing);
 
     EXPECT_CALL(*m_convertService, fetchQueue())
     .Times(2)
@@ -1453,13 +1523,13 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_KeepsWa
     });
 
     // [WHEN] Starting the first conversion - its poll fails with a transient network error
-    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
+    uploadAndFinish(TEST_QUEUE_ID, "My Score", { "/some/path/a.pdf" });
 
     // [THEN] Nothing is finished yet, the item was not dropped from the watch list
     EXPECT_FALSE(received);
 
     // [AND WHEN] Starting an unrelated conversion triggers a second poll, checking the original item again too
-    uploadAndResolve(otherQueueId, "Other Score", { "/some/path/b.pdf" });
+    uploadAndFinish(otherQueueId, "Other Score", { "/some/path/b.pdf" });
 
     // [THEN] The item survived the transient failure and was processed once the queue succeeded
     EXPECT_TRUE(received);
@@ -1493,8 +1563,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_ConsecutiveRetryableFetchFail
 
     // [WHEN] Starting a new conversion re-triggers polling, each attempt failing
     for (int i = 0; i < failureCount; ++i) {
-        uploadAndResolve(TEST_QUEUE_ID + i, QString("Score %1").arg(i),
-                         { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
+        uploadAndFinish(TEST_QUEUE_ID + i, QString("Score %1").arg(i),
+                        { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
 
         if (i < failureCount - 1) {
             EXPECT_FALSE(gaveUp);
@@ -1528,7 +1598,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_RetryableFetchFailure_Reports
     });
 
     // [WHEN] Starting the conversion, triggering the first poll
-    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
+    uploadAndFinish(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
 
     // [THEN] The first failure is reported as still retrying, already backed off from the minimum interval
     ASSERT_TRUE(received);
@@ -1563,8 +1633,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_AfterGivingUp_Resumes
     });
 
     for (int i = 0; i < failureCount; ++i) {
-        uploadAndResolve(TEST_QUEUE_ID + i, QString("Score %1").arg(i),
-                         { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
+        uploadAndFinish(TEST_QUEUE_ID + i, QString("Score %1").arg(i),
+                        { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
 
         if (i < failureCount - 1) {
             m_service->fakeNowMs += fakeIntervalMs;
@@ -1575,7 +1645,6 @@ TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_AfterGivingUp_Resumes
     // [THEN] Calling retryPolling() checks the status again
     bool polledAgain = false;
     EXPECT_CALL(*m_convertService, fetchQueue())
-    .Times(1)
     .WillOnce(Invoke([&] {
         polledAgain = true;
         return pendingPromise<RetVal<ConvertQueueList> >();
@@ -1606,7 +1675,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, RetryPolling_FailsWithRetryableErr
     }));
 
     // [AND GIVEN] A pending conversion, whose first poll already failed once (still retrying, not given up)
-    uploadAndResolve(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
+    uploadAndFinish(TEST_QUEUE_ID, "My Score", { "/some/path/file.pdf" });
 
     bool gaveUp = false;
     secs_t elapsed = secs_t(-1.0);
@@ -1632,10 +1701,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_R
 {
     // [GIVEN] A pattern of failures with a success in between. The success must restart the
     // elapsed retry window, so polling should never give up
-    ConvertQueueItem processingItem;
-    processingItem.id = TEST_QUEUE_ID;
-    processingItem.type = ConvertType::Omr;
-    processingItem.status = ConvertStatus::Processing;
+    ConvertQueueItem processingItem = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
 
     auto failure = [] {
         return resolvedPromise<RetVal<ConvertQueueList> >(
@@ -1667,8 +1733,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_R
 
     // [WHEN] Triggering 8 polls in a row, each 2.5 minutes apart
     for (int i = 0; i < 8; ++i) {
-        uploadAndResolve(TEST_QUEUE_ID, QString("Score %1").arg(i),
-                         { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
+        uploadAndFinish(TEST_QUEUE_ID, QString("Score %1").arg(i),
+                        { io::path_t(std::string("/some/path/") + std::to_string(i) + ".pdf") });
         m_service->fakeNowMs += 150000;
     }
 
@@ -1683,11 +1749,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, Poll_SuccessBetweenFetchFailures_R
 TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_Good_DelegatesToConvertService)
 {
     // [GIVEN] A watched item already reported ready and awaiting review, identified by its scoreId
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::AwaitingReview;
-    item.scoreId = 555;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::AwaitingReview, 555);
 
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
 
@@ -1716,11 +1778,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_Good_DelegatesToConve
 TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_DelegatesToConvertService)
 {
     // [GIVEN] A watched item already reported ready and awaiting review, identified by its scoreId
-    ConvertQueueItem item;
-    item.id = 7;
-    item.type = ConvertType::Audio2Score;
-    item.status = ConvertStatus::AwaitingReview;
-    item.scoreId = 555;
+    ConvertQueueItem item = queueItem(7, ConvertType::Audio2Score, ConvertStatus::AwaitingReview, 555);
 
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
@@ -1750,11 +1808,7 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReview_BadWithComment_Delega
 TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToConvertService)
 {
     // [GIVEN] A watched item already reported ready and awaiting review, identified by its scoreId
-    ConvertQueueItem item;
-    item.id = 7;
-    item.type = ConvertType::Audio2Score;
-    item.status = ConvertStatus::AwaitingReview;
-    item.scoreId = 555;
+    ConvertQueueItem item = queueItem(7, ConvertType::Audio2Score, ConvertStatus::AwaitingReview, 555);
 
     deliverQueueStatus({ item }, ConvertType::Audio2Score, 7, "My Score");
 
@@ -1777,19 +1831,21 @@ TEST_F(Project_ConvertFileToScoreServiceTest, SubmitReviewComment_DelegatesToCon
 }
 
 // ==================================================
-// deleteConversion()
+// cancelConversion()
 // ==================================================
 
-TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Success_RemovesFromWatchedScores)
+TEST_F(Project_ConvertFileToScoreServiceTest, CancelConversion_RemovesFromWatchedScores)
 {
     // [GIVEN] A watched, still-processing conversion
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::Processing;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
 
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
     ASSERT_EQ(m_service->watchedScores().val.size(), 1u);
+
+    bool uploadingChanged = false;
+    m_service->uploadingScores().notification.onNotify(nullptr, [&] {
+        uploadingChanged = true;
+    });
 
     // [THEN] The deletion is delegated to the convert service
     EXPECT_CALL(*m_convertService, deleteConversion(ConvertType::Omr, TEST_QUEUE_ID))
@@ -1797,21 +1853,22 @@ TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Success_RemovesFr
         return resolvedPromise<Ret>(make_ok());
     }));
 
-    // [WHEN] Deleting the conversion
-    m_service->deleteConversion(ConvertType::Omr, TEST_QUEUE_ID);
+    // [WHEN] Canceling the conversion
+    m_service->cancelConversion(ConvertType::Omr, TEST_QUEUE_ID);
     pumpEvents();
 
     // [THEN] It is no longer watched
     EXPECT_TRUE(m_service->watchedScores().val.empty());
+
+    // [THEN] The uploading scores are not affected
+    EXPECT_FALSE(uploadingChanged);
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
 }
 
-TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Fails_KeepsWatching)
+TEST_F(Project_ConvertFileToScoreServiceTest, CancelConversion_Fails_KeepsWatching)
 {
     // [GIVEN] A watched, still-processing conversion
-    ConvertQueueItem item;
-    item.id = TEST_QUEUE_ID;
-    item.type = ConvertType::Omr;
-    item.status = ConvertStatus::Processing;
+    ConvertQueueItem item = queueItem(TEST_QUEUE_ID, ConvertType::Omr, ConvertStatus::Processing);
 
     deliverQueueStatus({ item }, ConvertType::Omr, TEST_QUEUE_ID, "My Score");
     ASSERT_EQ(m_service->watchedScores().val.size(), 1u);
@@ -1822,8 +1879,8 @@ TEST_F(Project_ConvertFileToScoreServiceTest, DeleteConversion_Fails_KeepsWatchi
         return resolvedPromise<Ret>(make_ret(muse::cloud::Err::UnknownError));
     }));
 
-    // [WHEN] Deleting the conversion
-    m_service->deleteConversion(ConvertType::Omr, TEST_QUEUE_ID);
+    // [WHEN] Canceling the conversion
+    m_service->cancelConversion(ConvertType::Omr, TEST_QUEUE_ID);
     pumpEvents();
 
     // [THEN] It is still watched

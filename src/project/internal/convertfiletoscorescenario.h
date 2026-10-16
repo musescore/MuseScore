@@ -64,10 +64,12 @@ public:
     void convertFiles(const muse::io::paths_t& paths = {}) override;
     muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const override;
 
+    muse::ValNt<UploadingScoreList> uploadingScores() const override;
     muse::ValNt<WatchedScoreList> watchedScores() const override;
 
     bool isAwaitingReview(int scoreId) const override;
 
+    void cancelUpload(int uploadId) override;
     void cancelConversion(ConvertType type, int convertId) override;
 
     muse::async::Channel<PollingStatus> pollingStatusChanged() const override;
@@ -87,13 +89,16 @@ private:
     ConvertSelection toConvertSelection(const muse::Val& val) const;
 
     void confirmConvert(const muse::io::paths_t& paths, ConvertType type);
+    void confirmCancel(const std::function<void()>& onCancel);
 
-    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName);
+    void startConvert(const ConvertInput& input, const muse::String& convertedScoreName);
 
     void showValidationError(const muse::Ret& ret);
+    void showUploadError(const muse::Ret& ret, const ConvertInput& input, const muse::String& convertedScoreName);
 
     void showCloudIsNotAvailableError();
     void showUnknownError();
+    void showFileReadError(size_t fileCount);
     void showFileTooLargeError(qint64 maxFileSizeBytes);
     void showCombinedImageSizeTooLargeError(qint64 maxFileSizeBytes);
     void showUnsupportedFormatError();
@@ -106,6 +111,7 @@ private:
     void showFileProcessingDialog();
     void showScoreReadyNotification(const WatchedScore& watched);
     void showConvertFailedNotification(const WatchedScore& watched);
+    void showUploadFailedNotification(const ConvertInput& input, const muse::String& convertedScoreName);
     void showPollingFailureNotification();
     void showPollingGaveUpNotification();
 

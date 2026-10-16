@@ -45,9 +45,18 @@ ListItemBlank {
     signal removeFromRecentFilesRequested(string scorePath)
     signal deleteScoreRequested(int scoreId, string scoreName)
     signal retryRequested()
-    signal cancelRequested(int convertType, int convertId)
+    signal cancelUploadRequested(int uploadId)
+    signal cancelConversionRequested(int convertType, int convertId)
 
     readonly property bool isProcessing: root.score.processingStatus !== undefined
+
+    function requestCancel() {
+        if (Boolean(root.score.uploadId)) {
+            root.cancelUploadRequested(root.score.uploadId)
+        } else {
+            root.cancelConversionRequested(root.score.convertType, root.score.convertId)
+        }
+    }
 
     implicitHeight: 64
 
@@ -117,7 +126,7 @@ ListItemBlank {
                     iconSize: 16
 
                     onRetryRequested: root.retryRequested()
-                    onCancelRequested: root.cancelRequested(root.score.convertType, root.score.convertId)
+                    onCancelRequested: root.requestCancel()
                 }
             }
 
@@ -169,7 +178,7 @@ ListItemBlank {
                             if (root.score.processingStatus === ScoreProcessingPlaceholder.Failed) {
                                 root.retryRequested()
                             } else {
-                                root.cancelRequested(root.score.convertType, root.score.convertId)
+                                root.requestCancel()
                             }
                         }
                     }

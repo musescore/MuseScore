@@ -35,9 +35,10 @@ public:
     MOCK_METHOD(muse::RetVal<ConvertFilesValidation>, validateFiles, (const muse::io::paths_t&), (const, override));
     MOCK_METHOD(muse::Ret, validateLink, (const QUrl&), (const, override));
 
-    MOCK_METHOD(muse::Ret, startConvert, (const ConvertInput&, const muse::String&), (override));
+    MOCK_METHOD(muse::RetVal<muse::Progress>, uploadToConvert, (const ConvertInput&, const muse::String&), (override));
     MOCK_METHOD((muse::async::Channel<muse::Ret, WatchedScore>), convertFinished, (), (const, override));
 
+    MOCK_METHOD(muse::ValNt<UploadingScoreList>, uploadingScores, (), (const, override));
     MOCK_METHOD(muse::ValNt<WatchedScoreList>, watchedScores, (), (const, override));
     MOCK_METHOD(const WatchedScore*, watchedScoreById, (int), (const, override));
 
@@ -47,6 +48,7 @@ public:
     MOCK_METHOD(void, submitReview, (int, ReviewRating, const QString&), (override));
     MOCK_METHOD(void, submitReviewComment, (int, const QString&), (override));
 
-    MOCK_METHOD(void, deleteConversion, (ConvertType, int), (override));
+    MOCK_METHOD(void, cancelUpload, (int), (override));
+    MOCK_METHOD(void, cancelConversion, (ConvertType, int), (override));
 };
 }

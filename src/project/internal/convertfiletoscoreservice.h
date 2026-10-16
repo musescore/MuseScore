@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <optional>
+#include <unordered_map>
 #include <vector>
 
 #include <QObject>
@@ -61,9 +62,10 @@ public:
     muse::RetVal<ConvertFilesValidation> validateFiles(const muse::io::paths_t& paths) const override;
     muse::Ret validateLink(const QUrl& link) const override;
 
-    muse::Ret startConvert(const ConvertInput& input, const muse::String& convertedScoreName) override;
+    muse::RetVal<muse::Progress> uploadToConvert(const ConvertInput& input, const muse::String& convertedScoreName) override;
     muse::async::Channel<muse::Ret, WatchedScore> convertFinished() const override;
 
+    muse::ValNt<UploadingScoreList> uploadingScores() const override;
     muse::ValNt<WatchedScoreList> watchedScores() const override;
     const WatchedScore* watchedScoreById(int scoreId) const override;
 
@@ -73,7 +75,8 @@ public:
     void submitReview(int scoreId, ReviewRating rating, const QString& comment = QString()) override;
     void submitReviewComment(int scoreId, const QString& comment) override;
 
-    void deleteConversion(ConvertType type, int convertId) override;
+    void cancelUpload(int uploadId) override;
+    void cancelConversion(ConvertType type, int convertId) override;
 
 protected:
     //! NOTE: overridable so tests can fake elapsed time instead of waiting on the real clock
@@ -89,8 +92,9 @@ private:
     void loadWatchedScores();
     void saveWatchedScores();
 
+    void removeUpload(int uploadId);
     void watch(ConvertType type, int itemId, const muse::String& convertedScoreName);
-    bool hasAnyProcessingScores() const;
+    bool hasAnyScoresToPoll() const;
     void resetPollState();
     void handlePollFailure(const muse::Ret& ret);
     void giveUpPolling(const muse::Ret& ret, muse::secs_t elapsed);
@@ -104,13 +108,17 @@ private:
     int64_t m_pollRetryStartMs = 0;
     int m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
     int m_pollFailureCount = 0;
+    UploadingScoreList m_uploadingScores;
     std::vector<WatchedScore> m_watchedScores;
+    std::unordered_map<int /*uploadId*/, muse::ProgressPtr> m_uploadProgresses;
+    int m_lastUploadId = 0;
     bool m_pollInProgress = false;
     bool m_manualRetryRequested = false;
     bool m_isSaving = false;
 
-    muse::async::Channel<PollingStatus> m_pollingStatusChanged;
+    muse::async::Notification m_uploadingScoresChanged;
     muse::async::Notification m_watchedScoresChanged;
+    muse::async::Channel<PollingStatus> m_pollingStatusChanged;
     muse::async::Channel<muse::Ret, WatchedScore> m_convertFinished;
 };
 }

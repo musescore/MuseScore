@@ -735,13 +735,18 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
     TRACEFUNC;
 
     RetVal<ScoreInfo> result = RetVal<ScoreInfo>::make_ok(ScoreInfo());
+    bool isFinished = false;
 
     QEventLoop loop;
-    doDownloadScoreInfo(scoreId, [&result, &loop](const RetVal<ScoreInfo>& info) {
+    doDownloadScoreInfo(scoreId, [&result, &loop, &isFinished](const RetVal<ScoreInfo>& info) {
         result = info;
+        isFinished = true;
         loop.quit();
     });
-    loop.exec();
+
+    if (!isFinished) {
+        loop.exec();
+    }
 
     return result;
 }
@@ -1075,15 +1080,16 @@ Promise<RetVal<ConvertConfig> > MuseScoreComService::fetchConfig()
     });
 }
 
-ProgressPtr MuseScoreComService::startConvert(const ConvertUploadDataPtr& data)
+ProgressPtr MuseScoreComService::uploadToConvert(const ConvertUploadDataPtr& data)
 {
     ProgressPtr progress = std::make_shared<Progress>();
     progress->start();
 
     executeAsyncRequest([this, data, progress]() {
-        return doUpload(data, progress);
+        return doUploadToConvert(data, progress);
     }).onResolve(this, [progress](const Ret& ret) {
-        if (progress->isStarted()) {
+        //! NOTE: cancel() finishes it by itself
+        if (progress->isStarted() && !progress->isCanceled()) {
             progress->finish(ret);
         }
     });
@@ -1091,13 +1097,18 @@ ProgressPtr MuseScoreComService::startConvert(const ConvertUploadDataPtr& data)
     return progress;
 }
 
-Promise<Ret> MuseScoreComService::doUpload(const ConvertUploadDataPtr& data, ProgressPtr progress)
+Promise<Ret> MuseScoreComService::doUploadToConvert(const ConvertUploadDataPtr& data, ProgressPtr progress)
 {
     TRACEFUNC;
 
     return make_promise<Ret>([this, data, progress](auto resolve, auto) {
         IF_ASSERT_FAILED(data->type != ConvertType::Unknown) {
             return resolve(make_ret(cloud::Err::InvalidData));
+        }
+
+        //! NOTE: possible when canceled while the tokens were being updated
+        if (progress->isCanceled()) {
+            return resolve(make_ret(Ret::Code::Cancel));
         }
 
         RetVal<QUrl> uploadUrl = prepareUrlForRequest(MUSESCORECOM_CONVERT_UPLOAD_API_URL);
@@ -1117,7 +1128,16 @@ Promise<Ret> MuseScoreComService::doUpload(const ConvertUploadDataPtr& data, Pro
             progress->progress(current, total, msg);
         });
 
-        uploadProgress.val.finished().onReceive(this, [this, data, receivedData, resolve, progress](const ProgressResult& res) {
+        progress->canceled().onNotify(this, [uploadProgress]() mutable {
+            uploadProgress.val.cancel();
+        });
+
+        uploadProgress.val.finished().onReceive(this, [this, data, receivedData, resolve, progress,
+                                                       uploadProgress](const ProgressResult& res) mutable {
+            //! NOTE: cancel() finishes it again after the aborted reply did
+            uploadProgress.val.finished().disconnect(this);
+            progress->canceled().disconnect(this);
+
             if (!res.ret) {
                 printServerReply(*receivedData);
                 Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
