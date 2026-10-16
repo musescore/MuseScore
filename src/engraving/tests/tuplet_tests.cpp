@@ -409,3 +409,187 @@ TEST_F(Engraving_TupletTests, nestedTupletStartDoesNotSplitTuplet)
 
     delete score;
 }
+
+TEST_F(Engraving_TupletTests, insertTimeMovesLaterTuplets)
+{
+    // voice 1: four quarters; voice 2: an eighth triplet on beat 2
+    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setDuration(DurationType::V_QUARTER);
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (int pitch : { 60, 62, 64, 65 }) {
+            NoteVal nval(pitch);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    is.setTrack(1);
+    is.setSegment(score->tick2segment(Fraction(1, 4), false, SegmentType::ChordRest));
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        NoteVal nval(55);
+        Note* note = NoteInput::addPitch(tx, score, nval, false);
+        score->addTuplet(note->chord(), Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+    });
+    Measure* m1 = score->firstMeasure();
+    ChordRest* first = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(1, 4))->element(1));
+    ASSERT_TRUE(first && first->tuplet());
+    Tuplet* tuplet = first->tuplet();
+    ASSERT_EQ(tuplet->tick(), Fraction(1, 4));
+
+    // a quarter inserted on beat 1 moves the triplet to beat 3
+    is.setTrack(0);
+    is.setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    score->select(toChord(is.cr())->upNote());
+    is.setTrack(0);
+    is.setDuration(DurationType::V_QUARTER);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(tx, score, NoteInputParams { 0 }, false, false);
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m1->ticks(), Fraction(5, 4));
+    EXPECT_EQ(first->tick(), Fraction(2, 4));
+    EXPECT_EQ(tuplet->tick(), Fraction(2, 4));
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(tuplet->tick(), Fraction(1, 4));
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(tuplet->tick(), Fraction(2, 4));
+
+    // deleting the triplet leaves a rest in its place
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdDeleteTuplet(tuplet, true);
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    Segment* segment = m1->findSegment(SegmentType::ChordRest, Fraction(2, 4));
+    ASSERT_TRUE(segment);
+    ChordRest* rest = toChordRest(segment->element(1));
+    ASSERT_TRUE(rest);
+    EXPECT_TRUE(rest->isRest());
+    EXPECT_EQ(rest->ticks(), Fraction(1, 4));
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, insertTimeThenDeleteTupletKeepsMeasureComplete)
+{
+    // four quarters, the second made into an eighth triplet
+    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setDuration(DurationType::V_QUARTER);
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (int pitch : { 60, 62, 64, 65 }) {
+            NoteVal nval(pitch);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    Measure* m1 = score->firstMeasure();
+    Chord* second = toChord(m1->findSegment(SegmentType::ChordRest, Fraction(1, 4))->element(0));
+    ASSERT_TRUE(second);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->addTuplet(second, Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+    });
+    ChordRest* tupletFirst = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(1, 4))->element(0));
+    ASSERT_TRUE(tupletFirst && tupletFirst->tuplet());
+    Tuplet* tuplet = tupletFirst->tuplet();
+
+    // a quarter inserted on beat 1 moves the triplet to beat 3
+    is.setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    score->select(toChord(is.cr())->upNote());
+    is.setTrack(0);
+    is.setDuration(DurationType::V_QUARTER);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(tx, score, NoteInputParams { 0 }, false, false);
+    });
+    ASSERT_EQ(m1->ticks(), Fraction(5, 4));
+
+    // deleting the triplet leaves a rest on beat 3 and the first quarter on beat 2
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdDeleteTuplet(tuplet, true);
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    ChordRest* beat2 = toChordRest(m1->findSegment(SegmentType::ChordRest, Fraction(1, 4))->element(0));
+    ASSERT_TRUE(beat2 && beat2->isChord());
+    EXPECT_EQ(toChord(beat2)->upNote()->pitch(), 60);
+    Segment* beat3 = m1->findSegment(SegmentType::ChordRest, Fraction(2, 4));
+    ASSERT_TRUE(beat3 && beat3->element(0));
+    EXPECT_TRUE(beat3->element(0)->isRest());
+    EXPECT_EQ(toChordRest(beat3->element(0))->ticks(), Fraction(1, 4));
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, insertMeasureMovesOuterTuplets)
+{
+    // a quarter triplet made of three eighth triplets, then a half
+    MasterScore* score = ScoreRW::readScore(u"durationtype_data/empty.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setDuration(DurationType::V_HALF);
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (int pitch : { 60, 62 }) {
+            NoteVal nval(pitch);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    auto crAt = [&](const Fraction& tick) {
+        Segment* s = score->tick2segment(tick, false, SegmentType::ChordRest);
+        return s ? toChordRest(s->element(0)) : nullptr;
+    };
+    for (const Fraction& tick : { Fraction(0, 1), Fraction(0, 1), Fraction(1, 6), Fraction(2, 6) }) {
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+            score->addTuplet(crAt(tick), Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+        });
+    }
+    ASSERT_TRUE(crAt(Fraction(0, 1))->tuplet());
+    Tuplet* outer = crAt(Fraction(0, 1))->tuplet()->tuplet();
+    ASSERT_TRUE(outer);
+    for (const DurationElement* element : outer->elements()) {
+        ASSERT_TRUE(element->isTuplet());
+    }
+
+    // a measure inserted before moves the outer triplet along with the inner ones
+    score->startCmd(TranslatableString::untranslatable("Tuplet tests"));
+    score->insertMeasure(score->firstMeasure());
+    score->endCmd();
+    EXPECT_EQ(outer->tick(), Fraction(1, 1));
+
+    // deleting the outer triplet leaves a half rest in its place
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdDeleteTuplet(outer, true);
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    ChordRest* rest = crAt(Fraction(1, 1));
+    EXPECT_TRUE(rest && rest->isRest() && rest->ticks() == Fraction(1, 2));
+    ChordRest* half = crAt(Fraction(3, 2));
+    EXPECT_TRUE(half && half->isChord());
+    auto insertedMeasureIsRest = [&]() {
+        ChordRest* cr = crAt(Fraction(0, 1));
+        return cr && cr->isRest() && cr->ticks() == Fraction(1, 1);
+    };
+    EXPECT_TRUE(insertedMeasureIsRest());
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(outer->tick(), Fraction(1, 1));
+    EXPECT_TRUE(insertedMeasureIsRest());
+    EXPECT_TRUE(score->sanityCheck());
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(outer->tick(), Fraction(0, 1));
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}

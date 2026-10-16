@@ -1095,8 +1095,20 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
         Measure* m = lscore->tick2measure(tick);
         tx.push(new ChangeMeasureLen(m, targetMeasureLen));
         Segment* scoreSeg = m->tick2segment(tick);
+        // tuplets store their tick: move those from the insertion on with their segments
+        std::set<Tuplet*> tuplets;
         for (Segment* s = scoreSeg; s; s = s->next()) {
+            if (s->isChordRestType()) {
+                for (EngravingItem* e : s->elist()) {
+                    for (Tuplet* t = e ? toChordRest(e)->tuplet() : nullptr; t && t->tick() >= tick; t = t->tuplet()) {
+                        tuplets.insert(t);
+                    }
+                }
+            }
             s->undoChangeProperty(Pid::TICK, s->rtick() + len);
+        }
+        for (Tuplet* t : tuplets) {
+            t->undoChangeProperty(Pid::TICK, t->tick() + len);
         }
     }
 
