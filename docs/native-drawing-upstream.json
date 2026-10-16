@@ -14,6 +14,9 @@
     "preserveChangeDependencies": true,
     "preserveDrawingVersionOnMaintenanceMerge": true,
     "requireForkValidationBeforeApproval": true,
+    "allowForkCompatibilityChangesToImportedCode": true,
+    "preserveIntendedUpstreamBehaviour": true,
+    "requireRegressionCoverageForBothSides": true,
     "keepFiveXPortSeparate": true
   }
 }

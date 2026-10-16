@@ -24,6 +24,15 @@ required upstream checks. Open pull requests and unvalidated feature
 branches are excluded. Dependencies between accepted changes must be
 preserved; an incomplete batch is deferred rather than partially applied.
 
+Acceptance upstream does not establish compatibility with this fork.
+When an accepted change conflicts with drawing functionality, compatibility
+fixes may change either the drawing implementation or the imported upstream
+code. Preserve the intended behaviour of the accepted fix as well as the
+fork's drawing behaviour and responsiveness. Add regression coverage for
+both sides, and record fork-specific compatibility changes separately from
+the original upstream changes. Do not discard an upstream fix merely to
+make the drawing checks pass.
+
 When the official 4.7.6 tag becomes available, compare its entire ancestry
 and source tree with the recorded baseline. Incorporate outstanding fixes
 and additions, preserve the fork's development version, and run the fork's
