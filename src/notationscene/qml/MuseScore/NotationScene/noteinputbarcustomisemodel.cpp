@@ -49,7 +49,13 @@ void NoteInputBarCustomiseModel::load()
 
     ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NoteInputBarModel::defaultNoteInputConfig());
 
+    const AutomationUiVariant automationUiVariant = notationConfiguration()->automationUiVariant();
+
     for (const ToolConfig::Item& item : toolConfig.items) {
+        if (!item.isSeparator() && !NoteInputBarModel::isItemAvailable(item.intent, automationUiVariant)) {
+            continue;
+        }
+
         if (item.isSeparator()) {
             items << makeSeparatorItem();
         } else if (item.intent == NoteInputBarModel::CROSS_STAFF_BEAMING_SUBITEMS || item.intent == NoteInputBarModel::TUPLET_SUBITEMS) {

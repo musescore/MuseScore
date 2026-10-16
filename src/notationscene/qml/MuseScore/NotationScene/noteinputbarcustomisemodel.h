@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuistate.h"
 #include "rcommand/icommandsregister.h"
+#include "notation/inotationconfiguration.h"
 
 class QItemSelectionModel;
 
@@ -51,6 +52,7 @@ class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemList
 
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<muse::ui::IUiState> uiState = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
 
 public:
     explicit NoteInputBarCustomiseModel(QObject* parent = nullptr);

@@ -113,6 +113,10 @@ public:
     void setCurrentAutomationType(engraving::AutomationType type) override;
     muse::async::Notification currentAutomationTypeChanged() const override;
 
+    AutomationUiVariant automationUiVariant() const override;
+    void setAutomationUiVariant(AutomationUiVariant variant) override;
+    muse::async::Notification automationUiVariantChanged() const override;
+
     qreal scalingFromZoomPercentage(int zoomPercentage) const override;
     int zoomPercentageFromScaling(qreal scaling) const override;
 

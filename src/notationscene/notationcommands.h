@@ -489,6 +489,8 @@ inline static const muse::rcommand::Command TOGGLE_AUTOPLACE_COMMAND("command://
 inline static const muse::rcommand::Command AUTOPLACE_ENABLED_COMMAND("command://notation/autoplace-enabled");
 inline static const muse::rcommand::Command TOGGLE_AUTOMATION_COMMAND("command://notation/toggle-automation");
 inline static const muse::rcommand::Command SELECT_AUTOMATION_TYPE_COMMAND("command://notation/select-automation-type"); // with params
+inline static const muse::rcommand::Command SET_AUTOMATION_UI_TOOLBAR_COMMAND("command://notation/set-automation-ui-toolbar");
+inline static const muse::rcommand::Command SET_AUTOMATION_UI_WIDGET_COMMAND("command://notation/set-automation-ui-widget");
 
 // TAB commands
 inline static const muse::rcommand::Command SET_DURATION_WHOLE_TAB_COMMAND("command://notation/set-duration-whole-tab");

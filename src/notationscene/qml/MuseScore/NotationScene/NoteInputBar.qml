@@ -178,6 +178,197 @@ Item {
         }
     }
 
+    Grid {
+        id: automationControls
+
+        columns: gridView.isHorizontal ? children.length : 1
+        spacing: 4
+        verticalItemAlignment: Grid.AlignVCenter
+
+        visible: noteInputModel.isAutomationToolbarActive
+
+        // Don't contribute to the toolbar's size while hidden
+        width: visible ? implicitWidth : 0
+        height: visible ? implicitHeight : 0
+
+        component ToolbarSeparator: Rectangle {
+            width: 1
+            height: root.height
+            color: ui.theme.strokeColor
+
+            visible: gridView.isHorizontal
+        }
+
+        ToolbarSeparator {}
+
+        // Automation type
+        Row {
+            leftPadding: 4
+            spacing: 8
+
+            StyledTextLabel {
+                id: automateLabel
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Automate"
+            }
+
+            StyledDropdown {
+                id: automationTypeDropdown
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                width: 120
+
+                model: noteInputModel.automationTypes
+                currentIndex: indexOfValue(noteInputModel.currentAutomationType)
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "AutomationType"
+                navigation.order: 101
+                navigation.accessible.name: automateLabel.text + " " + currentText
+
+                onActivated: function(index, value) {
+                    noteInputModel.currentAutomationType = value
+                }
+            }
+        }
+
+        ToolbarSeparator {}
+
+        // Voice selection (Dynamics only; UI only for now)
+        Row {
+            leftPadding: 4
+            spacing: 8
+
+            visible: noteInputModel.isVoiceSelectionAvailable
+
+            StyledTextLabel {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Voice"
+            }
+
+            Row {
+                spacing: 4
+
+                FlatButton {
+                    width: 38
+                    height: gridView.cellHeight
+
+                    text: "All"
+                    toolTipTitle: "All voices"
+                    accentButton: noteInputModel.currentAutomationVoice === -1
+
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "AutomationAllVoices"
+                    navigation.order: 102
+
+                    onClicked: {
+                        noteInputModel.currentAutomationVoice = -1
+                    }
+                }
+
+                Repeater {
+                    model: noteInputModel.automationVoicesCount
+
+                    FlatButton {
+                        required property int index
+
+                        width: gridView.cellWidth
+                        height: gridView.cellHeight
+
+                        icon: [IconCode.VOICE_1, IconCode.VOICE_2, IconCode.VOICE_3, IconCode.VOICE_4][index]
+                        iconFont: ui.theme.toolbarIconsFont
+                        toolTipTitle: "Voice " + (index + 1)
+                        accentButton: noteInputModel.currentAutomationVoice === index
+
+                        navigation.panel: root.navigationPanel
+                        navigation.name: "AutomationVoice" + (index + 1)
+                        navigation.order: 103 + index
+
+                        onClicked: {
+                            noteInputModel.currentAutomationVoice = index
+                        }
+                    }
+                }
+            }
+        }
+
+        ToolbarSeparator {
+            visible: gridView.isHorizontal && noteInputModel.isVoiceSelectionAvailable
+        }
+
+        // Tempo only (UI only for now)
+        FlatButton {
+            height: 30
+
+            visible: noteInputModel.isTempoRangeAvailable
+
+            text: "Set tempo range…"
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "SetTempoRange"
+            navigation.order: 110
+
+            onClicked: {
+                noteInputModel.openTempoRangeDialog()
+            }
+        }
+
+        FlatButton {
+            id: resetButton
+
+            width: gridView.cellWidth
+            height: gridView.cellHeight
+
+            icon: IconCode.UNDO
+            iconFont: ui.theme.toolbarIconsFont
+            toolTipTitle: "Reset"
+            accentButton: resetMenuLoader.isMenuOpened
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "AutomationReset"
+            navigation.order: 111
+
+            onClicked: {
+                if (resetMenuLoader.isMenuOpened) {
+                    resetMenuLoader.close()
+                } else {
+                    resetMenuLoader.open(noteInputModel.automationResetMenuItems())
+                }
+            }
+
+            StyledMenuLoader {
+                id: resetMenuLoader
+
+                onHandleMenuItem: function(itemId) {
+                    noteInputModel.handleAutomationMenuItem(itemId)
+                }
+            }
+
+            // Menu indicator
+            Canvas {
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: 2
+
+                width: 4
+                height: 4
+
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    ctx.fillStyle = ui.theme.fontPrimaryColor
+                    ctx.beginPath()
+                    ctx.moveTo(width, 0)
+                    ctx.lineTo(width, height)
+                    ctx.lineTo(0, height)
+                    ctx.closePath()
+                    ctx.fill()
+                }
+            }
+        }
+    }
+
     PopupButton {
         id: customizeButton
 
@@ -193,6 +384,7 @@ Item {
         transparent: true
 
         enabled: noteInputModel.isInputAllowed
+        visible: !noteInputModel.isAutomationToolbarActive
 
         navigation.panel: root.navigationPanel
         navigation.order: 100
@@ -221,6 +413,17 @@ Item {
                 anchors.left: gridView.right
                 anchors.verticalCenter: root.verticalCenter
             }
+
+            AnchorChanges {
+                target: automationControls
+                anchors.left: gridView.right
+                anchors.verticalCenter: root.verticalCenter
+            }
+
+            PropertyChanges {
+                target: automationControls
+                anchors.leftMargin: 4
+            }
         },
         State {
             when: !gridView.isHorizontal
@@ -239,6 +442,17 @@ Item {
                 target: customizeButton
                 anchors.top: gridView.bottom
                 anchors.right: parent.right
+            }
+
+            AnchorChanges {
+                target: automationControls
+                anchors.top: gridView.bottom
+                anchors.left: root.left
+            }
+
+            PropertyChanges {
+                target: automationControls
+                anchors.topMargin: 4
             }
         }
     ]

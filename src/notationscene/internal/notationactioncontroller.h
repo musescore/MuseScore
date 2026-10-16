@@ -264,6 +264,7 @@ private:
     void checkForScoreCorruptions();
 
     void toggleAutomation();
+    bool isToolbarAutomationUi() const;
     muse::Ret selectAutomationType(const muse::rcommand::Params& params);
 
     // commands

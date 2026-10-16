@@ -83,6 +83,7 @@ void NotationSceneModule::resolveImports()
 
         ir->registerQmlUri(Uri("musescore://notation/parts"), "MuseScore.NotationScene", "PartsDialog");
         ir->registerQmlUri(Uri("musescore://notation/selectmeasurescount"), "MuseScore.NotationScene", "SelectMeasuresCountDialog");
+        ir->registerQmlUri(Uri("musescore://notation/settemporange"), "MuseScore.NotationScene", "SetTempoRangeDialog");
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore.NotationScene", "EditGridSizeDialog");
         ir->registerQmlUri(Uri("musescore://notation/percussionpanelpadswap"), "MuseScore.NotationScene", "PercussionPanelPadSwapDialog");
         ir->registerQmlUri(Uri("musescore://notation/editpercussionshortcut"), "MuseScore.NotationScene", "EditPercussionShortcutDialog");
