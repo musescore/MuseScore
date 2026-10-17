@@ -43,10 +43,14 @@ void PaletteActionsController::init()
 {
     dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
     dispatcher()->reg(this, "show-keys", this, &PaletteActionsController::toggleSpecialCharactersDialog);
-    dispatcher()->reg(this,"show-drawing-characters",[this]() {
-        if(!globalContext()->currentNotation())return;
-        if(interactive()->isOpened(SPECIAL_CHARACTERS_URI.uri()).val)interactive()->close(SPECIAL_CHARACTERS_URI.uri());
-        interactive()->open(SPECIAL_CHARACTERS_URI.addingParam("drawingMode",Val(true)));
+    dispatcher()->reg(this, "show-drawing-characters", [this]() {
+        if (!globalContext()->currentNotation()) {
+            return;
+        }
+        if (interactive()->isOpened(SPECIAL_CHARACTERS_URI.uri()).val) {
+            interactive()->close(SPECIAL_CHARACTERS_URI.uri());
+        }
+        interactive()->open(SPECIAL_CHARACTERS_URI.addingParam("drawingMode", Val(true)));
     });
     dispatcher()->reg(this, "time-signature-properties", this, &PaletteActionsController::openTimeSignaturePropertiesDialog);
     dispatcher()->reg(this, "customize-kit", this, &PaletteActionsController::openCustomizeKitDialog);

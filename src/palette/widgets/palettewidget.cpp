@@ -470,7 +470,7 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
         return;
     }
 
-    if(captureDrawingSymbol) {
+    if (captureDrawingSymbol) {
         emit drawingSymbolActivated(cell->element.get());
         mainWindow()->qWindow()->requestActivate();
         return;
@@ -753,17 +753,24 @@ void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
             QMimeData* mimeData = new QMimeData;
             const ElementPtr el   = cell->element;
 
-            if(captureDrawingSymbol) {
-                QString text,family;
-                if(el->isSymbol()) {
+            if (captureDrawingSymbol) {
+                QString text, family;
+                if (el->isSymbol()) {
                     const auto symbol=toSymbol(el.get());
-                    const auto font=symbol->scoreFont()?symbol->scoreFont():gpaletteScore->engravingFont();
-                    text=font->toString(symbol->sym()).toQString();family=QString::fromStdString(font->family());
-                }else if(el->isFSymbol()) {
-                    const auto symbol=toFSymbol(el.get());text=symbol->toString().toQString();family=symbol->font().family().id().toQString();
+                    const auto font=symbol->scoreFont() ? symbol->scoreFont() : gpaletteScore->engravingFont();
+                    text=font->toString(symbol->sym()).toQString();
+                    family=QString::fromStdString(font->family());
+                } else if (el->isFSymbol()) {
+                    const auto symbol=toFSymbol(el.get());
+                    text=symbol->toString().toQString();
+                    family=symbol->font().family().id().toQString();
                 }
-                mimeData->setData("application/x-musedraw-character",QJsonDocument(QJsonObject{{"text",text},{"family",family}}).toJson(QJsonDocument::Compact));
-            }else mimeData->setData(mimeSymbolFormat, el->mimeData().toQByteArray());
+                mimeData->setData("application/x-musedraw-character", QJsonDocument(QJsonObject { { "text", text }, { "family",
+                                                                                                                      family } }).toJson(
+                                      QJsonDocument::Compact));
+            } else {
+                mimeData->setData(mimeSymbolFormat, el->mimeData().toQByteArray());
+            }
             drag->setMimeData(mimeData);
 
             drag->setPixmap(pixmapForCellAt(m_currentIdx));

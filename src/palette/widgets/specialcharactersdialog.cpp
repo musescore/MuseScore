@@ -492,29 +492,45 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
 
     if (interaction) {
         const TextBase* editedText = interaction->editedText();
-        if(editedText)setFont(editedText->font());
-        else setFont(muse::draw::Font(muse::draw::Font::FontFamily("Arial"),muse::draw::Font::Type::Text));
-    }
-    for(auto palette:{m_pCommon,m_pSmufl,m_pUnicode})connect(palette,&PaletteWidget::drawingSymbolActivated,this,[this](EngravingItem* item) {
-        if(!m_drawingMode||!item)return;
-        QString text,family;
-        if(item->isSymbol()) {
-            const auto symbol=toSymbol(item);
-            const auto font=symbol->scoreFont()?symbol->scoreFont():gpaletteScore->engravingFont();
-            text=font->toString(symbol->sym()).toQString();family=QString::fromStdString(font->family());
-        }else if(item->isFSymbol()) {
-            const auto symbol=toFSymbol(item);text=symbol->toString().toQString();family=symbol->font().family().id().toQString();
+        if (editedText) {
+            setFont(editedText->font());
+        } else {
+            setFont(muse::draw::Font(muse::draw::Font::FontFamily("Arial"), muse::draw::Font::Type::Text));
         }
-        if(!text.isEmpty())dispatcher()->dispatch("drawing-insert-character",muse::actions::ActionData::make_arg2<std::string,std::string>(text.toStdString(),family.toStdString()));
-    });
+    }
+    for (auto palette:{ m_pCommon, m_pSmufl, m_pUnicode }) {
+        connect(palette, &PaletteWidget::drawingSymbolActivated, this, [this](EngravingItem* item) {
+            if (!m_drawingMode || !item) {
+                return;
+            }
+            QString text, family;
+            if (item->isSymbol()) {
+                const auto symbol=toSymbol(item);
+                const auto font=symbol->scoreFont() ? symbol->scoreFont() : gpaletteScore->engravingFont();
+                text=font->toString(symbol->sym()).toQString();
+                family=QString::fromStdString(font->family());
+            } else if (item->isFSymbol()) {
+                const auto symbol=toFSymbol(item);
+                text=symbol->toString().toQString();
+                family=symbol->font().family().id().toQString();
+            }
+            if (!text.isEmpty()) {
+                dispatcher()->dispatch("drawing-insert-character",
+                                       muse::actions::ActionData::make_arg2<std::string, std::string>(text.toStdString(),
+                                                                                                      family.toStdString()));
+            }
+        });
+    }
 }
 
 void SpecialCharactersDialog::setDrawingMode(bool active)
 {
     m_drawingMode=active;
-    for(auto palette:{m_pCommon,m_pSmufl,m_pUnicode}) {
+    for (auto palette:{ m_pCommon, m_pSmufl, m_pUnicode }) {
         palette->captureDrawingSymbol=active;
-        if(active)palette->setUseDoubleClickForApplyingElements(true);
+        if (active) {
+            palette->setUseDoubleClickForApplyingElements(true);
+        }
     }
 }
 

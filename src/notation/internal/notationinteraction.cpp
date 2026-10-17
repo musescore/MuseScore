@@ -5200,7 +5200,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
         // before apply() closes the existing undo transaction.
 #ifndef NO_QT_SUPPORT
         const auto drawings = boxType == BoxType::Measure && count > 1
-            ? mu::engraving::SvgDrawing::batchMeasureInsertion(score()) : nullptr;
+                              ? mu::engraving::SvgDrawing::batchMeasureInsertion(score()) : nullptr;
 #endif
         for (int i = 0; i < count; ++i) {
             score()->insertMeasure(elementType, beforeBox, options);

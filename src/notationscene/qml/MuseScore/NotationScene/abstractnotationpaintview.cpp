@@ -86,7 +86,9 @@ QString AbstractNotationPaintView::insertSvgDrawing(const QString& document, con
 QString AbstractNotationPaintView::nativeDrawingDocument() const
 {
     const auto n = notation();
-    if (n) engraving::SvgDrawing::setEditing(n->elements()->msScore(), m_drawingMode);
+    if (n) {
+        engraving::SvgDrawing::setEditing(n->elements()->msScore(), m_drawingMode);
+    }
     return n ? engraving::SvgDrawing::nativeDocument(n->elements()->msScore()) : QString();
 }
 
@@ -116,16 +118,27 @@ void AbstractNotationPaintView::drawingUndo(bool redo)
 
 QString AbstractNotationPaintView::drawingSvgPaths(const QString& svg, const QVariantList& matrix) const
 {
-    if (matrix.size() != 6) { return {}; }
-    for (const auto& value : matrix) { if (!std::isfinite(value.toDouble())) { return {}; } }
+    if (matrix.size() != 6) {
+        return {};
+    }
+    for (const auto& value : matrix) {
+        if (!std::isfinite(value.toDouble())) {
+            return {};
+        }
+    }
     QSvgRenderer renderer(svg.toUtf8());
-    if (!renderer.isValid()) { return {}; }
+    if (!renderer.isValid()) {
+        return {};
+    }
     mu::notationscene::drawing::PathDevice device(QTransform(matrix[0].toDouble(), matrix[1].toDouble(),
-        matrix[2].toDouble(), matrix[3].toDouble(), matrix[4].toDouble(), matrix[5].toDouble()));
+                                                             matrix[2].toDouble(), matrix[3].toDouble(), matrix[4].toDouble(),
+                                                             matrix[5].toDouble()));
     QPainter painter(&device);
     renderer.render(&painter, QRectF(0, 0, 1024, 1024));
     painter.end();
-    if (!device.engine.supported) { return {}; }
+    if (!device.engine.supported) {
+        return {};
+    }
     return QString::fromUtf8(QJsonDocument(device.engine.paths).toJson(QJsonDocument::Compact));
 }
 
@@ -161,7 +174,7 @@ static const QImage* drawingAlphaMask(const QString& svg)
 }
 
 bool AbstractNotationPaintView::drawingSvgContains(const QString& svg, const QVariantList& matrix,
-                                                  const QPointF& point, qreal tolerance) const
+                                                   const QPointF& point, qreal tolerance) const
 {
     if (matrix.size() != 6 || svg.size() > 16 * 1024 * 1024) {
         return false;
@@ -196,27 +209,37 @@ bool AbstractNotationPaintView::drawingSvgContains(const QString& svg, const QVa
 }
 
 bool AbstractNotationPaintView::drawingSvgIntersects(const QString& svg, const QVariantList& matrix,
-                                                    const QVariantList& polygon) const
+                                                     const QVariantList& polygon) const
 {
     if (matrix.size() != 6 || svg.size() > 16 * 1024 * 1024 || polygon.size() < 3 || polygon.size() > 4096) {
         return false;
     }
-    for (const auto& value : matrix) if (!std::isfinite(value.toDouble())) return false;
+    for (const auto& value : matrix) {
+        if (!std::isfinite(value.toDouble())) {
+            return false;
+        }
+    }
     const QTransform transform(matrix[0].toDouble(), matrix[1].toDouble(), matrix[2].toDouble(),
                                matrix[3].toDouble(), matrix[4].toDouble(), matrix[5].toDouble());
     bool invertible = false;
     const auto inverse = transform.inverted(&invertible);
-    if (!invertible) return false;
+    if (!invertible) {
+        return false;
+    }
     constexpr int size = 1024;
     QPolygonF local;
     for (const auto& value : polygon) {
         const auto point = value.toMap();
         const QPointF mapped = inverse.map(QPointF(point.value("x").toDouble(), point.value("y").toDouble())) * size;
-        if (!std::isfinite(mapped.x()) || !std::isfinite(mapped.y())) return false;
+        if (!std::isfinite(mapped.x()) || !std::isfinite(mapped.y())) {
+            return false;
+        }
         local.append(mapped);
     }
     const auto bounds = local.boundingRect().intersected(QRectF(0, 0, size, size));
-    if (bounds.isEmpty()) return false;
+    if (bounds.isEmpty()) {
+        return false;
+    }
     const auto mask = drawingAlphaMask(svg);
     // Scan only the polygon's filled intervals. Whitespace inside a text frame
     // must not count as ink, and a large eraser must not require many QML calls.
@@ -236,10 +259,16 @@ bool AbstractNotationPaintView::drawingSvgIntersects(const QString& svg, const Q
         std::sort(crossings.begin(), crossings.end());
         const auto row = reinterpret_cast<const QRgb*>(mask->constScanLine(y));
         for (size_t i = 0; i + 1 < crossings.size(); i += 2) {
-            if (crossings[i + 1] < 0 || crossings[i] >= size) continue;
+            if (crossings[i + 1] < 0 || crossings[i] >= size) {
+                continue;
+            }
             const int left = int(std::max(0.0, std::ceil(crossings[i] - 0.5)));
             const int right = int(std::min(double(size - 1), std::floor(crossings[i + 1] - 0.5)));
-            for (int x = left; x <= right; ++x) if (qAlpha(row[x]) > 8) return true;
+            for (int x = left; x <= right; ++x) {
+                if (qAlpha(row[x]) > 8) {
+                    return true;
+                }
+            }
         }
     }
     return false;
@@ -331,7 +360,7 @@ QString AbstractNotationPaintView::selectedSvgDrawing() const
                 for (const auto& cv : shape.value("commands").toArray()) {
                     const auto c = cv.toArray();
                     if (c.size() >= 3) {
-                        points.append(QJsonObject{{"x", c.at(c.size() - 2)}, {"y", c.at(c.size() - 1)}});
+                        points.append(QJsonObject { { "x", c.at(c.size() - 2) }, { "y", c.at(c.size() - 1) } });
                     }
                 }
                 shape["rawPoints"] = points;
@@ -346,18 +375,26 @@ QString AbstractNotationPaintView::selectedSvgDrawing() const
 
 QRectF AbstractNotationPaintView::drawingPopupBounds(QQuickItem* item) const
 {
-    if (!item) return {};
+    if (!item) {
+        return {}
+    }
     const QPointF origin=item->mapToGlobal(QPointF());
-    QScreen* screen=QGuiApplication::screenAt(item->mapToGlobal(QPointF(item->width()/2,item->height()/2)).toPoint());
-    if (!screen) screen=QGuiApplication::primaryScreen();
-    if (!screen) return {};
+    QScreen* screen=QGuiApplication::screenAt(item->mapToGlobal(QPointF(item->width() / 2, item->height() / 2)).toPoint());
+    if (!screen) {
+        screen=QGuiApplication::primaryScreen();
+    }
+    if (!screen) {
+        return {}
+    }
     QRectF bounds=screen->availableGeometry();
     // A narrow floating dock is a reference point, not a clipping rectangle.
     // In an ordinary editor window, keep the popup inside its visible area.
-    if (auto window=item->window(); window && window->width()>=520 && window->height()>=320) {
-        const QRectF windowBounds(window->mapToGlobal(QPoint()),window->size());
+    if (auto window=item->window(); window && window->width() >= 520 && window->height() >= 320) {
+        const QRectF windowBounds(window->mapToGlobal(QPoint()), window->size());
         const QRectF visible=bounds.intersected(windowBounds);
-        if (visible.width()>=240 && visible.height()>=160) bounds=visible;
+        if (visible.width() >= 240 && visible.height() >= 160) {
+            bounds=visible;
+        }
     }
     return bounds.translated(-origin);
 }
@@ -385,9 +422,9 @@ QVariantMap AbstractNotationPaintView::drawingViewTransform() const
             bottom = std::max(bottom, box.bottom());
         }
     }
-    return {{"scale", currentScaling()}, {"x", m_matrix.dx()}, {"y", m_matrix.dy()},
-            {"width", right}, {"height", bottom}, {"left", visible.x()}, {"top", visible.y()},
-            {"visibleWidth", visible.width()}, {"visibleHeight", visible.height()}};
+    return { { "scale", currentScaling() }, { "x", m_matrix.dx() }, { "y", m_matrix.dy() },
+        { "width", right }, { "height", bottom }, { "left", visible.x() }, { "top", visible.y() },
+        { "visibleWidth", visible.width() }, { "visibleHeight", visible.height() } };
 }
 
 void AbstractNotationPaintView::setDrawingMode(bool active)
@@ -461,8 +498,10 @@ void AbstractNotationPaintView::load()
         dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
             scheduleRedraw();
         });
-        dispatcher()->reg(this,"drawing-insert-character",[this](const ActionData& args) {
-            if(!m_drawingMode||!isMainView()||args.count()<2)return;
+        dispatcher()->reg(this, "drawing-insert-character", [this](const ActionData& args) {
+            if (!m_drawingMode || !isMainView() || args.count() < 2) {
+                return;
+            }
             emit drawingCharacterReady(QString::fromStdString(args.arg<std::string>(0)),
                                        QString::fromStdString(args.arg<std::string>(1)));
         });
@@ -476,7 +515,7 @@ void AbstractNotationPaintView::load()
             emit drawingCommitRequested();
         }
         if (m_drawingMode && (code.rfind("note-input", 0) == 0 || code.rfind("pad-", 0) == 0
-                             || code == "toggle-insert-mode")) {
+                              || code == "toggle-insert-mode")) {
             emit drawingModeExitRequested();
         }
     });
@@ -1045,7 +1084,9 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     TRACEFUNC;
     static const bool profileNavigation = qEnvironmentVariableIsSet("MUSEDRAW_PROFILE_NAVIGATION");
     QElapsedTimer navigationTimer;
-    if (profileNavigation) navigationTimer.start();
+    if (profileNavigation) {
+        navigationTimer.start();
+    }
 
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
     rect = correctDrawRect(rect);

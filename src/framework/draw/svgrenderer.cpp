@@ -41,6 +41,7 @@ static QCache<const SvgRenderer*, QImage>& drawingScreenCache()
     static QCache<const SvgRenderer*, QImage> cache(64 * 1024); // KiB, across all pages
     return cache;
 }
+
 #endif
 
 //! NOTE Perhaps in the future we need to add something like ISvgRenderer
@@ -101,9 +102,9 @@ void SvgRenderer::renderCached(Painter* painter, const RectF& rect)
     const double sx = std::hypot(transform.m11(), transform.m12());
     const double sy = std::hypot(transform.m21(), transform.m22());
     // One bounded screen texture per drawing fragment. Printing remains vector.
-    const double limit = std::min(1.0, 2048.0 / std::max(1.0, std::max(rect.width()*sx, rect.height()*sy)));
-    const QSize size(std::max(1, int(std::ceil(rect.width()*sx*limit))),
-                     std::max(1, int(std::ceil(rect.height()*sy*limit))));
+    const double limit = std::min(1.0, 2048.0 / std::max(1.0, std::max(rect.width() * sx, rect.height() * sy)));
+    const QSize size(std::max(1, int(std::ceil(rect.width() * sx * limit))),
+                     std::max(1, int(std::ceil(rect.height() * sy * limit))));
     QImage* image = drawingScreenCache().object(this);
     if (!image || image->size() != size) {
         image = new QImage(size, QImage::Format_ARGB32_Premultiplied);
@@ -112,7 +113,7 @@ void SvgRenderer::renderCached(Painter* painter, const RectF& rect)
         buffer.setRenderHint(QPainter::Antialiasing);
         m_qSvgRenderer->render(&buffer, QRectF(QPointF(0, 0), QSizeF(size)));
         buffer.end();
-        drawingScreenCache().insert(this, image, std::max(1, int(image->sizeInBytes()/1024)));
+        drawingScreenCache().insert(this, image, std::max(1, int(image->sizeInBytes() / 1024)));
     }
     target->drawImage(rect.toQRectF(), *image);
 #else

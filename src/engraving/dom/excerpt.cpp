@@ -946,13 +946,15 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                     if (e->generated() || e->excludeFromOtherParts()) {
                         continue;
                     }
-                    bool copyStaffAnnotation=e->track()==srcTrack;
+                    bool copyStaffAnnotation=e->track() == srcTrack;
 #ifndef NO_QT_SUPPORT
-                    if(e->isImage()&&!toImage(e)->drawingPart().empty()) {
+                    if (e->isImage() && !toImage(e)->drawingPart().empty()) {
                         // A drawing with anchors on multiple staves belongs to
                         // every represented part, once per destination score.
-                        const auto sourceStaff=SvgDrawing::excerptSourceStaff(toImage(e),sourceStavesIndexes);
-                        if(sourceStaff!=muse::nidx)copyStaffAnnotation=srcTrack==sourceStaff*VOICES;
+                        const auto sourceStaff=SvgDrawing::excerptSourceStaff(toImage(e), sourceStavesIndexes);
+                        if (sourceStaff != muse::nidx) {
+                            copyStaffAnnotation=srcTrack == sourceStaff * VOICES;
+                        }
                     }
 #endif
                     if ((copyStaffAnnotation && strack != muse::nidx && !e->systemFlag())

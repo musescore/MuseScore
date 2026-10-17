@@ -600,7 +600,9 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             // The editable image has musical points in this measure. Folding
             // it into a multi-measure rest would remove its layout and lose
             // the drawing when opening or exporting the individual part.
-            if(e->isImage()&&!toImage(e)->drawingPart().empty())return false;
+            if (e->isImage() && !toImage(e)->drawingPart().empty()) {
+                return false;
+            }
             if (muse::contains(BREAK_TYPES, e->type()) && !s->rtick().isZero()) {
                 // play count text is permitted at the end of a measure
                 if (!e->isPlayCountText()) {

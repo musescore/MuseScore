@@ -24,7 +24,9 @@ bool DrawingPanelMenuModel::keepVisible() const
 
 void DrawingPanelMenuModel::load()
 {
-    if (m_loaded) return;
+    if (m_loaded) {
+        return;
+    }
     m_loaded = true;
     auto item = new MenuItem(this);
     item->setId(QString::fromStdString(TOGGLE_KEEP_VISIBLE));
@@ -37,7 +39,7 @@ void DrawingPanelMenuModel::load()
     state.enabled = true;
     state.checked = keepVisible();
     item->setState(state);
-    setItems({item});
+    setItems({ item });
     settings()->valueChanged(KEEP_VISIBLE).onReceive(this, [this, item](const Val&) {
         auto state = item->state();
         state.checked = keepVisible();

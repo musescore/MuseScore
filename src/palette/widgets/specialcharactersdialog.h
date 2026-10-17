@@ -49,7 +49,7 @@ class SpecialCharactersDialog : public muse::uicomponents::TopLevelDialog, publi
 
 public:
     SpecialCharactersDialog(QWidget* parent = nullptr);
-    bool drawingMode() const {return m_drawingMode;}
+    bool drawingMode() const { return m_drawingMode; }
     void setDrawingMode(bool active);
 
 private slots:

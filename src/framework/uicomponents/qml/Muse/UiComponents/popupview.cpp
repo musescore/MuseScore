@@ -379,8 +379,8 @@ void PopupView::updateGeometry()
     };
 
     if (m_placementPolicies.testFlag(PlacementPolicy::ManualPosition)) {
-        movePos(std::clamp(m_globalPos.x(), anchorRect.left(), std::max(anchorRect.left(), anchorRect.right()-viewRect.width())),
-                std::clamp(m_globalPos.y(), anchorRect.top(), std::max(anchorRect.top(), anchorRect.bottom()-viewRect.height())));
+        movePos(std::clamp(m_globalPos.x(), anchorRect.left(), std::max(anchorRect.left(), anchorRect.right() - viewRect.width())),
+                std::clamp(m_globalPos.y(), anchorRect.top(), std::max(anchorRect.top(), anchorRect.bottom() - viewRect.height())));
         updateContentPosition();
         return;
     }

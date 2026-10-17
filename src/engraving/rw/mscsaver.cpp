@@ -138,7 +138,10 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
             // different image-store hash from the full score's fragments.
             if (!used && (!ctx || !ctx->shouldWriteRange())) {
                 for (const Excerpt* excerpt : score->excerpts()) {
-                    if (excerpt->excerptScore() && ip->isUsed(excerpt->excerptScore())) {used=true;break;}
+                    if (excerpt->excerptScore() && ip->isUsed(excerpt->excerptScore())) {
+                        used=true;
+                        break;
+                    }
                 }
             }
             if (!used) {
@@ -217,7 +220,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
     // assets. Metadata alone is not enough for stock MuseScore readers.
     for (ImageStoreItem* image : imageStore) {
         if (image->isUsed(partScore)) {
-            mscWriter.addImageFile(String::fromStdString(image->hashName()),image->buffer());
+            mscWriter.addImageFile(String::fromStdString(image->hashName()), image->buffer());
         }
     }
 

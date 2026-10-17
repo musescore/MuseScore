@@ -35,7 +35,9 @@ class SvgRenderer;
 
 namespace mu::engraving {
 class ImageStoreItem;
-namespace SvgDrawing { struct ImageCache; }
+namespace SvgDrawing {
+struct ImageCache;
+}
 
 enum class ImageType : char {
     NONE, RASTER, SVG
@@ -67,11 +69,15 @@ public:
 
     // SVG drawings keep their editable geometry alongside the ordinary embedded image.
     const std::string& drawingData() const { return m_drawingData; }
-    void setDrawingData(const std::string& data) {
-        if (m_drawingData == data) return;
+    void setDrawingData(const std::string& data)
+    {
+        if (m_drawingData == data) {
+            return;
+        }
         m_drawingData = data;
         m_drawingCache.reset();
     }
+
     std::shared_ptr<SvgDrawing::ImageCache>& drawingCache() const { return m_drawingCache; }
     const std::string& drawingPart() const { return m_drawingPart; }
     void setDrawingPart(const std::string& part) { m_drawingPart = part; }
