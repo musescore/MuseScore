@@ -106,9 +106,9 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
     Q_PROPERTY(QString version READ version WRITE setVersion)
     /// Human-readable plugin description, displayed in Plugin Manager
     Q_PROPERTY(QString description READ description WRITE setDescription)
-    /// Type may be dialog or not defined
+    /// Type may be dialog, dock (a resizable panel initially on the right), or not defined.
     Q_PROPERTY(QString pluginType READ pluginType WRITE setPluginType)
-    /// Where to dock on main screen. Possible values: left, top, bottom, right
+    /// Initial docking area is currently right; users can float or redock the panel.
     Q_PROPERTY(QString dockArea READ dockArea WRITE setDockArea)
     /// Whether the plugin requires an existing score to run, default is `true`
     Q_PROPERTY(bool requiresScore READ requiresScore WRITE setRequiresScore)

@@ -43,6 +43,8 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::actions;
 
+static const QString EXTENSION_PANEL_NAME = QStringLiteral("extensionPanel");
+
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -71,6 +73,7 @@ void NotationPageModel::init()
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        closeDockedExtension();
         onNotationChanged();
         scheduleUpdatePercussionPanelVisibility();
     });
@@ -79,7 +82,10 @@ void NotationPageModel::init()
         scheduleUpdateExtensionsToolBarVisibility();
     });
 
-    extensionsProvider()->enabledChanged().onReceive(this, [this](const muse::Uri&) {
+    extensionsProvider()->enabledChanged().onReceive(this, [this](const muse::Uri& uri) {
+        if (m_dockedExtension == QString::fromStdString(uri.toString()) && !extensionsProvider()->isEnabled(uri)) {
+            closeDockedExtension();
+        }
         scheduleUpdateExtensionsToolBarVisibility();
     });
 
@@ -89,6 +95,33 @@ void NotationPageModel::init()
 
     onNotationChanged();
 
+    extensionsProvider()->dockRequested().onReceive(this,
+                                                    [this](const muse::extensions::ExtensionUri& uri,
+                                                           const muse::extensions::ExtensionActionCode& action) {
+        auto window = dockWindowProvider()->window();
+        if (!window || !globalContext()->currentNotation()) {
+            return;
+        }
+        const QString extension = QString::fromStdString(uri.toString());
+        const QString actionName = QString::fromStdString(action);
+        if (m_dockedExtension != extension || m_dockedExtensionAction != actionName) {
+            emit dockedExtensionAboutToClose();
+            m_dockedExtension = extension;
+            m_dockedExtensionAction = actionName;
+            emit dockedExtensionChanged();
+        }
+        window->setDockOpen(EXTENSION_PANEL_NAME, true);
+    });
+
+    if (auto window = dockWindowProvider()->window()) {
+        window->setDockOpen(EXTENSION_PANEL_NAME, false);
+        window->docksOpenStatusChanged().onReceive(this, [this, window](const QStringList& names) {
+            if (names.contains(EXTENSION_PANEL_NAME) && !window->isDockOpen(EXTENSION_PANEL_NAME)) {
+                closeDockedExtension();
+            }
+        });
+    }
+
     scheduleUpdatePercussionPanelVisibility();
     scheduleUpdateExtensionsToolBarVisibility();
 
@@ -97,6 +130,21 @@ void NotationPageModel::init()
     });
 
     m_inited = true;
+}
+
+//! Dispose of the panel before changing score context so plug-ins cannot retain stale score references.
+void NotationPageModel::closeDockedExtension()
+{
+    if (m_dockedExtension.isEmpty()) {
+        return;
+    }
+    emit dockedExtensionAboutToClose();
+    m_dockedExtension.clear();
+    m_dockedExtensionAction.clear();
+    emit dockedExtensionChanged();
+    if (auto window = dockWindowProvider()->window()) {
+        window->setDockOpen(EXTENSION_PANEL_NAME, false);
+    }
 }
 
 QString NotationPageModel::notationToolBarName() const

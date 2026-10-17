@@ -560,12 +560,12 @@ void PluginAPI::setDescription(const QString& newDescription)
 
 QString PluginAPI::dockArea() const
 {
-    return QString();
+    return QStringLiteral("right");
 }
 
 void PluginAPI::setDockArea(const QString&)
 {
-    DEPRECATED;
+    // Panels initially open on the right; older area preferences fall back to the right.
 }
 
 bool PluginAPI::requiresScore() const
