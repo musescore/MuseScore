@@ -376,7 +376,7 @@ QString AbstractNotationPaintView::selectedSvgDrawing() const
 QRectF AbstractNotationPaintView::drawingPopupBounds(QQuickItem* item) const
 {
     if (!item) {
-        return {}
+        return QRectF();
     }
     const QPointF origin=item->mapToGlobal(QPointF());
     QScreen* screen=QGuiApplication::screenAt(item->mapToGlobal(QPointF(item->width() / 2, item->height() / 2)).toPoint());
@@ -384,7 +384,7 @@ QRectF AbstractNotationPaintView::drawingPopupBounds(QQuickItem* item) const
         screen=QGuiApplication::primaryScreen();
     }
     if (!screen) {
-        return {}
+        return QRectF();
     }
     QRectF bounds=screen->availableGeometry();
     // A narrow floating dock is a reference point, not a clipping rectangle.

@@ -855,7 +855,7 @@ std::vector<Part> selectionParts(Score* score, const Image* selectedImage = null
             for (const auto& member:saved) {
                 const auto m=member.first;
                 if (!m->system() || !m->system()->page() || !m->system()->staff(image->staffIdx())) {
-                    return {}
+                    return std::vector<Part>();
                 }
                 const auto& p = member.second;
                 // Keep the authored spelling in Part so geometry, drawingPart
@@ -1030,7 +1030,7 @@ std::vector<Part> nativeParts(Score* score, const QJsonObject& source, const QRe
     double origin = 0;
     for (Measure* m = first; m; m = m->nextMeasure()) {
         if (!m->system() || !m->system()->page() || !m->system()->staff(*track / VOICES)) {
-            return {}
+            return std::vector<Part>();
         }
         const double width = std::max(0.01, m->width()) / m->spatium();
         result.push_back({ m, QString::fromStdString(m->tick().toString().toStdString()), Fraction(0, 1),
@@ -1074,11 +1074,11 @@ QRectF anchoredRigidBox(Score* score, const QJsonObject& source, staff_idx_t fal
     const auto shapes = source.value("shapes").toArray();
     const auto links = source.value("anchors").toArray();
     if (!score || shapes.isEmpty() || links.isEmpty()) {
-        return {}
+        return QRectF();
     }
     const auto shape = shapes[0].toObject();
     if (!shape.value("singleAnchor").toBool() || !shape.value("textLink").toObject().isEmpty()) {
-        return {}
+        return QRectF();
     }
     const auto link = links[0].toObject(), box = source.value("bounds").toObject();
     const auto commands = shape.value("commands").toArray();
@@ -1087,19 +1087,19 @@ QRectF anchoredRigidBox(Score* score, const QJsonObject& source, staff_idx_t fal
     if (ci < 0 || ci >= commands.size() || field < 1 || field + 1 >= commands[ci].toArray().size()
         || sourceScale <= 0 || link.value("denominator").toInt() <= 0
         || !link.contains("offsetX") || !link.contains("offsetY")) {
-        return {}
+        return QRectF();
     }
     const QString key = link.value("key").toString();
     if (!key.contains(':')) {
-        return {}
+        return QRectF();
     }
     const auto staff = localStaff(score, link, fallback);
     if (staff >= score->nstaves()) {
-        return {}
+        return QRectF();
     }
     if (const auto measure=referencedMeasure(score, link)) {
         if (!measure->system() || !measure->system()->page() || !measure->system()->staff(staff)) {
-            return {}
+            return QRectF();
         }
         const double sp = measure->spatium(), scale = sp / sourceScale;
         const auto command = commands[ci].toArray();
@@ -1325,7 +1325,7 @@ QString rigidSvg(const QJsonObject& source)
     const auto box=source.value("bounds").toObject();
     const double width=box.value("width").toDouble(), height=box.value("height").toDouble();
     if (width <= 0 || height <= 0) {
-        return {}
+        return QString();
     }
     QString body;
     for (const auto& v:source.value("shapes").toArray()) {
@@ -1587,10 +1587,12 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
                        y + a * startDelta.value("dy").toDouble() + b * endDelta.value("dy").toDouble());
     };
     if (fragmentInfo) {
-        *fragmentInfo = QJsonObject{ { "startsPiece", startsPiece }, { "endsPiece", endsPiece },
-            { "derived", current.measure->system() != parts.front().measure->system() }, { "before", before }, { "after", after },
-            { "spatium", sp }, { "partKey", current.measure->tick().reduced().toString().toQString() },
-            { "cutLeft", left + startDelta.value("dx").toDouble() }, { "cutRight", right + endDelta.value("dx").toDouble() } }
+        *fragmentInfo = QJsonObject({ { "startsPiece", startsPiece }, { "endsPiece", endsPiece },
+                                        { "derived",
+                                          current.measure->system() != parts.front().measure->system() }, { "before", before }, { "after", after },
+                                        { "spatium", sp }, { "partKey", current.measure->tick().reduced().toString().toQString() },
+                                        { "cutLeft", left + startDelta.value("dx").toDouble() }, { "cutRight", right + endDelta.value(
+                                                                                                       "dx").toDouble() } });
     }
     double minY = std::numeric_limits<double>::infinity(), maxY = -minY;
     double minX = minY, maxX = maxY;
@@ -1885,7 +1887,7 @@ const QJsonArray& resolvedGeometryFor(const Image* image, const QJsonObject& doc
         if (current != parts.end()) {
             cache.resolved=resolveGeometry(doc, parts, *current);
         } else {
-            cache.resolved={}
+            cache.resolved=QJsonArray();
         }
         cache.signature=key;
     }
@@ -2064,7 +2066,7 @@ std::string serializedPart(const Image* image)
 std::vector<Staff*> linkedStaves(const Image* image)
 {
     if (!image || !image->staff()) {
-        return {}
+        return std::vector<Staff*>();
     }
     auto result=image->staff()->staffList();
     const auto ids=drawingStaffIds(image);
@@ -2946,8 +2948,8 @@ static QString nativeDocumentFiltered(Score* score, const QSet<QString>* drawing
                 }
                 if (mapped.size() == 3) {
                     shape["svgMatrix"]
-                        = QJsonArray{ mapped[1].x() - mapped[0].x(), mapped[1].y() - mapped[0].y(), mapped[2].x() - mapped[0].x(),
-                                      mapped[2].y() - mapped[0].y(), mapped[0].x(), mapped[0].y() }
+                        = QJsonArray({ mapped[1].x() - mapped[0].x(), mapped[1].y() - mapped[0].y(), mapped[2].x() - mapped[0].x(),
+                                       mapped[2].y() - mapped[0].y(), mapped[0].x(), mapped[0].y() });
                 }
             }
         }
@@ -3192,7 +3194,7 @@ QString syncNative(Score* score, const QString& document)
         && current.value("anchors") == source.value("anchors")
         && current.value("anchorGridMode") == source.value("anchorGridMode")
         && current.value("subdivision") == source.value("subdivision")) {
-        return {}
+        return QString();
     }
     score->startCmd(muse::TranslatableString("drawing-tools", "Edit vector drawing"));
     for (Image* i : existing) {
@@ -3366,7 +3368,7 @@ public:
     {
         const auto page=rows.find({ pageAt(point), staff });
         if (page == rows.end()) {
-            return {}
+            return QVariantMap();
         }
         const Marker* target=nullptr;
         double best=std::numeric_limits<double>::max();
