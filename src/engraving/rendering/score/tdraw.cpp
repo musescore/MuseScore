@@ -2018,6 +2018,9 @@ void TDraw::draw(const Hook* item, Painter* painter, const PaintOptions& opt)
 
 void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
 {
+    if (item->hiddenByDrawingEditor() && !opt.isPrinting) {
+        return;
+    }
     TRACE_DRAW_ITEM;
     const Image::LayoutData* ldata = item->ldata();
     bool emptyImage = false;
@@ -2025,7 +2028,16 @@ void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
         if (!item->svgRenderer()) {
             emptyImage = true;
         } else {
-            item->svgRenderer()->render(painter, ldata->bbox());
+            painter->save();
+            if (!item->drawingPart().empty()) {
+                painter->setClipRect(ldata->bbox());
+            }
+            if (!item->drawingPart().empty() && !opt.isPrinting) {
+                item->svgRenderer()->renderCached(painter, ldata->bbox());
+            } else {
+                item->svgRenderer()->render(painter, ldata->bbox());
+            }
+            painter->restore();
         }
     } else if (item->imageType() == ImageType::RASTER) {
         if (item->rasterImage() == nullptr) {

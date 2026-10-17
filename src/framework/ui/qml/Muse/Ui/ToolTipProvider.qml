@@ -39,6 +39,7 @@ Item {
         anchors.fill: parent
 
         sourceComponent: StyledToolTip {
+            inputTransparent:root.parent && root.parent["drawingToolTip"] === true
             onClosed: {
                 Qt.callLater(unloadToolTip)
             }

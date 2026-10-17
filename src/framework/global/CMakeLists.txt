@@ -20,6 +20,10 @@
 
 muse_create_module(muse_global ALIAS muse::global)
 
+if(WIN_PORTABLE)
+    target_compile_definitions(muse_global PRIVATE WIN_PORTABLE)
+endif()
+
 include(thirdparty/kors_logger/logger.cmake)
 include(thirdparty/kors_profiler/profiler/profiler.cmake)
 include(thirdparty/kors_modularity/modularity/modularity.cmake)

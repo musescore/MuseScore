@@ -123,6 +123,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
 
     // Vertical panels
+    UiAction("toggle-drawing-tools",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Desenho vetorial"),
+             TranslatableString("action", "Mostrar/ocultar ferramentas de desenho"),
+             Checkable::Yes
+             ),
     UiAction("toggle-palettes",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
@@ -392,6 +399,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
 
         { "toggle-palettes", PALETTES_PANEL_NAME },
+        { "toggle-drawing-tools", "vectorDrawingPanel" },
         { "toggle-instruments", LAYOUT_PANEL_NAME },
         { "inspector", INSPECTOR_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },

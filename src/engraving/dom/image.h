@@ -23,6 +23,7 @@
 #pragma once
 
 #include "bsymbol.h"
+#include <memory>
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
@@ -34,6 +35,9 @@ class SvgRenderer;
 
 namespace mu::engraving {
 class ImageStoreItem;
+namespace SvgDrawing {
+struct ImageCache;
+}
 
 enum class ImageType : char {
     NONE, RASTER, SVG
@@ -62,6 +66,25 @@ public:
     bool loadFromData(const std::string& suffix, const muse::ByteArray&);
 
     void init();
+
+    // SVG drawings keep their editable geometry alongside the ordinary embedded image.
+    const std::string& drawingData() const { return m_drawingData; }
+    void setDrawingData(const std::string& data)
+    {
+        if (m_drawingData == data) {
+            return;
+        }
+        m_drawingData = data;
+        m_drawingCache.reset();
+    }
+
+    std::shared_ptr<SvgDrawing::ImageCache>& drawingCache() const { return m_drawingCache; }
+    const std::string& drawingPart() const { return m_drawingPart; }
+    void setDrawingPart(const std::string& part) { m_drawingPart = part; }
+    bool hiddenByDrawingEditor() const { return m_hiddenByDrawingEditor; }
+    void setHiddenByDrawingEditor(bool value) { m_hiddenByDrawingEditor = value; }
+    void setDrawingSvg(const std::string& svg);
+    void updateDrawingStore();
 
     bool isImageFramed() const;
     double imageAspectRatio() const;
@@ -129,5 +152,11 @@ private:
     muse::draw::SvgRenderer* m_svgDoc = nullptr;
 
     ImageType m_imageType = ImageType::NONE;
+    std::string m_drawingData;
+    // Owned by the image: undo/deletion cannot leave a dangling global cache.
+    mutable std::shared_ptr<SvgDrawing::ImageCache> m_drawingCache;
+    std::string m_drawingPart;
+    bool m_hiddenByDrawingEditor = false;
+    std::string m_lastDrawingSvg;
 };
 }

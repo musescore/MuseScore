@@ -24,6 +24,13 @@
 
 #include <QQmlEngine>
 #include <QJSValueIterator>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <limits>
+#include <cmath>
+#include <algorithm>
+#include "engraving/dom/svgdrawing.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
@@ -370,6 +377,36 @@ apiv1::EngravingItem* PluginAPI::newElement(int elementType)
 ///   \param EngravingItem type.
 ///   \since MuseScore 3.3
 //---------------------------------------------------------
+
+QString PluginAPI::insertSvgDrawing(const QString& svg, const QString& document, const QString& mode)
+{
+    Q_UNUSED(svg)
+    const auto shapes = QJsonDocument::fromJson(document.toUtf8()).object().value("shapes").toArray();
+    double x = std::numeric_limits<double>::infinity(), y = x;
+    double right = -x, bottom = -x;
+    for (const auto& v : shapes) {
+        const auto shape = v.toObject();
+        const double pad = shape.value("style").toObject().value("width").toDouble() / 2 + 1;
+        for (const auto& cv : shape.value("commands").toArray()) {
+            const auto c = cv.toArray();
+            for (int n = 1; n + 1 < c.size(); n += 2) {
+                x = std::min(x, c.at(n).toDouble() - pad);
+                y = std::min(y, c.at(n + 1).toDouble() - pad);
+                right = std::max(right, c.at(n).toDouble() + pad);
+                bottom = std::max(bottom, c.at(n + 1).toDouble() + pad);
+            }
+        }
+    }
+    if (!std::isfinite(x) || !std::isfinite(y)) {
+        return QStringLiteral("Faça um desenho antes de inserir.");
+    }
+    return SvgDrawing::insert(currentScore(), document, mode, QRectF(x, y, right - x, bottom - y), RectF(), false);
+}
+
+QString PluginAPI::selectedSvgDrawing() const
+{
+    return SvgDrawing::selectedDocument(currentScore());
+}
 
 void PluginAPI::removeElement(apiv1::EngravingItem* wrapped)
 {

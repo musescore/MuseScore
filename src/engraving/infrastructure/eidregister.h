@@ -40,6 +40,7 @@ public:
     void removeItem(const EngravingObject* item);
 
     EngravingObject* itemFromEID(const EID& eid) const;
+    EngravingObject* findItemFromEID(const EID& eid) const;
     EID EIDFromItem(const EngravingObject* item) const;
 
 private:

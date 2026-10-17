@@ -83,3 +83,10 @@ __pycache__/
 /mscore/revision.h
 /share/sound/MuseScore_General*
 /VERSION
+
+# Local coordination and packaging records
+/DrawingTools/
+/.codex/
+/AGENTS.md
+/*FEEDBACK*.md
+/*HANDOFF*.md

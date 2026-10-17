@@ -45,3 +45,6 @@ qt_add_qml_module(muse_dockwindow_qml
 fixup_qml_module_dependencies(muse_dockwindow_qml)
 
 target_link_libraries(muse_dockwindow_qml PRIVATE kddockwidgets)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_dockwindow_qml PROPERTIES UNITY_BUILD OFF)

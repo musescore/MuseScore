@@ -21,6 +21,7 @@
  */
 
 #include "popupview.h"
+#include <algorithm>
 #include "modularity/ioc.h"
 
 #if defined(Q_OS_MAC)
@@ -78,8 +79,25 @@ void PopupView::initView()
 
     WindowView::initView();
 
-    m_view->setFlags(resolveWindowFlags());
+    auto flags = resolveWindowFlags();
+    if (m_inputTransparent) {
+        flags |= Qt::WindowTransparentForInput | Qt::WindowDoesNotAcceptFocus;
+    }
+    m_view->setFlags(flags);
     m_view->setColor(Qt::transparent);
+}
+
+void PopupView::setInputTransparent(bool value)
+{
+    if (m_inputTransparent == value) {
+        return;
+    }
+    m_inputTransparent = value;
+    if (m_view) {
+        m_view->setFlag(Qt::WindowTransparentForInput, value);
+        m_view->setFlag(Qt::WindowDoesNotAcceptFocus, value);
+    }
+    emit inputTransparentChanged();
 }
 
 void PopupView::initCloseController()
@@ -359,6 +377,13 @@ void PopupView::updateGeometry()
 
         viewRect.moveTopLeft(m_globalPos);
     };
+
+    if (m_placementPolicies.testFlag(PlacementPolicy::ManualPosition)) {
+        movePos(std::clamp(m_globalPos.x(), anchorRect.left(), std::max(anchorRect.left(), anchorRect.right() - viewRect.width())),
+                std::clamp(m_globalPos.y(), anchorRect.top(), std::max(anchorRect.top(), anchorRect.bottom() - viewRect.height())));
+        updateContentPosition();
+        return;
+    }
 
     bool ignoreFit = m_placementPolicies.testFlag(PlacementPolicy::IgnoreFit);
     bool canFitAbove = !ignoreFit ? viewRect.height() < parentTopLeft.y() : true;

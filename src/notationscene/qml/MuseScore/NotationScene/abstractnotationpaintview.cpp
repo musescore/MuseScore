@@ -20,10 +20,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "abstractnotationpaintview.h"
+#include "drawingpathcollector.h"
 
 #include <QCursor>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QQuickWindow>
+#include <QCoreApplication>
 #include <QPainter>
+#include <QPainterPath>
+#include <QCache>
+#include <QElapsedTimer>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+#include "draw/svgrenderer.h"
 #include <QMimeData>
+#include <QSaveFile>
+#include <QFile>
+#include <QDir>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QSvgRenderer>
+#include "project/inotationproject.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include "engraving/dom/svgdrawing.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/page.h"
 
 #include "async/async.h"
 
@@ -45,6 +70,378 @@ static void compensateFloatPart(RectF& rect)
     rect.adjust(-1, -1, 1, 1);
 }
 
+QString AbstractNotationPaintView::insertSvgDrawing(const QString& document, const QString& mode, const QRectF& bounds)
+{
+    auto n = notation();
+    if (!n) {
+        return QStringLiteral("Abra uma partitura.");
+    }
+    // The native overlay stores geometry in score canvas coordinates.
+    const RectF logical(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+    const QString result = engraving::SvgDrawing::insert(n->elements()->msScore(), document, mode, bounds, logical, true, true, false);
+    scheduleRedraw();
+    return result;
+}
+
+QString AbstractNotationPaintView::nativeDrawingDocument() const
+{
+    const auto n = notation();
+    if (n) {
+        engraving::SvgDrawing::setEditing(n->elements()->msScore(), m_drawingMode);
+    }
+    return n ? engraving::SvgDrawing::nativeDocument(n->elements()->msScore()) : QString();
+}
+
+QString AbstractNotationPaintView::syncNativeDrawingDocument(const QString& document)
+{
+    const auto n = notation();
+    if (!n) {
+        return QCoreApplication::translate("drawing-tools", "Open a score.");
+    }
+    auto score = n->elements()->msScore();
+    const QString error = engraving::SvgDrawing::syncNative(score, document);
+    engraving::SvgDrawing::setEditing(score, m_drawingMode);
+    scheduleRedraw();
+    return error;
+}
+
+QVariantList AbstractNotationPaintView::nativeDrawingFragments() const
+{
+    const auto n = notation();
+    return n ? engraving::SvgDrawing::nativeFragments(n->elements()->msScore()) : QVariantList();
+}
+
+void AbstractNotationPaintView::drawingUndo(bool redo)
+{
+    dispatcher()->dispatch(redo ? "action://notation/redo" : "action://notation/undo");
+}
+
+QString AbstractNotationPaintView::drawingSvgPaths(const QString& svg, const QVariantList& matrix) const
+{
+    if (matrix.size() != 6) {
+        return {};
+    }
+    for (const auto& value : matrix) {
+        if (!std::isfinite(value.toDouble())) {
+            return {};
+        }
+    }
+    QSvgRenderer renderer(svg.toUtf8());
+    if (!renderer.isValid()) {
+        return {};
+    }
+    mu::notationscene::drawing::PathDevice device(QTransform(matrix[0].toDouble(), matrix[1].toDouble(),
+                                                             matrix[2].toDouble(), matrix[3].toDouble(), matrix[4].toDouble(),
+                                                             matrix[5].toDouble()));
+    QPainter painter(&device);
+    renderer.render(&painter, QRectF(0, 0, 1024, 1024));
+    painter.end();
+    if (!device.engine.supported) {
+        return {};
+    }
+    return QString::fromUtf8(QJsonDocument(device.engine.paths).toJson(QJsonDocument::Compact));
+}
+
+void AbstractNotationPaintView::openDrawingCharacters()
+{
+    dispatcher()->dispatch("show-drawing-characters");
+}
+
+QVariantList AbstractNotationPaintView::previewNativeDrawingFragments(const QString& document) const
+{
+    const auto n = notation();
+    return n ? engraving::SvgDrawing::nativeFragments(n->elements()->msScore(), document) : QVariantList();
+}
+
+static const QImage* drawingAlphaMask(const QString& svg)
+{
+    // Shared by point selection and region erasing; transforms do not invalidate it.
+    static QCache<QString, QImage> masks(8);
+    if (const QImage* cached = masks.object(svg)) {
+        return cached;
+    }
+    constexpr int size = 1024;
+    auto image = new QImage(size, size, QImage::Format_ARGB32_Premultiplied);
+    image->fill(Qt::transparent);
+    QPainter qp(image);
+    qp.setRenderHint(QPainter::Antialiasing);
+    muse::draw::Painter painter(&qp, "drawing-hit-mask");
+    muse::draw::SvgRenderer renderer(muse::ByteArray::fromQByteArray(svg.toUtf8()));
+    renderer.render(&painter, RectF(0, 0, size, size));
+    qp.end();
+    masks.insert(svg, image);
+    return image;
+}
+
+bool AbstractNotationPaintView::drawingSvgContains(const QString& svg, const QVariantList& matrix,
+                                                   const QPointF& point, qreal tolerance) const
+{
+    if (matrix.size() != 6 || svg.size() > 16 * 1024 * 1024) {
+        return false;
+    }
+    const QTransform transform(matrix[0].toDouble(), matrix[1].toDouble(), matrix[2].toDouble(),
+                               matrix[3].toDouble(), matrix[4].toDouble(), matrix[5].toDouble());
+    bool invertible = false;
+    const QTransform inverse = transform.inverted(&invertible);
+    if (!invertible) {
+        return false;
+    }
+    const QPointF local = inverse.map(point);
+    const QPointF reachX = inverse.map(point + QPointF(tolerance, 0)) - local;
+    const QPointF reachY = inverse.map(point + QPointF(0, tolerance)) - local;
+    const double reach = std::max(std::hypot(reachX.x(), reachX.y()), std::hypot(reachY.x(), reachY.y()));
+    if (local.x() < -reach || local.y() < -reach || local.x() > 1 + reach || local.y() > 1 + reach) {
+        return false;
+    }
+    const QImage* mask = drawingAlphaMask(svg);
+    constexpr int size = 1024;
+    const int x = std::lround(local.x() * (size - 1)), y = std::lround(local.y() * (size - 1));
+    const int radius = std::clamp(int(std::ceil(reach * size)), 1, 12);
+    for (int dy = -radius; dy <= radius; ++dy) {
+        for (int dx = -radius; dx <= radius; ++dx) {
+            if (dx * dx + dy * dy <= radius * radius && x + dx >= 0 && x + dx < size && y + dy >= 0 && y + dy < size
+                && qAlpha(mask->pixel(x + dx, y + dy)) > 8) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool AbstractNotationPaintView::drawingSvgIntersects(const QString& svg, const QVariantList& matrix,
+                                                     const QVariantList& polygon) const
+{
+    if (matrix.size() != 6 || svg.size() > 16 * 1024 * 1024 || polygon.size() < 3 || polygon.size() > 4096) {
+        return false;
+    }
+    for (const auto& value : matrix) {
+        if (!std::isfinite(value.toDouble())) {
+            return false;
+        }
+    }
+    const QTransform transform(matrix[0].toDouble(), matrix[1].toDouble(), matrix[2].toDouble(),
+                               matrix[3].toDouble(), matrix[4].toDouble(), matrix[5].toDouble());
+    bool invertible = false;
+    const auto inverse = transform.inverted(&invertible);
+    if (!invertible) {
+        return false;
+    }
+    constexpr int size = 1024;
+    QPolygonF local;
+    for (const auto& value : polygon) {
+        const auto point = value.toMap();
+        const QPointF mapped = inverse.map(QPointF(point.value("x").toDouble(), point.value("y").toDouble())) * size;
+        if (!std::isfinite(mapped.x()) || !std::isfinite(mapped.y())) {
+            return false;
+        }
+        local.append(mapped);
+    }
+    const auto bounds = local.boundingRect().intersected(QRectF(0, 0, size, size));
+    if (bounds.isEmpty()) {
+        return false;
+    }
+    const auto mask = drawingAlphaMask(svg);
+    // Scan only the polygon's filled intervals. Whitespace inside a text frame
+    // must not count as ink, and a large eraser must not require many QML calls.
+    std::vector<double> crossings;
+    crossings.reserve(local.size());
+    const int top = std::clamp(int(std::floor(bounds.top())), 0, size - 1);
+    const int bottom = std::clamp(int(std::ceil(bounds.bottom())), 0, size - 1);
+    for (int y = top; y <= bottom; ++y) {
+        crossings.clear();
+        const double scan = y + 0.5;
+        for (int i = 0, previous = local.size() - 1; i < local.size(); previous = i++) {
+            const auto a = local[previous], b = local[i];
+            if ((a.y() <= scan && b.y() > scan) || (b.y() <= scan && a.y() > scan)) {
+                crossings.push_back(a.x() + (scan - a.y()) * (b.x() - a.x()) / (b.y() - a.y()));
+            }
+        }
+        std::sort(crossings.begin(), crossings.end());
+        const auto row = reinterpret_cast<const QRgb*>(mask->constScanLine(y));
+        for (size_t i = 0; i + 1 < crossings.size(); i += 2) {
+            if (crossings[i + 1] < 0 || crossings[i] >= size) {
+                continue;
+            }
+            const int left = int(std::max(0.0, std::ceil(crossings[i] - 0.5)));
+            const int right = int(std::min(double(size - 1), std::floor(crossings[i + 1] - 0.5)));
+            for (int x = left; x <= right; ++x) {
+                if (qAlpha(row[x]) > 8) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+QString AbstractNotationPaintView::saveSvgDrawing(const QString& svg, const QString& document, const QUrl& file) const
+{
+    if (!file.isLocalFile()) {
+        return QStringLiteral("Escolha um arquivo local.");
+    }
+    const QString path = file.toLocalFile();
+    QSaveFile out(path);
+    const QByteArray svgBytes = svg.toUtf8();
+    if (!out.open(QIODevice::WriteOnly) || out.write(svgBytes) != svgBytes.size() || !out.commit()) {
+        return QStringLiteral("Não foi possível salvar o SVG.");
+    }
+    Q_UNUSED(document);
+    return QCoreApplication::translate("drawing-tools", "SVG saved.");
+}
+
+QString AbstractNotationPaintView::loadSvgDrawing(const QUrl& file) const
+{
+    if (!file.isLocalFile()) {
+        return {};
+    }
+    QFile input(file.toLocalFile());
+    if (!input.open(QIODevice::ReadOnly) || input.size() > 16 * 1024 * 1024) {
+        return {};
+    }
+    return QString::fromUtf8(input.readAll());
+}
+
+QString AbstractNotationPaintView::selectedSvgDrawing() const
+{
+    auto n = notation();
+    if (!n) {
+        return {};
+    }
+    auto score = n->elements()->msScore();
+    QJsonObject source = QJsonDocument::fromJson(engraving::SvgDrawing::selectedDocument(score).toUtf8()).object();
+    QJsonArray shapes = source.value("shapes").toArray();
+    QJsonArray anchors;
+    const QVariantList editingPoints = engraving::SvgDrawing::editingPoints(score);
+    for (const QVariant& v : editingPoints) {
+        auto point = v.toMap();
+        const int si = point.value("shape").toInt(), ci = point.value("command").toInt(), field = point.value("field").toInt();
+        if (si < 0 || si >= shapes.size()) {
+            continue;
+        }
+        auto shape = shapes.at(si).toObject();
+        auto commands = shape.value("commands").toArray();
+        if (ci < 0 || ci >= commands.size()) {
+            continue;
+        }
+        auto command = commands.at(ci).toArray();
+        if (field < 1 || field + 1 >= command.size()) {
+            continue;
+        }
+        const PointF view(point.value("x").toDouble(), point.value("y").toDouble());
+        command[field] = view.x();
+        command[field + 1] = view.y();
+        commands[ci] = command;
+        shape["commands"] = commands;
+        shapes[si] = shape;
+        point["scale"] = point.value("spatium").toDouble();
+        if (!point.value("key").toString().isEmpty()) {
+            const auto selected = score->selection().element();
+            point["key"] = QStringLiteral("%1:%2").arg(selected ? selected->staffIdx() : 0).arg(point.value("key").toString());
+        }
+        // Preserve explicit editor vertices; internal spline controls stay hidden.
+        point["editable"] = false;
+        for (const auto& av : source.value("anchors").toArray()) {
+            const auto a = av.toObject();
+            if (a.value("shape").toInt() == si && a.value("command").toInt() == ci
+                && a.value("field").toInt() == field && a.value("editable").toBool()) {
+                point["editable"] = true;
+                break;
+            }
+        }
+        if (!point.value("key").toString().isEmpty()) {
+            anchors.append(QJsonObject::fromVariantMap(point));
+        }
+    }
+    if (!editingPoints.isEmpty()) {
+        for (int si = 0; si < shapes.size(); ++si) {
+            auto shape = shapes.at(si).toObject();
+            if (shape.value("kind").toString() == "pencil") {
+                QJsonArray points;
+                for (const auto& cv : shape.value("commands").toArray()) {
+                    const auto c = cv.toArray();
+                    if (c.size() >= 3) {
+                        points.append(QJsonObject { { "x", c.at(c.size() - 2) }, { "y", c.at(c.size() - 1) } });
+                    }
+                }
+                shape["rawPoints"] = points;
+                shapes[si] = shape;
+            }
+        }
+        source["anchors"] = anchors;
+        source["shapes"] = shapes;
+    }
+    return source.isEmpty() ? QString() : QString::fromUtf8(QJsonDocument(source).toJson(QJsonDocument::Compact));
+}
+
+QRectF AbstractNotationPaintView::drawingPopupBounds(QQuickItem* item) const
+{
+    if (!item) {
+        return QRectF();
+    }
+    const QPointF origin=item->mapToGlobal(QPointF());
+    QScreen* screen=QGuiApplication::screenAt(item->mapToGlobal(QPointF(item->width() / 2, item->height() / 2)).toPoint());
+    if (!screen) {
+        screen=QGuiApplication::primaryScreen();
+    }
+    if (!screen) {
+        return QRectF();
+    }
+    QRectF bounds=screen->availableGeometry();
+    // A narrow floating dock is a reference point, not a clipping rectangle.
+    // In an ordinary editor window, keep the popup inside its visible area.
+    if (auto window=item->window(); window && window->width() >= 520 && window->height() >= 320) {
+        const QRectF windowBounds(window->mapToGlobal(QPoint()), window->size());
+        const QRectF visible=bounds.intersected(windowBounds);
+        if (visible.width() >= 240 && visible.height() >= 160) {
+            bounds=visible;
+        }
+    }
+    return bounds.translated(-origin);
+}
+
+QVariantList AbstractNotationPaintView::drawingAnchorPoints(int subdivision) const
+{
+    auto n = notation();
+    QVariantList points = n ? engraving::SvgDrawing::anchors(n->elements()->msScore(), subdivision) : QVariantList();
+    for (QVariant& point : points) {
+        QVariantMap p = point.toMap();
+        p["scale"] = p.value("spatium").toDouble();
+        point = p;
+    }
+    return points;
+}
+
+QVariantMap AbstractNotationPaintView::drawingViewTransform() const
+{
+    const RectF visible = viewport();
+    double right = std::max(1.0, visible.right()), bottom = std::max(1.0, visible.bottom());
+    if (notation()) {
+        for (const auto page : notation()->elements()->msScore()->pages()) {
+            const auto box = page->canvasBoundingRect();
+            right = std::max(right, box.right());
+            bottom = std::max(bottom, box.bottom());
+        }
+    }
+    return { { "scale", currentScaling() }, { "x", m_matrix.dx() }, { "y", m_matrix.dy() },
+        { "width", right }, { "height", bottom }, { "left", visible.x() }, { "top", visible.y() },
+        { "visibleWidth", visible.width() }, { "visibleHeight", visible.height() } };
+}
+
+void AbstractNotationPaintView::setDrawingMode(bool active)
+{
+    if (m_drawingMode == active) {
+        return;
+    }
+    if (active && notationInteraction()) {
+        notationInteraction()->noteInput()->endNoteInput();
+    }
+    m_drawingMode = active;
+    if (notation()) {
+        engraving::SvgDrawing::setEditing(notation()->elements()->msScore(), active);
+        scheduleRedraw();
+    }
+}
+
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : muse::uicomponents::QuickPaintedView(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -54,6 +451,7 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
     connect(this, &QQuickPaintedItem::widthChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
+    connect(this, &AbstractNotationPaintView::viewportChanged, this, &AbstractNotationPaintView::drawingViewportChanged);
 
     connect(this, &AbstractNotationPaintView::horizontalScrollChanged, [this]() {
         m_previousHorizontalScrollPosition = startHorizontalScrollPosition();
@@ -100,10 +498,27 @@ void AbstractNotationPaintView::load()
         dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
             scheduleRedraw();
         });
+        dispatcher()->reg(this, "drawing-insert-character", [this](const ActionData& args) {
+            if (!m_drawingMode || !isMainView() || args.count() < 2) {
+                return;
+            }
+            emit drawingCharacterReady(QString::fromStdString(args.arg<std::string>(0)),
+                                       QString::fromStdString(args.arg<std::string>(1)));
+        });
     }
 
     m_inputController->setReadonly(m_readonly);
     m_inputController->init();
+    dispatcher()->preDispatch().onReceive(this, [this](const ActionCode& code) {
+        if (code.rfind("file-save", 0) == 0 || code == "file-close" || code == "quit"
+            || code == "file-export" || code == "parts" || code == "print") {
+            emit drawingCommitRequested();
+        }
+        if (m_drawingMode && (code.rfind("note-input", 0) == 0 || code.rfind("pad-", 0) == 0
+                              || code == "toggle-insert-mode")) {
+            emit drawingModeExitRequested();
+        }
+    });
 
     onNotationSetup();
 
@@ -258,6 +673,8 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         updateLoopMarkers();
         updateShadowNoteVisibility();
         scheduleRedraw();
+        emit drawingLayoutChanged();
+        emit drawingViewportChanged();
     });
 
     onNoteInputStateChanged();
@@ -272,6 +689,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     interaction->noteInput()->noteInputStarted().onReceive(this, [this](bool focusNotation) {
+        emit drawingModeExitRequested();
         if (focusNotation) {
             emit activeFocusRequested();
         }
@@ -286,6 +704,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     interaction->textEditingStarted().onNotify(this, [this]() {
+        emit drawingModeExitRequested();
         setFlag(ItemAcceptsInputMethod, true);
         setFocus(false); // Remove focus once so that the IME reloads the state
         forceFocusIn();
@@ -365,6 +784,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged();
+    emit drawingLayoutChanged();
 }
 
 void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
@@ -662,6 +1082,11 @@ bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementTyp
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
+    static const bool profileNavigation = qEnvironmentVariableIsSet("MUSEDRAW_PROFILE_NAVIGATION");
+    QElapsedTimer navigationTimer;
+    if (profileNavigation) {
+        navigationTimer.start();
+    }
 
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
     rect = correctDrawRect(rect);
@@ -683,6 +1108,15 @@ void AbstractNotationPaintView::paint(QPainter* qp)
 
     bool isPrinting = publishMode() || m_inputController->readonly();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
+    if (profileNavigation) {
+        static QElapsedTimer lastReport;
+        const auto elapsed = navigationTimer.elapsed();
+        if (elapsed >= 32 && (!lastReport.isValid() || lastReport.elapsed() >= 1000)) {
+            LOGI() << "[MuseDraw navigation] scorePaintMs=" << elapsed
+                   << " drawingMode=" << m_drawingMode << " printing=" << isPrinting;
+            lastReport.start();
+        }
+    }
 
     const ui::UiContext& uiCtx = uiContextResolver()->currentUiContext();
     const bool isOnNotationPage = uiCtx == ui::UiCtxProjectOpened || uiCtx == ui::UiCtxProjectFocused;
@@ -1403,7 +1837,20 @@ void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 
 void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
+    if (m_notation == notation) {
+        return;
+    }
+    emit drawingScoreAboutToChange();
+    if (m_notation) {
+        // Images hidden by the editor belong to the old tab. Restore their
+        // normal painting state before loading another score/individual part.
+        engraving::SvgDrawing::setEditing(m_notation->elements()->msScore(), false);
+    }
     m_notation = notation;
+    if (m_notation) {
+        engraving::SvgDrawing::setEditing(m_notation->elements()->msScore(), m_drawingMode);
+    }
+    emit drawingScoreChanged();
 
     if (m_loadCalled) {
         m_continuousPanel->setNotation(m_notation);

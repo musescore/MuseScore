@@ -88,3 +88,6 @@ qt_add_qml_module(playback_qml
 )
 
 fixup_qml_module_dependencies(playback_qml)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(playback_qml PROPERTIES UNITY_BUILD OFF)

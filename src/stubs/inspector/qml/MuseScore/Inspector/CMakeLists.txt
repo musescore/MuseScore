@@ -31,3 +31,6 @@ qt_add_qml_module(inspector_qml
 )
 
 fixup_qml_module_dependencies(inspector_qml)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(inspector_qml PROPERTIES UNITY_BUILD OFF)

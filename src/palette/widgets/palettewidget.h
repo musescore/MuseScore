@@ -81,6 +81,7 @@ class PaletteWidget : public QWidget, public muse::async::Asyncable, public muse
 
 public:
     PaletteWidget(QWidget* parent = nullptr);
+    bool captureDrawingSymbol = false;
 
     void setPalette(PalettePtr palette);
 
@@ -179,6 +180,7 @@ public:
     void setPaintOptions(const PaintOptions& options);
 
 signals:
+    void drawingSymbolActivated(mu::engraving::EngravingItem* element);
     void changed();
     void boxClicked(int index);
     void selectedChanged(int index, int previous);

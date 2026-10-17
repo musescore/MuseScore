@@ -26,6 +26,11 @@
 #include "dom/textlinebase.h"
 #include "dom/harmony.h"
 #include "dom/chord.h"
+#include "dom/score.h"
+#include "dom/measure.h"
+#include "dom/segment.h"
+#include "dom/page.h"
+#include "dom/svgdrawing.h"
 
 #include "tdraw.h"
 #include "tlayout.h"
@@ -49,6 +54,24 @@ using namespace mu::engraving::rendering::score;
 void ScoreRenderer::layoutScore(Score* score, const Fraction& st, const Fraction& et) const
 {
     ScoreLayout::layoutRange(score, st, et);
+#ifndef NO_QT_SUPPORT
+    // Reflow all fragments after the affected systems have their final widths.
+    bool drawingsChanged = false;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* s = m->first(); s && s->measure() == m; s = s->next()) {
+            for (EngravingItem* e : s->annotations()) {
+                if (e->isImage() && !toImage(e)->drawingPart().empty()) {
+                    drawingsChanged |= SvgDrawing::layout(toImage(e), toImage(e)->mutldata());
+                }
+            }
+        }
+    }
+    if (drawingsChanged) {
+        for (Page* page : score->pages()) {
+            page->invalidateBspTree();
+        }
+    }
+#endif
 }
 
 void ScoreRenderer::layoutHeadersFooters(Score* score) const

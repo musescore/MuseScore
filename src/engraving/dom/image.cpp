@@ -79,6 +79,8 @@ Image::Image(const Image& img)
     m_dirty           = img.m_dirty;
     m_storeItem       = img.m_storeItem;
     m_sizeIsSpatium   = img.m_sizeIsSpatium;
+    m_drawingData     = img.m_drawingData;
+    m_drawingPart     = img.m_drawingPart;
     if (m_storeItem) {
         m_storeItem->reference(this);
     }
@@ -102,6 +104,34 @@ Image::~Image()
     if (m_imageType == ImageType::SVG) {
         delete m_svgDoc;
     }
+}
+
+void Image::setDrawingSvg(const std::string& svg)
+{
+    if (svg == m_lastDrawingSvg || m_imageType != ImageType::SVG) {
+        return;
+    }
+    delete m_svgDoc;
+    m_svgDoc = new SvgRenderer(muse::ByteArray(reinterpret_cast<const uint8_t*>(svg.data()), svg.size()));
+    m_lastDrawingSvg = svg;
+    m_dirty = true;
+}
+
+void Image::updateDrawingStore()
+{
+    if (m_lastDrawingSvg.empty()) {
+        return;
+    }
+    const muse::ByteArray bytes(reinterpret_cast<const uint8_t*>(m_lastDrawingSvg.data()), m_lastDrawingSvg.size());
+    ImageStoreItem* snapshot = imageStore.add("drawing.svg", bytes);
+    if (snapshot == m_storeItem) {
+        return;
+    }
+    if (m_storeItem) {
+        m_storeItem->dereference(this);
+    }
+    m_storeItem = snapshot;
+    m_storeItem->reference(this);
 }
 
 //---------------------------------------------------------

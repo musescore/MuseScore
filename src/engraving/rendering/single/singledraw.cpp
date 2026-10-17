@@ -1839,7 +1839,12 @@ void SingleDraw::draw(const Image* item, Painter* painter, const PaintOptions&)
         if (!item->svgRenderer()) {
             emptyImage = true;
         } else {
+            painter->save();
+            if (!item->drawingPart().empty()) {
+                painter->setClipRect(ldata->bbox());
+            }
             item->svgRenderer()->render(painter, ldata->bbox());
+            painter->restore();
         }
     } else if (item->imageType() == ImageType::RASTER) {
         if (item->rasterImage() == nullptr) {

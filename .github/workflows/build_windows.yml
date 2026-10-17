@@ -50,7 +50,7 @@ on:
 
 jobs:
   windows_x64:
-    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x64')
+    if: inputs.platforms == '' || contains(inputs.platforms, 'windows_x64')
     runs-on: windows-2025
     steps:
     - name: Cancel Previous Runs
@@ -196,9 +196,9 @@ jobs:
     - name: Package
       shell: cmd
       run: |
-        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
-        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="''" )
-        IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_MU4_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_MU4_GUID }} )
+        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="" )
+        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="" )
+        SET GUID=9F230B12-44F1-4BCB-9C59-7376D3C940DA
         buildscripts\ci\windows\package.bat --signsecret %S_S% --signkey %S_K% --guid %GUID%
     - name: Checksum
       run: |
@@ -231,6 +231,7 @@ jobs:
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
+        retention-days: 1
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
@@ -248,10 +249,7 @@ jobs:
 
 
   windows_portable:
-    # Disable on pull_request
-    if: |
-      github.event_name != 'pull_request' &&
-      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable'))
+    if: inputs.platforms == '' || contains(inputs.platforms, 'windows_portable')
     runs-on: windows-2025
     steps:
     - name: Cancel Previous Runs
@@ -363,8 +361,8 @@ jobs:
     - name: Package
       shell: cmd
       run: |
-        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
-        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="''" )
+        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="" )
+        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="" )
         buildscripts\ci\windows\package.bat --portable ON  --signsecret %S_S% --signkey %S_K%
     - name: Checksum
       run: |
@@ -379,6 +377,7 @@ jobs:
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
+        retention-days: 1
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
@@ -403,6 +402,6 @@ jobs:
   #   - name: Sign test
   #     shell: cmd
   #     run: |
-  #       IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
+  #       IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="" )
   #       IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_P="''" )
   #       buildscripts\ci\windows\sign_test.bat --secret %S_S% --key %S_K%

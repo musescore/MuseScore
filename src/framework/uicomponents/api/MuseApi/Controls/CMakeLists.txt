@@ -112,3 +112,6 @@ qt_add_qml_module(muse_uicomponents_qmlapi
 )
 
 fixup_qml_module_dependencies(muse_uicomponents_qmlapi)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_uicomponents_qmlapi PROPERTIES UNITY_BUILD OFF)

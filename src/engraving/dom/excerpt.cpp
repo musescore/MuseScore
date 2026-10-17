@@ -54,6 +54,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+#include "svgdrawing.h"
 #include "text.h"
 #include "textline.h"
 #include "tie.h"
@@ -945,7 +946,18 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                     if (e->generated() || e->excludeFromOtherParts()) {
                         continue;
                     }
-                    if ((e->track() == srcTrack && strack != muse::nidx && !e->systemFlag())
+                    bool copyStaffAnnotation=e->track() == srcTrack;
+#ifndef NO_QT_SUPPORT
+                    if (e->isImage() && !toImage(e)->drawingPart().empty()) {
+                        // A drawing with anchors on multiple staves belongs to
+                        // every represented part, once per destination score.
+                        const auto sourceStaff=SvgDrawing::excerptSourceStaff(toImage(e), sourceStavesIndexes);
+                        if (sourceStaff != muse::nidx) {
+                            copyStaffAnnotation=srcTrack == sourceStaff * VOICES;
+                        }
+                    }
+#endif
+                    if ((copyStaffAnnotation && strack != muse::nidx && !e->systemFlag())
                         || (e->systemFlag() && srcTrack == 0 && e->track() == srcTrack)) {
                         EngravingItem* ne = e->linkedClone();
                         processLinkedClone(ne, score, strack);

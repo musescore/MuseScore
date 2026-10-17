@@ -28,10 +28,15 @@ else()
     set(MAYBE_BRAILLE_QML)
 endif()
 
+set_source_files_properties(DrawingSession.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 qt_add_qml_module(notationscene_qml
     URI MuseScore.NotationScene
     VERSION 1.0
     SOURCES
+        drawingpanelmenumodel.cpp
+        drawingpanelmenumodel.h
+        drawingpathcollector.h
         abstractelementpopupmodel.cpp
         abstractelementpopupmodel.h
         abstractnotationpaintview.cpp
@@ -159,6 +164,15 @@ qt_add_qml_module(notationscene_qml
         timelineview.h
 
     QML_FILES
+        DrawingSession.qml
+        DrawingOverlay.qml
+        NativeDrawingSettings.qml
+        NativeDrawingTextPopup.qml
+        NativeDrawingTools.qml
+        NativeDrawingIconButton.qml
+        drawing/ui/InfiniteSlider.qml
+        drawing/ui/DrawingCanvas.qml
+        drawing/ui/DrawingTools.qml
         AbstractElementPopup.qml
         ConcertPitchControl.qml
         EditGridSizeDialog.qml
@@ -240,6 +254,11 @@ qt_add_qml_module(notationscene_qml
         ZoomControl.qml
 
     RESOURCES
+        drawing/core/Reflow.js
+        drawing/core/Editing.js
+        drawing/core/Vector.js
+        drawing/core/SvgAsset.js
+        drawing/core/Painting.js
         styledialog/accidentalImages/followOffset-OFF.png
         styledialog/accidentalImages/followOffset-ON.png
         styledialog/accidentalImages/octaveOffset-OFF.png
@@ -301,8 +320,12 @@ target_include_directories(notationscene_qml PRIVATE
 
 target_link_libraries(notationscene_qml PRIVATE
     muse::uicomponents_qml
+    Qt::Svg
 )
 
 if(MUE_BUILD_NOTATIONSCENE_TESTS)
     add_subdirectory(tests)
 endif()
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(notationscene_qml PROPERTIES UNITY_BUILD OFF)

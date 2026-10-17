@@ -47,3 +47,6 @@ if (OS_IS_MAC)
     # Necessary for the auto-generated sources
     target_include_directories(muse_shortcuts_qml PRIVATE platform/macos)
 endif(OS_IS_MAC)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(muse_shortcuts_qml PROPERTIES UNITY_BUILD OFF)

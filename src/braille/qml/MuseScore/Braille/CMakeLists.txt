@@ -14,3 +14,6 @@ qt_add_qml_module(braille_qml
 )
 
 fixup_qml_module_dependencies(braille_qml)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(braille_qml PROPERTIES UNITY_BUILD OFF)

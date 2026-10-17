@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "notationinteraction.h"
+#ifndef NO_QT_SUPPORT
+#include "engraving/dom/svgdrawing.h"
+#endif
 
 #include "log.h"
 
@@ -5192,8 +5195,16 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     options.needDeselectAll = false;
     options.cloneBoxToAllParts = boxType != BoxType::Fret;
 
-    for (int i = 0; i < count; ++i) {
-        score()->insertMeasure(elementType, beforeBox, options);
+    {
+        // Capture the old grid once and adapt drawings after the entire batch,
+        // before apply() closes the existing undo transaction.
+#ifndef NO_QT_SUPPORT
+        const auto drawings = boxType == BoxType::Measure && count > 1
+                              ? mu::engraving::SvgDrawing::batchMeasureInsertion(score()) : nullptr;
+#endif
+        for (int i = 0; i < count; ++i) {
+            score()->insertMeasure(elementType, beforeBox, options);
+        }
     }
 
     apply();

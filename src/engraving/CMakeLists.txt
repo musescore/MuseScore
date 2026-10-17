@@ -416,6 +416,12 @@ target_include_directories(engraving PRIVATE
 target_link_libraries(engraving PRIVATE muse::draw)
 
 if (MUSE_QT_SUPPORT)
+    target_sources(engraving PRIVATE dom/svgdrawing.cpp dom/svgdrawing.h)
+    # Keep this frequently edited native extension as a direct compiler input.
+    # Some MSVC/Ninja include scans miss it inside generated unity sources,
+    # silently reusing old code and leaving new API symbols unresolved.
+    set_source_files_properties(dom/svgdrawing.cpp infrastructure/eidregister.cpp rw/write/twrite.cpp
+        PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
     target_link_libraries(engraving PRIVATE Qt::Quick)
 endif()
 

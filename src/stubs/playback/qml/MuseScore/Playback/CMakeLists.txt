@@ -33,3 +33,6 @@ qt_add_qml_module(playback_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
 )
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(playback_qml PROPERTIES UNITY_BUILD OFF)

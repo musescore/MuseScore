@@ -116,9 +116,9 @@ int main(int argc, char** argv)
 // Can't use MUSE_APP_TITLE until next major release, because this "application name" is used to determine
 // where user settings are stored. Changing it would result in all user settings being lost.
 #ifdef MUSE_APP_UNSTABLE
-    QCoreApplication::setApplicationName("MuseScore4Development");
+    QCoreApplication::setApplicationName("MuseScoreDrawingTest");
 #else
-    QCoreApplication::setApplicationName("MuseScore4");
+    QCoreApplication::setApplicationName("MuseScoreDrawingTest");
 #endif
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");

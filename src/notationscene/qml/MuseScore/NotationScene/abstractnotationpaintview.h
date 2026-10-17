@@ -22,6 +22,8 @@
 #pragma once
 
 #include <QTimer>
+#include <QUrl>
+#include <QVariantList>
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
@@ -62,6 +64,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(qreal verticalScrollbarSize READ verticalScrollbarSize NOTIFY verticalScrollChanged)
 
     Q_PROPERTY(QVariant matrix READ matrix NOTIFY matrixChanged)
+    Q_PROPERTY(QVariantMap drawingViewTransform READ drawingViewTransform NOTIFY drawingViewportChanged)
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
@@ -86,6 +89,24 @@ public:
     ~AbstractNotationPaintView() override;
 
     Q_INVOKABLE void load();
+
+    Q_INVOKABLE QString insertSvgDrawing(const QString& document, const QString& mode, const QRectF& bounds);
+    Q_INVOKABLE QString selectedSvgDrawing() const;
+    Q_INVOKABLE QString nativeDrawingDocument() const;
+    Q_INVOKABLE QVariantList nativeDrawingFragments() const;
+    Q_INVOKABLE QVariantList previewNativeDrawingFragments(const QString& document) const;
+    Q_INVOKABLE QString syncNativeDrawingDocument(const QString& document);
+    Q_INVOKABLE void drawingUndo(bool redo);
+    Q_INVOKABLE void openDrawingCharacters();
+    Q_INVOKABLE bool drawingSvgContains(const QString& svg, const QVariantList& matrix, const QPointF& point, qreal tolerance) const;
+    Q_INVOKABLE bool drawingSvgIntersects(const QString& svg, const QVariantList& matrix, const QVariantList& polygon) const;
+    Q_INVOKABLE QString drawingSvgPaths(const QString& svg, const QVariantList& matrix) const;
+    Q_INVOKABLE QVariantList drawingAnchorPoints(int subdivision) const;
+    Q_INVOKABLE QRectF drawingPopupBounds(QQuickItem* item) const;
+    Q_INVOKABLE QString saveSvgDrawing(const QString& svg, const QString& document, const QUrl& file) const;
+    Q_INVOKABLE QString loadSvgDrawing(const QUrl& file) const;
+    Q_INVOKABLE void setDrawingMode(bool active);
+    QVariantMap drawingViewTransform() const;
 
     Q_INVOKABLE void scrollHorizontal(qreal position);
     Q_INVOKABLE void scrollVertical(qreal position);
@@ -172,6 +193,13 @@ signals:
 
     void backgroundColorChanged(QColor color);
     void matrixChanged();
+    void drawingViewportChanged();
+    void drawingLayoutChanged();
+    void drawingModeExitRequested();
+    void drawingScoreAboutToChange();
+    void drawingScoreChanged();
+    void drawingCommitRequested();
+    void drawingCharacterReady(const QString& text, const QString& family);
     void viewportChanged();
     void publishModeChanged();
 
@@ -282,6 +310,7 @@ private:
     muse::draw::Transform m_matrix;
 
     bool m_loadCalled = false;
+    bool m_drawingMode = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;

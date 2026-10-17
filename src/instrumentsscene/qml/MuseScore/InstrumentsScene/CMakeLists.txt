@@ -76,3 +76,6 @@ fixup_qml_module_dependencies(instrumentsscene_qml)
 
 # Necessary for the auto-generated sources
 target_include_directories(instrumentsscene_qml PRIVATE internal)
+
+# Compile Qt generated caches separately to avoid generic Type collisions.
+set_target_properties(instrumentsscene_qml PROPERTIES UNITY_BUILD OFF)

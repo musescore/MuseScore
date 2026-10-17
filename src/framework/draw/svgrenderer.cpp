@@ -20,9 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "svgrenderer.h"
+#include <algorithm>
+#include <cmath>
 
 #ifndef DRAW_NO_QSVGRENDER
 #include <QPainter>
+#include <QImage>
+#include <QCache>
 #include <QSvgRenderer>
 
 #include "internal/qpainterprovider.h"
@@ -31,6 +35,14 @@
 #include "log.h"
 
 using namespace muse::draw;
+#ifndef DRAW_NO_QSVGRENDER
+static QCache<const SvgRenderer*, QImage>& drawingScreenCache()
+{
+    static QCache<const SvgRenderer*, QImage> cache(64 * 1024); // KiB, across all pages
+    return cache;
+}
+
+#endif
 
 //! NOTE Perhaps in the future we need to add something like ISvgRenderer
 
@@ -48,6 +60,7 @@ SvgRenderer::~SvgRenderer()
 {
 #ifndef DRAW_NO_QSVGRENDER
     delete m_qSvgRenderer;
+    drawingScreenCache().remove(this);
 #endif
 }
 
@@ -73,5 +86,37 @@ void SvgRenderer::render(Painter* painter, const RectF& rect)
     NOT_SUPPORTED;
     UNUSED(painter);
     UNUSED(rect);
+#endif
+}
+
+void SvgRenderer::renderCached(Painter* painter, const RectF& rect)
+{
+#ifndef DRAW_NO_QSVGRENDER
+    auto provider = std::dynamic_pointer_cast<QPainterProvider>(painter->provider());
+    if (!provider || !rect.isValid()) {
+        render(painter, rect);
+        return;
+    }
+    QPainter* target = provider->qpainter();
+    const auto transform = target->deviceTransform();
+    const double sx = std::hypot(transform.m11(), transform.m12());
+    const double sy = std::hypot(transform.m21(), transform.m22());
+    // One bounded screen texture per drawing fragment. Printing remains vector.
+    const double limit = std::min(1.0, 2048.0 / std::max(1.0, std::max(rect.width() * sx, rect.height() * sy)));
+    const QSize size(std::max(1, int(std::ceil(rect.width() * sx * limit))),
+                     std::max(1, int(std::ceil(rect.height() * sy * limit))));
+    QImage* image = drawingScreenCache().object(this);
+    if (!image || image->size() != size) {
+        image = new QImage(size, QImage::Format_ARGB32_Premultiplied);
+        image->fill(Qt::transparent);
+        QPainter buffer(image);
+        buffer.setRenderHint(QPainter::Antialiasing);
+        m_qSvgRenderer->render(&buffer, QRectF(QPointF(0, 0), QSizeF(size)));
+        buffer.end();
+        drawingScreenCache().insert(this, image, std::max(1, int(image->sizeInBytes() / 1024)));
+    }
+    target->drawImage(rect.toQRectF(), *image);
+#else
+    render(painter, rect);
 #endif
 }

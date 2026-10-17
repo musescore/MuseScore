@@ -50,6 +50,7 @@
 #include "staff.h"
 #include "tempo.h"
 #include "timesig.h"
+#include "svgdrawing.h"
 
 #include "log.h"
 
@@ -515,6 +516,12 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             ? beforeMeasure->prevMeasure()->tick()
                             : tick)
           .nominal();
+
+#ifndef NO_QT_SUPPORT
+    // Preserve crossing drawings before any measure ticks or layout change.
+    // The guard completes reanchoring inside this insertion's undo command.
+    const auto drawingInsertion = SvgDrawing::prepareMeasureInsertion(this, tick, currentTimeSig);
+#endif
 
     Measure* masterMeasure = nullptr;
     Fraction ticks = { 0, 1 };
