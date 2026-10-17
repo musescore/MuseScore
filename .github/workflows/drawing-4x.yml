@@ -51,5 +51,5 @@ jobs:
     uses: ./.github/workflows/build_windows.yml
     with:
       platforms: windows_x64 windows_portable
-      build_mode: devel
+      build_mode: testing
       publish: 'off'

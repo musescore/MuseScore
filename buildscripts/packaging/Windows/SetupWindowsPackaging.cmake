@@ -6,7 +6,7 @@ endif()
 
 include(InstallRequiredSystemLibraries)
 
-set(CPACK_PACKAGE_NAME ${MUSE_APP_NAME})
+set(CPACK_PACKAGE_NAME "MuseScore DRAWING TEST")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
 set(CPACK_PACKAGE_VENDOR "MuseScore Limited")
 set(CPACK_PACKAGE_CONTACT "https://musescore.org")
@@ -38,7 +38,7 @@ if(MUSE_APP_UNSTABLE)
     endif()
 endif(MUSE_APP_UNSTABLE)
 
-set(CPACK_PACKAGE_FILE_NAME "${MUSE_APP_NAME}-${MUSE_APP_VERSION}${git_date_string}")
+set(CPACK_PACKAGE_FILE_NAME "MuseScore-DRAWING-TEST-${MUSE_APP_VERSION}${git_date_string}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${MUSE_APP_NAME_VERSION})
 
 set(MUSESCORE_EXECUTABLE_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})

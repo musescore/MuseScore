@@ -198,7 +198,7 @@ jobs:
       run: |
         IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
         IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="''" )
-        IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_MU4_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_MU4_GUID }} )
+        SET GUID=9F230B12-44F1-4BCB-9C59-7376D3C940DA
         buildscripts\ci\windows\package.bat --signsecret %S_S% --signkey %S_K% --guid %GUID%
     - name: Checksum
       run: |
