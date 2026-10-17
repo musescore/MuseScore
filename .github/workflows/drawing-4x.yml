@@ -50,6 +50,6 @@ jobs:
     needs: editor_checks
     uses: ./.github/workflows/build_windows.yml
     with:
-      platforms: windows_portable
+      platforms: windows_x64 windows_portable
       build_mode: devel
       publish: 'off'
