@@ -43,6 +43,8 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
     Q_PROPERTY(bool isBraillePanelVisible READ isBraillePanelVisible NOTIFY isBraillePanelVisibleChanged)
+    Q_PROPERTY(QString dockedExtension READ dockedExtension NOTIFY dockedExtensionChanged)
+    Q_PROPERTY(QString dockedExtensionAction READ dockedExtensionAction NOTIFY dockedExtensionChanged)
 
     QML_ELEMENT
 
@@ -59,6 +61,9 @@ public:
 
     bool isNavigatorVisible() const;
     bool isBraillePanelVisible() const;
+    QString dockedExtension() const { return m_dockedExtension; }
+    QString dockedExtensionAction() const { return m_dockedExtensionAction; }
+    Q_INVOKABLE void closeDockedExtension();
 
     Q_INVOKABLE void init();
 
@@ -82,6 +87,8 @@ public:
     Q_INVOKABLE QString statusBarName() const;
 
 signals:
+    void dockedExtensionAboutToClose();
+    void dockedExtensionChanged();
     void isNavigatorVisibleChanged();
     void isBraillePanelVisibleChanged();
 
@@ -97,6 +104,8 @@ private:
     void doUpdateExtensionsToolBarVisibility();
 
     bool m_inited = false;
+    QString m_dockedExtension;
+    QString m_dockedExtensionAction;
     bool m_updatePercussionPanelVisibilityScheduled = false;
     bool m_updateExtensionsToolBarVisibilityScheduled = false;
 };
