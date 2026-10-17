@@ -298,7 +298,16 @@ DockPage {
 
                     ExtensionBuilder {
                         id: builder
-                        onCloseRequested: Qt.callLater(root.pageModel.closeDockedExtension)
+                        onCloseRequested: {
+                            const extension = root.pageModel.dockedExtension
+                            const action = root.pageModel.dockedExtensionAction
+                            Qt.callLater(function() {
+                                if (root.pageModel.dockedExtension === extension
+                                    && root.pageModel.dockedExtensionAction === action) {
+                                    root.pageModel.closeDockedExtension()
+                                }
+                            })
+                        }
                     }
 
                     Connections {
