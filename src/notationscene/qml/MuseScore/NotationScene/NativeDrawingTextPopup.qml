@@ -13,12 +13,14 @@ StyledPopupView {
     property real availableWidth:640
     property var boundsProvider:null
     property rect availableRect:Qt.rect(-200,-300,800,600)
+    property real dragX:0
+    property real dragY:0
     anchorItem:null
-    x:Math.max(availableRect.x+12,Math.min(parent.width/2-width/2,availableRect.x+availableRect.width-width-12))
-    y:Math.max(availableRect.y+12,Math.min(parent.height,availableRect.y+availableRect.height-height-12))
+    x:Math.max(availableRect.x+12,Math.min(parent.width/2-width/2+dragX,availableRect.x+availableRect.width-width-12))
+    y:Math.max(availableRect.y+12,Math.min((availableRect.y+availableRect.height-parent.height>=height?parent.height:-height)+dragY,availableRect.y+availableRect.height-height-12))
     contentWidth:Math.max(280,Math.min(420,availableWidth-48))
-    contentHeight:formatting.implicitHeight+42
-    placementPolicies:availableRect.y+availableRect.height-parent.height>=height?PopupView.PreferBelow:PopupView.PreferAbove
+    contentHeight:formatting.implicitHeight+64
+    placementPolicies:PopupView.ManualPosition
     openPolicies:PopupView.NoActivateFocus
     focusPolicies:PopupView.DefaultFocus & ~PopupView.ClickFocus
     closePolicies:PopupView.NoAutoClose
@@ -57,6 +59,17 @@ StyledPopupView {
     NavigationPanel{id:formatNav;name:"DrawingTextFormatting";direction:NavigationPanel.Vertical;section:root.navigationSection}
     ColumnLayout {
         width:root.contentWidth;spacing:8
+        Rectangle {
+            Layout.fillWidth:true;Layout.preferredHeight:14;color:"transparent"
+            Rectangle {anchors.centerIn:parent;width:40;height:3;radius:1.5;color:ui.theme.fontPrimaryColor;opacity:0.45}
+            MouseArea {
+                anchors.fill:parent;cursorShape:Qt.SizeAllCursor
+                property point origin
+                property point offset
+                onPressed:function(mouse){origin=mapToGlobal(mouse.x,mouse.y);offset=Qt.point(root.dragX,root.dragY)}
+                onPositionChanged:function(mouse){if(pressed){var p=mapToGlobal(mouse.x,mouse.y);root.dragX=offset.x+p.x-origin.x;root.dragY=offset.y+p.y-origin.y}}
+            }
+        }
         // This is the same formatting component used by TextStylePopup for
         // ordinary MuseScore text. Only irrelevant frame/style controls stay out.
         TextStyleFormatting {

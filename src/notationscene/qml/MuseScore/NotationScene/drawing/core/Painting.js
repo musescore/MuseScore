@@ -32,7 +32,91 @@ function projected(shape,p,tool,scale){
     }
     return p;
 }
+
+// Build bounded faces from actual segments. Open ends are never implicitly joined.
+// Work is restricted to a paint click, never navigation or pointer movement.
+function region(shape,x,y){
+    var segments=[],last=null,start=null;
+    var commands=shape.commands;
+    if(shape.paintRanges){commands=[];shape.paintRanges.forEach(function(r){if(!r.regionFill&&(r.style.stroke!=="none"||r.style.fill!=="none"))commands=commands.concat(shape.commands.slice(r.start,r.end));});}
+    function edge(a,b){if(Math.hypot(a.x-b.x,a.y-b.y)>1e-7)segments.push({a:a,b:b,cuts:[0,1]});}
+    commands.forEach(function(c){
+        if(c[0]==="M"){last={x:c[1],y:c[2]};start=last;}
+        else if(last&&c[0]==="C"){var a=last;for(var k=1;k<=32;k++){var b=V.curvePoint(a,c,k/32);edge(last,b);last=b;}}
+        else if(last&&c[0]==="L"){var b={x:c[1],y:c[2]};edge(last,b);last=b;}
+        else if(last&&c[0]==="Z"){edge(last,start);last=start;}
+    });
+    if(!segments.length||segments.length>12000)return null;
+    var ordered=segments.slice().sort(function(a,b){return Math.min(a.a.x,a.b.x)-Math.min(b.a.x,b.b.x);}),checks=0;
+    for(var i=0;i<ordered.length;i++)for(var j=i+1;j<ordered.length;j++){
+        var a=ordered[i],b=ordered[j];
+        if(Math.min(b.a.x,b.b.x)>Math.max(a.a.x,a.b.x)+1e-7)break;
+        if(Math.max(a.a.y,a.b.y)<Math.min(b.a.y,b.b.y)||Math.max(b.a.y,b.b.y)<Math.min(a.a.y,a.b.y))continue;
+        if(++checks>250000)return null;
+        var dx=a.b.x-a.a.x,dy=a.b.y-a.a.y,ex=b.b.x-b.a.x,ey=b.b.y-b.a.y,det=dx*ey-dy*ex;
+        if(Math.abs(det)<1e-12)continue;
+        var px=b.a.x-a.a.x,py=b.a.y-a.a.y,t=(px*ey-py*ex)/det,u=(px*dy-py*dx)/det;
+        if(t>=-1e-8&&t<=1+1e-8&&u>=-1e-8&&u<=1+1e-8){a.cuts.push(Math.max(0,Math.min(1,t)));b.cuts.push(Math.max(0,Math.min(1,u)));}
+    }
+    var vertices=[],lookup={},edges={},visited={};
+    function vertex(p){var key=Math.round(p.x*100000)+":"+Math.round(p.y*100000);if(lookup[key]!==undefined)return lookup[key];lookup[key]=vertices.length;vertices.push({x:p.x,y:p.y,links:[]});return vertices.length-1;}
+    segments.forEach(function(s){s.cuts.sort(function(a,b){return a-b;});for(var k=1;k<s.cuts.length;k++){
+        if(s.cuts[k]-s.cuts[k-1]<1e-8)continue;
+        var a=vertex(V.blend(s.a,s.b,s.cuts[k-1])),b=vertex(V.blend(s.a,s.b,s.cuts[k]));if(a===b||edges[a+":"+b])continue;
+        edges[a+":"+b]=edges[b+":"+a]=true;vertices[a].links.push(b);vertices[b].links.push(a);
+    }});
+    vertices.forEach(function(v){v.links.sort(function(a,b){return Math.atan2(vertices[a].y-v.y,vertices[a].x-v.x)-Math.atan2(vertices[b].y-v.y,vertices[b].x-v.x);});});
+    var best=null,bestArea=Infinity,faces=[];
+    vertices.forEach(function(v,origin){v.links.forEach(function(next){
+        if(visited[origin+":"+next])return;
+        var polygon=[],a=origin,b=next,closed=false;
+        for(var n=0;n<=segments.length*8;n++){
+            if(visited[a+":"+b])break;visited[a+":"+b]=true;polygon.push(vertices[a]);
+            var links=vertices[b].links,pos=links.indexOf(a),c=links[(pos+links.length-1)%links.length];a=b;b=c;
+            if(a===origin&&b===next){closed=true;break;}
+        }
+        if(!closed||polygon.length<3)return;
+        var area=0,inside=false;
+        for(var k=0,l=polygon.length-1;k<polygon.length;l=k++){
+            var p=polygon[l],q=polygon[k];area+=p.x*q.y-q.x*p.y;
+            if((p.y>y)!==(q.y>y)&&x<(q.x-p.x)*(y-p.y)/(q.y-p.y)+p.x)inside=!inside;
+        }
+        if(area>1e-8)faces.push({polygon:polygon,area:area,inside:inside});
+        if(inside&&area>1e-8&&area<bestArea){bestArea=area;best=polygon;}
+    });});
+    if(!best)return null;
+    function contains(poly,p){var inside=false;for(var k=0,l=poly.length-1;k<poly.length;l=k++){var a=poly[l],b=poly[k];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)inside=!inside;}return inside;}
+    var holes=faces.filter(function(f){return !f.inside&&f.area<bestArea&&contains(best,f.polygon[0]);});
+    holes=holes.filter(function(f){return !holes.some(function(other){return other!==f&&other.area>f.area&&contains(other.polygon,f.polygon[0]);});});
+    var result=[];[best].concat(holes.map(function(f){return f.polygon;})).forEach(function(poly){result=result.concat(poly.map(function(p,i){return [i?"L":"M",p.x,p.y];}),[["Z"]]);});return result;
+}
+function prepare(shape,x,y,editor){
+    if(shape.kind==="text")return null;
+    if(shape.svgSource){
+        if(!editor||!editor.svgVectorize)return null;
+        var box=V.bounds([shape]);if(x<box.x||y<box.y||x>box.x+box.width||y>box.y+box.height)return null;
+        var converted=editor.svgVectorize(shape.svgSource,shape.svgMatrix);if(!converted)return null;
+        var paths=JSON.parse(converted);if(!paths.length)return null;
+        var asset=Object.assign({},shape),commands=shape.commands.slice();
+        var ranges=[{start:0,end:commands.length,style:V.style("none","none",0.001,1)}];
+        paths.forEach(function(path){var start=commands.length;commands=commands.concat(path.commands);ranges.push({start:start,end:commands.length,style:path.style,fillRule:path.fillRule});});
+        asset.commands=commands;asset.paintRanges=ranges;delete asset.svgSource;delete asset.svgMatrix;delete asset.paintSource;delete asset.paintChannels;
+        shape=asset;
+    }
+    var face=region(shape,x,y);if(!face)return null;
+    var out=Object.assign({},shape),ranges=(shape.paintRanges||[{start:0,end:shape.commands.length,style:shape.style,fillRule:shape.fillRule}]).slice();
+    // Repainting an existing face preserves its geometry and other faces.
+    for(var i=ranges.length-1;i>=0;i--){var r=ranges[i];if(r.regionFill&&V.insideFill({commands:shape.commands.slice(r.start,r.end)},x,y)){out.activePaintRange=i;return out;}}
+    out.commands=shape.commands.concat(face);
+    ranges.push({start:shape.commands.length,end:out.commands.length,regionFill:true,fillRule:"evenodd",style:V.style("none","none",0.001,shape.style.opacity)});
+    out.paintRanges=ranges;out.activePaintRange=ranges.length-1;return out;
+}
+
 function hit(editor,x,y){
+    if(channel(editor.tool)==="fill"){
+        for(var index=editor.shapes.length-1;index>=0;index--){if(prepare(editor.shapes[index],x,y,editor))return index;}
+        return -1;
+    }
     var result=V.hit(editor.shapes,x,y,6/Math.max(0.02,editor.viewScale),editor.svgHitTest,editor.nativeShapeHitTest);
     if(result>=0||channel(editor.tool)!=="fill")return result;
     for(var i=editor.shapes.length-1;i>=0;i--){var sh=editor.shapes[i];if(!sh.svgSource&&V.insideFill(sh,x,y))return i;}
@@ -53,7 +137,10 @@ function apply(shape,tool,colour,gradient){
     var out=Object.assign({},shape),target=channel(tool),gradientKey=key(tool);
     function styled(old){var style=Object.assign({},old);style[target]=colour;if(gradient)style[gradientKey]=gradient;else delete style[gradientKey];return style;}
     out.style=styled(shape.style);
-    if(shape.paintRanges)out.paintRanges=shape.paintRanges.map(function(range){return Object.assign({},range,{style:styled(range.style)});});
+    if(shape.paintRanges)out.paintRanges=shape.paintRanges.map(function(range,index){
+        var change=target==="fill"?index===shape.activePaintRange:!range.regionFill;
+        return change?Object.assign({},range,{style:styled(range.style)}):range;
+    });
     if(shape.svgSource){
         out.paintSource=shape.paintSource||shape.svgSource;
         out.paintChannels=Object.assign({},shape.paintChannels||{});out.paintChannels[target]=true;
@@ -69,7 +156,9 @@ function create(editor,shape,from,to){
 function applySet(editor,originals,indices,tool,colour,gradient,reference){
     var shapes=editor.shapes.slice(),from=gradient?position(reference,gradient.from):null,to=gradient?position(reference,gradient.to):null;
     indices.forEach(function(index){
-        var shape=originals[index],g=gradient?Object.assign({},gradient,{from:fraction(shape,from),to:fraction(shape,to)}):null;
+        var shape=originals[index];
+        if(channel(tool)==="fill"&&shape.activePaintRange===undefined)return;
+        var g=gradient?Object.assign({},gradient,{from:fraction(shape,from),to:fraction(shape,to)}):null;
         shapes[index]=apply(shape,tool,colour,g);
     });return shapes;
 }

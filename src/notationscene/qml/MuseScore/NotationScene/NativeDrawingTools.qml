@@ -97,6 +97,7 @@ Item {
         anchors.top:parent.top;anchors.topMargin:8;anchors.horizontalCenter:parent.horizontalCenter;spacing:6
         FlatButton {
             id:colourButton;width:40;height:44;transparent:true
+            property bool drawingToolTip:true
             toolTipTitle:qsTrc("drawing-tools","Colours");toolTipShortcut:"X"
             onClicked:{DrawingSession.setDrawingMode(true);root.openGroup("colors",colourButton)}
             Connections{target:colourButton.mouseArea;function onContainsMouseChanged(){settings.helpText=colourButton.mouseArea.containsMouse?root.toolHelp("colors"):""}}

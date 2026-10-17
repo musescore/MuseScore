@@ -9,7 +9,8 @@ FlatButton {
     readonly property bool hovered:mouseArea.containsMouse
     width:40;height:40
     transparent:!accentButton
-    toolTipShowLocked:true
+    property bool drawingToolTip:true
+    toolTipShowLocked:false
     iconFont:ui.theme.toolbarIconsFont
     navigation.name:"drawing-"+glyph
     navigation.accessible.name:toolTipTitle
@@ -30,9 +31,13 @@ FlatButton {
                     function line(x,y,u,v){c.beginPath();c.moveTo(x,y);c.lineTo(u,v);c.stroke()}
                     function dot(x,y){c.beginPath();c.arc(x,y,2.2,0,Math.PI*2);c.fill()}
                     function box(x,y){c.strokeRect(x-2.2,y-2.2,4.4,4.4)}
-                    if(glyph==="paint"||glyph.indexOf("paint-")===0){
+                    if(glyph==="paint-stroke"){
+                        c.lineWidth=3;line(8,29,30,10);c.lineWidth=1.5;line(10,10,19,10);line(10,10,10,19);box(30,29)
+                    }else if(glyph==="paint"||glyph.indexOf("paint-")===0){
                         c.beginPath();c.moveTo(10,19);c.lineTo(20,9);c.lineTo(30,19);c.lineTo(20,29);c.closePath();c.stroke();line(15,9,13,5);line(10,19,30,19)
                         c.beginPath();c.moveTo(31,23);c.quadraticCurveTo(25,31,31,32);c.quadraticCurveTo(37,31,31,23);c.fill()
+                    }else if(glyph==="gradient-stroke"){
+                        var stripe=c.createLinearGradient(8,28,32,12);stripe.addColorStop(0,ink);stripe.addColorStop(1,"transparent");c.strokeStyle=stripe;c.lineWidth=5;line(8,28,32,12);c.strokeStyle=ink;c.lineWidth=1.5;box(8,28);box(32,12)
                     }else if(glyph.indexOf("gradient-")===0){
                         c.strokeRect(8,10,24,20);var g=c.createLinearGradient(9,20,31,20);g.addColorStop(0,ink);g.addColorStop(1,"transparent");c.fillStyle=g;c.fillRect(9,11,22,18);c.fillStyle=ink;line(9,31,31,9);box(9,31);box(31,9)
                     }else if(glyph==="characters"){

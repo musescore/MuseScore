@@ -590,11 +590,13 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
         // Restoring docks can resize the Quick item while LayoutSaver still
         // suppresses onResize(). Reconcile the restored splitter with the real
         // viewport once initialization has settled, retaining splitter ratios.
-        QTimer::singleShot(0, this, [this, newPage]() {
+        for (int delay : {0, 120, 500}) QTimer::singleShot(delay, this, [this, newPage]() {
             if (m_currentPage != newPage || KDDockWidgets::LayoutSaver::restoreInProgress()) {
                 return;
             }
-            m_mainWindow->layoutWidget()->setLayoutSize(m_mainWindow->QWidgetAdapter::size());
+            adjustContentForAvailableSpace(newPage);
+            alignTopLevelToolBars(newPage);
+            m_mainWindow->layoutWidget()->setLayoutSize(QSize(qRound(width()), qRound(height())));
         });
     }
 

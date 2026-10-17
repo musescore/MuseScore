@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QCache>
+#include <QElapsedTimer>
 #include <cmath>
 #include <algorithm>
 #include <vector>
@@ -77,7 +78,7 @@ QString AbstractNotationPaintView::insertSvgDrawing(const QString& document, con
     }
     // The native overlay stores geometry in score canvas coordinates.
     const RectF logical(bounds.x(), bounds.y(), bounds.width(), bounds.height());
-    const QString result = engraving::SvgDrawing::insert(n->elements()->msScore(), document, mode, bounds, logical, true);
+    const QString result = engraving::SvgDrawing::insert(n->elements()->msScore(), document, mode, bounds, logical, true, true, false);
     scheduleRedraw();
     return result;
 }
@@ -1042,6 +1043,9 @@ bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementTyp
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
+    static const bool profileNavigation = qEnvironmentVariableIsSet("MUSEDRAW_PROFILE_NAVIGATION");
+    QElapsedTimer navigationTimer;
+    if (profileNavigation) navigationTimer.start();
 
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
     rect = correctDrawRect(rect);
@@ -1063,6 +1067,15 @@ void AbstractNotationPaintView::paint(QPainter* qp)
 
     bool isPrinting = publishMode() || m_inputController->readonly();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
+    if (profileNavigation) {
+        static QElapsedTimer lastReport;
+        const auto elapsed = navigationTimer.elapsed();
+        if (elapsed >= 32 && (!lastReport.isValid() || lastReport.elapsed() >= 1000)) {
+            LOGI() << "[MuseDraw navigation] scorePaintMs=" << elapsed
+                   << " drawingMode=" << m_drawingMode << " printing=" << isPrinting;
+            lastReport.start();
+        }
+    }
 
     const ui::UiContext& uiCtx = uiContextResolver()->currentUiContext();
     const bool isOnNotationPage = uiCtx == ui::UiCtxProjectOpened || uiCtx == ui::UiCtxProjectFocused;

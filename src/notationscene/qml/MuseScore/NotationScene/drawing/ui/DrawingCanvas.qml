@@ -68,7 +68,9 @@ Item {
         var indices=selectionIndices();if(!paintingTool||!indices.length)return
         var reference=shapes[selected],g=currentGradient
         if(Painting.gradientTool(tool)&&!g){var box=Vector.bounds(indices.map(function(index){return shapes[index]}));g=Painting.create(root,reference,{x:box.x,y:box.y+box.height/2},{x:box.x+box.width,y:box.y+box.height/2})}
-        gestureStarting();remember();shapes=Painting.applySet(root,shapes,indices,tool,strokeColor,g,reference);changed();gestureFinished()
+        gestureStarting();remember();var originals=shapes.slice()
+        if(Painting.channel(tool)==="fill")indices.forEach(function(index){var sh=originals[index],b=Vector.bounds([sh]);if(sh.activePaintRange===undefined)originals[index]=Painting.prepare(sh,b.x+b.width/2,b.y+b.height/2,root)||sh})
+        shapes=Painting.applySet(root,originals,indices,tool,strokeColor,g,reference);changed();gestureFinished()
     }
     readonly property bool interactionActive:input.dragging
     readonly property bool anchorEditingActive:drawingEnabled&&(["nodes","anchors","addnode","deletenode","join","unlink"].indexOf(tool)>=0||(selectionTool&&switchStaff&&input.dragging))
@@ -116,14 +118,14 @@ Item {
     // Navigation changes placement immediately; sharpen SVG textures once the
     // wheel settles instead of re-rasterizing every image on every wheel event.
     property real svgRasterScale:1
-    onViewScaleChanged:svgQualityTimer.restart()
+    onViewScaleChanged:if(drawingEnabled)svgQualityTimer.restart()
     Timer {id:svgQualityTimer;interval:140;onTriggered:root.svgRasterScale=root.viewScale}
     property bool nativeHistory:false
     signal nativeUndoRequested(bool redo)
     signal rhythmAnchorsRequested()
     readonly property real rasterScale:Math.min(Math.max(0.000001,viewScale),2,2048/Math.max(1,paintRegion.width,paintRegion.height))
     onPaintRegionChanged:requestPaint()
-    function requestPaint(){drawingSurface.requestPaint()}
+    function requestPaint(){if(drawingEnabled&&visible)drawingSurface.requestPaint()}
     onRasterScaleChanged:requestPaint()
     property string pointerMode:"dynamic"
     readonly property real effectiveStrokeWidth:Math.max(0.001,Math.min(1000000,
@@ -212,7 +214,7 @@ Item {
         if(index<0)return
         var content=inlineText.text,old=shapes[index],family=inlineText.font.family,size=inlineText.font.pixelSize,format={fontStyle:textFontStyle(),alignment:inlineText.horizontalAlignment}
         editingTextId="";editingTextOriginal=null
-        if(old.textContent!==content||old.textFont!==family||old.textSize!==size||(old.textFontStyle||0)!==format.fontStyle||(old.textAlignment||Text.AlignLeft)!==format.alignment){remember();Editing.replaceText(root,index,content,family,size,format)}
+        if((!old.tightGlyph&&/^(Leland|Bravura|Emmentaler|Gonville|MuseJazz|Petaluma)$/i.test(family))||old.textContent!==content||old.textFont!==family||old.textSize!==size||(old.textFontStyle||0)!==format.fontStyle||(old.textAlignment||Text.AlignLeft)!==format.alignment){remember();Editing.replaceText(root,index,content,family,size,format)}
         labelText=content;labelFont=family;labelSize=size
     }
     function cancelTextEditing(){editingTextId="";editingTextOriginal=null;forceActiveFocus()}
@@ -227,7 +229,8 @@ Item {
             inlineText.font.family=family;inlineText.forceActiveFocus();return
         }
         var box={x:x,y:y,width:labelSize*2,height:labelSize*1.6}
-        append(Editing.textBox(root,box));Editing.replaceText(root,selected,text,family,labelSize)
+        var characterBox=Editing.textBox(root,box);characterBox.tightGlyph=true
+        append(characterBox);Editing.replaceText(root,selected,text,family,labelSize)
         labelFont=family;beginTextEditing(selected)
     }
     TextMetrics {id:labelMetrics;font.family:"Arial"}
@@ -237,7 +240,7 @@ Item {
         labelMetrics.font.bold=!!(fontStyle&1);labelMetrics.font.italic=!!(fontStyle&2)
         measureText(text,size,family)
         var b=labelMetrics.tightBoundingRect
-        return {width:Math.max(labelMetrics.advanceWidth,b.x+b.width),left:Math.min(0,b.x),
+        return {inkX:b.x,inkY:b.y,inkWidth:b.width,inkHeight:b.height,width:Math.max(labelMetrics.advanceWidth,b.x+b.width),left:Math.min(0,b.x),
             ascent:Math.max(labelFontMetrics.ascent,-b.y),descent:Math.max(labelFontMetrics.descent,b.y+b.height),height:labelFontMetrics.height}
     }
     function mergeSelected(){Editing.merge(root)}
@@ -1184,7 +1187,7 @@ Item {
     }
     Timer {interval:16;repeat:true;running:input.dragging&&input.eraseDirty;onTriggered:input.flushEraser()}
     Repeater {
-        model:root.nativeFragments
+        model:root.drawingEnabled?root.nativeFragments:[]
         delegate:Image {
             required property var modelData
             readonly property var entry:root.shapeLookup[modelData.id]
@@ -1193,7 +1196,8 @@ Item {
                 &&x+width>=root.paintRegion.x&&x<=root.paintRegion.x+root.paintRegion.width
                 &&y+height>=root.paintRegion.y&&y<=root.paintRegion.y+root.paintRegion.height
             x:modelData.x;y:modelData.y;width:modelData.width;height:modelData.height
-            source:visible?"data:image/svg+xml,"+encodeURIComponent(!root.paintingTool&&root.selectedShapes.indexOf(shapeIndex)>=0?SvgAsset.tinted(modelData.svg):modelData.svg):""
+            source:"data:image/svg+xml,"+encodeURIComponent(!root.paintingTool&&root.selectedShapes.indexOf(shapeIndex)>=0?SvgAsset.tinted(modelData.svg):modelData.svg)
+            retainWhileLoading:true
             sourceSize.width:Math.min(2048,Math.max(1,Math.ceil(width*root.svgRasterScale)))
             sourceSize.height:Math.min(2048,Math.max(1,Math.ceil(height*root.svgRasterScale)))
         }
@@ -1485,6 +1489,11 @@ Item {
                 if(painted<0){dragging=false;return}
                 if(root.selectionIndices().indexOf(painted)<0)root.setSelection([painted],painted)
                 captureSelection();original=selectionOriginals[root.selected]
+                if(Painting.channel(root.tool)==="fill"){
+                    var seed=Painting.fraction(original,first);
+                    selectionOrder.forEach(function(index){var sh=selectionOriginals[index],p=index===root.selected?first:Painting.position(sh,seed);selectionOriginals[index]=Painting.prepare(sh,p.x,p.y,root)||sh})
+                    original=selectionOriginals[root.selected]
+                }
                 if(!Painting.gradientTool(root.tool)){
                     root.remember();mutated=true
                     root.shapes=Painting.applySet(root,selectionOriginals,selectionOrder,root.tool,root.strokeColor,null,original)
@@ -1918,7 +1927,7 @@ Item {
             width:frameWidth;horizontalAlignment:shape.textAlignment||Text.AlignLeft
             FontMetrics {id:glyphMetrics;font:glyphText.font}
             leftPadding:shape.textLayout?shape.textLayout.left:shape.textSize*0.15
-            topPadding:shape.textLayout?Math.max(0,shape.textLayout.baseline-glyphMetrics.ascent):shape.textSize*0.15
+            topPadding:shape.textLayout?shape.textLayout.baseline-glyphMetrics.ascent:shape.textSize*0.15
             rightPadding:shape.textSize*0.15
             lineHeightMode:Text.FixedHeight;lineHeight:shape.textLayout?shape.textLayout.leading:shape.textSize*1.35
             color:root.shapes[root.selected]&&root.shapes[root.selected].drawId===shape.drawId?"#2675e6":shape.style.stroke
@@ -1934,18 +1943,21 @@ Item {
         property var m:shape?shape.svgMatrix:[1,0,0,1,0,0]
         property real fw:shape?(shape.textFrameWidth||Math.max(1,Math.hypot(m[0],m[1]))):1
         property real fh:shape?(shape.textFrameHeight||shape.textSize*1.5):1
-        width:Math.max(fw,inlineText.contentWidth+inlineText.leftPadding+inlineText.rightPadding)
-        height:Math.max(fh,inlineText.contentHeight+inlineText.topPadding+inlineText.bottomPadding)
+        readonly property bool tight:!!shape&&(shape.tightGlyph||/^(Leland|Bravura|Emmentaler|Gonville|MuseJazz|Petaluma)$/i.test(inlineText.font.family))
+        readonly property var liveLayout:tight?Editing.textDimensions(root,inlineText.text,inlineText.font.pixelSize,inlineText.font.family,root.textFontStyle(),true):null
+        width:tight?Math.max(1,liveLayout.width):Math.max(fw,inlineText.contentWidth+inlineText.leftPadding+inlineText.rightPadding)
+        height:tight?Math.max(1,liveLayout.height):Math.max(fh,inlineText.contentHeight+inlineText.topPadding+inlineText.bottomPadding)
         transform:Matrix4x4 {matrix:Qt.matrix4x4(inlineFrame.m[0]/inlineFrame.fw,inlineFrame.m[2]/inlineFrame.fh,0,inlineFrame.m[4],inlineFrame.m[1]/inlineFrame.fw,inlineFrame.m[3]/inlineFrame.fh,0,inlineFrame.m[5],0,0,1,0,0,0,0,1)}
         Controls.TextArea {
             id:inlineText
+            clip:inlineFrame.tight
             anchors.fill:parent;selectByMouse:true;wrapMode:TextEdit.NoWrap;textFormat:TextEdit.PlainText
             persistentSelection:true
             horizontalAlignment:inlineFrame.shape?(inlineFrame.shape.textAlignment||Text.AlignLeft):Text.AlignLeft
             FontMetrics {id:inlineMetrics;font:inlineText.font}
-            padding:font.pixelSize*0.15
-            leftPadding:inlineFrame.shape&&inlineFrame.shape.textLayout?inlineFrame.shape.textLayout.left:padding
-            topPadding:inlineFrame.shape&&inlineFrame.shape.textLayout?Math.max(0,inlineFrame.shape.textLayout.baseline-inlineMetrics.ascent):padding
+            padding:inlineFrame.tight?0:font.pixelSize*0.15
+            leftPadding:inlineFrame.tight?inlineFrame.liveLayout.left:(inlineFrame.shape&&inlineFrame.shape.textLayout?inlineFrame.shape.textLayout.left:padding)
+            topPadding:inlineFrame.tight?inlineFrame.liveLayout.baseline-inlineMetrics.ascent:(inlineFrame.shape&&inlineFrame.shape.textLayout?inlineFrame.shape.textLayout.baseline-inlineMetrics.ascent:padding)
             color:inlineFrame.shape?inlineFrame.shape.style.stroke:"#161616"
             background:Rectangle{color:"#eaffffff";border.color:"#398df1";border.width:1/Math.max(0.000001,root.viewScale)}
                 Keys.onShortcutOverride:function(event){event.accepted=true}

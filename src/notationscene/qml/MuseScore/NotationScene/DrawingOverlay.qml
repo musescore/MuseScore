@@ -7,7 +7,9 @@ Item {
     id:root
     property var scoreView:parent
     readonly property var drawingEditor:editor
-    property var frame:scoreView.drawingViewTransform
+    // Hidden editors must not subscribe to every pan/zoom of the score view.
+    property var frame:editor.drawingEnabled?scoreView.drawingViewTransform:
+        ({x:0,y:0,width:1,height:1,left:0,top:0,scale:1,visibleWidth:1,visibleHeight:1})
     anchors.fill:parent
     clip:true
     property bool loading:false

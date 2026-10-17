@@ -2032,7 +2032,11 @@ void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
             if (!item->drawingPart().empty()) {
                 painter->setClipRect(ldata->bbox());
             }
-            item->svgRenderer()->render(painter, ldata->bbox());
+            if (!item->drawingPart().empty() && !opt.isPrinting) {
+                item->svgRenderer()->renderCached(painter, ldata->bbox());
+            } else {
+                item->svgRenderer()->render(painter, ldata->bbox());
+            }
             painter->restore();
         }
     } else if (item->imageType() == ImageType::RASTER) {

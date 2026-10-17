@@ -39,6 +39,7 @@ public:
     SizeF defaultSize() const;
 
     void render(Painter* painter, const RectF& rect);
+    void renderCached(Painter* painter, const RectF& rect);
 
 private:
     QSvgRenderer* m_qSvgRenderer = nullptr;

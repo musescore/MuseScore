@@ -60,6 +60,7 @@ class PopupView : public WindowView
     Q_PROPERTY(qreal y READ localY WRITE setLocalY NOTIFY yChanged)
 
     Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
+    Q_PROPERTY(bool inputTransparent READ inputTransparent WRITE setInputTransparent NOTIFY inputTransparentChanged)
     Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
     Q_PROPERTY(int arrowY READ arrowY WRITE setArrowY NOTIFY arrowYChanged)
     Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
@@ -82,6 +83,7 @@ public:
         PreferLeft = 0x00000004,
         PreferRight = 0x00000008,
         IgnoreFit = 0x0000000F,
+        ManualPosition = 0x00000010,
     };
     Q_DECLARE_FLAGS(PlacementPolicies, PlacementPolicy)
     Q_FLAG(PlacementPolicies)
@@ -107,6 +109,8 @@ public:
     void setLocalY(qreal y);
 
     bool showArrow() const;
+    bool inputTransparent() const { return m_inputTransparent; }
+    void setInputTransparent(bool value);
     void setShowArrow(bool showArrow);
 
     int arrowX() const;
@@ -133,6 +137,7 @@ signals:
     void yChanged(qreal y);
 
     void showArrowChanged(bool showArrow);
+    void inputTransparentChanged();
     void arrowXChanged(int arrowX);
     void arrowYChanged(int arrowY);
     void paddingChanged(int padding);
@@ -160,6 +165,7 @@ private:
     PopupPosition::Type m_popupPosition = { PopupPosition::Bottom };
 
     bool m_showArrow = false;
+    bool m_inputTransparent = false;
     int m_arrowX = 0;
     int m_arrowY = 0;
     int m_padding = 0;

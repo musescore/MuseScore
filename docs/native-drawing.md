@@ -63,3 +63,18 @@ the existing Windows portable build workflow. It uses standard hosted
 runners and keeps downloadable artifacts for one day. New pushes cancel
 obsolete runs of that workflow. Existing upstream pull-request workflows
 provide the other platform builds when enabled.
+
+
+## Final 4.x candidate
+
+This snapshot incorporates the locally compiled drawing revision 41, reported
+as accepted by its tester. The public source keeps the upstream loading screen
+and contains no custom splash credit. It identifies this fork as 4.8.0-dev;
+this is not an official MuseScore release or an upstream acceptance claim.
+The public branch also includes previously merged 4.7 maintenance changes;
+its complete binary and runtime behavior still require CI and visual validation.
+
+Recent fixes cover inactive-mode screen caching (printing remains vector),
+hidden-editor updates during navigation, independent closed-region painting,
+separate stroke/fill icons, standard tooltips that pass through mouse input,
+manual text-format popup placement, and tighter musical-character editing bounds.
