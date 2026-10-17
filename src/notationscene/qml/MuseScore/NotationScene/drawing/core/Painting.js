@@ -130,7 +130,10 @@ function handles(editor){
     var a=position(sh,g.from),b=position(sh,g.to),dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy)||1;
     var gap=13/Math.max(0.02,editor.viewScale),nx=-dy/length*gap,ny=dx/length*gap;
     var result=[{role:"from",x:a.x,y:a.y},{role:"to",x:b.x,y:b.y}];
-    g.stops.forEach(function(stop,index){var p=V.blend(a,b,stop.offset);result.push({role:"stop",id:stop.id,index:index,color:stop.color,x:p.x+nx,y:p.y+ny,axisX:p.x,axisY:p.y});});
+    g.stops.forEach(function(stop,index){var p=V.blend(a,b,stop.offset);
+        result.push({role:"stop",id:stop.id,index:index,color:stop.color,x:p.x+nx,y:p.y+ny,axisX:p.x,axisY:p.y});
+        result.push({role:"opacity",id:stop.id,index:index,opacity:stop.opacity===undefined?1:stop.opacity,x:p.x-nx,y:p.y-ny,axisX:p.x,axisY:p.y});
+    });
     return result;
 }
 function apply(shape,tool,colour,gradient){
@@ -172,20 +175,21 @@ function move(editor,shape,handle,p){
     }else g[handle.role]=fraction(shape,projected(shape,p,editor.tool,editor.viewScale));
     return g;
 }
-function changeStop(editor,colour,add,remove){
+function changeStop(editor,colour,add,remove,opacity,continuous){
     var shape=editor.shapes[editor.selected],saved=descriptor(editor);if(!shape||!saved)return;
     var g=V.copy(saved),index=g.stops.findIndex(function(stop){return stop.id===editor.gradientStopId;});
     if(add){
         var left=0,right=1,gap=-1;
         for(var i=1;i<g.stops.length;i++){var distance=g.stops[i].offset-g.stops[i-1].offset;if(distance>gap){gap=distance;left=g.stops[i-1].offset;right=g.stops[i].offset;}}
         var id="colour-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7);
-        g.stops.push({id:id,offset:(left+right)/2,color:editor.strokeColor});editor.gradientStopId=id;
+        g.stops.push({id:id,offset:(left+right)/2,color:index>=0?g.stops[index].color:editor.gradientStopColor,opacity:index>=0?(g.stops[index].opacity===undefined?1:g.stops[index].opacity):1});editor.gradientStopId=id;
     }else if(index>=0){
         if(remove){if(g.stops.length<=2)return;g.stops.splice(index,1);editor.gradientStopId=g.stops[0].id;}
+        else if(opacity!==undefined)g.stops[index].opacity=Math.max(0,Math.min(1,opacity));
         else g.stops[index].color=V.color(colour,g.stops[index].color);
     }else return;
     g.stops.sort(function(a,b){return a.offset-b.offset;});
-    editor.gestureStarting();editor.remember();
+    if(!continuous){editor.gestureStarting();editor.remember();}
     editor.shapes=applySet(editor,editor.shapes,editor.selectionIndices(),editor.tool,shape.style[channel(editor.tool)],g,shape);
-    editor.changed();editor.gestureFinished();
+    editor.changed();if(!continuous)editor.gestureFinished();
 }

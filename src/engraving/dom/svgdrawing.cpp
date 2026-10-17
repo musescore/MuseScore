@@ -2,6 +2,8 @@
 #ifndef NO_QT_SUPPORT
 #include "svgdrawing.h"
 #include <QJsonArray>
+#include <QPointF>
+#include <vector>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUuid>
@@ -1122,7 +1124,11 @@ QString assetSource(const QJsonObject& shape)
         return shape.value("svgSource").toString();
     }
     // Rebuild from semantic text so old tspan-based backing images recover too.
-    const double size = std::max(1.0, shape.value("textSize").toDouble(24));
+    const double size
+        = std::max(1.0,
+                   shape.value("textUnitVersion").toInt() == 2 ? shape.value("textRenderSize").toDouble(shape.value("textSize").toDouble(
+                                                                                                            24)) : shape.value(
+                       "textSize").toDouble(24));
     const double width = shape.value("textFrameWidth").toDouble();
     const double height = shape.value("textFrameHeight").toDouble(size * 1.5);
     if (width <= 0 || height <= 0) {
@@ -1273,14 +1279,158 @@ QString gradientDefinition(const QJsonObject& gradient, const QString& id, const
         if (!colour.match(color).hasMatch()) {
             continue;
         }
-        result+="<stop offset=\"" + number(std::clamp(stop.value("offset").toDouble(), 0.0, 1.0)) + "\" stop-color=\"" + color + "\"/>";
+        result += "<stop offset=\""
+                  + number(std::clamp(stop.value("offset").toDouble(), 0.0,
+                                      1.0)) + "\" stop-color=\"" + color + "\" stop-opacity=\""
+                  + number(std::clamp(stop.value("opacity").toDouble(1.0), 0.0, 1.0)) + "\"/>";
     }
     return result + "</linearGradient>";
+}
+
+// A nib is swept in score coordinates after anchor mapping, matching the editor.
+QString nibOutlinePath(const QString& source, const QJsonObject& style)
+{
+    const auto nib = style.value("nib").toObject();
+    const double angle = std::clamp(nib.value("angle").toDouble(), -180.0, 180.0) * 3.14159265358979323846 / 180.0;
+    const double co = std::cos(angle), si = std::sin(angle);
+    const double ratio = 1.0 - std::clamp(nib.value("flatten").toDouble(), 0.0, 0.95);
+    const double radius = style.value("width").toDouble() / 2.0;
+    const bool square = nib.value("shape").toString() == "square";
+    const double tolerance = std::max(0.05, std::min(0.4, radius * 0.05));
+    std::vector<std::vector<QPointF> > paths;
+    std::vector<QPointF> points;
+    QPointF current, start;
+    auto finish = [&]() {
+        if (!points.empty()) {
+            paths.push_back(std::move(points));
+            points.clear();
+        }
+    };
+    std::function<void(QPointF, QPointF, QPointF, QPointF, int)> cubic;
+    cubic = [&](QPointF a, QPointF b, QPointF c, QPointF d, int depth) {
+        const double dx=d.x() - a.x(), dy=d.y() - a.y(), length=std::hypot(dx, dy);
+        const double error
+            =length ? std::max(std::abs(dx * (b.y() - a.y()) - dy * (b.x() - a.x())),
+                               std::abs(dx * (c.y() - a.y()) - dy * (c.x() - a.x()))) / length
+              : std::max(std::hypot(b.x() - a.x(), b.y() - a.y()), std::hypot(c.x() - a.x(), c.y() - a.y()));
+        if (depth >= 10
+            || (error <= tolerance
+                && std::hypot(b.x() - a.x(),
+                              b.y() - a.y())
+                + std::hypot(c.x() - b.x(), c.y() - b.y()) + std::hypot(d.x() - c.x(), d.y() - c.y()) - length <= tolerance)) {
+            points.push_back(d);
+            return;
+        }
+        const QPointF ab=(a + b) / 2, bc=(b + c) / 2, cd=(c + d) / 2, abc=(ab + bc) / 2, bcd=(bc + cd) / 2, m=(abc + bcd) / 2;
+        cubic(a, ab, abc, m, depth + 1);
+        cubic(m, bcd, cd, d, depth + 1);
+    };
+    static const QRegularExpression token(QStringLiteral("[MLCZ]|[-+]?(?:[0-9]*\\.[0-9]+|[0-9]+\\.?[0-9]*)(?:[eE][-+]?[0-9]+)?"));
+    QStringList tokens;
+    auto matches=token.globalMatch(source);
+    while (matches.hasNext()) {
+        tokens.push_back(matches.next().captured());
+    }
+    for (qsizetype i=0; i < tokens.size();) {
+        const QString op=tokens[i++];
+        const int count=op == "C" ? 6 : (op == "M" || op == "L") ? 2 : 0;
+        if (i + count > tokens.size()) {
+            break;
+        }
+        if (op == "M" || op == "L") {
+            current=QPointF(tokens[i].toDouble(), tokens[i + 1].toDouble());
+            i+=2;
+            if (op == "M") {
+                finish();
+                start=current;
+            }
+            points.push_back(current);
+        } else if (op == "C") {
+            const QPointF b(tokens[i].toDouble(), tokens[i + 1].toDouble()), c(tokens[i + 2].toDouble(), tokens[i + 3].toDouble()), d(
+                tokens[i + 4].toDouble(), tokens[i + 5].toDouble());
+            cubic(current, b, c, d, 0);
+            current=d;
+            i+=6;
+        } else if (op == "Z") {
+            points.push_back(start);
+            current=start;
+        }
+    }
+    finish();
+    auto stamp=[&](const QPointF& p) {
+        std::vector<QPointF> result;
+        const int count=square ? 4 : 32;
+        for (int i=0; i < count; ++i) {
+            const double t=i * 2 * 3.14159265358979323846 / count;
+            const double x=square ? ((i == 0 || i == 3) ? -radius : radius) : std::cos(t) * radius;
+            const double y=(square ? (i < 2 ? -radius : radius) : std::sin(t) * radius) * ratio;
+            result.emplace_back(p.x() + x * co - y * si, p.y() + x * si + y * co);
+        }
+        return result;
+    };
+    auto cross=[](const QPointF& a, const QPointF& b, const QPointF& c) {
+        return (b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x());
+    };
+    QString output;
+    for (const auto& line:paths) {
+        std::vector<QPointF> previous;
+        for (const auto& p:line) {
+            auto next=stamp(p), sorted=previous;
+            sorted.insert(sorted.end(), next.begin(), next.end());
+            previous=std::move(next);
+            std::sort(sorted.begin(), sorted.end(), [](const QPointF& a, const QPointF& b) {
+                return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
+            });
+            std::vector<QPointF> lower, upper;
+            for (const auto& v:sorted) {
+                while (lower.size() > 1 && cross(lower[lower.size() - 2], lower.back(), v) <= 0) {
+                    lower.pop_back();
+                } lower.push_back(v);
+            }
+            for (auto it=sorted.rbegin(); it != sorted.rend(); ++it) {
+                while (upper.size() > 1 && cross(upper[upper.size() - 2], upper.back(), *it) <= 0) {
+                    upper.pop_back();
+                } upper.push_back(*it);
+            }
+            if (!lower.empty()) {
+                lower.pop_back();
+            }
+            if (!upper.empty()) {
+                upper.pop_back();
+            }
+            lower.insert(lower.end(), upper.begin(), upper.end());
+            for (size_t i=0; i < lower.size(); ++i) {
+                output+=(i ? QStringLiteral("L") : QStringLiteral("M")) + number(lower[i].x()) + " " + number(lower[i].y()) + " ";
+            }
+            output+="Z ";
+        }
+    }
+    return output;
 }
 
 QString styledPath(const QString& path, const QJsonObject& style, const QString& fillRule=QStringLiteral("nonzero"),
                    const QRectF& frame=QRectF(0, 0, 1, 1))
 {
+    const auto nib = style.value("nib").toObject();
+    if (style.value("stroke").toString() != "none" && !nib.isEmpty()
+        && (nib.value("shape").toString() == "square" || nib.value("flatten").toDouble() > 0)) {
+        auto fillStyle=style;
+        fillStyle.remove("nib");
+        fillStyle["stroke"]="none";
+        fillStyle.remove("strokeGradient");
+        auto inkStyle=style;
+        inkStyle.remove("nib");
+        inkStyle["fill"]=style.value("stroke");
+        inkStyle["stroke"]="none";
+        inkStyle.remove("fillGradient");
+        if (style.contains("strokeGradient")) {
+            inkStyle["fillGradient"]=style.value("strokeGradient");
+        }
+        inkStyle.remove("strokeGradient");
+        return styledPath(path, fillStyle, fillRule, frame) + styledPath(nibOutlinePath(path, style), inkStyle, QStringLiteral(
+                                                                             "nonzero"), frame);
+    }
+
     QString definitions, stroke=style.value("stroke").toString(), fill=style.value("fill").toString();
     const auto id=QStringLiteral("musedraw-gradient-")
                    + QString::number(qHash(path + QString::fromUtf8(QJsonDocument(style).toJson(QJsonDocument::Compact))), 16);
@@ -1647,7 +1797,8 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
                 path += number(x) + " " + number(y) + " ";
                 mapped.append(x);
                 mapped.append(y);
-                const double pad = style.value("width").toDouble() / 2 + 0.1;
+                const double pad = style.value("width").toDouble() / 2
+                                   * (style.value("nib").toObject().value("shape").toString() == "square" ? std::sqrt(2.0) : 1.0) + 0.1;
                 minX = std::min(minX, x - pad);
                 maxX = std::max(maxX, x + pad);
                 minY = std::min(minY, y - pad);
@@ -3741,6 +3892,10 @@ bool layout(const Image* image, Image::LayoutData* data)
         return false;
     }
     const QJsonObject doc = metadata(image);
+    if (doc.value("nativeOwner").toString() == "MuseDrawNative") {
+        const_cast<Image*>(image)->setOffset(PointF(0, 0));
+    }
+
     if (doc.value("version").toInt() != 1) {
         return false;
     }
@@ -3769,7 +3924,7 @@ bool layout(const Image* image, Image::LayoutData* data)
         const double y=placement.box.y() - placement.measure->system()->staffCanvasYpage(image->staffIdx());
         writable->setDrawingSvg(cachedRigidSvg(image).toStdString());
         writable->setSize(SizeF(placement.box.width() / sp, placement.box.height() / sp));
-        writable->setOffset(PointF(x, y));
+        writable->setOffset(PointF(0, 0));
         data->setPos(x, y);
         data->setBbox(RectF(0, 0, placement.box.width(), placement.box.height()));
         return true;
@@ -3866,7 +4021,8 @@ bool layout(const Image* image, Image::LayoutData* data)
         return false;
     }
     const auto segment = toSegment(image->explicitParent());
-    const auto current = std::find_if(parts.begin(), parts.end(), [&](const Part& p) { return p.measure == segment->measure(); });
+    const auto current
+        = std::find_if(parts.begin(), parts.end(), [&](const Part& p) { return p.key.toStdString() == image->drawingPart(); });
     if (current == parts.end()) {
         return false;
     }

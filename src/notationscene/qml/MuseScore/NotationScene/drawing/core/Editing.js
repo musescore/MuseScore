@@ -32,6 +32,7 @@ function textSource(content,family,size,width,height,color,layout,fontStyle,alig
     return '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1" viewBox="0 0 '+width+' '+height+'"><g font-family="'+escapeText(family)+'" font-size="'+Math.max(1,Math.round(size))+'" fill="'+escapeText(color)+'" font-weight="'+((fontStyle&1)?'bold':'normal')+'" font-style="'+((fontStyle&2)?'italic':'normal')+'" text-decoration="'+((fontStyle&4)?'underline ': '')+((fontStyle&8)?'line-through':'')+'" xml:space="preserve">'+body+'</g></svg>';
 }
 function textDimensions(editor,content,size,family,fontStyle,tight){
+    size=editor.renderTextSize(size,family);
     if(tight&&String(content).length&&String(content).indexOf("\n")<0){
         var ink=editor.measureTextLayout(content,size,family,fontStyle);
         return {width:Math.max(1,ink.inkWidth),height:Math.max(1,ink.inkHeight),left:-ink.inkX,baseline:-ink.inkY,leading:ink.height};
@@ -46,10 +47,10 @@ function textDimensions(editor,content,size,family,fontStyle,tight){
 function label(editor,x,y,target){
     var content=editor.labelText===undefined?"":editor.labelText,size=editor.labelSize,family=editor.labelFont||"Arial";
     var dimensions=textDimensions(editor,content,size,family),w=dimensions.width,h=dimensions.height;
-    var out={kind:"text",textContent:content,textSize:size,textFont:family,textFrameWidth:w,textFrameHeight:h,textPlacement:editor.labelPlacement,
+    var out={kind:"text",textUnitVersion:2,textContent:content,textSize:size,textFont:family,textFrameWidth:w,textFrameHeight:h,textPlacement:editor.labelPlacement,
         singleAnchor:true,anchorMode:"note",commands:frameCommands(x,y,w,h),
         svgMatrix:[w,0,0,h,x,y],style:V.style(editor.strokeColor,"none",1,editor.strokeOpacity)};
-    out.textLayout=dimensions;out.svgSource=textSource(content,family,size,w,h,editor.strokeColor,dimensions);
+    out.textRenderSize=editor.renderTextSize(size,family);out.textLayout=dimensions;out.svgSource=textSource(content,family,editor.renderTextSize(size,family),w,h,editor.strokeColor,dimensions);
     if(target){
         var box=V.bounds([target]),px=box.x+box.width/2,py=box.y+box.height/2;
         var linear=target.kind==="line"||String(target.kind).indexOf("arrow")===0||target.commands.length===2;
@@ -68,12 +69,12 @@ function label(editor,x,y,target){
 }
 function textBox(editor,box){
     var size=Math.max(1,box.height/1.6),w=Math.max(size,box.width),h=Math.max(size*1.6,box.height);
-    var sh={kind:"text",textContent:"",textFont:editor.labelFont||"Arial",textSize:size,
+    var sh={kind:"text",textUnitVersion:2,textContent:"",textFont:editor.labelFont||"Arial",textSize:size,
         textFrameWidth:w,textFrameHeight:h,textPlacement:"above",singleAnchor:true,anchorMode:"note",
         commands:frameCommands(box.x,box.y,w,h),svgMatrix:[w,0,0,h,box.x,box.y],style:V.style(editor.strokeColor,"none",1,editor.strokeOpacity)};
-    sh.textLayout=textDimensions(editor,"",size,sh.textFont);sh.textFrameHeight=Math.max(h,sh.textLayout.height);
+    sh.textRenderSize=editor.renderTextSize(size,sh.textFont);sh.textLayout=textDimensions(editor,"",size,sh.textFont);sh.textFrameHeight=Math.max(h,sh.textLayout.height);
     sh.svgMatrix[3]=sh.textFrameHeight;sh.commands=frameCommands(box.x,box.y,w,sh.textFrameHeight);
-    sh.svgSource=textSource("",sh.textFont,size,w,sh.textFrameHeight,editor.strokeColor,sh.textLayout);return sh;
+    sh.svgSource=textSource("",sh.textFont,editor.renderTextSize(size,sh.textFont),w,sh.textFrameHeight,editor.strokeColor,sh.textLayout);return sh;
 }
 function replaceText(editor,index,content,family,size,format){
     var old=editor.shapes[index];if(!old||old.kind!=="text")return;
@@ -84,10 +85,10 @@ function replaceText(editor,index,content,family,size,format){
     var fontStyle=format?format.fontStyle:old.textFontStyle||0,alignment=format?format.alignment:old.textAlignment||1;
     var natural=textDimensions(editor,content,size,family,fontStyle,sh.tightGlyph);
     var w=sh.tightGlyph?natural.width:Math.max(oldW,natural.width),h=sh.tightGlyph?natural.height:Math.max(oldH,natural.height);
-    sh.textContent=content;sh.textFont=family;sh.textSize=size;sh.textFontStyle=fontStyle;sh.textAlignment=alignment;sh.textFrameWidth=w;sh.textFrameHeight=h;
+    sh.textUnitVersion=2;sh.textContent=content;sh.textFont=family;sh.textSize=size;sh.textFontStyle=fontStyle;sh.textAlignment=alignment;sh.textFrameWidth=w;sh.textFrameHeight=h;
     sh.svgMatrix=[m[0]/oldW*w,m[1]/oldW*w,m[2]/oldH*h,m[3]/oldH*h,m[4],m[5]];
     sh.commands=V.transform({commands:frameCommands(0,0,w,h),style:sh.style},[m[0]/oldW,m[1]/oldW,m[2]/oldH,m[3]/oldH,m[4],m[5]]).commands;
-    sh.textLayout=natural;sh.svgSource=textSource(content,family,size,w,h,sh.style.stroke,natural,fontStyle,alignment);
+    sh.textRenderSize=editor.renderTextSize(size,family);sh.textLayout=natural;sh.svgSource=textSource(content,family,editor.renderTextSize(size,family),w,h,sh.style.stroke,natural,fontStyle,alignment);
     var all=editor.shapes.slice();all[index]=sh;editor.shapes=all;
     editor.bindings=editor.transformBindings(old,sh,editor.bindings,index);
     if(sh.textLink){sh.textLink.dx+=sh.commands[5][1]-old.commands[5][1];sh.textLink.dy+=sh.commands[5][2]-old.commands[5][2];}

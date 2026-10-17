@@ -77,9 +77,66 @@ function smoothFiltered(p,amount){
     if(p.length===1)out.push(line(p[0].x+0.1,p[0].y));
     return out;
 }
+
+// Sweep a rotated, flattened nib along the centreline. Controls remain centreline nodes.
+function nibHull(points) {
+    var sorted=points.slice().sort(function(a,b){return a.x-b.x||a.y-b.y}),lower=[],upper=[];
+    function cross(a,b,c){return (b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);}
+    sorted.forEach(function(p){while(lower.length>1&&cross(lower[lower.length-2],lower[lower.length-1],p)<=0)lower.pop();lower.push(p);});
+    sorted.reverse().forEach(function(p){while(upper.length>1&&cross(upper[upper.length-2],upper[upper.length-1],p)<=0)upper.pop();upper.push(p);});
+    lower.pop();upper.pop();return lower.concat(upper);
+}
+function nibPolygons(paths,style) {
+    var nib=style.nib,angle=nib.angle*Math.PI/180,co=Math.cos(angle),si=Math.sin(angle),ratio=Math.max(0.05,1-nib.flatten),out=[];
+    function stamp(p){
+        var radius=style.width*Math.max(0.05,p.pressure===undefined?1:p.pressure)/2,points=[];
+        var count=nib.shape==="square"?4:32;
+        for(var i=0;i<count;i++){
+            var x,y;if(count===4){x=(i===0||i===3?-1:1)*radius;y=(i<2?-1:1)*radius*ratio;}
+            else{x=Math.cos(i*2*Math.PI/count)*radius;y=Math.sin(i*2*Math.PI/count)*radius*ratio;}
+            points.push({x:p.x+x*co-y*si,y:p.y+x*si+y*co});
+        }return points;
+    }
+    paths.forEach(function(points){
+        var last=null;points.forEach(function(p){var next=stamp(p),polygon=nibHull(last?last.concat(next):next);last=next;
+            polygon.forEach(function(p,i){out.push([i?"L":"M",p.x,p.y]);});out.push(["Z"]);
+        });
+    });return out;
+}
+var nibOutlineCache = new WeakMap();
+function nibOutline(commands,style) {
+    if(style.stroke==="none"||!style.nib||(style.nib.shape==="round"&&style.nib.flatten===0))return null;
+    var signature=[style.width,style.nib.shape,style.nib.flatten,style.nib.angle,pathData(commands)].join("/"),saved=nibOutlineCache.get(commands);
+    if(saved&&saved.signature===signature)return saved.commands;
+    var outline=buildNibOutline(commands,style);
+    nibOutlineCache.set(commands,{signature:signature,commands:outline});return outline;
+}
+function buildNibOutline(commands,style) {
+    if(style.stroke==="none"||!style.nib||(style.nib.shape==="round"&&style.nib.flatten===0))return null;
+    var paths=[],points=[],current=null,start=null,tolerance=Math.max(0.05,Math.min(0.4,style.width*0.025));
+    function finish(){if(points.length)paths.push(points);points=[];}
+    function cubic(a,b,c,d,depth){
+        var dx=d.x-a.x,dy=d.y-a.y,length=Math.hypot(dx,dy);
+        var error=length?Math.max(Math.abs(dx*(b.y-a.y)-dy*(b.x-a.x)),Math.abs(dx*(c.y-a.y)-dy*(c.x-a.x)))/length:Math.max(Math.hypot(b.x-a.x,b.y-a.y),Math.hypot(c.x-a.x,c.y-a.y));
+        if(depth>=10||(error<=tolerance&&Math.hypot(b.x-a.x,b.y-a.y)+Math.hypot(c.x-b.x,c.y-b.y)+Math.hypot(d.x-c.x,d.y-c.y)-length<=tolerance)){points.push(d);return;}
+        function mid(p,q){return {x:(p.x+q.x)/2,y:(p.y+q.y)/2};}
+        var ab=mid(a,b),bc=mid(b,c),cd=mid(c,d),abc=mid(ab,bc),bcd=mid(bc,cd),m=mid(abc,bcd);
+        cubic(a,ab,abc,m,depth+1);cubic(m,bcd,cd,d,depth+1);
+    }
+    commands.forEach(function(c){
+        if(c[0]==="M"){finish();current={x:c[1],y:c[2]};start=current;points.push(current);}
+        else if(c[0]==="L"){current={x:c[1],y:c[2]};points.push(current);}
+        else if(c[0]==="C"&&current){var end={x:c[5],y:c[6]};cubic(current,{x:c[1],y:c[2]},{x:c[3],y:c[4]},end,0);current=end;}
+        else if(c[0]==="Z"&&start){points.push(start);current=start;}
+    });finish();return nibPolygons(paths,style);
+}
+
 function pencilStroke(points,amount,style,scale,pressure){
     var p=filteredPoints(points,amount,scale);
     if(!pressure||p.length<2)return {kind:"pencil",rawPoints:points,commands:smoothFiltered(p,amount),style:style};
+    if(style.nib&&(style.nib.shape!=="round"||style.nib.flatten>0)){
+        return {kind:"pencil-pressure",rawPoints:points,commands:nibPolygons([p],style),style:{stroke:"none",fill:style.stroke,width:0.001,opacity:style.opacity}};
+    }
     var left=[],right=[];
     p.forEach(function(point,index){
         var before=p[Math.max(0,index-1)],after=p[Math.min(p.length-1,index+1)],dx=after.x-before.x,dy=after.y-before.y,d=Math.hypot(dx,dy)||1;
@@ -147,7 +204,7 @@ function bounds(shapes) {
 
     var x=Infinity,y=Infinity,r=-Infinity,b=-Infinity;
     for(var i=0;i<shapes.length;i++){
-        var sh=shapes[i],pad=sh.svgSource?0:sh.style.width/2+1,lx=Infinity,ly=Infinity,rx=-Infinity,by=-Infinity;
+        var sh=shapes[i],pad=sh.svgSource?0:sh.style.width/2*(sh.style.nib&&sh.style.nib.shape==="square"?Math.SQRT2:1)+1,lx=Infinity,ly=Infinity,rx=-Infinity,by=-Infinity;
         (sh.derivedWholeCommands||sh.commands).forEach(function(c){for(var n=1;n<c.length;n+=2){
             lx=Math.min(lx,c[n]-pad);ly=Math.min(ly,c[n+1]-pad);rx=Math.max(rx,c[n]+pad);by=Math.max(by,c[n+1]+pad);
         }});
@@ -170,18 +227,23 @@ function paintBounds(commands){
     return isFinite(x)?{x:x,y:y,width:Math.max(1,right-x),height:Math.max(1,bottom-y)}:{x:0,y:0,width:1,height:1};
 }
 function gradientPoints(gradient,box){return {x1:box.x+gradient.from.x*box.width,y1:box.y+gradient.from.y*box.height,x2:box.x+gradient.to.x*box.width,y2:box.y+gradient.to.y*box.height};}
+function gradientStopRgba(stop){
+    var hex=color(stop.color,"#161616").slice(1),a=stop.opacity===undefined?1:stop.opacity;
+    return "rgba("+parseInt(hex.slice(0,2),16)+","+parseInt(hex.slice(2,4),16)+","+parseInt(hex.slice(4,6),16)+","+Math.max(0,Math.min(1,a))+")";
+}
 function gradientSvg(gradient,id,box){
     var p=gradientPoints(gradient,box);
-    return '<linearGradient id="'+id+'" gradientUnits="userSpaceOnUse" spreadMethod="pad" x1="'+num(p.x1)+'" y1="'+num(p.y1)+'" x2="'+num(p.x2)+'" y2="'+num(p.y2)+'">'+gradient.stops.map(function(stop){return '<stop offset="'+num(stop.offset)+'" stop-color="'+color(stop.color,'#161616')+'"/>';}).join('')+'</linearGradient>';
+    return '<linearGradient id="'+id+'" gradientUnits="userSpaceOnUse" spreadMethod="pad" x1="'+num(p.x1)+'" y1="'+num(p.y1)+'" x2="'+num(p.x2)+'" y2="'+num(p.y2)+'">'+gradient.stops.map(function(stop){return '<stop offset="'+num(stop.offset)+'" stop-color="'+color(stop.color,'#161616')+'" stop-opacity="'+num(stop.opacity===undefined?1:stop.opacity)+'"/>';}).join('')+'</linearGradient>';
 }
 function checkedStyle(saved){
     var result=style(saved.stroke,saved.fill,saved.width,saved.opacity);
+    if(saved.nib)result.nib={shape:saved.nib.shape==="square"?"square":"round",flatten:Math.max(0,Math.min(0.95,Number(saved.nib.flatten)||0)),angle:Math.max(-180,Math.min(180,Number(saved.nib.angle)||0))};
     ["strokeGradient","fillGradient"].forEach(function(key){
         var g=saved[key];if(!g)return;
         if(!g.from||!g.to||![g.from.x,g.from.y,g.to.x,g.to.y].every(function(v){return typeof v==="number"&&isFinite(v)&&Math.abs(v)<=100000;})||!Array.isArray(g.stops)||g.stops.length<2||g.stops.length>128)throw Error("Gradiente inválido.");
         result[key]={from:{x:g.from.x,y:g.from.y},to:{x:g.to.x,y:g.to.y},stops:g.stops.map(function(stop,index){
             if(typeof stop.offset!=="number"||!isFinite(stop.offset)||stop.offset<0||stop.offset>1)throw Error("Gradiente inválido.");
-            return {id:String(stop.id||index).slice(0,64),offset:stop.offset,color:color(stop.color,"#161616")};
+            return {id:String(stop.id||index).slice(0,64),offset:stop.offset,color:color(stop.color,"#161616"),opacity:stop.opacity===undefined?1:Math.max(0,Math.min(1,Number(stop.opacity)||0))};
         }).sort(function(a,b){return a.offset-b.offset;})};
     });return result;
 }
@@ -193,6 +255,15 @@ function body(shapes, parentId) {
         var clip=sh.clipRect,id=(parentId||'draw')+'clip'+index
         var prefix=clip?'<defs><clipPath id="'+id+'"><rect x="'+num(clip.x)+'" y="'+num(clip.y)+'" width="'+num(clip.width)+'" height="'+num(clip.height)+'"/></clipPath></defs><g clip-path="url(#'+id+')">':''
         if(sh.paintRanges)return prefix+body(paintedParts(sh),id+'range')+(clip?'</g>':'');
+        var outline=nibOutline(sh.derivedWholeCommands||sh.commands,s);
+        if(outline){
+            var fillShape=copy(sh);delete fillShape.style.nib;fillShape.style.stroke="none";delete fillShape.style.strokeGradient;
+            var nibStyle=copy(s);delete nibStyle.nib;nibStyle.fill=s.stroke;nibStyle.stroke="none";
+            if(s.strokeGradient)nibStyle.fillGradient=s.strokeGradient;else delete nibStyle.fillGradient;
+            delete nibStyle.strokeGradient;
+            var strokeShape={commands:outline,style:nibStyle,paintFrame:sh.paintFrame||paintBounds(sh.derivedWholeCommands||sh.commands),clipRect:sh.clipRect};
+            return body(s.fill!=="none"?[fillShape,strokeShape]:[strokeShape],id+"nib");
+        }
         if(sh.svgSource)return prefix+'<g opacity="'+num(s.opacity)+'" transform="matrix('+sh.svgMatrix.map(num).join(' ')+')">'+sh.svgSource+'</g>'+(clip?'</g>':'');
         var definitions='',stroke=s.stroke,fill=s.fill,box=sh.paintFrame||paintBounds(sh.derivedWholeCommands||sh.commands);
         if(s.strokeGradient){definitions+=gradientSvg(s.strokeGradient,id+'stroke',box);stroke='url(#'+id+'stroke)';}
@@ -411,6 +482,7 @@ function transformedPaint(before,after,m){
     var oldBox=paintBounds(before.commands),box=paintBounds(after.commands);
     function styled(style){
         var result=Object.assign({},style);
+        if(style.nib){var a=style.nib.angle*Math.PI/180,x=Math.cos(a),y=Math.sin(a);result.nib=Object.assign({},style.nib,{angle:Math.atan2(m[1]*x+m[3]*y,m[0]*x+m[2]*y)*180/Math.PI});}
         ["strokeGradient","fillGradient"].forEach(function(key){var saved=style[key];if(!saved)return;
             function map(p){var x=oldBox.x+p.x*oldBox.width,y=oldBox.y+p.y*oldBox.height;return {x:(m[0]*x+m[2]*y+m[4]-box.x)/box.width,y:(m[1]*x+m[3]*y+m[5]-box.y)/box.height};}
             result[key]=Object.assign({},saved,{from:map(saved.from),to:map(saved.to)});
@@ -870,6 +942,15 @@ function paint(ctx, shapes, selected) {
             var parts=paintedParts(sh);paint(ctx,parts,selected&&selected.indexOf(sh)>=0?parts:[]);ctx.restore();return;
         }
         if(sh.svgSource)return;
+        var outline=nibOutline(sh.derivedWholeCommands||sh.commands,sh.style);
+        if(outline){
+            var fillShape=copy(sh);delete fillShape.style.nib;fillShape.style.stroke="none";delete fillShape.style.strokeGradient;
+            var nibStyle=copy(sh.style);delete nibStyle.nib;nibStyle.fill=nibStyle.stroke;nibStyle.stroke="none";
+            if(nibStyle.strokeGradient)nibStyle.fillGradient=nibStyle.strokeGradient;else delete nibStyle.fillGradient;delete nibStyle.strokeGradient;
+            var strokeShape={commands:outline,style:nibStyle,paintFrame:sh.paintFrame||paintBounds(sh.derivedWholeCommands||sh.commands),clipRect:sh.clipRect};
+            var parts=sh.style.fill!=="none"?[fillShape,strokeShape]:[strokeShape];
+            paint(ctx,parts,selected&&selected.indexOf(sh)>=0?parts:[]);return;
+        }
         var active=selected&&selected.indexOf(sh)>=0;
         ctx.save()
         if(sh.clipRect){var clip=sh.clipRect;ctx.beginPath();ctx.rect(clip.x,clip.y,clip.width,clip.height);ctx.clip()}
@@ -886,7 +967,7 @@ function paint(ctx, shapes, selected) {
             var g=sh.style[channel+"Gradient"];if(!g)return sh.style[channel];
             var p=gradientPoints(g,sh.paintFrame||paintBounds(sh.derivedWholeCommands||sh.commands));
             if(Math.hypot(p.x2-p.x1,p.y2-p.y1)<0.000001)p.x2+=0.000001;
-            var gradient=ctx.createLinearGradient(p.x1,p.y1,p.x2,p.y2);g.stops.forEach(function(stop){gradient.addColorStop(stop.offset,stop.color);});return gradient;
+            var gradient=ctx.createLinearGradient(p.x1,p.y1,p.x2,p.y2);g.stops.forEach(function(stop){gradient.addColorStop(stop.offset,gradientStopRgba(stop));});return gradient;
         }
         if(sh.style.fill!=="none"){ctx.fillStyle=active?"#628fea":paintValue("fill");ctx.fill();}
 

@@ -196,8 +196,8 @@ jobs:
     - name: Package
       shell: cmd
       run: |
-        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
-        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="''" )
+        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="" )
+        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="" )
         SET GUID=9F230B12-44F1-4BCB-9C59-7376D3C940DA
         buildscripts\ci\windows\package.bat --signsecret %S_S% --signkey %S_K% --guid %GUID%
     - name: Checksum
@@ -361,8 +361,8 @@ jobs:
     - name: Package
       shell: cmd
       run: |
-        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
-        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="''" )
+        IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="" )
+        IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_K="" )
         buildscripts\ci\windows\package.bat --portable ON  --signsecret %S_S% --signkey %S_K%
     - name: Checksum
       run: |
@@ -402,6 +402,6 @@ jobs:
   #   - name: Sign test
   #     shell: cmd
   #     run: |
-  #       IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="''" )
+  #       IF ${{ secrets.WIN_SIGN_S3_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_S3_SECRET }} ) ELSE ( SET S_S="" )
   #       IF ${{ secrets.WIN_SIGN_S3_KEY != 0 }} == true ( SET S_K=${{ secrets.WIN_SIGN_S3_KEY }} ) ELSE ( SET S_P="''" )
   #       buildscripts\ci\windows\sign_test.bat --secret %S_S% --key %S_K%
