@@ -284,6 +284,13 @@ DockPage {
                         if (root.pageModel.dockedExtension.length && !builder.contentItem) {
                             builder.load(root.pageModel.dockedExtension,
                                          root.pageModel.dockedExtensionAction, pluginHost)
+                            const requestedWidth = builder.contentItem ? builder.contentItem.implicitWidth : 0
+                            const initialWidth = Math.max(extensionPanel.minimumWidth,
+                                                          Math.min(extensionPanel.maximumWidth,
+                                                                   requestedWidth > 0 ? requestedWidth : 360))
+                            Qt.callLater(function() {
+                                extensionPanel.resize(initialWidth, extensionPanel.height)
+                            })
                         }
                     }
 
