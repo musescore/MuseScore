@@ -48,7 +48,7 @@ namespace mu::engraving {
  *              GuitarBend
  * **************************************/
 
-GuitarBend::GuitarBend(EngravingItem* parent)
+GuitarBend::GuitarBend(EngravingObject* parent)
     : SLine(ElementType::GUITAR_BEND, parent, ElementFlag::MOVABLE)
 {
 }
@@ -244,7 +244,7 @@ bool GuitarBend::isFullReleaseDive() const
 void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
 {
     Staff* curStaff =  startNote->staff();
-    Part* curPart = startNote->part();
+    Part* curPart = startNote->originPart();
     if (!curStaff || !curPart) {
         return;
     }
@@ -310,7 +310,7 @@ void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
 {
     // The start grace-note of bend must be on the same string as the main note
     int mainString = main->string();
-    const StringData* stringData = main->part()->stringData(main->tick(), main->staff()->idx());
+    const StringData* stringData = main->originPart()->stringData(main->tick(), main->staff()->idx());
     int staffPitchOffset = main->staff()->pitchOffset(main->tick());
     int graceFret = stringData->fret(grace->pitch() + staffPitchOffset, mainString, main->staff());
     if (graceFret > 0) {
@@ -848,7 +848,6 @@ GuitarBendSegment::GuitarBendSegment(GuitarBend* sp)
     : LineSegment(ElementType::GUITAR_BEND_SEGMENT, sp, ElementFlag::MOVABLE)
 {
     m_text = new GuitarBendText(this);
-    m_text->setOwnershipParent(this);
     setFlag(ElementFlag::ON_STAFF, true);
 }
 
@@ -857,7 +856,6 @@ GuitarBendSegment::GuitarBendSegment(const GuitarBendSegment& s)
 {
     m_vertexPointOff = s.m_vertexPointOff;
     m_text = new GuitarBendText(this);
-    m_text->setOwnershipParent(this);
 }
 
 GuitarBendSegment::~GuitarBendSegment()
@@ -927,7 +925,6 @@ void GuitarBendSegment::dragGrip(EditData& ed)
         break;
     case Grip::MIDDLE:
         setOffset(offset() + delta);
-        setOffsetChanged(true);
         break;
     default:
         UNREACHABLE;
@@ -1176,7 +1173,6 @@ void GuitarBendHoldSegment::dragGrip(EditData& ed)
         break;
     case Grip::MIDDLE:
         setOffset(offset() + delta);
-        setOffsetChanged(true);
         break;
     default:
         break;

@@ -31,7 +31,7 @@ class Capo final : public StaffTextBase
     DECLARE_CLASSOF(ElementType::CAPO)
 
 public:
-    Capo(Segment* parent = nullptr, TextStyleType textStyleType = TextStyleType::STAFF);
+    Capo(DummyParentOr<Segment> parent, TextStyleType textStyleType = TextStyleType::STAFF);
 
     Capo* clone() const override;
 

@@ -554,7 +554,6 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
     item->mutldata()->setArrow(arrow);
 
     GuitarBendText* guitarBendText = item->bendText();
-    guitarBendText->setOwnershipParent(item);
     guitarBendText->setXmlText(bend->ldata()->bendDigit());
     TextLayout::layoutBaseTextBase(toTextBase(guitarBendText), ctx);
     double verticalTextPad = 0.2 * spatium;

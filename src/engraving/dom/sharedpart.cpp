@@ -21,6 +21,7 @@
  */
 #include "sharedpart.h"
 #include "score.h"
+#include "staff.h"
 
 #include <sstream>
 
@@ -77,6 +78,32 @@ void SharedPart::removeOriginPart(Part* p)
     p->setSharedPart(nullptr);
 
     computeIsSameInstruments();
+}
+
+Part* SharedPart::mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const
+{
+    const SharedTrackMap& trackMap = trackMapAtTick(tick.negative() ? Fraction(0, 1) : tick);
+
+    track_idx_t originTrack = muse::key(trackMap, sharedTrack, muse::nidx);
+
+    const Staff* originStaff = originTrack != muse::nidx ? score()->staff(track2staff(originTrack)) : nullptr;
+    return originStaff ? originStaff->part() : nullptr;
+}
+
+const Part* SharedPart::originPart(track_idx_t sharedTrack, const Fraction& tick) const
+{
+    if (sharedTrack != muse::nidx) {
+        if (const Part* p = mappedOriginPart(sharedTrack, tick)) {
+            return p;
+        }
+    }
+
+    return m_originParts.empty() ? this : m_originParts.front();
+}
+
+Part* SharedPart::originPartForStaff(staff_idx_t sharedStaffIdx, const Fraction& tick) const
+{
+    return mappedOriginPart(staff2track(sharedStaffIdx, 0), tick);
 }
 
 const SharedTrackMap& SharedPart::trackMapAtTick(const Fraction& tick) const

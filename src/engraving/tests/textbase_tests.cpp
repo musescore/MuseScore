@@ -52,7 +52,7 @@ public:
 
 Dynamic* Engraving_TextBaseTests::addDynamic(MasterScore* score)
 {
-    Dynamic* dynamic = new Dynamic(score->dummy()->segment());
+    Dynamic* dynamic = new Dynamic(score->dummy());
     dynamic->setXmlText("<sym>dynamicForte</sym>");
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
     EditData ed;
@@ -112,7 +112,7 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)
 
 StaffText* Engraving_TextBaseTests::addStaffText(MasterScore* score)
 {
-    StaffText* staffText = new StaffText(score->dummy()->segment());
+    StaffText* staffText = new StaffText(score->dummy());
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
     EditData ed;
     ed.dropElement = staffText;
@@ -257,7 +257,7 @@ TEST_F(Engraving_TextBaseTests, lineBreakTest)
         ASSERT_TRUE(seg);
 
         StaffText* staffText = toStaffText(seg->findAnnotation(ElementType::STAFF_TEXT, 0, 0));
-        EXPECT_TRUE(staffText);
+        ASSERT_TRUE(staffText);
 
         EXPECT_EQ(staffText->xmlText(), TEXT);
     }

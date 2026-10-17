@@ -227,6 +227,106 @@ enum class ElementType : unsigned char {
 
 constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
 
+// Items must be added here to enable autoplace
+// Add new types to the appropriate group below as needed
+constexpr bool autoplaceAppliesToType(ElementType type)
+{
+    switch (type) {
+    // Ties, slurs and lines with their segments
+    case ElementType::SLUR:
+    case ElementType::SLUR_SEGMENT:
+    case ElementType::TIE:
+    case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE:
+    case ElementType::PARTIAL_TIE_SEGMENT:
+    case ElementType::VOLTA:
+    case ElementType::VOLTA_SEGMENT:
+    case ElementType::HAIRPIN:
+    case ElementType::HAIRPIN_SEGMENT:
+    case ElementType::OTTAVA:
+    case ElementType::OTTAVA_SEGMENT:
+    case ElementType::TRILL:
+    case ElementType::TRILL_SEGMENT:
+    case ElementType::LET_RING:
+    case ElementType::LET_RING_SEGMENT:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
+    case ElementType::VIBRATO:
+    case ElementType::VIBRATO_SEGMENT:
+    case ElementType::PALM_MUTE:
+    case ElementType::PALM_MUTE_SEGMENT:
+    case ElementType::WHAMMY_BAR:
+    case ElementType::WHAMMY_BAR_SEGMENT:
+    case ElementType::RASGUEADO:
+    case ElementType::RASGUEADO_SEGMENT:
+    case ElementType::HARMONIC_MARK:
+    case ElementType::HARMONIC_MARK_SEGMENT:
+    case ElementType::PICK_SCRAPE:
+    case ElementType::PICK_SCRAPE_SEGMENT:
+    case ElementType::TEXTLINE:
+    case ElementType::TEXTLINE_SEGMENT:
+    case ElementType::PEDAL:
+    case ElementType::PEDAL_SEGMENT:
+    case ElementType::LYRICSLINE:
+    case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
+    case ElementType::GLISSANDO:
+    case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE:
+    case ElementType::NOTELINE_SEGMENT:
+    case ElementType::GUITAR_BEND:
+    case ElementType::GUITAR_BEND_SEGMENT:
+    case ElementType::GUITAR_BEND_HOLD:
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::TAPPING:
+    case ElementType::TAPPING_HALF_SLUR:
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+
+    // Measure/system attachments
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::MMREST_RANGE:
+
+    // Note/measure-attached texts and symbols
+    case ElementType::TIMESIG:
+    case ElementType::REST:
+    case ElementType::MMREST:
+    case ElementType::ARTICULATION:
+    case ElementType::ORNAMENT:
+    case ElementType::FERMATA:
+    case ElementType::DYNAMIC:
+    case ElementType::EXPRESSION:
+    case ElementType::LYRICS:
+    case ElementType::FIGURED_BASS:
+    case ElementType::MARKER:
+    case ElementType::JUMP:
+    case ElementType::FINGERING:
+    case ElementType::TUPLET:
+    case ElementType::TEMPO_TEXT:
+    case ElementType::STAFF_TEXT:
+    case ElementType::SYSTEM_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
+    case ElementType::PLAY_COUNT_TEXT:
+    case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
+    case ElementType::TRIPLET_FEEL:
+    case ElementType::REHEARSAL_MARK:
+    case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::FRET_DIAGRAM:
+    case ElementType::HARMONY:
+    case ElementType::HARP_DIAGRAM:
+    case ElementType::STICKING:
+        return true;
+    default:
+        return false;
+    }
+}
+
 const static std::unordered_set<ElementType> TEXTBASE_TYPES {
     ElementType::TEXT,
     ElementType::LYRICS,
@@ -760,7 +860,8 @@ enum class IntervalType : unsigned char {
 enum class InstrumentLabelVisibility : unsigned char {
     LONG,
     SHORT,
-    HIDE
+    HIDE,
+    AUTO
 };
 
 struct OrnamentInterval
@@ -1275,6 +1376,11 @@ enum class LyricsDashSystemStart : unsigned char {
     UNDER_FIRST_NOTE
 };
 
+enum class LyricsStackingOrder : unsigned char {
+    LYRICS_AFTER_PEDALS,    // < v5.0
+    LYRICS_BEFORE_DYNAMICS  // >= v5.0
+};
+
 enum class NoteLineEndPlacement : unsigned char {
     LEFT_EDGE,
     OFFSET_ENDS,
@@ -1425,6 +1531,54 @@ enum class LoopBoundaryType : signed char {
     Unknown = -1,
     LoopIn = 0,
     LoopOut = 1
+};
+
+enum class ActionIconType : signed char {
+    UNDEFINED = -1,
+
+    ACCIACCATURA,
+    APPOGGIATURA,
+    GRACE4,
+    GRACE16,
+    GRACE32,
+    GRACE8_AFTER,
+    GRACE16_AFTER,
+    GRACE32_AFTER,
+
+    BEAM_AUTO,
+    BEAM_NONE,
+    BEAM_BREAK_LEFT,
+    BEAM_BREAK_INNER_8TH,
+    BEAM_BREAK_INNER_16TH,
+    BEAM_JOIN,
+
+    BEAM_FEATHERED_DECELERATE,
+    BEAM_FEATHERED_ACCELERATE,
+
+    VFRAME,
+    HFRAME,
+    TFRAME,
+    FFRAME,
+    STAFF_TYPE_CHANGE,
+    MEASURE,
+
+    PARENTHESES,
+    BRACKETS,
+
+    STANDARD_BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+
+    DIVE,
+    PRE_DIVE,
+    DIP,
+    SCOOP,
+
+    NOTE_ANCHORED_LINE,
+
+    SYSTEM_LOCK,
+    PAGE_LOCK
 };
 } // mu::engraving
 

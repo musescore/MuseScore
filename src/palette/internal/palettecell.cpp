@@ -220,9 +220,9 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
         } else if (s == "visible") {
             visible = e.readBool();
         } else if (s == "Tremolo") {
-            compat::TremoloCompat tc;
-            tc.parent = paletteScoreProvider()->paletteScore()->dummy()->chord();
-            rw::RWRegister::reader(paletteScoreProvider()->paletteScore()->mscVersion())->readTremoloCompat(&tc, e);
+            Score* paletteScore = paletteScoreProvider()->paletteScore();
+            compat::TremoloCompat tc { paletteScore->dummy() };
+            rw::RWRegister::reader(paletteScore->mscVersion())->readTremoloCompat(&tc, e);
             if (tc.single) {
                 element.reset(tc.single);
             } else if (tc.two) {
@@ -249,16 +249,6 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
     if (element) {
         PaletteCompat::migrateOldPaletteCellIfNeeded(this, paletteScoreProvider()->paletteScore());
         element->styleChanged();
-
-        if (element->isActionIcon()) {
-            ActionIcon* icon = toActionIcon(element.get());
-            const muse::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
-            if (action.isValid()) {
-                icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
-            } else {
-                add = false;
-            }
-        }
     }
 
     return add && element;
@@ -336,15 +326,6 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const mu
 
     if (!element->isSymbol()) { // not sure this check is necessary, it was so in the old palette
         element->setTrack(0);
-    }
-
-    if (element->isActionIcon()) {
-        muse::ContextInject<muse::ui::IUiActionsRegister> aregister = { iocCtx };
-        ActionIcon* icon = toActionIcon(element.get());
-        const muse::ui::UiAction& action = aregister()->action(icon->actionCode());
-        if (action.isValid()) {
-            icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
-        }
     }
 
     const String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyPlainText() : element->translatedTypeUserName();

@@ -176,7 +176,6 @@ void SplitJoinMeasure::splitMeasure(Transaction& tx, MasterScore* masterScore, c
         Staff* staff = masterScore->staves().at(staffIdx);
         if (staff->isStaffTypeStartFrom(stick)) {
             StaffTypeChange* stc = Factory::createStaffTypeChange(m1);
-            stc->setOwnershipParent(m1);
             stc->setTrack(staffIdx * VOICES);
             masterScore->addElement(stc);
         }
@@ -270,7 +269,6 @@ void SplitJoinMeasure::joinMeasures(Transaction& tx, MasterScore* masterScore, c
         Staff* staff = masterScore->staves().at(staffIdx);
         if (staff->isStaffTypeStartFrom(tick1)) {
             StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(joinedMeasure);
-            stc->setOwnershipParent(joinedMeasure);
             stc->setTrack(staffIdx * VOICES);
             masterScore->addElement(stc);
         }

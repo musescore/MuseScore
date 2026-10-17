@@ -37,7 +37,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    readonly property int navigationRowEnd: centerStavesSection.navigationRowEnd
+    readonly property int navigationRowEnd: positionSection.navigationRowEnd
 
     spacing: 12
 
@@ -163,6 +163,18 @@ Column {
         }
     }
 
+    CenterBetweenStavesSection {
+        id: centerStavesSection
+
+        isApplicable: root.model && root.model.isStaveCenteringApplicable
+        isAvailable: root.model && root.model.isStaveCenteringAvailable
+
+        propertyItem: root.model ? root.model.centerBetweenStaves : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: voiceAssignmentSection.navigationRowEnd + 1
+    }
+
     FlatRadioButtonGroupPropertyView {
         id: positionSection
 
@@ -171,32 +183,12 @@ Column {
         propertyItem: root.model ? root.model.voiceBasedPosition : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: voiceAssignmentSection.navigationRowEnd + 1
+        navigationRowStart: centerStavesSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("propertiespanel", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
             { text: qsTrc("propertiespanel", "Above"), value: DirectionTypes.VERTICAL_UP },
             { text: qsTrc("propertiespanel", "Below"), value: DirectionTypes.VERTICAL_DOWN }
-        ]
-    }
-
-    FlatRadioButtonGroupPropertyView {
-        id: centerStavesSection
-
-        visible: root.model && root.model.isMultiStaffInstrument
-        enabled: root.model && root.model.isStaveCenteringAvailable
-
-        titleText: qsTrc("propertiespanel", "Center between staves")
-
-        propertyItem: root.model ? root.model.centerBetweenStaves : null
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: positionSection.navigationRowEnd + 1
-
-        model: [
-            { text: qsTrc("propertiespanel", "Auto"), value: DirectionTypes.CENTER_STAVES_AUTO },
-            { text: qsTrc("propertiespanel", "On"), value: DirectionTypes.CENTER_STAVES_ON },
-            { text: qsTrc("propertiespanel", "Off"), value: DirectionTypes.CENTER_STAVES_OFF }
         ]
     }
 }

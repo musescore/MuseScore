@@ -100,7 +100,7 @@ void HarpPedalDiagram::setPlayableTpcs()
     m_playableTpcs = playableTpcs;
 }
 
-HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
+HarpPedalDiagram::HarpPedalDiagram(DummyParentOr<Segment> parent)
     : TextBase(ElementType::HARP_DIAGRAM, parent, TextStyleType::HARP_PEDAL_DIAGRAM, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&harpPedalDiagramStyle);
@@ -177,8 +177,8 @@ String HarpPedalDiagram::createDiagramText()
                 PedalPosition::UNSET, PedalPosition::UNSET };
         std::array<PedalPosition, HARP_STRING_NO> prevState;
         HarpPedalDiagram* prevDiagram = nullptr;
-        if (part() && segment()) {
-            prevDiagram = part()->prevHarpDiagram(segment()->tick());
+        if (originPart() && segment()) {
+            prevDiagram = originPart()->prevHarpDiagram(segment()->tick());
         }
 
         if (prevDiagram != nullptr) {
@@ -192,7 +192,7 @@ String HarpPedalDiagram::createDiagramText()
                     break;
                 }
                 // Check if there's a diagram before.  If not, start of score and use init state
-                prevDiagram = part()->prevHarpDiagram(prevDiagram->segment()->tick());
+                prevDiagram = originPart()->prevHarpDiagram(prevDiagram->segment()->tick());
                 if (prevDiagram != nullptr) {
                     prevState = prevDiagram->getPedalState();
                 } else {

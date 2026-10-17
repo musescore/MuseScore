@@ -33,9 +33,11 @@
 
 #include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notationscene/notationcommands.h"
 
 // api
 #include "engravingapiv1.h"
+#include "rcommand/commandtypes.h"
 #include "score.h"
 #include "instrument.h"
 #include "cursor.h"
@@ -418,21 +420,21 @@ apiv1::Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, 
 
 void PluginAPI::cmd(const QString& s)
 {
-    static const QMap<QString, QString> COMPAT_CMD_MAP = {
-        { "escape", "command://notation/cancel" },
-        { "cut", "command://notation/cut" },
-        { "copy", "command://notation/copy" },
-        { "paste", "command://notation/paste" },
-        { "paste-half", "notation-paste-half" },
-        { "paste-double", "notation-paste-double" },
-        { "select-all", "notation-select-all" },
-        { "delete", "command://notation/delete" },
-        { "next-chord", "notation-move-right" },
-        { "prev-chord", "notation-move-left" },
-        { "prev-measure", "notation-move-left-quickly" }
+    static const QMap<QString, muse::rcommand::Command> COMPAT_CMD_MAP = {
+        { "escape", notation::CANCEL_COMMAND },
+        { "cut", notation::CUT_COMMAND },
+        { "copy", notation::COPY_COMMAND },
+        { "paste", notation::PASTE_COMMAND },
+        { "paste-half", notation::PASTE_HALF_COMMAND },
+        { "paste-double", notation::PASTE_DOUBLE_COMMAND },
+        { "select-all", notation::SELECT_ALL_COMMAND },
+        { "delete", notation::DELETE_COMMAND },
+        { "next-chord", notation::MOVE_RIGHT_COMMAND },
+        { "prev-chord", notation::MOVE_LEFT_COMMAND },
+        { "prev-measure", notation::MOVE_LEFT_QUICKLY_COMMAND }
     };
 
-    actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());
+    commandDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, muse::rcommand::Command(s.toStdString())));
 }
 
 void PluginAPI::openLog(const QString&)

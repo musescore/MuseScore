@@ -53,7 +53,7 @@ static const ElementStyle lyricsElementStyle {
 //   Lyrics
 //---------------------------------------------------------
 
-Lyrics::Lyrics(ChordRest* parent)
+Lyrics::Lyrics(DummyParentOr<ChordRest> parent)
     : TextBase(ElementType::LYRICS, parent, TextStyleType::LYRICS_ODD, ElementFlag::ON_STAFF)
 {
     m_separator  = 0;
@@ -576,6 +576,16 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
     }
 
     TextBase::undoChangeProperty(id, v, ps);
+}
+
+//---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void Lyrics::reset()
+{
+    undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
+    TextBase::reset();
 }
 
 //---------------------------------------------------------

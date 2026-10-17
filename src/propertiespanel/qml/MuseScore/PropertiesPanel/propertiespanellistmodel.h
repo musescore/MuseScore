@@ -75,7 +75,7 @@ private:
 
     bool alwaysUpdateModelList(const QList<mu::engraving::EngravingItem*>& selectedElementList);
     void setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                        engraving::SelState selectionState = engraving::SelState::NONE);
+                        engraving::SelState selectionState = engraving::SelState::NONE, bool selectionHasStartOrEndFrame = false);
 
     void buildModelsForEmptySelection();
     void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,

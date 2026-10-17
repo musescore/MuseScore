@@ -27,7 +27,7 @@
 
 using namespace mu::engraving;
 
-Parenthesis::Parenthesis(EngravingItem* parent)
+Parenthesis::Parenthesis(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::PARENTHESIS, parent, ElementFlag::MOVABLE)
 {
 }

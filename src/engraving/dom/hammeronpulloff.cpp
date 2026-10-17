@@ -32,7 +32,7 @@
 #include "system.h"
 
 namespace mu::engraving {
-HammerOnPullOff::HammerOnPullOff(EngravingItem* parent)
+HammerOnPullOff::HammerOnPullOff(DummyParentOr<EngravingItem> parent)
     : Slur(parent, ElementType::HAMMER_ON_PULL_OFF)
 {
 }
@@ -134,7 +134,6 @@ void HammerOnPullOffSegment::updateHopoText()
             m_hopoText.push_back(curHopoText);
         }
 
-        curHopoText->setOwnershipParent(this);
         curHopoText->setTrack(track());
         curHopoText->setIsValid(curRegion.isValid);
         curHopoText->setIsHammerOn(curRegion.isHammerOn);

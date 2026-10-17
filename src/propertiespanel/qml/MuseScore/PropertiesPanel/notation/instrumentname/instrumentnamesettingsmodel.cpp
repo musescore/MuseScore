@@ -25,9 +25,10 @@
 #include "engraving/dom/instrumentname.h"
 
 #include "notation/inotationselection.h" // IWYU pragma: keep
+#include "notationscene/notationcommands.h"
 
 using namespace mu::propertiespanel;
-using namespace muse::actions;
+using namespace mu::notation;
 
 InstrumentNameSettingsModel::InstrumentNameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                          IElementRepositoryService* repository)
@@ -50,13 +51,15 @@ void InstrumentNameSettingsModel::openStyleSettings()
         subPageCode = "instrument-name-short";
     }
 
-    ActionData args = ActionData::make_arg2<std::string, std::string>("text-styles", subPageCode);
-    dispatcher()->dispatch("edit-style", args);
+    commandDispatcher()->dispatch(OPEN_EDIT_STYLE_COMMAND, {
+        { "page_code", muse::Val("text-styles") },
+        { "sub_page_code", muse::Val(subPageCode) },
+    });
 }
 
 void InstrumentNameSettingsModel::openStaffAndPartProperties()
 {
-    dispatcher()->dispatch("staff-properties");
+    commandDispatcher()->dispatch(OPEN_STAFF_PROPERTIES_COMMAND);
 }
 
 const mu::engraving::InstrumentName* InstrumentNameSettingsModel::selectedInstrumentName() const

@@ -62,17 +62,16 @@ public:
 void Engraving_CopyPasteTests::copypaste(const char* idx)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();      // src
+    ASSERT_TRUE(m2);
     Measure* m3 = m2->nextMeasure();
+    ASSERT_TRUE(m3);
     Measure* m4 = m3->nextMeasure();      // dst
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
-    EXPECT_TRUE(m3);
-    EXPECT_TRUE(m4);
+    ASSERT_TRUE(m4);
 
     score->select(m2);
     if (score->nstaves() > 1) {
@@ -85,7 +84,7 @@ void Engraving_CopyPasteTests::copypaste(const char* idx)
     QByteArray ba = score->selection().mimeData().toQByteArray();
     mimeData->setData(mimeType, ba);
 
-    EXPECT_TRUE(m4->first()->element(0));
+    ASSERT_TRUE(m4->first()->element(0));
     score->select(m4->first()->element(0));
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
@@ -200,13 +199,12 @@ TEST_F(Engraving_CopyPasteTests, copypaste27)
 void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     // create a range selection on 2 and 3 beat of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
@@ -237,13 +235,12 @@ void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
 TEST_F(Engraving_CopyPasteTests, copypaste2Voice)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste13.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     // select 2 chord rests at the start of the first measure
     Segment* s = m1->first(SegmentType::ChordRest);
@@ -274,10 +271,10 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice)
 TEST_F(Engraving_CopyPasteTests, copypaste2Voice5)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste17.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     // create a range selection from 2 eighth note to the end of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
@@ -314,10 +311,10 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice5)
 TEST_F(Engraving_CopyPasteTests, copypaste2Voice6)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste20.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     // create a range selection from 2nd eighth note to the end of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
@@ -353,13 +350,12 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice6)
 TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste18.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     score->select(m1, SelectType::RANGE, 0);
 
@@ -393,13 +389,12 @@ TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
 void Engraving_CopyPasteTests::copypastestaff(const char* idx)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste%1.mscx").arg(String::fromUtf8(idx)));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();      // src
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     score->select(m2, SelectType::RANGE, 0);
     EXPECT_TRUE(score->selection().canCopy());
@@ -430,10 +425,10 @@ TEST_F(Engraving_CopyPasteTests, copypastestaff50)
 TEST_F(Engraving_CopyPasteTests, copypastePartial)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_partial_01.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     Segment* s = m1->first(SegmentType::ChordRest);
     s = s->next(SegmentType::ChordRest);
@@ -462,13 +457,12 @@ TEST_F(Engraving_CopyPasteTests, copypastePartial)
 void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     Segment* s = m1->first(SegmentType::ChordRest);
     score->select(toChord(s->element(0))->notes().at(0));
@@ -506,13 +500,12 @@ TEST_F(Engraving_CopyPasteTests, copypasteTuplet02)
 void Engraving_CopyPasteTests::copypastenote(const String& idx, Fraction scale)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteNote" + idx + ".mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
     score->select(toChord(s->element(0))->notes().at(0));
@@ -592,13 +585,12 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBar)
 {
     // Copy first note m2 to last note m1
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteSplit01.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
     score->select(toChord(s->element(0))->notes().at(0));
@@ -619,13 +611,12 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitTiedNoteOverBar)
 {
     // Copy range first 2 beats of m2 to 2nd to last note m1
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteSplit02.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     // create a range selection on 1st to 2nd beat (voice 1) of 2nd measure
     Segment* s = m2->first(SegmentType::ChordRest);
@@ -638,7 +629,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitTiedNoteOverBar)
     QMimeData mimeData;
     mimeData.setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
     ChordRest* cr = m1->findChordRest(Fraction(6, 8), 0);
-    EXPECT_TRUE(cr);
+    ASSERT_TRUE(cr);
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(&mimeData);
@@ -653,20 +644,19 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverManyBars)
 {
     // copy first note to last note m2
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteSplit03.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     Segment* s = m1->first(SegmentType::ChordRest);
     score->select(toChord(s->element(0))->notes().at(0));
     QMimeData mimeData;
     mimeData.setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
     ChordRest* cr = m2->findChordRest(Fraction(19, 8), 0);
-    EXPECT_TRUE(cr);
+    ASSERT_TRUE(cr);
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(&mimeData);
@@ -681,13 +671,12 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBarDrumStave)
 {
     // Copy first note m2 to last note m1
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteSplit04.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
     score->select(toChord(s->element(0))->notes().at(0));
@@ -711,15 +700,14 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBarDrumStave)
 TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_tremolo.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
+    ASSERT_TRUE(m2);
     Measure* m3 = m2->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
-    EXPECT_TRUE(m3);
+    ASSERT_TRUE(m3);
 
     // create a range selection on 2nd to 3rd beat (voice 1) of first measure
     SegmentType segTypeCR = SegmentType::ChordRest;
@@ -768,20 +756,19 @@ TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
 TEST_F(Engraving_CopyPasteTests, copypasteparts)
 {
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_parts.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     // create part
     TestUtils::createPart(score);
 
     // select measures 1-3
     Measure* m1 = score->firstMeasure();
+    ASSERT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
+    ASSERT_TRUE(m2);
     Measure* m3 = m2->nextMeasure();
+    ASSERT_TRUE(m3);
     Measure* m4 = m3->nextMeasure();
-
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
-    EXPECT_TRUE(m3);
-    EXPECT_TRUE(m4);
+    ASSERT_TRUE(m4);
 
     score->select(m1);
     score->select(m3, SelectType::RANGE);
@@ -812,14 +799,15 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
 {
     //! [GIVEN] A score with a variation of ChordRests at the start of each measure...
     MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_repeatListSelection.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     //! --
 
     //! 1.0 [GIVEN] A (single note) chord...
     Measure* m = score->firstMeasure();
     ChordRest* cr1 = m ? m->firstChordRest(0) : nullptr;
-    EXPECT_TRUE(cr1 && cr1->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
 
     //! 1.1 [GIVEN] The parenthesized note...
     std::vector<Note*> notes = toChord(cr1)->notes();
@@ -835,7 +823,10 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     m = m->next() ? toMeasure(m->next()) : nullptr;
     cr1 = m ? m->firstChordRest(0) : nullptr;
     ChordRest* cr2 = m ? m->firstChordRest(staff2track(1, 0)) : nullptr; // Staff 2, voice 1
-    EXPECT_TRUE(cr1 && cr1->isChord() && cr2 && cr2->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
+    ASSERT_TRUE(cr2);
+    ASSERT_TRUE(cr2->isChord());
 
     //! 2.1 [GIVEN] All notes from both chords...
     notes = toChord(cr1)->notes();
@@ -851,7 +842,8 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 3.0 [GIVEN] Chords in two staves...
     m = m->next() ? toMeasure(m->next()) : nullptr;
     cr1 = m ? m->firstChordRest(0) : nullptr;
-    EXPECT_TRUE(cr1 && cr1->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
 
     //! 3.1 [GIVEN] Some (not all) of the notes from one chord...
     notes.clear();
@@ -868,7 +860,8 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 4.0 [GIVEN] A chord with a mixture of parentheses...
     m = m->next() ? toMeasure(m->next()) : nullptr;
     cr1 = m ? m->firstChordRest(0) : nullptr;
-    EXPECT_TRUE(cr1 && cr1->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
 
     //! 4.1 [GIVEN] Some (not all) of the notes the chord...
     score->deselectAll();
@@ -888,7 +881,10 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     m = m->next() ? toMeasure(m->next()) : nullptr;
     cr1 = m ? m->firstChordRest(0) : nullptr;
     cr2 = m ? m->firstChordRest(1) : nullptr; // Voice 2
-    EXPECT_TRUE(cr1 && cr1->isChord() && cr2 && cr2->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
+    ASSERT_TRUE(cr2);
+    ASSERT_TRUE(cr2->isChord());
 
     //! 5.1 [GIVEN] All notes from both chords...
     notes = toChord(cr1)->notes();
@@ -908,7 +904,8 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     Segment* seg = m ? m->first(SegmentType::ChordRest) : nullptr;
     seg = seg ? seg->next(SegmentType::ChordRest) : nullptr;
     cr1 = seg ? seg->cr(0) : nullptr;
-    EXPECT_TRUE(cr1 && cr1->isChord());
+    ASSERT_TRUE(cr1);
+    ASSERT_TRUE(cr1->isChord());
 
     //! 6.1 [GIVEN] The parenthesized note...
     notes = toChord(cr1)->notes();

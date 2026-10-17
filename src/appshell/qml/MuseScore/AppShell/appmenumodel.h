@@ -28,7 +28,6 @@
 #include "muse_framework_config.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "extensions/iextensionsregister.h"
 #include "global/iglobalconfiguration.h"
@@ -39,7 +38,6 @@
 #include "project/irecentfilescontroller.h"
 #include "ui/imainwindow.h"
 #include "ui/inavigationcontroller.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 #include "update/iupdateconfiguration.h"
 #include "workspace/iworkspacemanager.h"
@@ -68,10 +66,8 @@ public:
 #ifdef MUSE_MODULE_MUSESAMPLER
     muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo;
 #endif
-    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
     muse::ContextInject<IAppMenuModelHook> appMenuModelHook = { this };
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
     muse::ContextInject<muse::workspace::IWorkspaceManager> workspacesManager = { this };

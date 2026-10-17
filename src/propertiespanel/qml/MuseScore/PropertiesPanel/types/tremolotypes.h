@@ -24,15 +24,17 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace TremoloTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class TremoloStyle {
-    STYLE_DEFAULT,
-    STYLE_TRADITIONAL,
-    STYLE_TRADITIONAL_ALTERNATE
+    STYLE_DEFAULT = int(engraving::TremoloStyle::DEFAULT),
+    STYLE_TRADITIONAL = int(engraving::TremoloStyle::TRADITIONAL),
+    STYLE_TRADITIONAL_ALTERNATE = int(engraving::TremoloStyle::TRADITIONAL_ALTERNATE)
 };
 Q_ENUM_NS(TremoloStyle)
 }

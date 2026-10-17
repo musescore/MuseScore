@@ -380,7 +380,7 @@ Slur::Slur(const Slur& s)
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(EngravingItem* parent, ElementType type)
+Slur::Slur(DummyParentOr<EngravingItem> parent, ElementType type)
     : SlurTie(type, parent)
 {
 }

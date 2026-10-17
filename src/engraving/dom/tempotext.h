@@ -48,7 +48,7 @@ class TempoText final : public TextBase
     DECLARE_CLASSOF(ElementType::TEMPO_TEXT)
 
 public:
-    TempoText(Segment* parent);
+    TempoText(DummyParentOr<Segment> parent);
 
     TempoText* clone() const override { return new TempoText(*this); }
 

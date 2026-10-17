@@ -56,7 +56,7 @@ public:
 private:
 
     friend class Factory;
-    StaffTypeChange(MeasureBase* parent = 0);
+    StaffTypeChange(DummyParentOr<MeasureBase> parent);
     StaffTypeChange(const StaffTypeChange&);
 
     void spatiumChanged(double oldValue, double newValue) override;

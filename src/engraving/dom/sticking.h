@@ -39,7 +39,7 @@ class Sticking final : public TextBase
     PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    Sticking(Segment* parent);
+    Sticking(DummyParentOr<Segment> parent);
 
     Sticking* clone() const override { return new Sticking(*this); }
 

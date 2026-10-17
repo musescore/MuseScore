@@ -27,7 +27,10 @@
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/measure.h"
 
+#include "palette/palettecommands.h"
+
 using namespace mu::propertiespanel;
+using namespace mu::palette;
 
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                        IElementRepositoryService* repository)
@@ -102,7 +105,7 @@ void TimeSignatureSettingsModel::loadProperties()
 
 void TimeSignatureSettingsModel::showTimeSignatureProperties()
 {
-    dispatcher()->dispatch("time-signature-properties");
+    commandDispatcher()->dispatch(OPEN_TIME_SIGNATURE_PROPERTIES_COMMAND);
 }
 
 PropertyItem* TimeSignatureSettingsModel::horizontalScale() const

@@ -361,7 +361,7 @@
           <Chord>
             <eid>K_K</eid>
             <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
+            <StemDirection>up</StemDirection>
             <Note>
               <eid>L_L</eid>
               <pitch>36</pitch>

@@ -117,7 +117,7 @@ public:
 protected:
     friend class Factory;
 
-    Arpeggio(Chord* parent, ElementType type = ElementType::ARPEGGIO);
+    Arpeggio(DummyParentOr<Chord> parent, ElementType type = ElementType::ARPEGGIO);
 
 private:
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;

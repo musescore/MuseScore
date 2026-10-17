@@ -44,8 +44,6 @@ TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, TextLineBase* 
 {
     m_text    = Factory::createText(this, TextStyleType::DEFAULT, false);
     m_endText = Factory::createText(this, TextStyleType::DEFAULT, false);
-    m_text->setOwnershipParent(this);
-    m_endText->setOwnershipParent(this);
     m_text->setFlag(ElementFlag::MOVABLE, false);
     m_endText->setFlag(ElementFlag::MOVABLE, false);
 }
@@ -119,7 +117,7 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
     m_endText->spatiumChanged(ov, nv);
 }
 
-static constexpr std::array<Pid, 44> TextLineBasePropertyId = { {
+static constexpr std::array<Pid, 45> TextLineBasePropertyId = { {
     Pid::LINE_VISIBLE,
     Pid::BEGIN_HOOK_TYPE,
     Pid::BEGIN_HOOK_HEIGHT,
@@ -164,9 +162,10 @@ static constexpr std::array<Pid, 44> TextLineBasePropertyId = { {
     Pid::END_FONT_SIZE,
     Pid::END_FONT_STYLE,
     Pid::END_TEXT_OFFSET,
+    Pid::TEXT_SIZE_SPATIUM_DEPENDENT
 } };
 
-const std::array<Pid, 44>& TextLineBase::textLineBasePropertyIds()
+const std::array<Pid, 45>& TextLineBase::textLineBasePropertyIds()
 {
     return TextLineBasePropertyId;
 }
@@ -214,7 +213,7 @@ EngravingObject* TextLineBaseSegment::propertyDelegate(Pid pid) const
 //   TextLineBase
 //---------------------------------------------------------
 
-TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
+TextLineBase::TextLineBase(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : SLine(type, parent, f)
 {
     setBeginHookHeight(1.9_sp);
@@ -576,6 +575,29 @@ PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
 
     default:
         return SLine::propertyDefault(propertyId);
+    }
+}
+
+PropertyFlags TextLineBase::propertyFlags(Pid id) const
+{
+    switch (id) {
+    case Pid::ALIGN:
+        return propertyFlags(Pid::BEGIN_TEXT_ALIGN);
+    case Pid::POSITION:
+        return propertyFlags(Pid::BEGIN_TEXT_POSITION);
+    case Pid::FONT_FACE:
+        return propertyFlags(Pid::BEGIN_FONT_FACE);
+    case Pid::FONT_SIZE:
+        return propertyFlags(Pid::BEGIN_FONT_SIZE);
+    case Pid::FONT_STYLE:
+        return propertyFlags(Pid::BEGIN_FONT_STYLE);
+    case Pid::MUSICAL_SYMBOLS_SCALE:
+        return propertyFlags(Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE);
+    case Pid::MUSIC_SYMBOL_SIZE:
+        return propertyFlags(Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE);
+
+    default:
+        return SLine::propertyFlags(id);
     }
 }
 

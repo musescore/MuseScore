@@ -35,7 +35,7 @@ static const ElementStyle laissezVibStyle {
     { Sid::minLaissezVibLength, Pid::MIN_LENGTH }
 };
 
-LaissezVib::LaissezVib(Note* parent)
+LaissezVib::LaissezVib(DummyParentOr<Note> parent)
     : Tie(ElementType::LAISSEZ_VIB, parent)
 {
     initElementStyle(&laissezVibStyle);

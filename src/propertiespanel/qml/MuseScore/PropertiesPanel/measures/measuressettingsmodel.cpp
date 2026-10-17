@@ -21,14 +21,15 @@
  */
 #include "measuressettingsmodel.h"
 
-#include "notation/inotationinteraction.h"
-#include "notation/inotationselection.h"
-
 #include "translation.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+#include "notationscene/notationcommands.h"
+
+using namespace muse::rcommand;
 using namespace mu::propertiespanel;
 using namespace mu::notation;
-using namespace muse::actions;
 using namespace mu::engraving;
 
 MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
@@ -60,20 +61,20 @@ bool MeasuresSettingsModel::isEmpty() const
 
 void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)
 {
-    ActionData actionData = ActionData::make_arg1(numberOfMeasures);
+    const Params params = { { "count", muse::Val(numberOfMeasures) } };
 
     switch (target) {
     case InsertMeasuresTarget::AfterSelection:
-        dispatcher()->dispatch("insert-measures-after-selection", actionData);
+        commandDispatcher()->dispatch(INSERT_MEASURES_AFTER_SELECTION_COMMAND, params);
         break;
     case InsertMeasuresTarget::BeforeSelection:
-        dispatcher()->dispatch("insert-measures", actionData);
+        commandDispatcher()->dispatch(INSERT_MEASURES_COMMAND, params);
         break;
     case InsertMeasuresTarget::AtStartOfScore:
-        dispatcher()->dispatch("insert-measures-at-start-of-score", actionData);
+        commandDispatcher()->dispatch(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, params);
         break;
     case InsertMeasuresTarget::AtEndOfScore:
-        dispatcher()->dispatch("append-measures", actionData);
+        commandDispatcher()->dispatch(APPEND_MEASURES_COMMAND, params);
         break;
     }
 }

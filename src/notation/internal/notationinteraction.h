@@ -184,6 +184,7 @@ public:
 
     // Grip edit
     bool isGripEditStarted() const override;
+    bool isStartEndGripSelected() const override;
     bool isHitGrip(const muse::PointF& pos) const override;
     void startEditGrip(const muse::PointF& pos) override;
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
@@ -301,6 +302,7 @@ public:
     void resetBeamMode() override;
     void resetShapesAndPosition() override;
     void resetToDefaultLayout() override;
+    void freezeSelectionPosition() override;
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(const ScoreConfig& config) override;
@@ -460,8 +462,11 @@ private:
 
     EngravingItem* dropTarget(mu::engraving::EditData& ed) const;
     bool prepareDropStandardElement(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
-    bool prepareDropMeasureAnchorElement(const muse::PointF& pos);
+    bool prepareDropMeasureBaseAnchorElement(const muse::PointF& pos);
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
+    std::vector<muse::RectF> dropHighlightRects(const mu::engraving::EngravingItem* dropElem,
+                                                const mu::engraving::MeasureBase* targetMeasureBase, const muse::RectF& staffRect,
+                                                mu::engraving::KeyboardModifiers modifiers) const;
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
 

@@ -42,10 +42,10 @@ class Engraving_BspTreeTests : public ::testing::Test
 TEST_F(Engraving_BspTreeTests, NearestNeighbor)
 {
     Score* score = ScoreRW::readScore(BSPTREE_DATA_DIR + u"nearest_neighbor.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Page* page = score->pages().at(0);
-    EXPECT_TRUE(page);
+    ASSERT_TRUE(page);
     EXPECT_FALSE(page->elements().empty());
 
     // [GIVEN] A set of notes in scattered positions, and a BspTree containing those notes
@@ -59,7 +59,7 @@ TEST_F(Engraving_BspTreeTests, NearestNeighbor)
         }
     }
 
-    EXPECT_FALSE(notes.empty());
+    ASSERT_FALSE(notes.empty());
 
     // [WHEN] Iterating through the set of notes, and passing each note's position to nearestNeighbor
     for (EngravingItem* note : notes) {
@@ -72,7 +72,7 @@ TEST_F(Engraving_BspTreeTests, NearestNeighbor)
 
     // [GIVEN] A set of notes in scattered positions, and a BspTree containing a single note
     EngravingItem* singleNote = *notes.begin();
-    EXPECT_TRUE(singleNote);
+    ASSERT_TRUE(singleNote);
 
     bsp.initialize(page->pageBoundingRect(), static_cast<int>(page->elements().size()));
     bsp.insert(singleNote);

@@ -1177,6 +1177,28 @@ NoteHeadScheme TConv::fromXml(const AsciiStringView& tag, NoteHeadScheme def)
     return findTypeByXmlTag<NoteHeadScheme>(NOTEHEAD_SCHEMES, tag, def);
 }
 
+static const std::vector<Item<InstrumentLabelVisibility> > INSTRUMENT_LABEL_VISIBILITIES = {
+    { InstrumentLabelVisibility::AUTO,  "auto",  muse::TranslatableString("engraving", "Auto") },
+    { InstrumentLabelVisibility::LONG,  "long",  muse::TranslatableString("engraving", "Long") },
+    { InstrumentLabelVisibility::SHORT, "short", muse::TranslatableString("engraving", "Short") },
+    { InstrumentLabelVisibility::HIDE,  "hide",  muse::TranslatableString("engraving", "Hide") }
+};
+
+String TConv::translatedUserName(InstrumentLabelVisibility v)
+{
+    return findCapitalizedUserNameByType(INSTRUMENT_LABEL_VISIBILITIES, v).translated();
+}
+
+AsciiStringView TConv::toXml(InstrumentLabelVisibility v)
+{
+    return findXmlTagByType<InstrumentLabelVisibility>(INSTRUMENT_LABEL_VISIBILITIES, v);
+}
+
+InstrumentLabelVisibility TConv::fromXml(const AsciiStringView& tag, InstrumentLabelVisibility def)
+{
+    return findTypeByXmlTag<InstrumentLabelVisibility>(INSTRUMENT_LABEL_VISIBILITIES, tag, def);
+}
+
 static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_NORMAL,           "normal",         muse::TranslatableString("engraving/noteheadgroup", "Normal") },
     { NoteHeadGroup::HEAD_CROSS,            "cross",          muse::TranslatableString("engraving/noteheadgroup", "Cross") },
@@ -1762,7 +1784,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::SYSTEM,            "system",               muse::TranslatableString("engraving", "System") },
 
     { TextStyleType::STAFF,             "staff",                muse::TranslatableString("engraving", "Staff") },
-    { TextStyleType::STAVE_SHARING,     "staff",                muse::TranslatableString("engraving", "Stave sharing label") },
+    { TextStyleType::STAVE_SHARING,     "stave_sharing",         muse::TranslatableString("engraving", "Stave sharing label") },
     { TextStyleType::EXPRESSION,        "expression",           muse::TranslatableString("engraving", "Expression") },
     { TextStyleType::DYNAMICS,          "dynamics",             muse::TranslatableString("engraving", "Dynamics") },
     { TextStyleType::HAIRPIN,           "hairpin",              muse::TranslatableString("engraving", "Hairpin") },
@@ -3558,4 +3580,112 @@ mu::engraving::AsciiStringView mu::engraving::TConv::toXml(InstrumentNamesFormat
 InstrumentNamesFormat TConv::fromXml(const AsciiStringView& str, InstrumentNamesFormat def)
 {
     return findTypeByXmlTag<InstrumentNamesFormat>(INSTR_NAMES_FORMAT, str, def);
+}
+
+struct ActionIconTypeItem {
+    ActionIconType type;
+    AsciiStringView xml;
+    muse::TranslatableString name;
+    char16_t icon = 0;
+};
+
+//! NOTE The icon code is a UTF-16-like address of the icon in the icon font.
+// See also /muse/framework/ui/view/iconcodes.h
+// If explicit synchronization with command names and icons is required, then we need to:
+// * Add an interface something like "IActionIconDecoration".
+// * Use it in ActionIcon(Item) to get titles and icons.
+// * Implement and register it outside the engraving module.
+
+const std::vector<ActionIconTypeItem> ACTIONICON_TYPES = { {
+    { ActionIconType::UNDEFINED,     "undefined", TranslatableString("action", "Undefined"),   0x0000 },
+
+    { ActionIconType::ACCIACCATURA,     "acciaccatura", TranslatableString("action", "Add grace note: acciaccatura"),   0xF427 },
+    { ActionIconType::APPOGGIATURA,     "appoggiatura", TranslatableString("action", "Add grace note: appoggiatura"),   0xF428 },
+    { ActionIconType::GRACE4,           "grace4",       TranslatableString("action", "Add grace note: quarter"),        0xF429 },
+    { ActionIconType::GRACE16,          "grace16",      TranslatableString("action", "Add grace note: 16th"),           0xF42A },
+    { ActionIconType::GRACE32,          "grace32",      TranslatableString("action", "Add grace note: 32nd"),           0xF42B },
+    { ActionIconType::GRACE8_AFTER,     "grace8after",  TranslatableString("action", "Add grace note: eighth after"),   0xF42C },
+    { ActionIconType::GRACE16_AFTER,    "grace16after", TranslatableString("action", "Add grace note: 16th after"),     0xF42D },
+    { ActionIconType::GRACE32_AFTER,    "grace32after", TranslatableString("action", "Add grace note: 32nd after"),     0xF42E },
+
+    { ActionIconType::BEAM_AUTO,        "beam-auto",    TranslatableString("action", "Auto beam"),                      0xF329 },
+    { ActionIconType::BEAM_NONE,        "beam-none",    TranslatableString("action", "No beam"),                        0xF33A },
+    { ActionIconType::BEAM_BREAK_LEFT,  "beam-break-left", TranslatableString("action", "Break beam left"),             0xF33B },
+    { ActionIconType::BEAM_JOIN,        "beam-join",    TranslatableString("action", "Join beams"),                     0xF33D },
+    { ActionIconType::BEAM_BREAK_INNER_8TH, "beam-break-inner-8th", TranslatableString("action", "Break inner beams (eighth)"), 0xF33E },
+    { ActionIconType::BEAM_BREAK_INNER_16TH, "beam-break-inner-16th", TranslatableString("action", "Break inner beams (16th)"),   0xF33F },
+    { ActionIconType::BEAM_FEATHERED_ACCELERATE, "beam-feathered-accelerate", TranslatableString("action", "Feathered beam, accelerate"),
+      0xEF88 },
+    { ActionIconType::BEAM_FEATHERED_DECELERATE, "beam-feathered-decelerate", TranslatableString("action", "Feathered beam, decelerate"),
+      0xEF89 },
+
+    { ActionIconType::PARENTHESES,      "add-parentheses",          TranslatableString("action", "Add parentheses to element"), 0xEF7C },
+    { ActionIconType::BRACKETS,         "add-brackets",             TranslatableString("action", "Add brackets to element"), 0xEF7D },
+
+    { ActionIconType::VFRAME,           "insert-vbox",              TranslatableString("action", "Insert vertical frame"), 0xEF6C },
+    { ActionIconType::HFRAME,           "insert-hbox",              TranslatableString("action", "Insert horizontal frame"), 0xEF6D },
+    { ActionIconType::TFRAME,           "insert-textframe",         TranslatableString("action", "Insert text frame"), 0xEF6E },
+    { ActionIconType::FFRAME,           "insert-fretframe",         TranslatableString("action", "Insert fretboard diagram legend"),
+      0xF491 },
+    { ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change", TranslatableString("action", "Insert staff type change"), 0xF433 },
+    { ActionIconType::MEASURE,          "insert-measure",       TranslatableString("action", "Insert one measure before selection"),
+      0xF432 },
+
+    { ActionIconType::STANDARD_BEND,    "standard-bend",            TranslatableString("action", "Standard bend"), 0xF45F },
+    { ActionIconType::PRE_BEND,         "pre-bend",                 TranslatableString("action", "Pre-bend"), 0xF460 },
+    { ActionIconType::GRACE_NOTE_BEND,  "grace-note-bend",          TranslatableString("action", "Grace note bend"), 0xF461 },
+    { ActionIconType::SLIGHT_BEND,      "slight-bend",              TranslatableString("action", "Slight bend"), 0xF462 },
+
+    { ActionIconType::DIVE,             "dive",                     TranslatableString("action", "Dive"), 0xF4B3 },
+    { ActionIconType::PRE_DIVE,         "pre-dive",                 TranslatableString("action", "Pre-dive"), 0xF4B4 },
+    { ActionIconType::DIP,              "dip",                      TranslatableString("action", "Dip"), 0xF4B5 },
+    { ActionIconType::SCOOP,            "scoop",                    TranslatableString("action", "Scoop"), 0xF4B6 },
+
+    { ActionIconType::NOTE_ANCHORED_LINE, "add-noteline",           TranslatableString("action", "Add note-anchored line"), 0xF47B },
+
+    { ActionIconType::SYSTEM_LOCK,      "toggle-system-lock",   TranslatableString("action", "Lock/unlock selected system(s)"), 0xF487 },
+    { ActionIconType::PAGE_LOCK,        "toggle-page-lock",     TranslatableString("action", "Lock/unlock selected page(s)"), 0xF4C3 },
+} };
+
+static const ActionIconTypeItem& findItemByType(const std::vector<ActionIconTypeItem>& cont, const ActionIconType& type)
+{
+    const auto it = std::find_if(cont.cbegin(), cont.cend(), [&](const ActionIconTypeItem& item) {
+        return item.type == type;
+    });
+
+    IF_ASSERT_FAILED(it != cont.cend()) {
+        static ActionIconTypeItem dummy;
+        return dummy;
+    }
+
+    return *it;
+}
+
+const TranslatableString& TConv::userName(ActionIconType v)
+{
+    return findItemByType(ACTIONICON_TYPES, v).name;
+}
+
+char16_t TConv::iconCode(ActionIconType v)
+{
+    return findItemByType(ACTIONICON_TYPES, v).icon;
+}
+
+AsciiStringView TConv::toXml(ActionIconType v)
+{
+    return findItemByType(ACTIONICON_TYPES, v).xml;
+}
+
+ActionIconType TConv::fromXml(const AsciiStringView& tag, ActionIconType def)
+{
+    auto it = std::find_if(ACTIONICON_TYPES.cbegin(), ACTIONICON_TYPES.cend(), [tag](const ActionIconTypeItem& i) {
+        return i.xml == tag;
+    });
+
+    if (it == ACTIONICON_TYPES.cend()) {
+        LOGE() << "not found type for tag: " << tag;
+        return def;
+    }
+
+    return it->type;
 }

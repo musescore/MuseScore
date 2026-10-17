@@ -22,13 +22,13 @@
 
 #include "layoutpanelcontextmenumodel.h"
 
-#include "actions/actiontypes.h"
+#include "thirdparty/kors_logger/src/log_base.h"
 #include "types/translatablestring.h"
-
-#include "log.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
+
+#include "log.h"
 
 using namespace mu::context;
 using namespace mu::instrumentsscene;
@@ -36,11 +36,9 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::uicomponents;
-using namespace muse::actions;
 
-static const ActionCode SET_INSTRUMENTS_ORDER_CODE("set-instruments-order");
-static const ActionCode EXPAND_ALL_CODE("expand-all-instruments");
-static const ActionCode COLLAPSE_ALL_CODE("collapse-all-instruments");
+static const QString EXPAND_ALL_ID("expand-all-instruments");
+static const QString COLLAPSE_ALL_ID("collapse-all-instruments");
 
 static const QString ORDERING_MENU_ID("ordering-menu");
 
@@ -60,13 +58,12 @@ void LayoutPanelContextMenuModel::load()
 
 void LayoutPanelContextMenuModel::handleMenuItem(const QString& itemId)
 {
-    if (itemId == EXPAND_ALL_CODE) {
+    if (itemId == EXPAND_ALL_ID) {
         emit expandCollapseAllRequested(true);
-    } else if (itemId == COLLAPSE_ALL_CODE) {
+    } else if (itemId == COLLAPSE_ALL_ID) {
         emit expandCollapseAllRequested(false);
-    } else if (itemId == SET_INSTRUMENTS_ORDER_CODE) {
-        const MenuItem& item = findItem(itemId);
-        setInstrumentsOrder(item.args());
+    } else {
+        setInstrumentsOrder(itemId);
     }
 }
 
@@ -129,13 +126,11 @@ void LayoutPanelContextMenuModel::buildMenu(bool includeInstrumentsOrdering)
     setItems(items);
 }
 
-void LayoutPanelContextMenuModel::setInstrumentsOrder(const ActionData& args)
+void LayoutPanelContextMenuModel::setInstrumentsOrder(const QString& newOrderId)
 {
-    if (args.empty()) {
+    IF_ASSERT_FAILED(!newOrderId.isEmpty()) {
         return;
     }
-
-    String newOrderId = String::fromQString(args.arg<QString>(0));
 
     for (const ScoreOrder& order : m_orders) {
         if (order.id == newOrderId) {
@@ -152,9 +147,7 @@ void LayoutPanelContextMenuModel::updateOrderingMenu(const QString& newOrderId)
     MenuItem& orderingMenu = findMenu(ORDERING_MENU_ID);
 
     for (MenuItem* item : orderingMenu.subitems()) {
-        UiActionState state = item->state();
-        state.checked = item->id() == newOrderId;
-        item->setState(state);
+        item->setChecked(item->id() == newOrderId);
     }
 }
 
@@ -167,20 +160,9 @@ MenuItem* LayoutPanelContextMenuModel::createInstrumentsOrderingItem()
     auto createNewItem = [currentOrder, this](const ScoreOrder& order, bool customized) {
         MenuItem* orderItem = new MenuItem(this);
         orderItem->setId(order.id);
-
-        UiAction action;
-        action.title = order.getName();
-        action.code = SET_INSTRUMENTS_ORDER_CODE;
-        action.checkable = Checkable::Yes;
-        orderItem->setAction(action);
-
-        UiActionState state;
-        state.enabled = true;
-        state.checked = !customized && currentOrder.id == order.id;
-        orderItem->setState(state);
-
-        orderItem->setArgs(ActionData::make_arg1<QString>(order.id));
-
+        orderItem->setTitle(order.getName());
+        orderItem->setCheckable(true);
+        orderItem->setChecked(!customized && currentOrder.id == order.id);
         return orderItem;
     };
 
@@ -198,18 +180,10 @@ MenuItem* LayoutPanelContextMenuModel::createInstrumentsOrderingItem()
 MenuItem* LayoutPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
 {
     MenuItem* item = new MenuItem(this);
-    item->setId(QString::fromStdString(expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE));
-
-    UiAction action;
-    action.title = expand
+    item->setId(expand ? EXPAND_ALL_ID : COLLAPSE_ALL_ID);
+    item->setTitle(expand
                    ? TranslatableString("layoutpanel", "Expand all instruments")
-                   : TranslatableString("layoutpanel", "Collapse all instruments");
-    action.code = expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE;
-    item->setAction(action);
-
-    UiActionState state;
-    state.enabled = true;
-    item->setState(state);
+                   : TranslatableString("layoutpanel", "Collapse all instruments"));
 
     return item;
 }

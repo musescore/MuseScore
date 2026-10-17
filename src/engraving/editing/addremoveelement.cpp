@@ -111,6 +111,7 @@ void AddElement::endUndoRedo(bool isUndo) const
 void AddElement::undo()
 {
     Score* score = element->score();
+    EngravingItem::disconnectSharedTree(element);
 
     if (!element->isTuplet()) {
         score->removeElement(element);
@@ -268,6 +269,7 @@ void RemoveElement::redo()
 {
     Score* score = element->score();
 
+    EngravingItem::disconnectSharedTree(element);
     if (!element->isTuplet()) {
         score->removeElement(element);
     }
