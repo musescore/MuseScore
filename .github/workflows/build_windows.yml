@@ -249,10 +249,7 @@ jobs:
 
 
   windows_portable:
-    # Disable on pull_request
-    if: |
-      github.event_name != 'pull_request' &&
-      (inputs.platforms == '' || contains(inputs.platforms, 'windows_portable'))
+    if: inputs.platforms == '' || contains(inputs.platforms, 'windows_portable')
     runs-on: windows-2025
     steps:
     - name: Cancel Previous Runs
