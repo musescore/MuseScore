@@ -579,24 +579,35 @@ Item {
             }
         }
     }
-    Rectangle {
+    Item {
+        id: panelNibPreview
         property var panel: DrawingSession.panel
-        visible: panel && panel.pointerPreview
+        visible: editor.drawingEnabled && panel && panel.pointerPreview
         anchors.centerIn: parent
         width: panel && panel.eraserPreview ? editor.eraserSize * editor.viewScale : editor.effectiveStrokeWidth * editor.viewScale
         height: width
-        radius: width / 2
-        color: panel && !panel.eraserPreview ? editor.strokeColor : "transparent"
-        border.color: "white"
-        border.width: 2
+        rotation: panel && !panel.eraserPreview ? editor.nibAngle : 0
         z: 30
         Rectangle {
+            id: panelNibBody
             anchors.fill: parent
-            anchors.margins: 2
-            radius: width / 2
-            color: "transparent"
-            border.color: "black"
-            border.width: 1
+            readonly property real squeeze: panelNibPreview.panel && !panelNibPreview.panel.eraserPreview ? 1 - editor.nibFlatten : 1
+            readonly property real shear: panelNibPreview.panel && !panelNibPreview.panel.eraserPreview && editor.nibShape === "square" ? Math.tan(editor.nibTilt * Math.PI / 180) : 0
+            transform: Matrix4x4 {
+                matrix: Qt.matrix4x4(1, panelNibBody.shear, 0, -panelNibBody.shear * panelNibBody.height / 2, 0, panelNibBody.squeeze, 0, (1 - panelNibBody.squeeze) * panelNibBody.height / 2, 0, 0, 1, 0, 0, 0, 0, 1)
+            }
+            radius: panelNibPreview.panel && !panelNibPreview.panel.eraserPreview && editor.nibShape === "square" ? 0 : width / 2
+            color: panelNibPreview.panel && !panelNibPreview.panel.eraserPreview ? editor.strokeColor : "transparent"
+            border.color: "white"
+            border.width: 2
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: 2
+                radius: panelNibPreview.panel && !panelNibPreview.panel.eraserPreview && editor.nibShape === "square" ? 0 : width / 2
+                color: "transparent"
+                border.color: "black"
+                border.width: 1
+            }
         }
     }
 }

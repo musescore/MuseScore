@@ -87,29 +87,40 @@ function nibHull(points) {
     lower.pop();upper.pop();return lower.concat(upper);
 }
 function nibPolygons(paths,style) {
-    var nib=style.nib,angle=nib.angle*Math.PI/180,co=Math.cos(angle),si=Math.sin(angle),ratio=Math.max(0.05,1-nib.flatten),out=[];
-    function stamp(p){
+    var nib=style.nib,angle=nib.angle*Math.PI/180,co=Math.cos(angle),si=Math.sin(angle),ratio=Math.max(0.05,1-nib.flatten),shear=nib.shape==="square"?Math.tan(Math.max(-60,Math.min(60,Number(nib.tilt)||0))*Math.PI/180):0,out=[];
+    function stamp(p,direction){
+        var co=Math.cos(angle),si=Math.sin(angle),automatic=nib.followDirection?direction:0,ac=Math.cos(automatic),as=Math.sin(automatic);
         var radius=style.width*Math.max(0.05,p.pressure===undefined?1:p.pressure)/2,points=[];
         var count=nib.shape==="square"?4:32;
         for(var i=0;i<count;i++){
-            var x,y;if(count===4){x=(i===0||i===3?-1:1)*radius;y=(i<2?-1:1)*radius*ratio;}
-            else{x=Math.cos(i*2*Math.PI/count)*radius;y=Math.sin(i*2*Math.PI/count)*radius*ratio;}
-            points.push({x:p.x+x*co-y*si,y:p.y+x*si+y*co});
+            var x,y;if(count===4){x=(i===0||i===3?-1:1)*radius;y=(i<2?-1:1)*radius;}
+            else{x=Math.cos(i*2*Math.PI/count)*radius;y=Math.sin(i*2*Math.PI/count)*radius;}
+            x+=shear*y;
+            y*=ratio;
+            var rotatedX=x*co-y*si,rotatedY=x*si+y*co;
+            points.push({x:p.x+rotatedX*ac-rotatedY*as,y:p.y+rotatedX*as+rotatedY*ac});
         }return points;
     }
     paths.forEach(function(points){
-        var last=null;points.forEach(function(p){var next=stamp(p),polygon=nibHull(last?last.concat(next):next);last=next;
+        var last=null;points.forEach(function(p,index){var before=points[Math.max(0,index-1)],after=points[Math.min(points.length-1,index+1)];var next=stamp(p,Math.atan2(after.y-before.y,after.x-before.x)),polygon=nibHull(last?last.concat(next):next);last=next;
             polygon.forEach(function(p,i){out.push([i?"L":"M",p.x,p.y]);});out.push(["Z"]);
         });
     });return out;
 }
-var nibOutlineCache = new WeakMap();
+// Keep a bounded strong cache: QV4 WeakMap lookups can crash after collection
+// of the temporary centreline arrays produced by pencil previews.
+var nibOutlineCache = [];
 function nibOutline(commands,style) {
     if(style.stroke==="none"||!style.nib||(style.nib.shape==="round"&&style.nib.flatten===0))return null;
-    var signature=[style.width,style.nib.shape,style.nib.flatten,style.nib.angle,pathData(commands)].join("/"),saved=nibOutlineCache.get(commands);
-    if(saved&&saved.signature===signature)return saved.commands;
+    var signature=[style.width,style.nib.shape,style.nib.flatten,style.nib.angle,style.nib.tilt||0,!!style.nib.followDirection,pathData(commands)].join("/");
+    for(var i=0;i<nibOutlineCache.length;i++){
+        var saved=nibOutlineCache[i];
+        if(saved.source===commands&&saved.signature===signature)return saved.commands;
+    }
     var outline=buildNibOutline(commands,style);
-    nibOutlineCache.set(commands,{signature:signature,commands:outline});return outline;
+    nibOutlineCache.push({source:commands,signature:signature,commands:outline});
+    if(nibOutlineCache.length>8)nibOutlineCache.shift();
+    return outline;
 }
 function buildNibOutline(commands,style) {
     if(style.stroke==="none"||!style.nib||(style.nib.shape==="round"&&style.nib.flatten===0))return null;
@@ -200,11 +211,16 @@ function shape(kind,a,b,s) {
 
 }
 
+function nibExtentMultiplier(style){
+    var nib=style.nib;if(!nib||nib.shape!=="square")return 1;
+    var ratio=Math.max(0.05,1-(Number(nib.flatten)||0)),shear=Math.tan(Math.max(-60,Math.min(60,Number(nib.tilt)||0))*Math.PI/180);
+    return Math.hypot(1+Math.abs(shear),ratio);
+}
 function bounds(shapes) {
 
     var x=Infinity,y=Infinity,r=-Infinity,b=-Infinity;
     for(var i=0;i<shapes.length;i++){
-        var sh=shapes[i],pad=sh.svgSource?0:sh.style.width/2*(sh.style.nib&&sh.style.nib.shape==="square"?Math.SQRT2:1)+1,lx=Infinity,ly=Infinity,rx=-Infinity,by=-Infinity;
+        var sh=shapes[i],pad=sh.svgSource?0:sh.style.width/2*nibExtentMultiplier(sh.style)+1,lx=Infinity,ly=Infinity,rx=-Infinity,by=-Infinity;
         (sh.derivedWholeCommands||sh.commands).forEach(function(c){for(var n=1;n<c.length;n+=2){
             lx=Math.min(lx,c[n]-pad);ly=Math.min(ly,c[n+1]-pad);rx=Math.max(rx,c[n]+pad);by=Math.max(by,c[n+1]+pad);
         }});
@@ -237,7 +253,7 @@ function gradientSvg(gradient,id,box){
 }
 function checkedStyle(saved){
     var result=style(saved.stroke,saved.fill,saved.width,saved.opacity);
-    if(saved.nib)result.nib={shape:saved.nib.shape==="square"?"square":"round",flatten:Math.max(0,Math.min(0.95,Number(saved.nib.flatten)||0)),angle:Math.max(-180,Math.min(180,Number(saved.nib.angle)||0))};
+    if(saved.nib)result.nib={followDirection:!!saved.nib.followDirection,shape:saved.nib.shape==="square"?"square":"round",flatten:Math.max(0,Math.min(0.95,Number(saved.nib.flatten)||0)),angle:Math.max(-180,Math.min(180,Number(saved.nib.angle)||0)),tilt:Math.max(-60,Math.min(60,Number(saved.nib.tilt)||0))};
     ["strokeGradient","fillGradient"].forEach(function(key){
         var g=saved[key];if(!g)return;
         if(!g.from||!g.to||![g.from.x,g.from.y,g.to.x,g.to.y].every(function(v){return typeof v==="number"&&isFinite(v)&&Math.abs(v)<=100000;})||!Array.isArray(g.stops)||g.stops.length<2||g.stops.length>128)throw Error("Gradiente inválido.");

@@ -10,7 +10,9 @@ Item {
     property var editor: null
     property string group: ""
     property string helpText: ""
-    property bool pointerPreview: false
+    property bool panelOpen: false
+    property bool sliderPointerPreview: false
+    readonly property bool pointerPreview: sliderPointerPreview || (panelOpen && (group === "pencil" || group === "pen"))
     property bool eraserPreview: false
     property bool sliderBusy: false
     readonly property bool erase: group === "eraser"
@@ -22,7 +24,7 @@ Item {
     }
     function adjusting(active, preview, eraser) {
         sliderBusy = active;
-        pointerPreview = active && preview;
+        sliderPointerPreview = active && preview;
         eraserPreview = eraser;
         if (active && editor && (group === "nodes" || group === "select"))
             editor.remember(true);
@@ -57,6 +59,23 @@ Item {
                     accentButton: root.editor && root.editor.nibShape === "square"
                     onClicked: if (root.editor)
                         root.editor.nibShape = "square"
+                }
+            }
+            Column {
+                width: parent.width
+                spacing: 6
+                visible: !!root.editor && root.editor.nibShape === "square"
+                StyledTextLabel {
+                    text: root.tr("Nib inclination") + ": " + Math.round(root.editor ? root.editor.nibTilt : 0) + "°"
+                }
+                StyledSlider {
+                    width: parent.width
+                    from: -60
+                    to: 60
+                    stepSize: 1
+                    value: root.editor ? root.editor.nibTilt : 0
+                    onMoved: if (root.editor)
+                        root.editor.nibTilt = value
                 }
             }
             StyledTextLabel {
@@ -226,6 +245,11 @@ Item {
                 stepSize: 0
                 value: root.editor ? root.editor.smoothing : 0.7
                 onMoved: root.editor.setSmoothing(value)
+            }
+            CheckBox {
+                text: root.tr("Rotate nib along stroke")
+                checked: root.editor ? root.editor.nibFollowDirection : false
+                onClicked: root.editor.nibFollowDirection = !checked
             }
             CheckBox {
                 text: root.tr("Use pen pressure")

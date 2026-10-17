@@ -16,7 +16,10 @@ Item {
     property string nibShape: "round"
     property real nibFlatten: 0
     property real nibAngle: 0
+    property real nibTilt: 0
     property string transformMode: "scale"
+    property bool nibFollowDirection: false
+    property real nibStrokeDirection: 0
     property bool pressureEnabled: false
     property real tabletPressure: 1
     property bool tabletActive: false
@@ -925,6 +928,10 @@ Item {
                 flatten: nibFlatten,
                 angle: nibAngle
             };
+        if (result.nib)
+            result.nib.followDirection = nibFollowDirection;
+        if (result.nib)
+            result.nib.tilt = nibShape === "square" ? nibTilt : 0;
         return result;
     }
 
@@ -1824,6 +1831,7 @@ Item {
         d.secondaryActive = secondaryActive;
         d.smoothing = smoothing;
         d.pressureEnabled = pressureEnabled;
+        d.nibFollowDirection = nibFollowDirection;
         d.strokeOpacity = strokeOpacity;
         d.filled = filled;
         d.coordinateSpace = coordinateSpace;
@@ -1873,6 +1881,8 @@ Item {
             smoothing = Math.max(0, Math.min(1, d.smoothing));
         if (d.pressureEnabled !== undefined)
             pressureEnabled = !!d.pressureEnabled;
+        if (d.nibFollowDirection !== undefined)
+            nibFollowDirection = !!d.nibFollowDirection;
         if (d.strokeOpacity !== undefined)
             strokeOpacity = Math.max(0, Math.min(1, d.strokeOpacity));
         if (d.filled !== undefined)
@@ -2071,7 +2081,7 @@ Item {
         forceActiveFocus();
     }
     Keys.onShortcutOverride: function (event) {
-        if (drawingEnabled && !textEditing && activeFocus && (event.key === Qt.Key_Delete || event.key === Qt.Key_Escape || event.key === Qt.Key_Return || event.key === Qt.Key_Enter || toolShortcut(event) !== "" || ((event.modifiers & Qt.ControlModifier) && (event.key === Qt.Key_Z || event.key === Qt.Key_Y || event.key === Qt.Key_D))))
+        if (drawingEnabled && !textEditing && activeFocus && ((event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace) || event.key === Qt.Key_Escape || event.key === Qt.Key_Return || event.key === Qt.Key_Enter || toolShortcut(event) !== "" || ((event.modifiers & Qt.ControlModifier) && (event.key === Qt.Key_Z || event.key === Qt.Key_Y || event.key === Qt.Key_D))))
             event.accepted = true;
     }
     Keys.onReleased: function (event) {
@@ -2097,7 +2107,7 @@ Item {
         } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
             finishPen();
             event.accepted = true;
-        } else if (event.key === Qt.Key_Delete) {
+        } else if ((event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace)) {
             removeSelected();
             event.accepted = true;
         } else if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_Z) {
@@ -2899,6 +2909,9 @@ Item {
                 moveInput(mouse);
         }
         function moveInput(mouse) {
+            var nibDx = mouse.x - pointerX, nibDy = mouse.y - pointerY;
+            if (nibDx * nibDx + nibDy * nibDy > 0.25)
+                root.nibStrokeDirection = Math.atan2(nibDy, nibDx) * 180 / Math.PI;
             pointerX = mouse.x;
             pointerY = mouse.y;
 
@@ -3459,32 +3472,36 @@ Item {
             }
         }
     }
-    Rectangle {
+    Item {
         id: nibPointer
-        rotation: root.tool === "pencil" ? root.nibAngle : 0
-        transform: Scale {
-            origin.x: nibPointer.width / 2
-            origin.y: nibPointer.height / 2
-            yScale: root.tool === "pencil" ? 1 - root.nibFlatten : 1
-        }
         visible: root.drawingEnabled && (input.containsMouse || root.mirrorPointerVisible) && (root.tool === "pencil" || root.tool === "eraser")
         width: root.tool === "eraser" ? root.eraserSize : root.effectiveStrokeWidth
         height: width
         x: (root.mirrorPointerVisible && !input.dragging ? root.mirrorPointerX : input.pointerX) - width / 2
         y: (root.mirrorPointerVisible && !input.dragging ? root.mirrorPointerY : input.pointerY) - height / 2
-        radius: root.tool === "pencil" && root.nibShape === "square" ? 0 : width / 2
-        color: root.tool === "pencil" ? root.strokeColor : "transparent"
+        rotation: root.tool === "pencil" ? root.nibAngle + (root.nibFollowDirection ? root.nibStrokeDirection : 0) : 0
         opacity: root.tool === "pencil" ? root.strokeOpacity : 1
-        border.color: "#202020"
-        border.width: Math.min(width / 3, 1 / Math.max(0.02, root.viewScale))
         z: 100
         Rectangle {
+            id: nibPointerBody
             anchors.fill: parent
-            anchors.margins: parent.border.width
+            readonly property real squeeze: root.tool === "pencil" ? 1 - root.nibFlatten : 1
+            readonly property real shear: root.tool === "pencil" && root.nibShape === "square" ? Math.tan(root.nibTilt * Math.PI / 180) : 0
+            transform: Matrix4x4 {
+                matrix: Qt.matrix4x4(1, nibPointerBody.shear, 0, -nibPointerBody.shear * nibPointerBody.height / 2, 0, nibPointerBody.squeeze, 0, (1 - nibPointerBody.squeeze) * nibPointerBody.height / 2, 0, 0, 1, 0, 0, 0, 0, 1)
+            }
             radius: root.tool === "pencil" && root.nibShape === "square" ? 0 : width / 2
-            color: "transparent"
-            border.color: "#ffffff"
+            color: root.tool === "pencil" ? root.strokeColor : "transparent"
+            border.color: "#202020"
             border.width: Math.min(width / 3, 1 / Math.max(0.02, root.viewScale))
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: parent.border.width
+                radius: root.tool === "pencil" && root.nibShape === "square" ? 0 : width / 2
+                color: "transparent"
+                border.color: "white"
+                border.width: Math.min(width / 3, 1 / Math.max(0.02, root.viewScale))
+            }
         }
     }
     Image {

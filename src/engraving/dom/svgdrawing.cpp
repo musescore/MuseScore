@@ -1288,14 +1288,22 @@ QString gradientDefinition(const QJsonObject& gradient, const QString& id, const
 }
 
 // A nib is swept in score coordinates after anchor mapping, matching the editor.
+double nibExtentMultiplier(const QJsonObject& style)
+{
+    const auto nib = style.value("nib").toObject();
+    const double ratio = 1.0 - std::clamp(nib.value("flatten").toDouble(), 0.0, 0.95);
+    const double shear = std::tan(std::clamp(nib.value("tilt").toDouble(), -60.0, 60.0) * 3.14159265358979323846 / 180.0);
+    return std::hypot(1.0 + std::abs(shear), ratio);
+}
+
 QString nibOutlinePath(const QString& source, const QJsonObject& style)
 {
     const auto nib = style.value("nib").toObject();
     const double angle = std::clamp(nib.value("angle").toDouble(), -180.0, 180.0) * 3.14159265358979323846 / 180.0;
-    const double co = std::cos(angle), si = std::sin(angle);
     const double ratio = 1.0 - std::clamp(nib.value("flatten").toDouble(), 0.0, 0.95);
     const double radius = style.value("width").toDouble() / 2.0;
     const bool square = nib.value("shape").toString() == "square";
+    const double shear = square ? std::tan(std::clamp(nib.value("tilt").toDouble(), -60.0, 60.0) * 3.14159265358979323846 / 180.0) : 0.0;
     const double tolerance = std::max(0.05, std::min(0.4, radius * 0.05));
     std::vector<std::vector<QPointF> > paths;
     std::vector<QPointF> points;
@@ -1357,14 +1365,20 @@ QString nibOutlinePath(const QString& source, const QJsonObject& style)
         }
     }
     finish();
-    auto stamp=[&](const QPointF& p) {
+    auto stamp=[&](const QPointF& p, double direction) {
+        const double co = std::cos(angle), si = std::sin(angle);
+        const double automatic = nib.value("followDirection").toBool() ? direction : 0.0;
+        const double ac = std::cos(automatic), as = std::sin(automatic);
         std::vector<QPointF> result;
         const int count=square ? 4 : 32;
         for (int i=0; i < count; ++i) {
             const double t=i * 2 * 3.14159265358979323846 / count;
             const double x=square ? ((i == 0 || i == 3) ? -radius : radius) : std::cos(t) * radius;
-            const double y=(square ? (i < 2 ? -radius : radius) : std::sin(t) * radius) * ratio;
-            result.emplace_back(p.x() + x * co - y * si, p.y() + x * si + y * co);
+            const double rawY = square ? (i < 2 ? -radius : radius) : std::sin(t) * radius;
+            const double y = rawY * ratio;
+            const double tiltedX = x + shear * rawY;
+            const double rotatedX = tiltedX * co - y * si, rotatedY = tiltedX * si + y * co;
+            result.emplace_back(p.x() + rotatedX * ac - rotatedY * as, p.y() + rotatedX * as + rotatedY * ac);
         }
         return result;
     };
@@ -1374,8 +1388,11 @@ QString nibOutlinePath(const QString& source, const QJsonObject& style)
     QString output;
     for (const auto& line:paths) {
         std::vector<QPointF> previous;
-        for (const auto& p:line) {
-            auto next=stamp(p), sorted=previous;
+        for (size_t pointIndex=0; pointIndex < line.size(); ++pointIndex) {
+            const auto& p = line[pointIndex];
+            const auto& before = line[pointIndex ? pointIndex - 1 : 0];
+            const auto& after = line[std::min(pointIndex + 1, line.size() - 1)];
+            auto next=stamp(p, std::atan2(after.y() - before.y(), after.x() - before.x())), sorted=previous;
             sorted.insert(sorted.end(), next.begin(), next.end());
             previous=std::move(next);
             std::sort(sorted.begin(), sorted.end(), [](const QPointF& a, const QPointF& b) {
@@ -1798,7 +1815,8 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
                 mapped.append(x);
                 mapped.append(y);
                 const double pad = style.value("width").toDouble() / 2
-                                   * (style.value("nib").toObject().value("shape").toString() == "square" ? std::sqrt(2.0) : 1.0) + 0.1;
+                                   * (style.value("nib").toObject().value("shape").toString()
+                                      == "square" ? nibExtentMultiplier(style) : 1.0) + 0.1;
                 minX = std::min(minX, x - pad);
                 maxX = std::max(maxX, x + pad);
                 minY = std::min(minY, y - pad);

@@ -181,7 +181,7 @@ Item {
         placementPolicies:roomRight>=width&&(roomLeft<width||roomRight>=roomLeft)?PopupView.PreferRight:PopupView.PreferLeft
         showArrow:true
         closeOnEscape:false
-        onClosed:{settings.helpText="";settings.pointerPreview=false;settings.sliderBusy=false;if(root.editor&&DrawingSession.modeActive&&!root.editor.textEditing)root.editor.forceActiveFocus()}
+        onClosed:{settings.helpText="";settings.sliderPointerPreview = false;settings.sliderBusy=false;if(root.editor&&DrawingSession.modeActive&&!root.editor.textEditing)root.editor.forceActiveFocus()}
         ColumnLayout {
             width:options.contentWidth;height:options.contentHeight
             Keys.onShortcutOverride:function(event){
@@ -233,6 +233,8 @@ Item {
                 Layout.fillWidth:true;Layout.fillHeight:true
                 contentWidth:width;contentHeight:settings.implicitHeight;flickableDirection:Flickable.VerticalFlick
                 NativeDrawingSettings {
+                    panelOpen: options.isOpened
+
                     id:settings
                     width:settingsScroll.width-12
                     editor:root.editor;group:root.group
