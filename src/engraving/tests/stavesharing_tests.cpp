@@ -487,5 +487,21 @@ TEST_F(Engraving_StaveSharingTests, testTimeShiftMovesSharedTupletsOnce)
         EXPECT_EQ(t->tick(), Fraction(1, 4));
     }
 
+    // [WHEN] Redo, then remove the inserted quarter
+    score->undoRedo(false, nullptr);
+    is.setNoteEntryMode(false);
+    score->select(toChord(m1->findChordRest(m1->tick(), flute1Track))->upNote());
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Remove time"), [&](Transaction&) {
+        score->cmdTimeDelete();
+    });
+
+    // [THEN] Both triplets move back to beat 2, once
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m1->ticks(), Fraction(4, 4));
+    for (Tuplet* t : tuplets) {
+        EXPECT_EQ(t->tick(), Fraction(1, 4));
+        EXPECT_EQ(t->elements().front()->tick(), Fraction(1, 4));
+    }
+
     delete score;
 }

@@ -593,3 +593,118 @@ TEST_F(Engraving_TupletTests, insertMeasureMovesOuterTuplets)
 
     delete score;
 }
+
+TEST_F(Engraving_TupletTests, removeTimeMovesLaterTuplets)
+{
+    // four quarters, the second made into an eighth triplet
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setDuration(DurationType::V_QUARTER);
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (int pitch : { 60, 62, 64, 65 }) {
+            NoteVal nval(pitch);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    Measure* m1 = score->firstMeasure();
+    auto crAt = [&](const Fraction& tick) {
+        Segment* s = m1->findSegment(SegmentType::ChordRest, tick);
+        return s ? toChordRest(s->element(0)) : nullptr;
+    };
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->addTuplet(crAt(Fraction(1, 4)), Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+    });
+    Tuplet* tuplet = crAt(Fraction(1, 4))->tuplet();
+    ASSERT_TRUE(tuplet);
+
+    // removing the first quarter moves the triplet to beat 1
+    score->select(toChord(crAt(Fraction(0, 1)))->upNote());
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdTimeDelete();
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    ASSERT_EQ(rhythm(m1), "3:2[8 r8 r8] 4 4");
+    EXPECT_EQ(tuplet->tick(), Fraction(0, 1));
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(tuplet->tick(), Fraction(1, 4));
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(tuplet->tick(), Fraction(0, 1));
+
+    // deleting the triplet leaves a rest in its place
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdDeleteTuplet(tuplet, true);
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "r4 4 4");
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, removeInsertedTimeMovesNestedTupletsBack)
+{
+    // quarter, a quarter triplet starting with an eighth triplet, quarter
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (DurationType duration : { DurationType::V_QUARTER, DurationType::V_HALF, DurationType::V_QUARTER }) {
+            is.setDuration(duration);
+            NoteVal nval(60);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    Measure* m1 = score->firstMeasure();
+    auto crAt = [&](const Fraction& tick) {
+        Segment* s = m1->findSegment(SegmentType::ChordRest, tick);
+        return s ? toChordRest(s->element(0)) : nullptr;
+    };
+    for (int i = 0; i < 2; ++i) {
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+            score->addTuplet(crAt(Fraction(1, 4)), Fraction(3, 2), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+        });
+    }
+    ASSERT_EQ(rhythm(m1), "4 3:2[ 3:2[8 r8 r8] r4 r4] 4");
+    Tuplet* inner = crAt(Fraction(1, 4))->tuplet();
+    ASSERT_TRUE(inner && inner->tuplet());
+    Tuplet* outer = inner->tuplet();
+
+    // Insert adds a quarter on beat 1, then removing it moves both tuplets back to beat 2
+    is.setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    is.setSegment(m1->first(SegmentType::ChordRest));
+    score->select(toChord(crAt(Fraction(0, 1)))->upNote());
+    is.setTrack(0);
+    is.setDuration(DurationType::V_QUARTER);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(tx, score, NoteInputParams { 0 }, false, false);
+    });
+    ASSERT_EQ(rhythm(m1), "4 4 3:2[ 3:2[8 r8 r8] r4 r4] 4");
+    ASSERT_EQ(outer->tick(), Fraction(2, 4));
+    is.setNoteEntryMode(false);
+    score->select(toChord(crAt(Fraction(0, 1)))->upNote());
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdTimeDelete();
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    ASSERT_EQ(rhythm(m1), "4 3:2[ 3:2[8 r8 r8] r4 r4] 4");
+    EXPECT_EQ(outer->tick(), Fraction(1, 4));
+    EXPECT_EQ(inner->tick(), Fraction(1, 4));
+
+    // deleting the outer triplet leaves a rest in its place
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->cmdDeleteTuplet(outer, true);
+    });
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "4 r4 r4 4");
+
+    delete score;
+}
