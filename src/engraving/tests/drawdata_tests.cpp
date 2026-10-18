@@ -22,17 +22,22 @@
 #include <gtest/gtest.h>
 
 #include <cstring>
+#include <memory>
 
-#include "draw/types/drawdata.h"
-#include "draw/painter.h"
 #include "draw/bufferedpaintprovider.h"
-#include "draw/utils/drawdatarw.h"
+#include "draw/painter.h"
+#include "draw/types/drawdata.h"
 #include "draw/utils/drawdatacomp.h"
+#include "draw/utils/drawdatarw.h"
 
 #include "global/io/file.h"
 
 #include "engraving/devtools/drawdata/drawdataconverter.h"
 #include "engraving/devtools/drawdata/drawdatagenerator.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/rendering/score/scorerenderer.h"
+
+#include "utils/scorerw.h"
 
 #include "log.h"
 
@@ -193,6 +198,37 @@ TEST_F(Engraving_DrawDataTests, ScoreDraw)
     }
 
     EXPECT_EQ(originImage, dataImage);
+}
+
+TEST_F(Engraving_DrawDataTests, PaddingAfterLoadingStyle)
+{
+    const muse::io::path_t scorePath = DATA_ROOT + "/stavecentering_data/staveCentering.mscx";
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(scorePath.toString(), true));
+    ASSERT_TRUE(score);
+    ASSERT_NE(score->style().spatium(), MStyle().spatium());
+    for (Score* loadedScore : score->scoreList()) {
+        loadedScore->updatePaddingTables();
+    }
+    score->setLayoutAll();
+    score->doLayout();
+
+    auto provider = std::make_shared<BufferedPaintProvider>();
+    {
+        Painter painter(provider, "DrawData");
+        rendering::IScoreRenderer::ScorePaintOptions options;
+        options.isMultiPage = true;
+        options.deviceDpi = DrawData::CANVAS_DPI;
+        options.printPageBackground = true;
+        options.isSetViewport = true;
+        options.isPrinting = true;
+        rendering::score::ScoreRenderer renderer;
+        renderer.paintScore(&painter, score.get(), options);
+    }
+
+    DrawDataGenerator generator;
+    DrawDataPtr actual = generator.genDrawData(scorePath);
+    ASSERT_TRUE(actual);
+    EXPECT_TRUE(DrawDataComp::compare(actual, provider->drawData()).empty());
 }
 
 TEST_F(Engraving_DrawDataTests, DrawDiff)
