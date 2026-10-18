@@ -8718,7 +8718,7 @@ followed by dashes</source>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2175"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2176"/>
         <source>Real-time advance</source>
-        <translation>リアルタイムアドバンス</translation>
+        <translation>リアルタイム拍送り</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2182"/>
@@ -38835,7 +38835,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationmidiinput.cpp" line="508"/>
         <source>Realtime advance</source>
-        <translation>リアルタイムアドバンス</translation>
+        <translation>リアルタイム拍送り</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="448"/>

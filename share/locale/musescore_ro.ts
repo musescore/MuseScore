@@ -10245,7 +10245,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="346"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="215"/>
         <source>&amp;Add</source>
-        <translation>&amp;Adaugă</translation>
+        <translation>&amp;Adăugare</translation>
     </message>
 </context>
 <context>
@@ -10316,7 +10316,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="266"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="143"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Editează</translation>
+        <translation>&amp;Editare</translation>
     </message>
 </context>
 <context>
@@ -10355,7 +10355,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="373"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="239"/>
         <source>F&amp;ormat</source>
-        <translation>F&amp;ormatează</translation>
+        <translation>F&amp;ormatare</translation>
     </message>
 </context>
 <context>
@@ -10424,7 +10424,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="328"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="199"/>
         <source>&amp;View</source>
-        <translation>&amp;Vizualizează</translation>
+        <translation>&amp;Vizualizare</translation>
     </message>
 </context>
 <context>
@@ -35978,7 +35978,7 @@ a eșuat: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="233"/>
         <source>%1/%n file(s) max.</source>
         <extracomment>%1 is the number of files currently selected, %2 is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1/%n fișiere max.</translation>
     </message>
     <message>
         <source>%1/%2 max files</source>
