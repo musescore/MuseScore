@@ -1494,6 +1494,19 @@ void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derive
 }
 
 //---------------------------------------------------------
+//   convertMScoreFontMarkerSymbols206
+//---------------------------------------------------------
+
+static String convertMScoreFontMarkerSymbols206(const String& xmlText)
+{
+    String s = xmlText;
+    s.replace(u"\ue177", u"<sym>segno</sym>");
+    s.replace(u"\ue178", u"<sym>coda</sym>");
+    s.replace(u"\ue179", u"<sym>codaSquare</sym>");
+    return s;
+}
+
+//---------------------------------------------------------
 //   readText206
 //---------------------------------------------------------
 
@@ -1560,6 +1573,7 @@ static void readMarker(Marker* m, XmlReader& e, ReadContext& ctx)
             tctx.reader().unknown();
         }
     }
+    m->setXmlText(convertMScoreFontMarkerSymbols206(m->xmlText()));
     m->setMarkerType(mt);
 
     CompatUtils::migrateOffsetPre302(m, ctx.mscVersion());
