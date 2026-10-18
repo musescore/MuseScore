@@ -1079,7 +1079,9 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
         // there, so fill it with a hidden full-measure rest rather than the visible one
         // checkMeasure would add. The exporter omits hidden full-measure rests, so this round-trips.
         const auto& imported = importedVoices[static_cast<size_t>(staffNum - 1)];
-        if (!imported[0] && std::any_of(imported.begin(), imported.end(), [](bool v) { return v; })) {
+        const Segment* startSegment = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+        const bool voice1Occupied = startSegment && startSegment->element(staff2track(staffIdx));
+        if (!imported[0] && !voice1Occupied && std::any_of(imported.begin(), imported.end(), [](bool v) { return v; })) {
             Staff* staff = m_score->staff(staffIdx);
             Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
             Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
