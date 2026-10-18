@@ -21,6 +21,8 @@
  */
 #include "htmlparser.h"
 
+#include <string_view>
+
 namespace mu::engraving {
 muse::String HtmlParser::parse(const muse::String& in_html)
 {
@@ -113,15 +115,14 @@ muse::String HtmlParser::parse(const muse::String& in_html)
         text += formatRichText(block);
     }
 
-    auto replaceSym = [](std::string& str, int cc, const char* sym) {
+    auto replaceSym = [](std::string& str, int cc, std::string_view sym) {
         std::string code;
         code.resize(3);
         code[2] = static_cast<char>(cc);
         code[1] = static_cast<char>(cc >> 8);
         code[0] = static_cast<char>(cc >> 16);
 
-        auto pos = str.find(code);
-        if (pos != std::string::npos) {
+        for (auto pos = str.find(code); pos != std::string::npos; pos = str.find(code, pos + sym.size())) {
             str.replace(pos, 3, sym);
         }
     };
