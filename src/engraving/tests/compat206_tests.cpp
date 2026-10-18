@@ -94,6 +94,9 @@ TEST_F(Engraving_Compat206Tests, lidEmptyText) {
 TEST_F(Engraving_Compat206Tests, markers) {
     compat("markers");
 }
+TEST_F(Engraving_Compat206Tests, markers_mscore_font) {
+    compat("markers_mscore_font");
+}
 TEST_F(Engraving_Compat206Tests, noteheads) {
     compat("noteheads");
 }
