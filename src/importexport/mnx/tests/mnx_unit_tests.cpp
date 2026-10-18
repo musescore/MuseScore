@@ -452,6 +452,24 @@ TEST_F(Mnx_UnitTests, directionHintAllocation)
     }
 }
 
+TEST_F(Mnx_UnitTests, directionHintPreservesVoice1GapRest)
+{
+    const std::string spaces = R"({ "content": [ { "type": "space", "duration": [1, 1] } ] })";
+    const std::string json = singleStaffMnx({ sequencesArray({ spaces, wholeNoteSequence("C", 4, "lower") }) });
+    std::unique_ptr<MasterScore> score(importMnxFromJson(json, u"<directionHints>/gap.mnx"));
+    ASSERT_TRUE(score);
+
+    const Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+    const Segment* segment = measure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    ASSERT_TRUE(segment);
+    const EngravingItem* voice1 = segment->element(0);
+    ASSERT_TRUE(voice1 && voice1->isRest());
+    EXPECT_TRUE(toRest(voice1)->isGap());
+    EXPECT_FALSE(toRest(voice1)->durationType().isMeasure());
+    EXPECT_EQ(firstPitchOnTrack(measure, 1), 60);
+}
+
 TEST_F(Mnx_UnitTests, directionHintExport)
 {
     std::unique_ptr<MasterScore> score(importMnxFromJson(directionHintMnx(), u"<directionHints>/hints.mnx"));
