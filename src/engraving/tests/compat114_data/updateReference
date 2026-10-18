@@ -28,6 +28,7 @@ cp $test_dir/tamtam-test.mscx                   tamtam-ref.mscx
 cp $test_dir/text_scaling-test.mscx             text_scaling-ref.mscx
 cp $test_dir/textline-test.mscx                 textline-ref.mscx
 cp $test_dir/textstyles-test.mscx               textstyles-ref.mscx
+cp $test_dir/text_mscore1_symbols-test.mscx     text_mscore1_symbols-ref.mscx
 cp $test_dir/title-test.mscx                    title-ref.mscx
 cp $test_dir/tremolo2notes-test.mscx            tremolo2notes-ref.mscx
 cp $test_dir/tuplets-test.mscx                  tuplets-ref.mscx
