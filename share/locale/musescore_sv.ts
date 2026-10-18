@@ -5627,7 +5627,7 @@ som följs av streck</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="229"/>
         <source>&amp;Preferences…</source>
-        <translation>&amp;Inställningar …</translation>
+        <translation>&amp;Inställningar…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="230"/>
@@ -10488,7 +10488,7 @@ Publicerad under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio.</source>
-        <translation>Hör dina noter komma till liv med professionellt inspelade instrumentbibliotek för uttrycksfull, realistisk uppspelning i MuseScore Studio.</translation>
+        <translation>Hör dina noter vakna till liv med professionellt inspelade instrumentbibliotek för uttrycksfull, realistisk uppspelning i MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
@@ -12854,7 +12854,7 @@ Band %1 på strängar %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="572"/>
         <source>fretboard diagram frame(s)</source>
-        <translation><numerusform>Ram för greppbrädediagram</numerusform><numerusform>Ramar för greppbrädediagram</numerusform></translation>
+        <translation><numerusform>ram för greppbrädediagram</numerusform><numerusform>ramar för greppbrädediagram</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="573"/>
@@ -21449,18 +21449,18 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="360"/>
         <source>Checking for updates…</source>
-        <translation>Letar efter uppdateringar …</translation>
+        <translation>Letar efter uppdateringar…</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="428"/>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="431"/>
         <source>Downloading…</source>
-        <translation>Laddar ned …</translation>
+        <translation>Laddar ned…</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="440"/>
         <source>Unpacking…</source>
-        <translation>Packar upp …</translation>
+        <translation>Packar upp…</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/pagesettings.cpp" line="170"/>
@@ -33883,7 +33883,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>Du behöver internetåtkomst för att kolla efter uppdateringar. För att skydda ditt privatliv kommer MuseScore Studio inte att lagra någon personlig information. Se vår &lt;a href=&quot;%1&quot;&gt;policy&lt;/a&gt; för mer information.</translation>
+        <translation>Du behöver internetåtkomst för att leta efter uppdateringar. För att skydda din integritet kommer MuseScore Studio inte att lagra någon personlig information. Se vår &lt;a href=&quot;%1&quot;&gt;policy&lt;/a&gt; för mer information.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="30"/>
