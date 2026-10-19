@@ -174,6 +174,13 @@ protected:
         async::processMessages();
     }
 
+    //! NOTE: emulates a driver that closed and blanked its spec after a failed reopen
+    void givenClosedWithBlankSpec(Driver& driver)
+    {
+        driver.opened = false;
+        driver.activeSpec = IAudioDriver::Spec();
+    }
+
     void countNotifications(async::Notification notification, int& count)
     {
         notification.onNotify(this, [&count]() {
@@ -476,6 +483,96 @@ TEST_F(Audio_AudioDriverControllerTests, SelectOutputDevice_RestoresPreviousDevi
     EXPECT_FALSE(ok);
     EXPECT_TRUE(m_controller->isOpened());
     EXPECT_EQ(m_controller->outputDevice(), HEADPHONES);
+}
+
+TEST_F(Audio_AudioDriverControllerTests, SelectOutputDevice_OpensDriver_WhenClosedAfterFailure)
+{
+    //! [GIVEN] The desired output spec is configured
+    ON_CALL(*m_configuration, desiredOutputSpec())
+    .WillByDefault(Return(DESIRED_OUTPUT_SPEC));
+
+    //! [GIVEN] The headphones were opened, then the driver closed after a failure
+    givenOpened(HEADPHONES);
+    givenClosedWithBlankSpec(*m_currentDriver);
+
+    //! [THEN] The driver is opened with the speakers
+    EXPECT_CALL(*m_currentDriver->mock, close());
+    EXPECT_CALL(*m_currentDriver->mock, open(SpecIs(SPEAKERS, DESIRED_OUTPUT_SPEC), _));
+
+    //! [THEN] The speakers are saved
+    EXPECT_CALL(*m_configuration, setAudioOutputDeviceId(SPEAKERS));
+
+    int outputDeviceChangedCount = 0;
+    countNotifications(m_controller->outputDeviceChanged(), outputDeviceChangedCount);
+
+    //! [WHEN] Selecting the speakers
+    bool ok = m_controller->selectOutputDevice(SPEAKERS);
+    async::processMessages();
+
+    //! [THEN] The speakers are the active device
+    EXPECT_TRUE(ok);
+    EXPECT_TRUE(m_controller->isOpened());
+    EXPECT_THAT(m_controller->activeSpec(), SpecIs(SPEAKERS, DESIRED_OUTPUT_SPEC));
+    EXPECT_EQ(outputDeviceChangedCount, 1);
+}
+
+TEST_F(Audio_AudioDriverControllerTests, SelectOutputDevice_RestoresLastValidSpec_WhenClosedAndNewDeviceFails)
+{
+    //! [GIVEN] The desired output spec is configured
+    ON_CALL(*m_configuration, desiredOutputSpec())
+    .WillByDefault(Return(DESIRED_OUTPUT_SPEC));
+
+    //! [GIVEN] The headphones were opened, then the driver closed after a failure
+    givenOpened(HEADPHONES);
+    givenClosedWithBlankSpec(*m_currentDriver);
+
+    //! [GIVEN] The speakers can't be opened
+    ON_CALL(*m_currentDriver->mock, open(SpecIs(SPEAKERS, DESIRED_OUTPUT_SPEC), _))
+    .WillByDefault(Return(false));
+
+    //! [THEN] The speakers are tried, then the headphones are reopened with the last valid spec
+    EXPECT_CALL(*m_currentDriver->mock, open(SpecIs(SPEAKERS, DESIRED_OUTPUT_SPEC), _));
+    EXPECT_CALL(*m_currentDriver->mock, open(SpecIs(HEADPHONES, DESIRED_OUTPUT_SPEC), _));
+
+    //! [THEN] The headphones are saved
+    EXPECT_CALL(*m_configuration, setAudioOutputDeviceId(HEADPHONES));
+
+    //! [WHEN] Selecting the speakers
+    bool ok = m_controller->selectOutputDevice(SPEAKERS);
+    async::processMessages();
+
+    //! [THEN] The headphones are the active device
+    EXPECT_FALSE(ok);
+    EXPECT_TRUE(m_controller->isOpened());
+    EXPECT_THAT(m_controller->activeSpec(), SpecIs(HEADPHONES, DESIRED_OUTPUT_SPEC));
+}
+
+TEST_F(Audio_AudioDriverControllerTests, SelectOutputDevice_OnlySavesDevice_WhenAudioNeverStarted)
+{
+    //! [GIVEN] The current driver is the default one, and it can't open any device
+    givenCurrentDriverIsDefault();
+    ON_CALL(*m_defaultDriver->mock, open(_, _))
+    .WillByDefault(Return(false));
+
+    //! [GIVEN] Opening failed, so audio has never started
+    ASSERT_FALSE(m_controller->open(makeSpec(HEADPHONES), nullptr));
+    async::processMessages();
+
+    //! [THEN] The driver isn't opened
+    EXPECT_CALL(*m_defaultDriver->mock, open(_, _))
+    .Times(0);
+
+    //! [THEN] The speakers are saved
+    EXPECT_CALL(*m_configuration, setAudioOutputDeviceId(SPEAKERS));
+
+    //! [WHEN] Selecting the speakers
+    bool ok = m_controller->selectOutputDevice(SPEAKERS);
+    async::processMessages();
+
+    //! [THEN] The selection succeeds, and the driver stays closed
+    EXPECT_TRUE(ok);
+    EXPECT_FALSE(m_controller->isOpened());
+    EXPECT_FALSE(m_controller->activeSpec().isValid());
 }
 
 TEST_F(Audio_AudioDriverControllerTests, DeviceListChange_ReopensActiveDevice)

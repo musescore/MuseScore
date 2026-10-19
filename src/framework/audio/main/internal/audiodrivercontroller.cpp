@@ -210,19 +210,18 @@ bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
         return false;
     }
 
-    if (!m_audioDriver->isOpened()) {
+    // Audio has never been started yet
+    if (!m_audioDriver->isOpened() && !m_lastValidSpec.isValid()) {
         configuration()->setAudioOutputDeviceId(deviceId);
         return true;
     }
 
-    const IAudioDriver::Spec& oldSpec = m_audioDriver->activeSpec();
-
     IAudioDriver::Spec spec;
     spec.deviceId = deviceId;
-    spec.callback = oldSpec.callback;
+    spec.callback = m_callback;
     spec.output = configuration()->desiredOutputSpec();
 
-    LOGI() << "Trying to change output device from " << oldSpec << " to " << spec;
+    LOGI() << "Trying to change output device to " << spec;
 
     return reopenWithSpec(spec);
 }
@@ -312,17 +311,23 @@ bool AudioDriverController::switchToDefaultAudioDriver(IAudioDriver::Spec* activ
 
 bool AudioDriverController::reopenWithSpec(const IAudioDriver::Spec& spec)
 {
-    const IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
+    // A failed reopen can blank the driver's spec
+    IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
+    if (!oldSpec.isValid()) {
+        oldSpec = m_lastValidSpec;
+    }
 
     m_audioDriver->close();
     if (m_audioDriver->open(spec, nullptr)) {
         LOGI() << "Reopened with: " << spec;
+        m_retryOpenDevice = false;
         return true;
     }
 
     LOGE() << "Failed to reopen with: " << spec << ", returning to: " << oldSpec;
     if (m_audioDriver->open(oldSpec, nullptr)) {
         LOGI() << "Restored previous spec: " << oldSpec;
+        m_retryOpenDevice = false;
     } else {
         LOGE() << "Failed to restore previous spec: " << oldSpec << ", will retry on next device list change";
         m_retryOpenDevice = true;
