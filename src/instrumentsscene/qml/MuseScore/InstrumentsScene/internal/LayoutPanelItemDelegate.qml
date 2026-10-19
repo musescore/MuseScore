@@ -64,11 +64,15 @@ FocusableControl {
 
     property bool isLastRow: false
 
+    // For staff rows: whether their instrument is visible
+    property bool isParentVisible: true
+
     property alias isPopupOpened: popupLoader.isPopupOpened
 
     readonly property bool isCardTop: root.depth === 0
     readonly property bool isInExpandedCard: root.depth > 0 || (root.isExpanded && root.type === LayoutPanelItemType.PART)
     readonly property bool isHovered: rowHover.hovered && !prv.dragged
+    readonly property bool isDragged: prv.dragged
 
     // Group headers show their hover / pressed / selected state on the whole group's background (see LayoutPanel.qml)
     readonly property bool usesRowHighlight: root.type !== LayoutPanelItemType.SHARED_PART
@@ -157,8 +161,8 @@ FocusableControl {
     background.border.width: 0
     background.topLeftRadius: root.isCardTop ? root.cardRadius : 0
     background.topRightRadius: root.isCardTop ? root.cardRadius : 0
-    background.bottomLeftRadius: root.cardBottom ? root.cardRadius : 0
-    background.bottomRightRadius: root.cardBottom ? root.cardRadius : 0
+    background.bottomLeftRadius: root.cardBottom || prv.dragged ? root.cardRadius : 0
+    background.bottomRightRadius: root.cardBottom || prv.dragged ? root.cardRadius : 0
 
     StyledRectangularShadow {
         id: shadow
@@ -299,18 +303,23 @@ FocusableControl {
                     visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
                              && (root.type !== LayoutPanelItemType.SHARED_PART || root.isGroupCombined)
 
-                    // Instruments on combined shared staves take their visibility from the group
-                    enabled: root.isEnabled
+                    // Instruments on combined shared staves (and their staves) take their visibility from the group,
+                    // so their eyes are disabled (shown at the theme's disabled opacity), mirroring the instrument
+                    readonly property bool mirrorsInstrument: root.isGroupCombined && root.depth > 0
+                    readonly property bool isShownVisible: mirrorsInstrument ? root.isParentVisible
+                                                                             : Boolean(root.item) && root.item.isVisible
+
+                    enabled: root.isEnabled && !mirrorsInstrument
 
                     objectName: "VisibleBtn"
                     navigation.panel: root.navigation.panel
                     navigation.row: root.navigation.row
                     navigation.column: 1
                     accessible.name: (titleLabel.text ? titleLabel.text + ", " : "")
-                                     + (root.item && root.item.isVisible ? qsTrc("ui", "Visible") : qsTrc("ui", "Hidden"))
+                                     + (isShownVisible ? qsTrc("ui", "Visible") : qsTrc("ui", "Hidden"))
 
                     transparent: true
-                    icon: root.item && root.item.isVisible ? IconCode.EYE_OPEN : IconCode.EYE_CLOSED
+                    icon: isShownVisible ? IconCode.EYE_OPEN : IconCode.EYE_CLOSED
 
                     onClicked: {
                         const isVisible = root.item && root.item.isVisible
@@ -574,6 +583,11 @@ FocusableControl {
             PropertyChanges {
                 target: shadow
                 visible: true
+            }
+
+            PropertyChanges {
+                target: root
+                opacity: 0.9
             }
 
             AnchorChanges {

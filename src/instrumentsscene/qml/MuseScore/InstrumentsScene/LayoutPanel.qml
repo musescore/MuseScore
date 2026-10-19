@@ -59,6 +59,7 @@ Item {
 
 
 
+
     LayoutPanelContextMenuModel {
         id: contextMenuModel
 
@@ -487,6 +488,24 @@ Item {
                     }
                 }
 
+                // Drop placeholder: while a row is dragged, its slot in the list (which follows the
+                // drag, as rows are moved live) shows where it will be dropped
+                Rectangle {
+                    readonly property LayoutPanelItemDelegate draggedDelegate: treeItemDelegateLoader.item as LayoutPanelItemDelegate
+
+                    x: 4
+                    y: dropArea.metrics.top
+                    width: parent.width - 8
+                    height: prv.rowContentHeight
+
+                    visible: Boolean(draggedDelegate) && draggedDelegate.isDragged
+
+                    radius: 3
+                    color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
+                    border.width: 1.5
+                    border.color: ui.theme.accentColor
+                }
+
                 Loader {
                     id: treeItemDelegateLoader
 
@@ -518,6 +537,7 @@ Item {
                             isGroupExpanded: Boolean(item) && prv.isGroupExpanded(item.sharedGroupId)
                             isStaveSharingEnabled: treeModel.isStaveSharingEnabled
                             isLastRow: styleData.depth === 0 && !styleData.hasSibling
+                            isParentVisible: !dropArea.parentRowItem || dropArea.parentRowItem.isVisible
 
                             navigation.name: item?.title || "LayoutPanelItemDelegate"
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
