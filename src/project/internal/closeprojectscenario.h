@@ -32,6 +32,7 @@
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
 #include "rcommand/icommanddispatcher.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "inotationproject.h"
 #include "isaveprojectscenario.h"
@@ -44,6 +45,7 @@ public:
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
     CloseProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}

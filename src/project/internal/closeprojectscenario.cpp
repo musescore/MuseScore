@@ -25,10 +25,13 @@
 #include "translation.h"
 #include "types/projecturis.h"
 
+#include "playback/playbackcommands.h"
+
 #include "log.h"
 
-using namespace mu::project;
 using namespace muse;
+using namespace mu::project;
+using namespace mu::playback;
 using muse::async::Promise;
 
 Promise<Ret> CloseProjectScenario::resolvedPromise(const Ret& ret)
@@ -46,8 +49,8 @@ Promise<Ret> CloseProjectScenario::closeOpenedProject(bool goToHome)
             return resolvedPromise(make_ok());
         }
 
-        if (globalContext()->playbackState()->isPlaying()) {
-            commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
+        if (playbackState()->isPlaying()) {
+            commandDispatcher()->dispatch(STOP_COMMAND);
         }
 
         if (!project->isNeedSave()) {

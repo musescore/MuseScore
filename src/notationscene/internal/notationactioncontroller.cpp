@@ -702,7 +702,7 @@ void NotationActionController::init()
         m_currentNotationStyleChanged.notify();
     });
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
         m_isNoteInputAllowedChanged.send(isNoteInputAllowed());
     }, Asyncable::Mode::SetReplace);
 }
@@ -807,7 +807,7 @@ void NotationActionController::resetState()
 {
     TRACEFUNC;
 
-    if (globalContext()->playbackState()->isPlaying()) {
+    if (playbackController()->isPlaying()) {
         commandDispatcher()->dispatch(playback::STOP_COMMAND);
     }
 
@@ -846,7 +846,7 @@ void NotationActionController::resetState()
 
 bool NotationActionController::isNoteInputAllowed() const
 {
-    return !globalContext()->playbackState()->isPlaying();
+    return !playbackController()->isPlaying();
 }
 
 muse::async::Channel<bool> NotationActionController::isNoteInputAllowedChanged() const
@@ -1636,7 +1636,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
-        if (globalContext()->playbackState()->isPlaying()) {
+        if (playbackController()->isPlaying()) {
             engraving::MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
@@ -2630,7 +2630,7 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 bool NotationActionController::toggleNoteInputAllowed() const
 {
-    if (globalContext()->playbackState()->isPlaying()) {
+    if (!isNoteInputAllowed()) {
         return false;
     }
 

@@ -29,7 +29,7 @@
 
 using namespace muse;
 using namespace muse::shortcuts;
-using namespace mu::context;
+using namespace mu::appshell;
 
 static const std::string NAVIGATION_SCOPE = "NAVIGATION";
 static const std::string PLAYBACK_SCOPE = "PLAYBACK";

@@ -23,12 +23,9 @@
 #pragma once
 
 #include "async/notification.h"
-#include "audio/main/iplayer.h"
 #include "modularity/imoduleinterface.h"
 #include "notation/inotation_fwd.h"
 #include "project/inotationproject_fwd.h"
-
-#include "iplaybackstate.h"
 
 namespace mu::context {
 class IGlobalContext : MODULE_CONTEXT_INTERFACE
@@ -48,8 +45,5 @@ public:
     virtual void setCurrentNotation(const notation::INotationPtr& notation) = 0;
     virtual notation::INotationPtr currentNotation() const = 0;
     virtual muse::async::Notification currentNotationChanged() const = 0;
-
-    virtual void setCurrentPlayer(const muse::audio::IPlayerPtr& player) = 0;
-    virtual IPlaybackStatePtr playbackState() const = 0;
 };
 }

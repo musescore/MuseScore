@@ -148,12 +148,12 @@ void AbstractNotationPaintView::load()
         m_isSmoothPanningEnabled = configuration()->isSmoothPanning();
     }, async::Asyncable::Mode::SetReplace);
 
-    globalContext()->playbackState()->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
+    playbackState()->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
         m_lastPlaybackPosition = secs;
         m_lastPlaybackPositionUpdateTimeNs = m_elapsedTimer.nsecsElapsed();
     }, async::Asyncable::Mode::SetReplace);
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
+    playbackState()->isPlayingChanged().onReceive(this, [this](bool) {
         onPlayingChanged();
     }, async::Asyncable::Mode::SetReplace);
 
@@ -1564,7 +1564,7 @@ void AbstractNotationPaintView::onPlayingChanged()
 {
     TRACEFUNC;
 
-    bool isPlaying = globalContext()->playbackState()->isPlaying();
+    bool isPlaying = playbackState()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
     if (m_playbackCursorItem) {
@@ -1575,7 +1575,7 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_enableAutoScrollTimer.stop();
 
     if (isPlaying) {
-        m_lastPlaybackPosition = globalContext()->playbackState()->playbackPosition();
+        m_lastPlaybackPosition = playbackState()->playbackPosition();
         m_lastPlaybackPositionUpdateTimeNs = m_elapsedTimer.nsecsElapsed();
         updatePlaybackCursorInterpolated();
         m_updatePlaybackCursorInterpolatedTimer.start(23); // ~43 FPS (1024 buffer + 44100)
@@ -1770,7 +1770,7 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
     m_playbackCursorItem = cursor;
 
     if (m_playbackCursorItem) {
-        m_playbackCursorItem->setVisible(globalContext()->playbackState()->isPlaying());
+        m_playbackCursorItem->setVisible(playbackState()->isPlaying());
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", notationConfiguration()->playbackCursorColor());
 

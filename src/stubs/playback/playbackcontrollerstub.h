@@ -37,6 +37,9 @@ public:
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
 
+    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
+
     muse::Ret togglePlay() override;
     muse::Ret play(bool showErrors = true) override;
     muse::Ret playFromSelection(bool showErrors = true) override;

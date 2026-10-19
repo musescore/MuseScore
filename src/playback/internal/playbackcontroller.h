@@ -64,14 +64,20 @@ public:
     void init();
     void deinit();
 
+    // IPlaybackState
+    bool isPlaying() const override;
+    muse::async::Channel<bool> isPlayingChanged() const override;
+
+    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
+    // --------------
+
+    // IPlaybackController
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
 
     bool isPlayAllowed() const override;
     muse::async::Channel<bool> isPlayAllowedChanged() const override;
-
-    bool isPlaying() const override;
-    muse::async::Channel<bool> isPlayingChanged() const override;
 
     muse::Ret togglePlay() override;
     muse::Ret play(bool showErrors = true) override;
@@ -246,6 +252,7 @@ private:
 
     muse::async::Channel<bool> m_isPlayAllowedChanged;
     muse::async::Channel<bool> m_isPlayingChanged;
+    muse::async::Channel<muse::audio::secs_t> m_playbackPositionChanged;
     muse::async::Channel<bool> m_loopEnabledChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;

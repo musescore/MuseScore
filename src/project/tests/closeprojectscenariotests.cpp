@@ -25,7 +25,7 @@
 #include "project/internal/closeprojectscenario.h"
 
 #include "context/tests/mocks/globalcontextmock.h"
-#include "context/tests/mocks/playbackstatemock.h"
+#include "playback/tests/mocks/playbackstatemock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 #include "rcommand/tests/mocks/commanddispatchermock.h"
 
@@ -54,18 +54,18 @@ protected:
         m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
         m_commandDispatcher = std::make_shared<NiceMock<rcommand::CommandDispatcherMock> >();
         m_saveScenario = std::make_shared<NiceMock<SaveProjectScenarioMock> >();
+        m_playbackState = std::make_shared<NiceMock<playback::PlaybackStateMock> >();
 
         m_scenario->interactive.set(m_interactive);
         m_scenario->globalContext.set(m_globalContext);
         m_scenario->commandDispatcher.set(m_commandDispatcher);
         m_scenario->saveProjectScenario.set(m_saveScenario);
+        m_scenario->playbackState.set(m_playbackState);
 
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
-        m_playbackState = std::make_shared<NiceMock<context::PlaybackStateMock> >();
 
         // An opened score with no pending changes, and silence, unless a test says otherwise.
         ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
-        ON_CALL(*m_globalContext, playbackState()).WillByDefault(Return(m_playbackState));
         ON_CALL(*m_playbackState, isPlaying()).WillByDefault(Return(false));
         ON_CALL(*m_project, isNeedSave()).WillByDefault(Return(false));
 
@@ -132,7 +132,7 @@ protected:
     std::shared_ptr<SaveProjectScenarioMock> m_saveScenario;
 
     std::shared_ptr<NotationProjectMock> m_project;
-    std::shared_ptr<context::PlaybackStateMock> m_playbackState;
+    std::shared_ptr<playback::PlaybackStateMock> m_playbackState;
 };
 
 // ─── Nothing to close ────────────────────────────────────────────────────────

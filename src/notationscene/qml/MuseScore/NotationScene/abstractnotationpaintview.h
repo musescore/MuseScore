@@ -25,16 +25,17 @@
 #include <QElapsedTimer>
 #include <qqmlintegration.h>
 
-#include "modularity/ioc.h"
-
-#include "notation/inotationconfiguration.h"
-#include "notation/inotationcontextconfiguration.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
-#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "notationscene/inotationsceneconfiguration.h"
 #include "notationviewinputcontroller.h"
@@ -76,6 +77,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
 public:
     explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);
