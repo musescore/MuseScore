@@ -45,6 +45,7 @@
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
 #include "context/iglobalcontext.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "iappshellcommandscontroller.h"
 
@@ -72,6 +73,7 @@ class AppshellCommandsController : public QObject, public IAppshellCommandsContr
     muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
 public:
     AppshellCommandsController(const muse::modularity::ContextPtr& iocCtx)

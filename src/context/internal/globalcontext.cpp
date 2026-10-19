@@ -35,7 +35,6 @@ using namespace muse::async;
 
 GlobalContext::GlobalContext()
 {
-    m_playbackState = std::make_shared<PlaybackState>();
 }
 
 void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
@@ -128,14 +127,4 @@ void GlobalContext::doSetCurrentNotation(const INotationPtr& notation)
     if (m_currentNotation) {
         m_currentNotation->setIsOpen(true);
     }
-}
-
-void GlobalContext::setCurrentPlayer(const muse::audio::IPlayerPtr& player)
-{
-    m_playbackState->setPlayer(player);
-}
-
-IPlaybackStatePtr GlobalContext::playbackState() const
-{
-    return m_playbackState;
 }

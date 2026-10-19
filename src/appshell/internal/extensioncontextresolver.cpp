@@ -20,21 +20,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "extensioncontextresolver.h"
 
-#include <gmock/gmock.h>
+#include "extensions/extensionstypes.h"
 
-#include "context/iplaybackstate.h"
+using namespace mu::appshell;
 
-namespace mu::context {
-class PlaybackStateMock : public IPlaybackState
+void ExtensionContextResolver::init()
 {
-public:
-    MOCK_METHOD(bool, isPlaying, (), (const, override));
-    MOCK_METHOD(muse::audio::PlaybackStatus, playbackStatus, (), (const, override));
-    MOCK_METHOD(muse::async::Channel<muse::audio::PlaybackStatus>, playbackStatusChanged, (), (const, override));
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        m_contextChanged.notify();
+    });
+}
 
-    MOCK_METHOD(muse::audio::secs_t, playbackPosition, (), (const, override));
-    MOCK_METHOD(muse::async::Channel<muse::audio::secs_t>, playbackPositionChanged, (), (const, override));
-};
+bool ExtensionContextResolver::isContextAllowed(const std::string& context) const
+{
+    if (context == muse::extensions::PROJECT_OPENED_CONTEXT) {
+        return globalContext()->currentProject() != nullptr;
+    }
+
+    return true;
+}
+
+muse::async::Notification ExtensionContextResolver::contextChanged() const
+{
+    return m_contextChanged;
 }

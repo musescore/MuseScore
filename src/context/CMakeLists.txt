@@ -24,13 +24,6 @@ target_sources(context PRIVATE
     contextmodule.cpp
     contextmodule.h
     iglobalcontext.h
-    iplaybackstate.h
     internal/globalcontext.cpp
     internal/globalcontext.h
-    internal/playbackstate.cpp
-    internal/playbackstate.h
-    internal/extensioncontextresolver.cpp
-    internal/extensioncontextresolver.h
-    internal/shortcutresolver.cpp
-    internal/shortcutresolver.h
 )

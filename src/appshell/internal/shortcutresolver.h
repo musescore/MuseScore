@@ -30,7 +30,7 @@
 #include "ui/inavigationcontroller.h"
 #include "notationscene/inotationcommandscontroller.h"
 
-namespace mu::context {
+namespace mu::appshell {
 class ShortcutResolver : public muse::shortcuts::IShortcutsResolver, public muse::Contextable
 {
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };

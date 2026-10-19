@@ -23,6 +23,7 @@ set(MODULE_TEST playback_test)
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackcontrollermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackstatemock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackmock.h
     ${CMAKE_CURRENT_LIST_DIR}/playbackcontrollertests.cpp
 

@@ -40,8 +40,5 @@ public:
     MOCK_METHOD(void, setCurrentNotation, (const notation::INotationPtr& notation), (override));
     MOCK_METHOD(notation::INotationPtr, currentNotation, (), (const, override));
     MOCK_METHOD(muse::async::Notification, currentNotationChanged, (), (const, override));
-
-    MOCK_METHOD(void, setCurrentPlayer, (const muse::audio::IPlayerPtr& player), (override));
-    MOCK_METHOD(IPlaybackStatePtr, playbackState, (), (const, override));
 };
 }
