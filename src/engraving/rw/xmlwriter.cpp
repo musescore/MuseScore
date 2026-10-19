@@ -159,6 +159,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::SIZE_T:
         element(name, data.value<int>());
         break;
+    case P_TYPE::NOTELINE_PLACEMENT_TYPE:
+        element(name, data.toInt());
+        break;
     case P_TYPE::REAL:
         element(name, data.value<double>());
         break;
