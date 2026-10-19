@@ -1448,7 +1448,7 @@ PropertyValue Staff::getProperty(Pid id) const
     case Pid::STAFF_BARLINE_SPAN_TO:
         return barLineTo();
     case Pid::STAFF_BARLINE_SPAN_STYLE:
-        return static_cast<int>(barLineSpanStyle());
+        return barLineSpanStyle();
     case Pid::STAFF_USERDIST:
         return userDist();
     case Pid::GENERATED:
@@ -1548,7 +1548,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         if (v.toInt() < static_cast<int>(BarLineSpanStyle::DEFAULT) || v.toInt() > static_cast<int>(BarLineSpanStyle::DOTTED)) {
             return false;
         }
-        setBarLineSpanStyle(static_cast<BarLineSpanStyle>(v.toInt()));
+        setBarLineSpanStyle(v.value<BarLineSpanStyle>());
         break;
     case Pid::STAFF_USERDIST:
         setUserDist(v.value<Spatium>());
@@ -1609,7 +1609,7 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::STAFF_BARLINE_SPAN_TO:
         return 0;
     case Pid::STAFF_BARLINE_SPAN_STYLE:
-        return static_cast<int>(BarLineSpanStyle::DEFAULT);
+        return BarLineSpanStyle::DEFAULT;
     case Pid::STAFF_USERDIST:
         return 0.0_sp;
     case Pid::SHOW_MEASURE_NUMBERS:

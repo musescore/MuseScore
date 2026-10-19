@@ -2501,6 +2501,29 @@ GlissandoStyle TConv::fromXml(const AsciiStringView& tag, GlissandoStyle def)
     return def;
 }
 
+static const std::vector<Item<BarLineSpanStyle> > BARLINE_SPAN_STYLES = {
+    { BarLineSpanStyle::DEFAULT, "default" },
+    { BarLineSpanStyle::SOLID, "solid" },
+    { BarLineSpanStyle::DASHED, "dashed" },
+    { BarLineSpanStyle::DOTTED, "dotted" }
+};
+
+AsciiStringView TConv::toXml(BarLineSpanStyle v)
+{
+    return findXmlTagByType<BarLineSpanStyle>(BARLINE_SPAN_STYLES, v);
+}
+
+BarLineSpanStyle TConv::fromXml(const AsciiStringView& tag, BarLineSpanStyle def)
+{
+    // Read scores saved with the initial prototype, which used numeric values.
+    bool ok = false;
+    int value = tag.toInt(&ok);
+    if (ok && value >= static_cast<int>(BarLineSpanStyle::DEFAULT) && value <= static_cast<int>(BarLineSpanStyle::DOTTED)) {
+        return static_cast<BarLineSpanStyle>(value);
+    }
+    return findTypeByXmlTag(BARLINE_SPAN_STYLES, tag, def);
+}
+
 static const std::vector<Item<BarLineType> > BARLINE_TYPES = {
     { BarLineType::NORMAL, "normal" },
     { BarLineType::DOUBLE, "double" },

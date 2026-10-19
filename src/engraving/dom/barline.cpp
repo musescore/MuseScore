@@ -22,8 +22,6 @@
 
 #include "barline.h"
 
-#include <algorithm>
-
 #include "translation.h"
 
 #include "../types/symnames.h"
@@ -345,7 +343,7 @@ void BarLine::calcY()
 
     const bool ordinaryBarline = m_barLineType == BarLineType::NORMAL || m_barLineType == BarLineType::BROKEN
                                  || m_barLineType == BarLineType::DOTTED;
-    if (spanStaff && y2 > y1 && segment()->isEndBarLineType() && ordinaryBarline
+    if (spanStaff && y2 > y1 && (segment()->isEndBarLineType() || segment()->isBarLineType()) && ordinaryBarline
         && staff1->barLineSpanStyle() != BarLineSpanStyle::DEFAULT) {
         data->spanStartY = std::clamp(staffBottomY, y1, y2);
         if (data->spanStartY < y2) {

@@ -423,6 +423,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
+    case P_TYPE::BARLINE_SPAN_STYLE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineSpanStyle::DEFAULT));
 
     case P_TYPE::NOTEHEAD_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadType::HEAD_AUTO));
@@ -4234,13 +4236,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         s->setBarLineFrom(e.readInt());
     } else if (tag == "barLineSpanTo") {
         s->setBarLineTo(e.readInt());
-    } else if (tag == "barLineSpanStyle") {
-        const int spanStyle = e.readInt();
-        if (spanStyle >= static_cast<int>(BarLineSpanStyle::DEFAULT) && spanStyle <= static_cast<int>(BarLineSpanStyle::DOTTED)) {
-            s->setBarLineSpanStyle(static_cast<BarLineSpanStyle>(spanStyle));
-        } else {
-            LOGW() << "Invalid barline connection style: " << spanStyle;
-        }
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::STAFF_BARLINE_SPAN_STYLE)) {
     } else if (tag == "distOffset") {
         s->setUserDist(Spatium(e.readDouble()));
     } else if (tag == "mag") {

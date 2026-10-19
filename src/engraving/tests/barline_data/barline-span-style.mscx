@@ -11,7 +11,7 @@
           <name>stdNormal</name>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>2</barLineSpanStyle>
+        <barLineSpanStyle>dashed</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Voice 1</trackName>
@@ -30,7 +30,7 @@
           <name>stdNormal</name>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>3</barLineSpanStyle>
+        <barLineSpanStyle>dotted</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Voice 2</trackName>

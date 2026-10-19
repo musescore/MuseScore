@@ -176,6 +176,9 @@ public:
     static AsciiStringView toXml(BarLineType v);
     static BarLineType fromXml(const AsciiStringView& str, BarLineType def);
 
+    static AsciiStringView toXml(BarLineSpanStyle v);
+    static BarLineSpanStyle fromXml(const AsciiStringView& str, BarLineSpanStyle def);
+
     static const TranslatableString& userName(TremoloType v);
     static AsciiStringView toXml(TremoloType v);
     static TremoloType fromXml(const AsciiStringView& str, TremoloType def);
