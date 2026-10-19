@@ -38998,5 +38998,29 @@ falhou: %2</translation>
         <translation>Selecione a figura e arraste um nó ou uma alça. Adicionar ponto cria novos nós no traço.</translation></message>
     <message><source>%1 drawing(s) selected. Delete to remove.</source>
         <translation>%1 desenho(s) selecionado(s). Delete para excluir.</translation></message>
+    <message><source>Edit Shape</source><translation>Editar Forma</translation></message>
+    <message><source>Confirm (Enter)</source><translation>Confirmar (Enter)</translation></message>
+    <message><source>Cancel (Esc)</source><translation>Cancelar (Esc)</translation></message>
+    <message><source>Edit nodes</source><translation>Editar nós</translation></message>
+    <message><source>Add node</source><translation>Adicionar nó</translation></message>
+    <message><source>Delete node</source><translation>Excluir nó</translation></message>
+    <message><source>Join nodes</source><translation>Unir nós</translation></message>
+    <message><source>Link nodes</source><translation>Vincular nós</translation></message>
+    <message><source>Unlink nodes</source><translation>Desvincular nós</translation></message>
+    <message><source>Remove node</source><translation>Remover nó</translation></message>
+    <message><source>Smooth node</source><translation>Nó suave</translation></message>
+    <message><source>Angular node</source><translation>Nó angular</translation></message>
+    <message><source>Add node here</source><translation>Adicionar nó aqui</translation></message>
+    <message><source>Style from this node</source><translation>Estilo a partir deste nó</translation></message>
+    <message><source>Amplitude / envelope</source><translation>Amplitude / envelope</translation></message>
+    <message><source>Wavelength</source><translation>Comprimento de onda</translation></message>
+    <message><source>Start / direction</source><translation>Início / direção</translation></message>
+    <message><source>Length / direction</source><translation>Comprimento / direção</translation></message>
+    <message><source>Arrowhead length / opening</source><translation>Comprimento / abertura da ponta</translation></message>
+    <message><source>Shaft width</source><translation>Espessura do corpo</translation></message>
+    <message><source>Corner radius</source><translation>Raio dos cantos</translation></message>
+    <message><source>Number of sides / tips</source><translation>Quantidade de lados / pontas</translation></message>
+    <message><source>Inner radius</source><translation>Raio interno</translation></message>
+    <message><source>Shape adjustment</source><translation>Ajuste da forma</translation></message>
 </context>
 </TS>
