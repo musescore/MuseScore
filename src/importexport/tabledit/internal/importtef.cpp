@@ -374,7 +374,7 @@ void TablEdit::createCapos()
             params.transposeMode = CapoParams::TransposeMode::TAB_ONLY;
             params.fretPosition = capo;
 
-            Capo* capoEl = Factory::createCapo(score->dummy()->segment());
+            Capo* capoEl = Factory::createCapo(score->dummy());
             capoEl->setTrack(track);
             capoEl->setParams(params);
             s->add(capoEl);
