@@ -995,6 +995,9 @@ void NotationActionController::setDuration(DurationType duration)
 
         startNoteInput();
     }
+    if (noteInput->isNoteInputMode() && !noteInput->state().isValid()) {
+        return;
+    }
 
     noteInput->setDuration(duration);
 

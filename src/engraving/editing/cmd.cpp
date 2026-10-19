@@ -421,8 +421,8 @@ void MasterScore::lockUpdates(bool locked)
 
 void Score::expandVoice(Segment* s, track_idx_t track)
 {
-    if (!s) {
-        LOGD("expand voice: no segment");
+    if (!s || track == muse::nidx) {
+        LOGD("expand voice: no segment or invalid track");
         return;
     }
     if (s->element(track)) {
@@ -458,7 +458,13 @@ void Score::expandVoice(Segment* s, track_idx_t track)
     //
     Measure* m = s->measure();
     Fraction stick  = ps ? ps->tick() : m->tick();
-    Fraction stretch = staff(track2staff(track))->timeStretch(stick);
+
+    const Staff* currStaff = staff(track2staff(track));
+    IF_ASSERT_FAILED(currStaff) {
+        return;
+    }
+    const Fraction stretch = currStaff->timeStretch(stick);
+
     Fraction ticks  = s->tick() - stick;
     if (ticks.isNotZero()) {
         setRest(stick, track, ticks * stretch, false, 0);
@@ -1098,8 +1104,12 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
 {
     assert(_sd.numerator());
 
-    Measure* measure = segment->measure();
     Staff* stf = staff(track2staff(track));
+    IF_ASSERT_FAILED(stf) {
+        return Fraction();
+    }
+
+    Measure* measure = segment->measure();
     Fraction accumulated;
     Fraction sd = _sd;
 
