@@ -44,11 +44,15 @@ public:
 
     virtual QUrl checkForMuseSoundsUpdateUrl() const = 0;
     virtual QUrl checkForMuseSamplerUpdateUrl() const = 0;
+    virtual QUrl museSoundsTroubleshootUrl() const = 0;
 
     virtual QString getMuseSamplerVersionQuery() const = 0;
 
     virtual std::string lastShownMuseSoundsReleaseVersion() const = 0;
     virtual void setLastShownMuseSoundsReleaseVersion(const std::string& version) = 0;
+
+    virtual bool showLoadingFailedWarning() const = 0;
+    virtual void setShowLoadingFailedWarning(bool show) = 0;
 
     virtual bool museSoundsCheckForUpdateTestMode() const = 0;
 };

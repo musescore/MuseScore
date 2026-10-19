@@ -37,7 +37,7 @@
 
 #include "update/iappupdatescenario.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
-#include "musesounds/imusesamplercheckupdatescenario.h"
+#include "musesounds/imusesamplercheckstatusscenario.h"
 
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Contextable, public muse::async::Asyncable
@@ -51,7 +51,7 @@ class StartupScenario : public IStartupScenario, public muse::Contextable, publi
     muse::ContextInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
     muse::ContextInject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
     muse::ContextInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
-    muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };
+    muse::ContextInject<musesounds::IMuseSamplerCheckStatusScenario> museSamplerCheckStatusScenario = { this };
 
 public:
     StartupScenario(const muse::modularity::ContextPtr& iocCtx)
@@ -76,7 +76,7 @@ private:
     void onStartupPageOpened(StartupModeType modeType);
 
     void showStartupDialogsIfNeed(StartupModeType modeType);
-    void checkAndShowMuseSamplerUpdateIfNeed();
+    void checkAndShowMuseSamplerStatusIfNeed();
     bool shouldShowWelcomeDialog(StartupModeType modeType) const;
 
     void openScore(const project::ProjectFile& file);

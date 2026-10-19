@@ -1,8 +1,8 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -20,15 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "musesamplercheckupdatescenariostub.h"
+#include "musesamplercheckstatusservicestub.h"
 
 using namespace mu::musesounds;
 
-bool MuseSamplerCheckUpdateScenarioStub::alreadyChecked() const
+bool MuseSamplerCheckStatusServiceStub::libInitFailed() const
 {
     return false;
 }
 
-void MuseSamplerCheckUpdateScenarioStub::checkAndShowUpdateIfNeed()
+bool MuseSamplerCheckStatusServiceStub::canCheckForUpdate() const
 {
+    return false;
+}
+
+bool MuseSamplerCheckStatusServiceStub::incompatibleLocalVersion() const
+{
+    return false;
+}
+
+muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckStatusServiceStub::checkForUpdate()
+{
+    return muse::async::Promise<muse::RetVal<bool> >([](auto /*resolve*/, auto reject) {
+        return reject(int(muse::Ret::Code::UnknownError), "stub");
+    });
 }

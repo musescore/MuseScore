@@ -38,6 +38,7 @@ public:
 
     virtual const Version& version() const = 0;
     virtual bool isLoaded() const = 0;
+    virtual bool initFailed() const = 0;
 
     virtual float defaultReverbLevel(const String& instrumentSoundId) const = 0;
 

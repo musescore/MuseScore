@@ -45,7 +45,7 @@ public:
     void init(std::weak_ptr<MuseSamplerResolver> resolver);
 
 private:
-    void checkLibraryIsDetected();
+    void checkMuseSampler();
     void reloadMuseSampler();
 
     std::weak_ptr<MuseSamplerResolver> m_museSamplerResolver;
