@@ -478,6 +478,11 @@ Item {
 
     DrawingCanvas {
         id: editor
+        contextMenu: DrawingContext {
+            parent: root.drawingEditor
+            editor: root.drawingEditor
+        }
+        handleTooltip: DrawingHandleTip {}
         tool: "select"
         width: Math.max(1, root.frame.width || 1)
         height: Math.max(1, root.frame.height || 1)

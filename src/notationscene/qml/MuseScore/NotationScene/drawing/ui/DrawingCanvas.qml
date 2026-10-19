@@ -2,7 +2,6 @@
 
 import QtQuick
 import QtQuick.Controls as Controls
-import Muse.Ui
 
 import "../core/Vector.js" as Vector
 import "../core/Reflow.js" as Reflow
@@ -16,8 +15,17 @@ import "../core/Repeat.js" as Repeat
 Item {
     id: root
 
-    DrawingHandleTip {
-        id: handleTooltip
+    // Presentation services are supplied by DrawingOverlay. The interaction
+    // component itself runs on stock Qt Quick, including in the CI runner.
+    property var handleTooltip: null
+    property var contextMenu: null
+    function showHandleTip(item, text) {
+        if (handleTooltip)
+            handleTooltip.schedule(item, text);
+    }
+    function hideHandleTip() {
+        if (handleTooltip)
+            handleTooltip.hideTip();
     }
     property var repeatSession: null
     readonly property bool repeatEditActive: repeatSession !== null
@@ -172,7 +180,8 @@ Item {
         gestureFinished();
     }
     function openObjectContext(index, x, y) {
-        contextMenu.openAt(x, y, index);
+        if (contextMenu)
+            contextMenu.openAt(x, y, index);
     }
     function renameObject(index, value) {
         if (!shapes[index] || styleEditActive || repeatEditActive)
@@ -470,7 +479,12 @@ Item {
         forceActiveFocus();
     }
     function finishContextEdit(apply) {
-        contextMenu.finishEdit(apply);
+        if (contextMenu)
+            contextMenu.finishEdit(apply);
+        else if (nodeEditActive)
+            finishNodeEdit(apply);
+        else
+            finishShapeEdit(apply);
     }
     property real lastShapeAnchorMs: 0
     function canEditShape(index) {
@@ -525,7 +539,7 @@ Item {
                 console.info("[MuseDraw shape-confirm] anchors=" + lastShapeAnchorMs);
         }
         shapeEditSession = null;
-        handleTooltip.hideTip();
+        root.hideHandleTip();
         tool = edit.tool;
         if (apply)
             changed();
@@ -635,10 +649,6 @@ Item {
         contextLinkTargets = [];
         changed();
         return true;
-    }
-    DrawingContext {
-        id: contextMenu
-        editor: root
     }
     property string tool: "pencil"
     property string nibShape: "round"
@@ -3166,14 +3176,14 @@ Item {
                 hoverEnabled: true
                 onContainsMouseChanged: {
                     if (containsMouse)
-                        handleTooltip.schedule(parent, root.shapeHandleName(modelData));
+                        root.showHandleTip(parent, root.shapeHandleName(modelData));
                     else
-                        handleTooltip.hideTip();
+                        root.hideHandleTip();
                 }
                 property var original: null
                 property point start
                 onPressed: function (mouse) {
-                    handleTooltip.hideTip();
+                    root.hideHandleTip();
                     original = Vector.copy(root.shapes[root.selected]);
                     start = mapToItem(root, mouse.x, mouse.y);
                     root.gestureStarting();
@@ -3462,9 +3472,9 @@ Item {
                     acceptedButtons: Qt.NoButton
                     onContainsMouseChanged: {
                         if (containsMouse)
-                            handleTooltip.schedule(parent, root.shapeHandleName(modelData));
+                            root.showHandleTip(parent, root.shapeHandleName(modelData));
                         else
-                            handleTooltip.hideTip();
+                            root.hideHandleTip();
                     }
                 }
                 Rectangle {
@@ -3604,7 +3614,8 @@ Item {
             if (mouse.button === Qt.RightButton) {
                 root.finishPen();
                 dragging = false;
-                contextMenu.openAt(mouse.x, mouse.y);
+                if (root.contextMenu)
+                    root.contextMenu.openAt(mouse.x, mouse.y);
                 return;
             }
             if (root.repeatEditActive && root.repeatPick) {
