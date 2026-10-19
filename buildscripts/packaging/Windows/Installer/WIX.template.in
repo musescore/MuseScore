@@ -69,6 +69,9 @@
         <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
 
         <!-- Drawing test packages do not change official file or URL associations. -->
+        <!-- Root the CPack feature so WiX links its directories and file components.
+             Removing registry associations must not remove the product payload. -->
+        <FeatureRef Id="ProductFeature" />
 
 <!-- Something from CMake-->
         <?include "product_fragment.wxi"?>

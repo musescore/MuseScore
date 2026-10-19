@@ -187,6 +187,10 @@ ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y || GOTO END_ERROR
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
+:: A successful WiX exit is insufficient: reject an unlinked/empty MSI.
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File buildscripts\ci\windows\validate-msi.ps1 -Path "%ARTIFACT_PATH%"
+IF ERRORLEVEL 1 GOTO END_ERROR
+
 IF %DO_SIGN% == ON (
     CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --file %ARTIFACT_PATH% || exit /b 1
 )
