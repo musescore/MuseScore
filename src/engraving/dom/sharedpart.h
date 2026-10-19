@@ -96,6 +96,8 @@ public:
     bool enabled() const;
     bool show() const override;
 
+    void insertTime(const Fraction& tick, const Fraction& len) override;
+
     const StaveSharingState& staveSharingStateAtTick(const Fraction& tick) const;
     StaveSharingState& staveSharingStateAtTick(const Fraction& tick);
     std::optional<StaveSharingState> exactStaveSharingStateAtTick(const Fraction& tick) const;

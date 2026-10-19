@@ -144,7 +144,7 @@ public:
     void removeStringTunings(StringTunings* stringTunings);
     StringTunings* nextStringTuning(const Fraction& tick) const;
 
-    void insertTime(const Fraction& tick, const Fraction& len);
+    virtual void insertTime(const Fraction& tick, const Fraction& len);
 
     const std::map<int, HarpPedalDiagram*>& harpDiagrams() const { return m_harpDiagrams; }
     void addHarpDiagram(HarpPedalDiagram*);
