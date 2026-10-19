@@ -136,12 +136,17 @@ protected:
         const std::string appName = "MuseHub";
 #endif
 
+#ifdef Q_OS_WIN
+        const std::vector<int> buttonIds { OPEN_MUSEHUB_BUTTON, TROUBLESHOOT_BUTTON, int(IInteractive::Button::Close) };
+#else
+        const std::vector<int> buttonIds { int(IInteractive::Button::Close), TROUBLESHOOT_BUTTON, OPEN_MUSEHUB_BUTTON };
+#endif
+
         ON_CALL(*m_interactive, buttonData(IInteractive::Button::Close))
         .WillByDefault(Return(IInteractive::ButtonData(IInteractive::Button::Close, "")));
 
         EXPECT_CALL(*m_interactive, warning("MuseSounds could not be loaded", TextContains("open " + appName),
-                                            ButtonIdsAre({ int(IInteractive::Button::Close), TROUBLESHOOT_BUTTON, OPEN_MUSEHUB_BUTTON }),
-                                            OPEN_MUSEHUB_BUTTON, HasDontShowAgainCheckBox(), _))
+                                            ButtonIdsAre(buttonIds), OPEN_MUSEHUB_BUTTON, HasDontShowAgainCheckBox(), _))
         .WillOnce(Invoke([result](auto&&...) {
             return resolvedResultPromise(result);
         }));
