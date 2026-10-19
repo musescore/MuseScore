@@ -3201,6 +3201,8 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
     for (Score* score : masterScore()->scoreList()) {
         Measure* localMeasure = score->tick2measure(abstick);
 
+        EditStaveSharing::removeStaveSharingStatesOnRemoveTime(transactionManager()->currentOrDummyTransaction(), score, abstick,
+                                                               abstick + len);
         undo(new InsertTime(score, abstick, -len));
 
         Fraction updatedTick = tick;
@@ -5139,6 +5141,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
 
     EditSystemLocks::removeSystemLocksOnRemoveMeasures(tx, this, m1, m2);
     EditPageLocks::removePageLocksOnRemoveMeasures(tx, this, m1, m2);
+    EditStaveSharing::removeStaveSharingStatesOnRemoveTime(tx, this, startTick, endTick);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }
