@@ -17,6 +17,7 @@ std::shared_ptr<MeasureInsertionBatch> batchMeasureInsertion(Score* score);
 std::shared_ptr<MeasureInsertionState> prepareMeasureInsertion(Score* score, const Fraction& tick, const Fraction& length);
 std::vector<Staff*> linkedStaves(const Image* image);
 staff_idx_t excerptSourceStaff(const Image* image, const std::vector<staff_idx_t>& sourceStaves);
+void prepareForSave(Score* score);
 std::string serializedData(const Image* image);
 std::string serializedPart(const Image* image);
 QString insert(Score* score, const QString& sourceDocument, const QString& mode, const QRectF& sourceBounds, const RectF& canvasBounds,

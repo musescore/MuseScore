@@ -26,6 +26,9 @@
 #include "dom/masterscore.h"
 #include "dom/excerpt.h"
 #include "dom/imageStore.h"
+#ifndef NO_QT_SUPPORT
+#include "dom/svgdrawing.h"
+#endif
 #include "dom/audio.h"
 
 #include "engraving/automation/iautomation.h"
@@ -60,6 +63,10 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         score->style().write(&styleBuf);
         mscWriter.writeStyleFile(styleData);
     }
+
+#ifndef NO_QT_SUPPORT
+    SvgDrawing::prepareForSave(score);
+#endif
 
     WriteInOutData masterWriteOutData(score);
 

@@ -10,6 +10,7 @@
 #include <QCoreApplication>
 #include <QSet>
 #include <QHash>
+#include <QCache>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QRegularExpression>
@@ -43,6 +44,8 @@
 #include "../editing/undo.h"
 
 namespace mu::engraving::SvgDrawing {
+static QJsonObject repeatedSource(Score* score, const QJsonObject& source);
+
 struct GeometryCache {
     QJsonArray source;
     QByteArray signature;
@@ -260,7 +263,7 @@ QJsonObject documentWithCurrentKeys(const Image* image)
             const auto saved=measureKey(reference.value("key").toString().section(':', -1)),
          current=measure->tick().reduced().toString().toQString();
             keys.insert(saved, current);
-            changed|=saved != current;
+            changed |= !reference.value("key").toString().isEmpty() && reference.value("key").toString().section(':', -1) != current;
             if (reference.contains("measureId")) {
                 changed|=reference.value("measureId").toString() != measureIdentity(measure);
             }
@@ -875,7 +878,7 @@ std::vector<Part> selectionParts(Score* score, const Image* selectedImage = null
                 QJsonArray saved = d.value("parts").toArray();
                 for (const auto& v : saved) {
                     QJsonObject o = v.toObject();
-                    if (o.value("key").toString().toStdString() == i->drawingPart()) {
+                    if (sameMeasureKey(o.value("key").toString(), QString::fromStdString(i->drawingPart()))) {
                         parts.push_back({ seg->measure(), o.value("key").toString(), fraction(o, "start"), fraction(o,
                                                                                                                     "end"), 0, 0, 0, o.value(
                                               "fullMeasure").toBool() });
@@ -1071,15 +1074,41 @@ QJsonObject canvasBinding(const std::vector<Part>& parts, double x, double y, st
         { "y", (y - nearest->measure->system()->staffCanvasYpage(staff)) / sp } };
 }
 
+static int linkedVertexCount(const QJsonObject& source)
+{
+    QSet<QString> nodes;
+    for (const auto& value : source.value("anchors").toArray()) {
+        const auto link=value.toObject();
+        nodes.insert(QString::number(link.value("command").toInt()) + ":" + QString::number(link.value("field").toInt()));
+    }
+    const auto shapes=source.value("shapes").toArray();
+    if (!shapes.isEmpty()) {
+        for (const auto& value : shapes[0].toObject().value("nodeLinks").toArray()) {
+            const auto link=value.toObject();
+            nodes.insert(QString::number(link.value("ownCommand").toInt()) + ":" + QString::number(link.value("ownField").toInt()));
+        }
+    }
+    return nodes.size();
+}
+
+static QRectF sourceRectangle(const QJsonObject& source)
+{
+    const auto b = source.value("bounds").toObject();
+    return QRectF(b.value("x").toDouble(), b.value("y").toDouble(), b.value("width").toDouble(), b.value("height").toDouble());
+}
+
 QRectF anchoredRigidBox(Score* score, const QJsonObject& source, staff_idx_t fallback)
 {
     const auto shapes = source.value("shapes").toArray();
+    if (!shapes.isEmpty() && shapes[0].toObject().contains("repeatLink")) {
+        return sourceRectangle(repeatedSource(score, source));
+    }
     const auto links = source.value("anchors").toArray();
     if (!score || shapes.isEmpty() || links.isEmpty()) {
         return QRectF();
     }
     const auto shape = shapes[0].toObject();
-    if (!shape.value("singleAnchor").toBool() || !shape.value("textLink").toObject().isEmpty()) {
+    if (linkedVertexCount(source) != 1 || !shape.value("textLink").toObject().isEmpty()) {
         return QRectF();
     }
     const auto link = links[0].toObject(), box = source.value("bounds").toObject();
@@ -1103,7 +1132,7 @@ QRectF anchoredRigidBox(Score* score, const QJsonObject& source, staff_idx_t fal
         if (!measure->system() || !measure->system()->page() || !measure->system()->staff(staff)) {
             return QRectF();
         }
-        const double sp = measure->spatium(), scale = sp / sourceScale;
+        const double sp = measure->spatium(), scale = 1.0;
         const auto command = commands[ci].toArray();
         const Fraction time(link.value("numerator").toInt(), link.value("denominator").toInt());
         // Resolve the same centre and offsets as the editor, without relying on
@@ -1466,10 +1495,20 @@ QString styledPath(const QString& path, const QJsonObject& style, const QString&
            + "\" fill-rule=\""
            + (fillRule
               == "evenodd" ? QStringLiteral("evenodd") : QStringLiteral("nonzero"))
-           + "\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>";
+           + "\" stroke-linecap=\""
+           + (style.value("lineCap").toString() == "butt" ? QStringLiteral("butt") : style.value("lineCap").toString()
+              == "square" ? QStringLiteral("square") : QStringLiteral("round"))
+           + "\" stroke-dasharray=\""
+           + (style.value("linePattern").toString()
+              == "dash" ? number(style.value("width").toDouble() * 4) + " "
+              + number(style.value("width").toDouble() * 2) : style.value("linePattern").toString()
+              == "dot" ? number(style.value("width").toDouble()) + " " + number(style.value("width").toDouble() * 2) : QStringLiteral(
+                  "none"))
+           + "\" stroke-linejoin=\"round\"/>";
 }
 
-QString styledRanges(const QJsonArray& ranges, const QStringList& commands, const QRectF& frame=QRectF(0, 0, 1, 1))
+QString styledRanges(const QJsonArray& ranges, const QStringList& commands, const QJsonArray& points, const QRectF& frame=QRectF(0, 0, 1,
+                                                                                                                                 1))
 {
     QString body;
     for (const auto& value:ranges) {
@@ -1479,8 +1518,24 @@ QString styledRanges(const QJsonArray& ranges, const QStringList& commands, cons
             continue;
         }
         QString path;
+        if (start > 0 && start < points.size() && points[start].toArray()[0].toString() != "M") {
+            const auto previous=points[start - 1].toArray();
+            if (previous.size() >= 3) {
+                path="M" + number(previous[previous.size() - 2].toDouble()) + " " + number(previous.last().toDouble()) + " ";
+            }
+        }
         for (int i=start; i < end; ++i) {
-            path+=commands[i];
+            if (start > 0 && i < points.size() && points[i].toArray()[0].toString() == "Z") {
+                for (int origin=i - 1; origin >= 0; --origin) {
+                    const auto c=points[origin].toArray();
+                    if (c.size() >= 3 && c[0].toString() == "M") {
+                        path+="L" + number(c[1].toDouble()) + " " + number(c[2].toDouble()) + " ";
+                        break;
+                    }
+                }
+            } else {
+                path+=commands[i];
+            }
         }
         body+=styledPath(path, range.value("style").toObject(), range.value("fillRule").toString(), frame);
     }
@@ -1516,7 +1571,9 @@ QString rigidSvg(const QJsonObject& source)
             }
         }
         const auto frame=paintBounds(shape.value("commands").toArray());
-        body+=ranges.isEmpty() ? styledPath(path, style, shape.value("fillRule").toString(), frame) : styledRanges(ranges, pieces, frame);
+        body+=ranges.isEmpty() ? styledPath(path, style, shape.value("fillRule").toString(), frame) : styledRanges(ranges, pieces, shape.value(
+                                                                                                                       "commands").toArray(),
+                                                                                                                   frame);
     }
     return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"" + number(box.value("x").toDouble()) + " " + number(box.value(
                                                                                                                          "y").toDouble())
@@ -1566,11 +1623,63 @@ bool rigidArrowHeadPoint(const QJsonObject& head, const QJsonArray& commands, QP
     return std::isfinite(result->x()) && std::isfinite(result->y());
 }
 
+QJsonArray waveCommands(const QJsonObject& wave, const QJsonArray& a, const QJsonArray& b, int fixedSamples = 0)
+{
+    if (a.size() != 2 || b.size() != 2) {
+        return {};
+    }
+    const auto stops = wave.value("stops").toArray();
+    if (stops.isEmpty() || stops.size() > 128) {
+        return {};
+    }
+    auto sample = [&](double t, const char* key) {
+        auto left = stops.first().toObject(), right = left;
+        for (int i = 1; i < stops.size(); ++i) {
+            right = stops[i].toObject();
+            if (t <= right.value("t").toDouble()) {
+                break;
+            }
+            left = right;
+        }
+        const double u
+            = std::clamp((t - left.value("t").toDouble()) / std::max(0.00001, right.value("t").toDouble() - left.value(
+                                                                         "t").toDouble()), 0.0, 1.0);
+        return left.value(key).toDouble() * (1 - u) + right.value(key).toDouble() * u;
+    };
+    const double ax = a[0].toDouble(), ay = a[1].toDouble(), dx = b[0].toDouble() - ax, dy = b[1].toDouble() - ay;
+    const double length = std::hypot(dx, dy);
+    if (!std::isfinite(length) || length < 0.000001) {
+        return {};
+    }
+    double period = 1e20;
+    for (const auto& value : stops) {
+        period = std::min(period, value.toObject().value("period").toDouble());
+    }
+    period = std::max(0.0001, period);
+    const int count = fixedSamples > 0 ? fixedSamples : std::clamp(int(std::min(4096.0, std::ceil(length / period * 24))), 16, 4096);
+    constexpr double pi = 3.14159265358979323846;
+    double phase = wave.value("phase").toDouble() * pi / 180;
+    QJsonArray result;
+    for (int i = 0; i <= count; ++i) {
+        const double t = double(i) / count;
+        if (i) {
+            phase += 2 * pi * (length / count) / std::max(0.0001, sample(t, "period"));
+        }
+        const double value = wave.value("waveform").toString() == "zigzag" ? 2 / pi * std::asin(std::sin(phase)) : std::sin(phase);
+        const double displacement = sample(t, "amplitude") * value;
+        result.append(QJsonArray { i ? "L" : "M", QJsonArray { ax + dx * t - dy / length * displacement,
+                                                               ay + dy * t + dx / length * displacement } });
+    }
+    result.append(QJsonArray { "M", a });
+    result.append(QJsonArray { "M", b });
+    return result;
+}
+
 QJsonArray resolveGeometry(const QJsonObject& doc, const std::vector<Part>& parts, const Part& current)
 {
     std::map<QString, const Part*> targets;
     for (const auto& p:parts) {
-        targets.emplace(p.key, &p);
+        targets.emplace(measureKey(p.key), &p);
     }
     QHash<QString, staff_idx_t> staffIndexes;
     const auto score=current.measure->score();
@@ -1579,7 +1688,7 @@ QJsonArray resolveGeometry(const QJsonObject& doc, const std::vector<Part>& part
     }
     const double sp=current.measure->spatium();
     auto pointAt=[&](const QJsonObject& point) {
-        const auto found=targets.find(point.value("key").toString());
+        const auto found=targets.find(measureKey(point.value("key").toString()));
         const auto& p=found == targets.end() ? parts.front() : *found->second;
         double x=p.origin + (rhythmicX(p.measure, fraction(point, "time")) - p.left) / p.measure->spatium() + point.value("dx").toDouble();
         double y=point.value("y").toDouble();
@@ -1602,6 +1711,13 @@ QJsonArray resolveGeometry(const QJsonObject& doc, const std::vector<Part>& part
                       - current.measure->system()->staffCanvasYpage(doc.value("staff").toInt())) / sp;
                 break;
             }
+        }
+        const auto handle = point.value("curveHandle").toObject();
+        if (!handle.isEmpty() && free.isEmpty()) {
+            const double span = handle.value("span").toDouble();
+            const double scale = span > 0 ? p.measure->width() / p.measure->spatium() / span : 1.0;
+            x += handle.value("dx").toDouble() * scale;
+            y += handle.value("dy").toDouble();
         }
         return QJsonArray{ x, y };
     };
@@ -1635,6 +1751,15 @@ QJsonArray resolveGeometry(const QJsonObject& doc, const std::vector<Part>& part
             auto command=commands[it.key().toInt()].toArray();
             command[1]=QJsonArray{ position.x(), position.y() };
             commands[it.key().toInt()]=command;
+        }
+        const auto wave = shape.value("wave").toObject();
+        if (!wave.isEmpty() && commands.size() >= 4 && wave.value("layoutMode").toString() == "continue") {
+            const auto a = commands[commands.size() - 2].toArray()[1].toArray();
+            const auto b = commands.last().toArray()[1].toArray();
+            const auto generated = waveCommands(wave, a, b, commands.size() - 3);
+            if (!generated.isEmpty()) {
+                commands = generated;
+            }
         }
         shape["commands"]=commands;
         shape["resolvedArrowHeads"]=rigidHeads;
@@ -1680,13 +1805,13 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
 {
     std::map<QString, Part> targets;
     for (const Part& p : parts) {
-        targets[p.key] = p;
+        targets[measureKey(p.key)] = p;
     }
-    if (!targets.count(partKey)) {
+    if (!targets.count(measureKey(partKey))) {
         return {};
     }
-    const Part& current = targets.at(partKey);
-    const auto at = std::find_if(parts.begin(), parts.end(), [&](const Part& p) { return p.key == partKey; });
+    const Part& current = targets.at(measureKey(partKey));
+    const auto at = std::find_if(parts.begin(), parts.end(), [&](const Part& p) { return sameMeasureKey(p.key, partKey); });
     const bool firstPiece = at == parts.begin();
     const bool lastPiece = at + 1 == parts.end();
     const bool startsPiece = firstPiece || (at - 1)->measure->system() != current.measure->system();
@@ -1704,7 +1829,12 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
             }
         }
         if (override.isEmpty()) {
-            override=overrides.value(partKey).toObject();
+            for (auto it = overrides.begin(); it != overrides.end(); ++it) {
+                if (sameMeasureKey(it.key(), partKey)) {
+                    override = it.value().toObject();
+                    break;
+                }
+            }
         }
     }
     const double sp = current.measure->spatium();
@@ -1726,7 +1856,7 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
             const auto measure=referencedMeasure(current.measure->score(), link);
             found=std::find_if(targets.begin(), targets.end(), [&](const auto& target){ return target.second.measure == measure; });
         } else {
-            found=targets.find(link.value("key").toString().section(':', -1));
+            found=targets.find(measureKey(link.value("key").toString().section(':', -1)));
         }
         if (found != targets.end() && link.value("denominator").toInt() > 0) {
             const Fraction time(link.value("numerator").toInt(), link.value("denominator").toInt());
@@ -1846,7 +1976,8 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
             continue;
         }
         const auto frame=paintBounds(drawn);
-        body+=ranges.isEmpty() ? styledPath(path, style, shape.value("fillRule").toString(), frame) : styledRanges(ranges, pieces, frame);
+        body+=ranges.isEmpty() ? styledPath(path, style, shape.value("fillRule").toString(), frame) : styledRanges(ranges, pieces, drawn,
+                                                                                                                   frame);
     }
     if (!std::isfinite(minY) || !std::isfinite(maxY)) {
         return {};
@@ -1875,6 +2006,11 @@ QString paintSvg(const QJsonObject& doc, const std::vector<Part>& parts, const Q
 QString cachedRigidSvg(const Image* image)
 {
     const auto doc = metadata(image);
+    const auto source = doc.value("source").toObject();
+    const auto shapes = source.value("shapes").toArray();
+    if (!shapes.isEmpty() && shapes[0].toObject().contains("repeatLink")) {
+        return rigidSvg(repeatedSource(image->score(), source));
+    }
     auto& cache = *image->drawingCache();
     if (cache.rigidSvg.isEmpty()) {
         cache.rigidSvg = rigidSvg(doc.value("source").toObject());
@@ -1899,7 +2035,8 @@ WholePartPlacement wholePartPlacement(const Image* image, const QJsonObject& doc
 {
     WholePartPlacement result;
     const auto parts=doc.value("parts").toArray();
-    if (parts.isEmpty() || parts.first().toObject().value("key").toString().toStdString() != image->drawingPart()) {
+    if (parts.isEmpty()
+        || !sameMeasureKey(parts.first().toObject().value("key").toString(), QString::fromStdString(image->drawingPart()))) {
         return result;
     }
     const auto segment=image->explicitParent() && image->explicitParent()->isSegment() ? toSegment(image->explicitParent()) : nullptr;
@@ -2051,7 +2188,7 @@ const QJsonArray& resolvedGeometryFor(const Image* image, const QJsonObject& doc
     const auto key=fragmentLayoutSignature(image, parts, cache.hasFreePoints, cache.hasFreePoints);
     if (cache.signature != key) {
         const auto current=std::find_if(parts.begin(), parts.end(), [&](const Part& p){
-            return p.key.toStdString() == image->drawingPart();
+            return sameMeasureKey(p.key, QString::fromStdString(image->drawingPart()));
         });
         if (current != parts.end()) {
             cache.resolved=resolveGeometry(doc, parts, *current);
@@ -2222,7 +2359,7 @@ std::string serializedPart(const Image* image)
     }
     for (const auto& value:doc.value("parts").toArray()) {
         const auto part=value.toObject();
-        if (part.value("key").toString().toStdString() != image->drawingPart()) {
+        if (!sameMeasureKey(part.value("key").toString(), QString::fromStdString(image->drawingPart()))) {
             continue;
         }
         if (const auto measure=referencedMeasure(image->score(), part)) {
@@ -2230,6 +2367,24 @@ std::string serializedPart(const Image* image)
         }
     }
     return image->drawingPart();
+}
+
+void prepareForSave(Score* score)
+{
+    if (!score) {
+        return;
+    }
+    for (Score* local : score->scoreList()) {
+        for (Image* image : nativeImages(local)) {
+            // Re-read saved references against the fully loaded score, outside painting.
+            image->drawingCache().reset();
+            const auto canonical = serializedData(image);
+            if (canonical != image->drawingData()) {
+                image->setDrawingData(canonical);
+            }
+            image->updateDrawingStore();
+        }
+    }
 }
 
 std::vector<Staff*> linkedStaves(const Image* image)
@@ -2290,6 +2445,19 @@ QVariantList editingPoints(Score* score, const Image* suppliedImage)
     }
     const auto image = toImage(e);
     const auto doc = metadata(image);
+    const auto sourceShapes = doc.value("source").toObject().value("shapes").toArray();
+    if (!sourceShapes.isEmpty() && sourceShapes[0].toObject().contains("repeatLink")) {
+        const auto placed = repeatedSource(score, doc.value("source").toObject());
+        const auto commands = placed.value("shapes").toArray()[0].toObject().value("commands").toArray();
+        for (int ci=0; ci < commands.size(); ++ci) {
+            const auto c=commands[ci].toArray();
+            for (int field=1; field + 1 < c.size(); field+=2) {
+                result.append(QVariantMap { { "shape", 0 }, { "command", ci }, { "field", field }, { "x", c[field].toDouble() },
+                                  { "y", c[field + 1].toDouble() } });
+            }
+        }
+        return result;
+    }
     if (uniformPartCopy(image, doc)) {
         const auto placement=wholePartPlacement(image, doc);
         if (placement.box.isEmpty()) {
@@ -2366,7 +2534,7 @@ QVariantList editingPoints(Score* score, const Image* suppliedImage)
                     point=tipCommand[1].toObject();
                 }
                 const auto target = std::find_if(parts.begin(), parts.end(), [&](const Part& p) {
-                    return p.key == point.value("key").toString();
+                    return sameMeasureKey(p.key, point.value("key").toString());
                 });
                 if (target == parts.end() || !target->measure->system()) {
                     continue;
@@ -2390,6 +2558,13 @@ QVariantList editingPoints(Score* score, const Image* suppliedImage)
                         break;
                     }
                 }
+                const auto curveHandle = point.value("curveHandle").toObject();
+                if (!curveHandle.isEmpty() && free.isEmpty()) {
+                    const double span = curveHandle.value("span").toDouble();
+                    const double scale = span > 0 ? target->measure->width() / sp / span : 1.0;
+                    canvasX += curveHandle.value("dx").toDouble() * scale * sp;
+                    canvasY += curveHandle.value("dy").toDouble() * sp;
+                }
                 if (rigidHead && si < resolved.size()) {
                     const auto mapped=resolved[si].toObject().value("commands").toArray();
                     const int tip=head.value("tip").toInt(-1);
@@ -2409,7 +2584,7 @@ QVariantList editingPoints(Score* score, const Image* suppliedImage)
                 }
                 result.append(QVariantMap { { "shape", si }, { "command", ci }, { "field", (pi - 1) * 2 + 1 },
                                   { "key",
-                                    rigidHead ? QString() : target->measure->tick().reduced().toString().toQString() },
+                                    (rigidHead || !curveHandle.isEmpty()) ? QString() : target->measure->tick().reduced().toString().toQString() },
                                   { "staff", int(targetStaff) }, { "staffId", point.value("staffId") }, { "numerator", time.numerator() },
                                   { "denominator", time.denominator() }, { "spatium", sp },
                                   { "offsetX", point.value("dx").toDouble() }, { "offsetY", point.value("y").toDouble() },
@@ -2529,7 +2704,7 @@ QString insert(Score* score, const QString& sourceDocument, const QString& mode,
     std::string reusedData;
     std::shared_ptr<GeometryCache> sharedGeometry;
     const auto reusableMembers=native && reuseFragments ? groupImages(score, group) : std::vector<Image*>();
-    if (mode == "note" && native) {
+    if (native && (linkedVertexCount(source) == 1 || (linkedVertexCount(source) == 0 && mode == "note"))) {
         track_idx_t track = 0;
         auto parts = nativeParts(score, source, sourceBounds, &track);
         if (parts.empty()) {
@@ -2632,7 +2807,7 @@ QString insert(Score* score, const QString& sourceDocument, const QString& mode,
             return QStringLiteral("Não foi possível carregar o SVG.");
         }
         pending.push_back(std::move(image));
-    } else if (mode == "rhythm" || (mode == "note" && native)) {
+    } else if (mode == "rhythm" || native) {
         track_idx_t nativeTrack = 0;
         auto parts = native ? nativeParts(score, source, sourceBounds, &nativeTrack) : selectionParts(score);
         if (parts.empty() || parts.size() > 512) {
@@ -2702,6 +2877,32 @@ QString insert(Score* score, const QString& sourceDocument, const QString& mode,
                                 { "time", QString::fromStdString(t.toString().toStdString()) },
                                 { "staffId", a.value("staffId") }, { "dx", a.value("offsetX").toDouble() },
                                 { "y", a.value("offsetY").toDouble() } };
+                        }
+                    }
+                    if (native && c.at(0).toString() == "C" && (n == 1 || n == 3)
+                        && (binding == anchorsByPoint.end() || !binding->second.value("editable").toBool())
+                        && !shape.value("unlinkedPoints").toObject().value(QString::number(ci) + ":" + QString::number(n)).toBool()) {
+                        QJsonArray endpoint;
+                        if (n == 3) {
+                            endpoint = c;
+                        } else if (ci > 0) {
+                            endpoint = commands.at(ci - 1).toArray();
+                        }
+                        if (endpoint.size() >= 3) {
+                            const double ax = endpoint.at(endpoint.size() - 2).toDouble();
+                            const double ay = endpoint.at(endpoint.size() - 1).toDouble();
+                            auto attachment = canvasBinding(parts, ax, ay, track / VOICES);
+                            if (auto measure = referencedMeasure(score, attachment)) {
+                                const double unit = measure->spatium();
+                                if (unit > 0 && measure->width() > 0) {
+                                    attachment["curveHandle"] = QJsonObject {
+                                        { "dx", (c.at(n).toDouble() - ax) / unit },
+                                        { "dy", (c.at(n + 1).toDouble() - ay) / unit },
+                                        { "span", measure->width() / unit }
+                                    };
+                                    point = attachment;
+                                }
+                            }
                         }
                     }
                     // A head follows its anchored tip with rigid local offsets.
@@ -2778,6 +2979,18 @@ QString insert(Score* score, const QString& sourceDocument, const QString& mode,
             };
             style=bindPaint(style);
             QJsonObject boundShape{ { "commands", boundCommands }, { "style", style } };
+            if (shape.contains("wave")) {
+                auto wave = shape.value("wave").toObject();
+                auto stops = wave.value("stops").toArray();
+                for (int wi=0; wi < stops.size(); ++wi) {
+                    auto stop=stops[wi].toObject();
+                    stop["amplitude"]=stop.value("amplitude").toDouble() * yScale;
+                    stop["period"]=stop.value("period").toDouble() * yScale;
+                    stops[wi]=stop;
+                }
+                wave["stops"]=stops;
+                boundShape["wave"]=wave;
+            }
             if (shape.contains("fillRule")) {
                 boundShape["fillRule"]=shape.value("fillRule");
             }
@@ -2850,6 +3063,9 @@ QString insert(Score* score, const QString& sourceDocument, const QString& mode,
             image->setAutoplace(false);
             image->setSizeIsSpatium(true);
             image->setDrawingData(text);
+            if (native) {
+                image->setZ(1000 + source.value("nativeIndex").toInt());
+            }
             image->setDrawingPart(p.key.toStdString());
             if (sharedGeometry) {
                 metadata(image.get());
@@ -2892,6 +3108,9 @@ QString insert(Score* score, const QString& sourceDocument, const QString& mode,
     }
     for (const auto& entry:reused) {
         score->undo(new ChangeDrawingMetadata(entry.first, reusedData));
+        if (native) {
+            entry.first->undoChangeProperty(Pid::Z, 1000 + source.value("nativeIndex").toInt());
+        }
         if (entry.first->drawingPart() != entry.second) {
             score->undo(new ChangeDrawingPart(entry.first, entry.second));
         }
@@ -2947,6 +3166,11 @@ static QString nativeDocumentFiltered(Score* score, const QSet<QString>* drawing
         source=doc.value("source").toObject();
         array=source.value("shapes").toArray();
         shape=array[0].toObject();
+        if (shape.contains("repeatLink")) {
+            source=repeatedSource(score, source);
+            doc["source"]=source;
+            shape=source.value("shapes").toArray()[0].toObject();
+        }
         auto commands = shape.value("commands").toArray();
         const int index = shapes.size();
         const bool whole=uniformPartCopy(image, doc);
@@ -3083,6 +3307,26 @@ static QString nativeDocumentFiltered(Score* score, const QSet<QString>* drawing
             }
         }
         shape["commands"] = commands;
+        if (shape.contains("wave") && commands.size() >= 4) {
+            auto wave=shape.value("wave").toObject();
+            const auto geometry=doc.value("geometry").toArray();
+            if (!geometry.isEmpty()) {
+                auto stops=geometry[0].toObject().value("wave").toObject().value("stops").toArray();
+                for (int wi=0; wi < stops.size(); ++wi) {
+                    auto stop=stops[wi].toObject();
+                    stop["amplitude"]=stop.value("amplitude").toDouble() * image->spatium();
+                    stop["period"]=stop.value("period").toDouble() * image->spatium();
+                    stops[wi]=stop;
+                }
+                if (!stops.isEmpty()) {
+                    wave["stops"]=stops;
+                }
+            }
+            const auto a=commands[commands.size() - 2].toArray(), b=commands.last().toArray();
+            wave["a"]=QJsonObject{ { "x", a[1] }, { "y", a[2] } };
+            wave["b"]=QJsonObject{ { "x", b[1] }, { "y", b[2] } };
+            shape["wave"]=wave;
+        }
         shape=localShapeLinks(score, shape, image->staffIdx());
         // A stored asset frame consists of three musical points defining its affine transform.
         if (whole && !shape.value("svgSource").toString().isEmpty() && !placement.box.isEmpty()) {
@@ -3146,7 +3390,8 @@ static QString nativeDocumentFiltered(Score* score, const QSet<QString>* drawing
         for (const char* setting :
              { "subdivision", "systemContinuation", "systemStartContinuation", "pointerMode", "strokeWidth", "strokeColor",
                "secondaryColor",
-               "secondaryActive", "smoothing", "pressureEnabled", "strokeOpacity", "filled", "pointCurvature", "dragResistance",
+               "secondaryActive", "smoothing", "pressureEnabled", "nibFollowDirection", "strokeOpacity", "filled", "pointCurvature",
+               "dragResistance",
                "anchorMode", "anchorGridMode" }) {
             if (source.contains(setting)) {
                 result[setting] = source.value(setting);
@@ -3159,6 +3404,134 @@ static QString nativeDocumentFiltered(Score* score, const QSet<QString>* drawing
 }
 
 QString nativeDocument(Score* score) { return nativeDocumentFiltered(score, nullptr); }
+
+// Repeat placement is evaluated against the current guide in the current score/part.
+// Cached traces contain coordinates only, never score or engraving-item pointers.
+static QJsonObject repeatedSource(Score* score, const QJsonObject& source)
+{
+    auto shapes=source.value("shapes").toArray();
+    if (!score || shapes.isEmpty()) {
+        return source;
+    }
+    auto shape=shapes[0].toObject(), link=shape.value("repeatLink").toObject();
+    const QString guideId=link.value("guideId").toString();
+    if (guideId.isEmpty() || guideId == shape.value("drawId").toString()) {
+        return source;
+    }
+    Image* guide=nullptr;
+    for (Image* candidate:nativeImages(score)) {
+        const auto list=metadata(candidate).value("source").toObject().value("shapes").toArray();
+        if (!list.isEmpty() && list[0].toObject().value("drawId").toString() == guideId && !list[0].toObject().contains("repeatLink")) {
+            guide=candidate;
+            break;
+        }
+    }
+    if (!guide) {
+        return source;
+    }
+    struct Edge {
+        QPointF a, b;
+        double length=0;
+    };
+    struct Trace {
+        std::vector<Edge> edges;
+        double length=0;
+    };
+    static QCache<QByteArray, Trace> traces(8);
+    const auto parts=selectionParts(score, guide);
+    const QByteArray key=QJsonDocument(metadata(guide)).toJson(QJsonDocument::Compact) + fragmentLayoutSignature(guide, parts);
+    auto trace=traces.object(key);
+    if (!trace) {
+        auto made=std::make_unique<Trace>();
+        const QSet<QString> ids{ guideId };
+        const auto document=QJsonDocument::fromJson(nativeDocumentFiltered(score, &ids).toUtf8()).object().value("shapes").toArray();
+        if (document.isEmpty()) {
+            return source;
+        }
+        const auto commands=document[0].toObject().value("commands").toArray();
+        QPointF last, start;
+        bool active=false;
+        auto edge=[&](const QPointF& end) {
+            const double length=std::hypot(end.x() - last.x(), end.y() - last.y());
+            if (length > 1e-8 && made->edges.size() < 50000) {
+                made->length+=length;
+                made->edges.push_back({ last, end, made->length });
+            }
+            last=end;
+        };
+        std::function<void(QPointF, QPointF, QPointF, QPointF, int)> cubic;
+        cubic=[&](QPointF a, QPointF b, QPointF c, QPointF d, int depth) {
+            if (made->edges.size() >= 50000) {
+                return;
+            }
+            auto distance=[](QPointF p, QPointF q) { return std::hypot(p.x() - q.x(), p.y() - q.y()); };
+            if (depth >= 12 || distance(a, b) + distance(b, c) + distance(c, d) - distance(a, d) < 0.05) {
+                edge(d);
+                return;
+            }
+            const QPointF ab=(a + b) / 2, bc=(b + c) / 2, cd=(c + d) / 2, u=(ab + bc) / 2, v=(bc + cd) / 2, m=(u + v) / 2;
+            cubic(a, ab, u, m, depth + 1);
+            cubic(m, v, cd, d, depth + 1);
+        };
+        for (const auto& value:commands) {
+            const auto c=value.toArray();
+            const QString op=c[0].toString();
+            if (op == "M") {
+                last=QPointF(c[1].toDouble(), c[2].toDouble());
+                start=last;
+                active=true;
+            } else if (active && op == "L") {
+                edge(QPointF(c[1].toDouble(), c[2].toDouble()));
+            } else if (active && op == "Z") {
+                edge(start);
+            } else if (active && op == "C") {
+                cubic(last, QPointF(c[1].toDouble(), c[2].toDouble()), QPointF(c[3].toDouble(), c[4].toDouble()),
+                      QPointF(c[5].toDouble(), c[6].toDouble()), 0);
+            }
+        }
+        trace=made.release();
+        traces.insert(key, trace);
+    }
+    if (trace->edges.empty() || !std::isfinite(trace->length)) {
+        return source;
+    }
+    const double distance=std::clamp(link.value("u").toDouble(), 0.0, 1.0) * trace->length;
+    auto found=std::lower_bound(trace->edges.begin(), trace->edges.end(), distance, [](const Edge& e, double value){
+        return e.length < value;
+    });
+    const auto& edge=found == trace->edges.end() ? trace->edges.back() : *found;
+    const double length=std::hypot(edge.b.x() - edge.a.x(), edge.b.y() - edge.a.y()),
+                 fraction=length ? (distance - edge.length + length) / length : 0;
+    const double x=edge.a.x() + (edge.b.x() - edge.a.x()) * fraction + link.value("dx").toDouble();
+    const double y=edge.a.y() + (edge.b.y() - edge.a.y()) * fraction + link.value("dy").toDouble();
+    const double angle=link.value("rotation").toDouble() * std::acos(-1.0) / 180
+                        + (link.value("follow").toBool() ? std::atan2(edge.b.y() - edge.a.y(), edge.b.x() - edge.a.x()) : 0);
+    const double w=link.value("width").toDouble(), h=link.value("height").toDouble(), c=std::cos(angle), sn=std::sin(angle);
+    if (!std::isfinite(x + y + angle + w + h) || w <= 0 || h <= 0 || w > 1000000 || h > 1000000) {
+        return source;
+    }
+    const QJsonArray matrix{ w* c, w* sn, -h * sn, h* c, x - w * c / 2 + h * sn / 2, y - w * sn / 2 - h * c / 2 };
+    const double a=matrix[0].toDouble(), b=matrix[1].toDouble(), d=matrix[2].toDouble(), e=matrix[3].toDouble(), tx=matrix[4].toDouble(),
+                 ty=matrix[5].toDouble();
+    const QJsonArray commands{ QJsonArray{ "M", tx, ty }, QJsonArray{ "L", tx + a, ty + b }, QJsonArray{ "L", tx + a + d, ty + b + e },
+                               QJsonArray{ "L", tx + d, ty + e }, QJsonArray{ "Z" }, QJsonArray{ "M", x, y } };
+    shape["commands"]=commands;
+    shape["svgMatrix"]=matrix;
+    link["poseX"]=x;
+    link["poseY"]=y;
+    link["poseAngle"]=angle;
+    shape["repeatLink"]=link;
+    auto result=source;
+    result["shapes"]=QJsonArray{ shape };
+    const double left=std::min({ tx, tx + a, tx + a + d, tx + d }), top=std::min({ ty, ty + b, ty + b + e, ty + e });
+    result["bounds"]
+        =QJsonObject{ { "x", left }, { "y", top }, { "width", std::max({ tx, tx + a, tx + a + d, tx + d }) - left }, { "height", std::max(
+                                                                                                                           { ty, ty + b,
+                                                                                                                             ty + b + e,
+                                                                                                                             ty + e })
+                                                                                                                       - top } };
+    return result;
+}
 
 QVariantList nativeFragments(Score* score, const QString& previewDocument)
 {
@@ -3205,7 +3578,12 @@ QVariantList nativeFragments(Score* score, const QString& previewDocument)
         RectF box;
         QJsonArray mapped;
         QJsonObject info;
-        if (uniformPartCopy(image, doc)) {
+        if (shapes[0].toObject().contains("repeatLink")) {
+            const auto placed=repeatedSource(score, doc.value("source").toObject());
+            svg=rigidSvg(placed);
+            const auto rect=sourceRectangle(placed);
+            box=RectF(rect.x(), rect.y(), rect.width(), rect.height());
+        } else if (uniformPartCopy(image, doc)) {
             const auto placement=wholePartPlacement(image, doc);
             if (placement.box.isEmpty()) {
                 continue;
@@ -3232,7 +3610,7 @@ QVariantList nativeFragments(Score* score, const QString& previewDocument)
                   : paintSvg(doc, parts, QString::fromStdString(image->drawingPart()), &clip, &mapped, &info,
                              &resolvedGeometryFor(image, doc, parts));
             const auto target = std::find_if(parts.begin(), parts.end(), [&](const Part& p){
-                return p.key.toStdString() == image->drawingPart();
+                return sameMeasureKey(p.key, QString::fromStdString(image->drawingPart()));
             });
             if (target == parts.end() || !target->measure->system()) {
                 continue;
@@ -3348,6 +3726,20 @@ QString syncNative(Score* score, const QString& document)
         }
         return result;
     };
+    // The editor keeps the submitted coordinates until a layout restore. A
+    // native round trip can differ in floating point values or derived paint
+    // metadata; compare untouched input with its stored source as well.
+    QHash<QString, QJsonObject> storedSources;
+    for (Image* image : existing) {
+        const auto saved = metadata(image).value("source").toObject();
+        const auto savedShapes = saved.value("shapes").toArray();
+        if (savedShapes.size() == 1) {
+            const QString id = savedShapes[0].toObject().value("drawId").toString();
+            if (!storedSources.contains(id)) {
+                storedSources.insert(id, saved);
+            }
+        }
+    }
     QSet<QString> wanted;
     bool modified = false;
     for (const auto& v : shapes) {
@@ -3387,13 +3779,17 @@ QString syncNative(Score* score, const QString& document)
             auto beforeShape=sh, afterShape=shape;
             beforeShape.remove("fragmentOverrides");
             afterShape.remove("fragmentOverrides");
+            beforeShape.remove("name");
+            afterShape.remove("name");
+            beforeShape.remove("groupName");
+            afterShape.remove("groupName");
             beforeShape.remove("selectionGroup");
             afterShape.remove("selectionGroup");
             metadataOnly=beforeShape == afterShape
                           && normalizedLinks(current.value("anchors").toArray(), previous) == normalizedLinks(source.value(
                                                                                                                   "anchors").toArray(),
                                                                                                               index);
-            unchanged = sh == shape
+            unchanged = previous == index && sh == shape
                         && normalizedLinks(current.value("anchors").toArray(), previous) == normalizedLinks(source.value(
                                                                                                                 "anchors").toArray(), index)
                         && current.value("systemContinuation") == source.value("systemContinuation")
@@ -3401,6 +3797,30 @@ QString syncNative(Score* score, const QString& document)
                         && current.value("anchorGridMode") == source.value("anchorGridMode")
                         && current.value("subdivision") == source.value("subdivision");
             break;
+        }
+        const auto stored = storedSources.value(shape.value("drawId").toString());
+        const auto storedShapes = stored.value("shapes").toArray();
+        if (!storedShapes.isEmpty()) {
+            const auto storedShape = storedShapes[0].toObject();
+            const bool sameLinks = normalizedLinks(stored.value("anchors").toArray(), 0)
+                                   == normalizedLinks(source.value("anchors").toArray(), index);
+            if (sameLinks) {
+                auto before = storedShape, after = shape;
+                before.remove("fragmentOverrides");
+                after.remove("fragmentOverrides");
+                before.remove("name");
+                after.remove("name");
+                before.remove("groupName");
+                after.remove("groupName");
+                before.remove("selectionGroup");
+                after.remove("selectionGroup");
+                metadataOnly = metadataOnly || before == after;
+                unchanged = unchanged || (stored.value("nativeIndex").toInt() == index && storedShape == shape
+                                          && stored.value("systemContinuation") == source.value("systemContinuation")
+                                          && stored.value("systemStartContinuation") == source.value("systemStartContinuation")
+                                          && stored.value("anchorGridMode") == source.value("anchorGridMode")
+                                          && stored.value("subdivision") == source.value("subdivision"));
+            }
         }
         if (unchanged) {
             continue;
@@ -3413,6 +3833,13 @@ QString syncNative(Score* score, const QString& document)
                     continue;
                 }
                 auto savedShape=savedShapes[0].toObject();
+                for (const char* key:{ "name", "groupName" }) {
+                    if (shape.contains(key)) {
+                        savedShape[key]=shape.value(key);
+                    } else {
+                        savedShape.remove(key);
+                    }
+                }
                 if (shape.contains("selectionGroup")) {
                     savedShape["selectionGroup"]=shape.value("selectionGroup");
                 } else {
@@ -3423,7 +3850,8 @@ QString syncNative(Score* score, const QString& document)
                 saved["shapes"]=savedShapes;
                 for (const char* key:
                      { "subdivision", "systemContinuation", "systemStartContinuation", "pointerMode", "strokeWidth", "strokeColor",
-                       "secondaryColor", "secondaryActive", "smoothing", "pressureEnabled", "strokeOpacity", "filled", "pointCurvature",
+                       "secondaryColor", "secondaryActive", "smoothing", "pressureEnabled", "nibFollowDirection", "strokeOpacity", "filled",
+                       "pointCurvature",
                        "dragResistance", "anchorMode", "anchorGridMode" }) {
                     if (source.contains(key)) {
                         saved[key]=source.value(key);
@@ -3431,6 +3859,7 @@ QString syncNative(Score* score, const QString& document)
                 }
                 doc["source"]=saved;
                 doc["nativeIndex"]=index;
+                image->undoChangeProperty(Pid::Z, 1000 + index);
                 if (doc == metadata(image)) {
                     continue;
                 }
@@ -3923,6 +4352,21 @@ bool layout(const Image* image, Image::LayoutData* data)
     if (doc.value("nativeOwner").toString() == "MuseDrawNative") {
         const_cast<Image*>(image)->setSelectable(false);
     }
+    const auto sourceShapes=doc.value("source").toObject().value("shapes").toArray();
+    if (!sourceShapes.isEmpty() && sourceShapes[0].toObject().contains("repeatLink")) {
+        const auto segment=toSegment(image->explicitParent());
+        if (!segment || !segment->measure()->system()) {
+            return false;
+        }
+        const auto placed=repeatedSource(image->score(), doc.value("source").toObject());
+        const auto box=sourceRectangle(placed);
+        auto writable=const_cast<Image*>(image);
+        writable->setDrawingSvg(rigidSvg(placed).toStdString());
+        writable->setSize(SizeF(box.width() / image->spatium(), box.height() / image->spatium()));
+        data->setPos(box.x() - segment->canvasPos().x(), box.y() - segment->measure()->system()->staffCanvasYpage(image->staffIdx()));
+        data->setBbox(RectF(0, 0, box.width(), box.height()));
+        return true;
+    }
     if (uniformPartCopy(image, doc)) {
         auto writable=const_cast<Image*>(image);
         const auto placement=wholePartPlacement(image, doc);
@@ -4040,7 +4484,9 @@ bool layout(const Image* image, Image::LayoutData* data)
     }
     const auto segment = toSegment(image->explicitParent());
     const auto current
-        = std::find_if(parts.begin(), parts.end(), [&](const Part& p) { return p.key.toStdString() == image->drawingPart(); });
+        = std::find_if(parts.begin(), parts.end(), [&](const Part& p) {
+        return sameMeasureKey(p.key, QString::fromStdString(image->drawingPart()));
+    });
     if (current == parts.end()) {
         return false;
     }

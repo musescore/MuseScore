@@ -87,7 +87,20 @@ Image::Image(const Image& img)
     if (m_imageType == ImageType::RASTER) {
         m_rasterDoc = img.m_rasterDoc ? std::make_shared<Pixmap>(*img.m_rasterDoc) : nullptr;
     } else if (m_imageType == ImageType::SVG) {
-        m_svgDoc = img.m_svgDoc ? new SvgRenderer(m_storeItem->buffer()) : 0;
+        m_svgDoc = nullptr;
+        // Drawing layout can have a newer SVG than its stored backing image.
+        // A linked part must clone that snapshot, even before the next save.
+        if (img.m_svgDoc) {
+            if (!img.m_lastDrawingSvg.empty()) {
+                const auto& svg = img.m_lastDrawingSvg;
+                m_svgDoc = new SvgRenderer(muse::ByteArray(reinterpret_cast<const uint8_t*>(svg.data()), svg.size()));
+                m_lastDrawingSvg = svg;
+            } else if (m_storeItem) {
+                m_svgDoc = new SvgRenderer(m_storeItem->buffer());
+            } else {
+                LOGW() << "Cannot clone SVG image: no backing data is available";
+            }
+        }
     }
     setZ(img.z());
 }
