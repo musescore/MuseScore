@@ -3,10 +3,13 @@ import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import Muse.UiComponents
+import Muse.Ui
 import MuseScore.NotationScene
+import "drawing/ui"
 
 Item {
     id: root
+    property var navigationSection: null
     property var editor: null
     property string group: ""
     property string helpText: ""
@@ -16,7 +19,7 @@ Item {
     property bool eraserPreview: false
     property bool sliderBusy: false
     readonly property bool erase: group === "eraser"
-    readonly property bool stroke: ["pencil", "pen", "shapes"].indexOf(group) >= 0
+    readonly property bool stroke: ["pencil", "pen", "shapes"].indexOf(group) >= 0 || !!(editor && editor.styleEditActive)
     readonly property bool music: ["select", "pencil", "pen", "shapes", "nodes"].indexOf(group) >= 0 && editor && editor.tool !== "unlink"
     implicitHeight: content.implicitHeight
     function tr(s) {
@@ -33,6 +36,16 @@ Item {
     }
     Column {
         id: content
+        ShapeControls {
+            width: parent.width
+            editor: root.editor
+            visible: root.group === "shapes"
+        }
+        DrawingObjects {
+            width: parent.width
+            editor: root.editor
+            visible: root.group === "objects"
+        }
         width: parent.width
         spacing: 12
         Column {
@@ -115,6 +128,7 @@ Item {
             }
             ColorPicker {
                 visible: !root.editor || root.editor.tool.indexOf("gradient-") !== 0
+
                 color: root.editor ? root.editor.strokeColor : "#161616"
                 onNewColorSelected: function (colour) {
                     if (root.editor)
@@ -217,7 +231,7 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 width: parent.width
                 wrapMode: Text.WordWrap
-                text: root.tr("Shift: mirrored sides. Ctrl: proportional size. Centre point: rotate.")
+                text: root.tr("Shift: mirrored sides. Ctrl: proportional size. Centre node: rotate.")
             }
             FlatButton {
                 width: parent.width
@@ -281,10 +295,10 @@ Item {
             }
             IncrementalPropertyControl {
                 width: parent.width
-                minValue: 1
+                minValue: root.editor && root.editor.styleEditActive ? 0.1 : 1
                 maxValue: 1000
-                step: 1
-                decimals: 0
+                step: root.editor && root.editor.styleEditActive ? 0.1 : 1
+                decimals: root.editor && root.editor.styleEditActive ? 1 : 0
                 currentValue: root.editor ? root.editor.strokeWidth : 30
                 onValueEdited: function (value) {
                     if (root.editor)
@@ -318,8 +332,53 @@ Item {
                 value: root.editor ? root.editor.strokeOpacity : 1
                 onMoved: root.editor.strokeOpacity = value
             }
+            StyledDropdown {
+                visible: !!(root.editor && root.editor.styleEditActive)
+                width: parent.width
+                model: [
+                    {
+                        text: root.tr("Solid"),
+                        value: "solid"
+                    },
+                    {
+                        text: root.tr("Dashed"),
+                        value: "dash"
+                    },
+                    {
+                        text: root.tr("Dotted"),
+                        value: "dot"
+                    }
+                ]
+                currentIndex: root.editor ? Math.max(0, ["solid", "dash", "dot"].indexOf(root.editor.strokeLinePattern)) : 0
+                onActivated: function (index, value) {
+                    root.editor.strokeLinePattern = value;
+                }
+            }
+            StyledDropdown {
+                visible: !!(root.editor && root.editor.styleEditActive)
+                width: parent.width
+                model: [
+                    {
+                        text: root.tr("Round ends"),
+                        value: "round"
+                    },
+                    {
+                        text: root.tr("Flat ends"),
+                        value: "butt"
+                    },
+                    {
+                        text: root.tr("Square ends"),
+                        value: "square"
+                    }
+                ]
+                currentIndex: root.editor ? Math.max(0, ["round", "butt", "square"].indexOf(root.editor.strokeLineCap)) : 0
+                onActivated: function (index, value) {
+                    root.editor.strokeLineCap = value;
+                }
+            }
             FlatButton {
                 width: parent.width
+                visible: !root.editor || !root.editor.styleEditActive
                 text: root.tr("Apply style to selection")
                 enabled: root.editor && root.editor.selected >= 0
                 onClicked: root.editor.updateStyle()
@@ -361,7 +420,7 @@ Item {
             visible: root.group === "nodes" && root.editor && root.editor.tool === "nodes"
             StyledTextLabel {
                 horizontalAlignment: Text.AlignLeft
-                text: root.tr("Point curvature: ") + (root.editor ? Math.round(root.editor.pointCurvature * 100) : 50) + "%"
+                text: root.tr("Node curvature: ") + (root.editor ? Math.round(root.editor.pointCurvature * 100) : 50) + "%"
             }
             StyledSlider {
                 width: parent.width

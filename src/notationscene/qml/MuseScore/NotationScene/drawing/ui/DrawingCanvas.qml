@@ -2,16 +2,644 @@
 
 import QtQuick
 import QtQuick.Controls as Controls
+import Muse.Ui
 
 import "../core/Vector.js" as Vector
 import "../core/Reflow.js" as Reflow
 import "../core/SvgAsset.js" as SvgAsset
 import "../core/Editing.js" as Editing
 import "../core/Painting.js" as Painting
+import "../core/Parametric.js" as Parametric
+import "../core/Context.js" as Context
+import "../core/Repeat.js" as Repeat
 
 Item {
     id: root
 
+    DrawingHandleTip {
+        id: handleTooltip
+    }
+    property var repeatSession: null
+    readonly property bool repeatEditActive: repeatSession !== null
+    property string repeatPick: ""
+    property int repeatCount: 5
+    property bool repeatFollow: true
+    property real repeatRotation: 0
+    property real repeatOpacity: 1
+    function beginRepeatEdit() {
+        if (repeatEditActive)
+            return;
+        if (nodeEditActive || shapeEditActive) {
+            status = trStatus("Confirm or cancel the current edit first.", "Confirme ou cancele a edição atual primeiro.");
+            return;
+        }
+        finishPen();
+        finishTextEditing();
+        gestureStarting();
+        repeatSession = {
+            state: snapshot(),
+            tool: tool,
+            pathId: "",
+            sourceId: "",
+            selected: selected,
+            selection: selectedShapes.slice(),
+            groupId: Vector.ensureIdentity({}) + "-repeat"
+        };
+        repeatPick = "path";
+        tool = "select";
+        requestPaint();
+    }
+    function pickRepeat(index) {
+        var sh = shapes[index];
+        if (!repeatEditActive || !sh)
+            return;
+        if (repeatPick === "path") {
+            if (sh.svgSource || sh.repeatLink || !Repeat.trace(sh.commands).length) {
+                status = trStatus("Choose a drawn path.", "Escolha uma linha desenhada.");
+                return;
+            }
+            repeatSession = Object.assign({}, repeatSession, {
+                pathId: sh.drawId
+            });
+            repeatOpacity = sh.style.opacity;
+            repeatPick = "source";
+        } else if (repeatPick === "source") {
+            if (sh.drawId === repeatSession.pathId || (sh.repeatLink && sh.repeatLink.guideId === repeatSession.pathId)) {
+                status = trStatus("Choose another SVG as the source.", "Escolha outro SVG como modelo.");
+                return;
+            }
+            repeatSession = Object.assign({}, repeatSession, {
+                sourceId: sh.drawId
+            });
+            repeatPick = "";
+        }
+        var path = shapes.findIndex(function (s) {
+            return s.drawId === repeatSession.pathId;
+        });
+        if (path >= 0)
+            setSelection([path], path, true);
+        Repeat.rebuild(root);
+        requestPaint();
+    }
+    property bool repeatRedistribute: false
+    function repeatSettingsChanged(redistribute) {
+        if (!repeatEditActive)
+            return;
+        repeatRedistribute = repeatRedistribute || redistribute;
+        repeatPreviewTimer.restart();
+    }
+    Timer {
+        id: repeatPreviewTimer
+        interval: 16
+        onTriggered: {
+            if (!root.repeatEditActive)
+                return;
+            if (root.repeatRedistribute) {
+                root.repeatRedistribute = false;
+                Repeat.rebuild(root);
+            } else {
+                root.shapes = root.shapes.map(function (sh) {
+                    return sh.repeatLink && sh.repeatLink.guideId === root.repeatSession.pathId ? Object.assign({}, sh, {
+                        repeatLink: Object.assign({}, sh.repeatLink, {
+                            rotation: root.repeatRotation,
+                            follow: root.repeatFollow,
+                            poseAngle: null
+                        })
+                    }) : sh;
+                });
+                Repeat.follow(root);
+            }
+            root.requestPaint();
+        }
+    }
+    onRepeatCountChanged: repeatSettingsChanged(true)
+    onRepeatFollowChanged: repeatSettingsChanged(false)
+    onRepeatRotationChanged: repeatSettingsChanged(false)
+    onRepeatOpacityChanged: if (repeatEditActive && repeatSession.pathId) {
+        shapes = shapes.map(function (sh) {
+            return sh.drawId === repeatSession.pathId ? Object.assign({}, sh, {
+                style: Object.assign({}, sh.style, {
+                    opacity: repeatOpacity
+                })
+            }) : sh;
+        });
+        requestPaint();
+    }
+    function finishRepeatEdit(apply) {
+        if (!repeatEditActive)
+            return;
+        var edit = repeatSession;
+        input.dragging = false;
+        repeatPick = "";
+        if (apply && repeatPreviewTimer.running) {
+            repeatPreviewTimer.stop();
+            if (repeatRedistribute) {
+                repeatRedistribute = false;
+                Repeat.rebuild(root);
+            } else {
+                shapes = shapes.map(function (sh) {
+                    return sh.repeatLink && sh.repeatLink.guideId === edit.pathId ? Object.assign({}, sh, {
+                        repeatLink: Object.assign({}, sh.repeatLink, {
+                            rotation: repeatRotation,
+                            follow: repeatFollow,
+                            poseAngle: null
+                        })
+                    }) : sh;
+                });
+            }
+        }
+        repeatPreviewTimer.stop();
+        repeatRedistribute = false;
+        if (!apply) {
+            shapes = edit.state.shapes;
+            bindings = edit.state.bindings;
+            setSelection(edit.selection, edit.selected, true);
+        } else {
+            Repeat.follow(root);
+            var guideIndex = shapes.findIndex(function (sh) { return sh.drawId === edit.pathId; });
+            if (guideIndex >= 0) autoLink(guideIndex);
+            var list = shapes.slice();
+            for (var i = 0; i < list.length; i++)
+                if (list[i].repeatLink && list[i].repeatLink.guideId === edit.pathId)
+                    autoLink(i);
+        }
+        repeatSession = null;
+        tool = edit.tool;
+        if (apply)
+            changed();
+        else
+            requestPaint();
+        gestureFinished();
+    }
+    function openObjectContext(index, x, y) {
+        contextMenu.openAt(x, y, index);
+    }
+    function renameObject(index, value) {
+        if (!shapes[index] || styleEditActive || repeatEditActive)
+            return;
+        gestureStarting();
+        remember();
+        var all = shapes.slice();
+        all[index] = Object.assign({}, all[index], {
+            name: String(value).slice(0, 200)
+        });
+        shapes = all;
+        changed();
+        gestureFinished();
+    }
+    function renameGroup(id, value) {
+        if (!id || styleEditActive || repeatEditActive)
+            return;
+        gestureStarting();
+        remember();
+        shapes = shapes.map(function (sh) {
+            return sh.selectionGroup === id ? Object.assign({}, sh, {
+                groupName: String(value).slice(0, 200)
+            }) : sh;
+        });
+        changed();
+        gestureFinished();
+    }
+    property var shapeEditSession: null
+    readonly property bool shapeEditActive: shapeEditSession !== null
+    property var nodeEditSession: null
+    readonly property bool nodeEditActive: nodeEditSession !== null
+    readonly property bool styleEditActive: nodeEditActive && !!nodeEditSession.styleMode
+    readonly property int styleEditIndex: styleEditActive ? shapes.findIndex(function (sh) {
+        return sh.drawId === nodeEditSession.drawId;
+    }) : -1
+    property int styleNodeCommand: 0
+    property int styleRangeAnchor: 0
+    property int styleRangeEnd: -1
+    property var nodeStyleClipboard: null
+    function styleNodeSelected(command) {
+        return styleEditActive && (styleRangeEnd > styleNodeCommand ? command >= styleNodeCommand && command <= styleRangeEnd : command === styleNodeCommand);
+    }
+    property bool loadingNodeStyle: false
+    property string strokeLinePattern: "solid"
+    property string strokeLineCap: "round"
+    readonly property var selectedNodeStyle: styleEditIndex >= 0 ? Context.effective(shapes[styleEditIndex], styleNodeCommand) : null
+    readonly property var styleNodeHandles: styleEditIndex >= 0 ? Vector.handles(shapes[styleEditIndex]).filter(function (h) {
+        return !h.control;
+    }) : []
+    function styleControlState() {
+        return {
+            secondaryColor: secondaryColor,
+            secondaryActive: secondaryActive,
+            pointerMode: pointerMode,
+            strokeColor: strokeColor,
+            fillColor: fillColor,
+            strokeWidth: strokeWidth,
+            strokeOpacity: strokeOpacity,
+            filled: filled,
+            strokeLinePattern: strokeLinePattern,
+            strokeLineCap: strokeLineCap,
+            nibShape: nibShape,
+            nibFlatten: nibFlatten,
+            nibAngle: nibAngle,
+            nibTilt: nibTilt,
+            nibFollowDirection: nibFollowDirection
+        };
+    }
+    function restoreStyleControls(values) {
+        loadingNodeStyle = true;
+        try {
+            Object.keys(values).forEach(function (key) {
+                root[key] = values[key];
+            });
+        } finally {
+            loadingNodeStyle = false;
+        }
+    }
+    function beginLineStyleEdit(hit) {
+        if (repeatEditActive)
+            return;
+        if (selected < 0 || shapes[selected].kind === "text")
+            return;
+        if (styleEditActive) {
+            if (hit)
+                selectStyleNode(hit.handle.command);
+            return;
+        }
+        var prior = styleControlState();
+        beginNodeEdit("nodes");
+        var index = selected, sh = shapes[index];
+        if (sh.svgSource) {
+            // Native path conversion stays inside the cancelable session.
+            var converted = svgVectorize ? svgVectorize(sh.svgSource, sh.svgMatrix) : "";
+            var paths = converted ? JSON.parse(converted) : [];
+            if (!paths.length) {
+                finishNodeEdit(false);
+                status = trStatus("This SVG has no editable paths.", "Este SVG não tem caminhos editáveis.");
+                return;
+            }
+            var made = Vector.copy(sh), commands = [], marks = [];
+            paths.forEach(function (path) {
+                marks.push({
+                    command: commands.length,
+                    style: Vector.copy(path.style),
+                    replace: true
+                });
+                commands = commands.concat(path.commands);
+            });
+            made.commands = commands;
+            made.style = Vector.copy(paths[0].style);
+            made.segmentStyles = marks;
+            delete made.svgSource;
+            delete made.svgMatrix;
+            delete made.paintSource;
+            delete made.paintChannels;
+            delete made.singleAnchor;
+            delete made.anchorCommand;
+            Context.ranges(made);
+            var all = shapes.slice();
+            all[index] = made;
+            shapes = all;
+            autoLink(index);
+        }
+        nodeEditSession = Object.assign({}, nodeEditSession, {
+            styleMode: true,
+            drawId: sh.drawId,
+            controls: prior
+        });
+        setSelection([index], index, true);
+        selectStyleNode(hit && hit.shape === index ? hit.handle.command : 0);
+        status = trStatus("Select a node, then use the style tools. Confirm or cancel to finish.", "Selecione um nó e use as ferramentas de estilo. Confirme ou cancele para concluir.");
+    }
+    function selectStyleNode(command, extend) {
+        if (!styleEditActive || styleEditIndex < 0 || !shapes[styleEditIndex].commands[command])
+            return;
+        if (extend) {
+            styleNodeCommand = Math.min(styleRangeAnchor, command);
+            styleRangeEnd = Math.max(styleRangeAnchor, command);
+        } else {
+            styleNodeCommand = command;
+            styleRangeAnchor = command;
+            styleRangeEnd = -1;
+        }
+        loadNodeStyle();
+        requestPaint();
+    }
+    function loadNodeStyle() {
+        var st = selectedNodeStyle;
+        if (!st)
+            return;
+        var values = {
+            strokeColor: st.stroke && st.stroke !== "none" ? st.stroke : "#161616",
+            fillColor: st.fill || "none",
+            strokeWidth: st.width / (pointerMode === "fixed" ? 1 / Math.max(0.02, viewScale) : 1),
+            strokeOpacity: st.opacity === undefined ? 1 : st.opacity,
+            filled: st.fill !== "none",
+            strokeLinePattern: st.linePattern || "solid",
+            strokeLineCap: st.lineCap || "round"
+        };
+        if (st.nib)
+            Object.assign(values, {
+                nibShape: st.nib.shape,
+                nibFlatten: st.nib.flatten,
+                nibAngle: st.nib.angle,
+                nibTilt: st.nib.tilt || 0,
+                nibFollowDirection: !!st.nib.followDirection
+            });
+        restoreStyleControls(values);
+    }
+    function applyNodeStyle(patch, replaceStyle, removeKeys) {
+        if (!styleEditActive || loadingNodeStyle || styleEditIndex < 0)
+            return;
+        remember();
+        var all = shapes.slice();
+        all[styleEditIndex] = Context.changedStyle(all[styleEditIndex], styleNodeCommand, styleRangeEnd, patch, replaceStyle, removeKeys);
+        shapes = all;
+        changed();
+        if (replaceStyle)
+            loadNodeStyle();
+    }
+    function applyNodeNib() {
+        applyNodeStyle({
+            nib: {
+                shape: nibShape,
+                flatten: nibFlatten,
+                angle: nibAngle,
+                tilt: nibShape === "square" ? nibTilt : 0,
+                followDirection: nibFollowDirection
+            }
+        });
+    }
+    onStrokeWidthChanged: if (styleEditActive)
+        applyNodeStyle({
+            width: Math.max(0.001, Math.min(1000000, pointerMode === "fixed" ? strokeWidth / Math.max(0.02, viewScale) : strokeWidth))
+        })
+    onStrokeOpacityChanged: if (styleEditActive)
+        applyNodeStyle({
+            opacity: strokeOpacity
+        })
+    onStrokeColorChanged: if (styleEditActive) {
+        var patch = {}, channel = paintingTool ? Painting.channel(tool) : "stroke";
+        patch[channel] = strokeColor;
+        applyNodeStyle(patch, false, [channel + "Gradient"]);
+    }
+    onFilledChanged: if (styleEditActive)
+        applyNodeStyle({
+            fill: filled ? strokeColor : "none"
+        })
+    onStrokeLinePatternChanged: if (styleEditActive)
+        applyNodeStyle({
+            linePattern: strokeLinePattern
+        })
+    onStrokeLineCapChanged: if (styleEditActive)
+        applyNodeStyle({
+            lineCap: strokeLineCap
+        })
+    onNibShapeChanged: if (styleEditActive)
+        applyNodeNib()
+    onNibFlattenChanged: if (styleEditActive)
+        applyNodeNib()
+    onNibAngleChanged: if (styleEditActive)
+        applyNodeNib()
+    onNibTiltChanged: if (styleEditActive)
+        applyNodeNib()
+    onNibFollowDirectionChanged: if (styleEditActive)
+        applyNodeNib()
+    readonly property bool editSessionActive: shapeEditActive || nodeEditActive || repeatEditActive
+    property var deferredNodeAnchors: ({})
+    function nodeTool(name) {
+        return ["nodes", "anchors", "addnode", "deletenode", "join", "unlink"].indexOf(name) >= 0;
+    }
+    function beginNodeEdit(nextTool) {
+        if (repeatEditActive) {
+            tool = nextTool || "nodes";
+            return;
+        }
+        if (shapeEditActive)
+            finishShapeEdit(true);
+        if (!nodeEditActive) {
+            finishPen();
+            finishTextEditing();
+            gestureStarting();
+            nodeEditSession = {
+                state: snapshot(),
+                tool: tool,
+                selected: selected,
+                selection: selectedShapes.slice()
+            };
+            deferredNodeAnchors = {};
+        }
+        tool = nextTool || "nodes";
+        requestPaint();
+        forceActiveFocus();
+    }
+    function finishNodeEdit(apply) {
+        if (!nodeEditActive)
+            return;
+        var edit = nodeEditSession, anchors = deferredNodeAnchors;
+        input.dragging = false;
+        input.arrowHandle = null;
+        envelopeDragging = false;
+        contextLinkTargets = [];
+        pendingBinding = null;
+        selectedHandle = null;
+        snapTarget = null;
+        if (!apply) {
+            shapes = edit.state.shapes;
+            bindings = edit.state.bindings;
+        } else {
+            Object.keys(anchors).forEach(function (id) {
+                var index = shapes.findIndex(function (sh) {
+                    return sh.drawId === id;
+                });
+                if (index >= 0) {
+                    if (anchors[id] === "move")
+                        reanchorMovedSelection([index], true);
+                    else
+                        autoLink(index, true);
+                }
+            });
+        }
+        nodeEditSession = null;
+        if (!apply)
+            setSelection(edit.selection, edit.selected, true);
+        if (edit.controls)
+            restoreStyleControls(edit.controls);
+        deferredNodeAnchors = {};
+        tool = edit.tool;
+        if (apply)
+            changed();
+        else
+            requestPaint();
+        gestureFinished();
+        forceActiveFocus();
+    }
+    function finishContextEdit(apply) {
+        contextMenu.finishEdit(apply);
+    }
+    property real lastShapeAnchorMs: 0
+    function canEditShape(index) {
+        var sh = shapes[index];
+        return !repeatEditActive && !!sh && !sh.fragmentId && !sh.derivedWholeCommands && (!!sh.wave || (!!sh.parametric && ["polygon", "star", "rounded-rectangle"].indexOf(sh.kind) >= 0) || !!Vector.arrowGeometry(sh));
+    }
+    function beginShapeEdit() {
+        if (nodeEditActive)
+            finishNodeEdit(true);
+        if (shapeEditActive || !canEditShape(selected))
+            return;
+        finishPen();
+        finishTextEditing();
+        gestureStarting();
+        var saved = snapshot(), sh = shapes[selected];
+        shapeEditSession = {
+            index: selected,
+            state: saved,
+            tool: tool,
+            parameters: Vector.copy(shapeParameters)
+        };
+        tool = "select";
+        if (sh.parametric)
+            shapeParameters = Object.assign({}, shapeParameters, sh.parametric);
+        if (sh.wave)
+            shapeParameters = Object.assign({}, shapeParameters, {
+                amplitude: sh.wave.stops[0].amplitude,
+                period: sh.wave.stops[0].period,
+                waveform: sh.wave.waveform,
+                layoutMode: sh.wave.layoutMode
+            });
+        requestPaint();
+        forceActiveFocus();
+    }
+    function finishShapeEdit(apply) {
+        if (!shapeEditActive)
+            return;
+        var edit = shapeEditSession;
+        input.dragging = false;
+        input.arrowHandle = null;
+        envelopeDragging = false;
+        if (!apply) {
+            shapes = edit.state.shapes;
+            bindings = edit.state.bindings;
+            shapeParameters = edit.parameters;
+        } else {
+            var started = Date.now();
+            invalidateReflow(edit.index);
+            autoLink(edit.index);
+            lastShapeAnchorMs = Date.now() - started;
+            if (lastShapeAnchorMs > 100)
+                console.info("[MuseDraw shape-confirm] anchors=" + lastShapeAnchorMs);
+        }
+        shapeEditSession = null;
+        handleTooltip.hideTip();
+        tool = edit.tool;
+        if (apply)
+            changed();
+        else
+            requestPaint();
+        gestureFinished();
+        forceActiveFocus();
+    }
+    function setShapeParameter(key, value) {
+        var options = {};
+        options[key] = value;
+        shapeParameters = Object.assign({}, shapeParameters, options);
+        if (!shapeEditActive)
+            return;
+        var all = shapes.slice(), sh = Vector.copy(all[shapeEditSession.index]);
+        if (sh.wave) {
+            if (key === "amplitude" || key === "period")
+                sh.wave.stops.forEach(function (stop) {
+                    stop[key] = value;
+                });
+            else if (key === "waveform" || key === "layoutMode")
+                sh.wave[key] = value;
+            sh.commands = Parametric.waveCommands(sh.wave);
+        } else if (sh.parametric) {
+            sh = Parametric.rebuild(sh, shapeParameters);
+        }
+        if (sh.segmentStyles)
+            Context.ranges(sh);
+        all[shapeEditSession.index] = sh;
+        shapes = all;
+        requestPaint();
+    }
+    function shapeHandleName(handle) {
+        var names = {
+            "wave-amplitude": "Amplitude / envelope",
+            "wave-period": "Wavelength",
+            "start": "Start / direction",
+            "end": "Length / direction",
+            "head": "Arrowhead length / opening",
+            "shaft-width": "Shaft width",
+            "corners": "Corner radius",
+            "sides": "Number of sides / tips",
+            "inner-radius": "Inner radius"
+        };
+        return qsTrc("drawing-tools", names[handle.role] || "Shape adjustment");
+    }
+    property var shapeParameters: ({
+            sides: 5,
+            innerRatio: 0.4,
+            roundness: 0.2,
+            amplitude: 20,
+            period: 40,
+            waveform: "sine",
+            layoutMode: "continue"
+        })
+    property var contextLinkTargets: []
+    function completeContextLink(x, y) {
+        if (!contextLinkTargets.length)
+            return false;
+        var target = Context.anchorHit(root, x, y), node = target ? null : pointAt(x, y), all = shapes.slice();
+        if (node) {
+            var targetId = shapes[node.shape].drawId;
+            if (contextLinkTargets.some(function (t) {
+                return t.shape === node.shape || Context.reaches(shapes, targetId, shapes[t.shape].drawId);
+            })) {
+                status = trStatus("This link would form a cycle.", "Este vínculo criaria um ciclo.");
+                return true;
+            }
+            var existing = bindings.find(function (b) {
+                return b.shape === node.shape && b.command === node.handle.command && b.field === node.handle.field;
+            });
+            target = existing ? markerForBinding(existing) : null;
+            if (!target)
+                target = nearbyAnchor(x, y, node.handle, 1000000, true);
+        }
+        if (!target) {
+            status = trStatus("Choose a drawing node or a score anchor.", "Escolha um nó ou uma ancoragem da partitura.");
+            return true;
+        }
+        remember();
+        contextLinkTargets.forEach(function (t) {
+            var sh = Vector.copy(all[t.shape]);
+            sh.nodeLinks = (sh.nodeLinks || []).filter(function (l) {
+                return l.ownCommand !== t.handle.command || l.ownField !== t.handle.field;
+            });
+            if (node) {
+                var own = sh.commands[t.handle.command], c = shapes[node.shape].commands[node.handle.command];
+                sh.nodeLinks.push({
+                    drawId: targetId,
+                    command: node.handle.command,
+                    field: node.handle.field,
+                    ownCommand: t.handle.command,
+                    ownField: t.handle.field,
+                    dx: own[t.handle.field] - c[node.handle.field],
+                    dy: own[t.handle.field + 1] - c[node.handle.field + 1]
+                });
+            }
+            all[t.shape] = sh;
+        });
+        shapes = all;
+        var primary = selected;
+        contextLinkTargets.forEach(function (t) {
+            selected = t.shape;
+            bindHandle(t.handle, target);
+        });
+        selected = primary;
+        contextLinkTargets = [];
+        changed();
+        return true;
+    }
+    DrawingContext {
+        id: contextMenu
+        editor: root
+    }
     property string tool: "pencil"
     property string nibShape: "round"
     property real nibFlatten: 0
@@ -44,6 +672,10 @@ Item {
             swapColors();
     }
     function returnToSelection() {
+        if (styleEditActive) {
+            status = trStatus("Confirm or cancel the style edit first.", "Confirme ou cancele a edição de estilo primeiro.");
+            return;
+        }
         finishTextEditing();
         finishPen();
         finishInteractionForHistory();
@@ -52,6 +684,7 @@ Item {
         selectedHandle = null;
         selectionBox = null;
         pendingBinding = null;
+        contextLinkTargets = [];
         snapTarget = null;
         requestPaint();
         forceActiveFocus();
@@ -149,7 +782,7 @@ Item {
         gestureStarting();
         remember();
         var originals = shapes.slice();
-        if (Painting.channel(tool) === "fill")
+        if (!styleEditActive && Painting.channel(tool) === "fill")
             indices.forEach(function (index) {
                 var sh = originals[index], b = Vector.bounds([sh]);
                 if (sh.activePaintRange === undefined)
@@ -159,8 +792,9 @@ Item {
         changed();
         gestureFinished();
     }
-    readonly property bool interactionActive: input.dragging
-    readonly property bool anchorEditingActive: drawingEnabled && (["nodes", "anchors", "addnode", "deletenode", "join", "unlink"].indexOf(tool) >= 0 || (selectionTool && switchStaff && input.dragging))
+    property bool envelopeDragging: false
+    readonly property bool interactionActive: input.dragging || envelopeDragging
+    readonly property bool anchorEditingActive: drawingEnabled && (contextLinkTargets.length > 0 || ["nodes", "anchors", "addnode", "deletenode", "join", "unlink"].indexOf(tool) >= 0 || (selectionTool && switchStaff && input.dragging))
     property bool pencilPreviewDirty: false
     property bool mirrorPointerVisible: false
     property real mirrorPointerX: 0
@@ -179,9 +813,58 @@ Item {
     readonly property string fragmentHandleId: selected >= 0 && shapes[selected] && !shapes[selected].svgSource ? shapes[selected].drawId : ""
     readonly property var fragmentHandleCache: Editing.buildFragmentHandles(nativeFragments, fragmentHandleId)
     property var nativeShapeHitTest: null
+    property var nativeReadyIds: ({})
+    property var nativeFragmentKeys: []
+    property var nativeFragmentLookup: ({})
+    function indexNativeFragments() {
+        var lookup = {}, keys = [], counts = {}, readiness = Object.assign({}, nativeReadyIds);
+        nativeFragments.forEach(function (fragment) {
+            var prefix = fragment.id + "/" + (fragment.partKey || "whole");
+            var count = counts[prefix] || 0;
+            counts[prefix] = count + 1;
+            var key = prefix + "/" + count, previous = nativeFragmentLookup[key];
+            lookup[key] = fragment;
+            keys.push(key);
+            if (!previous || previous.svg !== fragment.svg || previous.width !== fragment.width || previous.height !== fragment.height)
+                delete readiness[fragment.id];
+        });
+        nativeReadyIds = readiness;
+        nativeFragmentLookup = lookup;
+        if (keys.length !== nativeFragmentKeys.length || keys.some(function (key, i) {
+            return key !== nativeFragmentKeys[i];
+        }))
+            nativeFragmentKeys = keys;
+        nativeReadyTimer.restart();
+        requestPaint();
+    }
+    onNativeFragmentsChanged: indexNativeFragments()
+    Timer {
+        id: nativeReadyTimer
+        interval: 0
+        onTriggered: root.refreshNativeReadiness()
+    }
+    function refreshNativeReadiness() {
+        var expected = {}, ready = {}, next = {};
+        nativeFragments.forEach(function (f, i) {
+            if (!f.svg || f.width <= 0 || f.height <= 0)
+                return;
+            expected[f.id] = (expected[f.id] || 0) + 1;
+            var image = fragmentImages.itemAt(i) as Image;
+            if (image && image.status === Image.Ready)
+                ready[f.id] = (ready[f.id] || 0) + 1;
+        });
+        Object.keys(expected).forEach(function (id) {
+            next[id] = ready[id] === expected[id];
+        });
+        nativeReadyIds = next;
+        requestPaint();
+    }
     property var nativeFragmentFingerprints: ({})
     function hasNativeFragments(shape) {
-        if (!shape)
+        if (!shape || !nativeReadyIds[shape.drawId])
+            return false;
+        var entry = shapeLookup[Vector.svgIdentity(shape)];
+        if (editSessionActive && (entry && selectedShapes.indexOf(entry.index) >= 0 || nodeEditActive && nodeEditSession.state.shapes.indexOf(shape) < 0))
             return false;
         var rendered = nativeFragmentFingerprints[shape.drawId];
         return rendered === shape || !!rendered && (liveFragmentEdit || liveContinuationPreview);
@@ -372,6 +1055,8 @@ Item {
         forceActiveFocus();
     }
     function insertCharacter(text, family, x, y) {
+        if (styleEditActive)
+            return;
         var index = editingTextIndex >= 0 ? editingTextIndex : selected;
         var sh = shapes[index];
         if (sh && sh.kind === "text") {
@@ -462,9 +1147,13 @@ Item {
         };
     }
     function mergeSelected() {
+        if (styleEditActive)
+            return;
         Editing.merge(root);
     }
     function groupSelected() {
+        if (styleEditActive)
+            return;
         var targets = selectionIndices();
         if (targets.length < 2)
             return;
@@ -480,6 +1169,8 @@ Item {
         changed();
     }
     function duplicateSelected() {
+        if (styleEditActive)
+            return;
         var targets = selectionIndices();
         if (!targets.length)
             return;
@@ -489,6 +1180,9 @@ Item {
         var delta = 12 / Math.max(0.02, viewScale);
         targets.forEach(function (index) {
             var old = shapes[index], copy = Vector.translate(Vector.copy(old), delta, delta);
+            copy.name = Context.nextName(all, old.name || old.kind || "SVG");
+            if (copy.repeatLink)
+                copy = Repeat.detach(copy);
             delete copy.drawId;
             delete copy.fragmentId;
             delete copy.parentDrawId;
@@ -530,6 +1224,8 @@ Item {
         gestureFinished();
     }
     function ungroupSelected() {
+        if (styleEditActive)
+            return;
         var targets = selectionIndices();
         if (!targets.some(function (index) {
             return !!shapes[index].selectionGroup;
@@ -568,9 +1264,18 @@ Item {
         }
     }
     function isBasicShape(key) {
-        return ["line", "rectangle", "ellipse", "triangle", "right-triangle", "arrow", "arrow-double", "arrow-filled"].indexOf(key) >= 0;
+        return ["line", "rectangle", "ellipse", "triangle", "right-triangle", "arrow", "arrow-double", "arrow-filled", "wave", "polygon", "star", "rounded-rectangle", "diamond", "cross"].indexOf(key) >= 0;
     }
-    function reanchorMovedSelection(targets) {
+    function reanchorMovedSelection(targets, force) {
+        if (nodeEditActive && !force) {
+            var pending = Object.assign({}, deferredNodeAnchors);
+            targets.forEach(function (index) {
+                if (!pending[shapes[index].drawId])
+                    pending[shapes[index].drawId] = "move";
+            });
+            deferredNodeAnchors = pending;
+            return;
+        }
         if (!targets.length || !rhythmMarkers.length)
             return;
         var moving = {}, ids = {}, updated = shapes.slice(), links = [];
@@ -678,6 +1383,8 @@ Item {
     property bool settingSelection: false
     property var selectionBox: null
     onSelectedChanged: {
+        if (shapeEditActive && selected !== shapeEditSession.index)
+            finishShapeEdit(false);
         if (!settingSelection)
             selectedShapes = selected >= 0 ? [selected] : [];
         var sh = shapes[selected];
@@ -694,10 +1401,15 @@ Item {
             return index >= 0 && index < shapes.length;
         });
     }
-    function setSelection(indices, primary) {
+    function setSelection(indices, primary, individual) {
+        if (styleEditActive && styleEditIndex >= 0) {
+            indices = [styleEditIndex];
+            primary = styleEditIndex;
+            individual = true;
+        }
         var expanded = [];
         indices.forEach(function (index) {
-            selectionMembers(index).forEach(function (member) {
+            (individual ? [index] : selectionMembers(index)).forEach(function (member) {
                 if (expanded.indexOf(member) < 0)
                     expanded.push(member);
             });
@@ -1246,12 +1958,26 @@ Item {
     }
 
     function changed() {
+        if (editSessionActive) {
+            if (repeatEditActive)
+                Repeat.follow(root);
+            requestPaint();
+            return;
+        }
+        Repeat.follow(root);
+        Context.followPoints(root);
         Editing.followLabels(root);
         requestPaint();
         documentChanged();
     }
 
-    function autoLink(index) {
+    function autoLink(index, force) {
+        if (nodeEditActive && !force) {
+            var pending = Object.assign({}, deferredNodeAnchors);
+            pending[shapes[index].drawId] = true;
+            deferredNodeAnchors = pending;
+            return;
+        }
         if (shapes[index].singleAnchor) {
             linkSingleAnchor(index);
             return;
@@ -1268,6 +1994,10 @@ Item {
         delete linked.shape.suppressAutoAnchors;
         a[index] = linked.shape;
         shapes = a;
+        if (linked.commandMapping)
+            Context.remapLinks(root, linked.shape.drawId, function (ci) {
+                return linked.commandMapping[ci] === undefined ? -1 : linked.commandMapping[ci];
+            });
 
         bindings = bindings.filter(function (b) {
             return b.shape !== index;
@@ -1304,13 +2034,27 @@ Item {
             ] : [];
         }
         var handles = Vector.linkedHandles(shapes[selected], bindings, selected);
-        var ends = contextualRhythmMarkers ? Editing.fragmentHandles(root) : [];
+        var ends = contextualRhythmMarkers && !nodeEditActive && !pendingBinding && !(tool === "anchors" && selectedHandle) && !contextLinkTargets.length && hasNativeFragments(shapes[selected]) ? Editing.fragmentHandles(root) : [];
         return ends.length ? handles.filter(function (h) {
             return !h.endpoint;
         }).concat(ends) : handles;
     }
     property var joiningPoint: null
     function pointAt(x, y) {
+        if (styleEditActive) {
+            var match = null, reach = 12 / Math.max(0.000001, viewScale);
+            styleNodeHandles.forEach(function (h) {
+                var distance = Math.hypot(h.x - x, h.y - y);
+                if (distance < reach) {
+                    reach = distance;
+                    match = {
+                        shape: styleEditIndex,
+                        handle: h
+                    };
+                }
+            });
+            return match;
+        }
         var best = null, distance = 12 / Math.max(0.000001, viewScale);
         for (var i = shapes.length - 1; i >= 0; i--) {
             var handles = Vector.linkedHandles(shapes[i], bindings, i);
@@ -1330,7 +2074,7 @@ Item {
     function deletePointAt(x, y) {
         var hit = pointAt(x, y);
         if (!hit) {
-            status = root.trStatus("Click a visible point to delete it.", "Clique em um ponto visível para excluir.");
+            status = root.trStatus("Click a visible node to delete it.", "Clique em um nó visível para excluir.");
             return;
         }
         selected = hit.shape;
@@ -1377,13 +2121,23 @@ Item {
                 replacement = [["L", target.x, target.y]];
             mapping[to] = from;
         } else {
-            status = root.trStatus("There is no other point in this section.", "Não há outro ponto neste trecho.");
+            status = root.trStatus("There is no other node in this section.", "Não há outro nó neste trecho.");
             return;
         }
         remember();
         invalidateReflow(selected);
         var shift = replacement.length - (to - from + 1);
         commands.splice.apply(commands, [from, to - from + 1].concat(replacement));
+        delete shape.wave;
+        if (shape.segmentStyles) {
+            shape.segmentStyles = shape.segmentStyles.filter(function (m) {
+                return m.command < from || m.command > to || mapping[m.command] !== undefined;
+            }).map(function (m) {
+                return Object.assign({}, m, {
+                    command: mapping[m.command] !== undefined ? mapping[m.command] : m.command > to ? m.command + shift : m.command
+                });
+            });
+        }
         if (shape.paintRanges)
             shape.paintRanges = shape.paintRanges.map(function (range) {
                 var r = Object.assign({}, range);
@@ -1393,6 +2147,8 @@ Item {
             }).filter(function (range) {
                 return range.end > range.start;
             });
+        if (shape.segmentStyles)
+            Context.ranges(shape);
         if (shape.anchorCommand !== undefined && shape.anchorCommand > to)
             shape.anchorCommand += shift;
         delete shape.rawPoints;
@@ -1401,6 +2157,9 @@ Item {
         var updated = shapes.slice();
         updated[selected] = shape;
         shapes = updated;
+        Context.remapLinks(root, shape.drawId, function (ci) {
+            return mapping[ci] !== undefined ? mapping[ci] : ci > to ? ci + shift : ci >= from ? -1 : ci;
+        });
         bindings = bindings.filter(function (b) {
             return b.shape !== selected || b.command < from || b.command > to || typeof mapping[b.command] !== "undefined";
         }).map(function (b) {
@@ -1522,7 +2281,11 @@ Item {
     }
 
     function append(sh) {
+        if (styleEditActive)
+            return;
         Vector.ensureIdentity(sh);
+        if (sh.ownerPage === undefined && sh.commands.length)
+            sh.ownerPage = anchorPageAt(sh.commands[0][1], sh.commands[0][2]);
         sh.anchorMode = sh.anchorMode || anchorMode;
         deformationSession = null;
         remember();
@@ -1532,10 +2295,12 @@ Item {
         changed();
     }
     function importSvg(text, x, y) {
+        if (styleEditActive)
+            return;
         finishPen();
         append(SvgAsset.create(text, x, y, Math.min(width * 0.45, 400 / Math.max(0.02, viewScale))));
         tool = "transform";
-        status = root.trStatus("SVG imported. Use the handles to transform it and the centre point to rotate.", "SVG importado. Use as alças para transformar e o ponto central para girar.");
+        status = root.trStatus("SVG imported. Use the handles to transform it and the centre node to rotate.", "SVG importado. Use as alças para transformar e o nó central para girar.");
     }
     function transformHandles() {
         if (tool !== "transform" || !selectionIndices().length)
@@ -1558,7 +2323,7 @@ Item {
         return out;
     }
     function arrowControlHandles() {
-        if (!drawingEnabled || (!selectionTool && tool !== "nodes") || selectionIndices().length !== 1)
+        if (!drawingEnabled || !shapeEditActive || selectionIndices().length !== 1)
             return [];
         var shape = shapes[selected];
         // Fragment endpoints have their own reflow controls; do not reinterpret
@@ -1580,6 +2345,8 @@ Item {
         });
     }
     function mirrorSelected(horizontal) {
+        if (styleEditActive)
+            return;
         var targets = selectedShapes.length ? selectedShapes.slice() : (selected >= 0 ? [selected] : []);
         if (!targets.length)
             return;
@@ -1601,6 +2368,7 @@ Item {
         changed();
     }
     function updateSelectionTextLinks(before, after, targets) {
+        Repeat.captureMoves(before, after, targets);
         var moved = {};
         targets.forEach(function (index) {
             moved[before[index].drawId] = index;
@@ -1623,6 +2391,8 @@ Item {
     }
 
     function undo() {
+        if (styleEditActive)
+            return;
         if (nativeHistory) {
             nativeUndoRequested(false);
             return;
@@ -1643,6 +2413,8 @@ Item {
     }
 
     function redo() {
+        if (styleEditActive)
+            return;
         if (nativeHistory) {
             nativeUndoRequested(true);
             return;
@@ -1757,6 +2529,8 @@ Item {
     }
 
     function removeSelected() {
+        if (styleEditActive || repeatEditActive)
+            return;
         var removed = selectedShapes.length ? selectedShapes.slice() : (selected >= 0 ? [selected] : []);
         if (!removed.length)
             return;
@@ -1823,7 +2597,10 @@ Item {
         var d = {
             format: "musescore-drawing",
             version: 1,
-            shapes: shapes
+            shapes: shapes.map(function (shape, index) {
+                var count = Context.linkedNodes(shape, bindings, index).length;
+                return count ? Object.assign({}, shape, {anchorMode: count === 1 ? "note" : "rhythm"}) : shape;
+            })
         };
 
         d.strokeColor = strokeColor;
@@ -1911,6 +2688,15 @@ Item {
     }
 
     function updateStyle() {
+        if (styleEditActive) {
+            applyNodeStyle({
+                width: effectiveStrokeWidth,
+                opacity: strokeOpacity,
+                linePattern: strokeLinePattern,
+                lineCap: strokeLineCap
+            });
+            return;
+        }
         if (selected < 0)
             return;
         remember();
@@ -1949,7 +2735,7 @@ Item {
         }
 
         if (!point) {
-            status = root.trStatus("Click the stroke to add a point.", "Clique sobre o traço para adicionar um ponto.");
+            status = root.trStatus("Click the stroke to add a node.", "Clique sobre o traço para adicionar um nó.");
             return;
         }
 
@@ -1976,6 +2762,7 @@ Item {
             insertedCount = 2;
         }
 
+        delete a[selected].wave;
         a[selected] = Vector.insertPoint(a[selected], point.command, point.t);
         if (a[selected].kind === "fused") {
             a[selected].singleAnchor = false;
@@ -2007,6 +2794,9 @@ Item {
         ]);
 
         shapes = a;
+        Context.remapLinks(root, a[selected].drawId, function (ci) {
+            return ci >= point.command ? ci + insertedCount : ci;
+        });
         selectedHandle = {
             command: point.command,
             field: field,
@@ -2014,11 +2804,15 @@ Item {
             y: node[field + 1]
         };
 
-        status = root.trStatus("Point added. You can edit it or attach it to the score.", "Ponto adicionado. Você pode editá-lo ou vinculá-lo à partitura.");
+        status = root.trStatus("Node added. You can edit it or attach it to the score.", "Ponto adicionado. Você pode editá-lo ou vinculá-lo à partitura.");
         changed();
     }
 
     onToolChanged: {
+        if (nodeEditActive && !styleEditActive && !nodeTool(tool))
+            finishNodeEdit(false);
+        if (shapeEditActive && tool !== "select")
+            finishShapeEdit(false);
         joiningPoint = null;
 
         finishPen();
@@ -2030,7 +2824,7 @@ Item {
             rhythmAnchorsRequested();
 
         if (tool === "nodes")
-            status = root.trStatus("Select a drawing and drag a node or handle. Add point creates new stroke nodes.", "Selecione a figura e arraste um nó ou uma alça. Adicionar ponto cria novos nós no traço.");
+            status = root.trStatus("Select a drawing and drag a node or handle. Add node creates new stroke nodes.", "Selecione a figura e arraste um nó ou uma alça. Adicionar nó cria novos nós no traço.");
 
         requestPaint();
     }
@@ -2042,8 +2836,13 @@ Item {
     onBindingsChanged: requestPaint()
     onRhythmPresentationChanged: requestPaint()
     onAnchorEditingActiveChanged: requestPaint()
-    onNativeFragmentsChanged: requestPaint()
-    onDrawingEnabledChanged: requestPaint()
+    onDrawingEnabledChanged: {
+        if (!drawingEnabled && nodeEditActive)
+            finishNodeEdit(false);
+        if (!drawingEnabled && shapeEditActive)
+            finishShapeEdit(false);
+        requestPaint();
+    }
 
     function toolShortcut(event) {
         if (!drawingEnabled || textEditing || (event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier)))
@@ -2091,11 +2890,58 @@ Item {
         handleDrawingKey(event);
     }
     function handleDrawingKey(event) {
+        if (repeatEditActive && (event.key === Qt.Key_Escape || event.key === Qt.Key_Return || event.key === Qt.Key_Enter)) {
+            finishRepeatEdit(event.key !== Qt.Key_Escape);
+            event.accepted = true;
+            return;
+        }
+        if (styleEditActive && (event.modifiers & Qt.ControlModifier) && [Qt.Key_C, Qt.Key_V, Qt.Key_X, Qt.Key_D, Qt.Key_Z, Qt.Key_Y].indexOf(event.key) >= 0) {
+            if (event.key === Qt.Key_C)
+                Context.copyNodeProperties(root);
+            if (event.key === Qt.Key_V)
+                Context.pasteNodeProperties(root);
+            event.accepted = true;
+            return;
+        }
+        if (styleEditActive && (event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace)) {
+            Context.removeNodeProperties(root);
+            event.accepted = true;
+            return;
+        }
+        if (editSessionActive && (event.modifiers & Qt.ControlModifier) && (event.key === Qt.Key_Z || event.key === Qt.Key_Y)) {
+            finishContextEdit(false);
+            event.accepted = true;
+            return;
+        }
+        if (nodeEditActive && (event.key === Qt.Key_Escape || event.key === Qt.Key_Return || event.key === Qt.Key_Enter)) {
+            finishContextEdit(event.key !== Qt.Key_Escape);
+            event.accepted = true;
+            return;
+        }
+        if (shapeEditActive) {
+            if (event.key === Qt.Key_Escape || event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                finishContextEdit(event.key !== Qt.Key_Escape);
+                event.accepted = true;
+                return;
+            }
+            if ((event.modifiers & Qt.ControlModifier) || event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace) {
+                event.accepted = true;
+                return;
+            }
+        }
         pointerModifiers = event.modifiers;
 
         if (!drawingEnabled || textEditing)
             return;
-        if (event.key === Qt.Key_Escape) {
+        if ((event.modifiers & Qt.ControlModifier) && [Qt.Key_C, Qt.Key_V, Qt.Key_X].indexOf(event.key) >= 0) {
+            gestureStarting();
+            if (event.key === Qt.Key_V)
+                Context.paste(root);
+            else
+                Context.copy(root, event.key === Qt.Key_X);
+            gestureFinished();
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Escape) {
             returnToSelection();
             event.accepted = true;
         } else if (toolShortcut(event) !== "") {
@@ -2141,18 +2987,30 @@ Item {
         onTriggered: input.flushEraser()
     }
     Repeater {
-        model: root.drawingEnabled ? root.nativeFragments : []
+        id: fragmentImages
+        model: root.drawingEnabled ? root.nativeFragmentKeys : []
         delegate: Image {
+            onStatusChanged: nativeReadyTimer.restart()
+            Component.onCompleted: nativeReadyTimer.restart()
             required property var modelData
-            readonly property var entry: root.shapeLookup[modelData.id]
+            readonly property var fragment: root.nativeFragmentLookup[modelData] || ({
+                    id: "",
+                    svg: "",
+                    x: 0,
+                    y: 0,
+                    width: 0,
+                    height: 0
+                })
+            readonly property var entry: root.shapeLookup[fragment.id]
             readonly property int shapeIndex: entry ? entry.index : -1
             visible: !!entry && entry.shape.kind !== "text" && root.hasNativeFragments(entry.shape) && x + width >= root.paintRegion.x && x <= root.paintRegion.x + root.paintRegion.width && y + height >= root.paintRegion.y && y <= root.paintRegion.y + root.paintRegion.height
-            x: modelData.x
-            y: modelData.y
-            width: modelData.width
-            height: modelData.height
-            source: "data:image/svg+xml," + encodeURIComponent(!root.paintingTool && root.selectedShapes.indexOf(shapeIndex) >= 0 ? SvgAsset.tinted(modelData.svg) : modelData.svg)
-            retainWhileLoading: true
+            x: fragment.x
+            y: fragment.y
+            width: fragment.width
+            height: fragment.height
+            source: "data:image/svg+xml," + encodeURIComponent(!root.paintingTool && !root.editSessionActive && root.selectedShapes.indexOf(shapeIndex) >= 0 ? SvgAsset.tinted(fragment.svg) : fragment.svg)
+            retainWhileLoading: false
+            asynchronous: true
             sourceSize.width: Math.min(2048, Math.max(1, Math.ceil(width * root.svgRasterScale)))
             sourceSize.height: Math.min(2048, Math.max(1, Math.ceil(height * root.svgRasterScale)))
         }
@@ -2227,7 +3085,9 @@ Item {
         return Math.max(0.001, Number(style.width) || 0.001);
     }
     readonly property var displayedNodeHandles: {
-        if (!drawingEnabled || ["nodes", "anchors", "addnode", "deletenode", "join"].indexOf(tool) < 0)
+        if (drawingEnabled && styleEditActive)
+            return styleNodeHandles;
+        if (!drawingEnabled || ["nodes", "anchors", "addnode", "deletenode", "join", "unlink"].indexOf(tool) < 0)
             return [];
         if (tool === "join")
             return shapes.reduce(function (all, shape, index) {
@@ -2272,16 +3132,84 @@ Item {
             x: handle ? handle.x - width / 2 : 0
             y: handle ? handle.y - height / 2 : 0
             visible: !!handle && x + width >= root.paintRegion.x && y + height >= root.paintRegion.y && x <= root.paintRegion.x + root.paintRegion.width && y <= root.paintRegion.y + root.paintRegion.height
-            color: "#ff7a18"
+            color: root.styleNodeSelected(handle.command) ? "#00b8b0" : root.shapes[root.selected] && (root.shapes[root.selected].segmentStyles || []).some(function (m) {
+                return m.command === handle.command;
+            }) ? "#ba58f0" : "#ff7a18"
             border.color: "white"
             border.width: Math.min(width * 0.15, 1 / Math.max(0.000001, root.viewScale))
-            opacity: held || index === root.hoveredNodeIndex ? 1 : 0.3
+            opacity: held || root.styleNodeSelected(handle.command) || index === root.hoveredNodeIndex ? 1 : 0.3
             z: 20
             antialiasing: true
             // The existing MouseArea owns hit testing, pointer capture and dragging.
         }
     }
 
+    readonly property var waveHandles: root.drawingEnabled && root.shapeEditActive && root.selected >= 0 ? Parametric.handles(root.shapes[root.selected], root.viewScale) : []
+    Repeater {
+        model: root.waveHandles.length
+        delegate: Rectangle {
+            required property int index
+            readonly property var modelData: root.waveHandles[index]
+            width: 15 / Math.max(0.02, root.viewScale)
+            height: width
+            radius: width / 2
+            x: modelData.x - width / 2
+            y: modelData.y - height / 2
+            color: modelData.color
+            border.color: "white"
+            border.width: 1 / root.viewScale
+            z: 30
+            MouseArea {
+                anchors.centerIn: parent
+                width: 22 / root.viewScale
+                height: width
+                hoverEnabled: true
+                onContainsMouseChanged: {
+                    if (containsMouse)
+                        handleTooltip.schedule(parent, root.shapeHandleName(modelData));
+                    else
+                        handleTooltip.hideTip();
+                }
+                property var original: null
+                property point start
+                onPressed: function (mouse) {
+                    handleTooltip.hideTip();
+                    original = Vector.copy(root.shapes[root.selected]);
+                    start = mapToItem(root, mouse.x, mouse.y);
+                    root.gestureStarting();
+                    root.envelopeDragging = true;
+                    root.remember();
+                }
+                onPositionChanged: function (mouse) {
+                    if (!pressed)
+                        return;
+                    var p = mapToItem(root, mouse.x, mouse.y), all = root.shapes.slice();
+                    all[root.selected] = Parametric.adjust(original, modelData, p.x - start.x, p.y - start.y, root.viewScale);
+                    if (all[root.selected].segmentStyles)
+                        Context.ranges(all[root.selected]);
+                    root.shapes = all;
+                    if (all[root.selected].parametric)
+                        root.shapeParameters = Object.assign({}, root.shapeParameters, all[root.selected].parametric);
+                    root.requestPaint();
+                }
+                onReleased: {
+                    root.envelopeDragging = false;
+                    root.requestPaint();
+                    root.gestureFinished();
+                }
+                onCanceled: {
+                    root.envelopeDragging = false;
+                    if (root.shapeEditActive && original) {
+                        var all = root.shapes.slice();
+                        all[root.selected] = original;
+                        root.shapes = all;
+                        root.requestPaint();
+                    }
+                    root.gestureFinished();
+                }
+            }
+        }
+    }
     Canvas {
         id: drawingSurface
         x: root.paintRegion.x
@@ -2305,8 +3233,9 @@ Item {
 
             var deformation = root.pointDeformationPreview;
             Vector.paint(ctx, shapes.filter(function (shape) {
-                return !root.hasNativeFragments(shape) && (!deformation || shape !== deformation.shape);
-            }), root.paintingTool ? [] : selectedShapes.map(function (index) {
+                var entry = root.shapeLookup[Vector.svgIdentity(shape)], box = entry ? entry.bounds : Vector.bounds([shape]);
+                return box.x + box.width >= region.x - padding && box.y + box.height >= region.y - padding && box.x <= region.x + region.width + padding && box.y <= region.y + region.height + padding && !root.hasNativeFragments(shape) && (!deformation || shape !== deformation.shape);
+            }), root.paintingTool || root.editSessionActive ? [] : selectedShapes.map(function (index) {
                 return shapes[index];
             }));
             if (deformation)
@@ -2359,12 +3288,21 @@ Item {
                 ctx.strokeRect(selectionBox.x, selectionBox.y, selectionBox.width, selectionBox.height);
             }
 
-            if (!root.selectionTool && selected >= 0 && selected < shapes.length) {
+            if (!root.editSessionActive && !root.selectionTool && selected >= 0 && selected < shapes.length) {
                 var box = Vector.bounds([shapes[selected]]);
                 ctx.strokeStyle = "#398df1";
                 ctx.lineWidth = 3 / root.viewScale;
 
                 ctx.strokeRect(box.x, box.y, box.width, box.height);
+            }
+            if (root.editSessionActive && root.selected >= 0) {
+                var editBox = Vector.bounds([shapes[root.selected]]);
+                ctx.save();
+                ctx.strokeStyle = "#2675e6";
+                ctx.lineWidth = 2 / root.viewScale;
+                ctx.setLineDash([6 / root.viewScale, 4 / root.viewScale]);
+                ctx.strokeRect(editBox.x, editBox.y, editBox.width, editBox.height);
+                ctx.restore();
             }
             if (root.drawingEnabled) {
                 var pointTools = ["nodes", "anchors", "addnode", "deletenode", "join"].indexOf(tool) >= 0;
@@ -2461,7 +3399,7 @@ Item {
     }
 
     Item {
-        visible: root.drawingEnabled && root.tool === "transform" && root.selectedShapes.length > 0
+        visible: root.drawingEnabled && !root.styleEditActive && root.tool === "transform" && root.selectedShapes.length > 0
         anchors.fill: parent
         property var box: root.selectionBounds()
         Rectangle {
@@ -2495,13 +3433,15 @@ Item {
             }
         }
     }
+    readonly property var visibleArrowHandles: root.arrowControlHandles()
     Item {
         anchors.fill: parent
         z: 11
         Repeater {
-            model: root.arrowControlHandles()
+            model: root.visibleArrowHandles.length
             delegate: Item {
-                required property var modelData
+                required property int index
+                readonly property var modelData: root.visibleArrowHandles[index]
                 x: modelData.x
                 y: modelData.y
                 Rectangle {
@@ -2514,8 +3454,21 @@ Item {
                     rotation: Math.atan2(modelData.y - modelData.targetY, modelData.x - modelData.targetX) * 180 / Math.PI
                     transformOrigin: Item.TopLeft
                 }
+                MouseArea {
+                    anchors.centerIn: parent
+                    width: 28 / root.viewScale
+                    height: width
+                    hoverEnabled: true
+                    acceptedButtons: Qt.NoButton
+                    onContainsMouseChanged: {
+                        if (containsMouse)
+                            handleTooltip.schedule(parent, root.shapeHandleName(modelData));
+                        else
+                            handleTooltip.hideTip();
+                    }
+                }
                 Rectangle {
-                    width: 12 / root.viewScale
+                    width: 16 / root.viewScale
                     height: width
                     x: -width / 2
                     y: -height / 2
@@ -2650,6 +3603,20 @@ Item {
 
             if (mouse.button === Qt.RightButton) {
                 root.finishPen();
+                dragging = false;
+                contextMenu.openAt(mouse.x, mouse.y);
+                return;
+            }
+            if (root.repeatEditActive && root.repeatPick) {
+                var picked = Vector.hit(root.shapes, mouse.x, mouse.y, 10 / root.viewScale, root.svgHitTest, root.nativeShapeHitTest);
+                if (picked >= 0)
+                    root.pickRepeat(picked);
+                dragging = false;
+                return;
+            }
+            if (root.completeContextLink(mouse.x, mouse.y)) {
+                dragging = false;
+                root.gestureFinished();
                 return;
             }
 
@@ -2671,7 +3638,23 @@ Item {
             erasePosition = null;
             root.liveFragmentEdit = false;
             root.targetStaffMarker = null;
+            if (root.styleEditActive && !root.paintingTool) {
+                var styleHit = root.pointAt(mouse.x, mouse.y);
+                if (styleHit)
+                    root.selectStyleNode(styleHit.handle.command, !!(mouse.modifiers & Qt.ShiftModifier));
+                dragging = false;
+                root.requestPaint();
+                return;
+            }
             if (root.paintingTool) {
+                if (root.styleEditActive && (mouse.modifiers & Qt.ShiftModifier)) {
+                    var rangeHit = root.pointAt(mouse.x, mouse.y);
+                    if (rangeHit) {
+                        root.selectStyleNode(rangeHit.handle.command, true);
+                        dragging = false;
+                        return;
+                    }
+                }
                 var reach = 10 / root.viewScale;
                 root.gradientHandles.slice().reverse().forEach(function (handle) {
                     var distance = Math.hypot(mouse.x - handle.x, mouse.y - handle.y);
@@ -2697,7 +3680,15 @@ Item {
                     root.requestPaint();
                     return;
                 }
-                var painted = Painting.hit(root, mouse.x, mouse.y);
+                if (root.styleEditActive) {
+                    var nodeHit = root.pointAt(mouse.x, mouse.y);
+                    if (nodeHit) {
+                        root.selectStyleNode(nodeHit.handle.command, !!(mouse.modifiers & Qt.ShiftModifier));
+                        dragging = false;
+                        return;
+                    }
+                }
+                var painted = root.styleEditActive ? root.styleEditIndex : Painting.hit(root, mouse.x, mouse.y);
                 if (painted < 0) {
                     dragging = false;
                     return;
@@ -2706,7 +3697,7 @@ Item {
                     root.setSelection([painted], painted);
                 captureSelection();
                 original = selectionOriginals[root.selected];
-                if (Painting.channel(root.tool) === "fill") {
+                if (!root.styleEditActive && Painting.channel(root.tool) === "fill") {
                     var seed = Painting.fraction(original, first);
                     selectionOrder.forEach(function (index) {
                         var sh = selectionOriginals[index], p = index === root.selected ? first : Painting.position(sh, seed);
@@ -2748,6 +3739,12 @@ Item {
             });
             if (arrowHandle) {
                 captureSelection();
+                return;
+            }
+
+            if (root.shapeEditActive) {
+                dragging = false;
+                root.gestureFinished();
                 return;
             }
 
@@ -2872,6 +3869,13 @@ Item {
 
                 if (root.selectionTool && !boxSelecting)
                     captureSelection();
+                if (root.selectedHandle && root.shapes[root.selected] && root.shapes[root.selected].wave) {
+                    root.remember();
+                    var converted = root.shapes.slice();
+                    converted[root.selected] = Vector.copy(converted[root.selected]);
+                    delete converted[root.selected].wave;
+                    root.shapes = converted;
+                }
                 original = root.selected >= 0 ? Vector.copy(root.shapes[root.selected]) : null;
                 if (original) {
                     delete original.reflowSource;
@@ -3109,6 +4113,13 @@ Item {
                 // entire document here serialized every unrelated path per move.
                 var s = root.shapes.slice();
 
+                if (root.selectedHandle && root.shapes[root.selected].wave) {
+                    root.remember();
+                    var editable = root.shapes.slice();
+                    editable[root.selected] = Vector.copy(editable[root.selected]);
+                    delete editable[root.selected].wave;
+                    root.shapes = editable;
+                }
                 if (root.selectedHandle) {
                     var h = root.selectedHandle;
 
@@ -3175,7 +4186,7 @@ Item {
                     control: !!(mouse.modifiers & Qt.ControlModifier),
                     alt: !!(mouse.modifiers & Qt.AltModifier)
                 });
-                root.preview = Editing.basicShape(gestureTool, ends.a, ends.b, root.currentStyle());
+                root.preview = Editing.basicShape(gestureTool, ends.a, ends.b, root.currentStyle(), root.shapeParameters);
             }
 
             root.requestPaint();
@@ -3202,7 +4213,7 @@ Item {
             }
             if (arrowHandle) {
                 if (mutated) {
-                    if (arrowHandle.role === "start" || arrowHandle.role === "end")
+                    if (!root.shapeEditActive && (arrowHandle.role === "start" || arrowHandle.role === "end"))
                         root.reanchorMovedSelection(selectionOrder);
                     root.changed();
                 }
@@ -3323,6 +4334,8 @@ Item {
                 }
             }
 
+            if (root.styleEditActive)
+                return;
             var text = root.shapes[root.selected];
             if (root.tool !== "pen" && text && text.kind === "text") {
                 root.beginTextEditing(root.selected);

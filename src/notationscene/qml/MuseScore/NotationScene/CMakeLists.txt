@@ -171,6 +171,13 @@ qt_add_qml_module(notationscene_qml
         NativeDrawingTools.qml
         NativeDrawingIconButton.qml
         drawing/ui/InfiniteSlider.qml
+        drawing/ui/DrawingContext.qml
+        drawing/ui/DrawingObjects.qml
+        drawing/ui/DrawingToolPanel.qml
+        drawing/ui/DrawingRepeatControls.qml
+        drawing/ui/DrawingHandleTip.qml
+        drawing/ui/ShapeEditPopup.qml
+        drawing/ui/ShapeControls.qml
         drawing/ui/DrawingCanvas.qml
         drawing/ui/DrawingTools.qml
         AbstractElementPopup.qml
@@ -255,6 +262,9 @@ qt_add_qml_module(notationscene_qml
 
     RESOURCES
         drawing/core/Reflow.js
+        drawing/core/Context.js
+        drawing/core/Repeat.js
+        drawing/core/Parametric.js
         drawing/core/Editing.js
         drawing/core/Vector.js
         drawing/core/SvgAsset.js

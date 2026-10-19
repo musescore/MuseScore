@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+.import "Parametric.js" as P
 
 // Shared by the QML editor, standalone plugin and preview. Coordinates are editor units.
 
@@ -119,7 +120,8 @@ function nibOutline(commands,style) {
     }
     var outline=buildNibOutline(commands,style);
     nibOutlineCache.push({source:commands,signature:signature,commands:outline});
-    if(nibOutlineCache.length>8)nibOutlineCache.shift();
+    var weight=nibOutlineCache.reduce(function(n,entry){return n+entry.commands.length;},0);
+    while(nibOutlineCache.length>1 && (nibOutlineCache.length>64 || weight>100000))weight-=nibOutlineCache.shift().commands.length;
     return outline;
 }
 function buildNibOutline(commands,style) {
@@ -143,8 +145,14 @@ function buildNibOutline(commands,style) {
 }
 
 function pencilStroke(points,amount,style,scale,pressure){
-    var p=filteredPoints(points,amount,scale);
-    if(!pressure||p.length<2)return {kind:"pencil",rawPoints:points,commands:smoothFiltered(p,amount),style:style};
+    var p=filteredPoints(points,amount,scale),closed=false;
+    if(p.length>=4){
+        var first=p[0],last=p[p.length-1],reach=Math.max(0.05,(style.width||1)*0.5),length=0;
+        for(var k=1;k<p.length;k++)length+=Math.hypot(p[k].x-p[k-1].x,p[k].y-p[k-1].y);
+        closed=length>reach*6&&Math.hypot(last.x-first.x,last.y-first.y)<=reach;
+        if(closed){p=p.slice();p[p.length-1]=Object.assign({},last,{x:first.x,y:first.y});}
+    }
+    if(!pressure||p.length<2){var commands=smoothFiltered(p,amount);if(closed)commands.push(["Z"]);return {kind:"pencil",rawPoints:points,commands:commands,style:style};}
     if(style.nib&&(style.nib.shape!=="round"||style.nib.flatten>0)){
         return {kind:"pencil-pressure",rawPoints:points,commands:nibPolygons([p],style),style:{stroke:"none",fill:style.stroke,width:0.001,opacity:style.opacity}};
     }
@@ -220,7 +228,9 @@ function bounds(shapes) {
 
     var x=Infinity,y=Infinity,r=-Infinity,b=-Infinity;
     for(var i=0;i<shapes.length;i++){
-        var sh=shapes[i],pad=sh.svgSource?0:sh.style.width/2*nibExtentMultiplier(sh.style)+1,lx=Infinity,ly=Infinity,rx=-Infinity,by=-Infinity;
+        var sh=shapes[i],extent=sh.style.width*nibExtentMultiplier(sh.style);
+        (sh.paintRanges||[]).forEach(function(range){extent=Math.max(extent,range.style.width*nibExtentMultiplier(range.style));});
+        var pad=sh.svgSource?0:extent/2+1,lx=Infinity,ly=Infinity,rx=-Infinity,by=-Infinity;
         (sh.derivedWholeCommands||sh.commands).forEach(function(c){for(var n=1;n<c.length;n+=2){
             lx=Math.min(lx,c[n]-pad);ly=Math.min(ly,c[n+1]-pad);rx=Math.max(rx,c[n]+pad);by=Math.max(by,c[n+1]+pad);
         }});
@@ -253,6 +263,7 @@ function gradientSvg(gradient,id,box){
 }
 function checkedStyle(saved){
     var result=style(saved.stroke,saved.fill,saved.width,saved.opacity);
+    result.lineCap=["round","butt","square"].indexOf(saved.lineCap)>=0?saved.lineCap:"round";result.linePattern=["solid","dash","dot"].indexOf(saved.linePattern)>=0?saved.linePattern:"solid";
     if(saved.nib)result.nib={followDirection:!!saved.nib.followDirection,shape:saved.nib.shape==="square"?"square":"round",flatten:Math.max(0,Math.min(0.95,Number(saved.nib.flatten)||0)),angle:Math.max(-180,Math.min(180,Number(saved.nib.angle)||0)),tilt:Math.max(-60,Math.min(60,Number(saved.nib.tilt)||0))};
     ["strokeGradient","fillGradient"].forEach(function(key){
         var g=saved[key];if(!g)return;
@@ -288,11 +299,27 @@ function body(shapes, parentId) {
 
         '" stroke-width="'+num(s.width)+'" opacity="'+num(s.opacity)+
 
-        '" fill-rule="'+(sh.fillRule==="evenodd"?"evenodd":"nonzero")+'" stroke-linecap="round" stroke-linejoin="round"/>'+(clip?'</g>':'');}).join("\n");
+        '" fill-rule="'+(sh.fillRule==="evenodd"?"evenodd":"nonzero")+'" stroke-linecap="'+(s.lineCap||"round")+'" stroke-dasharray="'+(s.linePattern==="dash"?num(s.width*4)+" "+num(s.width*2):s.linePattern==="dot"?num(s.width)+" "+num(s.width*2):"none")+'" stroke-linejoin="round"/>'+(clip?'</g>':'');}).join("\n");
 
 }
+function rangeCommands(commands,start,end){
+ var out=commands.slice(start,end);if(start<=0||!out.length||out[0][0]==="M")return out;
+ var previous=commands[start-1],origin=null;for(var i=0;i<end;i++){if(commands[i][0]==="M")origin=commands[i];}
+ if(previous.length>=3)out=[["M",previous[previous.length-2],previous[previous.length-1]]].concat(out);
+ if(origin)out=out.map(function(c){return c[0]==="Z"?["L",origin[1],origin[2]]:c;});return out;
+}
+var paintedPartsCache = [];
 function paintedParts(shape){
-    return shape.paintRanges.map(function(range){return {commands:shape.commands.slice(range.start,range.end),style:range.style,fillRule:range.fillRule,paintFrame:shape.paintFrame||paintBounds(shape.commands)}});
+    for(var i=0;i<paintedPartsCache.length;i++){
+        var saved=paintedPartsCache[i];
+        if(saved.commands===shape.commands && saved.ranges===shape.paintRanges && saved.frame===shape.paintFrame)return saved.parts;
+    }
+    var frame=shape.paintFrame||paintBounds(shape.commands);
+    var parts=shape.paintRanges.map(function(range){return {commands:rangeCommands(shape.commands,range.start,range.end),style:range.style,fillRule:range.fillRule,paintFrame:frame};});
+    paintedPartsCache.push({commands:shape.commands,ranges:shape.paintRanges,frame:shape.paintFrame,parts:parts});
+    var weight=paintedPartsCache.reduce(function(n,entry){return n+entry.commands.length;},0);
+    while(paintedPartsCache.length>1 && (paintedPartsCache.length>64 || weight>100000))weight-=paintedPartsCache.shift().commands.length;
+    return parts;
 }
 
 function svg(shapes, box) {
@@ -312,6 +339,8 @@ function translate(sh, dx,dy) {
     // SVG source strings and untouched metadata are immutable. Serializing
     // them for each pointer event also copied every saved fragment/source.
     var out=Object.assign({},sh);
+    if(sh.wave)out.wave=P.transform(sh.wave,[1,0,0,1,dx,dy]);
+    if(sh.parametric){out.parametric=copy(sh.parametric);out.parametric.matrix=multiply([1,0,0,1,dx,dy],sh.parametric.matrix||[1,0,0,1,0,0]);}
     if(out.svgMatrix){out.svgMatrix=out.svgMatrix.slice();out.svgMatrix[4]+=dx;out.svgMatrix[5]+=dy;}
     out.commands=sh.commands.map(function(command){var c=command.slice();for(var n=1;n<c.length;n+=2){c[n]+=dx;c[n+1]+=dy;}return c;});
     if(out.rawPoints)out.rawPoints=out.rawPoints.map(function(p){return Object.assign({},p,{x:p.x+dx,y:p.y+dy});});
@@ -484,6 +513,8 @@ function transform(shape,m){
         return transformedPaint(shape,rebuildArrow(shape,mapped(arrow.a),mapped(arrow.b),arrowParameters(shape,arrow)),m);
     }
     var out=Object.assign({},shape);
+    if(shape.wave)out.wave=P.transform(shape.wave,m);
+    if(shape.parametric){out.parametric=copy(shape.parametric);out.parametric.matrix=multiply(m,shape.parametric.matrix||[1,0,0,1,0,0]);}
     out.commands=shape.commands.map(function(command){var c=command.slice();for(var i=1;i<c.length;i+=2){var x=c[i],y=c[i+1];c[i]=m[0]*x+m[2]*y+m[4];c[i+1]=m[1]*x+m[3]*y+m[5]}return c;});
     if(out.svgMatrix)out.svgMatrix=multiply(m,out.svgMatrix);
     if(out.rawPoints)out.rawPoints=out.rawPoints.map(function(p){return Object.assign({},p,{x:m[0]*p.x+m[2]*p.y+m[4],y:m[1]*p.x+m[3]*p.y+m[5]});});
@@ -677,6 +708,7 @@ function insertPoint(sh,index,t,inPlace) {
     }
 
     out.commands.splice(index,1,pieces[0],pieces[1]);
+    if(out.segmentStyles)out.segmentStyles=out.segmentStyles.map(function(m){return Object.assign({},m,{command:m.command>=index?m.command+1:m.command});});
     if(out.arrowTopology)out.arrowTopology=out.arrowTopology.map(function(at){return at>=index?at+1:at;});
     if(out.paintRanges)out.paintRanges=out.paintRanges.map(function(range){var r=Object.assign({},range);if(r.start>index)r.start++;if(r.end>index)r.end++;return r});
     if(out.anchorCommand!==undefined&&out.anchorCommand>=index)out.anchorCommand++;
@@ -688,7 +720,11 @@ function insertPoint(sh,index,t,inPlace) {
 
 function autoAnchors(sh, markers, shapeIndex, manualHeads) {
 
-    var out=copy(sh), links=[],manual=copy(manualHeads||[]);
+    var out=copy(sh), links=[],manual=copy(manualHeads||[]),commandMapping=sh.commands.map(function(c,i){return i;});
+    if(sh.wave){
+        [out.commands.length-2,out.commands.length-1].forEach(function(ci){var c=out.commands[ci],target=null,best=Infinity;markers.forEach(function(m){var d=Math.hypot(c[1]-m.x,c[2]-m.y);if(d<best){best=d;target=m;}});if(target)links.push({shape:shapeIndex,command:ci,field:1,key:target.key,numerator:target.numerator,denominator:target.denominator,scale:target.scale||1,offsetX:(c[1]-(target.bindingX===undefined?target.x:target.bindingX))/(target.scale||1),offsetY:(c[2]-target.y)/(target.scale||1),editable:true});});
+        return {shape:out,bindings:links};
+    }
     var arrow=arrowGeometry(out);
     if(arrow)out.arrowTopology=arrow.indices.slice();
 
@@ -731,6 +767,7 @@ function autoAnchors(sh, markers, shapeIndex, manualHeads) {
                     split=(lo+hi)/2;
                 }
                 out=insertPoint(out,i,split,true);
+                commandMapping=commandMapping.map(function(ci){return ci>=i?ci+1:ci;});
 
                 links.forEach(function(b){if(b.command>=i)b.command++;});
                 manual.forEach(function(b){if(b.command>=i)b.command++;});
@@ -762,7 +799,7 @@ function autoAnchors(sh, markers, shapeIndex, manualHeads) {
 
     out.rigidArrowHeads=rigidArrowHeads(out);
     links=links.filter(function(link){return !out.rigidArrowHeads[link.command];});
-    return {shape:out,bindings:links.concat(manual)};
+    return {shape:out,bindings:links.concat(manual),commandMapping:commandMapping};
 
 }
 
@@ -976,7 +1013,7 @@ function paint(ctx, shapes, selected) {
 
         else if(c[0]==="C")ctx.bezierCurveTo(c[1],c[2],c[3],c[4],c[5],c[6]);else ctx.closePath();
 
-    });ctx.globalAlpha=sh.style.opacity;ctx.lineWidth=sh.style.width;ctx.lineCap="round";ctx.lineJoin="round";
+    });ctx.globalAlpha=sh.style.opacity;ctx.lineWidth=sh.style.width;ctx.lineCap=sh.style.lineCap||"round";ctx.lineJoin="round";ctx.setLineDash(sh.style.linePattern==="dash"?[sh.style.width*4,sh.style.width*2]:sh.style.linePattern==="dot"?[sh.style.width,sh.style.width*2]:[]);
 
         ctx.fillRule=sh.fillRule==="evenodd"?Qt.OddEvenFill:Qt.WindingFill;
         function paintValue(channel){

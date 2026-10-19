@@ -35,7 +35,7 @@ Item {
     Shortcut {
         sequence: "Escape"
         context: Qt.WindowShortcut
-        enabled: DrawingSession.modeActive
+        enabled: DrawingSession.modeActive && !editor.editSessionActive
         onActivated: editor.returnToSelection()
     }
     property bool anchorsRequested: false
@@ -96,6 +96,8 @@ Item {
         editor.nativeFragmentFingerprints = fingerprints;
     }
     function previewFragments() {
+        if (editor.editSessionActive)
+            return;
         editor.nativeFragments = scoreView.previewNativeDrawingFragments(changeDocument());
         var fingerprints = {}, rendered = {};
         editor.nativeFragments.forEach(function (fragment) {
@@ -128,8 +130,11 @@ Item {
         return editor.exportDocument();
     }
     function busy() {
+        if (editor.editSessionActive)
+            return true;
         if (editor.gradientOpacityEditing)
             return true;
+
         return editor.textEditing || editor.interactionActive || editor.penNodes.length > 0 || (DrawingSession.panel && DrawingSession.panel.sliderBusy);
     }
     property bool historyRedo: false
@@ -158,8 +163,12 @@ Item {
             return;
         }
         syncing = true;
+        var started = Date.now(), serialized = started, synced = started, fragments = started;
         try {
-            var error = scoreView.syncNativeDrawingDocument(changeDocument());
+            var document = changeDocument();
+            serialized = Date.now();
+            var error = scoreView.syncNativeDrawingDocument(document);
+            synced = Date.now();
             if (error) {
                 editor.status = error;
                 return;
@@ -170,8 +179,11 @@ Item {
             editor.liveFragmentEdit = false;
             editor.liveContinuationPreview = false;
             refreshFragments();
+            fragments = Date.now();
             refreshAnchors();
         } finally {
+            if (Date.now() - started > 100)
+                console.info("[MuseDraw commit] serialize=" + (serialized - started) + " sync=" + (synced - serialized) + " fragments=" + (fragments - synced) + " anchors=" + (Date.now() - fragments) + " total=" + (Date.now() - started));
             syncing = false;
         }
     }
@@ -221,7 +233,7 @@ Item {
             });
             editor.setSelection(selection, selectedId ? editor.shapes.findIndex(function (shape) {
                 return shape.drawId === selectedId;
-            }) : -1);
+            }) : -1, true);
             refreshAnchors();
             refreshFragments();
             restoreNeeded = false;
@@ -286,6 +298,11 @@ Item {
             editor.insertCharacter(text, family, (root.frame.left || 0) + root.frame.visibleWidth / 2, (root.frame.top || 0) + root.frame.visibleHeight / 2);
         }
         function onDrawingScoreAboutToChange() {
+            if (editor.repeatEditActive)editor.finishRepeatEdit(false);
+            if (editor.nodeEditActive)
+                editor.finishNodeEdit(false);
+            if (editor.shapeEditActive)
+                editor.finishShapeEdit(false);
             editor.finishTextEditing();
             editor.finishPen();
             editor.finishInteractionForHistory();
@@ -495,7 +512,8 @@ Item {
             root.requestHistory(redo);
         }
         onGestureStarting: root.commit()
-        onGestureFinished: root.commit()
+        onGestureFinished: if (!root.loading && root.pending)
+            commitTimer.restart()
         onExitRequested: DrawingSession.setDrawingMode(false)
         onCharacterPickerRequested: root.scoreView.openDrawingCharacters()
         onDocumentChanged: if (!root.loading) {

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 .import "Vector.js" as V
+.import "Parametric.js" as P
 var eraserCounter=0;
 
 function escapeText(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
@@ -9,7 +10,8 @@ function constrained(a,b,modifiers){
     if(modifiers.control){var size=Math.max(Math.abs(dx),Math.abs(dy));dx=(dx<0?-1:1)*size;dy=(dy<0?-1:1)*size;}
     return {a:modifiers.shift||modifiers.control?{x:a.x-dx,y:a.y-dy}:a,b:{x:a.x+dx,y:a.y+dy}};
 }
-function basicShape(kind,a,b,style){
+function basicShape(kind,a,b,style,options){
+    if(["wave","polygon","star","rounded-rectangle","diamond","cross"].indexOf(kind)>=0)return P.create(kind,a,b,style,options);
     if(["line","rectangle","ellipse"].indexOf(kind)>=0)return V.shape(kind,a,b,style);
     if(["arrow","arrow-double","arrow-filled"].indexOf(kind)>=0)return V.arrowShape(kind,a,b,style);
     var x=Math.min(a.x,b.x),y=Math.min(a.y,b.y),w=Math.abs(b.x-a.x),h=Math.abs(b.y-a.y),c;
