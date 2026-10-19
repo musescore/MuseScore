@@ -66,7 +66,7 @@ class SystemLayout
 {
 public:
     static System* collectSystem(LayoutContext& ctx);
-    static void layoutSystemElements(System* system, LayoutContext& ctx);
+    static void layoutSystemElements(System* system, LayoutContext& ctx, double targetSystemWidth = 0.0);
 
     static void layoutSystem(System* system, LayoutContext& ctx, double xo1);
 
@@ -182,6 +182,9 @@ private:
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
+    //! Try actual beamed-rest shapes once; restore conservative spacing if the trial moves a rest vertically.
+    static void refineBeamedRestSpacing(System* system, LayoutContext& ctx, double targetSystemWidth,
+                                        const std::vector<ChordRest*>& chordRests);
 
     static void updateTimeSigAboveStavesXPos(System* system, LayoutContext& ctx);
     static void clearBigTimeSigNotShown(System* system, LayoutContext& ctx);
