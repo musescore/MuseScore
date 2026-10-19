@@ -84,17 +84,25 @@ void MuseSamplerCheckStatusScenario::showLoadingFailedNotification()
                                            muse::trc("musesounds", "Open MuseSounds Manager"), true /*accent*/);
 
     std::string msg = muse::trc("musesounds", "To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. "
-                                              "Update if needed and restart your machine.");
+                                              "Update if needed and restart your machine.\n\n"
+                                              "If the issue persists, follow the steps at the troubleshooting link below.");
 #else
     muse::IInteractive::ButtonData openBtn(int(muse::IInteractive::Button::CustomButton) + 2,
                                            muse::trc("musesounds", "Open MuseHub"), true /*accent*/);
 
     std::string msg = muse::trc("musesounds", "To load MuseSounds, open MuseHub and check that you’re running the latest version. "
-                                              "Update if needed and restart your machine.");
+                                              "Update if needed and restart your machine.\n\n"
+                                              "If the issue persists, follow the steps at the troubleshooting link below.");
+#endif
+
+#ifdef Q_OS_WIN
+    const muse::IInteractive::ButtonDatas buttons { openBtn, troubleshootBtn, closeBtn };
+#else
+    const muse::IInteractive::ButtonDatas buttons { closeBtn, troubleshootBtn, openBtn };
 #endif
 
     interactive()->warning(muse::trc("musesounds", "MuseSounds could not be loaded"), msg,
-                           { closeBtn, troubleshootBtn, openBtn }, openBtn.btn,
+                           buttons, openBtn.btn,
                            muse::IInteractive::Option::WithIcon | muse::IInteractive::Option::WithDontShowAgainCheckBox)
     .onResolve(this, [this, troubleshootBtn, openBtn](const muse::IInteractive::Result& res) {
         if (!res.showAgain()) {
