@@ -640,7 +640,7 @@ TEST_F(Audio_AudioDriverControllerTests, ChangeBufferSize_ReopensDriverWithNewBu
     EXPECT_TRUE(m_controller->isOpened());
 }
 
-TEST_F(Audio_AudioDriverControllerTests, ChangeBufferSize_DoesNotSave_WhenReopenFails)
+TEST_F(Audio_AudioDriverControllerTests, ChangeBufferSize_RestoresPreviousSpec_WhenReopenFails)
 {
     //! [GIVEN] The headphones are opened
     givenOpened(HEADPHONES);
@@ -649,19 +649,30 @@ TEST_F(Audio_AudioDriverControllerTests, ChangeBufferSize_DoesNotSave_WhenReopen
     OutputSpec expectedOutput = DESIRED_OUTPUT_SPEC;
     expectedOutput.samplesPerChannel = BUFFER_SIZE;
 
-    //! [GIVEN] The headphones can't be reopened
+    //! [GIVEN] The headphones can't be reopened with the new buffer size
     ON_CALL(*m_currentDriver->mock, open(SpecIs(HEADPHONES, expectedOutput), _))
     .WillByDefault(Return(false));
 
-    //! [THEN] The buffer size isn't saved or sent to the engine
+    //! [THEN] The new buffer size is tried, then the previous spec is restored
+    EXPECT_CALL(*m_currentDriver->mock, open(SpecIs(HEADPHONES, expectedOutput), _));
+    EXPECT_CALL(*m_currentDriver->mock, open(SpecIs(HEADPHONES, DESIRED_OUTPUT_SPEC), _));
+
+    //! [THEN] The new buffer size isn't saved or sent to the engine
     EXPECT_CALL(*m_configuration, setDriverBufferSize(_))
     .Times(0);
-    EXPECT_CALL(*m_rpcChannel, send(_, _))
+    EXPECT_CALL(*m_rpcChannel, send(SetOutputSpecRequest(expectedOutput), _))
     .Times(0);
+
+    //! [THEN] The previous spec is sent to the engine again
+    EXPECT_CALL(*m_rpcChannel, send(SetOutputSpecRequest(DESIRED_OUTPUT_SPEC), _));
 
     //! [WHEN] Changing the buffer size
     m_controller->changeBufferSize(BUFFER_SIZE);
     async::processMessages();
+
+    //! [THEN] The headphones are still opened with the previous spec
+    EXPECT_TRUE(m_controller->isOpened());
+    EXPECT_THAT(m_controller->activeSpec(), SpecIs(HEADPHONES, DESIRED_OUTPUT_SPEC));
 }
 
 TEST_F(Audio_AudioDriverControllerTests, ChangeBufferSize_OnlySaves_WhenDriverIsClosed)
@@ -711,7 +722,7 @@ TEST_F(Audio_AudioDriverControllerTests, ChangeSampleRate_ReopensDriverWithNewSa
     EXPECT_TRUE(m_controller->isOpened());
 }
 
-TEST_F(Audio_AudioDriverControllerTests, ChangeSampleRate_DoesNotSave_WhenReopenFails)
+TEST_F(Audio_AudioDriverControllerTests, ChangeSampleRate_RestoresPreviousSpec_WhenReopenFails)
 {
     //! [GIVEN] The headphones are opened
     givenOpened(HEADPHONES);
@@ -720,19 +731,30 @@ TEST_F(Audio_AudioDriverControllerTests, ChangeSampleRate_DoesNotSave_WhenReopen
     OutputSpec expectedOutput = DESIRED_OUTPUT_SPEC;
     expectedOutput.sampleRate = SAMPLE_RATE;
 
-    //! [GIVEN] The headphones can't be reopened
+    //! [GIVEN] The headphones can't be reopened with the new sample rate
     ON_CALL(*m_currentDriver->mock, open(SpecIs(HEADPHONES, expectedOutput), _))
     .WillByDefault(Return(false));
 
-    //! [THEN] The sample rate isn't saved or sent to the engine
+    //! [THEN] The new sample rate is tried, then the previous spec is restored
+    EXPECT_CALL(*m_currentDriver->mock, open(SpecIs(HEADPHONES, expectedOutput), _));
+    EXPECT_CALL(*m_currentDriver->mock, open(SpecIs(HEADPHONES, DESIRED_OUTPUT_SPEC), _));
+
+    //! [THEN] The new sample rate isn't saved or sent to the engine
     EXPECT_CALL(*m_configuration, setSampleRate(_))
     .Times(0);
-    EXPECT_CALL(*m_rpcChannel, send(_, _))
+    EXPECT_CALL(*m_rpcChannel, send(SetOutputSpecRequest(expectedOutput), _))
     .Times(0);
+
+    //! [THEN] The previous spec is sent to the engine again
+    EXPECT_CALL(*m_rpcChannel, send(SetOutputSpecRequest(DESIRED_OUTPUT_SPEC), _));
 
     //! [WHEN] Changing the sample rate
     m_controller->changeSampleRate(SAMPLE_RATE);
     async::processMessages();
+
+    //! [THEN] The headphones are still opened with the previous spec
+    EXPECT_TRUE(m_controller->isOpened());
+    EXPECT_THAT(m_controller->activeSpec(), SpecIs(HEADPHONES, DESIRED_OUTPUT_SPEC));
 }
 
 TEST_F(Audio_AudioDriverControllerTests, ChangeSampleRate_OnlySaves_WhenDriverIsClosed)

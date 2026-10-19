@@ -58,6 +58,8 @@ void AudioDriverController::setNewDriver(IAudioDriverPtr newDriver)
         m_audioDriver->activeSpecChanged().onReceive(this, [this](const IAudioDriver::Spec& spec) {
             if (spec.isValid()) {
                 m_lastValidSpec = spec;
+            } else {
+                LOGW() << "Driver reported an invalid spec";
             }
 
             m_activeSpecChanged.send(spec);
@@ -213,7 +215,7 @@ bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
         return true;
     }
 
-    const IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
+    const IAudioDriver::Spec& oldSpec = m_audioDriver->activeSpec();
 
     IAudioDriver::Spec spec;
     spec.deviceId = deviceId;
@@ -222,16 +224,7 @@ bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
 
     LOGI() << "Trying to change output device from " << oldSpec << " to " << spec;
 
-    m_audioDriver->close();
-    bool ok = m_audioDriver->open(spec, nullptr);
-    if (!ok) {
-        LOGE() << "Failed to select device: " << deviceId << ", returning to: " << oldSpec.deviceId;
-        bool restored = m_audioDriver->open(oldSpec, nullptr);
-        if (!restored) {
-            LOGE() << "Failed to restore previous device: " << oldSpec.deviceId;
-        }
-    }
-    return ok;
+    return reopenWithSpec(spec);
 }
 
 async::Notification AudioDriverController::outputDeviceChanged() const
@@ -250,8 +243,10 @@ void AudioDriverController::handleOutputDeviceChange()
     IAudioDriver::Spec spec = m_audioDriver->activeSpec();
     if (!spec.isValid()) {
         if (m_lastValidSpec.isValid()) {
+            LOGW() << "Active spec is invalid, using last valid spec";
             spec = m_lastValidSpec;
         } else {
+            LOGW() << "Active spec is invalid, using default spec";
             spec.deviceId = DEFAULT_DEVICE_ID;
             spec.output = configuration()->defaultOutputSpec();
             spec.callback = m_callback;
@@ -271,6 +266,12 @@ void AudioDriverController::handleOutputDeviceChange()
             LOGE() << "Failed to reopen default device on " << m_audioDriver->name() << ", switching to default audio driver";
             ok = switchToDefaultAudioDriver();
         }
+    }
+
+    if (ok) {
+        LOGI() << "Reopened output device: " << m_audioDriver->activeSpec();
+    } else {
+        LOGE() << "Failed to reopen output device, will retry on next device list change";
     }
 
     m_retryOpenDevice = !ok;
@@ -309,6 +310,27 @@ bool AudioDriverController::switchToDefaultAudioDriver(IAudioDriver::Spec* activ
     return ok;
 }
 
+bool AudioDriverController::reopenWithSpec(const IAudioDriver::Spec& spec)
+{
+    const IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
+
+    m_audioDriver->close();
+    if (m_audioDriver->open(spec, nullptr)) {
+        LOGI() << "Reopened with: " << spec;
+        return true;
+    }
+
+    LOGE() << "Failed to reopen with: " << spec << ", returning to: " << oldSpec;
+    if (m_audioDriver->open(oldSpec, nullptr)) {
+        LOGI() << "Restored previous spec: " << oldSpec;
+    } else {
+        LOGE() << "Failed to restore previous spec: " << oldSpec << ", will retry on next device list change";
+        m_retryOpenDevice = true;
+    }
+
+    return false;
+}
+
 void AudioDriverController::updateOutputSpec()
 {
     if (!m_audioDriver->isOpened()) {
@@ -338,9 +360,8 @@ void AudioDriverController::changeBufferSize(samples_t samples)
 
     if (m_audioDriver->isOpened()) {
         IAudioDriver::Spec spec = m_audioDriver->activeSpec();
-        m_audioDriver->close();
         spec.output.samplesPerChannel = samples;
-        ok = m_audioDriver->open(spec, &spec);
+        ok = reopenWithSpec(spec);
     }
 
     if (ok) {
@@ -376,9 +397,8 @@ void AudioDriverController::changeSampleRate(sample_rate_t sampleRate)
 
     if (m_audioDriver->isOpened()) {
         IAudioDriver::Spec spec = m_audioDriver->activeSpec();
-        m_audioDriver->close();
         spec.output.sampleRate = sampleRate;
-        ok = m_audioDriver->open(spec, &spec);
+        ok = reopenWithSpec(spec);
     }
 
     if (ok) {
