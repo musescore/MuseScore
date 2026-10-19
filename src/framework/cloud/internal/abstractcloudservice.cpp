@@ -53,6 +53,46 @@ const QString muse::cloud::REFRESH_TOKEN_KEY("refresh_token");
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 static const std::string STATUS_KEY("status");
 
+static Ret retFromStatus(int status, bool isAlreadyUploaded)
+{
+    Ret ret;
+
+    switch (status) {
+    case 400:
+        ret = make_ret(cloud::Err::Status400_InvalidRequest);
+        break;
+    case 401:
+        ret = make_ret(cloud::Err::Status401_AuthorizationRequired);
+        break;
+    case 403:
+        ret = make_ret(isAlreadyUploaded ? cloud::Err::Status403_AccountNotActivated : cloud::Err::Status403_NotOwner);
+        break;
+    case 404:
+        ret = make_ret(cloud::Err::Status404_NotFound);
+        break;
+    case 409:
+        ret = make_ret(cloud::Err::Status409_Conflict);
+        break;
+    case 422:
+        ret = make_ret(cloud::Err::Status422_ValidationFailed);
+        break;
+    case 429:
+        ret = make_ret(cloud::Err::Status429_RateLimitExceeded);
+        break;
+    case 500:
+        ret = make_ret(cloud::Err::Status500_InternalServerError);
+        break;
+    default:
+        ret = make_ret(cloud::Err::UnknownStatusCode);
+        ret.setText("Unknown status code: " + std::to_string(status));
+        break;
+    }
+
+    ret.setData(STATUS_KEY, status);
+
+    return ret;
+}
+
 AbstractCloudService::AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent)
     : QObject(parent), Contextable(iocCtx)
 {
@@ -444,34 +484,14 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
 
     int status = statusCode(rawRet);
     if (status) {
-        switch (status) {
-        case 400: return make_ret(Err::Status400_InvalidRequest);
-        case 401: return make_ret(Err::Status401_AuthorizationRequired);
-        case 403:
-            if (isAlreadyUploaded) {
-                return make_ret(Err::Status403_AccountNotActivated);
-            } else {
-                return make_ret(Err::Status403_NotOwner);
-            }
-        case 404: return make_ret(Err::Status404_NotFound);
-        case 409: return make_ret(Err::Status409_Conflict);
-        case 422: return make_ret(Err::Status422_ValidationFailed);
-        case 429: return make_ret(Err::Status429_RateLimitExceeded);
-        case 500: return make_ret(Err::Status500_InternalServerError);
-        default: break;
-        }
-
-        Ret ret = make_ret(Err::UnknownStatusCode);
-        ret.setText("Unknown status code: " + std::to_string(status));
-        ret.setData("status", status);
-        return ret;
+        return retFromStatus(status, isAlreadyUploaded);
     }
 
     switch (rawRet.code()) {
     case int(network::Err::NetworkError):
     case int(network::Err::Timeout):
     case int(network::Err::Abort):
-        return make_ret(Err::NetworkError);
+        return make_ret(cloud::Err::NetworkError);
     }
 
     return rawRet;

@@ -100,6 +100,17 @@ struct PollingFailure {
 
 using PollingStatus = std::variant<PollingSuccess, PollingFailure>;
 
+struct UploadingScore {
+    int uploadId = 0;
+    muse::String name;
+
+    bool operator==(const UploadingScore& other) const
+    {
+        return uploadId == other.uploadId && name == other.name;
+    }
+};
+using UploadingScoreList = std::vector<UploadingScore>;
+
 struct WatchedScore {
     ScoreConversionInfo conversion;
     std::optional<int> scoreId; //! set once the score is ready and reported (Done/AwaitingReview)

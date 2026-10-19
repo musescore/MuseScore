@@ -457,7 +457,7 @@ bool ConvertFileToScoreModel::validateAndAddFiles(const QStringList& pathsOrUrls
 
 bool ConvertFileToScoreModel::validateLink(const QString& link) const
 {
-    return convertFileToScoreScenario()->validateLink(QUrl(link)).success();
+    return convertFileToScoreScenario()->validateLink(QUrl::fromUserInput(link)).success();
 }
 
 QString ConvertFileToScoreModel::validateFileName(const QString& name) const

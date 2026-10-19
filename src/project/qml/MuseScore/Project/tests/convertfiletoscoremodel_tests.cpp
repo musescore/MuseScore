@@ -30,6 +30,7 @@
 
 #include "project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.h"
 
+#include "project/tests/utils/testutils.h"
 #include "project/tests/mocks/convertfiletoscorescenariomock.h"
 #include "project/tests/mocks/projectconfigurationmock.h"
 #include "global/tests/mocks/filesystemmock.h"
@@ -46,10 +47,7 @@ using namespace muse::cloud;
 namespace {
 async::Promise<IInteractive::Result> resolvedResultPromise(const IInteractive::Result& result = IInteractive::Result())
 {
-    return async::make_promise<IInteractive::Result>([result](auto resolve, auto reject) {
-        (void)reject;
-        return resolve(result);
-    });
+    return resolvedPromise(result);
 }
 
 Matcher<const IInteractive::Text&> TextIs(const std::string& text)
@@ -776,6 +774,16 @@ TEST_F(Project_ConvertFileToScoreModelTest, ValidateLink_DelegatesToScenario)
 
     EXPECT_TRUE(m_model.validateLink("test://good-link"));
     EXPECT_FALSE(m_model.validateLink("test://bad-link"));
+}
+
+TEST_F(Project_ConvertFileToScoreModelTest, ValidateLink_AddsSchemeToSchemelessLink)
+{
+    // [THEN] The scenario receives the link with a scheme
+    EXPECT_CALL(*m_scenario, validateLink(QUrl("http://link.xyz/song")))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Validating a link typed without a scheme
+    EXPECT_TRUE(m_model.validateLink("link.xyz/song"));
 }
 
 // ==================================================

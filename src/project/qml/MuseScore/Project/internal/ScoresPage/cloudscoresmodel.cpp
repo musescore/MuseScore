@@ -61,6 +61,10 @@ void CloudScoresModel::load()
         loadItemsIfNecessary();
     });
 
+    convertFileToScoreScenario()->uploadingScores().notification.onNotify(this, [this]() {
+        updateWatchedItems({}, /*allowRefresh*/ false);
+    });
+
     convertFileToScoreScenario()->watchedScores().notification.onNotify(this, [this]() {
         updateWatchedItems();
     });
@@ -109,6 +113,11 @@ void CloudScoresModel::retryAllConversions()
     m_pollingGaveUp = false;
     convertFileToScoreScenario()->retryPolling();
     updateWatchedItems();
+}
+
+void CloudScoresModel::cancelUpload(int uploadId)
+{
+    convertFileToScoreScenario()->cancelUpload(uploadId);
 }
 
 void CloudScoresModel::cancelConversion(int convertType, int convertId)
@@ -303,8 +312,22 @@ bool CloudScoresModel::containsCloudScore(int scoreId) const
 
 std::vector<QVariantMap> CloudScoresModel::buildWatchedItems(const std::unordered_set<int>& downloadedScoreIds) const
 {
+    const UploadingScoreList uploadingScores = convertFileToScoreScenario()->uploadingScores().val;
     const WatchedScoreList watchedScores = convertFileToScoreScenario()->watchedScores().val;
     std::vector<QVariantMap> items;
+    items.reserve(uploadingScores.size() + watchedScores.size());
+
+    for (const UploadingScore& uploadingScore : uploadingScores) {
+        QVariantMap obj;
+        obj[NAME_KEY] = uploadingScore.name.toQString();
+        obj[IS_CREATE_NEW_KEY] = false;
+        obj[IS_NO_RESULTS_FOUND_KEY] = false;
+        obj[PROCESSING_STATUS_KEY] = PROCESSING_STATUS_PROCESSING;
+        obj[UPLOAD_ID_KEY] = uploadingScore.uploadId;
+        obj[IS_CLOUD_KEY] = false;
+        obj[CLOUD_VISIBILITY_KEY] = static_cast<int>(cloud::Visibility::Private);
+        items.push_back(obj);
+    }
 
     for (const WatchedScore& watchedScore : watchedScores) {
         if (watchedScore.conversion.status != ConvertStatus::Processing) {

@@ -28,6 +28,7 @@
 #include "project/projecterrors.h"
 
 #include "global/dataformatter.h"
+#include "global/io/ioretcodes.h"
 #include "global/log.h"
 
 using namespace mu::project;
@@ -152,6 +153,11 @@ async::Channel<Ret, WatchedScore> ConvertFileToScoreScenario::convertFinished() 
     return m_convertFinished;
 }
 
+ValNt<UploadingScoreList> ConvertFileToScoreScenario::uploadingScores() const
+{
+    return service()->uploadingScores();
+}
+
 ValNt<WatchedScoreList> ConvertFileToScoreScenario::watchedScores() const
 {
     return service()->watchedScores();
@@ -163,7 +169,21 @@ bool ConvertFileToScoreScenario::isAwaitingReview(int scoreId) const
     return watched && watched->conversion.status == ConvertStatus::AwaitingReview;
 }
 
+void ConvertFileToScoreScenario::cancelUpload(int uploadId)
+{
+    confirmCancel([this, uploadId]() {
+        service()->cancelUpload(uploadId);
+    });
+}
+
 void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertId)
+{
+    confirmCancel([this, type, convertId]() {
+        service()->cancelConversion(type, convertId);
+    });
+}
+
+void ConvertFileToScoreScenario::confirmCancel(const std::function<void()>& onCancel)
 {
     constexpr int keepConvertingBtn = int(IInteractive::Button::No);
     constexpr int cancelBtn = int(IInteractive::Button::Yes);
@@ -178,9 +198,9 @@ void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertI
         muse::trc("project/convert", "Are you sure you want to cancel this file conversion?"),
         muse::trc("project/convert", "Processing will be canceled and this score will be removed from your scores."),
         { keepConverting, cancel }, keepConvertingBtn, IInteractive::WithIcon)
-    .onResolve(this, [this, type, convertId, cancelBtn](const IInteractive::Result& result) {
+    .onResolve(this, [onCancel, cancelBtn](const IInteractive::Result& result) {
         if (result.isButton(cancelBtn)) {
-            service()->deleteConversion(type, convertId);
+            onCancel();
         }
     });
 }
@@ -284,7 +304,7 @@ ConvertFileToScoreScenario::ConvertSelection ConvertFileToScoreScenario::toConve
     selection.convertedScoreName = map.value("convertedScoreName").toString();
 
     if (type == ConvertType::Audio2Score && !link.isEmpty()) {
-        selection.input = Audio2ScoreConvertInput { QUrl(link) };
+        selection.input = Audio2ScoreConvertInput { QUrl::fromUserInput(link) };
     } else if (type == ConvertType::Audio2Score) {
         selection.input = Audio2ScoreConvertInput { paths };
     } else {
@@ -328,19 +348,39 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
     });
 }
 
-Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
+void ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
 {
-    Ret ret = service()->startConvert(input, convertedScoreName);
-    if (!ret) {
-        showUnknownError();
-        return ret;
+    RetVal<Progress> progress = service()->uploadToConvert(input, convertedScoreName);
+    if (!progress.ret) {
+        showUploadError(progress.ret, input, convertedScoreName);
+        return;
     }
 
     if (configuration()->showConvertFileProcessingDialog()) {
         showFileProcessingDialog();
     }
 
-    return ret;
+    progress.val.finished().onReceive(this, [this, input, convertedScoreName](const ProgressResult& res) {
+        if (!res.ret && res.ret.code() != static_cast<int>(Ret::Code::Cancel)) {
+            showUploadError(res.ret, input, convertedScoreName);
+        }
+    });
+}
+
+void ConvertFileToScoreScenario::showUploadError(const Ret& ret, const ConvertInput& input, const muse::String& convertedScoreName)
+{
+    switch (ret.code()) {
+    case static_cast<int>(Err::ConvertUploadFailed):
+        showUploadFailedNotification(input, convertedScoreName);
+        break;
+    case static_cast<int>(io::Err::FSNotExist):
+    case static_cast<int>(io::Err::FSReadError):
+        showFileReadError(convertPathsOf(input).size());
+        break;
+    default:
+        showUnknownError();
+        break;
+    }
 }
 
 void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
@@ -391,6 +431,19 @@ void ConvertFileToScoreScenario::showUnknownError()
     interactive()->warning(muse::trc("project/convert", "Something went wrong"),
                            muse::trc("project/convert", "Check your internet connection and try again."),
                            { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showFileReadError(size_t fileCount)
+{
+    if (fileCount > 1) {
+        interactive()->warning(muse::trc("project/convert", "One or more files could not be read"),
+                               muse::trc("project/convert", "Make sure the files still exist and that you have permission to open them."),
+                               { interactive()->buttonData(IInteractive::Button::Ok) });
+    } else {
+        interactive()->warning(muse::trc("project/convert", "This file could not be read"),
+                               muse::trc("project/convert", "Make sure the file still exists and that you have permission to open it."),
+                               { interactive()->buttonData(IInteractive::Button::Ok) });
+    }
 }
 
 void ConvertFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)
@@ -531,6 +584,23 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const WatchedScor
     }).onResolve(this, [this](const toast::ToastResult& result) {
         if (result.isCode(toast::ToastActionCode::TryAgain)) {
             convertFiles();
+        }
+    });
+}
+
+void ConvertFileToScoreScenario::showUploadFailedNotification(const ConvertInput& input, const muse::String& convertedScoreName)
+{
+    std::string msg = muse::qtrc("project/convert", "We weren’t able to upload ‘%1’. Check your internet connection and try again.")
+                      .arg(convertedScoreName.toQString()).toStdString();
+
+    toastService()->show(muse::trc("project/convert", "Error uploading score"), msg,
+                         muse::ui::IconCode::Code::ERROR_FILLED, true,
+    {
+        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
+        { muse::trc("global", "Retry"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+    }).onResolve(this, [this, input, convertedScoreName](const toast::ToastResult& result) {
+        if (result.isCode(toast::ToastActionCode::TryAgain)) {
+            startConvert(input, convertedScoreName);
         }
     });
 }
