@@ -542,3 +542,13 @@ void EditStaveSharing::removeStaveSharingChange(Transaction& tx, StaveSharingCha
     tx.push(new RemoveStaveSharingChange(sharedPart, staveSharingChange->tick()));
     staveSharingChange->triggerLayout();
 }
+
+void EditStaveSharing::removeStaveSharingStatesOnRemoveTime(Transaction& tx, Score* score, const Fraction& startTick,
+                                                            const Fraction& endTick)
+{
+    for (SharedPart* sharedPart : score->sharedParts()) {
+        for (const auto& [tick, state] : sharedPart->staveSharingStatesBetweenTicks(startTick, endTick)) {
+            tx.push(new RemoveStaveSharingChange(sharedPart, tick));
+        }
+    }
+}

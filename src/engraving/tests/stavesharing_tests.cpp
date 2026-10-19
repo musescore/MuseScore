@@ -613,3 +613,106 @@ TEST_F(Engraving_StaveSharingTests, testInvalidUserTrackMaps)
 
     delete score;
 }
+
+static std::vector<Fraction> userModifiedStaveSharingTicks(const Score* score, const SharedPart* sharedPart)
+{
+    std::vector<Fraction> ticks;
+    for (const auto& [tick, state] : sharedPart->staveSharingStatesBetweenTicks(Fraction(0, 1), score->endTick())) {
+        if (state.isUserModified()) {
+            ticks.push_back(tick);
+        }
+    }
+    return ticks;
+}
+
+TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
+{
+    // [GIVEN] A score of 5 measures of 4/4 with 2 staves
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_15.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+
+    // [WHEN] A stave sharing change is added at the start of measure 3
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m3);
+    ASSERT_EQ(m3->tick(), Fraction(2, 1));
+
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest",
+                                                                      "Add stave sharing change"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, m3->first(SegmentType::ChordRest), sharedPart, false);
+    });
+    score->doLayout();
+
+    // [THEN] The change should be at the start of measure 3, with a reset at the start of the next system (measure 4)
+    const std::vector<Fraction> originalTicks = { Fraction(2, 1), Fraction(3, 1) };
+    ASSERT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] A measure is inserted before measure 2
+    score->startCmd(muse::TranslatableString("staveSharingTest", "Insert measure"));
+    score->insertMeasure(score->crMeasure(1));
+    score->endCmd();
+
+    // [THEN] The changes should move with their measures
+    EXPECT_EQ(m3->tick(), Fraction(3, 1));
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), std::vector<Fraction>({ Fraction(3, 1), Fraction(4, 1) }));
+
+    // [WHEN] The insertion is undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The change should be back at the start of measure 3
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] A measure is inserted after measure 4
+    score->startCmd(muse::TranslatableString("staveSharingTest", "Insert measure"));
+    score->insertMeasure(score->crMeasure(4));
+    score->endCmd();
+
+    // [THEN] The changes should not move
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    score->undoRedo(true, nullptr);
+
+    // [WHEN] Measure 1 is deleted
+    score->startCmd(muse::TranslatableString("staveSharingTest", "Delete measure"));
+    score->deleteMeasures(score->crMeasure(0), score->crMeasure(0));
+    score->endCmd();
+
+    // [THEN] The changes should move with their measures
+    EXPECT_EQ(m3->tick(), Fraction(1, 1));
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), std::vector<Fraction>({ Fraction(1, 1), Fraction(2, 1) }));
+
+    // [WHEN] The deletion is undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The change should be back at the start of measure 3
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] Measure 3 itself is deleted
+    score->startCmd(muse::TranslatableString("staveSharingTest", "Delete measure"));
+    score->deleteMeasures(m3, m3);
+    score->endCmd();
+
+    // [THEN] The change should be removed along with the measure, and the reset should move back into its place
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), std::vector<Fraction>({ Fraction(2, 1) }));
+
+    // [WHEN] The deletion is undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The change should be restored at the start of measure 3
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}

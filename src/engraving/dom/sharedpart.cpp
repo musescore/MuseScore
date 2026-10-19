@@ -284,4 +284,27 @@ bool SharedPart::show() const
 {
     return m_show && m_enabled && style().styleB(Sid::enableStaveSharing);
 }
+
+void SharedPart::insertTime(const Fraction& tick, const Fraction& len)
+{
+    if (len.isZero()) {
+        return;
+    }
+
+    if (len < Fraction(0, 1)) {
+        m_staveSharingStateByTick.erase(m_staveSharingStateByTick.lower_bound(tick), m_staveSharingStateByTick.lower_bound(tick - len));
+    }
+
+    std::map<Fraction, StaveSharingState> newSharedStaves;
+
+    for (auto s = m_staveSharingStateByTick.lower_bound(tick); s != m_staveSharingStateByTick.end();) {
+        StaveSharingState state = s->second;
+        Fraction t = s->first;
+        m_staveSharingStateByTick.erase(s++);
+        newSharedStaves[t + len] = state;
+    }
+    m_staveSharingStateByTick.insert(newSharedStaves.begin(), newSharedStaves.end());
+
+    Part::insertTime(tick, len);
+}
 }
