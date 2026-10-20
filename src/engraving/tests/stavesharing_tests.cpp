@@ -534,6 +534,57 @@ TEST_F(Engraving_StaveSharingTests, testInvalidUserTrackMaps)
     delete score;
 }
 
+TEST_F(Engraving_StaveSharingTests, testFillVoice1WithRests)
+{
+    // [GIVEN] A score of 5 measures with 4 staves, 3 of which are grouped for stave sharing
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_07.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(sharedPart->nstaves(), 3);
+
+    // [WHEN] A stave sharing change is added at beat 3 of measure 3, moving the 3rd origin stave onto the 2nd shared stave
+    Segment* seg = score->tick2segment(Fraction(5, 2), true, SegmentType::ChordRest);
+    ASSERT_TRUE(seg);
+
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
+    });
+    score->doLayout();
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    const track_idx_t sharedStave2Track = staff2track(sharedPart->staff(1)->idx());
+
+    // [THEN] Voice 1 of the 2nd shared stave should have measure rests in measures 1 and 2
+    for (const Fraction& tick : { Fraction(0, 1), Fraction(1, 1) }) {
+        ChordRest* measureRest = score->findCR(tick, sharedStave2Track);
+        ASSERT_TRUE(measureRest) << "Tick " << tick.toString().toStdString();
+        EXPECT_EQ(measureRest->tick(), tick) << "Tick " << tick.toString().toStdString();
+        EXPECT_TRUE(measureRest->isFullMeasureRest()) << "Tick " << tick.toString().toStdString();
+    }
+
+    // [THEN] Voice 1 of the 2nd shared stave should be filled with a minim rest up to the stave sharing change
+    ChordRest* cr = score->findCR(Fraction(2, 1), sharedStave2Track);
+    ASSERT_TRUE(cr);
+    EXPECT_EQ(cr->tick(), Fraction(2, 1));
+    EXPECT_TRUE(cr->isRest());
+    EXPECT_EQ(cr->durationType().type(), DurationType::V_HALF);
+    EXPECT_EQ(cr->ticks(), Fraction(1, 2));
+
+    delete score;
+}
+
 static std::vector<Fraction> userModifiedStaveSharingTicks(const Score* score, const SharedPart* sharedPart)
 {
     std::vector<Fraction> ticks;
