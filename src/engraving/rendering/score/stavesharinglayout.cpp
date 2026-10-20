@@ -1920,7 +1920,7 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
         }
     }
 
-    addMeasureRestsIfNeed(ctx);
+    fillRestsIfNeed(ctx);
 
     for (Spanner* spanner : ctx.overlappingSpanners) {
         if (!spanner->systemFlag() && spanner->track() >= range.startTrack && spanner->track() < range.endTrack
@@ -1942,25 +1942,24 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
     }
 }
 
-void StaveSharingLayout::addMeasureRestsIfNeed(StaveSharingContext& ctx)
+void StaveSharingLayout::fillRestsIfNeed(StaveSharingContext& ctx)
 {
-    Measure* startMeas = ctx.segmentsToUpdate.front()->measure();
-    Measure* endMeas = ctx.segmentsToUpdate.back()->measure();
-
-    TrackRange trackRange = ctx.curSharedPart->trackRange();
-    staff_idx_t startStaff = track2staff(trackRange.startTrack);
-    staff_idx_t endStaff = track2staff(trackRange.endTrack);
-
-    for (Measure* measure = startMeas; measure && measure->isBeforeOrEqual(endMeas); measure = measure->nextMeasure()) {
-        for (staff_idx_t staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
-            if (!measure->isEmpty(staffIdx)) {
+    // Make sure voice 1 is filled with rests
+    const TrackRange trackRange = ctx.curSharedPart->trackRange();
+    for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; track += VOICES) {
+        Fraction filledUntil = ctx.crSegmentsToUpdate.front()->tick();
+        for (const Segment* seg : ctx.crSegmentsToUpdate) {
+            const ChordRest* cr = toChordRest(seg->element(track));
+            if (!cr) {
                 continue;
             }
-            if (ChordRest* firstCR = measure->firstChordRest(staffIdx * VOICES); firstCR && firstCR->isFullMeasureRest()) {
-                continue;
+            if (seg->tick() > filledUntil) {
+                ctx.score->setRest(filledUntil, track, seg->tick() - filledUntil, false, nullptr);
             }
-
-            ctx.score->setRest(measure->tick(), staffIdx * VOICES, measure->ticks(), false, nullptr);
+            filledUntil = std::max(filledUntil, seg->tick() + cr->actualTicks());
+        }
+        if (filledUntil < ctx.eTick) {
+            ctx.score->setRest(filledUntil, track, ctx.eTick - filledUntil, false, nullptr);
         }
     }
 }
