@@ -88,6 +88,17 @@ bool checkSharedPartNotExist(SharedPart* sharedPart, const std::vector<Part*>& o
     return true;
 }
 
+static std::vector<Fraction> userModifiedStaveSharingTicks(const Score* score, const SharedPart* sharedPart)
+{
+    std::vector<Fraction> ticks;
+    for (const auto& [tick, state] : sharedPart->staveSharingStatesBetweenTicks(Fraction(0, 1), score->endTick())) {
+        if (state.isUserModified()) {
+            ticks.push_back(tick);
+        }
+    }
+    return ticks;
+}
+
 TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
 {
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
@@ -534,6 +545,76 @@ TEST_F(Engraving_StaveSharingTests, testInvalidUserTrackMaps)
     delete score;
 }
 
+TEST_F(Engraving_StaveSharingTests, testUserTrackMapInvalidInLaterSystem)
+{
+    // [GIVEN] A score of 3 measures, each on its own system, with 3 staves in unison in measure 1 only
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_06.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m1 && m2);
+
+    // [WHEN] A stave sharing change is added at the start of the score, with no reset after it
+    const SharedTrackMap m1TrackMap = sharedPart->staveSharingStateAtTick(m1->tick()).sharedTrackMap();
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    ASSERT_TRUE(muse::contains(m1TrackMap, origin1)) << dump(m1TrackMap);
+
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::setTrackMapping(tx, m1->first(SegmentType::ChordRest), sharedPart, origin1, m1TrackMap.at(origin1));
+    });
+    score->doLayout();
+
+    // [THEN] The change should be the only user change in the score, so it applies to the whole score
+    ASSERT_EQ(userModifiedStaveSharingTicks(score, sharedPart), std::vector<Fraction>({ Fraction(0, 1) }));
+
+    // [THEN] The change should be flagged as invalid, as the staves are not in unison in measure 2
+    std::optional<StaveSharingState> state = sharedPart->exactStaveSharingStateAtTick(m1->tick());
+    ASSERT_TRUE(state && state->userTrackMap());
+    EXPECT_EQ(state->userTrackMap().value(), m1TrackMap);
+    EXPECT_FALSE(state->isUserMapValid());
+
+    // [THEN] Measure 2 should use a computed track map rather than the invalid user one
+    const StaveSharingState& m2State = sharedPart->staveSharingStateAtTick(m2->tick());
+    EXPECT_FALSE(m2State.isUserModified());
+    const SharedTrackMap& m2TrackMap = m2State.sharedTrackMap();
+    EXPECT_NE(m2TrackMap, m1TrackMap) << dump(m2TrackMap);
+
+    // [THEN] Measure 2 should not be corrupt - each origin chord/rest should be mirrored on its mapped shared track
+    for (const auto& [originTrack, sharedTrack] : m2TrackMap) {
+        for (Segment* seg = m2->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+            const EngravingItem* originItem = seg->element(originTrack);
+            if (!originItem) {
+                continue;
+            }
+            const EngravingItem* sharedItem = seg->element(sharedTrack);
+            ASSERT_TRUE(sharedItem && sharedItem->isChordRest())
+                << "Origin track " << originTrack << ", tick " << seg->tick().toString().toStdString();
+            EXPECT_EQ(toChordRest(sharedItem)->ticks(), toChordRest(originItem)->ticks())
+                << "Origin track " << originTrack << ", tick " << seg->tick().toString().toStdString();
+            EXPECT_EQ(sharedItem->type(), originItem->type())
+                << "Origin track " << originTrack << ", tick " << seg->tick().toString().toStdString();
+        }
+    }
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}
+
 TEST_F(Engraving_StaveSharingTests, testFillVoice1WithRests)
 {
     // [GIVEN] A score of 5 measures with 4 staves, 3 of which are grouped for stave sharing
@@ -583,17 +664,6 @@ TEST_F(Engraving_StaveSharingTests, testFillVoice1WithRests)
     EXPECT_EQ(cr->ticks(), Fraction(1, 2));
 
     delete score;
-}
-
-static std::vector<Fraction> userModifiedStaveSharingTicks(const Score* score, const SharedPart* sharedPart)
-{
-    std::vector<Fraction> ticks;
-    for (const auto& [tick, state] : sharedPart->staveSharingStatesBetweenTicks(Fraction(0, 1), score->endTick())) {
-        if (state.isUserModified()) {
-            ticks.push_back(tick);
-        }
-    }
-    return ticks;
 }
 
 TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
