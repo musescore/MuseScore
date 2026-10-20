@@ -38,7 +38,7 @@ AbstractElementPopup {
     contentWidth: content.width
     contentHeight: content.height
 
-    placementPolicies: PopupView.PreferRight
+    placementPolicies: PopupView.PreferLeft
     showArrow: false
 
     model: StaveSharingChangePopupModel {
