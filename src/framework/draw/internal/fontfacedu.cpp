@@ -103,12 +103,12 @@ f26dot6_t FontFaceDU::lineWidth() const
     return m_origin->lineWidth();
 }
 
-std::vector<GlyphPos> FontFaceDU::glyphs(const char32_t* text, int text_length) const
+std::vector<ShapedGlyph> FontFaceDU::glyphs(const char32_t* text, int text_length) const
 {
-    std::vector<GlyphPos> glyphs = m_origin->glyphs(text, text_length);
-    std::vector<GlyphPos> ret;
+    std::vector<ShapedGlyph> glyphs = m_origin->glyphs(text, text_length);
+    std::vector<ShapedGlyph> ret;
     ret.reserve(glyphs.size());
-    for (GlyphPos& gp : glyphs) {
+    for (ShapedGlyph& gp : glyphs) {
         if (gp.idx == 0) {
             gp.x_advance = glyphAdvance(0); // dummy
         }
