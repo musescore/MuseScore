@@ -4,6 +4,8 @@
  */
 #include <gtest/gtest.h>
 
+#include <QTemporaryDir>
+
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -133,6 +135,71 @@ TEST(Engraving_StaffTypeChangeTests, dragFromFirstMeasure)
     score->endCmd();
     EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
 
+    dragChange(change, third);
+    EXPECT_EQ(change->measure(), third);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    EXPECT_EQ(staff->staffType(third->tick())->lines(), 1);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(change->measure(), first);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(change->measure(), third);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    EXPECT_EQ(staff->staffType(third->tick())->lines(), 1);
+}
+
+//! Reloading and deleting a first-measure marker must preserve its baseline for moves and undo/redo.
+TEST(Engraving_StaffTypeChangeTests, baselineSurvivesReloadAndDeleteUndo)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"measure_data/checkMeasure.mscx"));
+    ASSERT_NE(score, nullptr);
+    Staff* staff = score->staff(0);
+    staff->staffType(Fraction(0, 1))->setLines(3);
+    const int initialLines = staff->staffType(Fraction(0, 1))->lines();
+    Measure* first = score->firstMeasure();
+    StaffType* type = new StaffType(*staff->staffType(first->tick()));
+    type->setLines(1);
+    StaffTypeChange* change = Factory::createStaffTypeChange(first);
+    change->setOwnershipParent(first);
+    change->setTrack(0);
+    change->setStaffType(type, true);
+    score->startCmd(muse::TranslatableString::untranslatable("Add staff type change"));
+    score->undoAddElement(change);
+    score->endCmd();
+
+    QTemporaryDir directory;
+    ASSERT_TRUE(directory.isValid());
+    const String path = String::fromQString(directory.filePath("stafftype-baseline.mscx"));
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), path));
+    score.reset(ScoreRW::readScore(path, true));
+    ASSERT_NE(score, nullptr);
+    staff = score->staff(0);
+    first = score->firstMeasure();
+    change = nullptr;
+    for (EngravingItem* item : first->el()) {
+        if (item->isStaffTypeChange()) {
+            change = toStaffTypeChange(item);
+            break;
+        }
+    }
+    ASSERT_NE(change, nullptr);
+    ASSERT_NE(change->initialStaffType(), nullptr);
+    EXPECT_EQ(change->initialStaffType()->lines(), initialLines);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
+
+    score->startCmd(muse::TranslatableString::untranslatable("Delete staff type change"));
+    score->undoRemoveElement(change);
+    score->endCmd();
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
+    ASSERT_NE(change->initialStaffType(), nullptr);
+    EXPECT_EQ(change->initialStaffType()->lines(), initialLines);
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    score->undoRedo(true, nullptr);
+
+    Measure* third = first->nextMeasure()->nextMeasure();
     dragChange(change, third);
     EXPECT_EQ(change->measure(), third);
     EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);

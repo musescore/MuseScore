@@ -897,7 +897,7 @@ void Measure::add(EngravingItem* e)
 
         Staff* staff = staffTypeChange->staff();
 
-        if (tick().isZero()) {
+        if (tick().isZero() && !staffTypeChange->initialStaffType()) {
             staffTypeChange->setInitialStaffType(*staff->staffType(tick()));
         }
 
@@ -1024,6 +1024,9 @@ void Measure::remove(EngravingItem* e)
             StaffType* st = new StaffType(*stc->staffType());
             if (!tick().isZero()) {
                 staff->removeStaffType(tick());
+            } else if (stc->initialStaffType()) {
+                staff->setStaffType(tick(), *stc->initialStaffType());
+                staff->staffTypeListChanged(tick());
             }
             stc->setStaffType(st, true);
         }

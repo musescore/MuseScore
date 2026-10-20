@@ -41,9 +41,7 @@ class MoveStaffTypeChange : public UndoableCommand
 {
 public:
     MoveStaffTypeChange(StaffTypeChange* item, Measure* target)
-        : m_item(item), m_target(target),
-        m_initialType(item->measure()->tick().isZero() && item->initialStaffType()
-                      ? *item->initialStaffType() : *item->staff()->staffType(Fraction(0, 1))) {}
+        : m_item(item), m_target(target) {}
 
     UNDO_NAME("MoveStaffTypeChange")
     UNDO_CHANGED_OBJECTS({ m_item, m_target })
@@ -53,22 +51,18 @@ private:
     {
         Measure* source = m_item->measure();
         Staff* staff = m_item->staff();
-        const StaffType initialType = *staff->staffType(Fraction(0, 1));
         source->remove(m_item);
-        if (source->tick().isZero()) {
-            staff->setStaffType(Fraction(0, 1), m_initialType);
-            staff->staffTypeListChanged(Fraction(0, 1));
+        if (m_target->tick().isZero()) {
+            m_item->setInitialStaffType(*staff->staffType(Fraction(0, 1)));
         }
         m_item->setOwnershipParent(m_target);
         m_target->add(m_item);
         m_target = source;
-        m_initialType = initialType;
         m_item->triggerLayout();
     }
 
     StaffTypeChange* m_item;
     Measure* m_target;
-    StaffType m_initialType;
 };
 }
 
