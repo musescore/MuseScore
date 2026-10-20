@@ -2658,7 +2658,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
         }
         doUndoRemoveElement(static_cast<EngravingItem*>(e));
         if (clearSegment) {
-            Segment* s = cr->segment();
+            Segment* s = toChordRest(e)->segment();
             if (segments.find(s) == segments.end()) {
                 segments.insert(s);
             }
