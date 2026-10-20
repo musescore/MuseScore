@@ -26,7 +26,7 @@
 #include "ui_stafftextpropertiesdialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::engraving {
 class StaffTextBase;
@@ -37,7 +37,7 @@ class StaffTextPropertiesDialog : public muse::ui::WidgetDialog, private Ui::Sta
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);

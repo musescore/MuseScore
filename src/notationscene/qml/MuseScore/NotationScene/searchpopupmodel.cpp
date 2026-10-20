@@ -45,7 +45,7 @@ void SearchPopupModel::init()
 
 void SearchPopupModel::search(const QString& text)
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }

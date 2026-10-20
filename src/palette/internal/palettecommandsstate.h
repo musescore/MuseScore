@@ -29,7 +29,7 @@
 
 #include "global/modularity/ioc.h"
 #include "rcommand/icommandsregister.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "../ipaletteconfiguration.h"
 
 namespace mu::palette {
@@ -37,7 +37,7 @@ class PaletteCommandsState : public muse::rcommand::IModuleCommandsState, public
 {
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     PaletteCommandsState(const muse::modularity::ContextPtr& ctx)

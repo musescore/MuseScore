@@ -25,7 +25,7 @@
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 
 namespace mu::appshell {
@@ -39,7 +39,7 @@ class MainWindowTitleProvider : public QObject, public muse::Contextable, public
 
     QML_ELEMENT
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     explicit MainWindowTitleProvider(QObject* parent = nullptr);

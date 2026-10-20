@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 
 namespace muse::uicomponents {
@@ -43,7 +43,7 @@ class PartListModel : public QAbstractListModel, public muse::Contextable, publi
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

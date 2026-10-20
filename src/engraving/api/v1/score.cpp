@@ -120,7 +120,7 @@ const mu::engraving::InstrumentTemplate* Score::instrTemplateFromName(const QStr
 
 mu::notation::INotationPtr Score::notation() const
 {
-    return context()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 mu::notation::INotationUndoStackPtr Score::undoStack() const

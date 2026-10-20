@@ -201,7 +201,7 @@ void AbstractElementPopupModel::updateNotation()
 
 INotationPtr AbstractElementPopupModel::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value)
@@ -236,7 +236,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
 
 INotationInteractionPtr AbstractElementPopupModel::interaction() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 

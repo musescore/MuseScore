@@ -174,7 +174,7 @@ AppshellCommandsController::DragTarget AppshellCommandsController::dragTarget(co
             return DragTarget::Extension;
         } else {
             bool scorePageWithProjectOpen = interactive()->currentUri().val == NOTATION_URI
-                                            && globalContext()->currentProject() != nullptr;
+                                            && projectSession()->currentProject() != nullptr;
             if (!scorePageWithProjectOpen && convertFileToScoreScenario()->isFileSupported(filePath)) {
                 return DragTarget::ConvertibleFile;
             }

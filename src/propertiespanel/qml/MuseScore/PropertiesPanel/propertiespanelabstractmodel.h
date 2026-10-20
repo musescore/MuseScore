@@ -34,7 +34,7 @@
 
 #include "internal/ielementrepositoryservice.h"
 #include "notation/inotation.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 #include "propertyitem.h"
 #include "pointfpropertyitem.h"
@@ -64,7 +64,7 @@ class PropertiesPanelAbstractModel : public QObject, public muse::async::Asyncab
 
 public:
     muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:

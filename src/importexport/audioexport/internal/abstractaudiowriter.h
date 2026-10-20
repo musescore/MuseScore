@@ -27,7 +27,7 @@
 #include "audio/main/iplayback.h"
 #include "audio/main/istartaudiocontroller.h"
 #include "iaudioexportconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "playback/iplaybackcontroller.h"
 #include "global/iapplication.h"
 

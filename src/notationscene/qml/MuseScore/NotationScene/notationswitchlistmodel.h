@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "rcommand/icommanddispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::notation {
 class NotationSwitchListModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
@@ -37,7 +37,7 @@ class NotationSwitchListModel : public QAbstractListModel, public muse::Contexta
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:

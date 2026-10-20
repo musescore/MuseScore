@@ -150,8 +150,8 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
 
     const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
-    m_notationForRestore = globalContext()->currentNotation();
+    muse::ContextInject<project::IProjectSession> projectSession = { m_iocContext };
+    m_notationForRestore = projectSession()->currentNotation();
 
     auto restorePlaybackState = [this]() {
         muse::ContextInject<playback::IPlaybackController> playbackController = { m_iocContext };

@@ -28,7 +28,7 @@
 
 #include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "engraving/dom/fret.h"
 
 namespace mu::propertiespanel {
@@ -43,7 +43,7 @@ class FretCanvas : public muse::uicomponents::QuickPaintedView, public muse::Con
     Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit FretCanvas(QQuickItem* parent = nullptr);

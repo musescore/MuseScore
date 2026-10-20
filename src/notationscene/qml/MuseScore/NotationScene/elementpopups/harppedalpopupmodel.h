@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "engraving/dom/harppedaldiagram.h"
 
@@ -41,7 +41,7 @@ class HarpPedalPopupModel : public AbstractElementPopupModel
         QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
     Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     enum class Position {

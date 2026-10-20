@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/rendering/isinglerenderer.h"
@@ -53,7 +53,7 @@ public:
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);

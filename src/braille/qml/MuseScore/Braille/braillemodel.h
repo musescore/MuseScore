@@ -26,7 +26,7 @@
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 
@@ -51,7 +51,7 @@ class BrailleModel : public QObject, public muse::Contextable, public muse::asyn
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<braille::INotationBraille> notationBraille = { this };
 
 public:

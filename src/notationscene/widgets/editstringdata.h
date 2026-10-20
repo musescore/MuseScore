@@ -27,7 +27,7 @@
 #include "engraving/dom/stringdata.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::engraving {
 class Instrument;
@@ -42,7 +42,7 @@ class EditStringData : public muse::ui::WidgetDialog, private Ui::EditStringData
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     EditStringData(QWidget* parent = nullptr, const std::vector<engraving::instrString>& strings = {}, int frets = 0);

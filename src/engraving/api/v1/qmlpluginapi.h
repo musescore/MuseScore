@@ -28,7 +28,7 @@
 #include "global/api/apiutils.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "global/iapplication.h"
 #include "rcommand/icommanddispatcher.h"
 
@@ -136,7 +136,7 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
 
 private:
     muse::GlobalInject<muse::IApplication> application;
-    muse::ContextInject<mu::context::IGlobalContext> context = { this };
+    muse::ContextInject<mu::project::IProjectSession> context = { this };
     muse::ContextInject<mu::engraving::IEngravingPluginAPIHelper> helper = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 

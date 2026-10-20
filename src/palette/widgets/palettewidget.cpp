@@ -466,7 +466,7 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
         return;
     }
 
-    notation::INotationPtr notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }

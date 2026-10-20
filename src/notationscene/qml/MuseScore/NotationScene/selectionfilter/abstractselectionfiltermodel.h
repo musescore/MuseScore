@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "engraving/dom/selectionfilter.h"
 
@@ -44,7 +44,7 @@ class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Con
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit AbstractSelectionFilterModel(QObject* parent = nullptr);

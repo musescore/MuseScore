@@ -23,7 +23,7 @@
 #pragma once
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "midi/imidiconfiguration.h"
 #include "midi/imidiinport.h"
 #include "midi/imidioutport.h"
@@ -39,7 +39,7 @@ class MidiInputOutputController : public muse::async::Asyncable, public muse::Co
     muse::GlobalInject<muse::midi::IMidiInPort> midiInPort;
     muse::GlobalInject<muse::midi::IMidiOutPort> midiOutPort;
     muse::ContextInject<muse::midiremote::IMidiRemote> midiRemote  = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
 

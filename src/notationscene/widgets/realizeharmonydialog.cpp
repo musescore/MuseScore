@@ -70,7 +70,7 @@ void RealizeHarmonyDialog::componentComplete()
 
 INotationInteractionPtr RealizeHarmonyDialog::interaction() const
 {
-    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 

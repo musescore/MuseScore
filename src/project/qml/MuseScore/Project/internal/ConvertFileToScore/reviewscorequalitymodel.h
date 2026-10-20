@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "project/iconvertfiletoscoreservice.h"
 
 namespace mu::project {
@@ -42,7 +42,7 @@ class ReviewScoreQualityModel : public QObject, public muse::Contextable
 
 public:
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<IConvertFileToScoreService> convertFileToScoreService = { this };
 
     enum class Step {

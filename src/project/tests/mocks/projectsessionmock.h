@@ -24,10 +24,10 @@
 
 #include <gmock/gmock.h>
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
-namespace mu::context {
-class GlobalContextMock : public IGlobalContext
+namespace mu::project {
+class ProjectSessionMock : public IProjectSession
 {
 public:
     MOCK_METHOD(void, setCurrentProject, (const project::INotationProjectPtr& project), (override));

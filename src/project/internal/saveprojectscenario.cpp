@@ -63,7 +63,7 @@ static constexpr int SAVE_AS_BTN_ID    = RETRY_SAVE_BTN_ID + 1;
 
 INotationProjectPtr SaveProjectScenario::currentNotationProject() const
 {
-    return globalContext()->currentProject();
+    return projectSession()->currentProject();
 }
 
 INotationInteractionPtr SaveProjectScenario::currentInteraction() const
@@ -781,7 +781,7 @@ void SaveProjectScenario::closeUploadProgressDialog()
 Promise<Ret> SaveProjectScenario::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
 {
     return async::make_promise<Ret>([this, info, audio, openEditUrl, publishMode](auto resolve) {
-        INotationProjectPtr project = globalContext()->currentProject();
+        INotationProjectPtr project = projectSession()->currentProject();
         if (!project) {
             return resolve(make_ret(Err::NoProjectError));
         }

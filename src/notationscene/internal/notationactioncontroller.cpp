@@ -60,7 +60,6 @@ using namespace mu;
 using namespace muse;
 using namespace muse::io;
 using namespace mu::notation;
-using namespace mu::context;
 
 static constexpr qreal STRETCH_STEP = 0.1;
 static constexpr bool NEAR_NOTE_OR_REST = true;
@@ -657,8 +656,8 @@ void NotationActionController::init()
     }
 
     // listen on state changes
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        auto notation = globalContext()->currentNotation();
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
+        auto notation = projectSession()->currentNotation();
         if (notation) {
             auto interaction = notation->interaction();
 
@@ -720,12 +719,12 @@ INotationViewController* NotationActionController::viewController() const
 
 INotationPtr NotationActionController::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 IMasterNotationPtr NotationActionController::currentMasterNotation() const
 {
-    return globalContext()->currentMasterNotation();
+    return projectSession()->currentMasterNotation();
 }
 
 INotationInteractionPtr NotationActionController::currentNotationInteraction() const
@@ -745,12 +744,12 @@ INotationElementsPtr NotationActionController::currentNotationElements() const
 
 muse::async::Notification NotationActionController::currentNotationChanged() const
 {
-    return globalContext()->currentNotationChanged();
+    return projectSession()->currentNotationChanged();
 }
 
 muse::async::Notification NotationActionController::currentMasterNotationChanged() const
 {
-    return globalContext()->currentMasterNotationChanged();
+    return projectSession()->currentMasterNotationChanged();
 }
 
 INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
@@ -2758,7 +2757,7 @@ bool NotationActionController::isNotEditingElement() const
 
 void NotationActionController::checkForScoreCorruptions()
 {
-    project::INotationProjectPtr project = globalContext()->currentProject();
+    project::INotationProjectPtr project = projectSession()->currentProject();
     if (!project) {
         return;
     }

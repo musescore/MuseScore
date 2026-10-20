@@ -305,7 +305,7 @@ void NotationCommandsState::init()
         return;
     }
 
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->currentProjectChanged().onNotify(this, [this]() {
         updateCommandStates();
     });
 
@@ -376,7 +376,7 @@ void NotationCommandsState::init()
 
 void NotationCommandsState::deinit()
 {
-    globalContext()->currentProjectChanged().disconnect(this);
+    projectSession()->currentProjectChanged().disconnect(this);
     if (interactive()) {
         interactive()->opened().disconnect(this);
     }
@@ -534,7 +534,7 @@ async::Channel<Command, CommandState> NotationCommandsState::commandStateChanged
 
 bool NotationCommandsState::isProjectOpened() const
 {
-    if (!globalContext()->currentProject()) {
+    if (!projectSession()->currentProject()) {
         return false;
     }
 

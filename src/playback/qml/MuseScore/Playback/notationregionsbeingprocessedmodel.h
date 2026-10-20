@@ -29,7 +29,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "audio/main/iplayback.h"
 #include "iplaybackcontroller.h"
 #include "iplaybackconfiguration.h"
@@ -52,7 +52,7 @@ class NotationRegionsBeingProcessedModel : public QAbstractListModel, public mus
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<IPlaybackController> playbackController = { this };
 
 public:

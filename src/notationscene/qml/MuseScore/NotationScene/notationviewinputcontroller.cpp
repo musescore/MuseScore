@@ -92,7 +92,7 @@ void NotationViewInputController::init()
         commandsController()->setViewController(this);
 
         onNotationChanged();
-        globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        projectSession()->currentNotationChanged().onNotify(this, [this]() {
             onNotationChanged();
         });
     }
@@ -272,7 +272,7 @@ void NotationViewInputController::setReadonly(bool readonly)
 
 INotationPtr NotationViewInputController::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 INotationStylePtr NotationViewInputController::notationStyle() const
@@ -474,7 +474,7 @@ int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
 
 void NotationViewInputController::setViewMode(ViewMode viewMode)
 {
-    auto notation = globalContext()->currentNotation();
+    auto notation = projectSession()->currentNotation();
     if (notation) {
         notation->viewState()->setViewMode(viewMode);
         notation->painting()->setViewMode(viewMode);

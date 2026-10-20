@@ -42,6 +42,7 @@ target_sources(project PRIVATE
     iconvertfiletoscorescenario.h
     iconvertfiletoscoreservice.h
     ideletecloudscorescenario.h
+    iprojectsession.h
     projectcommands.h
 
     types/migrationtypes.h
@@ -111,6 +112,8 @@ target_sources(project PRIVATE
     internal/projectmigrator.h
     internal/projectfileinfoprovider.cpp
     internal/projectfileinfoprovider.h
+    internal/projectsession.cpp
+    internal/projectsession.h
 )
 
 if (OS_IS_MAC)

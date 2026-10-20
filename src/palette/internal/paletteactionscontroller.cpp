@@ -99,7 +99,7 @@ void PaletteActionsController::toggleSpecialCharactersDialog()
     if (interactive()->isOpened(SPECIAL_CHARACTERS_URI.uri()).val) {
         interactive()->close(SPECIAL_CHARACTERS_URI.uri());
     } else {
-        auto notation = globalContext()->currentNotation();
+        auto notation = projectSession()->currentNotation();
         if (notation && notation->interaction()->isTextEditingStarted()) {
             interactive()->open(SPECIAL_CHARACTERS_URI);
         }
@@ -143,7 +143,7 @@ muse::Ret PaletteActionsController::toggleDragEnabled()
 
 mu::notation::INotationInteractionPtr PaletteActionsController::notationInteraction() const
 {
-    const notation::INotationPtr notation = globalContext()->currentNotation();
+    const notation::INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 

@@ -40,7 +40,7 @@
 #include "internal/convertfiletoscoreservice.h"
 #include "internal/convertfiletoscorescenario.h"
 #include "internal/deletecloudscorescenario.h"
-
+#include "internal/projectsession.h"
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
 #include "internal/projectcommandsregister.h"
@@ -164,6 +164,7 @@ void ProjectContext::registerExports()
     ioc()->registerExport<IConvertFileToScoreService>(mname, m_convertFileToScoreService);
     ioc()->registerExport<IConvertFileToScoreScenario>(mname, m_convertFileToScoreScenario);
     ioc()->registerExport<IDeleteCloudScoreScenario>(mname, new DeleteCloudScoreScenario(iocContext()));
+    ioc()->registerExport<IProjectSession>(mname, new ProjectSession());
 }
 
 void ProjectContext::resolveImports()

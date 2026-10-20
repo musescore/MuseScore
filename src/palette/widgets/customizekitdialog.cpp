@@ -274,7 +274,7 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
 
 void CustomizeKitDialog::componentComplete()
 {
-    m_notation = globalContext()->currentNotation();
+    m_notation = projectSession()->currentNotation();
     if (!m_notation) {
         return;
     }

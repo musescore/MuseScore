@@ -36,7 +36,7 @@
 #include "ui/iuiactionsregister.h"
 #include "workspace/iworkspaceconfiguration.h"
 #include "notation/inotationconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "context/iprojectsession.h"
 
 #include "global/iglobalconfiguration.h"
 
@@ -59,7 +59,7 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IProjectSession> context = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 

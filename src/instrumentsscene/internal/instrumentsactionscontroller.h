@@ -28,7 +28,7 @@
 #include "rcommand/commandable.h"
 #include "rcommand/icommanddispatcher.h"
 #include "notationscene/iselectinstrumentscenario.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 
 namespace mu::instrumentsscene {
@@ -36,7 +36,7 @@ class InstrumentsActionsController : public muse::rcommand::Commandable, public 
 {
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

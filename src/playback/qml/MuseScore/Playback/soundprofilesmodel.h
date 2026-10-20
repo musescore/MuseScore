@@ -26,7 +26,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 
 #include "isoundprofilesrepository.h"
@@ -49,7 +49,7 @@ class SoundProfilesModel : public QAbstractListModel, public muse::Contextable
 
     muse::GlobalInject<IPlaybackConfiguration> config;
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<IPlaybackController> controller = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 

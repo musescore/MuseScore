@@ -253,7 +253,7 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
         onUnloadNotation(m_notation);
     }
 
-    setNotation(globalContext()->currentNotation());
+    setNotation(projectSession()->currentNotation());
 
     if (!m_notation) {
         return;
@@ -781,7 +781,7 @@ void AbstractNotationPaintView::onNotationSetup()
     onCurrentNotationChanged();
     onPlayingChanged();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
     });
 

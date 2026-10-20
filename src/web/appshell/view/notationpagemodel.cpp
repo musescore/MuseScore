@@ -60,7 +60,7 @@ void NotationPageModel::init()
         dispatcher()->reg(this, actionCode, [this, dockName]() { toggleDock(dockName); });
     }
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
 
@@ -160,7 +160,7 @@ QString NotationPageModel::statusBarName() const
 
 void NotationPageModel::onNotationChanged()
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }
@@ -221,7 +221,7 @@ void NotationPageModel::updateDrumsetPanelVisibility()
         return;
     }
 
-    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         setDrumsetPanelOpen(false);
         return;
@@ -262,7 +262,7 @@ void NotationPageModel::updatePercussionPanelVisibility()
     }
 
     const PercussionPanelAutoShowMode autoShowMode = notationConfiguration()->percussionPanelAutoShowMode();
-    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationPtr notation = projectSession()->currentNotation();
     if (!notation || !notation->elements() || autoShowMode == PercussionPanelAutoShowMode::NEVER) {
         return;
     }

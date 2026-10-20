@@ -25,7 +25,7 @@
 #include "scoreelement.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -362,7 +362,7 @@ class Score : public apiv1::ScoreElement, public muse::Contextable
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Excerpt> excerpts READ excerpts)
 
-    muse::ContextInject<mu::context::IGlobalContext> context = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
 
 public:
     Score(mu::engraving::Score* s, Ownership o = Ownership::SCORE)

@@ -33,7 +33,7 @@
 #include "async/promise.h"
 #include "interactive/iinteractive.h"
 #include "interactive/iplatforminteractive.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
 #include "io/ifilesystem.h"
@@ -60,7 +60,7 @@ public:
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
 
     SaveProjectScenario(const muse::modularity::ContextPtr& iocCtx)

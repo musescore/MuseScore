@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "interactive/iinteractive.h"
 #include "interactive/iplatforminteractive.h"
@@ -63,7 +63,7 @@ public:
     muse::ContextInject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
     muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
