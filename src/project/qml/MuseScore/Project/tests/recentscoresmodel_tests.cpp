@@ -171,7 +171,7 @@ protected:
 // load()
 // ==================================================
 
-TEST_F(Project_RecentScoresModelTest, Load_ShowsRecentScoresBetweenSpecialItems)
+TEST_F(Project_RecentScoresModelTest, Load_ShowsRecentScoresAfterSpecialItems)
 {
     // [GIVEN] Two recent files
     ON_CALL(*m_controller, recentFilesList())
@@ -180,10 +180,10 @@ TEST_F(Project_RecentScoresModelTest, Load_ShowsRecentScoresBetweenSpecialItems)
     // [WHEN] Loading the model
     m_model.load();
 
-    // [THEN] The recent scores are shown between "New score" and "No results found"
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/a.mscz", "/scores/b.mscz", NO_RESULTS_ITEM }));
+    // [THEN] The recent scores are shown after "New score" and "No results found"
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/a.mscz", "/scores/b.mscz" }));
     EXPECT_EQ(score(0).value("name").toString(), "New score");
-    EXPECT_EQ(m_model.nonScoreItemIndices(), QList<int>({ 0, 3 }));
+    EXPECT_EQ(m_model.nonScoreItemIndices(), QList<int>({ 0, 1 }));
 }
 
 TEST_F(Project_RecentScoresModelTest, Load_ItemFields)
@@ -207,7 +207,7 @@ TEST_F(Project_RecentScoresModelTest, Load_ItemFields)
     // [THEN] The model exposes all their properties
     ASSERT_EQ(m_model.rowCount(), 4);
 
-    const QVariantMap cloudScore = score(1);
+    const QVariantMap cloudScore = score(2);
     EXPECT_EQ(cloudScore.value("name").toString(), "My score");
     EXPECT_EQ(cloudScore.value("path").toString(), "/scores/a.mscz");
     EXPECT_EQ(cloudScore.value("suffix").toString(), "mscz");
@@ -218,7 +218,7 @@ TEST_F(Project_RecentScoresModelTest, Load_ItemFields)
     EXPECT_FALSE(cloudScore.value("isNoResultsFound").toBool());
 
     // [THEN] The suffix is shown for files that aren't .mscz, and an unknown file size is empty
-    const QVariantMap localFile = score(2);
+    const QVariantMap localFile = score(3);
     EXPECT_EQ(localFile.value("name").toString(), "b.musicxml");
     EXPECT_EQ(localFile.value("suffix").toString(), "musicxml");
     EXPECT_TRUE(localFile.value("fileSize").toString().isEmpty());
@@ -257,8 +257,8 @@ TEST_F(Project_RecentScoresModelTest, FileRemoved_RemovesOnlyItsRow)
     m_recentFilesListChanged.send(RecentFileRemoved { "/scores/b.mscz" });
 
     // [THEN] Only its row is removed
-    EXPECT_THAT(m_events, ElementsAre(removed(2)));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/a.mscz", "/scores/c.mscz", NO_RESULTS_ITEM }));
+    EXPECT_THAT(m_events, ElementsAre(removed(3)));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/a.mscz", "/scores/c.mscz" }));
 }
 
 TEST_F(Project_RecentScoresModelTest, FileRemoved_UnknownFile_Reloads)
@@ -279,7 +279,7 @@ TEST_F(Project_RecentScoresModelTest, FileRemoved_UnknownFile_Reloads)
 
     // [THEN] The model is reloaded from the controller
     EXPECT_THAT(m_events, ElementsAre(reset()));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/b.mscz", NO_RESULTS_ITEM }));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/b.mscz" }));
 }
 
 TEST_F(Project_RecentScoresModelTest, FilePrepended_NewFile_InsertsItAtTop)
@@ -295,9 +295,9 @@ TEST_F(Project_RecentScoresModelTest, FilePrepended_NewFile_InsertsItAtTop)
     // [WHEN] A new file is opened
     m_recentFilesListChanged.send(RecentFilePrepended { RecentFile("/scores/c.mscz") });
 
-    // [THEN] It is inserted right after "New score"
-    EXPECT_THAT(m_events, ElementsAre(inserted(1)));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/c.mscz", "/scores/a.mscz", "/scores/b.mscz", NO_RESULTS_ITEM }));
+    // [THEN] It is inserted right after "No results found"
+    EXPECT_THAT(m_events, ElementsAre(inserted(2)));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/c.mscz", "/scores/a.mscz", "/scores/b.mscz" }));
 }
 
 TEST_F(Project_RecentScoresModelTest, FilePrepended_ExistingFile_MovesItToTop)
@@ -314,9 +314,9 @@ TEST_F(Project_RecentScoresModelTest, FilePrepended_ExistingFile_MovesItToTop)
     // [WHEN] A recent file is opened again
     m_recentFilesListChanged.send(RecentFilePrepended { RecentFile("/scores/c.mscz") });
 
-    // [THEN] Its row is removed and inserted right after "New score"
-    EXPECT_THAT(m_events, ElementsAre(removed(3), inserted(1)));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/c.mscz", "/scores/a.mscz", "/scores/b.mscz", NO_RESULTS_ITEM }));
+    // [THEN] Its row is removed and inserted right after "No results found"
+    EXPECT_THAT(m_events, ElementsAre(removed(4), inserted(2)));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/c.mscz", "/scores/a.mscz", "/scores/b.mscz" }));
 }
 
 TEST_F(Project_RecentScoresModelTest, FilePrepended_FirstFile_StaysAtTop)
@@ -333,9 +333,9 @@ TEST_F(Project_RecentScoresModelTest, FilePrepended_FirstFile_StaysAtTop)
     m_recentFilesListChanged.send(RecentFilePrepended { RecentFile("/scores/a.mscz", "My score") });
 
     // [THEN] It stays at the top, with the new data
-    EXPECT_THAT(m_events, ElementsAre(removed(1), inserted(1)));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/a.mscz", "/scores/b.mscz", NO_RESULTS_ITEM }));
-    EXPECT_EQ(score(1).value("name").toString(), "My score");
+    EXPECT_THAT(m_events, ElementsAre(removed(2), inserted(2)));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/a.mscz", "/scores/b.mscz" }));
+    EXPECT_EQ(score(2).value("name").toString(), "My score");
 }
 
 TEST_F(Project_RecentScoresModelTest, FilePathChanged_UpdatesItsRowInPlace)
@@ -353,9 +353,9 @@ TEST_F(Project_RecentScoresModelTest, FilePathChanged_UpdatesItsRowInPlace)
     m_recentFilesListChanged.send(RecentFilePathChanged { "/scores/b.mscz", RecentFile("/other/d.mscz") });
 
     // [THEN] Its row is updated in place
-    EXPECT_THAT(m_events, ElementsAre(changed(2)));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/a.mscz", "/other/d.mscz", "/scores/c.mscz", NO_RESULTS_ITEM }));
-    EXPECT_EQ(score(2).value("name").toString(), "d");
+    EXPECT_THAT(m_events, ElementsAre(changed(3)));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/a.mscz", "/other/d.mscz", "/scores/c.mscz" }));
+    EXPECT_EQ(score(3).value("name").toString(), "d");
 }
 
 TEST_F(Project_RecentScoresModelTest, FilePathChanged_UnknownFile_Reloads)
@@ -376,7 +376,7 @@ TEST_F(Project_RecentScoresModelTest, FilePathChanged_UnknownFile_Reloads)
 
     // [THEN] The model is reloaded from the controller
     EXPECT_THAT(m_events, ElementsAre(reset()));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/a.mscz", "/other/d.mscz", NO_RESULTS_ITEM }));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/a.mscz", "/other/d.mscz" }));
 }
 
 TEST_F(Project_RecentScoresModelTest, Reset_ReloadsFromController)
@@ -396,7 +396,7 @@ TEST_F(Project_RecentScoresModelTest, Reset_ReloadsFromController)
 
     // [THEN] The model is reloaded from the controller
     EXPECT_THAT(m_events, ElementsAre(reset()));
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/c.mscz", NO_RESULTS_ITEM }));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/c.mscz" }));
 }
 
 TEST_F(Project_RecentScoresModelTest, Reset_SameFiles_DoesNotResetModel)
@@ -414,5 +414,5 @@ TEST_F(Project_RecentScoresModelTest, Reset_SameFiles_DoesNotResetModel)
 
     // [THEN] Nothing changes
     EXPECT_TRUE(m_events.empty());
-    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, "/scores/a.mscz", "/scores/b.mscz", NO_RESULTS_ITEM }));
+    EXPECT_EQ(paths(), QStringList({ NEW_SCORE_ITEM, NO_RESULTS_ITEM, "/scores/a.mscz", "/scores/b.mscz" }));
 }
