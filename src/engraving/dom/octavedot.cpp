@@ -36,8 +36,8 @@ namespace mu::engraving {
 //   OctaveDot
 //---------------------------------------------------------
 
-OctaveDot::OctaveDot(EngravingItem* s)
-    : EngravingItem(ElementType::OCTAVE_DOT, s)
+OctaveDot::OctaveDot(DummyParentOr<Note> parent)
+    : EngravingItem(ElementType::OCTAVE_DOT, parent)
 {
     setSelectable(false);
 }

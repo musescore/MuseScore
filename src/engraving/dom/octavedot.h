@@ -43,7 +43,7 @@ class OctaveDot final : public EngravingItem
     DECLARE_CLASSOF(ElementType::OCTAVE_DOT)
 
 public:
-    OctaveDot(EngravingItem*);
+    OctaveDot(DummyParentOr<Note>);
     ~OctaveDot() override = default;
     OctaveDot& operator=(const OctaveDot&) = delete;
 

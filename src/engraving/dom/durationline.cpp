@@ -37,8 +37,8 @@ namespace mu::engraving {
 //   DurationLine
 //---------------------------------------------------------
 
-DurationLine::DurationLine(EngravingItem* s)
-    : EngravingItem(ElementType::DURATION_LINE, s)
+DurationLine::DurationLine(DummyParentOr<ChordRest> parent)
+    : EngravingItem(ElementType::DURATION_LINE, parent)
 {
     setSelectable(false);
 }

@@ -41,7 +41,7 @@ class DurationLine final : public EngravingItem
     DECLARE_CLASSOF(ElementType::DURATION_LINE)
 
 public:
-    DurationLine(EngravingItem*);
+    DurationLine(DummyParentOr<ChordRest>);
     ~DurationLine() override = default;
     DurationLine& operator=(const DurationLine&) = delete;
 

@@ -267,8 +267,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::PARTIAL_TIE:       return new PartialTie(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
     case ElementType::PARENTHESIS:       return new Parenthesis(parent);
-    case ElementType::DURATION_LINE:     return new DurationLine(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
-    case ElementType::OCTAVE_DOT:        return new OctaveDot(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::DURATION_LINE:     return new DurationLine(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
+    case ElementType::OCTAVE_DOT:        return new OctaveDot(parentOfTypeOrDummy<Note>(parentItem, dummy));
 
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:
