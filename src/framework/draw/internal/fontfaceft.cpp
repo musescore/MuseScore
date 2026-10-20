@@ -329,24 +329,25 @@ bool FontFaceFT::isSymbolMode() const
     return m_isSymbolMode;
 }
 
-std::vector<GlyphPos> FontFaceFT::glyphs(const char32_t* text, int text_length) const
+std::vector<ShapedGlyph> FontFaceFT::glyphs(const char32_t* text, int text_length) const
 {
     if (text_length < 1) {
-        return std::vector<GlyphPos>();
+        return std::vector<ShapedGlyph>();
     }
 
-    std::vector<GlyphPos> result;
+    std::vector<ShapedGlyph> result;
     if (m_isSymbolMode) {
         for (int i = 0; i < text_length; ++i) {
             glyph_idx_t idx = glyphIndex(text[i]);
             SymbolMetrics* sm = symbolMetrics(idx);
             IF_ASSERT_FAILED(sm) {
-                return std::vector<GlyphPos>();
+                return std::vector<ShapedGlyph>();
             }
 
-            GlyphPos p;
+            ShapedGlyph p;
             p.idx = sm->idx;
             p.x_advance = sm->linearAdvance;
+            p.cluster = static_cast<uint32_t>(i);
 
             result.push_back(std::move(p));
         }
@@ -375,7 +376,7 @@ std::vector<GlyphPos> FontFaceFT::glyphs(const char32_t* text, int text_length) 
                 xAdvance += metrics->linearAdvance - hbAdvance;
             }
 
-            result.push_back({ info[i].codepoint, xAdvance });
+            result.push_back({ info[i].codepoint, xAdvance, info[i].cluster });
         }
 
         hb_buffer_destroy(hb_buffer);

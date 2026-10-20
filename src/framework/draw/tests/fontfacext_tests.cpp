@@ -109,8 +109,8 @@ static std::string bboxToString(const FBBox& bbox)
 static f26dot6_t textAdvance(const IFontFace& face, const std::u32string& text)
 {
     f26dot6_t result = 0;
-    const std::vector<GlyphPos> glyphs = face.glyphs(text.data(), static_cast<int>(text.size()));
-    for (const GlyphPos& glyph : glyphs) {
+    const std::vector<ShapedGlyph> glyphs = face.glyphs(text.data(), static_cast<int>(text.size()));
+    for (const ShapedGlyph& glyph : glyphs) {
         result += glyph.x_advance;
     }
 
@@ -125,8 +125,8 @@ static FBBox textBbox(const IFontFace& face, const std::u32string& text)
     f26dot6_t ymax = 0;
     bool hasGlyph = false;
 
-    const std::vector<GlyphPos> glyphs = face.glyphs(text.data(), static_cast<int>(text.size()));
-    for (const GlyphPos& glyph : glyphs) {
+    const std::vector<ShapedGlyph> glyphs = face.glyphs(text.data(), static_cast<int>(text.size()));
+    for (const ShapedGlyph& glyph : glyphs) {
         FBBox glyphBbox = face.glyphBbox(glyph.idx);
         f26dot6_t x = xOffset + glyphBbox.x();
         f26dot6_t y = glyphBbox.y();
@@ -218,8 +218,8 @@ TEST_F(Draw_FontFaceXTTests, Glyphs)
     std::unique_ptr<FontFaces> faces = loadEdwinFaces();
 
     for (const std::u32string& text : TEST_STRINGS) {
-        std::vector<GlyphPos> ftGlyphs = faces->ft.glyphs(text.data(), static_cast<int>(text.size()));
-        std::vector<GlyphPos> xtGlyphs = faces->xt.glyphs(text.data(), static_cast<int>(text.size()));
+        std::vector<ShapedGlyph> ftGlyphs = faces->ft.glyphs(text.data(), static_cast<int>(text.size()));
+        std::vector<ShapedGlyph> xtGlyphs = faces->xt.glyphs(text.data(), static_cast<int>(text.size()));
 
         ASSERT_EQ(ftGlyphs.size(), xtGlyphs.size());
 

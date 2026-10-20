@@ -32,9 +32,10 @@ inline double from_f26d6(f26dot6_t v) { return static_cast<double>(v) / 64.0; }
 
 using FBBox = RectX<f26dot6_t>;
 
-struct GlyphPos {
+struct ShapedGlyph {
     glyph_idx_t idx = 0;
     f26dot6_t x_advance = 0.;
+    uint32_t cluster = 0;
 };
 
 class IFontFace
@@ -56,7 +57,7 @@ public:
     virtual f26dot6_t underlinePos() const = 0;
     virtual f26dot6_t lineWidth() const = 0;
 
-    virtual std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const = 0;
+    virtual std::vector<ShapedGlyph> glyphs(const char32_t* text, int text_length) const = 0;
     virtual glyph_idx_t glyphIndex(char32_t ucs4) const = 0;
     virtual glyph_idx_t glyphIndex(const std::string& glyphName) const = 0;
     virtual char32_t findCharCode(glyph_idx_t idx) const = 0; // for tests

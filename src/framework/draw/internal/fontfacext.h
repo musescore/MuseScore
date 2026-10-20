@@ -92,7 +92,7 @@ public:
     f26dot6_t underlinePos() const override;
     f26dot6_t lineWidth() const override;
 
-    std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const override;
+    std::vector<ShapedGlyph> glyphs(const char32_t* text, int text_length) const override;
     glyph_idx_t glyphIndex(char32_t ucs4) const override;
     glyph_idx_t glyphIndex(const std::string& glyphName) const override;
     char32_t findCharCode(glyph_idx_t idx) const override;
@@ -106,7 +106,7 @@ public:
 
     using Kernings = std::map<std::pair<glyph_idx_t, glyph_idx_t>, f26dot6_t>;
 
-    static void applyLigatures(std::vector<glyph_idx_t>& glyphs, const Ligatures& ls);
+    static void applyLigatures(std::vector<ShapedGlyph>& glyphs, const Ligatures& ls);
 
 private:
 
