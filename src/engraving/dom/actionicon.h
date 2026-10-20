@@ -56,7 +56,6 @@ public:
 private:
     ActionIconType m_actionType = ActionIconType::UNDEFINED;
     muse::TranslatableString m_title;
-    char16_t m_icon = 0;
     muse::draw::Font m_iconFont;
 };
 }
