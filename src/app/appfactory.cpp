@@ -93,9 +93,9 @@
 #endif
 
 #ifdef MUSE_MODULE_SHORTCUTS
-#include "framework/shortcuts/shortcutsmodule.h"
+#include "framework/shortcuts_v2/shortcutsmodule.h"
 #else
-#include "framework/stubs/shortcuts/shortcutsstubmodule.h"
+#include "framework/stubs/shortcuts_v2/shortcutsstubmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_TOAST
