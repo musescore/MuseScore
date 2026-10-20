@@ -32,10 +32,12 @@
 
 #include "global/io/file.h"
 
+#include "modularity/ioc.h"
+
 #include "engraving/devtools/drawdata/drawdataconverter.h"
 #include "engraving/devtools/drawdata/drawdatagenerator.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/rendering/score/scorerenderer.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 #include "utils/scorerw.h"
 
@@ -212,6 +214,8 @@ TEST_F(Engraving_DrawDataTests, PaddingAfterLoadingStyle)
     score->setLayoutAll();
     score->doLayout();
 
+    auto renderer = muse::modularity::globalIoc()->resolve<rendering::IScoreRenderer>("utests");
+    ASSERT_TRUE(renderer);
     auto provider = std::make_shared<BufferedPaintProvider>();
     {
         Painter painter(provider, "DrawData");
@@ -221,8 +225,7 @@ TEST_F(Engraving_DrawDataTests, PaddingAfterLoadingStyle)
         options.printPageBackground = true;
         options.isSetViewport = true;
         options.isPrinting = true;
-        rendering::score::ScoreRenderer renderer;
-        renderer.paintScore(&painter, score.get(), options);
+        renderer->paintScore(&painter, score.get(), options);
     }
 
     DrawDataGenerator generator;
