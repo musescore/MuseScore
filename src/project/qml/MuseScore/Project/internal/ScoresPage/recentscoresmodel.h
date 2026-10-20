@@ -28,8 +28,8 @@
 
 #include "async/asyncable.h"
 
-#include "iprojectconfiguration.h"
-#include "irecentfilescontroller.h"
+#include "project/iprojectconfiguration.h"
+#include "project/irecentfilescontroller.h"
 #include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 
@@ -38,6 +38,8 @@ class RecentScoresModel : public AbstractScoresModel, public muse::async::Asynca
 {
     Q_OBJECT
     QML_ELEMENT
+
+public:
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
