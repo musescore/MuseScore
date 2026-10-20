@@ -32,7 +32,8 @@
 using namespace muse;
 using namespace mu::project;
 
-static constexpr int FIRST_SCORE_ROW = 1; // after "New score"
+static constexpr int NO_RESULTS_FOUND_ROW = 1;
+static constexpr int FIRST_SCORE_ROW = 2; // after "New score" and "No results found"
 
 RecentScoresModel::RecentScoresModel(QObject* parent)
     : AbstractScoresModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -75,16 +76,16 @@ void RecentScoresModel::reloadRecentScores()
     addItem[IS_CLOUD_KEY] = false;
     items.push_back(addItem);
 
-    for (const RecentFile& file : recentScores) {
-        items.push_back(makeItem(file));
-    }
-
     QVariantMap noResultsFoundItem;
     noResultsFoundItem[NAME_KEY] = "";
     noResultsFoundItem[IS_CREATE_NEW_KEY] = false;
     noResultsFoundItem[IS_NO_RESULTS_FOUND_KEY] = true;
     noResultsFoundItem[IS_CLOUD_KEY] = false;
     items.push_back(noResultsFoundItem);
+
+    for (const RecentFile& file : recentScores) {
+        items.push_back(makeItem(file));
+    }
 
     setRecentScores(items);
 }
@@ -168,7 +169,7 @@ int RecentScoresModel::findRow(const muse::io::path_t& path) const
 {
     const QString pathStr = path.toQString();
 
-    for (size_t i = 0; i < m_items.size(); ++i) {
+    for (size_t i = FIRST_SCORE_ROW; i < m_items.size(); ++i) {
         if (m_items[i].value(PATH_KEY).toString() == pathStr) {
             return static_cast<int>(i);
         }
@@ -179,5 +180,5 @@ int RecentScoresModel::findRow(const muse::io::path_t& path) const
 
 QList<int> RecentScoresModel::nonScoreItemIndices() const
 {
-    return { 0, rowCount() - 1 };
+    return { 0, NO_RESULTS_FOUND_ROW };
 }
