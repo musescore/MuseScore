@@ -3849,12 +3849,12 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
             text = u"continue";
         } else {
             const Fraction subBeamUnit = cr->durationType().fraction();
-            if (subBeamUnit.isNotZero() && (cr->rtick().ticks() % (subBeamUnit.ticks() * 2) >= subBeamUnit.ticks())) {
+            const bool isOffBeat = subBeamUnit.isNotZero()
+                                   && (cr->rtick().ticks() % (subBeamUnit.ticks() * 2) >= subBeamUnit.ticks());
+            if (blp > 0 && (isOffBeat || bln <= 0)) {
                 text = u"backward hook";
             } else if (bln > 0) {
                 text = u"forward hook";
-            } else if (blp > 0) {
-                text = u"backward hook";
             }
         }
         if (!text.empty()) {
