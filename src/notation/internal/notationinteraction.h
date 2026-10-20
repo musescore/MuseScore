@@ -465,7 +465,7 @@ private:
     bool prepareDropMeasureBaseAnchorElement(const muse::PointF& pos);
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     std::vector<muse::RectF> dropHighlightRects(const mu::engraving::EngravingItem* dropElem,
-                                                const mu::engraving::MeasureBase* targetMeasureBase, const muse::RectF& staffRect,
+                                                const mu::engraving::EngravingItem* targetElem,
                                                 mu::engraving::KeyboardModifiers modifiers) const;
     bool dropCanvas(EngravingItem* e);
     void resetDropData();

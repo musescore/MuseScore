@@ -163,6 +163,7 @@ class Staff;
 class StaffLines;
 class StaffState;
 class StaffText;
+class StaveSharingChange;
 class StaveSharingLabel;
 class StaffTextBase;
 class StaffTypeChange;
@@ -174,6 +175,7 @@ class StringTunings;
 class Symbol;
 class System;
 class SystemDivider;
+class SystemIndicatorIcon;
 class SystemLockIndicator;
 class SystemText;
 class SoundFlag;
@@ -487,6 +489,7 @@ public:
     CONVERT(MeasureNumber, MEASURE_NUMBER)
     CONVERT(MMRestRange,   MMREST_RANGE)
     CONVERT(StaffText,     STAFF_TEXT)
+    CONVERT(StaveSharingChange, STAVE_SHARING_CHANGE)
     CONVERT(StaveSharingLabel, STAVE_SHARING_LABEL)
     CONVERT(SystemText,    SYSTEM_TEXT)
     CONVERT(SoundFlag,     SOUND_FLAG)
@@ -632,7 +635,8 @@ public:
         return isArticulationFamily() || isFermata();
     }
 
-    bool isIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
+    bool isSystemIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
+    bool isIndicatorIcon() const { return isSystemIndicatorIcon() || isStaveSharingChange(); }
 };
 
 template<typename ... ParentTypes>
@@ -727,6 +731,7 @@ CONVERT(TripletFeel)
 CONVERT(Harmony)
 CONVERT(Jump)
 CONVERT(StaffText)
+CONVERT(StaveSharingChange)
 CONVERT(StaveSharingLabel);
 CONVERT(StaffTextBase)
 CONVERT(TextBase)
@@ -738,6 +743,7 @@ CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
 CONVERT(IndicatorIcon)
+CONVERT(SystemIndicatorIcon)
 CONVERT(StaffVisibilityIndicator)
 CONVERT(SystemLockIndicator)
 CONVERT(Segment)

@@ -56,6 +56,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::NOTEDOT:
     case ElementType::STAFF_STATE:
     case ElementType::STAFFTYPE_CHANGE:
+    case ElementType::STAVE_SHARING_CHANGE:
     case ElementType::STEM:
     case ElementType::SYMBOL:
     case ElementType::FSYMBOL:

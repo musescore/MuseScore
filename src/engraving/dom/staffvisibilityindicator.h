@@ -22,10 +22,10 @@
 
 #pragma once
 
-#include "indicatoricon.h"
+#include "systemindicatoricon.h"
 
 namespace mu::engraving {
-class StaffVisibilityIndicator : public IndicatorIcon
+class StaffVisibilityIndicator : public SystemIndicatorIcon
 {
     OBJECT_ALLOCATOR(engraving, StaffVisibilityIndicator)
     DECLARE_CLASSOF(ElementType::STAFF_VISIBILITY_INDICATOR)

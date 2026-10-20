@@ -99,6 +99,8 @@ enum class Sid : short {
     sharedOnStaffNumeralsHyphenThreshold,
     staveSharingInstrChangePlayerNum,
 
+    staveSharingChangeMinDistance,
+
     windsNameByGroup,
     vocalsNameByGroup,
     stringsNameByGroup,

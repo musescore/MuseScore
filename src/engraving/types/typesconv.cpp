@@ -346,6 +346,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::STAFF_TEXT, "StaffText",
           TranslatableString("engraving", "staff text(s)", nullptr, 1),
           TranslatableString("engraving", "Staff text(s)", nullptr, 1) },
+    Item{ ElementType::STAVE_SHARING_CHANGE, "StaveSharingChange",
+          TranslatableString("engraving", "stave sharing change(s)", nullptr, 1),
+          TranslatableString("engraving", "Stave sharing change(s)", nullptr, 1) },
     Item{ ElementType::STAVE_SHARING_LABEL, "StaveSharingLabel",
           TranslatableString("engraving", "stave sharing label(s)", nullptr, 1),
           TranslatableString("engraving", "Stave sharing label(s)", nullptr, 1) },
@@ -3645,6 +3648,11 @@ const std::vector<ActionIconTypeItem> ACTIONICON_TYPES = { {
 
     { ActionIconType::SYSTEM_LOCK,      "toggle-system-lock",   TranslatableString("action", "Lock/unlock selected system(s)"), 0xF487 },
     { ActionIconType::PAGE_LOCK,        "toggle-page-lock",     TranslatableString("action", "Lock/unlock selected page(s)"), 0xF4C3 },
+
+    { ActionIconType::STAVE_SHARING_CHANGE,       "stave-sharing-change",       TranslatableString("action", "Add stave sharing change"),
+      0xF499 },
+    { ActionIconType::RESET_STAVE_SHARING_CHANGE, "reset-stave-sharing-change", TranslatableString("action", "Add stave sharing reset"),
+      0xEF19 },
 } };
 
 static const ActionIconTypeItem& findItemByType(const std::vector<ActionIconTypeItem>& cont, const ActionIconType& type)
