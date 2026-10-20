@@ -294,8 +294,8 @@ void SlurSegment::dragGrip(EditData& ed)
             if (e && e->isNote()) {
                 Note* note = toNote(e);
                 Chord* chord = note->chord();
-                if ((g == Grip::END && slr->startCR()->isBefore(chord))
-                    || (g == Grip::START && chord->isBefore(slr->endCR()))) {
+                if ((g == Grip::END && slr->startCR() && slr->startCR()->isBefore(chord))
+                    || (g == Grip::START && slr->endCR() && chord->isBefore(slr->endCR()))) {
                     if (km != (ShiftModifier | ControlModifier)) {
                         ed.view()->setDropTarget(note);
                         if (chord->part() == slr->part() && chord != slr->endCR()) {
