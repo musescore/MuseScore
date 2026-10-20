@@ -401,7 +401,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
 
         if (StaffVisibilityIndicator* visibilityIndicator = s->staffVisibilityIndicator()) {
-            TLayout::layoutIndicatorIcon(visibilityIndicator, visibilityIndicator->mutldata());
+            TLayout::layoutSystemIndicatorIcon(visibilityIndicator, visibilityIndicator->mutldata());
         }
     }
 

@@ -21,12 +21,55 @@
  */
 #pragma once
 
+#include <optional>
+
 #include "part.h"
 
 namespace mu::engraving {
 // Map from origin track to shared track
 using SharedTrackMap = std::map<track_idx_t, track_idx_t>;
 std::string dump(const SharedTrackMap& map);
+
+struct StaveSharingState {
+    StaveSharingState() {}
+    StaveSharingState(SharedTrackMap trackMap)
+        : m_sharedTrackMap(trackMap) {}
+
+    // User data
+    const std::optional<SharedTrackMap>& userTrackMap() const { return m_userTrackMap; }
+    void setUserTrackMap(std::optional<SharedTrackMap> map) { m_userTrackMap = map; }
+
+    bool isUserModified() const { return m_userTrackMap.has_value(); }
+
+    void setIsReset(bool val) { m_isReset = val; }
+    bool isReset() const { return m_isReset; }
+
+    // Data calculated at layout
+    const SharedTrackMap& sharedTrackMap() const { return m_sharedTrackMap; }
+    void setSharedTrackMap(SharedTrackMap map) { m_sharedTrackMap = map; }
+
+    void setIsUserMapValid(bool val) { m_isUserMapValid = val; }
+    bool isUserMapValid() const { return m_isUserMapValid; }
+
+    bool operator==(const StaveSharingState& other) const
+    {
+        return m_sharedTrackMap == other.m_sharedTrackMap
+               && m_userTrackMap == other.m_userTrackMap
+               && m_isReset == other.m_isReset
+               && m_isUserMapValid == other.m_isUserMapValid;
+    }
+
+    bool operator!=(const StaveSharingState& other) const { return !(*this == other); }
+
+private:
+    // User data
+    std::optional<SharedTrackMap> m_userTrackMap;
+    bool m_isReset = false;
+
+    // Data calculated at layout
+    SharedTrackMap m_sharedTrackMap;
+    bool m_isUserMapValid = false;
+};
 
 class SharedPart final : public Part
 {
@@ -53,9 +96,12 @@ public:
     bool enabled() const;
     bool show() const override;
 
-    const SharedTrackMap& trackMapAtTick(const Fraction& tick) const;
-    void setTrackMapAtTick(const SharedTrackMap& map, const Fraction& tick);
-    void removeMapsBetweenTicks(const Fraction& startTick, const Fraction& endTick);
+    const StaveSharingState& staveSharingStateAtTick(const Fraction& tick) const;
+    std::optional<StaveSharingState> exactStaveSharingStateAtTick(const Fraction& tick) const;
+    void setStaveSharingStateAtTick(const StaveSharingState& state, const Fraction& tick);
+    void removeStaveSharingStateAtTick(const Fraction& tick);
+    void removeStaveSharingStatesBetweenTicks(const Fraction& startTick, const Fraction& endTick, bool removeUserChanges);
+    std::map<Fraction, StaveSharingState> staveSharingStatesBetweenTicks(const Fraction& startTick, const Fraction& endTick) const;
 
     bool isSameInstrumentsAtTick(const Fraction& tick);
 
@@ -69,6 +115,6 @@ private:
 
     bool m_enabled = true;
     std::vector<Part*> m_originParts;
-    std::map<Fraction, SharedTrackMap> m_trackMapsByTick { { Fraction(0, 1), SharedTrackMap() } };
+    std::map<Fraction, StaveSharingState> m_staveSharingStateByTick { { Fraction(0, 1), StaveSharingState() } };
 };
 }
