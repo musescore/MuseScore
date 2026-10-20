@@ -258,7 +258,7 @@ DockPage {
             id: extensionPanel
 
             objectName: "extensionPanel"
-            title: extensionLoader.item ? extensionLoader.item.title : qsTrc("appshell", "Plug-in")
+            title: extensionContent.title || qsTrc("appshell", "Plug-in")
             location: Location.Right
             visible: false
             floatable: true
@@ -272,64 +272,24 @@ DockPage {
             navigationSection: root.navigationPanelSec(extensionPanel.location)
             dropDestinations: root.verticalPanelDropDestinations
 
-            Loader {
-                id: extensionLoader
-                active: extensionPanel.inited && root.pageModel.dockedExtension.length > 0
-                sourceComponent: Item {
-                    id: pluginHost
-                    property alias title: builder.title
-                    clip: true
+            ExtensionPanel {
+                id: extensionContent
+                active: extensionPanel.inited
 
-                    function loadPlugin() {
-                        if (root.pageModel.dockedExtension.length && !builder.contentItem) {
-                            builder.load(root.pageModel.dockedExtension,
-                                         root.pageModel.dockedExtensionAction, pluginHost)
-                            const requestedWidth = builder.contentItem ? builder.contentItem.implicitWidth : 0
-                            const initialWidth = Math.max(extensionPanel.minimumWidth,
-                                                          Math.min(extensionPanel.maximumWidth,
-                                                                   requestedWidth > 0 ? requestedWidth : 360))
-                            Qt.callLater(function() {
-                                extensionPanel.resize(initialWidth, extensionPanel.height)
-                            })
-                        }
-                    }
+                Component.onCompleted: load(root.pageModel.dockedExtension, root.pageModel.dockedExtensionAction)
 
-                    Component.onCompleted: loadPlugin()
+                onCloseRequested: root.pageModel.closeDockedExtension()
+                onInitialWidthRequested: function(width) {
+                    const initialWidth = Math.max(extensionPanel.minimumWidth,
+                                                  Math.min(extensionPanel.maximumWidth, width))
+                    extensionPanel.resize(initialWidth, extensionPanel.height)
+                }
 
-                    ExtensionBuilder {
-                        id: builder
-                        onCloseRequested: {
-                            const extension = root.pageModel.dockedExtension
-                            const action = root.pageModel.dockedExtensionAction
-                            Qt.callLater(function() {
-                                if (root.pageModel.dockedExtension === extension
-                                    && root.pageModel.dockedExtensionAction === action) {
-                                    root.pageModel.closeDockedExtension()
-                                }
-                            })
-                        }
-                    }
-
-                    Connections {
-                        target: root.pageModel
-                        function onDockedExtensionAboutToClose() { builder.unload() }
-                        function onDockedExtensionChanged() { pluginHost.loadPlugin() }
-                    }
-
-                    Binding {
-                        target: builder.contentItem
-                        property: "width"
-                        value: pluginHost.width
-                        when: Boolean(builder.contentItem)
-                        restoreMode: Binding.RestoreNone
-                    }
-
-                    Binding {
-                        target: builder.contentItem
-                        property: "height"
-                        value: pluginHost.height
-                        when: Boolean(builder.contentItem)
-                        restoreMode: Binding.RestoreNone
+                Connections {
+                    target: root.pageModel
+                    function onDockedExtensionAboutToClose() { extensionContent.unload() }
+                    function onDockedExtensionChanged() {
+                        extensionContent.load(root.pageModel.dockedExtension, root.pageModel.dockedExtensionAction)
                     }
                 }
             }
