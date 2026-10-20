@@ -334,7 +334,10 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     // TODO: case ElementType::STAFF_VISIBILTY_INDICATOR:
     case ElementType::SYSTEM_LOCK_INDICATOR:
-        layoutIndicatorIcon(item_cast<const IndicatorIcon*>(item), static_cast<IndicatorIcon::LayoutData*>(ldata));
+        layoutSystemIndicatorIcon(item_cast<const SystemIndicatorIcon*>(item), static_cast<IndicatorIcon::LayoutData*>(ldata));
+        break;
+    case ElementType::STAVE_SHARING_CHANGE:
+        layoutStaveSharingChange(item_cast<const StaveSharingChange*>(item), static_cast<IndicatorIcon::LayoutData*>(ldata));
         break;
     case ElementType::LET_RING:         layoutLetRing(item_cast<LetRing*>(item), ctx);
         break;
@@ -3714,7 +3717,7 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
     ldata->setShape(Shape(bbox, item));
 }
 
-void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::LayoutData* ldata)
+void TLayout::layoutSystemIndicatorIcon(const SystemIndicatorIcon* item, IndicatorIcon::LayoutData* ldata)
 {
     if (!item->configuration()->canLayoutIcons()) {
         return;
@@ -3777,7 +3780,24 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
     ldata->setPos(PointF(x, -2.5 * spatium));
 
     // Ensure it goes behind notation and LayoutBreak
-    const_cast<IndicatorIcon*>(item)->setZ(-100);
+    const_cast<SystemIndicatorIcon*>(item)->setZ(-100);
+}
+
+void TLayout::layoutStaveSharingChange(const StaveSharingChange* item, IndicatorIcon::LayoutData* ldata)
+{
+    if (!item->configuration()->canLayoutIcons()) {
+        return;
+    }
+
+    const FontMetrics metrics(item->font());
+    const RectF iconBox = metrics.boundingRect(item->iconCode());
+
+    Shape shape;
+    shape.add(iconBox, item);
+    ldata->setShape(shape);
+    ldata->setPos(PointF(0.0, -2.5 * item->spatium()));
+
+    Autoplace::autoplaceSegmentElement(item, ldata, false);
 }
 
 static void _layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, LedgerLine::LayoutData* ldata)

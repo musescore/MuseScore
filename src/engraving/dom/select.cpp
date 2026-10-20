@@ -423,7 +423,7 @@ std::vector<System*> Selection::selectedSystems() const
 {
     EngravingItem* el = element();
     if (el && (el->isSystemLockIndicator() || el->isPageLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
-        return { const_cast<System*>(toIndicatorIcon(el)->system()) };
+        return { const_cast<System*>(toSystemIndicatorIcon(el)->system()) };
     }
 
     const MeasureBase* startMB = startMeasureBase();

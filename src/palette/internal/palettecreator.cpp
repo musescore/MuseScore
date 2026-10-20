@@ -570,6 +570,8 @@ PalettePtr PaletteCreator::newLayoutPalette()
     sp->appendActionIcon(ActionIconType::FFRAME, FRAME_MAG);
     sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE);
     sp->appendActionIcon(ActionIconType::MEASURE);
+    sp->appendActionIcon(ActionIconType::STAVE_SHARING_CHANGE);
+    sp->appendActionIcon(ActionIconType::RESET_STAVE_SHARING_CHANGE);
 
     return sp;
 }

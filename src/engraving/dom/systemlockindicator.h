@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "indicatoricon.h"
+#include "systemindicatoricon.h"
 
 namespace mu::engraving {
 class RangeLock;
 
-class SystemLockIndicator : public IndicatorIcon
+class SystemLockIndicator : public SystemIndicatorIcon
 {
     OBJECT_ALLOCATOR(engraving, SystemLockIndicator)
     DECLARE_CLASSOF(ElementType::SYSTEM_LOCK_INDICATOR)
