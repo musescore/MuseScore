@@ -276,7 +276,6 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     }
 }
 
-/// Handles grip dragging, including updating a slur endpoint's note anchor.
 void SlurSegment::dragGrip(EditData& ed)
 {
     Grip g = ed.curGrip;
