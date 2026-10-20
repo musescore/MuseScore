@@ -30,7 +30,7 @@
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 
 #include "engraving/types/types.h"
@@ -82,7 +82,7 @@ class EmptyStavesVisibilityModel : public QAbstractItemModel, public muse::Conte
 
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> globalContext { this };
+    muse::ContextInject<project::IProjectSession> projectSession { this };
 
 public:
     explicit EmptyStavesVisibilityModel(QObject* parent = nullptr);

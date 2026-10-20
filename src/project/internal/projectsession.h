@@ -19,23 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONTEXT_GLOBALCONTEXT_H
-#define MU_CONTEXT_GLOBALCONTEXT_H
+#pragma once
 
-#include "../iglobalcontext.h"
+#include "../iprojectsession.h"
 
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
 #include "global/api/ifilesystemapirestriction.h"
 
-namespace mu::context {
-class GlobalContext : public IGlobalContext, public muse::async::Asyncable
+namespace mu::project {
+class ProjectSession : public IProjectSession, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::api::IFileSystemApiRestriction> fsRestriction;
 public:
 
-    GlobalContext();
+    ProjectSession();
 
     void setCurrentProject(const project::INotationProjectPtr& project) override;
     project::INotationProjectPtr currentProject() const override;
@@ -58,5 +57,3 @@ private:
     muse::async::Notification m_currentNotationChanged;
 };
 }
-
-#endif // MU_CONTEXT_GLOBALCONTEXT_H

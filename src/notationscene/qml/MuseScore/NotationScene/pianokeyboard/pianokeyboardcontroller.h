@@ -25,7 +25,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/inotationconfiguration.h"
 
 #include "pianokeyboardtypes.h"
@@ -38,7 +38,7 @@ namespace mu::notation {
 class PianoKeyboardController : public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     PianoKeyboardController(const muse::modularity::ContextPtr& iocCtx);

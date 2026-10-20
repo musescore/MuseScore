@@ -26,7 +26,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "layoutpanelutils.h"
 
@@ -37,7 +37,7 @@ class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::
 
     QML_ELEMENT
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     explicit SystemObjectsLayerSettingsModel(QObject* parent = nullptr);

@@ -31,12 +31,11 @@
 #include "project/tests/utils/testutils.h"
 #include "project/tests/mocks/convertfiletoscoreservicemock.h"
 #include "project/tests/mocks/notationprojectmock.h"
-#include "context/tests/mocks/globalcontextmock.h"
+#include "project/tests/mocks/projectsessionmock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 
 using namespace ::testing;
 using namespace mu::project;
-using namespace mu::context;
 using namespace muse;
 
 namespace {
@@ -57,17 +56,17 @@ protected:
     void SetUp() override
     {
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
-        m_globalContext = std::make_shared<NiceMock<GlobalContextMock> >();
+        m_projectSession = std::make_shared<NiceMock<ProjectSessionMock> >();
         m_service = std::make_shared<NiceMock<ConvertFileToScoreServiceMock> >();
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
 
         m_model.interactive.set(m_interactive);
-        m_model.globalContext.set(m_globalContext);
+        m_model.projectSession.set(m_projectSession);
         m_model.convertFileToScoreService.set(m_service);
 
         m_cloudInfo.sourceUrl = QUrl(QString("test://scores/%1").arg(SCORE_ID));
 
-        ON_CALL(*m_globalContext, currentProject())
+        ON_CALL(*m_projectSession, currentProject())
         .WillByDefault(Return(m_project));
         ON_CALL(*m_project, cloudInfo())
         .WillByDefault(ReturnRef(m_cloudInfo));
@@ -98,7 +97,7 @@ protected:
     ReviewScoreQualityModel m_model;
 
     std::shared_ptr<InteractiveMock> m_interactive;
-    std::shared_ptr<GlobalContextMock> m_globalContext;
+    std::shared_ptr<ProjectSessionMock> m_projectSession;
     std::shared_ptr<ConvertFileToScoreServiceMock> m_service;
     std::shared_ptr<NotationProjectMock> m_project;
 };

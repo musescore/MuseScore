@@ -30,7 +30,7 @@
 #include "interactive/iplatforminteractive.h"
 #include "inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "io/ifilesystem.h"
 #include "async/asyncable.h"
 #include "notation/types/viewmode.h"
@@ -44,7 +44,7 @@ class ExportProjectScenario : public IExportProjectScenario, public muse::async:
     muse::GlobalInject<INotationWritersRegister> writers;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
 

@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "globalcontext.h"
+#include "projectsession.h"
 
 #include "global/io/fileinfo.h"
 
@@ -28,16 +28,15 @@
 #include "notation/inotation.h"
 #include "project/inotationproject.h"
 
-using namespace mu::context;
 using namespace mu::project;
 using namespace mu::notation;
 using namespace muse::async;
 
-GlobalContext::GlobalContext()
+ProjectSession::ProjectSession()
 {
 }
 
-void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
+void ProjectSession::setCurrentProject(const INotationProjectPtr& project)
 {
     if (m_currentProject == project) {
         return;
@@ -71,28 +70,28 @@ void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
     m_currentNotationChanged.notify();
 }
 
-INotationProjectPtr GlobalContext::currentProject() const
+INotationProjectPtr ProjectSession::currentProject() const
 {
     return m_currentProject;
 }
 
-Notification GlobalContext::currentProjectChanged() const
+Notification ProjectSession::currentProjectChanged() const
 {
     return m_currentProjectChanged;
 }
 
-IMasterNotationPtr GlobalContext::currentMasterNotation() const
+IMasterNotationPtr ProjectSession::currentMasterNotation() const
 {
     return m_currentProject ? m_currentProject->masterNotation() : nullptr;
 }
 
-Notification GlobalContext::currentMasterNotationChanged() const
+Notification ProjectSession::currentMasterNotationChanged() const
 {
     //! NOTE Same as project
     return m_currentProjectChanged;
 }
 
-void GlobalContext::setCurrentNotation(const INotationPtr& notation)
+void ProjectSession::setCurrentNotation(const INotationPtr& notation)
 {
     if (m_currentNotation == notation) {
         return;
@@ -106,17 +105,17 @@ void GlobalContext::setCurrentNotation(const INotationPtr& notation)
     m_currentNotationChanged.notify();
 }
 
-INotationPtr GlobalContext::currentNotation() const
+INotationPtr ProjectSession::currentNotation() const
 {
     return m_currentNotation;
 }
 
-Notification GlobalContext::currentNotationChanged() const
+Notification ProjectSession::currentNotationChanged() const
 {
     return m_currentNotationChanged;
 }
 
-void GlobalContext::doSetCurrentNotation(const INotationPtr& notation)
+void ProjectSession::doSetCurrentNotation(const INotationPtr& notation)
 {
     if (m_currentNotation == notation) {
         return;

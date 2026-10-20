@@ -30,7 +30,7 @@
 #include "rcommand/icommanddispatcher.h"
 #include "dockwindow/idockwindowprovider.h"
 #include "extensions/iextensionsprovider.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notationscene/inotationsceneconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
 #include "iappshellstate.h"
@@ -52,7 +52,7 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
     muse::ContextInject<IAppShellState> appShellState = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<IAppshellCommandsController> commandsController = { this };
 public:
     explicit NotationPageModel(QObject* parent = nullptr);

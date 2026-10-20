@@ -155,7 +155,7 @@ QString PercussionNotePopupContentModel::keyboardShortcut() const
 
 INotationInteractionPtr PercussionNotePopupContentModel::interaction() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 

@@ -152,7 +152,6 @@ add_to_link_if_exists(muse::workspace)
 
 add_to_link_if_exists(appshell)
 add_to_link_if_exists(braille)
-add_to_link_if_exists(context)
 add_to_link_if_exists(converter)
 add_to_link_if_exists(engraving)
 add_to_link_if_exists(iex_audioexport)

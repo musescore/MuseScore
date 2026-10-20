@@ -26,12 +26,12 @@
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::appshell {
 class ExtensionContextResolver : public muse::extensions::IExtensionContextResolver, public muse::Contextable, public muse::async::Asyncable
 {
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     ExtensionContextResolver(const muse::modularity::ContextPtr& ctx)

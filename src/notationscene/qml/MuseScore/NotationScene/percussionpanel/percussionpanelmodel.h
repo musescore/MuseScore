@@ -29,7 +29,7 @@
 #include "async/asyncable.h"
 
 #include "rcommand/icommanddispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "musesampler/imusesamplerinfo.h"
 #include "notation/iinstrumentsrepository.h"
 #include "notation/inotationconfiguration.h"
@@ -77,7 +77,7 @@ class PercussionPanelModel : public QObject, public muse::Contextable, public mu
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSampler;
     muse::GlobalInject<IInstrumentsRepository> instrumentsRepository;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<mu::playback::IPlaybackController> playbackController = { this };
 

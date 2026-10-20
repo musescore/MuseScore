@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/ipalettescoreprovider.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -41,7 +41,7 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase, public muse::Contexta
 {
     Q_OBJECT
     muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:

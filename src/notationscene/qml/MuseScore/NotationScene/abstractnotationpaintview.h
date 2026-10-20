@@ -32,7 +32,7 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "playback/iplaybackcontroller.h"
@@ -75,7 +75,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 

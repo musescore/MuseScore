@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "engraving/types/types.h"
 #include "notation/inotationautomation.h"
 #include "notation/inotationconfiguration.h"
@@ -53,7 +53,7 @@ class PlaybackController : public IPlaybackController, public muse::async::Async
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 

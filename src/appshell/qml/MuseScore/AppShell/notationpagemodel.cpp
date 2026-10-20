@@ -70,7 +70,7 @@ void NotationPageModel::init()
         toggleDock(dockName);
     });
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
         scheduleUpdatePercussionPanelVisibility();
     });
@@ -176,7 +176,7 @@ QString NotationPageModel::statusBarName() const
 
 void NotationPageModel::onNotationChanged()
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }
@@ -245,7 +245,7 @@ void NotationPageModel::doUpdatePercussionPanelVisibility()
     };
 
     const PercussionPanelAutoShowMode autoShowMode = notationSceneConfiguration()->percussionPanelAutoShowMode();
-    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationPtr notation = projectSession()->currentNotation();
     if (!notation || !notation->elements() || autoShowMode == PercussionPanelAutoShowMode::NEVER) {
         return;
     }

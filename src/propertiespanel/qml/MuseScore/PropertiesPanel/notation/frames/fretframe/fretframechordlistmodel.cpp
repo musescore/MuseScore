@@ -98,7 +98,7 @@ void FretFrameChordListModel::setChordVisible(int index, bool visible)
         return;
     }
 
-    notation::INotationPtr notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }
@@ -126,7 +126,7 @@ void FretFrameChordListModel::moveSelectionUp()
         return;
     }
 
-    notation::INotationPtr notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }
@@ -148,7 +148,7 @@ void FretFrameChordListModel::moveSelectionDown()
         return;
     }
 
-    notation::INotationPtr notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }

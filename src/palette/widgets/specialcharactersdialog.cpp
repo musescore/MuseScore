@@ -496,7 +496,7 @@ void SpecialCharactersDialog::classBegin()
 
     setFocusPolicy(Qt::NoFocus);
 
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
 
     if (interaction) {

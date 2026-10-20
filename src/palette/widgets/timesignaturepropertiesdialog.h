@@ -27,7 +27,7 @@
 #include "ui_timesignaturepropertiesdialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "ui/iuiconfiguration.h"
 #include "engraving/ipalettescoreprovider.h"
 
@@ -41,7 +41,7 @@ class TimeSignaturePropertiesDialog : public muse::ui::WidgetDialog, public Ui::
     Q_OBJECT
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:

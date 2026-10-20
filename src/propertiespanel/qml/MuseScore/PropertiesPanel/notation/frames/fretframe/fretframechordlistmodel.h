@@ -25,7 +25,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
@@ -43,7 +43,7 @@ class FretFrameChordListModel : public muse::uicomponents::SelectableItemListMod
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit FretFrameChordListModel(QObject* parent = nullptr);

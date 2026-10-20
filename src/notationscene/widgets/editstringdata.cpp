@@ -123,7 +123,7 @@ QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) c
 
 INotationSelectionPtr EditStringData::currentNotationSelection() const
 {
-    notation::INotationPtr currentNotation = globalContext()->currentNotation();
+    notation::INotationPtr currentNotation = projectSession()->currentNotation();
     return currentNotation ? currentNotation->interaction()->selection() : nullptr;
 }
 

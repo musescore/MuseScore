@@ -30,13 +30,13 @@
 
 #include "global/modularity/ioc.h"
 #include "rcommand/icommandsregister.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::instrumentsscene {
 class InstrumentsCommandsState : public muse::rcommand::IModuleCommandsState, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     InstrumentsCommandsState(const muse::modularity::ContextPtr& ctx)

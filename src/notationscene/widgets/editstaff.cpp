@@ -507,12 +507,12 @@ void EditStaff::useCustomIndividualNameChanged(bool useCustomIndividual)
 
 INotationPtr EditStaff::notation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 IMasterNotationPtr EditStaff::masterNotation() const
 {
-    return globalContext()->currentMasterNotation();
+    return projectSession()->currentMasterNotation();
 }
 
 INotationPartsPtr EditStaff::notationParts() const

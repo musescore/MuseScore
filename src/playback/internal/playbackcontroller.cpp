@@ -99,18 +99,18 @@ void PlaybackController::init()
 {
     m_onlineSoundsController->regActions();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
 
         setupPlaybackIfNeed();
     });
 
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->currentProjectChanged().onNotify(this, [this]() {
         if (m_isPlaybackInited) {
             resetPlayback();
         }
 
-        m_needSetupPlayback = globalContext()->currentProject() != nullptr;
+        m_needSetupPlayback = projectSession()->currentProject() != nullptr;
 
         if (m_needSetupPlayback) {
             m_loadingProgress.start();
@@ -589,7 +589,7 @@ uint64_t PlaybackController::notationPlaybackKey() const
 
 void PlaybackController::onNotationChanged()
 {
-    setNotation(globalContext()->currentNotation());
+    setNotation(projectSession()->currentNotation());
 }
 
 void PlaybackController::onPartChanged(const Part* part)
@@ -1103,7 +1103,7 @@ void PlaybackController::disableLoop()
 
 mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
 {
-    INotationProjectPtr project = globalContext()->currentProject();
+    INotationProjectPtr project = projectSession()->currentProject();
     IF_ASSERT_FAILED(project) {
         return nullptr;
     }

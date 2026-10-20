@@ -191,7 +191,7 @@ void PercussionPanelModel::init()
 
     onCurrentNotationChanged();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this] {
+    projectSession()->currentNotationChanged().onNotify(this, [this] {
         onCurrentNotationChanged();
     });
 }
@@ -698,12 +698,12 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
 
 const mu::project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
 {
-    return globalContext()->currentProject() ? globalContext()->currentProject()->audioSettings() : nullptr;
+    return projectSession()->currentProject() ? projectSession()->currentProject()->audioSettings() : nullptr;
 }
 
 const INotationPtr PercussionPanelModel::notation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 const INotationInteractionPtr PercussionPanelModel::interaction() const

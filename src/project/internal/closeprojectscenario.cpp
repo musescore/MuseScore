@@ -102,7 +102,7 @@ muse::async::Notification CloseProjectScenario::busyChanged() const
 
 INotationProjectPtr CloseProjectScenario::currentNotationProject() const
 {
-    return globalContext()->currentProject();
+    return projectSession()->currentProject();
 }
 
 void CloseProjectScenario::setBusy(BusyStatus status, bool isBusy)
@@ -152,7 +152,7 @@ Promise<IInteractive::Result> CloseProjectScenario::askAboutSavingScore(const IN
 Promise<Ret> CloseProjectScenario::doCloseProject(bool goToHome)
 {
     return interactive()->closeAllDialogs().then<Ret>(this, [this, goToHome](const Ret&, auto resolve) {
-        globalContext()->setCurrentProject(nullptr);
+        projectSession()->setCurrentProject(nullptr);
 
         if (goToHome) {
             openHomePageIfNeed();

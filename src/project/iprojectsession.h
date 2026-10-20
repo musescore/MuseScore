@@ -27,13 +27,13 @@
 #include "notation/inotation_fwd.h"
 #include "project/inotationproject_fwd.h"
 
-namespace mu::context {
-class IGlobalContext : MODULE_CONTEXT_INTERFACE
+namespace mu::project {
+class IProjectSession : MODULE_CONTEXT_INTERFACE
 {
-    INTERFACE_ID(mu::context::IGlobalContext)
+    INTERFACE_ID(mu::project::IProjectSession)
 
 public:
-    virtual ~IGlobalContext() = default;
+    virtual ~IProjectSession() = default;
 
     virtual void setCurrentProject(const project::INotationProjectPtr& project) = 0;
     virtual project::INotationProjectPtr currentProject() const = 0;
