@@ -32,6 +32,12 @@ using namespace mu::project;
 
 static constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
 
+static const QString MUSESCORE_COM_ERROR_DIALOG_URL(
+    "https://musescore.com/redirect/af?mu_target=https%3A%2F%2Fmusescore.com%2F"
+    "%3Futm_medium%3DReferral%26utm_source%3Dmss%26utm_campaign%3DMU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+    "%26utm_content%3Derror_dialog"
+    "&utm_medium=Referral&utm_source=mss&utm_campaign=MU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=error_dialog");
+
 RetVal<SaveLocation> OpenSaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                                               SaveLocationType preselectedType) const
 {
@@ -516,7 +522,7 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
     case int(cloud::Err::NetworkError):
         message = muse::mtrc("project/cloud", "Could not connect to <a href=\"%1\">MuseScore.com</a>. "
                                               "Please check your internet connection or try again later.")
-                  .arg(u"https://musescore.com").toStdString();
+                  .arg(MUSESCORE_COM_ERROR_DIALOG_URL).toStdString();
         break;
     default:
         message = muse::trc("project/cloud", "Please try again later.");
@@ -603,7 +609,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
     case int(cloud::Err::NetworkError):
         msg = muse::mtrc("project/cloud", "Could not connect to <a href=\"%1\">MuseScore.com</a>. "
                                           "Please check your internet connection or try again later.")
-              .arg(u"https://musescore.com").toStdString();
+              .arg(MUSESCORE_COM_ERROR_DIALOG_URL).toStdString();
         break;
     default:
         msg = muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.com.");

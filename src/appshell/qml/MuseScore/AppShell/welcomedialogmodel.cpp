@@ -36,7 +36,7 @@ static std::vector<QVariantMap> welcomeDialogData()
                                                    "Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio."));
     museSoundsPro.insert("buttonText", muse::qtrc("appshell/welcome", "Get MuseSounds Pro"));
     museSoundsPro.insert("destinationUrl",
-                         "https://www.musehub.com/muse-sounds/musesounds-pro?utm_medium=Referral&utm_source=MSS&utm_campaign=MH_WW_REF_MSS_APP_ALL_040826_crosslink&utm_content=welcome_screen");
+                         "https://www.musehub.com/muse-sounds/musesounds-pro?utm_medium=Referral&utm_source=mss&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=welcome_screen");
 
     QVariantMap whatsNew;
     whatsNew.insert("title", muse::qtrc("appshell/welcome", "What’s new in MuseScore Studio"));
@@ -53,7 +53,7 @@ static std::vector<QVariantMap> welcomeDialogData()
                                                   "Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world."));
     cloudStorage.insert("buttonText", muse::qtrc("appshell/welcome", "View my scores online"));
     cloudStorage.insert("destinationUrl",
-                        "https://musescore.com/my-scores?utm_source=mss-app-welcome-musescore-com&utm_medium=mss-app-welcome-musescore-com&utm_campaign=mss-app-welcome-musescore-com");
+                        "https://musescore.com/redirect/af?mu_target=https%3A%2F%2Fmusescore.com%2Fmy-scores%3Futm_medium%3DReferral%26utm_source%3Dmss%26utm_campaign%3DMU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink%26utm_content%3Dwelcome_screen&utm_medium=Referral&utm_source=mss&utm_campaign=MU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=welcome_screen");
 
     QVariantMap freeMuseSounds;
     freeMuseSounds.insert("title", muse::qtrc("appshell/welcome", "Install our free MuseSounds libraries"));
@@ -62,7 +62,7 @@ static std::vector<QVariantMap> welcomeDialogData()
                                                     "Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub."));
     freeMuseSounds.insert("buttonText", muse::qtrc("appshell/welcome", "Get it on MuseHub"));
     freeMuseSounds.insert("destinationUrl",
-                          "https://www.musehub.com/free-musesounds?utm_source=mss-app-welcome-free-musesounds&utm_medium=mss-app-welcome-free-musesounds&utm_campaign=mss-app-welcome-free-musesounds&utm_id=mss-app-welcome-free-musesounds");
+                          "https://www.musehub.com/free-musesounds?utm_medium=Referral&utm_source=mss&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=welcome_screen");
 
     QVariantMap exploreTutorials;
     exploreTutorials.insert("title", muse::qtrc("appshell/welcome", "Explore our tutorials"));

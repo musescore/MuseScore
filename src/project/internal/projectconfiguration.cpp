@@ -689,12 +689,18 @@ QUrl ProjectConfiguration::supportForumUrl() const
 QUrl ProjectConfiguration::dotComBugReportUrl() const
 {
     // The general .com bug report page
-    return QUrl("https://musescore.com/groups/bug-reports");
+    return QUrl("https://musescore.com/redirect/af?mu_target=https%3A%2F%2Fmusescore.com%2Fgroups%2Fbug-reports"
+                "%3Futm_medium%3DReferral%26utm_source%3Dmss%26utm_campaign%3DMU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+                "%26utm_content%3Derror_dialog"
+                "&utm_medium=Referral&utm_source=mss&utm_campaign=MU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=error_dialog");
 }
 
 QUrl ProjectConfiguration::scoreUploadingGuidelinesUrl() const
 {
-    return QUrl("https://musescore.com/score-uploading-guidelines");
+    return QUrl("https://musescore.com/redirect/af?mu_target=https%3A%2F%2Fmusescore.com%2Fscore-uploading-guidelines"
+                "%3Futm_medium%3DReferral%26utm_source%3Dmss%26utm_campaign%3DMU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+                "%26utm_content%3Dconvert_to_score"
+                "&utm_medium=Referral&utm_source=mss&utm_campaign=MU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=convert_to_score");
 }
 
 bool ProjectConfiguration::openDetailedProjectUploadedDialog() const

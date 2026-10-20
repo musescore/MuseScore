@@ -36,6 +36,9 @@
 
 static const muse::UriQuery MUSEHUB_APP_URI("musehub://?from=musescore");
 static const muse::UriQuery MUSEHUB_APP_V1_URI("muse-hub://?from=musescore");
+static const std::string MUSEHUB_PROMO_URL_PARAMS("?utm_medium=Referral&utm_source=mss"
+                                                  "&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+                                                  "&utm_content=musesounds_promo");
 
 using namespace mu::musesounds;
 using namespace muse;
@@ -199,7 +202,7 @@ RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByteArray&
     if (result.val.actions.empty()) {
         result.val.actions.push_back(Val(MUSEHUB_APP_URI.toString()));
         result.val.actions.push_back(Val(MUSEHUB_APP_V1_URI.toString()));
-        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl()));
+        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl() + MUSEHUB_PROMO_URL_PARAMS));
     }
 
 #elif defined(Q_OS_MAC)
@@ -211,7 +214,7 @@ RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByteArray&
     // def
     if (result.val.actions.empty()) {
         result.val.actions.push_back(Val(MUSEHUB_APP_URI.toString()));
-        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl()));
+        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl() + MUSEHUB_PROMO_URL_PARAMS));
     }
 #else
     QJsonArray actionsArr = actionsObj.value("linux").toArray();
@@ -221,7 +224,7 @@ RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByteArray&
 
     // def
     if (result.val.actions.empty()) {
-        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl()));
+        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl() + MUSEHUB_PROMO_URL_PARAMS));
     }
 #endif
 

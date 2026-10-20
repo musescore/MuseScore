@@ -40,6 +40,11 @@ ScoresView {
         cloudScoresModel.load()
     }
 
+    readonly property string emptyStateUrl: "https://musescore.com/redirect/af?mu_target=https%3A%2F%2Fmusescore.com%2F"
+                                            + "%3Futm_medium%3DReferral%26utm_source%3Dmss%26utm_campaign%3DMU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+                                            + "%26utm_content%3Dhome_scores_empty"
+                                            + "&utm_medium=Referral&utm_source=mss&utm_campaign=MU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=home_scores_empty"
+
     function refresh() {
         cloudScoresModel.reload()
     }
@@ -151,7 +156,7 @@ ScoresView {
                 anchors.rightMargin: root.sideMargin
 
                 title: qsTrc("project", "You don’t have any online scores yet")
-                body: qsTrc("project", "Scores will appear here when you save a file to the cloud, or publish a score on <a href=\"%1\">MuseScore.com</a>.").arg("https://musescore.com")
+                body: qsTrc("project", "Scores will appear here when you save a file to the cloud, or publish a score on <a href=\"%1\">MuseScore.com</a>.").arg(root.emptyStateUrl)
             }
         }
     }
