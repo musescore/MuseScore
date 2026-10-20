@@ -41,7 +41,9 @@ class MoveStaffTypeChange : public UndoableCommand
 {
 public:
     MoveStaffTypeChange(StaffTypeChange* item, Measure* target)
-        : m_item(item), m_target(target), m_initialType(*item->staff()->staffType(Fraction(0, 1))) {}
+        : m_item(item), m_target(target),
+        m_initialType(item->measure()->tick().isZero() && item->initialStaffType()
+                      ? *item->initialStaffType() : *item->staff()->staffType(Fraction(0, 1))) {}
 
     UNDO_NAME("MoveStaffTypeChange")
     UNDO_CHANGED_OBJECTS({ m_item, m_target })
@@ -84,6 +86,7 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
     : EngravingItem(lb)
 {
     m_lw = lb.m_lw;
+    m_initialStaffType = lb.m_initialStaffType;
     m_ownsStaffType = lb.m_ownsStaffType;
     if (lb.m_ownsStaffType && lb.m_staffType) {
         m_staffType = new StaffType(*lb.m_staffType);

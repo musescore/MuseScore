@@ -86,9 +86,18 @@ TEST(Engraving_StaffTypeChangeTests, dragAndUndo)
 
     dragChange(change, third);
     EXPECT_EQ(change->measure(), third);
-    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    EXPECT_EQ(staff->staffType(third->tick())->lines(), 1);
     score->undoRedo(true, nullptr);
     EXPECT_EQ(change->measure(), first);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(change->measure(), third);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    EXPECT_EQ(staff->staffType(third->tick())->lines(), 1);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(change->measure(), first);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
 
     StaffTypeChange* occupied = Factory::createStaffTypeChange(second);
     occupied->setOwnershipParent(second);
@@ -99,4 +108,38 @@ TEST(Engraving_StaffTypeChangeTests, dragAndUndo)
     dragChange(change, second);
     EXPECT_EQ(change->measure(), first);
     EXPECT_EQ(change->offset(), PointF());
+}
+
+//! A marker added directly to the first measure must retain a non-default staff baseline.
+TEST(Engraving_StaffTypeChangeTests, dragFromFirstMeasure)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"measure_data/checkMeasure.mscx"));
+    ASSERT_NE(score, nullptr);
+    Measure* first = score->firstMeasure();
+    Measure* third = first->nextMeasure()->nextMeasure();
+    Staff* staff = score->staff(0);
+    staff->staffType(first->tick())->setLines(3);
+    const int initialLines = staff->staffType(first->tick())->lines();
+    StaffType* type = new StaffType(*staff->staffType(first->tick()));
+    type->setLines(1);
+    StaffTypeChange* change = Factory::createStaffTypeChange(first);
+    change->setOwnershipParent(first);
+    change->setTrack(0);
+    change->setStaffType(type, true);
+    score->startCmd(muse::TranslatableString::untranslatable("Add staff type change"));
+    score->undoAddElement(change);
+    score->endCmd();
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
+
+    dragChange(change, third);
+    EXPECT_EQ(change->measure(), third);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    EXPECT_EQ(staff->staffType(third->tick())->lines(), 1);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(change->measure(), first);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), 1);
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(change->measure(), third);
+    EXPECT_EQ(staff->staffType(first->tick())->lines(), initialLines);
+    EXPECT_EQ(staff->staffType(third->tick())->lines(), 1);
 }

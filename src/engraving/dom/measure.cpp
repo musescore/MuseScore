@@ -902,6 +902,10 @@ void Measure::add(EngravingItem* e)
 
         Staff* staff = staffTypeChange->staff();
 
+        if (tick().isZero()) {
+            staffTypeChange->setInitialStaffType(*staff->staffType(tick()));
+        }
+
         // This will need to point to the stafftype element within the stafftypelist for the staff
         StaffType* newStaffType = nullptr;
 
