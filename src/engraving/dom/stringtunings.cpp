@@ -43,7 +43,7 @@ static const ElementStyle STRING_TUNINGS_STYLE {
     { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
 };
 
-StringTunings::StringTunings(Segment* parent, TextStyleType textStyleType)
+StringTunings::StringTunings(DummyParentOr<Segment> parent, TextStyleType textStyleType)
     : StaffTextBase(ElementType::STRING_TUNINGS, parent, textStyleType, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&STRING_TUNINGS_STYLE);
@@ -253,10 +253,7 @@ void StringTunings::triggerLayout() const
 
     Fraction startTick = tick();
 
-    const std::map<int, StringTunings*>& allStringTuningsOnThisPart = part()->stringTunings();
-    auto iterOfNextStringTuningOnThisPart = allStringTuningsOnThisPart.upper_bound(startTick.ticks());
-    StringTunings* nextStringTuning = iterOfNextStringTuningOnThisPart != allStringTuningsOnThisPart.end()
-                                      ? iterOfNextStringTuningOnThisPart->second : nullptr;
+    StringTunings* nextStringTuning = originPart()->nextStringTuning(startTick);
 
     Fraction endTick = nextStringTuning ? nextStringTuning->tick() : score()->endTick();
 

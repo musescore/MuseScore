@@ -39,22 +39,27 @@ class ProjectAudioSettings : public IProjectAudioSettings, public muse::Contexta
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfig;
 
 public:
+    bool hasAnyAudioSettings() const override;
+
     const AudioOutputParams& masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const AudioOutputParams& params) override;
 
     bool containsAuxOutputParams(muse::audio::aux_channel_idx_t index) const override;
     const AudioOutputParams& auxOutputParams(muse::audio::aux_channel_idx_t index) const override;
-    void setAuxOutputParams(muse::audio::aux_channel_idx_t index, const AudioOutputParams& params) override;
+    void setAuxOutputParams(muse::audio::aux_channel_idx_t index, const AudioOutputParams& params,
+                            bool notifySettingsChanged = true) override;
 
     const TrackInputParamsMap& allTrackInputParams() const override;
     const AudioInputParams& trackInputParams(const engraving::InstrumentTrackId& partId) const override;
-    void setTrackInputParams(const engraving::InstrumentTrackId& partId, const AudioInputParams& params) override;
+    void setTrackInputParams(const engraving::InstrumentTrackId& partId, const AudioInputParams& params,
+                             bool notifySettingsChanged = true) override;
     void clearTrackInputParams() override;
     muse::async::Channel<engraving::InstrumentTrackId> trackInputParamsChanged() const override;
 
     bool trackHasExistingOutputParams(const engraving::InstrumentTrackId& partId) const override;
     const AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
-    void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const AudioOutputParams& params) override;
+    void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const AudioOutputParams& params,
+                              bool notifySettingsChanged = true) override;
 
     const SoloMuteState& auxSoloMuteState(muse::audio::aux_channel_idx_t index) const override;
     void setAuxSoloMuteState(muse::audio::aux_channel_idx_t index, const SoloMuteState& state) override;

@@ -27,7 +27,7 @@
 
 using namespace mu::engraving;
 
-void PaddingTable::initPaddingTable(double minPadUnit)
+void PaddingTable::init(double minPadUnit)
 {
     PaddingTable& table = *this;
 
@@ -38,11 +38,11 @@ void PaddingTable::initPaddingTable(double minPadUnit)
     }
 }
 
-void PaddingTable::createTable(const MStyle& style)
+void PaddingTable::update(const MStyle& style)
 {
     const double spatium = style.spatium();
     const double minPadUnit = 0.1 * spatium;
-    initPaddingTable(minPadUnit);
+    init(minPadUnit);
 
     const double ledgerPad = 0.25 * spatium;
     const double ledgerLength = style.styleAbsolute(Sid::ledgerLineLength);
@@ -267,7 +267,7 @@ void PaddingTable::createTable(const MStyle& style)
     }
 }
 
-double ParenPaddingTable::padding(ElementType type1, ElementType type2)
+double ParenPaddingTable::padding(ElementType type1, ElementType type2) const
 {
     assert(type1 == ElementType::PARENTHESIS || type2 == ElementType::PARENTHESIS);
     const PaddingVector<double>& row = type1 == ElementType::PARENTHESIS ? m_parenAfter : m_parenBefore;
@@ -276,37 +276,25 @@ double ParenPaddingTable::padding(ElementType type1, ElementType type2)
     return row.at(otherType);
 }
 
-ParenPaddingTablePtr ParenPaddingTable::getPaddingTable(const EngravingItem* parent)
+const ParenPaddingTable& ParenPaddingTables::getTableFor(const EngravingItem* parent) const
 {
-    ParenPaddingTablePtr table;
     switch (parent->type()) {
     case ElementType::NOTE:
     case ElementType::CHORD:
-        table = std::make_unique<NoteParenPaddingTable>();
-        break;
+        return noteParenPaddingTable;
     case ElementType::KEYSIG:
-        table = std::make_unique<KeySigParenPaddingTable>();
-        break;
+        return keySigParenPaddingTable;
     case ElementType::TIMESIG:
-        table = std::make_unique<TimeSigParenPaddingTable>();
-        break;
+        return timeSigParenPaddingTable;
     case ElementType::CLEF:
-        table = std::make_unique<ClefParenPaddingTable>();
-        break;
+        return clefParenPaddingTable;
     default:
         ASSERT_X("Not a valid parenthesised type")
+        return noteParenPaddingTable; // Just to return something
     }
-
-    const double spatium = parent->style().spatium();
-    const double minPadUnit = 0.1 * spatium;
-    table->initPaddingTable(minPadUnit);
-
-    table->createTable(parent->style());
-
-    return table;
 }
 
-void ParenPaddingTable::initPaddingTable(double minPadUnit)
+void ParenPaddingTable::init(double minPadUnit)
 {
     for (size_t i = 0; i < TOT_ELEMENT_TYPES; ++i) {
         m_parenBefore[i] = minPadUnit;
@@ -314,9 +302,11 @@ void ParenPaddingTable::initPaddingTable(double minPadUnit)
     }
 }
 
-void NoteParenPaddingTable::createTable(const MStyle& style)
+void NoteParenPaddingTable::update(const MStyle& style)
 {
     const double spatium = style.spatium();
+    const double minPadUnit = 0.1 * spatium;
+    init(minPadUnit);
 
     m_parenBefore[ElementType::ARPEGGIO] = style.styleAbsolute(Sid::arpeggioAccidentalDistance);
     m_parenBefore[ElementType::BAR_LINE] = style.styleAbsolute(Sid::barAccidentalDistance);
@@ -344,9 +334,11 @@ void NoteParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::PARENTHESIS] = style.styleAbsolute(Sid::minNoteDistance) * 0.5;
 }
 
-void KeySigParenPaddingTable::createTable(const MStyle& style)
+void KeySigParenPaddingTable::update(const MStyle& style)
 {
     const double spatium = style.spatium();
+    const double minPadUnit = 0.1 * spatium;
+    init(minPadUnit);
 
     m_parenBefore[ElementType::BAR_LINE] = 0.5 * spatium;
     m_parenBefore[ElementType::CLEF] = 0.25 * spatium;
@@ -371,9 +363,11 @@ void KeySigParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::PARENTHESIS] = 1.0 * spatium;
 }
 
-void TimeSigParenPaddingTable::createTable(const MStyle& style)
+void TimeSigParenPaddingTable::update(const MStyle& style)
 {
     const double spatium = style.spatium();
+    const double minPadUnit = 0.1 * spatium;
+    init(minPadUnit);
 
     m_parenBefore[ElementType::BAR_LINE] = 0.5 * spatium;
     m_parenBefore[ElementType::CLEF] = 0.25 * spatium;
@@ -398,9 +392,11 @@ void TimeSigParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::PARENTHESIS] = 1.0 * spatium;
 }
 
-void ClefParenPaddingTable::createTable(const MStyle& style)
+void ClefParenPaddingTable::update(const MStyle& style)
 {
     const double spatium = style.spatium();
+    const double minPadUnit = 0.1 * spatium;
+    init(minPadUnit);
 
     m_parenBefore[ElementType::BAR_LINE] = 0.5 * spatium;
     m_parenBefore[ElementType::CLEF] = 0.25 * spatium;

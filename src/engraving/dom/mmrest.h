@@ -33,7 +33,7 @@ class MMRest final : public Rest
     DECLARE_CLASSOF(ElementType::MMREST)
 
 public:
-    MMRest(Segment* s = 0);
+    MMRest(DummyParentOr<Segment> s);
     MMRest(const MMRest&, bool link = false);
 
     MMRest* clone() const override { return new MMRest(*this, false); }

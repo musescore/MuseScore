@@ -154,7 +154,7 @@ void NotationRegionsBeingProcessedModel::load()
         setRegions(calculateRegions(m_tracksBeingProcessed));
     });
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
         onIsPlayingChanged();
     });
 
@@ -198,7 +198,7 @@ void NotationRegionsBeingProcessedModel::setNotationViewMatrix(const QVariant& m
 
 bool NotationRegionsBeingProcessedModel::isPlaying() const
 {
-    return globalContext()->playbackState()->isPlaying();
+    return playbackController()->isPlaying();
 }
 
 void NotationRegionsBeingProcessedModel::clear()

@@ -63,7 +63,7 @@ static const ElementStyle tupletStyle {
 //   Tuplet
 //---------------------------------------------------------
 
-Tuplet::Tuplet(Measure* parent)
+Tuplet::Tuplet(DummyParentOr<Measure> parent)
     : DurationElement(ElementType::TUPLET, parent)
 {
     m_direction    = DirectionV::AUTO;
@@ -114,7 +114,7 @@ Tuplet::~Tuplet()
     delete m_number;
 }
 
-void Tuplet::setOwnershipParent(Measure* parent)
+void Tuplet::setOwnershipParent(DummyParentOr<Measure> parent)
 {
     EngravingItem::setOwnershipParent(parent);
 }
@@ -632,6 +632,9 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::P2:
         m_userP2 = v.value<PointF>();
+        break;
+    case Pid::TICK:
+        setTick(v.value<Fraction>());
         break;
     default:
         return DurationElement::setProperty(propertyId, v);

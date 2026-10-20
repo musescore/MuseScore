@@ -1,0 +1,54 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2026 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#pragma once
+
+#include <gmock/gmock.h>
+
+#include "project/iconvertfiletoscoreservice.h"
+
+namespace mu::project {
+class ConvertFileToScoreServiceMock : public IConvertFileToScoreService
+{
+public:
+    MOCK_METHOD(const ConvertConfig&, config, (), (const, override));
+
+    MOCK_METHOD(bool, isFileSupported, (const muse::io::path_t&), (const, override));
+    MOCK_METHOD(muse::RetVal<ConvertFilesValidation>, validateFiles, (const muse::io::paths_t&), (const, override));
+    MOCK_METHOD(muse::Ret, validateLink, (const QUrl&), (const, override));
+
+    MOCK_METHOD(muse::RetVal<muse::Progress>, uploadToConvert, (const ConvertInput&, const muse::String&), (override));
+    MOCK_METHOD((muse::async::Channel<muse::Ret, WatchedScore>), convertFinished, (), (const, override));
+
+    MOCK_METHOD(muse::ValNt<UploadingScoreList>, uploadingScores, (), (const, override));
+    MOCK_METHOD(muse::ValNt<WatchedScoreList>, watchedScores, (), (const, override));
+    MOCK_METHOD(const WatchedScore*, watchedScoreById, (int), (const, override));
+
+    MOCK_METHOD((muse::async::Channel<PollingStatus>), pollingStatusChanged, (), (const, override));
+    MOCK_METHOD(void, retryPolling, (), (override));
+
+    MOCK_METHOD(void, submitReview, (int, ReviewRating, const QString&), (override));
+    MOCK_METHOD(void, submitReviewComment, (int, const QString&), (override));
+
+    MOCK_METHOD(void, cancelUpload, (int), (override));
+    MOCK_METHOD(void, cancelConversion, (ConvertType, int), (override));
+};
+}

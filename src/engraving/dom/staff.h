@@ -78,6 +78,8 @@ public:
     Part* part() const { return m_part; }
     void setPart(Part* p) { m_part = p; }
 
+    Part* originPart(const Fraction& tick) const;
+
     ClefList& clefList() { return m_clefs; }
     ClefTypeList clefType(const Fraction&) const;
     ClefTypeList defaultClefType() const { return m_defaultClefType; }

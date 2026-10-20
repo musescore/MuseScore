@@ -23,6 +23,7 @@
 #include "stringtuningssettingsmodel.h"
 
 #include "notation/inotationselection.h"
+#include "notationscene/notationcommands.h"
 
 #include "translation.h"
 
@@ -45,5 +46,5 @@ bool StringTuningsSettingsModel::isEmpty() const
 
 void StringTuningsSettingsModel::editStrings()
 {
-    dispatcher()->dispatch("edit-strings");
+    commandDispatcher()->dispatch(OPEN_EDIT_STRINGS_COMMAND);
 }

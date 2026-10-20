@@ -27,6 +27,7 @@ static void dragChange(StaffTypeChange* change, Measure* destination)
     edit.evtDelta = edit.pos - change->canvasPos();
     const bool validTarget = destination == change->measure() || destination->canAddStaffTypeChange(change->staffIdx());
     change->drag(edit);
+    EXPECT_EQ(change->dragTargetMeasure(), validTarget ? destination : nullptr);
     const auto anchors = change->dragAnchorLines();
     EXPECT_EQ(anchors.size(), validTarget ? 1u : 0u);
     if (!anchors.empty()) {
@@ -35,6 +36,7 @@ static void dragChange(StaffTypeChange* change, Measure* destination)
         EXPECT_EQ(anchors.front().p2(), change->canvasPos());
     }
     change->endDrag(edit);
+    EXPECT_EQ(change->dragTargetMeasure(), nullptr);
     EXPECT_TRUE(change->dragAnchorLines().empty());
     score->endCmd();
 }

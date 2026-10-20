@@ -121,6 +121,7 @@ public:
 
     MOCK_METHOD(muse::async::Channel<ScoreConfigType>, scoreConfigChanged, (), (const, override));
     MOCK_METHOD(bool, isGripEditStarted, (), (const, override));
+    MOCK_METHOD(bool, isStartEndGripSelected, (), (const, override));
     MOCK_METHOD(bool, isHitGrip, (const muse::PointF&), (const, override));
     MOCK_METHOD(void, startEditGrip, (const muse::PointF&), (override));
     MOCK_METHOD(void, startEditGrip, (EngravingItem*, mu::engraving::Grip), (override));
@@ -237,6 +238,7 @@ public:
     MOCK_METHOD(void, resetBeamMode, (), (override));
     MOCK_METHOD(void, resetShapesAndPosition, (), (override));
     MOCK_METHOD(void, resetToDefaultLayout, (), (override));
+    MOCK_METHOD(void, freezeSelectionPosition, (), (override));
 
     MOCK_METHOD(ScoreConfig, scoreConfig, (), (const, override));
     MOCK_METHOD(void, setScoreConfig, (const ScoreConfig&), (override));

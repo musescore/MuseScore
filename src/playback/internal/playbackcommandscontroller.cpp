@@ -24,8 +24,6 @@
 
 #include <vector>
 
-#include "actions/actiontypes.h"
-#include "rcommand/actiontocommand.h"
 #include "rcommand/commandtypes.h"
 #include "audio/common/audiotypes.h"
 
@@ -35,18 +33,6 @@ using namespace muse;
 using namespace muse::rcommand;
 using namespace muse::audio;
 using namespace mu::playback;
-
-static rcommand::CommandQuery mixerSectionToggle(const rcommand::Command& command, const actions::ActionData& args)
-{
-    rcommand::CommandQuery q(command);
-    if (args.empty()) {
-        return q;
-    }
-
-    std::string section = str_conv(static_cast<MixerSectionType>(args.arg<int>(0)));
-    q.addParam("section", Val(section));
-    return q;
-}
 
 void PlaybackCommandsController::init()
 {
@@ -75,38 +61,6 @@ void PlaybackCommandsController::init()
     registerCommand(TOGGLE_MIXER_SECTION_COMMAND, [this](const rcommand::Params& params) { return toggleMixerSection(params); });
     registerCommand(TOGGLE_AUX_SEND_COMMAND, [this](const rcommand::Params& params) { return toggleAuxSend(params); });
     registerCommand(TOGGLE_AUX_CHANNEL_COMMAND, [this](const rcommand::Params& params) { return toggleAuxChannel(params); });
-
-    // compat
-    {
-        static std::vector<ActionToCommand> actionToCommand = {
-            { "play", PLAY_TOGGLE_COMMAND, {} },
-            { "play-from-selection", PLAY_SELECTION_COMMAND, {} },
-            { "pause", PAUSE_COMMAND, {} },
-            { "pause-and-select", PAUSE_AND_SELECT_COMMAND, {} },
-            { "stop", STOP_COMMAND, {} },
-            { "rewind", REWIND_COMMAND, {} },
-            { "loop", LOOP_TOGGLE_COMMAND, {} },
-            { "loop-in", LOOP_IN_COMMAND, {} },
-            { "loop-out", LOOP_OUT_COMMAND, {} },
-            { "metronome", METRONOME_TOGGLE_COMMAND, {} },
-            { "playback-setup", OPEN_PLAYBACK_SETUP_COMMAND, {} },
-            { "midi-on", MIDI_TOGGLE_COMMAND, {} },
-            { "midi-input-written-pitch", MIDI_INPUT_WRITTEN_PITCH_COMMAND, {} },
-            { "midi-input-sounding-pitch", MIDI_INPUT_SOUNDING_PITCH_COMMAND, {} },
-            { "repeats", REPEATS_TOGGLE_COMMAND, {} },
-            { "play-chord-symbols", CHORDSYMBOLS_TOGGLE_COMMAND, {} },
-            { "toggle-hear-playback-when-editing", HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND, {} },
-            { "pan", PAN_TOGGLE_COMMAND, {} },
-            { "countin", COUNTIN_TOGGLE_COMMAND, {} },
-            { "reload-playback-cache", RELOAD_PLAYBACK_CACHE_COMMAND, {} },
-            { "clear-online-sounds-cache", CLEAR_ONLINESOUNDS_CACHE_COMMAND, {} },
-            { "toggle-mixer-section", TOGGLE_MIXER_SECTION_COMMAND, mixerSectionToggle },
-            { "toggle-aux-send", TOGGLE_AUX_SEND_COMMAND, make_conv({ { "auxsend-index", param<int> } }) },
-            { "toggle-aux-channel", TOGGLE_AUX_CHANNEL_COMMAND, make_conv({ { "auxchannel-index", param<int> } }) },
-        };
-
-        registerActionToCommand(this, actionToCommand, dispatcher(), actionsDispatcher());
-    }
 }
 
 muse::Ret PlaybackCommandsController::rewind(const muse::rcommand::Params& params)

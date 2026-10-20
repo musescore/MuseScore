@@ -40,7 +40,7 @@ static const ElementStyle dividerStyle {
     { Sid::musicalSymbolFont, Pid::SCORE_FONT }
 };
 
-SystemDivider::SystemDivider(System* parent)
+SystemDivider::SystemDivider(DummyParentOr<System> parent)
     : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::MOVABLE)
 {
     // default value, but not valid until setDividerType()

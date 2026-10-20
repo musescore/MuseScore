@@ -110,7 +110,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::CLOUD_FILE)
     },
     CommandInfo{
-        PROJECT_SHARED_AUDIO_COMMAND,
+        PROJECT_SHARE_AUDIO_COMMAND,
         TranslatableString("project", "Share on &Audio.com…"),
         TranslatableString("project", "Share the project on Audio.com"),
         InputSchema(),
@@ -125,18 +125,11 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::SHARE_FILE)
     },
     CommandInfo{
-        PROJECT_IMPORT_PDF_COMMAND,
-        TranslatableString("project", "Import P&DF…"),
-        TranslatableString("project", "Import the PDF file"),
+        PROJECT_CONVERT_TO_SCORE_COMMAND,
+        TranslatableString("project", "Convert &file…"),
+        TranslatableString("project", "Convert a file to a score"),
         InputSchema(),
-        Decoration(IconCode::Code::OPEN_LINK)
-    },
-    CommandInfo{
-        PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND,
-        TranslatableString("project", "Import A&udio to Score…"),
-        TranslatableString("project", "Import the audio file to the score"),
-        InputSchema(),
-        Decoration(IconCode::Code::OPEN_LINK)
+        Decoration(IconCode::Code::IMPORT)
     },
 
     CommandInfo{

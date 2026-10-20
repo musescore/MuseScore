@@ -25,29 +25,27 @@
 #include <QObject>
 
 #include "async/asyncable.h"
-#include "actions/actionable.h"
 #include "rcommand/commandable.h"
 #include "rcommand/commandtypes.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/icommanddispatcher.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/imainwindow.h"
 #include "languages/ilanguagesservice.h"
 #include "interactive/iinteractive.h"
 #include "interactive/iplatforminteractive.h"
 #include "iappshellconfiguration.h"
 #include "multiwindows/imultiwindowsprovider.h"
-#include "project/iprojectfilescontroller.h"
 #include "project/iopenprojectscenario.h"
+#include "project/icloseprojectscenario.h"
+#include "project/iconvertfiletoscorescenario.h"
 #include "update/iappupdateservice.h"
 #include "audio/main/isoundfontinstallscenario.h"
 #include "istartupscenario.h"
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
 #include "context/iglobalcontext.h"
-#include "context/iuicontextresolver.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "iappshellcommandscontroller.h"
 
@@ -57,7 +55,7 @@ class QDropEvent;
 
 namespace mu::appshell {
 class AppshellCommandsController : public QObject, public IAppshellCommandsController, public muse::Contextable,
-    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
+    public muse::async::Asyncable, public muse::rcommand::Commandable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
@@ -65,18 +63,17 @@ class AppshellCommandsController : public QObject, public IAppshellCommandsContr
     muse::GlobalInject<muse::IApplication> application;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
     muse::ContextInject<project::IOpenProjectScenario> openProjectScenario = { this };
+    muse::ContextInject<project::ICloseProjectScenario> closeProjectScenario = { this };
+    muse::ContextInject<project::IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::ContextInject<muse::update::IAppUpdateService> appUpdateService = { this };
     muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
+    muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
 public:
     AppshellCommandsController(const muse::modularity::ContextPtr& iocCtx)
@@ -101,7 +98,8 @@ private:
         Unknown = 0,
         ProjectFile,
         SoundFont,
-        Extension
+        Extension,
+        ConvertibleFile
     };
 
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -115,8 +113,11 @@ private:
 
     void setupConnections();
 
-    muse::Ret quit(const muse::rcommand::Params& params);
-    muse::Ret quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
+    static muse::async::Promise<muse::Ret> resolvedPromise(const muse::Ret& ret);
+
+    muse::async::Promise<muse::Ret> quit(const muse::rcommand::Params& params);
+    muse::async::Promise<muse::Ret> quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
+    void doQuit(bool isAllInstances, const muse::io::path_t& installerPath);
     void restart();
 
     void toggleFullScreen();
@@ -136,7 +137,6 @@ private:
     bool m_quiting = false;
 
     muse::async::Channel<DockName> m_dockToggleRequested;
-    muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

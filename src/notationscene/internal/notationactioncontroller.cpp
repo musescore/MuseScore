@@ -26,8 +26,6 @@
 #include "global/translation.h"
 #include "global/types/ret.h"
 
-#include "rcommand/actiontocommand.h"
-
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
@@ -54,21 +52,22 @@
 #include "qml/MuseScore/NotationScene/notationviewinputcontroller.h"
 
 #include "../notationcommands.h"
+#include "playback/playbackcommands.h"
 
 #include "log.h"
-#include "rcommand/commandtypes.h"
 
 using namespace mu;
 using namespace muse;
 using namespace muse::io;
 using namespace mu::notation;
-using namespace muse::actions;
 using namespace mu::context;
 
 static constexpr qreal STRETCH_STEP = 0.1;
 static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
+
+static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
 
 using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
 static const std::map<muse::rcommand::Command, bool EngravingDebuggingOptions::*> s_debuggingCommands = {
@@ -90,22 +89,6 @@ static const std::map<muse::rcommand::Command, bool EngravingDebuggingOptions::*
 using Controller = NotationActionController;
 using Interaction = INotationInteraction;
 using ViewController = INotationViewController;
-
-// tuplet options convertor
-static muse::rcommand::CommandQuery tupletOptions(const rcommand::Command& command, const ActionData& args)
-{
-    IF_ASSERT_FAILED(args.count() > 0) {
-        return muse::rcommand::CommandQuery();
-    }
-    TupletOptions options = args.arg<TupletOptions>(0);
-
-    rcommand::CommandQuery query(command);
-    query.addParam("ratio", Val(options.ratio.toString().toStdString()));
-    query.addParam("number-type", Val(engraving::str_conv(options.numberType)));
-    query.addParam("bracket-type", Val(engraving::str_conv(options.bracketType)));
-    query.addParam("auto-baselen", Val(options.autoBaseLen));
-    return query;
-}
 
 void NotationActionController::init()
 {
@@ -218,10 +201,10 @@ void NotationActionController::init()
     registerCommand(SET_DURATION_512TH_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
     registerCommand(SET_DURATION_1024TH_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
 
-    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
-    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
-    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
-    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
+    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
+    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
@@ -528,6 +511,9 @@ void NotationActionController::init()
     registerCommand(RESET_SHAPES_AND_POSITIONS_COMMAND, &Interaction::resetShapesAndPosition);
     registerCommand(RESET_TO_DEFAULT_LAYOUT_COMMAND, &Interaction::resetToDefaultLayout);
 
+    // appearance commands
+    registerCommand(FREEZE_CURRENT_PLACEMENT_COMMAND, &Interaction::freezeSelectionPosition);
+
     // show commands
     registerCommand(SHOW_INVISIBLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
     registerCommand(SHOW_UNPRINTABLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
@@ -670,431 +656,6 @@ void NotationActionController::init()
         });
     }
 
-    // compat
-    {
-        using namespace muse::rcommand;
-        static const std::vector<ActionToCommand> actionToCommand = {
-            { "action://notation/copy", COPY_COMMAND, {} },
-            { "action://notation/cut", CUT_COMMAND, {} },
-            { "action://notation/paste", PASTE_COMMAND, {} },
-            { "notation-paste-half", PASTE_HALF_COMMAND, {} },
-            { "notation-paste-double", PASTE_DOUBLE_COMMAND, {} },
-            { "notation-paste-special", PASTE_SPECIAL_COMMAND, {} },
-            { "notation-swap", COPY_PASTE_SWAP_COMMAND, {} },
-            { "action://notation/delete", DELETE_COMMAND, {} },
-            { "action://notation/cancel", CANCEL_COMMAND, {} },
-            { "action://notation/undo", UNDO_COMMAND, {} },
-            { "action://notation/redo", REDO_COMMAND, {} },
-            { "action://copy", COPY_COMMAND, {} },
-            { "action://cut", CUT_COMMAND, {} },
-            { "action://paste", PASTE_COMMAND, {} },
-            { "action://delete", DELETE_COMMAND, {} },
-            { "action://cancel", CANCEL_COMMAND, {} },
-            { "action://undo", UNDO_COMMAND, {} },
-            { "action://redo", REDO_COMMAND, {} },
-            { "notation-move-right", MOVE_RIGHT_COMMAND, {} },
-            { "notation-move-left", MOVE_LEFT_COMMAND, {} },
-            { "notation-move-right-quickly", MOVE_RIGHT_QUICKLY_COMMAND, {} },
-            { "notation-move-left-quickly", MOVE_LEFT_QUICKLY_COMMAND, {} },
-            { "pitch-up", PITCH_UP_COMMAND, {} },
-            { "pitch-down", PITCH_DOWN_COMMAND, {} },
-            { "pitch-up-octave", PITCH_UP_OCTAVE_COMMAND, {} },
-            { "pitch-down-octave", PITCH_DOWN_OCTAVE_COMMAND, {} },
-            { "pitch-up-diatonic", PITCH_UP_DIATONIC_COMMAND, {} },
-            { "pitch-down-diatonic", PITCH_DOWN_DIATONIC_COMMAND, {} },
-            { "pitch-up-diatonic-alterations", PITCH_UP_DIATONIC_ALTERATIONS_COMMAND, {} },
-            { "pitch-down-diatonic-alterations", PITCH_DOWN_DIATONIC_ALTERATIONS_COMMAND, {} },
-            { "next-word", EDITTEXT_NEXT_WORD_COMMAND, {} },
-            { "next-text-element", EDITTEXT_NEXT_ELEMENT_COMMAND, {} },
-            { "prev-text-element", EDITTEXT_PREV_ELEMENT_COMMAND, {} },
-            { "note-input", TOGGLE_NOTE_INPUT_COMMAND, {} },
-            { "note-input-by-note-name", TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, {} },
-            { "note-input-by-duration", TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, {} },
-            { "note-input-rhythm", TOGGLE_NOTE_INPUT_RHYTHM_COMMAND, {} },
-            { "note-input-repitch", TOGGLE_NOTE_INPUT_REPITCH_COMMAND, {} },
-            { "note-input-realtime-auto", TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND, {} },
-            { "note-input-realtime-manual", TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND, {} },
-            { "note-input-timewise", TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND, {} },
-            { "realtime-advance", REALTIME_ADVANCE_COMMAND, {} },
-            { "note-longa", SET_DURATION_LONGA_COMMAND, {} },
-            { "note-breve", SET_DURATION_BREVE_COMMAND, {} },
-            { "pad-note-1", SET_DURATION_WHOLE_COMMAND, {} },
-            { "pad-note-2", SET_DURATION_HALF_COMMAND, {} },
-            { "pad-note-4", SET_DURATION_QUARTER_COMMAND, {} },
-            { "pad-note-8", SET_DURATION_EIGHTH_COMMAND, {} },
-            { "pad-note-16", SET_DURATION_16TH_COMMAND, {} },
-            { "pad-note-32", SET_DURATION_32ND_COMMAND, {} },
-            { "pad-note-64", SET_DURATION_64TH_COMMAND, {} },
-            { "pad-note-128", SET_DURATION_128TH_COMMAND, {} },
-            { "pad-note-256", SET_DURATION_256TH_COMMAND, {} },
-            { "pad-note-512", SET_DURATION_512TH_COMMAND, {} },
-            { "pad-note-1024", SET_DURATION_1024TH_COMMAND, {} },
-            { "double-duration", SET_DOUBLE_DURATION_COMMAND, {} },
-            { "half-duration", SET_HALVE_DURATION_COMMAND, {} },
-            { "inc-duration-dotted", SET_DOUBLE_DURATION_DOTTED_COMMAND, {} },
-            { "dec-duration-dotted", SET_HALVE_DURATION_DOTTED_COMMAND, {} },
-            { "pad-dot", TOGGLE_DOT_COMMAND, {} },
-            { "pad-dot2", TOGGLE_DOT2_COMMAND, {} },
-            { "pad-dot3", TOGGLE_DOT3_COMMAND, {} },
-            { "pad-dot4", TOGGLE_DOT4_COMMAND, {} },
-            { "pad-rest", TOGGLE_REST_COMMAND, {} },
-            { "flat2", TOGGLE_FLAT2_COMMAND, {} },
-            { "flat", TOGGLE_FLAT_COMMAND, {} },
-            { "nat", TOGGLE_NAT_COMMAND, {} },
-            { "sharp", TOGGLE_SHARP_COMMAND, {} },
-            { "sharp2", TOGGLE_SHARP2_COMMAND, {} },
-            { "sharp2-post", ADD_SHARP2_COMMAND, {} },
-            { "sharp-post", ADD_SHARP_COMMAND, {} },
-            { "nat-post", ADD_NAT_COMMAND, {} },
-            { "flat-post", ADD_FLAT_COMMAND, {} },
-            { "flat2-post", ADD_FLAT2_COMMAND, {} },
-            { "tie", TOGGLE_TIE_COMMAND, {} },
-            { "chord-tie", TOGGLE_TIE_COMMAND, {} }, // removed, now as 'tie'
-            { "lv", TOGGLE_LV_COMMAND, {} },
-            { "add-slur", ADD_SLUR_COMMAND, {} },
-            { "add-marcato", TOGGLE_MARCATO_COMMAND, {} },
-            { "add-sforzato", TOGGLE_SFORZATO_COMMAND, {} },
-            { "add-tenuto", TOGGLE_TENUTO_COMMAND, {} },
-            { "add-staccato", TOGGLE_STACCATO_COMMAND, {} },
-            { "voice-1", USE_VOICE_1_COMMAND, {} },
-            { "voice-2", USE_VOICE_2_COMMAND, {} },
-            { "voice-3", USE_VOICE_3_COMMAND, {} },
-            { "voice-4", USE_VOICE_4_COMMAND, {} },
-            { "voice-x12", SWAP_VOICE_X12_COMMAND, {} },
-            { "voice-x13", SWAP_VOICE_X13_COMMAND, {} },
-            { "voice-x14", SWAP_VOICE_X14_COMMAND, {} },
-            { "voice-x23", SWAP_VOICE_X23_COMMAND, {} },
-            { "voice-x24", SWAP_VOICE_X24_COMMAND, {} },
-            { "voice-x34", SWAP_VOICE_X34_COMMAND, {} },
-            { "flip", FLIP_COMMAND, {} },
-            { "flip-horizontally", FLIP_HORIZONTALLY_COMMAND, {} },
-            { "note-c", ENTER_NOTE_C_COMMAND, {} },
-            { "note-d", ENTER_NOTE_D_COMMAND, {} },
-            { "note-e", ENTER_NOTE_E_COMMAND, {} },
-            { "note-f", ENTER_NOTE_F_COMMAND, {} },
-            { "note-g", ENTER_NOTE_G_COMMAND, {} },
-            { "note-a", ENTER_NOTE_A_COMMAND, {} },
-            { "note-b", ENTER_NOTE_B_COMMAND, {} },
-            { "chord-c", ADD_NOTE_C_COMMAND, {} },
-            { "chord-d", ADD_NOTE_D_COMMAND, {} },
-            { "chord-e", ADD_NOTE_E_COMMAND, {} },
-            { "chord-f", ADD_NOTE_F_COMMAND, {} },
-            { "chord-g", ADD_NOTE_G_COMMAND, {} },
-            { "chord-a", ADD_NOTE_A_COMMAND, {} },
-            { "chord-b", ADD_NOTE_B_COMMAND, {} },
-            { "insert-c", INSERT_NOTE_C_COMMAND, {} },
-            { "insert-d", INSERT_NOTE_D_COMMAND, {} },
-            { "insert-e", INSERT_NOTE_E_COMMAND, {} },
-            { "insert-f", INSERT_NOTE_F_COMMAND, {} },
-            { "insert-g", INSERT_NOTE_G_COMMAND, {} },
-            { "insert-a", INSERT_NOTE_A_COMMAND, {} },
-            { "insert-b", INSERT_NOTE_B_COMMAND, {} },
-            { "rest", ENTER_REST_COMMAND, {} },
-            { "duplet", ADD_DUPLET_COMMAND, {} },
-            { "triplet", ADD_TRIPLET_COMMAND, {} },
-            { "quadruplet", ADD_QUADRUPLET_COMMAND, {} },
-            { "quintuplet", ADD_QUINTUPLET_COMMAND, {} },
-            { "sextuplet", ADD_SEXTUPLET_COMMAND, {} },
-            { "septuplet", ADD_SEPTUPLET_COMMAND, {} },
-            { "octuplet", ADD_OCTUPLET_COMMAND, {} },
-            { "nonuplet", ADD_NONUPLET_COMMAND, {} },
-            { "tuplet-dialog", OPEN_TUPLET_CONFIGURE_COMMAND, {} },
-            { "first-element", GOTO_FIRST_ELEMENT_COMMAND, {} },
-            { "last-element", GOTO_LAST_ELEMENT_COMMAND, {} },
-            { "next-element", GOTO_NEXT_ELEMENT_COMMAND, {} },
-            { "prev-element", GOTO_PREV_ELEMENT_COMMAND, {} },
-            { "next-segment-element", GOTO_NEXT_SEGMENT_ELEMENT_COMMAND, {} },
-            { "prev-segment-element", GOTO_PREV_SEGMENT_ELEMENT_COMMAND, {} },
-            { "next-track", GOTO_NEXT_TRACK_COMMAND, {} },
-            { "prev-track", GOTO_PREV_TRACK_COMMAND, {} },
-            { "next-frame", GOTO_NEXT_FRAME_COMMAND, {} },
-            { "prev-frame", GOTO_PREV_FRAME_COMMAND, {} },
-            { "next-system", GOTO_NEXT_SYSTEM_COMMAND, {} },
-            { "prev-system", GOTO_PREV_SYSTEM_COMMAND, {} },
-            { "up-chord", GOTO_UPNOTE_IN_CHORD_COMMAND, {} },
-            { "down-chord", GOTO_DOWNNOTE_IN_CHORD_COMMAND, {} },
-            { "top-chord", GOTO_TOPNOTE_IN_CHORD_COMMAND, {} },
-            { "bottom-chord", GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, {} },
-            { "top-staff", GOTO_TOP_STAFF_COMMAND, {} },
-            { "empty-trailing-measure", GOTO_EMPTY_TRAILING_MEASURE_COMMAND, {} },
-            { "select-similar", SELECT_SIMILAR_COMMAND, {} },
-            { "select-similar-staff", SELECT_SIMILAR_IN_STAFF_COMMAND, {} },
-            { "select-similar-range", SELECT_SIMILAR_IN_RANGE_COMMAND, {} },
-            { "select-notes-in-chord", SELECT_NOTES_IN_CHORD_COMMAND, {} },
-            { "notation-select-all", SELECT_ALL_COMMAND, {} },
-            { "notation-select-section", SELECT_SECTION_COMMAND, {} },
-            { "select-dialog", OPEN_SELECTION_OPTIONS_COMMAND, {} },
-            { "next-beat-TEXT", EDITTEXT_NEXT_BEAT_COMMAND, {} },
-            { "prev-beat-TEXT", EDITTEXT_PREV_BEAT_COMMAND, {} },
-            { "advance-longa", EDITTEXT_ADVANCE_LONGA_COMMAND, {} },
-            { "advance-breve", EDITTEXT_ADVANCE_BREVE_COMMAND, {} },
-            { "advance-1", EDITTEXT_ADVANCE_1_COMMAND, {} },
-            { "advance-2", EDITTEXT_ADVANCE_2_COMMAND, {} },
-            { "advance-4", EDITTEXT_ADVANCE_4_COMMAND, {} },
-            { "advance-8", EDITTEXT_ADVANCE_8_COMMAND, {} },
-            { "advance-16", EDITTEXT_ADVANCE_16_COMMAND, {} },
-            { "advance-32", EDITTEXT_ADVANCE_32_COMMAND, {} },
-            { "advance-64", EDITTEXT_ADVANCE_64_COMMAND, {} },
-            { "next-lyric-verse", EDITLYRIC_NEXT_VERSE_COMMAND, {} },
-            { "prev-lyric-verse", EDITLYRIC_PREV_VERSE_COMMAND, {} },
-            { "next-syllable", EDITLYRIC_NEXT_SYLLABLE_COMMAND, {} },
-            { "add-melisma", EDITLYRIC_ADD_MELISMA_COMMAND, {} },
-            { "add-lyric-verse", EDITLYRIC_ADD_VERSE_COMMAND, {} },
-            { "toggle-visible", TOGGLE_VISIBLE_COMMAND, {} },
-            { "toggle-snap-to-previous", TOGGLE_SNAP_TO_PREV_COMMAND, {} },
-            { "toggle-snap-to-next", TOGGLE_SNAP_TO_NEXT_COMMAND, {} },
-            { "system-break", TOGGLE_SYSTEM_BREAK_COMMAND, {} },
-            { "page-break", TOGGLE_PAGE_BREAK_COMMAND, {} },
-            { "section-break", TOGGLE_SECTION_BREAK_COMMAND, {} },
-            { "apply-system-lock", APPLY_SYSTEM_LOCK_COMMAND, {} },
-            { "toggle-system-lock", TOGGLE_SYSTEM_LOCK_COMMAND, {} },
-            { "apply-page-lock", APPLY_PAGE_LOCK_COMMAND, {} },
-            { "toggle-page-lock", TOGGLE_PAGE_LOCK_COMMAND, {} },
-            { "toggle-score-lock", TOGGLE_SCORE_LOCK_COMMAND, {} },
-            { "make-into-system", MAKE_INTO_SYSTEM_COMMAND, {} },
-            { "make-into-page", MAKE_INTO_PAGE_COMMAND, {} },
-            { "move-measure-to-prev-system", MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND, {} },
-            { "move-measure-to-next-system", MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND, {} },
-            { "move-system-to-prev-page", MOVE_SYSTEM_TO_PREV_PAGE_COMMAND, {} },
-            { "move-system-to-next-page", MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND, {} },
-            { "split-measure", SPLIT_MEASURE_COMMAND, {} },
-            { "join-measures", JOIN_MEASURES_COMMAND, {} },
-            { "insert-measure", INSERT_MEASURE_COMMAND, {} },
-            { "append-measure", APPEND_MEASURE_COMMAND, {} },
-            { "insert-hbox", INSERT_HBOX_COMMAND, {} },
-            { "insert-vbox", INSERT_VBOX_COMMAND, {} },
-            { "insert-textframe", INSERT_TEXTFRAME_COMMAND, {} },
-            { "insert-fretframe", INSERT_FRETFRAME_COMMAND, {} },
-            { "append-hbox", APPEND_HBOX_COMMAND, {} },
-            { "append-vbox", APPEND_VBOX_COMMAND, {} },
-            { "append-textframe", APPEND_TEXTFRAME_COMMAND, {} },
-            { "append-fretframe", APPEND_FRETFRAME_COMMAND, {} },
-            { "page-settings", OPEN_PAGE_SETTINGS_COMMAND, {} },
-            { "staff-properties", OPEN_STAFF_PROPERTIES_COMMAND, {} },
-            { "edit-strings", OPEN_EDIT_STRINGS_COMMAND, {} },
-            { "measures-per-system", OPEN_BREAKS_COMMAND, {} },
-            { "staff-text-properties", OPEN_STAFF_TEXT_PROPERTIES_COMMAND, {} },
-            { "system-text-properties", OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND, {} },
-            { "measure-properties", OPEN_MEASURE_PROPERTIES_COMMAND, {} },
-            { "transpose", OPEN_TRANSPOSE_COMMAND, {} },
-            { "parts", OPEN_PARTS_COMMAND, {} },
-            { "config-raster", OPEN_EDITGRIDSIZE_COMMAND, {} },
-            { "realize-chord-symbols", OPEN_REALIZECHORDSYMBOLS_COMMAND, {} },
-            { "load-style", LOAD_STYLE_COMMAND, {} },
-            { "save-style", SAVE_STYLE_COMMAND, {} },
-            { "add-fretboard-diagram", ADD_FRETBOARD_DIAGRAM_COMMAND, {} },
-            { "add-ottava-8va", ADD_OTTAVA_8VA_COMMAND, {} },
-            { "add-ottava-8vb", ADD_OTTAVA_8VB_COMMAND, {} },
-            { "add-dynamic", ADD_DYNAMIC_COMMAND, {} },
-            { "add-hairpin", ADD_HAIRPIN_COMMAND, {} },
-            { "add-hairpin-reverse", ADD_HAIRPIN_REVERSE_COMMAND, {} },
-            { "increase-dynamic", INCREASE_DYNAMIC_COMMAND, {} },
-            { "decrease-dynamic", DECREASE_DYNAMIC_COMMAND, {} },
-            { "add-noteline", ADD_NOTELINE_COMMAND, {} },
-            { "add-image", ADD_IMAGE_COMMAND, {} },
-            { "stretch-", STRETCH_DECREASE_COMMAND, {} },
-            { "stretch+", STRETCH_INCREASE_COMMAND, {} },
-            { "reset-stretch", STRETCH_RESET_COMMAND, {} },
-            { "title-text", ADD_TITLE_TEXT_COMMAND, {} },
-            { "subtitle-text", ADD_SUBTITLE_TEXT_COMMAND, {} },
-            { "composer-text", ADD_COMPOSER_TEXT_COMMAND, {} },
-            { "poet-text", ADD_LYRICIST_TEXT_COMMAND, {} },
-            { "part-text", ADD_PART_TEXT_COMMAND, {} },
-            { "frame-text", ADD_FRAME_TEXT_COMMAND, {} },
-            { "system-text", ADD_SYSTEM_TEXT_COMMAND, {} },
-            { "staff-text", ADD_STAFF_TEXT_COMMAND, {} },
-            { "expression-text", ADD_EXPRESSION_TEXT_COMMAND, {} },
-            { "rehearsalmark-text", ADD_REHEARSALMARK_TEXT_COMMAND, {} },
-            { "instrument-change-text", ADD_INSTRUMENT_CHANGE_TEXT_COMMAND, {} },
-            { "fingering-text", ADD_FINGERING_TEXT_COMMAND, {} },
-            { "sticking-text", ADD_STICKING_TEXT_COMMAND, {} },
-            { "chord-text", ADD_CHORD_TEXT_COMMAND, {} },
-            { "roman-numeral-text", ADD_ROMAN_NUMERAL_TEXT_COMMAND, {} },
-            { "nashville-number-text", ADD_NASHVILLE_NUMBER_TEXT_COMMAND, {} },
-            { "lyrics", ADD_LYRICS_COMMAND, {} },
-            { "tempo", ADD_TEMPO_COMMAND, {} },
-            { "figured-bass", ADD_FIGURED_BASS_COMMAND, {} },
-            { "reset-text-style-overrides", RESET_TEXT_STYLE_OVERRIDES_COMMAND, {} },
-            { "reset-beammode", RESET_BEAMS_COMMAND, {} },
-            { "reset", RESET_SHAPES_AND_POSITIONS_COMMAND, {} },
-            { "reset-to-default-layout", RESET_TO_DEFAULT_LAYOUT_COMMAND, {} },
-            { "show-invisible", SHOW_INVISIBLE_COMMAND, {} },
-            { "show-unprintable", SHOW_UNPRINTABLE_COMMAND, {} },
-            { "show-frames", SHOW_FRAMES_COMMAND, {} },
-            { "show-pageborders", SHOW_PAGEBORDERS_COMMAND, {} },
-            { "show-soundflags", SHOW_SOUNDFLAGS_COMMAND, {} },
-            { "show-irregular", SHOW_IRREGULAR_COMMAND, {} },
-            { "explode", STAFF_EXPLODE_COMMAND, {} },
-            { "implode", STAFF_IMPLODE_COMMAND, {} },
-            { "concert-pitch", TOGGLE_CONCERT_PITCH_COMMAND, {} },
-            { "acciaccatura", ADD_ACCIACCATURA_COMMAND, {} },
-            { "appoggiatura", ADD_APPOGGIATURA_COMMAND, {} },
-            { "grace4", ADD_GRACE4_COMMAND, {} },
-            { "grace16", ADD_GRACE16_COMMAND, {} },
-            { "grace32", ADD_GRACE32_COMMAND, {} },
-            { "grace8after", ADD_GRACE8_AFTER_COMMAND, {} },
-            { "grace16after", ADD_GRACE16_AFTER_COMMAND, {} },
-            { "grace32after", ADD_GRACE32_AFTER_COMMAND, {} },
-            { "beam-auto", ADD_BEAM_AUTO_COMMAND, {} },
-            { "beam-none", ADD_BEAM_NONE_COMMAND, {} },
-            { "beam-break-left", ADD_BEAM_BEGIN_COMMAND, {} },
-            { "beam-break-inner-8th", ADD_BEAM_BEGIN16_COMMAND, {} },
-            { "beam-break-inner-16th", ADD_BEAM_BEGIN32_COMMAND, {} },
-            { "beam-join", ADD_BEAM_MID_COMMAND, {} },
-            { "beam-selected-range", ADD_BEAM_SELECTED_RANGE_COMMAND, {} },
-            { "add-brackets", ADD_BRACKETS_COMMAND, {} },
-            { "add-parentheses", ADD_PARENTHESES_COMMAND, {} },
-            { "add-braces", ADD_BRACES_COMMAND, {} },
-            { "add-turn", ADD_TURN_COMMAND, {} },
-            { "add-turn-inverted", ADD_TURN_INVERTED_COMMAND, {} },
-            { "add-turn-slash", ADD_TURN_SLASH_COMMAND, {} },
-            { "add-turn-up", ADD_TURN_UP_COMMAND, {} },
-            { "add-turn-inverted-up", ADD_TURN_INVERTED_UP_COMMAND, {} },
-            { "add-trill", ADD_TRILL_COMMAND, {} },
-            { "add-short-trill", ADD_SHORT_TRILL_COMMAND, {} },
-            { "add-mordent", ADD_MORDENT_COMMAND, {} },
-            { "add-haydn", ADD_HAYDN_COMMAND, {} },
-            { "add-tremblement", ADD_TREMBLEMENT_COMMAND, {} },
-            { "add-prall-mordent", ADD_PRALL_MORDENT_COMMAND, {} },
-            { "add-shake", ADD_SHAKE_COMMAND, {} },
-            { "add-shake-muffat", ADD_SHAKE_MUFFAT_COMMAND, {} },
-            { "add-tremblement-couperin", ADD_TREMBLEMENT_COUPERIN_COMMAND, {} },
-            { "select-next-chord", ADD_TO_SELECTION_NEXT_CHORD_COMMAND, {} },
-            { "select-prev-chord", ADD_TO_SELECTION_PREV_CHORD_COMMAND, {} },
-            { "select-next-measure", ADD_TO_SELECTION_NEXT_MEASURE_COMMAND, {} },
-            { "select-prev-measure", ADD_TO_SELECTION_PREV_MEASURE_COMMAND, {} },
-            { "select-above-staff", ADD_TO_SELECTION_ABOVE_STAFF_COMMAND, {} },
-            { "select-below-staff", ADD_TO_SELECTION_BELOW_STAFF_COMMAND, {} },
-            { "select-begin-line", ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND, {} },
-            { "select-end-line", ADD_TO_SELECTION_END_SYSTEM_COMMAND, {} },
-            { "select-begin-score", ADD_TO_SELECTION_BEGIN_SCORE_COMMAND, {} },
-            { "select-end-score", ADD_TO_SELECTION_END_SCORE_COMMAND, {} },
-            { "extend-to-next-note", EXTEND_TO_NEXT_NOTE_COMMAND, {} },
-            { "time-delete", REMOVE_SELECTED_RANGE_COMMAND, {} },
-            { "del-empty-measures", REMOVE_EMPTY_TRAILING_MEASURES_COMMAND, {} },
-            { "slash-fill", SLASH_FILL_COMMAND, {} },
-            { "slash-rhythm", SLASH_RHYTHM_COMMAND, {} },
-            { "pitch-spell", PITCH_SPELL_COMMAND, {} },
-            { "pitch-spell-sharps", PITCH_SPELL_SHARPS_COMMAND, {} },
-            { "pitch-spell-flats", PITCH_SPELL_FLATS_COMMAND, {} },
-            { "enh-both", ENHARMONIC_SPELL_BOTH_COMMAND, {} },
-            { "enh-current", ENHARMONIC_SPELL_CURRENT_COMMAND, {} },
-            { "reset-groupings", REGROUP_RHYTHMS_COMMAND, {} },
-            { "resequence-rehearsal-marks", RESEQUENCE_REHEARSAL_MARKS_COMMAND, {} },
-            { "unroll-repeats", UNROLL_REPEATS_COMMAND, {} },
-            { "copy-lyrics-to-clipboard", COPY_LYRICS_COMMAND, {} },
-            { "repeat-selection", REPEAT_SELECTION_COMMAND, {} },
-            { "add-up-bow", ADD_UP_BOW_COMMAND, {} },
-            { "add-down-bow", ADD_DOWN_BOW_COMMAND, {} },
-            { "transpose-up", TRANSPOSE_UP_COMMAND, {} },
-            { "transpose-down", TRANSPOSE_DOWN_COMMAND, {} },
-            { "toggle-insert-mode", TOGGLE_INSERT_MODE_COMMAND, {} },
-            { "get-location", GET_LOCATION_COMMAND, {} },
-            { "toggle-mmrest", TOGGLE_MMREST_COMMAND, {} },
-            { "toggle-hide-empty", TOGGLE_HIDE_EMPTY_COMMAND, {} },
-            { "mirror-note", MIRROR_NOTEHEAD_COMMAND, {} },
-            { "set-visible", SET_VISIBLE_COMMAND, {} },
-            { "unset-visible", UNSET_VISIBLE_COMMAND, {} },
-            { "toggle-autoplace", TOGGLE_AUTOPLACE_COMMAND, {} },
-            { "autoplace-enabled", AUTOPLACE_ENABLED_COMMAND, {} },
-            { "full-measure-rest", ADD_FULL_MEASURE_REST_COMMAND, {} },
-            { "interval1", ADD_INTERVAL_PLUS_1_COMMAND, {} },
-            { "interval2", ADD_INTERVAL_PLUS_2_COMMAND, {} },
-            { "interval3", ADD_INTERVAL_PLUS_3_COMMAND, {} },
-            { "interval4", ADD_INTERVAL_PLUS_4_COMMAND, {} },
-            { "interval5", ADD_INTERVAL_PLUS_5_COMMAND, {} },
-            { "interval6", ADD_INTERVAL_PLUS_6_COMMAND, {} },
-            { "interval7", ADD_INTERVAL_PLUS_7_COMMAND, {} },
-            { "interval8", ADD_INTERVAL_PLUS_8_COMMAND, {} },
-            { "interval9", ADD_INTERVAL_PLUS_9_COMMAND, {} },
-            { "interval10", ADD_INTERVAL_PLUS_10_COMMAND, {} },
-            { "interval-2", ADD_INTERVAL_MINUS_2_COMMAND, {} },
-            { "interval-3", ADD_INTERVAL_MINUS_3_COMMAND, {} },
-            { "interval-4", ADD_INTERVAL_MINUS_4_COMMAND, {} },
-            { "interval-5", ADD_INTERVAL_MINUS_5_COMMAND, {} },
-            { "interval-6", ADD_INTERVAL_MINUS_6_COMMAND, {} },
-            { "interval-7", ADD_INTERVAL_MINUS_7_COMMAND, {} },
-            { "interval-8", ADD_INTERVAL_MINUS_8_COMMAND, {} },
-            { "interval-9", ADD_INTERVAL_MINUS_9_COMMAND, {} },
-            { "interval-10", ADD_INTERVAL_MINUS_10_COMMAND, {} },
-            { "voice-assignment-all-in-instrument", VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND, {} },
-            { "voice-assignment-all-in-staff", VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND, {} },
-            { "pad-note-1-TAB", SET_DURATION_WHOLE_TAB_COMMAND, {} },
-            { "pad-note-2-TAB", SET_DURATION_HALF_TAB_COMMAND, {} },
-            { "pad-note-4-TAB", SET_DURATION_QUARTER_TAB_COMMAND, {} },
-            { "pad-note-8-TAB", SET_DURATION_EIGHTH_TAB_COMMAND, {} },
-            { "pad-note-16-TAB", SET_DURATION_16TH_TAB_COMMAND, {} },
-            { "pad-note-32-TAB", SET_DURATION_32ND_TAB_COMMAND, {} },
-            { "pad-note-64-TAB", SET_DURATION_64TH_TAB_COMMAND, {} },
-            { "pad-note-128-TAB", SET_DURATION_128TH_TAB_COMMAND, {} },
-            { "pad-note-256-TAB", SET_DURATION_256TH_TAB_COMMAND, {} },
-            { "pad-note-512-TAB", SET_DURATION_512TH_TAB_COMMAND, {} },
-            { "pad-note-1024-TAB", SET_DURATION_1024TH_TAB_COMMAND, {} },
-            { "rest-TAB", ENTER_REST_TAB_COMMAND, {} },
-            { "fret-0", ENTER_FRET_0_COMMAND, {} },
-            { "fret-1", ENTER_FRET_1_COMMAND, {} },
-            { "fret-2", ENTER_FRET_2_COMMAND, {} },
-            { "fret-3", ENTER_FRET_3_COMMAND, {} },
-            { "fret-4", ENTER_FRET_4_COMMAND, {} },
-            { "fret-5", ENTER_FRET_5_COMMAND, {} },
-            { "fret-6", ENTER_FRET_6_COMMAND, {} },
-            { "fret-7", ENTER_FRET_7_COMMAND, {} },
-            { "fret-8", ENTER_FRET_8_COMMAND, {} },
-            { "fret-9", ENTER_FRET_9_COMMAND, {} },
-            { "fret-10", ENTER_FRET_10_COMMAND, {} },
-            { "fret-11", ENTER_FRET_11_COMMAND, {} },
-            { "fret-12", ENTER_FRET_12_COMMAND, {} },
-            { "fret-13", ENTER_FRET_13_COMMAND, {} },
-            { "fret-14", ENTER_FRET_14_COMMAND, {} },
-            { "standard-bend", ADD_STANDARD_BEND_COMMAND, {} },
-            { "pre-bend", ADD_PRE_BEND_COMMAND, {} },
-            { "grace-note-bend", ADD_GRACE_NOTE_BEND_COMMAND, {} },
-            { "slight-bend", ADD_SLIGHT_BEND_COMMAND, {} },
-            { "dive", ADD_DIVE_COMMAND, {} },
-            { "pre-dive", ADD_PRE_DIVE_COMMAND, {} },
-            { "dip", ADD_DIP_COMMAND, {} },
-            { "scoop", ADD_SCOOP_COMMAND, {} },
-            { "hammer-on-pull-off", ADD_HAMMER_ON_PULL_OFF_COMMAND, {} },
-            { "toggle-automation", TOGGLE_AUTOMATION_COMMAND, {} },
-            { "string-up", GOTO_STRING_ABOVE_COMMAND, {} },
-            { "string-down", GOTO_STRING_BELOW_COMMAND, {} },
-            { "move-up", MOVE_UP_COMMAND, {} },
-            { "move-down", MOVE_DOWN_COMMAND, {} },
-            { "move-left", SWAP_LEFT_COMMAND, {} },
-            { "move-right", SWAP_RIGHT_COMMAND, {} },
-            { "custom-tuplet", ADD_TUPLET_COMMAND, tupletOptions },
-            { "insert-measures", INSERT_MEASURES_COMMAND, make_conv({ { "count", param<int> } }) },
-            { "insert-measures-after-selection", INSERT_MEASURES_AFTER_SELECTION_COMMAND, make_conv({ { "count", param<int> } }) },
-            { "insert-measures-at-start-of-score", INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, make_conv({ { "count", param<int> } }) },
-            { "append-measures", APPEND_MEASURES_COMMAND, make_conv({ { "count", param<int> } }) },
-            { "edit-style", OPEN_EDIT_STYLE_COMMAND, make_conv({ { "page_code", param<std::string> },
-                                                                   { "sub_page_code", param<std::string> } }) },
-            { "zoomin", ZOOM_IN_COMMAND, {} },
-            { "zoomout", ZOOM_OUT_COMMAND, {} },
-            { "zoom-page-width", ZOOM_TO_PAGE_WIDTH_COMMAND, {} },
-            { "zoom-whole-page", ZOOM_TO_WHOLE_PAGE_COMMAND, {} },
-            { "zoom-two-pages", ZOOM_TO_TWO_PAGES_COMMAND, {} },
-            { "zoom100", ZOOM_TO_100_COMMAND, {} },
-            { "zoom-x-percent", ZOOM_TO_PERCENT_COMMAND, make_conv({ { "percent", param<int> } }) },
-            { "view-mode-page", VIEW_MODE_PAGE_COMMAND, {} },
-            { "view-mode-float", VIEW_MODE_FLOAT_COMMAND, {} },
-            { "view-mode-continuous", VIEW_MODE_CONTINUOUS_COMMAND, {} },
-            { "view-mode-single", VIEW_MODE_SINGLE_COMMAND, {} },
-            { "scr-next", NEXT_SCREEN_COMMAND, {} },
-            { "scr-prev", PREV_SCREEN_COMMAND, {} },
-            { "page-next", NEXT_PAGE_COMMAND, {} },
-            { "page-prev", PREV_PAGE_COMMAND, {} },
-            { "page-top", TOP_OF_FIRST_PAGE_COMMAND, {} },
-            { "page-end", BOTTOM_OF_LAST_PAGE_COMMAND, {} },
-            { "notation-context-menu", CONTEXT_MENU_OF_SELECTION_COMMAND, {} },
-            { "piano-keyboard-set-number-of-keys", PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND, make_conv({ { "keys", param<int> } }) },
-            { "find", SHOW_SEARCH_COMMAND, {} },
-            { "diagnostic-notationview-redraw", DIAGNOSTIC_VIEW_REDRAW_COMMAND, {} },
-        };
-
-        rcommand::registerActionToCommand(this, actionToCommand, commandDispatcher(), dispatcher());
-    }
-
     // listen on state changes
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
@@ -1141,7 +702,7 @@ void NotationActionController::init()
         m_currentNotationStyleChanged.notify();
     });
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
         m_isNoteInputAllowedChanged.send(isNoteInputAllowed());
     }, Asyncable::Mode::SetReplace);
 }
@@ -1155,35 +716,6 @@ void NotationActionController::setViewController(INotationViewController* contro
 INotationViewController* NotationActionController::viewController() const
 {
     return m_viewController;
-}
-
-bool NotationActionController::canReceiveAction(const ActionCode& code) const
-{
-    // If no notation is loaded, we cannot handle any action.
-    auto masterNotation = currentMasterNotation();
-    if (!masterNotation) {
-        return false;
-    }
-
-    if (globalContext()->playbackState()->isPlaying()) {
-        if (!muse::contains(m_isAllowedDuringPlayback, code)) {
-            return false;
-        }
-    }
-
-    // Actions other than undo and redo can only be handled when the current
-    // notation contains at least one part.
-    if (!masterNotation->hasParts()) {
-        return false;
-    }
-
-    auto iter = m_isEnabledMap.find(code);
-    if (iter != m_isEnabledMap.end()) {
-        bool enabled = iter->second();
-        return enabled;
-    }
-
-    return true;
 }
 
 INotationPtr NotationActionController::currentNotation() const
@@ -1275,8 +807,8 @@ void NotationActionController::resetState()
 {
     TRACEFUNC;
 
-    if (globalContext()->playbackState()->isPlaying()) {
-        dispatcher()->dispatch("stop");
+    if (playbackController()->isPlaying()) {
+        commandDispatcher()->dispatch(playback::STOP_COMMAND);
     }
 
     auto noteInput = currentNotationNoteInput();
@@ -1314,7 +846,7 @@ void NotationActionController::resetState()
 
 bool NotationActionController::isNoteInputAllowed() const
 {
-    return !globalContext()->playbackState()->isPlaying();
+    return !playbackController()->isPlaying();
 }
 
 muse::async::Channel<bool> NotationActionController::isNoteInputAllowedChanged() const
@@ -2010,9 +1542,9 @@ void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDo
 
     if (noteInput->isNoteInputMode()) {
         if (steps > 0) {
-            noteInput->doubleNoteInputDuration();
-        } else {
             noteInput->halveNoteInputDuration();
+        } else {
+            noteInput->doubleNoteInputDuration();
         }
     } else {
         interaction->increaseDecreaseDuration(steps, stepByDots);
@@ -2104,7 +1636,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
-        if (globalContext()->playbackState()->isPlaying()) {
+        if (playbackController()->isPlaying()) {
             engraving::MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
@@ -3098,7 +2630,7 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 bool NotationActionController::toggleNoteInputAllowed() const
 {
-    if (globalContext()->playbackState()->isPlaying()) {
+    if (!isNoteInputAllowed()) {
         return false;
     }
 
@@ -3139,6 +2671,12 @@ bool NotationActionController::isNoteOrRestSelected() const
     return selection && selection->elementsSelected(NOTE_REST_TYPES);
 }
 
+bool NotationActionController::isHairpinSelected() const
+{
+    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    return selection && selection->element() && selection->element()->isHairpinSegment();
+}
+
 const mu::engraving::Harmony* NotationActionController::editedChordSymbol() const
 {
     INotationInteractionPtr interaction = currentNotationInteraction();
@@ -3172,11 +2710,6 @@ bool NotationActionController::canRedo() const
 muse::async::Notification NotationActionController::stackChanged() const
 {
     return m_stackChanged;
-}
-
-bool NotationActionController::isNotationPage() const
-{
-    return uiContextResolver()->matchWithCurrent(context::UiCtxProjectOpened);
 }
 
 bool NotationActionController::isTablatureStaff() const

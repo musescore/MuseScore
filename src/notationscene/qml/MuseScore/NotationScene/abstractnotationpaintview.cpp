@@ -27,9 +27,7 @@
 #include <QMimeData>
 
 #include "async/async.h"
-#include "log.h"
 
-#include "actions/actiontypes.h"
 #include "engraving/dom/shadownote.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
@@ -42,12 +40,13 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::draw;
-using namespace muse::actions;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
@@ -149,12 +148,12 @@ void AbstractNotationPaintView::load()
         m_isSmoothPanningEnabled = configuration()->isSmoothPanning();
     }, async::Asyncable::Mode::SetReplace);
 
-    globalContext()->playbackState()->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
+    playbackState()->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
         m_lastPlaybackPosition = secs;
         m_lastPlaybackPositionUpdateTimeNs = m_elapsedTimer.nsecsElapsed();
     }, async::Asyncable::Mode::SetReplace);
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
+    playbackState()->isPlayingChanged().onReceive(this, [this](bool) {
         onPlayingChanged();
     }, async::Asyncable::Mode::SetReplace);
 
@@ -644,6 +643,10 @@ bool AbstractNotationPaintView::isNoteEnterMode() const
 void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
 {
     TRACEFUNC;
+
+    if (m_readonly) {
+        return;
+    }
 
     QPointF _pos = pos;
     if (_pos.isNull()) {
@@ -1483,12 +1486,23 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
     }
 }
 
+bool AbstractNotationPaintView::readonly() const
+{
+    return m_readonly;
+}
+
 void AbstractNotationPaintView::setReadonly(bool readonly)
 {
+    if (m_readonly == readonly) {
+        return;
+    }
+
     m_readonly = readonly;
     if (m_inputController) {
         m_inputController->setReadonly(m_readonly);
     }
+
+    emit readonlyChanged();
 }
 
 void AbstractNotationPaintView::clear()
@@ -1550,7 +1564,7 @@ void AbstractNotationPaintView::onPlayingChanged()
 {
     TRACEFUNC;
 
-    bool isPlaying = globalContext()->playbackState()->isPlaying();
+    bool isPlaying = playbackState()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
     if (m_playbackCursorItem) {
@@ -1561,7 +1575,7 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_enableAutoScrollTimer.stop();
 
     if (isPlaying) {
-        m_lastPlaybackPosition = globalContext()->playbackState()->playbackPosition();
+        m_lastPlaybackPosition = playbackState()->playbackPosition();
         m_lastPlaybackPositionUpdateTimeNs = m_elapsedTimer.nsecsElapsed();
         updatePlaybackCursorInterpolated();
         m_updatePlaybackCursorInterpolatedTimer.start(23); // ~43 FPS (1024 buffer + 44100)
@@ -1756,7 +1770,7 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
     m_playbackCursorItem = cursor;
 
     if (m_playbackCursorItem) {
-        m_playbackCursorItem->setVisible(globalContext()->playbackState()->isPlaying());
+        m_playbackCursorItem->setVisible(playbackState()->isPlaying());
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", notationConfiguration()->playbackCursorColor());
 

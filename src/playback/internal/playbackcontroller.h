@@ -27,7 +27,6 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "actions/actiontypes.h"
 #include "context/iglobalcontext.h"
 #include "engraving/types/types.h"
 #include "notation/inotationautomation.h"
@@ -38,6 +37,7 @@
 #include "audio/main/iplayback.h"
 #include "audio/common/audiotypes.h"
 #include "tours/itoursservice.h"
+#include "interactive/iinteractive.h"
 
 #include "drumsetloader.h"
 
@@ -55,21 +55,29 @@ class PlaybackController : public IPlaybackController, public muse::async::Async
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     PlaybackController(const muse::modularity::ContextPtr& iocCtx);
     ~PlaybackController() override;
 
     void init();
+    void deinit();
 
+    // IPlaybackState
+    bool isPlaying() const override;
+    muse::async::Channel<bool> isPlayingChanged() const override;
+
+    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
+    // --------------
+
+    // IPlaybackController
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
 
     bool isPlayAllowed() const override;
     muse::async::Channel<bool> isPlayAllowedChanged() const override;
-
-    bool isPlaying() const override;
-    muse::async::Channel<bool> isPlayingChanged() const override;
 
     muse::Ret togglePlay() override;
     muse::Ret play(bool showErrors = true) override;
@@ -143,8 +151,6 @@ public:
 
     void setIsExportingAudio(bool exporting) override;
 
-    bool canReceiveAction(const muse::actions::ActionCode& code) const;
-
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
     muse::Progress onlineSoundsProcessingProgress() const override;
@@ -204,6 +210,7 @@ private:
     project::IProjectAudioSettingsPtr audioSettings() const;
 
     void resetPlayback();
+    void setupPlaybackIfNeed();
     void setupPlayback();
     void subscribeOnAudioParamsChanges();
     void setupTracks();
@@ -214,9 +221,11 @@ private:
 
     using TrackAddFinished = std::function<void ()>;
 
-    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished);
-    void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title, const TrackAddFinished& onFinished);
-    void addAuxTrack(muse::audio::aux_channel_idx_t index, const TrackAddFinished& onFinished);
+    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, bool projectHadNoAudioSettings,
+                  const TrackAddFinished& onFinished);
+    void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title, bool projectHadNoAudioSettings,
+                    const TrackAddFinished& onFinished);
+    void addAuxTrack(muse::audio::aux_channel_idx_t index, bool projectHadNoAudioSettings, const TrackAddFinished& onFinished);
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
@@ -237,11 +246,13 @@ private:
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
     muse::audio::IPlayerPtr m_player;
+    bool m_needSetupPlayback = false;
     bool m_isPlaybackInited = false;
     muse::async::Channel<bool> m_playbackInited;
 
     muse::async::Channel<bool> m_isPlayAllowedChanged;
     muse::async::Channel<bool> m_isPlayingChanged;
+    muse::async::Channel<muse::audio::secs_t> m_playbackPositionChanged;
     muse::async::Channel<bool> m_loopEnabledChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;

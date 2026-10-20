@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "iappshellconfiguration.h"
 #include "isessionsmanager.h"
@@ -47,7 +47,7 @@ class StartupScenario : public IStartupScenario, public muse::Contextable, publi
     muse::ContextInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
     muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<ISessionsManager> sessionsManager = { this };
     muse::ContextInject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };

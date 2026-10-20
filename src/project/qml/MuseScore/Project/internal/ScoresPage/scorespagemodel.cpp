@@ -24,10 +24,10 @@
 
 #include <QString>
 
-#include "actions/actiontypes.h"
+#include "project/projectcommands.h"
+#include "log.h"
 
 using namespace mu::project;
-using namespace muse::actions;
 
 ScoresPageModel::ScoresPageModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -36,17 +36,60 @@ ScoresPageModel::ScoresPageModel(QObject* parent)
 
 void ScoresPageModel::createNewScore()
 {
-    dispatcher()->dispatch("file-new");
+    commandDispatcher()->dispatch(project::PROJECT_NEW_COMMAND);
+}
+
+void ScoresPageModel::convertFileToScore()
+{
+    commandDispatcher()->dispatch(project::PROJECT_CONVERT_TO_SCORE_COMMAND);
 }
 
 void ScoresPageModel::openOther()
 {
-    dispatcher()->dispatch("file-open");
+    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND);
 }
 
 void ScoresPageModel::openScore(const QString& scorePath, const QString& displayNameOverride)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(QUrl::fromLocalFile(scorePath), displayNameOverride));
+    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND, { { "url", muse::Val(QUrl::fromLocalFile(
+                                                                                          scorePath).toString()) }, { "display_name", muse::Val(
+                                                                                                                          displayNameOverride) } });
+}
+
+void ScoresPageModel::revealInFileBrowser(const QString& scorePath)
+{
+    muse::Ret ret = platformInteractive()->revealInFileBrowser(scorePath);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+}
+
+void ScoresPageModel::viewOnline(int scoreId)
+{
+    if (scoreId <= 0) {
+        return;
+    }
+
+    museScoreComService()->downloadScoreInfo(scoreId)
+    .onResolve(this, [this, scoreId](const muse::RetVal<muse::cloud::ScoreInfo>& scoreInfo) {
+        if (!scoreInfo.ret) {
+            LOGE() << scoreInfo.ret.toString();
+            return;
+        }
+
+        QUrl scoreUrl = QUrl::fromUserInput(scoreInfo.val.url);
+        if (!scoreUrl.isValid() || scoreUrl.isEmpty()) {
+            LOGE() << "Invalid score URL for cloud score" << scoreId << ":" << scoreInfo.val.url;
+            return;
+        }
+
+        platformInteractive()->openUrl(scoreUrl);
+    });
+}
+
+void ScoresPageModel::deleteScore(int scoreId, const QString& scoreName)
+{
+    deleteCloudScoreScenario()->deleteScore(scoreId, scoreName);
 }
 
 void ScoresPageModel::openScoreManager()

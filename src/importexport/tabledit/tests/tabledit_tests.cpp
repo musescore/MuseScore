@@ -83,6 +83,14 @@ TEST_F(TablEdit_Tests, tef_bass) {
     tefReadTest("bass");
 }
 
+TEST_F(TablEdit_Tests, tef_capo_1) {
+    tefReadTest("capo_1");
+}
+
+TEST_F(TablEdit_Tests, tef_capo_2) {
+    tefReadTest("capo_2");
+}
+
 TEST_F(TablEdit_Tests, tef_chord_C_D) {
     tefReadTest("chord_C_D");
 }
@@ -91,8 +99,32 @@ TEST_F(TablEdit_Tests, tef_dynamic) {
     tefReadTest("dynamic");
 }
 
-TEST_F(TablEdit_Tests, tef_effects) {
-    tefReadTest("effects");
+TEST_F(TablEdit_Tests, tef_effects_1) {
+    tefReadTest("effects_1");
+}
+
+TEST_F(TablEdit_Tests, tef_effects_2) {
+    tefReadTest("effects_2");
+}
+
+TEST_F(TablEdit_Tests, tef_effects_3) {
+    tefReadTest("effects_3");
+}
+
+TEST_F(TablEdit_Tests, tef_effects_4) {
+    tefReadTest("effects_4");
+}
+
+TEST_F(TablEdit_Tests, tef_effects_5) {
+    tefReadTest("effects_5");
+}
+
+TEST_F(TablEdit_Tests, effects_combination) {
+    tefReadTest("effects_combination");
+}
+
+TEST_F(TablEdit_Tests, tef_effect_arpeggio_like) {
+    tefReadTest("effect_arpeggio_like");
 }
 
 TEST_F(TablEdit_Tests, tef_fingerings_1) {

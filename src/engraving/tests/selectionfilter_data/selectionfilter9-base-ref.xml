@@ -40,8 +40,6 @@
     </Staff>
   <SpannerMap>
     <Pedal>
-      <beginText>&lt;sym&gt;keyboardPedalPed&lt;sym&gt;</beginText>
-      <continueText></continueText>
       <continueTextPlace>auto</continueTextPlace>
       <endTextPlace>auto</endTextPlace>
       <track2>0</track2>
@@ -49,6 +47,8 @@
       <ticks>3/4</ticks>
       <eid>J_J</eid>
       <track>0</track>
+      <beginText>&lt;sym&gt;keyboardPedalPed&lt;sym&gt;</beginText>
+      <continueText></continueText>
       </Pedal>
     </SpannerMap>
   </StaffList>

@@ -30,6 +30,7 @@
 #include "notation/inotation.h"
 
 #include "project/inotationproject.h"
+#include "project/projectcommands.h"
 
 using namespace mu::notation;
 using namespace mu::project;
@@ -257,7 +258,7 @@ void NotationSwitchListModel::closeNotation(int index)
     INotationPtr notation = m_notations[index];
 
     if (isMasterNotation(notation)) {
-        dispatcher()->dispatch("file-close");
+        commandDispatcher()->dispatch(PROJECT_CLOSE_COMMAND);
     } else {
         if (notation == currentNotation()) {
             // Set new current notation
@@ -288,7 +289,7 @@ void NotationSwitchListModel::closeOtherNotations(int index)
 
 void NotationSwitchListModel::closeAllNotations()
 {
-    dispatcher()->dispatch("file-close");
+    commandDispatcher()->dispatch(PROJECT_CLOSE_COMMAND);
 }
 
 QVariantList NotationSwitchListModel::contextMenuItems(int index) const

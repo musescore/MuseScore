@@ -24,23 +24,6 @@ target_sources(context PRIVATE
     contextmodule.cpp
     contextmodule.h
     iglobalcontext.h
-    iplaybackstate.h
-    uicontext.h
-    shortcutcontext.h
-    iuicontextresolver.h
     internal/globalcontext.cpp
     internal/globalcontext.h
-    internal/playbackstate.cpp
-    internal/playbackstate.h
-    internal/uicontextresolver.cpp
-    internal/uicontextresolver.h
-    internal/extensioncontextresolver.cpp
-    internal/extensioncontextresolver.h
 )
-
-if (MUSE_MODULE_SHORTCUTS_V2)
-    target_sources(context PRIVATE
-        internal/shortcutresolver.cpp
-        internal/shortcutresolver.h
-    )
-endif()

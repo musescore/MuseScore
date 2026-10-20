@@ -36,7 +36,7 @@ class MeasureNumberBase : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, MeasureNumberBase)
 public:
-    MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, TextStyleType = TextStyleType::DEFAULT);
+    MeasureNumberBase(const ElementType& type, DummyParentOr<Measure> parent, TextStyleType = TextStyleType::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
 
     Measure* measure() const { return toMeasure(ownershipParent()); }

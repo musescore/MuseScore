@@ -57,6 +57,8 @@ public:
     RectF drag(EditData&) override;
     void endDrag(EditData&) override;
     std::vector<LineF> dragAnchorLines() const override;
+    //! Exposes the prospective measure for the notation layer's drag highlight.
+    Measure* dragTargetMeasure() const { return m_dragTarget; }
 
     double lw() const { return m_lw; }
 
@@ -69,7 +71,7 @@ public:
 private:
 
     friend class Factory;
-    StaffTypeChange(MeasureBase* parent = 0);
+    StaffTypeChange(DummyParentOr<MeasureBase> parent);
     StaffTypeChange(const StaffTypeChange&);
 
     void spatiumChanged(double oldValue, double newValue) override;

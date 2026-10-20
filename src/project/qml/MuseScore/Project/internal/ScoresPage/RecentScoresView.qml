@@ -47,6 +47,7 @@ ScoresView {
 
             model: recentScoresModel
             searchText: root.searchText
+            allowRemoveFromRecentFiles: true
 
             isNoResultsMessageAllowed: false // provided by the model instead
 
@@ -65,6 +66,22 @@ ScoresView {
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
             }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
+            }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
+            }
+
+            onRemoveFromRecentFilesRequested: function(scorePath) {
+                recentScoresModel.removeRecentScore(scorePath)
+            }
         }
     }
 
@@ -78,6 +95,7 @@ ScoresView {
 
             model: recentScoresModel
             searchText: root.searchText
+            allowRemoveFromRecentFiles: true
 
             backgroundColor: root.backgroundColor
             sideMargin: root.sideMargin
@@ -95,6 +113,22 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
+            }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
+            }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
+            }
+
+            onRemoveFromRecentFilesRequested: function(scorePath) {
+                recentScoresModel.removeRecentScore(scorePath)
             }
 
             columns: [

@@ -450,13 +450,13 @@ void EditEnharmonicSpelling::changeEnharmonicSpelling(Score* score, bool both)
     std::vector<Note*> notes = score->selection().uniqueNotes();
     for (Note* note : notes) {
         Staff* staff = note->staff();
-        if (staff->part()->instrument(note->tick())->useDrumset()) {
+        if (note->originPart()->instrument(note->tick())->useDrumset()) {
             continue;
         }
 
         if (staff->isTabStaff(note->tick())) {
             int string = note->line() + (both ? 1 : -1);
-            int fret = staff->part()->stringData(note->tick(), staff->idx())->fret(note->pitch(), string, staff);
+            int fret = note->originPart()->stringData(note->tick(), staff->idx())->fret(note->pitch(), string, staff);
             if (fret != -1) {
                 note->undoChangeProperty(Pid::FRET, fret);
                 note->undoChangeProperty(Pid::STRING, string);

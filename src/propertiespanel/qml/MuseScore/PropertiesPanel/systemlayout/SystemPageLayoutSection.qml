@@ -37,13 +37,15 @@ PropertiesPanelSection {
 
     required property SystemPageLayoutSettingsModel model
 
-    implicitHeight: contentColumn.implicitHeight
+    implicitHeight: contentColumn.visible ? contentColumn.implicitHeight : 0
 
     Column {
         id: contentColumn
 
         width: parent.width
         spacing: 12
+
+        visible: root.model ? root.model.scoreIsInPageView : false
 
         PropertiesPanelTabBar {
             id: tabBar
@@ -78,7 +80,6 @@ PropertiesPanelSection {
 
             MeasuresFlowSection {
                 id: systemSection
-                visible: root.model ? root.model.scoreIsInPageView : false
                 navigationPanel: root.navigationPanel
                 navigationRowStart: root.navigationRowStart
                 isLocked: root.model ? root.model.allSystemsAreLocked : false
@@ -117,7 +118,6 @@ PropertiesPanelSection {
 
             MeasuresFlowSection {
                 id: pageSection
-                visible: root.model ? root.model.scoreIsInPageView : false
                 navigationPanel: root.navigationPanel
                 navigationRowStart: root.navigationRowStart
                 isLocked: root.model ? root.model.allPagesAreLocked : false

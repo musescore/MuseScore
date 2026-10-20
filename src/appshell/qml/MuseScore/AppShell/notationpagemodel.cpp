@@ -35,13 +35,13 @@
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationselection.h"
 
-#include "internal/applicationuiactions.h"
 #include "dockwindow/idockwindow.h"
+#include "dockwindow_v2/dockcommands.h"
 
+using namespace muse;
 using namespace mu::appshell;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace muse::actions;
 
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -206,7 +206,7 @@ void NotationPageModel::toggleDock(const QString& name)
         return;
     }
 
-    dispatcher()->dispatch("dock-toggle", ActionData::make_arg1<QString>(name));
+    commandDispatcher()->dispatch(dock::DOCK_TOGGLE_COMMAND, { { "dock_name", muse::Val(name) } });
 }
 
 void NotationPageModel::scheduleUpdatePercussionPanelVisibility()
@@ -240,7 +240,8 @@ void NotationPageModel::doUpdatePercussionPanelVisibility()
             return;
         }
 
-        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PERCUSSION_PANEL_NAME, open));
+        commandDispatcher()->dispatch(dock::DOCK_SET_OPEN_COMMAND,
+                                      { { "dock_name", muse::Val(PERCUSSION_PANEL_NAME) }, { "open", muse::Val(open) } });
     };
 
     const PercussionPanelAutoShowMode autoShowMode = notationSceneConfiguration()->percussionPanelAutoShowMode();
@@ -336,7 +337,8 @@ void NotationPageModel::doUpdateExtensionsToolBarVisibility()
             return;
         }
 
-        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(EXTENSIONS_TOOLBAR_NAME, open));
+        commandDispatcher()->dispatch(dock::DOCK_SET_OPEN_COMMAND,
+                                      { { "dock_name", muse::Val(EXTENSIONS_TOOLBAR_NAME) }, { "open", muse::Val(open) } });
     };
 
     muse::extensions::ManifestList enabledExtensions = extensionsProvider()->manifestList(muse::extensions::Filter::Enabled);

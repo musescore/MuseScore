@@ -36,8 +36,6 @@ target_sources(appshell PRIVATE
     internal/appshellcommandsstate.h
     internal/appshellstate.cpp
     internal/appshellstate.h
-    internal/applicationuiactions.cpp
-    internal/applicationuiactions.h
     internal/appshellconfiguration.cpp
     internal/appshellconfiguration.h
     internal/iappmenumodelhook.h
@@ -47,6 +45,10 @@ target_sources(appshell PRIVATE
     internal/sessionsmanager.h
     internal/startupscenario.cpp
     internal/startupscenario.h
+    internal/shortcutresolver.cpp
+    internal/shortcutresolver.h
+    internal/extensioncontextresolver.cpp
+    internal/extensioncontextresolver.h
     widgets/splashscreen/splashscreen.cpp
     widgets/splashscreen/splashscreen.h
     widgets/splashscreen/loadingscreenview.cpp

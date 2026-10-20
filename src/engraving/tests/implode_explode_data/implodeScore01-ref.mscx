@@ -7,6 +7,7 @@
       <windsNameByGroup>0</windsNameByGroup>
       <vocalsNameByGroup>0</vocalsNameByGroup>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsStackingOrder>0</lyricsStackingOrder>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>

@@ -22,6 +22,7 @@
 
 #include "musesamplercheckupdatescenario.h"
 
+#include "rcommand/commandtypes.h"
 #include "translation.h"
 
 using namespace mu::musesounds;
@@ -121,7 +122,7 @@ void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
 #ifdef Q_OS_LINUX
     if (process()->startDetached("muse-sounds-manager",
                                  { "--show-sampler-update", "--show-hidden-statuses" })) {
-        dispatcher()->dispatch("quit");
+        commandDispatcher()->dispatch(muse::rcommand::Command("command://app/quit"));
     } else {
         openMuseHubWebsiteAndQuit();
     }
@@ -139,7 +140,7 @@ void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
 
     promise.onResolve(this, [this](const muse::Ret& ret) {
         if (ret) {
-            dispatcher()->dispatch("quit");
+            commandDispatcher()->dispatch(muse::rcommand::Command("command://app/quit"));
         } else {
             openMuseHubWebsiteAndQuit();
         }
@@ -158,5 +159,5 @@ void MuseSamplerCheckUpdateScenario::openMuseHubWebsiteAndQuit()
 #else
     platformInteractive()->openUrl(globalConfiguration()->museHubWebUrl());
 #endif
-    dispatcher()->dispatch("quit");
+    commandDispatcher()->dispatch(muse::rcommand::Command("command://app/quit"));
 }

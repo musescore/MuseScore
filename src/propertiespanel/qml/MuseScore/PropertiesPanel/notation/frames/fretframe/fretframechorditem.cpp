@@ -24,7 +24,7 @@
 using namespace mu::propertiespanel;
 
 FretFrameChordItem::FretFrameChordItem(QObject* parent)
-    : muse::uicomponents::SelectableItemListModel::Item(parent)
+    : QObject(parent)
 {
 }
 

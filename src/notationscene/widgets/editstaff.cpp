@@ -85,6 +85,7 @@ EditStaff::EditStaff(QWidget* parent)
     connect(showTimesig,      &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
     connect(showBarlines,     &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
     connect(invisible,        &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+    connect(instrumentLabelVisibility, &QComboBox::currentIndexChanged, this, &EditStaff::instrumentLabelVisibilityChanged);
 
     connect(useDefaultName, &QRadioButton::clicked, this, [&]() {
         useCustomNameChanged(!useDefaultName->isChecked());
@@ -213,6 +214,7 @@ void EditStaff::updateStaffType(const mu::engraving::StaffType& staffType)
     showTimesig->setChecked(staffType.genTimesig());
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
+    instrumentLabelVisibility->setCurrentIndex(static_cast<int>(staffType.instrumentLabelVisibility()));
     staffGroupName->setText(staffType.translatedGroupName());
 
     longStaffName->setPlainText(TextBase::unEscape(staffType.longName()));
@@ -446,6 +448,11 @@ void EditStaff::invisibleChanged()
     m_staff->staffType(m_tick)->setInvisible(invisible->isChecked());
 }
 
+void EditStaff::instrumentLabelVisibilityChanged(int index)
+{
+    m_staff->staffType(m_tick)->setInstrumentLabelVisibility(static_cast<InstrumentLabelVisibility>(index));
+}
+
 void EditStaff::colorChanged()
 {
     m_staff->staffType(m_tick)->setColor(color->color());
@@ -527,11 +534,11 @@ void EditStaff::initStaff()
     Staff* staff = context.staff;
 
     if (interaction && !element) {
-        INotationSelectionPtr selection = interaction->selection();
+        const INotationSelectionPtr selection = interaction->selection();
         if (selection->isRange()) {
-            INotationSelectionRangePtr range = selection->range();
-            element = range->measureRange().endMeasure;
-            staff = element->score()->staff(range->endStaffIndex() - 1);
+            const INotationSelectionRangePtr range = selection->range();
+            element = range->measureBaseRange().endMeasureBase;
+            staff = element ? element->score()->staff(range->endStaffIndex() - 1) : nullptr;
         }
     }
 
@@ -544,8 +551,8 @@ void EditStaff::initStaff()
         tick = mu::engraving::toChordRest(element)->tick();
     } else if (element->isNote()) {
         tick = mu::engraving::toNote(element)->chord()->tick();
-    } else if (element->isMeasure()) {
-        tick = mu::engraving::toMeasure(element)->tick();
+    } else if (element->isMeasureBase()) {
+        tick = mu::engraving::toMeasureBase(element)->tick();
     } else if (element->isInstrumentName()) {
         const mu::engraving::System* system = mu::engraving::toSystem(mu::engraving::toInstrumentName(element)->ownershipParent());
         const Measure* measure = system ? system->firstMeasure() : nullptr;

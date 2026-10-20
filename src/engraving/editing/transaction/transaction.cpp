@@ -228,6 +228,23 @@ void TransactionManager::endTransaction(bool rollback, bool layoutAllParts, bool
     }
 }
 
+void TransactionManager::reopen()
+{
+    UndoStack* stack = undoStack();
+
+    if (stack->isLocked()) {
+        return;
+    }
+
+    if (stack->hasActiveTransaction()) {
+        LOGD() << "cmd already active";
+        return;
+    }
+
+    stack->reopen();
+    m_currentTransaction = std::unique_ptr<Transaction>(new Transaction(stack->activeTransaction()));
+}
+
 Transaction* TransactionManager::currentTransaction() const
 {
     return m_currentTransaction.get();

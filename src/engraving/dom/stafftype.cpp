@@ -184,6 +184,7 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_genTimesig == st.m_genTimesig);
     equal &= (m_genKeysig == st.m_genKeysig);
     equal &= (m_noteHeadScheme == st.m_noteHeadScheme);
+    equal &= (m_instrumentLabelVisibility == st.m_instrumentLabelVisibility);
     equal &= (m_durationFontSize == st.m_durationFontSize);
     equal &= (m_durationFontUserY == st.m_durationFontUserY);
     equal &= (m_fretFontSize == st.m_fretFontSize);

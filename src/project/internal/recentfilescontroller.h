@@ -53,6 +53,7 @@ public:
 
     void prependRecentFile(const RecentFile& file) override;
     void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) override;
+    void removeRecentFile(const muse::io::path_t& path) override;
     void clearRecentFiles() override;
 
     muse::async::Promise<QPixmap> thumbnail(const muse::io::path_t& file) const override;

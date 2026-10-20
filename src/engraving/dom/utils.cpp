@@ -809,7 +809,7 @@ static void noteValToEffectivePitchAndTpc(const NoteVal& nval, const Staff* staf
     if (concertPitch) {
         epitch = nval.pitch;
     } else {
-        const int pitchOffset = staff->part()->instrument(tick)->transpose().chromatic;
+        const int pitchOffset = staff->originPart(tick)->instrument(tick)->transpose().chromatic;
         epitch = nval.pitch - pitchOffset;
     }
 
@@ -822,7 +822,7 @@ static void noteValToEffectivePitchAndTpc(const NoteVal& nval, const Staff* staf
 int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
 {
     if (staff->isDrumStaff(tick)) {
-        const Drumset* drumset = staff->part()->instrument(tick)->drumset();
+        const Drumset* drumset = staff->originPart(tick)->instrument(tick)->drumset();
         if (drumset) {
             return drumset->line(nval.pitch);
         }
@@ -1014,7 +1014,8 @@ bool dragPositionToMeasure(const PointF& pos, const Score* score,
 {
     const System* preferredSystem = (*measure) ? (*measure)->system() : nullptr;
 
-    Measure* m = score->searchMeasure(pos, preferredSystem, spacingFactor);
+    MeasureBase* mb = score->searchMeasureBase(pos, /*scanMeasuresOnly*/ true, preferredSystem, spacingFactor);
+    Measure* m = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
     if (!m) {
         return false;
     }

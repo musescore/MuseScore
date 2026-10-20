@@ -116,13 +116,12 @@ void EditKeySig::undoChangeKeySig(Transaction& tx, Score* score, Staff* ostaff, 
             interval.flip();
         }
 
-        score->updateInstrumentChangeTranspositions(key, staff, tick);
+        staffScore->updateInstrumentChangeTranspositions(key, staff, tick);
         if (ks) {
             ks->undoChangeProperty(Pid::GENERATED, false);
             tx.push(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
         } else {
             KeySig* nks = Factory::createKeySig(s);
-            nks->setOwnershipParent(s);
             nks->setTrack(track);
             nks->setKeySigEvent(nkey);
             staffScore->doUndoAddElement(nks);

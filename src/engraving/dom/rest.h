@@ -139,8 +139,8 @@ public:
     double symWidthNoLedgerLines(LayoutData* ldata) const;
 
 protected:
-    Rest(const ElementType& type, Segment* parent = 0);
-    Rest(const ElementType& type, Segment* parent, const TDuration&);
+    Rest(const ElementType& type, DummyParentOr<Segment> parent);
+    Rest(const ElementType& type, DummyParentOr<Segment> parent, const TDuration&);
     Rest(const Rest&, bool link = false);
 
     Sid getPropertyStyle(Pid pid) const override;
@@ -149,8 +149,8 @@ protected:
 private:
 
     friend class Factory;
-    Rest(Segment* parent);
-    Rest(Segment* parent, const TDuration&);
+    Rest(DummyParentOr<Segment> parent);
+    Rest(DummyParentOr<Segment> parent, const TDuration&);
 
     RectF drag(EditData&) override;
     double upPos() const override;

@@ -82,6 +82,28 @@ ScoresView {
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
             }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
+            }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
+            }
+
+            onRetryRequested: cloudScoresModel.retryAllConversions()
+
+            onCancelUploadRequested: function(uploadId) {
+                cloudScoresModel.cancelUpload(uploadId)
+            }
+
+            onCancelConversionRequested: function(convertType, convertId) {
+                cloudScoresModel.cancelConversion(convertType, convertId)
+            }
         }
     }
 
@@ -106,6 +128,28 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
+            }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
+            }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
+            }
+
+            onRetryRequested: cloudScoresModel.retryAllConversions()
+
+            onCancelUploadRequested: function(uploadId) {
+                cloudScoresModel.cancelUpload(uploadId)
+            }
+
+            onCancelConversionRequested: function(convertType, convertId) {
+                cloudScoresModel.cancelConversion(convertType, convertId)
             }
         }
     }

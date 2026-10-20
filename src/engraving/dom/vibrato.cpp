@@ -112,7 +112,7 @@ static const ElementStyle vibratoStyle {
 //   Vibrato
 //---------------------------------------------------------
 
-Vibrato::Vibrato(EngravingItem* parent)
+Vibrato::Vibrato(DummyParentOr<EngravingItem> parent)
     : SLine(ElementType::VIBRATO, parent)
 {
     initElementStyle(&vibratoStyle);
@@ -161,6 +161,11 @@ String Vibrato::vibratoTypeUserName() const
 muse::TranslatableString Vibrato::subtypeUserName() const
 {
     return TConv::userName(vibratoType());
+}
+
+Sid Vibrato::defaultPosSid() const
+{
+    return placeAbove() ? Sid::vibratoPosAbove : Sid::vibratoPosBelow;
 }
 
 //---------------------------------------------------------

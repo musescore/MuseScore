@@ -6,7 +6,7 @@
 #include "staff.h"
 
 namespace mu::engraving {
-PartialTie::PartialTie(Note* parent)
+PartialTie::PartialTie(DummyParentOr<Note> parent)
     : Tie(ElementType::PARTIAL_TIE, parent)
 {
 }

@@ -37,15 +37,15 @@
 
 #include "audio/common/soundfonttypes.h"
 
-#include "rcommand/actiontocommand.h"
-
 #include "../appshellcommands.h"
+#include "project/projectcommands.h"
+#include "playback/playbackcommands.h"
 
 #include "log.h"
-#include "rcommand/commandtypes.h"
 
 using namespace muse;
 using namespace mu::appshell;
+using namespace mu::playback;
 
 static const std::map<rcommand::Command, DockName> s_dockToggleCommands = {
     { DOCK_TOGGLE_PLAYBACK_COMMAND, PLAYBACK_TOOLBAR_NAME },
@@ -93,49 +93,15 @@ void AppshellCommandsController::init()
             return muse::make_ok();
         });
     }
-
-    // compat
-    {
-        using namespace muse::rcommand;
-        static const std::vector<ActionToCommand> actionToCommands = {
-            { "quit", APP_QUIT_COMMAND, make_conv({ { "all_instances", param<bool> }, { "installer_path", param<io::path_t> } }) },
-            { "restart", APP_RESTART_COMMAND, {} },
-            { "fullscreen", APP_FULLSCREEN_COMMAND, {} },
-            { "about-musescore", APP_ABOUT_MUSESCORE_COMMAND, {} },
-            { "about-qt", APP_ABOUT_QT_COMMAND, {} },
-            { "about-musicxml", APP_ABOUT_MUSICXML_COMMAND, {} },
-            { "online-handbook", APP_ONLINE_HANDBOOK_COMMAND, {} },
-            { "ask-help", APP_ASK_HELP_COMMAND, {} },
-            { "accessibility-statement", APP_ACCESSIBILITY_STATEMENT_COMMAND, {} },
-            { "preference-dialog", APP_PREFERENCES_COMMAND, {} },
-            { "revert-factory", APP_REVERT_TO_FACTORY_COMMAND, {} },
-            { "manage-plugins", APP_EXTENSIONS_COMMAND, {} },
-            { "toggle-transport", DOCK_TOGGLE_PLAYBACK_COMMAND, {} },
-            { "toggle-noteinput", DOCK_TOGGLE_NOTEINPUT_COMMAND, {} },
-            { "toggle-palettes", DOCK_TOGGLE_PALETTES_COMMAND, {} },
-            { "toggle-instruments", DOCK_TOGGLE_INSTRUMENTS_COMMAND, {} },
-            { "toggle-properties-panel", DOCK_TOGGLE_PROPERTIES_COMMAND, {} },
-            { "toggle-selection-filter", DOCK_TOGGLE_SELECTION_FILTER_COMMAND, {} },
-            { "toggle-undo-history-panel", DOCK_TOGGLE_UNDO_HISTORY_COMMAND, {} },
-            { "toggle-navigator", DOCK_TOGGLE_NAVIGATOR_COMMAND, {} },
-            { "toggle-braille-panel", DOCK_TOGGLE_BRAILLE_COMMAND, {} },
-            { "toggle-timeline", DOCK_TOGGLE_TIMELINE_COMMAND, {} },
-            { "toggle-mixer", DOCK_TOGGLE_MIXER_COMMAND, {} },
-            { "toggle-piano-keyboard", DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND, {} },
-            { "toggle-percussion-panel", DOCK_TOGGLE_PERCUSSION_COMMAND, {} },
-            { "toggle-statusbar", DOCK_TOGGLE_STATUSBAR_COMMAND, {} },
-        };
-
-        rcommand::registerActionToCommand(this, actionToCommands, commandDispatcher(), dispatcher());
-    }
 }
 
 bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
 {
     if ((event->type() == QEvent::Close && watched == qWindow())
         || event->type() == QEvent::Quit) {
-        bool accepted = quit(false);
-        event->setAccepted(accepted);
+        event->setAccepted(false);
+
+        quit(false);
 
         return true;
     }
@@ -147,7 +113,7 @@ bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
 
             if (openProjectScenario()->isUrlSupported(url)) {
                 if (startupScenario()->startupCompleted()) {
-                    dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
+                    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND, { { "url", muse::Val(url.toString()) } });
                 } else {
                     startupScenario()->setStartupScoreFile(project::ProjectFile { url });
                 }
@@ -206,6 +172,12 @@ AppshellCommandsController::DragTarget AppshellCommandsController::dragTarget(co
             return DragTarget::SoundFont;
         } else if (extensionInstaller()->isFileSupported(filePath)) {
             return DragTarget::Extension;
+        } else {
+            bool scorePageWithProjectOpen = interactive()->currentUri().val == NOTATION_URI
+                                            && globalContext()->currentProject() != nullptr;
+            if (!scorePageWithProjectOpen && convertFileToScoreScenario()->isFileSupported(filePath)) {
+                return DragTarget::ConvertibleFile;
+            }
         }
     }
     return DragTarget::Unknown;
@@ -245,10 +217,12 @@ bool AppshellCommandsController::onDropEvent(QDropEvent* event)
         switch (target) {
         case DragTarget::ProjectFile: {
             async::Async::call(this, [this, url]() {
-                    Ret ret = openProjectScenario()->openProject(url);
-                    if (!ret) {
-                        LOGE() << ret.toString();
-                    }
+                    openProjectScenario()->openProject(url)
+                    .onResolve(this, [](const Ret& ret) {
+                        if (!ret) {
+                            LOGE() << ret.toString();
+                        }
+                    });
                 });
         } break;
         case DragTarget::SoundFont: {
@@ -261,6 +235,17 @@ bool AppshellCommandsController::onDropEvent(QDropEvent* event)
             muse::io::path_t filePath = url.toLocalFile();
             async::Async::call(this, [this, filePath]() {
                     extensionInstaller()->installExtension(filePath);
+                });
+        } break;
+        case DragTarget::ConvertibleFile: {
+            muse::io::paths_t paths;
+            for (const QUrl& u : urls) {
+                if (u.isLocalFile()) {
+                    paths.push_back(muse::io::path_t(u.toLocalFile()));
+                }
+            }
+            async::Async::call(this, [this, paths]() {
+                    convertFileToScoreScenario()->convertFiles(paths);
                 });
         } break;
         case DragTarget::Unknown:
@@ -280,35 +265,56 @@ bool AppshellCommandsController::onDropEvent(QDropEvent* event)
     return false;
 }
 
-muse::Ret AppshellCommandsController::quit(const muse::rcommand::Params& params)
+muse::async::Promise<muse::Ret> AppshellCommandsController::quit(const muse::rcommand::Params& params)
 {
-    bool isAllInstances = params.at("all_instances").toBool();
+    bool isAllInstances = params.at("all_instances", Val(true)).toBool();
     muse::io::path_t installatorPath = params.at("installer_path").toString();
     return quit(isAllInstances, installatorPath);
 }
 
-muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
+muse::async::Promise<muse::Ret> AppshellCommandsController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
 {
     if (m_quiting) {
-        return muse::make_ret(Ret::Code::Busy);
+        return resolvedPromise(muse::make_ret(Ret::Code::Busy));
     }
 
     m_quiting = true;
 
-    if (!projectFilesController()->closeOpenedProject(false)) {
-        m_quiting = false;
-        return muse::make_ret(Ret::Code::UnknownError);
-    }
+    return muse::async::make_promise<Ret>([this, isAllInstances, installerPath](auto resolve) {
+        closeProjectScenario()->closeOpenedProject(false)
+        .onResolve(this, [this, isAllInstances, installerPath, resolve](const Ret& ret) {
+            if (!ret) {
+                LOGD() << "quit cancelled: " << ret.toString();
+                m_quiting = false;
+                (void)resolve(ret);
+                return;
+            }
 
+            //! NOTE `doQuit` destroys this window, so let's answer before it
+            (void)resolve(muse::make_ok());
+
+            doQuit(isAllInstances, installerPath);
+        });
+
+        return muse::async::Promise<Ret>::dummy_result();
+    });
+}
+
+muse::async::Promise<muse::Ret> AppshellCommandsController::resolvedPromise(const muse::Ret& ret)
+{
+    return muse::async::make_promise<Ret>([ret](auto resolve) {
+        return resolve(ret);
+    });
+}
+
+void AppshellCommandsController::doQuit(bool isAllInstances, const muse::io::path_t& installerPath)
+{
     if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
         //! NOTE: All windows are quitting to complete the update, apply it
         //! in-place, falling back to handing the package to the user.
         bool applied = false;
         if (appUpdateService()->canAutoInstall()) {
-            const muse::RetVal<muse::io::path_t> prepared = appUpdateService()->prepareUpdate(installerPath);
-            if (prepared.ret) {
-                applied = bool(appUpdateService()->finalizeUpdate(prepared.val));
-            }
+            applied = bool(appUpdateService()->installUpdate());
         }
 
         if (!applied) {
@@ -327,17 +333,21 @@ muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::
     //! NOTE the following destroys the IoC context and `this` with it,
     //! so don't access `this` after this point!
     if (isAllInstances) {
-        multiwindowsProvider()->quitForAll();
+        multiwindowsProvider()->quitForAll(iocContext());
     } else {
         multiwindowsProvider()->quitWindow(iocContext());
     }
-
-    return muse::make_ok();
 }
 
 void AppshellCommandsController::restart()
 {
-    if (projectFilesController()->closeOpenedProject(false)) {
+    closeProjectScenario()->closeOpenedProject(false)
+    .onResolve(this, [this](const Ret& ret) {
+        if (!ret) {
+            LOGD() << "restart cancelled: " << ret.toString();
+            return;
+        }
+
         if (multiwindowsProvider()->windowCount() == 1) {
             application()->restart();
         } else {
@@ -345,7 +355,7 @@ void AppshellCommandsController::restart()
 
             QCoreApplication::exit();
         }
-    }
+    });
 }
 
 void AppshellCommandsController::toggleFullScreen()
@@ -388,21 +398,14 @@ void AppshellCommandsController::openAccessibilityStatementPage()
 
 void AppshellCommandsController::openPreferencesDialog()
 {
-    const context::IPlaybackStatePtr state = globalContext()->playbackState();
-    if (state->isPlaying()) {
-        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
-
-        async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
-        statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {
-            auto statusChangedMut = statusChanged;
-            statusChangedMut.disconnect(this);
+    if (!playbackState()->isPlaying()) {
+        doOpenPreferencesDialog();
+    } else {
+        commandDispatcher()->dispatch(STOP_COMMAND)
+        .onResolve(this, [this](const muse::rcommand::Response& ) {
             doOpenPreferencesDialog();
         });
-
-        return;
     }
-
-    doOpenPreferencesDialog();
 }
 
 void AppshellCommandsController::doOpenPreferencesDialog()

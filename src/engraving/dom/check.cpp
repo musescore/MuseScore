@@ -161,7 +161,6 @@ Ret Score::sanityCheckLocal()
             Fraction voices[VOICES];
 
             m->setCorrupted(staffIdx, false);
-            setHasCorruptedMeasures(true);
 
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 for (voice_idx_t v = 0; v < VOICES; ++v) {
@@ -215,6 +214,19 @@ Ret Score::sanityCheckLocal()
                         .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
                     m->setCorrupted(staffIdx, true);
                     setHasCorruptedMeasures(true);
+                }
+            }
+
+            for (Segment* s = m->first(); s; s = s->next()) {
+                const Fraction rtick = s->rtick();
+                if ((rtick.negative() || rtick > mLen) && s->hasAnnotationOrElement(staffIdx)) {
+                    //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
+                    errors << muse::mtrc("engraving",
+                                         "<b>Element outside measure</b>: %1, measure %2, staff %3. Found at: %4. Expected between 0 and %5.")
+                        .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(rtick.toString(), mLen.toString());
+                    m->setCorrupted(staffIdx, true);
+                    setHasCorruptedMeasures(true);
+                    break;
                 }
             }
         }
@@ -275,7 +287,7 @@ void Measure::fillGap(const Fraction& rtickStart, const Fraction& len, track_idx
 
     Fraction curTick = tick() + actualTicks(rtickStart, nullptr, stretch);
     for (TDuration d : durationList) {
-        Rest* rest = Factory::createRest(score()->dummy()->segment());
+        Rest* rest = Factory::createRest(score()->dummy());
         rest->setTicks(d.isMeasure() ? ticks() * stretch : d.fraction());
         rest->setDurationType(d);
         rest->setTrack(track);

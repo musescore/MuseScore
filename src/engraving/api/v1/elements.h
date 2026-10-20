@@ -1064,7 +1064,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(int, clefToBarlinePos, CLEF_TO_BARLINE_POS)
     /// Whether this clef is a header clef.
     ///\since MuseScore 4.6
-    API_PROPERTY_T(bool, isHeader,        IS_HEADER)
+    Q_PROPERTY(bool isHeader READ isHeader)
     /// For key signatures: The key in concert pitch.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, concertKey,       KEY_CONCERT)
@@ -1308,6 +1308,7 @@ class EngravingItem : public apiv1::ScoreElement
     int vStaffIdx() const { return int(element()->vStaffIdx()); }
 
     bool up() const;
+    bool isHeader() const;
 
     /// \brief Current tick for this element
     /// \returns Tick of this element, i.e. fraction of ticks from the beginning
@@ -2725,8 +2726,7 @@ class FretDiagram : public EngravingItem
     Q_PROPERTY(int strings READ strings)
     /// Number of frets displayed in this diagram.
     Q_PROPERTY(int frets READ frets)
-    /// Starting fret number (0 means no offset, nut is shown).
-    Q_PROPERTY(int fretOffset READ fretOffset)
+    // fretOffset comes writable from EngravingItem; redeclaring it here would make it read-only
 
 public:
     /// \cond MS_INTERNAL
@@ -2746,7 +2746,6 @@ public:
 
     int strings() const { return fretDiagram()->strings(); }
     int frets() const { return fretDiagram()->frets(); }
-    int fretOffset() const { return fretDiagram()->fretOffset(); }
     /// \endcond
 
     /** APIDOC

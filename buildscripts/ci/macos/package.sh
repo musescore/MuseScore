@@ -22,8 +22,6 @@ echo "Package MuseScore"
 trap 'echo Package failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"
-SIGN_CERTIFICATE_ENCRYPT_SECRET=""
-SIGN_CERTIFICATE_PASSWORD=""
 APPLE_TEAM_ID=""
 APPLE_USERNAME=""
 APPLE_PASSWORD=""
@@ -32,8 +30,7 @@ SIGN_ARGS=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --signsecret) SIGN_CERTIFICATE_ENCRYPT_SECRET="$2"; shift ;;
-        --signpass) SIGN_CERTIFICATE_PASSWORD="$2"; shift ;;
+        --sign) SIGN_ARGS="--sign" ;;
         --team-id) APPLE_TEAM_ID="$2"; shift ;;
         -u|--user) APPLE_USERNAME="$2"; shift ;;
         -p|--password) APPLE_PASSWORD="$2"; shift ;;
@@ -41,29 +38,6 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
-
-if [ -z "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then echo "warning: not set SIGN_CERTIFICATE_ENCRYPT_SECRET"; fi
-if [ -z "$SIGN_CERTIFICATE_PASSWORD" ]; then echo "warning: not set SIGN_CERTIFICATE_PASSWORD"; fi
-
-# Setup keychain for code sign
-if [ -n "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then
-
-    7z x -y ./buildscripts/ci/macos/resources/mac_musescore.p12.enc -o./buildscripts/ci/macos/resources/ -p${SIGN_CERTIFICATE_ENCRYPT_SECRET}
-
-    export CERTIFICATE_P12=./buildscripts/ci/macos/resources/mac_musescore.p12
-    export KEYCHAIN=build.keychain
-    security create-keychain -p ci $KEYCHAIN
-    security default-keychain -s $KEYCHAIN
-    security unlock-keychain -p ci $KEYCHAIN
-    # Set keychain timeout to 1 hour for long builds
-    # see http://www.egeek.me/2013/02/23/jenkins-and-xcode-user-interaction-is-not-allowed/
-    security set-keychain-settings -t 3600 -l $KEYCHAIN
-    security import $CERTIFICATE_P12 -k $KEYCHAIN -P "$SIGN_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-
-    security set-key-partition-list -S apple-tool:,apple: -s -k ci $KEYCHAIN
-
-    SIGN_ARGS="--sign"
-fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
 BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)

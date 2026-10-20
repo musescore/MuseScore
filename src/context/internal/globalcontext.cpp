@@ -22,6 +22,8 @@
 
 #include "globalcontext.h"
 
+#include "global/io/fileinfo.h"
+
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
 #include "project/inotationproject.h"
@@ -33,7 +35,6 @@ using namespace muse::async;
 
 GlobalContext::GlobalContext()
 {
-    m_playbackState = std::make_shared<PlaybackState>();
 }
 
 void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
@@ -42,7 +43,26 @@ void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
         return;
     }
 
+    //! NOTE Hold the previous project (and its notation) until all the receivers
+    //! have disconnected from it in the notifications below
+    INotationProjectPtr prevProject = m_currentProject;
+    INotationPtr prevNotation = m_currentNotation;
+
+    if (m_currentProject) {
+        fsRestriction()->removeAllowedPathBase("project");
+    }
+
     m_currentProject = project;
+
+    if (m_currentProject) {
+        fsRestriction()->addAllowedPathBase("project", muse::io::dirpath(m_currentProject->path()));
+
+        m_currentProject->pathChanged().onNotify(this, [this]() {
+            fsRestriction()->addAllowedPathBase("project", muse::io::dirpath(m_currentProject->path()));
+        });
+    } else {
+        fsRestriction()->removeAllowedPathBase("project");
+    }
 
     INotationPtr notation = project ? project->masterNotation()->notation() : nullptr;
     doSetCurrentNotation(notation);
@@ -78,6 +98,10 @@ void GlobalContext::setCurrentNotation(const INotationPtr& notation)
         return;
     }
 
+    //! NOTE Hold the previous notation until all the receivers
+    //! have disconnected from it in the notification below
+    INotationPtr prevNotation = m_currentNotation;
+
     doSetCurrentNotation(notation);
     m_currentNotationChanged.notify();
 }
@@ -103,14 +127,4 @@ void GlobalContext::doSetCurrentNotation(const INotationPtr& notation)
     if (m_currentNotation) {
         m_currentNotation->setIsOpen(true);
     }
-}
-
-void GlobalContext::setCurrentPlayer(const muse::audio::IPlayerPtr& player)
-{
-    m_playbackState->setPlayer(player);
-}
-
-IPlaybackStatePtr GlobalContext::playbackState() const
-{
-    return m_playbackState;
 }
