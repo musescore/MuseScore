@@ -34,6 +34,7 @@ class PageLockIndicator : public SystemIndicatorIcon
 
 public:
     PageLockIndicator(DummyParentOr<System> parent, const RangeLock* lock);
+    PageLockIndicator* clone() const override { return new PageLockIndicator(*this); }
 
     void setSelected(bool v) override;
 

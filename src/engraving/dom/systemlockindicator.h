@@ -34,6 +34,7 @@ class SystemLockIndicator : public SystemIndicatorIcon
 
 public:
     SystemLockIndicator(DummyParentOr<System> parent, const RangeLock* lock);
+    SystemLockIndicator* clone() const override { return new SystemLockIndicator(*this); }
 
     void setSelected(bool v) override;
 
