@@ -71,6 +71,7 @@
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/groups.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/hammeronpulloff.h"
@@ -3823,20 +3824,20 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
         const ChordRest* crst = elements[i];
         blp = crst->beams();
     }
+    const ChordRest* prevCr = (idx > 0) ? elements[idx - 1] : nullptr;
     // find beam level current chord or rest
     blc = cr->beams();
-    bmc = cr->beamMode();
+    bmc = Groups::baseBeamMode(cr, prevCr);
     // find beam level next chord or rest
     for (size_t i = idx + 1; bln == -1 && i < elements.size(); ++i) {
         const ChordRest* crst = elements[i];
         bln = crst->beams();
-        bmn = crst->beamMode();
+        const ChordRest* prevCrst = (i > 0) ? elements[i - 1] : nullptr;
+        bmn = Groups::baseBeamMode(crst, prevCrst);
     }
     // find beam type and write
     for (int i = 1; i <= blc; ++i) {
         String text;
-        // TODO: correctly handle Beam::Mode::AUTO
-        // when equivalent to BEGIN32 or BEGIN64
         if ((blp < i && bln >= i)
             || (bmc == BeamMode::BEGIN16 && i > 1)
             || (bmc == BeamMode::BEGIN32 && i > 2)) {

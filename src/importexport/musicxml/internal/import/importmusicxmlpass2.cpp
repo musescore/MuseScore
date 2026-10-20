@@ -6690,7 +6690,7 @@ static BeamMode computeBeamMode(const std::map<int, String>& beamTypes)
         return BeamMode::BEGIN16;
     } else if (muse::value(beamTypes, 1) == u"continue"
                && muse::value(beamTypes, 2) == u"continue"
-               && muse::value(beamTypes, 3) == u"begin") {
+               && (muse::value(beamTypes, 3) == u"begin" || muse::value(beamTypes, 4) == u"begin")) {
         return BeamMode::BEGIN32;
     }
     // Generic beam modes are naive to all except the first beam
