@@ -25,6 +25,7 @@
 
 #include "global/translation.h"
 #include "global/dataformatter.h"
+#include "global/io/ioretcodes.h"
 #include "global/log.h"
 
 #include "project/projecterrors.h"
@@ -34,35 +35,7 @@ using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
 
-//! NOTE: attempt 4 is ~5 minutes into retrying
-static constexpr int RETRY_TOAST_ATTEMPT_THRESHOLD = 4;
-
-static ConvertSelection toConvertSelection(const Val& val)
-{
-    const QVariantMap map = val.toQVariant().toMap();
-    const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
-    const QString link = map.value("link").toString();
-    const QStringList pathsList = map.value("paths").toStringList();
-
-    io::paths_t paths;
-    paths.reserve(pathsList.size());
-    for (const QString& path : pathsList) {
-        paths.push_back(io::path_t(path));
-    }
-
-    ConvertSelection selection;
-    selection.convertedScoreName = map.value("convertedScoreName").toString();
-
-    if (type == ConvertType::Audio2Score && !link.isEmpty()) {
-        selection.input = Audio2ScoreConvertInput { QUrl(link) };
-    } else if (type == ConvertType::Audio2Score) {
-        selection.input = Audio2ScoreConvertInput { paths };
-    } else {
-        selection.input = OmrConvertInput { paths };
-    }
-
-    return selection;
-}
+static constexpr muse::secs_t RETRY_TOAST_ELAPSED_THRESHOLD_SECS = muse::secs_t::make(5.0 * 60.0);
 
 ConvertFileToScoreScenario::ConvertFileToScoreScenario(const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx)
@@ -77,23 +50,26 @@ void ConvertFileToScoreScenario::init()
         if (ret) {
             showScoreReadyNotification(watched);
         } else {
-            showConvertFailedNotification(ret);
+            showConvertFailedNotification(watched);
         }
 
         m_convertFinished.send(ret, watched);
     });
 
-    service()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
+    service()->pollingStatusChanged().onReceive(this, [this](const PollingStatus& status) {
+        if (std::holds_alternative<PollingSuccess>(status)) {
+            m_retryToastShown = false;
+            return;
+        }
+
+        const PollingFailure& failure = std::get<PollingFailure>(status);
+
         if (failure.gaveUp) {
             showPollingGaveUpNotification();
             return;
         }
 
-        if (failure.attempt == 1) {
-            m_retryToastShown = false;
-        }
-
-        if (!m_retryToastShown && failure.attempt >= RETRY_TOAST_ATTEMPT_THRESHOLD) {
+        if (!m_retryToastShown && failure.elapsed >= RETRY_TOAST_ELAPSED_THRESHOLD_SECS) {
             m_retryToastShown = true;
             showPollingFailureNotification();
         }
@@ -177,6 +153,11 @@ async::Channel<Ret, WatchedScore> ConvertFileToScoreScenario::convertFinished() 
     return m_convertFinished;
 }
 
+ValNt<UploadingScoreList> ConvertFileToScoreScenario::uploadingScores() const
+{
+    return service()->uploadingScores();
+}
+
 ValNt<WatchedScoreList> ConvertFileToScoreScenario::watchedScores() const
 {
     return service()->watchedScores();
@@ -188,7 +169,21 @@ bool ConvertFileToScoreScenario::isAwaitingReview(int scoreId) const
     return watched && watched->conversion.status == ConvertStatus::AwaitingReview;
 }
 
+void ConvertFileToScoreScenario::cancelUpload(int uploadId)
+{
+    confirmCancel([this, uploadId]() {
+        service()->cancelUpload(uploadId);
+    });
+}
+
 void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertId)
+{
+    confirmCancel([this, type, convertId]() {
+        service()->cancelConversion(type, convertId);
+    });
+}
+
+void ConvertFileToScoreScenario::confirmCancel(const std::function<void()>& onCancel)
 {
     constexpr int keepConvertingBtn = int(IInteractive::Button::No);
     constexpr int cancelBtn = int(IInteractive::Button::Yes);
@@ -203,16 +198,16 @@ void ConvertFileToScoreScenario::cancelConversion(ConvertType type, int convertI
         muse::trc("project/convert", "Are you sure you want to cancel this file conversion?"),
         muse::trc("project/convert", "Processing will be canceled and this score will be removed from your scores."),
         { keepConverting, cancel }, keepConvertingBtn, IInteractive::WithIcon)
-    .onResolve(this, [this, type, convertId, cancelBtn](const IInteractive::Result& result) {
+    .onResolve(this, [onCancel, cancelBtn](const IInteractive::Result& result) {
         if (result.isButton(cancelBtn)) {
-            service()->deleteConversion(type, convertId);
+            onCancel();
         }
     });
 }
 
-async::Channel<PollingFailure> ConvertFileToScoreScenario::pollingFailed() const
+async::Channel<PollingStatus> ConvertFileToScoreScenario::pollingStatusChanged() const
 {
-    return service()->pollingFailed();
+    return service()->pollingStatusChanged();
 }
 
 void ConvertFileToScoreScenario::retryPolling()
@@ -271,7 +266,8 @@ async::Promise<Ret> ConvertFileToScoreScenario::ensureAuthorization()
     });
 }
 
-async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert(const io::paths_t& paths, ConvertType type)
+async::Promise<ConvertFileToScoreScenario::ConvertSelection> ConvertFileToScoreScenario::selectFilesToConvert(const io::paths_t& paths,
+                                                                                                              ConvertType type)
 {
     UriQuery query("musescore://project/convert/selectfiles");
 
@@ -286,9 +282,36 @@ async::Promise<ConvertSelection> ConvertFileToScoreScenario::selectFilesToConver
     }
 
     return interactive()->open(query)
-           .then<ConvertSelection>(this, [](const Val& val, auto resolve) {
+           .then<ConvertSelection>(this, [this](const Val& val, auto resolve) {
         return resolve(toConvertSelection(val));
     });
+}
+
+ConvertFileToScoreScenario::ConvertSelection ConvertFileToScoreScenario::toConvertSelection(const Val& val) const
+{
+    const QVariantMap map = val.toQVariant().toMap();
+    const ConvertType type = static_cast<ConvertType>(map.value("type").toInt());
+    const QString link = map.value("link").toString();
+    const QStringList pathsList = map.value("paths").toStringList();
+
+    io::paths_t paths;
+    paths.reserve(pathsList.size());
+    for (const QString& path : pathsList) {
+        paths.push_back(io::path_t(path));
+    }
+
+    ConvertSelection selection;
+    selection.convertedScoreName = map.value("convertedScoreName").toString();
+
+    if (type == ConvertType::Audio2Score && !link.isEmpty()) {
+        selection.input = Audio2ScoreConvertInput { QUrl::fromUserInput(link) };
+    } else if (type == ConvertType::Audio2Score) {
+        selection.input = Audio2ScoreConvertInput { paths };
+    } else {
+        selection.input = OmrConvertInput { paths };
+    }
+
+    return selection;
 }
 
 void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, ConvertType type)
@@ -325,19 +348,39 @@ void ConvertFileToScoreScenario::confirmConvert(const io::paths_t& paths, Conver
     });
 }
 
-Ret ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
+void ConvertFileToScoreScenario::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
 {
-    Ret ret = service()->startConvert(input, convertedScoreName);
-    if (!ret) {
-        showUnknownError();
-        return ret;
+    RetVal<Progress> progress = service()->uploadToConvert(input, convertedScoreName);
+    if (!progress.ret) {
+        showUploadError(progress.ret, input, convertedScoreName);
+        return;
     }
 
     if (configuration()->showConvertFileProcessingDialog()) {
         showFileProcessingDialog();
     }
 
-    return ret;
+    progress.val.finished().onReceive(this, [this, input, convertedScoreName](const ProgressResult& res) {
+        if (!res.ret && res.ret.code() != static_cast<int>(Ret::Code::Cancel)) {
+            showUploadError(res.ret, input, convertedScoreName);
+        }
+    });
+}
+
+void ConvertFileToScoreScenario::showUploadError(const Ret& ret, const ConvertInput& input, const muse::String& convertedScoreName)
+{
+    switch (ret.code()) {
+    case static_cast<int>(Err::ConvertUploadFailed):
+        showUploadFailedNotification(input, convertedScoreName);
+        break;
+    case static_cast<int>(io::Err::FSNotExist):
+    case static_cast<int>(io::Err::FSReadError):
+        showFileReadError(convertPathsOf(input).size());
+        break;
+    default:
+        showUnknownError();
+        break;
+    }
 }
 
 void ConvertFileToScoreScenario::showValidationError(const Ret& ret)
@@ -390,6 +433,19 @@ void ConvertFileToScoreScenario::showUnknownError()
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
+void ConvertFileToScoreScenario::showFileReadError(size_t fileCount)
+{
+    if (fileCount > 1) {
+        interactive()->warning(muse::trc("project/convert", "One or more files could not be read"),
+                               muse::trc("project/convert", "Make sure the files still exist and that you have permission to open them."),
+                               { interactive()->buttonData(IInteractive::Button::Ok) });
+    } else {
+        interactive()->warning(muse::trc("project/convert", "This file could not be read"),
+                               muse::trc("project/convert", "Make sure the file still exists and that you have permission to open it."),
+                               { interactive()->buttonData(IInteractive::Button::Ok) });
+    }
+}
+
 void ConvertFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)
 {
     QString size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes));
@@ -418,8 +474,7 @@ void ConvertFileToScoreScenario::showUnsupportedFormatError()
 
 void ConvertFileToScoreScenario::showUnsupportedLinkError()
 {
-    const LinkSources configured = service()->config().audio2score.link.allowedSources;
-    const LinkSources sources = configured ? configured : (LinkSource::YouTube | LinkSource::AudioCom);
+    const LinkSources sources = service()->config().audio2score.link.allowedSources;
 
     std::string text;
     if (sources.testFlag(LinkSource::YouTube) && sources.testFlag(LinkSource::AudioCom)) {
@@ -484,8 +539,17 @@ void ConvertFileToScoreScenario::showFileProcessingDialog()
 
 void ConvertFileToScoreScenario::showScoreReadyNotification(const WatchedScore& watched)
 {
+    IF_ASSERT_FAILED(watched.scoreId) {
+        return;
+    }
+
+    const io::path_t path = configuration()->cloudProjectPath(*watched.scoreId);
+    if (multiwindowsProvider()->isProjectAlreadyOpened(path)) {
+        return;
+    }
+
     constexpr int openScoreBtn = int(toast::ToastActionCode::Custom) + 1;
-    const int scoreId = watched.scoreId ? *watched.scoreId : 0;
+    const int scoreId = *watched.scoreId;
 
     std::string msg = muse::qtrc("project/convert", "‘%1’ has finished processing and is ready to open.")
                       .arg(watched.name.toQString()).toStdString();
@@ -503,15 +567,14 @@ void ConvertFileToScoreScenario::showScoreReadyNotification(const WatchedScore& 
     });
 }
 
-void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
+void ConvertFileToScoreScenario::showConvertFailedNotification(const WatchedScore& watched)
 {
-    muse::String fileName = ret.data<muse::String>(CONVERT_FAILED_FILE_NAME_KEY, muse::String());
-    if (fileName.isEmpty()) {
+    if (watched.name.isEmpty()) {
         return;
     }
 
     std::string msg = muse::qtrc("project/convert", "We weren’t able to convert ‘%1’. Please try again with a better quality file.")
-                      .arg(fileName.toQString()).toStdString();
+                      .arg(watched.name.toQString()).toStdString();
 
     toastService()->show(muse::trc("project/convert", "Error processing score"), msg,
                          muse::ui::IconCode::Code::ERROR_FILLED, true,
@@ -521,6 +584,23 @@ void ConvertFileToScoreScenario::showConvertFailedNotification(const Ret& ret)
     }).onResolve(this, [this](const toast::ToastResult& result) {
         if (result.isCode(toast::ToastActionCode::TryAgain)) {
             convertFiles();
+        }
+    });
+}
+
+void ConvertFileToScoreScenario::showUploadFailedNotification(const ConvertInput& input, const muse::String& convertedScoreName)
+{
+    std::string msg = muse::qtrc("project/convert", "We weren’t able to upload ‘%1’. Check your internet connection and try again.")
+                      .arg(convertedScoreName.toQString()).toStdString();
+
+    toastService()->show(muse::trc("project/convert", "Error uploading score"), msg,
+                         muse::ui::IconCode::Code::ERROR_FILLED, true,
+    {
+        { muse::trc("global", "Dismiss"), toast::ToastActionCode::Dismiss },
+        { muse::trc("global", "Retry"), toast::ToastActionCode::TryAgain, /*accent*/ true },
+    }).onResolve(this, [this, input, convertedScoreName](const toast::ToastResult& result) {
+        if (result.isCode(toast::ToastActionCode::TryAgain)) {
+            startConvert(input, convertedScoreName);
         }
     });
 }

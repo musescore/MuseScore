@@ -39,6 +39,7 @@
 #include "internal/projectautosaver.h"
 #include "internal/convertfiletoscoreservice.h"
 #include "internal/convertfiletoscorescenario.h"
+#include "internal/deletecloudscorescenario.h"
 
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
@@ -95,6 +96,7 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
         ir->registerQmlUri(Uri("musescore://project/convert/selectfiles"), "MuseScore.Project", "ConvertFileToScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/convert/processing"), "MuseScore.Project", "ConvertFileProcessingDialog");
+        ir->registerQmlUri(Uri("musescore://project/deletecloudscore"), "MuseScore.Project", "DeleteCloudScoreDialog");
     }
 
     auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
@@ -161,6 +163,7 @@ void ProjectContext::registerExports()
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(mname, m_engravingPluginAPIHelper);
     ioc()->registerExport<IConvertFileToScoreService>(mname, m_convertFileToScoreService);
     ioc()->registerExport<IConvertFileToScoreScenario>(mname, m_convertFileToScoreScenario);
+    ioc()->registerExport<IDeleteCloudScoreScenario>(mname, new DeleteCloudScoreScenario(iocContext()));
 }
 
 void ProjectContext::resolveImports()

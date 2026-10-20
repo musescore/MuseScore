@@ -40,11 +40,11 @@ class ReviewScoreQualityModel : public QObject, public muse::Contextable
 
     QML_ELEMENT
 
+public:
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IConvertFileToScoreService> convertFileToScoreService = { this };
 
-public:
     enum class Step {
         Rating,
         Feedback

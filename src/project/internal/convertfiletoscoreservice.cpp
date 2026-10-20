@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <memory>
 #include <optional>
 #include <unordered_map>
@@ -82,13 +83,7 @@ static FileCategory resolveFileCategory(const io::path_t& path, const ConvertCon
         return FileCategory::Audio;
     }
 
-    //! NOTE: config is a client-side sanity check only; if it hasn't been fully fetched yet, fall back
-    //! to a best-effort guess rather than blocking the conversion
-    if (!config.omr.images.allowedExtensions.isEmpty() && !config.audio2score.file.allowedExtensions.isEmpty()) {
-        return FileCategory::Unknown;
-    }
-
-    return fileCategoryFromSuffix(ext.toStdString());
+    return FileCategory::Unknown;
 }
 
 static std::string errorCodeToString(ConvertErrorCode code)
@@ -136,7 +131,7 @@ void ConvertFileToScoreService::init()
     m_config.omr.images.allowedExtensions = { "jpeg", "jpg", "png" };
     m_config.omr.images.maxFileSizeBytes = 78643200;
     m_config.omr.images.maxFiles = 15;
-    m_config.audio2score.file.allowedExtensions = { "mp3" };
+    m_config.audio2score.file.allowedExtensions = { "mp3", "wav", "flac" };
     m_config.audio2score.file.maxFileSizeBytes = 52428800;
     m_config.audio2score.file.maxFiles = 1;
     m_config.audio2score.link.maxLength = 2048;
@@ -238,7 +233,8 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
         return RetVal<ConvertFilesValidation>::make_ok(ConvertFilesValidation { ConvertType::Audio2Score, FileCategory::Audio });
     }
 
-    if (m_config.omr.images.maxFiles > 0 && paths.size() > 1 && int(paths.size()) > m_config.omr.images.maxFiles) {
+    if (firstCategory == FileCategory::Image
+        && m_config.omr.images.maxFiles > 0 && int(paths.size()) > m_config.omr.images.maxFiles) {
         return RetVal<ConvertFilesValidation>::make_ret(make_ret(Err::ConvertTooManyImages));
     }
 
@@ -259,22 +255,23 @@ RetVal<ConvertFilesValidation> ConvertFileToScoreService::validateFiles(const io
 
 Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
 {
-    const LinkSources sources = m_config.audio2score.link.allowedSources
-                                ? m_config.audio2score.link.allowedSources
-                                : LinkSource::YouTube | LinkSource::AudioCom;
-
     if (!link.isValid()) {
         return make_ret(Err::ConvertUnsupportedLink, link.errorString().toStdString());
     }
 
+    const int maxLength = m_config.audio2score.link.maxLength;
+    if (maxLength > 0 && link.toString().length() > maxLength) {
+        return make_ret(Err::ConvertUnsupportedLink);
+    }
+
     const QString host = link.host().toLower();
 
-    if (sources.testFlag(LinkSource::YouTube)
+    if (m_config.audio2score.link.allowedSources.testFlag(LinkSource::YouTube)
         && (host == "youtube.com" || host.endsWith(".youtube.com") || host == "youtu.be")) {
         return make_ok();
     }
 
-    if (sources.testFlag(LinkSource::AudioCom)
+    if (m_config.audio2score.link.allowedSources.testFlag(LinkSource::AudioCom)
         && (host == "audio.com" || host.endsWith(".audio.com"))) {
         return make_ok();
     }
@@ -282,17 +279,17 @@ Ret ConvertFileToScoreService::validateLink(const QUrl& link) const
     return make_ret(Err::ConvertUnsupportedLink);
 }
 
-Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const muse::String& convertedScoreName)
+RetVal<Progress> ConvertFileToScoreService::uploadToConvert(const ConvertInput& input, const muse::String& convertedScoreName)
 {
     const io::paths_t paths = convertPathsOf(input);
     const QUrl link = convertLinkOf(input);
 
     IF_ASSERT_FAILED(!paths.empty() || link.isValid()) {
-        return make_ret(Err::ConvertValidationFailed);
+        return RetVal<Progress>::make_ret(make_ret(Err::ConvertValidationFailed));
     }
 
     IF_ASSERT_FAILED(io::isAllowedFileName(io::path_t(convertedScoreName))) {
-        return make_ret(Err::ConvertValidationFailed);
+        return RetVal<Progress>::make_ret(make_ret(Err::ConvertValidationFailed));
     }
 
     ConvertFileDataList files;
@@ -300,7 +297,7 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
     for (const io::path_t& path : paths) {
         RetVal<ByteArray> fileData = fileSystem()->readFile(path);
         if (!fileData.ret) {
-            return fileData.ret;
+            return RetVal<Progress>::make_ret(fileData.ret);
         }
 
         files.push_back(ConvertFileData { std::move(fileData.val), io::filename(path) });
@@ -309,32 +306,60 @@ Ret ConvertFileToScoreService::startConvert(const ConvertInput& input, const mus
     const ConvertType type = convertTypeOf(input);
     auto data = std::make_shared<const ConvertUploadData>(ConvertUploadData { type, std::move(files), link,
                                                                               convertedScoreName.toQString() });
-    ProgressPtr progress = museScoreComService()->convert()->startConvert(data);
+    ProgressPtr uploadProgress = museScoreComService()->convert()->uploadToConvert(data);
 
-    progress->progressChanged().onReceive(this, [convertedScoreName](int64_t current, int64_t total, const std::string&) {
-        LOGI() << "Uploading for convert \"" << convertedScoreName << "\": " << current << "/" << total;
+    LOGI() << "Uploading \"" << convertedScoreName << "\" for conversion (type: " << convertTypeToString(type) << ")";
+
+    const int uploadId = ++m_lastUploadId;
+    m_uploadingScores.push_back(UploadingScore { uploadId, convertedScoreName });
+    m_uploadProgresses[uploadId] = uploadProgress;
+    m_uploadingScoresChanged.notify();
+
+    Progress progress;
+    progress.start();
+
+    uploadProgress->progressChanged().onReceive(this, [convertedScoreName, progress](int64_t current, int64_t total,
+                                                                                     const std::string& msg) mutable {
+        LOGI() << "Uploading \"" << convertedScoreName << "\" for conversion: " << current << "/" << total;
+        progress.progress(current, total, msg);
     });
 
-    progress->finished().onReceive(this, [this, type, convertedScoreName](const ProgressResult& res) {
+    uploadProgress->finished().onReceive(this, [this, type, uploadId, convertedScoreName, progress](const ProgressResult& res) mutable {
+        removeUpload(uploadId);
+
+        if (res.ret.code() == int(Ret::Code::Cancel)) {
+            LOGI() << "Upload of \"" << convertedScoreName << "\" was canceled";
+            progress.finish(res.ret);
+            return;
+        }
+
         if (!res.ret) {
             LOGE() << "Could not upload files for \"" << convertedScoreName << "\" (type: "
                    << convertTypeToString(type) << "): " << res.ret.toString();
-            Ret ret = res.ret;
-            ret.setData(CONVERT_FAILED_FILE_NAME_KEY, convertedScoreName);
-            finishConvert(ret);
+            progress.finish(make_ret(Err::ConvertUploadFailed, res.ret.toString()));
             return;
         }
 
         const int itemId = res.val.toMap()["id"].toInt();
         watch(type, itemId, convertedScoreName);
+        progress.finish(make_ok());
     });
 
-    return make_ok();
+    return RetVal<Progress>::make_ok(progress);
 }
 
 async::Channel<Ret, WatchedScore> ConvertFileToScoreService::convertFinished() const
 {
     return m_convertFinished;
+}
+
+ValNt<UploadingScoreList> ConvertFileToScoreService::uploadingScores() const
+{
+    ValNt<UploadingScoreList> result;
+    result.val = m_uploadingScores;
+    result.notification = m_uploadingScoresChanged;
+
+    return result;
 }
 
 ValNt<WatchedScoreList> ConvertFileToScoreService::watchedScores() const
@@ -355,14 +380,21 @@ const WatchedScore* ConvertFileToScoreService::watchedScoreById(int scoreId) con
     return it != m_watchedScores.cend() ? &*it : nullptr;
 }
 
-async::Channel<PollingFailure> ConvertFileToScoreService::pollingFailed() const
+async::Channel<PollingStatus> ConvertFileToScoreService::pollingStatusChanged() const
 {
-    return m_pollingFailed;
+    return m_pollingStatusChanged;
+}
+
+int64_t ConvertFileToScoreService::nowMs() const
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
 void ConvertFileToScoreService::retryPolling()
 {
     resetPollState();
+    m_manualRetryRequested = true;
     m_timer.start();
     poll();
 }
@@ -427,7 +459,19 @@ void ConvertFileToScoreService::submitReviewComment(int scoreId, const QString& 
     });
 }
 
-void ConvertFileToScoreService::deleteConversion(ConvertType type, int convertId)
+void ConvertFileToScoreService::cancelUpload(int uploadId)
+{
+    auto it = m_uploadProgresses.find(uploadId);
+    if (it == m_uploadProgresses.end()) {
+        return;
+    }
+
+    //! NOTE: the upload's finished() handler removes it
+    ProgressPtr progress = it->second;
+    progress->cancel();
+}
+
+void ConvertFileToScoreService::cancelConversion(ConvertType type, int convertId)
 {
     museScoreComService()->convert()->deleteConversion(type, convertId)
     .onResolve(this, [this, type, convertId](const Ret& ret) {
@@ -488,10 +532,16 @@ void ConvertFileToScoreService::loadWatchedScores()
             continue;
         }
 
+        int statusInt = obj.value("status").toInt();
+        if (statusInt < 0 || statusInt > static_cast<int>(ConvertStatus::Unknown)) {
+            LOGW() << "Unknown conversion status: " << statusInt;
+            statusInt = static_cast<int>(ConvertStatus::Unknown);
+        }
+
         WatchedScore& watched = m_watchedScores.emplace_back();
         watched.conversion.id = obj.value("id").toInt();
         watched.conversion.type = static_cast<ConvertType>(typeInt);
-        watched.conversion.status = static_cast<ConvertStatus>(obj.value("status").toInt());
+        watched.conversion.status = static_cast<ConvertStatus>(statusInt);
         watched.scoreId = obj.contains("scoreId") ? std::optional<int>(obj.value("scoreId").toInt()) : std::nullopt;
         watched.startedLocally = obj.value("startedLocally").toBool();
         watched.name = muse::String::fromStdString(obj.value("convertedScoreName").toStdString());
@@ -534,6 +584,19 @@ void ConvertFileToScoreService::saveWatchedScores()
     m_isSaving = false;
 }
 
+void ConvertFileToScoreService::removeUpload(int uploadId)
+{
+    m_uploadProgresses.erase(uploadId);
+
+    auto it = std::find_if(m_uploadingScores.begin(), m_uploadingScores.end(), [uploadId](const UploadingScore& uploading) {
+        return uploading.uploadId == uploadId;
+    });
+    if (it != m_uploadingScores.end()) {
+        m_uploadingScores.erase(it);
+        m_uploadingScoresChanged.notify();
+    }
+}
+
 void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::String& convertedScoreName)
 {
     LOGI() << "Start watching conversion of \"" << convertedScoreName << "\" (" << convertIdAndType(type, itemId) << ")";
@@ -554,22 +617,22 @@ void ConvertFileToScoreService::watch(ConvertType type, int itemId, const muse::
     if (!m_timer.isActive()) {
         m_timer.start();
     }
-
-    poll();
 }
 
-bool ConvertFileToScoreService::hasAnyProcessingScores() const
+bool ConvertFileToScoreService::hasAnyScoresToPoll() const
 {
     return std::any_of(m_watchedScores.begin(), m_watchedScores.end(), [](const WatchedScore& watched) {
-        return watched.conversion.status == ConvertStatus::Processing;
+        return watched.conversion.status == ConvertStatus::Processing
+               || watched.conversion.status == ConvertStatus::Unknown;
     });
 }
 
 void ConvertFileToScoreService::poll()
 {
-    if (!hasAnyProcessingScores()) {
+    if (!hasAnyScoresToPoll()) {
         LOGDA() << "Nothing active to poll, stopping timer";
         m_timer.stop();
+        m_manualRetryRequested = false;
         return;
     }
 
@@ -594,6 +657,7 @@ void ConvertFileToScoreService::poll()
         }
 
         resetPollState();
+        m_pollingStatusChanged.send(PollingSuccess {});
         updateWatchedScores(result.val, snapshot);
     });
 }
@@ -603,39 +667,42 @@ void ConvertFileToScoreService::resetPollState()
     m_pollFailureCount = 0;
     m_pollIntervalMs = MIN_RETRY_INTERVAL_MS;
     m_timer.setInterval(MIN_RETRY_INTERVAL_MS);
+    m_manualRetryRequested = false;
 }
 
 void ConvertFileToScoreService::handlePollFailure(const Ret& ret)
 {
-    if (isRetryableError(ret) && ++m_pollFailureCount < MAX_POLL_RETRY_ATTEMPTS) {
-        //! NOTE: the first retry is likely just a stale pooled connection the server closed
-        //! (e.g. HTTP/2 GOAWAY) - don't back off yet, retry at the normal interval
-        if (m_pollFailureCount > 1) {
-            m_pollIntervalMs = std::min(m_pollIntervalMs * 2, MAX_RETRY_INTERVAL_MS);
-            m_timer.setInterval(m_pollIntervalMs);
-        }
+    if (m_pollFailureCount == 0) {
+        m_pollRetryStartMs = nowMs();
+    }
+    ++m_pollFailureCount;
+
+    const int64_t elapsedMs = nowMs() - m_pollRetryStartMs;
+    const int64_t remainingMs = MAX_POLL_RETRY_DURATION_MS - elapsedMs;
+    const secs_t elapsedSecs(elapsedMs / 1000.0);
+
+    if (!m_manualRetryRequested && isRetryableError(ret) && remainingMs > 0) {
+        m_pollIntervalMs = static_cast<int>(std::min<int64_t>(m_pollIntervalMs * 2, remainingMs));
+        m_timer.setInterval(m_pollIntervalMs);
         const secs_t intervalSecs(m_pollIntervalMs / 1000.0);
-        LOGW() << "Could not check the conversion status, retrying in " << intervalSecs.raw()
-               << "s (attempt " << m_pollFailureCount << "/" << MAX_POLL_RETRY_ATTEMPTS
-               << "): " << ret.toString();
-        m_pollingFailed.send(PollingFailure { ret, m_pollFailureCount, MAX_POLL_RETRY_ATTEMPTS, intervalSecs, false });
+        LOGW() << "Could not check the conversion status, retrying in " << intervalSecs
+               << "s (elapsed " << elapsedSecs << "s): " << ret.toString();
+        m_pollingStatusChanged.send(PollingFailure { ret, elapsedSecs, intervalSecs, false });
         return;
     }
 
-    giveUpPolling(ret);
+    giveUpPolling(ret, elapsedSecs);
 }
 
-void ConvertFileToScoreService::giveUpPolling(const Ret& ret)
+void ConvertFileToScoreService::giveUpPolling(const Ret& ret, secs_t elapsed)
 {
     LOGE() << "Could not check the conversion status, stopping polling for now, "
            << m_watchedScores.size() << " pending conversion(s) remain watched: " << ret.toString();
 
-    const int count = m_pollFailureCount;
-
     m_timer.stop();
     resetPollState();
 
-    m_pollingFailed.send(PollingFailure { ret, count, MAX_POLL_RETRY_ATTEMPTS, secs_t(0), true });
+    m_pollingStatusChanged.send(PollingFailure { ret, elapsed, secs_t(0), true });
 }
 
 void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queue, const WatchedScoreList& snapshot)
@@ -651,7 +718,16 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
         snapshotByTypeAndId[static_cast<size_t>(watched.conversion.type)][watched.conversion.id] = i;
     }
 
-    std::vector<bool> seen(snapshot.size(), false);
+    std::vector<bool> seenInSnapshot(snapshot.size(), false);
+
+    //! NOTE: m_watchedScores also covers items watched while a poll is in progress
+    std::array<std::unordered_map<int /*itemId*/, size_t /*index*/>, CONVERT_TYPE_COUNT> liveByTypeAndId;
+    for (size_t i = 0; i < m_watchedScores.size(); ++i) {
+        const WatchedScore& watched = m_watchedScores[i];
+        liveByTypeAndId[static_cast<size_t>(watched.conversion.type)][watched.conversion.id] = i;
+    }
+
+    std::vector<bool> seenInWatchedScores(m_watchedScores.size(), false);
 
     //! NOTE: the queue is the source of truth - rebuild m_watchedScores from it every time,
     //! since it may also contain conversions started outside MuseScore
@@ -659,36 +735,40 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
     newWatchedScores.reserve(queue.size());
 
     for (const ConvertQueueItem& queueItem : queue) {
-        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(queueItem.type)];
-        const auto it = snapshotIndexById.find(queueItem.id);
-
-        if (it != snapshotIndexById.end()) {
-            //! NOTE: already watched - update it (name, status, scoreId)
-            seen[it->second] = true;
-            WatchedScore watched = snapshot.at(it->second);
-            if (!queueItem.filename.isEmpty()) {
-                watched.name = queueItem.filename;
-            }
-            watched.scoreId = queueItem.scoreId;
-            updateStatus(watched, queueItem.status, queueItem.errorCode);
-
-            if (watched.conversion.status != ConvertStatus::Done) {
-                newWatchedScores.push_back(watched);
-            }
+        if (queueItem.type == ConvertType::Unknown) {
+            LOGW() << "Skipping queue item with unrecognized type (" << convertIdAndType(queueItem.type, queueItem.id) << ")";
             continue;
         }
 
-        if (queueItem.status != ConvertStatus::Processing && queueItem.status != ConvertStatus::AwaitingReview) {
+        const std::unordered_map<int, size_t>& liveIndexById = liveByTypeAndId[static_cast<size_t>(queueItem.type)];
+        const auto liveIt = liveIndexById.find(queueItem.id);
+
+        if (liveIt == liveIndexById.end()
+            && queueItem.status != ConvertStatus::Processing && queueItem.status != ConvertStatus::AwaitingReview) {
             //! NOTE: not previously watched, and already terminal - nothing to watch for anymore
             continue;
         }
 
-        LOGI() << "Found new external conversion (" << convertIdAndType(queueItem.type, queueItem.id) << ")";
-
         WatchedScore watched;
+        if (liveIt != liveIndexById.end()) {
+            //! NOTE: already watched - whether known before the poll started, or watched mid-poll
+            watched = m_watchedScores.at(liveIt->second);
+            seenInWatchedScores[liveIt->second] = true;
+        } else {
+            LOGI() << "Found new external conversion (" << convertIdAndType(queueItem.type, queueItem.id) << ")";
+        }
+
+        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(queueItem.type)];
+        const auto snapshotIt = snapshotIndexById.find(queueItem.id);
+        if (snapshotIt != snapshotIndexById.end()) {
+            seenInSnapshot[snapshotIt->second] = true;
+        }
+
         watched.conversion.id = queueItem.id;
         watched.conversion.type = queueItem.type;
-        watched.name = queueItem.filename;
+        if (!queueItem.filename.isEmpty()) {
+            watched.name = queueItem.filename;
+        }
         watched.scoreId = queueItem.scoreId;
 
         updateStatus(watched, queueItem.status, queueItem.errorCode);
@@ -699,7 +779,7 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
     }
 
     for (size_t i = 0; i < snapshot.size(); ++i) {
-        if (seen.at(i)) {
+        if (seenInSnapshot.at(i)) {
             continue;
         }
 
@@ -717,12 +797,20 @@ void ConvertFileToScoreService::updateWatchedScores(const ConvertQueueList& queu
         }
     }
 
-    //! NOTE: items watched mid-poll weren't in the snapshot - carry them over untouched
-    for (const WatchedScore& watched : m_watchedScores) {
-        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(watched.conversion.type)];
-        if (snapshotIndexById.find(watched.conversion.id) == snapshotIndexById.end()) {
-            newWatchedScores.push_back(watched);
+    //! NOTE: items watched mid-poll that never appeared in the queue response at all (the server
+    //! hasn't listed them yet) - carry them over untouched
+    for (size_t i = 0; i < m_watchedScores.size(); ++i) {
+        if (seenInWatchedScores[i]) {
+            continue;
         }
+
+        const WatchedScore& watched = m_watchedScores[i];
+        const std::unordered_map<int, size_t>& snapshotIndexById = snapshotByTypeAndId[static_cast<size_t>(watched.conversion.type)];
+        if (snapshotIndexById.find(watched.conversion.id) != snapshotIndexById.end()) {
+            continue;
+        }
+
+        newWatchedScores.push_back(watched);
     }
 
     if (m_watchedScores != newWatchedScores) {
@@ -754,25 +842,19 @@ void ConvertFileToScoreService::updateStatus(WatchedScore& watched, ConvertStatu
     case ConvertStatus::AwaitingReview:
     case ConvertStatus::Done:
         if (!wasDone && watched.scoreId && watched.startedLocally) {
-            finishConvert(make_ok(), watched);
+            m_convertFinished.send(make_ok(), watched);
         }
         break;
     case ConvertStatus::Failed: {
         Ret ret = make_ret(Err::ConvertProcessingFailed);
         ret.setText("Conversion failed for \"" + watched.name.toStdString() + "\": " + errorCodeToString(errorCode));
-        ret.setData(CONVERT_FAILED_FILE_NAME_KEY, watched.name);
 
         LOGE() << ret.toString();
 
         if (watched.startedLocally) {
-            finishConvert(ret);
+            m_convertFinished.send(ret, watched);
         }
         break;
     }
     }
-}
-
-void ConvertFileToScoreService::finishConvert(const Ret& ret, const WatchedScore& watched)
-{
-    m_convertFinished.send(ret, watched);
 }
