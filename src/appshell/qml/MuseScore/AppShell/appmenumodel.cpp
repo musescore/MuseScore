@@ -122,7 +122,7 @@ bool AppMenuModel::isGlobalMenuAvailable()
 
 void AppMenuModel::setupConnections()
 {
-    recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
+    recentFilesController()->recentFilesListChanged().onReceive(this, [this](const RecentFilesChange&) {
         MenuItem& recentMenuItem = findMenu("menu-file-open");
         MenuItemList recentSubMenuItems = makeRecentSubMenuItems();
         recentMenuItem.setSubitems(recentSubMenuItems);
