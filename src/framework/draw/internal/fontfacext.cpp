@@ -290,21 +290,24 @@ f26dot6_t FontFaceXT::lineWidth() const
     return m_lineWidth;
 }
 
-void FontFaceXT::applyLigatures(std::vector<glyph_idx_t>& glyphs, const Ligatures& ls)
+void FontFaceXT::applyLigatures(std::vector<ShapedGlyph>& glyphs, const Ligatures& ls)
 {
     for (const Ligature& l : ls) {
         if (l.second.empty() || l.second.size() > glyphs.size() || (l.second.size() == 1 && l.second.front() == l.first)) {
             continue;
         }
 
+        auto from = glyphs.begin();
         while (1) {
-            auto it = std::search(glyphs.begin(), glyphs.end(), l.second.begin(), l.second.end());
+            auto it = std::search(from, glyphs.end(), l.second.begin(), l.second.end(),
+                                  [](const ShapedGlyph& glyph, glyph_idx_t idx) { return glyph.idx == idx; });
             if (it != glyphs.end()) {
-                *it = l.first;
+                it->idx = l.first;
                 for (size_t i = 1; i < l.second.size(); ++i) {
                     ++it;
-                    *it = 0;
+                    it->idx = 0;
                 }
+                from = std::next(it);
             } else {
                 break;
             }
@@ -312,20 +315,20 @@ void FontFaceXT::applyLigatures(std::vector<glyph_idx_t>& glyphs, const Ligature
     }
 }
 
-std::vector<GlyphPos> FontFaceXT::glyphs(const char32_t* text, int text_length) const
+std::vector<ShapedGlyph> FontFaceXT::glyphs(const char32_t* text, int text_length) const
 {
     if (text_length < 1) {
-        return std::vector<GlyphPos>();
+        return std::vector<ShapedGlyph>();
     }
 
-    std::vector<GlyphPos> result;
+    std::vector<ShapedGlyph> result;
 
     std::vector<char32_t> data(text, text + text_length);
 
-    std::vector<glyph_idx_t> glyphs;
-    glyphs.reserve(text_length);
+    result.reserve(text_length);
 
-    for (char32_t ch : data) {
+    for (size_t i = 0; i < data.size(); ++i) {
+        const char32_t ch = data[i];
         if (ch == 0) {
             continue;
         }
@@ -336,25 +339,21 @@ std::vector<GlyphPos> FontFaceXT::glyphs(const char32_t* text, int text_length) 
             continue;
         }
 
-        glyphs.push_back(idx);
+        result.push_back({ idx, 0, static_cast<uint32_t>(i) });
     }
 
     if (!m_isSymbolMode) {
-        applyLigatures(glyphs, m_ligatures);
+        applyLigatures(result, m_ligatures);
     }
 
-    muse::remove(glyphs, (glyph_idx_t)0);
+    muse::remove_if(result, [](const ShapedGlyph& glyph) { return glyph.idx == 0; });
 
-    for (auto it = glyphs.begin(); it != glyphs.end(); ++it) {
-        GlyphPos p;
-        if (auto nextIt = std::next(it); nextIt != glyphs.end()) {
-            p.x_advance = glyphAdvance(*it, *nextIt);
+    for (auto it = result.begin(); it != result.end(); ++it) {
+        if (auto nextIt = std::next(it); nextIt != result.end()) {
+            it->x_advance = glyphAdvance(it->idx, nextIt->idx);
         } else {
-            p.x_advance = glyphAdvance(*it);
+            it->x_advance = glyphAdvance(it->idx);
         }
-        p.idx = *it;
-
-        result.push_back(std::move(p));
     }
 
     return result;
