@@ -259,7 +259,13 @@ void NotationPlayback::updateTotalPlayTime()
     const bool expandRepeats = m_playbackModel.isPlayRepeatsEnabled();
     const int lastTick = score->repeatList(expandRepeats).ticks();
     const TempoTimeline& timeline = score->tempoTimeline(expandRepeats);
-    audio::secs_t newPlayTime = timeline.utick2utime(lastTick);
+    const double seconds = timeline.utick2utime(lastTick);
+    // A non-finite duration aborts the audio engine (check_valid) and closes the app.
+    if (!std::isfinite(seconds) || seconds < 0.0) {
+        LOGE() << "Ignoring non-finite playback duration at tick " << lastTick;
+        return;
+    }
+    audio::secs_t newPlayTime = seconds;
     newPlayTime += PLAYBACK_TAIL_SECS;
 
     if (m_totalPlayTime == newPlayTime) {
