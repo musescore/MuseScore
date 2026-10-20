@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "irecentfilescontroller.h"
+#include "project/irecentfilescontroller.h"
 
 #include <mutex>
 #include <map>
@@ -32,14 +32,15 @@
 #include "async/promise.h"
 
 #include "modularity/ioc.h"
-#include "iprojectconfiguration.h"
-#include "imscmetareader.h"
+#include "project/iprojectconfiguration.h"
+#include "project/imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public muse::async::Asyncable
 {
+public:
     muse::GlobalThreadSafeInject<IProjectConfiguration> configuration;
     muse::GlobalThreadSafeInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalThreadSafeInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
