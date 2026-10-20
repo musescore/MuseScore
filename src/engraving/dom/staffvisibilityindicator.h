@@ -32,6 +32,7 @@ class StaffVisibilityIndicator : public SystemIndicatorIcon
 
 public:
     StaffVisibilityIndicator(DummyParentOr<System> parent);
+    StaffVisibilityIndicator* clone() const override { return new StaffVisibilityIndicator(*this); }
 
     char16_t iconCode() const override { return 0xF4AE; }
 };
