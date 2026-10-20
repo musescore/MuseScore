@@ -51,7 +51,14 @@ public:
     QList<int> nonScoreItemIndices() const override;
 
 private:
-    void updateRecentScores();
+    void reloadRecentScores();
     void setRecentScores(const std::vector<QVariantMap>& items);
+
+    void prependItem(const RecentFile& file);
+    void updateItem(const muse::io::path_t& oldPath, const RecentFile& file);
+    void removeItem(const muse::io::path_t& path);
+
+    QVariantMap makeItem(const RecentFile& file) const;
+    int findRow(const muse::io::path_t& path) const;
 };
 }

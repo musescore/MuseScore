@@ -32,6 +32,8 @@
 using namespace muse;
 using namespace mu::project;
 
+static constexpr int FIRST_SCORE_ROW = 1; // after "New score"
+
 RecentScoresModel::RecentScoresModel(QObject* parent)
     : AbstractScoresModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -39,10 +41,18 @@ RecentScoresModel::RecentScoresModel(QObject* parent)
 
 void RecentScoresModel::load()
 {
-    updateRecentScores();
+    reloadRecentScores();
 
-    recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
-        updateRecentScores();
+    recentFilesController()->recentFilesListChanged().onReceive(this, [this](const RecentFilesChange& change) {
+        if (const RecentFilePrepended* prepended = std::get_if<RecentFilePrepended>(&change)) {
+            prependItem(prepended->file);
+        } else if (const RecentFilePathChanged* pathChanged = std::get_if<RecentFilePathChanged>(&change)) {
+            updateItem(pathChanged->oldPath, pathChanged->file);
+        } else if (const RecentFileRemoved* removed = std::get_if<RecentFileRemoved>(&change)) {
+            removeItem(removed->path);
+        } else {
+            reloadRecentScores();
+        }
     });
 }
 
@@ -51,18 +61,7 @@ void RecentScoresModel::removeRecentScore(const QString& scorePath)
     recentFilesController()->removeRecentFile(scorePath);
 }
 
-void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
-{
-    if (m_items == items) {
-        return;
-    }
-
-    beginResetModel();
-    m_items = items;
-    endResetModel();
-}
-
-void RecentScoresModel::updateRecentScores()
+void RecentScoresModel::reloadRecentScores()
 {
     const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
 
@@ -77,25 +76,7 @@ void RecentScoresModel::updateRecentScores()
     items.push_back(addItem);
 
     for (const RecentFile& file : recentScores) {
-        QVariantMap obj;
-
-        std::string suffix = io::suffix(file.path);
-        bool isSuffixInteresting = suffix != engraving::MSCZ;
-
-        RetVal<uint64_t> fileSize = fileSystem()->fileSize(file.path);
-        QString fileSizeString = (fileSize.ret && fileSize.val > 0) ? DataFormatter::formatFileSize(fileSize.val).toQString() : QString();
-
-        obj[NAME_KEY] = file.displayName(isSuffixInteresting);
-        obj[PATH_KEY] = file.path.toQString();
-        obj[SUFFIX_KEY] = QString::fromStdString(suffix);
-        obj[FILE_SIZE_KEY] = fileSizeString;
-        obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file.path);
-        obj[CLOUD_SCORE_ID_KEY] = configuration()->cloudScoreIdFromPath(file.path);
-        obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
-        obj[IS_CREATE_NEW_KEY] = false;
-        obj[IS_NO_RESULTS_FOUND_KEY] = false;
-
-        items.push_back(obj);
+        items.push_back(makeItem(file));
     }
 
     QVariantMap noResultsFoundItem;
@@ -106,6 +87,94 @@ void RecentScoresModel::updateRecentScores()
     items.push_back(noResultsFoundItem);
 
     setRecentScores(items);
+}
+
+void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
+{
+    if (m_items == items) {
+        return;
+    }
+
+    beginResetModel();
+    m_items = items;
+    endResetModel();
+}
+
+void RecentScoresModel::prependItem(const RecentFile& file)
+{
+    const int row = findRow(file.path);
+    if (row >= 0) {
+        beginRemoveRows(QModelIndex(), row, row);
+        m_items.erase(m_items.begin() + row);
+        endRemoveRows();
+    }
+
+    beginInsertRows(QModelIndex(), FIRST_SCORE_ROW, FIRST_SCORE_ROW);
+    m_items.insert(m_items.begin() + FIRST_SCORE_ROW, makeItem(file));
+    endInsertRows();
+}
+
+void RecentScoresModel::updateItem(const muse::io::path_t& oldPath, const RecentFile& file)
+{
+    const int row = findRow(oldPath);
+    if (row < 0) {
+        reloadRecentScores();
+        return;
+    }
+
+    m_items[row] = makeItem(file);
+
+    const QModelIndex idx = index(row);
+    emit dataChanged(idx, idx);
+}
+
+void RecentScoresModel::removeItem(const muse::io::path_t& path)
+{
+    const int row = findRow(path);
+    if (row < 0) {
+        reloadRecentScores();
+        return;
+    }
+
+    beginRemoveRows(QModelIndex(), row, row);
+    m_items.erase(m_items.begin() + row);
+    endRemoveRows();
+}
+
+QVariantMap RecentScoresModel::makeItem(const RecentFile& file) const
+{
+    QVariantMap obj;
+
+    std::string suffix = io::suffix(file.path);
+    bool isSuffixInteresting = suffix != engraving::MSCZ;
+
+    RetVal<uint64_t> fileSize = fileSystem()->fileSize(file.path);
+    QString fileSizeString = (fileSize.ret && fileSize.val > 0) ? DataFormatter::formatFileSize(fileSize.val).toQString() : QString();
+
+    obj[NAME_KEY] = file.displayName(isSuffixInteresting);
+    obj[PATH_KEY] = file.path.toQString();
+    obj[SUFFIX_KEY] = QString::fromStdString(suffix);
+    obj[FILE_SIZE_KEY] = fileSizeString;
+    obj[IS_CLOUD_KEY] = configuration()->isCloudProject(file.path);
+    obj[CLOUD_SCORE_ID_KEY] = configuration()->cloudScoreIdFromPath(file.path);
+    obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
+    obj[IS_CREATE_NEW_KEY] = false;
+    obj[IS_NO_RESULTS_FOUND_KEY] = false;
+
+    return obj;
+}
+
+int RecentScoresModel::findRow(const muse::io::path_t& path) const
+{
+    const QString pathStr = path.toQString();
+
+    for (size_t i = 0; i < m_items.size(); ++i) {
+        if (m_items[i].value(PATH_KEY).toString() == pathStr) {
+            return static_cast<int>(i);
+        }
+    }
+
+    return -1;
 }
 
 QList<int> RecentScoresModel::nonScoreItemIndices() const

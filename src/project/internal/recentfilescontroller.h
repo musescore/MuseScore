@@ -47,7 +47,7 @@ public:
     void init();
 
     const RecentFilesList& recentFilesList() const override;
-    muse::async::Notification recentFilesListChanged() const override;
+    muse::async::Channel<RecentFilesChange> recentFilesListChanged() const override;
 
     void prependRecentFile(const RecentFile& file) override;
     void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) override;
@@ -63,14 +63,15 @@ protected:
 private:
     void loadRecentFilesList();
     void removeNonexistentFiles();
-    void setRecentFilesList(const RecentFilesList& list, bool saveAndNotify);
+    bool setRecentFilesList(const RecentFilesList& list);
+    void setRecentFilesListAndNotify(const RecentFilesList& list, const RecentFilesChange& change);
     void saveRecentFilesList();
 
     void cleanUpThumbnailCache(const RecentFilesList& files);
 
     mutable bool m_dirty = true;
     mutable RecentFilesList m_recentFilesList;
-    muse::async::Notification m_recentFilesListChanged;
+    muse::async::Channel<RecentFilesChange> m_recentFilesListChanged;
     mutable bool m_isSaving = false;
 
     struct CachedThumbnail {
