@@ -42,13 +42,13 @@ class Engraving_EIDTests : public ::testing::Test
 TEST_F(Engraving_EIDTests, testRegisteredItems)
 {
     MasterScore* score = ScoreRW::readScore(DATA_DIR + u"random_elements.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     auto checkRegister = [&](EngravingItem* item) {
         EID eid = item->eid();
         if (eid.isValid()) {
             EngravingObject* registeredItem = item->masterScore()->eidRegister()->itemFromEID(item->eid());
-            EXPECT_TRUE(registeredItem);
+            ASSERT_TRUE(registeredItem);
             EXPECT_EQ(registeredItem, item);
         }
     };
@@ -65,7 +65,7 @@ TEST_F(Engraving_EIDTests, deletedItemIsUnregistered)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    EngravingItem* item = new Dynamic(score->dummy()->segment());
+    EngravingItem* item = new Dynamic(score->dummy());
     EID eid = item->assignNewEID();
     EXPECT_TRUE(eid.isValid());
     EXPECT_EQ(score->eidRegister()->itemFromEID(eid), item);
@@ -105,7 +105,7 @@ TEST_F(Engraving_EIDTests, writeReadElementDoesNotLeakRegisterEntries)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
 
-    Dynamic* dynamic = new Dynamic(score->dummy()->segment());
+    Dynamic* dynamic = new Dynamic(score->dummy());
     dynamic->setDynamicType(DynamicType(1));
 
     // writeReadElement round trips through clipboard write and paste read,

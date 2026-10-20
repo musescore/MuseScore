@@ -35,6 +35,7 @@
       <chordSymbolBFontSize>11.9365</chordSymbolBFontSize>
       <nashvilleNumberFontFace>Quicksand</nashvilleNumberFontFace>
       <nashvilleNumberFontSize>11.9365</nashvilleNumberFontSize>
+      <fretFrets>5</fretFrets>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>

@@ -29,8 +29,6 @@
 #include "global/types/ret.h"
 
 #include "global/modularity/ioc.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/commandable.h"
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"
@@ -40,11 +38,9 @@
 #include "../iplaybackconfiguration.h"
 
 namespace mu::playback {
-class PlaybackCommandsController : public IPlaybackCommandsController, public muse::Contextable, public muse::actions::Actionable,
-    public muse::rcommand::Commandable
+class PlaybackCommandsController : public IPlaybackCommandsController, public muse::Contextable, public muse::rcommand::Commandable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
     muse::ContextInject<IPlaybackController> playbackController = { this };

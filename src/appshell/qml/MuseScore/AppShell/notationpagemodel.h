@@ -25,10 +25,9 @@
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "actions/actionable.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "dockwindow/idockwindowprovider.h"
 #include "extensions/iextensionsprovider.h"
 #include "context/iglobalcontext.h"
@@ -38,7 +37,7 @@
 #include "internal/iappshellcommandscontroller.h"
 
 namespace mu::appshell {
-class NotationPageModel : public QObject, public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
+class NotationPageModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -51,7 +50,7 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::ContextInject<IAppShellState> appShellState = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IAppshellCommandsController> commandsController = { this };

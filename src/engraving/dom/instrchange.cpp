@@ -56,14 +56,14 @@ static const ElementStyle instrumentChangeStyle {
 //   InstrumentChange
 //---------------------------------------------------------
 
-InstrumentChange::InstrumentChange(EngravingItem* parent)
+InstrumentChange::InstrumentChange(EngravingObject* parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
     m_instrument = new Instrument();
 }
 
-InstrumentChange::InstrumentChange(const Instrument& i, EngravingItem* parent)
+InstrumentChange::InstrumentChange(const Instrument& i, EngravingObject* parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
@@ -89,7 +89,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
     //_instrument = new Instrument(i);
 }
 
-void InstrumentChange::setupInstrument(const Instrument* instrument)
+void InstrumentChange::setupInstrument(const Instrument* instrument, bool updateText)
 {
     if (!m_init) {
         return;
@@ -154,6 +154,10 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             tickEnd = Fraction::fromTicks(i->first);
         }
         Transpose::transpositionChanged(tx, score(), part, oldKv, tickStart, tickEnd);
+    }
+
+    if (!updateText) {
+        return;
     }
 
     //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.

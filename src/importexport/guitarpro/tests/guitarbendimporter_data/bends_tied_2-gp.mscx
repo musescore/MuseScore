@@ -129,13 +129,20 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>R_R</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>S_S</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>N_N</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>R_R</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

@@ -36,6 +36,9 @@
 
 #include "containers.h"
 
+#include "dom/box.h"
+#include "dom/select.h"
+
 #include "editing/editproperty.h"
 #include "editing/editstyle.h"
 #include "editing/textedit.h"
@@ -262,10 +265,18 @@ void UndoableTransaction::cleanup(bool wasDone)
 
 void UndoableTransaction::unwind(bool cleanUp)
 {
+    // Undo everything first, without freeing: commands pushed later (e.g. AddElement for a part's linked
+    // clone) may still be referenced by earlier commands' undo() (e.g. Link::undo()):
+    std::vector<UndoableCommand*> undoneCommands;
+    undoneCommands.reserve(m_commands.size());
     while (!m_commands.empty()) {
         UndoableCommand* command = muse::takeLast(m_commands);
         LOG_UNDO() << "unwind: " << command->name();
         command->undo();
+        undoneCommands.push_back(command);
+    }
+    // Now we can free everything:
+    for (UndoableCommand* command : undoneCommands) {
         if (cleanUp) {
             command->cleanup(false);
         }
@@ -334,6 +345,7 @@ bool UndoableTransaction::canRecordSelectedElement(const EngravingItem* e)
 void UndoableTransaction::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
 {
     info.staffStart = info.staffEnd = muse::nidx;
+    info.startBox = info.endBox = nullptr;
     info.elements.clear();
 
     if (sel.isList()) {
@@ -351,6 +363,8 @@ void UndoableTransaction::fillSelectionInfo(SelectionInfo& info, const Selection
         info.staffEnd = sel.staffEnd();
         info.tickStart = sel.tickStart();
         info.tickEnd = sel.tickEnd();
+        info.startBox = sel.startBox();
+        info.endBox = sel.endBox();
     }
 }
 
@@ -361,7 +375,7 @@ void UndoableTransaction::applySelectionInfo(const SelectionInfo& info, Selectio
             sel.add(e);
         }
     } else if (info.staffStart != muse::nidx) {
-        sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd);
+        sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd, info.startBox, info.endBox);
     }
 }
 

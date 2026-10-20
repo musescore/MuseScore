@@ -137,7 +137,6 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
         TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
         if (!anchor) {
             anchor = Factory::createTimeTickAnchor(segment);
-            anchor->setOwnershipParent(segment);
             anchor->setTrack(track);
             segment->add(anchor);
         }
@@ -571,7 +570,7 @@ void MoveElementAnchors::rebaseOffsetOnMoveSegment(EngravingItem* element, const
  * TimeTickAnchor
  * *****************************************/
 
-TimeTickAnchor::TimeTickAnchor(Segment* parent)
+TimeTickAnchor::TimeTickAnchor(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::TIME_TICK_ANCHOR, parent,
                     ElementFlag::ON_STAFF
                     | ElementFlag::NOT_SELECTABLE

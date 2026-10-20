@@ -270,7 +270,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
         if (!(aboveStart || belowEnd)) {
             ElementType elType = spanArp->type();
-            const PaddingTable& paddingTable = item->score()->paddingTable();
+            const PaddingTable& paddingTable = item->score()->paddingTables().horizontalPaddingTable();
             double arpeggioNoteDistance = paddingTable.at(elType).at(ElementType::NOTE) * mag_;
             double arpeggioLedgerDistance = paddingTable.at(elType).at(ElementType::LEDGER_LINE) * mag_;
             int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
@@ -508,7 +508,6 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         double llX         = stemX - (headWidth + extraLen) * 0.5;
         for (int i = 0; i < ledgerLines; i++) {
             LedgerLine* ldgLin = item->ledgerLines()[i];
-            ldgLin->setOwnershipParent(item);
             ldgLin->setTrack(item->track());
             ldgLin->setVisible(item->visible());
             ldgLin->setLen(headWidth + extraLen);
@@ -535,7 +534,6 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         // set stem position (stem length is set in Chord:layoutStem() )
         if (!item->stem()) {
             Stem* stem = Factory::createStem(item);
-            stem->setOwnershipParent(item);
             stem->setGenerated(true);
             ctx.mutDom().addElement(stem);
         }
@@ -614,7 +612,6 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             } else {
                 item->tabDur()->setDuration(item->durationType().type(), item->dots(), tab);
             }
-            item->tabDur()->setOwnershipParent(item);
             item->tabDur()->setRepeat(repeat);
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
             TLayout::layoutTabDurationSymbol(item->tabDur(), item->tabDur()->mutldata());
@@ -1491,7 +1488,6 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < ledgerLineData.size(); ++i) {
         LedgerLineData lld = ledgerLineData[i];
         LedgerLine* h = item->ledgerLines()[i];
-        h->setOwnershipParent(item);
         h->setTrack(track);
         h->setVisible(lld.visible && staffVisible);
         h->setLen(lld.maxX - lld.minX);
@@ -2800,7 +2796,6 @@ void ChordLayout::setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(note);
-        dot->setOwnershipParent(note);
         dot->setTrack(note->track());      // needed to know the staff it belongs to (and detect tablature)
         dot->setVisible(note->visible());
         ctx.mutDom().undoAddElement(dot);
@@ -3669,6 +3664,10 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
 
     for (Note* note : item->notes()) {
         shape.add(note->shape().translate(note->pos()));
+    }
+
+    if (item->tabDur() && item->tabDur()->addToSkyline()) {
+        shape.add(item->tabDur()->shape().translate(item->tabDur()->pos()));
     }
 
     for (const NoteParenthesisInfo* parenInfo : item->noteParentheses()) {

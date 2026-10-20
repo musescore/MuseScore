@@ -271,14 +271,14 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>u_u</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <HammerOnPullOffText idx="1">
+            <style>hammer_on_pull_off</style>
             <eid>v_v</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>w_w</eid>
           <track>0</track>
@@ -291,9 +291,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>y_y</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>z_z</eid>
           <track>0</track>

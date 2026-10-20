@@ -120,19 +120,26 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>R_R</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>S_S</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>P_P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>T_T</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>S_S</eid>
+              <eid>U_U</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -141,18 +148,18 @@
                 <guitarBendType>bend</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                <startElement>T_T</startElement>
-                <endElement>S_S</endElement>
-                <eid>U_U</eid>
+                <startElement>V_V</startElement>
+                <endElement>U_U</endElement>
+                <eid>W_W</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>X_X</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>V_V</eid>
               <parentheses>both</parentheses>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -163,30 +170,37 @@
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.5</bendEndTimeFactor>
                 <startElement>P_P</startElement>
-                <endElement>T_T</endElement>
-                <eid>W_W</eid>
+                <endElement>V_V</endElement>
+                <eid>Y_Y</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>Z_Z</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>a_a</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>T_T</NoteEID>
+                <NoteEID>V_V</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>X_X</eid>
+        <eid>b_b</eid>
         <voice>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>c_c</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>d_d</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>4</fret>
@@ -195,45 +209,11 @@
                 <guitarBendType>grace-note-bend</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                <startElement>a_a</startElement>
-                <endElement>Z_Z</endElement>
-                <eid>b_b</eid>
+                <startElement>e_e</startElement>
+                <endElement>d_d</endElement>
+                <eid>f_f</eid>
                 <track>0</track>
                 </GuitarBend>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>c_c</eid>
-            <BeamMode>no</BeamMode>
-            <durationType>eighth</durationType>
-            <grace8after/>
-            <noStem>1</noStem>
-            <Note>
-              <eid>a_a</eid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>4</fret>
-              <string>2</string>
-              <GuitarBend>
-                <guitarBendType>bend</guitarBendType>
-                <bendStartTimeFactor>0</bendStartTimeFactor>
-                <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                <startElement>d_d</startElement>
-                <endElement>a_a</endElement>
-                <eid>e_e</eid>
-                <track>0</track>
-                </GuitarBend>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>f_f</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>d_d</eid>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              <fret>2</fret>
-              <string>2</string>
               </Note>
             </Chord>
           <Chord>
@@ -243,7 +223,41 @@
             <grace8after/>
             <noStem>1</noStem>
             <Note>
+              <eid>e_e</eid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              <GuitarBend>
+                <guitarBendType>bend</guitarBendType>
+                <bendStartTimeFactor>0</bendStartTimeFactor>
+                <bendEndTimeFactor>0.5</bendEndTimeFactor>
+                <startElement>h_h</startElement>
+                <endElement>e_e</endElement>
+                <eid>i_i</eid>
+                <track>0</track>
+                </GuitarBend>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>j_j</eid>
+            <durationType>half</durationType>
+            <Note>
               <eid>h_h</eid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>k_k</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <grace8after/>
+            <noStem>1</noStem>
+            <Note>
+              <eid>l_l</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -252,18 +266,18 @@
                 <guitarBendType>bend</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                <startElement>i_i</startElement>
-                <endElement>h_h</endElement>
-                <eid>j_j</eid>
+                <startElement>m_m</startElement>
+                <endElement>l_l</endElement>
+                <eid>n_n</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>k_k</eid>
+            <eid>o_o</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>i_i</eid>
+              <eid>m_m</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -273,16 +287,16 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>l_l</eid>
+        <eid>p_p</eid>
         <voice>
           <Chord>
-            <eid>m_m</eid>
+            <eid>q_q</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>n_n</eid>
+              <eid>r_r</eid>
               <parentheses>both</parentheses>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -291,16 +305,23 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>s_s</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>t_t</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>n_n</NoteEID>
+                <NoteEID>r_r</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>o_o</eid>
+            <eid>u_u</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>p_p</eid>
+              <eid>v_v</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -309,21 +330,21 @@
                 <guitarBendType>pre-bend</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
-                <startElement>n_n</startElement>
-                <endElement>p_p</endElement>
-                <eid>q_q</eid>
+                <startElement>r_r</startElement>
+                <endElement>v_v</endElement>
+                <eid>w_w</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
+            <eid>x_x</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>s_s</eid>
+              <eid>y_y</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>5</fret>
@@ -332,21 +353,21 @@
                 <guitarBendType>bend</guitarBendType>
                 <bendStartTimeFactor>0.333333</bendStartTimeFactor>
                 <bendEndTimeFactor>0.666667</bendEndTimeFactor>
-                <startElement>t_t</startElement>
-                <endElement>s_s</endElement>
-                <eid>u_u</eid>
+                <startElement>z_z</startElement>
+                <endElement>y_y</endElement>
+                <eid>0_0</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>v_v</eid>
+            <eid>1_1</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>w_w</eid>
+              <eid>2_2</eid>
               <parentheses>both</parentheses>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -355,16 +376,23 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>3_3</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>4_4</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>w_w</NoteEID>
+                <NoteEID>2_2</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>x_x</eid>
+            <eid>5_5</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>t_t</eid>
+              <eid>z_z</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -373,9 +401,9 @@
                 <guitarBendType>pre-bend</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
-                <startElement>w_w</startElement>
-                <endElement>t_t</endElement>
-                <eid>y_y</eid>
+                <startElement>2_2</startElement>
+                <endElement>z_z</endElement>
+                <eid>6_6</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>

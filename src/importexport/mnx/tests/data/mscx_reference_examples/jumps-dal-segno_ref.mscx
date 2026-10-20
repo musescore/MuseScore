@@ -115,8 +115,8 @@
       <Measure>
         <eid>K_K</eid>
         <Marker>
-          <eid>L_L</eid>
           <style>repeat_left</style>
+          <eid>L_L</eid>
           <text><sym>segno</sym></text>
           <label>segno</label>
           <markerType>segno</markerType>
@@ -164,8 +164,8 @@
       <Measure>
         <eid>U_U</eid>
         <Jump>
-          <eid>V_V</eid>
           <style>repeat_right</style>
+          <eid>V_V</eid>
           <text>Dal Doppio Segno</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>end</playUntil>

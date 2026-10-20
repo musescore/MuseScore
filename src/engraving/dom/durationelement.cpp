@@ -37,7 +37,7 @@ namespace mu::engraving {
 //   DurationElement
 //---------------------------------------------------------
 
-DurationElement::DurationElement(const ElementType& type, EngravingItem* parent, ElementFlags f)
+DurationElement::DurationElement(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
     m_tuplet = 0;

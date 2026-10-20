@@ -25,6 +25,8 @@
 #include "global/modularity/imoduleinterface.h"
 #include "global/async/notification.h"
 
+#include "types/projecttypes.h"
+
 namespace mu::project {
 class IProjectCommandsController : MODULE_CONTEXT_INTERFACE
 {
@@ -32,16 +34,6 @@ class IProjectCommandsController : MODULE_CONTEXT_INTERFACE
 
 public:
     virtual ~IProjectCommandsController() = default;
-
-    enum class BusyStatus {
-        Opening,
-        Saving,
-        Closing,
-        Downloading,
-        Uploading,
-        Publishing,
-        AudioSharing
-    };
 
     virtual bool hasProject() const = 0;
     virtual muse::async::Notification hasProjectChanged() const = 0;

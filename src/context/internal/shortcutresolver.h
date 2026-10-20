@@ -42,6 +42,8 @@ public:
 
     muse::shortcuts::Shortcut selectOne(const muse::shortcuts::ShortcutList& list) const override;
 
+    muse::TranslatableString scopeTitle(const std::string& scopeCode) const override;
+
 private:
     int scopePriority(const std::string& scope) const;
 

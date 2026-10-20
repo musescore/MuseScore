@@ -6606,6 +6606,30 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Increase dynamics</source>
+        <translation type="unfinished">Increase dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Increase selected dynamics</source>
+        <translation type="unfinished">Increase selected dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Decrease dynamics</source>
+        <translation type="unfinished">Decrease dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <source>Decrease selected dynamics</source>
+        <translation type="unfinished">Decrease selected dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
         <source>Select to beginning of system</source>
         <translation type="unfinished">Select to beginning of system</translation>
     </message>
@@ -9652,12 +9676,14 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="1"/>
         <source>Cross-staff beaming</source>
         <translation type="unfinished">Cross-staff beaming</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
         <location filename="src/notationscene/internal/notationuiactions.cpp" line="1"/>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="1"/>
         <source>Tuplet</source>
         <translation type="unfinished">Tuplet</translation>
     </message>
@@ -10963,8 +10989,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <name>appshell/menu/plugins</name>
     <message>
         <location filename="src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="1"/>
-        <source>&amp;Plugins</source>
-        <translation type="unfinished">&amp;Plugins</translation>
+        <source>E&amp;xtensions</source>
+        <translation type="unfinished">E&amp;xtensions</translation>
     </message>
 </context>
 <context>
@@ -11670,141 +11696,6 @@ Fret %1 on strings %2</translation>
         <location filename="src/notation/internal/notationaccessibility.cpp" line="1"/>
         <source>End beat: %1</source>
         <translation type="unfinished">End beat: %1</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Standard</source>
-        <translation type="unfinished">Standard</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 1 line</source>
-        <translation type="unfinished">Perc. 1 line</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 2 lines</source>
-        <translation type="unfinished">Perc. 2 lines</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 3 lines</source>
-        <translation type="unfinished">Perc. 3 lines</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Perc. 5 lines</source>
-        <translation type="unfinished">Perc. 5 lines</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. simple</source>
-        <translation type="unfinished">Tab. 6-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. common</source>
-        <translation type="unfinished">Tab. 6-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. full</source>
-        <translation type="unfinished">Tab. 6-str. full</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 4-str. simple</source>
-        <translation type="unfinished">Tab. 4-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 4-str. common</source>
-        <translation type="unfinished">Tab. 4-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 4-str. full</source>
-        <translation type="unfinished">Tab. 4-str. full</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 5-str. simple</source>
-        <translation type="unfinished">Tab. 5-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 5-str. common</source>
-        <translation type="unfinished">Tab. 5-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 5-str. full</source>
-        <translation type="unfinished">Tab. 5-str. full</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. ukulele</source>
-        <translation type="unfinished">Tab. ukulele</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. balalaika</source>
-        <translation type="unfinished">Tab. balalaika</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. dulcimer</source>
-        <translation type="unfinished">Tab. dulcimer</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. Italian</source>
-        <translation type="unfinished">Tab. 6-str. Italian</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 6-str. French</source>
-        <translation type="unfinished">Tab. 6-str. French</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 7-str. common</source>
-        <translation type="unfinished">Tab. 7-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 8-str. common</source>
-        <translation type="unfinished">Tab. 8-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 9-str. common</source>
-        <translation type="unfinished">Tab. 9-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 10-str. common</source>
-        <translation type="unfinished">Tab. 10-str. common</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 7-str. simple</source>
-        <translation type="unfinished">Tab. 7-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 8-str. simple</source>
-        <translation type="unfinished">Tab. 8-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 9-str. simple</source>
-        <translation type="unfinished">Tab. 9-str. simple</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/stafftype.cpp" line="1"/>
-        <source>Tab. 10-str. simple</source>
-        <translation type="unfinished">Tab. 10-str. simple</translation>
     </message>
     <message>
         <location filename="src/engraving/dom/stringtunings.cpp" line="1"/>
@@ -19554,6 +19445,144 @@ Fret %1 on strings %2</translation>
     </message>
 </context>
 <context>
+    <name>engraving/stafftypes</name>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Standard</source>
+        <translation type="unfinished">Standard</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 1 line</source>
+        <translation type="unfinished">Perc. 1 line</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 2 lines</source>
+        <translation type="unfinished">Perc. 2 lines</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 3 lines</source>
+        <translation type="unfinished">Perc. 3 lines</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Perc. 5 lines</source>
+        <translation type="unfinished">Perc. 5 lines</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. simple</source>
+        <translation type="unfinished">Tab. 6-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. common</source>
+        <translation type="unfinished">Tab. 6-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. full</source>
+        <translation type="unfinished">Tab. 6-str. full</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 4-str. simple</source>
+        <translation type="unfinished">Tab. 4-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 4-str. common</source>
+        <translation type="unfinished">Tab. 4-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 4-str. full</source>
+        <translation type="unfinished">Tab. 4-str. full</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 5-str. simple</source>
+        <translation type="unfinished">Tab. 5-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 5-str. common</source>
+        <translation type="unfinished">Tab. 5-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 5-str. full</source>
+        <translation type="unfinished">Tab. 5-str. full</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. ukulele</source>
+        <translation type="unfinished">Tab. ukulele</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. balalaika</source>
+        <translation type="unfinished">Tab. balalaika</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. dulcimer</source>
+        <translation type="unfinished">Tab. dulcimer</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. Italian</source>
+        <translation type="unfinished">Tab. 6-str. Italian</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 6-str. French</source>
+        <translation type="unfinished">Tab. 6-str. French</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 7-str. common</source>
+        <translation type="unfinished">Tab. 7-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 8-str. common</source>
+        <translation type="unfinished">Tab. 8-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 9-str. common</source>
+        <translation type="unfinished">Tab. 9-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 10-str. common</source>
+        <translation type="unfinished">Tab. 10-str. common</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 7-str. simple</source>
+        <translation type="unfinished">Tab. 7-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 8-str. simple</source>
+        <translation type="unfinished">Tab. 8-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 9-str. simple</source>
+        <translation type="unfinished">Tab. 9-str. simple</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Tab. 10-str. simple</source>
+        <translation type="unfinished">Tab. 10-str. simple</translation>
+    </message>
+</context>
+<context>
     <name>engraving/sym</name>
     <message>
         <location filename="src/engraving/types/symnames.cpp" line="1"/>
@@ -22006,7 +22035,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="1"/>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="3"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="3"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
     </message>
@@ -22390,7 +22419,7 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="1"/>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Success!</source>
         <translation type="unfinished">Success!</translation>
     </message>
@@ -26208,6 +26237,11 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="src/notationscene/qml/MuseScore/NotationScene/styledialog/StaveSharingPage.qml" line="1"/>
+        <source>Show player numerals for instrument changes</source>
+        <translation type="unfinished">Show player numerals for instrument changes</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/styledialog/StaveSharingPage.qml" line="1"/>
         <source>Instrument labels on staff</source>
         <translation type="unfinished">Instrument labels on staff</translation>
     </message>
@@ -28207,7 +28241,6 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/palette/internal/palettecommandsregister.cpp" line="1"/>
-        <location filename="src/palette/qml/MuseScore/Palette/internal/palettespanelcontextmenumodel.cpp" line="1"/>
         <source>Single-click to open a palette</source>
         <translation type="unfinished">Single-click to open a palette</translation>
     </message>
@@ -28218,9 +28251,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/palette/internal/palettecommandsregister.cpp" line="1"/>
-        <location filename="src/palette/qml/MuseScore/Palette/internal/palettespanelcontextmenumodel.cpp" line="1"/>
         <source>Open only one palette at a time</source>
-        <extracomment>This is the name of a setting that can be turned on or off. &quot;Open&quot; is a verb here.</extracomment>
         <translation type="unfinished">Open only one palette at a time</translation>
     </message>
     <message>
@@ -28230,7 +28261,6 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/palette/internal/palettecommandsregister.cpp" line="1"/>
-        <location filename="src/palette/qml/MuseScore/Palette/internal/palettespanelcontextmenumodel.cpp" line="1"/>
         <source>Allow reordering palettes</source>
         <translation type="unfinished">Allow reordering palettes</translation>
     </message>
@@ -28241,13 +28271,11 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/palette/internal/palettecommandsregister.cpp" line="2"/>
-        <location filename="src/palette/qml/MuseScore/Palette/internal/palettespanelcontextmenumodel.cpp" line="1"/>
         <source>Expand all palettes</source>
         <translation type="unfinished">Expand all palettes</translation>
     </message>
     <message>
         <location filename="src/palette/internal/palettecommandsregister.cpp" line="2"/>
-        <location filename="src/palette/qml/MuseScore/Palette/internal/palettespanelcontextmenumodel.cpp" line="1"/>
         <source>Collapse all palettes</source>
         <translation type="unfinished">Collapse all palettes</translation>
     </message>
@@ -30501,21 +30529,6 @@ failed.</translation>
         <translation type="unfinished">Restart audio and MIDI devices</translation>
     </message>
     <message>
-        <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="1"/>
-        <source>Automatic update check</source>
-        <translation type="unfinished">Automatic update check</translation>
-    </message>
-    <message>
-        <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="1"/>
-        <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation type="unfinished">Check to see if a new version of MuseScore Studio is available</translation>
-    </message>
-    <message>
-        <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="1"/>
-        <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished">Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</translation>
-    </message>
-    <message>
         <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="1"/>
         <source>Auto save</source>
         <translation type="unfinished">Auto save</translation>
@@ -31395,6 +31408,26 @@ failed.</translation>
         <source>Use warmer instrument sound (MS Basic/SoundFont only)</source>
         <translation type="unfinished">Use warmer instrument sound (MS Basic/SoundFont only)</translation>
     </message>
+    <message>
+        <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="1"/>
+        <source>Automatic updates</source>
+        <translation type="unfinished">Automatic updates</translation>
+    </message>
+    <message>
+        <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="1"/>
+        <source>Check automatically for updates to MuseScore Studio is available</source>
+        <translation type="unfinished">Check automatically for updates to MuseScore Studio is available</translation>
+    </message>
+    <message>
+        <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="1"/>
+        <source>Download updates in the background</source>
+        <translation type="unfinished">Download updates in the background</translation>
+    </message>
+    <message>
+        <location filename="src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="1"/>
+        <source>Checking for updates requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
+        <translation type="unfinished">Checking for updates requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</translation>
+    </message>
 </context>
 <context>
     <name>preferences/score</name>
@@ -31671,7 +31704,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationactioncontroller.cpp" line="1"/>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>File “%1” is corrupted</source>
         <translation type="unfinished">File “%1” is corrupted</translation>
     </message>
@@ -31681,239 +31714,256 @@ failed.</translation>
         <translation type="unfinished">This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>MuseScore file</source>
         <translation type="unfinished">MuseScore file</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Uncompressed MuseScore folder [experimental]</source>
         <translation type="unfinished">Uncompressed MuseScore folder [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Your score could not be opened</source>
         <translation type="unfinished">Your score could not be opened</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>This score is invalid.</source>
         <translation type="unfinished">This score is invalid.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/closeprojectscenario.cpp" line="1"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation type="unfinished">Do you want to save changes to the score “%1” before closing?</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/closeprojectscenario.cpp" line="1"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation type="unfinished">Your changes will be lost if you don’t save them.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="2"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation type="unfinished">Your score cannot be uploaded to the cloud</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</source>
         <translation type="unfinished">This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Save as…</source>
         <translation type="unfinished">Save as…</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="2"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Revert to last saved</source>
         <translation type="unfinished">Revert to last saved</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>This score has become corrupted and contains errors</source>
         <translation type="unfinished">This score has become corrupted and contains errors</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on MuseScore.org.</source>
         <translation type="unfinished">You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</source>
         <translation type="unfinished">You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Save anyway</source>
         <translation type="unfinished">Save anyway</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your score cannot be saved</source>
         <translation type="unfinished">Your score cannot be saved</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>This score is corrupted. You can get help for this issue on MuseScore.org.</source>
         <translation type="unfinished">This score is corrupted. You can get help for this issue on MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="2"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Get help</source>
         <translation type="unfinished">Get help</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Try again</source>
         <translation type="unfinished">Try again</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Revert to last saved?</source>
         <translation type="unfinished">Revert to last saved?</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation type="unfinished">Your changes will be lost. This action cannot be undone.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="2"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="2"/>
         <source>Open anyway</source>
         <translation type="unfinished">Open anyway</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="2"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="2"/>
         <source>Cannot read file %1</source>
         <translation type="unfinished">Cannot read file %1</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
         <translation type="unfinished">This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
         <translation type="unfinished">This file contains errors that could cause MuseScore Studio to malfunction.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation type="unfinished">File “%1” is corrupted and cannot be opened</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Get help for this issue on MuseScore.org.</source>
         <translation type="unfinished">Get help for this issue on MuseScore.org.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation type="unfinished">This file does not exist or cannot be accessed at the moment.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
         <translation type="unfinished">This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>An error occurred while reading this file.</source>
         <translation type="unfinished">An error occurred while reading this file.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>All supported files</source>
         <translation type="unfinished">All supported files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MuseScore files</source>
         <translation type="unfinished">MuseScore files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MusicXML files</source>
         <translation type="unfinished">MusicXML files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MIDI files</source>
         <translation type="unfinished">MIDI files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MNX files [experimental]</source>
         <translation type="unfinished">MNX files [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>BB files [experimental]</source>
         <translation type="unfinished">BB files [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Overture / Score Writer files [experimental]</source>
         <translation type="unfinished">Overture / Score Writer files [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Bagpipe Music Writer files [experimental]</source>
         <translation type="unfinished">Bagpipe Music Writer files [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Power Tab Editor files [experimental]</source>
         <translation type="unfinished">Power Tab Editor files [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>TablEdit files [experimental]</source>
         <translation type="unfinished">TablEdit files [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Uncompressed MuseScore folders [experimental]</source>
         <translation type="unfinished">Uncompressed MuseScore folders [experimental]</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MuseData files</source>
         <translation type="unfinished">MuseData files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Capella files</source>
         <translation type="unfinished">Capella files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Guitar Pro files</source>
         <translation type="unfinished">Guitar Pro files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MEI files</source>
         <translation type="unfinished">MEI files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MuseScore developer files</source>
         <translation type="unfinished">MuseScore developer files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>MuseScore backup files</source>
         <translation type="unfinished">MuseScore backup files</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Open</source>
         <translation type="unfinished">Open</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="1"/>
+        <source>View online</source>
+        <translation type="unfinished">View online</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="1"/>
+        <source>Reveal in file browser</source>
+        <translation type="unfinished">Reveal in file browser</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="1"/>
+        <source>Remove from recent files list</source>
+        <translation type="unfinished">Remove from recent files list</translation>
     </message>
     <message>
         <location filename="src/project/internal/projectconfiguration.cpp" line="1"/>
@@ -32196,54 +32246,60 @@ failed.</translation>
         <translation type="unfinished">Share your score’s audio with millions of listeners on this free streaming platform</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="5"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="5"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="5"/>
         <source>MuseScore.com returned an error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned; this might contain english text that is deliberately not translated</extracomment>
         <translation type="unfinished">MuseScore.com returned an error code: %1.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>MuseScore.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned, which is a number.</extracomment>
         <translation type="unfinished">MuseScore.com returned an unknown error code: %1.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>MuseScore.com returned an unknown error code.</source>
         <translation type="unfinished">MuseScore.com returned an unknown error code.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Please try again later, or get help for this problem on MuseScore.com.</source>
         <translation type="unfinished">Please try again later, or get help for this problem on MuseScore.com.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>The file could not be downloaded to your disk.</source>
         <translation type="unfinished">The file could not be downloaded to your disk.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your MuseScore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
         <translation type="unfinished">Your MuseScore.com account needs to be verified first. Please activate your account via the link in the activation email.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>This score does not belong to this account. To access this score, make sure you are logged in to the desktop app with the account to which this score belongs.</source>
         <translation type="unfinished">This score does not belong to this account. To access this score, make sure you are logged in to the desktop app with the account to which this score belongs.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>The score could not be found, or cannot be accessed by your account.</source>
         <translation type="unfinished">The score could not be found, or cannot be accessed by your account.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Could not connect to &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
         <translation type="unfinished">Could not connect to &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Please try again later.</source>
         <translation type="unfinished">Please try again later.</translation>
     </message>
@@ -33178,7 +33234,7 @@ failed.</translation>
     <message>
         <location filename="src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="1"/>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Save to computer</source>
         <translation type="unfinished">Save to computer</translation>
     </message>
@@ -33295,7 +33351,7 @@ failed.</translation>
         <translation type="unfinished">Share the audio from this score on Audio.com</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Publish</source>
         <translation type="unfinished">Publish</translation>
     </message>
@@ -33310,183 +33366,180 @@ failed.</translation>
         <translation type="unfinished">“%1” is corrupted or damaged.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Save score</source>
         <translation type="unfinished">Save score</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>copy</source>
         <comment>a copy of a file</comment>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - copy&quot;</extracomment>
         <translation type="unfinished">copy</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>selection</source>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - selection&quot;</extracomment>
         <translation type="unfinished">selection</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
         <translation type="unfinished">Log in or create a new account on Audio.com to share your music.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
         <translation type="unfinished">Log in to MuseScore.com to save this score to the cloud.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Log in to MuseScore.com to publish this score.</source>
         <translation type="unfinished">Log in to MuseScore.com to publish this score.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Publish changes online?</source>
         <translation type="unfinished">Publish changes online?</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>We will need to generate a new MP3 for web playback.</source>
         <translation type="unfinished">We will need to generate a new MP3 for web playback.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Publish this score online?</source>
         <translation type="unfinished">Publish this score online?</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</source>
         <translation type="unfinished">All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your saved changes will be publicly visible. We will also need to generate a new MP3 for public playback.</source>
         <translation type="unfinished">Your saved changes will be publicly visible. We will also need to generate a new MP3 for public playback.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Unable to connect to MuseScore.com</source>
         <translation type="unfinished">Unable to connect to MuseScore.com</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="3"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="3"/>
         <source>Please check your internet connection or try again later.</source>
         <translation type="unfinished">Please check your internet connection or try again later.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Unable to connect to the cloud</source>
         <translation type="unfinished">Unable to connect to the cloud</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Unable to connect to Audio.com</source>
         <translation type="unfinished">Unable to connect to Audio.com</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your score could not be published</source>
         <translation type="unfinished">Your score could not be published</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your score could not be saved to the cloud</source>
         <translation type="unfinished">Your score could not be saved to the cloud</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your score cannot be published</source>
         <translation type="unfinished">Your score cannot be published</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your score cannot be saved to the cloud</source>
         <translation type="unfinished">Your score cannot be saved to the cloud</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Get help</source>
         <translation type="unfinished">Get help</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>There are conflicting changes in the online score</source>
         <translation type="unfinished">There are conflicting changes in the online score</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
         <translation type="unfinished">You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Publish as new score</source>
         <translation type="unfinished">Publish as new score</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Replace</source>
         <translation type="unfinished">Replace</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
         <translation type="unfinished">You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Save as…</source>
         <translation type="unfinished">Save as…</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="2"/>
+        <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <source>Log in or create a free account on MuseScore.com to open this score.</source>
         <translation type="unfinished">Log in or create a free account on MuseScore.com to open this score.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>View online</source>
         <translation type="unfinished">View online</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
         <translation type="unfinished">All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation type="unfinished">Your changes will be saved to a local file until the connection resumes.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation type="unfinished">Please add at least one instrument to enable saving.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation type="unfinished">An unknown error occurred while saving this file.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your score could not be saved</source>
         <translation type="unfinished">Your score could not be saved</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>An error occurred while saving your score</source>
         <translation type="unfinished">An error occurred while saving your score</translation>
     </message>
     <message>
-        <location filename="src/project/internal/projectactionscontroller.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
         <translation type="unfinished">To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</translation>
     </message>
@@ -33494,33 +33547,33 @@ failed.</translation>
 <context>
     <name>project/share</name>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your audio could not be shared</source>
         <translation type="unfinished">Your audio could not be shared</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Your Audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
         <translation type="unfinished">Your Audio.com account needs to be verified first. Please activate your account via the link in the activation email.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Audio.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that audio.com returned, which is a number.</extracomment>
         <translation type="unfinished">Audio.com returned an unknown error code: %1.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Audio.com returned an unknown error code.</source>
         <translation type="unfinished">Audio.com returned an unknown error code.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="2"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="2"/>
         <source>Please try again later, or get help for this problem on Audio.com.</source>
         <translation type="unfinished">Please try again later, or get help for this problem on Audio.com.</translation>
     </message>
     <message>
-        <location filename="src/project/internal/opensaveprojectscenario.cpp" line="1"/>
+        <location filename="src/project/internal/saveprojectscenario.cpp" line="1"/>
         <source>Could not connect to Audio.com. Please check your internet connection or try again later.</source>
         <translation type="unfinished">Could not connect to Audio.com. Please check your internet connection or try again later.</translation>
     </message>
@@ -36978,6 +37031,11 @@ failed.</translation>
         <source>selected</source>
         <translation type="unfinished">selected</translation>
     </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="1"/>
+        <source>Menu</source>
+        <translation type="unfinished">Menu</translation>
+    </message>
 </context>
 <context>
     <name>undoableAction</name>
@@ -37544,6 +37602,16 @@ failed.</translation>
         <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
         <source>Increase duration</source>
         <translation type="unfinished">Increase duration</translation>
+    </message>
+    <message>
+        <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
+        <source>Increase dynamics</source>
+        <translation type="unfinished">Increase dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
+        <source>Decrease dynamics</source>
+        <translation type="unfinished">Decrease dynamics</translation>
     </message>
     <message>
         <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>

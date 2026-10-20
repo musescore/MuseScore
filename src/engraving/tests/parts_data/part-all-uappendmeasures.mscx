@@ -118,8 +118,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>testpart2</text>
           </Text>
         </VBox>
@@ -1060,13 +1060,13 @@
       <HairPin>
         <subtype>0</subtype>
         <veloChange>10</veloChange>
-        <beginText>cresc.</beginText>
-        <continueText>(cresc.)</continueText>
         <track2>0</track2>
         <startTick>1/1</startTick>
         <ticks>1/4</ticks>
         <eid>T_T</eid>
         <track>0</track>
+        <beginText>cresc.</beginText>
+        <continueText>(cresc.)</continueText>
         </HairPin>
       <Slur>
         <startElement>q_q</startElement>
@@ -1137,14 +1137,14 @@
           <eid>3C_3C</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>4C_4C</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>testpart2</text>
             </Text>
           <Text>
-            <eid>5C_5C</eid>
             <style>instrument_excerpt</style>
+            <eid>5C_5C</eid>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1772,14 +1772,14 @@
         <HairPin>
           <subtype>0</subtype>
           <veloChange>10</veloChange>
-          <beginText>cresc.</beginText>
-          <continueText>(cresc.)</continueText>
           <track2>0</track2>
           <startTick>1/1</startTick>
           <ticks>1/4</ticks>
           <eid>sE_sE</eid>
           <linkedTo>T_T</linkedTo>
           <track>0</track>
+          <beginText>cresc.</beginText>
+          <continueText>(cresc.)</continueText>
           </HairPin>
         <Slur>
           <startElement>dD_dD</startElement>
@@ -1850,14 +1850,14 @@
           <eid>xE_xE</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>yE_yE</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>testpart2</text>
             </Text>
           <Text>
-            <eid>zE_zE</eid>
             <style>instrument_excerpt</style>
+            <eid>zE_zE</eid>
             <text>Tenor</text>
             </Text>
           </VBox>

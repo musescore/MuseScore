@@ -40,18 +40,27 @@ StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, const muse::modu
 void StaffTypeSettingsModel::createProperties()
 {
     m_isSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
-    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::STAFF_YOFFSET);
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::STAFF_YOFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, -newValue.toDouble());
+    });
     m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 
     m_lineCount = buildPropertyItem(mu::engraving::Pid::STAFF_LINES); // int
     m_lineDistance = buildPropertyItem(mu::engraving::Pid::LINE_DISTANCE);
-    m_stepOffset = buildPropertyItem(mu::engraving::Pid::STEP_OFFSET); // int
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    m_stepOffset = buildPropertyItem(mu::engraving::Pid::STEP_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) { // int
+        onPropertyValueChanged(pid, -newValue.toInt());
+    });
     m_isInvisible = buildPropertyItem(mu::engraving::Pid::STAFF_INVISIBLE);
     m_color = buildPropertyItem(mu::engraving::Pid::STAFF_COLOR);
 
     m_noteheadSchemeType = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
+    m_instrumentLabelVisibility = buildPropertyItem(mu::engraving::Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY);
     m_isStemless = buildPropertyItem(mu::engraving::Pid::STAFF_STEMLESS);
     m_shouldShowBarlines = buildPropertyItem(mu::engraving::Pid::STAFF_SHOW_BARLINES);
     m_shouldShowLedgerLines = buildPropertyItem(mu::engraving::Pid::STAFF_SHOW_LEDGERLINES);
@@ -71,18 +80,27 @@ void StaffTypeSettingsModel::requestElements()
 void StaffTypeSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isSmall);
-    loadPropertyItem(m_verticalOffset, formatDoubleFunc);
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+        return -muse::DataFormatter::roundDouble(elementPropertyValue.toDouble());
+    });
     loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
         return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_lineCount);
     loadPropertyItem(m_lineDistance, formatDoubleFunc);
-    loadPropertyItem(m_stepOffset);
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    loadPropertyItem(m_stepOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+        return -elementPropertyValue.toInt();
+    });
     loadPropertyItem(m_isInvisible);
     loadPropertyItem(m_color);
 
     loadPropertyItem(m_noteheadSchemeType);
+    loadPropertyItem(m_instrumentLabelVisibility);
     loadPropertyItem(m_isStemless);
     loadPropertyItem(m_shouldShowBarlines);
     loadPropertyItem(m_shouldShowLedgerLines);
@@ -137,6 +155,11 @@ PropertyItem* StaffTypeSettingsModel::color() const
 PropertyItem* StaffTypeSettingsModel::noteheadSchemeType() const
 {
     return m_noteheadSchemeType;
+}
+
+PropertyItem* StaffTypeSettingsModel::instrumentLabelVisibility() const
+{
+    return m_instrumentLabelVisibility;
 }
 
 PropertyItem* StaffTypeSettingsModel::isStemless() const

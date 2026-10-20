@@ -106,20 +106,27 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>O_O</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>P_P</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>M_M</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>R_R</eid>
               <parentheses>both</parentheses>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>Q_Q</eid>
+                <eid>S_S</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
@@ -130,25 +137,32 @@
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.983333</bendEndTimeFactor>
                 <startElement>M_M</startElement>
-                <endElement>P_P</endElement>
-                <eid>R_R</eid>
+                <endElement>R_R</endElement>
+                <eid>T_T</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>U_U</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>V_V</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>P_P</NoteEID>
+                <NoteEID>R_R</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>W_W</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>T_T</eid>
+              <eid>X_X</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
@@ -157,18 +171,18 @@
                 <guitarBendType>dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.983333</bendEndTimeFactor>
-                <startElement>U_U</startElement>
-                <endElement>T_T</endElement>
-                <eid>V_V</eid>
+                <startElement>Y_Y</startElement>
+                <endElement>X_X</endElement>
+                <eid>Z_Z</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>W_W</eid>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>Y_Y</eid>
               <parentheses>both</parentheses>
               <pitch>62</pitch>
               <tpc>16</tpc>
@@ -178,15 +192,22 @@
                 <guitarBendType>dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.983333</bendEndTimeFactor>
-                <startElement>P_P</startElement>
-                <endElement>U_U</endElement>
-                <eid>X_X</eid>
+                <startElement>R_R</startElement>
+                <endElement>Y_Y</endElement>
+                <eid>b_b</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>c_c</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>d_d</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>U_U</NoteEID>
+                <NoteEID>Y_Y</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>

@@ -26,6 +26,7 @@
       <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
       <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
       <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
+      <fretFrets>5</fretFrets>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
       <slurEndWidth>0.0625</slurEndWidth>
@@ -185,13 +186,13 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>testInferredCrescLines</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>James M</text>
           </Text>
         </VBox>

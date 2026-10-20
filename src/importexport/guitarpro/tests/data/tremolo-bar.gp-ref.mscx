@@ -226,19 +226,26 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>j_j</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>k_k</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>i_i</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>j_j</eid>
+            <eid>l_l</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>k_k</eid>
+              <eid>m_m</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>l_l</eid>
+                <eid>n_n</eid>
                 </Accidental>
               <pitch>49</pitch>
               <tpc>21</tpc>
@@ -249,20 +256,20 @@
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>i_i</startElement>
-                <endElement>k_k</endElement>
-                <eid>m_m</eid>
+                <endElement>m_m</endElement>
+                <eid>o_o</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>n_n</eid>
+            <eid>p_p</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>o_o</eid>
+              <eid>q_q</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -271,21 +278,21 @@
                 <guitarBendType>dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.75</bendEndTimeFactor>
-                <startElement>p_p</startElement>
-                <endElement>o_o</endElement>
-                <eid>q_q</eid>
+                <startElement>r_r</startElement>
+                <endElement>q_q</endElement>
+                <eid>s_s</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
+            <eid>t_t</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>s_s</eid>
+              <eid>u_u</eid>
               <parentheses>both</parentheses>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -294,16 +301,23 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>v_v</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>w_w</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>s_s</NoteEID>
+                <NoteEID>u_u</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>t_t</eid>
+            <eid>x_x</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>p_p</eid>
+              <eid>r_r</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <fret>15</fret>
@@ -312,41 +326,41 @@
                 <guitarBendType>pre-dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
-                <startElement>s_s</startElement>
-                <endElement>p_p</endElement>
-                <eid>u_u</eid>
+                <startElement>u_u</startElement>
+                <endElement>r_r</endElement>
+                <eid>y_y</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Rest>
-            <eid>v_v</eid>
+            <eid>z_z</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>w_w</eid>
+            <eid>0_0</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <eid>x_x</eid>
+            <eid>1_1</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>y_y</eid>
+        <eid>2_2</eid>
         <voice>
           <Chord>
-            <eid>z_z</eid>
+            <eid>3_3</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>0_0</eid>
+              <eid>4_4</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalSharp</subtype>
-                <eid>1_1</eid>
+                <eid>5_5</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -356,49 +370,8 @@
                 <guitarBendType>dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.483333</bendEndTimeFactor>
-                <startElement>2_2</startElement>
-                <endElement>0_0</endElement>
-                <eid>3_3</eid>
-                <track>0</track>
-                </GuitarBend>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>4_4</eid>
-            <BeamMode>no</BeamMode>
-            <durationType>eighth</durationType>
-            <appoggiatura/>
-            <noStem>1</noStem>
-            <Note>
-              <eid>5_5</eid>
-              <parentheses>both</parentheses>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              <ghost>1</ghost>
-              </Note>
-            <NoteParenGroup>
-              <Notes>
-                <NoteEID>5_5</NoteEID>
-                </Notes>
-              </NoteParenGroup>
-            </Chord>
-          <Chord>
-            <eid>6_6</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>2_2</eid>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              <GuitarBend>
-                <guitarBendType>pre-dive</guitarBendType>
-                <bendStartTimeFactor>0</bendStartTimeFactor>
-                <bendEndTimeFactor>1</bendEndTimeFactor>
-                <startElement>5_5</startElement>
-                <endElement>2_2</endElement>
+                <startElement>6_6</startElement>
+                <endElement>4_4</endElement>
                 <eid>7_7</eid>
                 <track>0</track>
                 </GuitarBend>
@@ -420,16 +393,71 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>+_+</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>/_/</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>9_9</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>+_+</eid>
+            <eid>AB_AB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>/_/</eid>
+              <eid>6_6</eid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              <GuitarBend>
+                <guitarBendType>pre-dive</guitarBendType>
+                <bendStartTimeFactor>0</bendStartTimeFactor>
+                <bendEndTimeFactor>1</bendEndTimeFactor>
+                <startElement>9_9</startElement>
+                <endElement>6_6</endElement>
+                <eid>BB_BB</eid>
+                <track>0</track>
+                </GuitarBend>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>CB_CB</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <noStem>1</noStem>
+            <Note>
+              <eid>DB_DB</eid>
+              <parentheses>both</parentheses>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              <ghost>1</ghost>
+              </Note>
+            <NoteParenGroup>
+              <Parenthesis>
+                <eid>EB_EB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>FB_FB</eid>
+                </Parenthesis>
+              <Notes>
+                <NoteEID>DB_DB</NoteEID>
+                </Notes>
+              </NoteParenGroup>
+            </Chord>
+          <Chord>
+            <eid>GB_GB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>HB_HB</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>1</fret>
@@ -438,19 +466,19 @@
                 <guitarBendType>pre-dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
-                <startElement>9_9</startElement>
-                <endElement>/_/</endElement>
-                <eid>AB_AB</eid>
+                <startElement>DB_DB</startElement>
+                <endElement>HB_HB</endElement>
+                <eid>IB_IB</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Rest>
-            <eid>BB_BB</eid>
+            <eid>JB_JB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>CB_CB</eid>
+            <eid>KB_KB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

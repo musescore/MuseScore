@@ -227,18 +227,18 @@
         <height>10</height>
         <eid>V_V</eid>
         <Text>
-          <eid>W_W</eid>
           <style>title</style>
+          <eid>W_W</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>X_X</eid>
           <style>subtitle</style>
+          <eid>X_X</eid>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>Y_Y</eid>
           <style>composer</style>
+          <eid>Y_Y</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>

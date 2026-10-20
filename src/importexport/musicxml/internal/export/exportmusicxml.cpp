@@ -4295,25 +4295,11 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     xml.startElement(useDrumset ? "unpitched" : "pitch");
     xml.tag(useDrumset ? "display-step" : "step", step);
     // Check for microtonal accidentals and overwrite "alter" tag
-    const Accidental* acc = note->accidental();
-    double microtonalAlter = 0.0;
-    if (acc) {
-        switch (acc->accidentalType()) {
-        case AccidentalType::MIRRORED_FLAT:  microtonalAlter = -0.5;
-            break;
-        case AccidentalType::SHARP_SLASH:    microtonalAlter = 0.5;
-            break;
-        case AccidentalType::MIRRORED_FLAT2: microtonalAlter = -1.5;
-            break;
-        case AccidentalType::SHARP_SLASH4:   microtonalAlter = 1.5;
-            break;
-        default:                                             break;
-        }
-    }
-    // Override accidental with explicit note tuning
+    double microtonalAlter = note->centOffset() / 100.0;
+    // Explicit note tuning
     double tuning = note->tuning();
     if (!muse::RealIsNull(tuning)) {
-        microtonalAlter = tuning / 100.0;
+        microtonalAlter += tuning / 100.0;
     }
     if (alter || microtonalAlter) {
         xml.tag("alter", alter + microtonalAlter);
@@ -7182,7 +7168,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (m->tick().isZero()) {
             //KeySigEvent kse;
             //kse.setKey(Key::C);
-            KeySig* ks = Factory::createKeySig(m_score->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(m_score->dummy());
             if (p->staff(0)->isTabStaff(Fraction(0, 1))) {
                 ks->setVisible(false);
             }

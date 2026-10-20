@@ -138,17 +138,24 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>S_S</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>T_T</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>O_O</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>S_S</eid>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>T_T</eid>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

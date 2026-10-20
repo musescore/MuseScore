@@ -335,8 +335,8 @@
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>f_f</eid>
           <Text>
-            <eid>g_g</eid>
             <style>instrument_excerpt</style>
+            <eid>g_g</eid>
             <text>Bass</text>
             </Text>
           </VBox>

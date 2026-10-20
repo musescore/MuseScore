@@ -32,7 +32,7 @@ class IndicatorIcon : public EngravingItem
     OBJECT_ALLOCATOR(engraving, IndicatorIcon)
 
 public:
-    IndicatorIcon(const ElementType& type, System* parent = nullptr, ElementFlags = ElementFlag::NOTHING);
+    IndicatorIcon(const ElementType& type, DummyParentOr<System> parent, ElementFlags = ElementFlag::NOTHING);
     IndicatorIcon* clone() const override { return new IndicatorIcon(*this); }
 
     System* system() const { return toSystem(ownershipParent()); }

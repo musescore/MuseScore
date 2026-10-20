@@ -1,0 +1,129 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2026 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <QObject>
+#include <qqmlintegration.h>
+
+#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "interactive/iinteractive.h"
+
+#include "cloud/musescorecom/imusescorecomservice.h"
+#include "cloud/audiocom/iaudiocomservice.h"
+
+#include "project/iprojectconfiguration.h"
+#include "project/iconvertfiletoscorescenario.h"
+#include "project/types/filecategory.h"
+
+namespace mu::project {
+class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, public muse::Contextable
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QString accountAvatarUrl READ accountAvatarUrl CONSTANT)
+    Q_PROPERTY(QString guidelinesUrl READ guidelinesUrl CONSTANT)
+
+    Q_PROPERTY(int convertType READ convertType NOTIFY convertTypeChanged)
+    Q_PROPERTY(QStringList selectedPaths READ selectedPaths WRITE setSelectedPaths NOTIFY selectedPathsChanged)
+    Q_PROPERTY(QString selectedLink READ selectedLink WRITE setSelectedLink NOTIFY selectedLinkChanged)
+    Q_PROPERTY(QString defaultSaveAsName READ defaultSaveAsName NOTIFY selectedPathsChanged)
+
+    Q_PROPERTY(QVariantList fileRequirements READ fileRequirements NOTIFY fileRequirementsChanged)
+    Q_PROPERTY(QVariantMap convertLimits READ convertLimits NOTIFY fileRequirementsChanged)
+    Q_PROPERTY(bool canSelectMultipleFiles READ canSelectMultipleFiles NOTIFY fileRequirementsChanged)
+
+    Q_PROPERTY(QString linkHintText READ linkHintText CONSTANT)
+    Q_PROPERTY(QString audioComUrl READ audioComUrl CONSTANT)
+    Q_PROPERTY(QString linkPageHintText READ linkPageHintText CONSTANT)
+    Q_PROPERTY(QString linkPageHintPlainText READ linkPageHintPlainText CONSTANT)
+    Q_PROPERTY(int maxLinkLength READ maxLinkLength CONSTANT)
+
+    QML_ELEMENT
+
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
+    muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
+    muse::GlobalInject<muse::cloud::IAudioComService> audioComService;
+    muse::GlobalInject<IProjectConfiguration> configuration;
+
+public:
+    explicit ConvertFileToScoreModel(QObject* parent = nullptr);
+
+    QString accountAvatarUrl() const;
+    QString guidelinesUrl() const;
+
+    int convertType() const; // OMR = 0, Audio2Score = 1
+
+    QStringList selectedPaths() const;
+    void setSelectedPaths(const QStringList& paths);
+
+    QString selectedLink() const;
+    void setSelectedLink(const QString& link);
+
+    QString defaultSaveAsName() const;
+
+    QVariantList fileRequirements() const;
+    QVariantMap convertLimits() const;
+    bool canSelectMultipleFiles() const;
+
+    QString linkHintText() const;
+    QString audioComUrl() const;
+    QString linkPageHintText() const;
+    QString linkPageHintPlainText() const;
+    int maxLinkLength() const;
+
+    Q_INVOKABLE void load(const QStringList& paths, int type);
+
+    Q_INVOKABLE bool validateAndApplyFiles(const QStringList& pathsOrUrls);
+    Q_INVOKABLE bool selectAndValidateFiles(const QStringList& existingPaths = {});
+
+    Q_INVOKABLE QString validateFileName(const QString& name) const;
+    Q_INVOKABLE bool validateLink(const QString& link) const;
+
+    Q_INVOKABLE void confirmCancel();
+    Q_INVOKABLE void confirmGoingBack();
+    Q_INVOKABLE void clearSelection();
+
+signals:
+    void convertTypeChanged();
+    void selectedPathsChanged();
+    void selectedLinkChanged();
+    void fileRequirementsChanged();
+    void cancelConfirmed();
+    void goingBackConfirmed();
+
+private:
+    void setConvertType(int type);
+
+    FileCategory selectedFileCategory() const;
+    QStringList boldLinkSources() const;
+
+    QStringList selectFiles(const QStringList& existingPaths = {});
+
+    ConvertType m_convertType = ConvertType::Omr;
+    QStringList m_selectedPaths;
+    QString m_selectedLink;
+};
+}

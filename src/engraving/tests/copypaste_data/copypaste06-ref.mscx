@@ -64,13 +64,13 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>W_W</eid>
         <Text>
-          <eid>X_X</eid>
           <style>title</style>
+          <eid>X_X</eid>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>Y_Y</eid>
           <style>subtitle</style>
+          <eid>Y_Y</eid>
           <text>Copy-Paste</text>
           </Text>
         </VBox>

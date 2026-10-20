@@ -141,6 +141,13 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>U_U</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>V_V</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>R_R</NoteEID>
                 </Notes>

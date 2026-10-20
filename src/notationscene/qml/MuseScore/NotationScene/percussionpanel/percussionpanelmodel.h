@@ -28,7 +28,6 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
 #include "musesampler/imusesamplerinfo.h"
@@ -79,7 +78,6 @@ class PercussionPanelModel : public QObject, public muse::Contextable, public mu
     muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSampler;
     muse::GlobalInject<IInstrumentsRepository> instrumentsRepository;
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<mu::playback::IPlaybackController> playbackController = { this };
 

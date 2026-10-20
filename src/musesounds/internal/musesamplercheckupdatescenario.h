@@ -23,13 +23,13 @@
 
 #include "imusesamplercheckupdatescenario.h"
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
+#include "modularity/ioc.h"
+#include "rcommand/icommanddispatcher.h"
 #include "imusesamplercheckupdateservice.h"
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
-#include "actions/iactionsdispatcher.h"
 #include "interactive/iinteractive.h"
 #include "interactive/iplatforminteractive.h"
 #include "multiwindows/imultiwindowsprovider.h"
@@ -45,7 +45,7 @@ class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, p
     muse::GlobalInject<IMuseSamplerCheckUpdateService> service;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     MuseSamplerCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)

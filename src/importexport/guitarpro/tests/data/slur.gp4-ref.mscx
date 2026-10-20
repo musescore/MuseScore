@@ -113,9 +113,9 @@
         <track>0</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>Q_Q</eid>
             <track>0</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>R_R</eid>
           <track>0</track>

@@ -40,7 +40,7 @@ void CloudScoreStatusWatcher::load(int scoreId)
     }
 
     onProjectBeingDownloadedChanged();
-    projectFilesController()->projectBeingDownloadedChanged().onNotify(this, [this] {
+    openProjectScenario()->projectBeingDownloadedChanged().onNotify(this, [this] {
         onProjectBeingDownloadedChanged();
     });
 }
@@ -53,7 +53,7 @@ bool CloudScoreStatusWatcher::isDownloadedAndUpToDate() const
 
 void CloudScoreStatusWatcher::onProjectBeingDownloadedChanged()
 {
-    ProjectBeingDownloaded download = projectFilesController()->projectBeingDownloaded();
+    ProjectBeingDownloaded download = openProjectScenario()->projectBeingDownloaded();
     if (download.scoreId != m_scoreId) {
         clearProgress();
         return;
@@ -98,7 +98,7 @@ void CloudScoreStatusWatcher::cancel()
         return;
     }
 
-    ProjectBeingDownloaded download = projectFilesController()->projectBeingDownloaded();
+    ProjectBeingDownloaded download = openProjectScenario()->projectBeingDownloaded();
     if (download.scoreId != m_scoreId) {
         return;
     }

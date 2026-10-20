@@ -61,7 +61,7 @@ class ChordRest : public DurationElement
     DECLARE_CLASSOF(ElementType::INVALID) // dummy
 
 public:
-    ChordRest(const ElementType& type, Segment* parent);
+    ChordRest(const ElementType& type, DummyParentOr<Segment> parent);
     ChordRest(const ChordRest&, bool link = false);
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();
@@ -185,8 +185,6 @@ public:
     virtual void removeMarkings(bool keepTremolo = false);
 
     bool isBefore(const EngravingItem*) const override;
-
-    void undoAddAnnotation(EngravingItem*);
 
     virtual double intrinsicMag() const = 0;
 

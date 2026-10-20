@@ -40,7 +40,7 @@ class MMRestRange : public MeasureNumberBase
     M_PROPERTY(MMRestRangeBracketType, bracketType, setBracketType)
 
 public:
-    MMRestRange(Measure* parent = nullptr);
+    MMRestRange(DummyParentOr<Measure> parent);
     MMRestRange(const MMRestRange& other);
 
     MMRestRange* clone() const override { return new MMRestRange(*this); }

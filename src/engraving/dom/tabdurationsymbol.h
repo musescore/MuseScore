@@ -43,8 +43,8 @@ class TabDurationSymbol final : public EngravingItem
     DECLARE_CLASSOF(ElementType::TAB_DURATION_SYMBOL)
 
 public:
-    TabDurationSymbol(ChordRest* parent);
-    TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots);
+    TabDurationSymbol(DummyParentOr<ChordRest> parent);
+    TabDurationSymbol(DummyParentOr<ChordRest> parent, const StaffType* tab, DurationType type, int dots);
     TabDurationSymbol(const TabDurationSymbol&);
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
 

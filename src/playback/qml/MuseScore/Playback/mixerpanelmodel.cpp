@@ -595,7 +595,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
 
 MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 {
-    MixerChannelItem* item = new MixerChannelItem(this, MixerChannelItem::Type::Master, true /*outputOnly*/);
+    MixerChannelItem* item = new MixerChannelItem(this, MixerChannelItem::Type::Master, true /*outputOnly*/, MASTER_TRACK_ID);
     item->setPanelSection(m_navigationSection);
     item->setTitle(muse::qtrc("playback", "Master"));
 

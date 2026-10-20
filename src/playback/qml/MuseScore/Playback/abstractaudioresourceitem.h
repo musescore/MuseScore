@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
-#include "actions/actiontypes.h"
+#include "rcommand/commandtypes.h"
 #include "audio/common/audiotypes.h"
 
 namespace mu::playback {
@@ -59,8 +59,8 @@ public:
     virtual bool isActive() const;
     virtual bool hasNativeEditorSupport() const;
 
-    const muse::actions::ActionQuery& editorAction() const;
-    void setEditorAction(const muse::actions::ActionQuery& action);
+    const muse::rcommand::CommandQuery& editorCommand() const;
+    void setEditorCommand(const muse::rcommand::CommandQuery& command);
 
 signals:
     void titleChanged();
@@ -86,6 +86,6 @@ protected:
 private:
     void doRequestToLaunchNativeEditorView();
 
-    muse::actions::ActionQuery m_editorAction;
+    muse::rcommand::CommandQuery m_editorCommand;
 };
 }

@@ -25,16 +25,14 @@
 
 #include <QAbstractItemModel>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "actions/iactionsdispatcher.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/view/iconcodes.h"
 
+#include "modularity/ioc.h"
 #include "appshell/iappshellconfiguration.h"
+#include "interactive/iinteractive.h"
 
 #include "preferencepageitem.h"
-#include "interactive/iinteractive.h"
 
 namespace mu::preferences {
 class PreferencesModel : public QAbstractItemModel, public muse::Contextable, public muse::async::Asyncable
@@ -45,8 +43,6 @@ class PreferencesModel : public QAbstractItemModel, public muse::Contextable, pu
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
     muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

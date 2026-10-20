@@ -55,7 +55,7 @@ private slots:
 TEST_F(Engraving_DurationTypeTests, halfDuration)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
@@ -84,7 +84,7 @@ TEST_F(Engraving_DurationTypeTests, halfDuration)
 TEST_F(Engraving_DurationTypeTests, doubleDuration)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
@@ -113,7 +113,7 @@ TEST_F(Engraving_DurationTypeTests, doubleDuration)
 TEST_F(Engraving_DurationTypeTests, decDurationDotted)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
@@ -146,7 +146,7 @@ TEST_F(Engraving_DurationTypeTests, decDurationDotted)
 TEST_F(Engraving_DurationTypeTests, incDurationDotted)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));

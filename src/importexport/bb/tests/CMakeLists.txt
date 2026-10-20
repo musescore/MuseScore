@@ -20,24 +20,20 @@
 
 set(MODULE_TEST iex_bb_tests)
 
-set(ENGRAVING_TEST_UTILS_DIR ${CMAKE_SOURCE_DIR}/src/engraving/tests/utils)
-
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
-   # ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.h
 
-    ${ENGRAVING_TEST_UTILS_DIR}/scorecomp.cpp
-    ${ENGRAVING_TEST_UTILS_DIR}/scorecomp.h
-    ${ENGRAVING_TEST_UTILS_DIR}/scorerw.cpp
-    ${ENGRAVING_TEST_UTILS_DIR}/scorerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/bb_tests.cpp
 )
 
 set(MODULE_TEST_LINK
     engraving
     iex_bb
-    )
+)
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 

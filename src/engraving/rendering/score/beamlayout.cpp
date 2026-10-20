@@ -533,7 +533,7 @@ void BeamLayout::breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx)
 
         Beam* newBeam = nullptr;
         if (nextElements.size() > 1) {
-            newBeam = Factory::createBeam(ctx.mutDom().dummyParent()->score());
+            newBeam = Factory::createBeam(ctx.mutDom().score());
             newBeam->setGenerated(true);
             newBeam->setTrack(track);
         }
@@ -614,7 +614,7 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
             } else {
                 beam = a1->beam();
                 if (beam == 0 || beam->elements().front() != a1) {
-                    beam = Factory::createBeam(ctx.mutDom().dummyParent()->score());
+                    beam = Factory::createBeam(ctx.mutDom().score());
                     beam->setGenerated(true);
                     beam->setTrack(mainNote->track());
                     a1->replaceBeam(beam);
@@ -792,7 +792,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 } else {
                     beam = a1->beam();
                     if (beam == 0 || beam->elements().front() != a1) {
-                        beam = Factory::createBeam(ctx.mutDom().dummyParent()->score());
+                        beam = Factory::createBeam(ctx.mutDom().score());
                         beam->setGenerated(true);
                         beam->setTrack(track);
                         a1->replaceBeam(beam);

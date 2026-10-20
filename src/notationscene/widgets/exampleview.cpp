@@ -120,10 +120,6 @@ void ExampleView::changeEditElement(EngravingItem*)
 {
 }
 
-void ExampleView::setDropRectangles(const std::vector<RectF>&)
-{
-}
-
 void ExampleView::drawBackground(Painter* p, const RectF& r) const
 {
     if (m_backgroundPixmap == 0 || m_backgroundPixmap->isNull()) {

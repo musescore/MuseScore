@@ -108,8 +108,8 @@
               <string>38</string>
               <string>43</string>
               </StringData>
-            <eid>L_L</eid>
             <style>string_tunings</style>
+            <eid>L_L</eid>
             <text/>
             </StringTunings>
           <Chord>
@@ -205,8 +205,8 @@
               <string>38</string>
               <string>43</string>
               </StringData>
-            <eid>c_c</eid>
             <style>string_tunings</style>
+            <eid>c_c</eid>
             <text/>
             </StringTunings>
           <Rest>

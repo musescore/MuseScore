@@ -42,7 +42,6 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeSystemFlag, Pid::SYSTEM_FLAG },
     { Sid::tempoChangePlacement, Pid::PLACEMENT },
     { Sid::tempoChangeMinDistance, Pid::MIN_DISTANCE },
-    { Sid::tempoChangeLineSpacing, Pid::TEXT_LINE_SPACING },
 
     { Sid::tempoChangeColor, Pid::COLOR },
 
@@ -108,7 +107,7 @@ static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_
     { GradualTempoChangeType::Stringendo, 1.5 }
 };
 
-GradualTempoChange::GradualTempoChange(EngravingItem* parent)
+GradualTempoChange::GradualTempoChange(DummyParentOr<EngravingItem> parent)
     : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoStyle);

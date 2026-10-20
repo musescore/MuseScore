@@ -208,6 +208,9 @@ done
 fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
   libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
+  # https://github.com/musescore/MuseScore/issues/33133
+  # old copy shadows system one, breaks dlopen of system FFmpeg via libmount
+  libsystemd.so.0
 )
 
 if $BUILD_PIPEWIRE; then
@@ -227,6 +230,11 @@ done
 # so we need to remove it as it is in the fallback mechanism
 if [[ -f "${appdir}/lib/libpipewire-0.3.so.0" ]]; then
   rm -f "${appdir}/lib/libpipewire-0.3.so.0"
+fi
+
+# Same for libsystemd.so.0
+if [[ -f "${appdir}/lib/libsystemd.so.0" ]]; then
+  rm -f "${appdir}/lib/libsystemd.so.0"
 fi
 
 # APPIMAGEUPDATETOOL

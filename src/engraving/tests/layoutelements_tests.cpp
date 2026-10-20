@@ -147,7 +147,7 @@ TEST_F(Engraving_LayoutElementsTests, DISABLED_tstLayoutGoldberg)
 TEST_F(Engraving_LayoutElementsTests, tstLayoutCrossStaffArp)
 {
     MasterScore* score = ScoreRW::readScore(ALL_ELEMENTS_DATA_DIR + "cross_staff_arp.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // the y-position where the bottom staff is
     double staff1yPre = score->systems().front()->staves().at(1)->y();

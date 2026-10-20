@@ -170,6 +170,7 @@ public:
     virtual void startEditGrip(const muse::PointF& pos) = 0;
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
     virtual void endEditGrip() = 0;
+    virtual bool isStartEndGripSelected() const = 0;
 
     virtual bool isEditingElement() const = 0;
     virtual muse::async::Notification isEditingElementChanged() const = 0;
@@ -284,6 +285,7 @@ public:
     virtual void resetBeamMode() = 0;
     virtual void resetShapesAndPosition() = 0;
     virtual void resetToDefaultLayout() = 0;
+    virtual void freezeSelectionPosition() = 0;
 
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(const ScoreConfig& config) = 0;

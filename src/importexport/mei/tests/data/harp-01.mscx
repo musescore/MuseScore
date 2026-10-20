@@ -58,13 +58,13 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>title</style>
+          <eid>G_G</eid>
           <text>Harp pedals test</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>

@@ -427,6 +427,14 @@ void MusicXmlParserPass1::setExporterSoftware(String& exporter)
     }
 }
 
+void MusicXmlParserPass1::setExporterStyles()
+{
+    // If exporters have different default styles to MuseScore, assume they are being used here
+    if (sibOrDolet()) {
+        m_score->style().set(Sid::fretFrets, 5);
+    }
+}
+
 //---------------------------------------------------------
 //   initPartState
 //---------------------------------------------------------
@@ -1530,6 +1538,7 @@ void MusicXmlParserPass1::identification()
                 } else if (m_e.name() == "software") {
                     String exporterString = m_e.readText().toLower();
                     setExporterSoftware(exporterString);
+                    setExporterStyles();
                 } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam" && m_e.asciiAttribute("type") == "yes") {
                     m_hasBeamingInfo = true;
                     m_e.skipCurrentElement();

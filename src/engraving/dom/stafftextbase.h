@@ -43,7 +43,7 @@ class StaffTextBase : public TextBase
     OBJECT_ALLOCATOR(engraving, StaffTextBase)
 
 public:
-    StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags = ElementFlag::ON_STAFF);
+    StaffTextBase(const ElementType& type, DummyParentOr<Segment> parent, TextStyleType tid, ElementFlags = ElementFlag::ON_STAFF);
 
     void clear();
 

@@ -1045,6 +1045,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                     // 'on' is the old spanner end note and 'nn' is the new spanner end note
                                     for (Spanner* oldSp : on->spannerBack()) {
                                         if (oldSp->startElement() && oldSp->endElement()
+                                            && oldSp->startElement()->findMeasure() == oldSp->endElement()->findMeasure()
                                             && oldSp->startElement()->track() > oldSp->endElement()->track()) {
                                             continue;
                                         }
@@ -1059,7 +1060,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                     }
                                     for (Spanner* oldSp : on->spannerFor()) {
                                         if (oldSp->startElement() && oldSp->endElement()
-                                            && oldSp->startElement()->track() <= oldSp->endElement()->track()) {
+                                            && (oldSp->startElement()->findMeasure() != oldSp->endElement()->findMeasure()
+                                                || oldSp->startElement()->track() <= oldSp->endElement()->track())) {
                                             continue;
                                         }
                                         Note* newEnd = Spanner::endElementFromSpanner(oldSp, nn);

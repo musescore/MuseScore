@@ -116,6 +116,13 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>Q_Q</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>R_R</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>O_O</NoteEID>
                 </Notes>

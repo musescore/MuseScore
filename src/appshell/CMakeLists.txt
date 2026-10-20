@@ -36,8 +36,6 @@ target_sources(appshell PRIVATE
     internal/appshellcommandsstate.h
     internal/appshellstate.cpp
     internal/appshellstate.h
-    internal/applicationuiactions.cpp
-    internal/applicationuiactions.h
     internal/appshellconfiguration.cpp
     internal/appshellconfiguration.h
     internal/iappmenumodelhook.h

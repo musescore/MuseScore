@@ -27,12 +27,11 @@
 
 #include "uicomponents/qml/Muse/UiComponents/toolbaritem.h"
 
+#include "notationcommands.h"
+
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
-
-static const actions::ActionCode UNDO_ACTION_CODE("command://notation/undo");
-static const actions::ActionCode REDO_ACTION_CODE("command://notation/redo");
 
 UndoRedoToolbarModel::UndoRedoToolbarModel(QObject* parent)
     : AbstractToolBarModel(parent)
@@ -41,77 +40,43 @@ UndoRedoToolbarModel::UndoRedoToolbarModel(QObject* parent)
 
 void UndoRedoToolbarModel::load()
 {
-    actions::ActionCodeList itemsCodes = {
-        UNDO_ACTION_CODE,
-        REDO_ACTION_CODE
-    };
-
-    ToolBarItemList items;
-    for (const actions::ActionCode& code : itemsCodes) {
-        ToolBarItem* item = makeItem(code);
-        item->setIsTransparent(true);
-        items << item;
-    }
-
-    setItems(items);
-
     AbstractToolBarModel::load();
 
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        updateItems();
+    ToolBarItemList items = {
+        makeItem(UNDO_COMMAND),
+        makeItem(REDO_COMMAND),
+    };
 
-        subsribeOnUndoStackChanges();
-    });
-
-    subsribeOnUndoStackChanges();
+    setItems(items);
 }
 
-void UndoRedoToolbarModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
+void UndoRedoToolbarModel::onCommandStateChanged(const muse::rcommand::Command& command, const muse::rcommand::CommandState& state)
 {
+    AbstractToolBarModel::onCommandStateChanged(command, state);
+
     INotationUndoStackPtr stack = undoStack();
 
-    for (const actions::ActionCode& code : codes) {
-        if (code == UNDO_ACTION_CODE) {
-            ToolBarItem* undoItem = findItemPtr(UNDO_ACTION_CODE);
-            if (undoItem) {
-                const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
-                undoItem->setTitle(undoActionName.isEmpty()
-                                   ? TranslatableString("action", "Undo")
-                                   : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
-            }
-        } else if (code == REDO_ACTION_CODE) {
-            ToolBarItem* redoItem = findItemPtr(REDO_ACTION_CODE);
-            if (redoItem) {
-                const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
-                redoItem->setTitle(redoActionName.isEmpty()
-                                   ? TranslatableString("action", "Redo")
-                                   : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
-            }
+    if (command == UNDO_COMMAND) {
+        ToolBarItem* undoItem = findItemPtr(UNDO_COMMAND);
+        if (undoItem) {
+            const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
+            undoItem->setTitle(undoActionName.isEmpty()
+                               ? TranslatableString("action", "Undo")
+                               : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
+        }
+    } else if (command == REDO_COMMAND) {
+        ToolBarItem* redoItem = findItemPtr(REDO_COMMAND);
+        if (redoItem) {
+            const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
+            redoItem->setTitle(redoActionName.isEmpty()
+                               ? TranslatableString("action", "Redo")
+                               : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
         }
     }
-
-    AbstractToolBarModel::onActionsStateChanges(codes);
 }
 
 INotationUndoStackPtr UndoRedoToolbarModel::undoStack() const
 {
     INotationPtr notation = context()->currentNotation();
     return notation ? notation->undoStack() : nullptr;
-}
-
-void UndoRedoToolbarModel::updateItems()
-{
-    onActionsStateChanges({ UNDO_ACTION_CODE, REDO_ACTION_CODE });
-}
-
-void UndoRedoToolbarModel::subsribeOnUndoStackChanges()
-{
-    INotationUndoStackPtr stack = undoStack();
-    if (!stack) {
-        return;
-    }
-
-    stack->stackChanged().onNotify(this, [this]() {
-        updateItems();
-    }, Asyncable::Mode::SetReplace /* FIXME */);
 }

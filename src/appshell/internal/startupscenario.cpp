@@ -24,8 +24,11 @@
 
 #include <QCoreApplication>
 
+#include "appshelltypes.h"
 #include "translation.h"
 #include "types/version.h"
+
+#include "project/projectcommands.h"
 
 #include "muse_framework_config.h"
 
@@ -33,12 +36,9 @@
 
 using namespace mu::appshell;
 using namespace muse;
-using namespace muse::actions;
 
 static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
 static const muse::UriQuery WELCOME_DIALOG_URI("musescore://welcomedialog");
-static const muse::Uri HOME_URI("musescore://home");
-static const muse::Uri NOTATION_URI("musescore://notation");
 
 static StartupModeType modeTypeTromString(const std::string& str)
 {
@@ -189,10 +189,10 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     case StartupModeType::StartEmpty:
         break;
     case StartupModeType::StartWithNewScore:
-        dispatcher()->dispatch("file-new");
+        commandDispatcher()->dispatch(project::PROJECT_NEW_COMMAND);
         break;
     case StartupModeType::ContinueLastSession:
-        dispatcher()->dispatch("continue-last-session");
+        commandDispatcher()->dispatch(project::PROJECT_CONTINUE_LAST_SESSION_COMMAND);
         break;
     case StartupModeType::Recovery:
         restoreLastSession();
@@ -206,15 +206,6 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     }
 
     m_activeUpdateCheckCount = 0;
-
-    if (appUpdateScenario() && appUpdateScenario()->checkInProgress()) {
-        m_activeUpdateCheckCount++;
-        appUpdateScenario()->checkInProgressChanged().onNotify(this, [this, modeType]() {
-            appUpdateScenario()->checkInProgressChanged().disconnect(this);
-            m_activeUpdateCheckCount--;
-            showStartupDialogsIfNeed(modeType);
-        }, Asyncable::Mode::SetReplace);
-    }
 
     if (museSoundsUpdateScenario() && museSoundsUpdateScenario()->checkInProgress()) {
         m_activeUpdateCheckCount++;
@@ -268,18 +259,7 @@ void StartupScenario::showStartupDialogsIfNeed(StartupModeType modeType)
         }
     };
 
-    if (!appUpdateScenario() || !appUpdateScenario()->hasUpdate()) {
-        showWelcomeDialogAndSamplerUpdateIfNeed();
-        return;
-    }
-
-    auto promise = appUpdateScenario()->showUpdate();
-    promise.onResolve(this, [showWelcomeDialogAndSamplerUpdateIfNeed](const Ret& ret) {
-        if (ret.code() == static_cast<int>(Ret::Code::Ok)) {
-            return; // OK means the user wants to close and complete installation - don't show any more dialogs...
-        }
-        showWelcomeDialogAndSamplerUpdateIfNeed();
-    });
+    showWelcomeDialogAndSamplerUpdateIfNeed();
 }
 
 bool StartupScenario::shouldShowWelcomeDialog(StartupModeType modeType) const
@@ -309,7 +289,8 @@ void StartupScenario::checkAndShowMuseSamplerUpdateIfNeed()
 
 void StartupScenario::openScore(const project::ProjectFile& file)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(file.url, file.displayNameOverride));
+    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND,
+                                  { { "url", muse::Val(file.url.toString()) }, { "display_name", muse::Val(file.displayNameOverride) } });
 }
 
 void StartupScenario::restoreLastSession()

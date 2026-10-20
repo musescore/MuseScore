@@ -189,9 +189,9 @@ double ParenthesisLayout::computeExternalParenthesisPadding(const EngravingItem*
     ElementType type1 = item1->type();
     ElementType type2 = item2->type();
 
-    ParenPaddingTablePtr paddingTable = ParenPaddingTable::getPaddingTable(parent);
+    const ParenPaddingTable& paddingTable = parent->score()->paddingTables().parenthesisPaddingTableFor(parent);
 
-    double padding = paddingTable->padding(type1, type2);
+    double padding = paddingTable.padding(type1, type2);
 
     double scaling = (item1->mag() + item2->mag()) / 2;
     padding *= scaling;
@@ -562,6 +562,9 @@ Shape ParenthesisLayout::getParentShape(const EngravingItem* parent)
 
 Shape ParenthesisLayout::getNoteShape(const Note* note, Parenthesis* paren)
 {
+    IF_ASSERT_FAILED(note && paren) {
+        return Shape();
+    }
     Shape noteShape = note->shape();
     noteShape.remove_if([paren](ShapeElement& s) {
         return s.item() == paren || s.item()->isBend() || s.item()->isParenthesis() || s.item()->isAccidental() || s.item()->isNoteDot() || s.item()->isLaissezVibSegment();

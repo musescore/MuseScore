@@ -100,8 +100,8 @@
       <Measure>
         <eid>E_E</eid>
         <Marker>
-          <eid>F_F</eid>
           <style>repeat_right</style>
+          <eid>F_F</eid>
           <text>To Coda</text>
           <label>coda</label>
           <markerType>coda</markerType>
@@ -201,8 +201,8 @@
       <Measure>
         <eid>Z_Z</eid>
         <Jump>
-          <eid>a_a</eid>
           <style>repeat_right</style>
+          <eid>a_a</eid>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>coda</playUntil>
@@ -242,8 +242,8 @@
       <Measure>
         <eid>h_h</eid>
         <Marker>
-          <eid>i_i</eid>
           <style>repeat_left</style>
+          <eid>i_i</eid>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>
