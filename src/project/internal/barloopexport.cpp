@@ -28,11 +28,18 @@
 #include <vector>
 
 #include "engraving/dom/barline.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/measurerepeat.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/tie.h"
+#include "engraving/dom/tremolotwochord.h"
+#include "engraving/dom/tuplet.h"
+#include "engraving/dom/tupletmap.h"
 #include "engraving/dom/playtechannotation.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/score.h"
@@ -116,10 +123,12 @@ static MasterScore* cloneAsMaster(Score* source)
 static void removeRepeatMarkings(Score* score)
 {
     for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        measure->setRepeatStart(false);
-        measure->setRepeatEnd(false);
-        measure->setRepeatJump(false);
-        measure->setRepeatCount(1);
+        // Direct flag writes are not part of the command, so a later layout can still see the
+        // old repeat. The undo change is what playback's repeat list actually honors.
+        measure->undoChangeProperty(Pid::REPEAT_START, false);
+        measure->undoChangeProperty(Pid::REPEAT_END, false);
+        measure->undoChangeProperty(Pid::REPEAT_JUMP, false);
+        measure->undoChangeProperty(Pid::REPEAT_COUNT, 1);
         if (measure->sectionBreak()) {
             measure->undoSetBreak(false, LayoutBreakType::SECTION);
         }
@@ -187,6 +196,201 @@ static void retargetHarmonies(EngravingItem* element, Score* score)
     }
 }
 
+//! cloneMeasure keeps the written notes but drops the measure flags playback needs.
+//! A measure repeat (%) is silent without its staff count: the sign has no notes of
+//! its own, and the count is what points at the bar it should play.
+static void copyMeasurePlaybackState(Measure* dest, const Measure* source)
+{
+    if (!dest || !source) {
+        return;
+    }
+
+    dest->setRepeatStart(source->repeatStart());
+    dest->setRepeatEnd(source->repeatEnd());
+    dest->setRepeatJump(source->repeatJump());
+
+    const staff_idx_t staves = std::min(dest->mstaves().size(), source->mstaves().size());
+    for (staff_idx_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+        dest->setMeasureRepeatCount(source->measureRepeatCount(staffIdx), staffIdx);
+    }
+}
+
+//! A copied one-bar repeat (%) keeps the sign and drops the staff count that says which
+//! bar it plays. Playback then has nothing to sound. Put that count back when the sign
+//! itself still says it repeats a single bar.
+static void repairOneMeasureRepeatCounts(Score* score)
+{
+    const staff_idx_t staves = static_cast<staff_idx_t>(score->nstaves());
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (staff_idx_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+            if (measure->measureRepeatCount(staffIdx) > 0) {
+                continue;
+            }
+
+            const track_idx_t from = staff2track(staffIdx);
+            const track_idx_t to = from + VOICES;
+            for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+                for (track_idx_t track = from; track < to; ++track) {
+                    EngravingItem* element = segment->element(track);
+                    if (element && element->isMeasureRepeat() && toMeasureRepeat(element)->numMeasures() == 1) {
+                        measure->setMeasureRepeatCount(1, staffIdx);
+                    }
+                }
+            }
+        }
+    }
+}
+
+static void detachUnplayableLinks(Chord* chord)
+{
+    if (!chord) {
+        return;
+    }
+
+    for (Chord* grace : chord->graceNotes()) {
+        detachUnplayableLinks(grace);
+    }
+
+    for (Note* note : chord->notes()) {
+        // The copy keeps a tie that still points at the source bar. Layout follows it
+        // and can drop the note. The note itself should sound either way.
+        if (Tie* tie = note->tieFor(); tie && !tie->endNote()) {
+            note->setTieFor(nullptr);
+            delete tie;
+        }
+    }
+
+    if (TremoloTwoChord* tremolo = chord->tremoloTwoChord(); tremolo && (!tremolo->chord1() || !tremolo->chord2())) {
+        chord->setTremoloTwoChord(nullptr, false);
+        delete tremolo;
+    }
+}
+
+static bool staffHasWrittenNotes(const Measure* measure, staff_idx_t staffIdx)
+{
+    const track_idx_t from = staff2track(staffIdx);
+    const track_idx_t to = from + VOICES;
+    for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (track_idx_t track = from; track < to; ++track) {
+            const EngravingItem* element = segment->element(track);
+            if (element && element->isChord()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+//! Replace one staff of `dest` with the written notes of the same staff in `source`.
+static bool copyStaffNotes(Measure* dest, const Measure* source, staff_idx_t staffIdx)
+{
+    if (!staffHasWrittenNotes(source, staffIdx)) {
+        return false;
+    }
+
+    Score* score = dest->score();
+    const track_idx_t from = staff2track(staffIdx);
+    const track_idx_t to = from + VOICES;
+
+    std::vector<EngravingItem*> remove;
+    for (Segment* segment = dest->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (track_idx_t track = from; track < to; ++track) {
+            if (EngravingItem* element = segment->element(track)) {
+                remove.push_back(element);
+            }
+        }
+    }
+    for (EngravingItem* element : remove) {
+        Segment* segment = toSegment(element->ownershipParent());
+        segment->remove(element);
+        delete element;
+    }
+
+    TupletMap tupletMap;
+    for (const Segment* sourceSegment = source->first(SegmentType::ChordRest); sourceSegment;
+         sourceSegment = sourceSegment->next(SegmentType::ChordRest)) {
+        for (track_idx_t track = from; track < to; ++track) {
+            const EngravingItem* element = sourceSegment->element(track);
+            if (!element || !element->isChordRest() || element->isMeasureRepeat()) {
+                continue;
+            }
+
+            EngravingItem* clone = element->clone();
+            ChordRest* chordRest = toChordRest(clone);
+            chordRest->setScore(score);
+            chordRest->setTrack(track);
+
+            if (const Tuplet* sourceTuplet = toChordRest(element)->tuplet()) {
+                Tuplet* sourceKey = const_cast<Tuplet*>(sourceTuplet);
+                Tuplet* tuplet = tupletMap.findNew(sourceKey);
+                if (!tuplet) {
+                    tuplet = Factory::copyTuplet(*sourceTuplet);
+                    tuplet->clear();
+                    tuplet->setTrack(track);
+                    tuplet->setScore(score);
+                    tuplet->setOwnershipParent(dest);
+                    tupletMap.add(sourceKey, tuplet);
+                }
+                chordRest->setTuplet(tuplet);
+                tuplet->add(chordRest);
+            }
+
+            if (chordRest->isChord()) {
+                detachUnplayableLinks(toChord(chordRest));
+            }
+
+            Segment* segment = dest->getSegmentR(SegmentType::ChordRest, sourceSegment->rtick());
+            segment->add(chordRest);
+        }
+    }
+
+    return true;
+}
+
+//! A measure repeat is silent unless playback can see the bar it stands for. Write that
+//! bar's notes in, so a later copy of the passage does not depend on the sign surviving.
+static void realizeMeasureRepeats(Score* score)
+{
+    repairOneMeasureRepeatCounts(score);
+
+    struct Referral {
+        Measure* dest = nullptr;
+        Measure* source = nullptr;
+        staff_idx_t staffIdx = 0;
+    };
+
+    std::vector<Referral> referrals;
+    const staff_idx_t staves = static_cast<staff_idx_t>(score->nstaves());
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (staff_idx_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+            if (measure->measureRepeatCount(staffIdx) <= 0) {
+                continue;
+            }
+
+            MeasureRepeat* repeat = measure->measureRepeatElement(staffIdx);
+            if (!repeat) {
+                continue;
+            }
+
+            Measure* source = const_cast<Measure*>(repeat->referringMeasure(measure));
+            if (!source || source == measure) {
+                continue;
+            }
+
+            referrals.push_back({ measure, source, staffIdx });
+        }
+    }
+
+    for (const Referral& referral : referrals) {
+        // Earlier repeats in this list are already notes, so a chain of one-bar
+        // repeats copies the lick rather than another sign.
+        if (!copyStaffNotes(referral.dest, referral.source, referral.staffIdx)) {
+            continue;
+        }
+        referral.dest->setMeasureRepeatCount(0, referral.staffIdx);
+    }
+}
+
 //! Copy [startTick, endTick) onto the end of dest.
 //! Score::appendMeasuresFromScore also joins pickup measures and keeps the copied
 //! lines attached to the source score. Layout of that copy then crashes.
@@ -211,6 +415,7 @@ static bool appendRange(Score* dest, Score* source, const Fraction& startTick, c
         Measure* copy = toMeasure(measure)->cloneMeasure(dest, curTick, &tieMap);
         curTick += copy->ticks();
         copy->setScore(dest);
+        copyMeasurePlaybackState(copy, toMeasure(measure));
         dest->measures()->append(copy);
     }
     if (curTick == tickOfAppend) {
@@ -457,9 +662,8 @@ static bool hasOpeningSoundFlag(const Measure* measure, track_idx_t track)
     return false;
 }
 
-static void stampPlaybackState(Score* score, const CarriedPlayback& carried)
+static void stampPlaybackState(Score* score, const CarriedPlayback& carried, Measure* measure)
 {
-    Measure* measure = score->firstMeasure();
     Segment* segment = measure ? openingSegment(measure) : nullptr;
     if (!measure || !segment || score->ntracks() == 0) {
         return;
@@ -585,9 +789,8 @@ static bool spansAreWrittenOrder(const std::vector<TickSpan>& spans, const Score
     return spans.front().start == score->firstMeasure()->tick() && spans.front().end == score->lastMeasure()->endTick();
 }
 
-static bool unrollRepeatedPassage(MasterScore* score, MasterScore* source)
+static bool unrollRepeatedPassage(MasterScore* score, MasterScore* source, const std::vector<TickSpan>& spans)
 {
-    const std::vector<TickSpan> spans = expandedPlaybackSpans(score);
     if (spans.empty()) {
         return false;
     }
@@ -654,38 +857,53 @@ static MasterScore* buildBarLoop(Score* source, const Fraction& startTick, const
     }
     score->updateTicksAndTimeSigMap();
 
-    if (!unrollRepeatedPassage(score.get(), passage.get())) {
+    // Spans are in the trimmed passage's tick space. Later loops copy from `passage`,
+    // which is not unrolled, so this list has to be captured before `score` grows.
+    const std::vector<TickSpan> spans = expandedPlaybackSpans(score.get());
+    if (!unrollRepeatedPassage(score.get(), passage.get(), spans)) {
         score->endCmd(true);
         return nullptr;
     }
 
-    // Signs are gone before the passage is copied, so each exported loop plays it the same way.
+    // The sounded bars are written out in order. Clear the signs so playback does not
+    // honor them a second time, and so a jump cannot end the score before the next loop.
     removeRepeatMarkings(score.get());
-    stampPlaybackState(score.get(), carried);
+    stampPlaybackState(score.get(), carried, score->firstMeasure());
     score->updateTicksAndTimeSigMap();
     score->endCmd();
 
     repeats = std::clamp(repeats, 1, 99);
     if (repeats > 1) {
-        // Clone after the command commits. Cloning inside the transaction writes a score
-        // whose layout still belongs to that undo frame.
-        std::unique_ptr<MasterScore> linear(score->clone());
-        if (!linear || !linear->lastMeasure()) {
-            return nullptr;
-        }
-        const Fraction linearStart = linear->firstMeasure()->tick();
-        const Fraction linearEnd = linear->lastMeasure()->endTick();
         score->startCmd(commandName);
         for (int copy = 1; copy < repeats; ++copy) {
-            if (!score->last() || !appendRange(score.get(), linear.get(), linearStart, linearEnd)) {
-                LOGE() << "Could not append repetition " << copy + 1;
+            if (!score->lastMeasure()) {
                 score->endCmd(true);
                 return nullptr;
             }
+            const Fraction loopTick = score->lastMeasure()->endTick();
+            for (const TickSpan& span : spans) {
+                if (!appendRange(score.get(), passage.get(), span.start, span.end)) {
+                    LOGE() << "Could not append repetition " << copy + 1;
+                    score->endCmd(true);
+                    return nullptr;
+                }
+            }
+            stampPlaybackState(score.get(), carried, score->tick2measure(loopTick));
         }
+        // Copies taken from the trimmed passage still have its repeat signs.
+        removeRepeatMarkings(score.get());
         score->updateTicksAndTimeSigMap();
         score->endCmd();
     }
+
+    // Signs are still in place here, including on bars appended for later loops.
+    // Turn them into the notes they stand for before layout, or the next loop plays
+    // the written bar and then silence where the repeat sign was.
+    score->startCmd(commandName);
+    realizeMeasureRepeats(score.get());
+    score->updateTicksAndTimeSigMap();
+    score->endCmd();
+
     // endCmd updates automation incrementally from the deleted range. Rebuild it from
     // the bars that remain so the exported duration matches those bars.
     score->initAutomation();
