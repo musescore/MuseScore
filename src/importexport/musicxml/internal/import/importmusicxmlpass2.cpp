@@ -1068,7 +1068,11 @@ void MusicXmlParserPass2::addElemOffset(engraving::EngravingItem* el, engraving:
             }
         }
         if (!found) {
-            el->setOwnershipParent(s);
+            if (el->isMarker() || el->isJump()) {
+                el->setOwnershipParent(measure);
+            } else {
+                el->setOwnershipParent(s);
+            }
             addSystemElement(el, elTick);
         }
     } else {
@@ -2121,7 +2125,7 @@ void MusicXmlParserPass2::scorePartwise()
         m_score->undoAddElement(sysEl);
 
         // Remove potential duplicated text for text and text lines
-        const bool elIsText = (sysEl->isTextBase() || sysEl->isTextLineBase());
+        const bool elIsText = (sysEl->isTextBase() || sysEl->isTextLineBase()) && !sysEl->isMarker() && !sysEl->isJump();
         if (!elIsText) {
             continue;
         }
@@ -5807,7 +5811,7 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
                 colorItem(m, segnoColor);
             }
             const track_idx_t track = m_pass1.trackForPart(partId);
-            addElemOffset(m, track, u"above", markedMeasure, markedMeasure->tick());
+            addElemOffset(m, 0, u"above", markedMeasure, markedMeasure->tick());
             m_e.skipCurrentElement();
         } else if (m_e.name() == "coda") {
             const Color codaColor = Color::fromString(m_e.asciiAttribute("color").ascii());
@@ -5830,7 +5834,7 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
                 colorItem(m, codaColor);
             }
             const track_idx_t track = m_pass1.trackForPart(partId);
-            addElemOffset(m, track, u"above", markedMeasure, markedMeasure->tick());
+            addElemOffset(m, 0, u"above", markedMeasure, markedMeasure->tick());
             m_e.skipCurrentElement();
         } else if (m_e.name() == "fermata") {
             const Color fermataColor = Color::fromString(m_e.asciiAttribute("color").ascii());
