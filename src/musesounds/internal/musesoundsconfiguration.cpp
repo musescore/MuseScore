@@ -86,7 +86,8 @@ UriQuery MuseSoundsConfiguration::soundsUri() const
 
 UriQuery MuseSoundsConfiguration::soundPageUri(const muse::String& soundCode) const
 {
-    String utm = String("?utm_source=mss-app&utm_medium=mh-cta&utm_campaign=mss-app-home-mh-%1").arg(soundCode);
+    String utm = String("?utm_medium=Referral&utm_source=mss&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+                        "&utm_content=home_musesounds&utm_term=%1").arg(soundCode);
     return UriQuery(OPEN_SOUND_URL + soundCode + utm);
 }
 

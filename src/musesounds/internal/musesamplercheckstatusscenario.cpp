@@ -216,7 +216,10 @@ void MuseSamplerCheckStatusScenario::openMuseHubWebsite(bool quit)
 #ifdef Q_OS_LINUX
     interactive()->openUrl(globalConfiguration()->museScoreUrl());
 #else
-    interactive()->openUrl(globalConfiguration()->museHubWebUrl());
+    interactive()->openUrl(globalConfiguration()->museHubWebUrl()
+                           + "?utm_medium=Referral&utm_source=mss"
+                             "&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+                             "&utm_content=musesampler_update");
 #endif
 
     if (quit) {
