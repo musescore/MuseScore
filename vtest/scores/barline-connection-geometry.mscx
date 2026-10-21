@@ -38,7 +38,6 @@
           <yoffset>.5</yoffset>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>solid</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Solid connection</trackName>
@@ -59,7 +58,6 @@
           <yoffset>.5</yoffset>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>dashed</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Dashed connection</trackName>
@@ -76,7 +74,6 @@
           <name>stdNormal</name>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>dotted</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Dotted connection</trackName>
@@ -200,6 +197,7 @@
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -207,6 +205,7 @@
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -219,6 +218,7 @@
             <subtype>normal</subtype>
             <span>1</span>
             <spanFromOffset>10</spanFromOffset>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -227,6 +227,7 @@
             <subtype>normal</subtype>
             <span>1</span>
             <spanFromOffset>10</spanFromOffset>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -238,6 +239,7 @@
           <BarLine>
             <subtype>dashed</subtype>
             <span>0</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -245,6 +247,7 @@
           <BarLine>
             <subtype>dashed</subtype>
             <span>0</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -258,6 +261,7 @@
             <span>1</span>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>2</spanToOffset>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -267,6 +271,7 @@
             <span>1</span>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>2</spanToOffset>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -284,6 +289,7 @@
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -291,6 +297,7 @@
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -303,6 +310,7 @@
             <subtype>normal</subtype>
             <span>1</span>
             <spanFromOffset>10</spanFromOffset>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -311,6 +319,7 @@
             <subtype>normal</subtype>
             <span>1</span>
             <spanFromOffset>10</spanFromOffset>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -322,6 +331,7 @@
           <BarLine>
             <subtype>dashed</subtype>
             <span>0</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -329,6 +339,7 @@
           <BarLine>
             <subtype>dashed</subtype>
             <span>0</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -342,6 +353,7 @@
             <span>1</span>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>2</spanToOffset>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -351,6 +363,7 @@
             <span>1</span>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>2</spanToOffset>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -368,6 +381,7 @@
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -375,6 +389,7 @@
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -387,6 +402,7 @@
             <subtype>normal</subtype>
             <span>1</span>
             <spanFromOffset>10</spanFromOffset>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -395,6 +411,7 @@
             <subtype>normal</subtype>
             <span>1</span>
             <spanFromOffset>10</spanFromOffset>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -406,6 +423,7 @@
           <BarLine>
             <subtype>dashed</subtype>
             <span>0</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -413,6 +431,7 @@
           <BarLine>
             <subtype>dashed</subtype>
             <span>0</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -426,6 +445,7 @@
             <span>1</span>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>2</spanToOffset>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -435,6 +455,7 @@
             <span>1</span>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>2</spanToOffset>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>

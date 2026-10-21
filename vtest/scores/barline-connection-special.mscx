@@ -27,7 +27,6 @@
           <name>stdNormal</name>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>solid</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Solid connection</trackName>
@@ -44,7 +43,6 @@
           <name>stdNormal</name>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>dashed</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Dashed connection</trackName>
@@ -61,7 +59,6 @@
           <name>stdNormal</name>
         </StaffType>
         <barLineSpan>1</barLineSpan>
-        <barLineSpanStyle>dotted</barLineSpanStyle>
         <defaultClef>G</defaultClef>
       </Staff>
       <trackName>Dotted connection</trackName>
@@ -251,6 +248,7 @@
           <BarLine>
             <subtype>double</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -258,6 +256,7 @@
           <BarLine>
             <subtype>double</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -269,6 +268,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -276,6 +276,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -287,6 +288,7 @@
           <BarLine>
             <subtype>reverse-end</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -294,6 +296,7 @@
           <BarLine>
             <subtype>reverse-end</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -305,6 +308,7 @@
           <BarLine>
             <subtype>heavy</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -312,6 +316,7 @@
           <BarLine>
             <subtype>heavy</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -323,6 +328,7 @@
           <BarLine>
             <subtype>double-heavy</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -330,6 +336,7 @@
           <BarLine>
             <subtype>double-heavy</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -341,6 +348,7 @@
           <BarLine>
             <subtype>start-repeat</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -348,6 +356,7 @@
           <BarLine>
             <subtype>start-repeat</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -359,6 +368,7 @@
           <BarLine>
             <subtype>end-repeat</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -366,6 +376,7 @@
           <BarLine>
             <subtype>end-repeat</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -377,6 +388,7 @@
           <BarLine>
             <subtype>end-start-repeat</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -384,6 +396,7 @@
           <BarLine>
             <subtype>end-start-repeat</subtype>
             <span>1</span>
+            <spanStyle>solid</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -401,6 +414,7 @@
           <BarLine>
             <subtype>double</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -408,6 +422,7 @@
           <BarLine>
             <subtype>double</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -419,6 +434,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -426,6 +442,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -437,6 +454,7 @@
           <BarLine>
             <subtype>reverse-end</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -444,6 +462,7 @@
           <BarLine>
             <subtype>reverse-end</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -455,6 +474,7 @@
           <BarLine>
             <subtype>heavy</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -462,6 +482,7 @@
           <BarLine>
             <subtype>heavy</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -473,6 +494,7 @@
           <BarLine>
             <subtype>double-heavy</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -480,6 +502,7 @@
           <BarLine>
             <subtype>double-heavy</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -491,6 +514,7 @@
           <BarLine>
             <subtype>start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -498,6 +522,7 @@
           <BarLine>
             <subtype>start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -509,6 +534,7 @@
           <BarLine>
             <subtype>end-repeat</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -516,6 +542,7 @@
           <BarLine>
             <subtype>end-repeat</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -527,6 +554,7 @@
           <BarLine>
             <subtype>end-start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -534,6 +562,7 @@
           <BarLine>
             <subtype>end-start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dashed</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -551,6 +580,7 @@
           <BarLine>
             <subtype>double</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -558,6 +588,7 @@
           <BarLine>
             <subtype>double</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -569,6 +600,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -576,6 +608,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -587,6 +620,7 @@
           <BarLine>
             <subtype>reverse-end</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -594,6 +628,7 @@
           <BarLine>
             <subtype>reverse-end</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -605,6 +640,7 @@
           <BarLine>
             <subtype>heavy</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -612,6 +648,7 @@
           <BarLine>
             <subtype>heavy</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -623,6 +660,7 @@
           <BarLine>
             <subtype>double-heavy</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -630,6 +668,7 @@
           <BarLine>
             <subtype>double-heavy</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -641,6 +680,7 @@
           <BarLine>
             <subtype>start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -648,6 +688,7 @@
           <BarLine>
             <subtype>start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -659,6 +700,7 @@
           <BarLine>
             <subtype>end-repeat</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -666,6 +708,7 @@
           <BarLine>
             <subtype>end-repeat</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>
@@ -677,6 +720,7 @@
           <BarLine>
             <subtype>end-start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
           <Rest>
             <durationType>half</durationType>
@@ -684,6 +728,7 @@
           <BarLine>
             <subtype>end-start-repeat</subtype>
             <span>1</span>
+            <spanStyle>dotted</spanStyle>
           </BarLine>
         </voice>
       </Measure>

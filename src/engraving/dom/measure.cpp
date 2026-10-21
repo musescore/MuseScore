@@ -1289,8 +1289,8 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
             }
             if (obl) {
                 BarLine* barline = Factory::copyBarLine(*obl);
-                barline->setSpanStaff(score()->staff(staffIdx)->barLineSpan());
                 barline->setTrack(staffIdx * VOICES);
+                barline->setPropertyFlags(Pid::BARLINE_SPAN, PropertyFlags::STYLED);
                 barline->setOwnershipParent(bs);
                 barline->setGenerated(false);
                 score()->undoAddElement(barline);

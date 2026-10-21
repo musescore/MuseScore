@@ -34,6 +34,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/scoreorder.h"
+#include "engraving/dom/select.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
@@ -459,98 +460,152 @@ TEST_F(Engraving_BarlineTests, spanStyleRoundTripAndReset)
     muse::ByteArray saved;
     ASSERT_TRUE(muse::io::File::readFile(path, saved));
     const std::string xml(saved.constChar(), saved.size());
-    EXPECT_NE(xml.find("<barLineSpanStyle>dashed</barLineSpanStyle>"), std::string::npos);
-    EXPECT_NE(xml.find("<barLineSpanStyle>dotted</barLineSpanStyle>"), std::string::npos);
-    EXPECT_EQ(xml.find("<barLineSpanStyle>default</barLineSpanStyle>"), std::string::npos);
+    EXPECT_NE(xml.find("<spanStyle>dashed</spanStyle>"), std::string::npos);
+    EXPECT_NE(xml.find("<spanStyle>dotted</spanStyle>"), std::string::npos);
+    EXPECT_EQ(xml.find("<spanStyle>default</spanStyle>"), std::string::npos);
+    EXPECT_EQ(xml.find("barLineSpanStyle"), std::string::npos);
     std::unique_ptr<MasterScore> reloaded(ScoreRW::readScore(path, true));
     ASSERT_TRUE(reloaded);
-    EXPECT_EQ(reloaded->staff(0)->barLineSpanStyle(), BarLineSpanStyle::DASHED);
-    EXPECT_EQ(reloaded->staff(1)->barLineSpanStyle(), BarLineSpanStyle::DOTTED);
-    EXPECT_EQ(reloaded->staff(2)->barLineSpanStyle(), BarLineSpanStyle::DEFAULT);
-    reloaded->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN_STYLE, reloaded->staff(0)->propertyDefault(Pid::STAFF_BARLINE_SPAN_STYLE));
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 0)->spanStyle(), BarLineSpanStyle::DASHED);
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 1)->spanStyle(), BarLineSpanStyle::DOTTED);
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 2)->spanStyle(), BarLineSpanStyle::DEFAULT);
+    BarLine* bar = endBarLine(reloaded->firstMeasure(), 0);
+    bar->setProperty(Pid::BARLINE_SPAN_STYLE, bar->propertyDefault(Pid::BARLINE_SPAN_STYLE));
     ASSERT_TRUE(ScoreRW::saveScore(reloaded.get(), path));
     reloaded.reset(ScoreRW::readScore(path, true));
     ASSERT_TRUE(reloaded);
-    EXPECT_EQ(reloaded->staff(0)->barLineSpanStyle(), BarLineSpanStyle::DEFAULT);
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 0)->spanStyle(), BarLineSpanStyle::DEFAULT);
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure()->nextMeasure(), 0)->spanStyle(), BarLineSpanStyle::DASHED);
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 1)->spanStyle(), BarLineSpanStyle::DOTTED);
 }
 
-TEST_F(Engraving_BarlineTests, spanStyleUndoRedoAndStaffCopy)
+TEST_F(Engraving_BarlineTests, spanStyleUndoRedoAndBarlineCopy)
 {
     std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
     ASSERT_TRUE(score);
-    score->startCmd(TranslatableString::untranslatable("Change connection style"));
-    score->staff(0)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_STYLE, BarLineSpanStyle::SOLID);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    score->startCmd(TranslatableString::untranslatable("Change span style"));
+    bar->undoChangeProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::SOLID);
     score->endCmd();
-    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_FALSE(bar->generated());
     score->undoRedo(true, nullptr);
-    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::DASHED);
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
     score->undoRedo(false, nullptr);
-    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::SOLID);
-    std::unique_ptr<Staff> copy(score->staff(0)->clone());
-    EXPECT_EQ(copy->barLineSpanStyle(), BarLineSpanStyle::SOLID);
-    EXPECT_EQ(score->staff(0)->getProperty(Pid::STAFF_BARLINE_SPAN_STYLE).type(), P_TYPE::BARLINE_SPAN_STYLE);
-    EXPECT_EQ(score->staff(0)->propertyDefault(Pid::STAFF_BARLINE_SPAN_STYLE).type(), P_TYPE::BARLINE_SPAN_STYLE);
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::SOLID);
+    std::unique_ptr<BarLine> copy(bar->clone());
+    EXPECT_EQ(copy->spanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_EQ(bar->getProperty(Pid::BARLINE_SPAN_STYLE).type(), P_TYPE::BARLINE_SPAN_STYLE);
+    EXPECT_EQ(bar->propertyDefault(Pid::BARLINE_SPAN_STYLE).type(), P_TYPE::BARLINE_SPAN_STYLE);
+    EXPECT_EQ(endBarLine(score->firstMeasure()->nextMeasure(), 0)->spanStyle(), BarLineSpanStyle::DASHED);
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleChangesOnlySelectedBarlines)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Measure* measure = score->firstMeasure();
+    BarLine* middle = toBarLine(measure->findSegment(SegmentType::BarLine, Fraction(1, 2))->element(0));
+    BarLine* otherStaff = endBarLine(measure, 1);
+    ASSERT_TRUE(middle);
+    EXPECT_EQ(middle->spanStyle(), BarLineSpanStyle::DEFAULT);
+    score->select(middle);
+    score->select(otherStaff, SelectType::ADD);
+    ASSERT_EQ(score->selection().elements().size(), 2);
+    score->startCmd(TranslatableString::untranslatable("Change selected span styles"));
+    for (EngravingItem* item : score->selection().elements()) {
+        item->undoChangeProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::SOLID);
+    }
+    score->endCmd();
+    EXPECT_EQ(middle->spanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_EQ(otherStaff->spanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_EQ(endBarLine(measure, 0)->spanStyle(), BarLineSpanStyle::DASHED);
+    EXPECT_EQ(endBarLine(measure->nextMeasure(), 1)->spanStyle(), BarLineSpanStyle::DOTTED);
+    EXPECT_EQ(endBarLine(measure, 2)->spanStyle(), BarLineSpanStyle::DEFAULT);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(middle->spanStyle(), BarLineSpanStyle::DEFAULT);
+    EXPECT_EQ(otherStaff->spanStyle(), BarLineSpanStyle::DOTTED);
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(middle->spanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_EQ(otherStaff->spanStyle(), BarLineSpanStyle::SOLID);
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleSelectSimilarOnStaff)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    score->select(bar);
+    score->selectSimilar(bar, true);
+    ASSERT_GT(score->selection().elements().size(), 1);
+    score->startCmd(TranslatableString::untranslatable("Change similar barlines"));
+    for (EngravingItem* item : score->selection().elements()) {
+        ASSERT_TRUE(item->isBarLine());
+        EXPECT_EQ(item->staffIdx(), 0);
+        item->undoChangeProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::SOLID);
+    }
+    score->endCmd();
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_EQ(endBarLine(score->firstMeasure()->nextMeasure(), 0)->spanStyle(), BarLineSpanStyle::SOLID);
+    EXPECT_EQ(endBarLine(score->firstMeasure(), 1)->spanStyle(), BarLineSpanStyle::DOTTED);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
 }
 
 TEST_F(Engraving_BarlineTests, spanStyleSurvivesInstrumentReordering)
 {
-    for (bool customStyle : { false, true }) {
-        SCOPED_TRACE(customStyle ? "Independent connection style" : "Default connection style");
-        std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
-        ASSERT_TRUE(score);
-        ASSERT_EQ(score->parts().size(), 3);
-        Staff* first = score->staff(0);
-        Staff* second = score->staff(1);
-        const BarLineSpanStyle firstStyle = customStyle ? BarLineSpanStyle::DASHED : BarLineSpanStyle::DEFAULT;
-        const BarLineSpanStyle secondStyle = customStyle ? BarLineSpanStyle::DOTTED : BarLineSpanStyle::DEFAULT;
-        first->setBarLineSpanStyle(firstStyle);
-        second->setBarLineSpanStyle(secondStyle);
-
-        for (Part* part : score->parts()) {
-            part->instrument()->setId(u"flute");
-        }
-        ScoreOrder order;
-        ScoreGroup group;
-        group.family = u"flutes";
-        group.section = u"woodwind";
-        group.barLineSpan = false;
-        group.thinBracket = false;
-        order.groups.push_back(group);
-        score->setScoreOrder(order);
-        ASSERT_TRUE(first->barLineSpan());
-        ASSERT_TRUE(second->barLineSpan());
-
-        score->startCmd(TranslatableString::untranslatable("Move instruments"));
-        EditPart::moveParts(score.get(), { score->parts().back() }, first->part(), false);
-        score->endCmd();
-        EXPECT_EQ(first->idx(), 1);
-        EXPECT_EQ(second->idx(), 2);
-        // Existing score-order rules reset spans for both default and custom styles.
-        EXPECT_FALSE(first->barLineSpan());
-        EXPECT_FALSE(second->barLineSpan());
-        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
-        EXPECT_EQ(second->barLineSpanStyle(), secondStyle);
-        EXPECT_FALSE(endBarLine(score->firstMeasure(), first->idx())->spanStaff());
-
-        score->startCmd(TranslatableString::untranslatable("Reconnect staves"));
-        first->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, true);
-        score->endCmd();
-        EXPECT_TRUE(endBarLine(score->firstMeasure(), first->idx())->spanStaff());
-        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
-
-        score->undoRedo(true, nullptr);
-        EXPECT_FALSE(first->barLineSpan());
-        score->undoRedo(true, nullptr);
-        EXPECT_EQ(first->idx(), 0);
-        EXPECT_TRUE(first->barLineSpan());
-        EXPECT_TRUE(second->barLineSpan());
-        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
-        EXPECT_EQ(second->barLineSpanStyle(), secondStyle);
-        score->undoRedo(false, nullptr);
-        EXPECT_EQ(first->idx(), 1);
-        EXPECT_FALSE(first->barLineSpan());
-        EXPECT_EQ(first->barLineSpanStyle(), firstStyle);
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Staff* first = score->staff(0);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    ASSERT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    for (Part* part : score->parts()) {
+        part->instrument()->setId(u"flute");
     }
+    ScoreOrder order;
+    ScoreGroup group;
+    group.family = u"flutes";
+    group.section = u"woodwind";
+    group.barLineSpan = false;
+    group.thinBracket = false;
+    order.groups.push_back(group);
+    score->setScoreOrder(order);
+    score->startCmd(TranslatableString::untranslatable("Move instruments"));
+    EditPart::moveParts(score.get(), { score->parts().back() }, first->part(), false);
+    score->endCmd();
+    EXPECT_EQ(first->idx(), 1);
+    EXPECT_EQ(endBarLine(score->firstMeasure(), first->idx()), bar);
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    score->startCmd(TranslatableString::untranslatable("Disconnect barline"));
+    bar->undoChangeProperty(Pid::BARLINE_SPAN, false);
+    score->endCmd();
+    EXPECT_FALSE(bar->spanStaff());
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(bar->spanStaff());
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(first->idx(), 0);
+    EXPECT_EQ(endBarLine(score->firstMeasure(), 0), bar);
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+}
+
+TEST_F(Engraving_BarlineTests, spanStylePersistsWhenRepeatTypeIsForced)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Measure* measure = score->firstMeasure();
+    BarLine* bar = endBarLine(measure, 0);
+    ASSERT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    measure->setRepeatEnd(true);
+    score->doLayout();
+    EXPECT_EQ(bar->barLineType(), BarLineType::END_REPEAT);
+    EXPECT_FALSE(bar->generated());
+    const String path(u"barline-span-style-repeat.mscx");
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), path));
+    std::unique_ptr<MasterScore> reloaded(ScoreRW::readScore(path, true));
+    ASSERT_TRUE(reloaded);
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 0)->spanStyle(), BarLineSpanStyle::DASHED);
 }
 
 TEST_F(Engraving_BarlineTests, spanStyleXmlAndPropertyConversions)
@@ -575,4 +630,376 @@ TEST_F(Engraving_BarlineTests, spanStyleXmlAndPropertyConversions)
     }
     EXPECT_EQ(TConv::fromXml("unknown", BarLineSpanStyle::DEFAULT), BarLineSpanStyle::DEFAULT);
     EXPECT_EQ(TConv::fromXml("unknown", BarLineSpanStyle::SOLID), BarLineSpanStyle::SOLID);
+}
+
+namespace {
+void dragSpanGrip(Score* score, BarLine* bar, bool connect, bool local = false)
+{
+    EditData ed;
+    ed.modifiers = local ? ControlModifier : NoModifier;
+    bar->startEdit(ed);
+    auto data = std::static_pointer_cast<BarLineEditData>(ed.getData(bar));
+    System* system = bar->measure()->system();
+    const double targetY = system->pagePos().y()
+                           + (connect ? system->staff(bar->staffIdx() + 1)->y()
+                              : system->staff(bar->staffIdx())->y() + bar->staff()->staffHeight(bar->tick()));
+    data->yoff2 = targetY - bar->pagePos().y() - bar->ldata()->y2;
+    score->startCmd(TranslatableString::untranslatable("Drag barline span grip"));
+    bar->endDragGrip(ed);
+    score->endCmd();
+}
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleOnlyKeepsConnectionInherited)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Staff* staff = score->staff(0);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    ASSERT_TRUE(staff->barLineSpan());
+    ASSERT_TRUE(bar->spanStaffInherited());
+    score->startCmd(TranslatableString::untranslatable("Change appearance only"));
+    bar->undoChangeProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::DOTTED);
+    score->endCmd();
+    ASSERT_TRUE(bar->spanStaffInherited());
+    score->startCmd(TranslatableString::untranslatable("Change staff span default"));
+    staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, false);
+    score->endCmd();
+    EXPECT_FALSE(bar->spanStaff());
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DOTTED);
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(bar->spanStaff());
+    EXPECT_TRUE(bar->spanStaffInherited());
+    score->undoRedo(false, nullptr);
+    EXPECT_FALSE(bar->spanStaff());
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DOTTED);
+}
+
+TEST_F(Engraving_BarlineTests, explicitSpanSurvivesStaffDefaultsAndUndo)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Staff* staff = score->staff(0);
+    BarLine* inherited = endBarLine(score->firstMeasure(), 0);
+    BarLine* local = endBarLine(score->firstMeasure()->nextMeasure(), 0);
+    score->startCmd(TranslatableString::untranslatable("Disconnect one barline"));
+    local->undoChangeProperty(Pid::BARLINE_SPAN, false);
+    score->endCmd();
+    ASSERT_FALSE(local->spanStaffInherited());
+    for (bool span : { false, true }) {
+        score->startCmd(TranslatableString::untranslatable("Change staff span default"));
+        staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, span);
+        score->endCmd();
+        EXPECT_EQ(inherited->spanStaff(), span);
+        EXPECT_FALSE(local->spanStaff());
+        EXPECT_FALSE(local->spanStaffInherited());
+    }
+    score->undoRedo(true, nullptr);
+    EXPECT_FALSE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(local->spanStaff());
+    EXPECT_TRUE(local->spanStaffInherited());
+    score->undoRedo(false, nullptr);
+    EXPECT_FALSE(local->spanStaff());
+    EXPECT_FALSE(local->spanStaffInherited());
+}
+
+TEST_F(Engraving_BarlineTests, explicitSpanEqualToDefaultPersists)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* local = endBarLine(score->firstMeasure()->nextMeasure(), 0);
+    score->startCmd(TranslatableString::untranslatable("Set matching explicit connection"));
+    local->undoChangeProperty(Pid::BARLINE_SPAN, true, PropertyFlags::UNSTYLED);
+    score->endCmd();
+    ASSERT_FALSE(local->spanStaffInherited());
+    const String path(u"barline-span-inheritance-roundtrip.mscx");
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), path));
+    std::unique_ptr<MasterScore> reloaded(ScoreRW::readScore(path, true));
+    ASSERT_TRUE(reloaded);
+    BarLine* inherited = endBarLine(reloaded->firstMeasure(), 0);
+    local = endBarLine(reloaded->firstMeasure()->nextMeasure(), 0);
+    EXPECT_TRUE(inherited->spanStaffInherited());
+    EXPECT_FALSE(local->spanStaffInherited());
+    reloaded->startCmd(TranslatableString::untranslatable("Change reloaded default"));
+    reloaded->staff(0)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, false);
+    reloaded->endCmd();
+    EXPECT_FALSE(inherited->spanStaff());
+    EXPECT_TRUE(local->spanStaff());
+    EXPECT_EQ(local->spanStyle(), BarLineSpanStyle::DASHED);
+}
+
+TEST_F(Engraving_BarlineTests, resetSpanRestoresInheritanceAndUndoRestoresOverride)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    score->startCmd(TranslatableString::untranslatable("Set explicit connection"));
+    bar->undoChangeProperty(Pid::BARLINE_SPAN, true, PropertyFlags::UNSTYLED);
+    score->endCmd();
+    std::unique_ptr<BarLine> copy(bar->clone());
+    EXPECT_FALSE(copy->spanStaffInherited());
+    score->startCmd(TranslatableString::untranslatable("Reset connection override"));
+    bar->undoResetProperty(Pid::BARLINE_SPAN);
+    score->endCmd();
+    EXPECT_TRUE(bar->spanStaffInherited());
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(bar->spanStaff());
+    EXPECT_FALSE(bar->spanStaffInherited());
+    score->undoRedo(false, nullptr);
+    EXPECT_TRUE(bar->spanStaffInherited());
+}
+
+TEST_F(Engraving_BarlineTests, gripChangesStaffDefaultAndPreservesLocalConnections)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* inherited = endBarLine(score->firstMeasure(), 0);
+    BarLine* local = endBarLine(score->firstMeasure()->nextMeasure(), 0);
+    score->startCmd(TranslatableString::untranslatable("Set local disconnection"));
+    local->undoChangeProperty(Pid::BARLINE_SPAN, false);
+    score->endCmd();
+    dragSpanGrip(score.get(), inherited, false);
+    EXPECT_FALSE(score->staff(0)->barLineSpan());
+    EXPECT_FALSE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(score->staff(0)->barLineSpan());
+    EXPECT_TRUE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+    // Dragging an exceptional barline still edits the staff default.
+    dragSpanGrip(score.get(), local, false);
+    EXPECT_FALSE(score->staff(0)->barLineSpan());
+    EXPECT_FALSE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+}
+
+TEST_F(Engraving_BarlineTests, controlGripEditsOneConnectionAndUndoRestoresInheritance)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    BarLine* neighbor = endBarLine(score->firstMeasure()->nextMeasure(), 0);
+    dragSpanGrip(score.get(), bar, false, true);
+    EXPECT_TRUE(score->staff(0)->barLineSpan());
+    EXPECT_FALSE(bar->spanStaff());
+    EXPECT_FALSE(bar->spanStaffInherited());
+    EXPECT_TRUE(neighbor->spanStaff());
+    EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(bar->spanStaff());
+    EXPECT_TRUE(bar->spanStaffInherited());
+    score->undoRedo(false, nullptr);
+    EXPECT_FALSE(bar->spanStaff());
+    EXPECT_FALSE(bar->spanStaffInherited());
+}
+
+TEST_F(Engraving_BarlineTests, midMeasureGripKeepsLocalScope)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Measure* measure = score->firstMeasure();
+    BarLine* middle = toBarLine(measure->findSegment(SegmentType::BarLine, Fraction(1, 2))->element(0));
+    ASSERT_TRUE(middle);
+    ASSERT_TRUE(middle->spanStaff());
+    dragSpanGrip(score.get(), middle, false);
+    EXPECT_TRUE(score->staff(0)->barLineSpan());
+    EXPECT_FALSE(middle->spanStaff());
+    EXPECT_TRUE(endBarLine(measure, 0)->spanStaff());
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(middle->spanStaff());
+}
+
+TEST_F(Engraving_BarlineTests, shiftSelectsContiguousBarlines)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Measure* first = score->firstMeasure();
+    Measure* third = first->nextMeasure()->nextMeasure();
+    BarLine* start = endBarLine(first, 0);
+    BarLine* end = endBarLine(third, 0);
+    score->select(start);
+    score->select(end, SelectType::RANGE, 0);
+    bool startFound = false;
+    bool endFound = false;
+    for (EngravingItem* item : score->selection().elements()) {
+        ASSERT_TRUE(item->isBarLine());
+        EXPECT_EQ(item->staffIdx(), 0);
+        startFound |= item == start;
+        endFound |= item == end;
+    }
+    EXPECT_TRUE(startFound);
+    EXPECT_TRUE(endFound);
+    EXPECT_GE(score->selection().elements().size(), 3);
+}
+
+TEST_F(Engraving_BarlineTests, gripUndoPreservesMixedConnectionPattern)
+{
+    for (bool customStyle : { false, true }) {
+        SCOPED_TRACE(customStyle ? "custom appearance" : "default appearance");
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+        ASSERT_TRUE(score);
+        score->staff(0)->setBarLineSpan(false);
+        std::vector<BarLine*> bars;
+        int index = 0;
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            BarLine* bar = endBarLine(measure, 0);
+            bar->setSpanStaff(index++ < 2);
+            bar->setSpanStyle(customStyle ? BarLineSpanStyle::DASHED : BarLineSpanStyle::DEFAULT);
+            bars.push_back(bar);
+        }
+        score->doLayout();
+        auto checkPattern = [&]() {
+            for (size_t i = 0; i < bars.size(); ++i) {
+                EXPECT_EQ(bars[i]->spanStaff(), i < 2);
+                EXPECT_FALSE(bars[i]->spanStaffInherited());
+            }
+        };
+        dragSpanGrip(score.get(), bars.back(), true);
+        EXPECT_TRUE(score->staff(0)->barLineSpan());
+        checkPattern();
+        score->undoRedo(true, nullptr);
+        EXPECT_FALSE(score->staff(0)->barLineSpan());
+        checkPattern();
+        score->undoRedo(false, nullptr);
+        EXPECT_TRUE(score->staff(0)->barLineSpan());
+        checkPattern();
+    }
+}
+
+TEST_F(Engraving_BarlineTests, midMeasureConnectionPersistsAcrossStaffDefaultChange)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* middle = toBarLine(score->firstMeasure()->findSegment(SegmentType::BarLine, Fraction(1, 2))->element(0));
+    ASSERT_TRUE(middle);
+    // Older files can omit the span tag on a mid-measure barline.
+    middle->setPropertyFlags(Pid::BARLINE_SPAN, PropertyFlags::STYLED);
+    score->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN, false);
+    EXPECT_TRUE(middle->spanStaff());
+    const String path(u"barline-middle-span-roundtrip.mscx");
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), path));
+    std::unique_ptr<MasterScore> reloaded(ScoreRW::readScore(path, true));
+    ASSERT_TRUE(reloaded);
+    middle = toBarLine(reloaded->firstMeasure()->findSegment(SegmentType::BarLine, Fraction(1, 2))->element(0));
+    ASSERT_TRUE(middle);
+    EXPECT_TRUE(middle->spanStaff());
+    EXPECT_FALSE(middle->spanStaffInherited());
+    EXPECT_FALSE(endBarLine(reloaded->firstMeasure(), 0)->spanStaff());
+}
+
+TEST_F(Engraving_BarlineTests, rewriteMeasuresPreservesBarlineAppearanceAndConnection)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    bar->setProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::DOTTED);
+    bar->setProperty(Pid::BARLINE_SPAN, false);
+    TimeSig* signature = Factory::createTimeSig(score->dummy()->segment());
+    signature->setSig(Fraction(2, 4), TimeSigType::NORMAL);
+    score->startCmd(TranslatableString::untranslatable("Rewrite measures"));
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score.get(),
+                            score->firstMeasure(), 0, signature, false);
+    score->endCmd();
+    bool found = false;
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        if (measure->endTick() == Fraction(1, 1)) {
+            bar = endBarLine(measure, 0);
+            ASSERT_TRUE(bar);
+            EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DOTTED);
+            EXPECT_FALSE(bar->spanStaff());
+            EXPECT_FALSE(bar->spanStaffInherited());
+            found = true;
+        }
+    }
+    EXPECT_TRUE(found);
+}
+
+TEST_F(Engraving_BarlineTests, resetSpanAfterGenericPropertyChange)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* bar = endBarLine(score->firstMeasure(), 0);
+    score->startCmd(TranslatableString::untranslatable("Change span through generic property command"));
+    bar->undoChangeProperty(Pid::BARLINE_SPAN, false, PropertyFlags::NOSTYLE);
+    score->endCmd();
+    EXPECT_FALSE(bar->spanStaff());
+    score->startCmd(TranslatableString::untranslatable("Restore staff span default"));
+    bar->undoResetProperty(Pid::BARLINE_SPAN);
+    score->endCmd();
+    EXPECT_TRUE(bar->spanStaff());
+    EXPECT_TRUE(bar->spanStaffInherited());
+    score->undoRedo(true, nullptr);
+    EXPECT_FALSE(bar->spanStaff());
+    EXPECT_FALSE(bar->spanStaffInherited());
+}
+
+TEST_F(Engraving_BarlineTests, copiedStyledBarlineInheritsDestinationStaffConnection)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Measure* measure = score->firstMeasure();
+    BarLine* source = endBarLine(measure, 0);
+    BarLine* destination = endBarLine(measure, 2);
+    const bool destinationSpan = destination->spanStaff();
+    const bool destinationInherited = destination->spanStaffInherited();
+    const BarLineSpanStyle destinationStyle = destination->spanStyle();
+    ASSERT_TRUE(source->spanStaffInherited());
+    ASSERT_TRUE(source->spanStaff());
+    ASSERT_FALSE(score->staff(2)->barLineSpan());
+    BarLine* copy = source->clone();
+    copy->setTrack(2 * VOICES);
+    copy->setOwnershipParent(destination->segment());
+    score->startCmd(TranslatableString::untranslatable("Copy barline to another staff"));
+    score->undoRemoveElement(destination);
+    score->undoAddElement(copy);
+    score->endCmd();
+    EXPECT_TRUE(copy->spanStaffInherited());
+    EXPECT_FALSE(copy->spanStaff());
+    EXPECT_EQ(copy->spanStyle(), BarLineSpanStyle::DASHED);
+    score->undoRedo(true, nullptr);
+    BarLine* restored = endBarLine(measure, 2);
+    ASSERT_TRUE(restored);
+    EXPECT_EQ(restored->spanStaff(), destinationSpan);
+    EXPECT_EQ(restored->spanStaffInherited(), destinationInherited);
+    EXPECT_EQ(restored->spanStyle(), destinationStyle);
+}
+
+TEST_F(Engraving_BarlineTests, keyboardSpanEditingUsesGripScope)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    BarLine* local = endBarLine(score->firstMeasure(), 0);
+    BarLine* inherited = endBarLine(score->firstMeasure()->nextMeasure(), 0);
+    local->setProperty(Pid::BARLINE_SPAN, false);
+    EditData ed;
+    ed.key = Key_Up;
+    score->startCmd(TranslatableString::untranslatable("Change staff connection with keyboard"));
+    EXPECT_TRUE(local->edit(ed));
+    score->endCmd();
+    EXPECT_FALSE(score->staff(0)->barLineSpan());
+    EXPECT_FALSE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+    score->undoRedo(true, nullptr);
+    EXPECT_TRUE(score->staff(0)->barLineSpan());
+    EXPECT_TRUE(inherited->spanStaff());
+    EXPECT_FALSE(local->spanStaff());
+    ed.key = Key_Down;
+    ed.modifiers = ControlModifier;
+    score->startCmd(TranslatableString::untranslatable("Change local connection with keyboard"));
+    EXPECT_TRUE(local->edit(ed));
+    score->endCmd();
+    EXPECT_TRUE(local->spanStaff());
+    EXPECT_FALSE(local->spanStaffInherited());
+    EXPECT_TRUE(inherited->spanStaff());
+    score->undoRedo(true, nullptr);
+    EXPECT_FALSE(local->spanStaff());
 }

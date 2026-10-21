@@ -778,8 +778,8 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
     for (Staff* staff : ctx.dom().staves()) {
         BarLine* bl = toBarLine(seg->element(track));      // get existing bar line for this staff, if any
         if (bl) {
+            bl->setSpanStaffDefault(staff->barLineSpan());
             if (bl->generated()) {
-                bl->setSpanStaff(staff->barLineSpan());
                 bl->setSpanFrom(staff->barLineFrom());
                 bl->setSpanTo(staff->barLineTo());
             }
@@ -788,7 +788,7 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
             bl->setOwnershipParent(seg);
             bl->setTrack(track);
             bl->setGenerated(true);
-            bl->setSpanStaff(staff->barLineSpan());
+            bl->setSpanStaffDefault(staff->barLineSpan());
             bl->setSpanFrom(staff->barLineFrom());
             bl->setSpanTo(staff->barLineTo());
             TLayout::layoutBarLine(bl, bl->mutldata(), ctx);
@@ -926,7 +926,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
                 barLine->setOwnershipParent(barlineSeg);
                 barLine->setTrack(track);
                 barLine->setGenerated(true);
-                barLine->setSpanStaff(staff->barLineSpan());
+                barLine->setSpanStaffDefault(staff->barLineSpan());
                 barLine->setSpanFrom(staff->barLineFrom());
                 barLine->setSpanTo(staff->barLineTo());
                 barLine->setBarLineType(blType);
@@ -935,14 +935,14 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
                 // do not change bar line type if bar line is user modified
                 // and its not a repeat start/end barline (forced)
 
+                barLine->setSpanStaffDefault(staff->barLineSpan());
                 if (barLine->generated()) {
-                    barLine->setSpanStaff(staff->barLineSpan());
                     barLine->setSpanFrom(staff->barLineFrom());
                     barLine->setSpanTo(staff->barLineTo());
                     barLine->setBarLineType(blType);
                 } else if (barLine->barLineType() != blType && force) {
                     barLine->setBarLineType(blType);
-                    barLine->setGenerated(true);
+                    barLine->setGenerated(barLine->spanStyle() == BarLineSpanStyle::DEFAULT && barLine->spanStaffInherited());
                 }
             }
 

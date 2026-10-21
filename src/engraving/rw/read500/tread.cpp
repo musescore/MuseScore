@@ -2106,6 +2106,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
             b->setSpanFrom(e.readInt());
         } else if (tag == "spanToOffset") {
             b->setSpanTo(e.readInt());
+        } else if (readProperty(b, tag, e, ctx, Pid::BARLINE_SPAN_STYLE)) {
         } else if (tag == "Articulation") {
             Articulation* a = Factory::createArticulation(b->score()->dummy()->chord());
             TRead::read(a, e, ctx);
@@ -4236,7 +4237,6 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         s->setBarLineFrom(e.readInt());
     } else if (tag == "barLineSpanTo") {
         s->setBarLineTo(e.readInt());
-    } else if (TRead::readProperty(s, tag, e, ctx, Pid::STAFF_BARLINE_SPAN_STYLE)) {
     } else if (tag == "distOffset") {
         s->setUserDist(Spatium(e.readDouble()));
     } else if (tag == "mag") {

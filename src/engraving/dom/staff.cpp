@@ -1174,7 +1174,6 @@ void Staff::init(const Staff* s)
     setDefaultClefType(s->defaultClefType());
     m_barLineFrom       = s->m_barLineFrom;
     m_barLineTo         = s->m_barLineTo;
-    m_barLineSpanStyle  = s->m_barLineSpanStyle;
     m_hideWhenEmpty     = s->m_hideWhenEmpty;
     m_cutaway           = s->m_cutaway;
     m_showIfEntireSystemEmpty = s->m_showIfEntireSystemEmpty;
@@ -1447,8 +1446,6 @@ PropertyValue Staff::getProperty(Pid id) const
         return barLineFrom();
     case Pid::STAFF_BARLINE_SPAN_TO:
         return barLineTo();
-    case Pid::STAFF_BARLINE_SPAN_STYLE:
-        return barLineSpanStyle();
     case Pid::STAFF_USERDIST:
         return userDist();
     case Pid::GENERATED:
@@ -1516,7 +1513,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::STAFF_BARLINE_SPAN: {
         setBarLineSpan(v.toBool());
-        // update non-generated barlines
+        // update barlines that inherit this staff default
         track_idx_t track = idx() * VOICES;
         std::vector<EngravingItem*> blList;
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
@@ -1532,8 +1529,8 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
             }
         }
         for (EngravingItem* e : blList) {
-            if (e && e->isBarLine() && !e->generated()) {
-                toBarLine(e)->setSpanStaff(barLineSpan());
+            if (e && e->isBarLine()) {
+                toBarLine(e)->setSpanStaffDefault(barLineSpan());
             }
         }
     }
@@ -1543,9 +1540,6 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::STAFF_BARLINE_SPAN_TO:
         setBarLineTo(v.toInt());
-        break;
-    case Pid::STAFF_BARLINE_SPAN_STYLE:
-        setBarLineSpanStyle(v.value<BarLineSpanStyle>());
         break;
     case Pid::STAFF_USERDIST:
         setUserDist(v.value<Spatium>());
@@ -1605,8 +1599,6 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::STAFF_BARLINE_SPAN_FROM:
     case Pid::STAFF_BARLINE_SPAN_TO:
         return 0;
-    case Pid::STAFF_BARLINE_SPAN_STYLE:
-        return BarLineSpanStyle::DEFAULT;
     case Pid::STAFF_USERDIST:
         return 0.0_sp;
     case Pid::SHOW_MEASURE_NUMBERS:

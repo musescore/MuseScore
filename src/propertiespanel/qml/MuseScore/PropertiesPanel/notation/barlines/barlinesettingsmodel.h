@@ -79,8 +79,6 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
-    QList<mu::engraving::EngravingItem*> selectedStaves() const;
-
     void updateShowPlayCount();
     void updateShowPlayCountSettings();
 

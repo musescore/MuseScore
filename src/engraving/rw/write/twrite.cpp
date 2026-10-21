@@ -869,9 +869,15 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
 
     writeProperty(item, xml, Pid::BARLINE_TYPE);
-    writeProperty(item, xml, Pid::BARLINE_SPAN);
+    if (item->segment() && item->segment()->isBarLineType()) {
+        // Mid-measure connections always have local scope.
+        xml.tag("span", item->spanStaff());
+    } else {
+        writeProperty(item, xml, Pid::BARLINE_SPAN, !item->spanStaffInherited());
+    }
     writeProperty(item, xml, Pid::BARLINE_SPAN_FROM);
     writeProperty(item, xml, Pid::BARLINE_SPAN_TO);
+    writeProperty(item, xml, Pid::BARLINE_SPAN_STYLE);
 
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
@@ -2944,7 +2950,6 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN);
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_FROM);
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_TO);
-    writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_STYLE);
     writeProperty(item, xml, Pid::STAFF_USERDIST);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE1);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE2);

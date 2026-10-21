@@ -117,6 +117,34 @@ Column {
         navigationRowStart: playCount.navigationRowEnd + 1
     }
 
+    PropertyCheckBox {
+        id: spanToNextStaffCheckBox
+
+        navigation.name: "SpanToStaffCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: playCountSection.navigationRowEnd + 1
+
+        text: qsTrc("propertiespanel", "Span to next staff")
+        propertyItem: root.model ? root.model.isSpanToNextStaff : null
+    }
+
+    DropdownPropertyView {
+        id: spanStyleSection
+        titleText: qsTrc("propertiespanel", "Span style")
+        propertyItem: root.model ? root.model.spanStyle : null
+
+        navigationName: "SpanStyle"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
+
+        model: [
+            { text: qsTrc("propertiespanel", "Follow barline type"), value: BarlineTypes.SPAN_DEFAULT },
+            { text: qsTrc("propertiespanel", "Solid"), value: BarlineTypes.SPAN_SOLID },
+            { text: qsTrc("propertiespanel", "Dashed"), value: BarlineTypes.SPAN_DASHED },
+            { text: qsTrc("propertiespanel", "Dotted"), value: BarlineTypes.SPAN_DOTTED }
+        ]
+    }
+
     ExpandableBlank {
         id: showItem
         isExpanded: false
@@ -126,48 +154,13 @@ Column {
         width: parent.width
 
         navigation.panel: root.navigationPanel
-        navigation.row: playCountSection.navigationRowEnd + 1
+        navigation.row: spanStyleSection.navigationRowEnd + 1
 
         contentItemComponent: Column {
             height: implicitHeight
             width: root.width
 
             spacing: 12
-
-            PropertyCheckBox {
-                id: spanToNextStaffCheckBox
-
-                navigation.name: "SpanToStaffCheckBox"
-                navigation.panel: root.navigationPanel
-                navigation.row: showItem.navigation.row + 1
-
-                text: qsTrc("propertiespanel", "Span to next staff")
-                propertyItem: root.model ? root.model.isSpanToNextStaff : null
-            }
-
-            DropdownPropertyView {
-                id: connectionStyleSection
-                titleText: qsTrc("propertiespanel", "Connection style (all measures)")
-                propertyItem: root.model ? root.model.spanStyle : null
-
-                navigationName: "ConnectionStyle"
-                navigationPanel: root.navigationPanel
-                navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
-
-                model: [
-                    { text: qsTrc("propertiespanel", "Follow barline type"), value: BarlineTypes.SPAN_DEFAULT },
-                    { text: qsTrc("propertiespanel", "Solid"), value: BarlineTypes.SPAN_SOLID },
-                    { text: qsTrc("propertiespanel", "Dashed"), value: BarlineTypes.SPAN_DASHED },
-                    { text: qsTrc("propertiespanel", "Dotted"), value: BarlineTypes.SPAN_DOTTED }
-                ]
-            }
-
-            StyledTextLabel {
-                width: parent.width
-                text: qsTrc("propertiespanel", "Applies to ordinary barlines on this staff. Double, final and repeat barlines keep their current connections.")
-                horizontalAlignment: Text.AlignLeft
-                wrapMode: Text.WordWrap
-            }
 
             Item {
                 height: childrenRect.height
@@ -189,7 +182,7 @@ Column {
 
                     navigationName: "SpanFrom"
                     navigationPanel: root.navigationPanel
-                    navigationRowStart: connectionStyleSection.navigationRowEnd + 1
+                    navigationRowStart: showItem.navigation.row + 1
                 }
 
                 SpinBoxPropertyView {

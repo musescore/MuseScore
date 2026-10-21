@@ -55,14 +55,7 @@ void BarlineSettingsModel::createProperties()
     m_playCountText = buildPropertyItem(Pid::PLAY_COUNT_TEXT);
     m_playCountTextSetting = buildPropertyItem(Pid::PLAY_COUNT_TEXT_SETTING);
     m_isSpanToNextStaff = buildPropertyItem(Pid::BARLINE_SPAN);
-    m_spanStyle = buildPropertyItem(Pid::STAFF_BARLINE_SPAN_STYLE,
-                                    [this](Pid pid, const QVariant& value) {
-        setPropertyValue(selectedStaves(), pid, value);
-        loadProperties();
-    }, nullptr, [this](Pid pid) {
-        resetPropertyValue(selectedStaves(), pid);
-        loadProperties();
-    });
+    m_spanStyle = buildPropertyItem(Pid::BARLINE_SPAN_STYLE);
     m_spanFrom = buildPropertyItem(Pid::BARLINE_SPAN_FROM);
     m_spanTo = buildPropertyItem(Pid::BARLINE_SPAN_TO);
     m_hasToShowTips = buildPropertyItem(Pid::BARLINE_SHOW_TIPS);
@@ -93,7 +86,7 @@ void BarlineSettingsModel::loadProperties()
         Pid::PLAY_COUNT_TEXT,
         Pid::PLAY_COUNT_TEXT_SETTING,
         Pid::BARLINE_SPAN,
-        Pid::STAFF_BARLINE_SPAN_STYLE,
+        Pid::BARLINE_SPAN_STYLE,
         Pid::BARLINE_SPAN_FROM,
         Pid::BARLINE_SPAN_TO,
         Pid::BARLINE_SHOW_TIPS,
@@ -138,8 +131,8 @@ void BarlineSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
         });
     }
 
-    if (muse::contains(propertyIdSet, Pid::STAFF_BARLINE_SPAN_STYLE)) {
-        loadPropertyItem(m_spanStyle, selectedStaves());
+    if (muse::contains(propertyIdSet, Pid::BARLINE_SPAN_STYLE)) {
+        loadPropertyItem(m_spanStyle);
     }
 
     if (muse::contains(propertyIdSet, Pid::BARLINE_SPAN_FROM)) {
@@ -160,18 +153,6 @@ void BarlineSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
 
     updateShowPlayCount();
     updateShowPlayCountSettings();
-}
-
-QList<EngravingItem*> BarlineSettingsModel::selectedStaves() const
-{
-    QList<EngravingItem*> staves;
-    for (EngravingItem* item : m_elementList) {
-        Staff* staff = item->staff();
-        if (staff && !staff->isLastOfScore() && !staves.contains(staff)) {
-            staves.push_back(staff);
-        }
-    }
-    return staves;
 }
 
 void BarlineSettingsModel::updateShowPlayCount()
@@ -275,7 +256,10 @@ void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
             staves.push_back(staff);
         }
 
-        if (barline->barLineType() == mu::engraving::BarLineType::NORMAL) {
+        barline->undoResetProperty(Pid::BARLINE_SPAN);
+
+        if (barline->barLineType() == mu::engraving::BarLineType::NORMAL
+            && barline->spanStyle() == mu::engraving::BarLineSpanStyle::DEFAULT) {
             barline->setGenerated(true);
         }
     }
