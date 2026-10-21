@@ -194,8 +194,9 @@ muse::Ret MnxExporter::exportMnx()
         }
     }
 
+    mnx::MnxMetaData::Support support = m_mnxDocument.mnx().ensure_support();
+    support.set_useLyricExtenders(true);
     if (m_exportBeams) {
-        mnx::MnxMetaData::Support support = m_mnxDocument.mnx().ensure_support();
         support.set_useBeams(true);
     }
 

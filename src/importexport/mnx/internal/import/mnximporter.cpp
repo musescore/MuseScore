@@ -31,6 +31,7 @@
 #include "internal/shared/mnxtypesconv.h"
 
 #include "engraving/dom/barline.h"
+#include "engraving/dom/breath.h"
 #include "engraving/dom/bracketitem.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/drumset.h"
@@ -1011,7 +1012,14 @@ void MnxImporter::importGlobalMeasures(const PendingStaffTypeEdits& staffTypeEdi
             createJumpOrMarker(measure, fine->location().fraction(), MarkerType::FINE);
         }
         if (const std::optional<mnx::global::Jump>& jump = mnxMeasure.jump()) {
-            createJumpOrMarker(measure, jump->location().fraction(), toMuseScoreJumpType(jump->type()));
+            if (jump->type() == mnx::JumpType::ToCoda) {
+                createJumpOrMarker(measure, jump->location().fraction(), MarkerType::TOCODA);
+            } else {
+                createJumpOrMarker(measure, jump->location().fraction(), toMuseScoreJumpType(jump->type()));
+            }
+        }
+        if (const auto coda = mnxMeasure.coda()) {
+            createJumpOrMarker(measure, coda->location().fraction(), MarkerType::CODA, coda->glyph());
         }
         if (const std::optional<mnx::global::Segno>& segno = mnxMeasure.segno()) {
             createJumpOrMarker(measure, segno->location().fraction(), MarkerType::SEGNO, segno->glyph());
@@ -1019,6 +1027,15 @@ void MnxImporter::importGlobalMeasures(const PendingStaffTypeEdits& staffTypeEdi
         if (const std::optional<mnx::Array<mnx::global::Tempo> >& tempos = mnxMeasure.tempos()) {
             for (const auto& tempo : tempos.value()) {
                 createTempoMark(measure, tempo);
+            }
+        }
+        if (const auto caesura = mnxMeasure.caesura()) {
+            Segment* segment = measure->getSegmentR(SegmentType::Breath, measure->ticks());
+            for (staff_idx_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
+                Breath* breath = Factory::createBreath(segment);
+                breath->setTrack(staff2track(staffIdx));
+                breath->setSymId(toMuseScoreCaesuraSym(caesura->shape(), caesura->marks()));
+                segment->add(breath);
             }
         }
         if (const std::optional<mnx::Fermata>& mnxFermata = mnxMeasure.fermata()) {

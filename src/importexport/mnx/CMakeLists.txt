@@ -37,7 +37,7 @@ else()
     message(STATUS "Using muse_deps nlohmann_json from ${NLOHMANN_JSON_PREFIX}")
     message(STATUS "Using muse_deps json_schema_validator from ${JSON_SCHEMA_VALIDATOR_PREFIX}")
 
-    set(MNXDOM_GIT_TAG 8c5056cb5cb08ff317b3199ed73aacf9e350d7ae)
+    set(MNXDOM_GIT_TAG e21521f6802d4f801bac75e5a7c2daef714bf846)
     string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(
         mnxdom

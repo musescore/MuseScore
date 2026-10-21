@@ -34,6 +34,7 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordline.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/instrument.h"
@@ -79,6 +80,39 @@ static void exportAccidentalDetails(mnx::sequence::Note& mnxNote, const Note* no
                                       : mnx::AccidentalEnclosureSymbol::Brackets;
                 auto enclosure = accDisp.ensure_enclosure(mnxAcciBracket);
             }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   exportNoteMarkings
+//---------------------------------------------------------
+
+static void exportNoteMarkings(mnx::sequence::Note& mnxNote, const Note* note)
+{
+    for (const EngravingItem* item : note->chord()->el()) {
+        if (!item->isChordLine()) {
+            continue;
+        }
+        const ChordLine* line = toChordLine(item);
+        if (line->note() != note && (line->note() || note != note->chord()->upNote())) {
+            continue;
+        }
+        switch (line->chordLineType()) {
+        case ChordLineType::SCOOP:
+            mnxNote.ensure_markings().ensure_slideIn(mnx::SlideIntoNoteType::Scoop);
+            break;
+        case ChordLineType::PLOP:
+            mnxNote.ensure_markings().ensure_slideIn(mnx::SlideIntoNoteType::Plop);
+            break;
+        case ChordLineType::FALL:
+            mnxNote.ensure_markings().ensure_slideOut(mnx::SlideOutOfNoteType::Falloff);
+            break;
+        case ChordLineType::DOIT:
+            mnxNote.ensure_markings().ensure_slideOut(mnx::SlideOutOfNoteType::Doit);
+            break;
+        default:
+            break;
         }
     }
 }
@@ -134,8 +168,8 @@ static int calcWrittenDiatonicDelta(const Note* note)
 //   export lyrics on a chord/rest into mnxEvent
 //---------------------------------------------------------
 
-static void createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
-                         std::set<std::string>& lyricLineIds)
+void MnxExporter::createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
+                               std::set<std::string>& lyricLineIds)
 {
     IF_ASSERT_FAILED(cr) {
         return;
@@ -155,7 +189,18 @@ static void createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
         auto mnxLine = mnxLines.append(lineId, lyric->plainText().toStdString());
         mnxLine.set_type(toMnxLyricLineType(lyric->syllabic()));
         /// @todo export styled text when supported by MNX.
-        /// @todo export word extension span when supported by MNX.
+        if (lyric->ticks() > Fraction(0, 1)) {
+            const Fraction lastTick = cr->tick() + lyric->ticks();
+            const ChordRest* target = cr;
+            for (const Segment* segment = cr->segment()->next1(SegmentType::ChordRest);
+                 segment && segment->tick() <= lastTick; segment = segment->next1(SegmentType::ChordRest)) {
+                const EngravingItem* item = segment->element(cr->track());
+                if (item && item->isChordRest() && !(item->isRest() && toRest(item)->isGap())) {
+                    target = toChordRest(item);
+                }
+            }
+            mnxLine.ensure_extender().set_target(getOrAssignEID(const_cast<ChordRest*>(target)).toStdString());
+        }
     }
 }
 
@@ -284,9 +329,14 @@ void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
         auto mnxMarkings = mnxEvent.ensure_markings();
         if (breath->isCaesura()) {
             const MnxCaesura caesura = toMnxCaesura(breath->symId());
-            auto mnxCaesura = mnxMarkings.ensure_caesura();
-            mnxCaesura.set_or_clear_shape(caesura.shape);
-            mnxCaesura.set_or_clear_marks(caesura.marks);
+            const auto globalMeasure = m_mnxDocument.global().measures()[m_measToMnxMeas.at(cr->measure())];
+            const auto globalCaesura = globalMeasure.caesura();
+            if (!globalCaesura || breath->tick() != cr->measure()->endTick()
+                || globalCaesura->shape() != caesura.shape || globalCaesura->marks() != caesura.marks) {
+                auto mnxCaesura = mnxMarkings.ensure_caesura();
+                mnxCaesura.set_or_clear_shape(caesura.shape);
+                mnxCaesura.set_or_clear_marks(caesura.marks);
+            }
         } else {
             auto mnxBreath = mnxMarkings.ensure_breath();
             mnxBreath.set_or_clear_placement(toMnxPlacement(breath->placement()));
@@ -457,6 +507,7 @@ bool MnxExporter::createNotes(mnx::sequence::Event& mnxEvent, ChordRest* chordRe
         mnxNote.set_id(getOrAssignEID(note).toStdString());
         createTies(mnxNote, note);
         exportAccidentalDetails(mnxNote, note);
+        exportNoteMarkings(mnxNote, note);
         const int delta = calcWrittenDiatonicDelta(note);
         if (delta != 0) {
             mnxNote.ensure_written().set_diatonicDelta(delta);

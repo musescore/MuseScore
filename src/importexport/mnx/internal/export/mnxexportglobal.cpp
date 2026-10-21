@@ -25,6 +25,7 @@
 #include <utility>
 
 #include "engraving/dom/barline.h"
+#include "engraving/dom/breath.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
@@ -327,8 +328,7 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
                 break;
             }
             if (const auto mnxJt = toMnxJumpType(jump->jumpType())) {
-                /// @note Current jump types default to measure end when stored at tick 0.
-                /// When MNX adds new types, revisit placement of new types.
+                // Navigation jumps are placed at measure end when stored at tick zero.
                 mnxMeasure.ensure_jump(*mnxJt, locationOrEnd);
             }
             break;
@@ -340,6 +340,10 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
             }
             if (marker->markerType() == MarkerType::FINE) {
                 mnxMeasure.ensure_fine(locationOrEnd);
+            } else if (marker->markerType() == MarkerType::TOCODA || marker->markerType() == MarkerType::TOCODASYM) {
+                mnxMeasure.ensure_jump(mnx::JumpType::ToCoda, locationOrEnd);
+            } else if (marker->markerType() == MarkerType::CODA || marker->markerType() == MarkerType::VARCODA) {
+                mnxMeasure.ensure_coda(location);
             } else if (marker->isSegno()) {
                 mnxMeasure.ensure_segno(location);
                 /// @todo Export segno glyph when appropriate (defer pending MNX spec clarifications).
@@ -387,6 +391,34 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
 }
 
 //---------------------------------------------------------
+//   exportGlobalCaesura
+//---------------------------------------------------------
+
+static void exportGlobalCaesura(mnx::global::Measure& mnxMeasure, const Measure* measure)
+{
+    // A matching caesura on every staff at the barline belongs to the global measure.
+    const Segment* breathSegment = measure->findSegmentR(SegmentType::Breath, measure->ticks());
+    const Breath* globalCaesura = nullptr;
+    if (breathSegment) {
+        for (staff_idx_t staffIdx = 0; staffIdx < measure->score()->nstaves(); ++staffIdx) {
+            const EngravingItem* item = breathSegment->element(staff2track(staffIdx));
+            if (!item || !item->isBreath() || !toBreath(item)->isCaesura()
+                || (globalCaesura && globalCaesura->symId() != toBreath(item)->symId())) {
+                globalCaesura = nullptr;
+                break;
+            }
+            globalCaesura = toBreath(item);
+        }
+    }
+    if (globalCaesura) {
+        const MnxCaesura value = toMnxCaesura(globalCaesura->symId());
+        auto caesura = mnxMeasure.ensure_caesura();
+        caesura.set_or_clear_shape(value.shape);
+        caesura.set_or_clear_marks(value.marks);
+    }
+}
+
+//---------------------------------------------------------
 //   createGlobal
 //---------------------------------------------------------
 
@@ -416,6 +448,7 @@ void MnxExporter::createGlobal()
         assignTimeSignature(mnxMeasure, measure, prevTimeSig, prevTimeSigDisplay);
         assignKeySignature(mnxMeasure, m_score, measure, prevKeyFifths);
         exportMeasureElements(mnxMeasure, measure);
+        exportGlobalCaesura(mnxMeasure, measure);
 
         const int displayNumber = measureNumberState.displayNumber(measure);
         if (displayNumber == 0) {
