@@ -173,7 +173,7 @@ void NotationBraille::doBraille(bool force)
 
             if (!m) {
                 brailleEngravingItemList()->clear();
-                Braille lb(score(), brailleConfiguration()->intervalDirection(), brailleConfiguration()->voiceOrder());
+                Braille lb(score(), { brailleConfiguration()->intervalDirection(), brailleConfiguration()->voiceOrder() });
                 bool res = lb.convertItem(e, brailleEngravingItemList());
                 if (!res) {
                     QString txt = e->accessibleInfo();
@@ -187,7 +187,7 @@ void NotationBraille::doBraille(bool force)
             } else {
                 if (m != current_measure || force) {
                     brailleEngravingItemList()->clear();
-                    Braille lb(score(), brailleConfiguration()->intervalDirection(), brailleConfiguration()->voiceOrder());
+                    Braille lb(score(), { brailleConfiguration()->intervalDirection(), brailleConfiguration()->voiceOrder() });
                     lb.convertMeasure(m, brailleEngravingItemList());
                     setBrailleInfo(brailleEngravingItemList()->brailleStr());
                     current_measure = m;

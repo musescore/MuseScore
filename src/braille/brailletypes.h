@@ -44,6 +44,12 @@ enum class BrailleVoiceOrder
     Up,
     Down,
 };
+
+struct BrailleOptions
+{
+    BrailleIntervalDirection intervalDirection = BrailleIntervalDirection::Auto;
+    BrailleVoiceOrder voiceOrder = BrailleVoiceOrder::Auto;
+};
 }
 
 #endif // MU_BRAILLE_BRAILLETYPES_H

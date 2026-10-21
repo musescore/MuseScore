@@ -790,11 +790,10 @@ QString TextToUEBBraille::braille(const QString& text)
     return rez.readAll();
 }
 
-Braille::Braille(Score* s, mu::braille::BrailleIntervalDirection intervalDirection, mu::braille::BrailleVoiceOrder voiceOrder)
+Braille::Braille(Score* s, const mu::braille::BrailleOptions& options)
 {
     m_score = s;
-    m_intervalDirection = intervalDirection;
-    m_voiceOrder = voiceOrder;
+    m_options = options;
     for (size_t i = 0; i < m_score->staves().size(); ++i) {
         m_context.previousNote.push_back(nullptr);
         m_context.currentClefType.push_back(ClefType::INVALID);
@@ -1168,7 +1167,7 @@ bool Braille::hasTies(ChordRest* chordRest)
 
 bool Braille::ascendingChords(ClefType clefType)
 {
-    switch (m_intervalDirection) {
+    switch (m_options.intervalDirection) {
     case mu::braille::BrailleIntervalDirection::Up:
         return true;
     case mu::braille::BrailleIntervalDirection::Down:
@@ -1234,7 +1233,7 @@ bool Braille::ascendingChordsForClef(ClefType clefType)
 
 bool Braille::ascendingVoices(ClefType clefType)
 {
-    switch (m_voiceOrder) {
+    switch (m_options.voiceOrder) {
     case mu::braille::BrailleVoiceOrder::Up:
         return true;
     case mu::braille::BrailleVoiceOrder::Down:
