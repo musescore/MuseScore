@@ -3765,9 +3765,10 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
     }
 
     for (const SystemLockIndicator* sli : item->system()->systemLockIndicators()) {
-        if (sli != item) {
+        if (sli != item && sli->systemLock()->endMB() == endMB) {
+            const double sliWidth = FontMetrics(sli->font()).boundingRect(sli->iconCode()).width();
             // TODO: Rough spacing here
-            xOffset -= (sli->ldata()->bbox().width() * 2) - spatium;
+            xOffset -= (sliWidth * 2) - spatium;
         }
     }
 
