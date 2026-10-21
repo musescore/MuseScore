@@ -994,6 +994,9 @@ void NotationActionController::setDuration(DurationType duration)
 
         startNoteInput();
     }
+    if (noteInput->isNoteInputMode() && !noteInput->state().isValid()) {
+        return;
+    }
 
     noteInput->setDuration(duration);
 
@@ -1618,7 +1621,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
             interaction->nudge(direction, quickly);
         } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
             interaction->nudgeAnchors(direction);
-        } else if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        } else if (state.isValid() && noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
             moveInputNotes(direction == MoveDirection::Up, quickly ? PitchMode::OCTAVE : PitchMode::DIATONIC);
             return muse::make_ok();
         } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
@@ -1723,7 +1726,7 @@ void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
     }
 
     INotationNoteInputPtr noteInput = interaction->noteInput();
-    if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+    if (noteInput->state().isValid() && noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
         moveInputNotes(direction == MoveDirection::Up, PitchMode::DIATONIC);
         return;
     }
