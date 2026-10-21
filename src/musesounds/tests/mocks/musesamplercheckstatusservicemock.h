@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,19 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include "modularity/imoduleinterface.h"
+#include <gmock/gmock.h>
+
+#include "musesounds/imusesamplercheckstatusservice.h"
 
 namespace mu::musesounds {
-class IMuseSamplerCheckUpdateScenario : MODULE_CONTEXT_INTERFACE
+class MuseSamplerCheckStatusServiceMock : public IMuseSamplerCheckStatusService
 {
-    INTERFACE_ID(IMuseSamplerCheckUpdateScenario)
-
 public:
-    virtual ~IMuseSamplerCheckUpdateScenario() = default;
+    MOCK_METHOD(bool, libInitFailed, (), (const, override));
+    MOCK_METHOD(bool, canCheckForUpdate, (), (const, override));
+    MOCK_METHOD(bool, incompatibleLocalVersion, (), (const, override));
 
-    virtual bool alreadyChecked() const = 0;
-    virtual void checkAndShowUpdateIfNeed() = 0;
+    MOCK_METHOD(muse::async::Promise<muse::RetVal<bool> >, checkForUpdate, (), (override));
 };
 }

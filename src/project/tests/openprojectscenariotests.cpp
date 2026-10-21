@@ -36,7 +36,7 @@
 #include "global/tests/mocks/filesystemmock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 #include "multiwindows/tests/mocks/multiwindowsprovidermock.h"
-#include "musesounds/tests/mocks/musesamplercheckupdatescenariomock.h"
+#include "musesounds/tests/mocks/musesamplercheckstatusscenariomock.h"
 #include "musesounds/tests/mocks/musesoundscheckupdatescenariomock.h"
 #include "notation/tests/mocks/masternotationmock.h"
 #include "notation/tests/mocks/notationmock.h"
@@ -81,7 +81,7 @@ protected:
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_projectSession = std::make_shared<NiceMock<ProjectSessionMock> >();
         m_museSounds = std::make_shared<NiceMock<musesounds::MuseSoundsCheckUpdateScenarioMock> >();
-        m_museSampler = std::make_shared<NiceMock<musesounds::MuseSamplerCheckUpdateScenarioMock> >();
+        m_museSampler = std::make_shared<NiceMock<musesounds::MuseSamplerCheckStatusScenarioMock> >();
         m_mscMetaReader = std::make_shared<NiceMock<notation::MscMetaReaderMock> >();
         m_convertFileToScoreScenario = std::make_shared<NiceMock<ConvertFileToScoreScenarioMock> >();
 
@@ -96,7 +96,7 @@ protected:
         m_scenario->interactive.set(m_interactive);
         m_scenario->projectSession.set(m_projectSession);
         m_scenario->museSoundsCheckUpdateScenario.set(m_museSounds);
-        m_scenario->museSamplerCheckUpdateScenario.set(m_museSampler);
+        m_scenario->museSamplerCheckStatusScenario.set(m_museSampler);
         m_scenario->mscMetaReader.set(m_mscMetaReader);
         m_scenario->convertFileToScoreScenario.set(m_convertFileToScoreScenario);
 
@@ -253,7 +253,7 @@ protected:
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<ProjectSessionMock> m_projectSession;
     std::shared_ptr<musesounds::MuseSoundsCheckUpdateScenarioMock> m_museSounds;
-    std::shared_ptr<musesounds::MuseSamplerCheckUpdateScenarioMock> m_museSampler;
+    std::shared_ptr<musesounds::MuseSamplerCheckStatusScenarioMock> m_museSampler;
     std::shared_ptr<notation::MscMetaReaderMock> m_mscMetaReader;
     std::shared_ptr<ConvertFileToScoreScenarioMock> m_convertFileToScoreScenario;
 

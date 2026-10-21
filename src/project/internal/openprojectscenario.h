@@ -35,7 +35,7 @@
 #include "interactive/iplatforminteractive.h"
 #include "io/ifilesystem.h"
 #include "multiwindows/imultiwindowsprovider.h"
-#include "musesounds/imusesamplercheckupdatescenario.h"
+#include "musesounds/imusesamplercheckstatusscenario.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
 
 #include "imscmetareader.h"
@@ -65,7 +65,7 @@ public:
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
-    muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
+    muse::ContextInject<musesounds::IMuseSamplerCheckStatusScenario> museSamplerCheckStatusScenario = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
 
     OpenProjectScenario(const muse::modularity::ContextPtr& iocCtx)

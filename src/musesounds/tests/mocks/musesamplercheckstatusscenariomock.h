@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,13 +22,15 @@
 
 #pragma once
 
-#include "musesounds/imusesamplercheckupdatescenario.h"
+#include <gmock/gmock.h>
+
+#include "musesounds/imusesamplercheckstatusscenario.h"
 
 namespace mu::musesounds {
-class MuseSamplerCheckUpdateScenarioStub : public IMuseSamplerCheckUpdateScenario
+class MuseSamplerCheckStatusScenarioMock : public IMuseSamplerCheckStatusScenario
 {
 public:
-    bool alreadyChecked() const override;
-    void checkAndShowUpdateIfNeed() override;
+    MOCK_METHOD(bool, alreadyChecked, (), (const, override));
+    MOCK_METHOD(void, checkAndShowStatusIfNeed, (), (override));
 };
 }

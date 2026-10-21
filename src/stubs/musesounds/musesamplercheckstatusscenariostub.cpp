@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "musesamplercheckupdatescenariostub.h"
+#include "musesamplercheckstatusscenariostub.h"
 
 using namespace mu::musesounds;
 
-bool MuseSamplerCheckUpdateScenarioStub::alreadyChecked() const
+bool MuseSamplerCheckStatusScenarioStub::alreadyChecked() const
 {
     return false;
 }
 
-void MuseSamplerCheckUpdateScenarioStub::checkAndShowUpdateIfNeed()
+void MuseSamplerCheckStatusScenarioStub::checkAndShowStatusIfNeed()
 {
 }

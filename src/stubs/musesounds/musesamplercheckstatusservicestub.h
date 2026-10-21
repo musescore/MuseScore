@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
  * MuseScore Studio
  * Music Composition & Notation
@@ -19,34 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include "imusesamplercheckupdateservice.h"
-
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "musesampler/imusesamplerinfo.h"
-#include "musesampler/imusesamplerconfiguration.h"
-#include "network/inetworkmanagercreator.h"
-#include "imusesoundsconfiguration.h"
+#include "musesounds/imusesamplercheckstatusservice.h"
 
 namespace mu::musesounds {
-class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, public muse::async::Asyncable
+class MuseSamplerCheckStatusServiceStub : public IMuseSamplerCheckStatusService
 {
-    muse::GlobalInject<IMuseSoundsConfiguration> configuration;
-    muse::GlobalInject<muse::network::INetworkManagerCreator> networkManagerCreator;
-    muse::GlobalInject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration;
-    muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSampler;
-
 public:
-    MuseSamplerCheckUpdateService() = default;
-
+    bool libInitFailed() const override;
     bool canCheckForUpdate() const override;
     bool incompatibleLocalVersion() const override;
 
     muse::async::Promise<muse::RetVal<bool> > checkForUpdate() override;
-
-private:
-    muse::network::INetworkManagerPtr m_networkManager;
 };
 }

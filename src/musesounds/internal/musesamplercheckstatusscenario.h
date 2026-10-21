@@ -21,13 +21,14 @@
  */
 #pragma once
 
-#include "imusesamplercheckupdatescenario.h"
+#include "musesounds/imusesamplercheckstatusscenario.h"
 
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "rcommand/icommanddispatcher.h"
-#include "imusesamplercheckupdateservice.h"
+#include "musesounds/imusesamplercheckstatusservice.h"
+#include "musesounds/imusesoundsconfiguration.h"
 #include "global/iprocess.h"
 #include "global/iglobalconfiguration.h"
 #include "interactive/iinteractive.h"
@@ -36,30 +37,33 @@
 #include "update/iupdateconfiguration.h"
 
 namespace mu::musesounds {
-class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
+class MuseSamplerCheckStatusScenario : public IMuseSamplerCheckStatusScenario, public muse::Contextable, public muse::async::Asyncable
 {
+public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
     muse::GlobalInject<muse::IProcess> process;
-    muse::GlobalInject<IMuseSamplerCheckUpdateService> service;
+    muse::GlobalInject<IMuseSoundsConfiguration> configuration;
+    muse::GlobalInject<IMuseSamplerCheckStatusService> service;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
-    MuseSamplerCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
+    MuseSamplerCheckStatusScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
     bool alreadyChecked() const override;
-    void checkAndShowUpdateIfNeed() override;
+    void checkAndShowStatusIfNeed() override;
 
 private:
+    void showLoadingFailedNotification();
     void showCriticalUpdateNotification();
     void showNewVersionNotification();
 
-    void openMuseHubAndQuit();
-    void openMuseHubWebsiteAndQuit();
+    void openMuseHub(bool quit);
+    void openMuseHubWebsite(bool quit);
 
     bool m_alreadyChecked = false;
 };
