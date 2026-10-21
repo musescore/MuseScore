@@ -43,7 +43,6 @@
 #include "widgets/selectdialog.h"
 #include "widgets/selectnotedialog.h"
 #include "widgets/stafftextpropertiesdialog.h"
-#include "widgets/transposedialog.h"
 #include "widgets/tupletdialog.h"
 
 using namespace mu::notation;
@@ -74,7 +73,6 @@ void NotationSceneModule::resolveImports()
         ir->registerWidgetUri<BreaksDialog>(Uri("musescore://notation/breaks"));
         ir->registerWidgetUri<EditStaff>(Uri("musescore://notation/staffproperties"));
         ir->registerWidgetUri<EditStringData>(Uri("musescore://notation/editstrings"));
-        ir->registerWidgetUri<TransposeDialog>(Uri("musescore://notation/transpose"));
         ir->registerWidgetUri<SelectNoteDialog>(Uri("musescore://notation/selectnote"));
         ir->registerWidgetUri<SelectDialog>(Uri("musescore://notation/selectelement"));
         ir->registerWidgetUri<TupletDialog>(Uri("musescore://notation/othertupletdialog"));
@@ -86,6 +84,7 @@ void NotationSceneModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore.NotationScene", "EditGridSizeDialog");
         ir->registerQmlUri(Uri("musescore://notation/percussionpanelpadswap"), "MuseScore.NotationScene", "PercussionPanelPadSwapDialog");
         ir->registerQmlUri(Uri("musescore://notation/editpercussionshortcut"), "MuseScore.NotationScene", "EditPercussionShortcutDialog");
+        ir->registerQmlUri(Uri("musescore://notation/transpose"), "MuseScore.NotationScene", "TransposeDialog");
     }
 
     auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
