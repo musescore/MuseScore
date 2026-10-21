@@ -89,6 +89,12 @@ public:
     MOCK_METHOD(PreferredScoreCreationMode, preferredScoreCreationMode, (), (const, override));
     MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
 
+    MOCK_METHOD(QString, lastInstrumentNamesLanguage, (), (const, override));
+    MOCK_METHOD(void, setLastInstrumentNamesLanguage, (const QString&), (override));
+
+    MOCK_METHOD(QStringList, recentInstrumentNamesLanguages, (), (const, override));
+    MOCK_METHOD(void, setRecentInstrumentNamesLanguages, (const QStringList&), (override));
+
     MOCK_METHOD(MigrationOptions, migrationOptions, (MigrationType), (const, override));
     MOCK_METHOD(void, setMigrationOptions, (MigrationType, const MigrationOptions&, bool), (override));
 

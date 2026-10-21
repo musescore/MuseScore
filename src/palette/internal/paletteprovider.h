@@ -221,6 +221,7 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 public:
 
     PaletteProvider(const muse::modularity::ContextPtr& ctx, QObject* parent = nullptr)
@@ -305,11 +306,15 @@ private:
 
     void doResetPalette(const QModelIndex& index);
 
+    void updateTextLanguage();
+
     PaletteTreeModel* m_userPaletteModel = nullptr;
     PaletteTreeModel* m_masterPaletteModel = nullptr;
     PaletteTreeModel* m_defaultPaletteModel = nullptr; // palette used by "Reset palette" action
 
     muse::async::Notification m_userPaletteChanged;
+
+    QString m_textLanguage; // see currentScoreTextLanguage()
 
     bool m_isSearching = false;
 

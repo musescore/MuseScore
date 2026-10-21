@@ -24,6 +24,10 @@
 
 #include "translation.h"
 
+#include "modularity/ioc.h"
+
+#include "../iscoretexttranslator.h"
+
 #include "../editing/editclef.h"
 #include "../editing/editinstrumentchange.h"
 #include "../editing/editkeysig.h"
@@ -161,8 +165,16 @@ void InstrumentChange::setupInstrument(const Instrument* instrument, bool update
     }
 
     //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
-    const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(instrument->trackName());
-    undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
+    String newInstrChangeText = muse::mtrc("engraving", "To %1");
+
+    // Write the text in the language of the score, if one was chosen
+    static muse::GlobalInject<IScoreTextTranslator> scoreTextTranslator;
+    const String language = masterScore()->metaTag(SCORE_TEXT_LANGUAGE_META_TAG);
+    if (!language.empty() && scoreTextTranslator()) {
+        newInstrChangeText = scoreTextTranslator()->translate(language, "engraving", u"To %1");
+    }
+
+    undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText.arg(instrument->trackName())));
 }
 
 //---------------------------------------------------------
