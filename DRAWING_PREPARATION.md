@@ -6,7 +6,7 @@ This branch starts from the official MuseScore `main` baseline at commit `f019f4
 
 ### Source files modified
 
-None in this revision. No source scaffolding was added because the reviewed official interfaces do not establish a necessary standalone preparation change; drawing behavior and its data model require implementation-specific design and validation.
+No source files were modified during the P1 preparation baseline review. No source scaffolding was added because the reviewed official interfaces do not establish a necessary standalone preparation change; drawing behavior and its data model require implementation-specific design and validation.
 
 ### Existing integration points reviewed (unchanged)
 
@@ -29,7 +29,7 @@ The source comparison showed that the drawing branch changes implement drawing b
 ### Scope and validation
 
 - The branch and the refreshed official `main` share commit `f019f4079d0ba74c481fa93396b3486a77f22635`; the feature branch shares that base as well.
-- This preparation revision changes no existing source files and introduces no visual changes.
+- The P1 and P2 preparation stages introduced no source changes or visual changes. The subsequent Windows Qt deployment correction is documented in P4.
 - The branch comparison reported no merge conflicts. Compilation, automated tests, and runtime behavior were not evaluated.
 
 ## P3 — Windows build validation
