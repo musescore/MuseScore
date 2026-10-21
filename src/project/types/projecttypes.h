@@ -293,6 +293,23 @@ struct RecentFile {
 
 using RecentFilesList = std::vector<RecentFile>;
 
+struct RecentFilesReset {};
+
+struct RecentFilePrepended {
+    RecentFile file;
+};
+
+struct RecentFilePathChanged {
+    muse::io::path_t oldPath;
+    RecentFile file;
+};
+
+struct RecentFileRemoved {
+    muse::io::path_t path;
+};
+
+using RecentFilesChange = std::variant<RecentFilesReset, RecentFilePrepended, RecentFilePathChanged, RecentFileRemoved>;
+
 struct Template
 {
     QString categoryTitle;
