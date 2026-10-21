@@ -275,6 +275,9 @@
     {
         "scope": "NOTATION_TEXT_EDITING",
         "shortcuts": [
+            {"command": "command://notation/edittext-toggle-bold",  "sequences": ["Ctrl+B"]},
+            {"command": "command://notation/edittext-toggle-italic",  "sequences": ["Ctrl+I"]},
+            {"command": "command://notation/edittext-toggle-underline",  "sequences": ["Ctrl+U"]},
             {"command": "command://notation/edittext-advance-longa",  "sequences": ["Ctrl+9"]},
             {"command": "command://notation/edittext-advance-breve",  "sequences": ["Ctrl+8"]},
             {"command": "command://notation/edittext-advance-1",  "sequences": ["Ctrl+7"]},
