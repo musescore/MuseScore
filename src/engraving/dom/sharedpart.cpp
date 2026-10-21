@@ -24,6 +24,7 @@
 #include "staff.h"
 
 #include <sstream>
+#include <utility>
 
 namespace mu::engraving {
 std::string dump(const SharedTrackMap& map)
