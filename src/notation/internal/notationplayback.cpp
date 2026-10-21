@@ -128,6 +128,9 @@ void NotationPlayback::reload()
 void NotationPlayback::setPlaybackScore(Score* score)
 {
     m_playbackScoreOverride = score;
+    // Empty events are sent for tracks the temporary score does not contain.
+    // Restoring the open score turns this off before those tracks are rebuilt.
+    m_playbackModel.setSuspendMissingTracks(score != nullptr);
 
     Score* target = score ? score : this->score();
     if (!target) {

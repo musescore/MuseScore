@@ -37,12 +37,11 @@ class MasterScore;
 namespace mu::project {
 struct BarLoopPrepared {
     // Scores outlive the notations that point at them.
-    std::vector<std::unique_ptr<mu::engraving::MasterScore>> scores;
+    std::vector<std::unique_ptr<mu::engraving::MasterScore> > scores;
     notation::INotationPtrList notations;
     mu::engraving::MasterScore* playbackScore = nullptr;
 };
 
-std::unique_ptr<BarLoopPrepared> prepareBarLoopExport(notation::IMasterNotationPtr master,
-                                                      const notation::INotationPtrList& notations,
-                                                      const SelectedBarsExport& selected);
+std::unique_ptr<BarLoopPrepared> prepareBarLoopExport(notation::IMasterNotationPtr master, const notation::INotationPtrList& notations,
+                                                       const SelectedBarsExport& selected);
 }

@@ -161,7 +161,15 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
 
     const SelectedBarsExport barLoop = std::exchange(m_barLoop, {});
     std::unique_ptr<BarLoopPrepared> prepared;
+    // Prepared notations are copies, so the main-score check has to be taken
+    // before they replace the list used to build file names.
+    std::vector<bool> sourceIsMain;
     if (barLoop.active) {
+        sourceIsMain.reserve(notations.size());
+        for (const INotationPtr& notation : notations) {
+            sourceIsMain.push_back(isMainNotation(notation));
+        }
+
         prepared = prepareBarLoopExport(masterNotation(), notations, barLoop);
         if (!prepared) {
             interactive()->errorSync(
@@ -175,6 +183,13 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
             playback->setPlaybackScore(prepared->playbackScore);
         }
     }
+
+    auto exportedIsMain = [&](size_t index, const INotationPtr& notation) {
+        if (index < sourceIsMain.size()) {
+            return static_cast<bool>(sourceIsMain[index]);
+        }
+        return isMainNotation(notation);
+    };
 
     DEFER {
         if (!prepared) {
@@ -232,9 +247,10 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
 
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
-        for (const INotationPtr& notation : notations) {
+        for (size_t notationIndex = 0; notationIndex < notations.size(); ++notationIndex) {
+            const INotationPtr& notation = notations[notationIndex];
             size_t pageCount = notation->elements()->msScore()->pages().size();
-            bool isMain = isMainNotation(notation);
+            bool isMain = exportedIsMain(notationIndex, notation);
 
             for (size_t page = 0; page < pageCount; ++page) {
                 options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
@@ -258,11 +274,12 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         }
     } break;
     case INotationWriter::UnitType::PER_PART: {
-        for (const INotationPtr& notation : notations) {
+        for (size_t notationIndex = 0; notationIndex < notations.size(); ++notationIndex) {
+            const INotationPtr& notation = notations[notationIndex];
+            const bool isMain = exportedIsMain(notationIndex, notation);
             muse::io::path_t definitivePath = isCreatingOnlyOneFile
                                               ? destinationPath
-                                              : completeExportPath(destinationPath, notation, isMainNotation(
-                                                                       notation), isExportingOnlyOneScore);
+                                              : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore);
 
             auto exportFunction = [writer, notation, options](IODevice& destinationDevice) {
                     return writer->write(notation, destinationDevice, options);

@@ -110,7 +110,9 @@ static MasterScore* cloneAsMaster(Score* source)
     }
 
     dropExcerpts(copy);
-    if (source && !source->isMaster()) {
+    if (!source->isMaster()) {
+        // Keep the part's own page format, spacing, and header text.
+        copy->setStyle(source->style());
         copy->startCmd(muse::TranslatableString::untranslatable("Export selected bars"));
         keepSourceParts(copy, source);
         copy->endCmd();
@@ -690,7 +692,7 @@ static void stampPlaybackState(Score* score, const CarriedPlayback& carried, Mea
         }
 
         PlayTechAnnotation* annotation = Factory::createPlayTechAnnotation(segment, carriedTechnique.type,
-                                                                            carriedTechnique.textStyle);
+                                                                           carriedTechnique.textStyle);
         annotation->setTrack(carriedTechnique.track);
         annotation->setXmlText(carriedTechnique.text);
         annotation->setPlayPlayTechAnnotation(carriedTechnique.play);
@@ -939,8 +941,8 @@ static void copySoloMute(const INotationPtr& from, const INotationPtr& to, const
 }
 
 std::unique_ptr<BarLoopPrepared> mu::project::prepareBarLoopExport(IMasterNotationPtr master,
-                                                                  const INotationPtrList& notations,
-                                                                  const SelectedBarsExport& selected)
+                                                                   const INotationPtrList& notations,
+                                                                   const SelectedBarsExport& selected)
 {
     if (!master || !selected.active || selected.endTick <= selected.startTick || notations.empty()) {
         return nullptr;

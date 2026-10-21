@@ -62,6 +62,10 @@ public:
     //! Point playback at another score and push its events, without re-adding tracks that already exist.
     void assignScore(Score* score);
 
+    //! While a temporary score is playing, tracks it does not contain stay silent
+    //! instead of being removed. Removing them drops mixer state and notifies the UI.
+    void setSuspendMissingTracks(bool suspend);
+
     void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send);
     void sendEventsForChangedTracks();
 
@@ -141,6 +145,8 @@ private:
     void processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
                               const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges);
 
+    void subscribeToScoreChanges(Score* score);
+
     bool hasToReloadTracks(const ScoreChanges& changes) const;
     bool hasToReloadScore(const ScoreChanges& changes) const;
     bool hasAutomationChange(const ScoreChanges& changes) const;
@@ -175,6 +181,7 @@ private:
     bool m_playChordSymbols = true;
     bool m_useScoreDynamicsForOffstreamPlayback = true;
     bool m_metronomeEnabled = true;
+    bool m_suspendMissingTracks = false;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;

@@ -1465,20 +1465,45 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
     }
 
     playback()->removeTrack(search->second);
-    audioSettings()->removeTrackParams(instrumentTrackId);
 
-    m_masterNotation->notation()->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
-    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
-        if (const INotationPtr& notation = excerpt->notation()) {
-            notation->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
+    // Selected-bar export points playback at a temporary score. An instrument that
+    // is still in the open score keeps its mixer, solo/mute, and sound settings.
+    if (!trackBelongsToOpenScore(instrumentTrackId)) {
+        audioSettings()->removeTrackParams(instrumentTrackId);
+
+        m_masterNotation->notation()->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
+        for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+            if (const INotationPtr& notation = excerpt->notation()) {
+                notation->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
+            }
         }
+
+        m_automatedControlParamsCache.erase(instrumentTrackId);
     }
 
     m_onlineSoundsController->removeOnlineTrack(search->second);
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
-    m_automatedControlParamsCache.erase(instrumentTrackId);
+}
+
+bool PlaybackController::trackBelongsToOpenScore(const InstrumentTrackId& instrumentTrackId) const
+{
+    const INotationPartsPtr parts = masterNotationParts();
+    if (!parts || !notationPlayback()) {
+        return false;
+    }
+
+    const Part* part = parts->part(instrumentTrackId.partId);
+    if (!part) {
+        return false;
+    }
+
+    if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
+        return part->hasChordSymbol();
+    }
+
+    return part->instrumentById(instrumentTrackId.instrumentId) != nullptr;
 }
 
 void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTrackId)

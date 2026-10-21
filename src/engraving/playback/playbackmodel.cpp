@@ -61,17 +61,8 @@ static const Harmony* findChordSymbol(const EngravingItem* item)
     return nullptr;
 }
 
-void PlaybackModel::load(Score* score)
+void PlaybackModel::subscribeToScoreChanges(Score* score)
 {
-    TRACEFUNC;
-
-    if (!score || score->measures()->empty() || !score->lastMeasure()) {
-        return;
-    }
-
-    m_score = score;
-    m_playbackCtx = std::make_shared<PlaybackContext>(score);
-
     auto changesChannel = score->changesChannel();
     changesChannel.disconnect(this);
 
@@ -93,6 +84,20 @@ void PlaybackModel::load(Score* score)
 
         notifyAboutChanges(oldTracks, trackChanges);
     });
+}
+
+void PlaybackModel::load(Score* score)
+{
+    TRACEFUNC;
+
+    if (!score || score->measures()->empty() || !score->lastMeasure()) {
+        return;
+    }
+
+    m_score = score;
+    m_playbackCtx = std::make_shared<PlaybackContext>(score);
+
+    subscribeToScoreChanges(score);
 
     update(0, m_score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
 
@@ -160,26 +165,7 @@ void PlaybackModel::assignScore(Score* score)
     m_score = score;
     m_playbackCtx = std::make_shared<PlaybackContext>(score);
 
-    auto changesChannel = score->changesChannel();
-    changesChannel.disconnect(this);
-    changesChannel.onReceive(this, [this](const ScoreChanges& changes) {
-        if (shouldSkipChanges(changes)) {
-            return;
-        }
-
-        const TickBoundaries tickRange = tickBoundaries(changes);
-        const TrackBoundaries trackRange = trackBoundaries(changes);
-        ChangedTrackIdSet trackChanges;
-
-        clearExpiredTracks();
-        m_playbackCtx->clear(trackRange.trackFrom, trackRange.trackTo, tickRange.tickFrom, tickRange.tickTo);
-        clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
-
-        const InstrumentTrackIdSet oldTracks = existingTrackIdSet();
-        update(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
-
-        notifyAboutChanges(oldTracks, trackChanges);
-    });
+    subscribeToScoreChanges(score);
 
     const InstrumentTrackIdSet oldTracks = existingTrackIdSet();
 
@@ -212,6 +198,11 @@ void PlaybackModel::assignScore(Score* score)
         m_tracksDataChanged.send(changedTracks);
     }
     m_changedTrackIdSet.clear();
+}
+
+void PlaybackModel::setSuspendMissingTracks(bool suspend)
+{
+    m_suspendMissingTracks = suspend;
 }
 
 void PlaybackModel::setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send)
@@ -904,6 +895,13 @@ void PlaybackModel::clearExpiredTracks()
         }
 
         if (needRemoveTrack(it->first)) {
+            // The open score still has this track. Dropping it here removes mixer
+            // settings and updates the UI while an export dialog is closing.
+            if (m_suspendMissingTracks) {
+                ++it;
+                continue;
+            }
+
             m_trackRemoved.send(it->first);
             it = m_playbackDataMap.erase(it);
             continue;
