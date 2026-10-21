@@ -35,6 +35,7 @@ static const std::string NAVIGATION_SCOPE = "NAVIGATION";
 static const std::string PLAYBACK_SCOPE = "PLAYBACK";
 static const std::string NOTATION_PAGE_SCOPE = "NOTATION_PAGE";
 static const std::string NOTATION_SCOPE = "NOTATION";
+static const std::string NOTATION_TAB_SCOPE = "NOTATION_TAB";
 static const std::string NOTATION_NOTE_INPUT_SCOPE = "NOTATION_NOTE_INPUT";
 static const std::string NOTATION_TEXT_EDITING_SCOPE = "NOTATION_TEXT_EDITING";
 static const std::string PROJECT_SCOPE = "PROJECT";
@@ -59,8 +60,9 @@ int ShortcutResolver::scopePriority(const std::string& scope) const
             { PLAYBACK_SCOPE, []() { return 2; } },
             { NOTATION_PAGE_SCOPE, []() { return 3; } },
             { NOTATION_SCOPE, [this]() { return isNotationFocused() ? 4 : -1; } },
-            { NOTATION_NOTE_INPUT_SCOPE, [this]() { return isNotationFocusedAndNoteInputMode() ? 5 : -1; } },
-            { NOTATION_TEXT_EDITING_SCOPE, [this]() { return isNotationFocused() ? 6 : -1; } },
+            { NOTATION_TAB_SCOPE, [this]() { return isNotationFocusedAndTabStaff() ? 5 : -1; } },
+            { NOTATION_NOTE_INPUT_SCOPE, [this]() { return isNotationFocusedAndNoteInputMode() ? 6 : -1; } },
+            { NOTATION_TEXT_EDITING_SCOPE, [this]() { return isNotationFocusedAndTextEditing() ? 7 : -1; } },
         };
     }
 
@@ -81,6 +83,16 @@ bool ShortcutResolver::isNotationFocused() const
 bool ShortcutResolver::isNotationFocusedAndNoteInputMode() const
 {
     return isNotationFocused() && notationCommandsController()->isNoteInputMode();
+}
+
+bool ShortcutResolver::isNotationFocusedAndTabStaff() const
+{
+    return isNotationFocused() && notationCommandsController()->isTablatureStaff();
+}
+
+bool ShortcutResolver::isNotationFocusedAndTextEditing() const
+{
+    return isNotationFocused() && notationCommandsController()->isTextEditing();
 }
 
 Shortcut ShortcutResolver::selectOne(const ShortcutList& list) const
@@ -107,6 +119,7 @@ muse::TranslatableString ShortcutResolver::scopeTitle(const std::string& scopeCo
         { PLAYBACK_SCOPE, TranslatableString("shortcuts", "PLAYBACK") },
         { NOTATION_PAGE_SCOPE, TranslatableString("shortcuts", "NOTATION PAGE") },
         { NOTATION_SCOPE, TranslatableString("shortcuts", "NOTATION") },
+        { NOTATION_TAB_SCOPE, TranslatableString("shortcuts", "NOTATION: TAB") },
         { NOTATION_NOTE_INPUT_SCOPE, TranslatableString("shortcuts", "NOTATION: NOTE INPUT") },
         { NOTATION_TEXT_EDITING_SCOPE, TranslatableString("shortcuts", "NOTATION: TEXT EDITING") },
         { PROJECT_SCOPE, TranslatableString("shortcuts", "PROJECT") },

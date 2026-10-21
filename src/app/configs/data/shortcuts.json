@@ -248,16 +248,7 @@
       ]
     },
     {
-        "scope": "NOTATION_NOTE_INPUT",
-        "shortcuts": [
-            {"command": "command://notation/realtime-advance", "sequences": ["Enter"] },
-            {"command": "command://notation/swap-left", "sequences": ["Shift+Left"]},
-            {"command": "command://notation/swap-right", "sequences": ["Shift+Right"]},
-            {"command": "command://none", "sequences": ["Shift+Up","Shift+Down"], "_comment": "Disabled Shift+Up/Down for note input"}
-        ]
-    },
-    {
-      "scope": "NOTATION_NOTE_INPUT_TAB",
+      "scope": "NOTATION_TAB",
       "shortcuts": [
             {"command": "command://notation/enter-rest-tab",  "sequences": [";"]},
             {"command": "command://notation/enter-fret-0",  "sequences": ["0","A"]},
@@ -271,6 +262,15 @@
             {"command": "command://notation/enter-fret-8",  "sequences": ["8","J"]},
             {"command": "command://notation/enter-fret-9",  "sequences": ["9","K"]}          
       ]
+    },
+    {
+        "scope": "NOTATION_NOTE_INPUT",
+        "shortcuts": [
+            {"command": "command://notation/realtime-advance", "sequences": ["Enter"] },
+            {"command": "command://notation/swap-left", "sequences": ["Shift+Left"]},
+            {"command": "command://notation/swap-right", "sequences": ["Shift+Right"]},
+            {"command": "command://none", "sequences": ["Shift+Up","Shift+Down"], "_comment": "Disabled Shift+Up/Down for note input"}
+        ]
     },
     {
         "scope": "NOTATION_TEXT_EDITING",
