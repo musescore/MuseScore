@@ -148,6 +148,10 @@ TEST_F(Engraving_Compat114Tests, textstyles) {
     compat("textstyles");
 }
 
+TEST_F(Engraving_Compat114Tests, text_mscore1_symbols) {
+    compat("text_mscore1_symbols");
+}
+
 TEST_F(Engraving_Compat114Tests, title) {
     compat("title");
 }
