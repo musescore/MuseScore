@@ -47,7 +47,7 @@ public:
 
     static void addStaveSharingChange(Transaction& tx, Segment* seg, Part* part, bool reset);
     static void addStaveSharingChangeToRange(Transaction& tx, Segment* startSeg, Segment* endSeg, staff_idx_t startStaff,
-                                             staff_idx_t endStaffIdx);
+                                             staff_idx_t endStaffIdx, bool reset);
     static void removeStaveSharingChange(Transaction& tx, StaveSharingChange* staveSharingChange);
     static void setIsReset(Transaction& tx, StaveSharingChange* staveSharingChange, bool reset);
 

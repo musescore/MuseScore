@@ -465,17 +465,16 @@ void EditStaveSharing::addStaveSharingChange(Transaction& tx, Segment* seg, Part
 }
 
 void EditStaveSharing::addStaveSharingChangeToRange(Transaction& tx, Segment* startSeg, Segment* endSeg, staff_idx_t startStaff,
-                                                    staff_idx_t endStaffIdx)
+                                                    staff_idx_t endStaffIdx, bool reset)
 {
     const Score* score = startSeg->score();
     const Fraction& startTick = startSeg->tick();
-    const Fraction& endTick = endSeg->tick();
 
-    for (staff_idx_t staffIdx = startStaff; staffIdx <= endStaffIdx;) {
+    for (staff_idx_t staffIdx = startStaff; staffIdx < endStaffIdx;) {
         Staff* staff = score->staff(staffIdx);
         Part* part = staff->part();
         if (!part->isSharedPart()) {
-            staffIdx = track2staff(part->trackRange().endTrack) + 1;
+            staffIdx = track2staff(part->trackRange().endTrack);
             continue;
         }
         SharedPart* sharedPart = toSharedPart(part);
@@ -485,28 +484,29 @@ void EditStaveSharing::addStaveSharingChangeToRange(Transaction& tx, Segment* st
 
         StaveSharingState newStaveSharingState = prevStaveSharingState;
         newStaveSharingState.setUserTrackMap(newStaveSharingState.sharedTrackMap());
-        newStaveSharingState.setIsReset(false);
+        newStaveSharingState.setIsReset(reset);
 
         undoSetStaveSharingState(tx, sharedPart, startTick, newStaveSharingState);
 
-        std::optional<StaveSharingState> existingState = sharedPart->exactStaveSharingStateAtTick(endTick);
-        if (!existingState || !existingState->isUserModified()) {
-            StaveSharingState nextState;
+        // No end state needed if the range runs to the end of the score
+        std::optional<StaveSharingState> existingState = endSeg ? sharedPart->exactStaveSharingStateAtTick(endSeg->tick()) : std::nullopt;
+        if (endSeg && (!existingState || !existingState->isUserModified())) {
+            const Fraction& endTick = endSeg->tick();
             if (prevStaveSharingState.isUserModified() && !prevStaveSharingState.isReset()) {
                 // Resume previous user sharing state
-                nextState = prevStaveSharingState;
-            } else {
+                StaveSharingState nextState = prevStaveSharingState;
+                undoSetStaveSharingState(tx, sharedPart, endTick, nextState);
+            } else if (!reset) {
                 // Create reset
-                nextState = existingState ? existingState.value() : newStaveSharingState;
+                StaveSharingState nextState = existingState ? existingState.value() : newStaveSharingState;
                 nextState.setUserTrackMap(nextState.sharedTrackMap());
                 nextState.setIsReset(true);
+                undoSetStaveSharingState(tx, sharedPart, endTick, nextState);
             }
-
-            undoSetStaveSharingState(tx, sharedPart, endTick, nextState);
         }
 
         // Next part
-        staffIdx = track2staff(part->trackRange().endTrack) + 1;
+        staffIdx = track2staff(part->trackRange().endTrack);
     }
 }
 
@@ -565,7 +565,9 @@ void EditStaveSharing::removeStaveSharingStatesOnRemoveTime(Transaction& tx, Sco
 {
     for (SharedPart* sharedPart : score->sharedParts()) {
         for (const auto& [tick, state] : sharedPart->staveSharingStatesBetweenTicks(startTick, endTick)) {
-            tx.push(new RemoveStaveSharingChange(sharedPart, tick));
+            if (state.isUserModified()) {
+                tx.push(new RemoveStaveSharingChange(sharedPart, tick));
+            }
         }
     }
 }

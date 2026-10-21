@@ -133,9 +133,6 @@ bool StaveSharingLayout::isValid(const SharedTrackMap& userMap, StaveSharingLayo
     track_idx_t prevSharedTrack = muse::nidx;
     track_idx_t lastTrackOnPrevVoice = muse::nidx;
     for (const auto& [sharedTrack, originTracks] : originTracksBySharedTrack) {
-        if (originTracks.size() <= 1) {
-            continue;
-        }
         // Origin tracks mapped to the same shared track must be able to go in the same voice
         TrackGroup curTrackGroup = { originTracks.front() };
         std::unordered_set<Note*> localUnisonNotes;
@@ -823,8 +820,7 @@ bool StaveSharingLayout::checkSpannersForSameVoice(track_idx_t prevTrack, track_
     std::multimap<ElementType, Spanner*> spannersOnNextTrack;
 
     for (Spanner* spanner : ctx.overlappingSpanners) {
-        const bool hasOverlap = (spanner->tick() >= ctx.sTick && spanner->tick() < ctx.eTick)
-                                || (spanner->tick2() >= ctx.sTick && spanner->tick2() < ctx.eTick);
+        const bool hasOverlap = spanner->tick() < ctx.eTick && spanner->tick2() >= ctx.sTick;
         if (!hasOverlap) {
             continue;
         }
