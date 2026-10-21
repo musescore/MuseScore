@@ -2619,7 +2619,12 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         }
         case ActionIconType::STAVE_SHARING_CHANGE: {
             EditStaveSharing::addStaveSharingChangeToRange(tx, sel.startSegment(), sel.endSegment(), sel.staffStart(),
-                                                           sel.staffEnd());
+                                                           sel.staffEnd(), false);
+            return;
+        }
+        case ActionIconType::RESET_STAVE_SHARING_CHANGE: {
+            EditStaveSharing::addStaveSharingChangeToRange(tx, sel.startSegment(), sel.endSegment(), sel.staffStart(),
+                                                           sel.staffEnd(), true);
             return;
         }
         case ActionIconType::STANDARD_BEND:

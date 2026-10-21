@@ -305,6 +305,10 @@ void SharedPart::insertTime(const Fraction& tick, const Fraction& len)
     }
     m_staveSharingStateByTick.insert(newSharedStaves.begin(), newSharedStaves.end());
 
+    if (!muse::contains(m_staveSharingStateByTick, Fraction(0, 1))) {
+        m_staveSharingStateByTick.emplace(Fraction(0, 1), StaveSharingState());
+    }
+
     Part::insertTime(tick, len);
 }
 }
