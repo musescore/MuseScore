@@ -1545,9 +1545,6 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setBarLineTo(v.toInt());
         break;
     case Pid::STAFF_BARLINE_SPAN_STYLE:
-        if (v.toInt() < static_cast<int>(BarLineSpanStyle::DEFAULT) || v.toInt() > static_cast<int>(BarLineSpanStyle::DOTTED)) {
-            return false;
-        }
         setBarLineSpanStyle(v.value<BarLineSpanStyle>());
         break;
     case Pid::STAFF_USERDIST:

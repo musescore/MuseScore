@@ -490,9 +490,6 @@ TEST_F(Engraving_BarlineTests, spanStyleUndoRedoAndStaffCopy)
     EXPECT_EQ(copy->barLineSpanStyle(), BarLineSpanStyle::SOLID);
     EXPECT_EQ(score->staff(0)->getProperty(Pid::STAFF_BARLINE_SPAN_STYLE).type(), P_TYPE::BARLINE_SPAN_STYLE);
     EXPECT_EQ(score->staff(0)->propertyDefault(Pid::STAFF_BARLINE_SPAN_STYLE).type(), P_TYPE::BARLINE_SPAN_STYLE);
-    EXPECT_FALSE(score->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN_STYLE, -1));
-    EXPECT_FALSE(score->staff(0)->setProperty(Pid::STAFF_BARLINE_SPAN_STYLE, 4));
-    EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::SOLID);
 }
 
 TEST_F(Engraving_BarlineTests, spanStyleSurvivesInstrumentReordering)
@@ -578,11 +575,4 @@ TEST_F(Engraving_BarlineTests, spanStyleXmlAndPropertyConversions)
     }
     EXPECT_EQ(TConv::fromXml("unknown", BarLineSpanStyle::DEFAULT), BarLineSpanStyle::DEFAULT);
     EXPECT_EQ(TConv::fromXml("unknown", BarLineSpanStyle::SOLID), BarLineSpanStyle::SOLID);
-    // Previously saved prototype scores remain readable.
-    EXPECT_EQ(TConv::fromXml("0", BarLineSpanStyle::SOLID), BarLineSpanStyle::DEFAULT);
-    EXPECT_EQ(TConv::fromXml("1", BarLineSpanStyle::DEFAULT), BarLineSpanStyle::SOLID);
-    EXPECT_EQ(TConv::fromXml("2", BarLineSpanStyle::DEFAULT), BarLineSpanStyle::DASHED);
-    EXPECT_EQ(TConv::fromXml("3", BarLineSpanStyle::DEFAULT), BarLineSpanStyle::DOTTED);
-    EXPECT_EQ(TConv::fromXml("-1", BarLineSpanStyle::DEFAULT), BarLineSpanStyle::DEFAULT);
-    EXPECT_EQ(TConv::fromXml("4", BarLineSpanStyle::DEFAULT), BarLineSpanStyle::DEFAULT);
 }

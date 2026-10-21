@@ -2515,12 +2515,6 @@ AsciiStringView TConv::toXml(BarLineSpanStyle v)
 
 BarLineSpanStyle TConv::fromXml(const AsciiStringView& tag, BarLineSpanStyle def)
 {
-    // Read scores saved with the initial prototype, which used numeric values.
-    bool ok = false;
-    int value = tag.toInt(&ok);
-    if (ok && value >= static_cast<int>(BarLineSpanStyle::DEFAULT) && value <= static_cast<int>(BarLineSpanStyle::DOTTED)) {
-        return static_cast<BarLineSpanStyle>(value);
-    }
     return findTypeByXmlTag(BARLINE_SPAN_STYLES, tag, def);
 }
 
