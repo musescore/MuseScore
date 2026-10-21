@@ -329,10 +329,11 @@ void Transpose::transposeKeys(Transaction& tx, Score* score, staff_idx_t staffSt
             if (!ks || ks->generated()) {
                 continue;
             }
+            Part* part = st->originPart(s->tick());
             if (!ks->isAtonal()) {
-                Interval v = st->part()->instrument(s->tick())->transpose();
+                Interval v = part->instrument(s->tick())->transpose();
                 KeySigEvent ke = st->keySigEvent(s->tick());
-                PreferSharpFlat pref = ks->part()->preferSharpFlat();
+                PreferSharpFlat pref = part->preferSharpFlat();
                 Key nKey = ke.concertKey();
                 if (flip && !v.isZero()) {
                     v.flip();
@@ -351,13 +352,13 @@ void Transpose::transposeKeys(Transaction& tx, Score* score, staff_idx_t staffSt
             seg->setHeader(true);
             KeySig* ks = Factory::createKeySig(seg);
             ks->setTrack(staffIdx * VOICES);
-            Interval v = ks->part()->instrument()->transpose();
+            Interval v = ks->originPart()->instrument()->transpose();
             Key cKey = Key::C;
             Key nKey = cKey;
             if (flip) {
                 if (!v.isZero()) {
                     v.flip();
-                    nKey = transposeKey(Key::C, v, ks->part()->preferSharpFlat());
+                    nKey = transposeKey(Key::C, v, ks->originPart()->preferSharpFlat());
                 }
             } else {
                 cKey = transposeKey(Key::C, v);
