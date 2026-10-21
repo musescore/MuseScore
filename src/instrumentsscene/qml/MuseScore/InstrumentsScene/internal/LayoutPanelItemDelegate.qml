@@ -179,8 +179,12 @@ FocusableControl {
         anchors.fill: contentArea
         z: -1
 
-        visible: root.isInExpandedCard || (root.isInGroup && root.type === LayoutPanelItemType.PART) || prv.dragged
-        color: root.isInExpandedCard ? ui.theme.textFieldColor : ui.theme.backgroundPrimaryColor
+        // The expanded card's colour is dropped on the hovered row, so that the (translucent) hover fill
+        // looks the same as on a collapsed row; in groups that falls back to the instruments' card colour
+        readonly property bool showsExpandedCard: root.isInExpandedCard && !root.isHovered
+
+        visible: showsExpandedCard || (root.isInGroup && root.type !== LayoutPanelItemType.SHARED_PART) || prv.dragged
+        color: showsExpandedCard ? ui.theme.textFieldColor : ui.theme.backgroundPrimaryColor
 
         topLeftRadius: root.background.topLeftRadius
         topRightRadius: root.background.topRightRadius
