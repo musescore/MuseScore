@@ -104,7 +104,7 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     ASSERT_TRUE(score);
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
@@ -122,7 +122,7 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPartUndoRedo)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     ASSERT_TRUE(score);
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
@@ -148,7 +148,7 @@ TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     ASSERT_TRUE(score);
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
@@ -158,7 +158,7 @@ TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
 
     EXPECT_TRUE(checkSharedPartExist(sharedPart, originParts));
 
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Remove shared part"));
+    score->startCmd(muse::TranslatableString::untranslatable("Remove shared part"));
     score->cmdRemovePart(sharedPart);
     score->endCmd();
 
@@ -171,7 +171,7 @@ TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
     EXPECT_TRUE(checkSharedPartExist(sharedPart, originParts));
 
     Part* partToRemove = originParts.front();
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Remove origin part"));
+    score->startCmd(muse::TranslatableString::untranslatable("Remove origin part"));
     score->cmdRemovePart(partToRemove);
     score->endCmd();
 
@@ -180,7 +180,7 @@ TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
     EXPECT_FALSE(muse::contains(sharedPart->originParts(), partToRemove));
 
     partToRemove = originParts.front();
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Remove origin part"));
+    score->startCmd(muse::TranslatableString::untranslatable("Remove origin part"));
     score->cmdRemovePart(partToRemove);
     score->endCmd();
 
@@ -194,7 +194,7 @@ TEST_F(Engraving_StaveSharingTests, testSaveReloadStaveSharing)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     ASSERT_TRUE(score);
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
@@ -229,7 +229,7 @@ TEST_F(Engraving_StaveSharingTests, testChangeDurationAfterUndoingStaveSharing)
     ASSERT_FALSE(cr1->sharedItem());
 
     // [WHEN] Stave sharing is enabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
@@ -237,7 +237,7 @@ TEST_F(Engraving_StaveSharingTests, testChangeDurationAfterUndoingStaveSharing)
     ASSERT_TRUE(cr1->sharedItem());
 
     // [WHEN] Stave sharing is disabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Disable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, false);
     });
 
@@ -260,7 +260,7 @@ TEST_F(Engraving_StaveSharingTests, testChangeDurationAfterUndoingStaveSharing)
     EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
 
     // [WHEN] The rest's duration is changed
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Change rest duration"));
+    score->startCmd(muse::TranslatableString::untranslatable("Change rest duration"));
     score->changeCRlen(cr1, TDuration(DurationType::V_QUARTER));
     score->endCmd();
 
@@ -295,7 +295,7 @@ TEST_F(Engraving_StaveSharingTests, testChangeChordAfterUndoingStaveSharing)
     }
 
     // [WHEN] Stave sharing is enabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
@@ -307,7 +307,7 @@ TEST_F(Engraving_StaveSharingTests, testChangeChordAfterUndoingStaveSharing)
     }
 
     // [WHEN] Stave sharing is disabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Disable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, false);
     });
 
@@ -336,7 +336,7 @@ TEST_F(Engraving_StaveSharingTests, testChangeChordAfterUndoingStaveSharing)
     EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
 
     // [WHEN] The chord's duration is changed
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Change chord duration"));
+    score->startCmd(muse::TranslatableString::untranslatable("Change chord duration"));
     score->changeCRlen(chords.front(), TDuration(DurationType::V_HALF));
     score->endCmd();
 
@@ -358,12 +358,12 @@ TEST_F(Engraving_StaveSharingTests, testFlipTieAfterUndoingStaveSharing)
     ASSERT_TRUE(tie);
 
     // [WHEN] Stave sharing is enabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
     // [WHEN] Stave sharing is disabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Disable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Disable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, false);
     });
 
@@ -383,7 +383,7 @@ TEST_F(Engraving_StaveSharingTests, testFlipTieAfterUndoingStaveSharing)
     ASSERT_FALSE(tie->segmentsEmpty());
     for (int i = 0; i < 2; ++i) {
         score->select(tie->frontSegment());
-        score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Flip tie direction"), [&](Transaction& tx) {
+        score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Flip tie direction"), [&](Transaction& tx) {
             Flip::flip(tx, score);
         });
     }
@@ -398,7 +398,7 @@ TEST_F(Engraving_StaveSharingTests, testLocalClefKeyTimeSigsCopiedToSharedStaves
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_04.mscx");
     ASSERT_TRUE(score);
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
     score->doLayout();
@@ -442,7 +442,7 @@ TEST_F(Engraving_StaveSharingTests, testDefualtStaveSharingPatterns)
     ASSERT_TRUE(score);
 
     // [WHEN] Stave sharing is enabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
     score->doLayout();
@@ -518,7 +518,7 @@ TEST_F(Engraving_StaveSharingTests, testInvalidUserTrackMaps)
     };
 
     // [WHEN] The invalid user track maps are applied to each measure
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Set track mapping"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Set track mapping"), [&](Transaction& tx) {
         for (size_t i = 0; i < userTrackMaps.size(); ++i) {
             Measure* m = score->crMeasure(static_cast<int>(i));
             ASSERT_TRUE(m);
@@ -552,7 +552,7 @@ TEST_F(Engraving_StaveSharingTests, testUserTrackMapInvalidInLaterSystem)
     ASSERT_TRUE(score);
 
     // [WHEN] Stave sharing is enabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
     score->doLayout();
@@ -572,7 +572,7 @@ TEST_F(Engraving_StaveSharingTests, testUserTrackMapInvalidInLaterSystem)
     const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
     ASSERT_TRUE(muse::contains(m1TrackMap, origin1)) << dump(m1TrackMap);
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
         EditStaveSharing::setTrackMapping(tx, m1->first(SegmentType::ChordRest), sharedPart, origin1, m1TrackMap.at(origin1));
     });
     score->doLayout();
@@ -622,7 +622,7 @@ TEST_F(Engraving_StaveSharingTests, testFillVoice1WithRests)
     ASSERT_TRUE(score);
 
     // [WHEN] Stave sharing is enabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
     score->doLayout();
@@ -637,7 +637,7 @@ TEST_F(Engraving_StaveSharingTests, testFillVoice1WithRests)
     Segment* seg = score->tick2segment(Fraction(5, 2), true, SegmentType::ChordRest);
     ASSERT_TRUE(seg);
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Stave sharing tests"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
         EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
     });
     score->doLayout();
@@ -673,7 +673,7 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
     ASSERT_TRUE(score);
 
     // [WHEN] Stave sharing is enabled
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
     score->doLayout();
@@ -688,8 +688,7 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
     ASSERT_TRUE(m3);
     ASSERT_EQ(m3->tick(), Fraction(2, 1));
 
-    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest",
-                                                                      "Add stave sharing change"), [&](Transaction& tx) {
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add stave sharing change"), [&](Transaction& tx) {
         EditStaveSharing::addStaveSharingChange(tx, m3->first(SegmentType::ChordRest), sharedPart, false);
     });
     score->doLayout();
@@ -699,7 +698,7 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
     ASSERT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
 
     // [WHEN] A measure is inserted before measure 2
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Insert measure"));
+    score->startCmd(muse::TranslatableString::untranslatable("Insert measure"));
     score->insertMeasure(score->crMeasure(1));
     score->endCmd();
 
@@ -714,7 +713,7 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
     EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
 
     // [WHEN] A measure is inserted after measure 4
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Insert measure"));
+    score->startCmd(muse::TranslatableString::untranslatable("Insert measure"));
     score->insertMeasure(score->crMeasure(4));
     score->endCmd();
 
@@ -724,7 +723,7 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
     score->undoRedo(true, nullptr);
 
     // [WHEN] Measure 1 is deleted
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Delete measure"));
+    score->startCmd(muse::TranslatableString::untranslatable("Delete measure"));
     score->deleteMeasures(score->crMeasure(0), score->crMeasure(0));
     score->endCmd();
 
@@ -739,7 +738,7 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
     EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
 
     // [WHEN] Measure 3 itself is deleted
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Delete measure"));
+    score->startCmd(muse::TranslatableString::untranslatable("Delete measure"));
     score->deleteMeasures(m3, m3);
     score->endCmd();
 
