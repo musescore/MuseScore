@@ -134,6 +134,8 @@ public:
 
     void setBarLineType(BarLineType i) { m_barLineType = i; }
     BarLineType barLineType() const { return m_barLineType; }
+    bool repeatEndTypeForced() const { return m_repeatEndTypeForced; }
+    void setRepeatEndTypeForced(bool forced) { m_repeatEndTypeForced = forced; }
 
     bool isTop() const;
     bool isBottom() const;
@@ -195,6 +197,7 @@ private:
     int m_spanTo = 0;
     BarLineSpanStyle m_spanStyle = BarLineSpanStyle::DEFAULT;
     BarLineType m_barLineType = BarLineType::NORMAL;
+    bool m_repeatEndTypeForced = false; // layout state, independent of user span overrides
 
     ElementList m_el;          ///< fermata or other articulations
 

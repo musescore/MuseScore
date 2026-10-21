@@ -322,10 +322,12 @@ void BarLine::calcY()
 
             // change barline, only if it is not initial one
             if (rtick().isNotZero()) {
-                double staffBottomYNext = offsetNext
-                                          + (oneLineNext ? BARLINE_SPAN_1LINESTAFF_TO : staffType1Next->lines() * 2 - 2)
-                                          * lineDistanceNext * .5 + lineWidthNext;
-                staffBottomY = std::max(staffBottomY, staffBottomYNext);
+                if (segment()->isEndBarLineType()) {
+                    double staffBottomYNext = offsetNext
+                                              + (oneLineNext ? BARLINE_SPAN_1LINESTAFF_TO : staffType1Next->lines() * 2 - 2)
+                                              * lineDistanceNext * .5 + lineWidthNext;
+                    staffBottomY = std::max(staffBottomY, staffBottomYNext);
+                }
                 if (y1Next < y1) {
                     y1 = y1Next;
                 }

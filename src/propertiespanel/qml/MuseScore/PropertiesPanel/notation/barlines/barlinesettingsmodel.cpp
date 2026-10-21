@@ -257,6 +257,8 @@ void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
         }
 
         barline->undoResetProperty(Pid::BARLINE_SPAN);
+        barline->undoResetProperty(Pid::BARLINE_SPAN_FROM);
+        barline->undoResetProperty(Pid::BARLINE_SPAN_TO);
 
         if (barline->barLineType() == mu::engraving::BarLineType::NORMAL
             && barline->spanStyle() == mu::engraving::BarLineSpanStyle::DEFAULT) {

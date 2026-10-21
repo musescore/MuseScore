@@ -33,9 +33,11 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/range.h"
 #include "engraving/dom/scoreorder.h"
 #include "engraving/dom/select.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/types/typesconv.h"
@@ -606,6 +608,10 @@ TEST_F(Engraving_BarlineTests, spanStylePersistsWhenRepeatTypeIsForced)
     std::unique_ptr<MasterScore> reloaded(ScoreRW::readScore(path, true));
     ASSERT_TRUE(reloaded);
     EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 0)->spanStyle(), BarLineSpanStyle::DASHED);
+    reloaded->firstMeasure()->setRepeatEnd(false);
+    reloaded->doLayout();
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 0)->barLineType(), BarLineType::NORMAL);
+    EXPECT_EQ(endBarLine(reloaded->firstMeasure(), 0)->spanStyle(), BarLineSpanStyle::DASHED);
 }
 
 TEST_F(Engraving_BarlineTests, spanStyleXmlAndPropertyConversions)
@@ -903,7 +909,7 @@ TEST_F(Engraving_BarlineTests, rewriteMeasuresPreservesBarlineAppearanceAndConne
     BarLine* bar = endBarLine(score->firstMeasure(), 0);
     bar->setProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::DOTTED);
     bar->setProperty(Pid::BARLINE_SPAN, false);
-    TimeSig* signature = Factory::createTimeSig(score->dummy()->segment());
+    TimeSig* signature = Factory::createTimeSig(score->firstMeasure()->first());
     signature->setSig(Fraction(2, 4), TimeSigType::NORMAL);
     score->startCmd(TranslatableString::untranslatable("Rewrite measures"));
     EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score.get(),
@@ -1002,4 +1008,103 @@ TEST_F(Engraving_BarlineTests, keyboardSpanEditingUsesGripScope)
     EXPECT_TRUE(inherited->spanStaff());
     score->undoRedo(true, nullptr);
     EXPECT_FALSE(local->spanStaff());
+}
+
+TEST_F(Engraving_BarlineTests, spanStyleReturnsToNormalWhenRepeatEndRemoved)
+{
+    for (bool explicitSpan : { false, true }) {
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+        ASSERT_TRUE(score);
+        Measure* measure = score->firstMeasure();
+        BarLine* bar = endBarLine(measure, 0);
+        if (explicitSpan) {
+            bar->setProperty(Pid::BARLINE_SPAN, false);
+        }
+        measure->setRepeatEnd(true);
+        score->doLayout();
+        ASSERT_EQ(bar->barLineType(), BarLineType::END_REPEAT);
+        measure->setRepeatEnd(false);
+        score->doLayout();
+        EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
+        EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+        EXPECT_EQ(bar->spanStaff(), !explicitSpan);
+        EXPECT_EQ(bar->spanStaffInherited(), !explicitSpan);
+        EXPECT_FALSE(bar->generated());
+    }
+}
+
+TEST_F(Engraving_BarlineTests, midMeasureSpanUsesCurrentStaffType)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(score);
+    Staff* staff = score->staff(0);
+    StaffType oneLine = *staff->staffType(Fraction(0, 1));
+    oneLine.setLines(1);
+    staff->setStaffType(Fraction(0, 1), oneLine);
+    StaffType fiveLines = oneLine;
+    fiveLines.setLines(5);
+    staff->setStaffType(Fraction(1, 1), fiveLines);
+    Measure* measure = score->firstMeasure();
+    BarLine* middle = toBarLine(measure->findSegment(SegmentType::BarLine, Fraction(1, 2))->element(0));
+    ASSERT_TRUE(middle);
+    middle->setProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::DASHED);
+    score->doLayout();
+    ASSERT_EQ(measure->system(), measure->nextMeasure()->system());
+    const double sp = staff->staffType(Fraction(0, 1))->spatium();
+    const double bottom = oneLine.yoffset().val() * sp
+                          + BARLINE_SPAN_1LINESTAFF_TO * oneLine.lineDistance().val() * sp * .5
+                          + score->style().styleS(Sid::staffLineWidth).val() * sp * .5;
+    EXPECT_DOUBLE_EQ(middle->ldata()->spanStartY, bottom);
+    EXPECT_GT(endBarLine(measure, 0)->ldata()->spanStartY, bottom);
+}
+
+TEST_F(Engraving_BarlineTests, rangeRestorePreservesExistingBarlineConnection)
+{
+    std::unique_ptr<MasterScore> source(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    std::unique_ptr<MasterScore> destination(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+    ASSERT_TRUE(source);
+    ASSERT_TRUE(destination);
+    BarLine* saved = endBarLine(source->firstMeasure(), 0);
+    saved->setProperty(Pid::BARLINE_SPAN, false);
+    saved->setProperty(Pid::BARLINE_SPAN_STYLE, BarLineSpanStyle::DOTTED);
+    ScoreRange range;
+    range.read(source->firstMeasure()->first(), source->lastMeasure()->last(), false);
+    BarLine* existing = endBarLine(destination->firstMeasure(), 0);
+    existing->setPropertyFlags(Pid::BARLINE_SPAN, PropertyFlags::STYLED);
+    ASSERT_TRUE(existing->spanStaff());
+    for (Measure* measure = destination->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            for (track_idx_t track = 0; track < destination->nstaves() * VOICES; ++track) {
+                EngravingItem* item = segment->element(track);
+                if (item && item->isChordRest()) {
+                    destination->removeElement(item);
+                    delete item;
+                }
+            }
+        }
+    }
+    destination->startCmd(TranslatableString::untranslatable("Restore range into existing measures"));
+    ASSERT_TRUE(range.write(destination.get(), Fraction(0, 1)));
+    destination->endCmd();
+    BarLine* restored = endBarLine(destination->firstMeasure(), 0);
+    ASSERT_EQ(restored, existing);
+    EXPECT_FALSE(restored->spanStaff());
+    EXPECT_FALSE(restored->spanStaffInherited());
+    EXPECT_EQ(restored->spanStyle(), BarLineSpanStyle::DOTTED);
+}
+
+TEST_F(Engraving_BarlineTests, spanStylePreservesUnforcedBarlineTypes)
+{
+    for (BarLineType type : { BarLineType::DOUBLE, BarLineType::END, BarLineType::END_REPEAT,
+                              BarLineType::BROKEN, BarLineType::DOTTED, BarLineType::HEAVY }) {
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
+        ASSERT_TRUE(score);
+        Measure* measure = score->firstMeasure();
+        BarLine* bar = endBarLine(measure, 0);
+        ASSERT_FALSE(measure->repeatEnd());
+        bar->setProperty(Pid::BARLINE_TYPE, type);
+        score->doLayout();
+        EXPECT_EQ(bar->barLineType(), type);
+        EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    }
 }

@@ -1118,9 +1118,6 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
                 nbl = Factory::createBarLine(seg);
                 nbl->setOwnershipParent(seg);
                 nbl->setTrack(bl->track());
-                // A BL in the middle of a Measure does have SpanStaff to false
-                nbl->setSpanStaff(middle ? false : bl->spanStaff());
-                nbl->setPropertyFlags(Pid::BARLINE_SPAN, middle ? PropertyFlags::UNSTYLED : bl->propertyFlags(Pid::BARLINE_SPAN));
                 m->score()->addElement(nbl);
             } else {
                 // We change BarLineType if necessary to keep END_START repeats if in the middle of a meassure
@@ -1128,6 +1125,9 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
                     blt = BarLineType::END_START_REPEAT;
                 }
             }
+            // Restore connection overrides even when the destination barline already exists.
+            nbl->setSpanStaff(middle ? false : bl->spanStaff());
+            nbl->setPropertyFlags(Pid::BARLINE_SPAN, middle ? PropertyFlags::UNSTYLED : bl->propertyFlags(Pid::BARLINE_SPAN));
             nbl->setGenerated(false);
             nbl->setBarLineType(blt);
             nbl->setSpanStyle(bl->spanStyle());

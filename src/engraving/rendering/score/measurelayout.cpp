@@ -940,12 +940,14 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
                     barLine->setSpanFrom(staff->barLineFrom());
                     barLine->setSpanTo(staff->barLineTo());
                     barLine->setBarLineType(blType);
-                } else if (barLine->barLineType() != blType && force) {
+                } else if (barLine->barLineType() != blType
+                           && (force || (barLine->repeatEndTypeForced() && barLine->barLineType() == BarLineType::END_REPEAT))) {
                     barLine->setBarLineType(blType);
                     barLine->setGenerated(barLine->spanStyle() == BarLineSpanStyle::DEFAULT && barLine->spanStaffInherited());
                 }
             }
 
+            barLine->setRepeatEndTypeForced(force);
             TLayout::layoutBarLine(barLine, barLine->mutldata(), ctx);
             barlineWidth = std::max(barlineWidth, barLine->width());
         }
