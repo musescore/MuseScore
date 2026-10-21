@@ -853,6 +853,24 @@ TEST_F(Mnx_UnitTests, lyricExtenderUsesActualTupletDuration)
     EXPECT_EQ(info.elapsedTime + info.actualDuration, mnx::FractionValue(1, 1));
 }
 
+TEST_F(Mnx_UnitTests, lyricExtenderInvalidTargetIsIgnored)
+{
+    for (const std::string target : { "missing", "m1", "n1" }) {
+        SCOPED_TRACE(target);
+        const std::string sequences
+            =
+                R"([{"content":[
+            {"duration":{"base":"whole"},"notes":[{"id":"n1","pitch":{"step":"C","octave":5}}],
+             "lyrics":{"lines":{"1":{"text":"Ah","extender":{"target":")" + target + R"("}}}}}
+        ]}])";
+        std::unique_ptr<MasterScore> score(importMnxFromJson(singleStaffMnx({ sequences }), u"<extender>/invalid-target.mnx"));
+        ASSERT_TRUE(score);
+        const ChordRest* first = toChordRest(score->firstMeasure()->first(SegmentType::ChordRest)->element(0));
+        ASSERT_EQ(first->lyrics().size(), size_t(1));
+        EXPECT_EQ(first->lyrics()[0]->ticks(), Fraction(0, 1));
+    }
+}
+
 TEST_F(Mnx_UnitTests, navigationTypesRoundTrip)
 {
     const std::vector<std::pair<mnx::JumpType, JumpType> > jumps {

@@ -258,9 +258,12 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
 {
     auto applyExtender = [&](const mnx::sequence::EventLyricLine& line, Lyrics* lyric) {
         if (const auto extender = line.extender(); extender&& extender->show() && extender->target()) {
-            const auto info = mnxDocument().getEntityMap().getEventInfo(*extender->target());
-            const Fraction endTick = m_mnxMeasToTick.at(info.measureIndex)
-                                     + toMuseScoreFraction(info.elapsedTime);
+            const auto info = mnxDocument().getEntityMap().tryGetEventInfo(*extender->target());
+            if (!info) {
+                return;
+            }
+            const Fraction endTick = m_mnxMeasToTick.at(info->measureIndex)
+                                     + toMuseScoreFraction(info->elapsedTime);
             // Lyrics::ticks() measures from the lyric's chord onset to the target chord's onset.
             if (endTick >= cr->tick()) {
                 lyric->setTicks(endTick == cr->tick() ? Lyrics::TEMP_MELISMA_TICKS : endTick - cr->tick());
