@@ -30,6 +30,7 @@
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/rest.h"
@@ -789,4 +790,109 @@ TEST_F(Mnx_UnitTests, allSpaceTupletBecomesGap)
     // The skipped grace note is not attached to either neighbor.
     ASSERT_TRUE(first->isChord());
     EXPECT_TRUE(toChord(first)->graceNotes().empty());
+}
+
+TEST_F(Mnx_UnitTests, noteSlidesRoundTrip)
+{
+    const std::string sequences
+        =
+            R"([{"content":[{"duration":{"base":"whole"},"notes":[
+        {"pitch":{"step":"C","octave":5},"markings":{"slideIn":{"type":"scoop"},"slideOut":{"type":"falloff"}}},
+        {"pitch":{"step":"E","octave":5},"markings":{"slideIn":{"type":"plop"},"slideOut":{"type":"doit"}}}
+    ]}]}])";
+    std::unique_ptr<MasterScore> score(importMnxFromJson(singleStaffMnx({ sequences }), u"<slides>/slides.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+    const std::string json = exportMnxJson(score.get());
+    auto doc = mnx::Document::create(json.data(), json.size());
+    ASSERT_TRUE(mnx::validation::schemaValidate(doc));
+    const auto event = doc.parts()[0].measures()[0].sequences()[0].content()[0].get<mnx::sequence::Event>();
+    ASSERT_TRUE(event.notes());
+    const auto notes = *event.notes();
+    ASSERT_EQ(notes.size(), size_t(2));
+    ASSERT_TRUE(notes[0].markings());
+    ASSERT_TRUE(notes[1].markings());
+    EXPECT_EQ(notes[0].markings()->slideIn()->type(), mnx::SlideIntoNoteType::Scoop);
+    EXPECT_EQ(notes[0].markings()->slideOut()->type(), mnx::SlideOutOfNoteType::Falloff);
+    EXPECT_EQ(notes[1].markings()->slideIn()->type(), mnx::SlideIntoNoteType::Plop);
+    EXPECT_EQ(notes[1].markings()->slideOut()->type(), mnx::SlideOutOfNoteType::Doit);
+}
+
+TEST_F(Mnx_UnitTests, lyricExtenderUsesActualTupletDuration)
+{
+    const std::string sequences
+        =
+            R"([{"content":[
+        {"duration":{"base":"half"},"notes":[{"pitch":{"step":"C","octave":5}}],
+         "lyrics":{"lines":{"1":{"text":"Ah","extender":{"target":"last"}},"2":{"text":"Oh"}}}},
+        {"type":"tuplet","inner":{"duration":{"base":"quarter"},"multiple":3},
+         "outer":{"duration":{"base":"quarter"},"multiple":2},"content":[
+            {"duration":{"base":"quarter"},"notes":[{"pitch":{"step":"D","octave":5}}]},
+            {"duration":{"base":"quarter"},"notes":[{"pitch":{"step":"E","octave":5}}]},
+            {"id":"last","duration":{"base":"quarter"},"notes":[{"pitch":{"step":"F","octave":5}}]}
+        ]}
+    ]}])";
+    std::unique_ptr<MasterScore> score(importMnxFromJson(singleStaffMnx({ sequences }), u"<extender>/lyrics.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+    const ChordRest* first = toChordRest(score->firstMeasure()->first(SegmentType::ChordRest)->element(0));
+    ASSERT_EQ(first->lyrics().size(), size_t(2));
+    EXPECT_EQ(first->lyrics()[0]->ticks(), Fraction(5, 6));
+    const std::string json = exportMnxJson(score.get());
+    auto doc = mnx::Document::create(json.data(), json.size());
+    ASSERT_TRUE(mnx::validation::schemaValidate(doc));
+    doc.buildEntityMap();
+    const auto event = doc.parts()[0].measures()[0].sequences()[0].content()[0].get<mnx::sequence::Event>();
+    ASSERT_TRUE(doc.mnx().support());
+    EXPECT_TRUE(doc.mnx().support()->useLyricExtenders());
+    EXPECT_FALSE(event.lyrics()->lines()->at("2").extender());
+    const auto line = event.lyrics()->lines()->at("1");
+    ASSERT_TRUE(line.extender());
+    ASSERT_TRUE(line.extender()->target());
+    const auto info = doc.getEntityMap().getEventInfo(*line.extender()->target());
+    EXPECT_EQ(info.elapsedTime + info.actualDuration, mnx::FractionValue(1, 1));
+}
+
+TEST_F(Mnx_UnitTests, navigationTypesRoundTrip)
+{
+    const std::vector<std::pair<mnx::JumpType, JumpType> > jumps {
+        { mnx::JumpType::Dc, JumpType::DC },
+        { mnx::JumpType::DcAlFine, JumpType::DC_AL_FINE },
+        { mnx::JumpType::DcAlCoda, JumpType::DC_AL_CODA },
+        { mnx::JumpType::DsAlCoda, JumpType::DS_AL_CODA },
+        { mnx::JumpType::DsAlFine, JumpType::DS_AL_FINE },
+        { mnx::JumpType::Segno, JumpType::DS }
+    };
+    for (const auto& [mnxType, msType] : jumps) {
+        EXPECT_EQ(toMuseScoreJumpType(mnxType), msType);
+        EXPECT_EQ(toMnxJumpType(msType), mnxType);
+    }
+}
+
+TEST_F(Mnx_UnitTests, codaNavigationAndGlobalCaesuraRoundTrip)
+{
+    const std::string sequence = R"([{"content":[{"duration":{"base":"whole"},"notes":[{"pitch":{"step":"C","octave":5}}]}]}])";
+    const std::string input = singleStaffMnx({ sequence, sequence, sequence, sequence });
+    auto source = mnx::Document::create(input.data(), input.size());
+    auto measures = source.global().measures();
+    measures[0].ensure_segno(mnx::FractionValue(0, 1));
+    measures[1].ensure_jump(mnx::JumpType::ToCoda, mnx::FractionValue(1, 1));
+    measures[2].ensure_jump(mnx::JumpType::DsAlCoda, mnx::FractionValue(1, 1));
+    measures[3].ensure_coda(mnx::FractionValue(0, 1));
+    measures[3].ensure_caesura().set_shape(mnx::CaesuraShape::Curved);
+    std::unique_ptr<MasterScore> score(importMnxFromJson(source.dump(), u"<navigation>/coda.mnx"));
+    ASSERT_TRUE(score);
+    fixupAndLayoutScore(score.get());
+    const std::string json = exportMnxJson(score.get());
+    auto doc = mnx::Document::create(json.data(), json.size());
+    ASSERT_TRUE(mnx::validation::schemaValidate(doc));
+    const auto result = doc.global().measures();
+    ASSERT_TRUE(result[0].segno());
+    ASSERT_TRUE(result[1].jump());
+    EXPECT_EQ(result[1].jump()->type(), mnx::JumpType::ToCoda);
+    ASSERT_TRUE(result[2].jump());
+    EXPECT_EQ(result[2].jump()->type(), mnx::JumpType::DsAlCoda);
+    ASSERT_TRUE(result[3].coda());
+    ASSERT_TRUE(result[3].caesura());
+    EXPECT_EQ(result[3].caesura()->shape(), mnx::CaesuraShape::Curved);
 }

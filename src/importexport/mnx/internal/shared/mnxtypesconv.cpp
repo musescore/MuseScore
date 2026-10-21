@@ -773,10 +773,13 @@ mnx::FermataSymbol toMnxFermataSymbol(SymId sym)
 }
 
 namespace {
-/// @todo Grow this table as MNX grows it.
 const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
     { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
-    { mnx::JumpType::Segno,         JumpType::DSS },
+    { mnx::JumpType::Segno,         JumpType::DS },
+    { mnx::JumpType::Dc,            JumpType::DC },
+    { mnx::JumpType::DcAlFine,      JumpType::DC_AL_FINE },
+    { mnx::JumpType::DcAlCoda,      JumpType::DC_AL_CODA },
+    { mnx::JumpType::DsAlCoda,      JumpType::DS_AL_CODA },
 };
 } // namespace
 

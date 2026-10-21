@@ -35,6 +35,7 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordline.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
@@ -255,6 +256,17 @@ void MnxImporter::buildLyricLineVerseMap()
 
 void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr)
 {
+    auto applyExtender = [&](const mnx::sequence::EventLyricLine& line, Lyrics* lyric) {
+        if (const auto extender = line.extender(); extender&& extender->show() && extender->target()) {
+            const auto info = mnxDocument().getEntityMap().getEventInfo(*extender->target());
+            const Fraction endTick = m_mnxMeasToTick.at(info.measureIndex)
+                                     + toMuseScoreFraction(info.elapsedTime);
+            // Lyrics::ticks() measures from the lyric's chord onset to the target chord's onset.
+            if (endTick >= cr->tick()) {
+                lyric->setTicks(endTick == cr->tick() ? Lyrics::TEMP_MELISMA_TICKS : endTick - cr->tick());
+            }
+        }
+    };
     /// @todo import lyric line metadata (i.e., language code) somehow?
     if (const auto lyrics = mnxEvent.lyrics()) {
         if (const auto lines = lyrics->lines()) {
@@ -279,7 +291,7 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
                     lyric->setXmlText(String::fromStdString(it->second.text()));
                     lyric->setSyllabic(toMuseScoreLyricsSyllabic(it->second.type()));
                     /// @todo styled text when supported by MNX.
-                    /// @todo word extension span, if mnx ever provides it
+                    applyExtender(it->second, lyric);
                     cr->add(lyric);
                 }
                 return;
@@ -300,7 +312,7 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
                 lyric->setVerse(verse);
                 lyric->setXmlText(String::fromStdString(line.text()));
                 lyric->setSyllabic(toMuseScoreLyricsSyllabic(line.type()));
-                /// @todo import word extension span, if mnx ever provides it
+                applyExtender(line, lyric);
                 cr->add(lyric);
             }
         }
@@ -569,6 +581,21 @@ Note* MnxImporter::createNote(const mnx::sequence::Note& mnxNote, Chord* chord, 
     nval.tpc2 = nvalTransposed.tpc2;
     note->setNval(nval);
     chord->add(note);
+    if (const auto markings = mnxNote.markings()) {
+        auto addSlide = [&](ChordLineType type) {
+            ChordLine* line = Factory::createChordLine(chord);
+            line->setTrack(note->track());
+            line->setChordLineType(type);
+            line->setNote(note);
+            chord->add(line);
+        };
+        if (const auto slide = markings->slideIn()) {
+            addSlide(slide->type() == mnx::SlideIntoNoteType::Scoop ? ChordLineType::SCOOP : ChordLineType::PLOP);
+        }
+        if (const auto slide = markings->slideOut()) {
+            addSlide(slide->type() == mnx::SlideOutOfNoteType::Falloff ? ChordLineType::FALL : ChordLineType::DOIT);
+        }
+    }
     m_mnxNoteToNote.emplace(mnxNote.pointer().to_string(), note);
     return note;
 }
@@ -1096,16 +1123,27 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
     }
 }
 
-// Whether a dynamic renders any text of its own, as opposed to being a bare hairpin.
-// DynamicAccent overrides calcHasImmediateText() to account for its prefix, suffix, and
-// residual value, but iterating a dynamics array yields the base class by value, so the
-// override only runs if the concrete type is recovered first.
-static bool calcHasImmediateText(const mnx::part::DynamicGroupBase& mnxDynamic)
+// Recover the concrete type because dynamics arrays store base wrappers by value.
+static std::optional<mnx::DynamicValue> dynamicValue(const mnx::part::DynamicGroupBase& dynamic)
 {
-    if (mnxDynamic.type() == mnx::part::DynamicAccent::ContentTypeValue) {
-        return mnxDynamic.get<mnx::part::DynamicAccent>().calcHasImmediateText();
+    if (dynamic.type() == mnx::part::DynamicAccent::ContentTypeValue) {
+        return dynamic.get<mnx::part::DynamicAccent>().value();
     }
-    return mnxDynamic.calcHasImmediateText();
+    if (dynamic.type() == mnx::part::DynamicImmediate::ContentTypeValue) {
+        return dynamic.get<mnx::part::DynamicImmediate>().value();
+    }
+    if (dynamic.type() == mnx::part::DynamicRelative::ContentTypeValue) {
+        return dynamic.get<mnx::part::DynamicRelative>().value();
+    }
+    return dynamic.get<mnx::part::DynamicGradual>().value();
+}
+
+static bool calcHasImmediateText(const mnx::part::DynamicGroupBase& dynamic)
+{
+    if (dynamic.type() == mnx::part::DynamicGradual::ContentTypeValue) {
+        return dynamic.get<mnx::part::DynamicGradual>().calcHasImmediateText();
+    }
+    return true;
 }
 
 // Describes an MNX dynamic in the terms toMuseScoreDynamicType() understands, so that a
@@ -1115,7 +1153,7 @@ static MnxDynamicMapping mnxDynamicMapping(const mnx::part::DynamicGroupBase& mn
                                            const std::optional<mnx::part::DynamicAccent>& mnxAccent)
 {
     MnxDynamicMapping mapping;
-    mapping.value = mnxDynamic.value();
+    mapping.value = dynamicValue(mnxDynamic);
     if (mnxAccent) {
         mapping.isAccent = true;
         mapping.residualValue = mnxAccent->residualValue();
@@ -1227,7 +1265,7 @@ void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, S
         for (const auto& glyph : glyphs.value()) {
             appendGlyph(glyph);
         }
-    } else if (mnxDynamic.value() || residualValue) {
+    } else if (dynamicValue(mnxDynamic) || residualValue) {
         if (!dynamicText.empty()) {
             dynamicText += u" ";
         }
@@ -1244,7 +1282,7 @@ void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, S
         if (mnxAccent) {
             appendGlyph(toMuseScoreDynamicGlyphName(mnxAccent->accentPrefix()));
         }
-        appendValueGlyphs(mnxDynamic.value());
+        appendValueGlyphs(dynamicValue(mnxDynamic));
         if (mnxAccent) {
             appendGlyph(toMuseScoreDynamicGlyphName(mnxAccent->accentSuffix()));
         }
