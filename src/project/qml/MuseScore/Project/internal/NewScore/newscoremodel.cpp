@@ -62,7 +62,7 @@ bool NewScoreModel::createScore(const QVariant& info)
         return false;
     }
 
-    projectSession()->setCurrentProject(project);
+    projectSession()->setProject(project);
 
     bool isScoreCreatedFromInstruments = options.templatePath.empty();
     updatePreferredScoreCreationMode(isScoreCreatedFromInstruments);

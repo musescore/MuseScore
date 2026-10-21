@@ -65,7 +65,7 @@ protected:
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
 
         // An opened score with no pending changes, and silence, unless a test says otherwise.
-        ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(m_project));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
         ON_CALL(*m_playbackState, isPlaying()).WillByDefault(Return(false));
         ON_CALL(*m_project, isNeedSave()).WillByDefault(Return(false));
 
@@ -140,11 +140,11 @@ protected:
 TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NoProject_Succeeds)
 {
     //! [GIVEN] No score is opened
-    ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(nullptr));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(nullptr));
 
     //! [THEN] There is nothing to ask about, and nothing to let go of
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
-    EXPECT_CALL(*m_projectSession, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
 
     //! [WHEN] Closing...
     Ret ret = closeOpenedProject();
@@ -165,7 +165,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_SavedScore_ClosesAndGoesHom
     //! the score is let go of, and the home page takes its place
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_interactive, closeAllDialogs()).Times(1);
-    EXPECT_CALL(*m_projectSession, setCurrentProject(INotationProjectPtr())).Times(1);
+    EXPECT_CALL(*m_projectSession, setProject(INotationProjectPtr())).Times(1);
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(1);
 
     //! [WHEN] Closing...
@@ -184,7 +184,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_WaitsForTheDialogsToClose)
     });
 
     //! [THEN] The score is not pulled out from under a window that is still on its way out
-    EXPECT_CALL(*m_projectSession, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
     //! [WHEN] Closing...
@@ -204,7 +204,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotGoingHome_LeavesThePageA
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
     //! [THEN] ...but the score is still let go of
-    EXPECT_CALL(*m_projectSession, setCurrentProject(INotationProjectPtr())).Times(1);
+    EXPECT_CALL(*m_projectSession, setProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing without going home...
     Ret ret = closeOpenedProject(false);
@@ -247,7 +247,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserCancels_
 
     //! [THEN] Nothing is saved, and the score stays where it was
     EXPECT_CALL(*m_saveScenario, saveProject(_)).Times(0);
-    EXPECT_CALL(*m_projectSession, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
     EXPECT_CALL(*m_interactive, closeAllDialogs()).Times(0);
     EXPECT_CALL(*m_interactive, open(IsHomePage())).Times(0);
 
@@ -266,7 +266,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserDeclines
 
     //! [THEN] The changes are not written, and the score is closed regardless
     EXPECT_CALL(*m_saveScenario, saveProject(_)).Times(0);
-    EXPECT_CALL(*m_projectSession, setCurrentProject(INotationProjectPtr())).Times(1);
+    EXPECT_CALL(*m_projectSession, setProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing...
     Ret ret = closeOpenedProject();
@@ -283,7 +283,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_UserSaves_Sa
     //! [THEN] The score is saved over itself - an empty path is what tells the save to keep the file it has -
     //! and only then let go of
     EXPECT_CALL(*m_saveScenario, saveProject(io::path_t())).Times(1);
-    EXPECT_CALL(*m_projectSession, setCurrentProject(INotationProjectPtr())).Times(1);
+    EXPECT_CALL(*m_projectSession, setProject(INotationProjectPtr())).Times(1);
 
     //! [WHEN] Closing...
     Ret ret = closeOpenedProject();
@@ -298,7 +298,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_UnsavedChanges_SaveFails_Ke
     givenSaveFinishesWith(make_ret(Ret::Code::UnknownError));
 
     //! [THEN] The score is not let go of, so that the work is not lost with it
-    EXPECT_CALL(*m_projectSession, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
 
     //! [WHEN] Closing...
     Ret ret = closeOpenedProject();

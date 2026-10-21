@@ -69,7 +69,7 @@ void LayoutPanelContextMenuModel::handleMenuItem(const QString& itemId)
 void LayoutPanelContextMenuModel::updateMenu()
 {
     INotationPtr notation = projectSession()->currentNotation();
-    m_masterNotation = projectSession()->currentMasterNotation();
+    m_masterNotation = projectSession()->masterNotation();
 
     if (!m_masterNotation || !notation) {
         clear();

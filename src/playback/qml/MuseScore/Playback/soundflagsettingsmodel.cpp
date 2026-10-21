@@ -397,11 +397,11 @@ bool SoundFlagSettingsModel::updateStaffText()
 
 project::IProjectAudioSettingsPtr SoundFlagSettingsModel::audioSettings() const
 {
-    IF_ASSERT_FAILED(projectSession()->currentProject()) {
+    IF_ASSERT_FAILED(projectSession()->project()) {
         return nullptr;
     }
 
-    return projectSession()->currentProject()->audioSettings();
+    return projectSession()->project()->audioSettings();
 }
 
 const AudioInputParams& SoundFlagSettingsModel::currentAudioInputParams() const

@@ -675,7 +675,7 @@ void MixerPanelModel::updateOutputResourceItemCount()
 
 INotationProjectPtr MixerPanelModel::currentProject() const
 {
-    return context()->currentProject();
+    return context()->project();
 }
 
 IProjectAudioSettingsPtr MixerPanelModel::audioSettings() const

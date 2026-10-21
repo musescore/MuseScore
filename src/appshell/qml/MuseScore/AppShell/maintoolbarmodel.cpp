@@ -114,7 +114,7 @@ void MainToolBarModel::load()
 
     updateNotationPageItem();
 
-    context()->currentProjectChanged().onNotify(this, [this]() {
+    context()->projectChanged().onNotify(this, [this]() {
         updateNotationPageItem();
     });
 }
@@ -143,7 +143,7 @@ void MainToolBarModel::updateNotationPageItem()
 
         if (isNotationPageUri(item[URI_KEY].toString())) {
             item[URI_KEY] = QString::fromStdString(openProjectScenario()->resolveNotationPageUri().toString());
-            item[IS_TITLE_BOLD_KEY] = context()->currentProject() != nullptr;
+            item[IS_TITLE_BOLD_KEY] = context()->project() != nullptr;
 
             QModelIndex modelIndex = index(i);
             emit dataChanged(modelIndex, modelIndex, { UriRole, IsTitleBoldRole });

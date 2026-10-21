@@ -35,12 +35,12 @@ class IProjectSession : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IProjectSession() = default;
 
-    virtual void setCurrentProject(const project::INotationProjectPtr& project) = 0;
-    virtual project::INotationProjectPtr currentProject() const = 0;
-    virtual muse::async::Notification currentProjectChanged() const = 0;
+    virtual void setProject(const project::INotationProjectPtr& project) = 0;
+    virtual project::INotationProjectPtr project() const = 0;
+    virtual muse::async::Notification projectChanged() const = 0;
 
-    virtual notation::IMasterNotationPtr currentMasterNotation() const = 0;
-    virtual muse::async::Notification currentMasterNotationChanged() const = 0;
+    virtual notation::IMasterNotationPtr masterNotation() const = 0;
+    virtual muse::async::Notification masterNotationChanged() const = 0;
 
     virtual void setCurrentNotation(const notation::INotationPtr& notation) = 0;
     virtual notation::INotationPtr currentNotation() const = 0;

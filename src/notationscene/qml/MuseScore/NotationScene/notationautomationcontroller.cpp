@@ -1230,7 +1230,7 @@ AutomationType NotationAutomationController::currentAutomationType() const
 
 INotationAutomationPtr NotationAutomationController::automation() const
 {
-    const IMasterNotationPtr masterNotation = projectSession()->currentMasterNotation();
+    const IMasterNotationPtr masterNotation = projectSession()->masterNotation();
     return masterNotation ? masterNotation->automation() : nullptr;
 }
 

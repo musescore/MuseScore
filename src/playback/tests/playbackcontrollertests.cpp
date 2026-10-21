@@ -65,9 +65,9 @@ protected:
 
         modularity::globalIoc()->registerExport<IPlaybackConfiguration>(TEST_MODULE, m_configuration);
 
-        ON_CALL(*m_projectSession, currentProjectChanged()).WillByDefault(Return(m_currentProjectChanged));
+        ON_CALL(*m_projectSession, projectChanged()).WillByDefault(Return(m_currentProjectChanged));
         ON_CALL(*m_projectSession, currentNotationChanged()).WillByDefault(Return(m_currentNotationChanged));
-        ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(project::INotationProjectPtr()));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(project::INotationProjectPtr()));
         ON_CALL(*m_projectSession, currentNotation()).WillByDefault(Return(notation::INotationPtr()));
 
         //! NOTE The audio context stays inited until a test resolves it, as it is in the app:
@@ -113,16 +113,16 @@ protected:
 
     void openProject()
     {
-        ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(project::INotationProjectPtr(m_project)));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(project::INotationProjectPtr(m_project)));
 
-        //! NOTE ProjectSession::setCurrentProject notifies in this order
+        //! NOTE ProjectSession::setProject notifies in this order
         m_currentProjectChanged.notify();
         m_currentNotationChanged.notify();
     }
 
     void closeProject()
     {
-        ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(project::INotationProjectPtr()));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(project::INotationProjectPtr()));
 
         m_currentProjectChanged.notify();
         m_currentNotationChanged.notify();

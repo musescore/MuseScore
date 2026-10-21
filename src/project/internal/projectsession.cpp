@@ -36,7 +36,7 @@ ProjectSession::ProjectSession()
 {
 }
 
-void ProjectSession::setCurrentProject(const INotationProjectPtr& project)
+void ProjectSession::setProject(const INotationProjectPtr& project)
 {
     if (m_currentProject == project) {
         return;
@@ -70,22 +70,22 @@ void ProjectSession::setCurrentProject(const INotationProjectPtr& project)
     m_currentNotationChanged.notify();
 }
 
-INotationProjectPtr ProjectSession::currentProject() const
+INotationProjectPtr ProjectSession::project() const
 {
     return m_currentProject;
 }
 
-Notification ProjectSession::currentProjectChanged() const
+Notification ProjectSession::projectChanged() const
 {
     return m_currentProjectChanged;
 }
 
-IMasterNotationPtr ProjectSession::currentMasterNotation() const
+IMasterNotationPtr ProjectSession::masterNotation() const
 {
     return m_currentProject ? m_currentProject->masterNotation() : nullptr;
 }
 
-Notification ProjectSession::currentMasterNotationChanged() const
+Notification ProjectSession::masterNotationChanged() const
 {
     //! NOTE Same as project
     return m_currentProjectChanged;

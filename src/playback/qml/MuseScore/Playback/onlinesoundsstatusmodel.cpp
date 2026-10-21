@@ -66,7 +66,7 @@ void OnlineSoundsStatusModel::load()
         onOnlineSoundsChanged();
     });
 
-    projectSession()->currentMasterNotationChanged().onNotify(this, [this]() {
+    projectSession()->masterNotationChanged().onNotify(this, [this]() {
         updateManualProcessingAllowed();
     });
 
@@ -169,7 +169,7 @@ void OnlineSoundsStatusModel::updateManualProcessingAllowed(bool enableByDefault
         return;
     }
 
-    IMasterNotationPtr master = projectSession()->currentMasterNotation();
+    IMasterNotationPtr master = projectSession()->masterNotation();
     if (!master) {
         m_tracksDataChanged.disconnect(this);
         setManualProcessingAllowed(false);

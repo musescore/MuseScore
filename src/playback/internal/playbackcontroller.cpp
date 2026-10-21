@@ -105,12 +105,12 @@ void PlaybackController::init()
         setupPlaybackIfNeed();
     });
 
-    projectSession()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         if (m_isPlaybackInited) {
             resetPlayback();
         }
 
-        m_needSetupPlayback = projectSession()->currentProject() != nullptr;
+        m_needSetupPlayback = projectSession()->project() != nullptr;
 
         if (m_needSetupPlayback) {
             m_loadingProgress.start();
@@ -1103,7 +1103,7 @@ void PlaybackController::disableLoop()
 
 mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
 {
-    INotationProjectPtr project = projectSession()->currentProject();
+    INotationProjectPtr project = projectSession()->project();
     IF_ASSERT_FAILED(project) {
         return nullptr;
     }

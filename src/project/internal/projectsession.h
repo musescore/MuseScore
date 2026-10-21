@@ -36,12 +36,12 @@ public:
 
     ProjectSession();
 
-    void setCurrentProject(const project::INotationProjectPtr& project) override;
-    project::INotationProjectPtr currentProject() const override;
-    muse::async::Notification currentProjectChanged() const override;
+    void setProject(const project::INotationProjectPtr& project) override;
+    project::INotationProjectPtr project() const override;
+    muse::async::Notification projectChanged() const override;
 
-    notation::IMasterNotationPtr currentMasterNotation() const override;
-    muse::async::Notification currentMasterNotationChanged() const override;
+    notation::IMasterNotationPtr masterNotation() const override;
+    muse::async::Notification masterNotationChanged() const override;
 
     void setCurrentNotation(const notation::INotationPtr& notation) override;
     notation::INotationPtr currentNotation() const override;

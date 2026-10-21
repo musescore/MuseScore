@@ -724,7 +724,7 @@ INotationPtr NotationActionController::currentNotation() const
 
 IMasterNotationPtr NotationActionController::currentMasterNotation() const
 {
-    return projectSession()->currentMasterNotation();
+    return projectSession()->masterNotation();
 }
 
 INotationInteractionPtr NotationActionController::currentNotationInteraction() const
@@ -749,7 +749,7 @@ muse::async::Notification NotationActionController::currentNotationChanged() con
 
 muse::async::Notification NotationActionController::currentMasterNotationChanged() const
 {
-    return projectSession()->currentMasterNotationChanged();
+    return projectSession()->masterNotationChanged();
 }
 
 INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
@@ -2757,7 +2757,7 @@ bool NotationActionController::isNotEditingElement() const
 
 void NotationActionController::checkForScoreCorruptions()
 {
-    project::INotationProjectPtr project = projectSession()->currentProject();
+    project::INotationProjectPtr project = projectSession()->project();
     if (!project) {
         return;
     }

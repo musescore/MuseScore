@@ -28,7 +28,7 @@ using namespace mu::appshell;
 
 void ExtensionContextResolver::init()
 {
-    projectSession()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         m_contextChanged.notify();
     });
 }
@@ -36,7 +36,7 @@ void ExtensionContextResolver::init()
 bool ExtensionContextResolver::isContextAllowed(const std::string& context) const
 {
     if (context == muse::extensions::PROJECT_OPENED_CONTEXT) {
-        return projectSession()->currentProject() != nullptr;
+        return projectSession()->project() != nullptr;
     }
 
     return true;

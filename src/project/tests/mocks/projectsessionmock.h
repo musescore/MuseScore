@@ -30,12 +30,12 @@ namespace mu::project {
 class ProjectSessionMock : public IProjectSession
 {
 public:
-    MOCK_METHOD(void, setCurrentProject, (const project::INotationProjectPtr& project), (override));
-    MOCK_METHOD(project::INotationProjectPtr, currentProject, (), (const, override));
-    MOCK_METHOD(muse::async::Notification, currentProjectChanged, (), (const, override));
+    MOCK_METHOD(void, setProject, (const project::INotationProjectPtr& project), (override));
+    MOCK_METHOD(project::INotationProjectPtr, project, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, projectChanged, (), (const, override));
 
-    MOCK_METHOD(notation::IMasterNotationPtr, currentMasterNotation, (), (const, override));
-    MOCK_METHOD(muse::async::Notification, currentMasterNotationChanged, (), (const, override));
+    MOCK_METHOD(notation::IMasterNotationPtr, masterNotation, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, masterNotationChanged, (), (const, override));
 
     MOCK_METHOD(void, setCurrentNotation, (const notation::INotationPtr& notation), (override));
     MOCK_METHOD(notation::INotationPtr, currentNotation, (), (const, override));

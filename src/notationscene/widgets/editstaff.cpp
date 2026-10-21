@@ -512,7 +512,7 @@ INotationPtr EditStaff::notation() const
 
 IMasterNotationPtr EditStaff::masterNotation() const
 {
-    return projectSession()->currentMasterNotation();
+    return projectSession()->masterNotation();
 }
 
 INotationPartsPtr EditStaff::notationParts() const

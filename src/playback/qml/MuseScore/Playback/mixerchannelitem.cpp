@@ -543,7 +543,7 @@ void MixerChannelItem::setMuted(bool mute)
 
 mu::notation::INotationPlaybackPtr MixerChannelItem::notationPlayback() const
 {
-    project::INotationProjectPtr project = context()->currentProject();
+    project::INotationProjectPtr project = context()->project();
     return project ? project->masterNotation()->playback() : nullptr;
 }
 
@@ -552,7 +552,7 @@ void MixerChannelItem::updateHasAutomationFlags()
     bool hasVolumeAutomation = false;
     bool hasBalanceAutomation = false;
 
-    INotationProjectPtr project = context()->currentProject();
+    INotationProjectPtr project = context()->project();
     const notation::AutomationDataConstPtr automationData
         = (project && m_instrumentTrackId.isValid()) ? project->masterNotation()->automation()->automationData() : nullptr;
 
