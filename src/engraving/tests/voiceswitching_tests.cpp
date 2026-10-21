@@ -211,7 +211,7 @@ TEST_F(Engraving_VoiceSwitchingTests, voicesSwitchingGapRests)
 
     //! [WHEN] The last note of the measure is selected and moved to voice one
     score->select(chord->upNote());
-    score->startCmd(TranslatableString("undoableAction", "Change voice"));
+    score->startCmd(TranslatableString::untranslatable("Change voice"));
     EditVoice::changeSelectedElementsVoice(score->transactionManager()->currentOrDummyTransaction(), score, 1);
     score->endCmd();
 
