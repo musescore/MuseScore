@@ -2368,11 +2368,12 @@ void Score::adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km)
             if (staff->isDrumStaff(tick)) {
                 continue;
             }
+            Part* part = staff->originPart(tick);
             KeySigEvent key = i->second;
-            Interval v = staff->part()->instrument(tick)->transpose();
+            Interval v = part->instrument(tick)->transpose();
             if (!v.isZero() && !style().styleB(Sid::concertPitch) && !key.isAtonal()) {
                 v.flip();
-                key.setKey(Transpose::transposeKey(key.concertKey(), v, staff->part()->preferSharpFlat()));
+                key.setKey(Transpose::transposeKey(key.concertKey(), v, part->preferSharpFlat()));
             }
             staff->setKey(tick, key);
 
