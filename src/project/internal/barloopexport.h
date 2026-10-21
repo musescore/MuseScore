@@ -43,5 +43,5 @@ struct BarLoopPrepared {
 };
 
 std::unique_ptr<BarLoopPrepared> prepareBarLoopExport(notation::IMasterNotationPtr master, const notation::INotationPtrList& notations,
-                                                       const SelectedBarsExport& selected);
+                                                      const SelectedBarsExport& selected);
 }
