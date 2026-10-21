@@ -42,7 +42,7 @@ void PaletteCommandsState::init()
         return;
     }
 
-    projectSession()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         updateCommandStates();
     });
 
@@ -63,7 +63,7 @@ void PaletteCommandsState::init()
 
 void PaletteCommandsState::deinit()
 {
-    projectSession()->currentProjectChanged().disconnect(this);
+    projectSession()->projectChanged().disconnect(this);
 }
 
 void PaletteCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -108,7 +108,7 @@ async::Channel<Command, CommandState> PaletteCommandsState::commandStateChanged(
 
 bool PaletteCommandsState::isProjectOpened() const
 {
-    if (projectSession()->currentProject()) {
+    if (projectSession()->project()) {
         return true;
     }
 

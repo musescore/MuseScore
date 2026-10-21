@@ -98,7 +98,7 @@ protected:
         m_notation = std::make_shared<NiceMock<notation::NotationMock> >();
         m_interaction = std::make_shared<NiceMock<notation::NotationInteractionMock> >();
 
-        ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(m_project));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
         ON_CALL(*m_project, masterNotation()).WillByDefault(Return(m_masterNotation));
         ON_CALL(*m_masterNotation, notation()).WillByDefault(Return(m_notation));
         ON_CALL(*m_notation, interaction()).WillByDefault(Return(m_interaction));
@@ -532,7 +532,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_Forced_SkipsTheCanSaveCheck)
 TEST_F(SaveProjectScenarioTests, SaveProject_NoOpenScore_IsRefusedInsteadOfCrashing)
 {
     //! [GIVEN] No score open at all...
-    ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(nullptr));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(nullptr));
 
     //! [THEN] Nothing is asked and nothing is written
     EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
@@ -550,7 +550,7 @@ TEST_F(SaveProjectScenarioTests, ShareAudio_NoOpenScore_IsRefusedInsteadOfCrashi
     givenReachableCloud();
 
     //! [GIVEN] ...and no score open at all
-    ON_CALL(*m_projectSession, currentProject()).WillByDefault(Return(nullptr));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(nullptr));
 
     //! [THEN] Nothing is asked and nothing is uploaded
     EXPECT_CALL(*m_interactive, open(IsSaveToCloudDialog())).Times(0);

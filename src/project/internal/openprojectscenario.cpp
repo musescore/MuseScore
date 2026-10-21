@@ -300,7 +300,7 @@ Promise<Ret> OpenProjectScenario::openProject(const muse::io::path_t& givenPath,
 
         //! Step 4. Check, if a any project is already open in the current window,
         //! then create a new instance
-        if (projectSession()->currentProject()) {
+        if (projectSession()->project()) {
             QStringList args;
             args << actualPath.toQString();
 
@@ -417,7 +417,7 @@ Promise<Ret> OpenProjectScenario::doOpenProject(const muse::io::path_t& filePath
             recentFilesController()->prependRecentFile(makeRecentFile(project));
         }
 
-        projectSession()->setCurrentProject(project);
+        projectSession()->setProject(project);
 
         return resolve(finishOpening());
     });
@@ -445,7 +445,7 @@ Promise<Ret> OpenProjectScenario::doOpenCloudProject(const muse::io::path_t& fil
             recentFilesController()->prependRecentFile(makeRecentFile(project));
         }
 
-        projectSession()->setCurrentProject(project);
+        projectSession()->setProject(project);
 
         return resolve(finishOpening());
     });
@@ -465,7 +465,7 @@ Promise<Ret> OpenProjectScenario::doOpenCloudProjectOffline(const muse::io::path
         project->setCloudInfo(info);
 
         recentFilesController()->prependRecentFile(makeRecentFile(project));
-        projectSession()->setCurrentProject(project);
+        projectSession()->setProject(project);
 
         return resolve(finishOpening());
     });
@@ -507,7 +507,7 @@ Ret OpenProjectScenario::finishOpening()
 
 Uri OpenProjectScenario::resolveNotationPageUri() const
 {
-    INotationProjectPtr project = projectSession()->currentProject();
+    INotationProjectPtr project = projectSession()->project();
     if (!project || !project->cloudInfo().isValid()) {
         return NOTATION_PAGE_URI;
     }
@@ -701,7 +701,7 @@ Promise<Ret> OpenProjectScenario::openScoreFromMuseScoreCom(const QUrl& url, int
         }
 
         // Check if this instance already has an open project
-        if (projectSession()->currentProject()) {
+        if (projectSession()->project()) {
             QStringList args;
             args << url.toString();
 
@@ -745,7 +745,7 @@ Ret OpenProjectScenario::openPageIfNeed(Uri pageUri)
 
 bool OpenProjectScenario::isProjectOpened(const muse::io::path_t& scorePath) const
 {
-    auto project = projectSession()->currentProject();
+    auto project = projectSession()->project();
     if (!project) {
         return false;
     }
@@ -774,7 +774,7 @@ Promise<Ret> OpenProjectScenario::revertToLastSaved()
 {
     TRACEFUNC;
 
-    auto currentProject = projectSession()->currentProject();
+    auto currentProject = projectSession()->project();
     if (!currentProject) {
         return resolvedPromise(make_ret(Err::NoProjectError));
     }

@@ -223,7 +223,7 @@ void PartListModel::doRemovePart(int partIndex)
     endRemoveRows();
 
     if (isCurrentNotation) {
-        context()->setCurrentNotation(context()->currentMasterNotation()->notation());
+        context()->setCurrentNotation(context()->masterNotation()->notation());
     }
 }
 
@@ -366,5 +366,5 @@ bool PartListModel::isExcerptIndexValid(int index) const
 
 IMasterNotationPtr PartListModel::masterNotation() const
 {
-    return context()->currentMasterNotation();
+    return context()->masterNotation();
 }

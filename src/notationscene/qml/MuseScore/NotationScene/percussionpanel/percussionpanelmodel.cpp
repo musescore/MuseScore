@@ -698,7 +698,7 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
 
 const mu::project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
 {
-    return projectSession()->currentProject() ? projectSession()->currentProject()->audioSettings() : nullptr;
+    return projectSession()->project() ? projectSession()->project()->audioSettings() : nullptr;
 }
 
 const INotationPtr PercussionPanelModel::notation() const

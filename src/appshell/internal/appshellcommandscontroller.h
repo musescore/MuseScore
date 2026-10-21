@@ -45,7 +45,6 @@
 #include "istartupscenario.h"
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
-#include "project/iprojectsession.h"
 #include "playback/iplaybackcontroller.h"
 
 #include "iappshellcommandscontroller.h"

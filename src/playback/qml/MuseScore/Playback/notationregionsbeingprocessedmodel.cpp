@@ -138,7 +138,7 @@ QHash<int, QByteArray> NotationRegionsBeingProcessedModel::roleNames() const
 void NotationRegionsBeingProcessedModel::load()
 {
     clear();
-    projectSession()->currentMasterNotationChanged().onNotify(this, [this]() {
+    projectSession()->masterNotationChanged().onNotify(this, [this]() {
         clear();
     });
 
@@ -332,7 +332,7 @@ void NotationRegionsBeingProcessedModel::onProgressStarted(const InstrumentTrack
 
 void NotationRegionsBeingProcessedModel::onChunksReceived(const InstrumentTrackId& instrumentTrackId, const ChunkInfoList& chunks)
 {
-    const notation::IMasterNotationPtr master = projectSession()->currentMasterNotation();
+    const notation::IMasterNotationPtr master = projectSession()->masterNotation();
     if (!master) {
         return;
     }

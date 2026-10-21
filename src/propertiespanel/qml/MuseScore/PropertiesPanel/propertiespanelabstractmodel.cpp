@@ -890,7 +890,7 @@ void PropertiesPanelAbstractModel::loadPropertyItem(PropertyItem* propertyItem, 
 
 bool PropertiesPanelAbstractModel::isNotationExisting() const
 {
-    return context()->currentProject() != nullptr;
+    return context()->project() != nullptr;
 }
 
 INotationStylePtr PropertiesPanelAbstractModel::style() const

@@ -120,7 +120,7 @@ QString FileIO::projectPath()
         return QString();
     }
 
-    project::INotationProjectPtr project = projectSession()->currentProject();
+    project::INotationProjectPtr project = projectSession()->project();
     if (!project) {
         return QString();
     }

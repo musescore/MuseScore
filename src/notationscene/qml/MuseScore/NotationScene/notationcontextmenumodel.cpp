@@ -532,7 +532,7 @@ INotationSelectionPtr NotationContextMenuModel::selection() const
 
 INotationAutomationPtr NotationContextMenuModel::automation() const
 {
-    IMasterNotationPtr masterNotation = projectSession()->currentMasterNotation();
+    IMasterNotationPtr masterNotation = projectSession()->masterNotation();
     return masterNotation ? masterNotation->automation() : nullptr;
 }
 

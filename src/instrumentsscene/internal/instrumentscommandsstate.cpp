@@ -40,7 +40,7 @@ void InstrumentsCommandsState::init()
         return;
     }
 
-    projectSession()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         updateCommandStates();
     });
 
@@ -49,7 +49,7 @@ void InstrumentsCommandsState::init()
 
 void InstrumentsCommandsState::deinit()
 {
-    projectSession()->currentProjectChanged().disconnect(this);
+    projectSession()->projectChanged().disconnect(this);
 }
 
 void InstrumentsCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -91,7 +91,7 @@ async::Channel<Command, CommandState> InstrumentsCommandsState::commandStateChan
 
 bool InstrumentsCommandsState::isProjectOpened() const
 {
-    if (!projectSession()->currentProject()) {
+    if (!projectSession()->project()) {
         return false;
     }
 

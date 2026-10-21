@@ -93,8 +93,8 @@ void ProjectActionsController::init()
     });
 
     // listen changes
-    projectSession()->currentProjectChanged().onNotify(this, [this]() {
-        auto project = projectSession()->currentProject();
+    projectSession()->projectChanged().onNotify(this, [this]() {
+        auto project = projectSession()->project();
         if (project) {
             project->needSaveChanged().onNotify(this, [this]() {
                 m_needSaveChanged.notify();
@@ -117,7 +117,7 @@ bool ProjectActionsController::hasProject() const
 
 muse::async::Notification ProjectActionsController::hasProjectChanged() const
 {
-    return projectSession()->currentProjectChanged();
+    return projectSession()->projectChanged();
 }
 
 bool ProjectActionsController::needSave() const
@@ -171,7 +171,7 @@ muse::async::Notification ProjectActionsController::hasSelectionChanged() const
 
 INotationProjectPtr ProjectActionsController::currentNotationProject() const
 {
-    return projectSession()->currentProject();
+    return projectSession()->project();
 }
 
 IMasterNotationPtr ProjectActionsController::currentMasterNotation() const
@@ -214,7 +214,7 @@ muse::Ret ProjectActionsController::openProject(const muse::rcommand::Params& pa
 
 bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath) const
 {
-    auto project = projectSession()->currentProject();
+    auto project = projectSession()->project();
     if (!project) {
         return false;
     }
@@ -229,7 +229,7 @@ bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath
 
 bool ProjectActionsController::isAnyProjectOpened() const
 {
-    auto project = projectSession()->currentProject();
+    auto project = projectSession()->project();
     if (project) {
         return true;
     }
@@ -253,7 +253,7 @@ muse::Ret ProjectActionsController::newProject()
         setBusy(BusyStatus::Opening, false);
     };
 
-    if (projectSession()->currentProject()) {
+    if (projectSession()->project()) {
         if (multiwindowsProvider()->isHasWindowWithoutProject()) {
             multiwindowsProvider()->activateWindowWithoutProject({ QString::fromStdString(PROJECT_NEW_COMMAND.toString()) });
             return make_ok();

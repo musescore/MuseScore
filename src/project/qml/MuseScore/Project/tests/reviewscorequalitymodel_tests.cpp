@@ -66,7 +66,7 @@ protected:
 
         m_cloudInfo.sourceUrl = QUrl(QString("test://scores/%1").arg(SCORE_ID));
 
-        ON_CALL(*m_projectSession, currentProject())
+        ON_CALL(*m_projectSession, project())
         .WillByDefault(Return(m_project));
         ON_CALL(*m_project, cloudInfo())
         .WillByDefault(ReturnRef(m_cloudInfo));

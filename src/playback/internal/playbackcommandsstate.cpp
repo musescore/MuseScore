@@ -41,7 +41,7 @@ std::string PlaybackCommandsState::moduleName() const
 
 void PlaybackCommandsState::init()
 {
-    projectSession()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         updateCommandStates();
     });
 
@@ -125,7 +125,7 @@ void PlaybackCommandsState::init()
 
 void PlaybackCommandsState::deinit()
 {
-    projectSession()->currentProjectChanged().disconnect(this);
+    projectSession()->projectChanged().disconnect(this);
     projectSession()->currentNotationChanged().disconnect(this);
     if (interactive()) {
         interactive()->opened().disconnect(this);
@@ -212,7 +212,7 @@ async::Channel<Command, CommandState> PlaybackCommandsState::commandStateChanged
 
 bool PlaybackCommandsState::isProjectOpened() const
 {
-    if (!projectSession()->currentProject()) {
+    if (!projectSession()->project()) {
         return false;
     }
 
