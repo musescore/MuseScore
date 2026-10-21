@@ -479,7 +479,7 @@ TEST_F(Engraving_BarlineTests, spanStyleUndoRedoAndStaffCopy)
     std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
     ASSERT_TRUE(score);
     score->startCmd(TranslatableString::untranslatable("Change connection style"));
-    score->staff(0)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_STYLE, static_cast<int>(BarLineSpanStyle::SOLID));
+    score->staff(0)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_STYLE, BarLineSpanStyle::SOLID);
     score->endCmd();
     EXPECT_EQ(score->staff(0)->barLineSpanStyle(), BarLineSpanStyle::SOLID);
     score->undoRedo(true, nullptr);
