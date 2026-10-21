@@ -28,12 +28,15 @@
 
 #include "modularity/ioc.h"
 #include "audio/main/iaudioconfiguration.h"
+#include "audio/main/internal/iaudiodriverfactory.h"
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
 class AudioDriverController : public IAudioDriverController, public Contextable, public async::Asyncable
 {
+public:
     GlobalInject<IAudioConfiguration> configuration;
+    GlobalInject<IAudioDriverFactory> audioDriverFactory;
     ContextInject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
@@ -71,11 +74,11 @@ public:
     async::Notification outputDeviceSampleRateChanged() const override;
 
 private:
-    IAudioDriverPtr createDriver(const std::string& name) const;
     void setNewDriver(IAudioDriverPtr newDriver);
 
     void handleOutputDeviceChange();
     bool switchToDefaultAudioDriver(IAudioDriver::Spec* activeSpec = nullptr);
+    bool reopenWithSpec(const IAudioDriver::Spec& spec);
     void updateOutputSpec();
 
     IAudioDriver::Callback m_callback;
