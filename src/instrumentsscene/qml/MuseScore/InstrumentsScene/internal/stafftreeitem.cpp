@@ -21,6 +21,8 @@
  */
 #include "stafftreeitem.h"
 
+#include "engraving/dom/part.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -53,7 +55,10 @@ void StaffTreeItem::init(const Staff* masterStaff)
     }
 
     const Staff* staff = notation()->parts()->staff(masterStaff->id());
-    bool visible = staff && staff->show();
+
+    // Not Staff::show(): that is also false while the instrument is combined onto shared staves,
+    // which the Layout panel shows on the group instead of on the instrument's own staves
+    bool visible = staff && staff->visible() && staff->part()->getProperty(Pid::VISIBLE).toBool();
 
     if (!staff) {
         staff = masterStaff;
