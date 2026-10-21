@@ -46,10 +46,15 @@ public:
     void setBrailleTable(const QString& table) override;
     QStringList brailleTableList() const override;
 
+    muse::async::Notification signDoublingChanged() const override;
+    bool signDoubling() const override;
+    void setSignDoubling(const bool enabled) override;
+
 private:
     muse::async::Notification m_braillePanelEnabledChanged;
     muse::async::Notification m_brailleTableChanged;
     muse::async::Notification m_intervalDirectionChanged;
+    muse::async::Notification m_signDoublingChanged;
 };
 }
 
