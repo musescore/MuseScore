@@ -292,6 +292,21 @@ muse::async::Notification NotationConfigurationStub::currentAutomationTypeChange
     return n;
 }
 
+AutomationUiVariant NotationConfigurationStub::automationUiVariant() const
+{
+    return AutomationUiVariant::Widget;
+}
+
+void NotationConfigurationStub::setAutomationUiVariant(AutomationUiVariant)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::automationUiVariantChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 qreal NotationConfigurationStub::scalingFromZoomPercentage(int) const
 {
     return 0.0;

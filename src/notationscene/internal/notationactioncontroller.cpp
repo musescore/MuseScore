@@ -569,6 +569,8 @@ void NotationActionController::init()
 
     registerCommand(TOGGLE_AUTOMATION_COMMAND, &Controller::toggleAutomation);
     registerCommandWithParams(SELECT_AUTOMATION_TYPE_COMMAND, &Controller::selectAutomationType);
+    registerCommand(SET_AUTOMATION_UI_TOOLBAR_COMMAND, [this]() { configuration()->setAutomationUiVariant(AutomationUiVariant::Toolbar); });
+    registerCommand(SET_AUTOMATION_UI_WIDGET_COMMAND, [this]() { configuration()->setAutomationUiVariant(AutomationUiVariant::Widget); });
 
     // TAB
     registerCommand(SET_DURATION_WHOLE_TAB_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
@@ -656,6 +658,14 @@ void NotationActionController::init()
         });
     }
 
+    // Every newly opened score starts with the default automation type
+    //! TODO: remember the last edited automation type per score
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        if (globalContext()->currentProject()) {
+            configuration()->setCurrentAutomationType(mu::engraving::AutomationType::Dynamics);
+        }
+    });
+
     // listen on state changes
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
@@ -667,6 +677,11 @@ void NotationActionController::init()
             }, Asyncable::Mode::SetReplace);
 
             interaction->noteInput()->stateChanged().onNotify(this, [this]() {
+                // Note input and automation modes are mutually exclusive (Toolbar variant only)
+                if (isToolbarAutomationUi() && isNoteInputMode() && isAutomationModeEnabled()) {
+                    currentMasterNotation()->automation()->setAutomationModeEnabled(false);
+                }
+
                 m_noteInputStateChanged.notify();
             }, Asyncable::Mode::SetReplace);
 
@@ -692,6 +707,11 @@ void NotationActionController::init()
 
             if (const IMasterNotationPtr masterNotation = notation->masterNotation()) {
                 masterNotation->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
+                    // Note input and automation modes are mutually exclusive (Toolbar variant only)
+                    if (isToolbarAutomationUi() && isAutomationModeEnabled() && isNoteInputMode()) {
+                        currentNotationNoteInput()->endNoteInput();
+                    }
+
                     m_automationModeEnabledChanged.notify();
                 }, Asyncable::Mode::SetReplace);
             }
@@ -2720,6 +2740,11 @@ bool NotationActionController::isTablatureStaff() const
 bool NotationActionController::isAutomationModeEnabled() const
 {
     return currentMasterNotation() ? currentMasterNotation()->automation()->isAutomationModeEnabled() : false;
+}
+
+bool NotationActionController::isToolbarAutomationUi() const
+{
+    return configuration()->automationUiVariant() == AutomationUiVariant::Toolbar;
 }
 
 muse::async::Notification NotationActionController::automationModeEnabledChanged() const

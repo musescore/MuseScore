@@ -66,6 +66,10 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
     Q_PROPERTY(bool automationMode READ automationMode NOTIFY automationModeChanged)
 
+    //! NOTE: one entry per system in view, in view coordinates: { x, y } is the top-left of the system's
+    //! first visible staff (at the system's first chord/rest), { bottom } is the bottom of the system
+    Q_PROPERTY(QVariantList automationWidgetAnchors READ automationWidgetAnchors NOTIFY automationWidgetAnchorsChanged)
+
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
     Q_PROPERTY(bool readOnly READ readonly WRITE setReadonly NOTIFY readonlyChanged)
@@ -157,6 +161,8 @@ public:
 
     bool automationMode() const;
 
+    QVariantList automationWidgetAnchors() const;
+
     bool isMainView() const;
     void setIsMainView(bool isMainView);
 
@@ -181,6 +187,7 @@ signals:
     void viewportChanged();
     void publishModeChanged();
     void automationModeChanged();
+    void automationWidgetAnchorsChanged();
 
     void activeFocusRequested();
 
@@ -292,6 +299,9 @@ private:
     std::unique_ptr<NotationViewInputController> m_inputController;
     QQuickItem* m_automationLinesContainer = nullptr;
     std::unique_ptr<NotationAutomationController> m_notationAutomationController;
+
+    void updateAutomationWidgetAnchors();
+    QVariantList m_automationWidgetAnchors;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<NotationRuler> m_ruler;

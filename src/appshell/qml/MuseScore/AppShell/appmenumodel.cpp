@@ -274,6 +274,11 @@ void AppMenuModel::updateUndoRedoItems()
 MenuItem* AppMenuModel::makeViewMenu()
 {
     MenuItemList viewItems {
+        makeMenu(TranslatableString::untranslatable("Automation"), {
+            makeMenuItem(SET_AUTOMATION_UI_TOOLBAR_COMMAND),
+            makeMenuItem(SET_AUTOMATION_UI_WIDGET_COMMAND)
+        }, "menu-automation-ui"),
+        makeSeparator(),
 #ifndef Q_OS_MAC
         makeMenuItem(APP_FULLSCREEN_COMMAND),
 #endif

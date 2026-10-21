@@ -37,6 +37,12 @@
 #include "engraving/automation/automationtypes.h"
 
 namespace mu::notation {
+//! NOTE: temporary, for A/B testing different ways of switching the automation type in automation mode
+enum class AutomationUiVariant : unsigned char {
+    Widget = 0,
+    Toolbar,
+};
+
 class INotationConfiguration : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(INotationConfiguration)
@@ -125,6 +131,10 @@ public:
     virtual mu::engraving::AutomationType currentAutomationType() const = 0;
     virtual void setCurrentAutomationType(mu::engraving::AutomationType type) = 0;
     virtual muse::async::Notification currentAutomationTypeChanged() const = 0;
+
+    virtual AutomationUiVariant automationUiVariant() const = 0;
+    virtual void setAutomationUiVariant(AutomationUiVariant variant) = 0;
+    virtual muse::async::Notification automationUiVariantChanged() const = 0;
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;

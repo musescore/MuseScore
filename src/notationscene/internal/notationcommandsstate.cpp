@@ -371,6 +371,10 @@ void NotationCommandsState::init()
         updateCommandStates(DEBUG_COMMANDS);
     });
 
+    notationConfiguration()->automationUiVariantChanged().onNotify(this, [this]() {
+        updateCommandStates({ SET_AUTOMATION_UI_TOOLBAR_COMMAND, SET_AUTOMATION_UI_WIDGET_COMMAND });
+    });
+
     updateCommandStates();
 }
 
@@ -389,6 +393,7 @@ void NotationCommandsState::deinit()
     controller()->notationStyleChanged().disconnect(this);
     controller()->automationModeEnabledChanged().disconnect(this);
     controller()->debuggingOptionsChanged().disconnect(this);
+    notationConfiguration()->automationUiVariantChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -509,6 +514,14 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (command == TOGGLE_AUTOMATION_COMMAND) {
         return CommandState(true, controller()->isAutomationModeEnabled());
+    }
+
+    if (command == SET_AUTOMATION_UI_TOOLBAR_COMMAND) {
+        return CommandState(true, notationConfiguration()->automationUiVariant() == AutomationUiVariant::Toolbar);
+    }
+
+    if (command == SET_AUTOMATION_UI_WIDGET_COMMAND) {
+        return CommandState(true, notationConfiguration()->automationUiVariant() == AutomationUiVariant::Widget);
     }
 
     if (muse::contains(DEBUG_COMMANDS, command)) {

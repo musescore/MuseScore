@@ -39,15 +39,37 @@ void NotationToolBarModel::load()
 
     AbstractToolBarModel::load();
 
+    updateItems();
+
+    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+        load();
+    });
+
+    notationConfiguration()->automationUiVariantChanged().onNotify(this, [this]() {
+        updateItems();
+    });
+
+    m_loaded = true;
+}
+
+void NotationToolBarModel::updateItems()
+{
     std::vector<rcommand::Command> commands = {
         OPEN_PARTS_COMMAND,
-        appshell::DOCK_TOGGLE_MIXER_COMMAND,
-        TOGGLE_AUTOMATION_COMMAND
+        appshell::DOCK_TOGGLE_MIXER_COMMAND
     };
+
+    //! NOTE: in the Toolbar variant, the automation button lives in the note input toolbar instead
+    if (notationConfiguration()->automationUiVariant() == AutomationUiVariant::Widget) {
+        commands.push_back(TOGGLE_AUTOMATION_COMMAND);
+    }
 
     ToolBarItemList items;
     for (const rcommand::Command& command : commands) {
-        ToolBarItem* item = makeItem(command);
+        //! NOTE: the command's own title ("&Parts…") is meant for the menu
+        const TranslatableString title = command == OPEN_PARTS_COMMAND ? TranslatableString("action", "Parts") : TranslatableString();
+
+        ToolBarItem* item = makeItem(command, title);
         if (!item) {
             continue;
         }
@@ -59,10 +81,4 @@ void NotationToolBarModel::load()
     }
 
     setItems(items);
-
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
-        load();
-    });
-
-    m_loaded = true;
 }

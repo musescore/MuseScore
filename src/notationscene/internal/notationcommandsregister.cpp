@@ -2961,6 +2961,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
         }),
         Decoration(rcommand::Checkable::Yes)
     },
+    CommandInfo {
+        SET_AUTOMATION_UI_TOOLBAR_COMMAND,
+        TranslatableString::untranslatable("Toolbar"),
+        TranslatableString::untranslatable("Switch automation type from the note input toolbar"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo {
+        SET_AUTOMATION_UI_WIDGET_COMMAND,
+        TranslatableString::untranslatable("Widget"),
+        TranslatableString::untranslatable("Switch automation type from the widget"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
 
     // screen commands
 

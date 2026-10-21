@@ -36,6 +36,10 @@ qt_add_qml_module(notationscene_qml
         abstractelementpopupmodel.h
         abstractnotationpaintview.cpp
         abstractnotationpaintview.h
+        automationuiutils.cpp
+        automationuiutils.h
+        automationwidgetmodel.cpp
+        automationwidgetmodel.h
         continuouspanel.cpp
         continuouspanel.h
         editgridsizedialogmodel.cpp
@@ -192,6 +196,7 @@ qt_add_qml_module(notationscene_qml
         internal/SearchPopup.qml
         internal/SelectionFilterSection.qml
         internal/VoicesPopup.qml
+        AutomationWidget.qml
         NotationToolBar.qml
         NotationView.qml
         NoteInputBar.qml
@@ -204,6 +209,7 @@ qt_add_qml_module(notationscene_qml
         PianoKeyboardPanel.qml
         SelectionFilterPanel.qml
         SelectMeasuresCountDialog.qml
+        SetTempoRangeDialog.qml
         styledialog/AccidentalsPage.qml
         styledialog/BeamsPage.qml
         styledialog/BendsPage.qml
