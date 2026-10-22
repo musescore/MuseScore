@@ -1335,6 +1335,11 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
             return true;
         }
 
+        // Ignore octave dots
+        if (item->isOctaveDot()) {
+            return true;
+        }
+
         return false;
     });
 

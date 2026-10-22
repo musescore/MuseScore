@@ -511,6 +511,7 @@ public:
     CONVERT(Tapping, TAPPING)
     CONVERT(TappingHalfSlur, TAPPING_HALF_SLUR)
     CONVERT(TappingHalfSlurSegment, TAPPING_HALF_SLUR_SEGMENT)
+    CONVERT(OctaveDot, OCTAVE_DOT)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h

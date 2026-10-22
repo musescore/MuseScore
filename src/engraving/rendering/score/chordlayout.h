@@ -40,6 +40,7 @@ class Score;
 class Segment;
 class Staff;
 class Slur;
+class System;
 }
 
 namespace mu::engraving::rendering::score {
@@ -115,6 +116,7 @@ public:
 
     static void layoutDurationLines(Chord* item, LayoutContext& ctx);
     static void layoutOctaveDots(Chord* item, LayoutContext& ctx);
+    static void layoutVoiceOffsets(System* system, staff_idx_t staffIdx, LayoutContext& ctx);
 
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
 

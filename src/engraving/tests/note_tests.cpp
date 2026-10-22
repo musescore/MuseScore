@@ -504,6 +504,94 @@ TEST_F(Engraving_NoteTests, tpcDegrees)
     //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
 }
 
+TEST_F(Engraving_NoteTests, jianpuOctave)
+{
+    EXPECT_EQ(pitch2JianpuOctave(36, Tpc::TPC_C, Key::C, KeyMode::MAJOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(48, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 1);
+    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 2);
+
+    EXPECT_EQ(pitch2JianpuOctave(43, Tpc::TPC_G, Key::G, KeyMode::MAJOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(48, Tpc::TPC_C, Key::G, KeyMode::MAJOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(55, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, Key::G, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(66, Tpc::TPC_F_S, Key::G, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(67, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 1);
+    EXPECT_EQ(pitch2JianpuOctave(79, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 2);
+}
+
+TEST_F(Engraving_NoteTests, jianpuModeMapping)
+{
+    String accidental;
+    String degree;
+
+    EXPECT_EQ(jianpuTonicTpc(Key::B_B, KeyMode::DORIAN), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::A_B, KeyMode::PHRYGIAN), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::G, KeyMode::LYDIAN), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::F, KeyMode::MIXOLYDIAN), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::E_B, KeyMode::AEOLIAN), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::C, KeyMode::IONIAN), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::D_B, KeyMode::LOCRIAN), Tpc::TPC_C);
+
+    EXPECT_EQ(jianpuTonicTpc(Key::E_B, KeyMode::MINOR), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::C, KeyMode::MAJOR), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::C, KeyMode::UNKNOWN), Tpc::TPC_C);
+    EXPECT_EQ(jianpuTonicTpc(Key::C, KeyMode::NONE), Tpc::TPC_C);
+
+    const int cDorianTonic = jianpuTonicTpc(Key::B_B, KeyMode::DORIAN);
+    tpc2Jianpu(Tpc::TPC_C, cDorianTonic, KeyMode::DORIAN, accidental, degree);
+    EXPECT_EQ(degree, u"2");
+    EXPECT_TRUE(accidental.empty());
+
+    tpc2Jianpu(Tpc::TPC_E_B, cDorianTonic, KeyMode::DORIAN, accidental, degree);
+    EXPECT_EQ(degree, u"4");
+    EXPECT_TRUE(accidental.empty());
+
+    tpc2Jianpu(Tpc::TPC_E, cDorianTonic, KeyMode::DORIAN, accidental, degree);
+    EXPECT_EQ(degree, u"4");
+    EXPECT_EQ(accidental, u"#");
+
+    const int cMajorTonic = key2Tpc(Key::C);
+    tpc2Jianpu(Tpc::TPC_F_S, cMajorTonic, KeyMode::MAJOR, accidental, degree);
+    EXPECT_EQ(degree, u"4");
+    EXPECT_EQ(accidental, u"#");
+    tpc2Jianpu(Tpc::TPC_G_B, cMajorTonic, KeyMode::MAJOR, accidental, degree);
+    EXPECT_EQ(degree, u"5");
+    EXPECT_EQ(accidental, u"b");
+
+    const int aMinorTonic = jianpuTonicTpc(Key::C, KeyMode::MINOR);
+    EXPECT_EQ(aMinorTonic, Tpc::TPC_A);
+    tpc2Jianpu(Tpc::TPC_A, aMinorTonic, KeyMode::MINOR, accidental, degree);
+    EXPECT_EQ(degree, u"6");
+    EXPECT_TRUE(accidental.empty());
+    tpc2Jianpu(Tpc::TPC_C, aMinorTonic, KeyMode::MINOR, accidental, degree);
+    EXPECT_EQ(degree, u"1");
+    EXPECT_TRUE(accidental.empty());
+
+    EXPECT_EQ(pitch2JianpuOctave(58, Tpc::TPC_B_B, cDorianTonic, KeyMode::DORIAN), 0);
+    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, cDorianTonic, KeyMode::DORIAN), 0);
+    EXPECT_EQ(pitch2JianpuOctave(57, Tpc::TPC_A, aMinorTonic, KeyMode::MINOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(59, Tpc::TPC_B, aMinorTonic, KeyMode::MINOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, aMinorTonic, KeyMode::MINOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(69, Tpc::TPC_A, aMinorTonic, KeyMode::MINOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, aMinorTonic, KeyMode::MINOR), 1);
+}
+
+// KeyMode::UNKNOWN is the mode stored for any ordinary key signature that never had an
+// explicit mode assigned (i.e. almost every major/minor key signature in real scores,
+// since the "mode" XML tag is only written when it differs from UNKNOWN). It must be
+// treated the same as KeyMode::MAJOR so that FOLLOW_SCORE_KEY tracks the actual key.
+TEST_F(Engraving_NoteTests, jianpuUnknownModeTracksScoreKey)
+{
+    EXPECT_EQ(jianpuTonicTpc(Key::G, KeyMode::UNKNOWN), jianpuTonicTpc(Key::G, KeyMode::MAJOR));
+    EXPECT_EQ(jianpuTonicTpc(Key::G, KeyMode::UNKNOWN), Tpc::TPC_G);
+    EXPECT_EQ(jianpuTonicTpc(Key::E_B, KeyMode::UNKNOWN), jianpuTonicTpc(Key::E_B, KeyMode::MAJOR));
+    EXPECT_EQ(jianpuTonicTpc(Key::E_B, KeyMode::UNKNOWN), Tpc::TPC_E_B);
+
+    // Atonal (custom) key signatures have no key to derive a tonic from.
+    EXPECT_EQ(jianpuTonicTpc(Key::C, KeyMode::NONE), Tpc::TPC_C);
+}
+
 TEST_F(Engraving_NoteTests, alteredUnison)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"altered-unison.mscx");

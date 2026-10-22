@@ -270,6 +270,8 @@ public:
 
     String jianpuDigit() const { return m_jianpuDigit; }
     void setJianpuDigit(const String& s) { m_jianpuDigit = s; }
+    String jianpuAccidental() const { return m_jianpuAccidental; }
+    void setJianpuAccidental(const String& s) { m_jianpuAccidental = s; }
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
@@ -567,6 +569,7 @@ private:
 
     String m_fretString;
     String m_jianpuDigit;
+    String m_jianpuAccidental;
     std::vector<OctaveDot*> m_octaveDots;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;

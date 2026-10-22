@@ -536,8 +536,9 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
     ldata->syms.clear();
 
     // TODO: remove Accidental in layout
-    // don't show accidentals for tab or slash notation
-    if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
+    // don't show accidentals for tab or slash notation; Jianpu shows its
+    // accidental as part of the digit label instead of this glyph
+    if (item->onTabStaff() || item->isJianpuStaff() || (item->note() && item->note()->fixed())) {
         ldata->setIsSkipDraw(true);
         return;
     }
@@ -3515,6 +3516,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
 
     ldata->setBbox(RectF());
     ldata->keySymbols.clear();
+    ldata->jianpuLabel = String();
 
     const Staff* staff = item->staff();
     const StaffType* stVisibility = staff ? staff->staffType(item->tick()) : nullptr;
@@ -3523,9 +3525,26 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     }
 
     const StaffType* st = item->staffType();
+    double spatium = item->spatium();
+
+    if (staff && staff->isJianpuStaff(item->tick())) {
+        // Jianpu staves show a numbering label (e.g. "1=C") in place of the standard ♭/♯ symbols
+        ldata->jianpuLabel = jianpuKeyLabel(item->keySigEvent());
+
+        const double height = (st ? st->jianpuBoxH() : spatium) * item->mag();
+        double width = 0.0;
+        if (!ldata->jianpuLabel.isEmpty()) {
+            Font font(st ? st->jianpuFont() : Font());
+            font.setPointSizeF(font.pointSizeF() * item->mag());
+            width = FontMetrics(font).width(ldata->jianpuLabel);
+        }
+        ldata->setPosY(item->staffOffsetY());
+        ldata->setBbox(0.0, -height * 0.5, width, height);
+        return;
+    }
+
     const Segment* s = item->segment();
     track_idx_t track = item->track();
-    double spatium = item->spatium();
     double step = spatium * (st ? st->lineDistance().val() * 0.5 : 0.5);
 
     // determine current clef for this staff
@@ -4194,9 +4213,18 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         const StaffType* jianpu = st->staffTypeForElement(item);
 
         KeySigEvent ks = st->keySigEvent(item->chord()->tick());
+        KeyMode mode;
+        int tonicTpc;
+        jianpuKeyMapping(ks, mode, tonicTpc);
         String accName, stepName;
-        tpc2Function(item->tpc(), ks.key(), accName, stepName);
-        const_cast<Note*>(item)->setJianpuDigit(String(u"%1").arg(stepName));
+        tpc2Jianpu(item->tpc(), tonicTpc, mode, accName, stepName);
+        Tie* tieBack = item->tieBackNonPartial();
+        if (tieBack && tieBack->startNote()->tpc() == item->tpc()) {
+            // tied continuation: accidental was already shown on the tied-from note
+            accName = String();
+        }
+        const_cast<Note*>(item)->setJianpuDigit(stepName);
+        const_cast<Note*>(item)->setJianpuAccidental(jianpuAccidentalMark(accName));
 
         double width = item->headWidth();
         double height = jianpu->jianpuBoxH() * item->magS();
@@ -4805,9 +4833,9 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         }
     }
 
-    // Layout accidental
+    // Layout accidental (Jianpu shows its accidental as part of the digit label instead)
     SymId acc = Accidental::subtype2symbol(item->accidentalType());
-    if (acc != SymId::noSym) {
+    if (!isJianpu && acc != SymId::noSym) {
         RectF symRect = item->symBbox(acc);
         double accWidth = symRect.width() + ctx.conf().styleAbsolute(Sid::accidentalNoteDistance) * mag;
         double dh = 0.0;
@@ -4834,8 +4862,10 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         // jianpu digit
         if (item->isRest()) {
             item->setJianpuDigit(String(u"0"));
+            item->setJianpuAccidental(String());
         } else {
             item->setJianpuDigit(String());
+            item->setJianpuAccidental(String());
             Score* score = item->score();
             Position pos;
             bool error = !(score && score->getPosition(&pos, item->pos(), item->track()) && pos.segment);
@@ -4850,15 +4880,16 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
                 if (tpc != Tpc::TPC_INVALID) {
                     String accName, stepName;
                     KeySigEvent ks = staff->keySigEvent(item->tick());
-                    tpc2Function(tpc, ks.key(), accName, stepName);
-                    item->setJianpuDigit(String(u"%1").arg(stepName));
+                    KeyMode mode;
+                    int tonicTpc;
+                    jianpuKeyMapping(ks, mode, tonicTpc);
+                    tpc2Jianpu(tpc, tonicTpc, mode, accName, stepName);
+                    item->setJianpuDigit(stepName);
+                    item->setJianpuAccidental(jianpuAccidentalMark(accName));
 
                     Interval transpose = item->part()->instrument(item->tick())->transpose();
-                    int alteration = static_cast<int>(tpc2alter(tpc));
                     int epitch = nval.pitch - transpose.chromatic;
-                    int octave = (epitch - alteration) / 12 - 1; // See Note::octave
-                    int baseOctave = 3; // Default base octave for Jianpu is C3
-                    dots = baseOctave - octave;
+                    dots = -pitch2JianpuOctave(epitch, tpc, tonicTpc, mode);
                 }
             }
         }

@@ -24,6 +24,7 @@
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/keysig.h"
+#include "engraving/dom/staff.h"
 
 #include "translation.h"
 
@@ -43,6 +44,9 @@ void KeySignatureSettingsModel::createProperties()
 {
     m_hasToShowCourtesy = buildPropertyItem(mu::engraving::Pid::SHOW_COURTESY);
     m_mode = buildPropertyItem(mu::engraving::Pid::KEYSIG_MODE);
+    m_jianpuNumbering = buildPropertyItem(mu::engraving::Pid::JIANPU_NUMBERING);
+    m_jianpuTonicKey = buildPropertyItem(mu::engraving::Pid::JIANPU_TONIC_KEY);
+    m_jianpuTonicMode = buildPropertyItem(mu::engraving::Pid::JIANPU_TONIC_MODE);
 }
 
 void KeySignatureSettingsModel::requestElements()
@@ -54,12 +58,15 @@ void KeySignatureSettingsModel::loadProperties()
 {
     loadPropertyItem(m_hasToShowCourtesy);
     loadPropertyItem(m_mode);
+    loadPropertyItem(m_jianpuNumbering);
+    loadPropertyItem(m_jianpuTonicKey);
+    loadPropertyItem(m_jianpuTonicMode);
 
     bool enableMode = true;
     bool enableCourtesy = true;
 
     for (const mu::engraving::EngravingItem* element : m_elementList) {
-        if (element->generated() || toKeySig(element)->isCourtesy()) {
+        if (toKeySig(element)->isCourtesy()) {
             enableMode = false;
         }
 
@@ -73,6 +80,13 @@ void KeySignatureSettingsModel::loadProperties()
 
     m_hasToShowCourtesy->setIsEnabled(enableCourtesy);
     m_mode->setIsEnabled(enableMode);
+    m_jianpuNumbering->setIsEnabled(enableMode);
+
+    const bool customJianpuMapping = m_jianpuNumbering->value().toInt() == int(mu::engraving::JianpuTonicMode::CUSTOM);
+    m_jianpuTonicKey->setIsEnabled(enableMode && customJianpuMapping);
+    m_jianpuTonicMode->setIsEnabled(enableMode && customJianpuMapping);
+
+    updateIsJianpuStaff();
 }
 
 PropertyItem* KeySignatureSettingsModel::hasToShowCourtesy() const
@@ -83,4 +97,40 @@ PropertyItem* KeySignatureSettingsModel::hasToShowCourtesy() const
 PropertyItem* KeySignatureSettingsModel::mode() const
 {
     return m_mode;
+}
+
+PropertyItem* KeySignatureSettingsModel::jianpuNumbering() const
+{
+    return m_jianpuNumbering;
+}
+
+PropertyItem* KeySignatureSettingsModel::jianpuTonicKey() const
+{
+    return m_jianpuTonicKey;
+}
+
+PropertyItem* KeySignatureSettingsModel::jianpuTonicMode() const
+{
+    return m_jianpuTonicMode;
+}
+
+bool KeySignatureSettingsModel::isJianpuStaff() const
+{
+    return m_isJianpuStaff;
+}
+
+void KeySignatureSettingsModel::updateIsJianpuStaff()
+{
+    bool isJianpuStaff = false;
+    for (const mu::engraving::EngravingItem* element : m_elementList) {
+        if (element->staff() && element->staff()->isJianpuStaff(element->tick())) {
+            isJianpuStaff = true;
+            break;
+        }
+    }
+
+    if (m_isJianpuStaff != isJianpuStaff) {
+        m_isJianpuStaff = isJianpuStaff;
+        emit isJianpuStaffChanged(m_isJianpuStaff);
+    }
 }

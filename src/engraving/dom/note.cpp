@@ -799,6 +799,7 @@ Note::Note(const Note& n, bool link)
     }
     m_mark = n.m_mark;
     m_jianpuDigit = n.m_jianpuDigit;
+    m_jianpuAccidental = n.m_jianpuAccidental;
 
     setDropTarget(false);
 }

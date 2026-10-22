@@ -2137,6 +2137,19 @@ void TDraw::draw(const KeySig* item, Painter* painter, const PaintOptions& opt)
     const KeySig::LayoutData* ldata = item->ldata();
 
     painter->setPen(item->curColor(opt));
+
+    if (item->staff() && item->staff()->isJianpuStaff(item->tick())) {
+        if (ldata->jianpuLabel.isEmpty()) {
+            return;
+        }
+        const StaffType* staffType = item->staff()->staffTypeForElement(item);
+        Font f(staffType->jianpuFont());
+        f.setPointSizeF(f.pointSizeF() * item->mag());
+        painter->setFont(f);
+        painter->drawText(PointF(ldata->bbox().x(), ldata->bbox().bottom()), ldata->jianpuLabel);
+        return;
+    }
+
     double _spatium = item->spatium();
     double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
     int lines = item->staff() ? item->staff()->staffTypeForElement(item)->lines() : 5;
@@ -2354,6 +2367,33 @@ void TDraw::draw(const MMRestRange* item, Painter* painter, const PaintOptions& 
     drawTextBase(item, painter, opt);
 }
 
+//---------------------------------------------------------
+//   drawJianpuAccidental
+//    Draws a Jianpu accidental mark smaller and above-left of the digit,
+//    without shifting the digit itself (which stays aligned with beams/dots).
+//---------------------------------------------------------
+
+static void drawJianpuAccidental(Painter* painter, const Font& digitFont, const FontMetrics& digitFm, const String& accidental,
+                                 double digitStartX, double baselineY)
+{
+    if (accidental.isEmpty()) {
+        return;
+    }
+
+    static constexpr double JIANPU_ACCIDENTAL_MAG = 0.7;
+    Font accFont(digitFont);
+    accFont.setPointSizeF(digitFont.pointSizeF() * JIANPU_ACCIDENTAL_MAG);
+    painter->setFont(accFont);
+
+    FontMetrics accFm(accFont);
+    const double gap = accFont.pointSizeF() * 0.1;
+    const double accX = digitStartX - accFm.width(accidental) - gap;
+    const double accY = baselineY - digitFm.ascent() * 0.5;
+    painter->drawText(PointF(accX, accY), accidental);
+
+    painter->setFont(digitFont);
+}
+
 void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
@@ -2407,6 +2447,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         const double bw = ldata->bbox().width();
         const double startPosX = ldata->bbox().x() + (bw - fw) * .5;
         const double startPosY = ldata->bbox().bottom();
+        drawJianpuAccidental(painter, f, fm, item->jianpuAccidental(), startPosX, startPosY);
         painter->drawText(PointF(startPosX, startPosY), item->jianpuDigit());
     } else {
         // skip drawing, if second note of a cross-measure value
@@ -2674,9 +2715,9 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
     bool jianpu = item->staff() && item->staff()->isJianpuStaff(item->tick());
     bool up = item->computeUp();
 
-    // Draw the accidental
+    // Draw the accidental (Jianpu shows its accidental as part of the digit label instead)
     SymId acc = Accidental::subtype2symbol(item->accidentalType());
-    if (acc != SymId::noSym) {
+    if (!jianpu && acc != SymId::noSym) {
         PointF posAcc;
         posAcc.rx() -= item->symWidth(acc) + item->style().styleAbsolute(Sid::accidentalNoteDistance) * item->mag();
         item->drawSymbol(acc, painter, posAcc);
@@ -2830,6 +2871,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
         // Draw jianpu digit
         jianpuY += toNoteDistance; // Spacing for beams or dots to the notehead
         jianpuY += jianpuHeight; // Spacing from jianpu digit
+        drawJianpuAccidental(painter, f, fm, item->jianpuAccidental(), jianpuX, jianpuY);
         painter->drawText(jianpuX, jianpuY, item->jianpuDigit());
 
         // Draw beams below the jianpu digit

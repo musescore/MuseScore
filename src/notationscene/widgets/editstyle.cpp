@@ -721,6 +721,7 @@ void EditStyle::classBegin()
         { StyleId::parenthesizeTiedFretIfArticulation, false, tabParenthArticulation, 0 },
 
         { StyleId::jianpuNumberVerticalDistance, false, jianpuNumberVerticalDistance, jianpuNumberVerticalDistanceReset },
+        { StyleId::jianpuVoiceVerticalDistance, false, jianpuVoiceVerticalDistance, jianpuVoiceVerticalDistanceReset },
         { StyleId::jianpuOctaveDotRadius, false, jianpuOctaveDotRadius, jianpuOctaveDotRadiusReset },
         { StyleId::jianpuOctaveDotDistance, false, jianpuOctaveDotDistance, jianpuOctaveDotDistanceReset },
         { StyleId::jianpuDiminutionBeamThickness, false, jianpuDiminutionBeamThickness, jianpuDiminutionBeamThicknessReset },

@@ -83,6 +83,8 @@ public:
 
     String jianpuDigit() const { return m_jianpuDigit; }
     void setJianpuDigit(const String& s) { m_jianpuDigit = s; }
+    String jianpuAccidental() const { return m_jianpuAccidental; }
+    void setJianpuAccidental(const String& s) { m_jianpuAccidental = s; }
 
     int jianpuDiminutionLines() const { return m_jianpuDiminutionLines; }
     void setJianpuDiminutionLines(int lines) { m_jianpuDiminutionLines = lines; }
@@ -100,6 +102,7 @@ private:
     std::set<SymId> m_articulationIds;
     bool m_beyondScore = false;
     String m_jianpuDigit;
+    String m_jianpuAccidental;
     int m_jianpuDiminutionLines = 0;
     int m_jianpuOctaveDots = 0;
 };

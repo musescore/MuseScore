@@ -195,6 +195,9 @@ EngravingObject* KeySig::propertyDelegate(Pid propertyId) const
     case Pid::KEY_CONCERT:
     case Pid::SHOW_COURTESY:
     case Pid::KEYSIG_MODE:
+    case Pid::JIANPU_NUMBERING:
+    case Pid::JIANPU_TONIC_KEY:
+    case Pid::JIANPU_TONIC_MODE:
     {
         Segment* thisSeg = segment();
         Segment* nextKSSeg = thisSeg ? thisSeg->next1(SegmentType::KeySig) : nullptr;
@@ -228,6 +231,12 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
         return showCourtesy();
     case Pid::KEYSIG_MODE:
         return mode();
+    case Pid::JIANPU_NUMBERING:
+        return int(jianpuNumbering());
+    case Pid::JIANPU_TONIC_KEY:
+        return int(jianpuTonicKey());
+    case Pid::JIANPU_TONIC_MODE:
+        return jianpuTonicMode();
     case Pid::IS_COURTESY:
         return _isCourtesy;
     default:
@@ -264,10 +273,22 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         setShowCourtesy(v.toBool());
         break;
     case Pid::KEYSIG_MODE:
-        if (generated()) {
-            return false;
-        }
+        // Editable even when generated (e.g. a natural key signature with no visible
+        // accidentals): the mode is stored in the staff's persistent key map, not
+        // in a drawn symbol, so there is nothing unsafe about setting it here.
         setMode(v.value<KeyMode>());
+        staff()->setKey(tick(), keySigEvent());
+        break;
+    case Pid::JIANPU_NUMBERING:
+        setJianpuNumbering(JianpuTonicMode(v.toInt()));
+        staff()->setKey(tick(), keySigEvent());
+        break;
+    case Pid::JIANPU_TONIC_KEY:
+        setJianpuTonicKey(Key(v.toInt()));
+        staff()->setKey(tick(), keySigEvent());
+        break;
+    case Pid::JIANPU_TONIC_MODE:
+        setJianpuTonicMode(v.value<KeyMode>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::IS_COURTESY:
@@ -320,6 +341,12 @@ PropertyValue KeySig::propertyDefault(Pid id) const
         return true;
     case Pid::KEYSIG_MODE:
         return KeyMode::UNKNOWN;
+    case Pid::JIANPU_NUMBERING:
+        return int(JianpuTonicMode::FOLLOW_SCORE_KEY);
+    case Pid::JIANPU_TONIC_KEY:
+        return int(Key::C);
+    case Pid::JIANPU_TONIC_MODE:
+        return KeyMode::MAJOR;
     case Pid::IS_COURTESY:
         return false;
     default:
