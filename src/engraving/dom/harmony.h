@@ -121,6 +121,11 @@ struct TextSegment : HarmonyRenderItem {
     void setText(const String& t) { m_text = t; }
     String text() const { return m_text; }
 
+    // Marks the "Capo N:" label prepended by HarmonyLayout::layoutCapoLabel so
+    // repeated layout passes can find and replace it instead of accumulating duplicates.
+    bool isCapoLabel() const { return m_isCapoLabel; }
+    void setCapoLabel(bool v) { m_isCapoLabel = v; }
+
     muse::draw::Font font() const { return m_font; }
     void setFont(const muse::draw::Font& f);
 
@@ -137,6 +142,7 @@ struct TextSegment : HarmonyRenderItem {
 private:
     muse::draw::Font m_font;
     String m_text;
+    bool m_isCapoLabel = false;
 };
 
 class HDegree;
