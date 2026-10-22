@@ -1806,6 +1806,11 @@ PropertyValue EditStyle::getValue(StyleId idx)
     switch (type) {
     case P_TYPE::SPATIUM: {
         QDoubleSpinBox* sb = qobject_cast<QDoubleSpinBox*>(sw.widget);
+        if (idx == StyleId::mmRestNumberPos) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            return Spatium(-sb->value());
+        }
         return Spatium(sb->value() * (sw.showPercent ? 0.01 : 1.0));
     } break;
     case P_TYPE::REAL: {
@@ -1938,6 +1943,8 @@ void EditStyle::setValues()
         // Internal:  negative = up, positive = down
         PropertyValue val = sw.idx == StyleId::lyricsPosAbove || sw.idx == StyleId::lyricsPosBelow
                             ? Spatium(-styleValue(sw.idx).value<PointF>().y())
+                            : sw.idx == StyleId::mmRestNumberPos
+                            ? Spatium(-styleValue(sw.idx).value<Spatium>().val())
                             : styleValue(sw.idx);
         if (sw.reset) {
             sw.reset->setEnabled(!hasDefaultStyleValue(sw.idx));

@@ -48,7 +48,12 @@ MMRestSettingsModel::MMRestSettingsModel(QObject* parent, const muse::modularity
 void MMRestSettingsModel::createProperties()
 {
     m_isNumberVisible = buildPropertyItem(mu::engraving::Pid::MMREST_NUMBER_VISIBLE);
-    m_numberPosition = buildPropertyItem(mu::engraving::Pid::MMREST_NUMBER_OFFSET);
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    m_numberPosition = buildPropertyItem(
+        mu::engraving::Pid::MMREST_NUMBER_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, -newValue.toDouble());
+    });
 }
 
 void MMRestSettingsModel::requestElements()
@@ -59,7 +64,11 @@ void MMRestSettingsModel::requestElements()
 void MMRestSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isNumberVisible);
-    loadPropertyItem(m_numberPosition);
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    loadPropertyItem(m_numberPosition, [](const QVariant& elementPropertyValue) -> QVariant {
+        return -muse::DataFormatter::roundDouble(elementPropertyValue.toDouble());
+    });
 
     updateNumberOptionsEnabled();
 }
