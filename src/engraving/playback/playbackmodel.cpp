@@ -61,6 +61,29 @@ static const Harmony* findChordSymbol(const EngravingItem* item)
     return nullptr;
 }
 
+static bool isScopedAutomationChange(const ScoreChanges& changes)
+{
+    if (!changes.isValidBoundary()) {
+        return false;
+    }
+
+    bool hasAutomationChange = false;
+
+    for (const auto& pair : changes.changedObjects) {
+        if (pair.first->type() != ElementType::SCORE) {
+            continue;
+        }
+
+        if (pair.second.size() != 1 || !muse::contains(pair.second, CommandType::EditAutomationPoints)) {
+            return false;
+        }
+
+        hasAutomationChange = true;
+    }
+
+    return hasAutomationChange;
+}
+
 void PlaybackModel::load(Score* score)
 {
     TRACEFUNC;
@@ -772,9 +795,8 @@ bool PlaybackModel::hasToReloadScore(const ScoreChanges& changes) const
     };
 
     for (const ElementType type : changes.changedTypes) {
-        //! NOTE: a SCORE-level change with a valid tick/staff range means whoever made the
-        //! change already scoped it, so it doesn't need a full reload
-        if (type == ElementType::SCORE && changes.isValidBoundary()) {
+        // Automation edits on one staff shouldn't reload all tracks
+        if (type == ElementType::SCORE && isScopedAutomationChange(changes)) {
             continue;
         }
 
