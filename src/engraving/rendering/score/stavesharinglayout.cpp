@@ -1944,15 +1944,28 @@ void StaveSharingLayout::fillRestsIfNeed(StaveSharingContext& ctx)
     const TrackRange trackRange = ctx.curSharedPart->trackRange();
     for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; track += VOICES) {
         Fraction filledUntil = ctx.crSegmentsToUpdate.front()->tick();
+        ChordRest* prevCr = nullptr;
         for (const Segment* seg : ctx.crSegmentsToUpdate) {
-            const ChordRest* cr = toChordRest(seg->element(track));
+            ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
             }
             if (seg->tick() > filledUntil) {
                 ctx.score->setRest(filledUntil, track, seg->tick() - filledUntil, false, nullptr);
+            } else if (seg->tick() < filledUntil && prevCr) {
+                // The previous chordrest extends past this one
+                // This should be a stale full measure rest from the last run of this function as cleanup skips full measure rests
+                IF_ASSERT_FAILED(prevCr->isRest() && toRest(prevCr)->isFullMeasureRest()) {
+                    continue;
+                }
+                // Replace the previous rest with rest of the correct length
+                const Fraction prevTick = prevCr->tick();
+                ctx.score->undoRemoveElement(prevCr);
+                ctx.score->setRest(prevTick, track, seg->tick() - prevTick, false, nullptr);
+                filledUntil = seg->tick();
             }
             filledUntil = std::max(filledUntil, seg->tick() + cr->actualTicks());
+            prevCr = cr;
         }
         if (filledUntil < ctx.eTick) {
             ctx.score->setRest(filledUntil, track, ctx.eTick - filledUntil, false, nullptr);
