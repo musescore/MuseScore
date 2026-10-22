@@ -40,7 +40,7 @@ public:
     ShortcutResolver(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    muse::shortcuts::Shortcut selectOne(const muse::shortcuts::ShortcutList& list) const override;
+    muse::shortcuts::Shortcut selectActive(const muse::shortcuts::ShortcutList& list) const override;
 
     muse::TranslatableString scopeTitle(const std::string& scopeCode) const override;
 

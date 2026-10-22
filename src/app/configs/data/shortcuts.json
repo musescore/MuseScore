@@ -12,6 +12,7 @@
     {
       "scope": "NAVIGATION",
       "shortcuts": [
+        {"command": "command://navigation/escape",  "sequences": ["Esc"]},
         {"command": "command://navigation/next-section",  "sequences": ["F6","`"]},
         {"command": "command://navigation/prev-section",  "sequences": ["Shift+F6","Shift+`"]},
         {"command": "command://navigation/next-panel",  "sequences": ["Tab","Ctrl+Tab"]},
