@@ -832,7 +832,7 @@
         <source>Whistle pitched in D (notated at concert pitch).</source>
         <comment>d-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta irlandesa afinada en Re (escrita en tono de concierto).</translation>
+        <translation>Flauta irlandesa afinada en Re (escrita en afinación de concierto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="480"/>
@@ -902,7 +902,7 @@
         <source>Whistle pitched in B♭ (notated at concert pitch).</source>
         <comment>bflat-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta irlandesa afinada en Si♭ (escrita en tono de concierto).</translation>
+        <translation>Flauta irlandesa afinada en Si♭ (escrita en afinación de concierto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="502"/>
@@ -7077,7 +7077,7 @@ Afinada en Do.</translation>
         <source>Baritone horn (sometimes just called ‘baritone’). Notated in bass clef, at concert pitch.</source>
         <comment>baritone-horn description</comment>
         <extracomment>description for Baritone Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa barítono (a veces simplemente llamada ‘barítono’). Escrita en clave de Fa, a tono de concierto.</translation>
+        <translation>Trompa barítono (a veces simplemente llamada ‘barítono’). Escrita en clave de Fa, en afinación de concierto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2465"/>
@@ -7203,7 +7203,7 @@ Afinada en Do.</translation>
         <source>Central European variant of the baritone horn. Notated in bass clef, at concert pitch.</source>
         <comment>baritone-horn-central-europe description</comment>
         <extracomment>description for Baritone Horn (Central European); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Variante centroeuropea de la trompa barítono. Escrita en clave de Fa, a tono de concierto.</translation>
+        <translation>Variante centroeuropea de la trompa barítono. Escrita en clave de Fa, en afinación de concierto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2504"/>
@@ -9625,7 +9625,7 @@ Afinada en Do.</translation>
         <source>Bass tuba in F (notated in bass clef at concert pitch).</source>
         <comment>f-tuba description</comment>
         <extracomment>description for Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba baja en Fa (escrita en clave de fa y en tono de concierto)</translation>
+        <translation>Tuba baja en Fa (escrita en clave de fa y en afinación de concierto)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3259"/>
@@ -9653,7 +9653,7 @@ Afinada en Do.</translation>
         <source>Bass tuba in E♭ (notated in bass clef at concert pitch).</source>
         <comment>eb-tuba description</comment>
         <extracomment>description for Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba baja en Mi♭ (escrita en clave de fa y en tono de concierto)</translation>
+        <translation>Tuba baja en Mi♭ (escrita en clave de fa y en afinación de concierto)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3268"/>
@@ -9681,7 +9681,7 @@ Afinada en Do.</translation>
         <source>Bass tuba in E♭ (notated in bass clef at concert pitch).</source>
         <comment>bass-eb-tuba description</comment>
         <extracomment>description for Bass Tuba; tuning: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba baja en Mi♭ (escrita en clave de fa y en tono de concierto)</translation>
+        <translation>Tuba baja en Mi♭ (escrita en clave de fa y en afinación de concierto)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3277"/>
@@ -9716,7 +9716,7 @@ Afinada en Do.</translation>
         <source>Bass tuba in F (notated in bass clef at concert pitch).</source>
         <comment>bass-f-tuba description</comment>
         <extracomment>description for Bass Tuba; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba baja en Fa (escrita en clave de fa al tono de concierto)</translation>
+        <translation>Tuba baja en Fa (escrita en clave de fa en afinación de concierto)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3288"/>
@@ -9821,7 +9821,7 @@ Afinada en Do.</translation>
         <source>Contrabass tuba in B♭ (notated in bass clef at concert pitch).</source>
         <comment>bb-tuba description</comment>
         <extracomment>description for Contrabass Tuba; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba de contrabajo en Si♭ (escrita en clave de Fa al tono de concierto)</translation>
+        <translation>Tuba de contrabajo en Si♭ (escrita en clave de Fa en afinación de concierto)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3321"/>
@@ -9989,14 +9989,14 @@ Afinada en Do.</translation>
         <source>Sousaphone in B♭ (notated in treble clef at concert pitch).</source>
         <comment>sousaphone description</comment>
         <extracomment>description for Sousaphone (concert pitch); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sousaphone en Si♭ (anotado en clave de sol en tono de concierto).</translation>
+        <translation>Sousaphone en Si♭ (anotado en clave de sol en afinación de concierto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3374"/>
         <source>Sousaphone (concert pitch)</source>
         <comment>sousaphone trackName</comment>
         <extracomment>trackName for Sousaphone (concert pitch); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sousafón (tono de concierto)</translation>
+        <translation>Sousafón (afinación de concierto)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3376"/>
