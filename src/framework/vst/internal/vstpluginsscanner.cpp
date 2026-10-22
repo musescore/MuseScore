@@ -24,6 +24,10 @@
 
 #include "vst/vsttypes.h"
 
+#ifdef Q_OS_MACOS
+#include "platform/macos/macosvstmodulepaths.h"
+#endif
+
 #include "log.h"
 
 using namespace muse;
@@ -39,10 +43,15 @@ static std::set<io::path_t> pluginPathsFromDefaultLocation()
     std::set<io::path_t> result;
 
     try {
+#ifdef Q_OS_MACOS
+        const io::paths_t paths = MacOSVstModulePaths::getModulePaths();
+        result.insert(paths.begin(), paths.end());
+#else
         PluginModule::PathList paths = PluginModule::getModulePaths();
         for (const std::string& path : paths) {
             result.insert(path);
         }
+#endif
     } catch (...) {
         LOGE() << "Unable to get module paths";
     }
