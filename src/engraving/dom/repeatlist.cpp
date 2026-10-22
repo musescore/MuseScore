@@ -23,7 +23,6 @@
 #include "repeatlist.h"
 
 #include <list>
-#include <set>
 #include <utility> // std::pair
 
 #include "jump.h"
@@ -235,35 +234,18 @@ void RepeatList::updateTempo()
         return;
     }
 
-    // Collect the end-ticks of all segments that carry a section-break pause.
-    // tick2time() always includes the pause at the queried tick, so for repeated
-    // sections every segment ending at a section break would accumulate the pause
-    // once per iteration.  We subtract it from non-final segments so that it is
-    // counted only once (in the last segment, where s->pause > 0.0).
-    std::set<int> sectionBreakEndTicks;
-    for (RepeatSegment* s : *this) {
-        if (s->pause > 0.0) {
-            sectionBreakEndTicks.insert(s->tick + s->len());
-        }
-    }
-
     int utick = 0;
     double t  = 0;
 
     for (RepeatSegment* s : *this) {
         s->utick      = utick;
         s->utime      = t;
-        double ct      = tl->tick2time(s->tick);
+        double ct     = tl->tick2time(s->tick);
         s->timeOffset = t - ct;
         int len       = s->len();
         utick        += len;
-        double delta  = tl->tick2time(s->tick + len) - ct;
-        // For a non-final segment that ends at a section break, remove the
-        // section-break pause from the delta so the pause is not double-counted.
-        if (s->pause == 0.0 && sectionBreakEndTicks.count(s->tick + len)) {
-            delta -= tl->pauseSecs(s->tick + len);
-        }
-        t            += delta;
+        t            += tl->tick2time(s->tick + len) - ct;
+        t            += s->pause;
     }
 }
 
@@ -335,10 +317,27 @@ int RepeatList::utime2utick(double secs) const
 {
     size_t repeatSegmentsCount = size();
     unsigned ii = (m_idx2 < repeatSegmentsCount) && (secs >= at(m_idx2)->utime) ? m_idx2 : 0;
+
     for (unsigned i = ii; i < repeatSegmentsCount; ++i) {
-        if ((secs >= at(i)->utime) && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
+        const RepeatSegment* segment = at(i);
+
+        if ((secs >= segment->utime)
+            && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
             m_idx2 = i;
-            return m_score->tempomap()->time2tick(secs - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
+
+            const double segmentEndTime
+                = segment->utime
+                  + m_score->tempomap()->tick2time(segment->endTick())
+                  - m_score->tempomap()->tick2time(segment->tick);
+
+            if (!muse::RealIsNull(segment->pause)
+                && secs >= segmentEndTime
+                && secs < segmentEndTime + segment->pause) {
+                return segment->utick + segment->len() - 1;
+            }
+
+            return m_score->tempomap()->time2tick(secs - segment->timeOffset)
+                   + (segment->utick - segment->tick);
         }
     }
 
