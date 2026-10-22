@@ -127,9 +127,11 @@ protected:
 
     void TearDown() override
     {
+        delete m_reopened;
         delete m_score;
     }
 
+    MasterScore* m_reopened = nullptr;
     MasterScore* m_score = nullptr;
     Score* m_part = nullptr;
     Image* m_image = nullptr;
@@ -164,16 +166,20 @@ TEST_F(Engraving_MsczImagesTests, ExportPart)
 
         const String exported(u"part-image-export.mscz");
         ASSERT_TRUE(File::writeFile(exported, data));
-        MasterScore* reopened = ScoreRW::readScore(exported, true);
-        ASSERT_TRUE(reopened);
-        EXPECT_EQ(reopened->nstaves(), part->nstaves());
+        m_reopened = ScoreRW::readScore(exported, true);
+        ASSERT_TRUE(m_reopened);
+        EXPECT_EQ(m_reopened->nstaves(), part->nstaves());
         if (part == m_part) {
-            Note* note = toChord(reopened->findCR(Fraction(1, 4), 0))->upNote();
+            ChordRest* chord = m_reopened->findCR(Fraction(1, 4), 0);
+            ASSERT_TRUE(chord && chord->isChord());
+            Note* note = toChord(chord)->upNote();
+            ASSERT_TRUE(note);
             ASSERT_EQ(note->el().size(), 1);
             ASSERT_TRUE(note->el().front()->isImage());
             EXPECT_TRUE(toImage(note->el().front())->isValid());
         }
-        delete reopened;
+        delete m_reopened;
+        m_reopened = nullptr;
     }
 }
 
@@ -226,49 +232,110 @@ TEST_F(Engraving_MsczImagesTests, SaveRangeExcludesPartImages)
     EXPECT_TRUE(reader.imageFileNames().empty());
 }
 
-TEST_F(Engraving_MsczFileTests, ExportPartPreservesInternalLinks)
+class Engraving_MsczPartTests : public ::testing::Test
 {
-    MasterScore* score = ScoreRW::readScore(u"parts_data/linked-ties-parts.mscx");
-    ASSERT_TRUE(score);
-    ASSERT_EQ(score->excerpts().size(), 1);
-    Score* part = score->excerpts().front()->excerptScore();
-    ASSERT_EQ(part->nstaves(), 2);
+protected:
+    void SetUp() override
+    {
+        m_score = ScoreRW::readScore(u"parts_data/linked-ties-parts.mscx");
+        ASSERT_TRUE(m_score);
+        ASSERT_EQ(m_score->excerpts().size(), 1);
+        m_part = m_score->excerpts().front()->excerptScore();
+        ASSERT_TRUE(m_part);
+        ASSERT_EQ(m_part->nstaves(), 2);
+    }
 
-    Hairpin* hairpin = Factory::createHairpin(score->dummy());
+    void TearDown() override
+    {
+        delete m_reopened;
+        delete m_score;
+    }
+
+    void exportAndReopen()
+    {
+        ByteArray data;
+        Buffer buffer(&data);
+        MscWriter::Params params;
+        params.device = &buffer;
+        params.filePath = "linked-part.mscz";
+        MscWriter writer(params);
+        ASSERT_TRUE(writer.open());
+        MscSaver saver(m_score->iocContext());
+        ASSERT_TRUE(saver.exportPart(m_part, writer));
+        writer.close();
+
+        const String exported(u"linked-part.mscz");
+        ASSERT_TRUE(File::writeFile(exported, data));
+        m_reopened = ScoreRW::readScore(exported, true);
+        ASSERT_TRUE(m_reopened);
+    }
+
+    MasterScore* m_score = nullptr;
+    Score* m_part = nullptr;
+    MasterScore* m_reopened = nullptr;
+};
+
+TEST_F(Engraving_MsczPartTests, ExportPartPreservesInternalLinks)
+{
+    ASSERT_NO_FATAL_FAILURE(exportAndReopen());
+    ASSERT_TRUE(m_part->staff(0)->links());
+    EXPECT_EQ(m_part->staff(0)->links()->mainElement(), m_score->staff(0));
+    ASSERT_EQ(m_reopened->nstaves(), 2);
+    ASSERT_TRUE(m_reopened->staff(0)->links());
+    EXPECT_TRUE(m_reopened->staff(0)->links()->contains(m_reopened->staff(1)));
+
+    ChordRest* firstChord = m_reopened->findCR(Fraction(0, 1), 0);
+    ChordRest* secondChord = m_reopened->findCR(Fraction(0, 1), 4);
+    ASSERT_TRUE(firstChord && firstChord->isChord());
+    ASSERT_TRUE(secondChord && secondChord->isChord());
+    Note* first = toChord(firstChord)->upNote();
+    Note* second = toChord(secondChord)->upNote();
+    ASSERT_TRUE(first);
+    ASSERT_TRUE(second);
+    ASSERT_TRUE(first->links());
+    EXPECT_TRUE(first->links()->contains(second));
+    ASSERT_TRUE(first->tieFor());
+    ASSERT_TRUE(second->tieFor());
+    ChordRest* firstEnd = m_reopened->findCR(Fraction(1, 4), 0);
+    ChordRest* secondEnd = m_reopened->findCR(Fraction(1, 4), 4);
+    ASSERT_TRUE(firstEnd && firstEnd->isChord());
+    ASSERT_TRUE(secondEnd && secondEnd->isChord());
+    EXPECT_EQ(first->tieFor()->endNote(), toChord(firstEnd)->upNote());
+    EXPECT_EQ(second->tieFor()->endNote(), toChord(secondEnd)->upNote());
+    ASSERT_TRUE(first->tieFor()->links());
+    EXPECT_TRUE(first->tieFor()->links()->contains(second->tieFor()));
+
+    const int originalPitch = first->pitch();
+    m_reopened->select(first);
+    m_reopened->transactionManager()->transaction(TranslatableString::untranslatable("Raise note pitch"), [&](Transaction&) {
+        EditNote::upDown(m_reopened, true, UpDownMode::CHROMATIC);
+    });
+    EXPECT_EQ(second->pitch(), originalPitch + 1);
+    m_reopened->undoRedo(true, nullptr);
+    EXPECT_EQ(second->pitch(), originalPitch);
+    m_reopened->undoRedo(false, nullptr);
+    EXPECT_EQ(second->pitch(), originalPitch + 1);
+}
+
+TEST_F(Engraving_MsczPartTests, ExportPartOrdersLinkedHairpins)
+{
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setTrack(0);
     hairpin->setTrack2(0);
     hairpin->setTick(Fraction(0, 1));
     hairpin->setTicks(Fraction(1, 2));
-    score->addSpanner(hairpin);
-    score->transactionManager()->transaction(TranslatableString::untranslatable("Clone linked hairpins"), [&](Transaction&) {
-        Excerpt::cloneSpanner(hairpin, part, 4, 4);
-        Excerpt::cloneSpanner(hairpin, part, 0, 0);
+    m_score->addSpanner(hairpin);
+    m_part->transactionManager()->transaction(TranslatableString::untranslatable("Clone linked hairpins"), [&](Transaction&) {
+        Excerpt::cloneSpanner(hairpin, m_part, 4, 4);
+        Excerpt::cloneSpanner(hairpin, m_part, 0, 0);
     });
-    ASSERT_EQ(part->spannerMap().map().size(), 2);
-    EXPECT_EQ(part->spannerMap().map().begin()->second->track(), 4);
+    ASSERT_EQ(m_part->spannerMap().map().size(), 2);
+    EXPECT_EQ(m_part->spannerMap().map().begin()->second->track(), 4);
 
-    ByteArray data;
-    Buffer buffer(&data);
-    MscWriter::Params params;
-    params.device = &buffer;
-    params.filePath = "linked-part.mscz";
-    MscWriter writer(params);
-    ASSERT_TRUE(writer.open());
-    MscSaver saver(score->iocContext());
-    ASSERT_TRUE(saver.exportPart(part, writer));
-    writer.close();
-    EXPECT_EQ(part->staff(0)->links()->mainElement(), score->staff(0));
+    ASSERT_NO_FATAL_FAILURE(exportAndReopen());
 
-    const String exported(u"linked-part.mscz");
-    ASSERT_TRUE(File::writeFile(exported, data));
-    MasterScore* reopened = ScoreRW::readScore(exported, true);
-    ASSERT_TRUE(reopened);
-    ASSERT_EQ(reopened->nstaves(), 2);
-    ASSERT_TRUE(reopened->staff(0)->links());
-    EXPECT_TRUE(reopened->staff(0)->links()->contains(reopened->staff(1)));
-
-    ASSERT_EQ(reopened->spannerMap().map().size(), 2);
-    for (const auto& entry : reopened->spannerMap().map()) {
+    ASSERT_EQ(m_reopened->spannerMap().map().size(), 2);
+    for (const auto& entry : m_reopened->spannerMap().map()) {
         Spanner* spanner = entry.second;
         EXPECT_EQ(spanner->type(), ElementType::HAIRPIN);
         EXPECT_EQ(spanner->tick(), Fraction(0, 1));
@@ -276,29 +343,4 @@ TEST_F(Engraving_MsczFileTests, ExportPartPreservesInternalLinks)
         ASSERT_TRUE(spanner->links());
         EXPECT_EQ(spanner->links()->size(), 2);
     }
-
-    Note* first = toChord(reopened->findCR(Fraction(0, 1), 0))->upNote();
-    Note* second = toChord(reopened->findCR(Fraction(0, 1), 4))->upNote();
-    ASSERT_TRUE(first->links());
-    EXPECT_TRUE(first->links()->contains(second));
-    ASSERT_TRUE(first->tieFor());
-    ASSERT_TRUE(second->tieFor());
-    EXPECT_EQ(first->tieFor()->endNote(), toChord(reopened->findCR(Fraction(1, 4), 0))->upNote());
-    EXPECT_EQ(second->tieFor()->endNote(), toChord(reopened->findCR(Fraction(1, 4), 4))->upNote());
-    ASSERT_TRUE(first->tieFor()->links());
-    EXPECT_TRUE(first->tieFor()->links()->contains(second->tieFor()));
-
-    const int originalPitch = first->pitch();
-    reopened->select(first);
-    reopened->transactionManager()->transaction(TranslatableString::untranslatable("Raise note pitch"), [&](Transaction&) {
-        EditNote::upDown(reopened, true, UpDownMode::CHROMATIC);
-    });
-    EXPECT_EQ(second->pitch(), originalPitch + 1);
-    reopened->undoRedo(true, nullptr);
-    EXPECT_EQ(second->pitch(), originalPitch);
-    reopened->undoRedo(false, nullptr);
-    EXPECT_EQ(second->pitch(), originalPitch + 1);
-
-    delete reopened;
-    delete score;
 }

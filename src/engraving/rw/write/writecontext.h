@@ -51,6 +51,7 @@ public:
 
     std::shared_ptr<IEngravingConfiguration> configuration() const;
 
+    // Standalone part exports use a local root; nullptr keeps master-score link selection.
     const Score* linkRootScore() const { return m_linkRootScore; }
     void setLinkRootScore(const Score* score) { m_linkRootScore = score; }
 
