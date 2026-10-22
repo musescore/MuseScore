@@ -31,6 +31,7 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/stavesharingchange.h"
 
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/flip.h"
@@ -737,6 +738,62 @@ TEST_F(Engraving_StaveSharingTests, testFillVoice1WithRests)
 
     // [THEN] Voice 1 of the 2nd shared stave should be filled with a minim rest up to the stave sharing change
     ChordRest* cr = score->findCR(Fraction(2, 1), sharedStave2Track);
+    ASSERT_TRUE(cr);
+    EXPECT_EQ(cr->tick(), Fraction(2, 1));
+    EXPECT_TRUE(cr->isRest());
+    EXPECT_EQ(cr->durationType().type(), DurationType::V_HALF);
+    EXPECT_EQ(cr->ticks(), Fraction(1, 2));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testFillVoice1WithRests2)
+{
+    // [GIVEN] A score of 5 measures with 4 staves, 3 of which are grouped for stave sharing
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_07.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(sharedPart->nstaves(), 3);
+
+    // [WHEN] A stave sharing change is added at beat 3 of measure 3, moving the 3rd origin stave onto the 2nd shared stave
+    Segment* seg = score->tick2segment(Fraction(5, 2), true, SegmentType::ChordRest);
+    ASSERT_TRUE(seg);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
+    });
+    score->doLayout();
+
+    // [WHEN] The added stave sharing change is edited to move the 2nd origin stave (flute 2) onto the 3rd shared stave
+    const TrackRange sharedTracks = sharedPart->trackRange();
+    const StaveSharingChange* change = toStaveSharingChange(seg->findAnnotation(ElementType::STAVE_SHARING_CHANGE,
+                                                                                sharedTracks.startTrack, sharedTracks.endTrack - 1));
+    ASSERT_TRUE(change);
+    ASSERT_EQ(change->tick(), Fraction(5, 2));
+
+    const track_idx_t origin2Track = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t sharedStave3Track = staff2track(sharedPart->staff(2)->idx());
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::setTrackMapping(tx, change->segment(), sharedPart, origin2Track, sharedStave3Track);
+    });
+    score->doLayout();
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    // [THEN] Voice 1 of the 3rd shared stave should be filled with a minim rest up to the stave sharing change
+    ChordRest* cr = score->findCR(Fraction(2, 1), sharedStave3Track);
     ASSERT_TRUE(cr);
     EXPECT_EQ(cr->tick(), Fraction(2, 1));
     EXPECT_TRUE(cr->isRest());
