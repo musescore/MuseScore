@@ -1350,10 +1350,22 @@ void StaveSharingLayout::makeSharedTiesAndNoteSpanners(Note* originNote, Note* s
 
     Tie* tieBack = originNote->tieBack();
     if (tieBack) {
+        Note* sharedStartNote = tieBack->startNote() ? toNote(tieBack->startNote()->sharedItem()) : nullptr;
         Tie* sharedTieBack = sharedNote->tieBack();
+
+        // The start note has changed for this tie and it is stale, remove it first
+        if (sharedTieBack && sharedTieBack->startNote() != sharedStartNote) {
+            score->undoRemoveElement(sharedTieBack);
+            sharedTieBack = nullptr;
+        }
+
         if (!sharedTieBack) {
+            // We are replacing a stale tie, remove it first
+            if (Tie* staleTieFor = sharedStartNote ? sharedStartNote->tieFor() : nullptr) {
+                score->undoRemoveElement(staleTieFor);
+            }
+
             sharedTieBack = toTie(tieBack->clone());
-            Note* sharedStartNote = tieBack->startNote() ? toNote(tieBack->startNote()->sharedItem()) : nullptr;
             sharedTieBack->setNoteSpan(sharedStartNote, sharedNote);
 
             score->undoAddElement(sharedTieBack);

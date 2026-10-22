@@ -813,3 +813,74 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testTieBetweenVoicesAfterStaveSharingChange)
+{
+    // Test stale ties don't break links between notes and new ties upon removal
+
+    // [GIVEN] A score of 2 measures with 2 shared staves and 2 origin staves, where origin stave 2 has a tie across the barline
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_08.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    // [WHEN] A stave sharing change is added at the start of measure 2, mapping origin stave 1 to shared stave 2
+    // and origin stave 2 to voice 1 of shared stave 1
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m2);
+    ASSERT_EQ(m2->tick(), Fraction(1, 1));
+    Segment* seg = m2->first(SegmentType::ChordRest);
+    ASSERT_TRUE(seg);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
+        EditStaveSharing::setTrackMapping(tx, seg, sharedPart, origin1, shared2);
+        EditStaveSharing::setTrackMapping(tx, seg, sharedPart, origin2, shared1);
+    });
+    score->doLayout();
+
+    const SharedTrackMap& m2TrackMap = sharedPart->staveSharingStateAtTick(m2->tick()).sharedTrackMap();
+    ASSERT_EQ(m2TrackMap, SharedTrackMap({ { origin1, shared2 }, { origin2, shared1 } })) << dump(m2TrackMap);
+
+    // [THEN] There should be a tie from the note on voice 2 of shared stave 1 at beat 4 of measure 1
+    // to the note on voice 1 of shared stave 1 at the start of measure 2
+    ChordRest* startCR = score->findCR(Fraction(3, 4), shared1 + 1);
+    ASSERT_TRUE(startCR && startCR->isChord());
+    ASSERT_EQ(startCR->tick(), Fraction(3, 4));
+    ChordRest* endCR = score->findCR(Fraction(1, 1), shared1);
+    ASSERT_TRUE(endCR && endCR->isChord());
+    ASSERT_EQ(endCR->tick(), Fraction(1, 1));
+
+    ASSERT_EQ(toChord(startCR)->notes().size(), 1);
+    ASSERT_EQ(toChord(endCR)->notes().size(), 1);
+    Note* startNote = toChord(startCR)->notes().front();
+    Note* endNote = toChord(endCR)->notes().front();
+
+    Tie* tie = startNote->tieFor();
+    ASSERT_TRUE(tie);
+    EXPECT_FALSE(tie->isPartialTie());
+    EXPECT_EQ(tie->startNote(), startNote);
+    EXPECT_EQ(tie->endNote(), endNote);
+    EXPECT_EQ(endNote->tieBack(), tie);
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}
