@@ -330,13 +330,17 @@ void NotationSelection::select(const std::vector<EngravingItem*>& elements, Sele
     const staff_idx_t oldStartStaff = selection.staffStart();
     const staff_idx_t oldEndStaff = selection.staffEnd();
 
+    const Box* oldStartBox = selection.startBox();
+    const Box* oldEndBox = selection.endBox();
+
     doSelect(elements, type, staffIndex);
 
     bool rangeChanged = false;
     if (selection.isRange()) {
         const bool ticksChanged = oldStartTick != selection.tickStart() || oldEndTick != selection.tickEnd();
         const bool stavesChanged = oldStartStaff != selection.staffStart() || oldEndStaff != selection.staffEnd();
-        rangeChanged = ticksChanged || stavesChanged;
+        const bool boxesChanged = oldStartBox != selection.startBox() || oldEndBox != selection.endBox();
+        rangeChanged = ticksChanged || stavesChanged || boxesChanged;
     }
 
     if (rangeChanged || oldSelectionState != selection.state() || oldSelectedElements != selection.elements()) {
