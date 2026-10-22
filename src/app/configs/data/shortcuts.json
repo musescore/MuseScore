@@ -1,5 +1,15 @@
 [
     {
+      "scope": "APP",
+      "shortcuts": [
+        {"command": "command://app/quit",  "sequences": ["Ctrl+Q"], "autorepeat": false},
+        {"command": "command://app/fullscreen",  "sequences": ["F11"], "autorepeat": false},
+        {"command": "command://app/preferences",  "sequences": ["Ctrl+,"], "autorepeat": false},
+        {"command": "command://dock/restore-default-layout",  "sequences": []},
+        {"command": "command://diagnostics/save-files",  "sequences": []}
+      ]
+    },
+    {
       "scope": "NAVIGATION",
       "shortcuts": [
         {"command": "command://navigation/next-section",  "sequences": ["F6","`"]},
@@ -48,7 +58,18 @@
         {"command": "command://palette/expand-all",  "sequences": []},
         {"command": "command://palette/collapse-all",  "sequences": []},
         {"command": "command://workspace/configure",  "sequences": []},
-        {"command": "command://workspace/create",  "sequences": []}
+        {"command": "command://workspace/create",  "sequences": []},
+        {"command": "command://notation/open-page-settings",  "sequences": []},
+        {"command": "command://notation/open-edit-strings",  "sequences": []},
+        {"command": "command://notation/open-breaks",  "sequences": []},
+        {"command": "command://notation/open-staff-properties",  "sequences": []},
+        {"command": "command://notation/open-staff-text-properties",  "sequences": []},
+        {"command": "command://notation/open-system-text-properties",  "sequences": []},
+        {"command": "command://notation/open-measure-properties",  "sequences": []},
+        {"command": "command://notation/open-transpose",  "sequences": []},
+        {"command": "command://notation/open-parts",  "sequences": []},
+        {"command": "command://notation/open-editgridsize",  "sequences": []},
+        {"command": "command://notation/open-realizechordsymbols",  "sequences": []}
       ]
     },
     {
@@ -311,15 +332,6 @@
       ]
     },
     {
-      "scope": "APP",
-      "shortcuts": [
-        {"command": "command://app/quit",  "sequences": ["Ctrl+Q"], "autorepeat": false},
-        {"command": "command://app/fullscreen",  "sequences": ["F11"], "autorepeat": false},
-        {"command": "command://app/preferences",  "sequences": ["Ctrl+,"], "autorepeat": false},
-        {"command": "command://dock/restore-default-layout",  "sequences": []}
-      ]
-    },
-    {
       "scope": "PLAYBACK",
       "shortcuts": [
         {"command": "command://playback/play-toggle",  "sequences": ["Space"], "autorepeat": false},
@@ -327,4 +339,4 @@
         {"command": "command://playback/pause-and-select",  "sequences": ["Ctrl+Space"], "autorepeat": false}
       ]
     }
-  ]
+]
