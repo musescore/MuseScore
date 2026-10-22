@@ -108,6 +108,7 @@ Item {
                     readonly property string trimmedText: linkInputField.currentText.trim()
 
                     hint: "https://"
+                    contextMenuEnabled: true
                     maximumLength: root.maxLinkLength > 0 ? root.maxLinkLength : 32767
 
                     navigation.panel: NavigationPanel {

@@ -82,6 +82,7 @@ Item {
                 hint: qsTrc("project/convert", "Tell us how your score could look better")
 
                 verticalScrollBarPolicy: ScrollBar.AlwaysOn
+                contextMenuEnabled: true
 
                 navigation.panel: root.navigationPanel
                 navigation.order: 1
