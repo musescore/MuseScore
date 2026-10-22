@@ -24,6 +24,7 @@
  #include "global/containers.h"
 
  #include "../notationcommands.h"
+#include "rcommand/commandtypes.h"
 
 using namespace muse;
 using namespace muse::rcommand;
@@ -108,6 +109,10 @@ static const std::vector<Command> LYRICS_EDITING_COMMANDS = {
     EDITLYRIC_NEXT_SYLLABLE_COMMAND,
     EDITLYRIC_ADD_MELISMA_COMMAND,
     EDITLYRIC_ADD_VERSE_COMMAND
+};
+
+static const std::vector<Command> NOT_TEXT_EDITING_COMMANDS = {
+    TOGGLE_MMREST_COMMAND,
 };
 
 static const std::map<Command, NoteInputMethod> NOTE_INPUT_COMMANDS = {
@@ -334,6 +339,7 @@ void NotationCommandsState::init()
         updateCommandStates(TEXT_EDITING_COMMANDS);
         updateCommandStates(LYRICS_EDITING_COMMANDS);
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
+        updateCommandStates(NOT_TEXT_EDITING_COMMANDS);
     });
 
     controller()->isNoteInputAllowedChanged().onReceive(this, [this](bool) {
@@ -439,6 +445,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(LYRICS_EDITING_COMMANDS, command)) {
         return CommandState(controller()->isLyricsEditing(), false);
+    }
+
+    if (muse::contains(NOT_TEXT_EDITING_COMMANDS, command)) {
+        return CommandState(!controller()->isTextEditing(), false);
     }
 
     if (muse::contains(NOTE_INPUT_COMMANDS, command)) {
