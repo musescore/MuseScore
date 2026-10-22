@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "irecentfilescontroller.h"
+#include "project/irecentfilescontroller.h"
 
 #include <mutex>
 #include <map>
@@ -32,14 +32,15 @@
 #include "async/promise.h"
 
 #include "modularity/ioc.h"
-#include "iprojectconfiguration.h"
-#include "imscmetareader.h"
+#include "project/iprojectconfiguration.h"
+#include "project/imscmetareader.h"
 #include "io/ifilesystem.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
 namespace mu::project {
 class RecentFilesController : public IRecentFilesController, public muse::async::Asyncable
 {
+public:
     muse::GlobalThreadSafeInject<IProjectConfiguration> configuration;
     muse::GlobalThreadSafeInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalThreadSafeInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
@@ -49,7 +50,7 @@ public:
     void init();
 
     const RecentFilesList& recentFilesList() const override;
-    muse::async::Notification recentFilesListChanged() const override;
+    muse::async::Channel<RecentFilesChange> recentFilesListChanged() const override;
 
     void prependRecentFile(const RecentFile& file) override;
     void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) override;
@@ -65,14 +66,15 @@ protected:
 private:
     void loadRecentFilesList();
     void removeNonexistentFiles();
-    void setRecentFilesList(const RecentFilesList& list, bool saveAndNotify);
+    bool setRecentFilesList(const RecentFilesList& list);
+    void setRecentFilesListAndNotify(const RecentFilesList& list, const RecentFilesChange& change);
     void saveRecentFilesList();
 
     void cleanUpThumbnailCache(const RecentFilesList& files);
 
     mutable bool m_dirty = true;
     mutable RecentFilesList m_recentFilesList;
-    muse::async::Notification m_recentFilesListChanged;
+    muse::async::Channel<RecentFilesChange> m_recentFilesListChanged;
     mutable bool m_isSaving = false;
 
     struct CachedThumbnail {

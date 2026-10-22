@@ -26,11 +26,13 @@ set(MODULE_TEST_SRC
     ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/deletecloudscorescenariomock.h
     ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/convertfiletoscoreservicemock.h
     ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/notationprojectmock.h
+    ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/recentfilescontrollermock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/filelistmodel_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/convertfiletoscoremodel_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/reviewscorequalitymodel_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cloudscoresmodel_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/recentscoresmodel_tests.cpp
 )
 
 set(MODULE_TEST_LINK
