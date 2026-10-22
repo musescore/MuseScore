@@ -95,7 +95,7 @@ bool ShortcutResolver::isNotationFocusedAndTextEditing() const
     return isNotationFocused() && notationCommandsController()->isTextEditing();
 }
 
-Shortcut ShortcutResolver::selectOne(const ShortcutList& list) const
+Shortcut ShortcutResolver::selectActive(const ShortcutList& list) const
 {
     IF_ASSERT_FAILED(list.size() > 0) {
         return Shortcut();
@@ -109,7 +109,13 @@ Shortcut ShortcutResolver::selectOne(const ShortcutList& list) const
         return a.command != rcommand::NONE_COMMAND && b.command == rcommand::NONE_COMMAND;
     });
 
-    return sorted.front();
+    Shortcut probableShortcut = sorted.front();
+    if (scopePriority(probableShortcut.scope) < 0) {
+        //! NOTE If the probable shortcut is not active, return an invalid shortcut.
+        return Shortcut();
+    }
+
+    return probableShortcut;
 }
 
 muse::TranslatableString ShortcutResolver::scopeTitle(const std::string& scopeCode) const
