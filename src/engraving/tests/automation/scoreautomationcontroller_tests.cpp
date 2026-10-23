@@ -100,6 +100,14 @@ static AutomationCurve expectedDynamicsCurve()
     return curve;
 }
 
+// Voice 1 of staff 0: the staff curve's points plus its own currentVoiceOnly f
+static AutomationCurve expectedVoiceDynamicsCurve()
+{
+    AutomationCurve curve = expectedDynamicsCurve();
+    curve[3840] = generatedPoint(F_VALUE, F_VALUE); // M3: f; inValue from the pf end at 3264
+    return curve;
+}
+
 // Play order: M1-M6 twice, then M7-M8, M7, M9-M11 (M8/M9 are voltas)
 static AutomationCurve expectedTempoCurve()
 {
@@ -183,15 +191,9 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
     checkCurvesMatch(controller.automationData()->curve(key), expectedDynamicsCurve());
 
     // [THEN] Voice-1 curve on staff 0 matches expectations.
-    // Voice-1 has a CURRENT_VOICE_ONLY f at tick 3840. All shared-curve points (including the
-    // measure repeat's copy) are filled in too, so the voice curve is self-contained
+    // All shared-curve points (including the measure repeat's copy) are filled in too, so the voice curve is self-contained
     key = AutomationCurveKey::staff(AutomationType::Dynamics, s_dynamicsScore->staff(0)->id(), size_t(1));
-    AutomationCurve expectedVoiceCurve = expectedDynamicsCurve();
-
-    // CURRENT_VOICE_ONLY f; inValue comes from the shared active point at tick 3264 (outValue = F_VALUE)
-    expectedVoiceCurve[3840] = generatedPoint(F_VALUE, F_VALUE);
-
-    checkCurvesMatch(controller.automationData()->curve(key), expectedVoiceCurve);
+    checkCurvesMatch(controller.automationData()->curve(key), expectedVoiceDynamicsCurve());
 }
 
 // Inserting time mid-score shifts only the points at or after the insert tick
@@ -1028,6 +1030,36 @@ TEST_F(ScoreAutomationController_Tests, Update_InstrumentCurve_KeepsUserPointsOn
     expectedCurve[9920] = generatedPoint(0.0, 0.8);
     expectedCurve[12000] = customPoint(0.8, 0.4);
     checkCurvesMatch(controller.automationData()->curve(volumeKey), expectedCurve);
+}
+
+// A user point erased from the staff curve is also gone from the voice curve after a rebuild
+TEST_F(ScoreAutomationController_Tests, Update_UserPointErasedFromStaffCurve_RemovedFromVoiceCurve)
+{
+    // [GIVEN] dynamics.mscx staff 0 has a voice-1 curve (see expectedVoiceDynamicsCurve)
+    ScoreAutomationController controller;
+    controller.init(s_dynamicsScore);
+
+    const AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_dynamicsScore->staff(0)->id());
+    const AutomationCurveKey voiceKey = AutomationCurveKey::staff(AutomationType::Dynamics, s_dynamicsScore->staff(0)->id(),
+                                                                  size_t(1));
+
+    ScoreChanges changes;
+    changes.changedTypes = { ElementType::DYNAMIC };
+
+    // [GIVEN] A user point in M5's 1st pass on the staff curve; a rebuild copies it and its 2nd-pass mirror into the voice curve
+    AutomationPointEdits setEdits { { 8000, AutomationPointEdit::SetPoint { customPoint(0.2, 0.3) } } };
+    controller.editPoints(key, setEdits);
+    controller.update(changes);
+    ASSERT_TRUE(controller.automationData()->curve(voiceKey).contains(8000));
+    ASSERT_TRUE(controller.automationData()->curve(voiceKey).contains(9920));
+
+    // [WHEN] The point is erased from the staff curve, then the score is rebuilt
+    AutomationPointEdits eraseEdits { { 8000, AutomationPointEdit::ErasePoint {} } };
+    controller.editPoints(key, eraseEdits);
+    controller.update(changes);
+
+    // [THEN] Both copies are gone from the voice curve too
+    checkCurvesMatch(controller.automationData()->curve(voiceKey), expectedVoiceDynamicsCurve());
 }
 
 // A compound dynamic like pf keeps its change length in seconds, so a faster tempo multiplier stretches it in ticks
