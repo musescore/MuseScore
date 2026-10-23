@@ -72,16 +72,16 @@ void PropertiesPanelListModel::init()
     });
 }
 
-void PropertiesPanelListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
-                                                              const QList<mu::engraving::EngravingItem*>& selectedElementList)
+void PropertiesPanelListModel::buildModelsForElements(const ElementKeySet& elementKeySet, bool isRangeSelection,
+                                                      const QList<mu::engraving::EngravingItem*>& elementList)
 {
-    removeUnusedModels(selectedElementKeySet, isRangeSelection, selectedElementList);
+    removeUnusedModels(elementKeySet, isRangeSelection, elementList);
 
-    PropertiesPanelSectionTypeSet buildingSectionTypeSet = PropertiesPanelAbstractModel::sectionTypesByElementKeys(selectedElementKeySet,
+    PropertiesPanelSectionTypeSet buildingSectionTypeSet = PropertiesPanelAbstractModel::sectionTypesByElementKeys(elementKeySet,
                                                                                                                    isRangeSelection,
-                                                                                                                   selectedElementList);
+                                                                                                                   elementList);
 
-    createModelsBySectionType(buildingSectionTypeSet, selectedElementKeySet);
+    createModelsBySectionType(buildingSectionTypeSet, elementKeySet);
 
     sortModels();
 }
@@ -103,21 +103,20 @@ void PropertiesPanelListModel::buildModelsForEmptySelection()
     createModelsBySectionType(persistentSections);
 }
 
-bool PropertiesPanelListModel::alwaysUpdateModelList(const QList<engraving::EngravingItem*>& selectedElementList)
+bool PropertiesPanelListModel::alwaysUpdateModelList(const QList<engraving::EngravingItem*>& elementList)
 {
-    // Force update of the list model where sections are only relevant to the child of the selected element
+    // Force update of the list model where sections are only relevant to the child of the given element
     // eg. We need to update the text section of PlayCountText when a BarLine is selected
-    for (EngravingItem* el : selectedElementList) {
+    for (EngravingItem* el : elementList) {
         if (el->isBarLine()) {
             return true;
         }
     }
-
     return false;
 }
 
-void PropertiesPanelListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                                              engraving::SelState selectionState, bool selectionHasStartEndBox)
+void PropertiesPanelListModel::setElementList(const QList<mu::engraving::EngravingItem*>& elementList,
+                                              engraving::SelState selectionState)
 {
     TRACEFUNC;
 
@@ -128,28 +127,28 @@ void PropertiesPanelListModel::setElementList(const QList<mu::engraving::Engravi
             buildModelsForEmptySelection();
         }
 
-        forceUpdate = alwaysUpdateModelList(selectedElementList);
-        if (!m_repository->needUpdateElementList(selectedElementList, selectionState) && !forceUpdate) {
+        forceUpdate = alwaysUpdateModelList(elementList);
+        if (!m_repository->needUpdateElementList(elementList, selectionState) && !forceUpdate) {
             return;
         }
     }
 
-    if (selectedElementList.isEmpty() && !selectionHasStartEndBox) {
+    if (elementList.isEmpty()) {
         buildModelsForEmptySelection();
     } else {
         ElementKeySet newElementKeySet;
 
-        for (const mu::engraving::EngravingItem* element : selectedElementList) {
+        for (const mu::engraving::EngravingItem* element : elementList) {
             newElementKeySet << PropertiesPanelAbstractModel::makeKey(element);
         }
 
-        buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE, selectedElementList);
+        buildModelsForElements(newElementKeySet, selectionState == SelectionState::RANGE, elementList);
     }
 
-    m_repository->updateElementList(selectedElementList, selectionState);
+    m_repository->updateElementList(elementList, selectionState);
 
     if (forceUpdate) {
-        m_repository->elementsUpdated().send(selectedElementList);
+        m_repository->elementsUpdated().send(elementList);
     }
 }
 
@@ -205,7 +204,7 @@ void PropertiesPanelListModel::setPropertiesPanelVisible(bool visible)
 }
 
 void PropertiesPanelListModel::createModelsBySectionType(const PropertiesPanelSectionTypeSet& sectionTypes,
-                                                         const ElementKeySet& selectedElementKeySet)
+                                                         const ElementKeySet& elementKeySet)
 {
     for (PropertiesPanelSectionType sectionType : sectionTypes) {
         if (sectionType == PropertiesPanelSectionType::SECTION_UNDEFINED) {
@@ -216,7 +215,7 @@ void PropertiesPanelListModel::createModelsBySectionType(const PropertiesPanelSe
 
         if (model) {
             if (auto proxyModel = dynamic_cast<PropertiesPanelAbstractProxyModel*>(model)) {
-                proxyModel->updateModels(selectedElementKeySet);
+                proxyModel->updateModels(elementKeySet);
             }
 
             continue;
@@ -241,7 +240,7 @@ void PropertiesPanelListModel::createModelsBySectionType(const PropertiesPanelSe
             newModel = new EmptyStavesVisibilitySettingsModel(this, iocContext(), m_repository.get());
             break;
         case PropertiesPanelSectionType::SECTION_NOTATION:
-            newModel = new NotationSettingsProxyModel(this, iocContext(), m_repository.get(), selectedElementKeySet);
+            newModel = new NotationSettingsProxyModel(this, iocContext(), m_repository.get(), elementKeySet);
             break;
         case PropertiesPanelSectionType::SECTION_TEXT:
             newModel = new TextSettingsModel(this, iocContext(), m_repository.get());
@@ -270,8 +269,8 @@ void PropertiesPanelListModel::createModelsBySectionType(const PropertiesPanelSe
     }
 }
 
-void PropertiesPanelListModel::removeUnusedModels(const ElementKeySet& newElementKeySet,
-                                                  bool isRangeSelection, const QList<engraving::EngravingItem*>& selectedElementList,
+void PropertiesPanelListModel::removeUnusedModels(const ElementKeySet& newElementKeySet, bool isRangeSelection,
+                                                  const QList<engraving::EngravingItem*>& elementList,
                                                   const PropertiesPanelSectionTypeSet& exclusions)
 {
     QList<PropertiesPanelAbstractModel*> modelsToRemove;
@@ -279,7 +278,7 @@ void PropertiesPanelListModel::removeUnusedModels(const ElementKeySet& newElemen
     PropertiesPanelModelTypeSet allowedModelTypes = PropertiesPanelAbstractModel::modelTypesByElementKeys(newElementKeySet);
     PropertiesPanelSectionTypeSet allowedSectionTypes = PropertiesPanelAbstractModel::sectionTypesByElementKeys(newElementKeySet,
                                                                                                                 isRangeSelection,
-                                                                                                                selectedElementList);
+                                                                                                                elementList);
 
     for (PropertiesPanelAbstractModel* model : m_modelList) {
         if (muse::contains(exclusions, model->sectionType())) {
@@ -463,11 +462,23 @@ void PropertiesPanelListModel::updateElementList()
         return;
     }
 
-    const std::vector<EngravingItem*>& elements = selection->elements();
+    std::vector<EngravingItem*> elements = selection->elements();
 
-    const mu::engraving::MeasureBase* startMB = selection->startMeasureBase();
-    const mu::engraving::MeasureBase* endMB = selection->endMeasureBase();
-    const bool selectionHasStartEndBox = (startMB && startMB->isBox()) || (endMB && endMB->isBox());
+    if (selection->isRange()) {
+        // Boxes aren't included in a range selection, but for the purposes of the properties panel
+        // we'll include them in the element list (so that their sections are available)...
+        const mu::engraving::MeasureBase* endMB = selection->endMeasureBase();
+        mu::engraving::MeasureBase* currMB = selection->startMeasureBase();
+        while (currMB) {
+            if (currMB->isBox()) {
+                elements.emplace_back(currMB);
+            }
+            if (!endMB || currMB->isAfterOrEqual(endMB)) {
+                break;
+            }
+            currMB = currMB->nextMM();
+        }
+    }
 
-    setElementList(QList(elements.cbegin(), elements.cend()), selection->state(), selectionHasStartEndBox);
+    setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
 }
