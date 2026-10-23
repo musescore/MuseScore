@@ -456,13 +456,28 @@ std::vector<Page*> mu::engraving::Selection::pagesContainingSelection() const
         return { const_cast<Page*>(toPageLockIndicator(el)->page()) };
     }
 
-    std::vector<System*> systems = selectedSystems();
     std::vector<Page*> pages;
-    for (System* system : systems) {
+    for (const System* system : selectedSystems()) {
         Page* page = system->page();
-        if (page && std::find(pages.begin(), pages.end(), page) == pages.end()) {
+        if (page && !muse::contains(pages, page)) {
             pages.push_back(page);
         }
+    }
+
+    //! NOTE: selectedSystems() skips VBoxBases, but their pages still contain the selection
+    const MeasureBase* endMB = endMeasureBase();
+    const MeasureBase* mb = startMeasureBase();
+    while (mb && endMB) {
+        if (mb->isVBoxBase()) {
+            Page* page = mb->page();
+            if (page && !muse::contains(pages, page)) {
+                pages.push_back(page);
+            }
+        }
+        if (mb->isAfterOrEqual(endMB)) {
+            break;
+        }
+        mb = mb->nextMM();
     }
 
     return pages;
