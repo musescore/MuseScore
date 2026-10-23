@@ -3160,6 +3160,11 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    if (item->initialStaffType()) {
+        xml.startElement("initialStaffType");
+        write(item->initialStaffType(), xml, ctx);
+        xml.endElement();
+    }
     if (item->staffType()) {
         write(item->staffType(), xml, ctx);
     }

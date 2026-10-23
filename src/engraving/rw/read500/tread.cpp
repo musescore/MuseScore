@@ -4073,6 +4073,16 @@ void TRead::read(StaffTypeChange* c, XmlReader& e, ReadContext& ctx)
             TRead::read(st, e, ctx);
             // Measure::add() will replace this with a pointer to a copy in the staff
             c->setStaffType(st, true);
+        } else if (tag == "initialStaffType") {
+            while (e.readNextStartElement()) {
+                if (e.name() == "StaffType") {
+                    StaffType st;
+                    TRead::read(&st, e, ctx);
+                    c->setInitialStaffType(st);
+                } else {
+                    e.unknown();
+                }
+            }
         } else if (!readItemProperties(c, e, ctx)) {
             e.unknown();
         }
