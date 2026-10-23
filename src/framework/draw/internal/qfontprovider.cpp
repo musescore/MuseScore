@@ -21,6 +21,10 @@
  */
 #include "qfontprovider.h"
 
+#include <memory>
+
+#include "global/io/file.h"
+
 #include <QFont>
 #include <QPaintDevice>
 #include <QFontDatabase>
@@ -57,8 +61,21 @@ static FontPaintDevice device;
 
 int QFontProvider::addSymbolFont(const String& family, const io::path_t& path)
 {
-    m_symbolsFonts[family] = path;
-    return QFontDatabase::addApplicationFont(path.toQString());
+    return addSymbolFont(family, std::make_shared<io::File>(path));
+}
+
+int QFontProvider::addSymbolFont(const String& family, std::shared_ptr<io::IODevice> device)
+{
+    const std::string filePath = device->meta("file_path");
+    if (!filePath.empty()) {
+        return QFontDatabase::addApplicationFont(QString::fromStdString(filePath));
+    }
+
+    if (!device->open(io::IODevice::ReadOnly)) {
+        return -1;
+    }
+
+    return QFontDatabase::addApplicationFontFromData(device->readAll().toQByteArray());
 }
 
 double QFontProvider::lineSpacing(const Font& f) const

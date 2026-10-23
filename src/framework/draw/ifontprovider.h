@@ -23,8 +23,11 @@
 #ifndef MUSE_DRAW_IFONTPROVIDER_H
 #define MUSE_DRAW_IFONTPROVIDER_H
 
+#include <memory>
+
 #include "global/modularity/imoduleinterface.h"
 #include "global/io/path.h"
+#include "global/io/iodevice.h"
 #include "global/types/string.h"
 
 #include "types/font.h"
@@ -39,6 +42,7 @@ public:
     virtual ~IFontProvider() = default;
 
     virtual int addSymbolFont(const String& family, const io::path_t& path) = 0;
+    virtual int addSymbolFont(const String& family, std::shared_ptr<io::IODevice> device) = 0;
 
     virtual double lineSpacing(const Font& f) const = 0;
     virtual double xHeight(const Font& f) const = 0;
