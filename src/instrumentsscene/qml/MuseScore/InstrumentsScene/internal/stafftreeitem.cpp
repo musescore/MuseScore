@@ -58,7 +58,7 @@ void StaffTreeItem::init(const Staff* masterStaff)
 
     // Not Staff::show(): that is also false while the instrument is combined onto shared staves,
     // which the Layout panel shows on the group instead of on the instrument's own staves
-    bool visible = staff && staff->visible() && staff->part()->getProperty(Pid::VISIBLE).toBool();
+    bool visible = staff && staff->visible() && staff->part()->getProperty(mu::engraving::Pid::VISIBLE).toBool();
 
     if (!staff) {
         staff = masterStaff;
