@@ -216,9 +216,5 @@ bool PlaybackCommandsState::isProjectOpened() const
         return false;
     }
 
-    if (!interactive() || !interactive()->isOpened(PROJECT_PAGE_URI).val) {
-        return false;
-    }
-
     return true;
 }
