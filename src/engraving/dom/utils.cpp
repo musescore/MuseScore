@@ -518,6 +518,27 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
     Note* note2  = nullptr;
     Chord* chord = note->chord();
     Segment* seg = chord->segment();
+    const bool explicitNextSegment = nextSegment != nullptr;
+
+    // Grace-after notes can tie directly to the next grace-after sibling regardless of whether
+    // a normal destination segment exists afterward (e.g. grace notes after the score's very
+    // last note) - check this first, before the normal-destination existence/adjacency gates
+    // below reject the search for unrelated reasons. Skipped when the caller passed an explicit
+    // nextSegment (e.g. probing a specific repeat/jump destination): the sibling is a fixed
+    // structural neighbor, not a per-repeat-destination candidate.
+    if (chord->isGraceAfter() && !explicitNextSegment) {
+        Chord* parentChord = toChord(chord->ownershipParent());
+        const GraceNotesGroup& gna = parentChord->graceNotesAfter();
+        for (size_t i = 0; i + 1 < gna.size(); ++i) {
+            if (gna[i] == chord) {
+                note2 = gna[i + 1]->findNote(note->pitch());
+                if (note2) {
+                    return note2;
+                }
+                break;
+            }
+        }
+    }
 
     if (!nextSegment) {
         nextSegment = seg->next1(SegmentType::ChordRest);
@@ -555,7 +576,7 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
             return note2;
         }
     } else if (chord->isGraceAfter()) {
-        // grace after
+        // grace after (the grace-after sibling lookup already happened above)
         // we will try to tie to note in next normal chord, below
         // meanwhile, set chord to parent chord so the endTick calculation will make sense
         chord = toChord(chord->ownershipParent());
