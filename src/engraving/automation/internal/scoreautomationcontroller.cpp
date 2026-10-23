@@ -1265,7 +1265,8 @@ void ScoreAutomationController::resolvePendingTempoResets(UpdateContext& ctx)
         const real_t tempo = rawIt != ctx.noRepeatTempoCurve.end() ? rawIt->second.value.outValue
                              : DEFAULT_NORMALIZED_TEMPO;
 
-        const real_t currentTempo = currentTempoAt(*ctx.tempoCurve, utick);
+        const real_t currentTempo = utickIt == ctx.tempoCurve->begin() ? DEFAULT_NORMALIZED_TEMPO
+                                    : std::prev(utickIt)->second.value.outValue;
         if (RealIsEqual(tempo, currentTempo)) {
             continue; // no actual change - don't emit a redundant point
         }
