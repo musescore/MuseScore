@@ -21,7 +21,10 @@
  */
 #pragma once
 
+#include <memory>
+
 #include "global/modularity/imoduleinterface.h"
+#include "global/io/iodevice.h"
 #include "global/io/path.h"
 #include "global/async/notification.h"
 
@@ -39,13 +42,13 @@ public:
     virtual void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) = 0;
 
     virtual int addFont(const FontDataKey& key, const io::path_t& path) = 0;
+    virtual int addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device) = 0;
 
     virtual void removeFont(const FontDataKey& key) = 0;
 
     virtual FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const = 0;
     virtual std::vector<FontDataKey> substitutionFonts(const FontDataKey& requireKey) const = 0;
     virtual FontData fontData(const FontDataKey& requireKey, Font::Type type) const = 0;
-    virtual bool isFtxFont(const FontDataKey& requireKey, Font::Type type) const = 0;
 
     virtual async::Notification changed() const = 0;
 };

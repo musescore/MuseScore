@@ -21,6 +21,8 @@
  */
 #include "zipcontainer.h"
 
+#include <algorithm>
+#include <cstddef>
 #include <ctime>
 #include <cstring>
 #include <zlib.h>
@@ -304,6 +306,17 @@ struct LocalFileHeader
     uint8_t file_name_length[2];
     uint8_t extra_field_length[2];
 };
+
+bool ZipContainer::startsWithEntry(const uint8_t* data, size_t size, std::span<const uint8_t> name)
+{
+    if (size < sizeof(LocalFileHeader) + name.size()) {
+        return false;
+    }
+
+    return readUInt(data + offsetof(LocalFileHeader, signature)) == 0x04034b50
+           && readUShort(data + offsetof(LocalFileHeader, file_name_length)) == name.size()
+           && std::equal(name.begin(), name.end(), data + sizeof(LocalFileHeader));
+}
 
 struct DataDescriptor
 {
