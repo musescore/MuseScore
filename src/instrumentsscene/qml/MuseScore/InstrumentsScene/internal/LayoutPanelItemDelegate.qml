@@ -67,6 +67,13 @@ FocusableControl {
     // For staff rows: whether their instrument is visible
     property bool isParentVisible: true
 
+    // The first system markings row can't be moved, so it has no hover / pressed highlight
+    // (its cog keeps its own states)
+    property bool isLocked: false
+
+    // Shifts the row's contents right, keeping its width (see Versions > Indent grouped instruments in LayoutPanel.qml)
+    property int contentIndent: 0
+
     property alias isPopupOpened: popupLoader.isPopupOpened
 
     readonly property bool isCardTop: root.depth === 0
@@ -104,6 +111,17 @@ FocusableControl {
                 }
             } else {
                 root.dropped()
+
+                // On release, the DRAGGED state's ParentChange restores the size the row had before the drag as fixed
+                // values, replacing the bindings to the row's slot below. As the row may have moved to a slot of a
+                // different height (e.g. becoming the last instrument of a group), bring the bindings back.
+                Qt.callLater(function() {
+                    if (!root || prv.dragged) {
+                        return
+                    }
+                    root.width = Qt.binding(function() { return root.slot ? root.slot.width : root.implicitWidth })
+                    root.height = Qt.binding(function() { return root.slot ? root.slot.height : root.implicitHeight })
+                })
             }
         }
     }
@@ -111,8 +129,14 @@ FocusableControl {
     anchors.verticalCenter: parent ? parent.verticalCenter : undefined
     anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
-    height: parent ? parent.height : implicitHeight
-    width: parent ? parent.width : implicitWidth
+    // The row's slot in the list (its original parent). While dragged, the row is reparented to the view's content
+    // item, so its size is bound to the slot rather than to whatever its parent currently is: otherwise the dragged
+    // row would take the whole list's size (and the drag's hot spot would be far off)
+    property Item slot: null
+    Component.onCompleted: root.slot = root.parent
+
+    height: slot ? slot.height : (parent ? parent.height : implicitHeight)
+    width: slot ? slot.width : (parent ? parent.width : implicitWidth)
 
     implicitHeight: 38
     implicitWidth: 248
@@ -276,6 +300,58 @@ FocusableControl {
         SystemObjectsLayerSettingsPopup {}
     }
 
+    // Shown instead of the system markings settings while the score has no system markings to configure
+    Component {
+        id: systemObjectsLayerHelpComp
+
+        StyledPopupView {
+            id: helpPopup
+
+            property bool needActiveFirstItem: false
+
+            contentWidth: 240
+            contentHeight: helpLabel.implicitHeight
+
+            function load(obj) {
+            }
+
+            StyledTextLabel {
+                id: helpLabel
+
+                width: parent.width
+
+                text: qsTrc("layoutpanel", "System markings let you choose which staves show elements like tempo markings, rehearsal marks, system text, voltas, and jumps. Add one or more of these elements in the score to configure their visibility here.")
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.WordWrap
+            }
+        }
+    }
+
+    // High contrast: instrument card stroke, one outline around an instrument and (when expanded) its staves.
+    // Drawn per row, with the edges between rows of the same card clipped away; the theme's border width
+    // is only non-zero in high contrast themes
+    Item {
+        anchors.fill: contentArea
+        z: 1
+
+        visible: ui.theme.borderWidth > 0 && (root.type === LayoutPanelItemType.PART || root.depth > 0)
+        clip: true
+
+        Rectangle {
+            readonly property int overflow: 4
+            readonly property bool closesBottom: root.cardBottom || prv.dragged
+
+            width: parent.width
+            y: root.isCardTop ? 0 : -overflow
+            height: parent.height + (root.isCardTop ? 0 : overflow) + (closesBottom ? 0 : overflow)
+
+            radius: root.cardRadius
+            color: "transparent"
+            border.width: ui.theme.borderWidth
+            border.color: ui.theme.strokeColor
+        }
+    }
+
     Item {
         id: contentArea
 
@@ -290,7 +366,9 @@ FocusableControl {
 
         RowLayout {
             anchors.fill: parent
-            anchors.rightMargin: root.type === LayoutPanelItemType.SHARED_PART ? 5 : 0
+            anchors.leftMargin: root.contentIndent
+            // Room after the group toggle; without it, the cog lines up with the instruments' cogs
+            anchors.rightMargin: sharedPartToggle.visible ? 5 : 0
 
             spacing: 4
 
@@ -423,11 +501,20 @@ FocusableControl {
                 Layout.preferredWidth: root.contentHeight
                 Layout.preferredHeight: root.contentHeight
 
-                visible: root.settingsAvailable
-                enabled: root.visible && root.settingsEnabled
+                // System markings rows keep their cog enabled when there's nothing to configure yet: it then explains them
+                readonly property bool showsSystemObjectsHelp: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER && !root.settingsEnabled
 
-                // Only shown on hover / press / selection; kept in the layout (transparent) so that it stays keyboard-accessible
-                opacity: root.isHovered || root.mouseArea.pressed || root.isSelected || popupLoader.isPopupOpened || navigation.highlight ? 1 : 0
+                visible: root.settingsAvailable
+                enabled: root.visible && (root.settingsEnabled || showsSystemObjectsHelp)
+
+                // Shown on hover / press / selection, and while the row or any of its controls has keyboard focus;
+                // kept in the layout (transparent) so that it stays keyboard-accessible
+                readonly property bool rowHasKeyboardFocus: root.navigation.highlight || navigation.highlight
+                                                            || visibilityButton.navigation.highlight
+                                                            || expandButton.navigation.highlight
+                                                            || sharedPartToggle.navigation.highlight
+
+                opacity: root.isHovered || root.mouseArea.pressed || root.isSelected || popupLoader.isPopupOpened || rowHasKeyboardFocus ? 1 : 0
 
                 objectName: "SettingsBtn"
                 navigation.panel: root.navigation.panel
@@ -469,6 +556,8 @@ FocusableControl {
                         comp = staffSettingsComp
 
                         item["id"] = root.item.id
+                    } else if (showsSystemObjectsHelp) {
+                        comp = systemObjectsLayerHelpComp
                     } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
                         comp = systemObjectsLayerSettingsComp
 
@@ -520,7 +609,7 @@ FocusableControl {
     background.states: [
         State {
             name: "HOVERED"
-            when: root.usesRowHighlight && root.isHovered && !root.mouseArea.pressed && !root.isSelected
+            when: root.usesRowHighlight && !root.isLocked && root.isHovered && !root.mouseArea.pressed && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -531,7 +620,7 @@ FocusableControl {
 
         State {
             name: "PRESSED"
-            when: root.usesRowHighlight && root.mouseArea.pressed && !root.isSelected && !prv.dragged
+            when: root.usesRowHighlight && !root.isLocked && root.mouseArea.pressed && !root.isSelected && !prv.dragged
 
             PropertyChanges {
                 target: root.background

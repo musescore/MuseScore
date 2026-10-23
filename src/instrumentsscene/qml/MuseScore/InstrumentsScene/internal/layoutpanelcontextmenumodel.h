@@ -35,6 +35,10 @@ class LayoutPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
 
     QML_ELEMENT
 
+    // Prototype versions of the shared-staves groups UI, switchable from the menu
+    Q_PROPERTY(bool outlinedGroups READ outlinedGroups NOTIFY versionsChanged FINAL)
+    Q_PROPERTY(bool indentCombinedGroups READ indentCombinedGroups NOTIFY versionsChanged FINAL)
+
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
     muse::ContextInject<project::IProjectSession> projectSession = { this };
 
@@ -44,8 +48,12 @@ public:
     Q_INVOKABLE void load() override;
     Q_INVOKABLE void handleMenuItem(const QString& itemId) override;
 
+    bool outlinedGroups() const;
+    bool indentCombinedGroups() const;
+
 signals:
     void expandCollapseAllRequested(bool expand);
+    void versionsChanged();
 
 private:
     void updateMenu();
@@ -56,8 +64,12 @@ private:
 
     muse::uicomponents::MenuItem* createInstrumentsOrderingItem();
     muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
+    muse::uicomponents::MenuItem* createVersionsItem();
 
     notation::IMasterNotationPtr m_masterNotation;
     notation::ScoreOrderList m_orders;
+
+    bool m_outlinedGroups = false;
+    bool m_indentCombinedGroups = true;
 };
 }
