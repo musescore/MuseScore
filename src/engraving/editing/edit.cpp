@@ -2302,6 +2302,9 @@ void Score::cmdDeleteSelection()
                 }
             } else if (e->isSoundFlag()) {
                 tick = e->tick();
+            } else if (e->isTuplet()) {
+                // the rests replacing the tuplet start at its tick
+                tick = toTuplet(e)->tick();
             } else if (e->ownershipParent()
                        && (e->ownershipParent()->isSegment() || e->ownershipParent()->isChord() || e->ownershipParent()->isNote()
                            || e->ownershipParent()->isRest())) {

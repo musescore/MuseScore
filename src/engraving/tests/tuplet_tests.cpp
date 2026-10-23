@@ -593,3 +593,72 @@ TEST_F(Engraving_TupletTests, insertMeasureMovesOuterTuplets)
 
     delete score;
 }
+
+//-----------------------------------------
+//    deleteTupletSelection
+//     deleting a tuplet selects the rest that replaces it
+//-----------------------------------------
+TEST_F(Engraving_TupletTests, deleteTupletSelection)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"tuplet1.mscx");
+    ASSERT_TRUE(score);
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(m2 && m2 != score->lastMeasure());
+
+    // a triplet from the first chord of bar 2
+    ChordRest* first = m2->first(SegmentType::ChordRest)->cr(0);
+    ASSERT_TRUE(first && first->isChord());
+    ASSERT_TRUE(createTuplet(3, first));
+    Tuplet* tuplet = m2->first(SegmentType::ChordRest)->cr(0)->tuplet();
+    ASSERT_TRUE(tuplet);
+    Fraction tupletTick = tuplet->tick();
+
+    score->select(tuplet);
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    ChordRest* selected = score->selection().firstChordRest();
+    ASSERT_TRUE(selected);
+    EXPECT_TRUE(selected->isRest());
+    EXPECT_EQ(selected->measure(), m2);
+    EXPECT_EQ(selected->tick(), tupletTick);
+    EXPECT_FALSE(selected->tuplet());
+    delete score;
+}
+
+//-----------------------------------------
+//    deleteNestedTupletSelection
+//     deleting a nested tuplet selects the rest that replaces it
+//     in the outer tuplet
+//-----------------------------------------
+TEST_F(Engraving_TupletTests, deleteNestedTupletSelection)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"nestedTuplets_lengthen.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = score->firstMeasure();
+    ASSERT_EQ(rhythm(m1), "9:8[8 8 8 3:2[8 8 8] 8 8 8 8]");
+
+    // the nested triplet starts on the 4th chord
+    Segment* s = m1->first(SegmentType::ChordRest);
+    for (int i = 0; i < 3; ++i) {
+        s = s->next(SegmentType::ChordRest);
+    }
+    Tuplet* nested = s->cr(0)->tuplet();
+    ASSERT_TRUE(nested && nested->tuplet());
+    Tuplet* outer = nested->tuplet();
+    Fraction nestedTick = nested->tick();
+
+    score->select(nested);
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    EXPECT_EQ(rhythm(m1), "9:8[8 8 8 r4 8 8 8 8]");
+    ChordRest* selected = score->selection().firstChordRest();
+    ASSERT_TRUE(selected);
+    EXPECT_TRUE(selected->isRest());
+    EXPECT_EQ(selected->tick(), nestedTick);
+    EXPECT_EQ(selected->tuplet(), outer);
+    delete score;
+}
