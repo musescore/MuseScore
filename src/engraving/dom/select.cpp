@@ -419,6 +419,22 @@ MeasureBase* Selection::endMeasureBase() const
     return mb;
 }
 
+std::vector<MeasureBase*> Selection::measureBasesInSelection() const
+{
+    MeasureBase* startMB = startMeasureBase();
+    MeasureBase* endMB = endMeasureBase();
+    if (!startMB || !endMB) {
+        return {};
+    }
+
+    std::vector<MeasureBase*> measureBases;
+    for (MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mb->nextMM()) {
+        measureBases.push_back(mb);
+    }
+
+    return measureBases;
+}
+
 std::vector<System*> Selection::selectedSystems() const
 {
     EngravingItem* el = element();
@@ -426,14 +442,8 @@ std::vector<System*> Selection::selectedSystems() const
         return { const_cast<System*>(toIndicatorIcon(el)->system()) };
     }
 
-    const MeasureBase* startMB = startMeasureBase();
-    const MeasureBase* endMB = endMeasureBase();
-    if (!startMB || !endMB) {
-        return {};
-    }
-
     std::vector<System*> systems;
-    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mb->nextMM()) {
+    for (const MeasureBase* mb : measureBasesInSelection()) {
         if (!mb->isMeasure() && !mb->isHBox()) {
             continue;
         }
@@ -456,12 +466,21 @@ std::vector<Page*> mu::engraving::Selection::pagesContainingSelection() const
         return { const_cast<Page*>(toPageLockIndicator(el)->page()) };
     }
 
-    std::vector<System*> systems = selectedSystems();
     std::vector<Page*> pages;
-    for (System* system : systems) {
+    for (const System* system : selectedSystems()) {
         Page* page = system->page();
-        if (page && std::find(pages.begin(), pages.end(), page) == pages.end()) {
+        if (page && !muse::contains(pages, page)) {
             pages.push_back(page);
+        }
+    }
+
+    //! NOTE: selectedSystems() skips VBoxBases, but their pages still contain the selection
+    for (const MeasureBase* mb : measureBasesInSelection()) {
+        if (mb->isVBoxBase()) {
+            Page* page = mb->page();
+            if (page && !muse::contains(pages, page)) {
+                pages.push_back(page);
+            }
         }
     }
 
