@@ -97,7 +97,7 @@ bool Transpose::transpose(Transaction& tx, Score* score, TransposeMode mode, Tra
         if (!rangeSelection) {
             trKeys = false;
         }
-        bool fullOctave = (interval.chromatic % PITCH_DELTA_OCTAVE) == 0;
+        bool fullOctave = interval.chromatic % PITCH_DELTA_OCTAVE == 0 && interval.diatonic % STEP_DELTA_OCTAVE == 0;
         if (fullOctave && (mode != TransposeMode::TO_KEY)) {
             trKeys = false;
             transposeChordNames = false;
