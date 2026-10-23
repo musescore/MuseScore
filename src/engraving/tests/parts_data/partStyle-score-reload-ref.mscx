@@ -620,8 +620,14 @@
               <isHeader>1</isHeader>
               <eid>RB_RB</eid>
               </Clef>
-            <Rest>
+            <TimeSig>
               <eid>SB_SB</eid>
+              <linkedTo>j_j</linkedTo>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <eid>TB_TB</eid>
               <linkedTo>k_k</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -630,15 +636,9 @@
           </Measure>
         <Measure len="32/4">
           <multiMeasureRest>8</multiMeasureRest>
-          <eid>TB_TB</eid>
-          <mmRestLast>UB_UB</mmRestLast>
+          <eid>UB_UB</eid>
+          <mmRestLast>VB_VB</mmRestLast>
           <voice>
-            <TimeSig>
-              <eid>VB_VB</eid>
-              <linkedTo>j_j</linkedTo>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Rest>
               <eid>WB_WB</eid>
               <placement>above</placement>
@@ -714,7 +714,7 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>UB_UB</eid>
+          <eid>VB_VB</eid>
           <voice>
             <Rest>
               <eid>jB_jB</eid>
