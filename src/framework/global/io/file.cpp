@@ -33,6 +33,7 @@ using namespace muse::io;
 File::File(const path_t& filePath)
     : m_filePath(filePath)
 {
+    setMeta("file_path", m_filePath.toStdString());
 }
 
 File::~File()
