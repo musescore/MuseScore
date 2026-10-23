@@ -23,6 +23,8 @@
 
 #include "types/commontypes.h"
 
+#include "notation/utilities/offsetutilities.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;
@@ -43,7 +45,7 @@ void StaffTypeSettingsModel::createProperties()
     // Displayed: positive = up, negative = down
     // Internal:  negative = up, positive = down
     m_verticalOffset = buildPropertyItem(mu::engraving::Pid::STAFF_YOFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, -newValue.toDouble());
+        onPropertyValueChanged(pid, notation::OffsetUtils::flipSign(newValue.toDouble()));
     });
     m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
@@ -83,7 +85,7 @@ void StaffTypeSettingsModel::loadProperties()
     // Displayed: positive = up, negative = down
     // Internal:  negative = up, positive = down
     loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return -muse::DataFormatter::roundDouble(elementPropertyValue.toDouble());
+        return notation::OffsetUtils::flipSign(muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()));
     });
     loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
         return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;

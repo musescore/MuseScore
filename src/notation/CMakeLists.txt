@@ -118,6 +118,7 @@ target_sources(notation PRIVATE
     internal/searchcommandsparser.cpp
     internal/searchcommandsparser.h
 
+    utilities/offsetutilities.h
     utilities/scorerangeutilities.cpp
     utilities/scorerangeutilities.h
 )
