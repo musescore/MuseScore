@@ -5810,7 +5810,6 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
             if (segnoColor.isValid()) {
                 colorItem(m, segnoColor);
             }
-            const track_idx_t track = m_pass1.trackForPart(partId);
             addElemOffset(m, 0, u"above", markedMeasure, markedMeasure->tick());
             m_e.skipCurrentElement();
         } else if (m_e.name() == "coda") {
@@ -5833,7 +5832,6 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
             if (codaColor.isValid()) {
                 colorItem(m, codaColor);
             }
-            const track_idx_t track = m_pass1.trackForPart(partId);
             addElemOffset(m, 0, u"above", markedMeasure, markedMeasure->tick());
             m_e.skipCurrentElement();
         } else if (m_e.name() == "fermata") {
