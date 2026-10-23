@@ -29,6 +29,9 @@
 
 #include "log.h"
 
+#include <algorithm>
+#include <QCollator>
+
 using namespace muse;
 using namespace mu::project;
 
@@ -66,8 +69,34 @@ void RecentScoresModel::reloadRecentScores()
 {
     const RecentFilesList& recentScores = recentFilesController()->recentFilesList();
 
+    struct ScoreEntry {
+        QVariantMap obj;
+        muse::DateTime lastModified;
+    };
+
+    std::vector<ScoreEntry> scoreEntries;
+    scoreEntries.reserve(recentScores.size());
+
+    for (const RecentFile& file : recentScores) {
+        scoreEntries.push_back({ makeItem(file), io::FileInfo(file.path).lastModified() });
+    }
+
+    if (m_sortMode == SortByName) {
+        QCollator collator;
+        collator.setNumericMode(true);
+        collator.setCaseSensitivity(Qt::CaseInsensitive);
+
+        std::stable_sort(scoreEntries.begin(), scoreEntries.end(), [&collator](const ScoreEntry& a, const ScoreEntry& b) {
+            return collator.compare(a.obj[NAME_KEY].toString(), b.obj[NAME_KEY].toString()) < 0;
+        });
+    } else {
+        std::stable_sort(scoreEntries.begin(), scoreEntries.end(), [](const ScoreEntry& a, const ScoreEntry& b) {
+            return a.lastModified.toQDateTime() > b.lastModified.toQDateTime();
+        });
+    }
+
     std::vector<QVariantMap> items;
-    items.reserve(recentScores.size() + 2);
+    items.reserve(scoreEntries.size() + 2);
 
     QVariantMap addItem;
     addItem[NAME_KEY] = muse::qtrc("project", "New score");
@@ -83,8 +112,8 @@ void RecentScoresModel::reloadRecentScores()
     noResultsFoundItem[IS_CLOUD_KEY] = false;
     items.push_back(noResultsFoundItem);
 
-    for (const RecentFile& file : recentScores) {
-        items.push_back(makeItem(file));
+    for (const ScoreEntry& entry : scoreEntries) {
+        items.push_back(entry.obj);
     }
 
     setRecentScores(items);
@@ -176,6 +205,23 @@ int RecentScoresModel::findRow(const muse::io::path_t& path) const
     }
 
     return -1;
+}
+
+RecentScoresModel::SortMode RecentScoresModel::sortMode() const
+{
+    return m_sortMode;
+}
+
+void RecentScoresModel::setSortMode(SortMode mode)
+{
+    if (m_sortMode == mode) {
+        return;
+    }
+
+    m_sortMode = mode;
+    emit sortModeChanged();
+
+    reloadRecentScores();
 }
 
 QList<int> RecentScoresModel::nonScoreItemIndices() const
