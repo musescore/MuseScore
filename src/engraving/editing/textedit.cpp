@@ -920,6 +920,9 @@ void TextBase::paste(const String& txt)
     bool symState = false;
     CharFormat format = *cursor()->format();
 
+    String prevFontFace;
+    double prevFontSize = 0;
+
     score()->startCmd(TranslatableString("undoableAction", "Paste text"));
     for (size_t i = 0; i < txt.size(); i++) {
         Char c = txt.at(i);
@@ -962,7 +965,7 @@ void TextBase::paste(const String& txt)
                     cursor()->setFormat(format);
                     insertSym(SymNames::symIdByName(sym));
                 } else {
-                    prepareFormat(token, format);
+                    prepareFormat(token, format, prevFontFace, prevFontSize);
                 }
             } else {
                 token += c;
