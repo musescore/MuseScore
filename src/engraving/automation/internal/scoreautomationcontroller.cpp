@@ -1215,27 +1215,38 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
 {
     const utick_t tickFrom = tempoChange->tick().ticks() + tickOffset;
     const utick_t tickTo = tickFrom + tempoChange->ticks().ticks();
-    const real_t normalizedCurrent = currentTempoAt(*ctx.tempoCurve, tickFrom);
 
     EID itemId = tempoChange->eid();
     if (!itemId.isValid()) {
         itemId = tempoChange->assignNewEID();
     }
 
-    const auto tickFromIt = ctx.tempoCurve->lower_bound(tickFrom);
-    if (tickFromIt == ctx.tempoCurve->end() || tickFromIt->first != tickFrom) {
-        // Explicit flat arrival, so the ramp is anchored here rather than at whatever
-        // unrelated marking last happened to be an arrival
-        AutomationPoint startPoint;
-        startPoint.value.outValue = normalizedCurrent;
-        startPoint.value.inValue = AutomationPoint::ExplicitArrival { normalizedCurrent, AutomationPoint::Ease::none() };
+    const auto [startIt, startInserted] = ctx.tempoCurve->try_emplace(tickFrom);
+    const real_t prevTempo = startIt == ctx.tempoCurve->begin() ? DEFAULT_NORMALIZED_TEMPO
+                             : std::prev(startIt)->second.value.outValue;
+
+    // Make the ramp start here. Otherwise TempoTimeline starts it at the previous ramp's end,
+    // overriding all tempo markings in between
+    const AutomationPoint::ExplicitArrival flatArrival { prevTempo, AutomationPoint::Ease::none() };
+
+    AutomationPoint& startPoint = startIt->second;
+    if (startInserted) {
+        startPoint.value.outValue = prevTempo;
+        startPoint.value.inValue = flatArrival;
         startPoint.itemId = itemId;
         startPoint.generated = true;
-        ctx.tempoCurve->emplace_hint(tickFromIt, tickFrom, startPoint);
         setNoRepeatTempoPoint(tickFrom - tickOffset, startPoint, ctx);
+    } else if (startPoint.generated && !std::holds_alternative<AutomationPoint::ExplicitArrival>(startPoint.value.inValue)) {
+        startPoint.value.inValue = flatArrival;
+
+        const auto rawIt = ctx.noRepeatTempoCurve.find(tickFrom - tickOffset);
+        if (rawIt != ctx.noRepeatTempoCurve.end() && rawIt->second.generated
+            && !std::holds_alternative<AutomationPoint::ExplicitArrival>(rawIt->second.value.inValue)) {
+            rawIt->second.value.inValue = flatArrival;
+        }
     }
 
-    const real_t normalizedTarget = std::clamp(normalizedCurrent * tempoChange->tempoChangeFactor(),
+    const real_t normalizedTarget = std::clamp(startPoint.value.outValue * tempoChange->tempoChangeFactor(),
                                                MIN_NORMALIZED_TEMPO, MAX_NORMALIZED_TEMPO);
     const AutomationPoint::ExplicitArrival arrival { normalizedTarget, changeMethodToEase(tempoChange->easingMethod()) };
 
