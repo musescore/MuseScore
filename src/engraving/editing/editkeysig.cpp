@@ -92,6 +92,7 @@ void EditKeySig::undoChangeKeySig(Transaction& tx, Score* score, Staff* ostaff, 
         if (staff->isDrumStaff(tick)) {
             continue;
         }
+        Part* part = staff->originPart(tick);
 
         Score* staffScore = staff->score();
         Measure* measure = staffScore->tick2measure(tick);
@@ -105,14 +106,14 @@ void EditKeySig::undoChangeKeySig(Transaction& tx, Score* score, Staff* ostaff, 
         track_idx_t track    = staffIdx * VOICES;
         KeySig* ks   = toKeySig(s->element(track));
 
-        Interval interval = staff->part()->instrument(tick)->transpose();
+        Interval interval = part->instrument(tick)->transpose();
         Interval oldStaffInterval = staff->transpose(tick);
         KeySigEvent nkey  = key;
         bool concertPitch = staffScore->style().styleB(Sid::concertPitch);
 
         if (interval.chromatic && !concertPitch && !nkey.isAtonal()) {
             interval.flip();
-            nkey.setKey(Transpose::transposeKey(key.concertKey(), interval, staff->part()->preferSharpFlat()));
+            nkey.setKey(Transpose::transposeKey(key.concertKey(), interval, part->preferSharpFlat()));
             interval.flip();
         }
 
@@ -137,6 +138,6 @@ void EditKeySig::undoChangeKeySig(Transaction& tx, Score* score, Staff* ostaff, 
     }
     if (needsUpdate) {
         Fraction tickEnd = Fraction::fromTicks(ostaff->keyList()->nextKeyTick(tick.ticks()));
-        Transpose::transpositionChanged(tx, score, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
+        Transpose::transpositionChanged(tx, score, ostaff->originPart(tick), ostaff->transpose(tick), tick, tickEnd);
     }
 }

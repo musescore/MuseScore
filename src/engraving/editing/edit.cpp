@@ -2893,7 +2893,7 @@ void Score::restoreInitialKeySigAndTimeSig()
     for (Staff* staff : m_staves) {
         Key concertKey = Key::C;
         Key transposedKey = concertKey;
-        const Part* part = staff->part();
+        const Part* part = staff->originPart(startTick);
         const Instrument* instrument = part->instrument();
         int transpose = -instrument->transpose().chromatic;
         if (!concertPitch) {
@@ -2917,7 +2917,7 @@ void Score::restoreInitialKeySigAndTimeSig()
         newKeySig->setKeySigEvent(keySigEvent);
         undoAddElement(newKeySig);
 
-        staff->setKey(Fraction(0, 1), keySigEvent);
+        staff->setKey(startTick, keySigEvent);
 
         Segment* timeSegment = firstMeas->undoGetSegment(SegmentType::TimeSig, startTick);
         TimeSig* newTimeSig = Factory::createTimeSig(timeSegment);
@@ -3808,10 +3808,11 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                     e.setConcertKey(Key::C);
                 } else {
                     e.setMode(key.mode());
-                    Interval transposeInterval = staff->part()->instrument(Fraction::fromTicks(nextTick))->transpose();
+                    Part* part = staff->originPart(Fraction::fromTicks(nextTick));
+                    Interval transposeInterval = part->instrument(Fraction::fromTicks(nextTick))->transpose();
                     transposeInterval.flip();
                     Key ckey = key.concertKey();
-                    Key nkey = Transpose::transposeKey(ckey, transposeInterval, staff->part()->preferSharpFlat());
+                    Key nkey = Transpose::transposeKey(ckey, transposeInterval, part->preferSharpFlat());
                     e.setConcertKey(ckey);
                     e.setKey(nkey);
                 }
