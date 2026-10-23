@@ -28,6 +28,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/editing/addremoveelement.h"
 #include "engraving/editing/editexcerpt.h"
 #include "engraving/editing/editpagelocks.h"
@@ -820,6 +821,52 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
 
     notifyAboutPartChanged(part);
     m_interaction->noteInput()->stateChanged().notify();
+}
+
+void NotationParts::addPartToSharedPart(const muse::ID& partId, const muse::ID& sharedPartId)
+{
+    Part* originPart = partModifiable(partId);
+    Part* possibleSharedPart = partModifiable(sharedPartId);
+
+    if (!originPart || !EditStaveSharing::canSharePart(originPart)) {
+        return;
+    }
+
+    if (!possibleSharedPart || !possibleSharedPart->isSharedPart()) {
+        return;
+    }
+
+    SharedPart* sharedPart = toSharedPart(possibleSharedPart);
+
+    if (originPart->sharedPart() == sharedPart) {
+        return;
+    }
+
+    undoStack()->transaction(TranslatableString("undoableAction", "Add part to shared part"), [&](engraving::Transaction& tx) {
+        if (originPart->sharedPart()) {
+            EditStaveSharing::handleRemovePart(tx, originPart);
+        }
+        EditStaveSharing::connectSharedPart(tx, sharedPart, originPart);
+    });
+
+    m_partsChanged.notify();
+    m_sharedPartsChanged.notify();
+}
+
+void NotationParts::removePartFromSharedPart(const muse::ID& partId)
+{
+    Part* originPart = partModifiable(partId);
+
+    if (!originPart || originPart->isSharedPart() || !originPart->sharedPart()) {
+        return;
+    }
+
+    undoStack()->transaction(TranslatableString("undoableAction", "Remove part from shared part"), [&](engraving::Transaction& tx) {
+        EditStaveSharing::handleRemovePart(tx, originPart);
+    });
+
+    m_partsChanged.notify();
+    m_sharedPartsChanged.notify();
 }
 
 const std::vector<Staff*>& NotationParts::systemObjectStaves() const

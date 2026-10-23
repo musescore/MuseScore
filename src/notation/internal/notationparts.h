@@ -85,6 +85,9 @@ public:
                            const StaffType* newStaffType = nullptr) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
+    void addPartToSharedPart(const muse::ID& partId, const muse::ID& sharedPartId) override;
+    void removePartFromSharedPart(const muse::ID& partId) override;
+
     const std::vector<Staff*>& systemObjectStaves() const override;
     muse::async::Notification systemObjectStavesChanged() const override;
 

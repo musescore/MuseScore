@@ -90,6 +90,9 @@ public:
                                    const StaffType* newStaffType = nullptr) = 0;
     virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) = 0;
 
+    virtual void addPartToSharedPart(const muse::ID& partId, const muse::ID& sharedPartId) = 0;
+    virtual void removePartFromSharedPart(const muse::ID& partId) = 0;
+
     virtual const std::vector<Staff*>& systemObjectStaves() const = 0;
     virtual muse::async::Notification systemObjectStavesChanged() const = 0;
 
