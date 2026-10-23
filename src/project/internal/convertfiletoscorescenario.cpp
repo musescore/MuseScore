@@ -373,6 +373,9 @@ void ConvertFileToScoreScenario::showUploadError(const Ret& ret, const ConvertIn
     case static_cast<int>(Err::ConvertUploadFailed):
         showUploadFailedNotification(input, convertedScoreName);
         break;
+    case static_cast<int>(Err::ConvertRateLimited):
+        showUploadLimitReachedError();
+        break;
     case static_cast<int>(io::Err::FSNotExist):
     case static_cast<int>(io::Err::FSReadError):
         showFileReadError(convertPathsOf(input).size());
@@ -517,6 +520,13 @@ void ConvertFileToScoreScenario::showTooManyImagesError(int maxImages)
     std::string text = muse::qtrc("project/convert", "You can convert up to %n image(s) at a time. Remove some images and try again.",
                                   nullptr, maxImages).toStdString();
     interactive()->warning(muse::trc("project/convert", "Too many images selected"), text,
+                           { interactive()->buttonData(IInteractive::Button::Ok) });
+}
+
+void ConvertFileToScoreScenario::showUploadLimitReachedError()
+{
+    interactive()->warning(muse::trc("project/convert", "Upload limit reached"),
+                           muse::trc("project/convert", "You’ve reached the limit for file conversions. Please try again later."),
                            { interactive()->buttonData(IInteractive::Button::Ok) });
 }
 
