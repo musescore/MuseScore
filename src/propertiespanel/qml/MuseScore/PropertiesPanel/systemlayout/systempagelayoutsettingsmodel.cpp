@@ -51,6 +51,9 @@ void SystemPageLayoutSettingsModel::loadProperties()
     updateScoreIsInPageView();
     updateIsMakeIntoSystemAvailable();
     updateIsMakeIntoPageAvailable();
+
+    updateBoxTypesInSelection();
+
     updateSystemCount();
     updatePageCount();
 }
@@ -245,6 +248,11 @@ bool SystemPageLayoutSettingsModel::isMakeIntoPageAvailable() const
     return m_isMakeIntoPageAvailable;
 }
 
+bool SystemPageLayoutSettingsModel::isSystemTabAvailable() const
+{
+    return m_isSystemTabAvailable;
+}
+
 int SystemPageLayoutSettingsModel::systemCount() const
 {
     return static_cast<int>(m_systemCount);
@@ -300,6 +308,56 @@ void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable()
         m_isMakeIntoPageAvailable = available;
         emit isMakeIntoPageAvailableChanged(m_isMakeIntoPageAvailable);
     }
+}
+
+void SystemPageLayoutSettingsModel::updateIsSystemTabAvailable()
+{
+    const bool available = m_boxTypesInSelection.contains(BoxType::Measure)
+                           || m_boxTypesInSelection.contains(BoxType::Horizontal);
+
+    if (m_isSystemTabAvailable != available) {
+        m_isSystemTabAvailable = available;
+        emit isSystemTabAvailableChanged(m_isSystemTabAvailable);
+    }
+}
+
+void SystemPageLayoutSettingsModel::updateBoxTypesInSelection()
+{
+    m_boxTypesInSelection.clear();
+
+    if (isEmpty()) {
+        updateIsSystemTabAvailable();
+        return;
+    }
+
+    const auto checkForBoxType = [this](const EngravingItem* item) {
+        if (item->isMeasure()) {
+            m_boxTypesInSelection.insert(BoxType::Measure);
+        } else if (item->isHBox()) {
+            m_boxTypesInSelection.insert(BoxType::Horizontal);
+        } else if (item->isVBoxBase()) {
+            // Slight hack - for these purposes we'll take "Vertical" to mean VBoxBase...
+            m_boxTypesInSelection.insert(BoxType::Vertical);
+        }
+    };
+
+    if (selection()->isRange()) {
+        const MeasureBase* endMB = selection()->endMeasureBase();
+        const MeasureBase* currMB = selection()->startMeasureBase();
+        while (currMB) {
+            checkForBoxType(currMB);
+            if (!endMB || currMB->isAfterOrEqual(endMB)) {
+                break;
+            }
+            currMB = currMB->nextMM();
+        }
+    } else {
+        for (const EngravingItem* item : selection()->elements()) {
+            checkForBoxType(item);
+        }
+    }
+
+    updateIsSystemTabAvailable();
 }
 
 void SystemPageLayoutSettingsModel::updateSystemCount()

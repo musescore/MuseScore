@@ -25,6 +25,7 @@
 #include <qqmlintegration.h>
 
 #include "propertiespanelabstractmodel.h"
+#include "notation/notationtypes.h"
 
 namespace mu::propertiespanel {
 class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
@@ -46,6 +47,7 @@ class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(bool scoreIsInPageView READ scoreIsInPageView NOTIFY scoreIsInPageViewChanged)
     Q_PROPERTY(bool isMakeIntoSystemAvailable READ isMakeIntoSystemAvailable NOTIFY isMakeIntoSystemAvailableChanged)
     Q_PROPERTY(bool isMakeIntoPageAvailable READ isMakeIntoPageAvailable NOTIFY isMakeIntoPageAvailableChanged)
+    Q_PROPERTY(bool isSystemTabAvailable READ isSystemTabAvailable NOTIFY isSystemTabAvailableChanged)
     Q_PROPERTY(int systemCount READ systemCount NOTIFY systemCountChanged)
     Q_PROPERTY(int pageCount READ pageCount NOTIFY pageCountChanged)
 
@@ -85,6 +87,7 @@ public:
     bool scoreIsInPageView() const;
     bool isMakeIntoSystemAvailable() const;
     bool isMakeIntoPageAvailable() const;
+    bool isSystemTabAvailable() const;
 
     int systemCount() const;
     int pageCount() const;
@@ -98,6 +101,10 @@ private:
     void updateScoreIsInPageView();
     void updateIsMakeIntoSystemAvailable();
     void updateIsMakeIntoPageAvailable();
+    void updateIsSystemTabAvailable();
+
+    void updateBoxTypesInSelection();
+
     void updateSystemCount();
     void updatePageCount();
 
@@ -107,6 +114,7 @@ signals:
     void scoreIsInPageViewChanged(bool isInPageView);
     void isMakeIntoSystemAvailableChanged(bool isMakeIntoSystemAvailable);
     void isMakeIntoPageAvailableChanged(bool isMakeIntoPageAvailable);
+    void isSystemTabAvailableChanged(bool isSystemTabAvailable);
     void systemCountChanged(int count);
     void pageCountChanged(int count);
 
@@ -116,6 +124,10 @@ private:
     bool m_scoreIsInPageView = false;
     bool m_isMakeIntoSystemAvailable = false;
     bool m_isMakeIntoPageAvailable = false;
+    bool m_isSystemTabAvailable = false;
+
+    QSet<mu::notation::BoxType> m_boxTypesInSelection;
+
     size_t m_systemCount = 0;
     size_t m_pageCount = 0;
 };

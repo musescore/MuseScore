@@ -37,6 +37,8 @@ PropertiesPanelSection {
 
     required property SystemPageLayoutSettingsModel model
 
+    readonly property bool isSystemTabAvailable: root.model ? root.model.isSystemTabAvailable : false
+
     implicitHeight: contentColumn.visible ? contentColumn.implicitHeight : 0
 
     Column {
@@ -49,6 +51,8 @@ PropertiesPanelSection {
 
         PropertiesPanelTabBar {
             id: tabBar
+
+            visible: root.isSystemTabAvailable
 
             PropertiesPanelTabButton {
                 text: qsTrc("propertiespanel", "System")
@@ -74,9 +78,11 @@ PropertiesPanelSection {
         StackLayout {
             id: lockMenu
             width: parent.width
-            currentIndex: tabBar.currentIndex
 
-            height: itemAt(currentIndex).implicitHeight
+            // Without the System tab (and the tab bar), only the Page section is available
+            currentIndex: root.isSystemTabAvailable ? tabBar.currentIndex : pageSection.StackLayout.index
+
+            height: itemAt(currentIndex)?.implicitHeight ?? 0
 
             MeasuresFlowSection {
                 id: systemSection
