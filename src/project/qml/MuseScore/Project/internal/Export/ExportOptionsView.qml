@@ -185,6 +185,65 @@ Column {
         }
     }
 
+    CheckBox {
+        id: selectedBarsBox
+        width: parent.width
+        enabled: root.exportModel.canExportSelectedBars
+
+        text: {
+            if (!root.exportModel.canExportSelectedBars) {
+                return qsTrc("project/export", "Export selected bars only")
+            }
+            if (root.exportModel.selectedBarStart === root.exportModel.selectedBarEnd) {
+                return qsTrc("project/export", "Export selected bars only (bar %1)").arg(root.exportModel.selectedBarStart)
+            }
+            return qsTrc("project/export", "Export selected bars only (bars %1–%2)")
+                    .arg(root.exportModel.selectedBarStart)
+                    .arg(root.exportModel.selectedBarEnd)
+        }
+
+        navigation.name: "ExportSelectedBarsCheckbox"
+        navigation.panel: navPanel
+        navigation.row: 100000 + exportType.count
+
+        checked: root.exportModel.exportSelectedBars
+        onClicked: {
+            root.exportModel.exportSelectedBars = !checked
+        }
+    }
+
+    StyledTextLabel {
+        width: parent.width
+        visible: !root.exportModel.canExportSelectedBars
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignLeft
+        text: qsTrc("project/export", "Select a range of bars in the score to export just those bars.")
+    }
+
+    ExportOptionItem {
+        width: parent.width
+        visible: selectedBarsBox.checked
+        text: qsTrc("project/export", "Repetitions:")
+
+        IncrementalPropertyControl {
+            Layout.preferredWidth: 96
+
+            currentValue: root.exportModel.selectedBarsRepeats
+            minValue: 1
+            maxValue: 99
+            step: 1
+            decimals: 0
+
+            navigation.name: "SelectedBarsRepeats"
+            navigation.panel: navPanel
+            navigation.row: 100000 + exportType.count + 1
+
+            onValueEdited: function(newValue) {
+                root.exportModel.selectedBarsRepeats = newValue
+            }
+        }
+    }
+
     SeparatorLine {
         anchors.topMargin: 24
         anchors.bottomMargin: 24
@@ -200,7 +259,7 @@ Column {
 
         navigation.name: "OpenDestinationFolderOnExportCheckbox"
         navigation.panel: navPanel
-        navigation.row: 100000 + exportType.count
+        navigation.row: 100000 + exportType.count + 2
 
         checked: root.exportModel.shouldDestinationFolderBeOpenedOnExport
         onClicked: {

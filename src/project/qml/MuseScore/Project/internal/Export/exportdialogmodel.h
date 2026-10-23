@@ -107,6 +107,12 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
 
+    Q_PROPERTY(bool canExportSelectedBars READ canExportSelectedBars NOTIFY selectedBarsChanged)
+    Q_PROPERTY(int selectedBarStart READ selectedBarStart NOTIFY selectedBarsChanged)
+    Q_PROPERTY(int selectedBarEnd READ selectedBarEnd NOTIFY selectedBarsChanged)
+    Q_PROPERTY(bool exportSelectedBars READ exportSelectedBars WRITE setExportSelectedBars NOTIFY exportSelectedBarsChanged)
+    Q_PROPERTY(int selectedBarsRepeats READ selectedBarsRepeats WRITE setSelectedBarsRepeats NOTIFY selectedBarsRepeatsChanged)
+
     Q_PROPERTY(bool isFFmpegAvailable READ isFFmpegAvailable NOTIFY isFFmpegAvailableChanged)
     Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged)
 
@@ -235,6 +241,16 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
 
+    bool canExportSelectedBars() const;
+    int selectedBarStart() const;
+    int selectedBarEnd() const;
+
+    bool exportSelectedBars() const;
+    void setExportSelectedBars(bool exportSelected);
+
+    int selectedBarsRepeats() const;
+    void setSelectedBarsRepeats(int repeats);
+
     bool isFFmpegAvailable() const;
     QString ffmpegDir() const;
     void setFFmpegDir(const QString& dir);
@@ -284,6 +300,10 @@ signals:
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
+    void selectedBarsChanged();
+    void exportSelectedBarsChanged();
+    void selectedBarsRepeatsChanged();
+
     void isFFmpegAvailableChanged();
     void ffmpegDirChanged();
 
@@ -306,6 +326,7 @@ private:
     notation::IMasterNotationPtr masterNotation() const;
 
     void selectSavedNotations();
+    void readSelectedBars();
 
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     void disableVideoExportSettingMode();
@@ -313,6 +334,14 @@ private:
 #endif
 
     QList<notation::INotationPtr> m_notations {};
+
+    bool m_canExportSelectedBars = false;
+    bool m_exportSelectedBars = false;
+    int m_selectedBarsRepeats = 1;
+    int m_selectedBarStart = 0;
+    int m_selectedBarEnd = 0;
+    int m_selectedStartTick = 0;
+    int m_selectedEndTick = 0;
     QItemSelectionModel* m_selectionModel = nullptr;
 
     ExportTypeList m_exportTypeList {};

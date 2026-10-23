@@ -176,6 +176,7 @@ public:
     void setTextName(const String& v) { m_textName = v; }
 
     ChordList* chordList() const { return m_score ? m_score->chordList() : nullptr; }
+    void setScore(Score* score) { m_score = score; }
 
     const ChordDescription* descr() const;
     const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
@@ -218,6 +219,8 @@ public:
     Harmony(EngravingObject* parent = 0); // Segment or FretDiagram
     Harmony(const Harmony&);
     ~Harmony();
+
+    void setScore(Score* s) override;
 
     Harmony* clone() const override { return new Harmony(*this); }
 

@@ -34,6 +34,7 @@
 
 namespace mu::engraving {
 class EngravingItem;
+class Score;
 class StaffText;
 }
 
@@ -45,6 +46,9 @@ public:
 
     virtual void init() = 0;
     virtual void reload() = 0;
+
+    //! Play `score` until setPlaybackScore(nullptr) restores the open notation.
+    virtual void setPlaybackScore(engraving::Score* score) = 0;
 
     virtual void setSendEventsOnScoreChange(const engraving::InstrumentTrackId& trackId, bool send) = 0;
     virtual void sendEventsForChangedTracks() = 0;

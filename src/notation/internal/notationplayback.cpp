@@ -125,6 +125,27 @@ void NotationPlayback::reload()
     m_playbackModel.reload();
 }
 
+void NotationPlayback::setPlaybackScore(Score* score)
+{
+    m_playbackScoreOverride = score;
+    // Empty events are sent for tracks the temporary score does not contain.
+    // Restoring the open score turns this off before those tracks are rebuilt.
+    m_playbackModel.setSuspendMissingTracks(score != nullptr);
+
+    Score* target = score ? score : this->score();
+    if (!target) {
+        return;
+    }
+
+    m_playbackModel.assignScore(target);
+    updateTotalPlayTime();
+}
+
+const Score* NotationPlayback::effectiveScore() const
+{
+    return m_playbackScoreOverride ? m_playbackScoreOverride : score();
+}
+
 void NotationPlayback::setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send)
 {
     m_playbackModel.setSendEventsOnScoreChange(trackId, send);
@@ -233,7 +254,7 @@ void NotationPlayback::updateLoopBoundaries()
 
 void NotationPlayback::updateTotalPlayTime()
 {
-    const mu::engraving::Score* score = m_getScore->score();
+    const mu::engraving::Score* score = effectiveScore();
     if (!score) {
         return;
     }
@@ -241,7 +262,13 @@ void NotationPlayback::updateTotalPlayTime()
     const bool expandRepeats = m_playbackModel.isPlayRepeatsEnabled();
     const int lastTick = score->repeatList(expandRepeats).ticks();
     const TempoTimeline& timeline = score->tempoTimeline(expandRepeats);
-    audio::secs_t newPlayTime = timeline.utick2utime(lastTick);
+    const double seconds = timeline.utick2utime(lastTick);
+    // A non-finite duration aborts the audio engine (check_valid) and closes the app.
+    if (!std::isfinite(seconds) || seconds < 0.0) {
+        LOGE() << "Ignoring non-finite playback duration at tick " << lastTick;
+        return;
+    }
+    audio::secs_t newPlayTime = seconds;
     newPlayTime += PLAYBACK_TAIL_SECS;
 
     if (m_totalPlayTime == newPlayTime) {
@@ -264,7 +291,7 @@ muse::async::Channel<muse::audio::secs_t> NotationPlayback::totalPlayTimeChanged
 
 muse::audio::secs_t NotationPlayback::playedTickToSec(tick_t tick) const
 {
-    const mu::engraving::Score* sc = score();
+    const mu::engraving::Score* sc = effectiveScore();
     if (!sc) {
         return 0;
     }
@@ -274,7 +301,7 @@ muse::audio::secs_t NotationPlayback::playedTickToSec(tick_t tick) const
 
 tick_t NotationPlayback::secToPlayedTick(muse::audio::secs_t sec) const
 {
-    const mu::engraving::Score* sc = score();
+    const mu::engraving::Score* sc = effectiveScore();
     if (!sc) {
         return 0;
     }
@@ -284,7 +311,7 @@ tick_t NotationPlayback::secToPlayedTick(muse::audio::secs_t sec) const
 
 tick_t NotationPlayback::secToTick(muse::audio::secs_t sec) const
 {
-    const mu::engraving::Score* sc = score();
+    const mu::engraving::Score* sc = effectiveScore();
     if (!sc) {
         return 0;
     }
@@ -298,11 +325,12 @@ tick_t NotationPlayback::secToTick(muse::audio::secs_t sec) const
 
 RetVal<muse::midi::tick_t> NotationPlayback::playPositionTickByRawTick(muse::midi::tick_t tick) const
 {
-    if (!score()) {
+    const Score* sc = effectiveScore();
+    if (!sc) {
         return make_ret(Err::Undefined);
     }
 
-    muse::midi::tick_t playbackTick = score()->repeatList(m_playbackModel.isPlayRepeatsEnabled()).tick2utick(tick);
+    muse::midi::tick_t playbackTick = sc->repeatList(m_playbackModel.isPlayRepeatsEnabled()).tick2utick(tick);
 
     return RetVal<muse::midi::tick_t>::make_ok(std::move(playbackTick));
 }
