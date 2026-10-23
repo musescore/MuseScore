@@ -662,6 +662,33 @@ TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadFails_Finish
     EXPECT_TRUE(m_service->watchedScores().val.empty());
 }
 
+TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_RateLimited_FinishesWithRateLimited)
+{
+    // [GIVEN] The upload starts
+    auto uploadProgress = std::make_shared<Progress>();
+    ON_CALL(*m_convertService, uploadToConvert(_))
+    .WillByDefault(Return(uploadProgress));
+
+    // [WHEN] Uploading
+    RetVal<Progress> progress = m_service->uploadToConvert(OmrConvertInput { io::paths_t { "/some/path/file.pdf" } }, u"My Score");
+    ASSERT_TRUE(progress.ret);
+
+    Ret finishedRet;
+    progress.val.finished().onReceive(nullptr, [&](const ProgressResult& res) {
+        finishedRet = res.ret;
+    });
+
+    // [WHEN] The server rejects the upload because the limit is exceeded
+    Ret serverRet = make_ret(Ret::Code::UnknownError);
+    serverRet.setData(CONVERT_ERROR_CODE_KEY, ConvertErrorCode::RateLimited);
+    uploadProgress->finish(serverRet);
+
+    // [THEN] The progress finishes with the rate limited error
+    EXPECT_EQ(finishedRet.code(), static_cast<int>(mu::project::Err::ConvertRateLimited));
+    EXPECT_TRUE(m_service->uploadingScores().val.empty());
+    EXPECT_TRUE(m_service->watchedScores().val.empty());
+}
+
 TEST_F(Project_ConvertFileToScoreServiceTest, UploadToConvert_UploadSucceeds_ReportsProgressAndPersistsWatchedItem)
 {
     // [GIVEN] The upload succeeds with queue id TEST_QUEUE_ID

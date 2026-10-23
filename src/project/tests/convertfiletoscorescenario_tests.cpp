@@ -1204,6 +1204,41 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UploadFailure_ShowsU
     pumpEvents();
 }
 
+TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UploadRateLimited_ShowsUploadLimitReachedNotification)
+{
+    // [GIVEN] The upload starts
+    Progress uploadProgress;
+    ON_CALL(*m_service, uploadToConvert(_, _))
+    .WillByDefault(Return(uploadStarted(uploadProgress)));
+
+    // [GIVEN] The user picks a file via the picker dialog
+    EXPECT_CALL(*m_interactive, open(UriQuery("musescore://project/convert/selectfiles")))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedValPromise(Val::fromQVariant(pickedOmrFileSelection()));
+    }));
+
+    const std::string title = muse::trc("project/convert", "Upload limit reached");
+    const std::string text = muse::trc("project/convert", "You’ve reached the limit for file conversions. Please try again later.");
+
+    // [THEN] The "upload limit reached" notification is shown, with only a Dismiss action
+    EXPECT_CALL(*m_toastService,
+                show(title, text, muse::ui::IconCode::Code::ERROR_FILLED, true,
+                     ToastActionCodesAre({ int(toast::ToastActionCode::Dismiss) })))
+    .WillOnce(Invoke([](auto&&...) {
+        return resolvedToastResultPromise();
+    }));
+
+    // [THEN] No error dialog is shown
+    expectNoErrorDialog();
+
+    // [WHEN] Converting with no pre-selected files, and the upload is then rate limited
+    m_scenario->convertFiles();
+    pumpEvents();
+
+    uploadProgress.finish(make_ret(Err::ConvertRateLimited));
+    pumpEvents();
+}
+
 TEST_F(Project_ConvertFileToScoreScenarioTest, ConvertFiles_UploadCanceled_ShowsNoError)
 {
     // [GIVEN] The upload starts
