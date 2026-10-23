@@ -45,14 +45,19 @@ using namespace mu::engraving;
 // ScoreFont
 // =============================================
 
-EngravingFont::EngravingFont(const std::string& name, const std::string& family,
-                             const path_t& filePath, const path_t& metadataPath,
+EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath, const path_t& metadataPath,
                              const modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx),  m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
+    : EngravingFont(name, family, std::make_shared<File>(filePath), std::make_shared<File>(metadataPath), iocCtx)
+{
+}
+
+EngravingFont::EngravingFont(const std::string& name, const std::string& family, std::shared_ptr<IODevice> font,
+                             std::shared_ptr<IODevice> metadata, const modularity::ContextPtr& iocCtx)
+    : muse::Contextable(iocCtx), m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
-    m_fontPath(filePath),
-    m_metadataPath(metadataPath)
+    m_fontDevice(std::move(font)),
+    m_metadataDevice(std::move(metadata))
 {
 }
 
@@ -60,11 +65,11 @@ EngravingFont::EngravingFont(const EngravingFont& other)
     : muse::Contextable(other.iocContext())
 {
     m_loaded = false;
-    m_symbols  = other.m_symbols;
-    m_name     = other.m_name;
-    m_family   = other.m_family;
-    m_fontPath = other.m_fontPath;
-    m_metadataPath = other.m_metadataPath;
+    m_symbols = other.m_symbols;
+    m_name = other.m_name;
+    m_family = other.m_family;
+    m_fontDevice = other.m_fontDevice;
+    m_metadataDevice = other.m_metadataDevice;
 }
 
 // =============================================
@@ -101,8 +106,9 @@ void EngravingFont::ensureLoad()
         return;
     }
 
-    if (-1 == fontProvider()->addSymbolFont(String::fromStdString(m_family), m_fontPath)) {
-        LOGE() << "fatal error: cannot load internal font: " << m_fontPath;
+    const String family = String::fromStdString(m_family);
+    if (!m_fontDevice || -1 == fontProvider()->addSymbolFont(family, m_fontDevice)) {
+        LOGE() << "fatal error: cannot load font: " << m_name;
         return;
     }
 
@@ -123,20 +129,23 @@ void EngravingFont::ensureLoad()
         computeMetrics(sym, code);
     }
 
-    File metadataFile(m_metadataPath);
-    if (!metadataFile.open(IODevice::ReadOnly)) {
-        LOGE() << "Failed to open glyph metadata file: " << metadataFile.filePath();
+    if (!m_metadataDevice || !m_metadataDevice->open(IODevice::ReadOnly)) {
+        LOGE() << "Failed to open glyph metadata of " << m_name;
         return;
     }
 
+    m_metadataDevice->seek(0);
+    const ByteArray metadata = m_metadataDevice->readAll();
+    m_metadataDevice->close();
+
     std::string error;
-    const JsonObject metadataJson = JsonDocument::fromJson(metadataFile.readAll(), &error).rootObject();
+    const JsonObject metadataJson = JsonDocument::fromJson(metadata, &error).rootObject();
     if (!error.empty()) {
-        LOGE() << "Json parse error in " << metadataFile.filePath() << ", error: " << error;
+        LOGE() << "Json parse error in glyph metadata of " << m_name << ", error: " << error;
         return;
     }
     if (!metadataJson.isValid()) {
-        LOGE() << "No valid JSON object in " << metadataFile.filePath();
+        LOGE() << "No valid JSON object in glyph metadata of " << m_name;
         return;
     }
 
