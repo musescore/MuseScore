@@ -51,6 +51,7 @@ void SystemPageLayoutSettingsModel::loadProperties()
     updateScoreIsInPageView();
 
     const QSet<BoxType> boxTypes = boxTypesInSelection();
+    updateIsBoxOnlySelection(boxTypes);
     updateIsSystemTabAvailable(boxTypes);
     updateIsMakeIntoSystemAvailable(boxTypes);
     updateIsMakeIntoPageAvailable(boxTypes);
@@ -239,6 +240,11 @@ bool SystemPageLayoutSettingsModel::scoreIsInPageView() const
     return m_scoreIsInPageView;
 }
 
+bool SystemPageLayoutSettingsModel::isBoxOnlySelection() const
+{
+    return m_isBoxOnlySelection;
+}
+
 bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
 {
     return m_isMakeIntoSystemAvailable;
@@ -275,6 +281,15 @@ void SystemPageLayoutSettingsModel::updateScoreIsInPageView()
     if (m_scoreIsInPageView != isInPageView) {
         m_scoreIsInPageView = isInPageView;
         emit scoreIsInPageViewChanged(m_scoreIsInPageView);
+    }
+}
+
+void SystemPageLayoutSettingsModel::updateIsBoxOnlySelection(const QSet<BoxType>& boxTypes)
+{
+    const bool boxOnlySelection = !isEmpty() && !boxTypes.contains(BoxType::Measure);
+    if (m_isBoxOnlySelection != boxOnlySelection) {
+        m_isBoxOnlySelection = boxOnlySelection;
+        emit isBoxOnlySelectionChanged(m_isBoxOnlySelection);
     }
 }
 
