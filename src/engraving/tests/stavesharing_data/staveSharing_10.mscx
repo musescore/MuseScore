@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>suJASSIasoN_0ppllC9DROE</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-10-21</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="bb-clarinet">
+        <family id="clarinets">Clarinets</family>
+        </instrument>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <eid>ibEsmExAZyJ_xHUuEdzSEgH</eid>
+      <Staff>
+        <eid>2imGqORIe2E_sKwIlT9yDCB</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>3</bracketSpan>
+          <level>0</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Instrument id="flute">
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <eid>YpylbG1iyiH_1DNSZKwjDgP</eid>
+      <Staff>
+        <eid>RP2SQgVcfhG_XRF5TYDAobF</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <BracketItem>
+          <type>Square</type>
+          <bracketSpan>2</bracketSpan>
+          <level>1</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Instrument id="bb-clarinet">
+        <InstrumentLabel>
+          <longName>Clarinet</longName>
+          <shortName>Cl.</shortName>
+          <transposition>B♭</transposition>
+          <number>1</number>
+          </InstrumentLabel>
+        <trackName>Clarinet</trackName>
+        <minPitchP>50</minPitchP>
+        <maxPitchP>94</maxPitchP>
+        <minPitchA>50</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>wind.reed.clarinet.bflat</instrumentId>
+        <Channel>
+          <program value="71"/>
+          <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="3">
+      <eid>Fad539XlhQK_Qr8GqLNCykL</eid>
+      <Staff>
+        <eid>ccO6Ue35U0C_CnAUbgMgBk</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="bb-clarinet">
+        <InstrumentLabel>
+          <longName>Clarinet</longName>
+          <shortName>Cl.</shortName>
+          <transposition>B♭</transposition>
+          <number>2</number>
+          </InstrumentLabel>
+        <trackName>Clarinet</trackName>
+        <minPitchP>50</minPitchP>
+        <maxPitchP>94</maxPitchP>
+        <minPitchA>50</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>wind.reed.clarinet.bflat</instrumentId>
+        <Channel>
+          <program value="71"/>
+          <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>ct5Vt1XkQ0J_c+8PkQkOPqK</eid>
+        <voice>
+          <KeySig>
+            <eid>GVsNZ0SxQjE_NpGUIBqo2PH</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>4YiXPsTbbSM_+QNvUd9ni4I</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>YlSDX+QblQ_LabvCVPKGtD</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>x7oqIW4lvvB_dPj8ud/bn3E</eid>
+        <LayoutBreak>
+          <eid>HYDXM6+eLX_/DDEE5/RoQN</eid>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <eid>mJnQqHVoJRI_P3sIyT3HP9H</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Fc06C9Dyf+H_KElVSMnGTTG</eid>
+        <voice>
+          <Rest>
+            <eid>Vmwpq9K8GYM_x+SMmDPr5m</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>YwCYNt6f2aG_Yp1kIuYAi1I</eid>
+        <voice>
+          <KeySig>
+            <eid>e6rnIOKO3BE_+UVjPUQI+X</eid>
+            <concertKey>1</concertKey>
+            </KeySig>
+          <Rest>
+            <eid>TN0fRLo+Y+E_TPjji1M2sWE</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>exC4BM1Ob/H_MgGIqz9IHYP</eid>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
+            </KeySig>
+          <TimeSig>
+            <eid>OE41KOo1/VF_/YzVkTlX6LJ</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>n+z24RXyLWJ_QoiBnfGIPdK</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>tBqOIOErB8J_w+yHUDz6yCH</eid>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
+            <forInstrumentChange>1</forInstrumentChange>
+            </KeySig>
+          <InstrumentChange>
+            <Instrument id="alto-saxophone">
+              <InstrumentLabel>
+                <longName>Alto Saxophone</longName>
+                <shortName>A. Sax.</shortName>
+                </InstrumentLabel>
+              <trackName>Alto Saxophone</trackName>
+              <minPitchP>49</minPitchP>
+              <maxPitchP>92</maxPitchP>
+              <minPitchA>49</minPitchA>
+              <maxPitchA>80</maxPitchA>
+              <transposeDiatonic>-5</transposeDiatonic>
+              <transposeChromatic>-9</transposeChromatic>
+              <instrumentId>wind.reed.saxophone.alto</instrumentId>
+              <Channel>
+                <program value="65"/>
+                <synti>Fluid</synti>
+                <midiPort>0</midiPort>
+                <midiChannel>3</midiChannel>
+                </Channel>
+              </Instrument>
+            <init>1</init>
+            <eid>3cCBuXmevrP_V45LecxG/bH</eid>
+            <text>To Alto Saxophone</text>
+            </InstrumentChange>
+          <Rest>
+            <eid>/AwOBg9wm0E_jgq9l5sExkC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>a9fgb+/lLjC_dqgdNnfIQQJ</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>4SieJDsQtxM_U46cPR3w/yD</eid>
+            <concertKey>1</concertKey>
+            <actualKey>4</actualKey>
+            </KeySig>
+          <Rest>
+            <eid>RPulkPpP4yF_ARgo70c5+PJ</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>xA4qxtvqnNN_hAb+e6s/JiJ</eid>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
+            </KeySig>
+          <TimeSig>
+            <eid>e2nHw2dPc6J_rEt4VG+5JRC</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>eg8XuNVKvs_37UfDPPjrX</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>azDTT0yH8AP_09elafSPM7O</eid>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
+            <forInstrumentChange>1</forInstrumentChange>
+            </KeySig>
+          <InstrumentChange>
+            <Instrument id="alto-saxophone">
+              <InstrumentLabel>
+                <longName>Alto Saxophone</longName>
+                <shortName>A. Sax.</shortName>
+                </InstrumentLabel>
+              <trackName>Alto Saxophone</trackName>
+              <minPitchP>49</minPitchP>
+              <maxPitchP>92</maxPitchP>
+              <minPitchA>49</minPitchA>
+              <maxPitchA>80</maxPitchA>
+              <transposeDiatonic>-5</transposeDiatonic>
+              <transposeChromatic>-9</transposeChromatic>
+              <instrumentId>wind.reed.saxophone.alto</instrumentId>
+              <Channel>
+                <program value="65"/>
+                <synti>Fluid</synti>
+                <midiPort>0</midiPort>
+                <midiChannel>4</midiChannel>
+                </Channel>
+              </Instrument>
+            <init>1</init>
+            <eid>O/cuGoYEEOF_+yZMHk0Q+OK</eid>
+            <text>To Alto Saxophone</text>
+            </InstrumentChange>
+          <Rest>
+            <eid>BXdLY0W7KkM_hNGA2JkPhvC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>zLRfVG6jBX_vbXQIwGC0wN</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>FPy7d4xmamP_y0hUNnwiLtO</eid>
+            <concertKey>1</concertKey>
+            <actualKey>4</actualKey>
+            </KeySig>
+          <Rest>
+            <eid>bhV7Evy+fxP_4SjOMDaK9wN</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
