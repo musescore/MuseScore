@@ -49,6 +49,7 @@ public:
         int bar;
         int chordRest;
         Fraction duration;
+        std::string rhythm;
         bool rest = false;
     };
 
@@ -211,73 +212,8 @@ TEST_F(Engraving_TupletTests, saveLoad)
     delete score;
 }
 
-//-----------------------------------------
-//    longNoteIntoSpaceLeft
-//     a note or rest longer than the space left in a tuplet writes
-//     all of that space as tuplet notes, even when it needs two values,
-//     and continues with ordinary notes or in the next or outer tuplet
-//-----------------------------------------
-
-void Engraving_TupletTests::enterLongNotes(const String& file, const std::vector<LongNoteEntry>& entries)
-{
-    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + file + u".mscx");
-    ASSERT_TRUE(score);
-
-    for (const LongNoteEntry& e : entries) {
-        Measure* m = score->firstMeasure();
-        for (int i = 0; i < e.bar; ++i) {
-            m = m->nextMeasure();
-        }
-        Segment* s = m->first(SegmentType::ChordRest);
-        for (int i = 0; i < e.chordRest; ++i) {
-            s = s->next(SegmentType::ChordRest);
-        }
-        ASSERT_TRUE(toChordRest(s->element(0))->tuplet());
-
-        score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
-        score->setNoteRest(s, 0, e.rest ? NoteVal() : NoteVal(72), e.duration, DirectionV::AUTO);
-        score->endCmd();
-    }
-
-    EXPECT_TRUE(score->sanityCheck());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, file + u".mscx", TUPLET_DATA_DIR + file + u"-ref.mscx"));
-    delete score;
-}
-
-TEST_F(Engraving_TupletTests, longNoteIntoSpaceLeft)
-{
-    enterLongNotes(u"spaceLeft_longNote", {
-        { 0, 0, Fraction(1, 2) },        // 16th quintuplet: space left 5/16, two values
-        { 1, 0, Fraction(1, 1) },        // eighth quintuplet: space left 5/8, two values
-        { 2, 0, Fraction(1, 2), true },  // 16th quintuplet, a rest: space left 5/16, two values
-        { 3, 0, Fraction(1, 1), true },  // eighth quintuplet, a rest: space left 5/8, two values
-        { 4, 1, Fraction(1, 2) },        // 16th quintuplet from its 2nd note: space left 4/16
-        { 5, 0, Fraction(1, 2) },        // 16th septuplet: space left 7/16
-        { 6, 0, Fraction(1, 1) },        // spills from one eighth triplet into the next
-        { 7, 1, Fraction(1, 2) },        // 16th sextuplet from its 2nd note: space left 5/16
-        { 8, 0, Fraction(1, 1) },        // 9:8 16ths: space left 9/16
-        { 9, 0, Fraction(1, 1) },        // two 16th quintuplets: two values in each
-        { 10, 0, Fraction(3, 4) },       // 5:3 eighths in 6/8: space left 5/8
-    });
-}
-
-//-----------------------------------------
-//    longNoteIntoNestedSpaceLeft
-//     the same, from the innermost of three nested tuplets,
-//     continuing in the tuplets it is nested in
-//-----------------------------------------
-
-TEST_F(Engraving_TupletTests, longNoteIntoNestedSpaceLeft)
-{
-    enterLongNotes(u"spaceLeft_nested", {
-        { 0, 2, Fraction(1, 1) },        // half triplet > eighth quintuplet > 16th septuplet, from its 3rd note
-        { 1, 2, Fraction(1, 1), true },  // the same nested tuplets, a rest
-        { 2, 1, Fraction(1, 1) },        // quarter quintuplet > eighth triplet > 32nd sextuplet, from its 2nd note
-    });
-}
-
-// the rhythm of track 0 in a measure, e.g. "3:5[8 r8 r8] 8. 4": durations as note values
-// (r = rest, . = dot, R = measure rest), tuplets as actual:normal[...]
+// the rhythm of track 0 in a measure, e.g. "3:5[8~ 8 r8] 8. 4": durations as note values
+// (r = rest, . = dot, ~ = tie, R = measure rest), tuplets as actual:normal[...]
 static std::string rhythm(Measure* measure)
 {
     std::string result;
@@ -313,9 +249,92 @@ static std::string rhythm(Measure* measure)
         result += cr->isRest() ? "r" : "";
         result += std::to_string(1 << (static_cast<int>(cr->durationType().type()) - static_cast<int>(DurationType::V_WHOLE)));
         result += std::string(cr->durationType().dots(), '.');
+        result += cr->isChord() && toChord(cr)->upNote()->tieFor() ? "~" : "";
     }
     result += std::string(open.size(), ']');
     return result.substr(result.find_first_not_of(' '));
+}
+
+//-----------------------------------------
+//    longNoteIntoSpaceLeft
+//     a note or rest longer than the space left in a tuplet writes
+//     all of that space as tuplet notes, even when it needs two values,
+//     and continues with ordinary notes or in the next or outer tuplet
+//-----------------------------------------
+
+void Engraving_TupletTests::enterLongNotes(const String& file, const std::vector<LongNoteEntry>& entries)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + file + u".mscx");
+    ASSERT_TRUE(score);
+
+    for (const LongNoteEntry& e : entries) {
+        Measure* m = score->firstMeasure();
+        for (int i = 0; i < e.bar; ++i) {
+            m = m->nextMeasure();
+        }
+        Segment* s = m->first(SegmentType::ChordRest);
+        for (int i = 0; i < e.chordRest; ++i) {
+            s = s->next(SegmentType::ChordRest);
+        }
+        ASSERT_TRUE(toChordRest(s->element(0))->tuplet());
+
+        score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+        score->setNoteRest(s, 0, e.rest ? NoteVal() : NoteVal(72), e.duration, DirectionV::AUTO);
+        score->endCmd();
+        EXPECT_EQ(rhythm(m), e.rhythm) << "bar " << e.bar + 1;
+    }
+
+    EXPECT_TRUE(score->sanityCheck());
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, longNoteIntoSpaceLeft)
+{
+    enterLongNotes(u"spaceLeft_longNote", {
+        // 16th quintuplet: space left 5/16, two values
+        { 0, 0, Fraction(1, 2), "5:4[4~ 16~] 8. r16 r2" },
+        // eighth quintuplet: space left 5/8, two values
+        { 1, 0, Fraction(1, 1), "5:4[2~ 8~] 4. r8" },
+        // 16th quintuplet, a rest: space left 5/16, two values
+        { 2, 0, Fraction(1, 2), "5:4[r4 r16] r8. r16 r2", true },
+        // eighth quintuplet, a rest: space left 5/8, two values
+        { 3, 0, Fraction(1, 1), "5:4[r2 r8] r4. r8", true },
+        // 16th quintuplet from its 2nd note: space left 4/16
+        { 4, 1, Fraction(1, 2), "5:4[r16 4~] 4 r2" },
+        // 16th septuplet: space left 7/16
+        { 5, 0, Fraction(1, 2), "7:4[4..~] 16 r16 r8 r2" },
+        // spills from one eighth triplet into the next
+        { 6, 0, Fraction(1, 1), "3:2[4.~] 3:2[4.~] 4 r4" },
+        // 16th sextuplet from its 2nd note: space left 5/16
+        { 7, 1, Fraction(1, 2), "6:4[r16 4~ 16~] 8. r16 r2" },
+        // 9:8 16ths: space left 9/16
+        { 8, 0, Fraction(1, 1), "9:8[2~ 16~] 4.. r16" },
+        // two 16th quintuplets: two values in each
+        { 9, 0, Fraction(1, 1), "5:4[4~ 16~] 5:4[4~ 16~] 4. r8" },
+        // 5:3 eighths in 6/8: space left 5/8
+        { 10, 0, Fraction(3, 4), "5:3[2~ 8~] 8 r8 r8" },
+    });
+}
+
+//-----------------------------------------
+//    longNoteIntoNestedSpaceLeft
+//     the same, from the innermost of three nested tuplets,
+//     continuing in the tuplets it is nested in,
+//     and replacing a nested tuplet in its way as a whole
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, longNoteIntoNestedSpaceLeft)
+{
+    enterLongNotes(u"spaceLeft_nested", {
+        // half triplet > eighth quintuplet > 16th septuplet, from its 3rd note
+        { 0, 2, Fraction(1, 1), "3:2[ 5:4[ 7:4[r16 r16 4~ 16~] 4.~] 4~ 16 r16 r8 r2]" },
+        // the same nested tuplets, a rest
+        { 1, 2, Fraction(1, 1), "3:2[ 5:4[ 7:4[r16 r16 r4 r16] r4.] r4 r16 r16 r8 r2]", true },
+        // quarter quintuplet > eighth triplet > 32nd sextuplet, from its 2nd note
+        { 2, 1, Fraction(1, 1), "5:4[ 3:2[ 6:4[r32 8~ 32~] 4~] 2~ 16. r32 r8 r4]" },
+        // quarter quintuplet > two eighth triplets, from the 1st triplet's 3rd note into the 2nd triplet
+        { 3, 2, Fraction(1, 2), "5:4[ 3:2[r8 r8 8~] 4. r8 r4 r4]" },
+    });
 }
 
 //-----------------------------------------
