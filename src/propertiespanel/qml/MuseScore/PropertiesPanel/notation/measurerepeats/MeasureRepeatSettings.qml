@@ -45,7 +45,7 @@ Column {
 
     SpinBoxPropertyView {
         id: numberPositionSection
-        titleText: qsTrc("propertiespanel", "Number position")
+        titleText: qsTrc("propertiespanel", "Number offset")
         propertyItem: root.model ? root.model.numberPosition : null
 
         icon: IconCode.VERTICAL

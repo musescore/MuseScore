@@ -746,6 +746,9 @@ class EngravingItem : public apiv1::ScoreElement
     /// For measure repeats: The position of the number.
     ///\since MuseScore 4.6
     API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
+    /// For measure repeats: The offset of the number.
+    ///\since MuseScore 5.0
+    API_PROPERTY(measureRepeatNumberOffset, MEASURE_REPEAT_NUMBER_OFFSET)
 
     /// For lyrics and lyrics lines: The verse they are assigned to.
     API_PROPERTY_T(int, verse,            VERSE)

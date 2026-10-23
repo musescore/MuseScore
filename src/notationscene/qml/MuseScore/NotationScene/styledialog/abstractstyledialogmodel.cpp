@@ -78,7 +78,13 @@ QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& lo
     P_TYPE type = mu::engraving::MStyle::valueType(id);
 
     if (type == P_TYPE::SPATIUM) {
-        return logicalValue.value<mu::engraving::Spatium>().val();
+        double value = logicalValue.value<mu::engraving::Spatium>().val();
+        if (id == StyleId::measureRepeatNumberPos) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            value = OffsetUtils::flipSign(value);
+        }
+        return value;
     }
 
     if (type == P_TYPE::POINT) {
@@ -95,7 +101,13 @@ PropertyValue AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& 
     P_TYPE type = mu::engraving::MStyle::valueType(id);
 
     if (type == P_TYPE::SPATIUM) {
-        return mu::engraving::Spatium(uiValue.toDouble());
+        double value = uiValue.toDouble();
+        if (id == StyleId::measureRepeatNumberPos) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            value = OffsetUtils::flipSign(value);
+        }
+        return mu::engraving::Spatium(value);
     }
 
     if (type == P_TYPE::POINT) {

@@ -2431,6 +2431,7 @@ void TWrite::write(const MeasureRepeat* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperty(item, xml, Pid::SUBTYPE);
     writeProperties(toRest(item), xml, ctx);
+    writeProperty(item, xml, Pid::MEASURE_REPEAT_NUMBER_OFFSET);
     writeItems(item->el(), xml, ctx);
     xml.endElement();
 }

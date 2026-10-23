@@ -249,7 +249,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::MMREST_NUMBER_OFFSET,                P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, false, "mmRestNumberOffset",              QT_TRANSLATE_NOOP("engraving/propertyName", "vertical offset of multimeasure rest number") },
     { Pid::MMREST_NUMBER_VISIBLE,               P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "mmRestNumberVisible",             QT_TRANSLATE_NOOP("engraving/propertyName", "visibility of multimeasure rest number") },
 
-    { Pid::MEASURE_REPEAT_NUMBER_POS,           P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, false, "measureRepeatNumberPos",          QT_TRANSLATE_NOOP("engraving/propertyName", "vertical position of measure repeat number") },
+    { Pid::MEASURE_REPEAT_NUMBER_POS,           P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, false, "measureRepeatNumberPos",          QT_TRANSLATE_NOOP("engraving/propertyName", "vertical position of measure repeat number") }, // Deprecated
+    { Pid::MEASURE_REPEAT_NUMBER_OFFSET,        P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, false, "measureRepeatNumberOffset",       QT_TRANSLATE_NOOP("engraving/propertyName", "vertical offset of measure repeat number") },
     { Pid::REPEAT_COUNT,                        P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "repeatCount",                     QT_TRANSLATE_NOOP("engraving/propertyName", "repeat count") },
 
     { Pid::USER_STRETCH,                        P_TYPE::REAL,                      PropertyGroup::NONE,       false, "stretch",                         QT_TRANSLATE_NOOP("engraving/propertyName", "stretch") },
