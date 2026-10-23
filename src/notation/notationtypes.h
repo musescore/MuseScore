@@ -129,6 +129,8 @@ enum class SelectionTarget : unsigned char
     PrevFrame,
     NextSystem,
     PrevSystem,
+    NextSection,
+    PrevSection,
     AboveStaff,
     BelowStaff,
     UpNoteInChord,
@@ -162,6 +164,8 @@ static const std::map<std::string, SelectionTarget> STR_SELECTION_TARGET = {
     { "prev-frame", SelectionTarget::PrevFrame },
     { "next-system", SelectionTarget::NextSystem },
     { "prev-system", SelectionTarget::PrevSystem },
+    { "next-section", SelectionTarget::NextSection},
+    { "prev-section", SelectionTarget::PrevSection},
     { "above-staff", SelectionTarget::AboveStaff },
     { "below-staff", SelectionTarget::BelowStaff },
     { "up-note-in-chord", SelectionTarget::UpNoteInChord },
@@ -225,6 +229,7 @@ enum class MoveSelectionType : unsigned char
     Track,
     Frame,
     System,
+    Section,
     String // TAB Staff
 };
 
