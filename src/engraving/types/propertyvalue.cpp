@@ -152,6 +152,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
     case P_TYPE::VELO_TYPE:        return static_cast<int>(value<VeloType>());
     case P_TYPE::BARLINE_TYPE:     return static_cast<int>(value<BarLineType>());
+    case P_TYPE::BARLINE_SPAN_STYLE: return static_cast<int>(value<BarLineSpanStyle>());
     case P_TYPE::NOTEHEAD_TYPE:    return static_cast<int>(value<NoteHeadType>());
     case P_TYPE::NOTEHEAD_SCHEME:  return static_cast<int>(value<NoteHeadScheme>());
     case P_TYPE::NOTEHEAD_GROUP:   return static_cast<int>(value<NoteHeadGroup>());
@@ -280,6 +281,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::LAYOUTBREAK_TYPE: return PropertyValue(LayoutBreakType(v.toInt()));
     case P_TYPE::VELO_TYPE:        return PropertyValue(VeloType(v.toInt()));
     case P_TYPE::BARLINE_TYPE:     return PropertyValue(BarLineType(v.toInt()));
+    case P_TYPE::BARLINE_SPAN_STYLE: return PropertyValue(BarLineSpanStyle(v.toInt()));
     case P_TYPE::NOTEHEAD_TYPE:    return PropertyValue(NoteHeadType(v.toInt()));
     case P_TYPE::NOTEHEAD_SCHEME:  return PropertyValue(NoteHeadScheme(v.toInt()));
     case P_TYPE::NOTEHEAD_GROUP:   return PropertyValue(NoteHeadGroup(v.toInt()));

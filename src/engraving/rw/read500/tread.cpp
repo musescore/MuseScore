@@ -423,6 +423,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
+    case P_TYPE::BARLINE_SPAN_STYLE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineSpanStyle::DEFAULT));
 
     case P_TYPE::NOTEHEAD_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), NoteHeadType::HEAD_AUTO));
@@ -2044,6 +2046,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
             b->setSpanFrom(e.readInt());
         } else if (tag == "spanToOffset") {
             b->setSpanTo(e.readInt());
+        } else if (readProperty(b, tag, e, ctx, Pid::BARLINE_SPAN_STYLE)) {
         } else if (tag == "Articulation") {
             Articulation* a = Factory::createArticulation(b->score()->dummy());
             TRead::read(a, e, ctx);

@@ -866,9 +866,15 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
 
     writeProperty(item, xml, Pid::BARLINE_TYPE);
-    writeProperty(item, xml, Pid::BARLINE_SPAN);
+    if (item->segment() && item->segment()->isBarLineType()) {
+        // Mid-measure connections always have local scope.
+        xml.tag("span", item->spanStaff());
+    } else {
+        writeProperty(item, xml, Pid::BARLINE_SPAN, !item->spanStaffInherited());
+    }
     writeProperty(item, xml, Pid::BARLINE_SPAN_FROM);
     writeProperty(item, xml, Pid::BARLINE_SPAN_TO);
+    writeProperty(item, xml, Pid::BARLINE_SPAN_STYLE);
 
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
