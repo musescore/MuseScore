@@ -469,7 +469,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
     }
 
-    layoutSystemElements(system, ctx);
+    layoutSystemElements(system, ctx, targetSystemWidth);
     SystemLayout::layout2(system, ctx);     // compute staff distances
 
     if (ctx.state().rangeDone() && oldSystem && !oldSystem->measures().empty() && oldSystem->measures().front()->tick() >= system->endTick()
@@ -1219,7 +1219,89 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
     }
 }
 
-void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
+void SystemLayout::refineBeamedRestSpacing(System* system, LayoutContext& ctx, double targetSystemWidth,
+                                           const std::vector<ChordRest*>& chordRests)
+{
+    bool hasEligibleBeamedRest = false;
+    std::vector<std::pair<Rest*, double> > restPositions;
+    for (ChordRest* cr : chordRests) {
+        if (!cr->isRest()) {
+            continue;
+        }
+        Rest* rest = toRest(cr);
+        restPositions.emplace_back(rest, rest->pos().y());
+        Beam* beam = rest->beam();
+        if (beam && !beam->cross() && !rest->measure()->hasVoices(rest->staffIdx())) {
+            hasEligibleBeamedRest = true;
+        }
+    }
+    if (!hasEligibleBeamedRest) {
+        return;
+    }
+
+    const auto refreshShapes = [&]() {
+        for (MeasureBase* mb : system->measures()) {
+            if (mb->isMeasure()) {
+                for (Segment& segment : toMeasure(mb)->segments()) {
+                    segment.createShapes();
+                }
+            }
+        }
+    };
+    const auto respace = [&](bool useActualRestShapes) {
+        refreshShapes();
+        double width = HorizontalSpacing::computeSpacingForFullSystem(system, 1.0, 1.0, false, useActualRestShapes);
+        if (width > targetSystemWidth) {
+            HorizontalSpacing::squeezeSystemToFit(system, width, targetSystemWidth, useActualRestShapes);
+        }
+        if (shouldBeJustified(system, width, targetSystemWidth, ctx)) {
+            HorizontalSpacing::justifySystem(system, width, targetSystemWidth);
+        }
+        for (MeasureBase* mb : system->measures()) {
+            if (mb->isMeasure()) {
+                MeasureLayout::layoutMeasureElements(toMeasure(mb), ctx);
+                MeasureLayout::layoutStaffLines(toMeasure(mb), ctx);
+            }
+        }
+        // All beams need the new horizontal coordinates, including beams without rests.
+        for (ChordRest* cr : chordRests) {
+            if (cr->isChord()) {
+                Chord* chord = toChord(cr);
+                GraceNotesGroup& before = chord->graceNotesBefore();
+                GraceNotesGroup& after = chord->graceNotesAfter();
+                TLayout::layoutGraceNotesGroup2(&before, before.mutldata());
+                TLayout::layoutGraceNotesGroup2(&after, after.mutldata());
+            }
+            BeamLayout::layoutNonCrossBeams(cr, ctx);
+        }
+        RestLayout::alignRests(system, ctx);
+        RestLayout::checkFullMeasureRestCollisions(system, ctx);
+    };
+
+    respace(true);
+    for (const auto& [rest, y] : restPositions) {
+        if (!muse::RealIsEqual(rest->pos().y(), y)) {
+            // A narrower beam changed rest clearance. Fall back once, without starting another refinement.
+            for (const auto& [savedRest, savedY] : restPositions) {
+                savedRest->mutldata()->setPosY(savedY);
+            }
+            respace(false);
+            break;
+        }
+    }
+    refreshShapes();
+    for (MeasureBase* mb : system->measures()) {
+        if (mb->isMeasure()) {
+            Measure* measure = toMeasure(mb);
+            MeasureLayout::layoutMeasureNumber(measure, ctx);
+            MMRestLayout::layoutMMRestRange(measure, ctx);
+            MeasureLayout::layoutPlayCountText(measure, ctx);
+            MeasureLayout::layoutTimeTickAnchors(measure, ctx);
+        }
+    }
+}
+
+void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx, double targetSystemWidth)
 {
     TRACEFUNC;
 
@@ -1275,6 +1357,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     RestLayout::alignRests(elementsToLayout.system, ctx);
     RestLayout::checkFullMeasureRestCollisions(elementsToLayout.system, ctx);
+
+    if (targetSystemWidth > 0.0) {
+        refineBeamedRestSpacing(system, ctx, targetSystemWidth, elementsToLayout.chordRests);
+    }
 
     for (BarLine* bl : elementsToLayout.barlines) {
         TLayout::updateBarlineShape(bl, bl->mutldata(), ctx);

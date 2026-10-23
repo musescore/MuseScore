@@ -47,7 +47,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
 double HorizontalSpacing::computeSpacingForFullSystem(System* system, double stretchReduction, double squeezeFactor,
-                                                      bool overrideMinMeasureWidth)
+                                                      bool overrideMinMeasureWidth, bool useActualRestShapes)
 {
     TRACEFUNC;
 
@@ -63,6 +63,7 @@ double HorizontalSpacing::computeSpacingForFullSystem(System* system, double str
     ctx.squeezeFactor = squeezeFactor;
     ctx.spacingDensity = system->style().styleD(Sid::spacingDensity);
     ctx.overrideMinMeasureWidth = overrideMinMeasureWidth;
+    ctx.useActualRestShapes = useActualRestShapes;
 
     ctx.xCur = system->leftMargin();
     ctx.xLeftBarrier = system->leftMargin();
@@ -134,7 +135,7 @@ double HorizontalSpacing::updateSpacingForLastAddedMeasure(System* system, bool 
     return ctx.xCur;
 }
 
-void HorizontalSpacing::squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth)
+void HorizontalSpacing::squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth, bool useActualRestShapes)
 {
     TRACEFUNC;
 
@@ -150,7 +151,7 @@ void HorizontalSpacing::squeezeSystemToFit(System* system, double& curSysWidth, 
     double stretchReduction = 1 - STRETCH_REDUCTION_STEP; // Reduces duration stretch
 
     while (curSysWidth > targetSysWidth && muse::RealIsEqualOrMore(squeezeFactor, 0.0)) {
-        curSysWidth = HorizontalSpacing::computeSpacingForFullSystem(system, stretchReduction, squeezeFactor, true);
+        curSysWidth = HorizontalSpacing::computeSpacingForFullSystem(system, stretchReduction, squeezeFactor, true, useActualRestShapes);
         squeezeFactor -= SQUEEZE_STEP;
         stretchReduction -= STRETCH_REDUCTION_STEP;
     }
@@ -382,7 +383,7 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
         } else if (timeSigAboveRepeatKeySigCase) {
             x = xPrevSeg + prevSeg->minRight();
         } else {
-            double minHorDist = minHorizontalDistance(prevSeg, segment, ctx.squeezeFactor);
+            double minHorDist = minHorizontalDistance(prevSeg, segment, ctx.squeezeFactor, ctx.useActualRestShapes);
             minHorDist = std::max(minHorDist, spaceLyricsAgainstBarlines(prevSeg, segment, ctx));
             double xNonCollision = xPrevSeg + minHorDist;
             x = std::max(x, xNonCollision);
@@ -659,7 +660,7 @@ void HorizontalSpacing::moveRightAlignedSegments(std::vector<SegmentPosition>& p
                 break;
             }
             double followingSegX = segPos.xPosInSystemCoords;
-            double minDist = minHorizontalDistance(segment, followingSeg, ctx.squeezeFactor);
+            double minDist = minHorizontalDistance(segment, followingSeg, ctx.squeezeFactor, ctx.useActualRestShapes);
 
             if (followingSeg->isRightAligned() && muse::RealIsNull(minDist)) {
                 continue;
@@ -1219,7 +1220,8 @@ double HorizontalSpacing::getFirstSegmentXPos(Segment* segment, HorizontalSpacin
     return x * ctx.squeezeFactor;
 }
 
-double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor)
+double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor,
+                                                bool useActualRestShapes)
 {
     double dist = -DBL_MAX;        // min real
     double absoluteMinPadding = 0.1 * spatium * squeezeFactor;
@@ -1240,6 +1242,22 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
 
             double ay1 = r1.top();
             double ay2 = r1.bottom();
+            if (item1 && item1->isRest() && item2 && item2->isAccidental()) {
+                const Rest* rest = toRest(item1);
+                if (const Beam* beam = rest->beam()) {
+                    // Reserve only the region into which beam avoidance can move this rest.
+                    if (beam->cross() || rest->measure()->hasVoices(rest->staffIdx())) {
+                        ay1 = -DBL_MAX;
+                        ay2 = DBL_MAX;
+                    } else if (!useActualRestShapes) {
+                        if (beam->up()) {
+                            ay2 = DBL_MAX;
+                        } else {
+                            ay1 = -DBL_MAX;
+                        }
+                    }
+                }
+            }
             double verticalClearance = computeVerticalClearance(item1, item2, spatium) * squeezeFactor;
             bool intersection = mu::engraving::intersects(ay1, ay2, by1, by2, verticalClearance);
             double padding = 0;
@@ -1297,7 +1315,7 @@ double HorizontalSpacing::shapeSpatium(const Shape& s)
 //    calculate the minimum layout distance to Segment ns
 //---------------------------------------------------------
 
-double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment* ns, double squeezeFactor)
+double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment* ns, double squeezeFactor, bool useActualRestShapes)
 {
     if (f->segmentType() & SegmentType::BarLineTypes) {
         if (ns->isStartRepeatBarLineType()) {
@@ -1333,7 +1351,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
 
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
-        d = minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor);
+        d = minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor, useActualRestShapes);
         if (systemHeaderGap) {
             // first chordrest of a staff should clear the widest header for any staff
             // so make sure segment is as wide as it needs to be
