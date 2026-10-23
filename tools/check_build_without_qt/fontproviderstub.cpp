@@ -8,6 +8,11 @@ int FontProviderStub::addSymbolFont(const String&, const io::path_t&)
     return -1;
 }
 
+int FontProviderStub::addSymbolFont(const String&, std::shared_ptr<io::IODevice>)
+{
+    return -1;
+}
+
 double FontProviderStub::lineSpacing(const Font&) const
 {
     return 0.0;
