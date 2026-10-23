@@ -99,11 +99,11 @@ private:
     void updateAllSystemsAreLocked();
     void updateAllPagesAreLocked();
     void updateScoreIsInPageView();
-    void updateIsMakeIntoSystemAvailable();
-    void updateIsMakeIntoPageAvailable();
-    void updateIsSystemTabAvailable();
+    void updateIsMakeIntoSystemAvailable(const QSet<mu::notation::BoxType>& boxTypes);
+    void updateIsMakeIntoPageAvailable(const QSet<mu::notation::BoxType>& boxTypes);
+    void updateIsSystemTabAvailable(const QSet<mu::notation::BoxType>& boxTypes);
 
-    void updateBoxTypesInSelection();
+    QSet<mu::notation::BoxType> boxTypesInSelection() const;
 
     void updateSystemCount();
     void updatePageCount();
@@ -125,8 +125,6 @@ private:
     bool m_isMakeIntoSystemAvailable = false;
     bool m_isMakeIntoPageAvailable = false;
     bool m_isSystemTabAvailable = false;
-
-    QSet<mu::notation::BoxType> m_boxTypesInSelection;
 
     size_t m_systemCount = 0;
     size_t m_pageCount = 0;
