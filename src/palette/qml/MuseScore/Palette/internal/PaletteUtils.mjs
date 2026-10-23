@@ -21,7 +21,8 @@
  */
 
 export function stretched(cw, w) {
-    return cw + (w % cw) / Math.floor(w / cw);
+    const columns = Math.floor(w / cw);
+    return columns > 0 ? cw + (w % cw) / columns : cw;
 }
 
 export function dropEventMimeData(drag) {
