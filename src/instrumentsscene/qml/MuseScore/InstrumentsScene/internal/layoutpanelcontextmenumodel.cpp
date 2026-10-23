@@ -41,6 +41,10 @@ static const QString COLLAPSE_ALL_ID("collapse-all-instruments");
 
 static const QString ORDERING_MENU_ID("ordering-menu");
 
+static const QString VERSION_UI_FILLED_ID("version-ui-filled-groups");
+static const QString VERSION_UI_OUTLINED_ID("version-ui-outlined-groups");
+static const QString VERSION_INDENT_ID("version-indent-grouped-instruments");
+
 LayoutPanelContextMenuModel::LayoutPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -61,6 +65,14 @@ void LayoutPanelContextMenuModel::handleMenuItem(const QString& itemId)
         emit expandCollapseAllRequested(true);
     } else if (itemId == COLLAPSE_ALL_ID) {
         emit expandCollapseAllRequested(false);
+    } else if (itemId == VERSION_UI_FILLED_ID || itemId == VERSION_UI_OUTLINED_ID) {
+        m_outlinedGroups = itemId == VERSION_UI_OUTLINED_ID;
+        emit versionsChanged();
+        updateMenu();
+    } else if (itemId == VERSION_INDENT_ID) {
+        m_indentCombinedGroups = !m_indentCombinedGroups;
+        emit versionsChanged();
+        updateMenu();
     } else {
         setInstrumentsOrder(itemId);
     }
@@ -108,7 +120,11 @@ void LayoutPanelContextMenuModel::loadInstrumentOrders()
 
 void LayoutPanelContextMenuModel::buildMenu(bool includeInstrumentsOrdering)
 {
-    MenuItemList items;
+    MenuItemList items {
+        createVersionsItem(),
+        makeSeparator()
+    };
+
     if (includeInstrumentsOrdering) {
         loadInstrumentOrders();
         items.append({
@@ -174,6 +190,40 @@ MenuItem* LayoutPanelContextMenuModel::createInstrumentsOrderingItem()
     }
 
     return makeMenu(TranslatableString("layoutpanel", "Instrument ordering"), orderItems, ORDERING_MENU_ID);
+}
+
+bool LayoutPanelContextMenuModel::outlinedGroups() const
+{
+    return m_outlinedGroups;
+}
+
+bool LayoutPanelContextMenuModel::indentCombinedGroups() const
+{
+    return m_indentCombinedGroups;
+}
+
+MenuItem* LayoutPanelContextMenuModel::createVersionsItem()
+{
+    auto createOption = [this](const QString& id, const TranslatableString& title, bool checked) {
+        MenuItem* item = new MenuItem(this);
+        item->setId(id);
+        item->setTitle(title);
+        item->setCheckable(true);
+        item->setChecked(checked);
+        return item;
+    };
+
+    MenuItemList groupStyleItems {
+        createOption(VERSION_UI_FILLED_ID, TranslatableString("layoutpanel", "Filled groups"), !m_outlinedGroups),
+        createOption(VERSION_UI_OUTLINED_ID, TranslatableString("layoutpanel", "Outlined groups"), m_outlinedGroups),
+    };
+
+    MenuItemList versionItems {
+        makeMenu(TranslatableString("layoutpanel", "Group style"), groupStyleItems),
+        createOption(VERSION_INDENT_ID, TranslatableString("layoutpanel", "Indent grouped instruments"), m_indentCombinedGroups),
+    };
+
+    return makeMenu(TranslatableString("layoutpanel", "Versions"), versionItems);
 }
 
 MenuItem* LayoutPanelContextMenuModel::createExpandCollapseAllItem(bool expand)

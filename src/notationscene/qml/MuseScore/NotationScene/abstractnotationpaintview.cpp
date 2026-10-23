@@ -109,7 +109,9 @@ void AbstractNotationPaintView::load()
         m_automationLinesContainer->setHeight(height());
     });
 
-    m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
+    // NOTE: automation is disabled on the layout-panel-redesign branch (it crashed on theme changes
+    // after combining instruments onto shared staves, and isn't needed to test the Layout panel)
+    // m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
@@ -368,7 +370,9 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     // FIXME: only un-/re-subscribe when master notation changes
-    m_notationAutomationController->init();
+    if (m_notationAutomationController) {
+        m_notationAutomationController->init();
+    }
     notationAutomation()->automationModeEnabledChanged().onNotify(this, [this]() {
         scheduleRedraw();
         emit automationModeChanged();

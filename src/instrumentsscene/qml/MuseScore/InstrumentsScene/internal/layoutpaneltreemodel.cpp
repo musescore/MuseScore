@@ -23,6 +23,7 @@
 #include "layoutpaneltreemodel.h"
 
 #include <algorithm>
+#include <functional>
 
 #include "async/notifylist.h"
 
@@ -30,6 +31,7 @@
 #include "defer.h"
 
 #include "engraving/dom/score.h"
+#include "engraving/dom/sharedpart.h"
 
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationselection.h" // IWYU pragma: keep
@@ -74,6 +76,7 @@ void LayoutPanelTreeModel::init()
             this, [this](const QItemSelection& selected, const QItemSelection& deselected) {
         setItemsSelected(deselected.indexes(), false);
         setItemsSelected(selected.indexes(), true);
+        syncItemsSelection();
 
         updateRearrangementAvailability();
         updateRemovingAvailability();
@@ -236,6 +239,7 @@ void LayoutPanelTreeModel::setupPartsConnections()
 
     m_notation->parts()->sharedPartsChanged().onNotify(this, [this]() {
         updateIsStaveSharingEnabled();
+        updateSharedGroupRoles();
     }, Mode::SetReplace);
 }
 
@@ -360,10 +364,13 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& cha
     }
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
 
     for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
         item->onScoreChanged(changes);
     }
+
+    updateSharedGroupRoles();
 
     m_scoreChanged = false;
 }
@@ -424,7 +431,14 @@ void LayoutPanelTreeModel::load()
             }
         }
 
-        m_rootItem->appendChild(part->isSharedPart() ? buildSharedPartItem(part) : buildMasterPartItem(part));
+        if (part->isSharedPart()) {
+            // Shared staves aren't shown in parts: there, instruments are shown as they are without combining
+            if (isMasterScore()) {
+                m_rootItem->appendChild(buildSharedPartItem(part));
+            }
+        } else {
+            m_rootItem->appendChild(buildMasterPartItem(part));
+        }
 
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
@@ -443,7 +457,10 @@ void LayoutPanelTreeModel::load()
     updateIsAddingSystemMarkingsAvailable();
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
+    updateSharedGroupRoles();
 
+    emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
 }
@@ -452,6 +469,19 @@ void LayoutPanelTreeModel::toggleStaveSharing(bool on)
 {
     m_notation->parts()->toggleStaveSharing(on);
     updateIsStaveSharingEnabled();
+}
+
+void LayoutPanelTreeModel::toggleHideEmptyStaves(bool on)
+{
+    if (!m_notation || isHideEmptyStavesEnabled() == on) {
+        return;
+    }
+
+    m_notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Hide empty staves"));
+    m_notation->style()->setStyleValue(StyleId::hideEmptyStaves, on);
+    m_notation->undoStack()->commitChanges();
+
+    updateIsHideEmptyStavesEnabled();
 }
 
 void LayoutPanelTreeModel::sortParts(PartList& parts, const PartList& referenceParts)
@@ -646,9 +676,14 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
 
+    // The selection follows the moved rows, but the items' selected state must be brought in line
+    syncItemsSelection();
+
     if (!m_dragInProgress) {
         updateSystemObjectLayers();
     }
+
+    updateSharedGroupRoles();
 
     updateRearrangementAvailability();
 
@@ -845,6 +880,16 @@ bool LayoutPanelTreeModel::isEmpty() const
 int LayoutPanelTreeModel::selectedItemsType() const
 {
     return static_cast<int>(m_selectedItemsType);
+}
+
+QString LayoutPanelTreeModel::scoreName() const
+{
+    return m_notation ? m_notation->name() : QString();
+}
+
+bool LayoutPanelTreeModel::isHideEmptyStavesEnabled() const
+{
+    return m_isHideEmptyStavesEnabled;
 }
 
 bool LayoutPanelTreeModel::isStaveSharingEnabled() const
@@ -1054,6 +1099,98 @@ void LayoutPanelTreeModel::updateIsStaveSharingEnabled()
 
     m_isStaveSharingEnabled = enabled;
     emit isStaveSharingEnabledChanged(enabled);
+}
+
+void LayoutPanelTreeModel::updateIsHideEmptyStavesEnabled()
+{
+    bool enabled = m_notation && m_notation->style()->styleValue(StyleId::hideEmptyStaves).toBool();
+    if (enabled == m_isHideEmptyStavesEnabled) {
+        return;
+    }
+
+    m_isHideEmptyStavesEnabled = enabled;
+    emit isHideEmptyStavesEnabledChanged(enabled);
+}
+
+void LayoutPanelTreeModel::updateSharedGroupRoles()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    // Shared parts are inserted directly before their origin parts, so a group is
+    // a SHARED_PART row followed by the consecutive PART rows that belong to it.
+    const QList<AbstractLayoutPanelTreeItem*>& items = m_rootItem->childItems();
+    const Part* currentSharedPart = nullptr;
+    AbstractLayoutPanelTreeItem* lastMember = nullptr;
+
+    auto closeGroup = [&]() {
+        if (lastMember) {
+            lastMember->setSharedGroupRole(LayoutPanelItemType::GROUP_LAST_MEMBER);
+        }
+        currentSharedPart = nullptr;
+        lastMember = nullptr;
+    };
+
+    for (AbstractLayoutPanelTreeItem* item : items) {
+        int role = LayoutPanelItemType::NOT_IN_GROUP;
+
+        if (item->type() == LayoutPanelItemType::SHARED_PART) {
+            closeGroup();
+            currentSharedPart = static_cast<PartTreeItem*>(item)->part();
+            role = LayoutPanelItemType::GROUP_HEADER;
+        } else if (item->type() == LayoutPanelItemType::PART && currentSharedPart) {
+            const Part* part = static_cast<PartTreeItem*>(item)->part();
+            if (part && part->sharedPart() == currentSharedPart) {
+                role = LayoutPanelItemType::GROUP_MEMBER;
+                lastMember = item;
+            } else {
+                closeGroup();
+            }
+        } else {
+            closeGroup();
+        }
+
+        const QString groupId = currentSharedPart ? currentSharedPart->id().toQString() : QString();
+
+        item->setSharedGroupRole(role);
+        item->setSharedGroupId(groupId);
+        for (AbstractLayoutPanelTreeItem* child : item->childItems()) {
+            child->setSharedGroupRole(role);
+            child->setSharedGroupId(groupId);
+        }
+    }
+
+    closeGroup();
+
+    // Children of the last member inherit its role, so that the group background closes below them
+    for (AbstractLayoutPanelTreeItem* item : items) {
+        if (item->sharedGroupRole() == LayoutPanelItemType::GROUP_LAST_MEMBER) {
+            for (AbstractLayoutPanelTreeItem* child : item->childItems()) {
+                child->setSharedGroupRole(LayoutPanelItemType::GROUP_LAST_MEMBER);
+            }
+        }
+    }
+}
+
+void LayoutPanelTreeModel::syncItemsSelection()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    // The selection deltas reported around row moves can refer to rows' old positions,
+    // so derive each item's selected state from the selection model itself
+    std::function<void(AbstractLayoutPanelTreeItem*)> sync = [&](AbstractLayoutPanelTreeItem* parent) {
+        for (AbstractLayoutPanelTreeItem* item : parent->childItems()) {
+            if (item->isSelectable()) {
+                item->setIsSelected(m_selectionModel->isSelected(createIndex(item->row(), 0, item)));
+            }
+            sync(item);
+        }
+    };
+
+    sync(m_rootItem);
 }
 
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)

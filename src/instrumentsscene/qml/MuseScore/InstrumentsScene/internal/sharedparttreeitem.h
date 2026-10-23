@@ -53,6 +53,8 @@ public:
 private:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
+    void updateTitle();
+
     bool m_ignoreEnabledChanged = true;
 };
 }
