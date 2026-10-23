@@ -63,13 +63,20 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
     return muse::RealRound(bps.val, Constants::TEMPO_PRECISION);
 }
 
-static AutomationPoint makeTempoPoint(real_t normalizedBps, std::optional<EID> itemId)
+static AutomationPoint makeGeneratedPoint(real_t outValue, std::optional<EID> itemId,
+                                          AutomationPoint::InValue inValue = AutomationPoint::ArrivalFromPrevious {})
 {
     AutomationPoint point;
-    point.value.outValue = std::clamp(normalizedBps, MIN_NORMALIZED_TEMPO, MAX_NORMALIZED_TEMPO);
+    point.value.inValue = inValue;
+    point.value.outValue = outValue;
     point.itemId = itemId;
     point.generated = true;
     return point;
+}
+
+static AutomationPoint makeTempoPoint(real_t normalizedBps, std::optional<EID> itemId)
+{
+    return makeGeneratedPoint(std::clamp(normalizedBps, MIN_NORMALIZED_TEMPO, MAX_NORMALIZED_TEMPO), itemId);
 }
 
 //! TODO: map EXPONENTIAL/EASE_IN/EASE_OUT/EASE_IN_OUT to a real ease shape; every method is linear for now
@@ -204,6 +211,12 @@ static std::optional<real_t> endHairpinValue(const Hairpin* hairpin)
 static int dynamicPriority(const EngravingItem* item)
 {
     return static_cast<int>(item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>());
+}
+
+static EID eidOrAssignNew(const EngravingItem* item)
+{
+    const EID eid = item->eid();
+    return eid.isValid() ? eid : item->assignNewEID();
 }
 
 static const AutomationPoint* activePoint(const AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
@@ -765,10 +778,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 
     info.priority = dynamicPriority(dynamic);
 
-    info.eid = dynamic->eid();
-    if (!info.eid.isValid()) {
-        info.eid = dynamic->assignNewEID();
-    }
+    info.eid = eidOrAssignNew(dynamic);
 
     for (const AutomationCurveKey& key : keys) {
         addDynamicPoints(info, key, ctx);
@@ -785,23 +795,14 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
     std::map<utick_t, int>& tickPrioMap = ctx.dynamicPriorities[key];
 
     if (const auto* ordinary = std::get_if<DynamicInfo::Ordinary>(&info.kind)) {
-        AutomationPoint point;
-        point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        point.value.outValue = ordinary->value;
-        point.itemId = info.eid;
-        point.generated = true;
-        addDynamicPoint(curve, tickPrioMap, info.tick, point, info.priority);
+        addDynamicPoint(curve, tickPrioMap, info.tick, makeGeneratedPoint(ordinary->value, info.eid), info.priority);
         return;
     }
 
     if (const auto* singleNote = std::get_if<DynamicInfo::SingleNote>(&info.kind)) {
         const AutomationPoint* prevPoint = singleNote->nextTick ? activePoint(ctx.curves, key, info.tick) : nullptr;
 
-        AutomationPoint point;
-        point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        point.value.outValue = singleNote->value;
-        point.itemId = info.eid;
-        point.generated = true;
+        const AutomationPoint point = makeGeneratedPoint(singleNote->value, info.eid);
         addDynamicPoint(curve, tickPrioMap, info.tick, point, info.priority);
 
         if (singleNote->nextTick) {
@@ -817,19 +818,11 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
     }
 
     if (const auto* compound = std::get_if<DynamicInfo::Compound>(&info.kind)) {
-        AutomationPoint startPoint;
-        startPoint.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        startPoint.value.outValue = compound->startValue;
-        startPoint.itemId = info.eid;
-        startPoint.generated = true;
-        addDynamicPoint(curve, tickPrioMap, info.tick, startPoint, info.priority);
+        addDynamicPoint(curve, tickPrioMap, info.tick, makeGeneratedPoint(compound->startValue, info.eid), info.priority);
 
-        AutomationPoint endPoint;
-        endPoint.value.outValue = compound->endValue;
-        endPoint.value.inValue = AutomationPoint::ExplicitArrival { endPoint.value.outValue, AutomationPoint::Ease::none() };
-        endPoint.itemId = info.eid;
-        endPoint.generated = true;
-        tryAddDynamicPoint(curve, tickPrioMap, compound->endPointTick, endPoint, info.priority);
+        const AutomationPoint::ExplicitArrival endArrival { compound->endValue, AutomationPoint::Ease::none() };
+        tryAddDynamicPoint(curve, tickPrioMap, compound->endPointTick, makeGeneratedPoint(compound->endValue, info.eid, endArrival),
+                           info.priority);
     }
 }
 
@@ -899,10 +892,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         return;
     }
 
-    info.eid = hairpin->eid();
-    if (!info.eid.isValid()) {
-        info.eid = hairpin->assignNewEID();
-    }
+    info.eid = eidOrAssignNew(hairpin);
 
     info.priority = dynamicPriority(hairpin);
     info.isCrescendo = hairpin->isCrescendo();
@@ -926,14 +916,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
     // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
     const real_t valueFrom = info.nominalValueFrom.value_or(prevOutValue);
 
-    {
-        AutomationPoint startPoint;
-        startPoint.value.outValue = valueFrom;
-        startPoint.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        startPoint.itemId = info.eid;
-        startPoint.generated = true;
-        tryAddDynamicPoint(curve, tickPrioMap, info.from, startPoint, info.priority);
-    }
+    tryAddDynamicPoint(curve, tickPrioMap, info.from, makeGeneratedPoint(valueFrom, info.eid), info.priority);
 
     // --- Determine valueTo
     // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs dim.)
@@ -961,14 +944,8 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
         return;
     }
 
-    if (info.from < info.to) {
-        AutomationPoint point;
-        point.value.outValue = valueTo;
-        point.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, AutomationPoint::Ease::none() };
-        point.itemId = info.eid;
-        point.generated = true;
-        tryAddDynamicPoint(curve, tickPrioMap, info.to, point, info.priority);
-    }
+    const AutomationPoint::ExplicitArrival endArrival { valueTo, AutomationPoint::Ease::none() };
+    tryAddDynamicPoint(curve, tickPrioMap, info.to, makeGeneratedPoint(valueTo, info.eid, endArrival), info.priority);
 }
 
 void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
@@ -1162,10 +1139,7 @@ void ScoreAutomationController::addTempoTextPoint(const TempoText* tt, int tickO
 
     const utick_t tick = tt->segment()->tick().ticks() + tickOffset;
 
-    EID itemId = tt->eid();
-    if (!itemId.isValid()) {
-        itemId = tt->assignNewEID();
-    }
+    const EID itemId = eidOrAssignNew(tt);
 
     if (tt->isATempo() && tt->followText()) {
         // This will effectively reset the tempo to the previous one when a progressive change was active
@@ -1189,10 +1163,7 @@ void ScoreAutomationController::addFermataStretchPoints(const Fermata* fermata, 
     const bool hasBefore = beforeIt != ctx.tempoCurve->cend();
     const real_t before = hasBefore ? beforeIt->second.value.outValue : DEFAULT_NORMALIZED_TEMPO;
 
-    EID itemId = fermata->eid();
-    if (!itemId.isValid()) {
-        itemId = fermata->assignNewEID();
-    }
+    const EID itemId = eidOrAssignNew(fermata);
 
     setTempoPoint(tick, tickOffset, before / stretch, ctx, itemId);
 
@@ -1216,10 +1187,7 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
     const utick_t tickFrom = tempoChange->tick().ticks() + tickOffset;
     const utick_t tickTo = tickFrom + tempoChange->ticks().ticks();
 
-    EID itemId = tempoChange->eid();
-    if (!itemId.isValid()) {
-        itemId = tempoChange->assignNewEID();
-    }
+    const EID itemId = eidOrAssignNew(tempoChange);
 
     const auto [startIt, startInserted] = ctx.tempoCurve->try_emplace(tickFrom);
     const real_t prevTempo = startIt == ctx.tempoCurve->begin() ? DEFAULT_NORMALIZED_TEMPO
@@ -1231,10 +1199,7 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
 
     AutomationPoint& startPoint = startIt->second;
     if (startInserted) {
-        startPoint.value.outValue = prevTempo;
-        startPoint.value.inValue = flatArrival;
-        startPoint.itemId = itemId;
-        startPoint.generated = true;
+        startPoint = makeGeneratedPoint(prevTempo, itemId, flatArrival);
         setNoRepeatTempoPoint(tickFrom - tickOffset, startPoint, ctx);
     } else if (startPoint.generated && !std::holds_alternative<AutomationPoint::ExplicitArrival>(startPoint.value.inValue)) {
         startPoint.value.inValue = flatArrival;
@@ -1265,11 +1230,7 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
         return;
     }
 
-    AutomationPoint endPoint;
-    endPoint.value.outValue = normalizedTarget;
-    endPoint.value.inValue = arrival;
-    endPoint.itemId = itemId;
-    endPoint.generated = true;
+    const AutomationPoint endPoint = makeGeneratedPoint(normalizedTarget, itemId, arrival);
     ctx.tempoCurve->emplace_hint(tickToIt, tickTo, endPoint);
     setNoRepeatTempoPoint(tickTo - tickOffset, endPoint, ctx);
 }
@@ -1288,11 +1249,8 @@ void ScoreAutomationController::addVoltaTempoResetPoint(const Volta* volta, Upda
     const bool hasBefore = beforeIt != ctx.noRepeatTempoCurve.end();
     const real_t tempoBeforeVolta = hasBefore ? beforeIt->second.value.outValue : DEFAULT_NORMALIZED_TEMPO;
 
-    AutomationPoint point;
-    point.value.outValue = tempoBeforeVolta;
     // Recovers to whatever was active before the volta, so the point belongs to that marking, not the volta
-    point.itemId = hasBefore ? beforeIt->second.itemId : std::nullopt;
-    point.generated = true;
+    const AutomationPoint point = makeGeneratedPoint(tempoBeforeVolta, hasBefore ? beforeIt->second.itemId : std::nullopt);
 
     // Don't overwrite an explicit tempo marking already sitting at this exact tick
     // (e.g. the seconda volta's own TempoText, written in Step 1 before this Step 2 pass runs)
