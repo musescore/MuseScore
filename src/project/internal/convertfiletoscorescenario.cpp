@@ -373,6 +373,9 @@ void ConvertFileToScoreScenario::showUploadError(const Ret& ret, const ConvertIn
     case static_cast<int>(Err::ConvertUploadFailed):
         showUploadFailedNotification(input, convertedScoreName);
         break;
+    case static_cast<int>(Err::ConvertRateLimited):
+        showUploadLimitReachedNotification();
+        break;
     case static_cast<int>(io::Err::FSNotExist):
     case static_cast<int>(io::Err::FSReadError):
         showFileReadError(convertPathsOf(input).size());
@@ -602,6 +605,16 @@ void ConvertFileToScoreScenario::showUploadFailedNotification(const ConvertInput
         if (result.isCode(toast::ToastActionCode::TryAgain)) {
             startConvert(input, convertedScoreName);
         }
+    });
+}
+
+void ConvertFileToScoreScenario::showUploadLimitReachedNotification()
+{
+    toastService()->show(muse::trc("project/convert", "Upload limit reached"),
+                         muse::trc("project/convert", "You’ve reached the limit for file conversions. Please try again later."),
+                         muse::ui::IconCode::Code::ERROR_FILLED, true,
+    {
+        { muse::trc("global", "OK"), toast::ToastActionCode::Dismiss, /*accent*/ true },
     });
 }
 

@@ -112,6 +112,7 @@ private:
     void showScoreReadyNotification(const WatchedScore& watched);
     void showConvertFailedNotification(const WatchedScore& watched);
     void showUploadFailedNotification(const ConvertInput& input, const muse::String& convertedScoreName);
+    void showUploadLimitReachedNotification();
     void showPollingFailureNotification();
     void showPollingGaveUpNotification();
 
