@@ -219,6 +219,21 @@ static EID eidOrAssignNew(const EngravingItem* item)
     return eid.isValid() ? eid : item->assignNewEID();
 }
 
+static double longestBreathPause(const Segment& segment)
+{
+    if (!segment.isBreathType()) {
+        return 0.0;
+    }
+
+    double length = 0.0;
+    for (const EngravingItem* e : segment.elist()) {
+        if (e && e->isBreath()) {
+            length = std::max(length, toBreath(e)->pause());
+        }
+    }
+    return length;
+}
+
 static const AutomationPoint* activePoint(const AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
 {
     static const AutomationCurve NO_CURVE;
@@ -1088,15 +1103,7 @@ void ScoreAutomationController::collectPauses(const Measure* measure, int tickOf
 
     // Add pauses from the end of the previous measure (at measure->tick()):
     for (Segment* s = measure->first(); s && s->tick() == startTick; s = s->prev1()) {
-        if (!s->isBreathType()) {
-            continue;
-        }
-        double length = 0.0;
-        for (EngravingItem* e : s->elist()) {
-            if (e && e->isBreath()) {
-                length = std::max(length, toBreath(e)->pause());
-            }
-        }
+        const double length = longestBreathPause(*s);
         if (!muse::RealIsNull(length)) {
             pauses[startUtick] = length;
             noRepeatPauses[startTick.ticks()] = length;
@@ -1104,22 +1111,11 @@ void ScoreAutomationController::collectPauses(const Measure* measure, int tickOf
     }
 
     for (const Segment& segment : measure->segments()) {
-        if (!segment.isBreathType()) {
-            continue;
-        }
-
-        double length = 0.0;
-        Fraction tick = segment.tick();
-        // find longest pause
-        for (track_idx_t i = 0, n = measure->score()->ntracks(); i < n; ++i) {
-            EngravingItem* e = segment.element(i);
-            if (e && e->isBreath()) {
-                length = std::max(length, toBreath(e)->pause());
-            }
-        }
+        const double length = longestBreathPause(segment);
         if (!muse::RealIsNull(length)) {
-            pauses[tick.ticks() + tickOffset] = length;
-            noRepeatPauses[tick.ticks()] = length;
+            const int tick = segment.tick().ticks();
+            pauses[tick + tickOffset] = length;
+            noRepeatPauses[tick] = length;
         }
     }
 }
