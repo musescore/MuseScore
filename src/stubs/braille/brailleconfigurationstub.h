@@ -36,6 +36,10 @@ public:
     BrailleIntervalDirection intervalDirection() const override;
     void setIntervalDirection(const BrailleIntervalDirection direction) override;
 
+    muse::async::Notification voiceOrderChanged() const override;
+    BrailleVoiceOrder voiceOrder() const override;
+    void setVoiceOrder(const BrailleVoiceOrder order) override;
+
     muse::async::Notification brailleTableChanged() const override;
     QString brailleTable() const override;
     void setBrailleTable(const QString& table) override;
