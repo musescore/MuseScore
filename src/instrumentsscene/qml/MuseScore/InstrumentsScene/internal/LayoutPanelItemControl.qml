@@ -57,6 +57,31 @@ Item {
         bottomLeftRadius: 3
         bottomRightRadius: 3
 
+        // High contrast: bottom of the instrument card's stroke (see LayoutPanelItemDelegate)
+        Item {
+            anchors.fill: parent
+
+            visible: ui.theme.borderWidth > 0
+            clip: true
+
+            Rectangle {
+                y: -4
+                width: parent.width
+                height: parent.height + 4
+
+                radius: 3
+                color: "transparent"
+                border.width: ui.theme.borderWidth
+                border.color: ui.theme.strokeColor
+            }
+        }
+
+        // The whole row is clickable, not just the button
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.clicked()
+        }
+
         FlatButton {
             id: addButton
 

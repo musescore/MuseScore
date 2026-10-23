@@ -23,6 +23,7 @@
 #include "layoutpaneltreemodel.h"
 
 #include <algorithm>
+#include <functional>
 
 #include "async/notifylist.h"
 
@@ -75,6 +76,7 @@ void LayoutPanelTreeModel::init()
             this, [this](const QItemSelection& selected, const QItemSelection& deselected) {
         setItemsSelected(deselected.indexes(), false);
         setItemsSelected(selected.indexes(), true);
+        syncItemsSelection();
 
         updateRearrangementAvailability();
         updateRemovingAvailability();
@@ -429,7 +431,14 @@ void LayoutPanelTreeModel::load()
             }
         }
 
-        m_rootItem->appendChild(part->isSharedPart() ? buildSharedPartItem(part) : buildMasterPartItem(part));
+        if (part->isSharedPart()) {
+            // Shared staves aren't shown in parts: there, instruments are shown as they are without combining
+            if (isMasterScore()) {
+                m_rootItem->appendChild(buildSharedPartItem(part));
+            }
+        } else {
+            m_rootItem->appendChild(buildMasterPartItem(part));
+        }
 
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
@@ -451,6 +460,7 @@ void LayoutPanelTreeModel::load()
     updateIsHideEmptyStavesEnabled();
     updateSharedGroupRoles();
 
+    emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
 }
@@ -666,6 +676,9 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
 
+    // The selection follows the moved rows, but the items' selected state must be brought in line
+    syncItemsSelection();
+
     if (!m_dragInProgress) {
         updateSystemObjectLayers();
     }
@@ -867,6 +880,11 @@ bool LayoutPanelTreeModel::isEmpty() const
 int LayoutPanelTreeModel::selectedItemsType() const
 {
     return static_cast<int>(m_selectedItemsType);
+}
+
+QString LayoutPanelTreeModel::scoreName() const
+{
+    return m_notation ? m_notation->name() : QString();
 }
 
 bool LayoutPanelTreeModel::isHideEmptyStavesEnabled() const
@@ -1153,6 +1171,26 @@ void LayoutPanelTreeModel::updateSharedGroupRoles()
             }
         }
     }
+}
+
+void LayoutPanelTreeModel::syncItemsSelection()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    // The selection deltas reported around row moves can refer to rows' old positions,
+    // so derive each item's selected state from the selection model itself
+    std::function<void(AbstractLayoutPanelTreeItem*)> sync = [&](AbstractLayoutPanelTreeItem* parent) {
+        for (AbstractLayoutPanelTreeItem* item : parent->childItems()) {
+            if (item->isSelectable()) {
+                item->setIsSelected(m_selectionModel->isSelected(createIndex(item->row(), 0, item)));
+            }
+            sync(item);
+        }
+    };
+
+    sync(m_rootItem);
 }
 
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)

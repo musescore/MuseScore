@@ -363,6 +363,21 @@ void AbstractLayoutPanelTreeItem::setSharedGroupId(const QString& id)
     emit sharedGroupIdChanged();
 }
 
+bool AbstractLayoutPanelTreeItem::existsInScore() const
+{
+    return m_existsInScore;
+}
+
+void AbstractLayoutPanelTreeItem::setExistsInScore(bool exists)
+{
+    if (m_existsInScore == exists) {
+        return;
+    }
+
+    m_existsInScore = exists;
+    emit existsInScoreChanged();
+}
+
 void AbstractLayoutPanelTreeItem::setSettingsEnabled(bool enabled)
 {
     if (m_settingsEnabled == enabled) {

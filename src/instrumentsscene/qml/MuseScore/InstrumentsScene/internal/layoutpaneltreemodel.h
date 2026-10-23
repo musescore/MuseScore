@@ -64,6 +64,8 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
     Q_PROPERTY(bool isStaveSharingEnabled READ isStaveSharingEnabled NOTIFY isStaveSharingEnabledChanged FINAL)
     Q_PROPERTY(bool isHideEmptyStavesEnabled READ isHideEmptyStavesEnabled NOTIFY isHideEmptyStavesEnabledChanged FINAL)
+    Q_PROPERTY(bool isMasterScore READ isMasterScore NOTIFY scoreChanged FINAL)
+    Q_PROPERTY(QString scoreName READ scoreName NOTIFY scoreChanged FINAL)
 
     QML_ELEMENT
 
@@ -97,6 +99,7 @@ public:
 
     bool isStaveSharingEnabled() const;
     bool isHideEmptyStavesEnabled() const;
+    QString scoreName() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void toggleStaveSharing(bool on);
@@ -133,6 +136,7 @@ signals:
     void selectedItemsTypeChanged(int type);
     void isStaveSharingEnabledChanged(bool enabled);
     void isHideEmptyStavesEnabledChanged(bool enabled);
+    void scoreChanged();
 
 private slots:
     void updateRearrangementAvailability();
@@ -184,6 +188,7 @@ private:
     void setIsRemovingAvailable(bool isRemovingAvailable);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
+    void syncItemsSelection();
 
     bool needWarnOnRemoveRows(int row, int count);
     bool warnAboutRemovingInstrumentsIfNecessary(int count);

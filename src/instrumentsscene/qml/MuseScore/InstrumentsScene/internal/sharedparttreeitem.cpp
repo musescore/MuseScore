@@ -21,6 +21,11 @@
  */
 #include "sharedparttreeitem.h"
 
+#include <algorithm>
+#include <limits>
+
+#include <QRegularExpression>
+
 #include "engraving/dom/sharedpart.h"
 
 #include "notation/inotation.h"
@@ -39,6 +44,7 @@ void SharedPartTreeItem::init(const notation::Part* part)
 {
     PartTreeItem::init(part);
 
+    updateTitle();
     setIsExpandable(true);
     setIsEnabled(engraving::toSharedPart(part)->enabled());
 
@@ -48,10 +54,52 @@ void SharedPartTreeItem::init(const notation::Part* part)
 void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& sc)
 {
     PartTreeItem::onScoreChanged(sc);
+    updateTitle();
 
     m_ignoreEnabledChanged = true;
     setIsEnabled(engraving::toSharedPart(part())->enabled());
     m_ignoreEnabledChanged = false;
+}
+
+void SharedPartTreeItem::updateTitle()
+{
+    // The group is named after its instruments plus the range of their numbers, e.g. "Trumpet 1–3". The numbers come
+    // from the instruments' numbering, or else from the end of their names (when the numbering is part of the name).
+    const engraving::SharedPart* sharedPart = part() ? engraving::toSharedPart(part()) : nullptr;
+    if (!sharedPart || sharedPart->originParts().empty()) {
+        return;
+    }
+
+    static const QRegularExpression trailingNumber(QStringLiteral("^(.*?)\\s*(\\d+)$"));
+
+    QString baseName;
+    int firstNumber = std::numeric_limits<int>::max();
+    int lastNumber = std::numeric_limits<int>::min();
+
+    for (const engraving::Part* originPart : sharedPart->originParts()) {
+        const QString name = originPart->partName().toQString().simplified();
+        const QRegularExpressionMatch match = trailingNumber.match(name);
+
+        int number = originPart->instrument()->number();
+        if (number <= 0 && match.hasMatch()) {
+            number = match.captured(2).toInt();
+        }
+
+        if (baseName.isEmpty()) {
+            baseName = match.hasMatch() ? match.captured(1) : name;
+        }
+
+        if (number > 0) {
+            firstNumber = std::min(firstNumber, number);
+            lastNumber = std::max(lastNumber, number);
+        }
+    }
+
+    if (baseName.isEmpty() || firstNumber >= lastNumber) {
+        return; // keep the shared part's own name
+    }
+
+    setTitle(QString::fromUtf8("%1 %2\u2013%3").arg(baseName).arg(firstNumber).arg(lastNumber));
 }
 
 MoveParams SharedPartTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,

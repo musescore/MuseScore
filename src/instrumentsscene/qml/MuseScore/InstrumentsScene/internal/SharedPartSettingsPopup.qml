@@ -32,8 +32,18 @@ StyledPopupView {
     property bool needActiveFirstItem: false
 
     contentWidth: 240
-    contentHeight: 60
+    contentHeight: placeholderLabel.implicitHeight
 
     function load(obj) {
+    }
+
+    StyledTextLabel {
+        id: placeholderLabel
+
+        width: parent.width
+
+        text: qsTrc("layoutpanel", "Placeholder until options are decided")
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WordWrap
     }
 }
