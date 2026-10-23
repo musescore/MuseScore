@@ -102,6 +102,11 @@ private:
         std::optional<utick_t> nextMeasureUTick; // next measure in the same repeat pass, if any
     };
 
+    struct DynamicPointDestination {
+        AutomationCurve& curve;
+        std::map<utick_t, int>& priorities;
+    };
+
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
     using MeasureRepeats = std::vector<std::pair<const MeasureRepeat*, int> >;
 
@@ -182,10 +187,8 @@ private:
     static void resolvePendingTempoResets(UpdateContext& ctx);
     static void fixAnacrusisTempo(UpdateContext& ctx);
 
-    static bool tryAddDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
-                                   int priority);
-    static void addDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
-                                int priority);
+    static void addDynamicPoint(const AutomationPoint& point, int priority, const DynamicPointDestination& dest, utick_t tick,
+                                bool mergeSamePriority = false);
     static void setTempoPoint(utick_t tick, int tickOffset, real_t normalizedBps, UpdateContext& ctx,
                               std::optional<EID> itemId = std::nullopt);
     //! NOTE: for callers that already know no point exists at tick (e.g. via lower_bound) - skips the redundant lookup
