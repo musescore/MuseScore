@@ -6688,24 +6688,27 @@ static void setNoteHead(Note* note, const String& noteheadFilled)
 
 static BeamMode computeBeamMode(const std::map<int, String>& beamTypes)
 {
-    // Start with uniquely-handled beam modes
-    if (muse::value(beamTypes, 1) == u"continue"
-        && muse::value(beamTypes, 2) == u"begin") {
+    const String& b1 = muse::value(beamTypes, 1);
+    const String& b2 = muse::value(beamTypes, 2);
+    const String& b3 = muse::value(beamTypes, 3);
+
+    // Start with uniquely-handled secondary beam modes
+    if (b1 == u"continue" && (b2 == u"begin" || b2 == u"forward hook")) {
         return BeamMode::BEGIN16;
-    } else if (muse::value(beamTypes, 1) == u"continue"
-               && muse::value(beamTypes, 2) == u"continue"
-               && muse::value(beamTypes, 3) == u"begin") {
+    } else if (b1 == u"continue" && b2 == u"continue" && (b3 == u"begin" || b3 == u"forward hook")) {
         return BeamMode::BEGIN32;
     }
-    // Generic beam modes are naive to all except the first beam
-    else if (muse::value(beamTypes, 1) == u"begin") {
+    // Generic primary beam modes
+    else if (b1 == u"begin") {
         return BeamMode::BEGIN;
-    } else if (muse::value(beamTypes, 1) == u"continue") {
+    } else if (b1 == u"continue") {
         return BeamMode::MID;
-    } else if (muse::value(beamTypes, 1) == u"end") {
+    } else if (b1 == u"end") {
         return BeamMode::END;
+    } else if (b1 == u"forward hook" || b1 == u"backward hook") {
+        return BeamMode::MID;
     } else {
-        // backward-hook, forward-hook, and other unknown combinations
+        // unknown combinations
         return BeamMode::AUTO;
     }
 }

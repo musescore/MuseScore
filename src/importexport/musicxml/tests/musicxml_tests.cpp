@@ -446,6 +446,9 @@ TEST_F(MusicXml_Tests, beams3) {
 TEST_F(MusicXml_Tests, beams4) {
     musicXmlIoTest("testBeams4");
 }
+TEST_F(MusicXml_Tests, beams5) {
+    musicXmlIoTest("testBeams5");
+}
 TEST_F(MusicXml_Tests, breaksImplExpl) {
     musicXmlMscxExportTestRefBreaks("testBreaksImplExpl");
 }
