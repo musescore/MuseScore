@@ -40,6 +40,8 @@
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transaction/transaction.h"
 
+#include "engraving/style/style.h"
+
 // api
 #include "apistructs.h"
 #include "part.h"
@@ -66,6 +68,56 @@ void EngravingItem::setOffsetY(qreal offY)
 {
     const qreal offX = element()->offset().x() / element()->spatium();
     set(mu::engraving::Pid::OFFSET, QPointF(offX, offY));
+}
+
+//---------------------------------------------------------
+//   Number positions of multimeasure rests
+//---------------------------------------------------------
+
+QVariant EngravingItem::mmRestNumberPos() const
+{
+    if (!element()->isMMRest()) {
+        return QVariant();
+    }
+    return element()->style().styleS(Sid::mmRestNumberPos).val() + get(Pid::MMREST_NUMBER_OFFSET).toDouble();
+}
+
+void EngravingItem::setMmRestNumberPos(const QVariant& pos)
+{
+    if (!element()->isMMRest()) {
+        return;
+    }
+    set(Pid::MMREST_NUMBER_OFFSET, pos.toDouble() - element()->style().styleS(Sid::mmRestNumberPos).val());
+}
+
+void EngravingItem::resetMmRestNumberPos()
+{
+    reset(Pid::MMREST_NUMBER_OFFSET);
+}
+
+//---------------------------------------------------------
+//   Number positions of measure repeats
+//---------------------------------------------------------
+
+QVariant EngravingItem::measureRepeatNumberPos() const
+{
+    if (!element()->isMeasureRepeat()) {
+        return QVariant();
+    }
+    return element()->style().styleS(Sid::measureRepeatNumberPos).val() + get(Pid::MEASURE_REPEAT_NUMBER_OFFSET).toDouble();
+}
+
+void EngravingItem::setMeasureRepeatNumberPos(const QVariant& pos)
+{
+    if (!element()->isMeasureRepeat()) {
+        return;
+    }
+    set(Pid::MEASURE_REPEAT_NUMBER_OFFSET, pos.toDouble() - element()->style().styleS(Sid::measureRepeatNumberPos).val());
+}
+
+void EngravingItem::resetMeasureRepeatNumberPos()
+{
+    reset(Pid::MEASURE_REPEAT_NUMBER_OFFSET);
 }
 
 static QRectF scaleRect(const mu::engraving::RectF& rect, double spatium)
