@@ -267,6 +267,7 @@ static real_t currentTempoAt(const AutomationCurve& tempoCurve, utick_t tick)
 struct ChangeRelevance {
     bool dynamics = false;
     bool tempo = false;
+    bool voiceAssignment = false;
 };
 
 static ChangeRelevance classifyChanges(const ScoreChanges& changes)
@@ -305,7 +306,8 @@ static ChangeRelevance classifyChanges(const ScoreChanges& changes)
 
     // VoiceAssignment change shifts which staves a dynamic/hairpin covers,
     // so the old points on staves outside the new assignment must also be cleared
-    result.dynamics |= muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
+    result.voiceAssignment = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
+    result.dynamics |= result.voiceAssignment;
 
     static const std::unordered_set<Pid> REPEAT_PROPERTIES {
         Pid::REPEAT_START,
@@ -451,10 +453,8 @@ void ScoreAutomationController::update(const ScoreChanges& changes)
     if (!relevance.tempo) {
         request.tickFrom = std::max(changes.tickFrom, 0);
 
-        // VoiceAssignment change shifts which staves a dynamic/hairpin covers,
-        // so the old points on staves outside the new assignment must also be cleared
-        const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
-        if (!voiceAssignmentChanged) {
+        // Old points on staves outside the new voice assignment must also be cleared
+        if (!relevance.voiceAssignment) {
             request.staffIdxFrom = changes.staffIdxFrom;
             request.staffIdxTo = changes.staffIdxTo;
         }
@@ -672,10 +672,13 @@ void ScoreAutomationController::mirrorAuthoredPointsToRepeats(UpdateContext& ctx
             continue;
         }
 
+        const size_t authoredCount = edits.size();
+
         //! NOTE: appends the corresponding mirrored edit(s) - one per other repeat pass - directly to edits
         mirrorEditsToRepeats(key, edits);
 
-        for (const AutomationPointEdit& edit : edits) {
+        for (size_t i = authoredCount; i < edits.size(); ++i) {
+            const AutomationPointEdit& edit = edits[i];
             const auto* setPoint = std::get_if<AutomationPointEdit::SetPoint>(&edit.change);
             IF_ASSERT_FAILED(setPoint) {
                 continue;
