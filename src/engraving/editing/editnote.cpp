@@ -354,7 +354,8 @@ void EditNote::changeAccidental(Score* score, Note* note, AccidentalType acciden
     if (clef == ClefType::TAB
         || clef == ClefType::TAB4
         || clef == ClefType::TAB_SERIF
-        || clef == ClefType::TAB4_SERIF) {
+        || clef == ClefType::TAB4_SERIF
+        || clef == ClefType::TAB_STRING_NAMES) {
         return;
     }
     int step      = ClefInfo::pitchOffset(clef) - note->line();

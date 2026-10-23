@@ -1191,6 +1191,7 @@ bool Braille::ascendingChords(ClefType clefType)
     case ClefType::TAB4:           //TAB
     case ClefType::TAB_SERIF:      //TAB
     case ClefType::TAB4_SERIF:     //TAB
+    case ClefType::TAB_STRING_NAMES: //TAB
         return false;
     case ClefType::C4:             //Tenor clef
     case ClefType::C4_8VB:         //Tenor clef ottava bassa
@@ -2047,6 +2048,7 @@ QString Braille::brailleClef(Clef* clef)
     case ClefType::TAB4:           //TAB
     case ClefType::TAB_SERIF:      //TAB
     case ClefType::TAB4_SERIF:     //TAB
+    case ClefType::TAB_STRING_NAMES: //TAB
         return QString();
     default:
         return QString();

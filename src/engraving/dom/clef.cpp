@@ -88,6 +88,9 @@ const ClefInfo ClefInfo::clefTable[] = {
     { ClefType::TAB_SERIF, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClefSerif,  StaffGroup::TAB },
     { ClefType::TAB4_SERIF, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif, StaffGroup::TAB },
 
+    // drawn dynamically from the staff's string data instead of a fixed symbol; see TLayout::layoutClef/TDraw::draw(Clef*)
+    { ClefType::TAB_STRING_NAMES, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::noSym, StaffGroup::TAB },
+
     { ClefType::C4_8VB,  4, 30, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 },  SymId::cClef8vb,         StaffGroup::STANDARD },
     { ClefType::G8_VB_C, 2, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbCClef,    StaffGroup::STANDARD },
 };
