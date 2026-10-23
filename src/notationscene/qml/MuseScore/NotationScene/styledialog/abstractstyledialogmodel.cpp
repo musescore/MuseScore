@@ -25,6 +25,7 @@
 #include "engraving/style/style.h"
 
 #include "notation/inotation.h"
+#include "notation/utilities/offsetutilities.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -83,9 +84,7 @@ QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& lo
     if (type == P_TYPE::POINT) {
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        PointF point = logicalValue.value<PointF>();
-        point.setY(-point.y());
-        return point.toQPointF();
+        return OffsetUtils::flipYSign(logicalValue.value<PointF>()).toQPointF();
     }
 
     return logicalValue.toQVariant();
@@ -102,9 +101,7 @@ PropertyValue AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& 
     if (type == P_TYPE::POINT) {
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        PointF point = PointF::fromQPointF(uiValue.value<QPointF>());
-        point.setY(-point.y());
-        return point;
+        return OffsetUtils::flipYSign(PointF::fromQPointF(uiValue.value<QPointF>()));
     }
 
     return PropertyValue::fromQVariant(uiValue, type);

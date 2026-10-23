@@ -24,6 +24,7 @@
 #include "engraving/dom/mmrest.h"
 
 #include "notation/inotationstyle.h"
+#include "notation/utilities/offsetutilities.h"
 
 #include "translation.h"
 
@@ -52,7 +53,7 @@ void MMRestSettingsModel::createProperties()
     // Internal:  negative = up, positive = down
     m_numberPosition = buildPropertyItem(
         mu::engraving::Pid::MMREST_NUMBER_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, -newValue.toDouble());
+        onPropertyValueChanged(pid, notation::OffsetUtils::flipSign(newValue.toDouble()));
     });
 }
 
@@ -67,7 +68,7 @@ void MMRestSettingsModel::loadProperties()
     // Displayed: positive = up, negative = down
     // Internal:  negative = up, positive = down
     loadPropertyItem(m_numberPosition, [](const QVariant& elementPropertyValue) -> QVariant {
-        return -muse::DataFormatter::roundDouble(elementPropertyValue.toDouble());
+        return notation::OffsetUtils::flipSign(muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()));
     });
 
     updateNumberOptionsEnabled();

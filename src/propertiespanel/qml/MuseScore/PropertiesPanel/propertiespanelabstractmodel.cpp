@@ -31,6 +31,7 @@
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationstyle.h"
 #include "notation/inotationundostack.h"
+#include "notation/utilities/offsetutilities.h"
 
 #include "modularity/ioc.h"
 
@@ -648,7 +649,7 @@ PropertyValue PropertiesPanelAbstractModel::valueToElementUnits(const mu::engrav
         if (pid == Pid::OFFSET) {
             // Displayed: positive = up, negative = down
             // Internal:  negative = up, positive = down
-            point.setY(-point.y());
+            point = OffsetUtils::flipYSign(point);
         }
 
         if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
@@ -707,7 +708,7 @@ QVariant PropertiesPanelAbstractModel::valueFromElementUnits(const mu::engraving
         if (pid == Pid::OFFSET) {
             // Displayed: positive = up, negative = down
             // Internal:  negative = up, positive = down
-            point.setY(-point.y());
+            point = OffsetUtils::flipYSign(point);
         }
 
         return point.toQPointF();
