@@ -33,6 +33,8 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/editing/edittimesig.h"
 #include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transaction/transaction.h"
 
@@ -862,7 +864,6 @@ TEST_F(Engraving_MeasureTests, breathInPart)
 ///   mmrestResize
 ///    a reused MM-rest that grows or shrinks must resize its MMRest symbols too
 //---------------------------------------------------------
-
 TEST_F(Engraving_MeasureTests, mmrestResize)
 {
     // one staff, 10 empty 4/4 measures
@@ -911,4 +912,66 @@ TEST_F(Engraving_MeasureTests, mmrestResize)
     score->endCmd();
     EXPECT_EQ(m1->mmRest()->ticks(), Fraction(10, 1));
     EXPECT_EQ(mmRestSymbol()->ticks(), Fraction(10, 1));
+}
+
+/**
+ *  A time signature change at the start of an MM rest survives save and reload.
+ *  See issue #35000
+ */
+TEST_F(Engraving_MeasureTests, mmrestTimeSigSaveReload)
+{
+    // [GIVEN] A 4/4 score with two staves, a time sig change to 3/4 at measure 2, followed by some empty measures
+    std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScore(nullptr));
+    for (int i = 0; i < 2; ++i) {
+        Part* part = new Part(score.get());
+        score->appendPart(part);
+        score->appendStaff(Factory::createStaff(part));
+    }
+    score->appendMeasures(4);
+
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
+    ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score.get(), score->crMeasure(1), 0, ts, false);
+    score->endCmd();
+
+    // [WHEN] MM rests are turned on
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->setLayoutAll();
+    score->endCmd();
+
+    // [THEN] Layout moves the 3/4 time signatures onto the MM rest starting at measure 2
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(m2->mmRest());
+    Segment* tsSeg = m2->mmRest()->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    ASSERT_TRUE(tsSeg);
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        EXPECT_TRUE(tsSeg->element(staff2track(staffIdx)));
+    }
+
+    // [WHEN] The score is saved and reloaded
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"mmrest-timesig-test.mscx"));
+
+    std::unique_ptr<MasterScore> reopened(ScoreRW::readScore(u"mmrest-timesig-test.mscx", true));
+    ASSERT_TRUE(reopened);
+
+    // [THEN] The score isn't corrupted
+    EXPECT_TRUE(reopened->sanityCheck());
+
+    // [THEN] Measure 2 is still in 3/4
+    m2 = reopened->firstMeasure()->nextMeasure();
+    EXPECT_EQ(m2->ticks(), Fraction(3, 4));
+    EXPECT_EQ(m2->timesig(), Fraction(3, 4));
+
+    // [THEN] The MM rest starting at measure 2 shows the 3/4 time signatures again
+    ASSERT_TRUE(m2->mmRest());
+    tsSeg = m2->mmRest()->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    ASSERT_TRUE(tsSeg);
+    for (staff_idx_t staffIdx = 0; staffIdx < reopened->nstaves(); ++staffIdx) {
+        EngravingItem* reopenedTs = tsSeg->element(staff2track(staffIdx));
+        ASSERT_TRUE(reopenedTs);
+        EXPECT_EQ(toTimeSig(reopenedTs)->sig(), Fraction(3, 4));
+    }
 }

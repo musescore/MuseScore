@@ -730,8 +730,14 @@
               <isHeader>1</isHeader>
               <eid>bB_bB</eid>
               </Clef>
-            <Rest>
+            <TimeSig>
               <eid>cB_cB</eid>
+              <linkedTo>o_o</linkedTo>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <eid>dB_dB</eid>
               <linkedTo>p_p</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
@@ -740,15 +746,9 @@
           </Measure>
         <Measure len="10/4">
           <multiMeasureRest>5</multiMeasureRest>
-          <eid>dB_dB</eid>
-          <mmRestLast>eB_eB</mmRestLast>
+          <eid>eB_eB</eid>
+          <mmRestLast>fB_fB</mmRestLast>
           <voice>
-            <TimeSig>
-              <eid>fB_fB</eid>
-              <linkedTo>o_o</linkedTo>
-              <sigN>2</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Tempo>
               <tempo>1.66667</tempo>
               <eid>gB_gB</eid>
@@ -796,7 +796,7 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>eB_eB</eid>
+          <eid>fB_fB</eid>
           <voice>
             <Rest>
               <eid>oB_oB</eid>
