@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/breath.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/linkedobjects.h"
@@ -511,6 +512,48 @@ TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
         EXPECT_FALSE(linkedItem->visible());
     }
     delete score;
+}
+
+//---------------------------------------------------------
+//   testLinkedStaffBreath
+///  Add a linked staff to a staff with a breath mark: the breath mark
+///  and its copy are linked, and the original stays on its staff
+//---------------------------------------------------------
+
+TEST_F(Engraving_LinksTests, testLinkedStaffBreath)
+{
+    MCursor c;
+    c.setTimeSig(Fraction(4, 4));
+    c.createScore(nullptr, u"test");
+    c.addPart(u"voice");
+    c.move(0, Fraction(0, 1));       // move to track 0 tick 0
+    c.addKeySig(Key(0));
+    c.addTimeSig(Fraction(4, 4));
+    c.addChord(60, TDuration(DurationType::V_HALF));
+    c.addChord(62, TDuration(DurationType::V_HALF));
+
+    MasterScore* score = c.score();
+    Measure* m = score->firstMeasure();
+    Segment* s = m->getSegment(SegmentType::Breath, Fraction(1, 2));
+    Breath* breath = Factory::createBreath(s);
+    breath->setTrack(0);
+    s->add(breath);
+    score->doLayout();
+
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
+    Staff* oStaff = score->staff(0);
+    Staff* staff  = Factory::createStaff(oStaff->part());
+    staff->setPart(oStaff->part());
+    score->undoInsertStaff(staff, 1, false);
+    Excerpt::cloneStaff(oStaff, staff);
+    score->endCmd();
+
+    EXPECT_EQ(s->element(0), breath);
+    ASSERT_TRUE(breath->links());
+    EXPECT_EQ(breath->links()->size(), 2);
+    EngravingItem* copy = s->element(VOICES);
+    ASSERT_TRUE(copy && copy->isBreath());
+    EXPECT_TRUE(breath->links()->contains(copy));
 }
 
 TEST_F(Engraving_LinksTests, testPickupLinkedStaff) {
