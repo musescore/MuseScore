@@ -196,7 +196,7 @@ MuseScore {
             columns: 2
             anchors.fill: parent
             anchors.margins: 10
-            Label {
+            StyledTextLabel {
                 text: "Pivot"
             }
             StyledDropdown {
