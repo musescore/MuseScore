@@ -97,12 +97,12 @@ TEST_F(Engraving_CapoTests, modeChange)
     score->doLayout();
 
     EXPECT_EQ(noteStd->pitch(), 60);
-    EXPECT_EQ(noteStd->string(), 1);
-    EXPECT_EQ(noteStd->fret(), 0);
+    EXPECT_EQ(noteStd->string(), 3);
+    EXPECT_EQ(noteStd->fret(), 9);
 
     EXPECT_EQ(noteTab->pitch(), 60);
-    EXPECT_EQ(noteTab->string(), 1);
-    EXPECT_EQ(noteTab->fret(), 0);
+    EXPECT_EQ(noteTab->string(), 3);
+    EXPECT_EQ(noteTab->fret(), 9);
 
     delete score;
 }
@@ -392,12 +392,12 @@ TEST_F(Engraving_CapoTests, ignoredString)
     score->doLayout();
 
     EXPECT_EQ(noteStd->pitch(), 60);
-    EXPECT_EQ(noteStd->string(), 1);
-    EXPECT_EQ(noteStd->fret(), 0);
+    EXPECT_EQ(noteStd->string(), 3);
+    EXPECT_EQ(noteStd->fret(), 9);
 
     EXPECT_EQ(noteTab->pitch(), 60);
-    EXPECT_EQ(noteTab->string(), 1);
-    EXPECT_EQ(noteTab->fret(), 0);
+    EXPECT_EQ(noteTab->string(), 3);
+    EXPECT_EQ(noteTab->fret(), 9);
 
     delete score;
 }
@@ -428,12 +428,12 @@ TEST_F(Engraving_CapoTests, capoSaveOpen)
     const Note* noteTab = toChord(chordTab)->notes()[0];
 
     EXPECT_EQ(noteStd->pitch(), 61);
-    EXPECT_EQ(noteStd->string(), 1);
-    EXPECT_EQ(noteStd->fret(), 1);
+    EXPECT_EQ(noteStd->string(), 2);
+    EXPECT_EQ(noteStd->fret(), 5);
 
     EXPECT_EQ(noteTab->pitch(), 61);
-    EXPECT_EQ(noteTab->string(), 1);
-    EXPECT_EQ(noteTab->fret(), 1);
+    EXPECT_EQ(noteTab->string(), 2);
+    EXPECT_EQ(noteTab->fret(), 5);
 
     delete score;
 }
@@ -470,12 +470,12 @@ TEST_F(Engraving_CapoTests, undoRedoOnInactiveCapo)
     const Note* noteTab = toChord(chordTab)->notes()[0];
 
     EXPECT_EQ(noteStd->pitch(), 61);
-    EXPECT_EQ(noteStd->string(), 1);
-    EXPECT_EQ(noteStd->fret(), 1);
+    EXPECT_EQ(noteStd->string(), 2);
+    EXPECT_EQ(noteStd->fret(), 5);
 
     EXPECT_EQ(noteTab->pitch(), 61);
-    EXPECT_EQ(noteTab->string(), 1);
-    EXPECT_EQ(noteTab->fret(), 1);
+    EXPECT_EQ(noteTab->string(), 2);
+    EXPECT_EQ(noteTab->fret(), 5);
 
     capoParams.active = false;
     staffStd->insertCapoParams(noteStd->tick(), capoParams, false);
@@ -483,24 +483,24 @@ TEST_F(Engraving_CapoTests, undoRedoOnInactiveCapo)
     score->doLayout();
 
     EXPECT_EQ(noteStd->pitch(), 60);
-    EXPECT_EQ(noteStd->string(), 1);
-    EXPECT_EQ(noteStd->fret(), 1);
+    EXPECT_EQ(noteStd->string(), 2);
+    EXPECT_EQ(noteStd->fret(), 5);
 
     EXPECT_EQ(noteTab->pitch(), 60);
-    EXPECT_EQ(noteTab->string(), 1);
-    EXPECT_EQ(noteTab->fret(), 1);
+    EXPECT_EQ(noteTab->string(), 2);
+    EXPECT_EQ(noteTab->fret(), 5);
 
     staffStd->removeCapoParams(noteStd->tick());
     staffTab->removeCapoParams(noteStd->tick());
     score->doLayout();
 
     EXPECT_EQ(noteStd->pitch(), 60);
-    EXPECT_EQ(noteStd->string(), 1);
-    EXPECT_EQ(noteStd->fret(), 1);
+    EXPECT_EQ(noteStd->string(), 2);
+    EXPECT_EQ(noteStd->fret(), 5);
 
     EXPECT_EQ(noteTab->pitch(), 60);
-    EXPECT_EQ(noteTab->string(), 1);
-    EXPECT_EQ(noteTab->fret(), 1);
+    EXPECT_EQ(noteTab->string(), 2);
+    EXPECT_EQ(noteTab->fret(), 5);
 
     // Simulate undo action
     staffStd->insertCapoParams(noteStd->tick(), capoParams, false);
@@ -508,12 +508,12 @@ TEST_F(Engraving_CapoTests, undoRedoOnInactiveCapo)
     score->doLayout();
 
     EXPECT_EQ(noteStd->pitch(), 60);
-    EXPECT_EQ(noteStd->string(), 1);
-    EXPECT_EQ(noteStd->fret(), 1);
+    EXPECT_EQ(noteStd->string(), 2);
+    EXPECT_EQ(noteStd->fret(), 5);
 
     EXPECT_EQ(noteTab->pitch(), 60);
-    EXPECT_EQ(noteTab->string(), 1);
-    EXPECT_EQ(noteTab->fret(), 1);
+    EXPECT_EQ(noteTab->string(), 2);
+    EXPECT_EQ(noteTab->fret(), 5);
 
     delete score;
 }
