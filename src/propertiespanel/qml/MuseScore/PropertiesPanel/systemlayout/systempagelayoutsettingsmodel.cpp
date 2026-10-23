@@ -49,10 +49,11 @@ void SystemPageLayoutSettingsModel::loadProperties()
     updateAllSystemsAreLocked();
     updateAllPagesAreLocked();
     updateScoreIsInPageView();
-    updateIsMakeIntoSystemAvailable();
-    updateIsMakeIntoPageAvailable();
 
-    updateBoxTypesInSelection();
+    const QSet<BoxType> boxTypes = boxTypesInSelection();
+    updateIsSystemTabAvailable(boxTypes);
+    updateIsMakeIntoSystemAvailable(boxTypes);
+    updateIsMakeIntoPageAvailable(boxTypes);
 
     updateSystemCount();
     updatePageCount();
@@ -277,7 +278,7 @@ void SystemPageLayoutSettingsModel::updateScoreIsInPageView()
     }
 }
 
-void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
+void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable(const QSet<BoxType>& boxTypes)
 {
     if (isEmpty()) {
         return;
@@ -289,10 +290,11 @@ void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
         return;
     }
 
-    bool available = true;
-    if (startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock() && startMB->systemLock() == endMB->systemLock()) {
-        available = false;
-    }
+    const bool selectionHasMeasures = boxTypes.contains(BoxType::Measure);
+    const bool systemAlreadyExists = startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock()
+                                     && startMB->systemLock() == endMB->systemLock();
+
+    const bool available = selectionHasMeasures && !systemAlreadyExists;
 
     if (m_isMakeIntoSystemAvailable != available) {
         m_isMakeIntoSystemAvailable = available;
@@ -300,9 +302,9 @@ void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
     }
 }
 
-void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable()
+void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable(const QSet<BoxType>& boxTypes)
 {
-    bool available = !isEmpty();
+    const bool available = boxTypes.contains(BoxType::Measure);
 
     if (m_isMakeIntoPageAvailable != available) {
         m_isMakeIntoPageAvailable = available;
@@ -310,10 +312,10 @@ void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable()
     }
 }
 
-void SystemPageLayoutSettingsModel::updateIsSystemTabAvailable()
+void SystemPageLayoutSettingsModel::updateIsSystemTabAvailable(const QSet<BoxType>& boxTypes)
 {
-    const bool available = m_boxTypesInSelection.contains(BoxType::Measure)
-                           || m_boxTypesInSelection.contains(BoxType::Horizontal);
+    const bool available = boxTypes.contains(BoxType::Measure)
+                           || boxTypes.contains(BoxType::Horizontal);
 
     if (m_isSystemTabAvailable != available) {
         m_isSystemTabAvailable = available;
@@ -321,23 +323,22 @@ void SystemPageLayoutSettingsModel::updateIsSystemTabAvailable()
     }
 }
 
-void SystemPageLayoutSettingsModel::updateBoxTypesInSelection()
+QSet<BoxType> SystemPageLayoutSettingsModel::boxTypesInSelection() const
 {
-    m_boxTypesInSelection.clear();
+    QSet<BoxType> boxTypes;
 
     if (isEmpty()) {
-        updateIsSystemTabAvailable();
-        return;
+        return boxTypes;
     }
 
-    const auto checkForBoxType = [this](const EngravingItem* item) {
+    const auto checkForBoxType = [&boxTypes](const EngravingItem* item) {
         if (item->isMeasure()) {
-            m_boxTypesInSelection.insert(BoxType::Measure);
+            boxTypes.insert(BoxType::Measure);
         } else if (item->isHBox()) {
-            m_boxTypesInSelection.insert(BoxType::Horizontal);
+            boxTypes.insert(BoxType::Horizontal);
         } else if (item->isVBoxBase()) {
             // Slight hack - for these purposes we'll take "Vertical" to mean VBoxBase...
-            m_boxTypesInSelection.insert(BoxType::Vertical);
+            boxTypes.insert(BoxType::Vertical);
         }
     };
 
@@ -357,7 +358,7 @@ void SystemPageLayoutSettingsModel::updateBoxTypesInSelection()
         }
     }
 
-    updateIsSystemTabAvailable();
+    return boxTypes;
 }
 
 void SystemPageLayoutSettingsModel::updateSystemCount()
