@@ -167,6 +167,11 @@ MeasureBase* NotationSelection::endMeasureBase() const
     return score()->selection().endMeasureBase();
 }
 
+std::vector<MeasureBase*> NotationSelection::measureBasesInSelection() const
+{
+    return score()->selection().measureBasesInSelection();
+}
+
 std::vector<System*> NotationSelection::selectedSystems() const
 {
     return score()->selection().selectedSystems();

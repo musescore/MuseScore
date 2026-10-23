@@ -467,16 +467,10 @@ void PropertiesPanelListModel::updateElementList()
     if (selection->isRange()) {
         // Boxes aren't included in a range selection, but for the purposes of the properties panel
         // we'll include them in the element list (so that their sections are available)...
-        const mu::engraving::MeasureBase* endMB = selection->endMeasureBase();
-        mu::engraving::MeasureBase* currMB = selection->startMeasureBase();
-        while (currMB) {
-            if (currMB->isBox()) {
-                elements.emplace_back(currMB);
+        for (mu::engraving::MeasureBase* mb : selection->measureBasesInSelection()) {
+            if (mb->isBox()) {
+                elements.emplace_back(mb);
             }
-            if (!endMB || currMB->isAfterOrEqual(endMB)) {
-                break;
-            }
-            currMB = currMB->nextMM();
         }
     }
 

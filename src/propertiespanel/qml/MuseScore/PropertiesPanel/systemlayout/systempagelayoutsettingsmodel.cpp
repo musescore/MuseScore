@@ -346,30 +346,14 @@ QSet<BoxType> SystemPageLayoutSettingsModel::boxTypesInSelection() const
         return boxTypes;
     }
 
-    const auto checkForBoxType = [&boxTypes](const EngravingItem* item) {
-        if (item->isMeasure()) {
+    for (const MeasureBase* mb : selection()->measureBasesInSelection()) {
+        if (mb->isMeasure()) {
             boxTypes.insert(BoxType::Measure);
-        } else if (item->isHBox()) {
+        } else if (mb->isHBox()) {
             boxTypes.insert(BoxType::Horizontal);
-        } else if (item->isVBoxBase()) {
+        } else if (mb->isVBoxBase()) {
             // Slight hack - for these purposes we'll take "Vertical" to mean VBoxBase...
             boxTypes.insert(BoxType::Vertical);
-        }
-    };
-
-    if (selection()->isRange()) {
-        const MeasureBase* endMB = selection()->endMeasureBase();
-        const MeasureBase* currMB = selection()->startMeasureBase();
-        while (currMB) {
-            checkForBoxType(currMB);
-            if (!endMB || currMB->isAfterOrEqual(endMB)) {
-                break;
-            }
-            currMB = currMB->nextMM();
-        }
-    } else {
-        for (const EngravingItem* item : selection()->elements()) {
-            checkForBoxType(item);
         }
     }
 
