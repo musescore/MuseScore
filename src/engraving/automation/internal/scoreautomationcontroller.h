@@ -199,8 +199,7 @@ private:
 
     static void mirrorPointIfInRange(const AutomationPointEdit& localEdit, const MirrorRange& range, AutomationPointEdits& allEdits);
 
-    static void mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, const AutomationPointEdit& localEdit,
-                                       AutomationPointEdits& allEdits);
+    static std::vector<MirrorRange> measureRepeatMirrorRanges(const RepeatSegment* seg, const StaffRange& range);
 
     Score* m_score = nullptr;
     AutomationDataPtr m_automationData;

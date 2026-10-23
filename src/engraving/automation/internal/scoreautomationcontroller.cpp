@@ -1495,14 +1495,19 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
 
     // Measure repeats are staff-specific; global/instrument-scoped points (e.g. Tempo, Volume, Pan)
     // aren't tied to any staff, so they're mirrored to regular repeats only, not measure repeats
-    std::optional<StaffRange> staffRange;
+    // One list per repeat segment, in repeatList order
+    std::vector<std::vector<MirrorRange> > measureRepeatRanges;
     if (const std::optional<muse::ID> staffId = key.staffId()) {
         const Staff* staff = m_score->staffById(*staffId);
         IF_ASSERT_FAILED(staff) {
             return;
         }
 
-        staffRange.emplace(m_score, staff->idx(), staff->idx());
+        const StaffRange staffRange(m_score, staff->idx(), staff->idx());
+        measureRepeatRanges.reserve(repeatList.size());
+        for (const RepeatSegment* seg : repeatList) {
+            measureRepeatRanges.push_back(measureRepeatMirrorRanges(seg, staffRange));
+        }
     }
 
     // Bounded by the original size, since mirrored edits are appended to the same vector below
@@ -1524,13 +1529,17 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
             movePoint->from -= sourceTickOffset;
         }
 
-        for (const RepeatSegment* targetSeg : repeatList) {
+        for (size_t segIdx = 0; segIdx < repeatList.size(); ++segIdx) {
+            const RepeatSegment* targetSeg = repeatList[segIdx];
             if (targetSeg != sourceSeg) {
                 const MirrorRange targetRange { targetSeg->tick, targetSeg->endTick(), targetSeg->utick - targetSeg->tick };
                 mirrorPointIfInRange(localEdit, targetRange, edits);
             }
-            if (staffRange) {
-                mirrorToMeasureRepeats(targetSeg, *staffRange, localEdit, edits);
+
+            if (!measureRepeatRanges.empty()) {
+                for (const MirrorRange& range : measureRepeatRanges[segIdx]) {
+                    mirrorPointIfInRange(localEdit, range, edits);
+                }
             }
         }
     }
@@ -1565,19 +1574,20 @@ void ScoreAutomationController::mirrorPointIfInRange(const AutomationPointEdit& 
     }
 }
 
-void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range,
-                                                       const AutomationPointEdit& localEdit, AutomationPointEdits& allEdits)
+std::vector<ScoreAutomationController::MirrorRange> ScoreAutomationController::measureRepeatMirrorRanges(const RepeatSegment* seg,
+                                                                                                         const StaffRange& range)
 {
-    const int tickOffset = targetSeg->utick - targetSeg->tick;
+    const int tickOffset = seg->utick - seg->tick;
 
     // A MeasureRepeat can only ever sit on the measure's first ChordRest segment
     MeasureRepeats measureRepeats;
-    for (const Measure* measure : targetSeg->measureList()) {
+    for (const Measure* measure : seg->measureList()) {
         if (const Segment* firstChordRestSegment = measure->first(SegmentType::ChordRest)) {
             collectMeasureRepeats(firstChordRestSegment, tickOffset, range, measureRepeats);
         }
     }
 
+    std::vector<MirrorRange> result;
     for (const auto& [mr, mrTickOffset] : measureRepeats) {
         const Measure* currMeasure = mr->firstMeasureOfGroup();
         for (int num = 0; currMeasure && num < mr->numMeasures(); ++num, currMeasure = currMeasure->nextMeasure()) {
@@ -1587,11 +1597,10 @@ void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targ
             }
 
             const int measureFrom = referringMeasure->tick().ticks();
-            const int measureToExclusive = referringMeasure->endTick().ticks();
             const int tickShift = currMeasure->tick().ticks() - measureFrom;
-
-            const MirrorRange measureRange { measureFrom, measureToExclusive, tickShift + mrTickOffset };
-            mirrorPointIfInRange(localEdit, measureRange, allEdits);
+            result.push_back({ measureFrom, referringMeasure->endTick().ticks(), tickShift + mrTickOffset });
         }
     }
+
+    return result;
 }
