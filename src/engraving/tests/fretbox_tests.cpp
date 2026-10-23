@@ -69,7 +69,7 @@ public:
 
             diagram->assignNewEID();
 
-            score->startCmd(TranslatableString());
+            score->startCmd(TranslatableString::untranslatable("Fretbox tests"));
             score->undoAddElement(diagram);
             score->endCmd();
 
@@ -100,7 +100,7 @@ public:
 
         diagram->assignNewEID();
 
-        score->startCmd(TranslatableString());
+        score->startCmd(TranslatableString::untranslatable("Fretbox tests"));
         score->undoAddElement(diagram);
         score->endCmd();
     }
@@ -116,7 +116,7 @@ public:
 
         Segment* segment = measure->first(SegmentType::ChordRest);
 
-        score->startCmd(TranslatableString());
+        score->startCmd(TranslatableString::untranslatable("Fretbox tests"));
         score->undoRemoveElement(toFretDiagram(segment->annotations().front()), true);
         score->endCmd();
     }
@@ -136,7 +136,7 @@ public:
         EditData ed;
         diagram->harmony()->startEdit(ed);
 
-        score->startCmd(TranslatableString());
+        score->startCmd(TranslatableString::untranslatable("Fretbox tests"));
         diagram->harmony()->undoChangeProperty(Pid::TEXT, newChordName);
         score->endCmd();
 
@@ -188,7 +188,7 @@ public:
         ASSERT_TRUE(fretBox);
         ASSERT_EQ(fretBox->el().size(), newOrder.size());
 
-        score->startCmd(TranslatableString());
+        score->startCmd(TranslatableString::untranslatable("Fretbox tests"));
         fretBox->undoReorderElements(newOrder);
         score->endCmd();
     }

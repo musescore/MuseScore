@@ -2635,6 +2635,21 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+static void writeStaveSharingState(const StaveSharingState& state, const Fraction& tick, XmlWriter& xml)
+{
+    if (!state.isUserModified()) {
+        return;
+    }
+    xml.startElement("StaveSharingState", { { "tick", tick.toString() } });
+    if (state.isReset()) {
+        xml.tag("isReset", state.isReset());
+    }
+    for (const auto& [originTrack, sharedTrack] : state.userTrackMap().value()) {
+        xml.tag("trackMap", { { "origin", originTrack }, { "shared", sharedTrack } });
+    }
+    xml.endElement();
+}
+
 void TWrite::write(const SharedPart* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item, { { "id", item->id().toUint64() } });
@@ -2642,6 +2657,12 @@ void TWrite::write(const SharedPart* item, XmlWriter& xml, WriteContext& ctx)
     writeItemEid(item, xml);
 
     xml.tag(propertyName(Pid::SHARED_PART_ENABLED), item->getProperty(Pid::SHARED_PART_ENABLED).toBool());
+
+    const Fraction& endTick = item->score()->endTick();
+
+    for (const auto& [tick, state] : item->staveSharingStatesBetweenTicks(Fraction(0, 1), endTick)) {
+        writeStaveSharingState(state, tick, xml);
+    }
 
     writeProperties(item, xml, ctx);
 

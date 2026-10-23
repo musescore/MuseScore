@@ -32,7 +32,7 @@
 
 namespace mu::engraving {
 PageLockIndicator::PageLockIndicator(DummyParentOr<System> parent, const RangeLock* lock)
-    : IndicatorIcon(ElementType::PAGE_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_pageLock(lock) {}
+    : SystemIndicatorIcon(ElementType::PAGE_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_pageLock(lock) {}
 
 void PageLockIndicator::setSelected(bool v)
 {
