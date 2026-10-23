@@ -615,14 +615,15 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
     // Step 3: resolve pending tempo resets now that noRepeatTempoCurve is fully built
     resolvePendingTempoResets(ctx);
 
-    // Step 4: fill each voice curve with any points from the base (all-voice) curve it doesn't already have
-    fillVoiceCurvesFromBase(ctx);
-
-    // Step 5: measure repeats
+    // Step 4: measure repeats
     addMeasureRepeatPoints(ctx);
 
-    // Step 6: Mirror directly-authored points to repeats
+    // Step 5: Mirror directly-authored points to repeats
     mirrorAuthoredPointsToRepeats(ctx);
+
+    // Step 6: fill each voice curve with any points from the base (all-voice) curve it doesn't already have,
+    // after Steps 4-5 so the base curve's repeat copies are included
+    fillVoiceCurvesFromBase(ctx);
 
     if (request.includeTempo) {
         // TempoTimeline falls back to the default tempo when the curve has no points
@@ -978,7 +979,13 @@ void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
             continue;
         }
 
-        curve.insert(baseIt->second.cbegin(), baseIt->second.cend());
+        // Copies are generated, so a rebuild drops them once the base point is gone
+        for (const auto& [tick, point] : baseIt->second) {
+            const auto [it, inserted] = curve.try_emplace(tick, point);
+            if (inserted) {
+                it->second.generated = true;
+            }
+        }
     }
 }
 
