@@ -185,6 +185,11 @@ const uint8_t* IODevice::cdataOffsetted() const
 
 ByteArray IODevice::readAll()
 {
+    return doReadAll();
+}
+
+ByteArray IODevice::doReadAll()
+{
     return read(size());
 }
 

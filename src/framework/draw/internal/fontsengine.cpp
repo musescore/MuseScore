@@ -35,6 +35,16 @@
 using namespace muse;
 using namespace muse::draw;
 
+static bool isFtx(const ByteArray& data)
+{
+#ifdef MUSE_MODULE_DRAW_USE_FONTFACE_XT
+    return FontFaceXT::isFtx(data);
+#else
+    UNUSED(data);
+    return false;
+#endif
+}
+
 static const double DEFAULT_PIXEL_SIZE = 100.0;
 static const double LOADED_PIXEL_SIZE = 200.0;
 static const double FONT_METRICS_DPI = 1200.0;
@@ -515,14 +525,15 @@ void FontsEngine::setFontFaceFactory(const FontFaceFactory& f)
     m_fontFaceFactory = f;
 }
 
-IFontFace* FontsEngine::createFontFace(const FontDataKey& dataKey, Font::Type type) const
+IFontFace* FontsEngine::createFontFace(const FontData& fontData, Font::Type type) const
 {
+    const FontDataKey& dataKey = fontData.key;
     if (m_fontFaceFactory) {
         return m_fontFaceFactory(dataKey, type);
     }
 
     IFontFace* origin = nullptr;
-    if (fontsDatabase()->isFtxFont(dataKey, type)) {
+    if (isFtx(fontData.data)) {
 #ifdef MUSE_MODULE_DRAW_USE_FONTFACE_XT
         origin = new FontFaceXT();
 #else
@@ -562,7 +573,7 @@ IFontFace* FontsEngine::fontFaceByActualDataKey(const FontDataKey& actualDataKey
     loadedKey.type = type;
     loadedKey.pixelSize = loadedPixelSize;
 
-    IFontFace* face = createFontFace(fontData.key, type);
+    IFontFace* face = createFontFace(fontData, type);
     IF_ASSERT_FAILED(face) {
         return nullptr;
     }
@@ -615,7 +626,8 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
     //! (for example, if there is no required one)
     FontDataKey actualDataKey = fontsDatabase()->actualFont(requireKey.dataKey, requireKey.type);
 
-    const int loadedPixelSize = fontsDatabase()->isFtxFont(actualDataKey, requireKey.type) ? static_cast<int>(LOADED_PIXEL_SIZE)
+    const int loadedPixelSize = isFtx(fontsDatabase()->fontData(actualDataKey, requireKey.type).data)
+                                ? static_cast<int>(LOADED_PIXEL_SIZE)
                                 : requireKey.pixelSize;
     IFontFace* face = fontFaceByActualDataKey(actualDataKey, requireKey.type, loadedPixelSize, isSymbolMode);
     if (!face) {
@@ -631,7 +643,7 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
     auto subtitutionFontDataKeys = fontsDatabase()->substitutionFonts(requireKey.dataKey);
     for (const FontDataKey& dataKey : subtitutionFontDataKeys) {
         const FontDataKey actualSubtitutionDataKey = fontsDatabase()->actualFont(dataKey, requireKey.type);
-        const int subtitutionLoadedPixelSize = fontsDatabase()->isFtxFont(actualSubtitutionDataKey, requireKey.type)
+        const int subtitutionLoadedPixelSize = isFtx(fontsDatabase()->fontData(actualSubtitutionDataKey, requireKey.type).data)
                                                ? static_cast<int>(LOADED_PIXEL_SIZE) : requireKey.pixelSize;
         IFontFace* subtitutionFace = fontFaceByActualDataKey(actualSubtitutionDataKey, requireKey.type, subtitutionLoadedPixelSize,
                                                              isSymbolMode);

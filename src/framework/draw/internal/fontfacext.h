@@ -63,6 +63,8 @@ private:
 class FontFaceXT : public IFontFace
 {
 public:
+    static bool isFtx(const ByteArray& data);
+
     FontFaceXT();
     ~FontFaceXT();
 

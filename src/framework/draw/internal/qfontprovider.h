@@ -21,8 +21,6 @@
  */
 #pragma once
 
-#include <QHash>
-
 #include "../ifontprovider.h"
 
 namespace muse::draw {
@@ -33,6 +31,7 @@ public:
     QFontProvider() = default;
 
     int addSymbolFont(const String& family, const io::path_t& path) override;
+    int addSymbolFont(const String& family, std::shared_ptr<io::IODevice> device) override;
 
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
@@ -54,9 +53,5 @@ public:
     RectF boundingRect(const Font& f, char32_t ucs4) const override;
 
     RectF tightBoundingRect(const Font& f, const String& string) const override;
-
-private:
-
-    QHash<QString /*family*/, io::path_t> m_symbolsFonts;
 };
 }
