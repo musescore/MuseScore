@@ -51,6 +51,10 @@ public:
 
     std::shared_ptr<IEngravingConfiguration> configuration() const;
 
+    // Standalone part exports use a local root; nullptr keeps master-score link selection.
+    const Score* linkRootScore() const { return m_linkRootScore; }
+    void setLinkRootScore(const Score* score) { m_linkRootScore = score; }
+
     Fraction curTick() const { return _curTick; }
     void setCurTick(const Fraction& v) { _curTick   = v; }
     void incCurTick(const Fraction& v) { _curTick += v; }
@@ -86,7 +90,8 @@ public:
                && _clipboardmode == c._clipboardmode
                && _filter == c._filter
                && _range == c._range
-               && _firstClipboardTick == c._firstClipboardTick;
+               && _firstClipboardTick == c._firstClipboardTick
+               && m_linkRootScore == c.m_linkRootScore;
     }
 
     inline bool operator!=(const WriteContext& c) const { return !this->operator==(c); }
@@ -94,6 +99,7 @@ public:
 private:
 
     const Score* m_score = nullptr;
+    const Score* m_linkRootScore = nullptr;
 
     Fraction _curTick    { 0, 1 };           // used to optimize output
     Fraction _tickDiff   { 0, 1 };

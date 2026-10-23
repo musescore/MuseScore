@@ -22,6 +22,7 @@
 #include "mscsaver.h"
 
 #include <cmath>
+#include <list>
 
 #include "global/io/buffer.h"
 #include "muse_framework_config.h"
@@ -50,6 +51,18 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
+
+static void writeImages(const std::list<Score*>& scores, MscWriter& mscWriter)
+{
+    for (ImageStoreItem* image : imageStore) {
+        for (Score* score : scores) {
+            if (image->isUsed(score)) {
+                mscWriter.addImageFile(String::fromStdString(image->hashName()), image->buffer());
+                break;
+            }
+        }
+    }
+}
 
 bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail,
                          const write::WriteContext* ctx)
@@ -161,16 +174,8 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         }
     }
 
-    // Write images
-    {
-        for (ImageStoreItem* ip : imageStore) {
-            if (!ip->isUsed(score)) {
-                continue;
-            }
-            ByteArray data = ip->buffer();
-            mscWriter.addImageFile(String::fromStdString(ip->hashName()), data);
-        }
-    }
+    // Write images used by the scores included in this archive.
+    writeImages(ctx && ctx->shouldWriteRange() ? std::list<Score*> { score } : score->scoreList(), mscWriter);
 
     // Write thumbnail
     {
@@ -221,13 +226,17 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
         ByteArray excerptData;
         auto excerptBuf = Buffer::opened(IODevice::WriteOnly, &excerptData);
 
-        rw::RWRegister::writer()->writeScore(partScore, &excerptBuf);
+        WriteInOutData writeData(partScore);
+        writeData.ctx.setLinkRootScore(partScore);
+        rw::RWRegister::writer()->writeScore(partScore, &excerptBuf, &writeData);
 
         mscWriter.writeScoreFile(excerptData);
     }
 
     // restore in-memory part score's metaTags
     partScore->setMetaTags(partTags);
+
+    writeImages({ partScore }, mscWriter);
 
     // Write thumbnail
     {
