@@ -1784,6 +1784,9 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         bool val = false;
         switch (type) {
         case LayoutBreakType::LINE:
+            if (mb->isVBoxBase()) {
+                break;
+            }
             val = !mb->lineBreak();
             if (val) {
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);

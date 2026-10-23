@@ -125,40 +125,36 @@ MeasureBase::~MeasureBase()
 
 System* MeasureBase::prevNonVBoxSystem() const
 {
-    System* curSystem = system();
-    IF_ASSERT_FAILED(curSystem) {
+    const System* currSystem = system();
+    const MeasureBase* firstInCurrSystem = currSystem ? currSystem->first() : nullptr;
+    IF_ASSERT_FAILED(firstInCurrSystem) {
         return nullptr;
     }
 
-    System* prevSystem = curSystem;
-    for (const MeasureBase* mb = this; mb && prevSystem == curSystem; mb = mb->prevMM()) {
-        if (mb->isMeasure() || mb->isHBox()) {
-            prevSystem = mb->system();
-        } else {
-            return nullptr;
-        }
-    }
+    // TODO: This logic is coupled to moveMeasureToPrevSystem - it should be possible to
+    // move a MeasureBase from below a VBox (or n VBoxes) to above. Once that's achieved,
+    // we can remove lastIsValid and simply iterate until we find a "non VBox system"...
+    const MeasureBase* lastInPrevSystem = firstInCurrSystem->prevMM();
+    const bool lastIsValid = lastInPrevSystem && !lastInPrevSystem->isVBoxBase();
 
-    return prevSystem != curSystem ? prevSystem : nullptr;
+    return lastIsValid ? lastInPrevSystem->system() : nullptr;
 }
 
 System* MeasureBase::nextNonVBoxSystem() const
 {
-    System* curSystem = system();
-    IF_ASSERT_FAILED(curSystem) {
+    const System* currSystem = system();
+    const MeasureBase* lastInCurrSystem = currSystem ? currSystem->last() : nullptr;
+    IF_ASSERT_FAILED(lastInCurrSystem) {
         return nullptr;
     }
 
-    System* nextSystem = curSystem;
-    for (const MeasureBase* mb = this; mb && nextSystem == curSystem; mb = mb->nextMM()) {
-        if (mb->isMeasure() || mb->isHBox()) {
-            nextSystem = mb->system();
-        } else {
-            return nullptr;
-        }
-    }
+    // TODO: This logic is coupled to moveMeasureToNextSystem - it should be possible to
+    // move a MeasureBase from above a VBox (or n VBoxes) to below. Once that's achieved,
+    // we can remove firstIsValid and simply iterate until we find a "non VBox system"...
+    const MeasureBase* firstInNextSystem = lastInCurrSystem->nextMM();
+    const bool firstIsValid = firstInNextSystem && !firstInNextSystem->isVBoxBase();
 
-    return nextSystem != curSystem ? nextSystem : nullptr;
+    return firstIsValid ? firstInNextSystem->system() : nullptr;
 }
 
 Page* MeasureBase::page() const
