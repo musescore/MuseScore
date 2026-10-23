@@ -27,11 +27,13 @@
 #include "../../dom/articulation.h"
 
 namespace mu::engraving {
+class ChordLine;
 class Dynamic;
 class Excerpt;
 class HarmonyInfo;
 class MasterScore;
 class Score;
+class XmlReader;
 enum class DynamicType : unsigned char;
 enum class SymId;
 }
@@ -57,6 +59,7 @@ public:
     static PointF getAdjustedOffset(EngravingItem* item, PointF offset);
     static void migrateOffset500(EngravingItem* item, PropertyValue& offset);
     static void migrateOffsetPre302(EngravingItem* item, int mscVersion);
+    static void readChordLinePath(ChordLine* chordLine, XmlReader& e, int mscVersion);
 
 private:
     static Sid positionStyleFromAlign(Sid align);
