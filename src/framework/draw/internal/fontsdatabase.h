@@ -21,9 +21,9 @@
  */
 #pragma once
 
+#include <memory>
 #include <vector>
 #include <map>
-#include <unordered_map>
 
 #include "ifontsdatabase.h"
 
@@ -38,12 +38,12 @@ public:
     void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) override;
 
     int addFont(const FontDataKey& key, const io::path_t& path) override;
+    int addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device) override;
     void removeFont(const FontDataKey& key) override;
 
     FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const override;
     std::vector<FontDataKey> substitutionFonts(const FontDataKey& requireKey) const override;
     FontData fontData(const FontDataKey& requireKey, Font::Type type) const override;
-    bool isFtxFont(const FontDataKey& requireKey, Font::Type type) const override;
 
     async::Notification changed() const override;
 
@@ -52,7 +52,7 @@ private:
     struct FontInfo {
         int id = -1;
         FontDataKey key;
-        io::path_t path;
+        std::shared_ptr<io::IODevice> device;
 
         bool valid() const { return id > -1; }
     };
@@ -64,7 +64,6 @@ private:
     std::map<Font::Type, FontDataKey> m_defaults;
     std::map<FontDataKey, std::vector<FontDataKey> > m_familySubstitutions;
     std::map<FontDataKey, FontInfo> m_fonts;
-    mutable std::unordered_map<std::string, ByteArray> m_fileDataCache;
     async::Notification m_changed;
 };
 }

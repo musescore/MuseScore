@@ -21,6 +21,8 @@
  */
 #include "fontprovider.h"
 
+#include <memory>
+
 #include "log.h"
 
 using namespace muse;
@@ -28,9 +30,12 @@ using namespace muse::draw;
 
 int FontProvider::addSymbolFont(const muse::String& family, const io::path_t& path)
 {
-    UNUSED(family);
-    UNUSED(path);
-    return 1;
+    return fontsDatabase()->addFont(FontDataKey(Font::FontFamily(family)), path);
+}
+
+int FontProvider::addSymbolFont(const muse::String& family, std::shared_ptr<io::IODevice> device)
+{
+    return fontsDatabase()->addFont(FontDataKey(Font::FontFamily(family)), std::move(device));
 }
 
 double FontProvider::lineSpacing(const muse::draw::Font& f) const
