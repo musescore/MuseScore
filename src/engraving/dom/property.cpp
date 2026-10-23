@@ -583,6 +583,9 @@ bool propertyLinkSameScore(Pid id)
 {
     assert(id < Pid::END);
     switch (id) {
+    case Pid::JIANPU_NUMBERING:
+    case Pid::JIANPU_TONIC_KEY:
+    case Pid::JIANPU_TONIC_MODE:
     case Pid::STAFF_BARLINE_SPAN:
     case Pid::STAFF_BARLINE_SPAN_FROM:
     case Pid::STAFF_BARLINE_SPAN_TO:

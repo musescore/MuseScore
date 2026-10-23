@@ -397,6 +397,55 @@ TEST_F(Engraving_KeySigTests, jianpuKeySigProperties)
     delete score;
 }
 
+TEST_F(Engraving_KeySigTests, jianpuLinkedKeySigProperties)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx"));
+    ASSERT_TRUE(score);
+    Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+    Segment* segment = measure->findSegment(SegmentType::KeySig, measure->tick());
+    ASSERT_TRUE(segment);
+    KeySig* source = toKeySig(segment->element(0));
+    KeySig* linked = toKeySig(segment->element(4));
+    ASSERT_TRUE(source);
+    ASSERT_TRUE(linked);
+    linked->linkTo(source);
+
+    const Pid properties[] = { Pid::JIANPU_NUMBERING, Pid::JIANPU_TONIC_KEY, Pid::JIANPU_TONIC_MODE };
+    const PropertyValue values[] = { int(JianpuTonicMode::CUSTOM), int(Key::E_B), KeyMode::PHRYGIAN };
+    PropertyValue originalValues[3];
+    for (size_t index = 0; index < 3; ++index) {
+        originalValues[index] = source->getProperty(properties[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+
+    score->startCmd(TranslatableString::untranslatable("Key signature tests"));
+    for (size_t index = 0; index < 3; ++index) {
+        source->undoChangeProperty(properties[index], values[index]);
+    }
+    score->endCmd();
+
+    for (size_t index = 0; index < 3; ++index) {
+        EXPECT_EQ(source->getProperty(properties[index]), values[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+    EXPECT_EQ(source->staff()->keySigEvent(source->tick()), source->keySigEvent());
+    EXPECT_EQ(linked->staff()->keySigEvent(linked->tick()), linked->keySigEvent());
+
+    EditData editData;
+    score->transactionManager()->undoRedo(true, &editData);
+    for (size_t index = 0; index < 3; ++index) {
+        EXPECT_EQ(source->getProperty(properties[index]), originalValues[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+
+    score->transactionManager()->undoRedo(false, &editData);
+    for (size_t index = 0; index < 3; ++index) {
+        EXPECT_EQ(source->getProperty(properties[index]), values[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+}
+
 //---------------------------------------------------------
 //   End-to-end check that TLayout::layoutKeySig actually populates
 //   KeySig::LayoutData::jianpuLabel on a real Jianpu staff: the major
