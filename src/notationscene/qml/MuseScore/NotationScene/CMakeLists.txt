@@ -161,6 +161,8 @@ qt_add_qml_module(notationscene_qml
         styledialog/tupletcenteringselectormodel.h
         styledialog/voltaspagemodel.cpp
         styledialog/voltaspagemodel.h
+        styledialog/watermarkpagemodel.cpp
+        styledialog/watermarkpagemodel.h
         timelineview.cpp
         timelineview.h
 
@@ -241,6 +243,7 @@ qt_add_qml_module(notationscene_qml
         styledialog/TiesSection.qml
         styledialog/TupletCenteringSelector.qml
         styledialog/VoltasPage.qml
+        styledialog/WatermarkPage.qml
         TempoView.qml
         Timeline.qml
         UndoHistoryPanel.qml
