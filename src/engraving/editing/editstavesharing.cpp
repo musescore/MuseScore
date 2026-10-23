@@ -62,6 +62,7 @@ public:
 
     UNDO_TYPE(CommandType::ConnectSharedPart)
     UNDO_NAME("Connect shared part")
+    UNDO_CHANGED_OBJECTS({ sharedPart, originPart })
 };
 
 class DisconnectSharedPart : public UndoableCommand
@@ -87,6 +88,7 @@ public:
 
     UNDO_TYPE(CommandType::DisconnectSharedPart)
     UNDO_NAME("Disconnect shared part")
+    UNDO_CHANGED_OBJECTS({ sharedPart, originPart })
 };
 }
 
@@ -131,23 +133,9 @@ StaveSharingGroups EditStaveSharing::computeGroups(Score* score)
 
     StaveSharingGroups staveSharingGroups;
 
-    auto excludePart = [](Part* part) {
-        if (part->nstaves() > 1 || part->isSharedPart()) {
-            return true;
-        }
-
-        Staff* firstStaff = part->staves().front();
-        const StaffType* staffType = firstStaff->staffType();
-        if (staffType->group() != StaffGroup::STANDARD) {
-            return true;
-        }
-
-        return false;
-    };
-
     for (size_t partIdx = 0; partIdx < parts.size();) {
         Part* part = parts[partIdx];
-        if (excludePart(part)) {
+        if (!canSharePart(part)) {
             ++partIdx;
             continue;
         }
@@ -164,7 +152,7 @@ StaveSharingGroups EditStaveSharing::computeGroups(Score* score)
         size_t nextPartIdx = partIdx;
         while (nextPartIdx < parts.size()) {
             Part* nextPart = parts[nextPartIdx];
-            if (excludePart(nextPart)) {
+            if (!canSharePart(nextPart)) {
                 break;
             }
             Instrument* nextInstr = nextPart->instrument();
@@ -265,6 +253,21 @@ void EditStaveSharing::disconnectSharedPart(Transaction& tx, SharedPart* sharedP
     Score* score = originPart->score();
     tx.push(new DisconnectSharedPart(sharedPart, originPart));
     score->undoRemoveStaff(sharedPart->staves().back());
+}
+
+bool EditStaveSharing::canSharePart(const Part* part)
+{
+    if (part->nstaves() != 1 || part->isSharedPart()) {
+        return false;
+    }
+
+    Staff* firstStaff = part->staves().front();
+    const StaffType* staffType = firstStaff ? firstStaff->staffType() : nullptr;
+    if (!staffType || staffType->group() != StaffGroup::STANDARD) {
+        return false;
+    }
+
+    return true;
 }
 
 void EditStaveSharing::handleRemovePart(Transaction& tx, Part* part)
