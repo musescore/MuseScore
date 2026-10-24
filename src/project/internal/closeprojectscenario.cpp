@@ -25,10 +25,13 @@
 #include "translation.h"
 #include "types/projecturis.h"
 
+#include "playback/playbackcommands.h"
+
 #include "log.h"
 
-using namespace mu::project;
 using namespace muse;
+using namespace mu::project;
+using namespace mu::playback;
 using muse::async::Promise;
 
 Promise<Ret> CloseProjectScenario::resolvedPromise(const Ret& ret)
@@ -46,8 +49,8 @@ Promise<Ret> CloseProjectScenario::closeOpenedProject(bool goToHome)
             return resolvedPromise(make_ok());
         }
 
-        if (globalContext()->playbackState()->isPlaying()) {
-            commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
+        if (playbackState()->isPlaying()) {
+            commandDispatcher()->dispatch(STOP_COMMAND);
         }
 
         if (!project->isNeedSave()) {
@@ -99,7 +102,7 @@ muse::async::Notification CloseProjectScenario::busyChanged() const
 
 INotationProjectPtr CloseProjectScenario::currentNotationProject() const
 {
-    return globalContext()->currentProject();
+    return projectSession()->project();
 }
 
 void CloseProjectScenario::setBusy(BusyStatus status, bool isBusy)
@@ -149,7 +152,7 @@ Promise<IInteractive::Result> CloseProjectScenario::askAboutSavingScore(const IN
 Promise<Ret> CloseProjectScenario::doCloseProject(bool goToHome)
 {
     return interactive()->closeAllDialogs().then<Ret>(this, [this, goToHome](const Ret&, auto resolve) {
-        globalContext()->setCurrentProject(nullptr);
+        projectSession()->setProject(nullptr);
 
         if (goToHome) {
             openHomePageIfNeed();

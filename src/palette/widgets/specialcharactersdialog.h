@@ -27,7 +27,7 @@
 #include "uicomponents/view/topleveldialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "engraving/ipalettescoreprovider.h"
 
 class QListWidget;
@@ -43,7 +43,7 @@ class SpecialCharactersDialog : public muse::uicomponents::TopLevelDialog, publi
 {
     Q_OBJECT
 
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
     SpecialCharactersDialog(QWidget* parent = nullptr);

@@ -2387,7 +2387,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         // by coloring the notehead
         if (item->chord() && item->chord()->segment() && item->staff() && !opt.isPrinting
             && MScore::warnPitchRange && !item->staff()->isDrumStaff(item->chord()->tick())) {
-            const Instrument* in = item->part()->instrument(item->chord()->tick());
+            const Instrument* in = item->originPart()->instrument(item->chord()->tick());
             int i = item->ppitch();
             if (i < in->minPitchP() || i > in->maxPitchP()) {
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
@@ -2398,7 +2398,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         // Warn if notes are unplayable based on previous harp diagram setting
         if (item->chord() && item->chord()->segment() && item->staff() && !opt.isPrinting
             && !item->staff()->isDrumStaff(item->chord()->tick())) {
-            HarpPedalDiagram* prevDiagram = item->part()->currentHarpDiagram(item->chord()->segment()->tick());
+            HarpPedalDiagram* prevDiagram = item->originPart()->currentHarpDiagram(item->chord()->segment()->tick());
             if (prevDiagram && !prevDiagram->isTpcPlayable(item->tpc())) {
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
             }

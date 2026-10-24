@@ -105,7 +105,7 @@ void PageSettings::componentComplete()
 
 void PageSettings::showEvent(QShowEvent* event)
 {
-    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit page settings"));
+    projectSession()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit page settings"));
     updateValues();
 
     WidgetStateStore::restoreGeometry(this);
@@ -139,22 +139,22 @@ void PageSettings::setMarginsMax(double pw)
 
 Score* PageSettings::score() const
 {
-    return globalContext()->currentNotation()->elements()->msScore();
+    return projectSession()->currentNotation()->elements()->msScore();
 }
 
 double PageSettings::styleValueDouble(StyleId styleId) const
 {
-    return globalContext()->currentNotation()->style()->styleValue(styleId).toDouble();
+    return projectSession()->currentNotation()->style()->styleValue(styleId).toDouble();
 }
 
 bool PageSettings::styleValueBool(StyleId styleId) const
 {
-    return globalContext()->currentNotation()->style()->styleValue(styleId).toBool();
+    return projectSession()->currentNotation()->style()->styleValue(styleId).toBool();
 }
 
 void PageSettings::setStyleValue(StyleId styleId, const PropertyValue& newValue) const
 {
-    globalContext()->currentNotation()->style()->setStyleValue(styleId, newValue);
+    projectSession()->currentNotation()->style()->setStyleValue(styleId, newValue);
 }
 
 //---------------------------------------------------------
@@ -271,7 +271,7 @@ void PageSettings::orientationClicked()
 void PageSettings::on_resetPageStyleButton_clicked()
 {
     score()->undoChangePageNumberOffset(0);
-    globalContext()->currentNotation()->style()->resetStyleValues(pageStyles());
+    projectSession()->currentNotation()->style()->resetStyleValues(pageStyles());
     updateValues();
 }
 
@@ -305,15 +305,15 @@ void PageSettings::buttonBoxClicked(QAbstractButton* button)
 
 void PageSettings::accept()
 {
-    globalContext()->currentNotation()->undoStack()->commitChanges();
-    globalContext()->currentNotation()->style()->styleChanged().notify();
+    projectSession()->currentNotation()->undoStack()->commitChanges();
+    projectSession()->currentNotation()->style()->styleChanged().notify();
     QDialog::accept();
 }
 
 void PageSettings::reject()
 {
-    globalContext()->currentNotation()->undoStack()->rollbackChanges();
-    globalContext()->currentNotation()->style()->styleChanged().notify();
+    projectSession()->currentNotation()->undoStack()->rollbackChanges();
+    projectSession()->currentNotation()->style()->styleChanged().notify();
     QDialog::reject();
 }
 
@@ -481,7 +481,7 @@ void PageSettings::spatiumChanged(double val)
 void PageSettings::pageOffsetChanged(int val)
 {
     score()->undoChangePageNumberOffset(val - 1);
-    globalContext()->currentNotation()->notationChanged().send(muse::RectF());
+    projectSession()->currentNotation()->notationChanged().send(muse::RectF());
 }
 
 void PageSettings::pageHeightChanged(double val)

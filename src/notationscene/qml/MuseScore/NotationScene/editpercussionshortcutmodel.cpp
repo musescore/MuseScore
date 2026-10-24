@@ -21,9 +21,9 @@
  */
 
 #include "editpercussionshortcutmodel.h"
-#include "shortcuts/shortcutstypes.h"
-
 #include "translation.h"
+
+#include "shortcuts_v2/shortcutstypes.h"
 
 using namespace muse;
 using namespace mu::notation;

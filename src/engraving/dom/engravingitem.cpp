@@ -668,6 +668,12 @@ Part* EngravingItem::part() const
     return s ? s->part() : 0;
 }
 
+Part* EngravingItem::originPart() const
+{
+    Part* p = part();
+    return p ? p->originPart(track(), tick()) : nullptr;
+}
+
 void EngravingItem::setColor(const Color& c)
 {
     m_color = c;
@@ -1545,7 +1551,7 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
     } else {
         VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
         if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
-            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
+            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && originPart()->instrument(tick())->isVocalInstrument()) {
                 newPlacement = PlacementV::ABOVE;
             } else {
                 newPlacement = PlacementV::BELOW;
@@ -2944,6 +2950,35 @@ void EngravingItem::LayoutData::disconnectItemSnappedAfter()
     }
     m_itemSnappedAfter->mutldata()->m_itemSnappedBefore = nullptr;
     m_itemSnappedAfter = nullptr;
+}
+
+void EngravingItem::LayoutData::scanConnectedItemsInSnappingChain(const System* system,
+                                                                  const std::function<void(EngravingItem*)>& func) const
+{
+    EngravingItem* item = const_cast<EngravingItem*>(m_item);
+    func(item);
+
+    std::vector<EngravingItem*> visited = { item }; // To break out of circular snap chains
+
+    EngravingItem* snappedBefore = m_itemSnappedBefore;
+    while (snappedBefore && snappedBefore->findAncestor(ElementType::SYSTEM) == system) {
+        IF_ASSERT_FAILED(!muse::contains(visited, snappedBefore)) {
+            break;
+        }
+        visited.push_back(snappedBefore);
+        func(snappedBefore);
+        snappedBefore = snappedBefore->ldata()->itemSnappedBefore();
+    }
+
+    EngravingItem* snappedAfter = m_itemSnappedAfter;
+    while (snappedAfter && snappedAfter->findAncestor(ElementType::SYSTEM) == system) {
+        IF_ASSERT_FAILED(!muse::contains(visited, snappedAfter)) {
+            break;
+        }
+        visited.push_back(snappedAfter);
+        func(snappedAfter);
+        snappedAfter = snappedAfter->ldata()->itemSnappedAfter();
+    }
 }
 
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const

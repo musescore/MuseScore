@@ -342,6 +342,7 @@ public:
     static void layoutSystemText(const SystemText* item, SystemText::LayoutData* ldata);
 
     static void layoutTabDurationSymbol(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata);
+    static void layoutTabDurationSymbol2(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata);
     static void layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutContext& ctx);
     static void layoutTappingHalfSlur(TappingHalfSlur* item);
     static void layoutTempoText(const TempoText* item, TempoText::LayoutData* ldata);

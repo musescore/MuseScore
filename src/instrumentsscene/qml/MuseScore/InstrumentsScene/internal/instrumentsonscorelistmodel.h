@@ -25,7 +25,7 @@
 #include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/iinstrumentsrepository.h"
 
 namespace mu::instrumentsscene {
@@ -39,7 +39,7 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
     QML_ELEMENT
 
     muse::GlobalInject<notation::IInstrumentsRepository> repository;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     InstrumentsOnScoreListModel(QObject* parent = nullptr);

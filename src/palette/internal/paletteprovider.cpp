@@ -588,7 +588,7 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
         return false;
     }
 
-    auto notation = globalContext()->currentNotation();
+    auto notation = projectSession()->currentNotation();
     if (!notation) {
         return false;
     }

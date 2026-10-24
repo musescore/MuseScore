@@ -26,7 +26,7 @@
 
 #include "ui_pagesettings.h"
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "framework/global/iglobalconfiguration.h"
 
 #include "engraving/style/styledef.h"
@@ -41,7 +41,7 @@ class PageSettings : public muse::ui::WidgetDialog, private Ui::PageSettingsBase
     Q_OBJECT
 
     muse::GlobalInject<muse::IGlobalConfiguration> configuration;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
 
 public:
     explicit PageSettings(QWidget* parent = 0);

@@ -42,7 +42,6 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeSystemFlag, Pid::SYSTEM_FLAG },
     { Sid::tempoChangePlacement, Pid::PLACEMENT },
     { Sid::tempoChangeMinDistance, Pid::MIN_DISTANCE },
-    { Sid::tempoChangeLineSpacing, Pid::TEXT_LINE_SPACING },
 
     { Sid::tempoChangeColor, Pid::COLOR },
 

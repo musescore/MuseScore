@@ -10240,7 +10240,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="342"/>
         <source>&amp;Chords and fretboard diagrams</source>
-        <translation>A&amp;cordes y diagramas de diapasón.</translation>
+        <translation>A&amp;cordes y diagramas de diapasón</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="346"/>
@@ -13341,7 +13341,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1766"/>
         <source>Bends &amp; Dives</source>
-        <translation> Bends y dives</translation>
+        <translation>Bends y dives</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1768"/>
@@ -28699,7 +28699,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="604"/>
         <source>Chords and fretboard diagrams</source>
-        <translation>Acordes y diagramas de diapasón.</translation>
+        <translation>Acordes y diagramas de diapasón</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="752"/>

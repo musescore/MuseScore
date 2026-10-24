@@ -160,6 +160,7 @@
 #include "dom/factory.h"
 
 #include "editing/editchord.h"
+#include "editing/navigation.h"
 
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
@@ -1782,7 +1783,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
         // if not tab, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
         if (staffGroup != StaffGroup::TAB) {
-            staffGroup = item->staff()->part()->instrument(item->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+            staffGroup = item->originPart()->instrument(item->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
         }
 
         // check clef is compatible with staff type group:
@@ -1864,7 +1865,7 @@ void TLayout::layoutCapo(const Capo* item, Capo::LayoutData* ldata, const Layout
     LAYOUT_CALL_ITEM(item);
     //! NOTE Looks like it doesn't belong here
     if (item->shouldAutomaticallyGenerateText() || item->empty()) {
-        if (const Part* part = item->part()) {
+        if (const Part* part = item->originPart()) {
             if (const StringData* stringData = part->stringData(item->tick(), item->staff()->idx())) {
                 String text = item->generateText(stringData->strings());
                 const_cast<Capo*>(item)->setXmlText(text);
@@ -3764,9 +3765,10 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
     }
 
     for (const SystemLockIndicator* sli : item->system()->systemLockIndicators()) {
-        if (sli != item) {
+        if (sli != item && sli->systemLock()->endMB() == endMB) {
+            const double sliWidth = FontMetrics(sli->font()).boundingRect(sli->iconCode()).width();
             // TODO: Rough spacing here
-            xOffset -= (sli->ldata()->bbox().width() * 2) - spatium;
+            xOffset -= (sliWidth * 2) - spatium;
         }
     }
 
@@ -5657,11 +5659,32 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     double xpos, ypos;           // position coords
 
     ldata->beamGrid = TabBeamGrid::NONE;
+    ldata->beamLength = 0.0;
+    ldata->beamLevel = 0;
     Chord* chord = item->ownershipParent() && item->ownershipParent()->isChord() ? toChord(item->ownershipParent()) : nullptr;
+    // A grid replaces the individual duration signs. Only connect equal, undotted
+    // values; otherwise retain the signs rather than lose their rhythm information.
+    auto connects = [](const ChordRest* left, const ChordRest* right) {
+        if (!left || !right || !left->isChord() || !right->isChord()) {
+            return false;
+        }
+        const bool regularChords = !left->isGrace() && !right->isGrace()
+                                   && !toChord(left)->noStem() && !toChord(right)->noStem();
+        const bool sameContext = left->measure() == right->measure() && left->staffType() == right->staffType()
+                                 && left->tuplet() == right->tuplet();
+        const bool equalUndottedDurations = left->durationType() == right->durationType() && !left->dots() && !right->dots();
+        const bool leftContinues = left->beamMode() == BeamMode::BEGIN || left->beamMode() == BeamMode::MID;
+        const bool rightConnects = right->beamMode() == BeamMode::MID || right->beamMode() == BeamMode::END;
+        return regularChords && sameContext && equalUndottedDurations && leftContinues && rightConnects;
+    };
+    const int beamLevel = chord ? static_cast<int>(chord->durationType().type())
+                          - static_cast<int>(item->tab()->tabDurationFont().zeroBeamLevel) : 0;
+    const bool joinsPrevious = beamLevel > 0 && (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END)
+                               && connects(Navigation::prevChordRest(chord), chord);
+    const bool joinsNext = beamLevel > 0 && (chord->beamMode() == BeamMode::BEGIN || chord->beamMode() == BeamMode::MID)
+                           && connects(chord, Navigation::nextChordRest(chord));
 // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
-    if (!chord || !chord->isChord()
-        || (chord->beamMode() != BeamMode::BEGIN && chord->beamMode() != BeamMode::MID
-            && chord->beamMode() != BeamMode::END)) {
+    if (beamLevel < 1 || (!joinsPrevious && !joinsNext)) {
         FontMetrics fm(item->tab()->durationFont());
         hbb   = item->tab()->durationBoxH();
         wbb   = fm.width(item->text());
@@ -5684,15 +5707,8 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
         ybb   = -hbb;                                   // bbox top is at top of stem height
         xpos  = 0.75 * spatium;                        // conventional centring of stem on fret marks
         ypos  = item->tab()->durationGridYOffset();      // stem start is at bottom
-        if (chord->beamMode() == BeamMode::BEGIN) {
-            ldata->beamGrid = TabBeamGrid::INITIAL;
-            ldata->beamLength = 0.0;
-        } else if (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END) {
-            ldata->beamLevel = (static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel));
-            ldata->beamGrid = (ldata->beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
-            // _beamLength and bbox x and width will be set in layout2(),
-            // once horiz. positions of chords are known
-        }
+        ldata->beamLevel = beamLevel;
+        ldata->beamGrid = joinsPrevious ? TabBeamGrid::MEDIALFINAL : TabBeamGrid::INITIAL;
     }
 // set this' mag from parent chord mag (include staff mag)
     double mag = chord != nullptr ? chord->mag() : 1.0;
@@ -5701,6 +5717,23 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
 // set magnified bbox and position
     ldata->setBbox(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
     ldata->setPos(xpos * mag, ypos * mag);
+}
+
+void TLayout::layoutTabDurationSymbol2(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata)
+{
+    if (ldata->beamGrid != TabBeamGrid::MEDIALFINAL) {
+        return;
+    }
+    const ChordRest* previous = Navigation::prevChordRest(toChord(item->ownershipParent()));
+    if (!previous || !previous->tabDur()) {
+        return;
+    }
+    // Horizontal spacing is now final. Drawing applies the symbol magnification again.
+    const double length = previous->tabDur()->pagePos().x() - item->pagePos().x();
+    ldata->beamLength = length / item->magS();
+    RectF bbox = ldata->bbox();
+    bbox.setLeft(std::min(bbox.left(), length));
+    ldata->setBbox(bbox);
 }
 
 void TLayout::layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutContext& ctx)

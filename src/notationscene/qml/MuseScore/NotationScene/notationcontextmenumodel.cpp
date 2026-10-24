@@ -47,7 +47,6 @@ using namespace mu::palette;
 using namespace mu::instrumentsscene;
 using namespace muse;
 using namespace muse::uicomponents;
-using namespace muse::actions;
 
 void NotationContextMenuModel::loadItems(int elementType)
 {
@@ -154,7 +153,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
-    if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
+    if (projectSession()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
         items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
     }
     items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
@@ -521,19 +520,19 @@ MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, 
 
 INotationInteractionPtr NotationContextMenuModel::interaction() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 
 INotationSelectionPtr NotationContextMenuModel::selection() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction()->selection() : nullptr;
 }
 
 INotationAutomationPtr NotationContextMenuModel::automation() const
 {
-    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    IMasterNotationPtr masterNotation = projectSession()->masterNotation();
     return masterNotation ? masterNotation->automation() : nullptr;
 }
 

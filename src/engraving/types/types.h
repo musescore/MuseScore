@@ -1532,6 +1532,54 @@ enum class LoopBoundaryType : signed char {
     LoopIn = 0,
     LoopOut = 1
 };
+
+enum class ActionIconType : signed char {
+    UNDEFINED = -1,
+
+    ACCIACCATURA,
+    APPOGGIATURA,
+    GRACE4,
+    GRACE16,
+    GRACE32,
+    GRACE8_AFTER,
+    GRACE16_AFTER,
+    GRACE32_AFTER,
+
+    BEAM_AUTO,
+    BEAM_NONE,
+    BEAM_BREAK_LEFT,
+    BEAM_BREAK_INNER_8TH,
+    BEAM_BREAK_INNER_16TH,
+    BEAM_JOIN,
+
+    BEAM_FEATHERED_DECELERATE,
+    BEAM_FEATHERED_ACCELERATE,
+
+    VFRAME,
+    HFRAME,
+    TFRAME,
+    FFRAME,
+    STAFF_TYPE_CHANGE,
+    MEASURE,
+
+    PARENTHESES,
+    BRACKETS,
+
+    STANDARD_BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+
+    DIVE,
+    PRE_DIVE,
+    DIP,
+    SCOOP,
+
+    NOTE_ANCHORED_LINE,
+
+    SYSTEM_LOCK,
+    PAGE_LOCK
+};
 } // mu::engraving
 
 template<>

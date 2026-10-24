@@ -39,6 +39,7 @@
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notationscene/notationcommands.h"
 
 #include "braille.h"
 #include "braillecode.h"
@@ -82,7 +83,7 @@ void NotationBraille::init()
         setIntervalDirection(direction);
     });
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         if (notation()) {
             notation()->interaction()->selectionChanged().onNotify(this, [this]() {
                 doBraille();
@@ -322,7 +323,7 @@ void NotationBraille::setCurrentItemPosition(const int start, const int end)
 
 INotationPtr NotationBraille::notation()
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 INotationInteractionPtr NotationBraille::interaction()
@@ -883,7 +884,7 @@ void NotationBraille::toggleMode()
         break;
     }
 
-    dispatcher()->dispatch("command://notation/toggle-note-input");
+    commandDispatcher()->dispatch(notation::TOGGLE_NOTE_INPUT_COMMAND);
 
     const QString stateTitle = interaction()->noteInput()->isNoteInputMode()
                                //: Braille input with 6 keyboard keys (F,D,S & J,K,L) to represent the 6 dots in a braille cell.

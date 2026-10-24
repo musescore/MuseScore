@@ -55,7 +55,6 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace muse::actions;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
 
@@ -93,7 +92,7 @@ void NotationViewInputController::init()
         commandsController()->setViewController(this);
 
         onNotationChanged();
-        globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        projectSession()->currentNotationChanged().onNotify(this, [this]() {
             onNotationChanged();
         });
     }
@@ -273,7 +272,7 @@ void NotationViewInputController::setReadonly(bool readonly)
 
 INotationPtr NotationViewInputController::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 INotationStylePtr NotationViewInputController::notationStyle() const
@@ -475,7 +474,7 @@ int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
 
 void NotationViewInputController::setViewMode(ViewMode viewMode)
 {
-    auto notation = globalContext()->currentNotation();
+    auto notation = projectSession()->currentNotation();
     if (notation) {
         notation->viewState()->setViewMode(viewMode);
         notation->painting()->setViewMode(viewMode);
@@ -1234,16 +1233,17 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     m_isCanvasDragged = false;
 
     if (interaction->isDragStarted()) {
-        bool isDraggingHairpinSegmentGrip
+        bool isDraggingHairpinSegmentStartEndGrip
             = interaction->isGripEditStarted()
               && interaction->selection()->element()
-              && interaction->selection()->element()->isHairpinSegment();
+              && interaction->selection()->element()->isHairpinSegment()
+              && interaction->isStartEndGripSelected();
 
         interaction->endDrag();
 
-        // When dragging of hairpin ends on a note or rest, open dynamic popup
+        // When dragging start or end of hairpin to a note or rest, open dynamic popup
         // Check for note or rest happens in Score::addText which is called through addTextToItem in toggleDynamicPopup
-        if (isDraggingHairpinSegmentGrip) {
+        if (isDraggingHairpinSegmentStartEndGrip) {
             interaction->toggleDynamicPopup();
         }
     }

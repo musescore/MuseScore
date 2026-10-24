@@ -41,12 +41,12 @@ std::string PlaybackCommandsState::moduleName() const
 
 void PlaybackCommandsState::init()
 {
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         updateCommandStates();
     });
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        const INotationPtr currNotation = globalContext()->currentNotation();
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
+        const INotationPtr currNotation = projectSession()->currentNotation();
         if (!currNotation) {
             return;
         }
@@ -125,8 +125,8 @@ void PlaybackCommandsState::init()
 
 void PlaybackCommandsState::deinit()
 {
-    globalContext()->currentProjectChanged().disconnect(this);
-    globalContext()->currentNotationChanged().disconnect(this);
+    projectSession()->projectChanged().disconnect(this);
+    projectSession()->currentNotationChanged().disconnect(this);
     if (interactive()) {
         interactive()->opened().disconnect(this);
     }
@@ -174,7 +174,7 @@ CommandState PlaybackCommandsState::commandState(const Command& command) const
     if (command == PLAY_COMMAND) {
         return CommandState(true, playbackController()->isPlaying());
     } else if (command == PLAY_SELECTION_COMMAND) {
-        const INotationPtr currNotation = globalContext()->currentNotation();
+        const INotationPtr currNotation = projectSession()->currentNotation();
         const INotationInteractionPtr interaction = currNotation ? currNotation->interaction() : nullptr;
         bool enabled = interaction && !interaction->isEditingElement();
         return CommandState(enabled, false);
@@ -212,7 +212,7 @@ async::Channel<Command, CommandState> PlaybackCommandsState::commandStateChanged
 
 bool PlaybackCommandsState::isProjectOpened() const
 {
-    if (!globalContext()->currentProject()) {
+    if (!projectSession()->project()) {
         return false;
     }
 

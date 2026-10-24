@@ -1263,6 +1263,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         GraceNotesGroup& graceAfter = chord->graceNotesAfter();
         TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
         TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
+        if (TabDurationSymbol* symbol = chord->tabDur()) {
+            TLayout::layoutTabDurationSymbol2(symbol, symbol->mutldata());
+            ChordLayout::fillShape(chord, chord->mutldata());
+        }
     }
 
     for (ChordRest* cr : elementsToLayout.chordRests) {
@@ -2674,6 +2678,13 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
         Shape shape = shapeRelativeToStaff(item, systemX);
         shape.remove_if([](ShapeElement& shapeEl) { return shapeEl.ignoreForLayout(); });
 
+        // Items left out of the skyline (e.g. invisible) must not take up space in the gap
+        const bool takesSpace = item->isLyricsLineSegment() ? toLyricsLineSegment(item)->lyricsAddToSkyline()
+                                : item->addToSkyline();
+        if (!takesSpace) {
+            shape.clear();
+        }
+
         Gap& gap = gaps[gapIdx];
         if (above) {
             // Inside a gap, everything is expressed relative to its upper staff
@@ -2792,7 +2803,7 @@ bool SystemLayout::snapChainShouldBeCenteredBetweenStaves(EngravingItem* item, c
 {
     // Snapped items are centered as one, so if any of them cannot be centered, none of them can
     bool allCenterable = true;
-    AlignmentLayout::scanConnectedItems(item, system, [&allCenterable, system](EngravingItem* chainItem) {
+    item->ldata()->scanConnectedItemsInSnappingChain(system, [&allCenterable, system](EngravingItem* chainItem) {
         allCenterable = allCenterable && elementShouldBeCenteredBetweenStaves(chainItem, system, chainItem->placeAbove());
     });
 
@@ -2961,8 +2972,9 @@ void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, double
                 canCenterGroup = false;
 
                 // Snapped items stay together:
-                AlignmentLayout::scanConnectedItems(gapItem.item, system,
-                                                    [&movableItems](EngravingItem* chainItem) { movableItems.erase(chainItem); });
+                gapItem.item->ldata()->scanConnectedItemsInSnappingChain(system, [&movableItems](EngravingItem* chainItem) {
+                    movableItems.erase(chainItem);
+                });
 
                 // A lyrics verse stays together:
                 if (gapItem.isLyrics) {

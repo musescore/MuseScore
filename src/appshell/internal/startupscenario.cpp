@@ -28,13 +28,14 @@
 #include "translation.h"
 #include "types/version.h"
 
+#include "project/projectcommands.h"
+
 #include "muse_framework_config.h"
 
 #include "log.h"
 
 using namespace mu::appshell;
 using namespace muse;
-using namespace muse::actions;
 
 static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
 static const muse::UriQuery WELCOME_DIALOG_URI("musescore://welcomedialog");
@@ -188,10 +189,10 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     case StartupModeType::StartEmpty:
         break;
     case StartupModeType::StartWithNewScore:
-        dispatcher()->dispatch("file-new");
+        commandDispatcher()->dispatch(project::PROJECT_NEW_COMMAND);
         break;
     case StartupModeType::ContinueLastSession:
-        dispatcher()->dispatch("continue-last-session");
+        commandDispatcher()->dispatch(project::PROJECT_CONTINUE_LAST_SESSION_COMMAND);
         break;
     case StartupModeType::Recovery:
         restoreLastSession();
@@ -250,11 +251,11 @@ void StartupScenario::showStartupDialogsIfNeed(StartupModeType modeType)
                 configuration()->setWelcomeDialogLastShownVersion(configuration()->museScoreVersion());
 
                 if (shouldCheckForMuseSamplerUpdate) {
-                    checkAndShowMuseSamplerUpdateIfNeed();
+                    checkAndShowMuseSamplerStatusIfNeed();
                 }
             });
         } else if (shouldCheckForMuseSamplerUpdate) {
-            checkAndShowMuseSamplerUpdateIfNeed();
+            checkAndShowMuseSamplerStatusIfNeed();
         }
     };
 
@@ -279,16 +280,17 @@ bool StartupScenario::shouldShowWelcomeDialog(StartupModeType modeType) const
     return interactive()->currentUri().val == startupUri;
 }
 
-void StartupScenario::checkAndShowMuseSamplerUpdateIfNeed()
+void StartupScenario::checkAndShowMuseSamplerStatusIfNeed()
 {
-    if (museSamplerCheckForUpdateScenario() && !museSamplerCheckForUpdateScenario()->alreadyChecked()) {
-        museSamplerCheckForUpdateScenario()->checkAndShowUpdateIfNeed();
+    if (museSamplerCheckStatusScenario() && !museSamplerCheckStatusScenario()->alreadyChecked()) {
+        museSamplerCheckStatusScenario()->checkAndShowStatusIfNeed();
     }
 }
 
 void StartupScenario::openScore(const project::ProjectFile& file)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(file.url, file.displayNameOverride));
+    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND,
+                                  { { "url", muse::Val(file.url.toString()) }, { "display_name", muse::Val(file.displayNameOverride) } });
 }
 
 void StartupScenario::restoreLastSession()
@@ -303,7 +305,7 @@ void StartupScenario::restoreLastSession()
         } else {
             removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
             sessionsManager()->reset();
-            checkAndShowMuseSamplerUpdateIfNeed();
+            checkAndShowMuseSamplerStatusIfNeed();
         }
     });
 }

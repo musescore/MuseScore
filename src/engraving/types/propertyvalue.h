@@ -118,6 +118,7 @@ enum class P_TYPE : unsigned char {
     LYRICS_DASH_SYSTEM_START_TYPE,
     PARTIAL_SPANNER_DIRECTION,
     MARKER_TYPE,
+    ACTION_TYPE,
 
     LH_TAPPING_SYMBOL,
     RH_TAPPING_SYMBOL,
@@ -326,6 +327,9 @@ public:
 
     PropertyValue(const NoteLineEndPlacement& v)
         : m_type(P_TYPE::NOTELINE_PLACEMENT_TYPE), m_data(make_data<NoteLineEndPlacement>(v)) {}
+
+    PropertyValue(ActionIconType v)
+        : m_type(P_TYPE::ACTION_TYPE), m_data(make_data<ActionIconType>(v)) {}
 
     // Other
     PropertyValue(const GroupNodes& v)

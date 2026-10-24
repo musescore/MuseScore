@@ -299,6 +299,9 @@ QString EditStyleUtils::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::STAFF:
             return "staff";
 
+        case TextStyleType::STAVE_SHARING:
+            return "stave-sharing";
+
         case TextStyleType::EXPRESSION:
             return "expression";
 

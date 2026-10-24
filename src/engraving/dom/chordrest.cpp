@@ -351,9 +351,9 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
         if (e->isRehearsalMark() && fromPalette) {
             RehearsalMark* r = toRehearsalMark(e);
             r->setXmlText(EditRehearsalMark::createRehearsalMarkText(score(), r));
-        } else if (e->isHarpPedalDiagram() && fromPalette && part()) {
+        } else if (e->isHarpPedalDiagram() && fromPalette && originPart()) {
             // Match pedal config with previous diagram's
-            if (HarpPedalDiagram* prevDiagram = part()->prevHarpDiagram(segment()->tick())) {
+            if (HarpPedalDiagram* prevDiagram = originPart()->prevHarpDiagram(segment()->tick())) {
                 toHarpPedalDiagram(e)->setPedalState(prevDiagram->getPedalState());
             }
         }
@@ -683,7 +683,10 @@ void ChordRest::undoChangeProperty(Pid id, const PropertyValue& newValue, Proper
 {
     if (id == Pid::BEAM_MODE) {
         if (isChord() && m_durationType.hooks() == 0) {
-            return;
+            const StaffType* tab = staffType();
+            if (!tab || !tab->isTabStaff() || !tab->genDurations()) {
+                return;
+            }
         }
         BeamMode newBeamMode = newValue.value<BeamMode>();
         if ((newBeamMode == BeamMode::BEGIN16 && m_durationType.hooks() < 2)

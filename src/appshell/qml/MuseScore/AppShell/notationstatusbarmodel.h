@@ -37,7 +37,7 @@
 #include "rcommand/icommandsstate.h"
 #include "workspace/iworkspaceconfiguration.h"
 #include "notation/inotationconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "global/iglobalconfiguration.h"
 
 #include "rcommand/commandtypes.h"
@@ -63,7 +63,7 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
 

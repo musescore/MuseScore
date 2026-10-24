@@ -31,14 +31,17 @@ class PlaybackControllerMock : public IPlaybackController
 {
 public:
 
+    MOCK_METHOD(bool, isPlaying, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, isPlayingChanged, (), (const, override));
+
+    MOCK_METHOD(muse::audio::secs_t, playbackPosition, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<muse::audio::secs_t>, playbackPositionChanged, (), (const, override));
+
     MOCK_METHOD(bool, isPlaybackInited, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, playbackInitedChanged, (), (const, override));
 
     MOCK_METHOD(bool, isPlayAllowed, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, isPlayAllowedChanged, (), (const, override));
-
-    MOCK_METHOD(bool, isPlaying, (), (const, override));
-    MOCK_METHOD(muse::async::Channel<bool>, isPlayingChanged, (), (const, override));
 
     MOCK_METHOD(muse::Ret, togglePlay, (), (override));
     MOCK_METHOD(muse::Ret, play, (bool), (override));

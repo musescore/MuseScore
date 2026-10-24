@@ -25,7 +25,7 @@
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/iinstrumentsrepository.h"
 
 namespace mu::instrumentsscene {
@@ -36,7 +36,7 @@ class LayoutPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
     QML_ELEMENT
 
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit LayoutPanelContextMenuModel(QObject* parent = nullptr);
@@ -51,7 +51,7 @@ private:
     void updateMenu();
     void loadInstrumentOrders();
     void buildMenu(bool includeInstrumentsOrdering);
-    void setInstrumentsOrder(const muse::actions::ActionData& args);
+    void setInstrumentsOrder(const QString& itemId);
     void updateOrderingMenu(const QString& newOrderId);
 
     muse::uicomponents::MenuItem* createInstrumentsOrderingItem();

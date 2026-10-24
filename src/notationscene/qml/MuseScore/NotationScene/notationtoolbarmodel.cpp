@@ -30,7 +30,6 @@
 using namespace muse;
 using namespace mu::notation;
 using namespace muse::uicomponents;
-using namespace muse::actions;
 
 void NotationToolBarModel::load()
 {
@@ -61,7 +60,7 @@ void NotationToolBarModel::load()
 
     setItems(items);
 
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->masterNotationChanged().onNotify(this, [this]() {
         load();
     });
 

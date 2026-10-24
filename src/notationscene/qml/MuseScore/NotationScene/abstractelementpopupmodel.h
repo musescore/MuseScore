@@ -25,15 +25,14 @@
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "actions/actionable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
-class AbstractElementPopupModel : public QObject, public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
+class AbstractElementPopupModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -43,8 +42,7 @@ class AbstractElementPopupModel : public QObject, public muse::Contextable, publ
     Q_PROPERTY(QRect itemRect READ itemRect NOTIFY itemRectChanged)
 
 public:
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     enum class PopupModelType {

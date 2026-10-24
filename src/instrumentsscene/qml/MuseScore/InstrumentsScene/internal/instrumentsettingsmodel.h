@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "notation/types/instrumentstypes.h"
 
@@ -49,7 +49,7 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, p
 
     QML_ELEMENT
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     explicit InstrumentSettingsModel(QObject* parent = nullptr);

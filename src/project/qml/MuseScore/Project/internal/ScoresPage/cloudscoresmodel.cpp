@@ -61,20 +61,38 @@ void CloudScoresModel::load()
         loadItemsIfNecessary();
     });
 
+    convertFileToScoreScenario()->uploadingScores().notification.onNotify(this, [this]() {
+        updateWatchedItems({}, /*allowRefresh*/ false);
+    });
+
     convertFileToScoreScenario()->watchedScores().notification.onNotify(this, [this]() {
         updateWatchedItems();
     });
 
-    convertFileToScoreScenario()->pollingFailed().onReceive(this, [this](const PollingFailure& failure) {
-        if (failure.gaveUp) {
-            m_pollingGaveUp = true;
-            updateWatchedItems();
+    convertFileToScoreScenario()->pollingStatusChanged().onReceive(this, [this](const PollingStatus& status) {
+        const PollingFailure* failure = std::get_if<PollingFailure>(&status);
+        const bool gaveUp = failure && failure->gaveUp;
+
+        if (m_pollingGaveUp == gaveUp) {
+            return;
         }
+
+        m_pollingGaveUp = gaveUp;
+        updateWatchedItems();
+    });
+
+    deleteCloudScoreScenario()->scoreDeleted().onReceive(this, [this](int scoreId) {
+        removeScore(scoreId);
     });
 }
 
 void CloudScoresModel::reload()
 {
+    if (m_requestState != RequestState::Idle) {
+        m_requestState = RequestState::PendingStale;
+        m_queuedRefreshPage.reset();
+    }
+
     beginResetModel();
 
     m_items = buildWatchedItems();
@@ -97,9 +115,38 @@ void CloudScoresModel::retryAllConversions()
     updateWatchedItems();
 }
 
+void CloudScoresModel::cancelUpload(int uploadId)
+{
+    convertFileToScoreScenario()->cancelUpload(uploadId);
+}
+
 void CloudScoresModel::cancelConversion(int convertType, int convertId)
 {
     convertFileToScoreScenario()->cancelConversion(static_cast<ConvertType>(convertType), convertId);
+}
+
+void CloudScoresModel::removeScore(int scoreId)
+{
+    for (size_t i = m_watchedItemCount; i < m_items.size(); ++i) {
+        if (m_items.at(i).value(CLOUD_SCORE_ID_KEY).toInt() != scoreId) {
+            continue;
+        }
+
+        const int row = static_cast<int>(i);
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_items.erase(m_items.begin() + row);
+        endRemoveRows();
+
+        if (m_totalItems != muse::nidx && m_totalItems > 0) {
+            --m_totalItems;
+        }
+
+        emit hasMoreChanged();
+        loadItemsIfNecessary();
+
+        return;
+    }
 }
 
 CloudScoresModel::State CloudScoresModel::state() const
@@ -139,8 +186,8 @@ void CloudScoresModel::setDesiredRowCount(int count)
 
 void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
 {
-    if (m_isRequestPending) {
-        if (refreshPage.has_value()) {
+    if (m_requestState != RequestState::Idle) {
+        if (refreshPage.has_value() && m_requestState != RequestState::PendingStale) {
             m_queuedRefreshPage = refreshPage;
         }
         return;
@@ -163,10 +210,18 @@ void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
         setState(State::Loading);
     }
 
-    m_isRequestPending = true;
+    m_requestState = RequestState::Pending;
 
     museScoreComService()->downloadScoresList(BATCH_SIZE, page)
     .onResolve(this, [this, isRefresh](const cloud::ScoresList& scoresList) {
+        const RequestState prevState = m_requestState;
+        m_requestState = RequestState::Idle;
+
+        if (prevState == RequestState::PendingStale) {
+            loadItemsIfNecessary();
+            return;
+        }
+
         std::unordered_set<int> downloadedScoreIds;
         downloadedScoreIds.reserve(scoresList.items.size());
         for (const cloud::ScoresList::Item& item : scoresList.items) {
@@ -205,8 +260,6 @@ void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
         m_totalItems = scoresList.meta.totalScoresCount;
         emit hasMoreChanged();
 
-        m_isRequestPending = false;
-
         if (m_queuedRefreshPage) {
             const int queuedPage = *m_queuedRefreshPage;
             m_queuedRefreshPage.reset();
@@ -217,7 +270,14 @@ void CloudScoresModel::loadItemsIfNecessary(std::optional<int> refreshPage)
     })
     .onReject(this, [this, isRefresh](int code, const std::string& err) {
         LOGE() << "Loading scores list failed: [" << code << "] " << err;
-        m_isRequestPending = false;
+
+        const RequestState prevState = m_requestState;
+        m_requestState = RequestState::Idle;
+
+        if (prevState == RequestState::PendingStale) {
+            loadItemsIfNecessary();
+            return;
+        }
 
         if (m_queuedRefreshPage) {
             const int queuedPage = *m_queuedRefreshPage;
@@ -252,8 +312,22 @@ bool CloudScoresModel::containsCloudScore(int scoreId) const
 
 std::vector<QVariantMap> CloudScoresModel::buildWatchedItems(const std::unordered_set<int>& downloadedScoreIds) const
 {
+    const UploadingScoreList uploadingScores = convertFileToScoreScenario()->uploadingScores().val;
     const WatchedScoreList watchedScores = convertFileToScoreScenario()->watchedScores().val;
     std::vector<QVariantMap> items;
+    items.reserve(uploadingScores.size() + watchedScores.size());
+
+    for (const UploadingScore& uploadingScore : uploadingScores) {
+        QVariantMap obj;
+        obj[NAME_KEY] = uploadingScore.name.toQString();
+        obj[IS_CREATE_NEW_KEY] = false;
+        obj[IS_NO_RESULTS_FOUND_KEY] = false;
+        obj[PROCESSING_STATUS_KEY] = PROCESSING_STATUS_PROCESSING;
+        obj[UPLOAD_ID_KEY] = uploadingScore.uploadId;
+        obj[IS_CLOUD_KEY] = false;
+        obj[CLOUD_VISIBILITY_KEY] = static_cast<int>(cloud::Visibility::Private);
+        items.push_back(obj);
+    }
 
     for (const WatchedScore& watchedScore : watchedScores) {
         if (watchedScore.conversion.status != ConvertStatus::Processing) {

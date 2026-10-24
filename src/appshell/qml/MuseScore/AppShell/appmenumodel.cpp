@@ -56,7 +56,6 @@ using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace mu::project;
 using namespace muse::workspace;
-using namespace muse::actions;
 using namespace muse::extensions;
 using namespace mu::notation;
 using namespace mu::playback;
@@ -123,7 +122,7 @@ bool AppMenuModel::isGlobalMenuAvailable()
 
 void AppMenuModel::setupConnections()
 {
-    recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
+    recentFilesController()->recentFilesListChanged().onReceive(this, [this](const RecentFilesChange&) {
         MenuItem& recentMenuItem = findMenu("menu-file-open");
         MenuItemList recentSubMenuItems = makeRecentSubMenuItems();
         recentMenuItem.setSubitems(recentSubMenuItems);
@@ -147,7 +146,7 @@ void AppMenuModel::setupConnections()
         pluginsItem.setSubitems(makeExtensionsSubitems());
     });
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         auto stack = undoStack();
         if (stack) {
             stack->stackChanged().onNotify(this, [this]() {
@@ -251,7 +250,7 @@ MenuItem* AppMenuModel::makeEditMenu()
 
 mu::notation::INotationUndoStackPtr AppMenuModel::undoStack() const
 {
-    mu::notation::INotationPtr notation = globalContext()->currentNotation();
+    mu::notation::INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->undoStack() : nullptr;
 }
 

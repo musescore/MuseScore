@@ -184,7 +184,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
     if (glissandoStyle == GlissandoStyle::DIATONIC) {
         // Obey harp pedal diagrams if on a harp staff
         if (glissando->isHarpGliss().value_or(false)) {
-            HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
+            HarpPedalDiagram* hd = spanner->originPart()->currentHarpDiagram(spanner->tick());
             std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
             std::vector<int> playablePitches;
             playablePitches.reserve(playableTpcs.size());

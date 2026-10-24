@@ -37,7 +37,7 @@ using namespace muse;
 
 bool EngravingPluginAPIHelper::writeScore(const QString& name, const QString& ext)
 {
-    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         LOGW() << "No notation found";
         return false;

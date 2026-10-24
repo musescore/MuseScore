@@ -23,19 +23,19 @@
 #include "sessionsmanager.h"
 
 #include "project/inotationproject.h"
+#include "project/projectcommands.h"
 
 using namespace mu::appshell;
 using namespace muse;
-using namespace muse::actions;
 
 void SessionsManager::init()
 {
     update();
 
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         update();
 
-        if (project::INotationProjectPtr project = globalContext()->currentProject()) {
+        if (project::INotationProjectPtr project = projectSession()->project()) {
             project->pathChanged().onNotify(this, [this]() {
                 update();
             });
@@ -68,7 +68,7 @@ void SessionsManager::restore()
     }
 
     for (const muse::io::path_t& path : projects) {
-        dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(path.toQUrl()));
+        commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND, { { "url", muse::Val(path.toQUrl().toString()) } });
     }
 }
 
@@ -81,7 +81,7 @@ void SessionsManager::update()
 {
     muse::io::path_t newProjectPath;
 
-    if (auto project = globalContext()->currentProject()) {
+    if (auto project = projectSession()->project()) {
         newProjectPath = project->isNewlyCreated() ? projectConfiguration()->newProjectTemporaryPath() : project->path();
     }
 

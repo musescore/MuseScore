@@ -123,7 +123,7 @@ INotationStylePtr TupletDialog::style() const
 
 INotationPtr TupletDialog::notation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 void TupletDialog::apply()

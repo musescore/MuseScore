@@ -633,6 +633,9 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::P2:
         m_userP2 = v.value<PointF>();
         break;
+    case Pid::TICK:
+        setTick(v.value<Fraction>());
+        break;
     default:
         return DurationElement::setProperty(propertyId, v);
     }

@@ -28,7 +28,7 @@
 
 #include "async/asyncable.h"
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 
 #include "types/propertyvalue.h"
@@ -39,7 +39,7 @@ class EngravingStyleModel : public QAbstractListModel, public muse::async::Async
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     explicit EngravingStyleModel(QObject* parent = nullptr);

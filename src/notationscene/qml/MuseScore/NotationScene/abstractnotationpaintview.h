@@ -25,18 +25,17 @@
 #include <QElapsedTimer>
 #include <qqmlintegration.h>
 
-#include "modularity/ioc.h"
-
-#include "notation/inotationconfiguration.h"
-#include "notation/inotationcontextconfiguration.h"
+#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+
+#include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
+#include "project/iprojectsession.h"
 #include "ui/imainwindow.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
-#include "ui/iuicontextresolver.h"
-#include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "notationscene/inotationsceneconfiguration.h"
 #include "notationviewinputcontroller.h"
@@ -76,10 +75,9 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
 public:
     explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);

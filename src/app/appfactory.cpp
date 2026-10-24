@@ -93,9 +93,9 @@
 #endif
 
 #ifdef MUSE_MODULE_SHORTCUTS
-#include "framework/shortcuts/shortcutsmodule.h"
+#include "framework/shortcuts_v2/shortcutsmodule.h"
 #else
-#include "framework/stubs/shortcuts/shortcutsstubmodule.h"
+#include "framework/stubs/shortcuts_v2/shortcutsstubmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_TOAST
@@ -163,8 +163,6 @@
 #else
 #include "stubs/braille/braillestubmodule.h"
 #endif
-
-#include "context/contextmodule.h"
 
 #ifdef MUE_BUILD_CONVERTER_MODULE
 #include "converter/convertermodule.h"
@@ -375,7 +373,6 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const std::shared_ptr<
     app->addModule(new mu::braille::BrailleModule());
 
     app->addModule(new muse::cloud::CloudModule());
-    app->addModule(new mu::context::ContextModule());
 
 #ifdef MUE_BUILD_CONVERTER_MODULE
     app->addModule(new mu::converter::ConverterModule());
@@ -498,8 +495,6 @@ static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
 #ifdef MUSE_MODULE_TESTFLOW
     app->addModule(new muse::testflow::TestflowModule());
 #endif
-
-    app->addModule(new mu::context::ContextModule());
 
 #ifdef MUE_BUILD_CONVERTER_MODULE
     app->addModule(new mu::converter::ConverterModule());

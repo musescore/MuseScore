@@ -22,6 +22,8 @@
 
 #include <gtest/gtest.h>
 
+#include <QJSEngine>
+
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
@@ -1770,6 +1772,48 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
 }
 
 //---------------------------------------------------------
+//   fretDiagramFretOffsetApi
+//   Test that a script can assign fretOffset, which the
+//   FretDiagram wrapper inherits writable from EngravingItem.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramFretOffsetApi)
+{
+    // [GIVEN] A FretDiagram exposed to a JS engine as `fd`, the way plugins see it
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    QJSEngine engine;
+    QJSEngine::setObjectOwnership(apiFd, QJSEngine::CppOwnership);
+    engine.globalObject().setProperty("fd", engine.newQObject(apiFd));
+
+    // [WHEN] The script moves the diagram up the neck inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("fret offset script test"));
+    QJSValue result = engine.evaluate("fd.fretOffset = 7");
+    domScore->endCmd();
+
+    // [THEN] The assignment does not throw and reaches the DOM
+    EXPECT_FALSE(result.isError()) << result.toString().toStdString();
+    EXPECT_EQ(domFd->fretOffset(), 7);
+    EXPECT_EQ(engine.evaluate("fd.fretOffset").toInt(), 7);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The diagram is back at the nut
+    EXPECT_EQ(domFd->fretOffset(), 0);
+    EXPECT_EQ(engine.evaluate("fd.fretOffset").toInt(), 0);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
 //   fretDiagramGettersApi
 //   Test the read-only getters: scalar properties (strings,
 //   frets, fretOffset) and collection methods (dots, markers,
@@ -1795,7 +1839,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramGettersApi)
     // [THEN] Scalar properties match the DOM state
     EXPECT_EQ(apiFd->strings(), domFd->strings());
     EXPECT_EQ(apiFd->frets(), domFd->frets());
-    EXPECT_EQ(apiFd->fretOffset(), 3);
+    EXPECT_EQ(apiFd->property("fretOffset").toInt(), 3);
 
     // [THEN] dots() returns the dot we placed
     QVariantList dotList = apiFd->dots();

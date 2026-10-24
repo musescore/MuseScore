@@ -79,7 +79,6 @@ private:
     static InstrumentNameType resolveInstrumentNameType(InstrumentLabelVisibility visibility);
 
     static String formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
-    static Part* originPartForStaff(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
     static String formatVerticalSharedLabel(const std::vector<const Instrument*>& instruments, bool trailingDotSingle);
 
     static String& resolveTokens(String& str, const String& name, const String& transposition, const String& number);

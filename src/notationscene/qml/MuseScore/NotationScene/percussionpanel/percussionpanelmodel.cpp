@@ -40,10 +40,12 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
-#include "notationscene/notationcommands.h"
 
 #include "project/inotationproject.h" // IWYU pragma: keep
 #include "project/iprojectaudiosettings.h"
+
+#include "notationscene/notationcommands.h"
+#include "palette/palettecommands.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
@@ -52,9 +54,9 @@ static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
 using namespace muse;
-using namespace muse::actions;
 using namespace muse::ui;
 using namespace mu::notation;
+using namespace mu::palette;
 
 static const std::unordered_map<PercussionPanelPadModel::PadAction, NoteAddingMode> WRITE_ACTION_MAP = {
     { PercussionPanelPadModel::PadAction::TRIGGER_STANDARD, NoteAddingMode::NextChord },
@@ -189,7 +191,7 @@ void PercussionPanelModel::init()
 
     onCurrentNotationChanged();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this] {
+    projectSession()->currentNotationChanged().onNotify(this, [this] {
         onCurrentNotationChanged();
     });
 }
@@ -326,7 +328,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
 
 void PercussionPanelModel::customizeKit()
 {
-    dispatcher()->dispatch("customize-kit");
+    commandDispatcher()->dispatch(OPEN_CUSTOMIZE_KIT_COMMAND);
 }
 
 void PercussionPanelModel::onCurrentNotationChanged()
@@ -696,12 +698,12 @@ std::pair<mu::engraving::Instrument*, mu::engraving::Part*> PercussionPanelModel
 
 const mu::project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
 {
-    return globalContext()->currentProject() ? globalContext()->currentProject()->audioSettings() : nullptr;
+    return projectSession()->project() ? projectSession()->project()->audioSettings() : nullptr;
 }
 
 const INotationPtr PercussionPanelModel::notation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 const INotationInteractionPtr PercussionPanelModel::interaction() const

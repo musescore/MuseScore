@@ -312,8 +312,6 @@ void EngravingElementsModel::select(QModelIndex index, bool arg)
     item->setData(QVariantMap());
 
     emit dataChanged(index, index, { rItemData });
-
-    dispatcher()->dispatch("diagnostic-notationview-redraw");
 }
 
 void EngravingElementsModel::click1(QModelIndex index)

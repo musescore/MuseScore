@@ -320,5 +320,10 @@ public:
 
     static AsciiStringView toXml(InstrumentNamesFormat v);
     static InstrumentNamesFormat fromXml(const AsciiStringView& str, InstrumentNamesFormat def);
+
+    static const TranslatableString& userName(ActionIconType v);
+    static char16_t iconCode(ActionIconType v);
+    static AsciiStringView toXml(ActionIconType v);
+    static ActionIconType fromXml(const AsciiStringView& str, ActionIconType def);
 };
 }

@@ -37,7 +37,6 @@
 #include "log.h"
 
 using namespace mu::propertiespanel;
-using namespace muse::actions;
 using namespace mu::engraving;
 using namespace mu::notation;
 
@@ -290,7 +289,7 @@ void AppearanceSettingsModel::pushToFrontInOrder()
 
 void AppearanceSettingsModel::configureGrid()
 {
-    dispatcher()->dispatch("config-raster");
+    commandDispatcher()->dispatch(OPEN_EDITGRIDSIZE_COMMAND);
 }
 
 void AppearanceSettingsModel::freezeCurrentPlacement()

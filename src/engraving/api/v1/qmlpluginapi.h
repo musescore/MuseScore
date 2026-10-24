@@ -28,9 +28,9 @@
 #include "global/api/apiutils.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "global/iapplication.h"
+#include "rcommand/icommanddispatcher.h"
 
 #include "../../iengravingpluginapihelper.h"
 
@@ -135,10 +135,10 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
 
 private:
-    muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
-    muse::ContextInject<mu::context::IGlobalContext> context = { this };
     muse::GlobalInject<muse::IApplication> application;
+    muse::ContextInject<mu::project::IProjectSession> context = { this };
     muse::ContextInject<mu::engraving::IEngravingPluginAPIHelper> helper = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     // Should be initialized in qmlpluginapi.cpp

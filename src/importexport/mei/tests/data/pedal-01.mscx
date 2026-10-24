@@ -398,7 +398,6 @@
         </Pedal>
       <Pedal>
         <lineVisible>0</lineVisible>
-        <beginText>&lt;sym&gt;keyboardPedalSost&lt;/sym&gt;</beginText>
         <continueTextPlace>auto</continueTextPlace>
         <endTextPlace>auto</endTextPlace>
         <track2>4</track2>
@@ -406,6 +405,7 @@
         <ticks>4/4</ticks>
         <eid>CB_CB</eid>
         <track>4</track>
+        <beginText>&lt;sym&gt;keyboardPedalSost&lt;/sym&gt;</beginText>
         </Pedal>
       </SpannerMap>
     </Score>

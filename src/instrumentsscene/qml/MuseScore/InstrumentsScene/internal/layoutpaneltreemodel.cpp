@@ -53,8 +53,6 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
 
-static const muse::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
-
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -88,7 +86,7 @@ void LayoutPanelTreeModel::init()
     });
 
     onMasterNotationChanged();
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->masterNotationChanged().onNotify(this, [this]() {
         onMasterNotationChanged();
     });
 
@@ -97,20 +95,14 @@ void LayoutPanelTreeModel::init()
         onNotationChanged();
     });
 
-#ifdef MUSE_MODULE_SHORTCUTS_V2
     commandShortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
         emit addInstrumentsKeyboardShortcutChanged();
     });
-#else
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
-        emit addInstrumentsKeyboardShortcutChanged();
-    });
-#endif
 }
 
 void LayoutPanelTreeModel::onMasterNotationChanged()
 {
-    m_masterNotation = context()->currentMasterNotation();
+    m_masterNotation = context()->masterNotation();
 }
 
 void LayoutPanelTreeModel::onNotationChanged()
@@ -521,7 +513,7 @@ void LayoutPanelTreeModel::clearSelection()
 
 void LayoutPanelTreeModel::addInstruments()
 {
-    dispatcher()->dispatch(ADD_INSTRUMENTS_ACTIONCODE);
+    commandDispatcher()->dispatch(INSTRUMENTS_SELECT_COMMAND);
 }
 
 void LayoutPanelTreeModel::addSystemMarkings()
@@ -862,14 +854,7 @@ bool LayoutPanelTreeModel::isStaveSharingEnabled() const
 
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
-    muse::shortcuts::Shortcut shortcut;
-
-#ifdef MUSE_MODULE_SHORTCUTS_V2
-    shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
-#else
-    shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
-#endif
-
+    muse::shortcuts::Shortcut shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
     if (shortcut.sequences.empty()) {
         return {};
     }

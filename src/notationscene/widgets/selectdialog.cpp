@@ -55,7 +55,7 @@ SelectDialog::SelectDialog(QWidget* parent)
 
 void SelectDialog::componentComplete()
 {
-    const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
+    const INotationInteractionPtr interaction = projectSession()->currentNotation()->interaction();
     IF_ASSERT_FAILED(interaction) {
         return;
     }
@@ -223,7 +223,7 @@ void SelectDialog::hideEvent(QHideEvent* event)
 
 std::shared_ptr<INotation> SelectDialog::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 INotationInteractionPtr SelectDialog::currentNotationInteraction() const

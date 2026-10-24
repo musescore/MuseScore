@@ -60,7 +60,7 @@ void ProjectAutoSaver::init()
 
     update();
 
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         if (INotationProjectPtr project = currentProject()) {
             if (project->isNewlyCreated() && !project->isImported()) {
                 Ret ret = project->save(configuration()->newProjectTemporaryPath(), SaveMode::AutoSave);
@@ -122,7 +122,7 @@ muse::io::path_t ProjectAutoSaver::projectAutoSavePath(const muse::io::path_t& p
 
 INotationProjectPtr ProjectAutoSaver::currentProject() const
 {
-    return globalContext()->currentProject();
+    return projectSession()->project();
 }
 
 void ProjectAutoSaver::update()
@@ -156,7 +156,7 @@ void ProjectAutoSaver::onTrySave()
 
     LOGI() << "[autosave] trying to auto save";
 
-    INotationProjectPtr project = globalContext()->currentProject();
+    INotationProjectPtr project = projectSession()->project();
     if (!project) {
         LOGI() << "[autosave] no project";
         return;

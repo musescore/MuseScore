@@ -37,15 +37,15 @@
 
 #include "audio/common/soundfonttypes.h"
 
-#include "rcommand/actiontocommand.h"
-
 #include "../appshellcommands.h"
+#include "project/projectcommands.h"
+#include "playback/playbackcommands.h"
 
 #include "log.h"
-#include "rcommand/commandtypes.h"
 
 using namespace muse;
 using namespace mu::appshell;
+using namespace mu::playback;
 
 static const std::map<rcommand::Command, DockName> s_dockToggleCommands = {
     { DOCK_TOGGLE_PLAYBACK_COMMAND, PLAYBACK_TOOLBAR_NAME },
@@ -93,41 +93,6 @@ void AppshellCommandsController::init()
             return muse::make_ok();
         });
     }
-
-    // compat
-    {
-        using namespace muse::rcommand;
-        static const std::vector<ActionToCommand> actionToCommands = {
-            { "quit", APP_QUIT_COMMAND, make_conv({ { "all_instances", param<bool> }, { "installer_path", param<io::path_t> } }) },
-            { "restart", APP_RESTART_COMMAND, {} },
-            { "fullscreen", APP_FULLSCREEN_COMMAND, {} },
-            { "about-musescore", APP_ABOUT_MUSESCORE_COMMAND, {} },
-            { "about-qt", APP_ABOUT_QT_COMMAND, {} },
-            { "about-musicxml", APP_ABOUT_MUSICXML_COMMAND, {} },
-            { "online-handbook", APP_ONLINE_HANDBOOK_COMMAND, {} },
-            { "ask-help", APP_ASK_HELP_COMMAND, {} },
-            { "accessibility-statement", APP_ACCESSIBILITY_STATEMENT_COMMAND, {} },
-            { "preference-dialog", APP_PREFERENCES_COMMAND, {} },
-            { "revert-factory", APP_REVERT_TO_FACTORY_COMMAND, {} },
-            { "manage-plugins", APP_EXTENSIONS_COMMAND, {} },
-            { "toggle-transport", DOCK_TOGGLE_PLAYBACK_COMMAND, {} },
-            { "toggle-noteinput", DOCK_TOGGLE_NOTEINPUT_COMMAND, {} },
-            { "toggle-palettes", DOCK_TOGGLE_PALETTES_COMMAND, {} },
-            { "toggle-instruments", DOCK_TOGGLE_INSTRUMENTS_COMMAND, {} },
-            { "toggle-properties-panel", DOCK_TOGGLE_PROPERTIES_COMMAND, {} },
-            { "toggle-selection-filter", DOCK_TOGGLE_SELECTION_FILTER_COMMAND, {} },
-            { "toggle-undo-history-panel", DOCK_TOGGLE_UNDO_HISTORY_COMMAND, {} },
-            { "toggle-navigator", DOCK_TOGGLE_NAVIGATOR_COMMAND, {} },
-            { "toggle-braille-panel", DOCK_TOGGLE_BRAILLE_COMMAND, {} },
-            { "toggle-timeline", DOCK_TOGGLE_TIMELINE_COMMAND, {} },
-            { "toggle-mixer", DOCK_TOGGLE_MIXER_COMMAND, {} },
-            { "toggle-piano-keyboard", DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND, {} },
-            { "toggle-percussion-panel", DOCK_TOGGLE_PERCUSSION_COMMAND, {} },
-            { "toggle-statusbar", DOCK_TOGGLE_STATUSBAR_COMMAND, {} },
-        };
-
-        rcommand::registerActionToCommand(this, actionToCommands, commandDispatcher(), dispatcher());
-    }
 }
 
 bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
@@ -148,7 +113,7 @@ bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
 
             if (openProjectScenario()->isUrlSupported(url)) {
                 if (startupScenario()->startupCompleted()) {
-                    dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
+                    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND, { { "url", muse::Val(url.toString()) } });
                 } else {
                     startupScenario()->setStartupScoreFile(project::ProjectFile { url });
                 }
@@ -209,7 +174,7 @@ AppshellCommandsController::DragTarget AppshellCommandsController::dragTarget(co
             return DragTarget::Extension;
         } else {
             bool scorePageWithProjectOpen = interactive()->currentUri().val == NOTATION_URI
-                                            && globalContext()->currentProject() != nullptr;
+                                            && projectSession()->project() != nullptr;
             if (!scorePageWithProjectOpen && convertFileToScoreScenario()->isFileSupported(filePath)) {
                 return DragTarget::ConvertibleFile;
             }
@@ -433,21 +398,14 @@ void AppshellCommandsController::openAccessibilityStatementPage()
 
 void AppshellCommandsController::openPreferencesDialog()
 {
-    const context::IPlaybackStatePtr state = globalContext()->playbackState();
-    if (state->isPlaying()) {
-        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
-
-        async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
-        statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {
-            auto statusChangedMut = statusChanged;
-            statusChangedMut.disconnect(this);
+    if (!playbackState()->isPlaying()) {
+        doOpenPreferencesDialog();
+    } else {
+        commandDispatcher()->dispatch(STOP_COMMAND)
+        .onResolve(this, [this](const muse::rcommand::Response& ) {
             doOpenPreferencesDialog();
         });
-
-        return;
     }
-
-    doOpenPreferencesDialog();
 }
 
 void AppshellCommandsController::doOpenPreferencesDialog()

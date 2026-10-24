@@ -24,6 +24,7 @@
  #include "global/containers.h"
 
  #include "../notationcommands.h"
+#include "rcommand/commandtypes.h"
 
 using namespace muse;
 using namespace muse::rcommand;
@@ -108,6 +109,10 @@ static const std::vector<Command> LYRICS_EDITING_COMMANDS = {
     EDITLYRIC_NEXT_SYLLABLE_COMMAND,
     EDITLYRIC_ADD_MELISMA_COMMAND,
     EDITLYRIC_ADD_VERSE_COMMAND
+};
+
+static const std::vector<Command> NOT_TEXT_EDITING_COMMANDS = {
+    TOGGLE_MMREST_COMMAND,
 };
 
 static const std::map<Command, NoteInputMethod> NOTE_INPUT_COMMANDS = {
@@ -259,6 +264,21 @@ static const std::vector<Command> TAB_COMMANDS = {
     SET_DURATION_512TH_TAB_COMMAND,
     SET_DURATION_1024TH_TAB_COMMAND,
     ENTER_REST_TAB_COMMAND,
+    ENTER_FRET_0_COMMAND,
+    ENTER_FRET_1_COMMAND,
+    ENTER_FRET_2_COMMAND,
+    ENTER_FRET_3_COMMAND,
+    ENTER_FRET_4_COMMAND,
+    ENTER_FRET_5_COMMAND,
+    ENTER_FRET_6_COMMAND,
+    ENTER_FRET_7_COMMAND,
+    ENTER_FRET_8_COMMAND,
+    ENTER_FRET_9_COMMAND,
+    ENTER_FRET_10_COMMAND,
+    ENTER_FRET_11_COMMAND,
+    ENTER_FRET_12_COMMAND,
+    ENTER_FRET_13_COMMAND,
+    ENTER_FRET_14_COMMAND,
     GOTO_STRING_ABOVE_COMMAND,
     GOTO_STRING_BELOW_COMMAND
 };
@@ -290,7 +310,7 @@ void NotationCommandsState::init()
         return;
     }
 
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+    projectSession()->projectChanged().onNotify(this, [this]() {
         updateCommandStates();
     });
 
@@ -319,6 +339,7 @@ void NotationCommandsState::init()
         updateCommandStates(TEXT_EDITING_COMMANDS);
         updateCommandStates(LYRICS_EDITING_COMMANDS);
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
+        updateCommandStates(NOT_TEXT_EDITING_COMMANDS);
     });
 
     controller()->isNoteInputAllowedChanged().onReceive(this, [this](bool) {
@@ -337,6 +358,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_COMMANDS);
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+        updateCommandStates(TAB_COMMANDS);
     });
 
     controller()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
@@ -360,7 +382,7 @@ void NotationCommandsState::init()
 
 void NotationCommandsState::deinit()
 {
-    globalContext()->currentProjectChanged().disconnect(this);
+    projectSession()->projectChanged().disconnect(this);
     if (interactive()) {
         interactive()->opened().disconnect(this);
     }
@@ -425,6 +447,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(controller()->isLyricsEditing(), false);
     }
 
+    if (muse::contains(NOT_TEXT_EDITING_COMMANDS, command)) {
+        return CommandState(!controller()->isTextEditing(), false);
+    }
+
     if (muse::contains(NOTE_INPUT_COMMANDS, command)) {
         return CommandState(controller()->isNoteInputAllowed(),
                             controller()->isNoteInputMode() && controller()->noteInputMethod() == NOTE_INPUT_COMMANDS.at(command));
@@ -464,6 +490,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(VOICE_COMMANDS, command)) {
         return CommandState(true, controller()->currentVoice() == VOICE_COMMANDS.at(command));
+    }
+
+    if (command == ADD_DYNAMIC_COMMAND) {
+        return CommandState(controller()->isNoteOrRestSelected() || controller()->isHairpinSelected(), false);
     }
 
     if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
@@ -514,7 +544,7 @@ async::Channel<Command, CommandState> NotationCommandsState::commandStateChanged
 
 bool NotationCommandsState::isProjectOpened() const
 {
-    if (!globalContext()->currentProject()) {
+    if (!projectSession()->project()) {
         return false;
     }
 

@@ -25,18 +25,14 @@
 
 #include "types/ret.h"
 #include "async/asyncable.h"
-#include "actions/actionable.h"
-#include "actions/actiontypes.h"
 #include "rcommand/commandable.h"
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommandsstate.h"
 #include "rcommand/icommanddispatcher.h"
-#include "context/iglobalcontext.h"
-#include "context/iuicontextresolver.h"
+#include "project/iprojectsession.h"
 #include "playback/iplaybackcontroller.h"
 #include "engraving/iengravingconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -48,17 +44,15 @@
 #include "inotationviewcontroller.h"
 
 namespace mu::notation {
-class NotationActionController : public INotationCommandsController, public muse::actions::Actionable, public muse::rcommand::Commandable,
-    public muse::async::Asyncable, public muse::Contextable
+class NotationActionController : public INotationCommandsController, public muse::rcommand::Commandable, public muse::async::Asyncable,
+    public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<INotationSceneConfiguration> sceneConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
@@ -68,8 +62,6 @@ public:
         : muse::Contextable(iocCtx) {}
 
     void init();
-
-    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     void setViewController(INotationViewController* controller) override;
     INotationViewController* viewController() const override;
@@ -103,6 +95,7 @@ public:
 
     bool isNoteInputActionAllowed() const override;
     bool isNoteOrRestSelected() const override;
+    bool isHairpinSelected() const override;
     bool isMoveSelectionAvailable(MoveSelectionType type) const override;
 
     bool isToggleLayoutBreakAvailable() const override;
@@ -179,6 +172,7 @@ private:
     void insertClef(mu::engraving::ClefType type);
 
     void addText(TextStyleType type);
+    void addDynamic();
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
@@ -263,8 +257,6 @@ private:
 
     bool elementHasPopup(const EngravingItem* e) const;
 
-    bool isNotationPage() const;
-
     void checkForScoreCorruptions();
 
     void toggleAutomation();
@@ -311,9 +303,5 @@ private:
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
     muse::async::Notification m_currentNotationStyleChanged;
     muse::async::Notification m_automationModeEnabledChanged;
-
-    using IsActionEnabledFunc = std::function<bool ()>;
-    std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
-    std::unordered_set<muse::actions::ActionCode> m_isAllowedDuringPlayback;
 };
 }

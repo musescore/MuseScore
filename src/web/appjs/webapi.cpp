@@ -66,7 +66,7 @@ void WebApi::init()
             m_currentProject->saveComplited().resetOnReceive(this);
         }
 
-        m_currentProject = globalContext()->currentProject();
+        m_currentProject = projectSession()->project();
 
         if (m_currentProject) {
             m_currentProject->saveComplited().onReceive(this, [this](const muse::io::path_t& path, project::SaveMode mode) {
@@ -75,7 +75,7 @@ void WebApi::init()
         }
     };
 
-    globalContext()->currentProjectChanged().onNotify(this, onProjectChanged);
+    projectSession()->projectChanged().onNotify(this, onProjectChanged);
 
     onProjectChanged();
 }

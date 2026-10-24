@@ -27,8 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "actions/actiontypes.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "engraving/types/types.h"
 #include "notation/inotationautomation.h"
 #include "notation/inotationconfiguration.h"
@@ -54,7 +53,7 @@ class PlaybackController : public IPlaybackController, public muse::async::Async
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
@@ -65,14 +64,20 @@ public:
     void init();
     void deinit();
 
+    // IPlaybackState
+    bool isPlaying() const override;
+    muse::async::Channel<bool> isPlayingChanged() const override;
+
+    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
+    // --------------
+
+    // IPlaybackController
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
 
     bool isPlayAllowed() const override;
     muse::async::Channel<bool> isPlayAllowedChanged() const override;
-
-    bool isPlaying() const override;
-    muse::async::Channel<bool> isPlayingChanged() const override;
 
     muse::Ret togglePlay() override;
     muse::Ret play(bool showErrors = true) override;
@@ -145,8 +150,6 @@ public:
     void setMasterNotation(notation::IMasterNotationPtr masterNotation);
 
     void setIsExportingAudio(bool exporting) override;
-
-    bool canReceiveAction(const muse::actions::ActionCode& code) const;
 
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
@@ -249,6 +252,7 @@ private:
 
     muse::async::Channel<bool> m_isPlayAllowedChanged;
     muse::async::Channel<bool> m_isPlayingChanged;
+    muse::async::Channel<muse::audio::secs_t> m_playbackPositionChanged;
     muse::async::Channel<bool> m_loopEnabledChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;

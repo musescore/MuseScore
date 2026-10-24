@@ -80,7 +80,7 @@ void ReviewScoreQualityModel::skipFeedback()
 
 std::optional<int> ReviewScoreQualityModel::currentScoreId() const
 {
-    INotationProjectPtr project = globalContext()->currentProject();
+    INotationProjectPtr project = projectSession()->project();
     IF_ASSERT_FAILED(project && project->cloudInfo().isValid()) {
         return std::nullopt;
     }
