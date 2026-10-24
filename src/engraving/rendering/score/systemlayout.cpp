@@ -241,6 +241,10 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 system->removeLastMeasure();
                 ctx.mutState().curMeasure()->setSystem(oldSystem);
             }
+            // re-align voice offsets for the evicted measures' real system, in case it never gets rebuilt in this pass
+            for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+                ChordLayout::layoutVoiceOffsets(oldSystem, staffIdx, ctx);
+            }
 
             if (sharedTrackMapChanged) {
                 // The last added measure caused sharedTrackMap to change. Now we are removing that measure so we must restore it.
@@ -467,6 +471,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             TLayout::layoutMeasureBase(curHBox, ctx);
             createBrackets = curHBox->createSystemHeader();
         }
+    }
+
+    // re-align voice offsets now that the system's final measure set is known
+    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        ChordLayout::layoutVoiceOffsets(system, staffIdx, ctx);
     }
 
     layoutSystemElements(system, ctx);
@@ -1299,6 +1308,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         ChordLayout::layoutArticulations(c, ctx);
         ChordLayout::layoutArticulations2(c, ctx);
         ChordLayout::layoutChordBaseFingering(c, system, ctx);
+        ChordLayout::layoutDurationLines(c, ctx);
     }
 
     layoutTuplets(elementsToLayout.chordRests, ctx);

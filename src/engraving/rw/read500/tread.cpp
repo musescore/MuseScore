@@ -1377,6 +1377,12 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             sig.setCustom(true);
         } else if (tag == "mode") {
             sig.setMode(TConv::fromXml(e.readAsciiText(), KeyMode::UNKNOWN));
+        } else if (tag == "jianpuNumbering") {
+            sig.setJianpuNumbering(JianpuTonicMode(e.readInt()));
+        } else if (tag == "jianpuTonicKey") {
+            sig.setJianpuTonicKey(Key(e.readInt()));
+        } else if (tag == "jianpuTonicMode") {
+            sig.setJianpuTonicMode(TConv::fromXml(e.readAsciiText(), KeyMode::MAJOR));
         } else if (tag == "subtype") {
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {

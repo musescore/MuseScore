@@ -69,6 +69,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY,         P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "showIfEntireSystemEmpty",         QT_TRANSLATE_NOOP("engraving/propertyName", "show if entire system empty") },
     { Pid::SHOW_COURTESY,                       P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "showCourtesySig",                 QT_TRANSLATE_NOOP("engraving/propertyName", "show courtesy") },
     { Pid::KEYSIG_MODE,                         P_TYPE::KEY_MODE,                  PropertyGroup::APPEARANCE, false, "keysig_mode",                     QT_TRANSLATE_NOOP("engraving/propertyName", "key signature mode") },
+    { Pid::JIANPU_NUMBERING,                    P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "jianpuNumbering",                 QT_TRANSLATE_NOOP("engraving/propertyName", "Jianpu numbering") },
+    { Pid::JIANPU_TONIC_KEY,                    P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "jianpuTonicKey",                  QT_TRANSLATE_NOOP("engraving/propertyName", "Jianpu tonal center") },
+    { Pid::JIANPU_TONIC_MODE,                   P_TYPE::KEY_MODE,                  PropertyGroup::APPEARANCE, false, "jianpuTonicMode",                 QT_TRANSLATE_NOOP("engraving/propertyName", "Jianpu tonic mode") },
     { Pid::SLUR_STYLE_TYPE,                     P_TYPE::SLUR_STYLE_TYPE,           PropertyGroup::APPEARANCE, false, "lineType",                        QT_TRANSLATE_NOOP("engraving/propertyName", "line type") },
     { Pid::PITCH,                               P_TYPE::INT,                       PropertyGroup::NONE,       true,  "pitch",                           QT_TRANSLATE_NOOP("engraving/propertyName", "pitch") },
     { Pid::CENT_OFFSET,                         P_TYPE::REAL,                      PropertyGroup::NONE,       true,  "centOffset",                      QT_TRANSLATE_NOOP("engraving/propertyName", "cent offset") },
@@ -580,6 +583,9 @@ bool propertyLinkSameScore(Pid id)
 {
     assert(id < Pid::END);
     switch (id) {
+    case Pid::JIANPU_NUMBERING:
+    case Pid::JIANPU_TONIC_KEY:
+    case Pid::JIANPU_TONIC_MODE:
     case Pid::STAFF_BARLINE_SPAN:
     case Pid::STAFF_BARLINE_SPAN_FROM:
     case Pid::STAFF_BARLINE_SPAN_TO:
