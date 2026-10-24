@@ -142,9 +142,6 @@ void ChangeSpannerElements::flip()
                 oldEndNote->removeSpannerBack(spanner);
                 newStartNote->addSpannerFor(spanner);
                 newEndNote->addSpannerBack(spanner);
-                if (spanner->isGlissando()) {
-                    oldEndNote->chord()->updateEndsNoteAnchoredLine();
-                }
             }
         }
     } else {

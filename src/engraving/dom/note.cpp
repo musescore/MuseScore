@@ -1319,10 +1319,6 @@ void Note::addSpanner(Spanner* l)
     if (e && e->isNote()) {
         Note* note = toNote(e);
         note->addSpannerBack(l);
-        bool isNoteAnchoredTextLine = l->isNoteLine() && toNoteLine(l)->enforceMinLength();
-        if (l->isGlissando() || l->isGuitarBend() || isNoteAnchoredTextLine) {
-            note->chord()->setEndsNoteAnchoredLine(true);
-        }
     }
     addSpannerFor(l);
 }
@@ -1338,9 +1334,6 @@ void Note::removeSpanner(Spanner* l)
         if (!e->removeSpannerBack(l)) {
             LOGD("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->typeName(), l);
             // abort();
-        }
-        if (l->isGlissando()) {
-            e->chord()->updateEndsNoteAnchoredLine();
         }
     }
     if (!removeSpannerFor(l)) {

@@ -289,7 +289,6 @@ Chord::Chord(DummyParentOr<Segment, Chord> parent)
     m_stemDirection    = DirectionV::AUTO;
     m_arpeggio         = 0;
     m_spanArpeggio     = 0;
-    m_endsNoteAnchoredLine    = false;
     m_noteType         = NoteType::NORMAL;
     m_stemSlash        = 0;
     m_noStem           = false;
@@ -328,7 +327,6 @@ Chord::Chord(const Chord& c, bool link)
     }
     m_stem          = 0;
     m_hook          = 0;
-    m_endsNoteAnchoredLine = false;
     m_arpeggio      = 0;
     m_stemSlash     = 0;
 
@@ -1988,24 +1986,16 @@ void Chord::setSlash(bool flag, bool stemless)
     }
 }
 
-//---------------------------------------------------------
-//  updateEndsNoteAnchoredLine
-//    sets/resets the chord m_endsNoteAnchoredLine according any note anchored line
-//    end into this chord or no.
-//---------------------------------------------------------
-
-void Chord::updateEndsNoteAnchoredLine()
+bool Chord::endsNoteAnchoredLine() const
 {
-    m_endsNoteAnchoredLine = false;         // assume no note anchored line ends here
-    // scan all chord notes for note anchored lines ending on this chord
-    for (Note* note : notes()) {
-        for (Spanner* sp : note->spannerBack()) {
-            if (sp->isGlissando() || (sp->isNoteLine() && toNoteLine(sp)->enforceMinLength())) {
-                m_endsNoteAnchoredLine = true;
-                return;
+    for (const Note* note : m_notes) {
+        for (const Spanner* sp : note->spannerBack()) {
+            if (sp->isGlissando() || sp->isGuitarBend() || (sp->isNoteLine() && toNoteLine(sp)->enforceMinLength())) {
+                return true;
             }
         }
     }
+    return false;
 }
 
 //---------------------------------------------------------
