@@ -188,6 +188,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         message = muse::trc("notation", "There isn’t enough space for the tuplet before the end of the measure "
                                         "(or of the tuplet it would be nested in).");
         break;
+    case MsError::TUPLET_NOTE_VALUE_TOO_SHORT:
+        title = muse::trc("notation", "Cannot create tuplet");
+        message = muse::trc("notation", "Note value is too short");
+        break;
     }
 
     m_currentDialogError = err;

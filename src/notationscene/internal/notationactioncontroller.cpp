@@ -1529,12 +1529,6 @@ void NotationActionController::putTuplet(const TupletOptions& options)
         return;
     }
 
-    // subdivision tuplets are checked when they're added
-    if (options.selectedDurationAs != TupletSelectedDuration::SUBDIVISION && !interaction->canAddTupletToSelectedChordRests()) {
-        interactive()->error(muse::trc("notation", "Cannot create tuplet"), muse::trc("notation", "Note value is too short"));
-        return;
-    }
-
     if (noteInput->isNoteInputMode()) {
         noteInput->addTuplet(options);
     } else {

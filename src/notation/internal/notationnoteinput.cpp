@@ -754,6 +754,12 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
         return;
     }
 
+    if (!durationAsSubdivision && !m_interaction->canAddTupletToSelectedChordRests()) {
+        MScore::setError(MsError::TUPLET_NOTE_VALUE_TOO_SHORT);
+        m_interaction->checkAndShowError();
+        return;
+    }
+
     startEdit(TranslatableString("undoableAction", "Add tuplet"));
     score()->expandVoice();
     ChordRest* chordRest = inputState.cr();
