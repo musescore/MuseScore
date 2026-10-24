@@ -76,6 +76,7 @@ static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/default
 
 static const Settings::Key ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED(module_name,
                                                                                   "score/addAccidentalDotsArticulationsToNextNoteEntered");
+static const Settings::Key TUPLET_COMMANDS_SELECTED_DURATION_AS(module_name, "score/tupletCommandsSelectedDurationAs");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY(module_name,
@@ -269,6 +270,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED, Val(true));
     settings()->valueChanged(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED).onReceive(this, [this](const Val&) {
         m_addAccidentalDotsArticulationsToNextNoteEnteredChanged.notify();
+    });
+
+    settings()->setDefaultValue(TUPLET_COMMANDS_SELECTED_DURATION_AS, Val(engraving::TupletSelectedDuration::SUBDIVISION));
+    settings()->valueChanged(TUPLET_COMMANDS_SELECTED_DURATION_AS).onReceive(this, [this](const Val&) {
+        m_tupletCommandsSelectedDurationAsChanged.notify();
     });
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
@@ -842,6 +848,21 @@ void NotationConfiguration::setAddAccidentalDotsArticulationsToNextNoteEntered(b
 muse::async::Notification NotationConfiguration::addAccidentalDotsArticulationsToNextNoteEnteredChanged() const
 {
     return m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;
+}
+
+engraving::TupletSelectedDuration NotationConfiguration::tupletCommandsSelectedDurationAs() const
+{
+    return settings()->value(TUPLET_COMMANDS_SELECTED_DURATION_AS).toEnum<engraving::TupletSelectedDuration>();
+}
+
+void NotationConfiguration::setTupletCommandsSelectedDurationAs(engraving::TupletSelectedDuration selectedDurationAs)
+{
+    settings()->setSharedValue(TUPLET_COMMANDS_SELECTED_DURATION_AS, Val(selectedDurationAs));
+}
+
+muse::async::Notification NotationConfiguration::tupletCommandsSelectedDurationAsChanged() const
+{
+    return m_tupletCommandsSelectedDurationAsChanged;
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

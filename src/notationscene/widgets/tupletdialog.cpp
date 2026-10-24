@@ -52,6 +52,10 @@ void TupletDialog::componentComplete()
 
     defaultToStyleSettings();
 
+    const TupletSelectedDuration selectedDurationAsPreference = configuration()->tupletCommandsSelectedDurationAs();
+    subdivision->setChecked(selectedDurationAsPreference == TupletSelectedDuration::SUBDIVISION);
+    tupletLength->setChecked(selectedDurationAsPreference == TupletSelectedDuration::TUPLET_LENGTH);
+
     numberGroupBox->setAccessibleName(formatGroupBox->title() + " " + numberGroupBox->title());
     bracketGroupBox->setAccessibleName(formatGroupBox->title() + " " + bracketGroupBox->title());
     subdivision->setAccessibleName(useSelectedDurationAsLabel->text() + " " + subdivision->text());

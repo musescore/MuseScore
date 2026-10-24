@@ -871,6 +871,21 @@ int Tuplet::computeTupletDenominator(int numerator, Fraction totalDuration)
     return ratio.numerator();
 }
 
+int Tuplet::conventionalTupletDenominator(int numerator)
+{
+    if (numerator <= 0) {
+        return 0;
+    }
+    if (numerator == 2) {
+        return 3;
+    }
+    int normal = 1;
+    while (normal * 2 < numerator) {
+        normal *= 2;
+    }
+    return normal * 2 == numerator ? numerator * 3 / 4 : normal;
+}
+
 EngravingItem* Tuplet::nextElement()
 {
     ChordRest* firstElement = toChordRest(elements().front());

@@ -36,10 +36,13 @@ BaseSection {
     property int defaultNoteInputMethod: 0
 
     property bool addAccidentalDotsArticulationsToNextNoteEntered: true
+    property alias tupletCommandsSelectedDurationAsOptions: tupletCommandsSelectedDurationAsDropdown.model
+    property int tupletCommandsSelectedDurationAs: 0
     property bool useNoteInputCursorInInputByDuration: false
 
     signal defaultNoteInputMethodChangeRequested(int method)
     signal addAccidentalDotsArticulationsToNextNoteEnteredChangeRequested(bool add)
+    signal tupletCommandsSelectedDurationAsChangeRequested(int selectedDurationAs)
     signal useNoteInputCursorInInputByDurationChangeRequested(bool use)
 
     ComboBoxWithTitle {
@@ -78,11 +81,27 @@ BaseSection {
     }
 
     ComboBoxWithTitle {
+        id: tupletCommandsSelectedDurationAsDropdown
+
+        title: qsTrc("preferences", "For tuplet entry, use selected duration as")
+
+        navigationName: "TupletCommandsSelectedDurationAsDropdown"
+        navigationPanel: root.navigation
+        navigationRow: 2
+
+        currentIndex: tupletCommandsSelectedDurationAsDropdown.indexOfValue(root.tupletCommandsSelectedDurationAs)
+
+        onValueEdited: function(newIndex, newValue) {
+            root.tupletCommandsSelectedDurationAsChangeRequested(newValue)
+        }
+    }
+
+    ComboBoxWithTitle {
         title: qsTrc("preferences", "Input by duration mode cursor")
 
         navigationName: "InputByDurationModeCursorDropdown"
         navigationPanel: root.navigation
-        navigationRow: 2
+        navigationRow: 3
 
         model: [
             { text: qsTrc("preferences", "Above staff"), value: 0 },
