@@ -607,6 +607,16 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
         }
         if (a1 == 0) {
             a1 = cr;
+            if (cr->isJianpuStaff()) {
+                beam = cr->beam();
+                if (!beam || beam->elements().front() != cr) {
+                    beam = Factory::createBeam(ctx.mutDom().score());
+                    beam->setGenerated(true);
+                    beam->setTrack(mainNote->track());
+                    cr->replaceBeam(beam);
+                }
+                a1 = 0;
+            }
         } else {
             if (!beamModeMid(bm) && (bm == BeamMode::BEGIN)) {
                 a1->removeDeleteBeam(false);
@@ -1333,6 +1343,12 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
 
 void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, ChordRest* cr, bool isBefore, int level)
 {
+    // Jianpu uses a full-width beam across the same chord/rest instead of a beamlet.
+    if (item->isJianpuStaff()) {
+        createBeamSegment(item, cr, cr, level, ctx.conf().styleB(Sid::frenchStyleBeams));
+        return;
+    }
+
     const double startX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), cr,
                                                               isBefore
                                                               ? ChordBeamAnchorType::End
