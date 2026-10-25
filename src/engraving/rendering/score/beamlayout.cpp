@@ -559,6 +559,18 @@ static bool beamNoContinue(BeamMode mode)
 
 #define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN16 || a == BeamMode::BEGIN32)
 
+static Beam* ensureBeam(LayoutContext& ctx, ChordRest* first, track_idx_t track)
+{
+    Beam* beam = first->beam();
+    if (!beam || beam->elements().front() != first) {
+        beam = Factory::createBeam(ctx.mutDom().score());
+        beam->setGenerated(true);
+        beam->setTrack(track);
+        first->replaceBeam(beam);
+    }
+    return beam;
+}
+
 //---------------------------------------------------------
 //   beamGraceNotes
 //---------------------------------------------------------
@@ -606,29 +618,17 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
             continue;
         }
         if (a1 == 0) {
-            a1 = cr;
             if (cr->isJianpuStaff()) {
-                beam = cr->beam();
-                if (!beam || beam->elements().front() != cr) {
-                    beam = Factory::createBeam(ctx.mutDom().score());
-                    beam->setGenerated(true);
-                    beam->setTrack(mainNote->track());
-                    cr->replaceBeam(beam);
-                }
-                a1 = 0;
+                beam = ensureBeam(ctx, cr, mainNote->track());
+            } else {
+                a1 = cr;
             }
         } else {
             if (!beamModeMid(bm) && (bm == BeamMode::BEGIN)) {
                 a1->removeDeleteBeam(false);
                 a1 = cr;
             } else {
-                beam = a1->beam();
-                if (beam == 0 || beam->elements().front() != a1) {
-                    beam = Factory::createBeam(ctx.mutDom().score());
-                    beam->setGenerated(true);
-                    beam->setTrack(mainNote->track());
-                    a1->replaceBeam(beam);
-                }
+                beam = ensureBeam(ctx, a1, mainNote->track());
                 cr->replaceBeam(beam);
                 a1 = 0;
             }
@@ -788,7 +788,11 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
             }
 
             if (a1 == 0) {
-                a1 = cr;
+                if (cr->isJianpuStaff()) {
+                    beam = ensureBeam(ctx, cr, track);
+                } else {
+                    a1 = cr;
+                }
             } else {
                 if (!beamModeMid(bm)
                     &&
@@ -800,13 +804,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                     a1->removeDeleteBeam(false);
                     a1 = cr;
                 } else {
-                    beam = a1->beam();
-                    if (beam == 0 || beam->elements().front() != a1) {
-                        beam = Factory::createBeam(ctx.mutDom().score());
-                        beam->setGenerated(true);
-                        beam->setTrack(track);
-                        a1->replaceBeam(beam);
-                    }
+                    beam = ensureBeam(ctx, a1, track);
                     cr->replaceBeam(beam);
                     a1 = 0;
                 }
