@@ -811,7 +811,7 @@ void TWrite::write(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::writeProperties(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!item->channelName().isEmpty()) {
-        xml.tag("channe", { { "name", item->channelName() } });
+        xml.tag("channel", { { "name", item->channelName() } });
     }
 
     writeProperty(item, xml, Pid::DIRECTION);
