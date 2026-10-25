@@ -4327,45 +4327,47 @@ static const String getMarkerId(const String& words)
 
 String MusicXmlParserDirection::matchRepeat(const String& plainWords) const
 {
-    static const std::wregex daCapo(L"^(d\\.? ?|da )(c\\.?|capo)$");
     static const std::wregex daCapoAlFine(L"^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
     static const std::wregex daCapoAlCoda(L"^(d\\.? ?|da )(c\\.? ?|capo )al coda ?(i{0,3})?$");
-    static const std::wregex dalSegno(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno) ?(i{0,3})?$");
+    static const std::wregex daCapo(L"^(d\\.? ?|da )(c\\.?|capo)");
     static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? ?(\\(.*\\))? al fine$");
     static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno\\.?) ?(i{0,3})? ?(\\(.*\\))? al coda ?(i{0,3})?$");
+    static const std::wregex dalSegno(L"^(d\\.? ?|d[ae]l )(s\\.?s?\\.?|segno) ?(i{0,3})?");
     static const std::wregex fine(L"^fine$");
     static const std::wregex segno(L"^segno( segno)? ?(i{0,3})?$");
     static const std::wregex toCoda(L"^to coda( coda)? ?(i{0,3})?$");
     static const std::wregex coda(L"^coda( coda)? ?(i{0,3})?$");
 
-    if (plainWords.contains(daCapo)) {
-        return u"daCapo";
-    }
-    if (plainWords.contains(daCapoAlFine)) {
+    const std::wstring str = plainWords.toStdWString();
+
+    if (std::regex_search(str, daCapoAlFine)) {
         return u"daCapoAlFine";
     }
-    if (plainWords.contains(daCapoAlCoda)) {
+    if (std::regex_search(str, daCapoAlCoda)) {
         return u"daCapoAlCoda";
     }
-    if (plainWords.contains(dalSegno)) {
-        return u"dalSegno";
+    if (std::regex_search(str, daCapo)) {
+        return u"daCapo";
     }
-    if (plainWords.contains(dalSegnoAlFine)) {
+    if (std::regex_search(str, dalSegnoAlFine)) {
         return u"dalSegnoAlFine";
     }
-    if (plainWords.contains(dalSegnoAlCoda)) {
+    if (std::regex_search(str, dalSegnoAlCoda)) {
         return u"dalSegnoAlCoda";
     }
-    if (plainWords.contains(segno)) {
+    if (std::regex_search(str, dalSegno)) {
+        return u"dalSegno";
+    }
+    if (std::regex_search(str, segno)) {
         return u"segno";
     }
-    if (plainWords.contains(fine)) {
+    if (std::regex_search(str, fine)) {
         return u"fine";
     }
-    if (plainWords.contains(toCoda)) {
+    if (std::regex_search(str, toCoda)) {
         return u"toCoda";
     }
-    if (plainWords.contains(coda)) {
+    if (std::regex_search(str, coda)) {
         return u"coda";
     }
     return String();
@@ -4665,10 +4667,25 @@ void MusicXmlParserDirection::handleRepeats(Measure* measure, const Fraction tic
     if (!m_sndCoda.empty()) {
         repeat = u"coda";
     } else if (!m_sndDacapo.empty()) {
-        // the accompanying words may refine the jump type (e.g. "D.C. al Fine")
-        repeat = wordsRepeat.startsWith(u"daCapo") ? wordsRepeat : u"daCapo";
+        if (wordsRepeat.startsWith(u"daCapo")) {
+            repeat = wordsRepeat;
+        } else if (!m_sndFine.empty()) {
+            repeat = u"daCapoAlFine";
+        } else if (!m_sndToCoda.empty() || !m_sndCoda.empty()) {
+            repeat = u"daCapoAlCoda";
+        } else {
+            repeat = u"daCapo";
+        }
     } else if (!m_sndDalsegno.empty()) {
-        repeat = wordsRepeat.startsWith(u"dalSegno") ? wordsRepeat : u"dalSegno";
+        if (wordsRepeat.startsWith(u"dalSegno")) {
+            repeat = wordsRepeat;
+        } else if (!m_sndFine.empty()) {
+            repeat = u"dalSegnoAlFine";
+        } else if (!m_sndToCoda.empty() || !m_sndCoda.empty()) {
+            repeat = u"dalSegnoAlCoda";
+        } else {
+            repeat = u"dalSegno";
+        }
     } else if (!m_sndFine.empty()) {
         repeat = u"fine";
     } else if (!m_sndSegno.empty()) {
