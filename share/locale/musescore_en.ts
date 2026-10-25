@@ -10434,7 +10434,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Continue with inserting measure repeat?</translation>
     </message>
     <message>
-        <location filename="src/engraving/editing/edit.cpp" line="1"/>
+        <location filename="src/engraving/editing/edit.cpp" line="2"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation type="unfinished">Cannot create tuplet with ratio %1 for duration %2</translation>
     </message>
@@ -20659,6 +20659,8 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="1"/>
+        <location filename="src/project/internal/deletecloudscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/deletecloudscorescenario_tests.cpp" line="1"/>
         <source>Please check your internet connection or try again later.</source>
         <translation type="unfinished">Please check your internet connection or try again later.</translation>
     </message>
@@ -21117,7 +21119,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="1"/>
-        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="2"/>
         <source>Retry</source>
         <translation type="unfinished">Retry</translation>
     </message>
@@ -21127,9 +21129,14 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Proceed</translation>
     </message>
     <message>
-        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="2"/>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="3"/>
         <source>Dismiss</source>
         <translation type="unfinished">Dismiss</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="1"/>
+        <source>Go back</source>
+        <translation type="unfinished">Go back</translation>
     </message>
 </context>
 <context>
@@ -21883,47 +21890,85 @@ pickup measure</translation>
         <translation type="unfinished">Sorry, we are unable to load these sounds right now</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="2"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
+        <source>Troubleshoot</source>
+        <translation type="unfinished">Troubleshoot</translation>
+    </message>
+    <message>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
+        <source>Open MuseSounds Manager</source>
+        <translation type="unfinished">Open MuseSounds Manager</translation>
+    </message>
+    <message>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
+        <source>To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. Update if needed and restart your machine.
+
+If the issue persists, follow the steps at the troubleshooting link below.</source>
+        <translation type="unfinished">To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. Update if needed and restart your machine.
+
+If the issue persists, follow the steps at the troubleshooting link below.</translation>
+    </message>
+    <message>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
+        <source>Open MuseHub</source>
+        <translation type="unfinished">Open MuseHub</translation>
+    </message>
+    <message>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
+        <source>To load MuseSounds, open MuseHub and check that you’re running the latest version. Update if needed and restart your machine.
+
+If the issue persists, follow the steps at the troubleshooting link below.</source>
+        <translation type="unfinished">To load MuseSounds, open MuseHub and check that you’re running the latest version. Update if needed and restart your machine.
+
+If the issue persists, follow the steps at the troubleshooting link below.</translation>
+    </message>
+    <message>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
+        <source>MuseSounds could not be loaded</source>
+        <translation type="unfinished">MuseSounds could not be loaded</translation>
+    </message>
+    <message>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="2"/>
         <source>Not now</source>
         <translation type="unfinished">Not now</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="2"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="2"/>
         <source>Quit &amp; launch MuseSounds Manager</source>
         <translation type="unfinished">Quit &amp; launch MuseSounds Manager</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="1"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation type="unfinished">To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="2"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="2"/>
         <source>Quit &amp; launch MuseHub</source>
         <translation type="unfinished">Quit &amp; launch MuseHub</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="1"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation type="unfinished">To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="1"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
         <source>MuseSounds needs an update</source>
         <translation type="unfinished">MuseSounds needs an update</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="1"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
         <translation type="unfinished">To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="1"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
         <translation type="unfinished">To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</translation>
     </message>
     <message>
-        <location filename="src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="1"/>
+        <location filename="src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="1"/>
         <source>An update for MuseSounds is available</source>
         <translation type="unfinished">An update for MuseSounds is available</translation>
     </message>
@@ -30200,6 +30245,7 @@ failed.</translation>
         <location filename="src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="1"/>
         <location filename="src/project/internal/notationproject.cpp" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>Untitled score</source>
         <translation type="unfinished">Untitled score</translation>
     </message>
@@ -30561,6 +30607,7 @@ failed.</translation>
     <message>
         <location filename="src/project/internal/openprojectscenario.cpp" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>All supported files</source>
         <translation type="unfinished">All supported files</translation>
     </message>
@@ -30674,6 +30721,11 @@ failed.</translation>
         <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="1"/>
         <source>Remove from recent files list</source>
         <translation type="unfinished">Remove from recent files list</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="1"/>
+        <source>Delete score</source>
+        <translation type="unfinished">Delete score</translation>
     </message>
     <message>
         <location filename="src/project/internal/projectconfiguration.cpp" line="1"/>
@@ -30919,6 +30971,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>All</source>
         <translation type="unfinished">All</translation>
     </message>
@@ -31015,6 +31068,33 @@ failed.</translation>
         <source>Please try again later.</source>
         <translation type="unfinished">Please try again later.</translation>
     </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="1"/>
+        <source>Are you sure you want to delete “%1”?</source>
+        <extracomment>%1 is the name of the score that is about to be deleted</extracomment>
+        <translation type="unfinished">Are you sure you want to delete “%1”?</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="1"/>
+        <source>Are you sure you want to delete this score?</source>
+        <translation type="unfinished">Are you sure you want to delete this score?</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="1"/>
+        <source>I understand that deleting is permanent and can’t be undone.</source>
+        <translation type="unfinished">I understand that deleting is permanent and can’t be undone.</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="1"/>
+        <source>Delete score</source>
+        <translation type="unfinished">Delete score</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/deletecloudscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/deletecloudscorescenario_tests.cpp" line="1"/>
+        <source>Unable to delete the score</source>
+        <translation type="unfinished">Unable to delete the score</translation>
+    </message>
 </context>
 <context>
     <name>project/convert</name>
@@ -31049,9 +31129,19 @@ failed.</translation>
         <translation type="unfinished">Convert file to score</translation>
     </message>
     <message>
-        <location filename="src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="2"/>
         <source>Convert audio to score (beta)</source>
         <translation type="unfinished">Convert audio to score (beta)</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="1"/>
+        <source>Convert PDF to score</source>
+        <translation type="unfinished">Convert PDF to score</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="1"/>
+        <source>Convert images to score</source>
+        <translation type="unfinished">Convert images to score</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="1"/>
@@ -31082,6 +31172,7 @@ failed.</translation>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>Recommended for solo arrangements only</source>
         <translation type="unfinished">Recommended for solo arrangements only</translation>
     </message>
@@ -31194,13 +31285,13 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
-        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="2"/>
         <source>Are you sure you want to cancel this file conversion?</source>
         <translation type="unfinished">Are you sure you want to cancel this file conversion?</translation>
     </message>
     <message>
         <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
-        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="2"/>
         <source>Processing will be canceled and this score will be removed from your scores.</source>
         <translation type="unfinished">Processing will be canceled and this score will be removed from your scores.</translation>
     </message>
@@ -31248,6 +31339,30 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>One or more files could not be read</source>
+        <translation type="unfinished">One or more files could not be read</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>Make sure the files still exist and that you have permission to open them.</source>
+        <translation type="unfinished">Make sure the files still exist and that you have permission to open them.</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>This file could not be read</source>
+        <translation type="unfinished">This file could not be read</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>Make sure the file still exists and that you have permission to open it.</source>
+        <translation type="unfinished">Make sure the file still exists and that you have permission to open it.</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
         <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="2"/>
         <source>The maximum file size is %1. Reduce the size of your file and try again.</source>
         <translation type="unfinished">The maximum file size is %1. Reduce the size of your file and try again.</translation>
@@ -31284,7 +31399,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
-        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="2"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
         <source>Make sure you’re using a valid link from YouTube or Audio.com.</source>
         <translation type="unfinished">Make sure you’re using a valid link from YouTube or Audio.com.</translation>
     </message>
@@ -31397,6 +31512,18 @@ failed.</translation>
     <message>
         <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
         <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>We weren’t able to upload ‘%1’. Check your internet connection and try again.</source>
+        <translation type="unfinished">We weren’t able to upload ‘%1’. Check your internet connection and try again.</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>Error uploading score</source>
+        <translation type="unfinished">Error uploading score</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
         <source>We’re having trouble connecting to MuseScore.com.</source>
         <translation type="unfinished">We’re having trouble connecting to MuseScore.com.</translation>
     </message>
@@ -31408,30 +31535,35 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>%1 max</source>
         <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max&quot;; shown as a short label/badge</extracomment>
         <translation type="unfinished">%1 max</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>%1 max combined</source>
         <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max combined&quot;; shown as a short label/badge</extracomment>
         <translation type="unfinished">%1 max combined</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>Paste a link from %1 or %2 (beta)</source>
         <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation type="unfinished">Paste a link from %1 or %2 (beta)</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="4"/>
         <source>Paste a link from %1 (beta)</source>
         <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation type="unfinished">Paste a link from %1 (beta)</translation>
     </message>
     <message numerus="yes">
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>%n page(s) max.</source>
         <extracomment>%n is the maximum number of pages; shown as a short label/badge, e.g. &quot;20 pages max&quot;</extracomment>
         <translation type="unfinished">
@@ -31441,6 +31573,7 @@ failed.</translation>
     </message>
     <message numerus="yes">
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="2"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>%n file(s) per conversion</source>
         <translation type="unfinished">
             <numerusform>%n file(s) per conversion</numerusform>
@@ -31449,11 +31582,13 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="3"/>
         <source>PDF</source>
         <translation type="unfinished">PDF</translation>
     </message>
     <message numerus="yes">
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>Max. %n image(s)</source>
         <translation type="unfinished">
             <numerusform>Max. %n image(s)</numerusform>
@@ -31462,34 +31597,40 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>Images</source>
         <translation type="unfinished">Images</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>%1 format</source>
         <extracomment>%1 is one or more file format names, e.g. &quot;MP3 format&quot; or &quot;MP3, WAV format&quot;</extracomment>
         <translation type="unfinished">%1 format</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>Audio</source>
         <translation type="unfinished">Audio</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>Or paste a link from %1 or %2 (beta)</source>
         <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation type="unfinished">Or paste a link from %1 or %2 (beta)</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>Or paste a link from %1 (beta)</source>
         <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation type="unfinished">Or paste a link from %1 (beta)</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>“%1” cannot be used as a file name. Please choose a different name.</source>
         <translation type="unfinished">“%1” cannot be used as a file name. Please choose a different name.</translation>
     </message>
@@ -31500,11 +31641,13 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>Are you sure you want to cancel?</source>
         <translation type="unfinished">Are you sure you want to cancel?</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="2"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>Your current selection will be lost.</source>
         <translation type="unfinished">Your current selection will be lost.</translation>
     </message>
@@ -31515,16 +31658,19 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="2"/>
         <source>Are you sure you want to go back?</source>
         <translation type="unfinished">Are you sure you want to go back?</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/filelistmodel_tests.cpp" line="1"/>
         <source>Images will be combined into one score in the order shown here</source>
         <translation type="unfinished">Images will be combined into one score in the order shown here</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/filelistmodel_tests.cpp" line="1"/>
         <source>%1/%2 used</source>
         <extracomment>%1 and %2 are pre-formatted file sizes including units, e.g. &quot;15 MB/20 MB used&quot;</extracomment>
         <translation type="unfinished">%1/%2 used</translation>
@@ -36229,87 +36375,92 @@ failed.</translation>
         <translation type="unfinished">Define keyboard shortcut…</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>NAVIGATION</source>
         <translation type="unfinished">NAVIGATION</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>PLAYBACK</source>
         <translation type="unfinished">PLAYBACK</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>NOTATION PAGE</source>
         <translation type="unfinished">NOTATION PAGE</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>NOTATION</source>
         <translation type="unfinished">NOTATION</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
+        <source>NOTATION: TAB</source>
+        <translation type="unfinished">NOTATION: TAB</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>NOTATION: NOTE INPUT</source>
         <translation type="unfinished">NOTATION: NOTE INPUT</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>NOTATION: TEXT EDITING</source>
         <translation type="unfinished">NOTATION: TEXT EDITING</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>PROJECT</source>
         <translation type="unfinished">PROJECT</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>APP</source>
         <translation type="unfinished">APP</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>PALETTE</source>
         <translation type="unfinished">PALETTE</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>INSTRUMENTS</source>
         <translation type="unfinished">INSTRUMENTS</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>EXTENSIONS</source>
         <translation type="unfinished">EXTENSIONS</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>AUDIO</source>
         <translation type="unfinished">AUDIO</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>DOCK</source>
         <translation type="unfinished">DOCK</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>WORKSPACE</source>
         <translation type="unfinished">WORKSPACE</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>UPDATE</source>
         <translation type="unfinished">UPDATE</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>DIAGNOSTICS</source>
         <translation type="unfinished">DIAGNOSTICS</translation>
     </message>
     <message>
-        <location filename="src/context/internal/shortcutresolver.cpp" line="1"/>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>TESTFLOW</source>
         <translation type="unfinished">TESTFLOW</translation>
     </message>
@@ -36396,6 +36547,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="2"/>
+        <location filename="src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="1"/>
         <source>Choose file</source>
         <translation type="unfinished">Choose file</translation>
     </message>
