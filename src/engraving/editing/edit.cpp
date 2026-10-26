@@ -276,12 +276,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
         return nullptr;
     }
 
-    Tuplet* tuplet = addTuplet(destinationChordRest, _ratio, TDuration(fr), numberType, bracketType);
-    if (tuplet) {
-        selectNewTuplet(tuplet);
-    }
-
-    return tuplet;
+    return addTuplet(destinationChordRest, _ratio, TDuration(fr), numberType, bracketType);
 }
 
 //---------------------------------------------------------
