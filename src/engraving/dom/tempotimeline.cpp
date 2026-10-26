@@ -130,7 +130,7 @@ template<typename T, typename Proj>
 static size_t findPointIndex(const std::vector<TempoTimePoint>& points, T value, size_t& hint, Proj proj)
 {
     const bool hintValid = value >= proj(points[hint])
-    && (hint + 1 == points.size() || value < proj(points[hint + 1]));
+                           && (hint + 1 == points.size() || value < proj(points[hint + 1]));
     if (!hintValid) {
         const auto it = std::upper_bound(points.begin(), points.end(), value,
                                          [proj](T v, const TempoTimePoint& p) { return v < proj(p); });
@@ -143,6 +143,11 @@ static size_t findPointIndex(const std::vector<TempoTimePoint>& points, T value,
 static double timeAt(const TempoTimePoint& from, int utick)
 {
     return from.time + double(utick - from.utick) / (Constants::DIVISION * from.bps);
+}
+
+static double scaledTime(double nominalTime, double pauseSum, double multiplier)
+{
+    return (nominalTime - pauseSum) / multiplier + pauseSum;
 }
 
 void TempoTimeline::rebuild(const AutomationCurve& tempoCurve, const PausesMap& pauses)
@@ -174,7 +179,8 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
             const double time = m_points.empty() ? 0.0 : timeAt(m_points.back(), utick);
             // Clamp to the valid tempo range so a zero/negative bps can't make time math divide by zero
             const double bps = std::clamp(vit->second, Constants::MIN_TEMPO.val, Constants::MAX_TEMPO.val);
-            m_points.push_back({ utick, time, bps, 0.0 });
+            const double pauseSum = m_points.empty() ? 0.0 : m_points.back().pauseSum;
+            m_points.push_back({ utick, time, bps, 0.0, pauseSum });
             ++vit;
         }
 
@@ -182,10 +188,10 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
         if (pit != pauses.end() && pit->first == utick) {
             if (m_points.empty()) {
                 // No tempo value at or before this pause - anchor with the default tempo
-                m_points.push_back({ utick, 0.0, Constants::DEFAULT_TEMPO.val, 0.0 });
+                m_points.push_back({ utick, 0.0, Constants::DEFAULT_TEMPO.val, 0.0, 0.0 });
             }
             const TempoTimePoint& prev = m_points.back();
-            m_points.push_back({ utick, timeAt(prev, utick) + pit->second, prev.bps, pit->second });
+            m_points.push_back({ utick, timeAt(prev, utick) + pit->second, prev.bps, pit->second, prev.pauseSum + pit->second });
             ++pit;
         }
     }
@@ -198,7 +204,8 @@ double TempoTimeline::utick2utime(int utick) const
     }
 
     const size_t idx = findPointIndex(m_points, utick, m_utick2utimeHint, [](const TempoTimePoint& p) { return p.utick; });
-    return timeAt(m_points[idx], utick) / m_tempoMultiplier.val;
+    const TempoTimePoint& from = m_points[idx];
+    return scaledTime(timeAt(from, utick), from.pauseSum, m_tempoMultiplier.val);
 }
 
 int TempoTimeline::utime2utick(double time) const
@@ -208,19 +215,20 @@ int TempoTimeline::utime2utick(double time) const
         return 0;
     }
 
-    const double nominalSecs = time * m_tempoMultiplier.val;
+    const double multiplier = m_tempoMultiplier.val;
 
-    const size_t idx = findPointIndex(m_points, nominalSecs, m_utime2utickHint, [](const TempoTimePoint& p) { return p.time; });
+    const size_t idx = findPointIndex(m_points, time, m_utime2utickHint,
+                                      [multiplier](const TempoTimePoint& p) { return scaledTime(p.time, p.pauseSum, multiplier); });
     const TempoTimePoint& from = m_points[idx];
 
     if (idx + 1 < n) {
         const TempoTimePoint& next = m_points[idx + 1];
-        if (next.pause > 0.0 && nominalSecs >= next.time - next.pause) {
+        if (!muse::RealIsNull(next.pause) && time >= scaledTime(next.time, next.pauseSum, multiplier) - next.pause) {
             return next.utick; // still inside next's pause window: hold there
         }
     }
 
-    const double elapsed = nominalSecs - from.time;
+    const double elapsed = (time - scaledTime(from.time, from.pauseSum, multiplier)) * multiplier;
     return from.utick + int(std::lround(elapsed * Constants::DIVISION * from.bps));
 }
 
