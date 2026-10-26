@@ -33,6 +33,7 @@
 
 #include "score.h"
 #include "chord.h"
+#include "measure.h"
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
