@@ -28,11 +28,14 @@
 #include "engraving/automation/tempovalues.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fermata.h"
+#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/spannermap.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/textline.h"
 #include "engraving/dom/tempotimeline.h"
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
@@ -683,6 +686,61 @@ TEST_F(ScoreAutomationController_Tests, Init_FermataOnTempoText_RestorePointKeep
     EXPECT_EQ(fermataIt->second.itemId, fermata->eid());
     EXPECT_EQ(restoreIt->second.itemId, tempoText->eid());
     EXPECT_NEAR(restoreIt->second.value.outValue, TEMPO_2_5, TEMPO_ERROR);
+}
+
+// A ramp starting where another ends starts from that ramp's target, even when the spanner map finds it first
+TEST_F(ScoreAutomationController_Tests, Init_BackToBackRamps_SecondStartsAtFirstTarget)
+{
+    // [GIVEN] tempo.mscx M2-M3: a ritardando from 180bpm to 90bpm (raw ticks 1920-3840)
+    // [GIVEN] An accelerando (x2) is added right after it, from M3 to M6 (raw ticks 3840-9600), plus 64 text lines
+    //         so that the spanner map's interval tree splits at 9600 and finds the accelerando before the ritardando
+    s_tempoScore->startCmd(TranslatableString::untranslatable("ScoreAutomationController tests"));
+
+    // Starts exactly where the ritardando ends
+    GradualTempoChange* accelerando = Factory::createGradualTempoChange(s_tempoScore->dummy());
+    accelerando->setTempoChangeType(GradualTempoChangeType::Accelerando);
+    accelerando->setProperty(Pid::TEMPO_CHANGE_FACTOR, 2.0);
+    accelerando->setTrack(0);
+    accelerando->setTrack2(0);
+    accelerando->setTick(Fraction::fromTicks(3840));
+    accelerando->setTick2(Fraction::fromTicks(9600));
+    s_tempoScore->undoAddElement(accelerando);
+
+    // 64 matches IntervalTree's default minbucket: below it, the tree is one list sorted by start
+    // Text lines don't affect playback; spanning 0-19200 puts the tree's split at (0 + 19200) / 2 = 9600
+    for (int i = 0; i < 64; ++i) {
+        TextLine* line = Factory::createTextLine(s_tempoScore->dummy());
+        line->setTrack(0);
+        line->setTrack2(0);
+        line->setTick(Fraction::fromTicks(0));
+        line->setTick2(Fraction::fromTicks(19200));
+        s_tempoScore->undoAddElement(line);
+    }
+
+    s_tempoScore->endCmd();
+
+    // Restore s_tempoScore to its original state even if an ASSERT_* below fails early
+    UndoRestoreGuard restoreScoreGuard(s_tempoScore);
+
+    // The tree returns the accelerando before the ritardando in M1-M6
+    std::vector<int> rampStarts;
+    for (const auto& interval : s_tempoScore->spannerMap().findOverlapping(1, 11519)) {
+        if (interval.value->isGradualTempoChange()) {
+            rampStarts.push_back(interval.start);
+        }
+    }
+    ASSERT_EQ(rampStarts, (std::vector<int> { 3840, 1920 }));
+
+    // [WHEN] Calculate the tempo curve
+    ScoreAutomationController controller;
+    controller.init(s_tempoScore);
+
+    // [THEN] The accelerando starts from the ritardando's 90bpm (3840 is unchanged) and arrives at 180bpm on M6's
+    //        fermata point, in both passes
+    AutomationCurve expectedCurve = expectedTempoCurve();
+    expectedCurve[9600]  = generatedPoint(TEMPO_3, TEMPO_1_5); // arrives at 90 * 2 = 180bpm, then the fermata halves 180bpm
+    expectedCurve[21120] = generatedPoint(TEMPO_3, TEMPO_1_5); // same in the 2nd pass
+    checkCurvesMatch(controller.automationData()->curve(TEMPO_KEY), expectedCurve);
 }
 
 // A user tempo point inside a ritardando changes what a later "a tempo" returns to, and is mirrored into the repeat
