@@ -34,6 +34,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/stavesharingchange.h"
+#include "engraving/dom/system.h"
 
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/edittimesig.h"
@@ -1206,6 +1207,45 @@ TEST_F(Engraving_StaveSharingTests, testTimeDeleteAtStaveSharingChangeUndo)
     const std::vector<SegmentInfo> segmentsAfter = collectSegments();
     EXPECT_EQ(segmentsAfter, segmentsBefore);
     expectTicksInOrder(segmentsAfter);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testHeaderClefsOnSharedStaves)
+{
+    // [GIVEN] A score with 2 staves, both changing to bass clef at the end of the first measure
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_11.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    // [THEN] The final system should have 2 visible staves, both with bass header clefs
+    Measure* lastMeasure = score->lastMeasure();
+    ASSERT_TRUE(lastMeasure);
+    System* lastSystem = lastMeasure->system();
+    ASSERT_TRUE(lastSystem);
+    Measure* firstMeasure = lastSystem->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+    Segment* headerClefSeg = firstMeasure->findSegment(SegmentType::HeaderClef, firstMeasure->tick());
+    ASSERT_TRUE(headerClefSeg);
+
+    std::vector<staff_idx_t> visibleStaves;
+    for (staff_idx_t staffIdx = 0; staffIdx < lastSystem->staves().size(); ++staffIdx) {
+        if (lastSystem->staff(staffIdx)->show()) {
+            visibleStaves.push_back(staffIdx);
+        }
+    }
+    ASSERT_EQ(visibleStaves.size(), 2);
+
+    for (staff_idx_t staffIdx : visibleStaves) {
+        EngravingItem* item = headerClefSeg->element(staff2track(staffIdx));
+        ASSERT_TRUE(item && item->isClef());
+        EXPECT_EQ(toClef(item)->clefType(), ClefType::F);
+    }
 
     delete score;
 }
