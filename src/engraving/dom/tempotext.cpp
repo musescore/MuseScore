@@ -103,11 +103,11 @@ const TimeSig* TempoText::alignmentTimeSignature() const
 {
     const Segment* s = segment();
     const staff_idx_t tempoStaffIdx = effectiveStaffIdx();
-    if (!s || !s->rtick().isZero() || tempoStaffIdx == muse::nidx) {
+    if (!s || tempoStaffIdx == muse::nidx) {
         return nullptr;
     }
     const Segment* p = s->prev(SegmentType::TimeSig);
-    if (!p || p->allElementsInvisible()) {
+    if (!p || p->tick() != s->tick() || p->allElementsInvisible()) {
         return nullptr;
     }
     const System* system = s->measure()->system();
