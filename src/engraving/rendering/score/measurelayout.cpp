@@ -42,6 +42,7 @@
 #include "dom/parenthesis.h"
 #include "dom/spacer.h"
 #include "dom/score.h"
+#include "dom/sharedpart.h"
 #include "dom/staff.h"
 #include "dom/stafflines.h"
 #include "dom/system.h"
@@ -1749,6 +1750,12 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
 
     // find the clef type at the previous tick
     ClefTypeList cl = staff->clefType(m->tick() - Fraction::eps());
+    if (staff->part()->isSharedPart()) {
+        Staff* originStaff = toSharedPart(staff->part())->originStaffForStaff(staff->idx(), m->tick());
+        if (originStaff && !originStaff->clefList().empty()) {
+            cl = originStaff->clefType(m->tick() - Fraction::eps());
+        }
+    }
     bool showCourtesy = true;
     Segment* s = nullptr;
     if (m->prevMeasure()) {
