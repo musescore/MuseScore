@@ -36,7 +36,7 @@ static const String TRANSPOSE_DATA_DIR("transpose_data/");
 class Engraving_TransposeTests : public ::testing::Test
 {
 public:
-    void undoTransposeTest(String scoreName, int interval = 4)
+    void undoTransposeTest(String scoreName, int interval = 4) //! NOTE: major second by default
     {
         String readFile(TRANSPOSE_DATA_DIR + scoreName + ".mscx");
         String writeFile1(scoreName + "01-test.mscx");
@@ -49,7 +49,7 @@ public:
         // select all
         score->cmdSelectAll();
 
-        // transpose major second up
+        // transpose up by interval
         score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving transpose tests"), [&](auto& tx) {
             Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, interval,
                                  true, true, true);
@@ -136,5 +136,5 @@ TEST_F(Engraving_TransposeTests, undoDiatonicTranspose)
 
 TEST_F(Engraving_TransposeTests, undoTransposeDiminishedSecond)
 {
-    undoTransposeTest(u"undoTransposeDiminishedSecond", 2);
+    undoTransposeTest(u"undoTransposeDiminishedSecond", /*interval*/ 2);
 }
