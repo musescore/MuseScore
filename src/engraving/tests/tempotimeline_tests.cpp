@@ -387,7 +387,7 @@ TEST_F(Engraving_TempoTimelineTests, PAUSE_ON_TEMPO_CHANGE)
     EXPECT_EQ(timeline.utime2utick(3.0), 1440);
 }
 
-// Playback speed scales time, pauses included, but not the tempo itself
+// Playback speed scales the time between ticks, but not pauses or the tempo itself
 TEST_F(Engraving_TempoTimelineTests, TEMPO_MULTIPLIER)
 {
     // [GIVEN] 120 BPM, then 60 BPM from tick 1920, with a 1s pause at tick 960
@@ -397,15 +397,15 @@ TEST_F(Engraving_TempoTimelineTests, TEMPO_MULTIPLIER)
     // [WHEN] Playback is set to double speed
     timeline.setTempoMultiplier(BeatsPerSecond(2.0));
 
-    // [THEN] Every time is halved: at normal speed these are 2s, 3s and 5s
-    EXPECT_NEAR(timeline.utick2utime(960), 1.0, TIME_ERROR); // 0.5s to reach 960 + the pause, now 0.5s
-    EXPECT_NEAR(timeline.utick2utime(1920), 1.5, TIME_ERROR);
-    EXPECT_NEAR(timeline.utick2utime(2880), 2.5, TIME_ERROR);
+    // [THEN] Tempo time is halved, the 1s pause isn't: at normal speed these are 2s, 3s and 5s
+    EXPECT_NEAR(timeline.utick2utime(960), 1.5, TIME_ERROR); // 0.5s to reach 960 + the 1s pause
+    EXPECT_NEAR(timeline.utick2utime(1920), 2.0, TIME_ERROR);
+    EXPECT_NEAR(timeline.utick2utime(2880), 3.0, TIME_ERROR);
 
-    // [AND] utime2utick maps the halved times back, holding at 960 during the shortened pause (0.5s-1s)
+    // [AND] utime2utick maps the times back, holding at 960 during the whole pause (0.5s-1.5s)
     EXPECT_EQ(timeline.utime2utick(0.25), 480);
-    EXPECT_EQ(timeline.utime2utick(0.75), 960);
-    EXPECT_EQ(timeline.utime2utick(2.5), 2880);
+    EXPECT_EQ(timeline.utime2utick(1.2), 960);
+    EXPECT_EQ(timeline.utime2utick(3.0), 2880);
 
     // [AND] The tempo itself is unchanged
     EXPECT_NEAR(timeline.tempo(2880).val, BeatsPerSecond::fromBPM(60.0).val, TEMPO_ERROR);
