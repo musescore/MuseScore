@@ -633,30 +633,25 @@ bool StaveSharingLayout::checkSegmentForSameVoice(Segment* segment, track_idx_t 
 
 bool StaveSharingLayout::checkClefKeyTimeSigForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack)
 {
-    if (segment->isClefType()
-        && !checkItemsForSameVoice(segment, prevTrack, nextTrack, [](const EngravingItem* item1, const EngravingItem* item2) {
-        return toClef(item1)->clefType() == toClef(item2)->clefType();
-    })) {
+    const Score* score = segment->score();
+
+    const staff_idx_t prevStaffIdx = track2staff(prevTrack);
+    const staff_idx_t nextStaffIdx = track2staff(nextTrack);
+    const Staff* prevStaff = score->staff(prevStaffIdx);
+    const Staff* nextStaff = score->staff(nextStaffIdx);
+    const Fraction tick = segment->tick();
+
+    if (prevStaff->clefType(tick) != nextStaff->clefType(tick)) {
         return false;
     }
 
-    if (segment->isTimeSigType()
-        && !checkItemsForSameVoice(segment, prevTrack, nextTrack, [](const EngravingItem* item1, const EngravingItem* item2) {
-        IF_ASSERT_FAILED(item1->isTimeSig() && item2->isTimeSig()) {
-            return false;
-        }
-        return *toTimeSig(item1) == *toTimeSig(item2);
-    })) {
+    if (!prevStaff->isDrumStaff(tick) && !nextStaff->isDrumStaff(tick) && prevStaff->keySigEvent(tick) != nextStaff->keySigEvent(tick)) {
         return false;
     }
 
-    if (segment->isKeySigType()
-        && !checkItemsForSameVoice(segment, prevTrack, nextTrack, [](const EngravingItem* item1, const EngravingItem* item2) {
-        IF_ASSERT_FAILED(item1->isKeySig() && item2->isKeySig()) {
-            return false;
-        }
-        return *toKeySig(item1) == *toKeySig(item2);
-    })) {
+    const TimeSig* prevStaffTimeSig = prevStaff->timeSig(tick);
+    const TimeSig* nextStaffTimeSig = nextStaff->timeSig(tick);
+    if (prevStaffTimeSig && nextStaffTimeSig && *prevStaffTimeSig != *nextStaffTimeSig) {
         return false;
     }
 
