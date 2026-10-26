@@ -23,6 +23,8 @@
 
 #include <cstring>
 
+#include "global/log.h"
+
 using namespace muse;
 using namespace muse::io;
 
@@ -64,7 +66,11 @@ const ByteArray& Buffer::data() const
 
 ByteArray Buffer::doReadAll()
 {
-    if (!isOpenModeReadable()) {
+    IF_ASSERT_FAILED(isOpenModeReadable()) {
+        return ByteArray();
+    }
+
+    if (pos() != 0) {
         return IODevice::doReadAll();
     }
 
