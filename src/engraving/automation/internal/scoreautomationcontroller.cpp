@@ -859,7 +859,12 @@ void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatS
         return;
     }
 
-    const auto& intervals = spannerMap.findOverlapping(overlapStart, overlapStop);
+    // Not sorted by tick, but a ramp or hairpin may start where an earlier one ends and take its start value from it
+    SpannerMap::IntervalList intervals = spannerMap.findOverlapping(overlapStart, overlapStop);
+    std::stable_sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) {
+        return a.start < b.start;
+    });
+
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
         if (!spanner->playSpanner()) {
