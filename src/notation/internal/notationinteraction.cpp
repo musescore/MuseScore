@@ -33,6 +33,7 @@
 #include <QEventLoop>
 #include <QGuiApplication>
 #include <QKeyEvent>
+#include <QKeySequence>
 #include <QMimeData>
 #include <QPainter>
 #include <QRectF>
@@ -4731,6 +4732,11 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
 
 void NotationInteraction::editElement(QKeyEvent* event)
 {
+#if 0
+    static int index = 0;
+    LOGDA() << "[" << ++index << "] " << QKeySequence(event->keyCombination()).toString();
+#endif
+
     if (!m_editData.element) {
         return;
     }
