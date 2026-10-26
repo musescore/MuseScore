@@ -26,9 +26,12 @@
 
 #include "engraving/automation/internal/scoreautomationcontroller.h"
 #include "engraving/automation/tempovalues.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/fermata.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/repeatlist.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotimeline.h"
 #include "engraving/types/fraction.h"
@@ -642,6 +645,44 @@ TEST_F(ScoreAutomationController_Tests, Init_Tempo_CurveMatchesExpected)
 
     // [THEN] Curve matches expectations
     checkCurvesMatch(controller.automationData()->curve(TEMPO_KEY), expectedTempoCurve());
+}
+
+// A fermata on a tempo text's chord restores the tempo under the tempo text's ID, not the fermata's
+TEST_F(ScoreAutomationController_Tests, Init_FermataOnTempoText_RestorePointKeepsTempoTextId)
+{
+    // [GIVEN] tempo.mscx M11's first chord (raw tick 19200, utick 32640) has a 150bpm tempo text
+    Segment* segment = s_tempoScore->tick2segment(Fraction::fromTicks(19200), true, SegmentType::ChordRest);
+    ASSERT_TRUE(segment);
+    const EngravingItem* tempoText = segment->findAnnotation(ElementType::TEMPO_TEXT, 0, 0);
+    ASSERT_TRUE(tempoText);
+
+    // [GIVEN] A playing fermata is added to the same chord (in an undoable command)
+    s_tempoScore->startCmd(TranslatableString::untranslatable("ScoreAutomationController tests"));
+    Fermata* fermata = Factory::createFermata(segment);
+    fermata->setSymIdAndTimeStretch(SymId::fermataAbove);
+    fermata->setTimeStretch(2.0);
+    fermata->setTrack(0);
+    fermata->setOwnershipParent(segment);
+    s_tempoScore->undoAddElement(fermata);
+    s_tempoScore->endCmd();
+
+    // Restore s_tempoScore to its original state even if an ASSERT_* below fails early
+    UndoRestoreGuard restoreScoreGuard(s_tempoScore);
+
+    // [WHEN] Calculate the tempo curve
+    ScoreAutomationController controller;
+    controller.init(s_tempoScore);
+
+    // [THEN] Beat 1 belongs to the fermata, and beat 2's restore point (back to 150bpm) belongs to the tempo text
+    const AutomationCurve& curve = controller.automationData()->curve(TEMPO_KEY);
+    const auto fermataIt = curve.find(32640);
+    const auto restoreIt = curve.find(33120);
+    ASSERT_TRUE(fermataIt != curve.cend());
+    ASSERT_TRUE(restoreIt != curve.cend());
+
+    EXPECT_EQ(fermataIt->second.itemId, fermata->eid());
+    EXPECT_EQ(restoreIt->second.itemId, tempoText->eid());
+    EXPECT_NEAR(restoreIt->second.value.outValue, TEMPO_2_5, TEMPO_ERROR);
 }
 
 // A user tempo point inside a ritardando changes what a later "a tempo" returns to, and is mirrored into the repeat
