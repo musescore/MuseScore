@@ -1143,6 +1143,7 @@ void PlaybackController::resetPlayback()
 
     m_instrumentTrackIdMap.clear();
     m_auxTrackIdMap.clear();
+    m_automationEnvelopesCache.clear();
 
     m_isRangeSelection = false;
 
@@ -1406,46 +1407,56 @@ ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& in
                                                      const AudioOutputParams& outParams,
                                                      bool rebuildVolume, bool rebuildPan)
 {
+    // Fixed values always come from the mixer settings; only envelopes are cached
     ControlParams control = outParams.control();
-    const auto it = m_automatedControlParamsCache.find(instrumentTrackId);
-    if (it != m_automatedControlParamsCache.end()) {
-        control.volume = it->second.volume;
-        control.balance = it->second.balance;
-    }
 
-    if (!rebuildVolume && !rebuildPan) {
+    const bool rebuild = rebuildVolume || rebuildPan;
+    const INotationAutomationPtr automation = m_masterNotation ? m_masterNotation->automation() : nullptr;
+    const AutomationDataConstPtr automationData = automation ? automation->automationData() : nullptr;
+
+    if (rebuild && (!automationData || !instrumentTrackId.isValid())) {
+        m_automationEnvelopesCache.erase(instrumentTrackId);
         return control;
     }
 
-    const INotationAutomationPtr automation = m_masterNotation ? m_masterNotation->automation() : nullptr;
-    const AutomationDataConstPtr automationData = automation ? automation->automationData() : nullptr;
-    if (!automationData || !instrumentTrackId.isValid()) {
-        m_automatedControlParamsCache.erase(instrumentTrackId);
-        return outParams.control();
+    const auto it = rebuild ? m_automationEnvelopesCache.try_emplace(instrumentTrackId).first
+                    : m_automationEnvelopesCache.find(instrumentTrackId);
+    if (it == m_automationEnvelopesCache.end()) {
+        return control;
     }
 
-    auto buildAutomationEnvelope = [this](const AutomationCurve& curve) {
-        muse::audio::AutomationEnvelope envelope;
+    auto buildEnvelope = [this, &automationData, &instrumentTrackId](AutomationType type) -> std::optional<AutomationEnvelope> {
+        const AutomationCurve& curve = automationData->curve(AutomationCurveKey::instrument(type, instrumentTrackId));
+        if (curve.empty()) {
+            return std::nullopt;
+        }
+
+        AutomationEnvelope envelope;
         for (const auto& [tick, point] : curve) {
             envelope.insert({ playedTickToSecs(tick), point.value });
         }
         return envelope;
     };
 
+    AutomationEnvelopes& envelopes = it->second;
     if (rebuildVolume) {
-        const AutomationCurve& volumeCurve = automationData->curve(AutomationCurveKey::instrument(AutomationType::Volume,
-                                                                                                  instrumentTrackId));
-        control.volume = !volumeCurve.empty() ? AutomatableValue<volume_db_t>(buildAutomationEnvelope(volumeCurve))
-                         : AutomatableValue<volume_db_t>(outParams.volume);
+        envelopes.volume = buildEnvelope(AutomationType::Volume);
     }
-
     if (rebuildPan) {
-        const AutomationCurve& panCurve = automationData->curve(AutomationCurveKey::instrument(AutomationType::Pan, instrumentTrackId));
-        control.balance = !panCurve.empty() ? AutomatableValue<balance_t>(buildAutomationEnvelope(panCurve))
-                          : AutomatableValue<balance_t>(outParams.balance);
+        envelopes.pan = buildEnvelope(AutomationType::Pan);
     }
 
-    m_automatedControlParamsCache[instrumentTrackId] = control;
+    if (!envelopes.volume && !envelopes.pan) {
+        m_automationEnvelopesCache.erase(it);
+        return control;
+    }
+
+    if (envelopes.volume) {
+        control.volume = *envelopes.volume;
+    }
+    if (envelopes.pan) {
+        control.balance = *envelopes.pan;
+    }
 
     return control;
 }
@@ -1526,7 +1537,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
-    m_automatedControlParamsCache.erase(instrumentTrackId);
+    m_automationEnvelopesCache.erase(instrumentTrackId);
 }
 
 void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTrackId)

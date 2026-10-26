@@ -270,7 +270,12 @@ private:
     InstrumentTrackIdMap m_instrumentTrackIdMap;
     AuxTrackIdMap m_auxTrackIdMap;
 
-    std::unordered_map<engraving::InstrumentTrackId, muse::audio::ControlParams> m_automatedControlParamsCache;
+    struct AutomationEnvelopes {
+        std::optional<muse::audio::AutomationEnvelope> volume;
+        std::optional<muse::audio::AutomationEnvelope> pan;
+    };
+
+    std::unordered_map<engraving::InstrumentTrackId, AutomationEnvelopes> m_automationEnvelopesCache; // only tracks with automation
 
     muse::Progress m_loadingProgress;
     size_t m_loadingTrackCount = 0;
