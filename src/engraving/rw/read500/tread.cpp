@@ -3202,6 +3202,7 @@ void TRead::read(MeasureRepeat* r, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             r->setNumMeasures(e.readInt());
+        } else if (TRead::readProperty(r, tag, e, ctx, Pid::MEASURE_REPEAT_NUMBER_OFFSET)) {
         } else if (!readProperties(toRest(r), e, ctx)) {
             e.unknown();
         }

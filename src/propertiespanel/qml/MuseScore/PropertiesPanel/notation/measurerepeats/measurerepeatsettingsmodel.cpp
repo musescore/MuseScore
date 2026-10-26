@@ -21,6 +21,8 @@
  */
 #include "measurerepeatsettingsmodel.h"
 
+#include "notation/utilities/offsetutilities.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;
@@ -37,7 +39,12 @@ MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, const mu
 
 void MeasureRepeatSettingsModel::createProperties()
 {
-    m_numberPosition = buildPropertyItem(mu::engraving::Pid::MEASURE_REPEAT_NUMBER_POS);
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    m_numberPosition = buildPropertyItem(
+        mu::engraving::Pid::MEASURE_REPEAT_NUMBER_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, notation::OffsetUtils::flipSign(newValue.toDouble()));
+    });
 }
 
 void MeasureRepeatSettingsModel::requestElements()
@@ -47,7 +54,11 @@ void MeasureRepeatSettingsModel::requestElements()
 
 void MeasureRepeatSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_numberPosition);
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    loadPropertyItem(m_numberPosition, [](const QVariant& elementPropertyValue) -> QVariant {
+        return notation::OffsetUtils::flipSign(muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()));
+    });
 }
 
 PropertyItem* MeasureRepeatSettingsModel::numberPosition() const

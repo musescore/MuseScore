@@ -35,10 +35,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const ElementStyle measureRepeatStyle {
-    { Sid::measureRepeatNumberPos, Pid::MEASURE_REPEAT_NUMBER_POS },
-};
-
 //---------------------------------------------------------
 //   MeasureRepeat
 //---------------------------------------------------------
@@ -48,9 +44,6 @@ MeasureRepeat::MeasureRepeat(DummyParentOr<Segment> parent)
 {
     // however many measures the group, the element itself is always exactly the duration of its containing measure
     setDurationType(DurationType::V_MEASURE);
-    if (parent) {
-        initElementStyle(&measureRepeatStyle);
-    }
 }
 
 void MeasureRepeat::setNumMeasures(int n)
@@ -110,7 +103,8 @@ PointF MeasureRepeat::numberPosition(const RectF& numberBbox) const
     if (staffType() && staffType()->lines() == 1) {
         staffTop -= 2.0 * spatium();
     }
-    double y = std::min(staffTop, -symBbox(ldata()->symId).height() / 2) + absoluteFromSpatium(m_numberPos) - 0.5 * numberBbox.height();
+    double yNumberPos = absoluteFromSpatium(style().styleS(Sid::measureRepeatNumberPos) + m_numberOffset);
+    double y = std::min(staffTop, -symBbox(ldata()->symId).height() / 2) + yNumberPos - 0.5 * numberBbox.height();
 
     return PointF(x, y);
 }
@@ -129,8 +123,8 @@ RectF MeasureRepeat::numberRect() const
 PropertyValue MeasureRepeat::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::MEASURE_REPEAT_NUMBER_POS:
-        return style().styleV(Sid::measureRepeatNumberPos);
+    case Pid::MEASURE_REPEAT_NUMBER_OFFSET:
+        return 0.0_sp;
     default:
         return Rest::propertyDefault(propertyId);
     }
@@ -145,8 +139,8 @@ PropertyValue MeasureRepeat::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::SUBTYPE:
         return numMeasures();
-    case Pid::MEASURE_REPEAT_NUMBER_POS:
-        return numberPos();
+    case Pid::MEASURE_REPEAT_NUMBER_OFFSET:
+        return m_numberOffset;
     default:
         return Rest::getProperty(propertyId);
     }
@@ -162,8 +156,8 @@ bool MeasureRepeat::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SUBTYPE:
         setNumMeasures(v.toInt());
         break;
-    case Pid::MEASURE_REPEAT_NUMBER_POS:
-        setNumberPos(v.value<Spatium>());
+    case Pid::MEASURE_REPEAT_NUMBER_OFFSET:
+        setNumberOffset(v.value<Spatium>());
         triggerLayout();
         break;
     default:
@@ -200,17 +194,5 @@ String MeasureRepeat::accessibleInfo() const
 muse::TranslatableString MeasureRepeat::subtypeUserName() const
 {
     return muse::TranslatableString("engraving", "%Ln measure(s)", nullptr, numMeasures());
-}
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid MeasureRepeat::getPropertyStyle(Pid propertyId) const
-{
-    if (propertyId == Pid::MEASURE_REPEAT_NUMBER_POS) {
-        return Sid::measureRepeatNumberPos;
-    }
-    return Rest::getPropertyStyle(propertyId);
 }
 }

@@ -734,8 +734,10 @@ class EngravingItem : public apiv1::ScoreElement
     /// For time signatures:  The time signature type,
     /// one of PluginAPI::PluginAPI::TimeSigType values.
     API_PROPERTY_T(int, timesigType,      TIMESIG_TYPE)
+    /// For multimeasure rests: The vertical position of the number,
+    /// i.e. the style position plus mmRestNumberOffset.
     ///\since MuseScore 4.6
-    API_PROPERTY(mmRestNumberPos,         MMREST_NUMBER_POS)
+    Q_PROPERTY(QVariant mmRestNumberPos READ mmRestNumberPos WRITE setMmRestNumberPos RESET resetMmRestNumberPos)
     /// For multimeasure rests: The offset of the number.
     ///\since MuseScore 4.6
     API_PROPERTY(mmRestNumberOffset,      MMREST_NUMBER_OFFSET)
@@ -743,9 +745,13 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, mmRestNumberVisible, MMREST_NUMBER_VISIBLE)
 
-    /// For measure repeats: The position of the number.
+    /// For measure repeats: The vertical position of the number,
+    /// i.e. the style position plus measureRepeatNumberOffset.
     ///\since MuseScore 4.6
-    API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
+    Q_PROPERTY(QVariant measureRepeatNumberPos READ measureRepeatNumberPos WRITE setMeasureRepeatNumberPos RESET resetMeasureRepeatNumberPos)
+    /// For measure repeats: The offset of the number.
+    ///\since MuseScore 5.0
+    API_PROPERTY(measureRepeatNumberOffset, MEASURE_REPEAT_NUMBER_OFFSET)
 
     /// For lyrics and lyrics lines: The verse they are assigned to.
     API_PROPERTY_T(int, verse,            VERSE)
@@ -1286,6 +1292,13 @@ class EngravingItem : public apiv1::ScoreElement
     qreal offsetY() const { return element()->offset().y() / element()->spatium(); }
     void setOffsetX(qreal offX);
     void setOffsetY(qreal offY);
+
+    QVariant mmRestNumberPos() const;
+    void setMmRestNumberPos(const QVariant& pos);
+    void resetMmRestNumberPos();
+    QVariant measureRepeatNumberPos() const;
+    void setMeasureRepeatNumberPos(const QVariant& pos);
+    void resetMeasureRepeatNumberPos();
 
     qreal posX() const { return element()->pos().x() / element()->spatium(); }
     qreal posY() const { return element()->pos().y() / element()->spatium(); }
