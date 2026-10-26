@@ -56,6 +56,26 @@ enum class NoteEntryMethod : char {
     UNKNOWN, BY_NOTE_NAME, BY_DURATION, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
 };
 
+static const std::map<std::string, NoteEntryMethod> STR_NoteEntryMethod = {
+    { "by-note-name", NoteEntryMethod::BY_NOTE_NAME },
+    { "by-duration", NoteEntryMethod::BY_DURATION },
+    { "repitch", NoteEntryMethod::REPITCH },
+    { "rhythm", NoteEntryMethod::RHYTHM },
+    { "realtime-auto", NoteEntryMethod::REALTIME_AUTO },
+    { "realtime-manual", NoteEntryMethod::REALTIME_MANUAL },
+    { "timewise", NoteEntryMethod::TIMEWISE },
+};
+
+inline NoteEntryMethod str_conv(const std::string& name, NoteEntryMethod def)
+{
+    return muse::value(STR_NoteEntryMethod, name, def);
+}
+
+inline std::string str_conv(NoteEntryMethod name)
+{
+    return muse::key(STR_NoteEntryMethod, name);
+}
+
 //---------------------------------------------------------
 //   InputState
 //---------------------------------------------------------

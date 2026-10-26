@@ -133,6 +133,7 @@ private:
 
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
+    muse::RetVal<muse::rcommand::Params> getNoteInputState() const;
 
     muse::Ret addNote(const muse::rcommand::Params& params);
     void addNote(NoteName noteName, NoteAddingMode addingMode);
@@ -278,6 +279,9 @@ private:
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
     void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
+
+    void registerGetCommand(const muse::rcommand::Command&, std::function<muse::RetVal<muse::rcommand::Params>()>);
+    void registerGetCommand(const muse::rcommand::Command&, muse::RetVal<muse::rcommand::Params>(NotationActionController::*)() const);
 
     muse::Ret select(const muse::rcommand::Params& params);
     void select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);

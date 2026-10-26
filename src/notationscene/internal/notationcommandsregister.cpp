@@ -3258,6 +3258,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
+
+    //! NOTE "Read" commands for MCP and maybe API
+    CommandInfo {
+        GET_NOTEINPUT_STATE_COMMAND,
+        TranslatableString("action", "Get note input state"),
+        TranslatableString("action", "Get note input state"),
+        InputSchema(),
+        OutputSchema({
+            { "mode", Arg(DataType::String, u"Note input mode (disabled, by-note-name, by-duration,"
+                                            "repitch, rhythm, realtime-auto, realtime-manual, timewise)") },
+        }),
+        Decoration(),
+        Availability::MCP
+    },
 };
 
 std::string NotationCommandsRegister::moduleName() const
