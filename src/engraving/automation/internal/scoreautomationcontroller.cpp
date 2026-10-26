@@ -1165,6 +1165,7 @@ void ScoreAutomationController::addFermataStretchPoints(const Fermata* fermata, 
     const auto beforeIt = muse::findLessOrEqual(*ctx.tempoCurve, tick);
     const bool hasBefore = beforeIt != ctx.tempoCurve->cend();
     const real_t before = hasBefore ? beforeIt->second.value.outValue : DEFAULT_NORMALIZED_TEMPO;
+    const std::optional<EID> beforeItemId = hasBefore ? beforeIt->second.itemId : std::nullopt;
 
     const EID itemId = eidOrAssignNew(fermata);
 
@@ -1181,7 +1182,7 @@ void ScoreAutomationController::addFermataStretchPoints(const Fermata* fermata, 
     // Restore to whatever was active before the fermata, so the point belongs to that marking, not the fermata
     const auto etickIt = ctx.tempoCurve->lower_bound(etick);
     if (etickIt == ctx.tempoCurve->end() || etickIt->first != etick) {
-        setTempoPoint(etickIt, etick, tickOffset, before, ctx, hasBefore ? beforeIt->second.itemId : std::nullopt);
+        setTempoPoint(etickIt, etick, tickOffset, before, ctx, beforeItemId);
     }
 }
 
