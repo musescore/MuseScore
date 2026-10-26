@@ -89,6 +89,37 @@ TEST(Engraving_TempoTextAlignmentTests, saveReloadAndReset)
     }
 }
 
+//! A mid-measure time signature takes precedence only at the tempo marking's tick.
+TEST(Engraving_TempoTextAlignmentTests, midMeasureTimeSignature)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"note_data/grace.mscx"));
+    ASSERT_NE(score, nullptr);
+    Segment* segment = score->firstMeasure()->first(SegmentType::ChordRest);
+    Segment* timeSigs = segment->prev(SegmentType::TimeSig);
+    ASSERT_NE(timeSigs, nullptr);
+    TempoText* tempo = Factory::createTempoText(segment);
+    tempo->setOwnershipParent(segment);
+    tempo->setTrack(0);
+    tempo->setXmlText(u"Allegro");
+    segment->add(tempo);
+    score->startCmd(muse::TranslatableString::untranslatable("Add grace note"));
+    score->setGraceNote(toChord(segment->element(0)), 74, NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+    score->endCmd();
+    segment->setRtick(Fraction(1, 4));
+    score->doLayout();
+    EXPECT_EQ(tempo->alignmentTimeSignature(), nullptr);
+    EXPECT_TRUE(tempo->graceNoteAlignmentOffset().has_value());
+    timeSigs->setRtick(Fraction(1, 4));
+    score->doLayout();
+    EXPECT_NE(tempo->alignmentTimeSignature(), nullptr);
+    tempo->setProperty(Pid::TEMPO_ALIGN_TO_GRACE_NOTES, true);
+    score->doLayout();
+    const double alignedX = tempo->pos().x();
+    tempo->setProperty(Pid::TEMPO_ALIGN_TO_GRACE_NOTES, false);
+    score->doLayout();
+    EXPECT_DOUBLE_EQ(tempo->pos().x(), alignedX);
+}
+
 //! Grace notes on another visible staff affect alignment, but visible time signatures take precedence.
 TEST(Engraving_TempoTextAlignmentTests, visibleStavesAndTimeSignature)
 {

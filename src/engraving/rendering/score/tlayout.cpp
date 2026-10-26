@@ -5754,7 +5754,7 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
         return;
     }
 
-    // tempo text on first chordrest of measure should align over time sig if present, unless time sig is above staff
+    // Tempo text aligns with a visible time signature at the same tick, before considering grace notes.
     Segment* s = item->segment();
 
     RehearsalMark* rehearsalMark = toRehearsalMark(s->findAnnotation(ElementType::REHEARSAL_MARK, item->track(), item->track()));

@@ -188,7 +188,8 @@ PropertiesPanelSection {
                 isModified: root.model ? (root.model.horizontalAlignment.isModified
                                           || root.model.verticalAlignment.isModified 
                                           || root.model.horizontalPosition.isModified
-                                          || (root.model.alignToGraceNotes.isEnabled && root.model.alignToGraceNotes.isModified)) : false
+                                          || (root.model.alignToGraceNotes.isVisible && root.model.alignToGraceNotes.isEnabled
+                                              && root.model.alignToGraceNotes.isModified)) : false
 
                 onRequestResetToDefault: {
                     if (root.model) {
@@ -206,7 +207,7 @@ PropertiesPanelSection {
                         root.model.horizontalAlignment.applyToStyle()
                         root.model.verticalAlignment.applyToStyle()
                         root.model.horizontalPosition.applyToStyle()
-                        if (root.model.alignToGraceNotes.isEnabled) {
+                        if (root.model.alignToGraceNotes.isVisible && root.model.alignToGraceNotes.isEnabled) {
                             root.model.alignToGraceNotes.applyToStyle()
                         }
 
