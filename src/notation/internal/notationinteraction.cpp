@@ -3194,6 +3194,9 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
         if (dropAccepted) {
             setAnchorLines({ LineF(pos, mbRect.topLeft()) });
             setDropRects(dropHighlightRects(dropElem, mb, mbRect, edd.ed.modifiers));
+        } else {
+            score()->addRefresh(mb->canvasBoundingRect());
+            setDropTarget(nullptr);
         }
 
         return dropAccepted;

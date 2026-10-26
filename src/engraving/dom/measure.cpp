@@ -1692,7 +1692,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             break;
         }
         default:
-            break;
+            return MeasureBase::drop(tx, data);
         }
         break;
 
