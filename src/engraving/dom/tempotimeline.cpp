@@ -126,6 +126,25 @@ static TempoValues resampleTempoValues(const AutomationCurve& tempoCurve)
     return merged;
 }
 
+template<typename T, typename Proj>
+static size_t findPointIndex(const std::vector<TempoTimePoint>& points, T value, size_t& hint, Proj proj)
+{
+    const bool hintValid = value >= proj(points[hint])
+    && (hint + 1 == points.size() || value < proj(points[hint + 1]));
+    if (!hintValid) {
+        const auto it = std::upper_bound(points.begin(), points.end(), value,
+                                         [proj](T v, const TempoTimePoint& p) { return v < proj(p); });
+        hint = it == points.begin() ? 0 : size_t(std::prev(it) - points.begin());
+    }
+
+    return hint;
+}
+
+static double timeAt(const TempoTimePoint& from, int utick)
+{
+    return from.time + double(utick - from.utick) / (Constants::DIVISION * from.bps);
+}
+
 void TempoTimeline::rebuild(const AutomationCurve& tempoCurve, const PausesMap& pauses)
 {
     rebuild(resampleTempoValues(tempoCurve), pauses);
@@ -152,11 +171,7 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
         const int utick = valueIsNext ? vit->first : pit->first;
 
         if (valueIsNext) {
-            double time = 0.0;
-            if (!m_points.empty()) {
-                const TempoTimePoint& prev = m_points.back();
-                time = prev.time + double(utick - prev.utick) / (Constants::DIVISION * prev.bps);
-            }
+            const double time = m_points.empty() ? 0.0 : timeAt(m_points.back(), utick);
             // Clamp to the valid tempo range so a zero/negative bps can't make time math divide by zero
             const double bps = std::clamp(vit->second, Constants::MIN_TEMPO.val, Constants::MAX_TEMPO.val);
             m_points.push_back({ utick, time, bps, 0.0 });
@@ -170,10 +185,7 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
                 m_points.push_back({ utick, 0.0, Constants::DEFAULT_TEMPO.val, 0.0 });
             }
             const TempoTimePoint& prev = m_points.back();
-            const double time = prev.utick == utick
-                                ? prev.time
-                                : prev.time + double(utick - prev.utick) / (Constants::DIVISION * prev.bps);
-            m_points.push_back({ utick, time + pit->second, prev.bps, pit->second });
+            m_points.push_back({ utick, timeAt(prev, utick) + pit->second, prev.bps, pit->second });
             ++pit;
         }
     }
@@ -181,28 +193,12 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
 
 double TempoTimeline::utick2utime(int utick) const
 {
-    const size_t n = m_points.size();
-    if (n == 0) {
+    if (m_points.empty()) {
         return 0.;
     }
 
-    bool hintValid = false;
-    if (m_utick2utimeHint < n) {
-        const int hintUtick = m_points[m_utick2utimeHint].utick;
-        const bool isLastPoint = (m_utick2utimeHint + 1 == n);
-        hintValid = utick >= hintUtick
-                    && (isLastPoint || utick < m_points[m_utick2utimeHint + 1].utick);
-    }
-
-    if (!hintValid) {
-        const auto it = std::upper_bound(m_points.begin(), m_points.end(), utick,
-                                         [](int u, const TempoTimePoint& p) { return u < p.utick; });
-        m_utick2utimeHint = it == m_points.begin() ? 0 : size_t(std::prev(it) - m_points.begin());
-    }
-
-    const TempoTimePoint& from = m_points[m_utick2utimeHint];
-    const double nominalTime = from.time + double(utick - from.utick) / (Constants::DIVISION * from.bps);
-    return nominalTime / m_tempoMultiplier.val;
+    const size_t idx = findPointIndex(m_points, utick, m_utick2utimeHint, [](const TempoTimePoint& p) { return p.utick; });
+    return timeAt(m_points[idx], utick) / m_tempoMultiplier.val;
 }
 
 int TempoTimeline::utime2utick(double time) const
@@ -214,21 +210,7 @@ int TempoTimeline::utime2utick(double time) const
 
     const double nominalSecs = time * m_tempoMultiplier.val;
 
-    bool hintValid = false;
-    if (m_utime2utickHint < n) {
-        const double hintTime = m_points[m_utime2utickHint].time;
-        const bool isLastPoint = (m_utime2utickHint + 1 == n);
-        hintValid = nominalSecs >= hintTime
-                    && (isLastPoint || nominalSecs < m_points[m_utime2utickHint + 1].time);
-    }
-
-    if (!hintValid) {
-        const auto it = std::upper_bound(m_points.begin(), m_points.end(), nominalSecs,
-                                         [](double s, const TempoTimePoint& p) { return s < p.time; });
-        m_utime2utickHint = it == m_points.begin() ? 0 : size_t(std::prev(it) - m_points.begin());
-    }
-
-    const size_t idx = m_utime2utickHint;
+    const size_t idx = findPointIndex(m_points, nominalSecs, m_utime2utickHint, [](const TempoTimePoint& p) { return p.time; });
     const TempoTimePoint& from = m_points[idx];
 
     if (idx + 1 < n) {
@@ -244,26 +226,12 @@ int TempoTimeline::utime2utick(double time) const
 
 BeatsPerSecond TempoTimeline::tempo(int utick) const
 {
-    const size_t n = m_points.size();
-    if (n == 0) {
+    if (m_points.empty()) {
         return Constants::DEFAULT_TEMPO;
     }
 
-    bool hintValid = false;
-    if (m_tempoHint < n) {
-        const int hintUtick = m_points[m_tempoHint].utick;
-        const bool isLastPoint = (m_tempoHint + 1 == n);
-        hintValid = utick >= hintUtick
-                    && (isLastPoint || utick < m_points[m_tempoHint + 1].utick);
-    }
-
-    if (!hintValid) {
-        const auto it = std::upper_bound(m_points.begin(), m_points.end(), utick,
-                                         [](int u, const TempoTimePoint& p) { return u < p.utick; });
-        m_tempoHint = it == m_points.begin() ? 0 : size_t(std::prev(it) - m_points.begin());
-    }
-
-    return BeatsPerSecond(m_points[m_tempoHint].bps);
+    const size_t idx = findPointIndex(m_points, utick, m_tempoHint, [](const TempoTimePoint& p) { return p.utick; });
+    return BeatsPerSecond(m_points[idx].bps);
 }
 
 void TempoTimeline::setTempoMultiplier(const BeatsPerSecond& bps)
