@@ -38,6 +38,7 @@ struct TempoTimePoint {
     double time = 0.0;  // cumulative nominal elapsed time at utick, pauses already included
     double bps = 0.0;   // tempo held flat from utick until the next point (or indefinitely, for the last one)
     double pause = 0.0; // seconds held at utick before "time" was reached, if this point is a pause
+    double pauseSum = 0.0; // pauses up to and including this point
 };
 
 class TempoTimeline
