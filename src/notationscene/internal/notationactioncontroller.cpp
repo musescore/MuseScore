@@ -186,6 +186,8 @@ void NotationActionController::init()
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
+    registerGetCommand(GET_NOTEINPUT_STATE_COMMAND, &NotationActionController::getNoteInputState);
+
     registerCommand(SET_DURATION_LONGA_COMMAND, [this]() { setDuration(DurationType::V_LONG); });
     registerCommand(SET_DURATION_BREVE_COMMAND, [this]() { setDuration(DurationType::V_BREVE); });
     registerCommand(SET_DURATION_WHOLE_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
@@ -907,6 +909,22 @@ void NotationActionController::toggleNoteInputInsert()
     } else {
         toggleNoteInput(NoteInputMethod::BY_NOTE_NAME);
     }
+}
+
+muse::RetVal<muse::rcommand::Params> NotationActionController::getNoteInputState() const
+{
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return RetVal<rcommand::Params>::make_ret(Ret::Code::InternalError);
+    }
+
+    if (!noteInput->isNoteInputMode()) {
+        return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({ { "mode", Val("disabled") } }));
+    }
+
+    const NoteInputState& state = noteInput->state();
+
+    return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({ { "mode", Val(str_conv(state.noteEntryMethod())) } }));
 }
 
 muse::Ret NotationActionController::addNote(const muse::rcommand::Params& params)
@@ -2993,6 +3011,32 @@ void NotationActionController::registerNavigationByFractionCommand(const muse::r
         navigateToTextItemByFraction(
             fraction);
     }, &NotationActionController::textNavigationByFractionAvailable);
+}
+
+void NotationActionController::registerGetCommand(const muse::rcommand::Command& command,
+                                                  std::function<muse::RetVal<muse::rcommand::Params>()> handler)
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler](const rcommand::Request& request) {
+        if (!commandsState()->commandState(command).enabled) {
+            return rcommand::make_response(request, muse::make_ret(Ret::Code::NotSupported));
+        }
+
+        muse::RetVal<muse::rcommand::Params> rv = handler();
+        return rcommand::make_response(request, rv.ret, rv.val);
+    });
+}
+
+void NotationActionController::registerGetCommand(const muse::rcommand::Command& command,
+                                                  muse::RetVal<muse::rcommand::Params>(NotationActionController::* handler)() const)
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler](const rcommand::Request& request) {
+        if (!commandsState()->commandState(command).enabled) {
+            return rcommand::make_response(request, muse::make_ret(Ret::Code::NotSupported));
+        }
+
+        muse::RetVal<muse::rcommand::Params> rv = (this->*handler)();
+        return rcommand::make_response(request, rv.ret, rv.val);
+    });
 }
 
 void NotationActionController::registerViewCommand(const muse::rcommand::Command& command, void (INotationViewController::* handler)())
