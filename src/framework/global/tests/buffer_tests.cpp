@@ -191,3 +191,52 @@ TEST_F(Global_IO_BufferTests, Buffer_Read_Pos)
     //! CHECK
     EXPECT_EQ(ch, 'e');
 }
+
+TEST_F(Global_IO_BufferTests, Buffer_ReadAll_From_Start)
+{
+    //! GIVEN Buffer with data
+    std::string ref = "Hello";
+    ByteArray ba(reinterpret_cast<const uint8_t*>(ref.c_str()), ref.size());
+    Buffer buf(&ba);
+    buf.open(IODevice::ReadOnly);
+
+    //! DO Read all
+    ByteArray data = buf.readAll();
+
+    //! CHECK
+    EXPECT_EQ(data, ba);
+    //! CHECK
+    EXPECT_EQ(data.constData(), ba.constData());
+    //! CHECK
+    EXPECT_EQ(buf.pos(), 5);
+
+    //! DO Read all again
+    ByteArray again = buf.readAll();
+
+    //! CHECK
+    EXPECT_TRUE(again.empty());
+}
+
+TEST_F(Global_IO_BufferTests, Buffer_ReadAll_From_Pos)
+{
+    //! GIVEN Buffer with data
+    std::string ref = "Hello";
+    ByteArray ba(reinterpret_cast<const uint8_t*>(ref.c_str()), ref.size());
+    Buffer buf(&ba);
+    buf.open(IODevice::ReadOnly);
+
+    //! DO Read two bytes and then read all
+    buf.read(2);
+    ByteArray rest = buf.readAll();
+
+    //! CHECK
+    EXPECT_EQ(rest, ByteArray(reinterpret_cast<const uint8_t*>("llo"), 3));
+    //! CHECK
+    EXPECT_EQ(buf.pos(), 5);
+
+    //! DO Read all at the end
+    ByteArray end = buf.readAll();
+
+    //! CHECK
+    EXPECT_TRUE(end.empty());
+}
