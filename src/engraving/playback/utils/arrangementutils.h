@@ -38,7 +38,7 @@ inline muse::mpe::timestamp_t timestampFromTicks(const Score* score, const int t
 
 inline int timestampToTick(const Score* score, const muse::mpe::timestamp_t timestamp)
 {
-    return score->tempoTimeline().utime2utick(timestamp / 1000000.f);
+    return score->tempoTimeline().utime2utick(timestamp / 1000000.0);
 }
 
 // Returns the pause at `tick` in microseconds, or 0
@@ -81,7 +81,7 @@ inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationT
 inline muse::mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, const int durationTicks,
                                                        const int ticksPerBeat = Constants::DIVISION)
 {
-    float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
+    const double beatsNumber = static_cast<double>(durationTicks) / static_cast<double>(ticksPerBeat);
 
     return (beatsNumber / beatsPerSecond) * 1000000;
 }
