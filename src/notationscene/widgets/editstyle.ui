@@ -10702,6 +10702,26 @@
              </property>
             </widget>
            </item>
+           <item row="4" column="0" colspan="2">
+            <widget class="QCheckBox" name="tempoTextAlignToGraceNotes">
+             <property name="text">
+              <string>Align to grace notes</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetTempoTextAlignToGraceNotes">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Align to grace notes' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -14047,6 +14067,8 @@ followed by dashes</string>
   <tabstop>resetTempoTextPosAbove</tabstop>
   <tabstop>tempoTextPosBelow</tabstop>
   <tabstop>resetTempoTextPosBelow</tabstop>
+  <tabstop>tempoTextAlignToGraceNotes</tabstop>
+  <tabstop>resetTempoTextAlignToGraceNotes</tabstop>
   <tabstop>tempoTextMinDistance</tabstop>
   <tabstop>resetTempoTextMinDistance</tabstop>
   <tabstop>scrollArea_lyrics</tabstop>

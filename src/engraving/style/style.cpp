@@ -754,7 +754,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         if (idx == Sid::spatium) {         // special handling for spatium
             continue;
         }
-        if (optimize && isDefault(idx)) {
+        // Absence of tempoAlignToGraceNotes identifies older files, which must retain their original layout.
+        if (optimize && isDefault(idx) && idx != Sid::tempoAlignToGraceNotes) {
             continue;
         }
         P_TYPE type = st.valueType();

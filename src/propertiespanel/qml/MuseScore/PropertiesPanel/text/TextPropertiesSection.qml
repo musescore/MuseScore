@@ -183,17 +183,21 @@ PropertiesPanelSection {
                 navigationName: "AlignmentMenu"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: sizeSection.navigationRowEnd + 1
-                navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
+                navigationRowEnd: alignToGraceNotes.visible ? alignToGraceNotes.navigationRowEnd : verticalAlignmentButtonList.navigationRowEnd
 
                 isModified: root.model ? (root.model.horizontalAlignment.isModified
                                           || root.model.verticalAlignment.isModified 
-                                          || root.model.horizontalPosition.isModified) : false
+                                          || root.model.horizontalPosition.isModified
+                                          || (root.model.alignToGraceNotes.isEnabled && root.model.alignToGraceNotes.isModified)) : false
 
                 onRequestResetToDefault: {
                     if (root.model) {
                         root.model.horizontalAlignment.resetToDefault()
                         root.model.verticalAlignment.resetToDefault()
                         root.model.horizontalPosition.resetToDefault()
+                        if (root.model.alignToGraceNotes.isEnabled) {
+                            root.model.alignToGraceNotes.resetToDefault()
+                        }
                     }
                 }
 
@@ -202,6 +206,9 @@ PropertiesPanelSection {
                         root.model.horizontalAlignment.applyToStyle()
                         root.model.verticalAlignment.applyToStyle()
                         root.model.horizontalPosition.applyToStyle()
+                        if (root.model.alignToGraceNotes.isEnabled) {
+                            root.model.alignToGraceNotes.applyToStyle()
+                        }
 
                     }
                 }
@@ -404,13 +411,23 @@ PropertiesPanelSection {
             }
         }
 
+        CheckBoxPropertyView {
+            id: alignToGraceNotes
+            titleText: qsTrc("propertiespanel", "Align to grace notes")
+            propertyItem: root.model ? root.model.alignToGraceNotes : null
+            showButton: false
+            navigationName: "AlignToGraceNotes"
+            navigationPanel: root.navigationPanel
+            navigationRowStart: verticalAlignmentButtonList.navigationRowEnd + 1
+        }
+
         FlatButton {
             id: insertSpecCharactersButton
             width: parent.width
 
             navigation.panel: root.navigationPanel
             navigation.name: "Insert special characters"
-            navigation.row: verticalAlignmentButtonList.navigationRowEnd + 1
+            navigation.row: alignmentSection.navigationRowEnd + 1
 
             text: qsTrc("propertiespanel", "Insert special characters")
 

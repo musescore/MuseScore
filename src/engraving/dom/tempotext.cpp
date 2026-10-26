@@ -32,8 +32,12 @@
 #include "types/constants.h"
 
 #include "score.h"
+#include "chord.h"
 #include "segment.h"
+#include "staff.h"
+#include "system.h"
 #include "tempotext.h"
+#include "timesig.h"
 
 #include "log.h"
 
@@ -51,6 +55,7 @@ static const ElementStyle tempoStyle {
     { Sid::tempoSystemFlag,                    Pid::SYSTEM_FLAG },
     { Sid::tempoPlacement,                     Pid::PLACEMENT },
     { Sid::tempoMinDistance,                   Pid::MIN_DISTANCE },
+    { Sid::tempoAlignToGraceNotes,             Pid::TEMPO_ALIGN_TO_GRACE_NOTES },
 };
 
 //---------------------------------------------------------
@@ -68,6 +73,68 @@ TempoText::TempoText(Segment* parent)
     m_isRelative     = false;
 
     resetProperty(Pid::MUSIC_SYMBOL_SIZE);
+}
+
+std::optional<double> TempoText::graceNoteAlignmentOffset() const
+{
+    const Segment* s = segment();
+    if (!s || !s->isChordRestType()) {
+        return std::nullopt;
+    }
+    std::optional<double> offset;
+    const System* system = s->measure()->system();
+    for (track_idx_t track = 0; track < staff2track(score()->nstaves()); ++track) {
+        const staff_idx_t staffIdx = track2staff(track);
+        if (!score()->staff(staffIdx)->show() || (system && (!system->staff(staffIdx) || !system->staff(staffIdx)->show()))) {
+            continue;
+        }
+        const EngravingItem* element = s->element(track);
+        if (!element || !element->isChord()) {
+            continue;
+        }
+        for (const Chord* grace : toChord(element)->graceNotesBefore()) {
+            offset = std::min(offset.value_or(0.0), grace->pagePos().x() - s->pagePos().x());
+        }
+    }
+    return offset;
+}
+
+const TimeSig* TempoText::alignmentTimeSignature() const
+{
+    const Segment* s = segment();
+    const staff_idx_t tempoStaffIdx = effectiveStaffIdx();
+    if (!s || !s->rtick().isZero() || tempoStaffIdx == muse::nidx) {
+        return nullptr;
+    }
+    const Segment* p = s->prev(SegmentType::TimeSig);
+    if (!p || p->allElementsInvisible()) {
+        return nullptr;
+    }
+    const System* system = s->measure()->system();
+    const TimeSig* timeSig = nullptr;
+    const TimeSig* firstVisibleTimeSig = nullptr;
+    for (const EngravingItem* element : p->elist()) {
+        if (!element || !element->isTimeSig() || !element->visible()) {
+            continue;
+        }
+        const TimeSig* candidate = toTimeSig(element);
+        const staff_idx_t staffIdx = candidate->effectiveStaffIdx();
+        if (!candidate->showOnThisStaff() || staffIdx == muse::nidx || candidate->ldata()->bbox().isEmpty()
+            || !score()->staff(staffIdx)->show() || (system && (!system->staff(staffIdx) || !system->staff(staffIdx)->show()))) {
+            continue;
+        }
+        if (!firstVisibleTimeSig || staffIdx < firstVisibleTimeSig->effectiveStaffIdx()) {
+            firstVisibleTimeSig = candidate;
+        }
+        if (candidate->isAboveStaves() || candidate->isAcrossStaves()) {
+            if (staffIdx <= tempoStaffIdx && (!timeSig || staffIdx > timeSig->effectiveStaffIdx())) {
+                timeSig = candidate;
+            }
+        } else if (staffIdx == tempoStaffIdx) {
+            timeSig = candidate;
+        }
+    }
+    return timeSig ? timeSig : firstVisibleTimeSig;
 }
 
 void TempoText::setTempoTextType(TempoTextType ttt)
@@ -336,6 +403,8 @@ PropertyValue TempoText::getProperty(Pid propertyId) const
         return m_followText;
     case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
         return m_alignRightOfRehearsalMark;
+    case Pid::TEMPO_ALIGN_TO_GRACE_NOTES:
+        return m_alignToGraceNotes;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -359,6 +428,9 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
         m_alignRightOfRehearsalMark = v.toBool();
+        break;
+    case Pid::TEMPO_ALIGN_TO_GRACE_NOTES:
+        m_alignToGraceNotes = v.toBool();
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {

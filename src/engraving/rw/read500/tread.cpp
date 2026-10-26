@@ -683,7 +683,8 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (readProperty(t, tag, e, ctx, Pid::PLAY)) {
+        if (readProperty(t, tag, e, ctx, Pid::TEMPO_ALIGN_TO_GRACE_NOTES)) {
+        } else if (readProperty(t, tag, e, ctx, Pid::PLAY)) {
         } else if (tag == "tempo") {
             t->setTempo(TConv::fromXml(e.readAsciiText(), Constants::DEFAULT_TEMPO));
         } else if (tag == "followText") {

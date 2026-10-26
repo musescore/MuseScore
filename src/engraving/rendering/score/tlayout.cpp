@@ -5757,67 +5757,17 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     // tempo text on first chordrest of measure should align over time sig if present, unless time sig is above staff
     Segment* s = item->segment();
 
-    // Align with preceding grace notes on all visible staves, unless the time signature overrides it below.
-    double graceNoteX = 0.0;
-    const System* system = s->measure()->system();
-    for (track_idx_t track = 0; track < staff2track(item->score()->nstaves()); ++track) {
-        if (!item->score()->staff(track2staff(track))->show()
-            || (system && !system->staff(track2staff(track))->show())) {
-            continue;
-        }
-        const EngravingItem* element = s->element(track);
-        if (!element || !element->isChord()) {
-            continue;
-        }
-        for (const Chord* grace : toChord(element)->graceNotesBefore()) {
-            graceNoteX = std::min(graceNoteX, grace->pagePos().x() - s->pagePos().x());
-        }
-    }
-
     RehearsalMark* rehearsalMark = toRehearsalMark(s->findAnnotation(ElementType::REHEARSAL_MARK, item->track(), item->track()));
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
 
-    const staff_idx_t tempoStaffIdx = item->effectiveStaffIdx();
-    if (s->rtick().isZero() && tempoStaffIdx != muse::nidx) {
+    if (const TimeSig* timeSig = item->alignmentTimeSignature()) {
         Segment* p = item->segment()->prev(SegmentType::TimeSig);
-        if (p && !p->allElementsInvisible()) {
-            const TimeSig* timeSig = nullptr;
-            const TimeSig* firstVisibleTimeSig = nullptr;
-            for (const EngravingItem* element : p->elist()) {
-                if (!element || !element->isTimeSig() || !element->visible()) {
-                    continue;
-                }
-                const TimeSig* candidate = toTimeSig(element);
-                const staff_idx_t staffIdx = candidate->effectiveStaffIdx();
-                if (!candidate->showOnThisStaff() || staffIdx == muse::nidx || candidate->ldata()->bbox().isEmpty()
-                    || !item->score()->staff(staffIdx)->show() || (system && !system->staff(staffIdx)->show())) {
-                    continue;
-                }
-                if (!firstVisibleTimeSig || staffIdx < firstVisibleTimeSig->effectiveStaffIdx()) {
-                    firstVisibleTimeSig = candidate;
-                }
-                if (candidate->isAboveStaves() || candidate->isAcrossStaves()) {
-                    if (staffIdx <= tempoStaffIdx
-                        && (!timeSig || staffIdx > timeSig->effectiveStaffIdx())) {
-                        timeSig = candidate;
-                    }
-                } else if (staffIdx == tempoStaffIdx) {
-                    timeSig = candidate;
-                }
-            }
-            if (!timeSig) {
-                timeSig = firstVisibleTimeSig;
-            }
-            if (timeSig) {
-                graceNoteX = 0.0;
-                ldata->moveX(-(s->x() - p->x()));
-                ldata->moveX(timeSig->isAboveStaves() ? timeSig->x() + timeSig->width() + timeSig->spatium() : timeSig->x());
-            }
-        }
+        ldata->moveX(-(s->x() - p->x()));
+        ldata->moveX(timeSig->isAboveStaves() ? timeSig->x() + timeSig->width() + timeSig->spatium() : timeSig->x());
+    } else if (item->alignToGraceNotes()) {
+        ldata->moveX(item->graceNoteAlignmentOffset().value_or(0.0));
     }
-
-    ldata->moveX(graceNoteX);
 
     if (rehearsalMark) {
         const bool sameSide = item->placeAbove() == rehearsalMark->placeAbove();

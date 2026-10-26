@@ -21,6 +21,8 @@
  */
 #include "textsettingsmodel.h"
 
+#include <algorithm>
+
 #include <QFont>
 
 #include "types/commontypes.h"
@@ -29,6 +31,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/textbase.h"
+#include "engraving/dom/tempotext.h"
 #include "engraving/types/typesconv.h"
 
 #include "notation/inotationelements.h" // IWYU pragma: keep
@@ -109,6 +112,7 @@ void TextSettingsModel::createProperties()
     });
     m_textPlacement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
     m_textScriptAlignment = buildPropertyItem(mu::engraving::Pid::TEXT_SCRIPT_ALIGN);
+    m_alignToGraceNotes = buildPropertyItem(Pid::TEMPO_ALIGN_TO_GRACE_NOTES);
 }
 
 void TextSettingsModel::requestElements()
@@ -251,6 +255,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         });
     }
 
+    updateGraceNoteAlignmentAvailability();
     updateTextPropertiesAvailability();
     updateFramePropertiesAvailability();
     updateStaffPropertiesAvailability();
@@ -311,6 +316,21 @@ PropertyItem* TextSettingsModel::fontFamily() const
 PropertyItem* TextSettingsModel::fontStyle() const
 {
     return m_fontStyle;
+}
+
+void TextSettingsModel::updateGraceNoteAlignmentAvailability()
+{
+    const bool allTempo = !m_elementList.empty() && std::all_of(m_elementList.begin(), m_elementList.end(), [](const EngravingItem* item) {
+        return item->isTempoText();
+    });
+    m_alignToGraceNotes->setIsEnabled(allTempo);
+    if (allTempo) {
+        loadPropertyItem(m_alignToGraceNotes);
+    }
+    m_alignToGraceNotes->setIsVisible(allTempo && std::any_of(m_elementList.begin(), m_elementList.end(), [](const EngravingItem* item) {
+        const TempoText* tempo = toTempoText(item);
+        return !tempo->alignmentTimeSignature() && tempo->graceNoteAlignmentOffset().has_value();
+    }));
 }
 
 PropertyItem* TextSettingsModel::fontSize() const

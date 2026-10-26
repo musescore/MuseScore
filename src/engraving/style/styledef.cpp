@@ -1229,6 +1229,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(tempoFrameFgColor,                          PropertyValue::fromValue(Color::BLACK)),
     styleDef(tempoFrameBgColor,                          PropertyValue::fromValue(Color::transparent)),
     styleDef(tempoPosition,                              AlignH::LEFT),
+    styleDef(tempoAlignToGraceNotes,                     true),
 
     styleDef(tempoChangeFontFace,                        "Edwin"),
     styleDef(tempoChangeFontSize,                        12.0),

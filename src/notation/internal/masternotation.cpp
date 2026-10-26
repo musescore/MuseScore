@@ -313,6 +313,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
         for (mu::engraving::Score* s : score->scoreList()) {
             s->clearSystemLocks();
+            s->style().set(Sid::tempoAlignToGraceNotes, DefaultStyle::defaultStyle().value(Sid::tempoAlignToGraceNotes));
         }
         clearMeasures(score);
 

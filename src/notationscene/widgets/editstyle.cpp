@@ -652,6 +652,7 @@ void EditStyle::classBegin()
         { StyleId::tempoPosAbove,           false, tempoTextPosAbove,           resetTempoTextPosAbove },
         { StyleId::tempoPosBelow,           false, tempoTextPosBelow,           resetTempoTextPosBelow },
         { StyleId::tempoMinDistance,        false, tempoTextMinDistance,        resetTempoTextMinDistance },
+        { StyleId::tempoAlignToGraceNotes,  false, tempoTextAlignToGraceNotes,   resetTempoTextAlignToGraceNotes },
 
         { StyleId::rehearsalMarkPlacement,   false, rehearsalMarkPlacement,     resetRehearsalMarkPlacement },
         { StyleId::rehearsalMarkPosAbove,    false, rehearsalMarkPosAbove,      resetRehearsalMarkPosAbove },

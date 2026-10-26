@@ -42,6 +42,7 @@ class TextSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * textLineSpacing READ textLineSpacing CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * horizontalAlignment READ horizontalAlignment CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * verticalAlignment READ verticalAlignment CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * alignToGraceNotes READ alignToGraceNotes CONSTANT)
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * horizontalPosition READ horizontalPosition CONSTANT)
 
@@ -99,6 +100,7 @@ public:
     PropertyItem* textLineSpacing() const;
     PropertyItem* horizontalAlignment() const;
     PropertyItem* verticalAlignment() const;
+    PropertyItem* alignToGraceNotes() const { return m_alignToGraceNotes; }
 
     PropertyItem* horizontalPosition() const;
 
@@ -183,6 +185,7 @@ private:
     void updateRightPositionText();
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+    void updateGraceNoteAlignmentAvailability();
 
     PropertyItem* m_fontFamily = nullptr;
     PropertyItem* m_fontStyle = nullptr;
@@ -190,6 +193,7 @@ private:
     PropertyItem* m_textLineSpacing = nullptr;
     PropertyItem* m_horizontalAlignment = nullptr;
     PropertyItem* m_verticalAlignment = nullptr;
+    PropertyItem* m_alignToGraceNotes = nullptr;
 
     PropertyItem* m_horizontalPosition = nullptr;
 
