@@ -9697,7 +9697,9 @@ void MusicXmlParserNotations::otherNotation()
     } else {
         id = SymNames::symIdByName(text, SymId::noSym);
     }
-    if (id == SymId::noSym) return;
+    if (id == SymId::noSym) {
+        return;
+    }
     Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
                                                          attributes, u"notations", id);
     notation.setVisible(m_visible);
