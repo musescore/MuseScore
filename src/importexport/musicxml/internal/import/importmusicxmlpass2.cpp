@@ -6282,6 +6282,9 @@ void MusicXmlParserPass2::clef(const String& partId, Measure* measure, const Fra
         clef = ClefType::C4_8VB;
     } else if (c == u"C" && i == 0 && line == 3) {
         clef = ClefType::C3;
+    } else if (c == u"C" && i != 0 && line == 3) {
+        clef = ClefType::C3;
+        LOGD("clef: unsupported clef clef-octave-change %d", i);
     } else if (c == u"C" && i == 0 && line == 2) {
         clef = ClefType::C2;
     } else if (c == u"C" && i == 0 && line == 1) {
