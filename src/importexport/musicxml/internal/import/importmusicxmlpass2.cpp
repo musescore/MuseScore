@@ -1439,13 +1439,13 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
 static void addOtherNotationToChord(const Notation& notation, ChordRest* cr)
 {
-    const String name = notation.name();
     const Color color = Color::fromString(notation.attribute(u"color"));
     Symbol* symbol = Factory::createSymbol(cr);
-    symbol->setSym(SymNames::symIdByName(name));
+    symbol->setSym(notation.symId());
     if (color.isValid()) {
         symbol->setColor(color);
     }
+    symbol->setVisible(notation.visible());
     cr->add(symbol);
 }
 
@@ -9679,19 +9679,26 @@ void MusicXmlParserNotations::otherNotation()
 {
     const String type = m_e.attribute("type");
     const String smufl = m_e.attribute("smufl");
+    const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
+    const String text = m_e.readText();
 
     if (type != u"single") {
         m_logger->logError(String(u"other-notation of type %1 cannot be imported").arg(type), &m_e);
+        return;
     }
 
+    SymId id = SymId::noSym;
+
     if (!smufl.empty()) {
-        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
-        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                             m_e.attributes(), u"notations", id);
-        notation.setVisible(m_visible);
-        m_notations.push_back(notation);
-        m_e.skipCurrentElement();
+        id = SymNames::symIdByName(smufl, SymId::noSym);
+    } else {
+        id = SymNames::symIdByName(text, SymId::noSym);
     }
+    if (id == SymId::noSym) return;
+    Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                         attributes, u"notations", id);
+    notation.setVisible(m_visible);
+    m_notations.push_back(notation);
 }
 
 //---------------------------------------------------------
