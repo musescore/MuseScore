@@ -26,9 +26,11 @@
 
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
+#include "notation/types/viewmode.h"
 
 #include "engraving/dom/score.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/system.h"
 
 #include "notationscene/notationcommands.h"
 
@@ -48,7 +50,7 @@ void SystemPageLayoutSettingsModel::loadProperties()
 {
     updateAllSystemsAreLocked();
     updateAllPagesAreLocked();
-    updateScoreIsInPageView();
+    updateLayoutAvailability();
     updateIsMakeIntoSystemAvailable();
     updateIsMakeIntoPageAvailable();
     updateSystemCount();
@@ -105,6 +107,11 @@ void SystemPageLayoutSettingsModel::makeIntoPage()
     }
 
     currentNotation()->interaction()->makeIntoPage();
+}
+
+void SystemPageLayoutSettingsModel::switchToPageView()
+{
+    commandDispatcher()->dispatch(VIEW_MODE_PAGE_COMMAND);
 }
 
 bool SystemPageLayoutSettingsModel::isEmpty() const
@@ -192,15 +199,7 @@ void SystemPageLayoutSettingsModel::updateAllSystemsAreLocked()
         return;
     }
 
-    std::vector<System*> systems = selection()->selectedSystems();
-
-    bool allLocked = true;
-    for (System* system : systems) {
-        if (!system->isLocked()) {
-            allLocked = false;
-            break;
-        }
-    }
+    const bool allLocked = System::allLocked(selection()->selectedSystems());
 
     if (m_allSystemsAreLocked != allLocked) {
         m_allSystemsAreLocked = allLocked;
@@ -214,15 +213,7 @@ void SystemPageLayoutSettingsModel::updateAllPagesAreLocked()
         return;
     }
 
-    std::vector<Page*> pages = selection()->pagesContainingSelection();
-
-    bool allLocked = true;
-    for (Page* page : pages) {
-        if (!page->isLocked()) {
-            allLocked = false;
-            break;
-        }
-    }
+    const bool allLocked = Page::allLocked(selection()->pagesContainingSelection());
 
     if (m_allPagesAreLocked != allLocked) {
         m_allPagesAreLocked = allLocked;
@@ -230,9 +221,14 @@ void SystemPageLayoutSettingsModel::updateAllPagesAreLocked()
     }
 }
 
-bool SystemPageLayoutSettingsModel::scoreIsInPageView() const
+bool SystemPageLayoutSettingsModel::isSystemLayoutAvailable() const
 {
-    return m_scoreIsInPageView;
+    return m_isSystemLayoutAvailable;
+}
+
+bool SystemPageLayoutSettingsModel::isPageLayoutAvailable() const
+{
+    return m_isPageLayoutAvailable;
 }
 
 bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
@@ -255,17 +251,24 @@ int SystemPageLayoutSettingsModel::pageCount() const
     return static_cast<int>(m_pageCount);
 }
 
-void SystemPageLayoutSettingsModel::updateScoreIsInPageView()
+void SystemPageLayoutSettingsModel::updateLayoutAvailability()
 {
     if (!currentNotation()) {
         return;
     }
 
-    bool isInPageView = currentNotation()->viewMode() != LayoutMode::LINE;
+    const ViewMode viewMode = currentNotation()->viewMode();
 
-    if (m_scoreIsInPageView != isInPageView) {
-        m_scoreIsInPageView = isInPageView;
-        emit scoreIsInPageViewChanged(m_scoreIsInPageView);
+    const bool systemLayoutAvailable = mu::notation::isSystemLayoutAvailable(viewMode);
+    if (m_isSystemLayoutAvailable != systemLayoutAvailable) {
+        m_isSystemLayoutAvailable = systemLayoutAvailable;
+        emit isSystemLayoutAvailableChanged(m_isSystemLayoutAvailable);
+    }
+
+    const bool pageLayoutAvailable = mu::notation::isPageLayoutAvailable(viewMode);
+    if (m_isPageLayoutAvailable != pageLayoutAvailable) {
+        m_isPageLayoutAvailable = pageLayoutAvailable;
+        emit isPageLayoutAvailableChanged(m_isPageLayoutAvailable);
     }
 }
 

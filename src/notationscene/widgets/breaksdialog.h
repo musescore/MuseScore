@@ -29,6 +29,7 @@
 
 #include "project/iprojectsession.h"
 #include "modularity/ioc.h"
+#include "rcommand/icommandsregister.h"
 
 namespace mu::notation {
 //---------------------------------------------------------
@@ -40,6 +41,7 @@ class BreaksDialog : public muse::ui::WidgetDialog, private Ui::BreaksDialog
     Q_OBJECT
 
     muse::ContextInject<project::IProjectSession> context = { this };
+    muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
 
 public:
     BreaksDialog(QWidget* parent = nullptr);

@@ -238,6 +238,21 @@ static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
     TOGGLE_SECTION_BREAK_COMMAND
 };
 
+static const std::vector<Command> SYSTEM_LAYOUT_COMMANDS = {
+    APPLY_SYSTEM_LOCK_COMMAND,
+    TOGGLE_SYSTEM_LOCK_COMMAND,
+    TOGGLE_SCORE_LOCK_COMMAND,
+    MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
+    MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND
+};
+
+static const std::vector<Command> PAGE_LAYOUT_COMMANDS = {
+    APPLY_PAGE_LOCK_COMMAND,
+    TOGGLE_PAGE_LOCK_COMMAND,
+    MOVE_SYSTEM_TO_PREV_PAGE_COMMAND,
+    MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND
+};
+
 static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {
     { SHOW_INVISIBLE_COMMAND, ScoreConfigType::ShowInvisibleElements },
     { SHOW_UNPRINTABLE_COMMAND, ScoreConfigType::ShowUnprintableElements },
@@ -377,6 +392,11 @@ void NotationCommandsState::init()
         updateCommandStates(DEBUG_COMMANDS);
     });
 
+    controller()->viewModeChanged().onNotify(this, [this]() {
+        updateCommandStates(SYSTEM_LAYOUT_COMMANDS);
+        updateCommandStates(PAGE_LAYOUT_COMMANDS);
+    });
+
     updateCommandStates();
 }
 
@@ -395,6 +415,7 @@ void NotationCommandsState::deinit()
     controller()->notationStyleChanged().disconnect(this);
     controller()->automationModeEnabledChanged().disconnect(this);
     controller()->debuggingOptionsChanged().disconnect(this);
+    controller()->viewModeChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -502,6 +523,14 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {
         return CommandState(controller()->isToggleLayoutBreakAvailable(), false);
+    }
+
+    if (muse::contains(SYSTEM_LAYOUT_COMMANDS, command)) {
+        return CommandState(isSystemLayoutAvailable(controller()->viewMode()), false);
+    }
+
+    if (muse::contains(PAGE_LAYOUT_COMMANDS, command)) {
+        return CommandState(isPageLayoutAvailable(controller()->viewMode()), false);
     }
 
     if (muse::contains(SCORE_CONFIG_COMMANDS, command)) {
