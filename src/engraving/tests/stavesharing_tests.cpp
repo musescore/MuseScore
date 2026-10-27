@@ -52,7 +52,7 @@ void collectSharedAndOriginParts(MasterScore* score, SharedPart** sharedPart, st
     for (Part* part : score->parts()) {
         if (part->isSharedPart()) {
             *sharedPart = toSharedPart(part);
-        } else {
+        } else if (part->sharedPart()) {
             originParts.push_back(part);
         }
     }
@@ -86,6 +86,33 @@ bool checkSharedPartNotExist(SharedPart* sharedPart, const std::vector<Part*>& o
     }
 
     return true;
+}
+
+void checkSharedKeysMatchOrigins(const SharedPart* sharedPart, const Fraction& tick)
+{
+    // Each shared staff in use should show the same written key as the origin part mapped to its first voice
+    size_t checkedStaves = 0;
+    for (const Staff* sharedStaff : sharedPart->staves()) {
+        const Part* originPart = sharedPart->originPartForStaff(sharedStaff->idx(), tick);
+        if (!originPart) {
+            continue;
+        }
+
+        ++checkedStaves;
+        EXPECT_EQ(sharedStaff->key(tick), originPart->staff(0)->key(tick))
+            << "shared staff " << sharedStaff->idx() << " at tick " << tick.ticks();
+    }
+
+    EXPECT_GT(checkedStaves, 0);
+}
+
+void toggleConcertPitch(MasterScore* score)
+{
+    for (bool concertPitch : { true, false }) {
+        score->startCmd(muse::TranslatableString::untranslatable("Toggle concert pitch"));
+        score->cmdConcertPitchChanged(concertPitch);
+        score->endCmd();
+    }
 }
 
 TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
@@ -420,6 +447,83 @@ TEST_F(Engraving_StaveSharingTests, testLocalClefKeyTimeSigsCopiedToSharedStaves
     ASSERT_TRUE(keySigSeg);
     EXPECT_TRUE(keySigSeg->element(secondSharedTrack) && keySigSeg->element(secondSharedTrack)->isKeySig());
     EXPECT_FALSE(keySigSeg->element(firstSharedTrack));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testPreferFlatsOnSharedStaves)
+{
+    // [GIVEN] Flute and two clarinets preferring flats, with a key change to E major (concert) for all staves in m.2
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_09.mscx");
+    ASSERT_TRUE(score);
+
+    const Fraction keyChangeTick = score->crMeasure(1)->tick();
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    // [THEN] The shared staves show G♭ major, like the origin staves
+    for (const Part* originPart : sharedPart->originParts()) {
+        EXPECT_EQ(originPart->staff(0)->key(keyChangeTick), Key::G_B);
+    }
+    for (const Staff* sharedStaff : sharedPart->staves()) {
+        if (sharedPart->originPartForStaff(sharedStaff->idx(), keyChangeTick)) {
+            EXPECT_EQ(sharedStaff->key(keyChangeTick), Key::G_B);
+        }
+    }
+    checkSharedKeysMatchOrigins(sharedPart, keyChangeTick);
+
+    // [WHEN] Concert pitch is toggled on and off
+    toggleConcertPitch(score);
+    score->doLayout();
+
+    // [THEN] The shared staves still match the origin staves
+    checkSharedKeysMatchOrigins(sharedPart, keyChangeTick);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testInstrumentChangeForAllOriginParts)
+{
+    // [GIVEN] Flute and two clarinets, both changing to alto saxophone in m.2, with a key change to G major (concert) for all staves in m.4
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_10.mscx");
+    ASSERT_TRUE(score);
+
+    const Fraction instrumentChangeTick = score->crMeasure(1)->tick();
+    const Fraction keyChangeTick = score->crMeasure(3)->tick();
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    // [THEN] The shared staves show E major from m.4, like the origin staves
+    for (const Part* originPart : sharedPart->originParts()) {
+        EXPECT_EQ(originPart->staff(0)->key(keyChangeTick), Key::E);
+    }
+    for (const Staff* sharedStaff : sharedPart->staves()) {
+        if (sharedPart->originPartForStaff(sharedStaff->idx(), keyChangeTick)) {
+            EXPECT_EQ(sharedStaff->key(keyChangeTick), Key::E);
+        }
+    }
+    checkSharedKeysMatchOrigins(sharedPart, instrumentChangeTick);
+    checkSharedKeysMatchOrigins(sharedPart, keyChangeTick);
 
     delete score;
 }
