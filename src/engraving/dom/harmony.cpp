@@ -374,6 +374,19 @@ Harmony::~Harmony()
     }
 }
 
+void Harmony::setScore(Score* s)
+{
+    EngravingObject::setScore(s);
+    // HarmonyInfo is not a DOM child, so it keeps the score it was copied from.
+    // Chord layout then reads that score's chord list, which is gone once the
+    // source of a bar-loop copy is destroyed.
+    for (HarmonyInfo* info : m_chords) {
+        if (info) {
+            info->setScore(s);
+        }
+    }
+}
+
 int Harmony::id() const
 {
     if (m_chords.empty()) {

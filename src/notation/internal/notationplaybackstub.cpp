@@ -40,6 +40,10 @@ void NotationPlaybackStub::reload()
 {
 }
 
+void NotationPlaybackStub::setPlaybackScore(engraving::Score*)
+{
+}
+
 void NotationPlaybackStub::setSendEventsOnScoreChange(const InstrumentTrackId&, bool)
 {
 }

@@ -34,7 +34,7 @@ StyledDialogView {
     title: qsTrc("project/export", "Export")
 
     contentWidth: 756
-    contentHeight: 420
+    contentHeight: 520
     margins: 24
 
     ExportDialogModel {
@@ -148,11 +148,32 @@ StyledDialogView {
                     navigationPanel.order: 4
 
                     FlatButton {
+                        id: exportButton
+
                         text: qsTrc("project/export", "Export…")
                         buttonRole: ButtonBoxModel.AcceptRole
                         buttonId: ButtonBoxModel.Done
                         enabled: exportModel.selectionLength > 0 && exportOptionsView.isExportAvailable
                         accentButton: true
+
+                        // The default label sits in a wrapping column whose width follows the
+                        // text implicit width. That column collapses, so a longer translation
+                        // such as "Exportar…" is elided to "Expor...".
+                        implicitWidth: Math.max(minWidth, exportLabelMetrics.advanceWidth + 2 * margins)
+
+                        contentItem: Component {
+                            StyledTextLabel {
+                                text: exportButton.text
+                                font: exportButton.textFont
+                                wrapMode: Text.NoWrap
+                            }
+                        }
+
+                        TextMetrics {
+                            id: exportLabelMetrics
+                            font: exportButton.textFont
+                            text: exportButton.text
+                        }
 
                         onClicked: {
                             if (exportModel.exportScores()) {

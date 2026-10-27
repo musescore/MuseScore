@@ -22,6 +22,8 @@
 
 #include "exportprojectscenario.h"
 
+#include <utility>
+
 #include "global/io/fileinfo.h"
 #include "global/io/filestream.h"
 
@@ -29,6 +31,7 @@
 #include "defer.h"
 #include "log.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/score.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
@@ -38,6 +41,9 @@
 #include "notation/inotationpainting.h" // IWYU pragma: keep
 
 #include "inotationproject.h"
+#include "barloopexport.h"
+
+#include "notation/inotationplayback.h"
 
 using namespace muse;
 using namespace muse::io;
@@ -153,6 +159,50 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         }
     }
 
+    const SelectedBarsExport barLoop = std::exchange(m_barLoop, {});
+    std::unique_ptr<BarLoopPrepared> prepared;
+    // Prepared notations are copies, so the main-score check has to be taken
+    // before they replace the list used to build file names.
+    std::vector<bool> sourceIsMain;
+    if (barLoop.active) {
+        sourceIsMain.reserve(notations.size());
+        for (const INotationPtr& notation : notations) {
+            sourceIsMain.push_back(isMainNotation(notation));
+        }
+
+        prepared = prepareBarLoopExport(masterNotation(), notations, barLoop);
+        if (!prepared) {
+            interactive()->errorSync(
+                muse::trc("project/export", "Export selected bars"),
+                muse::trc("project/export", "The selected bars could not be exported. Select a range of bars and try again."));
+            return false;
+        }
+
+        notations = prepared->notations;
+        if (INotationPlaybackPtr playback = masterNotation()->playback()) {
+            playback->setPlaybackScore(prepared->playbackScore);
+        }
+    }
+
+    auto exportedIsMain = [&](size_t index, const INotationPtr& notation) {
+        if (index < sourceIsMain.size()) {
+            return static_cast<bool>(sourceIsMain[index]);
+        }
+        return isMainNotation(notation);
+    };
+
+    DEFER {
+        if (!prepared) {
+            return;
+        }
+
+        if (const IMasterNotationPtr master = masterNotation()) {
+            if (const INotationPlaybackPtr playback = master->playback()) {
+                playback->setPlaybackScore(nullptr);
+            }
+        }
+    };
+
     // Backup view modes
     std::vector<ViewMode> viewModes = this->viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
@@ -197,9 +247,10 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
 
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
-        for (const INotationPtr& notation : notations) {
+        for (size_t notationIndex = 0; notationIndex < notations.size(); ++notationIndex) {
+            const INotationPtr& notation = notations[notationIndex];
             size_t pageCount = notation->elements()->msScore()->pages().size();
-            bool isMain = isMainNotation(notation);
+            bool isMain = exportedIsMain(notationIndex, notation);
 
             for (size_t page = 0; page < pageCount; ++page) {
                 options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
@@ -223,11 +274,12 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         }
     } break;
     case INotationWriter::UnitType::PER_PART: {
-        for (const INotationPtr& notation : notations) {
+        for (size_t notationIndex = 0; notationIndex < notations.size(); ++notationIndex) {
+            const INotationPtr& notation = notations[notationIndex];
+            const bool isMain = exportedIsMain(notationIndex, notation);
             muse::io::path_t definitivePath = isCreatingOnlyOneFile
                                               ? destinationPath
-                                              : completeExportPath(destinationPath, notation, isMainNotation(
-                                                                       notation), isExportingOnlyOneScore);
+                                              : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore);
 
             auto exportFunction = [writer, notation, options](IODevice& destinationDevice) {
                     return writer->write(notation, destinationDevice, options);
@@ -268,6 +320,11 @@ const ExportInfo& ExportProjectScenario::exportInfo() const
 void ExportProjectScenario::setExportInfo(const ExportInfo& exportInfo)
 {
     m_exportInfo = exportInfo;
+}
+
+void ExportProjectScenario::setSelectedBarsExport(const SelectedBarsExport& selectedBars)
+{
+    m_barLoop = selectedBars;
 }
 
 bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations,

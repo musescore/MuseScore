@@ -105,8 +105,13 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyl
 
 MasterScore::~MasterScore()
 {
-    if (m_project.lock()) {
-        m_project.lock()->m_masterScore = nullptr;
+    // A temporary clone shares the open project's weak pointer. Only the score the
+    // project actually owns may clear that pointer; otherwise closing the clone
+    // drops the score the user still has open.
+    if (EngravingProjectPtr project = m_project.lock()) {
+        if (project->m_masterScore == this) {
+            project->m_masterScore = nullptr;
+        }
     }
 
     delete m_expandedRepeatList;
