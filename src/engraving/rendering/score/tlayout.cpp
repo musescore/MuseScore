@@ -5761,22 +5761,19 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
         return;
     }
 
-    // tempo text on first chordrest of measure should align over time sig if present, unless time sig is above staff
+    // Tempo text aligns with a visible time signature at the same tick, before considering grace notes.
     Segment* s = item->segment();
 
     RehearsalMark* rehearsalMark = toRehearsalMark(s->findAnnotation(ElementType::REHEARSAL_MARK, item->track(), item->track()));
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
 
-    if (s->rtick().isZero()) {
+    if (const TimeSig* timeSig = item->alignmentTimeSignature()) {
         Segment* p = item->segment()->prev(SegmentType::TimeSig);
-        if (p && !p->allElementsInvisible()) {
-            ldata->moveX(-(s->x() - p->x()));
-            EngravingItem* e = p->element(item->staffIdx() * VOICES);
-            if (e) {
-                ldata->moveX(p->hasTimeSigAboveStaves() ? e->x() + e->width() + e->spatium() : e->x());
-            }
-        }
+        ldata->moveX(-(s->x() - p->x()));
+        ldata->moveX(timeSig->isAboveStaves() ? timeSig->x() + timeSig->width() + timeSig->spatium() : timeSig->x());
+    } else if (item->alignToGraceNotes()) {
+        ldata->moveX(item->graceNoteAlignmentOffset().value_or(0.0));
     }
 
     if (rehearsalMark) {

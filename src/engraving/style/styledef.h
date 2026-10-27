@@ -1242,6 +1242,7 @@ enum class Sid : short {
     tempoFrameFgColor,
     tempoFrameBgColor,
     tempoPosition,
+    tempoAlignToGraceNotes,
 
     tempoChangeFontFace,
     tempoChangeFontSize,

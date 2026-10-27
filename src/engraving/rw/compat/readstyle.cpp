@@ -100,6 +100,7 @@ void ReadStyleHook::setupDefaultStyle()
 
     m_score->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
     m_score->style().setDefaultStyleVersion(defaultsVersion);
+    m_score->style().set(Sid::tempoAlignToGraceNotes, false);
 }
 
 void ReadStyleHook::setupDefaultStyle(Score* score)
@@ -111,6 +112,7 @@ void ReadStyleHook::setupDefaultStyle(Score* score)
     int defaultsVersion = score->masterScore()->style().defaultStyleVersion();
     score->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
     score->style().setDefaultStyleVersion(defaultsVersion);
+    score->style().set(Sid::tempoAlignToGraceNotes, false);
 }
 
 void ReadStyleHook::readStyleTag(XmlReader& e)

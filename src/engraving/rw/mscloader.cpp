@@ -84,6 +84,9 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
 
     ScoreLoad sl;
 
+    // Files without this new setting retain their previous tempo-text layout.
+    masterScore->style().set(Sid::tempoAlignToGraceNotes, false);
+
     if (mscReader.isContainer()) {
         // Read style
         {

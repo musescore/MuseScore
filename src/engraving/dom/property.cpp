@@ -167,6 +167,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TEMPO,                               P_TYPE::TEMPO,                     PropertyGroup::APPEARANCE, true,  "tempo",                           QT_TRANSLATE_NOOP("engraving/propertyName", "tempo") },
     { Pid::TEMPO_FOLLOW_TEXT,                   P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "followText",                      QT_TRANSLATE_NOOP("engraving/propertyName", "following text") },
     { Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK, P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "tempoAlignRightOfRehearsalMark",  QT_TRANSLATE_NOOP("engraving/propertyName", "tempo align right of rehearsal mark") },
+    { Pid::TEMPO_ALIGN_TO_GRACE_NOTES,          P_TYPE::BOOL,                      PropertyGroup::POSITION,   false, "tempoAlignToGraceNotes",          QT_TRANSLATE_NOOP("engraving/propertyName", "align to grace notes") },
 
     { Pid::ACCIDENTAL_BRACKET,                  P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "bracket",                         QT_TRANSLATE_NOOP("engraving/propertyName", "bracket") },
     { Pid::ACCIDENTAL_TYPE,                     P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "subtype",                         QT_TRANSLATE_NOOP("engraving/propertyName", "accidental type") },

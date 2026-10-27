@@ -23,10 +23,13 @@
 #ifndef MU_ENGRAVING_TEMPOTEXT_H
 #define MU_ENGRAVING_TEMPOTEXT_H
 
+#include <optional>
+
 #include "durationtype.h"
 #include "textbase.h"
 
 namespace mu::engraving {
+class TimeSig;
 enum class TempoTextType : signed char
 {
     NORMAL,
@@ -95,6 +98,12 @@ public:
 
     bool positionRelativeToNoteheadRest() const override { return true; }
 
+    bool alignToGraceNotes() const { return m_alignToGraceNotes; }
+    //! Returns the grace-note offset across all visible staves, or no value if there are no preceding grace notes.
+    std::optional<double> graceNoteAlignmentOffset() const;
+    //! Resolves the visible time signature that takes precedence over grace-note alignment.
+    const TimeSig* alignmentTimeSignature() const;
+
     String tempoInfo() const;
 
     static constexpr double DEFAULT_SYM_SIZE_RATIO = 5.0 / 3.0;
@@ -111,6 +120,7 @@ protected:
     double m_relative = 0.0;
     bool m_isRelative = false;
     bool m_alignRightOfRehearsalMark = true;
+    bool m_alignToGraceNotes = true;
 };
 } // namespace mu::engraving
 #endif
