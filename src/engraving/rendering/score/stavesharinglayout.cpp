@@ -658,38 +658,6 @@ bool StaveSharingLayout::checkClefKeyTimeSigForSameVoice(Segment* segment, track
     return true;
 }
 
-bool StaveSharingLayout::segHasLocalKeySig(const Segment* segment, const SharedPart* sharedPart)
-{
-    // Key signatures applying to all staves are added to the shared staves at the same time as the origin staves,
-    // so only key signatures which differ between origin staves need copying to the shared staves
-    const KeySig* firstKeySig = nullptr;
-    for (const Part* originPart : sharedPart->originParts()) {
-        for (const Staff* staff : originPart->staves()) {
-            if (staff->isDrumStaff(segment->tick())) {
-                continue;
-            }
-
-            const EngravingItem* item = segment->element(staff->idx() * VOICES);
-            if (!item || !item->isKeySig()) {
-                return true;
-            }
-
-            const KeySig* keySig = toKeySig(item);
-            if (keySig->forInstrumentChange()) {
-                return true;
-            }
-
-            if (!firstKeySig) {
-                firstKeySig = keySig;
-            } else if (!(*firstKeySig == *keySig)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
 bool StaveSharingLayout::checkSegmentAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack)
 {
     std::multimap<ElementType, EngravingItem*> annotationsOnPrevTrack;
@@ -983,7 +951,7 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
         if (seg->isType(SegmentType::Breath | SegmentType::Clef | SegmentType::TimeSig | SegmentType::KeySig)) {
             for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
                 EngravingItem* item = seg->element(track);
-                if (!item || (item->isTimeSig() && !toTimeSig(item)->isLocal())) {
+                if (!item) {
                     continue;
                 }
                 EngravingItem::disconnectAllOriginItems(item);
@@ -1151,15 +1119,12 @@ EngravingItem* StaveSharingLayout::makeSharedItem(EngravingItem* originItem, Eng
 
 void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
 {
-    // This function copies local time signatures, key signatures and clefs to shared staves
-    // These items only apply to a single staff. Time signatures and key signatures applying to all staves
-    // were added at the same time as the origin items
+    // This function copies time signatures, key signatures and clefs on each origin staff to the shared staff it is mapped to
+    // Time signatures and key signatures applying to all staves already exist on the shared staves,
+    // so these are reused when they match the origin's
 
     for (Segment* seg : ctx.segmentsToUpdate) {
         if (seg->header() || (!seg->isClefType() && !seg->isKeySigType() && !seg->isTimeSigType())) {
-            continue;
-        }
-        if (seg->isKeySigType() && !segHasLocalKeySig(seg, ctx.curSharedPart)) {
             continue;
         }
         const SharedTrackMap& trackMap = ctx.curStaveSharingState(seg->tick()).sharedTrackMap();
@@ -1173,8 +1138,13 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
                 continue;
             }
 
+            EngravingItem* originItem = seg->element(originTrack);
+            if (originItem && originItem->generated()) {
+                continue;
+            }
+
             if (seg->isClefType()) {
-                Clef* originClef = toClef(seg->element(originTrack));
+                Clef* originClef = toClef(originItem);
                 if (originClef) {
                     makeSharedItem(originClef, seg->element(sharedTrack), sharedTrack, seg,
                                    [](const EngravingItem* origin, const EngravingItem* shared) {
@@ -1184,8 +1154,8 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
             }
 
             if (seg->isTimeSigType()) {
-                TimeSig* originTimeSig = toTimeSig(seg->element(originTrack));
-                if (originTimeSig && originTimeSig->isLocal()) {
+                TimeSig* originTimeSig = toTimeSig(originItem);
+                if (originTimeSig) {
                     makeSharedItem(originTimeSig, seg->element(sharedTrack), sharedTrack, seg,
                                    [](const EngravingItem* origin, const EngravingItem* shared) {
                         IF_ASSERT_FAILED(origin->isTimeSig() && shared->isTimeSig()) {
@@ -1197,7 +1167,7 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
             }
 
             if (seg->isKeySigType()) {
-                KeySig* originKeySig = toKeySig(seg->element(originTrack));
+                KeySig* originKeySig = toKeySig(originItem);
                 if (originKeySig) {
                     makeSharedItem(originKeySig, seg->element(sharedTrack), sharedTrack, seg,
                                    [](const EngravingItem* origin, const EngravingItem* shared) {
@@ -1886,6 +1856,10 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
 
     for (Segment* seg : ctx.segmentsToUpdate) {
         std::vector<EngravingItem*> annotations = seg->annotations(); // Copy because we may remove elements
+        std::unordered_set<staff_idx_t> mappedSharedStaves;
+        for (const auto& [originTrack, sharedTrack] : ctx.curStaveSharingState(seg->tick()).sharedTrackMap()) {
+            mappedSharedStaves.insert(track2staff(sharedTrack));
+        }
         for (EngravingItem* item : annotations) {
             if (!item->systemFlag() && !item->isStaveSharingLabel() && !item->isStaveSharingChange() && item->track() >= range.startTrack
                 && item->track() < range.endTrack
@@ -1898,11 +1872,15 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
             continue;
         }
 
-        if (seg->isType(SegmentType::Breath | SegmentType::Clef | SegmentType::TimeSig)
-            || (seg->isKeySigType() && segHasLocalKeySig(seg, p))) {
+        if (seg->isType(SegmentType::Breath | SegmentType::Clef | SegmentType::TimeSig | SegmentType::KeySig)) {
             for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
                 EngravingItem* item = seg->element(track);
-                if (!item || !item->originItems().empty() || (item->isTimeSig() && !toTimeSig(item)->isLocal())) {
+                if (!item || item->generated() || !item->originItems().empty()) {
+                    continue;
+                }
+                // Keep key and time signatures applying to all staves
+                // These will have no linked origin item but will not be generated (as they were created by the user at the same time as those on origin staves were)
+                if ((item->isKeySig() || item->isTimeSig()) && !muse::contains(mappedSharedStaves, track2staff(track))) {
                     continue;
                 }
                 ctx.score->undoRemoveElement(item);
