@@ -105,6 +105,7 @@ private:
                                                                                                  const EngravingItem*)>& isEqual);
 
     static void makeSharedNotation(StaveSharingContext& ctx);
+    static void updateStaffClefKeyMaps(StaveSharingContext& ctx);
     static void makeSharedClefKeyTimeSigs(StaveSharingContext& ctx);
     static void makeSharedChordRests(StaveSharingContext& ctx);
     static void makeSharedBreaths(StaveSharingContext& ctx);

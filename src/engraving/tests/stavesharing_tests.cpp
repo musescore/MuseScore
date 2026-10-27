@@ -24,6 +24,7 @@
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/keysig.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
@@ -1246,6 +1247,54 @@ TEST_F(Engraving_StaveSharingTests, testHeaderClefsOnSharedStaves)
         ASSERT_TRUE(item && item->isClef());
         EXPECT_EQ(toClef(item)->clefType(), ClefType::F);
     }
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testHeaderAndCourtesyKeySigsOnSharedStaves)
+{
+    // [GIVEN] A score with 2 staves, the second changing instrument (and key) at the start of the final system
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_12.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    const staff_idx_t secondSharedStaff = sharedPart->staff(1)->idx();
+    const track_idx_t secondSharedTrack = staff2track(secondSharedStaff);
+
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m2 && m3);
+
+    // [THEN] The second shared staff should be visible on the final system
+    System* lastSystem = score->lastMeasure()->system();
+    ASSERT_TRUE(lastSystem);
+    ASSERT_EQ(lastSystem->firstMeasure(), m3);
+    EXPECT_TRUE(lastSystem->staff(secondSharedStaff)->show());
+
+    // [THEN] It should have a header key signature of A major at the start of bar 3
+    Segment* headerKeySigSeg = m3->findSegment(SegmentType::KeySig, m3->tick());
+    ASSERT_TRUE(headerKeySigSeg);
+    EngravingItem* headerKeySig = headerKeySigSeg->element(secondSharedTrack);
+    ASSERT_TRUE(headerKeySig && headerKeySig->isKeySig());
+    EXPECT_EQ(toKeySig(headerKeySig)->key(), Key::A);
+
+    // [THEN] There should be a courtesy key signature in the trailer of bar 2
+    Segment* courtesyKeySigSeg = m2->findSegment(SegmentType::KeySigAnnounce, m2->endTick());
+    ASSERT_TRUE(courtesyKeySigSeg);
+    EngravingItem* courtesyKeySig = courtesyKeySigSeg->element(secondSharedTrack);
+    ASSERT_TRUE(courtesyKeySig && courtesyKeySig->isKeySig());
+    EXPECT_EQ(toKeySig(courtesyKeySig)->key(), Key::A);
 
     delete score;
 }
