@@ -31,6 +31,7 @@ class NotationSelectionMock : public INotationSelection
 {
 public:
     MOCK_METHOD(bool, isNone, (), (const, override));
+    MOCK_METHOD(bool, isSingle, (), (const, override));
     MOCK_METHOD(bool, isRange, (), (const, override));
     MOCK_METHOD(SelectionState, state, (), (const, override));
 

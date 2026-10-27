@@ -50,6 +50,9 @@ private:
     bool isNotationFocused() const;
     bool isNotationFocusedAndNoteInputMode() const;
     bool isNotationFocusedAndTabStaff() const;
+    bool isNotationFocusedAndHasSelection() const;
+    bool isNotationFocusedAndSingleSelection() const;
+    bool isNotationFocusedAndRangeSelection() const;
     bool isNotationFocusedAndTextEditing() const;
 
     mutable std::map<std::string, std::function<int()> > m_scopePriorityMap;

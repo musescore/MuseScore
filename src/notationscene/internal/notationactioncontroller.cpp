@@ -2675,6 +2675,16 @@ bool NotationActionController::hasSelection() const
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
 }
 
+bool NotationActionController::isSingleSelection() const
+{
+    return currentNotationSelection() ? currentNotationSelection()->isSingle() : false;
+}
+
+bool NotationActionController::isRangeSelection() const
+{
+    return currentNotationSelection() ? currentNotationSelection()->isRange() : false;
+}
+
 mu::engraving::EngravingItem* NotationActionController::selectedElement() const
 {
     auto selection = currentNotationSelection();
