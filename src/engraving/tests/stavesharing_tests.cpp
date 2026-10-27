@@ -1344,3 +1344,44 @@ TEST_F(Engraving_StaveSharingTests, testUserSetFirstClefOnSharedStaves)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testNoCourtesyKeySigWhenMappingChanges)
+{
+    // [GIVEN] A score with 3 staves, the third in a different key, where the origin mapped to the
+    // second shared staff changes from the third staff to the second staff at the start of the second system
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_14.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled and the score is laid out again
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(sharedPart->nstaves(), 3);
+    ASSERT_EQ(originParts.size(), 3);
+
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m2 && m3);
+    ASSERT_TRUE(m2->system() && m3->system());
+    ASSERT_NE(m2->system(), m3->system());
+
+    const staff_idx_t secondSharedStaff = sharedPart->staff(1)->idx();
+    ASSERT_EQ(sharedPart->originStaffForStaff(secondSharedStaff, m2->tick()), originParts.at(2)->staff(0));
+    ASSERT_EQ(sharedPart->originStaffForStaff(secondSharedStaff, m3->tick()), originParts.at(1)->staff(0));
+
+    // [THEN] There should be no courtesy key signature at the end of the first system
+    EXPECT_FALSE(m2->hasCourtesyKeySig());
+    Segment* courtesyKeySigSeg = m2->findSegment(SegmentType::KeySigAnnounce, m2->endTick());
+    if (courtesyKeySigSeg) {
+        EXPECT_FALSE(courtesyKeySigSeg->enabled() && courtesyKeySigSeg->element(staff2track(secondSharedStaff)));
+    }
+
+    delete score;
+}
