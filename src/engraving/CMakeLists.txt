@@ -186,6 +186,8 @@ target_sources(engraving PRIVATE
     editing/edittimesig.h
     editing/edittremolo.cpp
     editing/edittremolo.h
+    editing/edittuplet.cpp
+    editing/edittuplet.h
     editing/editvisibility.cpp
     editing/editvisibility.h
     editing/editvoice.cpp

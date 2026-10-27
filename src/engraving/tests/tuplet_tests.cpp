@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -31,6 +32,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/edittuplet.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -720,6 +722,144 @@ TEST_F(Engraving_TupletTests, addTupletKeepsSelection)
     EXPECT_EQ(rhythm(m1), "3:2[16 r16 r16] 8 8 8 8 8 8 8");
     EXPECT_EQ(score->selection().element(), note);
     EXPECT_EQ(score->inputState().duration(), TDuration(DurationType::V_QUARTER));
+    delete score;
+}
+
+// Divides the selected chords/rests, as the tuplet commands do
+static std::vector<Tuplet*> addTuplets(Score* score, const Fraction& ratio)
+{
+    std::vector<Tuplet*> tuplets;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving tuplet tests"), [&](Transaction& tx) {
+        tuplets = EditTuplet::addTuplets(tx, score, ratio, TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET,
+                                         /*autoBaseLen*/ true);
+    });
+    return tuplets;
+}
+
+// Adds a second staff to the first staff's part, linked to it or with measure rests
+static void addSecondStaff(Score* score, bool linked)
+{
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    Staff* staff = score->staff(0);
+    Staff* newStaff = Factory::createStaff(staff->part());
+    newStaff->setPart(staff->part());
+    score->undoInsertStaff(newStaff, 1, /*createRests*/ !linked);
+    if (linked) {
+        Excerpt::cloneStaff(staff, newStaff);
+    }
+    score->endCmd();
+}
+
+TEST_F(Engraving_TupletTests, addTuplets)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    // 3 eighths, selected from last to first: the tuplets come back in score order
+    score->select(toChord(chordRestAt(m1, 5))->upNote(), SelectType::SINGLE);
+    score->select(toChord(chordRestAt(m1, 2))->upNote(), SelectType::ADD);
+    score->select(toChord(chordRestAt(m1, 0))->upNote(), SelectType::ADD);
+    const std::vector<Tuplet*> tuplets = addTuplets(score, Fraction(3, 2));
+    ASSERT_EQ(tuplets.size(), 3);
+    EXPECT_EQ(tuplets[0]->tick(), Fraction(0, 1));
+    EXPECT_EQ(tuplets[1]->tick(), Fraction(1, 4));
+    EXPECT_EQ(tuplets[2]->tick(), Fraction(5, 8));
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[16 r16 r16] 8 3:2[16 r16 r16] 8 8 3:2[16 r16 r16] 8 8");
+
+    // the start of the first tuplet is selected, and its note value becomes the input duration
+    EXPECT_TRUE(score->selection().isSingle());
+    EXPECT_EQ(score->selection().element(), toChord(tuplets[0]->elements().front())->upNote());
+    EXPECT_EQ(score->inputState().duration(), TDuration(DurationType::V_16TH));
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m1), "8 8 8 8 8 8 8 8");
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsKeepsRange)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    score->select(chordRestAt(m1, 0), SelectType::RANGE);
+    score->select(chordRestAt(m1, 1), SelectType::RANGE);
+    ASSERT_EQ(score->getSelectedChordRests().size(), 2);
+    EXPECT_EQ(addTuplets(score, Fraction(3, 2)).size(), 2);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[16 r16 r16] 3:2[16 r16 r16] 8 8 8 8 8 8");
+
+    const Selection& selection = score->selection();
+    EXPECT_TRUE(selection.isRange());
+    EXPECT_EQ(selection.tickStart(), Fraction(0, 1));
+    EXPECT_EQ(selection.tickEnd(), Fraction(1, 4));
+    EXPECT_EQ(selection.staffStart(), 0);
+    EXPECT_EQ(selection.staffEnd(), 1);
+    EXPECT_EQ(score->getSelectedChordRests().size(), 6);
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsRangeAcrossStaves)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    addSecondStaff(score, /*linked*/ false);
+    Measure* m1 = measureAt(score, 0);
+
+    // the first 2 eighths of m1 and the measure rest below them
+    score->selection().setRange(chordRestAt(m1, 0)->segment(), chordRestAt(m1, 2)->segment(), 0, 2);
+    score->selection().updateSelectedElements();
+    ASSERT_EQ(score->getSelectedChordRests().size(), 3);
+    const std::vector<Tuplet*> tuplets = addTuplets(score, Fraction(3, 2));
+    EXPECT_TRUE(score->sanityCheck());
+
+    // score order: by tick, then by track
+    ASSERT_EQ(tuplets.size(), 3);
+    EXPECT_EQ(tuplets[0]->tick(), Fraction(0, 1));
+    EXPECT_EQ(tuplets[0]->staffIdx(), 0);
+    EXPECT_EQ(tuplets[1]->tick(), Fraction(0, 1));
+    EXPECT_EQ(tuplets[1]->staffIdx(), 1);
+    EXPECT_EQ(tuplets[2]->tick(), Fraction(1, 8));
+    EXPECT_EQ(tuplets[2]->staffIdx(), 0);
+
+    const Selection& selection = score->selection();
+    EXPECT_TRUE(selection.isRange());
+    EXPECT_EQ(selection.tickStart(), Fraction(0, 1));
+    EXPECT_EQ(selection.tickEnd(), Fraction(1, 4));
+    EXPECT_EQ(selection.staffStart(), 0);
+    EXPECT_EQ(selection.staffEnd(), 2);
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsLinkedStaff)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    addSecondStaff(score, /*linked*/ true);
+    Measure* m1 = measureAt(score, 0);
+
+    // the first eighth of m1 on both staves: one tuplet, which the linked staff gets too
+    Segment* first = m1->first(SegmentType::ChordRest);
+    score->select(first->cr(0), SelectType::RANGE);
+    score->select(first->cr(VOICES), SelectType::RANGE);
+    ASSERT_EQ(score->getSelectedChordRests().size(), 2);
+    EXPECT_EQ(addTuplets(score, Fraction(3, 2)).size(), 1);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[16 r16 r16] 8 8 8 8 8 8 8");
+
+    const Tuplet* linkedTuplet = first->cr(VOICES)->tuplet();
+    ASSERT_TRUE(linkedTuplet);
+    EXPECT_EQ(linkedTuplet->ratio(), Fraction(3, 2));
+    EXPECT_FALSE(linkedTuplet->tuplet());
+    EXPECT_EQ(linkedTuplet->elements().size(), 3);
+    EXPECT_TRUE(score->selection().isRange());
+    EXPECT_EQ(score->selection().staffEnd(), 2);
+
     delete score;
 }
 
