@@ -258,6 +258,7 @@ private:
     Staff(const Staff& staff);
 
     double staffMag(const StaffType*) const;
+    const Staff* timeSigReferenceStaff(const Fraction& tick) const;
 
     friend class Excerpt;
     void setVoiceVisible(voice_idx_t voice, bool visible);
