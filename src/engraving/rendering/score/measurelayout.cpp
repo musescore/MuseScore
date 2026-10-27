@@ -803,6 +803,16 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
 //    return the width change for measure
 //---------------------------------------------------------
 
+// The key list of a shared staff changes whenever a different origin is mapped to it,
+// so key changes must be looked up on the origin staff mapped at tick
+// A change of key caused by a change in origin staff allocation should NOT receive a courtesy
+static const Staff* keySigReferenceStaff(const Staff* staff, const Fraction& tick)
+{
+    const Part* part = staff->part();
+    const Staff* originStaff = part->isSharedPart() ? toSharedPart(part)->originStaffForStaff(staff->idx(), tick) : nullptr;
+    return originStaff ? originStaff : staff;
+}
+
 void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx)
 {
     const size_t nstaves = ctx.dom().nstaves();
@@ -830,7 +840,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
 
         Fraction tick = m->endTick();
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            const Staff* staff     = ctx.dom().staff(staffIdx);
+            const Staff* staff     = keySigReferenceStaff(ctx.dom().staff(staffIdx), tick);
             const KeySigEvent key1 = staff->keySigEvent(tick - Fraction::eps());
             const KeySigEvent key2 = staff->keySigEvent(tick);
             if (key1 == key2) {
@@ -841,7 +851,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
             Segment* keySigSeg = nextMeasure->findSegment(SegmentType::KeySig, tick);
             if (keySigSeg) {
                 hasKeySig = true;
-                KeySig* keySig = toKeySig(keySigSeg->element(staffIdx * VOICES));
+                KeySig* keySig = toKeySig(keySigSeg->element(staff2track(staff->idx())));
                 if (keySig && !keySig->showCourtesy()) {
                     continue;
                 }
@@ -1168,18 +1178,21 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
     Segment* courtesySigSeg = m->findSegmentR(courtesySegType, courtesySigRTick);
     for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
         // Find reference signature
+        // If this is a shared staff, use the origin staff.
+        // A change of key caused by a change in origin staff allocation should NOT receive a courtesy
         const Staff* staff = ctx.dom().staff(track2staff(track));
-        const Fraction refSigElementTick = staff->currentKeyTick(refSigTick);
+        const Staff* refStaff = keySigReferenceStaff(staff, refSigTick);
+        const Fraction refSigElementTick = refStaff->currentKeyTick(refSigTick);
         const Measure* refMeasure = ctx.dom().tick2measureMM(refSigElementTick);
         const Segment* actualKeySigSeg
             = refMeasure ? refMeasure->findSegmentR(SegmentType::KeySig, refSigElementTick - refMeasure->tick()) : nullptr;
-        const EngravingItem* el = actualKeySigSeg ? actualKeySigSeg->element(track) : nullptr;
+        const EngravingItem* el = actualKeySigSeg ? actualKeySigSeg->element(staff2track(refStaff->idx())) : nullptr;
         const KeySig* actualKeySig = el ? toKeySig(el) : nullptr;
 
-        const KeySigEvent refKey = staff->keySigEvent(refSigTick);
+        const KeySigEvent refKey = refStaff->keySigEvent(refSigTick);
         // Get info from correct tick for repeats
         // For trailers and pre-repeat courtesies, signatures should be different
-        const bool sigsDifferent = staff->key(m->endTick() - Fraction::eps()) != refKey.key();
+        const bool sigsDifferent = refStaff->key(m->endTick() - Fraction::eps()) != refKey.key();
         const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->element(
             track) : sigsDifferent;
         // Only show key sig changes on pitched staves
