@@ -34,6 +34,8 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/chord.h"
 
+#include "engraving/editing/transaction/undoablecommand.h"
+
 #include "engraving/playback/playbackmodel.h"
 
 #include "utils/scorerw.h"
@@ -1394,4 +1396,76 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
             EXPECT_EQ(result.setupData, expectedSetupData.at(instrumentId));
         }
     }
+}
+
+/**
+ * @brief PlaybackModelTests_Score_Changes_Track_Range
+ * @details A score-level change with a narrow range (e.g. inserting measures) must re-render all tracks,
+ *          while an automation edit on one staff must only re-render the tracks of that staff
+ *          See: https://github.com/musescore/MuseScore/issues/35246
+ */
+TEST_F(Engraving_PlaybackModelTests, Score_Changes_Track_Range)
+{
+    // [GIVEN] Score with multiple instruments
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "playback_setup_instruments/playback_setup_instruments.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_GT(score->parts().size(), 1);
+
+    const Part* firstPart = score->parts().front();
+    const Part* lastPart = score->parts().back();
+    const InstrumentTrackId firstTrackId { firstPart->id(), firstPart->instrumentId() };
+    const InstrumentTrackId lastTrackId { lastPart->id(), lastPart->instrumentId() };
+
+    // [GIVEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
+
+    // [GIVEN] The playback model is loaded
+    PlaybackModel model(modularity::globalCtx());
+    model.profilesRepository.set(m_repositoryMock);
+    model.load(score);
+
+    InstrumentTrackIdSet changedTracks;
+    model.tracksDataChanged().onReceive(this, [&changedTracks](const InstrumentTrackIdSet& tracks) {
+        changedTracks = tracks;
+    });
+
+    // [WHEN] A score-level change (e.g. inserting a measure) with a narrow range on the 1st staff
+    ScoreChanges changes;
+    changes.tickFrom = 0;
+    changes.tickTo = 1920;
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = 0;
+    changes.changedTypes = { ElementType::SCORE, ElementType::MEASURE };
+    changes.changedObjects = { { score, { CommandType::InsertTime } } };
+
+    score->changesChannel().send(changes);
+
+    // [THEN] All tracks are re-rendered
+    EXPECT_TRUE(muse::contains(changedTracks, firstTrackId));
+    EXPECT_TRUE(muse::contains(changedTracks, lastTrackId));
+
+    // [WHEN] An automation edit on the 1st staff
+    changedTracks.clear();
+    changes.changedTypes = { ElementType::SCORE };
+    changes.changedObjects = { { score, { CommandType::EditAutomationPoints } } };
+
+    score->changesChannel().send(changes);
+
+    // [THEN] Only the tracks of the 1st staff are re-rendered
+    EXPECT_TRUE(muse::contains(changedTracks, firstTrackId));
+    EXPECT_FALSE(muse::contains(changedTracks, lastTrackId));
+
+    // [WHEN] An automation edit together with another score-level change on the 1st staff
+    changedTracks.clear();
+    changes.changedObjects = { { score, { CommandType::EditAutomationPoints, CommandType::InsertTime } } };
+
+    score->changesChannel().send(changes);
+
+    // [THEN] All tracks are re-rendered
+    EXPECT_TRUE(muse::contains(changedTracks, firstTrackId));
+    EXPECT_TRUE(muse::contains(changedTracks, lastTrackId));
+
+    delete score;
 }
