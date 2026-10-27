@@ -22,12 +22,15 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/mmrest.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
 #include "engraving/editing/splitjoinmeasure.h"
@@ -853,4 +856,59 @@ TEST_F(Engraving_MeasureTests, breathInPart)
     }
 
     delete score;
+}
+
+//---------------------------------------------------------
+///   mmrestResize
+///    a reused MM-rest that grows or shrinks must resize its MMRest symbols too
+//---------------------------------------------------------
+
+TEST_F(Engraving_MeasureTests, mmrestResize)
+{
+    // one staff, 10 empty 4/4 measures
+    std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr));
+    Part* part = new Part(score.get());
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->appendMeasures(10);
+    score->endCmd();
+    ASSERT_EQ(score->nmeasures(), 10u);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m4 = score->crMeasure(3);
+    Measure* m5 = score->crMeasure(4);
+    ASSERT_TRUE(m1 && m4 && m5);
+
+    auto mmRestSymbol = [m1]() -> MMRest* {
+        Measure* mmr = m1->mmRest();
+        EXPECT_TRUE(mmr);
+        if (!mmr) {
+            return nullptr;
+        }
+        Segment* seg = mmr->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+        EXPECT_TRUE(seg && seg->element(0) && seg->element(0)->isMMRest());
+        return seg && seg->element(0) ? toMMRest(seg->element(0)) : nullptr;
+    };
+
+    // 10-bar MM rest
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->endCmd();
+    EXPECT_EQ(m1->mmRest()->ticks(), Fraction(10, 1));
+    EXPECT_EQ(mmRestSymbol()->ticks(), Fraction(10, 1));
+
+    // shrink to 4 bars
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    m5->undoChangeProperty(Pid::BREAK_MMR, true);
+    score->endCmd();
+    EXPECT_EQ(m1->mmRest()->ticks(), Fraction(4, 1));
+    EXPECT_EQ(mmRestSymbol()->ticks(), Fraction(4, 1));
+
+    // grow back to 10 bars
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    m5->undoChangeProperty(Pid::BREAK_MMR, false);
+    score->endCmd();
+    EXPECT_EQ(m1->mmRest()->ticks(), Fraction(10, 1));
+    EXPECT_EQ(mmRestSymbol()->ticks(), Fraction(10, 1));
 }
