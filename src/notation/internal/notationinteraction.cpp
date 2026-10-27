@@ -4832,12 +4832,12 @@ void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
     if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
         EditTimeTickAnchors::updateAnchors(selectedElement);
         updateDragAnchorLines();
+        score()->update();
     } else {
         score()->hideAnchors();
         resetAnchorLines();
     }
 
-    score()->update();
     notifyAboutNotationChanged();
 }
 
