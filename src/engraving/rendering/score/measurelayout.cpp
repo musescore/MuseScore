@@ -1739,6 +1739,27 @@ void MeasureLayout::removeRepeatContinuationCourtesies(Measure* m)
     }
 }
 
+static ClefTypeList getClefType(const Staff* staff, const Measure* measure, const Segment* cSegment)
+{
+    ClefTypeList cl = staff->clefType(measure->tick() - Fraction::eps());
+    if (!staff->part()->isSharedPart()) {
+        return cl;
+    }
+
+    Staff* originStaff = toSharedPart(staff->part())->originStaffForStaff(staff->idx(), measure->tick());
+    if (originStaff) {
+        cl = originStaff->clefType(measure->tick() - Fraction::eps());
+    }
+
+    // A user-set header clef isn't copied to the shared staff, so take its type from the origin
+    const Clef* originHeaderClef = originStaff && cSegment ? toClef(cSegment->element(staff2track(originStaff->idx()))) : nullptr;
+    if (originHeaderClef && !originHeaderClef->generated()) {
+        cl = originHeaderClef->clefTypeList();
+    }
+
+    return cl;
+}
+
 Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff* staff, LayoutContext& ctx)
 {
     const staff_idx_t staffIdx = staff->idx();
@@ -1749,13 +1770,7 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
     const bool hideClef = staffType->isTabStaff() ? ctx.conf().styleB(Sid::hideTabClefAfterFirst) : !ctx.conf().styleB(Sid::genClef);
 
     // find the clef type at the previous tick
-    ClefTypeList cl = staff->clefType(m->tick() - Fraction::eps());
-    if (staff->part()->isSharedPart()) {
-        Staff* originStaff = toSharedPart(staff->part())->originStaffForStaff(staff->idx(), m->tick());
-        if (originStaff && !originStaff->clefList().empty()) {
-            cl = originStaff->clefType(m->tick() - Fraction::eps());
-        }
-    }
+    ClefTypeList cl = getClefType(staff, m, cSegment);
     bool showCourtesy = true;
     Segment* s = nullptr;
     if (m->prevMeasure()) {

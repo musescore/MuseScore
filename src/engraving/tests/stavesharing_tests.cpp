@@ -1298,3 +1298,49 @@ TEST_F(Engraving_StaveSharingTests, testHeaderAndCourtesyKeySigsOnSharedStaves)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testUserSetFirstClefOnSharedStaves)
+{
+    // [GIVEN] A score with 2 staves, the second with a user-set header clef at the start of the score
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_13.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+    Segment* headerClefSeg = firstMeasure->findSegment(SegmentType::HeaderClef, firstMeasure->tick());
+    ASSERT_TRUE(headerClefSeg);
+
+    const Staff* secondOriginStaff = originParts.at(1)->staff(0);
+    EngravingItem* originClef = headerClefSeg->element(staff2track(secondOriginStaff->idx()));
+    ASSERT_TRUE(originClef && originClef->isClef());
+    ASSERT_FALSE(originClef->generated());
+
+    // [THEN] The shared staff showing the second origin staff should have the same header clef
+    const Staff* sharedStaff = nullptr;
+    for (const Staff* staff : sharedPart->staves()) {
+        if (sharedPart->originStaffForStaff(staff->idx(), firstMeasure->tick()) == secondOriginStaff) {
+            sharedStaff = staff;
+            break;
+        }
+    }
+    ASSERT_TRUE(sharedStaff);
+
+    EngravingItem* sharedClef = headerClefSeg->element(staff2track(sharedStaff->idx()));
+    ASSERT_TRUE(sharedClef && sharedClef->isClef());
+    EXPECT_EQ(toClef(sharedClef)->clefTypeList(), toClef(originClef)->clefTypeList());
+    EXPECT_EQ(toClef(sharedClef)->clefTypeList(), ClefTypeList(ClefType::G, ClefType::F));
+
+    delete score;
+}
