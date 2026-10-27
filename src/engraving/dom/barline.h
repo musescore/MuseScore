@@ -103,7 +103,7 @@ public:
     Segment* segment() const { return toSegment(ownershipParent()); }
     Measure* measure() const { return ownershipParent() ? toMeasure(ownershipParent()->ownershipParent()) : nullptr; }
 
-    void setSpanStaff(bool val) { m_spanStaff = val; m_spanStaffFlags = PropertyFlags::UNSTYLED; }
+    void setSpanStaff(bool val);
     void setSpanStaffDefault(bool val)
     {
         if (spanStaffInherited()) {

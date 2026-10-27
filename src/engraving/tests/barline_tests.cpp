@@ -46,6 +46,7 @@
 #include "engraving/editing/editproperty.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -578,14 +579,17 @@ TEST_F(Engraving_BarlineTests, spanStyleSurvivesInstrumentReordering)
     EXPECT_EQ(first->idx(), 1);
     EXPECT_EQ(endBarLine(score->firstMeasure(), first->idx()), bar);
     EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
-    score->startCmd(TranslatableString::untranslatable("Disconnect barline"));
-    bar->undoChangeProperty(Pid::BARLINE_SPAN, false);
+    const bool spanAfterReordering = bar->spanStaff();
+    score->startCmd(TranslatableString::untranslatable("Toggle barline connection"));
+    bar->undoChangeProperty(Pid::BARLINE_SPAN, !spanAfterReordering);
     score->endCmd();
-    EXPECT_FALSE(bar->spanStaff());
+    EXPECT_EQ(bar->spanStaff(), !spanAfterReordering);
     EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    ASSERT_TRUE(score->undoStack()->canUndo());
     score->undoRedo(true, nullptr);
-    EXPECT_TRUE(bar->spanStaff());
+    EXPECT_EQ(bar->spanStaff(), spanAfterReordering);
     EXPECT_EQ(bar->spanStyle(), BarLineSpanStyle::DASHED);
+    ASSERT_TRUE(score->undoStack()->canUndo());
     score->undoRedo(true, nullptr);
     EXPECT_EQ(first->idx(), 0);
     EXPECT_EQ(endBarLine(score->firstMeasure(), 0), bar);
@@ -723,6 +727,8 @@ TEST_F(Engraving_BarlineTests, explicitSpanEqualToDefaultPersists)
     local->undoChangeProperty(Pid::BARLINE_SPAN, true, PropertyFlags::UNSTYLED);
     score->endCmd();
     ASSERT_FALSE(local->spanStaffInherited());
+    local->setSpanStaff(local->spanStaff());
+    EXPECT_FALSE(local->spanStaffInherited());
     const String path(u"barline-span-inheritance-roundtrip.mscx");
     ASSERT_TRUE(ScoreRW::saveScore(score.get(), path));
     std::unique_ptr<MasterScore> reloaded(ScoreRW::readScore(path, true));
@@ -858,7 +864,7 @@ TEST_F(Engraving_BarlineTests, gripUndoPreservesMixedConnectionPattern)
         int index = 0;
         for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
             BarLine* bar = endBarLine(measure, 0);
-            bar->setSpanStaff(index++ < 2);
+            bar->setProperty(Pid::BARLINE_SPAN, index++ < 2);
             bar->setSpanStyle(customStyle ? BarLineSpanStyle::DASHED : BarLineSpanStyle::DEFAULT);
             bars.push_back(bar);
         }

@@ -847,6 +847,7 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::BARLINE_SPAN:
         setSpanStaff(v.toBool());
+        m_spanStaffFlags = PropertyFlags::UNSTYLED;
         break;
     case Pid::BARLINE_SPAN_FROM:
         setSpanFrom(v.toInt());
@@ -954,6 +955,15 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
 PropertyFlags BarLine::propertyFlags(Pid id) const
 {
     return id == Pid::BARLINE_SPAN ? m_spanStaffFlags : EngravingItem::propertyFlags(id);
+}
+
+void BarLine::setSpanStaff(bool val)
+{
+    m_spanStaff = val;
+    // Matching initialization inherits the staff default without clearing an existing override.
+    if (val != propertyDefault(Pid::BARLINE_SPAN).toBool()) {
+        m_spanStaffFlags = PropertyFlags::UNSTYLED;
+    }
 }
 
 void BarLine::setPropertyFlags(Pid id, PropertyFlags flags)

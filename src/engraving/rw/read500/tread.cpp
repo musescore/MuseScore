@@ -2102,6 +2102,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
             b->setBarLineType(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
         } else if (tag == "span") {
             b->setSpanStaff(e.readBool());
+            b->setPropertyFlags(Pid::BARLINE_SPAN, PropertyFlags::UNSTYLED);
         } else if (tag == "spanFromOffset") {
             b->setSpanFrom(e.readInt());
         } else if (tag == "spanToOffset") {
