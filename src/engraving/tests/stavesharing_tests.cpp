@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/keysig.h"
@@ -36,6 +37,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/stavesharingchange.h"
 #include "engraving/dom/system.h"
+#include "engraving/dom/timesig.h"
 
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/edittimesig.h"
@@ -1382,6 +1384,66 @@ TEST_F(Engraving_StaveSharingTests, testNoCourtesyKeySigWhenMappingChanges)
     if (courtesyKeySigSeg) {
         EXPECT_FALSE(courtesyKeySigSeg->enabled() && courtesyKeySigSeg->element(staff2track(secondSharedStaff)));
     }
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testTimeSigsFollowOriginWhenMappingChanges)
+{
+    // [GIVEN] A score with 3 staves, the first two in 3/4 and the third in 6/8, where the origins mapped to the
+    // second and third shared staves swap at the start of the second system without any time signature being present
+    // 1st system   2nd system
+    // 1 -> 1       1 -> 1
+    // 2 -> 1       2 -> 2
+    // 3 -> 2       3 -> 3
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_21.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled and the score is laid out again
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(sharedPart->nstaves(), 3);
+    ASSERT_EQ(originParts.size(), 3);
+
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m2 && m3);
+    ASSERT_TRUE(m2->system() && m3->system());
+    ASSERT_NE(m2->system(), m3->system());
+
+    const staff_idx_t secondSharedStaff = sharedPart->staff(1)->idx();
+    const staff_idx_t thirdSharedStaff = sharedPart->staff(2)->idx();
+    ASSERT_EQ(sharedPart->originStaffForStaff(secondSharedStaff, m2->tick()), originParts.at(2)->staff(0));
+    ASSERT_EQ(sharedPart->originStaffForStaff(secondSharedStaff, m3->tick()), originParts.at(1)->staff(0));
+    ASSERT_EQ(sharedPart->originStaffForStaff(thirdSharedStaff, m3->tick()), originParts.at(2)->staff(0));
+
+    // [THEN] The shared staves should use the time signature of the origin mapped to them in the second system
+    for (staff_idx_t sharedStaffIdx : { secondSharedStaff, thirdSharedStaff }) {
+        const Staff* originStaff = sharedPart->originStaffForStaff(sharedStaffIdx, m3->tick());
+        const TimeSig* sharedTimeSig = score->staff(sharedStaffIdx)->timeSig(m3->tick());
+        const TimeSig* originTimeSig = originStaff->timeSig(m3->tick());
+        ASSERT_TRUE(sharedTimeSig && originTimeSig);
+        // == compares values, which would treat 6/8 and 3/4 as equal
+        EXPECT_TRUE(sharedTimeSig->sig().identical(originTimeSig->sig()));
+    }
+
+    // [THEN] The 6/8 eighths on the third shared staff should be beamed in groups of 3, like on the origin staff
+    const Segment* firstCRSeg = m3->first(SegmentType::ChordRest);
+    ASSERT_TRUE(firstCRSeg);
+    const ChordRest* sharedCR = toChordRest(firstCRSeg->element(staff2track(thirdSharedStaff)));
+    const ChordRest* originCR = toChordRest(firstCRSeg->element(staff2track(originParts.at(2)->staff(0)->idx())));
+    ASSERT_TRUE(sharedCR && originCR);
+    ASSERT_TRUE(sharedCR->beam() && originCR->beam());
+    EXPECT_EQ(originCR->beam()->elements().size(), 3);
+    EXPECT_EQ(sharedCR->beam()->elements().size(), originCR->beam()->elements().size());
 
     delete score;
 }

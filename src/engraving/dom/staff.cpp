@@ -41,6 +41,7 @@
 #include "part.h"
 #include "score.h"
 #include "segment.h"
+#include "sharedpart.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "timesig.h"
@@ -564,17 +565,31 @@ Fraction Staff::timeStretch(const Fraction& tick) const
 }
 
 //---------------------------------------------------------
+//   timeSigReferenceStaff
+//    The time signatures of a shared staff are those of the
+//    origin staff mapped to it at tick. The mapping can change
+//    at a system start without any time signature present
+//---------------------------------------------------------
+
+const Staff* Staff::timeSigReferenceStaff(const Fraction& tick) const
+{
+    const Staff* originStaff = m_part && m_part->isSharedPart() ? toSharedPart(m_part)->originStaffForStaff(idx(), tick) : nullptr;
+    return originStaff ? originStaff : this;
+}
+
+//---------------------------------------------------------
 //   timeSig
 //    lookup time signature before or at tick
 //---------------------------------------------------------
 
 TimeSig* Staff::timeSig(const Fraction& tick) const
 {
-    auto i = m_timesigs.upper_bound(tick.ticks());
-    if (i != m_timesigs.begin()) {
+    const std::map<int, TimeSig*>& timesigs = timeSigReferenceStaff(tick)->m_timesigs;
+    auto i = timesigs.upper_bound(tick.ticks());
+    if (i != timesigs.begin()) {
         --i;
     }
-    if (i == m_timesigs.end()) {
+    if (i == timesigs.end()) {
         return 0;
     } else if (tick < Fraction::fromTicks(i->first)) {
         return 0;
@@ -602,11 +617,12 @@ TimeSig* Staff::nextTimeSig(const Fraction& tick) const
 
 Fraction Staff::currentTimeSigTick(const Fraction& tick) const
 {
-    if (m_timesigs.empty()) {
+    const std::map<int, TimeSig*>& timesigs = timeSigReferenceStaff(tick)->m_timesigs;
+    if (timesigs.empty()) {
         return Fraction(0, 1);
     }
-    auto i = m_timesigs.upper_bound(tick.ticks());
-    if (i == m_timesigs.begin()) {
+    auto i = timesigs.upper_bound(tick.ticks());
+    if (i == timesigs.begin()) {
         return Fraction(0, 1);
     }
     --i;
