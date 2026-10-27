@@ -926,6 +926,10 @@ void StaveSharingLayout::updateNotation(StaveSharingContext& ctx)
 
     // 3. Remove from shared notation any item that wasn't reconnected
     cleanup(ctx);
+
+    // 4. Sync the shared staves' clef and key lists with their origin staves
+    // Must come after cleanup, as removing shared clefs and keys erases their entries from the lists
+    updateStaffClefKeyMaps(ctx);
 }
 
 void StaveSharingLayout::computeSegmentsToUpdate(StaveSharingContext& ctx)
@@ -1068,6 +1072,52 @@ void StaveSharingLayout::makeSharedNotation(StaveSharingContext& ctx)
     makeSharedSpanners(ctx);
     makeStaveSharingLabels(ctx);
     makeStaveSharingChanges(ctx);
+}
+
+void StaveSharingLayout::updateStaffClefKeyMaps(StaveSharingContext& ctx)
+{
+    // Rebuild the shared staves' clef and key lists over sTick -> eTick from their origin staves.
+    // Erase the range first so we don't hold stale entries from a previous mapping.
+
+    const Fraction& sTick = ctx.sTick;
+    const Fraction& eTick = ctx.eTick;
+
+    for (Staff* sharedStaff : ctx.curSharedPart->staves()) {
+        ClefList& sharedClefList = sharedStaff->clefList();
+        KeyList& sharedKeyList = *sharedStaff->keyList();
+        sharedClefList.erase(sharedClefList.lower_bound(sTick.ticks()), sharedClefList.lower_bound(eTick.ticks()));
+        sharedKeyList.erase(sharedKeyList.lower_bound(sTick.ticks()), sharedKeyList.lower_bound(eTick.ticks()));
+    }
+
+    // Create a list of ticks where new track mappings are present
+    std::vector<Fraction> mapChangeTicks { sTick };
+    for (const auto& [tick, state] : ctx.curSharedPart->staveSharingStatesBetweenTicks(sTick, eTick)) {
+        if (tick != sTick) {
+            mapChangeTicks.push_back(tick);
+        }
+    }
+
+    // Copy each range from the origin staves mapped in it
+    for (size_t i = 0; i < mapChangeTicks.size(); ++i) {
+        const Fraction& rangeStart = mapChangeTicks[i];
+        const int rangeEnd = i + 1 < mapChangeTicks.size() ? mapChangeTicks[i + 1].ticks() : eTick.ticks();
+
+        auto copyRange = [&rangeStart, rangeEnd](auto& sharedList, const auto& originList) {
+            sharedList.insert(originList.upper_bound(rangeStart.ticks()), originList.lower_bound(rangeEnd));
+        };
+
+        for (const auto& [originTrack, sharedTrack] : ctx.curStaveSharingState(rangeStart).sharedTrackMap()) {
+            Staff* originStaff = ctx.score->staff(track2staff(originTrack));
+            Staff* sharedStaff = ctx.score->staff(track2staff(sharedTrack));
+
+            // Always set clef & key signature when a new mapping occurs
+            sharedStaff->clefList().try_emplace(rangeStart.ticks(), originStaff->clefType(rangeStart));
+            sharedStaff->keyList()->try_emplace(rangeStart.ticks(), originStaff->keySigEvent(rangeStart));
+
+            copyRange(sharedStaff->clefList(), originStaff->clefList());
+            copyRange(*sharedStaff->keyList(), *originStaff->keyList());
+        }
+    }
 }
 
 EngravingItem* StaveSharingLayout::makeSharedItem(EngravingItem* originItem, EngravingItem* possibleSharedItem, track_idx_t sharedTrack,
