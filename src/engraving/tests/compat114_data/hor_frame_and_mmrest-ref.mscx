@@ -18,6 +18,7 @@
       <bracketDistance>0.2</bracketDistance>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <voltaPosAbove x="0" y="-2"/>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>114</defaultsVersion>
       <spatium>1.764</spatium>
       </Style>

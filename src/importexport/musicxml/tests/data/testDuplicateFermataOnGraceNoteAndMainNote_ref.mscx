@@ -50,6 +50,7 @@
       <expressionFontFace>FreeSerif</expressionFontFace>
       <tempoFontFace>FreeSerif</tempoFontFace>
       <tempoFontSize>10</tempoFontSize>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontFace>FreeSerif</tempoChangeFontFace>
       <tempoChangeFontSize>10</tempoChangeFontSize>
       <metronomeFontFace>FreeSerif</metronomeFontFace>

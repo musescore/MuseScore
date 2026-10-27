@@ -5,6 +5,7 @@
     <Division>480</Division>
     <Style>
       <enableStaveSharing>1</enableStaveSharing>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

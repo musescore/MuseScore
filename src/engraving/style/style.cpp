@@ -346,6 +346,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
 void MStyle::applyCompatStyleVals(int mscVersion)
 {
     if (mscVersion < 500) {
+        set(Sid::tempoAlignToGraceNotes, false);
         set(Sid::windsNameByGroup, false);
         set(Sid::vocalsNameByGroup, false);
         set(Sid::maskSlurs, false);
@@ -759,7 +760,6 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         if (idx == Sid::spatium) {         // special handling for spatium
             continue;
         }
-        // Absence of tempoAlignToGraceNotes identifies older files, which must retain their original layout.
         if (optimize && isDefault(idx) && idx != Sid::tempoAlignToGraceNotes) {
             continue;
         }

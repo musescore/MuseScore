@@ -69,6 +69,7 @@
       <expressionFontSize>22</expressionFontSize>
       <tempoFontFace>Palatino,serif</tempoFontFace>
       <tempoFontSize>22</tempoFontSize>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontFace>Palatino,serif</tempoChangeFontFace>
       <tempoChangeFontSize>22</tempoChangeFontSize>
       <metronomeFontFace>Palatino,serif</metronomeFontFace>

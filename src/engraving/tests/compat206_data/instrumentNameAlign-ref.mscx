@@ -17,6 +17,7 @@
       <longInstrumentFramePadding>0</longInstrumentFramePadding>
       <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
       <longInstrumentPosition>center</longInstrumentPosition>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>206</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>

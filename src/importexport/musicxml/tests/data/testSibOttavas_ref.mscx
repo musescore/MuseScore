@@ -78,6 +78,7 @@
       <expressionFontSize>11.9365</expressionFontSize>
       <tempoFontFace>Quicksand</tempoFontFace>
       <tempoFontSize>11.9365</tempoFontSize>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontFace>Quicksand</tempoChangeFontFace>
       <tempoChangeFontSize>11.9365</tempoChangeFontSize>
       <metronomeFontFace>Quicksand</metronomeFontFace>

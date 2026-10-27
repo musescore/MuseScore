@@ -24,6 +24,7 @@
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <tempoFontSize>10</tempoFontSize>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <metronomeFontSize>10</metronomeFontSize>
       <translatorFontSize>10</translatorFontSize>
       <repeatLeftFontSize>10</repeatLeftFontSize>

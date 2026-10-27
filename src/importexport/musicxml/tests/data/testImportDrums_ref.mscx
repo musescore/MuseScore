@@ -17,6 +17,7 @@
       <staffDistance>5.5</staffDistance>
       <minSystemDistance>9.25</minSystemDistance>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <spatium>2.11667</spatium>
       </Style>
     <showInvisible>1</showInvisible>

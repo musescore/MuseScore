@@ -13,6 +13,7 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>206</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>
@@ -639,6 +640,7 @@
         <pageOddTopMargin>0.393701</pageOddTopMargin>
         <pageOddBottomMargin>0.787403</pageOddBottomMargin>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <defaultsVersion>206</defaultsVersion>
         <spatium>1.76389</spatium>
         </Style>
