@@ -68,6 +68,7 @@
 #include "stemslash.h"
 #include "sticking.h"
 #include "system.h"
+#include "systemlockindicator.h"
 #include "tie.h"
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
@@ -461,29 +462,23 @@ std::vector<System*> Selection::selectedSystems() const
 
 std::vector<Page*> mu::engraving::Selection::pagesContainingSelection() const
 {
-    EngravingItem* el = element();
-    if (el && (el->isPageLockIndicator())) {
-        return { const_cast<Page*>(toPageLockIndicator(el)->page()) };
+    if (const EngravingItem* el = element()) {
+        if (el->isPageLockIndicator()) {
+            return { const_cast<Page*>(toPageLockIndicator(el)->page()) };
+        }
+        if (el->isSystemLockIndicator()) {
+            Page* page = toSystemLockIndicator(el)->system()->page();
+            return page ? std::vector<Page*> { page } : std::vector<Page*> {};
+        }
     }
 
     std::vector<Page*> pages;
-    for (const System* system : selectedSystems()) {
-        Page* page = system->page();
+    for (const MeasureBase* mb : measureBasesInSelection()) {
+        Page* page = mb->page();
         if (page && !muse::contains(pages, page)) {
             pages.push_back(page);
         }
     }
-
-    //! NOTE: selectedSystems() skips VBoxBases, but their pages still contain the selection
-    for (const MeasureBase* mb : measureBasesInSelection()) {
-        if (mb->isVBoxBase()) {
-            Page* page = mb->page();
-            if (page && !muse::contains(pages, page)) {
-                pages.push_back(page);
-            }
-        }
-    }
-
     return pages;
 }
 

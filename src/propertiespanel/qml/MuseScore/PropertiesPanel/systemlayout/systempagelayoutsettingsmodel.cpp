@@ -121,6 +121,8 @@ bool SystemPageLayoutSettingsModel::isEmpty() const
     if (selection->isRange()) {
         return false;
     }
+    //! NOTE: element will be null for a list selection. This is fine though since (for
+    //! now) the actions in this model are incompatible with a list of elements...
     const EngravingItem* element = selection->element();
     return !element || !element->isBox();
 }
@@ -346,15 +348,23 @@ QSet<BoxType> SystemPageLayoutSettingsModel::boxTypesInSelection() const
         return boxTypes;
     }
 
-    for (const MeasureBase* mb : selection()->measureBasesInSelection()) {
-        if (mb->isMeasure()) {
+    const auto checkBoxType = [&boxTypes](const EngravingItem* item) {
+        if (item->isMeasure()) {
             boxTypes.insert(BoxType::Measure);
-        } else if (mb->isHBox()) {
+        } else if (item->isHBox()) {
             boxTypes.insert(BoxType::Horizontal);
-        } else if (mb->isVBoxBase()) {
+        } else if (item->isVBoxBase()) {
             // Slight hack - for these purposes we'll take "Vertical" to mean VBoxBase...
             boxTypes.insert(BoxType::Vertical);
         }
+    };
+
+    if (selection()->isRange()) {
+        for (const MeasureBase* mb : selection()->measureBasesInSelection()) {
+            checkBoxType(mb);
+        }
+    } else {
+        checkBoxType(selection()->element());
     }
 
     return boxTypes;
