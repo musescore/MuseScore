@@ -43,6 +43,7 @@ DockWindow {
 
     onPageLoaded: {
         console.log("WindowContent::onPageLoaded")
+
         interactiveProvider.onPageOpened()
     }
 
