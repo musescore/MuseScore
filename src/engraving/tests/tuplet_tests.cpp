@@ -702,6 +702,27 @@ TEST_F(Engraving_TupletTests, addTupletNested)
     delete score;
 }
 
+TEST_F(Engraving_TupletTests, addTupletKeepsSelection)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+    Note* note = toChord(chordRestAt(m1, 7))->upNote();
+    score->select(note);
+    score->inputState().setDuration(DurationType::V_QUARTER);
+
+    // the caller decides what to select, e.g. note input calls selectNewTuplet()
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    Tuplet* tuplet = score->addTuplet(chordRestAt(m1, 0), Fraction(3, 2), TupletNumberType::SHOW_NUMBER,
+                                      TupletBracketType::AUTO_BRACKET);
+    score->endCmd();
+    ASSERT_TRUE(tuplet);
+    EXPECT_EQ(rhythm(m1), "3:2[16 r16 r16] 8 8 8 8 8 8 8");
+    EXPECT_EQ(score->selection().element(), note);
+    EXPECT_EQ(score->inputState().duration(), TDuration(DurationType::V_QUARTER));
+    delete score;
+}
+
 TEST_F(Engraving_TupletTests, canAddTuplet)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");

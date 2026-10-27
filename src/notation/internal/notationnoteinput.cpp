@@ -755,7 +755,9 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
             ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
         }
         score()->changeCRlen(chordRest, inputState.duration());
-        score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
+        if (Tuplet* tuplet = score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType)) {
+            score()->selectNewTuplet(tuplet);
+        }
     }
     apply();
 
