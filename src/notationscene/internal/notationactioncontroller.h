@@ -67,6 +67,8 @@ public:
     INotationViewController* viewController() const override;
 
     bool hasSelection() const override;
+    bool isSingleSelection() const override;
+    bool isRangeSelection() const override;
     muse::async::Notification selectionChanged() const override;
     bool selectionHasTie() const override;
     bool selectionHasLaissezVib() const override;

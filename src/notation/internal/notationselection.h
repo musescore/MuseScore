@@ -58,6 +58,7 @@ public:
     NotationSelection(IGetScore* getScore, IInteractionForSelection* interaction);
 
     bool isNone() const override;
+    bool isSingle() const override;
     bool isRange() const override;
     SelectionState state() const override;
 

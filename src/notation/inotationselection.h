@@ -56,6 +56,7 @@ public:
     virtual ~INotationSelection() = default;
 
     virtual bool isNone() const = 0;
+    virtual bool isSingle() const = 0;
     virtual bool isRange() const = 0;
     virtual SelectionState state() const = 0;
 

@@ -36,6 +36,9 @@ static const std::string PLAYBACK_SCOPE = "PLAYBACK";
 static const std::string NOTATION_PAGE_SCOPE = "NOTATION_PAGE";
 static const std::string NOTATION_SCOPE = "NOTATION";
 static const std::string NOTATION_TAB_SCOPE = "NOTATION_TAB";
+static const std::string NOTATION_SELECTION_SCOPE = "NOTATION_SELECTION";
+static const std::string NOTATION_SINGLE_SELECTION_SCOPE = "NOTATION_SINGLE_SELECTION";
+static const std::string NOTATION_RANGE_SELECTION_SCOPE = "NOTATION_RANGE_SELECTION";
 static const std::string NOTATION_NOTE_INPUT_SCOPE = "NOTATION_NOTE_INPUT";
 static const std::string NOTATION_TEXT_EDITING_SCOPE = "NOTATION_TEXT_EDITING";
 static const std::string PROJECT_SCOPE = "PROJECT";
@@ -61,8 +64,11 @@ int ShortcutResolver::scopePriority(const std::string& scope) const
             { NOTATION_PAGE_SCOPE, []() { return 3; } },
             { NOTATION_SCOPE, [this]() { return isNotationFocused() ? 4 : -1; } },
             { NOTATION_TAB_SCOPE, [this]() { return isNotationFocusedAndTabStaff() ? 5 : -1; } },
-            { NOTATION_NOTE_INPUT_SCOPE, [this]() { return isNotationFocusedAndNoteInputMode() ? 6 : -1; } },
-            { NOTATION_TEXT_EDITING_SCOPE, [this]() { return isNotationFocusedAndTextEditing() ? 7 : -1; } },
+            { NOTATION_SELECTION_SCOPE, [this]() { return isNotationFocusedAndHasSelection() ? 6 : -1; } },
+            { NOTATION_SINGLE_SELECTION_SCOPE, [this]() { return isNotationFocusedAndSingleSelection() ? 7 : -1; } },
+            { NOTATION_RANGE_SELECTION_SCOPE, [this]() { return isNotationFocusedAndRangeSelection() ? 7 : -1; } },
+            { NOTATION_NOTE_INPUT_SCOPE, [this]() { return isNotationFocusedAndNoteInputMode() ? 8 : -1; } },
+            { NOTATION_TEXT_EDITING_SCOPE, [this]() { return isNotationFocusedAndTextEditing() ? 9 : -1; } },
         };
     }
 
@@ -88,6 +94,21 @@ bool ShortcutResolver::isNotationFocusedAndNoteInputMode() const
 bool ShortcutResolver::isNotationFocusedAndTabStaff() const
 {
     return isNotationFocused() && notationCommandsController()->isTablatureStaff();
+}
+
+bool ShortcutResolver::isNotationFocusedAndHasSelection() const
+{
+    return isNotationFocused() && notationCommandsController()->hasSelection();
+}
+
+bool ShortcutResolver::isNotationFocusedAndSingleSelection() const
+{
+    return isNotationFocused() && notationCommandsController()->isSingleSelection();
+}
+
+bool ShortcutResolver::isNotationFocusedAndRangeSelection() const
+{
+    return isNotationFocused() && notationCommandsController()->isRangeSelection();
 }
 
 bool ShortcutResolver::isNotationFocusedAndTextEditing() const
@@ -126,6 +147,9 @@ muse::TranslatableString ShortcutResolver::scopeTitle(const std::string& scopeCo
         { NOTATION_PAGE_SCOPE, TranslatableString("shortcuts", "NOTATION PAGE") },
         { NOTATION_SCOPE, TranslatableString("shortcuts", "NOTATION") },
         { NOTATION_TAB_SCOPE, TranslatableString("shortcuts", "NOTATION: TAB") },
+        { NOTATION_SELECTION_SCOPE, TranslatableString("shortcuts", "NOTATION: SELECTION") },
+        { NOTATION_SINGLE_SELECTION_SCOPE, TranslatableString("shortcuts", "NOTATION: SINGLE SELECTION") },
+        { NOTATION_RANGE_SELECTION_SCOPE, TranslatableString("shortcuts", "NOTATION: RANGE SELECTION") },
         { NOTATION_NOTE_INPUT_SCOPE, TranslatableString("shortcuts", "NOTATION: NOTE INPUT") },
         { NOTATION_TEXT_EDITING_SCOPE, TranslatableString("shortcuts", "NOTATION: TEXT EDITING") },
         { PROJECT_SCOPE, TranslatableString("shortcuts", "PROJECT") },

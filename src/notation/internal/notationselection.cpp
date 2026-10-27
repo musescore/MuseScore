@@ -58,6 +58,11 @@ bool NotationSelection::isNone() const
     return score()->selection().isNone();
 }
 
+bool NotationSelection::isSingle() const
+{
+    return score()->selection().isSingle();
+}
+
 bool NotationSelection::isRange() const
 {
     return score()->selection().isRange();
