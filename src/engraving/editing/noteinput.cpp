@@ -1102,7 +1102,10 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
             if (s->isChordRestType()) {
                 for (EngravingItem* e : s->elist()) {
                     for (Tuplet* t = e ? toChordRest(e)->tuplet() : nullptr; t && t->tick() >= tick; t = t->tuplet()) {
-                        tuplets.insert(t);
+                        // shared tuplets follow their origin
+                        if (t->originItems().empty()) {
+                            tuplets.insert(t);
+                        }
                     }
                 }
             }

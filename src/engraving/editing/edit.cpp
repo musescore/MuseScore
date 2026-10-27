@@ -3285,11 +3285,23 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
         undo(new InsertTime(score, abstick, -len));
 
         Fraction updatedTick = tick;
+        // tuplets store their tick: move those after the removed time back with their segments
+        std::set<Tuplet*> tuplets;
         for (Segment* s = localMeasure->first(SegmentType::ChordRest); s; s = s->next()) {
             if (s->rtick() < etick || s->rtick() == updatedTick) {
                 continue;
             }
 
+            if (s->isChordRestType()) {
+                for (EngravingItem* e : s->elist()) {
+                    for (Tuplet* t = e ? toChordRest(e)->tuplet() : nullptr; t && t->tick() >= abstick + len; t = t->tuplet()) {
+                        // shared tuplets follow their origin
+                        if (t->originItems().empty()) {
+                            tuplets.insert(t);
+                        }
+                    }
+                }
+            }
             s->undoChangeProperty(Pid::TICK, updatedTick);
             updatedTick += s->ticks();
 
@@ -3298,6 +3310,10 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
                     emptySegments.push_back(s);
                 }
             }
+        }
+
+        for (Tuplet* t : tuplets) {
+            t->undoChangeProperty(Pid::TICK, t->tick() - len);
         }
 
         undo(new ChangeMeasureLen(localMeasure, localMeasure->ticks() - f));
