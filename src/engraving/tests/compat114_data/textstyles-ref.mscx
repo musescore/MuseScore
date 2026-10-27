@@ -27,6 +27,7 @@
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
       <concertPitch>1</concertPitch>
       <voltaPosAbove x="0" y="-2"/>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>114</defaultsVersion>
       <spatium>2</spatium>
       </Style>

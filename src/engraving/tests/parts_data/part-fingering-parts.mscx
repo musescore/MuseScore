@@ -11,6 +11,7 @@
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -835,6 +836,7 @@
       <name>Alto</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1323,6 +1325,7 @@
       <name>Tenor</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

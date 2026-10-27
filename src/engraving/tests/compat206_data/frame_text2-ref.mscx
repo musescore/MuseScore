@@ -97,6 +97,7 @@
       <tempoFontStyle>0</tempoFontStyle>
       <tempoFramePadding>0</tempoFramePadding>
       <tempoFrameWidth>0</tempoFrameWidth>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <metronomeFramePadding>0</metronomeFramePadding>
       <metronomeFrameWidth>0</metronomeFrameWidth>
       <measureNumberAlign>center,bottom</measureNumberAlign>

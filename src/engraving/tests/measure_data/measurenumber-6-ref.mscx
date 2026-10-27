@@ -6,6 +6,7 @@
     <Style>
       <measureNumberInterval>1</measureNumberInterval>
       <measureNumberSystem>0</measureNumberSystem>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <measureNumberVPlacement>1</measureNumberVPlacement>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>

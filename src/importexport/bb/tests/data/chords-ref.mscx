@@ -5,6 +5,7 @@
     <Division>480</Division>
     <Style>
       <chordsXmlFile>1</chordsXmlFile>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

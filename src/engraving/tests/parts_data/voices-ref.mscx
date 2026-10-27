@@ -5,6 +5,7 @@
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>
@@ -1041,6 +1042,7 @@
       <Tracklist sTrack="7" dstTrack="7"/>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1689,6 +1691,7 @@
       <Tracklist sTrack="11" dstTrack="0"/>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -2082,6 +2085,7 @@
       <Tracklist sTrack="8" dstTrack="0"/>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

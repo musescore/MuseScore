@@ -12,6 +12,7 @@
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <concertPitch>1</concertPitch>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -299,6 +300,7 @@
       <name>B♭ Trumpet</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -484,6 +486,7 @@
       <name>C Trumpet</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

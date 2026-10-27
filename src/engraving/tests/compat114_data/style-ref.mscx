@@ -73,6 +73,7 @@
       <evenFooterL>$P</evenFooterL>
       <oddFooterR>$P</oddFooterR>
       <voltaPosAbove x="0" y="-2"/>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>114</defaultsVersion>
       <spatium>1.764</spatium>
       </Style>

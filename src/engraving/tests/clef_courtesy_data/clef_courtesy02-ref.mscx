@@ -23,6 +23,7 @@
       <evenFooterL>$:copyright:</evenFooterL>
       <evenFooterC>$:plate:</evenFooterC>
       <evenFooterR>Version $:version:</evenFooterR>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>

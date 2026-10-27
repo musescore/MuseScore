@@ -10,6 +10,7 @@
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <maskSlurs>0</maskSlurs>
       <maskTies>0</maskTies>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

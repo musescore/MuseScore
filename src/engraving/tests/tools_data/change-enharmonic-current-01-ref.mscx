@@ -6,6 +6,7 @@
     <Style>
       <pageWidth>8.27</pageWidth>
       <pageHeight>11.69</pageHeight>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

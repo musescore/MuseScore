@@ -146,6 +146,7 @@
       <expressionFontSize>10</expressionFontSize>
       <expressionOffset x="0" y="2.5"/>
       <tempoFontFace>Edwin</tempoFontFace>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <metronomeFontFace>Edwin</metronomeFontFace>
       <metronomeFontStyle>0</metronomeFontStyle>
       <measureNumberFontFace>Edwin</measureNumberFontFace>
@@ -1094,6 +1095,7 @@
       <name>Alto</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1580,6 +1582,7 @@
       <name>Tenor</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

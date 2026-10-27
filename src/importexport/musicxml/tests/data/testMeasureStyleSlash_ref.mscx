@@ -26,6 +26,7 @@
       <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontSize>10</tempoChangeFontSize>
       <metronomeFontSize>10</metronomeFontSize>
       <measureNumberFontSize>10</measureNumberFontSize>

@@ -9,6 +9,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

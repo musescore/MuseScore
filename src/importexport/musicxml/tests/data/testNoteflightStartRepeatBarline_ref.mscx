@@ -16,6 +16,7 @@
       <pageTwosided>0</pageTwosided>
       <minSystemDistance>13</minSystemDistance>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <spatium>1.41111</spatium>
       </Style>
     <showInvisible>1</showInvisible>

@@ -14,6 +14,7 @@
       <pageOddTopMargin>0.590551</pageOddTopMargin>
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
       <enableStaveSharing>1</enableStaveSharing>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

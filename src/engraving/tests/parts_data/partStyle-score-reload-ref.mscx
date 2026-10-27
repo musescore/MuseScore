@@ -10,6 +10,7 @@
       <titleFontFace>Arial</titleFontFace>
       <titleFontSize>48</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <titleMusicalSymbolSize>48</titleMusicalSymbolSize>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.364</spatium>
@@ -337,6 +338,7 @@
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <titleMusicalSymbolSize>48</titleMusicalSymbolSize>
         <defaultsVersion>301</defaultsVersion>
         <spatium>1.76389</spatium>
@@ -550,6 +552,7 @@
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <titleMusicalSymbolSize>48</titleMusicalSymbolSize>
         <defaultsVersion>301</defaultsVersion>
         <spatium>1.76389</spatium>

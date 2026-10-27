@@ -8,6 +8,7 @@
       <maxSystemDistance>12</maxSystemDistance>
       <measureSpacing>1</measureSpacing>
       <smallStaffMag>0.681818</smallStaffMag>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <spatium>1.76</spatium>
       </Style>
     <showInvisible>1</showInvisible>

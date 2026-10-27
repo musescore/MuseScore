@@ -66,6 +66,7 @@
       <expressionFontSize>10.25</expressionFontSize>
       <tempoFontFace>Times New Roman</tempoFontFace>
       <tempoFontSize>10.25</tempoFontSize>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
       <tempoChangeFontSize>10.25</tempoChangeFontSize>
       <metronomeFontFace>Times New Roman</metronomeFontFace>

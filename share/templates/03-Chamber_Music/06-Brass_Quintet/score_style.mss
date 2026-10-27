@@ -753,6 +753,7 @@
     <tempoFrameRound>25</tempoFrameRound>
     <tempoFrameFgColor r="0" g="0" b="0" a="255"/>
     <tempoFrameBgColor r="255" g="255" b="255" a="0"/>
+    <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
     <metronomeFontFace>Edwin</metronomeFontFace>
     <metronomeFontSize>12</metronomeFontSize>
     <metronomeLineSpacing>1</metronomeLineSpacing>

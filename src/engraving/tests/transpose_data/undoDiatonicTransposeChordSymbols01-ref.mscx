@@ -4,6 +4,7 @@
     <eid>2kOmbTnFT2K_1Ffu11EvJBD</eid>
     <Division>480</Division>
     <Style>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

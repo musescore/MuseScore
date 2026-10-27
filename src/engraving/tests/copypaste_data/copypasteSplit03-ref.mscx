@@ -4,6 +4,7 @@
     <eid>D_D</eid>
     <Division>480</Division>
     <Style>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <pageNumberMusicalSymbolSize>9</pageNumberMusicalSymbolSize>

@@ -4,6 +4,7 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -247,6 +248,7 @@
         <tiePlacementChord>inside</tiePlacementChord>
         <dynamicsPosAbove x="0" y="-1.5"/>
         <dynamicsPosBelow x="0" y="2.5"/>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <measureNumberPosBelow x="0" y="1"/>
         <repeatLeftFontSize>18</repeatLeftFontSize>
         <systemTextLineFontSize>12</systemTextLineFontSize>

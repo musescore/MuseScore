@@ -6,6 +6,7 @@
     <Style>
       <minSystemDistance>6</minSystemDistance>
       <maxSystemDistance>6</maxSystemDistance>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>

@@ -51,6 +51,7 @@
       <groupBracketFontFace>Times New Roman</groupBracketFontFace>
       <expressionFontFace>Times New Roman</expressionFontFace>
       <tempoFontFace>Times New Roman</tempoFontFace>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
       <metronomeFontFace>Times New Roman</metronomeFontFace>
       <measureNumberFontFace>Times New Roman</measureNumberFontFace>

@@ -6,6 +6,9 @@
 
 #include <QTemporaryDir>
 #include <QFile>
+#include <QDirIterator>
+
+#include "io/file.h"
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
@@ -27,6 +30,29 @@ TEST(Engraving_TempoTextAlignmentTests, defaultsAndLegacyScore)
     std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"note_data/grace.mscx"));
     ASSERT_NE(score, nullptr);
     EXPECT_FALSE(score->style().styleB(Sid::tempoAlignToGraceNotes));
+}
+
+//! Built-in template styles explicitly enable alignment when loaded over an older score's setting.
+TEST(Engraving_TempoTextAlignmentTests, builtInTemplateDefaults)
+{
+    const QString templates = ScoreRW::rootPath().toQString() + "/../../../share/templates";
+    QDirIterator styles(templates, { "score_style.mss" }, QDir::Files, QDirIterator::Subdirectories);
+    size_t count = 0;
+    while (styles.hasNext()) {
+        const String path = String::fromQString(styles.next());
+        SCOPED_TRACE(path.toStdString());
+        muse::io::File file(path);
+        ASSERT_TRUE(file.open(muse::io::IODevice::ReadOnly));
+        MStyle style;
+        style.set(Sid::tempoAlignToGraceNotes, false);
+        ASSERT_TRUE(style.read(&file));
+        EXPECT_TRUE(style.styleB(Sid::tempoAlignToGraceNotes));
+        ++count;
+    }
+    EXPECT_GT(count, 0u);
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(String::fromQString(templates + "/My_First_Score.mscx"), true));
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->style().styleB(Sid::tempoAlignToGraceNotes));
 }
 
 //! Earlier 5.0 files share the current format version but lack the new style tag.

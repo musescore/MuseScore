@@ -11,6 +11,7 @@
       <titleFontFace>Arial</titleFontFace>
       <titleFontSize>48</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <titleMusicalSymbolSize>48</titleMusicalSymbolSize>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.364</spatium>
@@ -329,6 +330,7 @@
       <eid>s_s</eid>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -532,6 +534,7 @@
       <eid>LB_LB</eid>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

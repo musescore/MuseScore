@@ -5,6 +5,7 @@
     <Division>480</Division>
     <Style>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>

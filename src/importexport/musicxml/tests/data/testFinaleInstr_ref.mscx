@@ -67,6 +67,7 @@
       <expressionFontSize>7.4</expressionFontSize>
       <tempoFontFace>Times</tempoFontFace>
       <tempoFontSize>7.4</tempoFontSize>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontFace>Times</tempoChangeFontFace>
       <tempoChangeFontSize>7.4</tempoChangeFontSize>
       <metronomeFontFace>Times</metronomeFontFace>

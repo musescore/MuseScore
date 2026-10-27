@@ -61,6 +61,7 @@
       <expressionFontSize>11.9365</expressionFontSize>
       <tempoFontFace>Plantin MT Std</tempoFontFace>
       <tempoFontSize>11.9365</tempoFontSize>
+      <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
       <tempoChangeFontFace>Plantin MT Std</tempoChangeFontFace>
       <tempoChangeFontSize>11.9365</tempoChangeFontSize>
       <metronomeFontFace>Plantin MT Std</metronomeFontFace>

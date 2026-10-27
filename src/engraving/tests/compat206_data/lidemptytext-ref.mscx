@@ -7,6 +7,7 @@
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
       <dynamicsFontStyle>0</dynamicsFontStyle>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>206</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>
@@ -258,6 +259,7 @@
         <pedalPosBelow x="0" y="0"/>
         <trillPosAbove x="0" y="0"/>
         <dynamicsFontStyle>0</dynamicsFontStyle>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <defaultsVersion>206</defaultsVersion>
         <spatium>1.76389</spatium>
         </Style>
