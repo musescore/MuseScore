@@ -20,9 +20,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- #pragma once
+#pragma once
 
- #include "rcommand/commandtypes.h"
+#include "rcommand/typedcommand.h"
+#include "notationcommandsenums.h" // IWYU pragma: export
+
+namespace mu::notation {
+using muse::rcommand::Field;
+using muse::MnemonicString;
+using muse::TranslatableString;
+
+struct AddNoteCommand {
+    static constexpr std::string_view id = "command://notation/add-note";
+    static const inline auto title = MnemonicString("action", "Add note");
+    static const inline auto description = TranslatableString("action", "Add note");
+
+    NoteName note = NoteName::C;
+    NoteAddingMode mode = NoteAddingMode::CurrentChord;
+
+    static constexpr auto fields = std::tuple {
+        Field{ "note", &AddNoteCommand::note, "Note name (c, d, e, f, g, a, b)" },
+        Field{ "mode", &AddNoteCommand::mode, "Adding mode (current, next, insert)" },
+    };
+};
+}
 
 namespace mu::notation {
 // global commands

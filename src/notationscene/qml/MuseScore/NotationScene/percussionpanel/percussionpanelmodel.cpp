@@ -55,6 +55,7 @@ static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
 using namespace muse;
 using namespace muse::ui;
+using namespace muse::rcommand;
 using namespace mu::notation;
 using namespace mu::palette;
 
@@ -529,10 +530,12 @@ void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMod
 
     interaction()->noteInput()->startNoteInput(notationConfiguration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
-    muse::rcommand::CommandQuery query(ADD_DRUM_NOTE_COMMAND);
-    query.set("pitch", muse::Val(pitch));
-    query.set("mode", muse::Val(str_conv(addingMode)));
-    commandDispatcher()->dispatch(query);
+    muse::rcommand::Params params = {
+        { "pitch", muse::Val(pitch) },
+        Contract<NoteAddingMode>::param(addingMode)
+    };
+
+    commandDispatcher()->dispatch(ADD_DRUM_NOTE_COMMAND, params);
 }
 
 void PercussionPanelModel::playPitch(int pitch)

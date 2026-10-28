@@ -316,7 +316,7 @@ void NotationSelection::addToSelection(SelectionTarget target)
         addToSelection(MoveDirection::Down, MoveSelectionType::Track);
         break;
     default:
-        NOT_SUPPORTED << "SelectionTarget: " << str_conv(target);
+        NOT_SUPPORTED << "SelectionTarget: " << (int)target;
         break;
     }
 }

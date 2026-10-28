@@ -135,7 +135,7 @@ private:
 
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
-    muse::RetVal<muse::rcommand::Params> getNoteInputState() const;
+    muse::RetVal<muse::rcommand::Params> requestNoteInputState() const;
 
     muse::Ret addNote(const muse::rcommand::Params& params);
     void addNote(NoteName noteName, NoteAddingMode addingMode);

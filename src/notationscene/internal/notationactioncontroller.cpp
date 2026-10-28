@@ -52,6 +52,7 @@
 #include "qml/MuseScore/NotationScene/notationviewinputcontroller.h"
 
 #include "../notationcommands.h"
+#include "../notationcommandsenums.h"
 #include "playback/playbackcommands.h"
 
 #include "log.h"
@@ -59,7 +60,9 @@
 using namespace mu;
 using namespace muse;
 using namespace muse::io;
+using namespace muse::rcommand;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 static constexpr qreal STRETCH_STEP = 0.1;
 static constexpr bool NEAR_NOTE_OR_REST = true;
@@ -186,7 +189,7 @@ void NotationActionController::init()
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
-    registerGetCommand(GET_NOTEINPUT_STATE_COMMAND, &NotationActionController::getNoteInputState);
+    registerGetCommand(GET_NOTEINPUT_STATE_COMMAND, &NotationActionController::requestNoteInputState);
 
     registerCommand(SET_DURATION_LONGA_COMMAND, [this]() { setDuration(DurationType::V_LONG); });
     registerCommand(SET_DURATION_BREVE_COMMAND, [this]() { setDuration(DurationType::V_BREVE); });
@@ -911,7 +914,7 @@ void NotationActionController::toggleNoteInputInsert()
     }
 }
 
-muse::RetVal<muse::rcommand::Params> NotationActionController::getNoteInputState() const
+muse::RetVal<muse::rcommand::Params> NotationActionController::requestNoteInputState() const
 {
     INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
@@ -919,20 +922,23 @@ muse::RetVal<muse::rcommand::Params> NotationActionController::getNoteInputState
     }
 
     if (!noteInput->isNoteInputMode()) {
-        return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({ { "mode", Val("disabled") } }));
+        return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({ { "noteinputmode", Val("disabled") } }));
     }
 
     const NoteInputState& state = noteInput->state();
 
-    return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({ { "mode", Val(str_conv(state.noteEntryMethod())) } }));
+    return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({
+        { "noteinputmode", Val("enabled") },
+        Contract<NoteInputMethod>::param(state.noteEntryMethod())
+    }));
 }
 
 muse::Ret NotationActionController::addNote(const muse::rcommand::Params& params)
 {
     TRACEFUNC;
 
-    NoteName note = str_conv(params.at("note").toString(), NoteName::C);
-    NoteAddingMode mode = str_conv(params.at("mode").toString(), NoteAddingMode::CurrentChord);
+    NoteName note = Contract<NoteName>::get(params);
+    NoteAddingMode mode = Contract<NoteAddingMode>::get(params);
 
     addNote(note, mode);
     return muse::make_ok();
@@ -956,7 +962,7 @@ muse::Ret NotationActionController::addDrumNote(const muse::rcommand::Params& pa
     TRACEFUNC;
 
     int pitch = params.at("pitch").toInt();
-    NoteAddingMode mode = str_conv(params.at("mode").toString(), NoteAddingMode::CurrentChord);
+    NoteAddingMode mode = Contract<NoteAddingMode>::get(params);
 
     NoteInputParams noteInputParams;
     noteInputParams.drumPitch = pitch;
@@ -1497,8 +1503,8 @@ muse::Ret NotationActionController::putTuplet(const muse::rcommand::Params& para
 {
     TupletOptions options;
     options.ratio = engraving::Fraction::fromString(muse::String::fromStdString(params.at("ratio").toString()));
-    options.numberType = engraving::str_conv(params.at("number-type").toString(), engraving::TupletNumberType::SHOW_NUMBER);
-    options.bracketType = engraving::str_conv(params.at("bracket-type").toString(), engraving::TupletBracketType::AUTO_BRACKET);
+    options.numberType = Contract<TupletNumberType>::get(params);
+    options.bracketType = Contract<TupletBracketType>::get(params);
     options.autoBaseLen = params.at("auto-baselen", Val(false)).toBool();
 
     putTuplet(options);
@@ -2853,12 +2859,12 @@ bool NotationActionController::isNoteInputActionAllowed() const
 
 muse::Ret NotationActionController::select(const muse::rcommand::Params& params)
 {
-    SelectionTarget target = str_conv(params.at("target").toString(), SelectionTarget::Undefined);
+    SelectionTarget target = Contract<SelectionTarget>::get(params);
     if (target == SelectionTarget::Undefined) {
         return muse::make_ret(Ret::Code::BadArgs);
     }
 
-    PlayMode playMode = str_conv(params.at("play-mode").toString(), PlayMode::NoPlay);
+    PlayMode playMode = Contract<PlayMode>::get(params);
 
     select(target, playMode);
     return muse::make_ok();
