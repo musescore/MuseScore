@@ -964,3 +964,32 @@ TEST_F(Engraving_StaveSharingTests, testTieBetweenVoicesAfterStaveSharingChange)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testMultipleSharedParts)
+{
+    // Test stave sharing doesn't corrupt the score when it creates more than one shared part
+
+    // [GIVEN] A score of 5 measures with 2 flute staves and 2 oboe staves
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_16.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    // [THEN] A shared part should be created for each instrument
+    size_t sharedPartCount = 0;
+    for (const Part* part : score->parts()) {
+        if (part->isSharedPart()) {
+            ++sharedPartCount;
+        }
+    }
+    EXPECT_EQ(sharedPartCount, 2);
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}

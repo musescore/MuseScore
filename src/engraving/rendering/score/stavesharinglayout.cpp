@@ -937,6 +937,8 @@ void StaveSharingLayout::computeSegmentsToUpdate(StaveSharingContext& ctx)
         return;
     }
 
+    ctx.segmentsToUpdate.clear();
+    ctx.crSegmentsToUpdate.clear();
     Measure* lastMeasure = ctx.crSegments.back()->measure();
     for (Segment& seg : lastMeasure->segments()) {
         ctx.segmentsToUpdate.push_back(&seg);
