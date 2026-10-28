@@ -993,3 +993,62 @@ TEST_F(Engraving_StaveSharingTests, testMultipleSharedParts)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testUserTrackMapWithVoiceCrossing)
+{
+    // Test a user track map is valid when it causes voice crossing, even if voice crossing is disabled in the style
+
+    // [GIVEN] A score of 4 measures with 2 flute staves, in unison in measures 1 and 2, with flute 1 above flute 2 in measures 3 and 4
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_17.mscz");
+    ASSERT_TRUE(score);
+    ASSERT_FALSE(score->style().styleB(Sid::allowVoiceCrossing));
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+
+    // [WHEN] A stave sharing change is added at the start of measure 2, mapping origin stave 1 to voice 2 of shared stave 1
+    // and origin stave 2 to voice 1 of shared stave 1
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m2);
+    ASSERT_EQ(m2->tick(), Fraction(1, 1));
+    Segment* seg = m2->first(SegmentType::ChordRest);
+    ASSERT_TRUE(seg);
+
+    const SharedTrackMap userTrackMap = { { origin1, shared1 + 1 }, { origin2, shared1 } };
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Stave sharing tests"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
+        for (const auto& [originTrack, sharedTrack] : userTrackMap) {
+            EditStaveSharing::setTrackMapping(tx, seg, sharedPart, originTrack, sharedTrack);
+        }
+    });
+    score->doLayout();
+
+    // [THEN] The user track map should be stored and flagged as valid
+    std::optional<StaveSharingState> state = sharedPart->exactStaveSharingStateAtTick(m2->tick());
+    ASSERT_TRUE(state && state->userTrackMap());
+    EXPECT_EQ(state->userTrackMap().value(), userTrackMap) << dump(state->userTrackMap().value());
+    EXPECT_TRUE(state->isUserMapValid());
+
+    // [THEN] The user track map should be used from measure 2
+    const SharedTrackMap& m2TrackMap = sharedPart->staveSharingStateAtTick(m2->tick()).sharedTrackMap();
+    EXPECT_EQ(m2TrackMap, userTrackMap) << dump(m2TrackMap);
+
+    // [THEN] The score should not be corrupt
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}

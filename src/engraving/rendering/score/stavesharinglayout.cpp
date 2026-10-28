@@ -145,7 +145,8 @@ bool StaveSharingLayout::isValid(const SharedTrackMap& userMap, StaveSharingLayo
 
         // Voices on the same shared stave must be able to go on the same stave
         bool sameStaveAsPrev = prevSharedTrack != muse::nidx && track2staff(prevSharedTrack) == track2staff(sharedTrack);
-        if (sameStaveAsPrev && !canGoToSameStave(lastTrackOnPrevVoice, originTracks.front(), ctx)) {
+        if (sameStaveAsPrev
+            && !canGoToSameStave(lastTrackOnPrevVoice, originTracks.front(), true, ctx)) {
             return false;
         }
 
@@ -333,7 +334,7 @@ SharedTrackMap StaveSharingLayout::computeTrackMap(StaveSharingContext& ctx)
 
         bool canGoOnThisStave = track2voice(curSharedTrack) == 0
                                 || lastAssignedTrack == muse::nidx
-                                || canGoToSameStave(lastAssignedTrack, track, ctx);
+                                || canGoToSameStave(lastAssignedTrack, track, ctx.style.styleB(Sid::allowVoiceCrossing), ctx);
         if (!canGoOnThisStave) {
             curSharedTrack = trackZeroVoice(curSharedTrack + VOICES);
         }
@@ -879,11 +880,8 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
     return true;
 }
 
-bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack,
-                                          StaveSharingContext& ctx)
+bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, bool allowVoiceCrossing, StaveSharingContext& ctx)
 {
-    const bool allowVoiceCrossing = ctx.style.styleB(Sid::allowVoiceCrossing);
-
     for (Segment* segment : ctx.allSegmentsInRange()) {
         if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
             return false;
