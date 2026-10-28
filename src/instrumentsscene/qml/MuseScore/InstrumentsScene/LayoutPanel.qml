@@ -51,14 +51,28 @@ Item {
         MouseArea {
             anchors.fill: parent
 
-            onClicked: {
-                treeModel.clearSelection()
+            // Only below the header: clicks on its (disabled) buttons and switches don't deselect
+            onClicked: function(mouse) {
+                if (mouse.y > headerDivider.mapToItem(background, 0, 0).y) {
+                    treeModel.clearSelection()
+                }
             }
         }
     }
 
 
 
+
+    // Right-click menu for the selected instruments / system markings
+    StyledMenuLoader {
+        id: rowContextMenu
+
+        menuAnchorItem: root.Window.window ? root.Window.window.contentItem : null
+
+        onHandleMenuItem: function(itemId) {
+            prv.handleRowContextMenuItem(itemId)
+        }
+    }
 
     LayoutPanelContextMenuModel {
         id: contextMenuModel
@@ -88,13 +102,134 @@ Item {
         // A group being dragged (by its header) is shown collapsed for the duration of the drag
         property string draggedGroupId: ""
 
-        function isGroupExpanded(groupId) {
+        // While an instrument is dragged over a group it can join, that group is the drop target: { id, isEmpty }
+        property var dropGroupTarget: null
+        property bool edgeMovePending: false
+        // The group the dragged instrument was in when the drag started (if any)
+        property string dragStartGroupId: ""
+
+        // Selected instruments (ids, in list order) and system markings, for the right-click menu
+        property var contextMenuPartIds: []
+
+        function openRowContextMenu(x, y) {
+            let partIds = []
+            let systemMarkingsCount = 0
+            let groups = []
+            // The group all selected instruments are in, if they're all in the same one (it isn't offered)
+            let currentGroupId = undefined
+
+            for (let row = 0; row < treeModel.rowCount(); ++row) {
+                const item = treeModel.modelIndexToItem(treeModel.index(row, 0))
+                if (!item) {
+                    continue
+                }
+                if (item.isSelected && item.type === LayoutPanelItemType.PART) {
+                    partIds.push(item.id)
+                    const groupId = prv.isGroupMember(item) ? item.sharedGroupId : ""
+                    currentGroupId = currentGroupId === undefined || currentGroupId === groupId ? groupId : ""
+                } else if (item.isSelected && item.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
+                    ++systemMarkingsCount
+                }
+                if (item.type === LayoutPanelItemType.SHARED_PART || item.type === LayoutPanelItemType.EMPTY_SHARED_GROUP) {
+                    groups.push(item)
+                }
+            }
+
+            if (partIds.length === 0 && systemMarkingsCount === 0) {
+                return
+            }
+
+            prv.contextMenuPartIds = partIds
+
+            const several = partIds.length > 1
+            let items = []
+
+            if (partIds.length > 0 && systemMarkingsCount === 0) {
+                if (treeModel.isMasterScore) {
+                    items.push({ id: "duplicate", title: several ? qsTrc("layoutpanel", "Duplicate instruments")
+                                                                 : qsTrc("layoutpanel", "Duplicate instrument") })
+                }
+                items.push({ id: "remove", title: several ? qsTrc("layoutpanel", "Remove instruments")
+                                                          : qsTrc("layoutpanel", "Remove instrument") })
+            } else if (partIds.length === 0) {
+                items.push({ id: "remove", title: qsTrc("layoutpanel", "Remove system markings") })
+            } else {
+                items.push({ id: "remove", title: qsTrc("layoutpanel", "Remove selected") })
+            }
+
+            // System markings in a mixed selection simply aren't moved
+            if (partIds.length > 0 && groups.length > 0 && treeModel.isMasterScore) {
+                let groupItems = []
+                for (const group of groups) {
+                    if (group.id === currentGroupId) {
+                        continue
+                    }
+                    const isEmpty = group.type === LayoutPanelItemType.EMPTY_SHARED_GROUP
+                    groupItems.push({ id: "move-to-group:" + (isEmpty ? "empty:" : "shared:") + group.id, title: group.title })
+                }
+                groupItems.push({})
+                groupItems.push({ id: "move-to-new-group", title: several ? qsTrc("layoutpanel", "New group with instruments")
+                                                                         : qsTrc("layoutpanel", "New group with instrument") })
+
+                items.push({ id: "move-to-group", title: qsTrc("layoutpanel", "Move to shared stave group"), subitems: groupItems })
+            }
+
+            rowContextMenu.open(items, x, y)
+        }
+
+        function handleRowContextMenuItem(itemId) {
+            const partIds = prv.contextMenuPartIds
+            prv.contextMenuPartIds = []
+
+            if (itemId === "duplicate") {
+                treeModel.duplicateParts(partIds)
+            } else if (itemId === "remove") {
+                treeModel.removeSelectedRows()
+            } else if (itemId === "move-to-new-group") {
+                const sharedPartId = treeModel.createSharedGroupWithParts(partIds)
+                if (sharedPartId !== "") {
+                    prv.expandGroup(sharedPartId)
+                }
+            } else if (itemId.startsWith("move-to-group:")) {
+                const parts = itemId.split(":")
+                const sharedPartId = treeModel.movePartsToSharedGroup(partIds, parts[2], parts[1] === "empty")
+                if (sharedPartId !== "") {
+                    prv.expandGroup(sharedPartId)
+                }
+            }
+        }
+
+        function expandGroup(groupId) {
+            let expanded = Object.assign({}, prv.expandedGroups)
+            expanded[groupId] = true
+            prv.expandedGroups = expanded
+        }
+
+        function isDropGroupTarget(groupId) {
+            return Boolean(prv.dropGroupTarget) && prv.dropGroupTarget.id === groupId
+        }
+
+        // isCombined: whether the group's instruments are currently combined (its toggle is on, and so is "Combine")
+        function isGroupExpanded(groupId, isCombined) {
             if (groupId !== "" && groupId === prv.draggedGroupId) {
                 return false
             }
 
             // Groups can't be collapsed while their instruments aren't combined
-            return !treeModel.isStaveSharingEnabled || Boolean(prv.expandedGroups[groupId])
+            return !isCombined || Boolean(prv.expandedGroups[groupId])
+        }
+
+        // Whether a row's group is combined: the header is enabled exactly while it is, and its instruments
+        // are disabled exactly while it is (staves follow their instrument)
+        function isRowGroupCombined(item, parentItem) {
+            if (!item) {
+                return false
+            }
+            if (item.type === LayoutPanelItemType.SHARED_PART) {
+                return item.isEnabled
+            }
+            const partItem = parentItem ? parentItem : item
+            return !partItem.isEnabled
         }
 
         function toggleGroupExpanded(groupId) {
@@ -182,6 +317,18 @@ Item {
             const depth = index.parent.valid ? 1 : 0
             const role = item.sharedGroupRole
 
+            // Empty group: its header, then a "Drag instruments here" row, on one group background
+            if (item.type === LayoutPanelItemType.EMPTY_SHARED_GROUP) {
+                m.inGroup = true
+                m.top = prv.groupPadding
+                m.bottom = prv.groupPadding + prv.rowContentHeight + prv.groupPadding
+                m.groupTop = true
+                m.groupBottom = true
+                m.gap = prv.itemSpacing
+                m.height = m.top + prv.rowContentHeight + m.bottom + m.gap
+                return m
+            }
+
             if (prv.hidesOtherInstruments && depth === 0 && item.type === LayoutPanelItemType.PART && !item.existsInScore) {
                 m.hidden = true
                 return m
@@ -198,7 +345,7 @@ Item {
             m.inGroup = role !== LayoutPanelItemType.NOT_IN_GROUP
 
             const isMember = role === LayoutPanelItemType.GROUP_MEMBER || role === LayoutPanelItemType.GROUP_LAST_MEMBER
-            if ((isMember && !prv.isGroupExpanded(item.sharedGroupId))
+            if ((isMember && !prv.isGroupExpanded(item.sharedGroupId, prv.isRowGroupCombined(item, parentItem)))
                     || (m.inGroup && item.type === LayoutPanelItemType.CONTROL_ADD_STAFF)) {
                 // Instruments in a group can't add staves, so the "Add staff" row is omitted
                 m.hidden = true
@@ -216,7 +363,7 @@ Item {
                 m.top = prv.groupPadding
                 m.bottom = prv.groupPadding
                 m.groupTop = true
-                if (!prv.isGroupExpanded(item.sharedGroupId)) {
+                if (!prv.isGroupExpanded(item.sharedGroupId, item.isEnabled)) {
                     m.groupBottom = true
                     m.gap = prv.itemSpacing
                 }
@@ -280,6 +427,8 @@ Item {
             isMovingDownAvailable: treeModel.isMovingDownAvailable
             isAddingAvailable: treeModel.isAddingAvailable
             isAddingSystemMarkingsAvailable: treeModel.isAddingSystemMarkingsAvailable
+            // Shared staves only exist in the main score
+            isAddingSharedStaveGroupAvailable: treeModel.isAddingAvailable && treeModel.isMasterScore
             isRemovingAvailable: treeModel.isRemovingAvailable
             selectedItemsType: treeModel.selectedItemsType
 
@@ -289,6 +438,10 @@ Item {
 
             onAddSystemMarkingsRequested: {
                 treeModel.addSystemMarkings()
+            }
+
+            onAddSharedStaveGroupRequested: {
+                treeModel.addEmptySharedGroup()
             }
 
             onMoveUpRequested: {
@@ -334,6 +487,7 @@ Item {
         }
 
         SeparatorLine {
+            id: headerDivider
             Layout.topMargin: contentColumn.sideMargin
         }
 
@@ -512,6 +666,10 @@ Item {
                         return rowItem.isEnabled
                     }
 
+                    if (rowItem.type === LayoutPanelItemType.EMPTY_SHARED_GROUP) {
+                        return treeModel.isStaveSharingEnabled
+                    }
+
                     // Origin parts are disabled while their shared part is enabled
                     const partItem = styleData.depth > 0 ? parentRowItem : rowItem
                     return Boolean(partItem) && !partItem.isEnabled
@@ -558,12 +716,18 @@ Item {
                     }
                 }
 
+                readonly property LayoutPanelItemDelegate rowDelegate: treeItemDelegateLoader.item as LayoutPanelItemDelegate
+                // A group being dragged (by its header): its slot shows a group-sized drop placeholder instead
+                readonly property bool isDraggedGroup: Boolean(rowDelegate) && rowDelegate.isDragged && Boolean(rowItem)
+                                                       && (rowItem.type === LayoutPanelItemType.SHARED_PART
+                                                           || rowItem.type === LayoutPanelItemType.EMPTY_SHARED_GROUP)
+
                 // Shared-staves group background: one segment per row, rounded at the group's ends
                 Item {
                     width: parent.width
                     height: parent.height - dropArea.metrics.gap
 
-                    visible: dropArea.metrics.inGroup
+                    visible: dropArea.metrics.inGroup && !dropArea.isDraggedGroup
                     clip: true
 
                     Rectangle {
@@ -573,11 +737,14 @@ Item {
                         readonly property bool isSelected: Boolean(prv.selectedGroups[groupId])
                         readonly property bool isHovered: (prv.groupHoverCounts[groupId] || 0) > 0
                         readonly property bool isPressed: prv.pressedGroupId === groupId
-                        // Versions > Group style: "Filled groups" fills combined groups and outlines uncombined ones;
-                        // "Outlined groups" outlines every group (see the separate outline below).
-                        // Either way, hover, press and selection fill the group.
-                        readonly property bool outlined: contextMenuModel.outlinedGroups
-                        readonly property bool isFilled: (!outlined && dropArea.isGroupCombined) || isSelected || isHovered || isPressed
+                        // Versions > Group style: "Filled groups" fills every group; "Filled only when on" fills combined groups
+                        // and outlines uncombined ones; "Outlined groups" outlines every group (see the separate outline below).
+                        // In every style, hover, press and selection fill the group.
+                        readonly property bool outlined: contextMenuModel.groupStyle === 2
+                        readonly property bool filledWhenOff: contextMenuModel.groupStyle === 0
+                        // Whether the group is filled at rest (hover, press and selection always fill it)
+                        readonly property bool hasRestingFill: !outlined && (dropArea.isGroupCombined || filledWhenOff)
+                        readonly property bool isFilled: hasRestingFill || isSelected || isHovered || isPressed
 
                         width: parent.width
                         y: dropArea.metrics.groupTop ? 0 : -overflow
@@ -585,17 +752,17 @@ Item {
 
                         radius: 6
                         color: isSelected ? ui.theme.accentColor : isFilled ? ui.theme.buttonColor : "transparent"
-                        border.width: !outlined && !isFilled ? 1 : 0
+                        border.width: !outlined && !isFilled ? 1 : 0 // "Filled only when on": outline of an uncombined group
                         border.color: ui.theme.strokeColor
 
                         opacity: {
                             if (!isFilled) {
-                                return outlined ? 0 : 1 // "Filled groups": outline of an uncombined group
+                                return outlined ? 0 : 1
                             }
                             if (isSelected) {
                                 return isPressed ? 0.7 : isHovered ? 0.4 : 0.5
                             }
-                            if (dropArea.isGroupCombined) {
+                            if (hasRestingFill) {
                                 return isPressed ? 0.7 : isHovered ? 0.3 : 0.5
                             }
                             return isPressed ? 0.5 : 0.3
@@ -622,7 +789,7 @@ Item {
                     Rectangle {
                         readonly property int overflow: 8
 
-                        visible: contextMenuModel.outlinedGroups
+                        visible: contextMenuModel.groupStyle === 2
 
                         width: parent.width
                         y: dropArea.metrics.groupTop ? 0 : -overflow
@@ -635,20 +802,64 @@ Item {
                     }
                 }
 
-                // Drop placeholder: while a row is dragged, its slot in the list (which follows the
-                // drag, as rows are moved live) shows where it will be dropped
-                Rectangle {
-                    readonly property LayoutPanelItemDelegate draggedDelegate: treeItemDelegateLoader.item as LayoutPanelItemDelegate
+                // Drop target highlight: while an instrument is dragged over a group it can be added to
+                Item {
+                    width: parent.width
+                    height: parent.height - dropArea.metrics.gap
 
+                    visible: dropArea.metrics.inGroup && Boolean(dropArea.rowItem) && prv.isDropGroupTarget(dropArea.rowItem.sharedGroupId)
+                    clip: true
+                    z: 1
+
+                    Rectangle {
+                        readonly property int overflow: 8
+
+                        width: parent.width
+                        y: dropArea.metrics.groupTop ? 0 : -overflow
+                        height: parent.height + (dropArea.metrics.groupTop ? 0 : overflow) + (dropArea.metrics.groupBottom ? 0 : overflow)
+
+                        radius: 6
+                        color: "transparent"
+                        border.width: 1.5
+                        border.color: ui.theme.accentColor
+                    }
+                }
+
+                // Empty group: the row instruments can be dropped on
+                Rectangle {
                     x: 4
-                    y: dropArea.metrics.top
+                    y: dropArea.metrics.top + prv.rowContentHeight + prv.groupPadding
                     width: parent.width - 8
                     height: prv.rowContentHeight
 
-                    visible: Boolean(draggedDelegate) && draggedDelegate.isDragged
+                    visible: Boolean(dropArea.rowItem) && dropArea.rowItem.type === LayoutPanelItemType.EMPTY_SHARED_GROUP
+                             && !dropArea.isDraggedGroup
 
                     radius: 3
-                    color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
+                    color: ui.theme.textFieldColor
+
+                    StyledTextLabel {
+                        anchors.centerIn: parent
+                        text: qsTrc("layoutpanel", "Drag instruments here")
+                    }
+                }
+
+                // Drop placeholder: while a row is dragged, its slot in the list (which follows the
+                // drag, as rows are moved live) shows where it will be dropped
+                // For a dragged group, it's the size of the (collapsed) group itself, and only outlined
+                Rectangle {
+                    readonly property bool isGroup: dropArea.isDraggedGroup
+
+                    x: isGroup ? 0 : 4
+                    y: isGroup ? 0 : dropArea.metrics.top
+                    width: parent.width - (isGroup ? 0 : 8)
+                    height: isGroup ? parent.height - dropArea.metrics.gap : prv.rowContentHeight
+
+                    // Not while dropping onto a group (which is highlighted instead)
+                    visible: Boolean(dropArea.rowDelegate) && dropArea.rowDelegate.isDragged && !prv.dropGroupTarget
+
+                    radius: isGroup ? 6 : 3
+                    color: isGroup ? "transparent" : Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
                     border.width: 1.5
                     border.color: ui.theme.accentColor
                 }
@@ -681,16 +892,36 @@ Item {
                             cardBottom: dropArea.metrics.cardBottom
                             isInGroup: dropArea.metrics.inGroup
                             isGroupCombined: dropArea.isGroupCombined
-                            isGroupExpanded: Boolean(item) && prv.isGroupExpanded(item.sharedGroupId)
+                            // Empty groups are always shown open
+                            isGroupExpanded: Boolean(item) && (type === LayoutPanelItemType.EMPTY_SHARED_GROUP
+                                                               || prv.isGroupExpanded(item.sharedGroupId, dropArea.isGroupCombined))
                             isStaveSharingEnabled: treeModel.isStaveSharingEnabled
-                            isLastRow: styleData.depth === 0 && !styleData.hasSibling
+                            // Re-evaluated on every row change (the view's "has sibling" flag isn't updated when rows move)
+                            isLastRow: {
+                                prv.treeRevision
+                                return styleData.depth === 0 && styleData.index.row === treeModel.rowCount() - 1
+                            }
                             isParentVisible: !dropArea.parentRowItem || dropArea.parentRowItem.isVisible
                             isLocked: type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER && styleData.depth === 0 && styleData.index.row === 0
 
-                            // Versions > Indent grouped instruments: in combined groups, instruments' (and their staves') contents are indented
-                            // so that their eyes line up with the group's expand arrow
-                            contentIndent: contextMenuModel.indentCombinedGroups && dropArea.isGroupCombined
-                                           && type !== LayoutPanelItemType.SHARED_PART ? prv.rowContentHeight + 4 : 0
+                            groupHeight: dropArea.height - dropArea.metrics.gap
+                            hideDisabledEyes: contextMenuModel.hideDisabledEyes
+                            onlyShowSettingsOnHover: contextMenuModel.onlyShowSettingsOnHover
+
+                            // Versions > Indentation: in combined groups, instruments' (and their staves') contents are indented.
+                            // Full: their eyes line up with the group's expand button (30px eye + 2px gap);
+                            // Half: their expand button's left edge lines up with the middle of the group's expand button
+                            contentIndent: {
+                                if (!dropArea.isGroupCombined || type === LayoutPanelItemType.SHARED_PART
+                                        || type === LayoutPanelItemType.EMPTY_SHARED_GROUP) {
+                                    return 0
+                                }
+                                switch (contextMenuModel.groupIndentation) {
+                                case 1: return prv.rowContentHeight + 2
+                                case 2: return prv.rowContentHeight / 2
+                                default: return 0
+                                }
+                            }
 
                             navigation.name: item?.title || "LayoutPanelItemDelegate"
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
@@ -709,6 +940,7 @@ Item {
                             }
 
                             readonly property bool isGroupHeader: type === LayoutPanelItemType.SHARED_PART
+                                                                  || type === LayoutPanelItemType.EMPTY_SHARED_GROUP
                             readonly property string groupId: item ? item.sharedGroupId : ""
 
                             readonly property bool isHeaderPressed: isGroupHeader && mouseArea.pressed
@@ -724,13 +956,29 @@ Item {
                                 }
                             }
 
+                            onContextMenuRequested: function(x, y) {
+                                if (!isSelected) {
+                                    treeModel.selectRow(styleData.index)
+                                }
+                                const pos = itemDelegate.mapToItem(root, x, y)
+                                Qt.callLater(prv.openRowContextMenu, pos.x, pos.y)
+                            }
+
+                            onUngroupRequested: {
+                                Qt.callLater(treeModel.ungroupSharedGroup, item.id)
+                            }
+
+                            onDeleteEmptyGroupRequested: {
+                                Qt.callLater(treeModel.deleteEmptySharedGroup, item.id)
+                            }
+
                             onGroupExpandToggled: {
                                 prv.toggleGroupExpanded(item.sharedGroupId)
                             }
 
                             onDoubleClicked: {
                                 if (type === LayoutPanelItemType.SHARED_PART) {
-                                    if (treeModel.isStaveSharingEnabled) {
+                                    if (isGroupCombined) {
                                         prv.toggleGroupExpanded(item.sharedGroupId)
                                     }
                                     return
@@ -768,6 +1016,8 @@ Item {
                             }
 
                             onDragStarted: {
+                                prv.dropGroupTarget = null
+                                prv.dragStartGroupId = prv.isGroupMember(item) ? item.sharedGroupId : ""
                                 if (isGroupHeader) {
                                     prv.draggedGroupId = groupId
                                 }
@@ -775,9 +1025,42 @@ Item {
                             }
 
                             onDropped: {
-                                treeModel.endActiveDrag()
                                 if (isGroupHeader && prv.draggedGroupId === groupId) {
                                     prv.draggedGroupId = ""
+                                }
+
+                                const dropTarget = prv.dropGroupTarget
+                                const startGroupId = prv.dragStartGroupId
+                                prv.dropGroupTarget = null
+                                prv.dragStartGroupId = ""
+
+                                const isPart = type === LayoutPanelItemType.PART
+                                const partId = isPart ? item.id : ""
+                                const leftGroup = isPart && !dropTarget && startGroupId !== ""
+                                        && !(prv.isGroupMember(item) && item.sharedGroupId === startGroupId)
+
+                                // Joining or leaving a group includes moving the instrument, so that it's one undoable step
+                                if (isPart && dropTarget) {
+                                    treeModel.cancelActiveDrag()
+                                } else if (leftGroup) {
+                                    treeModel.endActiveDragLeavingSharedGroup(partId)
+                                    return
+                                } else {
+                                    treeModel.endActiveDrag()
+                                }
+
+                                if (dropTarget) {
+                                    // Dropped on a group: join it
+                                    Qt.callLater(function() {
+                                        if (dropTarget.isEmpty) {
+                                            const sharedPartId = treeModel.fillEmptySharedGroup(dropTarget.id, partId)
+                                            if (sharedPartId !== "") {
+                                                prv.expandGroup(sharedPartId)
+                                            }
+                                        } else {
+                                            treeModel.addPartToSharedGroup(partId, dropTarget.id)
+                                        }
+                                    })
                                 }
                             }
 
@@ -805,25 +1088,88 @@ Item {
                     }
                 }
 
-                onEntered: function(drag) {
+                onEntered: function(drag) { dropArea.handleDrag(drag, false) }
+                // Within a row, only for the group edge zones (see below)
+                onPositionChanged: function(drag) { dropArea.handleDrag(drag, true) }
+
+                function handleDrag(drag, isPositionChange) {
                     const draggedItem = drag.source as LayoutPanelItemDelegate
                     if (!draggedItem) {
                         return
                     }
 
+                    const dragged = draggedItem.item
+                    const target = styleData.value
+                    if (!dragged || !target) {
+                        return
+                    }
+
+                    const draggedGroupId = prv.isGroupMember(dragged) ? dragged.sharedGroupId : ""
+                    const targetGroupId = target.type === LayoutPanelItemType.SHARED_PART || prv.isGroupMember(target)
+                            ? target.sharedGroupId : ""
+
+                    // Instruments can join another group (or an empty one): while dragged over it, it is the drop
+                    // target (the rows don't move), and the instrument joins it on release. Near the group's top or
+                    // bottom edge, the instrument goes just before / after the group instead (e.g. between two groups)
+                    const isEmptyTarget = target.type === LayoutPanelItemType.EMPTY_SHARED_GROUP
+                    const joinsGroup = dragged.type === LayoutPanelItemType.PART
+                            && (isEmptyTarget || (targetGroupId !== "" && targetGroupId !== draggedGroupId))
+
+                    if (isPositionChange && !joinsGroup) {
+                        return
+                    }
+
+                    if (joinsGroup) {
+                        const edgeZone = 12
+                        // Rows are compared at the top level: a staff row (of the group's last, expanded instrument)
+                        // stands for its instrument
+                        const topLevelIndex = styleData.depth > 0 ? styleData.index.parent : styleData.index
+                        const row = topLevelIndex.row
+                        const isHeaderRow = isEmptyTarget || target.type === LayoutPanelItemType.SHARED_PART
+                        const groupLastRow = target.type === LayoutPanelItemType.SHARED_PART ? row + prv.groupMemberCount(topLevelIndex) : row
+
+                        let besideRow = -1 // the row to place the instrument directly before / after
+                        let after = false
+                        if (isHeaderRow && drag.y < edgeZone) {
+                            besideRow = row
+                        } else if (dropArea.metrics.groupBottom && drag.y > dropArea.height - dropArea.metrics.gap - edgeZone) {
+                            besideRow = groupLastRow
+                            after = true
+                        }
+
+                        if (besideRow < 0) {
+                            prv.dropGroupTarget = { id: isEmptyTarget ? target.id : targetGroupId, isEmpty: isEmptyTarget }
+                            return
+                        }
+
+                        prv.dropGroupTarget = null
+
+                        const sourceRow = draggedItem.modelIndex.row
+                        const moveToRow = after ? (sourceRow < besideRow ? besideRow : besideRow + 1)
+                                                : (sourceRow < besideRow ? besideRow - 1 : besideRow)
+                        if (moveToRow !== sourceRow && sourceRow >= 0 && !prv.edgeMovePending) {
+                            // Position changes come in quickly: don't queue the same move twice
+                            prv.edgeMovePending = true
+                            const sourceParent = draggedItem.modelIndex.parent
+                            const destinationParent = topLevelIndex.parent
+                            Qt.callLater(function() {
+                                prv.edgeMovePending = false
+                                treeModel.moveRows(sourceParent, sourceRow, 1, destinationParent, moveToRow)
+                            })
+                        }
+                        return
+                    }
+                    prv.dropGroupTarget = null
 
                     if (styleData.index === draggedItem.modelIndex || !styleData.value.canAcceptDrop(draggedItem.item)) {
                         return
                     }
 
-                    // Instruments in a shared-staves group can only be reordered within it,
-                    // and other rows (including whole groups) can't be moved in among a group's instruments
-                    const dragged = draggedItem.item
-                    const target = styleData.value
-                    if (prv.isGroupMember(dragged) || prv.isGroupMember(target)) {
-                        if (!prv.isGroupMember(dragged) || !prv.isGroupMember(target) || dragged.sharedGroupId !== target.sharedGroupId) {
-                            return
-                        }
+                    // Nothing else (whole groups, system markings, other instruments' staves) can be moved in among
+                    // a group's instruments; instruments can be reordered within their group, or moved out of it
+                    // (leaving it on release)
+                    if (prv.isGroupMember(target) && targetGroupId !== draggedGroupId) {
+                        return
                     }
 
                     const sourceRow = draggedItem.modelIndex.row

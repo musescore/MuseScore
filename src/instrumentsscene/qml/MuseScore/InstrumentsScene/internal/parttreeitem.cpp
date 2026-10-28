@@ -254,7 +254,8 @@ bool PartTreeItem::canAcceptDrop(const QVariant& obj) const
         }
 
         // Instruments and shared-staves groups (moved as a whole, by their header) can be reordered among each other
-        const bool isPartOrGroup = item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART;
+        const bool isPartOrGroup = item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART
+                                   || item->type() == LayoutPanelItemType::EMPTY_SHARED_GROUP;
         if (isPartOrGroup && item->parentItem() == parentItem()) {
             return true;
         }

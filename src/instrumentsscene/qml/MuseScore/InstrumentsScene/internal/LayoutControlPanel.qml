@@ -36,6 +36,7 @@ RowLayout {
     property bool isRemovingAvailable: false
     property bool isAddingAvailable: false
     property bool isAddingSystemMarkingsAvailable: false
+    property bool isAddingSharedStaveGroupAvailable: false
 
     property int selectedItemsType: LayoutPanelItemType.UNDEFINED
 
@@ -43,6 +44,7 @@ RowLayout {
 
     signal addInstrumentRequested()
     signal addSystemMarkingsRequested()
+    signal addSharedStaveGroupRequested()
     signal moveUpRequested()
     signal moveDownRequested()
     signal removingRequested()
@@ -71,6 +73,7 @@ RowLayout {
 
         enabled: root.isAddingAvailable
         addSystemMarkingsAvailable: root.isAddingSystemMarkingsAvailable
+        addSharedStaveGroupAvailable: root.isAddingSharedStaveGroupAvailable
 
         onAddInstrumentRequested: {
             root.addInstrumentRequested()
@@ -78,6 +81,10 @@ RowLayout {
 
         onAddSystemMarkingsRequested: {
             root.addSystemMarkingsRequested()
+        }
+
+        onAddSharedStaveGroupRequested: {
+            root.addSharedStaveGroupRequested()
         }
     }
 

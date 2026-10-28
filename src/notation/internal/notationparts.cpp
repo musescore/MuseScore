@@ -27,6 +27,7 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/page.h"
 #include "engraving/editing/addremoveelement.h"
 #include "engraving/editing/editexcerpt.h"
@@ -34,6 +35,7 @@
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editstaff.h"
 #include "engraving/editing/editstavesharing.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
@@ -903,6 +905,177 @@ void NotationParts::toggleStaveSharing(bool on)
         EditStaveSharing::toggleStaveSharing(tx, score(), on);
     });
     m_partsChanged.notify();
+}
+
+muse::ID NotationParts::createSharedPart(const muse::IDList& partIds, const muse::ID& destinationPartId, InsertMode mode)
+{
+    std::vector<Part*> sourceParts;
+    for (Part* part : parts(partIds)) {
+        if (!part->isSharedPart()) {
+            sourceParts.push_back(part);
+        }
+    }
+    if (sourceParts.empty()) {
+        return muse::ID();
+    }
+
+    Part* destinationPart = destinationPartId.isValid() ? partModifiable(destinationPartId) : nullptr;
+
+    endInteractionWithScore();
+
+    SharedPart* sharedPart = nullptr;
+    undoStack()->transaction(TranslatableString("undoableAction", "Create shared staff"), [&](engraving::Transaction& tx) {
+        if (destinationPart && !muse::contains(sourceParts, destinationPart)) {
+            EditPart::moveParts(score(), sourceParts, destinationPart, mode == InsertMode::After);
+        } else if (sourceParts.size() > 1) {
+            EditPart::moveParts(score(), std::vector<Part*>(sourceParts.begin() + 1, sourceParts.end()), sourceParts.front(), true);
+        }
+
+        sharedPart = EditStaveSharing::cmdCreateSharedPartForPart(tx, score(), sourceParts.front());
+        for (size_t i = 1; i < sourceParts.size(); ++i) {
+            EditStaveSharing::cmdAddPartToSharedPart(tx, sharedPart, sourceParts[i]);
+        }
+    });
+
+    m_partsChanged.notify();
+    m_sharedPartsChanged.notify();
+
+    return sharedPart ? sharedPart->id() : muse::ID();
+}
+
+void NotationParts::addPartsToSharedPart(const muse::IDList& partIds, const muse::ID& sharedPartId)
+{
+    Part* shared = partModifiable(sharedPartId);
+    if (!shared || !shared->isSharedPart()) {
+        return;
+    }
+    SharedPart* sharedPart = engraving::toSharedPart(shared);
+
+    std::vector<Part*> sourceParts;
+    for (Part* part : parts(partIds)) {
+        if (!part->isSharedPart()) {
+            sourceParts.push_back(part);
+        }
+    }
+    if (sourceParts.empty()) {
+        return;
+    }
+
+    // The shared part's last part (that isn't being moved)
+    Part* lastPart = nullptr;
+    for (Part* part : score()->parts()) {
+        if (part->sharedPart() == sharedPart && !muse::contains(sourceParts, part)) {
+            lastPart = part;
+        }
+    }
+
+    endInteractionWithScore();
+
+    undoStack()->transaction(TranslatableString("undoableAction", "Add to shared staff"), [&](engraving::Transaction& tx) {
+        if (lastPart) {
+            EditPart::moveParts(score(), sourceParts, lastPart, true);
+        }
+        for (Part* part : sourceParts) {
+            EditStaveSharing::cmdAddPartToSharedPart(tx, sharedPart, part);
+        }
+    });
+
+    m_partsChanged.notify();
+    m_sharedPartsChanged.notify();
+}
+
+void NotationParts::ungroupSharedPart(const muse::ID& sharedPartId)
+{
+    Part* part = partModifiable(sharedPartId);
+    if (!part || !part->isSharedPart()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Ungroup instruments"));
+
+    // Disconnects the instruments from the shared part (see EditStaveSharing::handleRemovePart) before removing it
+    score()->cmdRemovePart(part);
+
+    apply();
+
+    m_partsChanged.notify();
+    m_sharedPartsChanged.notify();
+}
+
+void NotationParts::removePartFromSharedPart(const muse::ID& partId, const muse::ID& destinationPartId, InsertMode mode)
+{
+    Part* part = partModifiable(partId);
+    if (!part || !part->sharedPart()) {
+        return;
+    }
+
+    Part* destinationPart = destinationPartId.isValid() ? partModifiable(destinationPartId) : nullptr;
+
+    endInteractionWithScore();
+
+    undoStack()->transaction(TranslatableString("undoableAction", "Remove from shared staff"), [&](engraving::Transaction& tx) {
+        if (destinationPart && destinationPart != part) {
+            EditPart::moveParts(score(), { part }, destinationPart, mode == InsertMode::After);
+        }
+        EditStaveSharing::cmdRemovePartFromSharedPart(tx, part);
+    });
+
+    m_partsChanged.notify();
+    m_sharedPartsChanged.notify();
+}
+
+void NotationParts::duplicateParts(const muse::IDList& partIds)
+{
+    TRACEFUNC;
+
+    std::vector<Part*> sourceParts;
+    for (Part* part : score()->parts()) { // in score order
+        if (!part->isSharedPart() && muse::contains(partIds, part->id())) {
+            sourceParts.push_back(part);
+        }
+    }
+
+    if (sourceParts.empty()) {
+        return;
+    }
+
+    endInteractionWithScore();
+    startEdit(sourceParts.size() == 1
+              ? TranslatableString("undoableAction", "Duplicate instrument")
+              : TranslatableString("undoableAction", "Duplicate instruments"));
+
+    for (Part* sourcePart : sourceParts) {
+        const InstrumentTemplate* templ = mu::engraving::searchTemplateIndexForId(sourcePart->instrumentId()).instrTemplate;
+        if (!templ) {
+            continue;
+        }
+
+        // After the source part, or after the last part of its shared-staves group
+        const std::vector<Part*>& parts = score()->parts();
+        size_t index = muse::indexOf(parts, sourcePart) + 1;
+        if (SharedPart* sharedPart = sourcePart->sharedPart()) {
+            for (size_t i = 0; i < parts.size(); ++i) {
+                if (parts[i]->sharedPart() == sharedPart) {
+                    index = std::max(index, i + 1);
+                }
+            }
+        }
+
+        Part* part = new Part(score());
+        part->setSoloist(sourcePart->soloist());
+        part->setInstrument(Instrument::fromTemplate(templ));
+        part->setLongName(sourcePart->longName());
+        part->setShortName(sourcePart->shortName());
+
+        score()->undoInsertPart(part, index);
+        appendStaves(part, *templ, score()->keyList());
+
+        m_partChangedNotifier.itemAdded(part);
+    }
+
+    setBracketsAndBarlines();
+
+    apply();
 }
 
 Notification NotationParts::sharedPartsChanged() const

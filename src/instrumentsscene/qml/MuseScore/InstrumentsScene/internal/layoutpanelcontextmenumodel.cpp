@@ -42,8 +42,13 @@ static const QString COLLAPSE_ALL_ID("collapse-all-instruments");
 static const QString ORDERING_MENU_ID("ordering-menu");
 
 static const QString VERSION_UI_FILLED_ID("version-ui-filled-groups");
+static const QString VERSION_UI_FILLED_WHEN_ON_ID("version-ui-filled-only-when-on");
 static const QString VERSION_UI_OUTLINED_ID("version-ui-outlined-groups");
-static const QString VERSION_INDENT_ID("version-indent-grouped-instruments");
+static const QString VERSION_INDENT_NONE_ID("version-indentation-none");
+static const QString VERSION_INDENT_FULL_ID("version-indentation-full");
+static const QString VERSION_INDENT_HALF_ID("version-indentation-half");
+static const QString VERSION_HIDE_DISABLED_EYES_ID("version-hide-disabled-eyes");
+static const QString VERSION_SETTINGS_ON_HOVER_ID("version-only-show-settings-on-hover");
 
 LayoutPanelContextMenuModel::LayoutPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -65,12 +70,20 @@ void LayoutPanelContextMenuModel::handleMenuItem(const QString& itemId)
         emit expandCollapseAllRequested(true);
     } else if (itemId == COLLAPSE_ALL_ID) {
         emit expandCollapseAllRequested(false);
-    } else if (itemId == VERSION_UI_FILLED_ID || itemId == VERSION_UI_OUTLINED_ID) {
-        m_outlinedGroups = itemId == VERSION_UI_OUTLINED_ID;
+    } else if (itemId == VERSION_UI_FILLED_ID || itemId == VERSION_UI_FILLED_WHEN_ON_ID || itemId == VERSION_UI_OUTLINED_ID) {
+        m_groupStyle = itemId == VERSION_UI_OUTLINED_ID ? 2 : itemId == VERSION_UI_FILLED_WHEN_ON_ID ? 1 : 0;
         emit versionsChanged();
         updateMenu();
-    } else if (itemId == VERSION_INDENT_ID) {
-        m_indentCombinedGroups = !m_indentCombinedGroups;
+    } else if (itemId == VERSION_INDENT_NONE_ID || itemId == VERSION_INDENT_FULL_ID || itemId == VERSION_INDENT_HALF_ID) {
+        m_groupIndentation = itemId == VERSION_INDENT_FULL_ID ? 1 : itemId == VERSION_INDENT_HALF_ID ? 2 : 0;
+        emit versionsChanged();
+        updateMenu();
+    } else if (itemId == VERSION_HIDE_DISABLED_EYES_ID) {
+        m_hideDisabledEyes = !m_hideDisabledEyes;
+        emit versionsChanged();
+        updateMenu();
+    } else if (itemId == VERSION_SETTINGS_ON_HOVER_ID) {
+        m_onlyShowSettingsOnHover = !m_onlyShowSettingsOnHover;
         emit versionsChanged();
         updateMenu();
     } else {
@@ -192,14 +205,24 @@ MenuItem* LayoutPanelContextMenuModel::createInstrumentsOrderingItem()
     return makeMenu(TranslatableString("layoutpanel", "Instrument ordering"), orderItems, ORDERING_MENU_ID);
 }
 
-bool LayoutPanelContextMenuModel::outlinedGroups() const
+int LayoutPanelContextMenuModel::groupStyle() const
 {
-    return m_outlinedGroups;
+    return m_groupStyle;
 }
 
-bool LayoutPanelContextMenuModel::indentCombinedGroups() const
+int LayoutPanelContextMenuModel::groupIndentation() const
 {
-    return m_indentCombinedGroups;
+    return m_groupIndentation;
+}
+
+bool LayoutPanelContextMenuModel::hideDisabledEyes() const
+{
+    return m_hideDisabledEyes;
+}
+
+bool LayoutPanelContextMenuModel::onlyShowSettingsOnHover() const
+{
+    return m_onlyShowSettingsOnHover;
 }
 
 MenuItem* LayoutPanelContextMenuModel::createVersionsItem()
@@ -214,13 +237,23 @@ MenuItem* LayoutPanelContextMenuModel::createVersionsItem()
     };
 
     MenuItemList groupStyleItems {
-        createOption(VERSION_UI_FILLED_ID, TranslatableString("layoutpanel", "Filled groups"), !m_outlinedGroups),
-        createOption(VERSION_UI_OUTLINED_ID, TranslatableString("layoutpanel", "Outlined groups"), m_outlinedGroups),
+        createOption(VERSION_UI_FILLED_ID, TranslatableString("layoutpanel", "Filled groups"), m_groupStyle == 0),
+        createOption(VERSION_UI_FILLED_WHEN_ON_ID, TranslatableString("layoutpanel", "Filled only when on"), m_groupStyle == 1),
+        createOption(VERSION_UI_OUTLINED_ID, TranslatableString("layoutpanel", "Outlined groups"), m_groupStyle == 2),
+    };
+
+    MenuItemList indentationItems {
+        createOption(VERSION_INDENT_FULL_ID, TranslatableString("layoutpanel", "Full"), m_groupIndentation == 1),
+        createOption(VERSION_INDENT_HALF_ID, TranslatableString("layoutpanel", "Half"), m_groupIndentation == 2),
+        createOption(VERSION_INDENT_NONE_ID, TranslatableString("layoutpanel", "None"), m_groupIndentation == 0),
     };
 
     MenuItemList versionItems {
         makeMenu(TranslatableString("layoutpanel", "Group style"), groupStyleItems),
-        createOption(VERSION_INDENT_ID, TranslatableString("layoutpanel", "Indent grouped instruments"), m_indentCombinedGroups),
+        makeMenu(TranslatableString("layoutpanel", "Indentation"), indentationItems),
+        createOption(VERSION_HIDE_DISABLED_EYES_ID, TranslatableString("layoutpanel", "Hide disabled eye icons"), m_hideDisabledEyes),
+        createOption(VERSION_SETTINGS_ON_HOVER_ID, TranslatableString("layoutpanel", "Only show settings on hover"),
+                     m_onlyShowSettingsOnHover),
     };
 
     return makeMenu(TranslatableString("layoutpanel", "Versions"), versionItems);

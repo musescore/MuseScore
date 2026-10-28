@@ -85,9 +85,9 @@ Item {
         FlatButton {
             id: addButton
 
-            // 68 = 30 + 4 + 30 + 4 for the visibility and expand buttons and spacing in LayoutPanelItemDelegate,
+            // 66 = 30 + 2 + 30 + 4 for the visibility and expand buttons and spacing in LayoutPanelItemDelegate,
             // to make sure that the Add button aligns vertically with the text of the item above it
-            x: 68
+            x: 66
             anchors.verticalCenter: parent.verticalCenter
             height: 26
             margins: 8

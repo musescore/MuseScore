@@ -38,6 +38,9 @@ enum ItemType {
     STAFF,
     SYSTEM_OBJECTS_LAYER,
     CONTROL_ADD_STAFF,
+    // A shared-staves group added via the panel's Add menu that has no instruments yet; it only exists in the panel
+    // (an empty shared part can't exist in the score), and becomes a shared part once an instrument is dropped in it
+    EMPTY_SHARED_GROUP,
 };
 Q_ENUM_NS(ItemType)
 

@@ -109,6 +109,21 @@ public:
     Q_INVOKABLE void clearSelection();
     Q_INVOKABLE void addInstruments();
     Q_INVOKABLE void addSystemMarkings();
+
+    Q_INVOKABLE void addEmptySharedGroup();
+    // Turns the empty group into a shared part, starting with the given part; returns the new shared part's id
+    Q_INVOKABLE QString fillEmptySharedGroup(const QString& emptyGroupId, const QString& partId);
+    Q_INVOKABLE void addPartToSharedGroup(const QString& partId, const QString& sharedPartId);
+    Q_INVOKABLE void ungroupSharedGroup(const QString& sharedPartId);
+    Q_INVOKABLE void removePartFromSharedGroup(const QString& partId);
+
+    // Context menu actions on selected instruments (ids in list order)
+    Q_INVOKABLE void duplicateParts(const QStringList& partIds);
+    // Adds the parts to the group (an empty group or a shared part); returns the group's shared part id
+    Q_INVOKABLE QString movePartsToSharedGroup(const QStringList& partIds, const QString& groupId, bool isEmptyGroup);
+    // Creates a group with the parts (where the first part is); returns its shared part id
+    Q_INVOKABLE QString createSharedGroupWithParts(const QStringList& partIds);
+    Q_INVOKABLE void deleteEmptySharedGroup(const QString& emptyGroupId);
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
@@ -118,6 +133,10 @@ public:
     Q_INVOKABLE void changeEnabled(const QModelIndex& index, bool enable);
 
     Q_INVOKABLE void startActiveDrag();
+    // Ends the drag without applying its move to the score (when the drop does something else, as one step)
+    Q_INVOKABLE void cancelActiveDrag();
+    // Ends the drag of an instrument moved out of its shared-staves group: moves it and leaves the group, as one step
+    Q_INVOKABLE void endActiveDragLeavingSharedGroup(const QString& partId);
     Q_INVOKABLE void endActiveDrag();
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
@@ -190,6 +209,12 @@ private:
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
     void syncItemsSelection();
 
+    // For moving rows up / down by one: if that would put them in among another shared-staves group's
+    // instruments, the destination row past the whole group instead
+    int skipOtherSharedGroup(const QModelIndex& movedIndex, int destinationRow, bool up) const;
+    // Number of rows moved by the up / down buttons: the selection, plus a selected group header's instruments
+    int movedRowCount(const QModelIndexList& sortedSelectedIndexes) const;
+
     bool needWarnOnRemoveRows(int row, int count);
     bool warnAboutRemovingInstrumentsIfNecessary(int count);
 
@@ -214,6 +239,24 @@ private:
 
     bool m_isStaveSharingEnabled = false;
     bool m_isHideEmptyStavesEnabled = false;
+
+    // Empty shared-staves groups (see LayoutPanelItemType::EMPTY_SHARED_GROUP)
+    struct EmptySharedGroup {
+        int number = 0;
+        QString title;
+        bool atBottom = false;              // added via the Add menu: after the last instrument
+        muse::ID anchorPartId;              // else: after this instrument (if invalid, at the top)
+        muse::ID originSharedPartId;        // the group it was, before all its instruments left (if any)
+    };
+    QList<EmptySharedGroup> m_emptySharedGroups;
+    int m_lastEmptySharedGroupNumber = 0;
+
+    EmptySharedGroup* findEmptySharedGroup(const QString& emptyGroupId);
+    const AbstractLayoutPanelTreeItem* findEmptyGroupAnchor(const muse::ID& anchorPartId) const;
+    // After rows were moved: takes each empty group's position from where it now is in the panel
+    void updateEmptySharedGroupPositions();
+    // Before instruments leave their groups: keeps the groups they'd leave without instruments, as empty groups
+    void keepEmptiedSharedGroups(const QStringList& leavingPartIds, const QString& destinationGroupId);
 
     LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 

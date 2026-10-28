@@ -71,7 +71,14 @@ FocusableControl {
     // (its cog keeps its own states)
     property bool isLocked: false
 
-    // Shifts the row's contents right, keeping its width (see Versions > Indent grouped instruments in LayoutPanel.qml)
+    // Versions > Hide disabled eye icons: instruments and staves in combined groups don't show their (disabled) eye;
+    // its cell is kept, so nothing shifts
+    property bool hideDisabledEyes: false
+
+    // Versions > Only show settings on hover: when off, the cog is always shown
+    property bool onlyShowSettingsOnHover: true
+
+    // Shifts the row's contents right, keeping its width (see Versions > Indentation in LayoutPanel.qml)
     property int contentIndent: 0
 
     property alias isPopupOpened: popupLoader.isPopupOpened
@@ -82,13 +89,18 @@ FocusableControl {
     readonly property bool isDragged: prv.dragged
 
     // Group headers show their hover / pressed / selected state on the whole group's background (see LayoutPanel.qml)
-    readonly property bool usesRowHighlight: root.type !== LayoutPanelItemType.SHARED_PART
+    readonly property bool isEmptyGroup: root.type === LayoutPanelItemType.EMPTY_SHARED_GROUP
+    readonly property bool usesRowHighlight: root.type !== LayoutPanelItemType.SHARED_PART && !root.isEmptyGroup
     readonly property int cardRadius: 3
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal removeSelectionRequested()
     signal groupExpandToggled()
+    signal ungroupRequested()
+    // Right-click; x, y in this item's coordinates
+    signal contextMenuRequested(real x, real y)
+    signal deleteEmptyGroupRequested()
 
     signal changeVisibilityOfSelectedRowsRequested(bool visible)
     signal changeVisibilityRequested(var modelIndex, bool visible)
@@ -161,11 +173,20 @@ FocusableControl {
 
     mouseArea.hoverEnabled: root.visible
 
-    mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
+    mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
+    mouseArea.onClicked: function(mouse) {
+        if (mouse.button === Qt.RightButton) {
+            const pos = root.mouseArea.mapToItem(root, mouse.x, mouse.y)
+            root.contextMenuRequested(pos.x, pos.y)
+            return
+        }
+        root.clicked(mouse)
+    }
     mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
     mouseArea.enabled: root.isSelectable
 
-    mouseArea.drag.target: root
+    // Only the left button drags
+    mouseArea.drag.target: (root.mouseArea.pressedButtons & Qt.LeftButton) ? root : null
     mouseArea.drag.axis: Drag.YAxis
 
     Keys.onShortcutOverride: function(event) {
@@ -188,12 +209,53 @@ FocusableControl {
     background.bottomLeftRadius: root.cardBottom || prv.dragged ? root.cardRadius : 0
     background.bottomRightRadius: root.cardBottom || prv.dragged ? root.cardRadius : 0
 
+    // The height of the (collapsed) group this row is the header of: used for the card shown while dragging a group
+    property real groupHeight: 0
+    readonly property bool isDraggedGroup: prv.dragged && (root.type === LayoutPanelItemType.SHARED_PART || root.isEmptyGroup)
+
     StyledRectangularShadow {
         id: shadow
 
-        anchors.fill: contentArea
+        anchors.fill: root.isDraggedGroup ? draggedGroupBackground : contentArea
         visible: false
         z: -2
+    }
+
+    // While a group is dragged: the whole (collapsed) group, with its background
+    Rectangle {
+        id: draggedGroupBackground
+
+        width: root.width
+        height: root.groupHeight
+        z: -1
+
+        visible: root.isDraggedGroup
+        radius: 6
+        color: ui.theme.backgroundPrimaryColor
+
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            color: ui.theme.buttonColor
+            opacity: 0.5
+        }
+
+        // An empty group's "Drag instruments here" row
+        Rectangle {
+            x: 4
+            y: root.contentTopMargin + root.contentHeight + 4
+            width: parent.width - 8
+            height: root.contentHeight
+
+            visible: root.isEmptyGroup
+            radius: 3
+            color: ui.theme.textFieldColor
+
+            StyledTextLabel {
+                anchors.centerIn: parent
+                text: qsTrc("layoutpanel", "Drag instruments here")
+            }
+        }
     }
 
     // Card background: expanded instruments (with their staves), and instruments in a shared-staves group
@@ -207,7 +269,8 @@ FocusableControl {
         // looks the same as on a collapsed row; in groups that falls back to the instruments' card colour
         readonly property bool showsExpandedCard: root.isInExpandedCard && !root.isHovered
 
-        visible: showsExpandedCard || (root.isInGroup && root.type !== LayoutPanelItemType.SHARED_PART) || prv.dragged
+        visible: showsExpandedCard || (root.isInGroup && root.type !== LayoutPanelItemType.SHARED_PART && !root.isEmptyGroup)
+                 || (prv.dragged && !root.isDraggedGroup)
         color: showsExpandedCard ? ui.theme.textFieldColor : ui.theme.backgroundPrimaryColor
 
         topLeftRadius: root.background.topLeftRadius
@@ -280,12 +343,6 @@ FocusableControl {
                 Qt.callLater((root.item as PartTreeItem).resetAllFormatting)
             }
         }
-    }
-
-    Component {
-        id: sharedPartSettingsComp
-
-        SharedPartSettingsPopup {}
     }
 
     Component {
@@ -364,7 +421,35 @@ FocusableControl {
             id: rowHover
         }
 
+        // Clicks on disabled controls do nothing, rather than (re)selecting the row
+        MouseArea {
+            x: rowLayout.x + eyeCell.x
+            y: rowLayout.y + eyeCell.y
+            width: eyeCell.width
+            height: eyeCell.height
+            enabled: visibilityButton.visible && !visibilityButton.enabled
+        }
+
+        MouseArea {
+            x: rowLayout.x + expandCell.x
+            y: rowLayout.y + expandCell.y
+            width: expandCell.width
+            height: expandCell.height
+            enabled: expandButton.visible && !expandButton.enabled
+        }
+
+        MouseArea {
+            x: rowLayout.x + sharedPartToggle.x
+            y: rowLayout.y + sharedPartToggle.y
+            width: sharedPartToggle.width
+            height: sharedPartToggle.height
+            enabled: sharedPartToggle.visible && !sharedPartToggle.enabled
+        }
+
+
         RowLayout {
+            id: rowLayout
+
             anchors.fill: parent
             anchors.leftMargin: root.contentIndent
             // Room after the group toggle; without it, the cog lines up with the instruments' cogs
@@ -374,6 +459,8 @@ FocusableControl {
 
             // Visibility (or the system markings icon)
             Item {
+                id: eyeCell
+
                 Layout.preferredWidth: root.contentHeight
                 Layout.fillHeight: true
 
@@ -382,8 +469,11 @@ FocusableControl {
 
                     anchors.fill: parent
 
-                    visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+                    // Empty groups have no visibility to show
+                    visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER && !root.isEmptyGroup
                              && (root.type !== LayoutPanelItemType.SHARED_PART || root.isGroupCombined)
+                             && !(root.hideDisabledEyes && root.isGroupCombined
+                                  && root.type !== LayoutPanelItemType.SHARED_PART && !enabled)
 
                     // Instruments on combined shared staves (and their staves) take their visibility from the group,
                     // so their eyes are disabled (shown at the theme's disabled opacity), mirroring the instrument
@@ -422,17 +512,21 @@ FocusableControl {
                 }
             }
 
-            // Expand / collapse (an empty cell for staves, so that their names line up with the instrument's)
+            // Expand / collapse (an empty cell for staves, so that their names line up with the instrument's);
+            // 2px after the visibility cell rather than the row's usual spacing
             Item {
+                id: expandCell
+
                 Layout.preferredWidth: root.contentHeight
                 Layout.fillHeight: true
+                Layout.leftMargin: -2
 
                 visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
                 FlatButton {
                     id: expandButton
 
-                    readonly property bool isGroup: root.type === LayoutPanelItemType.SHARED_PART
+                    readonly property bool isGroup: root.type === LayoutPanelItemType.SHARED_PART || root.isEmptyGroup
                     readonly property bool expanded: isGroup ? root.isGroupExpanded : root.isExpanded
 
                     anchors.fill: parent
@@ -440,7 +534,8 @@ FocusableControl {
                     visible: root.depth === 0 && root.isExpandable
 
                     // Groups are always open while their instruments aren't combined
-                    enabled: !isGroup || root.isStaveSharingEnabled
+                    // (and empty groups always are)
+                    enabled: !isGroup || (root.isGroupCombined && !root.isEmptyGroup)
 
                     objectName: "ExpandBtn"
                     navigation.panel: root.navigation.panel
@@ -484,6 +579,8 @@ FocusableControl {
                         return isItemVisible && !root.isGroupCombined
                     case LayoutPanelItemType.SHARED_PART:
                         return isItemVisible && root.isGroupCombined
+                    case LayoutPanelItemType.EMPTY_SHARED_GROUP:
+                        return true
                     default:
                         return false
                     }
@@ -514,7 +611,8 @@ FocusableControl {
                                                             || expandButton.navigation.highlight
                                                             || sharedPartToggle.navigation.highlight
 
-                opacity: root.isHovered || root.mouseArea.pressed || root.isSelected || popupLoader.isPopupOpened || rowHasKeyboardFocus ? 1 : 0
+                opacity: !root.onlyShowSettingsOnHover || root.isHovered || root.mouseArea.pressed || root.isSelected
+                         || popupLoader.isPopupOpened || groupMenu.isMenuOpened || rowHasKeyboardFocus ? 1 : 0
 
                 objectName: "SettingsBtn"
                 navigation.panel: root.navigation.panel
@@ -522,9 +620,9 @@ FocusableControl {
                 navigation.column: 3
                 navigation.accessible.name: qsTrc("layoutpanel", "Settings")
 
-                // Accent state while its popup is open
-                transparent: !popupLoader.isPopupOpened
-                accentButton: popupLoader.isPopupOpened
+                // Accent state while its popup (or a group's menu) is open
+                transparent: !popupLoader.isPopupOpened && !groupMenu.isMenuOpened
+                accentButton: popupLoader.isPopupOpened || groupMenu.isMenuOpened
                 icon: IconCode.SETTINGS_COG
 
                 // The popup window has a padding around its visible content (for the shadow); end this anchor
@@ -536,18 +634,47 @@ FocusableControl {
                     height: parent.height
                 }
 
+                // Groups' cog opens a menu (for now) rather than a settings popup
+                StyledMenuLoader {
+                    id: groupMenu
+
+                    menuAnchorItem: root.Window.window ? root.Window.window.contentItem : null
+                    placementPolicies: PopupView.PreferRight
+
+                    onHandleMenuItem: function(itemId) {
+                        if (itemId === "ungroup-instruments") {
+                            root.ungroupRequested()
+                        } else if (itemId === "delete-group") {
+                            root.deleteEmptyGroupRequested()
+                        }
+                    }
+                }
+
                 onClicked: {
                     if (popupLoader.isPopupOpened) {
                         popupLoader.closeOpenedPopup()
                         return
                     }
 
+                    if (root.type === LayoutPanelItemType.SHARED_PART) {
+                        // A shared part always has at least one instrument
+                        groupMenu.toggleOpened([
+                            { id: "ungroup-instruments", title: qsTrc("layoutpanel", "Ungroup instruments") }
+                        ])
+                        return
+                    }
+
+                    if (root.isEmptyGroup) {
+                        groupMenu.toggleOpened([
+                            { id: "delete-group", title: qsTrc("layoutpanel", "Delete group"), icon: IconCode.DELETE_TANK }
+                        ])
+                        return
+                    }
+
                     let comp = null
                     let item = {}
 
-                    if (root.type === LayoutPanelItemType.SHARED_PART) {
-                        comp = sharedPartSettingsComp
-                    } else if (root.type === LayoutPanelItemType.PART) {
+                    if (root.type === LayoutPanelItemType.PART) {
                         comp = instrumentSettingsComp
 
                         item["partId"] = root.item.id
@@ -571,15 +698,18 @@ FocusableControl {
             ToggleButton {
                 id: sharedPartToggle
 
-                // The per-group switch only exists while instruments are being combined
-                visible: root.type === LayoutPanelItemType.SHARED_PART && root.isStaveSharingEnabled
+                // The per-group switch only exists while instruments are being combined; an empty group's switch
+                // is always shown, disabled, reflecting whether instruments are being combined
+                visible: (root.type === LayoutPanelItemType.SHARED_PART && root.isStaveSharingEnabled) || root.isEmptyGroup
+                enabled: !root.isEmptyGroup
 
                 navigation.panel: root.navigation.panel
                 navigation.row: root.navigation.row
                 navigation.column: 4
-                navigation.accessible.name: qsTrc("layoutpanel", "Combine onto shared staves")
+                navigation.accessible.name: toolTipTitle
+                toolTipTitle: qsTrc("layoutpanel", "Combine onto shared staves")
 
-                checked: root.item && root.item.isEnabled
+                checked: root.isEmptyGroup ? root.isStaveSharingEnabled : Boolean(root.item) && root.item.isEnabled
                 onToggled: function() {
                     if (root.isSelected) {
                         root.changeEnabledOfSelectedRowsRequested(!checked)
