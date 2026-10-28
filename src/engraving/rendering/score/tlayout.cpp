@@ -1661,7 +1661,7 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
 
     ldata->setMag(item->chord()->mag());
 
-    layoutChordLinePath(item, ldata, item->baseLength());
+    layoutChordLinePath(item, ldata, spatium, item->chordMag());
 
     double x = 0.0;
     double y = noteLD->pos().y();
@@ -1730,7 +1730,7 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     }
 }
 
-void TLayout::layoutChordLinePath(const ChordLine* item, ChordLine::LayoutData* ldata, double baseLength)
+void TLayout::layoutChordLinePath(const ChordLine* item, ChordLine::LayoutData* ldata, double spatium, double mag)
 {
     ldata->path = PainterPath();
     if (item->chordLineType() == ChordLineType::NOTYPE || item->isWavy()) {
@@ -1741,7 +1741,7 @@ void TLayout::layoutChordLinePath(const ChordLine* item, ChordLine::LayoutData* 
     const ChordLine::Points& offsets = item->bezierOffsets();
     ChordLine::Points points;
     for (size_t i = 0; i < points.size(); ++i) {
-        points[i] = defaultPoints[i] * baseLength + offsets[i];
+        points[i] = (defaultPoints[i] * spatium + offsets[i]) * mag;
     }
 
     PainterPath path;

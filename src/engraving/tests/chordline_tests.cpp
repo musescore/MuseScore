@@ -200,32 +200,39 @@ TEST_F(Engraving_ChordLineTests, layoutPath)
     ChordLine::LayoutData* ldata = m_chordLine->mutldata();
     m_chordLine->setBezierOffset(ChordLine::Point::END, PointF(10.0, 5.0));
 
-    // [THEN] A curved line is the default bezier, scaled by the base length, plus the offsets
-    double baseLength = 10.0;
-    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, baseLength);
+    // [THEN] A curved line is the default bezier, in spatium units, plus the offsets
+    const double spatium = 10.0;
+    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, spatium, 1.0);
     expectPath(ldata->path, { { PainterPath::ElementType::MoveToElement, PointF(0, 0) },    // (0 * 10, 0 * 10)
                    { PainterPath::ElementType::CurveToElement, PointF(6, 0) },              // (0.6 * 10, 0 * 10)
                    { PainterPath::ElementType::CurveToDataElement, PointF(12, 5) },         // (1.2 * 10, 0.5 * 10)
                    { PainterPath::ElementType::CurveToDataElement, PointF(22, 15) } });     // (1.2 * 10 + 10, 1 * 10 + 5)
 
+    // [THEN] The chord's mag scales the whole shape, offsets included
+    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, spatium, 0.5);
+    expectPath(ldata->path, { { PainterPath::ElementType::MoveToElement, PointF(0, 0) },
+                   { PainterPath::ElementType::CurveToElement, PointF(3, 0) },
+                   { PainterPath::ElementType::CurveToDataElement, PointF(6, 2.5) },
+                   { PainterPath::ElementType::CurveToDataElement, PointF(11, 7.5) } });
+
     // [THEN] A straight line only uses the start and end points
     m_chordLine->setStraight(true);
-    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, baseLength);
+    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, spatium, 1.0);
     expectPath(ldata->path, { { PainterPath::ElementType::MoveToElement, PointF(0, 0) },    // (0 * 10, 0 * 10)
                    { PainterPath::ElementType::LineToElement, PointF(22, 15) } });          // (1.2 * 10 + 10, 1 * 10 + 5)
 
     // [THEN] A wavy line has no path
     m_chordLine->setWavy(true);
-    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, baseLength);
+    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, spatium, 1.0);
     EXPECT_EQ(ldata->path.elementCount(), 0);
 }
 
-TEST_F(Engraving_ChordLineTests, baseLengthFollowsChordMag)
+TEST_F(Engraving_ChordLineTests, chordMagFollowsChord)
 {
-    EXPECT_DOUBLE_EQ(m_chordLine->baseLength(), m_chordLine->spatium());
+    EXPECT_DOUBLE_EQ(m_chordLine->chordMag(), 1.0);
 
     m_chord->setSmall(true);
-    EXPECT_DOUBLE_EQ(m_chordLine->baseLength(), m_chordLine->spatium() * m_score->style().styleD(Sid::smallNoteMag));
+    EXPECT_DOUBLE_EQ(m_chordLine->chordMag(), m_score->style().styleD(Sid::smallNoteMag));
 }
 
 TEST_F(Engraving_ChordLineTests, dragGripMovesItsPoint)
@@ -240,6 +247,24 @@ TEST_F(Engraving_ChordLineTests, dragGripMovesItsPoint)
     expectNear(m_chordLine->bezierOffset(ChordLine::Point::BEZIER1), PointF(sp, -sp));
     expectNear(m_chordLine->bezierOffset(ChordLine::Point::BEZIER2), PointF());
     expectNear(m_chordLine->bezierOffset(ChordLine::Point::END), PointF());
+}
+
+TEST_F(Engraving_ChordLineTests, dragGripOnSmallChord)
+{
+    // [GIVEN] A chord line on a small chord
+    m_chord->setSmall(true);
+    const double mag = m_chordLine->chordMag();
+    ASSERT_LT(mag, 1.0);
+    const double sp = m_chordLine->spatium();
+
+    // [WHEN] Dragging its end point
+    drag(Grip(3), PointF(sp, 0.5 * sp));
+
+    // [THEN] The drawn end point moves by exactly the dragged distance
+    ChordLine::LayoutData* ldata = m_chordLine->mutldata();
+    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, sp, mag);
+    const PointF defaultEnd = m_chordLine->defaultPoints()[size_t(ChordLine::Point::END)] * sp * mag;
+    expectNear(pathEnd(m_chordLine), defaultEnd + PointF(sp, 0.5 * sp));
 }
 
 TEST_F(Engraving_ChordLineTests, dragGripIgnoredForWavyLines)
@@ -298,6 +323,25 @@ TEST_F(Engraving_ChordLineTests, readLegacyStraightPath)
     expectPoints(m_chordLine->bezierOffsets(), { PointF(), PointF(), PointF(), PointF(1.0 * sp, 0.5 * sp) });
 }
 
+TEST_F(Engraving_ChordLineTests, readLegacyPathSmallChord)
+{
+    // [GIVEN] A chord line on a small chord
+    m_chord->setSmall(true);
+    ASSERT_LT(m_chordLine->chordMag(), 1.0);
+
+    // [WHEN] Reading a legacy path
+    readLegacyPath(1.0);
+
+    // [THEN] It's laid out where the saved path was drawn, at the saved points times spatium
+    const double sp = m_chordLine->spatium();
+    ChordLine::LayoutData* ldata = m_chordLine->mutldata();
+    rendering::score::TLayout::layoutChordLinePath(m_chordLine, ldata, sp, m_chordLine->chordMag());
+    expectPath(ldata->path, { { PainterPath::ElementType::MoveToElement, PointF(0, 0) },
+                   { PainterPath::ElementType::CurveToElement, PointF(0.6 * sp, 0) },
+                   { PainterPath::ElementType::CurveToDataElement, PointF(1.2 * sp, 0.5 * sp) },
+                   { PainterPath::ElementType::CurveToDataElement, PointF(2.2 * sp, 1.5 * sp) } });
+}
+
 //---------------------------------------------------------
 //   Integration tests: a chord line in a score with parts and undo
 //---------------------------------------------------------
@@ -340,7 +384,7 @@ protected:
     static void expectLaidOutEndOffset(const ChordLine* chordLine, const PointF& endOffset)
     {
         const PointF defaultEnd = chordLine->defaultPoints()[size_t(ChordLine::Point::END)];
-        expectNear(pathEnd(chordLine), defaultEnd * chordLine->baseLength() + endOffset);
+        expectNear(pathEnd(chordLine), (defaultEnd * chordLine->spatium() + endOffset) * chordLine->chordMag());
     }
 
     static void editEnd(ChordLine* chordLine, const PointF& offset)

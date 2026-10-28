@@ -75,21 +75,20 @@ const TranslatableString& ChordLine::chordLineTypeName() const
 
 ChordLine::Points ChordLine::defaultPoints() const
 {
-    const double x = isToTheLeft() ? -1.2 : 1.2; // let the symbols extend a bit more horizontally
-    const double y = isBelow() ? 1.0 : -1.0;
+    const Spatium x = isToTheLeft() ? -1.2_sp : 1.2_sp; // let the symbols extend a bit more horizontally
+    const Spatium y = isBelow() ? 1.0_sp : -1.0_sp;
 
     if (isToTheLeft()) {
-        return { PointF(), PointF(0.0, y / 2), PointF(x / 2, y), PointF(x, y) };
+        return { PointF(), PointF(0.0, (y / 2).val()), PointF((x / 2).val(), y.val()), PointF(x.val(), y.val()) };
     }
 
-    return { PointF(), PointF(x / 2, 0.0), PointF(x, y / 2), PointF(x, y) };
+    return { PointF(), PointF((x / 2).val(), 0.0), PointF(x.val(), (y / 2).val()), PointF(x.val(), y.val()) };
 }
 
-double ChordLine::baseLength() const
+double ChordLine::chordMag() const
 {
     const EngravingObject* parent = ownershipParent();
-    const double mag = parent && parent->isChord() ? toChord(parent)->intrinsicMag() : 1.0;
-    return spatium() * mag;
+    return parent && parent->isChord() ? toChord(parent)->intrinsicMag() : 1.0;
 }
 
 Pid ChordLine::bezierOffsetPid(Point point)
@@ -146,14 +145,16 @@ void ChordLine::dragGrip(EditData& ed)
     }
 
     const Point point = gripPoint(ed.curGrip);
-    const PointF offset = bezierOffset(point) + ed.delta;
+    // offsets are at the chord's normal size, the drawn shape is scaled by its mag
+    const PointF offset = bezierOffset(point) + ed.delta / chordMag();
 
     if (m_straight) {
         // stop the user from being able to turn one kind of slide into another
+        // (the shape at the chord's normal size is enough to check the direction)
         const Points points = defaultPoints();
-        const double length = baseLength();
-        const PointF start = points[size_t(Point::START)] * length + bezierOffset(Point::START);
-        const PointF end = points[size_t(Point::END)] * length + offset;
+        const double sp = spatium();
+        const PointF start = points[size_t(Point::START)] * sp + bezierOffset(Point::START);
+        const PointF end = points[size_t(Point::END)] * sp + offset;
         if ((m_chordLineType == ChordLineType::FALL && (end.x() < start.x() || end.y() < start.y()))
             || (m_chordLineType == ChordLineType::DOIT && (end.x() < start.x() || end.y() > start.y()))
             || (m_chordLineType == ChordLineType::SCOOP && (end.x() > start.x() || end.y() < start.y()))

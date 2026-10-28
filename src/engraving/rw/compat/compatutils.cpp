@@ -1253,12 +1253,13 @@ void CompatUtils::readChordLinePath(ChordLine* chordLine, XmlReader& e)
     const EngravingObject* parent = chordLine->ownershipParent();
     const Chord* chord = parent && parent->isChord() ? toChord(parent) : nullptr;
     const double spatium = chord ? chord->spatium() : chordLine->spatium();
-    const double baseLength = spatium * (chord ? chord->intrinsicMag() : 1.0);
+    const double mag = chord ? chord->intrinsicMag() : 1.0;
     const ChordLine::Points defaultPoints = chordLine->defaultPoints();
 
     for (size_t i = 0; i < points.size(); ++i) {
+        // the old line was drawn at the saved point * spatium; layout will draw (default * spatium + offset) * mag
         const ChordLine::Point point = pointTypes.at(i);
-        PointF offset = points.at(i) * spatium - defaultPoints[size_t(point)] * baseLength;
+        PointF offset = points.at(i) * spatium / mag - defaultPoints[size_t(point)] * spatium;
         // ignore rounding errors, so unedited points remain unedited:
         if (std::abs(offset.x()) < 0.001 * spatium) {
             offset.setX(0.0);

@@ -876,7 +876,7 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
 {
     ChordLine::LayoutData* ldata = item->mutldata();
     ldata->setMag(1.0);
-    TLayout::layoutChordLinePath(item, ldata, item->baseLength());
+    TLayout::layoutChordLinePath(item, ldata, item->spatium(), item->chordMag());
 
     ldata->setPos(0.0, 0.0);
 

@@ -59,8 +59,9 @@ public:
     bool isWavy() const { return m_wavy; }
     void setWavy(bool wavy) { m_wavy =  wavy; }
 
-    // The shape is described by up to four points. The default points are in units of the chord line's base
-    // length (i.e. spatium scaled by the chord's intrinsic mag), the user's offsets of these points are absolute
+    // The shape is described by up to four points: the default points, in spatium units, plus the user's
+    // offsets of these points, in absolute units. Both are at the chord's normal size: layout scales the
+    // whole shape by the chord's intrinsic mag.
     enum class Point : unsigned char {
         START,
         BEZIER1,
@@ -76,7 +77,7 @@ public:
     void setBezierOffset(Point point, const PointF& offset) { m_bezierOffsets[size_t(point)] = offset; }
     static Pid bezierOffsetPid(Point point);
 
-    double baseLength() const;
+    double chordMag() const;
 
     const TranslatableString& chordLineTypeName() const;
 
