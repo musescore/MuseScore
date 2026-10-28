@@ -1741,7 +1741,7 @@ void TLayout::layoutChordLinePath(const ChordLine* item, ChordLine::LayoutData* 
     const ChordLine::Points& offsets = item->gripOffsets();
     ChordLine::Points points;
     for (size_t i = 0; i < points.size(); ++i) {
-        points[i] = (defaultPoints[i] + offsets[i]) * baseLength;
+        points[i] = defaultPoints[i] * baseLength + offsets[i];
     }
 
     PainterPath path;

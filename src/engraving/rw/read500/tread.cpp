@@ -2616,7 +2616,7 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Path") {
-            compat::CompatUtils::readChordLinePath(l, e, ctx.mscVersion());
+            compat::CompatUtils::readChordLinePath(l, e);
         } else if (tag == "subtype") {
             l->setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
         } else if (tag == "straight") {
@@ -2625,14 +2625,10 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
             l->setWavy(e.readInt());
         } else if (tag == "lengthX" || tag == "lengthY") { // obsolete
             e.skipCurrentElement();
-        } else if (tag == propertyName(Pid::CHORD_LINE_GRIP_OFFSET1)) {
-            l->setGripOffset(ChordLine::Point::START, e.readPoint());
-        } else if (tag == propertyName(Pid::CHORD_LINE_GRIP_OFFSET2)) {
-            l->setGripOffset(ChordLine::Point::BEZIER1, e.readPoint());
-        } else if (tag == propertyName(Pid::CHORD_LINE_GRIP_OFFSET3)) {
-            l->setGripOffset(ChordLine::Point::BEZIER2, e.readPoint());
-        } else if (tag == propertyName(Pid::CHORD_LINE_GRIP_OFFSET4)) {
-            l->setGripOffset(ChordLine::Point::END, e.readPoint());
+        } else if (readProperty(l, tag, e, ctx, Pid::BEZIER_OFFSET1)) {
+        } else if (readProperty(l, tag, e, ctx, Pid::BEZIER_OFFSET2)) {
+        } else if (readProperty(l, tag, e, ctx, Pid::BEZIER_OFFSET3)) {
+        } else if (readProperty(l, tag, e, ctx, Pid::BEZIER_OFFSET4)) {
         } else if (tag == "play") {
             l->setPlayChordLine(e.readBool());
         } else if (!readItemProperties(l, e, ctx)) {

@@ -1272,13 +1272,8 @@ void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::CHORD_LINE_WAVY);
     writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
-    // Grip offsets are stored in units of the chord line's base length, so they can't be written with writeProperty
     for (size_t i = 0; i < size_t(ChordLine::Point::POINTS_COUNT); ++i) {
-        const ChordLine::Point point = ChordLine::Point(i);
-        const PointF& offset = item->gripOffset(point);
-        if (!offset.isNull()) {
-            xml.tagPoint(propertyName(ChordLine::gripOffsetPid(point)), offset);
-        }
+        writeProperty(item, xml, ChordLine::gripOffsetPid(ChordLine::Point(i)));
     }
     xml.endElement();
 }

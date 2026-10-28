@@ -204,7 +204,7 @@ void SlurTieSegment::startDragGrip(EditData& ed)
     IF_ASSERT_FAILED(eed) {
         return;
     }
-    for (Pid i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::OFFSET }) {
+    for (Pid i : { Pid::BEZIER_OFFSET1, Pid::BEZIER_OFFSET2, Pid::BEZIER_OFFSET3, Pid::BEZIER_OFFSET4, Pid::OFFSET }) {
         eed->pushProperty(i);
     }
 }
@@ -246,13 +246,13 @@ PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
     }
 
     switch (propertyId) {
-    case Pid::SLUR_UOFF1:
+    case Pid::BEZIER_OFFSET1:
         return ups(Grip::START).off;
-    case Pid::SLUR_UOFF2:
+    case Pid::BEZIER_OFFSET2:
         return ups(Grip::BEZIER1).off;
-    case Pid::SLUR_UOFF3:
+    case Pid::BEZIER_OFFSET3:
         return ups(Grip::BEZIER2).off;
-    case Pid::SLUR_UOFF4:
+    case Pid::BEZIER_OFFSET4:
         return ups(Grip::END).off;
     default:
         return SpannerSegment::getProperty(propertyId);
@@ -270,16 +270,16 @@ bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
     }
 
     switch (propertyId) {
-    case Pid::SLUR_UOFF1:
+    case Pid::BEZIER_OFFSET1:
         ups(Grip::START).off = v.value<PointF>();
         break;
-    case Pid::SLUR_UOFF2:
+    case Pid::BEZIER_OFFSET2:
         ups(Grip::BEZIER1).off = v.value<PointF>();
         break;
-    case Pid::SLUR_UOFF3:
+    case Pid::BEZIER_OFFSET3:
         ups(Grip::BEZIER2).off = v.value<PointF>();
         break;
-    case Pid::SLUR_UOFF4:
+    case Pid::BEZIER_OFFSET4:
         ups(Grip::END).off = v.value<PointF>();
         break;
     default:
@@ -300,10 +300,10 @@ PropertyValue SlurTieSegment::propertyDefault(Pid id) const
     }
 
     switch (id) {
-    case Pid::SLUR_UOFF1:
-    case Pid::SLUR_UOFF2:
-    case Pid::SLUR_UOFF3:
-    case Pid::SLUR_UOFF4:
+    case Pid::BEZIER_OFFSET1:
+    case Pid::BEZIER_OFFSET2:
+    case Pid::BEZIER_OFFSET3:
+    case Pid::BEZIER_OFFSET4:
         return PointF();
     default:
         return SpannerSegment::propertyDefault(id);
@@ -317,10 +317,10 @@ PropertyValue SlurTieSegment::propertyDefault(Pid id) const
 void SlurTieSegment::reset()
 {
     EngravingItem::reset();
-    undoResetProperty(Pid::SLUR_UOFF1);
-    undoResetProperty(Pid::SLUR_UOFF2);
-    undoResetProperty(Pid::SLUR_UOFF3);
-    undoResetProperty(Pid::SLUR_UOFF4);
+    undoResetProperty(Pid::BEZIER_OFFSET1);
+    undoResetProperty(Pid::BEZIER_OFFSET2);
+    undoResetProperty(Pid::BEZIER_OFFSET3);
+    undoResetProperty(Pid::BEZIER_OFFSET4);
     slurTie()->reset();
 }
 
@@ -333,10 +333,10 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
     if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
         // Switching autoplacement on. Save user-defined
         // placement properties to undo stack.
-        undoPushProperty(Pid::SLUR_UOFF1);
-        undoPushProperty(Pid::SLUR_UOFF2);
-        undoPushProperty(Pid::SLUR_UOFF3);
-        undoPushProperty(Pid::SLUR_UOFF4);
+        undoPushProperty(Pid::BEZIER_OFFSET1);
+        undoPushProperty(Pid::BEZIER_OFFSET2);
+        undoPushProperty(Pid::BEZIER_OFFSET3);
+        undoPushProperty(Pid::BEZIER_OFFSET4);
         // other will be saved in base classes.
     }
     SpannerSegment::undoChangeProperty(pid, val, ps);

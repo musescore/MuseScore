@@ -59,8 +59,8 @@ public:
     bool isWavy() const { return m_wavy; }
     void setWavy(bool wavy) { m_wavy =  wavy; }
 
-    // The shape is described by up to four points. These are in units of the chord line's
-    // base length, i.e. spatium scaled by the chord's intrinsic mag:
+    // The shape is described by up to four points. The default points are in units of the chord line's
+    // base length (i.e. spatium scaled by the chord's intrinsic mag), the user's grip offsets are absolute
     enum class Point : unsigned char {
         START,
         BEZIER1,
@@ -92,6 +92,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
     void reset() override;
+
+    void spatiumChanged(double oldValue, double newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override;
