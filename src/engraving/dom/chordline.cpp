@@ -386,6 +386,25 @@ void ChordLine::reset()
 }
 
 //---------------------------------------------------------
+//   propertyValueForLinkedItem
+//    the offsets are absolute, so a linked chord line in a score with a different spatium
+//    needs them scaled, as when it's created (see spatiumChanged)
+//---------------------------------------------------------
+
+PropertyValue ChordLine::propertyValueForLinkedItem(Pid propertyId, const PropertyValue& value, const EngravingItem* linkedItem) const
+{
+    switch (propertyId) {
+    case Pid::BEZIER_OFFSET1:
+    case Pid::BEZIER_OFFSET2:
+    case Pid::BEZIER_OFFSET3:
+    case Pid::BEZIER_OFFSET4:
+        return value.value<PointF>() * (linkedItem->spatium() / spatium());
+    default:
+        return EngravingItem::propertyValueForLinkedItem(propertyId, value, linkedItem);
+    }
+}
+
+//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 

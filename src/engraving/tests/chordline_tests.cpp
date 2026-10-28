@@ -420,6 +420,54 @@ TEST_F(Engraving_ChordLineScoreTests, dragGripPropagatesToExistingPart)
     expectLaidOutEndOffset(partChordLine, PointF());
 }
 
+TEST_F(Engraving_ChordLineScoreTests, propertyChangePropagatesToExistingPart)
+{
+    // [GIVEN] A score with a chord line and an existing part with a different spatium
+    TestUtils::createParts(m_score, 1);
+
+    Score* partScore = m_score->excerpts().front()->excerptScore();
+    partScore->setIsOpen(true); // only open parts are laid out on update
+    ChordLine* partChordLine = findChordLine(partScore);
+    ASSERT_TRUE(partChordLine);
+
+    const double sp = m_chordLine->spatium();
+    const double partSp = partChordLine->spatium();
+    ASSERT_GT(std::abs(partSp - sp), 1e-6);
+
+    // [WHEN] Changing the end offset property in the main score
+    editEnd(m_chordLine, PointF(sp, 0.5 * sp));
+
+    // [THEN] The part gets the same edit, scaled to its spatium
+    expectNear(partChordLine->bezierOffset(ChordLine::Point::END), PointF(partSp, 0.5 * partSp));
+    expectLaidOutEndOffset(partChordLine, PointF(partSp, 0.5 * partSp));
+}
+
+TEST_F(Engraving_ChordLineScoreTests, relinkToMainScoreScalesOffsets)
+{
+    // [GIVEN] A score with an edited chord line and an existing part with a different spatium
+    TestUtils::createParts(m_score, 1);
+
+    Score* partScore = m_score->excerpts().front()->excerptScore();
+    ChordLine* partChordLine = findChordLine(partScore);
+    ASSERT_TRUE(partChordLine);
+
+    const double sp = m_chordLine->spatium();
+    const double partSp = partChordLine->spatium();
+    ASSERT_GT(std::abs(partSp - sp), 1e-6);
+
+    editEnd(m_chordLine, PointF(sp, 0.5 * sp));
+
+    // [GIVEN] The part's chord line edited separately, which unlinks its position from the main score
+    editEnd(partChordLine, PointF(-partSp, 0.0));
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::END), PointF(sp, 0.5 * sp));
+
+    // [WHEN] Relinking it to the main score
+    partChordLine->relinkPropertiesToMaster(PropertyGroup::POSITION);
+
+    // [THEN] It gets the main score's edit, scaled to the part's spatium
+    expectNear(partChordLine->bezierOffset(ChordLine::Point::END), PointF(partSp, 0.5 * partSp));
+}
+
 TEST_F(Engraving_ChordLineScoreTests, resetRestoresDefaultShape)
 {
     // [GIVEN] A score with an edited chord line

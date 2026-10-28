@@ -1626,7 +1626,10 @@ void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
         if (propertyGroup(propertyId) != propGroup) {
             continue;
         }
-        const PropertyValue masterValue = masterElement->getProperty(propertyId);
+        PropertyValue masterValue = masterElement->getProperty(propertyId);
+        if (masterElement->isEngravingItem()) {
+            masterValue = toEngravingItem(masterElement)->propertyValueForLinkedItem(propertyId, masterValue, this);
+        }
         const PropertyFlags masterFlags = masterElement->propertyFlags(propertyId);
         if (getProperty(propertyId) != masterValue) {
             setProperty(propertyId, masterValue);
@@ -1654,7 +1657,11 @@ void EngravingItem::relinkPropertyToMaster(Pid propertyId)
         return;
     }
 
-    setProperty(propertyId, masterElement->getProperty(propertyId));
+    PropertyValue masterValue = masterElement->getProperty(propertyId);
+    if (masterElement->isEngravingItem()) {
+        masterValue = toEngravingItem(masterElement)->propertyValueForLinkedItem(propertyId, masterValue, this);
+    }
+    setProperty(propertyId, masterValue);
     setPropertyFlags(propertyId, masterElement->propertyFlags(propertyId));
 }
 
