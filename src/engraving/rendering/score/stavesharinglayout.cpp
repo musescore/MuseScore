@@ -43,16 +43,18 @@
 using namespace mu::engraving;
 
 namespace mu::engraving::rendering::score {
-void StaveSharingLayout::updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx)
+bool StaveSharingLayout::updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx)
 {
     StaveSharingContext ssctx(firstMB, lastMB, ctx);
     if (ssctx.crSegments.empty()) {
-        return;
+        return false;
     }
 
     ssctx.updateForLastAdded = false;
 
     updateStaveSharing(ssctx);
+
+    return ssctx.trackMapChanged;
 }
 
 bool StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx)
@@ -69,23 +71,27 @@ bool StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, L
     ssctx.updateForLastAdded = true;
 
     updateStaveSharing(ssctx);
-
     if (ssctx.trackMapChanged) {
-        SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
-
-        for (MeasureBase* mb = system->first(); mb; mb = mb->next()) {
-            if (mb->isMeasure()) {
-                toMeasure(mb)->mutldata()->setNeedLayout(true);
-                // TODO: only relayout shared staves
-                MeasureLayout::layoutMeasure(mb, ctx);
-            }
-            if (mb == system->last()) {
-                break;
-            }
-        }
+        relayoutMeasuresOnTrackMapChanged(system, ctx);
     }
 
     return ssctx.trackMapChanged;
+}
+
+void StaveSharingLayout::relayoutMeasuresOnTrackMapChanged(System* system, LayoutContext& ctx)
+{
+    SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
+
+    for (MeasureBase* mb = system->first(); mb; mb = mb->next()) {
+        if (mb->isMeasure()) {
+            toMeasure(mb)->mutldata()->setNeedLayout(true);
+            // TODO: only relayout shared staves
+            MeasureLayout::layoutMeasure(mb, ctx);
+        }
+        if (mb == system->last()) {
+            break;
+        }
+    }
 }
 
 void StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx)

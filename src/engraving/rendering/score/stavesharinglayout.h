@@ -32,9 +32,11 @@ namespace mu::engraving::rendering::score {
 class StaveSharingLayout
 {
 public:
-    static void updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx);
+    static bool updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx);
     static bool updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx);
     static void updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx);
+
+    static void relayoutMeasuresOnTrackMapChanged(System* system, LayoutContext& ctx);
 
 private:
     using TrackGroup = std::vector<track_idx_t>;

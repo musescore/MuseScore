@@ -244,7 +244,10 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
             if (sharedTrackMapChanged) {
                 // The last added measure caused sharedTrackMap to change. Now we are removing that measure so we must restore it.
-                StaveSharingLayout::updateStaveSharingForFullSystem(system->first(), system->last(), ctx);
+                // If this causes another change to the track map, relayout measures within the system
+                if (StaveSharingLayout::updateStaveSharingForFullSystem(system->first(), system->last(), ctx)) {
+                    StaveSharingLayout::relayoutMeasuresOnTrackMapChanged(system, ctx);
+                }
             }
 
             break;
