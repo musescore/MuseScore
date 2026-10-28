@@ -52,6 +52,7 @@
 
 #include "notationscene/notationcommands.h"
 
+using namespace muse::rcommand;
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -1036,10 +1037,12 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
         return false;
     }
 
-    muse::rcommand::CommandQuery query(ADD_DRUM_NOTE_COMMAND);
-    query.set("pitch", muse::Val(pitchToWrite));
-    query.set("mode", muse::Val(str_conv(addingMode)));
-    commandDispatcher()->dispatch(query);
+    muse::rcommand::Params params = {
+        { "pitch", muse::Val(pitchToWrite) },
+        Contract<NoteAddingMode>::param(addingMode)
+    };
+
+    commandDispatcher()->dispatch(ADD_DRUM_NOTE_COMMAND, params);
 
     return true;
 }

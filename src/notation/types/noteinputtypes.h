@@ -44,22 +44,6 @@ enum class NoteAddingMode : unsigned char
     InsertChord
 };
 
-static const std::map<std::string, NoteAddingMode> STR_NOTE_ADDING_MODE = {
-    { "current", NoteAddingMode::CurrentChord },
-    { "next", NoteAddingMode::NextChord },
-    { "insert", NoteAddingMode::InsertChord },
-};
-
-inline NoteAddingMode str_conv(const std::string& mode, NoteAddingMode def)
-{
-    return muse::value(STR_NOTE_ADDING_MODE, mode, def);
-}
-
-inline std::string str_conv(NoteAddingMode mode)
-{
-    return muse::key(STR_NOTE_ADDING_MODE, mode);
-}
-
 struct TupletOptions
 {
     engraving::Fraction ratio = { -1, -1 };

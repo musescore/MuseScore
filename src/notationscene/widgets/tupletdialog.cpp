@@ -22,8 +22,6 @@
 
 #include "tupletdialog.h"
 
-#include "engraving/dom/tuplet.h"
-
 #include "notation/inotation.h"
 #include "notation/inotationstyle.h"
 #include "notationcommands.h"
@@ -34,6 +32,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::ui;
 using namespace muse;
+using namespace muse::rcommand;
 
 //---------------------------------------------------------
 //   TupletDialog
@@ -128,12 +127,13 @@ INotationPtr TupletDialog::notation() const
 
 void TupletDialog::apply()
 {
-    rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
-    query.addParam("ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()));
-    query.addParam("number-type", Val(engraving::str_conv(numberType())));
-    query.addParam("bracket-type", Val(engraving::str_conv(bracketType())));
+    rcommand::Params params = {
+        { "ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()) },
+        Contract<TupletNumberType>::param(numberType()),
+        Contract<TupletBracketType>::param(bracketType()),
+    };
 
-    dispatcher()->dispatch(query);
+    dispatcher()->dispatch(ADD_TUPLET_COMMAND, params);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)
