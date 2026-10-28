@@ -198,6 +198,10 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
         return;
     }
 
+    if (item->isJianpuStaff() && item->isStyled(Pid::BEAM_NO_SLOPE)) {
+        item->setNoSlope(true);
+    }
+
     item->setMinMove(std::numeric_limits<int>::max());
     item->setMaxMove(std::numeric_limits<int>::min());
     double mag = 0.0;
@@ -343,6 +347,11 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         item->setBeamWidth(item->beamWidth() * graceScale);
     }
 
+    if (item->isJianpuStaff()) {
+        item->setBeamWidth(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->mag() * graceScale);
+        item->setBeamDist(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->mag() * graceScale);
+    }
+
     int fragmentIndex = item->directionIdx();
     if (item->userModified()) {
         BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
@@ -373,8 +382,6 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         item->setStartAnchor(item->ldata()->startAnchor);
         item->setEndAnchor(item->ldata()->endAnchor);
         item->setSlope(0.0);
-        item->setBeamWidth(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->mag() * graceScale);
-        item->setBeamDist(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->mag() * graceScale);
     } else if (!item->isBesideTabStaff()) {
         BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
         BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notePositions());
