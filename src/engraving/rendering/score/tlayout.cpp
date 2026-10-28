@@ -1738,7 +1738,7 @@ void TLayout::layoutChordLinePath(const ChordLine* item, ChordLine::LayoutData* 
     }
 
     const ChordLine::Points defaultPoints = item->defaultPoints();
-    const ChordLine::Points& offsets = item->gripOffsets();
+    const ChordLine::Points& offsets = item->bezierOffsets();
     ChordLine::Points points;
     for (size_t i = 0; i < points.size(); ++i) {
         points[i] = defaultPoints[i] * baseLength + offsets[i];

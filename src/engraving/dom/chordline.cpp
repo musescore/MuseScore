@@ -54,7 +54,7 @@ ChordLine::ChordLine(const ChordLine& cl)
     m_chordLineType = cl.m_chordLineType;
     m_straight = cl.m_straight;
     m_wavy = cl.m_wavy;
-    m_gripOffsets = cl.m_gripOffsets;
+    m_bezierOffsets = cl.m_bezierOffsets;
     m_playChordLine = cl.m_playChordLine;
     m_note = cl.m_note;
 }
@@ -92,7 +92,7 @@ double ChordLine::baseLength() const
     return spatium() * mag;
 }
 
-Pid ChordLine::gripOffsetPid(Point point)
+Pid ChordLine::bezierOffsetPid(Point point)
 {
     switch (point) {
     case Point::START: return Pid::BEZIER_OFFSET1;
@@ -131,7 +131,7 @@ void ChordLine::startDragGrip(EditData& ed)
     ElementEditDataPtr eed = ed.getData(this);
 
     for (size_t i = 0; i < size_t(Point::POINTS_COUNT); ++i) {
-        eed->pushProperty(gripOffsetPid(Point(i)));
+        eed->pushProperty(bezierOffsetPid(Point(i)));
     }
 }
 
@@ -146,13 +146,13 @@ void ChordLine::dragGrip(EditData& ed)
     }
 
     const Point point = gripPoint(ed.curGrip);
-    const PointF offset = gripOffset(point) + ed.delta;
+    const PointF offset = bezierOffset(point) + ed.delta;
 
     if (m_straight) {
         // stop the user from being able to turn one kind of slide into another
         const Points points = defaultPoints();
         const double length = baseLength();
-        const PointF start = points[size_t(Point::START)] * length + gripOffset(Point::START);
+        const PointF start = points[size_t(Point::START)] * length + bezierOffset(Point::START);
         const PointF end = points[size_t(Point::END)] * length + offset;
         if ((m_chordLineType == ChordLineType::FALL && (end.x() < start.x() || end.y() < start.y()))
             || (m_chordLineType == ChordLineType::DOIT && (end.x() < start.x() || end.y() > start.y()))
@@ -162,7 +162,7 @@ void ChordLine::dragGrip(EditData& ed)
         }
     }
 
-    setGripOffset(point, offset);
+    setBezierOffset(point, offset);
     triggerLayout();
 }
 
@@ -290,13 +290,13 @@ PropertyValue ChordLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BEZIER_OFFSET1:
-        return gripOffset(Point::START);
+        return bezierOffset(Point::START);
     case Pid::BEZIER_OFFSET2:
-        return gripOffset(Point::BEZIER1);
+        return bezierOffset(Point::BEZIER1);
     case Pid::BEZIER_OFFSET3:
-        return gripOffset(Point::BEZIER2);
+        return bezierOffset(Point::BEZIER2);
     case Pid::BEZIER_OFFSET4:
-        return gripOffset(Point::END);
+        return bezierOffset(Point::END);
     case Pid::CHORD_LINE_TYPE:
         return int(m_chordLineType);
     case Pid::CHORD_LINE_STRAIGHT:
@@ -319,16 +319,16 @@ bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::BEZIER_OFFSET1:
-        setGripOffset(Point::START, val.value<PointF>());
+        setBezierOffset(Point::START, val.value<PointF>());
         break;
     case Pid::BEZIER_OFFSET2:
-        setGripOffset(Point::BEZIER1, val.value<PointF>());
+        setBezierOffset(Point::BEZIER1, val.value<PointF>());
         break;
     case Pid::BEZIER_OFFSET3:
-        setGripOffset(Point::BEZIER2, val.value<PointF>());
+        setBezierOffset(Point::BEZIER2, val.value<PointF>());
         break;
     case Pid::BEZIER_OFFSET4:
-        setGripOffset(Point::END, val.value<PointF>());
+        setBezierOffset(Point::END, val.value<PointF>());
         break;
     case Pid::CHORD_LINE_TYPE:
         setChordLineType(ChordLineType(val.toInt()));
@@ -380,7 +380,7 @@ PropertyValue ChordLine::propertyDefault(Pid pid) const
 void ChordLine::reset()
 {
     for (size_t i = 0; i < size_t(Point::POINTS_COUNT); ++i) {
-        undoResetProperty(gripOffsetPid(Point(i)));
+        undoResetProperty(bezierOffsetPid(Point(i)));
     }
     EngravingItem::reset();
 }
@@ -392,7 +392,7 @@ void ChordLine::reset()
 void ChordLine::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    for (PointF& offset : m_gripOffsets) {
+    for (PointF& offset : m_bezierOffsets) {
         offset *= newValue / oldValue;
     }
 }
@@ -404,7 +404,7 @@ void ChordLine::spatiumChanged(double oldValue, double newValue)
 void ChordLine::localSpatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::localSpatiumChanged(oldValue, newValue);
-    for (PointF& offset : m_gripOffsets) {
+    for (PointF& offset : m_bezierOffsets) {
         offset *= newValue / oldValue;
     }
 }

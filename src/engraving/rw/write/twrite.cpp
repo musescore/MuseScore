@@ -1273,7 +1273,7 @@ void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
     for (size_t i = 0; i < size_t(ChordLine::Point::POINTS_COUNT); ++i) {
-        writeProperty(item, xml, ChordLine::gripOffsetPid(ChordLine::Point(i)));
+        writeProperty(item, xml, ChordLine::bezierOffsetPid(ChordLine::Point(i)));
     }
     xml.endElement();
 }

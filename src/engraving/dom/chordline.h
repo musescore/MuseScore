@@ -59,8 +59,8 @@ public:
     bool isWavy() const { return m_wavy; }
     void setWavy(bool wavy) { m_wavy =  wavy; }
 
-    // The shape is described by up to four points. The default points are in units of the chord line's
-    // base length (i.e. spatium scaled by the chord's intrinsic mag), the user's grip offsets are absolute
+    // The shape is described by up to four points. The default points are in units of the chord line's base
+    // length (i.e. spatium scaled by the chord's intrinsic mag), the user's offsets of these points are absolute
     enum class Point : unsigned char {
         START,
         BEZIER1,
@@ -71,10 +71,10 @@ public:
     using Points = std::array<PointF, static_cast<size_t>(Point::POINTS_COUNT)>;
 
     Points defaultPoints() const;
-    const Points& gripOffsets() const { return m_gripOffsets; }
-    const PointF& gripOffset(Point point) const { return m_gripOffsets[size_t(point)]; }
-    void setGripOffset(Point point, const PointF& offset) { m_gripOffsets[size_t(point)] = offset; }
-    static Pid gripOffsetPid(Point point);
+    const Points& bezierOffsets() const { return m_bezierOffsets; }
+    const PointF& bezierOffset(Point point) const { return m_bezierOffsets[size_t(point)]; }
+    void setBezierOffset(Point point, const PointF& offset) { m_bezierOffsets[size_t(point)] = offset; }
+    static Pid bezierOffsetPid(Point point);
 
     double baseLength() const;
 
@@ -131,7 +131,7 @@ private:
     bool m_wavy = false;
 
     ChordLineType m_chordLineType = ChordLineType::NOTYPE;
-    Points m_gripOffsets;
+    Points m_bezierOffsets;
     bool m_playChordLine = true;
     Note* m_note = nullptr;
 };

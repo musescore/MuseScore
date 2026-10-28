@@ -1266,6 +1266,6 @@ void CompatUtils::readChordLinePath(ChordLine* chordLine, XmlReader& e)
         if (std::abs(offset.y()) < 0.001 * spatium) {
             offset.setY(0.0);
         }
-        chordLine->setGripOffset(point, offset);
+        chordLine->setBezierOffset(point, offset);
     }
 }

@@ -140,25 +140,25 @@ TEST_F(Engraving_ChordLineTests, defaultPoints)
     expectPoints(m_chordLine->defaultPoints(), { PointF(0, 0), PointF(0, -0.5), PointF(-0.6, -1), PointF(-1.2, -1) });
 }
 
-TEST_F(Engraving_ChordLineTests, gripOffsetProperties)
+TEST_F(Engraving_ChordLineTests, bezierOffsetProperties)
 {
     const std::array<ChordLine::Point, 4> points { ChordLine::Point::START, ChordLine::Point::BEZIER1, ChordLine::Point::BEZIER2,
                                                    ChordLine::Point::END };
 
     for (ChordLine::Point point : points) {
-        EXPECT_EQ(m_chordLine->propertyDefault(ChordLine::gripOffsetPid(point)).value<PointF>(), PointF());
+        EXPECT_EQ(m_chordLine->propertyDefault(ChordLine::bezierOffsetPid(point)).value<PointF>(), PointF());
     }
 
     // [WHEN] Setting a different offset on each point through its property
     for (size_t i = 0; i < points.size(); ++i) {
-        m_chordLine->setProperty(ChordLine::gripOffsetPid(points[i]), PointF(double(i + 1), -double(i + 1)));
+        m_chordLine->setProperty(ChordLine::bezierOffsetPid(points[i]), PointF(double(i + 1), -double(i + 1)));
     }
 
     // [THEN] Each property maps to its own point
     for (size_t i = 0; i < points.size(); ++i) {
         const PointF expected(double(i + 1), -double(i + 1));
-        expectNear(m_chordLine->gripOffset(points[i]), expected);
-        expectNear(m_chordLine->getProperty(ChordLine::gripOffsetPid(points[i])).value<PointF>(), expected);
+        expectNear(m_chordLine->bezierOffset(points[i]), expected);
+        expectNear(m_chordLine->getProperty(ChordLine::bezierOffsetPid(points[i])).value<PointF>(), expected);
     }
 }
 
@@ -181,15 +181,15 @@ TEST_F(Engraving_ChordLineTests, gripsCount)
 TEST_F(Engraving_ChordLineTests, cloneKeepsEdits)
 {
     // [GIVEN] An edited chord line
-    m_chordLine->setGripOffset(ChordLine::Point::BEZIER1, PointF(0.25, -0.5));
-    m_chordLine->setGripOffset(ChordLine::Point::END, PointF(1.0, 0.5));
+    m_chordLine->setBezierOffset(ChordLine::Point::BEZIER1, PointF(0.25, -0.5));
+    m_chordLine->setBezierOffset(ChordLine::Point::END, PointF(1.0, 0.5));
     m_chordLine->setPlayChordLine(false);
 
     // [WHEN] Cloning it (e.g. when creating parts)
     ChordLine* clone = m_chordLine->clone();
 
     // [THEN] The clone has the same edits
-    expectPoints(clone->gripOffsets(), m_chordLine->gripOffsets());
+    expectPoints(clone->bezierOffsets(), m_chordLine->bezierOffsets());
     EXPECT_FALSE(clone->playChordLine());
 
     delete clone;
@@ -198,7 +198,7 @@ TEST_F(Engraving_ChordLineTests, cloneKeepsEdits)
 TEST_F(Engraving_ChordLineTests, layoutPath)
 {
     ChordLine::LayoutData* ldata = m_chordLine->mutldata();
-    m_chordLine->setGripOffset(ChordLine::Point::END, PointF(10.0, 5.0));
+    m_chordLine->setBezierOffset(ChordLine::Point::END, PointF(10.0, 5.0));
 
     // [THEN] A curved line is the default bezier, scaled by the base length, plus the offsets
     double baseLength = 10.0;
@@ -236,10 +236,10 @@ TEST_F(Engraving_ChordLineTests, dragGripMovesItsPoint)
     drag(Grip(1), PointF(sp, -sp));
 
     // [THEN] Only that point is offset
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::START), PointF());
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::BEZIER1), PointF(sp, -sp));
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::BEZIER2), PointF());
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::END), PointF());
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::START), PointF());
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::BEZIER1), PointF(sp, -sp));
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::BEZIER2), PointF());
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::END), PointF());
 }
 
 TEST_F(Engraving_ChordLineTests, dragGripIgnoredForWavyLines)
@@ -248,42 +248,42 @@ TEST_F(Engraving_ChordLineTests, dragGripIgnoredForWavyLines)
 
     drag(Grip(0), PointF(10.0, 10.0));
 
-    expectPoints(m_chordLine->gripOffsets(), ChordLine::Points());
+    expectPoints(m_chordLine->bezierOffsets(), ChordLine::Points());
 }
 
-TEST_F(Engraving_ChordLineTests, writeReadGripOffsets)
+TEST_F(Engraving_ChordLineTests, writeReadBezierOffsets)
 {
     // [GIVEN] An unedited chord line
     // [THEN] No offsets are saved
     const String unedited = String::fromUtf8(ScoreRW::writeElement(m_chordLine));
     for (size_t i = 0; i < size_t(ChordLine::Point::POINTS_COUNT); ++i) {
-        const String tag = u"<" + String::fromAscii(propertyName(ChordLine::gripOffsetPid(ChordLine::Point(i))));
+        const String tag = u"<" + String::fromAscii(propertyName(ChordLine::bezierOffsetPid(ChordLine::Point(i))));
         EXPECT_FALSE(unedited.contains(tag));
     }
 
     // [GIVEN] An edited chord line
     const double sp = m_chordLine->spatium();
-    m_chordLine->setGripOffset(ChordLine::Point::BEZIER1, PointF(0.25 * sp, -0.5 * sp));
-    m_chordLine->setGripOffset(ChordLine::Point::END, PointF(1.0 * sp, 0.5 * sp));
+    m_chordLine->setBezierOffset(ChordLine::Point::BEZIER1, PointF(0.25 * sp, -0.5 * sp));
+    m_chordLine->setBezierOffset(ChordLine::Point::END, PointF(1.0 * sp, 0.5 * sp));
 
     // [WHEN] Saving and reading it back
     ChordLine* read = toChordLine(ScoreRW::writeReadElement(m_chordLine));
 
     // [THEN] It has the edits
     EXPECT_EQ(read->chordLineType(), ChordLineType::FALL);
-    expectPoints(read->gripOffsets(), m_chordLine->gripOffsets());
+    expectPoints(read->bezierOffsets(), m_chordLine->bezierOffsets());
 
     delete read;
 }
 
 TEST_F(Engraving_ChordLineTests, readLegacyPath)
 {
-    // [WHEN] Reading a path saved before grip offsets existed
+    // [WHEN] Reading a path saved before offsets were stored per point
     readLegacyPath(1.0);
 
     // [THEN] Only the end point, which differs from the default shape, is offset
     const double sp = m_chordLine->spatium();
-    expectPoints(m_chordLine->gripOffsets(), { PointF(), PointF(), PointF(), PointF(1.0 * sp, 0.5 * sp) });
+    expectPoints(m_chordLine->bezierOffsets(), { PointF(), PointF(), PointF(), PointF(1.0 * sp, 0.5 * sp) });
 }
 
 TEST_F(Engraving_ChordLineTests, readLegacyStraightPath)
@@ -295,7 +295,7 @@ TEST_F(Engraving_ChordLineTests, readLegacyStraightPath)
     compat::CompatUtils::readChordLinePath(m_chordLine, e);
 
     const double sp = m_chordLine->spatium();
-    expectPoints(m_chordLine->gripOffsets(), { PointF(), PointF(), PointF(), PointF(1.0 * sp, 0.5 * sp) });
+    expectPoints(m_chordLine->bezierOffsets(), { PointF(), PointF(), PointF(), PointF(1.0 * sp, 0.5 * sp) });
 }
 
 //---------------------------------------------------------
@@ -347,7 +347,7 @@ protected:
     {
         Score* score = chordLine->score();
         score->startCmd(TranslatableString::untranslatable("Engraving chord line tests"));
-        chordLine->undoChangeProperty(ChordLine::gripOffsetPid(ChordLine::Point::END), offset);
+        chordLine->undoChangeProperty(ChordLine::bezierOffsetPid(ChordLine::Point::END), offset);
         score->endCmd();
     }
 
@@ -383,7 +383,7 @@ TEST_F(Engraving_ChordLineScoreTests, editedChordLineInNewPart)
     ChordLine* partChordLine = findChordLine(m_score->excerpts().front()->excerptScore());
     ASSERT_TRUE(partChordLine);
     const double partSp = partChordLine->spatium();
-    expectNear(partChordLine->gripOffset(ChordLine::Point::END), PointF(1.0 * partSp, 0.5 * partSp));
+    expectNear(partChordLine->bezierOffset(ChordLine::Point::END), PointF(1.0 * partSp, 0.5 * partSp));
     expectLaidOutEndOffset(partChordLine, PointF(1.0 * partSp, 0.5 * partSp));
 }
 
@@ -399,14 +399,14 @@ TEST_F(Engraving_ChordLineScoreTests, dragGripPropagatesToExistingPart)
 
     // [WHEN] Dragging the end grip in the main score
     const double sp = m_chordLine->spatium();
-    dragGrip(m_chordLine, Grip(int(ChordLine::Point::END)), PointF(sp, 0.5 * sp));
+    dragGrip(m_chordLine, Grip(3), PointF(sp, 0.5 * sp)); // curved line: grip 3 moves the end point
 
     // [THEN] The main score and the part both have the edited shape, the part's scaled to its spatium
     const PointF offset(sp, 0.5 * sp);
     const double partSp = partChordLine->spatium();
     const PointF partOffset(partSp, 0.5 * partSp);
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::END), offset);
-    expectNear(partChordLine->gripOffset(ChordLine::Point::END), partOffset);
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::END), offset);
+    expectNear(partChordLine->bezierOffset(ChordLine::Point::END), partOffset);
     expectLaidOutEndOffset(m_chordLine, offset);
     expectLaidOutEndOffset(partChordLine, partOffset);
 
@@ -414,8 +414,8 @@ TEST_F(Engraving_ChordLineScoreTests, dragGripPropagatesToExistingPart)
     m_score->undoRedo(true, nullptr);
 
     // [THEN] Both go back to the default shape
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::END), PointF());
-    expectNear(partChordLine->gripOffset(ChordLine::Point::END), PointF());
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::END), PointF());
+    expectNear(partChordLine->bezierOffset(ChordLine::Point::END), PointF());
     expectLaidOutEndOffset(m_chordLine, PointF());
     expectLaidOutEndOffset(partChordLine, PointF());
 }
@@ -432,13 +432,13 @@ TEST_F(Engraving_ChordLineScoreTests, resetRestoresDefaultShape)
     m_score->endCmd();
 
     // [THEN] It has the default shape
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::END), PointF());
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::END), PointF());
     expectLaidOutEndOffset(m_chordLine, PointF());
 
     // [WHEN] Undoing
     m_score->undoRedo(true, nullptr);
 
     // [THEN] The edit is back
-    expectNear(m_chordLine->gripOffset(ChordLine::Point::END), offset);
+    expectNear(m_chordLine->bezierOffset(ChordLine::Point::END), offset);
     expectLaidOutEndOffset(m_chordLine, offset);
 }
