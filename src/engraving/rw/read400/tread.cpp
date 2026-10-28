@@ -3588,19 +3588,14 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
 {
-    double _spatium = s->style().spatium();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (s->score()->mscVersion() < 400 && (tag == "o1" || tag == "o2" || tag == "o3" || tag == "o4")) {
             e.skipCurrentElement(); // Ignore slur user offsets from pre-4.0
-        } else if (tag == "o1") {
-            s->ups(Grip::START).off = e.readPoint() * _spatium;
-        } else if (tag == "o2") {
-            s->ups(Grip::BEZIER1).off = e.readPoint() * _spatium;
-        } else if (tag == "o3") {
-            s->ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
-        } else if (tag == "o4") {
-            s->ups(Grip::END).off = e.readPoint() * _spatium;
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET1)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET2)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET3)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET4)) {
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }

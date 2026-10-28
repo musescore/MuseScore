@@ -3738,17 +3738,12 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
 {
-    double _spatium = s->style().spatium();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "o1") {
-            s->ups(Grip::START).off = e.readPoint() * _spatium;
-        } else if (tag == "o2") {
-            s->ups(Grip::BEZIER1).off = e.readPoint() * _spatium;
-        } else if (tag == "o3") {
-            s->ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
-        } else if (tag == "o4") {
-            s->ups(Grip::END).off = e.readPoint() * _spatium;
+        if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET1)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET2)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET3)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET4)) {
         } else if (tag == "HammerOnPullOffText") {
             DO_ASSERT(s->isHammerOnPullOffSegment());
             readHopoText(toHammerOnPullOffSegment(s), e, ctx, e.intAttribute("idx"));

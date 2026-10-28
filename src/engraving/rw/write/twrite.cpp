@@ -2849,19 +2849,10 @@ void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& 
 
     xml.startElement(seg, { { "no", no } });
 
-    double _spatium = seg->style().spatium();
-    if (!seg->ups(Grip::START).off.isNull()) {
-        xml.tagPoint("o1", seg->ups(Grip::START).off / _spatium);
-    }
-    if (!seg->ups(Grip::BEZIER1).off.isNull()) {
-        xml.tagPoint("o2", seg->ups(Grip::BEZIER1).off / _spatium);
-    }
-    if (!seg->ups(Grip::BEZIER2).off.isNull()) {
-        xml.tagPoint("o3", seg->ups(Grip::BEZIER2).off / _spatium);
-    }
-    if (!seg->ups(Grip::END).off.isNull()) {
-        xml.tagPoint("o4", seg->ups(Grip::END).off / _spatium);
-    }
+    writeProperty(seg, xml, Pid::BEZIER_OFFSET1);
+    writeProperty(seg, xml, Pid::BEZIER_OFFSET2);
+    writeProperty(seg, xml, Pid::BEZIER_OFFSET3);
+    writeProperty(seg, xml, Pid::BEZIER_OFFSET4);
 
     if (seg->isHammerOnPullOffSegment()) {
         writeProperties(toHammerOnPullOffSegment(seg), xml, ctx);
