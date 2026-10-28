@@ -92,7 +92,7 @@ private:
     static bool checkSpannersForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
     static bool checkArticulationsForSameVoice(Chord* chord1, Chord* chord2);
 
-    static bool canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
+    static bool canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, bool allowVoiceCrossing, StaveSharingContext& ctx);
 
     static void updateNotation(StaveSharingContext& ctx);
     static void computeSegmentsToUpdate(StaveSharingContext& ctx);
