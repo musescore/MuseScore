@@ -23,19 +23,23 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/sharedpart.h"
 #include "engraving/dom/tie.h"
+#include "engraving/dom/timesig.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/stavesharingchange.h"
 
 #include "engraving/editing/editstavesharing.h"
+#include "engraving/editing/edittimesig.h"
 #include "engraving/editing/flip.h"
 #include "engraving/editing/noteinput.h"
+#include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -886,6 +890,53 @@ TEST_F(Engraving_StaveSharingTests, testStaveSharingChangeMovesWithMeasure)
     score->undoRedo(true, nullptr);
 
     // [THEN] The change should be restored at the start of measure 3
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] A 2/4 time signature is added to measure 2, rewriting the measures containing the changes
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add time signature"), [&](Transaction& tx) {
+        TimeSig* ts = Factory::createTimeSig(score->dummy());
+        ts->setSig(Fraction(2, 4));
+        EditTimeSig::addTimeSig(tx, score, score->crMeasure(1), 0, ts, false);
+    });
+
+    // [THEN] The changes should keep their ticks
+    EXPECT_EQ(score->tick2measure(Fraction(2, 1))->timesig(), Fraction(2, 4));
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] The time signature change is undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The changes should still be in place
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] Measure 3 is split on beat 3
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Split measure"), [&](Transaction& tx) {
+        SplitJoinMeasure::splitMeasure(tx, score, Fraction(5, 2));
+    });
+
+    // [THEN] The changes should keep their ticks
+    EXPECT_EQ(score->tick2measure(Fraction(5, 2))->tick(), Fraction(5, 2));
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] The split is undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The changes should still be in place
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] Measures 3 and 4 are joined
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Join measures"), [&](Transaction& tx) {
+        SplitJoinMeasure::joinMeasures(tx, score, Fraction(2, 1), Fraction(3, 1));
+    });
+
+    // [THEN] The changes should keep their ticks
+    EXPECT_EQ(score->tick2measure(Fraction(3, 1))->tick(), Fraction(2, 1));
+    EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
+
+    // [WHEN] The join is undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The changes should still be in place
     EXPECT_EQ(userModifiedStaveSharingTicks(score, sharedPart), originalTicks);
 
     // [THEN] The score should not be corrupt

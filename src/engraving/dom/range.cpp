@@ -40,6 +40,9 @@
 #include "marker.h"
 #include "volta.h"
 
+#include "../editing/editstavesharing.h"
+#include "../editing/transaction/transaction.h"
+
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "tuplet.h"
@@ -868,6 +871,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
     backupRepeats(first, last);
     backupSpacers(first, last);
     backupJumpsAndMarkers(first, last);
+    backupStaveSharingStates(first, last);
 }
 
 //---------------------------------------------------------
@@ -1018,6 +1022,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
     restoreRepeats(score, tick);
     restoreSpacers(score, tick);
     restoreJumpsAndMarkers(score, tick);
+    restoreStaveSharingStates(score);
     return true;
 }
 
@@ -1487,6 +1492,26 @@ void ScoreRange::deleteJumpsAndMarkers()
         delete jmb.e;
     }
     m_jumpsMarkers.clear();
+}
+
+//---------------------------------------------------------
+//   backupStaveSharingStates
+//    stave sharing states aren't stored in the measures,
+//    so keep the user states to restore at the same ticks
+//---------------------------------------------------------
+
+void ScoreRange::backupStaveSharingStates(Segment* first, Segment* last)
+{
+    m_staveSharingStates = EditStaveSharing::userStaveSharingStatesBetweenTicks(first->score(), first->tick(), last->tick());
+}
+
+//---------------------------------------------------------
+//   restoreStaveSharingStates
+//---------------------------------------------------------
+
+void ScoreRange::restoreStaveSharingStates(Score* score) const
+{
+    EditStaveSharing::restoreStaveSharingStates(score->transactionManager()->currentOrDummyTransaction(), m_staveSharingStates);
 }
 
 //---------------------------------------------------------

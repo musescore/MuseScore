@@ -571,3 +571,28 @@ void EditStaveSharing::removeStaveSharingStatesOnRemoveTime(Transaction& tx, Sco
         }
     }
 }
+
+StaveSharingStatesByPart EditStaveSharing::userStaveSharingStatesBetweenTicks(Score* score, const Fraction& startTick,
+                                                                              const Fraction& endTick)
+{
+    StaveSharingStatesByPart result;
+
+    for (SharedPart* sharedPart : score->sharedParts()) {
+        for (const auto& [tick, state] : sharedPart->staveSharingStatesBetweenTicks(startTick, endTick)) {
+            if (state.isUserModified()) {
+                result[sharedPart].emplace(tick, state);
+            }
+        }
+    }
+
+    return result;
+}
+
+void EditStaveSharing::restoreStaveSharingStates(Transaction& tx, const StaveSharingStatesByPart& states)
+{
+    for (const auto& [sharedPart, statesByTick] : states) {
+        for (const auto& [tick, state] : statesByTick) {
+            undoSetStaveSharingState(tx, sharedPart, tick, state);
+        }
+    }
+}
