@@ -71,6 +71,9 @@ private:
     bool m_isUserMapValid = false;
 };
 
+class SharedPart;
+using StaveSharingStatesByPart = std::map<SharedPart*, std::map<Fraction, StaveSharingState> >;
+
 class SharedPart final : public Part
 {
     OBJECT_ALLOCATOR(engraving, SharedPart)

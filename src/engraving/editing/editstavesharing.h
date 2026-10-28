@@ -23,6 +23,7 @@
 
 #include <vector>
 
+#include "../dom/sharedpart.h"
 #include "../types/types.h"
 
 namespace mu::engraving {
@@ -54,6 +55,8 @@ public:
     static void setTrackMapping(Transaction& tx, Segment* seg, Part* part, track_idx_t originTrack, track_idx_t sharedTrack);
 
     static void removeStaveSharingStatesOnRemoveTime(Transaction& tx, Score* score, const Fraction& startTick, const Fraction& endTick);
+    static StaveSharingStatesByPart userStaveSharingStatesBetweenTicks(Score* score, const Fraction& startTick, const Fraction& endTick);
+    static void restoreStaveSharingStates(Transaction& tx, const StaveSharingStatesByPart& states);
 
 private:
     static void cmdCreateSharedStaves(Transaction& tx, Score* score);
