@@ -453,7 +453,8 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
 
         const PointData& oldPointData = pointsData[pointIdx];
         const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, oldPointData.tick);
-        const bool editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
+        const bool editRestricted = !oldPointData.isPending
+                                    && (!automationPoint || automationPoint->generated || automationPoint->itemId.has_value());
         const qreal clampedX = editRestricted ? oldPointData.qPointF.x() : std::clamp(x, minX, maxX);
 
         const auto setPreviewPoint = [this, polyline, pointIdx, key](const QPointF& point) {
@@ -465,6 +466,13 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
         };
 
         if (completed) {
+            if (oldPointData.isPending) {
+                // Not in the model yet - add it where it was dropped
+                requestAddPoint(key, clampedX, y);
+                rebuildPolylinePoints(key);
+                return;
+            }
+
             if (!requestEditPoint(oldPointData, key, clampedX, y)) {
                 // Edit was rejected - snap the point back to where it actually is instead of
                 // leaving the live-drag preview stuck at the rejected position
@@ -481,6 +489,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
                      [this, key, polyline](qreal x, qreal y, bool completed) {
         if (completed) {
             requestAddPoint(key, x, y);
+            rebuildPolylinePoints(key);
             return;
         }
 
@@ -501,7 +510,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
         while (insertIdx < pointsData.size() && pointsData.at(insertIdx).tick < tick) {
             ++insertIdx;
         }
-        pointsData.insert(insertIdx, PointData(-1, tick, { x, y }, PointData::PointType::BOTH));
+        pointsData.insert(insertIdx, PointData(-1, tick, { x, y }, PointData::PointType::BOTH, /*isPending*/ true));
 
         QVector<QPointF> points = polyline->points();
         points.insert(insertIdx, { x, y });
@@ -1037,6 +1046,17 @@ void NotationAutomationController::updateStaffPointsInRange(const PolylineKey& k
     polyline->setPoints(points);
     applyPolylineColorsUnderLine(polyline, key);
     polyline->update();
+}
+
+void NotationAutomationController::rebuildPolylinePoints(const PolylineKey& key)
+{
+    const auto mapIt = m_polylinesDataMap.find(key);
+    IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
+        return;
+    }
+
+    const PolylineData& data = mapIt->second;
+    updateStaffPointsInRange(key, data.startMeasure->tick().ticks(), data.endMeasure->endTick().ticks());
 }
 
 void NotationAutomationController::mergePendingChanges(const mu::engraving::AutomationChanges& changes)

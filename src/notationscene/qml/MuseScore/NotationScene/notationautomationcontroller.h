@@ -113,6 +113,7 @@ private:
         int tick = -1;
         QPointF qPointF;
         PointType pointType = PointType::UNKNOWN;
+        bool isPending = false; // true while the user is adding/dragging the point (before committing to the model)
     };
 
     struct PolylineData {
@@ -161,6 +162,7 @@ private:
                                            const Measure* endMeasure);
 
     void updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo);
+    void rebuildPolylinePoints(const PolylineKey& key);
 
     void mergePendingChanges(const mu::engraving::AutomationChanges& changes);
     void mergePendingScoreChanges(const mu::engraving::ScoreChanges& changes);
