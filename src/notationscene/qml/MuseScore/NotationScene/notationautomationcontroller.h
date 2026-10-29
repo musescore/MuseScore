@@ -148,6 +148,7 @@ private:
     void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline, const PolylineKey& key) const;
     // TODO: apply within a range? (for efficiency)
     void applyPolylineColorsUnderLine(muse::uicomponents::PolylinePlot* polyline, const PolylineKey& key) const;
+    void applyPolylineEdgeValues(muse::uicomponents::PolylinePlot* polyline, const PolylineKey& key) const;
 
     QColor inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const;
 
@@ -161,7 +162,6 @@ private:
     void buildAndAddPolylineForStaffRegion(const System* system, staff_idx_t staffIdx, const Measure* startMeasure,
                                            const Measure* endMeasure);
 
-    void updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo);
     void rebuildPolylinePoints(const PolylineKey& key);
 
     void mergePendingChanges(const mu::engraving::AutomationChanges& changes);

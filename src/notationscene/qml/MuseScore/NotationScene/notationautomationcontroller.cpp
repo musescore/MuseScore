@@ -216,6 +216,14 @@ static muse::RectF regionCanvasRect(const System* system, staff_idx_t staffIdx, 
     return muse::RectF(left, staffCanvasRect.y(), right - left, staffCanvasRect.height());
 }
 
+// A point on a region's end tick is at the start of the next measure (so it belongs
+// to whatever follows the region) unless the region ends the score...
+static int regionLastTick(const Measure* endMeasure)
+{
+    const int endTick = endMeasure->endTick().ticks();
+    return endMeasure->nextMeasureMM() ? endTick - 1 : endTick;
+}
+
 static AutomationCurveKey curveKeyFor(AutomationType type, const Staff* staff)
 {
     switch (type) {
@@ -234,6 +242,50 @@ static AutomationCurveKey curveKeyFor(AutomationType type, const Staff* staff)
     }
 
     return AutomationCurveKey();
+}
+
+static int tickOfPointBefore(const AutomationCurve& curve, int tick)
+{
+    auto it = curve.lower_bound(tick);
+    if (it == curve.begin()) {
+        return -1;
+    }
+    --it;
+    return it->first;
+}
+
+static int tickOfPointAfter(const AutomationCurve& curve, int tick)
+{
+    const auto it = curve.upper_bound(tick);
+    if (it == curve.end()) {
+        return -1;
+    }
+    return it->first;
+}
+
+// The curve's value at a tick lying between two of its points...
+static double curveValueBetween(const AutomationCurve& curve, int tickBefore, int tickAfter, int tick)
+{
+    IF_ASSERT_FAILED(tickBefore >= 0 || tickAfter >= 0) {
+        return 0.0;
+    }
+
+    if (tickAfter == -1) {
+        // No point after - the curve stays flat at the last point's out value...
+        const mu::engraving::AutomationPoint& pointBefore = curve.find(tickBefore)->second;
+        return static_cast<double>(pointBefore.value.outValue);
+    }
+
+    const auto pointAfterIt = curve.find(tickAfter);
+    const double inValue = static_cast<double>(mu::engraving::resolveInValue(curve, pointAfterIt));
+    if (tickBefore == -1) {
+        // No point before - the curve is flat at the first point's in value...
+        return inValue;
+    }
+
+    const double outValue = static_cast<double>(curve.find(tickBefore)->second.value.outValue);
+    const double ratio = static_cast<double>(tick - tickBefore) / static_cast<double>(tickAfter - tickBefore);
+    return outValue + (inValue - outValue) * ratio;
 }
 
 static staff_idx_t firstVisibleStaffIdx(const Score* score)
@@ -399,7 +451,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
     }
 
     const int startTick = startMeasure->tick().ticks();
-    const int endTick = endMeasure->endTick().ticks();
+    const int endTick = regionLastTick(endMeasure);
 
     PolylinePlot* polyline = new PolylinePlot(m_linesParent);
 
@@ -420,6 +472,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
     polyline->setPoints(pointsForPolyline);
 
     applyPolylineStyle(polyline, key);
+    applyPolylineEdgeValues(polyline, key);
     polyline->setVisible(false);
 
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointMoved,
@@ -570,8 +623,13 @@ int NotationAutomationController::tickFromXInPolyline(const PolylineKey& key, co
             break;
         }
     }
+
+    // The end barline's tick (when there's a measure after it) is already in the next region...
+    const int lastTick = regionLastTick(endMeasure);
+
     if (!prevSeg) {
-        return nextSeg ? nextSeg->tick().ticks() : -1;
+        // The point is before the first segment, so snap to the next segment's tick (or none)...
+        return nextSeg ? std::min(nextSeg->tick().ticks(), lastTick) : -1;
     }
 
     // No next segment - use prevSeg's own end as a virtual next point
@@ -580,7 +638,10 @@ int NotationAutomationController::tickFromXInPolyline(const PolylineKey& key, co
     const double canvasSpan = nextCanvasX - prevSeg->canvasX();
     const double ratio = canvasSpan > 0.0 ? (pointCanvasX - prevSeg->canvasX()) / canvasSpan : 0.0;
 
-    return prevSeg->tick().ticks() + static_cast<int>(ratio * (nextTick - prevSeg->tick().ticks()));
+    // Interpolate between prevSeg's tick and the next tick (but don't go past the last tick that belongs to this region)...
+    const int prevTick = prevSeg->tick().ticks();
+    const int interpolatedTick = prevTick + static_cast<int>(ratio * (nextTick - prevTick));
+    return std::min(interpolatedTick, lastTick);
 }
 
 QVector<NotationAutomationController::PointData> NotationAutomationController::pointsDataInStaffRegion(
@@ -600,9 +661,8 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
     // Start at the first point >= startTick rather than curve.begin() - resolvedInValue() only ever
     // looks backward via std::prev(it), which works on any valid iterator, not just one reached by
     // walking from the beginning
-    for (auto it = curve.lower_bound(startTick); it != curve.end(); ++it) {
+    for (auto it = curve.lower_bound(startTick); it != curve.end() && it->first <= endTick; ++it) {
         const int tick = it->first;
-        const bool isPastEnd = tick > endTick;
 
         const Fraction frac = Fraction::fromTicks(tick);
         const Segment* seg = score()->tick2leftSegmentMM(frac);
@@ -633,12 +693,6 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
             const QPointF qpfOut(pointXInRegion, 1.0 - automationValueToDisplay(type, autoPoint.value.outValue));
             points.emplace_back(PointData(currentPointIndex++, tick, qpfOut, PointData::PointType::OUT));
         }
-
-        if (isPastEnd) {
-            // Included one point past the range - its own resolved value may depend on the outValue
-            // of the last in-range point, which could have just changed
-            break;
-        }
     }
 
     return points;
@@ -653,7 +707,10 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline, co
     polyline->setLineWidth(POLYLINE_LINE_WIDTH);
     polyline->setDrawBackground(false);
 
-    polyline->setBaselineN(defaultValueFor(currentAutomationType()));
+    //! NOTE: The polyline resets its baseline to its default value whenever it has no points. Higher value == lower Y...
+    const qreal defaultValue = defaultValueFor(currentAutomationType());
+    polyline->setDefaultValue(1.0 - defaultValue);
+    polyline->setBaselineN(defaultValue);
 
     polyline->setGhostPointsEnabled(false);
     polyline->setSelectedPointsEnabled(true);
@@ -713,7 +770,8 @@ void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline, c
 void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* polyline, const PolylineKey& key) const
 {
     const auto mapIt = m_polylinesDataMap.find(key);
-    IF_ASSERT_FAILED(polyline && mapIt != m_polylinesDataMap.end()) {
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    IF_ASSERT_FAILED(polyline && mapIt != m_polylinesDataMap.end() && staff && automationData()) {
         return;
     }
 
@@ -726,12 +784,18 @@ void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* po
     QColor editedColor = allVoicesColor;
     editedColor.setAlpha(POLYLINE_EDITED_AREA_ALPHA);
 
-    const QVector<PointData>& pointsData = mapIt->second.pointsData;
+    const PolylineData& data = mapIt->second;
+    const QVector<PointData>& pointsData = data.pointsData;
+
+    //! NOTE: The first and last segments run to/from the points just outside the region (if any), which can be in other polylines...
+    const AutomationCurve& curve = automationData()->curve(curveKeyFor(currentAutomationType(), staff));
+    const int tickBeforeRegion = tickOfPointBefore(curve, data.startMeasure->tick().ticks());
+    const int tickAfterRegion = tickOfPointAfter(curve, regionLastTick(data.endMeasure));
 
     QVector<QColor> colorsUnderLine;
     colorsUnderLine.reserve(pointsData.size() + 1); // +1 for the "trailing color" (see below)
 
-    bool prevPointGenerated = true;
+    bool prevPointGenerated = tickBeforeRegion == -1 || curve.find(tickBeforeRegion)->second.generated;
     for (const PointData& pointData : pointsData) {
         //! NOTE: The following can be null for newly created (always non-generated) points because they're not in the model yet
         const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, pointData.tick);
@@ -744,10 +808,43 @@ void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* po
         prevPointGenerated = currPointGenerated;
     }
 
-    // This is the trailing color (after the last point) - it always follows the color of the last point...
-    colorsUnderLine.emplace_back(prevPointGenerated ? generatedColor : editedColor);
+    // This is the trailing color (after the last point) - it follows the last point, as well as the point after the region...
+    const bool nextPointGenerated = tickAfterRegion == -1 || curve.find(tickAfterRegion)->second.generated;
+    colorsUnderLine.emplace_back(!prevPointGenerated || !nextPointGenerated ? editedColor : generatedColor);
 
     polyline->setColorsUnderLine(colorsUnderLine);
+}
+
+void NotationAutomationController::applyPolylineEdgeValues(PolylinePlot* polyline, const PolylineKey& key) const
+{
+    const auto mapIt = m_polylinesDataMap.find(key);
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    IF_ASSERT_FAILED(polyline && mapIt != m_polylinesDataMap.end() && staff && automationData()) {
+        return;
+    }
+
+    const PolylineData& data = mapIt->second;
+    const AutomationType type = currentAutomationType();
+    const AutomationCurve& curve = automationData()->curve(curveKeyFor(type, staff));
+
+    //! NOTE: The curve carries on beyond the region, so the line at the region's edges is taken from the points either side
+    //! of them (which may belong to other polylines) rather than from the points inside the region...
+    const int startTick = data.startMeasure->tick().ticks();
+    const int lastTick = regionLastTick(data.endMeasure);
+    const int endTick = data.endMeasure->endTick().ticks();
+
+    if (curve.empty()) {
+        polyline->setLeftEdgeValue(polyline->defaultValue());
+        polyline->setRightEdgeValue(polyline->defaultValue());
+        return;
+    }
+
+    const double left = curveValueBetween(curve, tickOfPointBefore(curve, startTick), tickOfPointAfter(curve, startTick - 1), startTick);
+    const double right = curveValueBetween(curve, tickOfPointBefore(curve, lastTick + 1), tickOfPointAfter(curve, lastTick), endTick);
+
+    // Higher value == lower Y...
+    polyline->setLeftEdgeValue(1.0 - automationValueToDisplay(type, left));
+    polyline->setRightEdgeValue(1.0 - automationValueToDisplay(type, right));
 }
 
 QColor NotationAutomationController::inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const
@@ -954,7 +1051,7 @@ void NotationAutomationController::processPendingChanges()
             }
         }
 
-        updateStaffPointsInRange(key, regionStartTick, regionEndTick);
+        rebuildPolylinePoints(key);
     }
 
     updatePolylinesGeometry();
@@ -980,9 +1077,9 @@ void NotationAutomationController::rebuildAllPolylines()
     updatePolylinesGeometry();
 }
 
-void NotationAutomationController::updateStaffPointsInRange(const PolylineKey& key, int tickFrom, int tickTo)
+void NotationAutomationController::rebuildPolylinePoints(const PolylineKey& key)
 {
-    auto mapIt = m_polylinesDataMap.find(key);
+    const auto mapIt = m_polylinesDataMap.find(key);
     IF_ASSERT_FAILED(key.isValid() && mapIt != m_polylinesDataMap.end()) {
         return;
     }
@@ -999,64 +1096,20 @@ void NotationAutomationController::updateStaffPointsInRange(const PolylineKey& k
         return;
     }
 
-    // A polyline knows nothing about points outside its own region...
-    tickFrom = std::max(tickFrom, data.startMeasure->tick().ticks());
-    tickTo = std::min(tickTo, data.endMeasure->endTick().ticks());
-    if (tickFrom > tickTo) {
-        return;
-    }
-
-    const QVector<PointData> newRangeData = pointsDataInStaffRegion(staff, regionRect, tickFrom, tickTo);
-
-    QVector<PointData>& pointsData = data.pointsData;
-
-    int firstIdx = 0;
-    while (firstIdx < pointsData.size() && pointsData.at(firstIdx).tick < tickFrom) {
-        ++firstIdx;
-    }
-    int lastIdx = firstIdx;
-    while (lastIdx < pointsData.size() && pointsData.at(lastIdx).tick <= tickTo) {
-        ++lastIdx;
-    }
-    if (!newRangeData.isEmpty() && newRangeData.back().tick > tickTo) {
-        const int trailingTick = newRangeData.back().tick;
-        while (lastIdx < pointsData.size() && pointsData.at(lastIdx).tick == trailingTick) {
-            ++lastIdx;
-        }
-    }
-
-    QVector<PointData> updatedPointsData;
-    updatedPointsData.reserve(pointsData.size() - (lastIdx - firstIdx) + newRangeData.size());
-    for (int i = 0; i < firstIdx; ++i) {
-        updatedPointsData.push_back(pointsData.at(i));
-    }
-    for (const PointData& pointData : newRangeData) {
-        updatedPointsData.push_back(pointData);
-    }
-    for (int i = lastIdx; i < pointsData.size(); ++i) {
-        updatedPointsData.push_back(pointsData.at(i));
-    }
-    pointsData = updatedPointsData;
+    //! NOTE: A polyline only holds the points inside its own region. Whatever lies outside it (which can still affect
+    //! the polyline) is covered by the edge values...
+    data.pointsData = pointsDataInStaffRegion(staff, regionRect, data.startMeasure->tick().ticks(), regionLastTick(data.endMeasure));
 
     QVector<QPointF> points;
-    points.reserve(pointsData.size());
-    for (const PointData& pointData : pointsData) {
+    points.reserve(data.pointsData.size());
+    for (const PointData& pointData : data.pointsData) {
         points.push_back(pointData.qPointF);
     }
     polyline->setPoints(points);
+
+    applyPolylineEdgeValues(polyline, key);
     applyPolylineColorsUnderLine(polyline, key);
     polyline->update();
-}
-
-void NotationAutomationController::rebuildPolylinePoints(const PolylineKey& key)
-{
-    const auto mapIt = m_polylinesDataMap.find(key);
-    IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
-        return;
-    }
-
-    const PolylineData& data = mapIt->second;
-    updateStaffPointsInRange(key, data.startMeasure->tick().ticks(), data.endMeasure->endTick().ticks());
 }
 
 void NotationAutomationController::mergePendingChanges(const mu::engraving::AutomationChanges& changes)
@@ -1077,6 +1130,10 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
         return;
     }
 
+    IF_ASSERT_FAILED(automationData()) {
+        return;
+    }
+
     std::set<muse::ID> affectedStaffIds;
     std::set<mu::engraving::InstrumentTrackId> affectedTrackIds;
     bool globalAffected = false;
@@ -1090,9 +1147,8 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
         }
     }
 
-    // Only touch the staves that were actually affected and whose system overlaps the changed tick
-    // range, and only recompute points within that range, rather than the whole score or even the
-    // whole staff
+    //! NOTE: A change can affect any polyline of an affected staff, even ones in other systems (the line between the
+    //! changed points and the points either side of them can span many regions), so they're all rebuilt...
     for (const auto& [key, data] : m_polylinesDataMap) {
         IF_ASSERT_FAILED(key.isValid()) {
             continue;
@@ -1105,13 +1161,8 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
         const mu::engraving::InstrumentTrackId staffTrackId { staff->part()->id(), staff->part()->instrumentId() };
         const bool trackAffected = affectedTrackIds.find(staffTrackId) != affectedTrackIds.end();
         const bool globalCurveAffected = globalAffected && curveKeyFor(currentAutomationType(), staff).isGlobal();
-        if (!staffAffected && !trackAffected && !globalCurveAffected) {
-            continue;
-        }
-        const int regionStartTick = data.startMeasure->tick().ticks();
-        const int regionEndTick = data.endMeasure->endTick().ticks();
-        if (regionEndTick >= changes.tickFrom && regionStartTick <= changes.tickTo) {
-            updateStaffPointsInRange(key, changes.tickFrom, changes.tickTo);
+        if (staffAffected || trackAffected || globalCurveAffected) {
+            rebuildPolylinePoints(key);
         }
     }
 
