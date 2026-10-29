@@ -3607,9 +3607,7 @@ static void writeTimeSig(Score* score, const Fraction& tick, XmlWriter& xml, Wri
 void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack, track_idx_t etrack,
                            Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig)
 {
-    Score* score = sseg->score();
-    Fraction startTick = ctx.curTick();
-    bool clip          = ctx.clipboardmode();
+    bool clip = ctx.clipboardmode();
 
     // in clipboard mode, ls might be in an mmrest
     // since we are traversing regular measures,
@@ -3633,6 +3631,25 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         }
     }
 
+    std::vector<Segment*> segments;
+    for (Segment* segment = sseg; segment && segment != eseg; segment = segment->next1()) {
+        segments.push_back(segment);
+    }
+
+    writeSegments(xml, ctx, strack, etrack, segments, writeSystemElements, forceTimeSig);
+}
+
+void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack, track_idx_t etrack, const std::vector<Segment*>& segments,
+                           bool writeSystemElements, bool forceTimeSig)
+{
+    if (segments.empty()) {
+        return;
+    }
+
+    Segment* sseg = segments.front();
+    Score* score = sseg->score();
+    Fraction startTick = ctx.curTick();
+
     int lastTrackWritten = static_cast<int>(strack - 1);   // for counting necessary <voice> tags
     for (track_idx_t track = strack; track < etrack; ++track) {
         if (!ctx.canWriteVoice(track)) {
@@ -3652,7 +3669,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         bool crWritten = false;          // for forceTimeSig
         bool keySigWritten = false;      // for forceTimeSig
 
-        for (Segment* segment = sseg; segment && segment != eseg; segment = segment->next1()) {
+        for (Segment* segment : segments) {
             if (!segment->enabled()) {
                 continue;
             }
