@@ -35,6 +35,8 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/tremolosinglechord.h"
 
 #include "engraving/editing/editnote.h"
@@ -502,6 +504,49 @@ TEST_F(Engraving_NoteTests, tpcDegrees)
     EXPECT_EQ(tpc2degree(Tpc::TPC_B,   Key::C_S), 6);
     EXPECT_EQ(tpc2degree(Tpc::TPC_B_B, Key::C_S), 6);
     //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
+}
+
+TEST_F(Engraving_NoteTests, jianpuChordNotesAlignHorizontally)
+{
+    MasterScore* score = ScoreRW::readScore(u"beam_data/jianpuBeam.mscx");
+    ASSERT_TRUE(score);
+    ChordRest* chordRest = chordRestAtTick(score, Fraction(0, 1), 0);
+    ASSERT_TRUE(chordRest);
+    ASSERT_TRUE(chordRest->isChord());
+    Chord* chord = toChord(chordRest);
+    ASSERT_TRUE(chord->isJianpuStaff());
+    ASSERT_EQ(chord->notes().size(), 1);
+
+    Note* firstNote = chord->notes().front();
+    firstNote->setPitch(60);
+    firstNote->setTpcFromPitch();
+    for (int pitch : { 62, 64 }) {
+        Note* note = Factory::createNote(chord);
+        note->setPitch(pitch);
+        note->setTpcFromPitch();
+        chord->add(note);
+    }
+
+    for (DirectionV direction : { DirectionV::UP, DirectionV::DOWN }) {
+        chord->setStemDirection(direction);
+        score->doLayout();
+        for (const Note* note : chord->notes()) {
+            EXPECT_DOUBLE_EQ(note->x(), firstNote->x());
+            if (note != firstNote) {
+                EXPECT_LT(note->y(), firstNote->y());
+            }
+        }
+    }
+
+    chord->staff()->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::STANDARD));
+    ASSERT_FALSE(chord->isJianpuStaff());
+    for (DirectionV direction : { DirectionV::UP, DirectionV::DOWN }) {
+        chord->setStemDirection(direction);
+        score->doLayout();
+        EXPECT_NE(chord->notes()[0]->x(), chord->notes()[1]->x());
+    }
+
+    delete score;
 }
 
 TEST_F(Engraving_NoteTests, jianpuOctave)

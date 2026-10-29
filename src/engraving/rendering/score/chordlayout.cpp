@@ -3245,14 +3245,16 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
                   [](Note* n1, const Note* n2) ->bool { return n1->line() < n2->line(); });
         for (Note* note : chordNotes) {
             double noteX = 0.0;
-            if (note->ldata()->mirror()) {
-                if (_up) {
-                    noteX = StemLayout::stemPosX(chord) - overlapMirror;
-                } else {
-                    noteX = -note->headBodyWidth() + overlapMirror;
+            if (!isJianpu) {
+                if (note->ldata()->mirror()) {
+                    if (_up) {
+                        noteX = StemLayout::stemPosX(chord) - overlapMirror;
+                    } else {
+                        noteX = -note->headBodyWidth() + overlapMirror;
+                    }
+                } else if (_up) {
+                    noteX = chord->noteHeadWidth() - note->headBodyWidth();
                 }
-            } else if (_up) {
-                noteX = chord->noteHeadWidth() - note->headBodyWidth();
             }
 
             double ny = (isJianpu ? 0 : note->line() + stepOffset) * stepDistance;
