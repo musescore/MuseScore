@@ -1636,6 +1636,12 @@ int Score::utime2utick(double utime) const
     return tempoTimeline(/*expandRepeats*/ true).utime2utick(utime);
 }
 
+double Score::utickToPlayedTime(int utick, bool expandRepeats) const
+{
+    const int playedTick = expandRepeats ? utick : expandedRepeatList().utick2tick(utick);
+    return tempoTimeline(expandRepeats).utick2utime(playedTick);
+}
+
 const TempoTimeline& Score::tempoTimeline() const
 {
     return masterScore()->tempoTimeline();

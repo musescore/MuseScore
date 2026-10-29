@@ -270,6 +270,10 @@ protected:
         ON_CALL(*m_notationPlayback, playedTickToSec(_)).WillByDefault([](midi::tick_t tick) {
             return audio::secs_t(tick / static_cast<double>(TICKS_PER_SEC));
         });
+        //! NOTE Envelopes are built from automation curves, which are in utick space
+        ON_CALL(*m_notationPlayback, utickToSec(_)).WillByDefault([](midi::tick_t utick) {
+            return audio::secs_t(utick / static_cast<double>(TICKS_PER_SEC));
+        });
 
         //! NOTE A valid input skips the sound profile lookup
         audio::AudioInputParams inputParams;
@@ -601,8 +605,8 @@ TEST_F(PlaybackControllerTests, ResendsAllEnvelopesOnTempoChange)
     startPlayback();
 
     // [GIVEN] The tempo doubles
-    ON_CALL(*m_notationPlayback, playedTickToSec(_)).WillByDefault([](midi::tick_t tick) {
-        return audio::secs_t(tick / (2.0 * TICKS_PER_SEC));
+    ON_CALL(*m_notationPlayback, utickToSec(_)).WillByDefault([](midi::tick_t utick) {
+        return audio::secs_t(utick / (2.0 * TICKS_PER_SEC));
     });
 
     // [THEN] Both envelopes are rebuilt with the new seconds

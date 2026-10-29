@@ -102,6 +102,7 @@ private:
     bool hasOnlyOneLyricsVerse(const RepeatSegment* repeat, const track_idx_t track) const;
 
     const Score* m_score = nullptr;
+    bool m_expandRepeats = true;
 
     std::set<track_idx_t> m_usedTracks;
     mutable std::unordered_map<track_idx_t, const AutomationCurve*> m_dynamicsCurveByTrack;

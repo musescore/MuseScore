@@ -93,7 +93,9 @@ dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackId
         return NATURAL_DYNAMIC_LEVEL;
     }
 
-    const std::optional<real_t> value = mu::engraving::evaluateCurveAt(*curve, nominalPositionTick);
+    // With repeats off, read the first pass
+    const int utick = m_expandRepeats ? nominalPositionTick : m_score->expandedRepeatList().tick2utick(nominalPositionTick);
+    const std::optional<real_t> value = mu::engraving::evaluateCurveAt(*curve, utick);
     return value ? toDynamicLevel(*value) : NATURAL_DYNAMIC_LEVEL;
 }
 
@@ -251,17 +253,15 @@ DynamicAutomationLayers PlaybackContext::dynamicLevelLayers(const track_idx_t tr
             lastCurve = curve;
             auto hint = lastLevelMap.end();
 
-            // AutomationCurve ticks are always in expanded utick space, regardless of the Play Repeats setting
-            const TempoTimeline& expandedTimeline = m_score->tempoTimeline(/*expandRepeats*/ true);
-
             if (curve->cbegin()->first > 0) {
                 AutomationPoint naturalPoint;
                 naturalPoint.value.outValue = real_t(NATURAL_DYNAMIC_LEVEL) / real_t(MAX_DYNAMIC_LEVEL);
-                hint = lastLevelMap.insert(hint, { expandedTimeline.utick2utime(0) * 1000000, naturalPoint.value });
+                hint = lastLevelMap.insert(hint, { m_score->utickToPlayedTime(0, m_expandRepeats) * 1000000, naturalPoint.value });
             }
 
-            for (const auto& [tick, point] : *curve) {
-                hint = lastLevelMap.insert(hint, { expandedTimeline.utick2utime(tick) * 1000000, point.value });
+            // With repeats off, later passes land on times the first pass already wrote; insert keeps the first
+            for (const auto& [utick, point] : *curve) {
+                hint = lastLevelMap.insert(hint, { m_score->utickToPlayedTime(utick, m_expandRepeats) * 1000000, point.value });
             }
         }
 
@@ -284,6 +284,7 @@ void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trac
         return;
     }
 
+    m_expandRepeats = expandRepeats;
     m_dynamicsCurveByTrack.clear();
 
     for (const RepeatSegment* repeatSegment : m_score->repeatList(expandRepeats)) {
