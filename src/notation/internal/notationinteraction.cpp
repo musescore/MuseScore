@@ -2878,7 +2878,7 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
             }
         }
 
-        if (firstChordRest == secondItem && (!firstItem || firstItem->isChordRest())) {
+        if (firstItem == secondItem && (!firstItem || firstItem->isChordRest())) {
             ChordRestNavigateOptions options;
             options.disableOverRepeats = true;
             secondItem = engraving::Navigation::nextChordRest(toChordRest(firstItem), options);
