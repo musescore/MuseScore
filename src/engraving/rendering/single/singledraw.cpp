@@ -1457,7 +1457,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter, const Pain
         f.setItalic(glissando->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando->fontStyle() & FontStyle::Underline);
         f.setStrike(glissando->fontStyle() & FontStyle::Strike);
-        FontMetrics fm(f);
+        FontMetrics fm(f, item->iocContext());
         RectF r = fm.boundingRect(glissando->text());
 
         // if text longer than available space, skip it

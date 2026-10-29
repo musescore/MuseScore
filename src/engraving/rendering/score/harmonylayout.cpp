@@ -662,7 +662,7 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const Stri
     }
 
     Font f = item->harmonyType() != HarmonyType::ROMAN ? ldata->fontList.value().front() : item->font();
-    TextSegment* ts = new TextSegment(s, f, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign);
+    TextSegment* ts = new TextSegment(s, f, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign, item->iocContext());
     harmonyCtx.renderItemList.push_back(ts);
     harmonyCtx.movex(ts->width());
 }
@@ -678,7 +678,7 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, SymId sym,
 
     String s = ctx.conf().engravingFont()->toString(sym);
 
-    TextSegment* ts = new TextSegment(s, f, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign);
+    TextSegment* ts = new TextSegment(s, f, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign, item->iocContext());
     harmonyCtx.renderItemList.push_back(ts);
     harmonyCtx.movex(ts->width());
 }
@@ -788,7 +788,7 @@ void HarmonyLayout::renderActionNote(Harmony* item, Harmony::LayoutData* ldata, 
     muse::draw::Font font = cs.isValid() ? ldata->fontList.value()[cs.fontIdx] : ldata->fontList.value().front();
     font.setPointSizeF(font.pointSizeF() * harmonyCtx.scale);
 
-    TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign);
+    TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign, item->iocContext());
     harmonyCtx.renderItemList.push_back(ts);
     harmonyCtx.movex(ts->width());
 }
@@ -841,7 +841,7 @@ void HarmonyLayout::renderActionAcc(Harmony* item, Harmony::LayoutData* ldata, H
     muse::draw::Font font = cs.isValid() ? ldata->fontList.value()[cs.fontIdx] : ldata->fontList.value().front();
     font.setPointSizeF(font.pointSizeF() * harmonyCtx.scale);
 
-    TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign);
+    TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign, item->iocContext());
     harmonyCtx.renderItemList.push_back(ts);
     harmonyCtx.movex(ts->width());
 }
@@ -913,9 +913,10 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
         }
         bool startMatchAny = kernPair.second.isEmpty();
         if ((endChar && startChar) || (endChar && startMatchAny)) {
-            const FontMetrics fm = FontMetrics(item->font());
+            const FontMetrics fm = FontMetrics(item->font(), item->iocContext());
             const double scale = harmonyCtx.scale * item->mag();
-            harmonyCtx.pos = harmonyCtx.pos + PointF(kernInfo.second, 0.0) * FontMetrics::capHeight(item->font()) * scale;
+            harmonyCtx.pos = harmonyCtx.pos
+                             + PointF(kernInfo.second, 0.0) * FontMetrics::capHeight(item->font(), item->iocContext()) * scale;
             break;
         }
     }
@@ -936,7 +937,7 @@ void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, c
 
     kernCharacters(item, text, harmonyCtx, ctx);
 
-    TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign);
+    TextSegment* ts = new TextSegment(text, font, harmonyCtx.x(), harmonyCtx.y(), harmonyCtx.hAlign, item->iocContext());
     harmonyCtx.movex(ts->width());
 
     if (a->renderText()) {
@@ -950,13 +951,13 @@ void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, c
 void HarmonyLayout::renderActionMove(Harmony* item, const RenderActionMovePtr& a, HarmonyRenderCtx& harmonyCtx)
 {
     const double scale = (a->scaled() ? harmonyCtx.scale : 1.0) * item->mag();
-    harmonyCtx.pos = harmonyCtx.pos + a->vec() * FontMetrics::capHeight(item->font()) * scale;
+    harmonyCtx.pos = harmonyCtx.pos + a->vec() * FontMetrics::capHeight(item->font(), item->iocContext()) * scale;
 }
 
 void HarmonyLayout::renderActionMoveXHeight(Harmony* item, const RenderActionMoveXHeightPtr& a, HarmonyRenderCtx& harmonyCtx)
 {
     const int direction = a->up() ? -1 : 1;
     const double scale = a->scaled() ? harmonyCtx.scale : 1.0;
-    const FontMetrics fm = FontMetrics(item->font());
+    const FontMetrics fm = FontMetrics(item->font(), item->iocContext());
     harmonyCtx.movey(direction * fm.xHeight() * scale);
 }

@@ -131,12 +131,14 @@ struct TextSegment : HarmonyRenderItem {
 
     HarmonyRenderItemType type() const override { return HarmonyRenderItemType::TEXT; }
 
-    TextSegment(const String& s, const muse::draw::Font& f, double _x, double _y, bool align)
-        : HarmonyRenderItem(align, _x, _y) { setText(s); setFont(f); }
+    TextSegment(const String& s, const muse::draw::Font& f, double _x, double _y, bool align,
+                const muse::modularity::ContextPtr& iocCtx)
+        : HarmonyRenderItem(align, _x, _y), m_iocCtx(iocCtx) { setText(s); setFont(f); }
 
 private:
     muse::draw::Font m_font;
     String m_text;
+    muse::modularity::ContextPtr m_iocCtx;
 };
 
 class HDegree;

@@ -910,7 +910,7 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
             f.setPointSizeF(12 * item->spatium() / item->defaultSpatium());
             f.setBold(true);
             Char ch = measure->ticks() > measure->timesig() ? u'+' : u'-';
-            RectF r = FontMetrics(f).boundingRect(ch);
+            RectF r = FontMetrics(f, item->iocContext()).boundingRect(ch);
 
             painter->setFont(f);
             painter->drawText(-r.width(), -item->spatium(), ch);
@@ -1654,7 +1654,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOpti
         f.setItalic(glissando->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando->fontStyle() & FontStyle::Underline);
         f.setStrike(glissando->fontStyle() & FontStyle::Strike);
-        FontMetrics fm(f);
+        FontMetrics fm(f, item->iocContext());
         RectF r = fm.boundingRect(glissando->text());
 
         // if text longer than available space, skip it

@@ -495,11 +495,11 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         return std::max(1, static_cast<int>(std::ceil(textWidth / maxTextWidth)));
     };
 
-    FontMetrics titleFontMetrics(titleFont);
+    FontMetrics titleFontMetrics(titleFont, iocContext());
     const int titleLines = lineCount(titleFontMetrics, title);
     const double titleHeight = titleLines * titleFontMetrics.lineSpacing();
 
-    FontMetrics subtitleFontMetrics(subtitleFont);
+    FontMetrics subtitleFontMetrics(subtitleFont, iocContext());
     const int subtitleLines = lineCount(subtitleFontMetrics, subtitle);
     const double subtitleHeight = subtitleLines * subtitleFontMetrics.lineSpacing();
 

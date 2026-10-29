@@ -1236,7 +1236,7 @@ double Note::tabHeadWidth(const StaffType* tab) const
     if (tab && tab->isTabStaff() && m_fret != INVALID_FRET_INDEX && m_string != INVALID_STRING_INDEX) {
         Font f = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
-        val = FontMetrics::width(f, m_fretString) * magS();
+        val = FontMetrics::width(f, m_fretString, iocContext()) * magS();
     } else {
         val = headWidth();
     }

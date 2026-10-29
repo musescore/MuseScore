@@ -1907,7 +1907,7 @@ static double scaleText(const String& str, const Sid fontFaceSid, const double f
     const String fontFace = style.styleV(fontFaceSid).value<String>();
     Font font(fontFace, Font::Type::Unknown);
     font.setPointSizeF(fontSize);
-    const FontMetrics fm(font);
+    const FontMetrics fm(font, score->iocContext());
 
     const double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
 

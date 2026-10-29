@@ -285,7 +285,7 @@ RectF TextCursor::cursorRect() const
         // Ensure the cursor height matches that of the associated text font
         TextLayout::substituteMusicFont(_font, fragment->calculatedFontSize(m_text));
     }
-    const FontMetrics fm(_font);
+    const FontMetrics fm(_font, m_text->iocContext());
 
     double fontCapHeight = fm.capHeight();
     double fontAscent = fm.ascent();
@@ -911,9 +911,9 @@ Font TextFragment::font(const TextBase* t) const
         // check if all symbols are available
         font.setFamily(family, fontType);
         font.setNoFontMerging(true);
-        FontMetrics fm(font);
+        FontMetrics fm(font, t->iocContext());
 
-        resolveFallback(fontType, fm, family);
+        resolveFallback(fontType, fm, family, t->iocContext());
     } else {
         family = format.fontFamily();
         fontType = Font::Type::Unknown;
@@ -950,7 +950,7 @@ double TextFragment::calculatedFontSize(const TextBase* t) const
 }
 
 void TextFragment::resolveFallback(muse::draw::Font::Type fontType, const muse::draw::FontMetrics& fm,
-                                   String& family) const
+                                   String& family, const muse::modularity::ContextPtr& iocCtx) const
 {
     std::vector<char32_t> missingChars;
     for (size_t i = 0; i < text.size(); ++i) {
@@ -974,8 +974,8 @@ void TextFragment::resolveFallback(muse::draw::Font::Type fontType, const muse::
 
     static String fallbackSymbolFontFamily = String::fromUtf8(FALLBACK_SYMBOL_FONT);
     static String fallbackSymbolTextFontFamily = String::fromUtf8(FALLBACK_SYMBOLTEXT_FONT);
-    static FontMetrics fallbackSymbolFM(Font(fallbackSymbolFontFamily, Font::Type::MusicSymbol));
-    static FontMetrics fallbackSymbolTextFM(Font(fallbackSymbolTextFontFamily, Font::Type::MusicSymbolText));
+    const FontMetrics fallbackSymbolFM(Font(fallbackSymbolFontFamily, Font::Type::MusicSymbol), iocCtx);
+    const FontMetrics fallbackSymbolTextFM(Font(fallbackSymbolTextFontFamily, Font::Type::MusicSymbolText), iocCtx);
 
     if (fontType == Font::Type::MusicSymbol) {
         for (char32_t missingChar : missingChars) {
@@ -1022,7 +1022,7 @@ double TextBlock::xpos(size_t column, const TextBase* t) const
         if (column == col) {
             return f.pos.x();
         }
-        FontMetrics fm(f.font(t));
+        FontMetrics fm(f.font(t), t->iocContext());
         size_t idx = 0;
         for (size_t i = 0; i < f.text.size(); ++i) {
             ++idx;
@@ -1128,7 +1128,7 @@ int TextBlock::column(double x, TextBase* t) const
             if (f.text.at(i).isHighSurrogate()) {
                 continue;
             }
-            FontMetrics fm(f.font(t));
+            FontMetrics fm(f.font(t), t->iocContext());
             double xo = fm.width(f.text.left(idx));
             if (x <= f.pos.x() + px + (xo - px) * .5) {
                 return col;
@@ -1865,7 +1865,7 @@ void TextBase::layoutFrame(LayoutData* ldata) const
 //      if (empty()) {    // or bbox.width() <= 1.0
     if (ldata->bbox().width() <= 1.0 || ldata->bbox().height() < 1.0) {      // or bbox.width() <= 1.0
         // this does not work for Harmony:
-        FontMetrics fm(font());
+        FontMetrics fm(font(), iocContext());
         double ch = fm.ascent();
         double cw = fm.width('n');
         ldata->frame = RectF(0.0, -ch, cw, ch);
@@ -2585,7 +2585,7 @@ Font TextBase::font() const
 
 FontMetrics TextBase::fontMetrics() const
 {
-    return FontMetrics(font());
+    return FontMetrics(font(), iocContext());
 }
 
 bool TextBase::isPropertyLinkedToMaster(Pid id) const

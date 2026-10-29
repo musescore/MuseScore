@@ -632,7 +632,7 @@ void TLayout::layoutActionIcon(const ActionIcon* item, ActionIcon::LayoutData* l
         return;
     }
 
-    FontMetrics fontMetrics(item->iconFont());
+    FontMetrics fontMetrics(item->iconFont(), item->iocContext());
     ldata->setBbox(fontMetrics.boundingRect(Char(item->icon())));
     ldata->setPos(PointF());
 }
@@ -1317,7 +1317,7 @@ void TLayout::layoutBend(const Bend* item, Bend::LayoutData* ldata)
 
     RectF bb;
 
-    FontMetrics fm(item->font(spatium));
+    FontMetrics fm(item->font(spatium), item->iocContext());
 
     size_t n = item->points().size();
     double x = ldata->noteWidth;
@@ -2092,7 +2092,7 @@ void TLayout::layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem
     // (use the same font selection as used in draw() below)
     double m = ctx.conf().styleD(Sid::figuredBassFontSize) * item->spatium() / item->defaultSpatium();
     f.setPointSizeF(m);
-    FontMetrics fm(f);
+    FontMetrics fm(f, item->iocContext());
 
     String str;
     double x = item->symWidth(SymId::noteheadBlack) * .5;
@@ -2524,7 +2524,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
             }
         }
         Font scaledFont(item->fretNumFont());
-        FontMetrics fm2(scaledFont);
+        FontMetrics fm2(scaledFont, item->iocContext());
         String fretText = String::number(item->fretOffset() + 1);
         if (ctx.conf().styleB(Sid::fretUseCustomSuffix)) {
             fretText += ctx.conf().styleSt(Sid::fretCustomSuffix);
@@ -2556,7 +2556,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     if (item->showFingering()) {
         const double padding = 0.2 * spatium;
         Font fingeringFont = item->fingeringFont();
-        FontMetrics fontMetrics(fingeringFont);
+        FontMetrics fontMetrics(fingeringFont, item->iocContext());
         double fontHeight = fontMetrics.capHeight();
         for (size_t i = 0; i < item->fingering().size(); ++i) {
             int finger = item->fingering()[i];
@@ -3709,7 +3709,7 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
         return;
     }
 
-    FontMetrics metrics(item->font());
+    FontMetrics metrics(item->font(), item->iocContext());
     RectF bbox = metrics.boundingRect(item->iconCode());
     ldata->setShape(Shape(bbox, item));
 }
@@ -3724,7 +3724,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
 
     Shape shape;
 
-    const FontMetrics metrics(item->font());
+    const FontMetrics metrics(item->font(), item->iocContext());
     const RectF iconBox = metrics.boundingRect(item->iconCode());
     shape.add(iconBox, item);
 
@@ -3766,7 +3766,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
 
     for (const SystemLockIndicator* sli : item->system()->systemLockIndicators()) {
         if (sli != item && sli->systemLock()->endMB() == endMB) {
-            const double sliWidth = FontMetrics(sli->font()).boundingRect(sli->iconCode()).width();
+            const double sliWidth = FontMetrics(sli->font(), sli->iocContext()).boundingRect(sli->iconCode()).width();
             // TODO: Rough spacing here
             xOffset -= (sliWidth * 2) - spatium;
         }
@@ -4379,7 +4379,7 @@ void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockInd
 
     const double spatium = item->spatium();
 
-    const FontMetrics metrics(item->font());
+    const FontMetrics metrics(item->font(), item->iocContext());
     const RectF iconBox = metrics.boundingRect(item->iconCode());
     shape.add(iconBox, item);
 
@@ -5613,7 +5613,7 @@ void TLayout::layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata)
         return;
     }
 
-    ldata->setBbox(FontMetrics::boundingRect(item->font(), item->toString()));
+    ldata->setBbox(FontMetrics::boundingRect(item->font(), item->toString(), item->iocContext()));
 }
 
 void TLayout::layoutSystemDivider(const SystemDivider* item, SystemDivider::LayoutData* ldata, const LayoutContext& ctx)
@@ -5685,7 +5685,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
                            && connects(chord, Navigation::nextChordRest(chord));
 // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
     if (beamLevel < 1 || (!joinsPrevious && !joinsNext)) {
-        FontMetrics fm(item->tab()->durationFont());
+        FontMetrics fm(item->tab()->durationFont(), item->iocContext());
         hbb   = item->tab()->durationBoxH();
         wbb   = fm.width(item->text());
         xbb   = 0.0;

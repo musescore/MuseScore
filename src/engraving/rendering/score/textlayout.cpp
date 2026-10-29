@@ -161,7 +161,7 @@ void TextLayout::computeTextHighResShape(const TextBase* item, TextBase::LayoutD
     for (const TextBlock& block : ldata->blocks) {
         double y = block.y();
         for (const TextFragment& fragment : block.fragments()) {
-            FontMetrics fontMetrics = FontMetrics(fragment.font(item));
+            FontMetrics fontMetrics = FontMetrics(fragment.font(item), item->iocContext());
             double x = fragment.pos.x();
             size_t textSize = fragment.text.size();
             for (size_t i = 0; i < textSize; ++i) {
@@ -271,7 +271,7 @@ void TextLayout::justifyLine(const TextBase* item, TextBlock* textBlock, double 
     std::vector<SubFragment> subfrags;
     for (const TextFragment& f : textBlock->fragments()) {
         String current;
-        FontMetrics fm(f.font(item));
+        FontMetrics fm(f.font(item), item->iocContext());
         for (size_t i = 0; i < f.text.size(); ++i) {
             Char c = f.text.at(i);
             current += c;
@@ -328,7 +328,7 @@ void TextLayout::layoutTextBlock(TextBlock* item, const TextBase* t)
         f.pos.setX(x);
         Font font = f.font(t);
         substituteMusicFont(font, f.calculatedFontSize(t));
-        FontMetrics fm(font);
+        FontMetrics fm(font, t->iocContext());
         if (f.format.valign() != VerticalAlignment::AlignNormal) {
             double voffset = fm.xHeight() / SUBSCRIPT_SIZE;   // use original height
             if (f.format.valign() == VerticalAlignment::AlignSubScript) {
@@ -351,7 +351,7 @@ void TextLayout::layoutTextBlock(TextBlock* item, const TextBase* t)
             TextFragment& f = *fi;
             f.pos.setX(x);
             Font fragmentFont = f.font(t);
-            FontMetrics fm(fragmentFont);
+            FontMetrics fm(fragmentFont, t->iocContext());
             if (f.format.valign() != VerticalAlignment::AlignNormal) {
                 double voffset = fm.xHeight() / SUBSCRIPT_SIZE;           // use original height
                 if (f.format.valign() == VerticalAlignment::AlignSubScript) {
@@ -418,7 +418,7 @@ double TextLayout::musicSymbolBaseLineAdjust(const TextBlock* block, const TextB
                                              const std::list<TextFragment>::iterator fi)
 {
     Font fragmentFont = f.font(t);
-    FontMetrics fm(fragmentFont);
+    FontMetrics fm(fragmentFont, t->iocContext());
     const bool adjustSymbol = fragmentFont.type() == Font::Type::MusicSymbolText && t->isMarker();
     if (!adjustSymbol) {
         return 0.0;
@@ -432,7 +432,7 @@ double TextLayout::musicSymbolBaseLineAdjust(const TextBlock* block, const TextB
         TextFragment& refFragment = fi != block->fragments().begin() ? *(std::prev(fi)) : *(std::next(fi));
         refFont = refFragment.font(t);
     }
-    FontMetrics refFm(refFont);
+    FontMetrics refFm(refFont, t->iocContext());
 
     const double middle = (fm.tightBoundingRect(f.text).height() / 2) - fm.tightBoundingRect(f.text).bottom();
     const double refXHeight = refFm.capHeight() / 2;
