@@ -167,6 +167,10 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
 
     m_points.reserve(tempoValues.size() + pauses.size());
 
+    // The default tempo applies before the first value
+    const bool usesDefaultTempo = tempoValues.empty() || tempoValues.begin()->first > 0;
+    double maxBps = usesDefaultTempo ? Constants::DEFAULT_TEMPO.val : Constants::MIN_TEMPO.val;
+
     // Merge-walk values (tick->bps) and pauses (tick->held seconds) by tick in one pass
     auto vit = tempoValues.begin();
     auto pit = pauses.begin();
@@ -181,6 +185,7 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
             const double bps = std::clamp(vit->second, Constants::MIN_TEMPO.val, Constants::MAX_TEMPO.val);
             const double pauseSum = m_points.empty() ? 0.0 : m_points.back().pauseSum;
             m_points.push_back({ utick, time, bps, 0.0, pauseSum });
+            maxBps = std::max(maxBps, bps);
             ++vit;
         }
 
@@ -195,6 +200,8 @@ void TempoTimeline::rebuild(const TempoValues& tempoValues, const PausesMap& pau
             ++pit;
         }
     }
+
+    m_maxTempo = maxBps;
 }
 
 double TempoTimeline::utick2utime(int utick) const

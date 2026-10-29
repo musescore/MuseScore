@@ -124,6 +124,7 @@ private:
         AutomationCurve noRepeatTempoCurve; // repeat-agnostic Tempo curve
         std::vector<std::pair<utick_t, int> > pendingTempoResets;
         BeatsPerSecond tempoMultiplier = 1.0;
+        bool hasTempoDependentDynamics = false;
     };
 
     struct DynamicInfo {
@@ -158,6 +159,7 @@ private:
 
     void update(const UpdateRequest& request, const AutomationCurveMap& curves);
     void fullRebuild(AutomationCurveMap& curves, bool includeTempo = true, bool includeDynamics = true);
+    int dynamicsRebuildStart(int tickFrom, const StaffRange& range) const;
 
     static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick, bool includeTempo,
                                      bool includeDynamics, AutomationCurveMap& destCurves);
@@ -209,5 +211,6 @@ private:
     TempoTimeline m_tempoTimeline;
     TempoTimeline m_flattenedTempoTimeline;
     std::optional<TempoTimeline> m_tempoTimelineOverride;
+    bool m_hasTempoDependentDynamics = false; // fp/pf, or a hairpin starting on one
 };
 }
