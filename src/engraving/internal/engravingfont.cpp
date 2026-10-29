@@ -44,14 +44,15 @@ using namespace mu::engraving;
 // ScoreFont
 // =============================================
 
-EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath, const path_t& metadataPath)
-    : EngravingFont(name, family, std::make_shared<File>(filePath), std::make_shared<File>(metadataPath))
+EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath, const path_t& metadataPath,
+                             const muse::modularity::ContextPtr& iocCtx)
+    : EngravingFont(name, family, std::make_shared<File>(filePath), std::make_shared<File>(metadataPath), iocCtx)
 {
 }
 
 EngravingFont::EngravingFont(const std::string& name, const std::string& family, std::shared_ptr<IODevice> font,
-                             std::shared_ptr<IODevice> metadata)
-    : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
+                             std::shared_ptr<IODevice> metadata, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Contextable(iocCtx), m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
     m_fontDevice(std::move(font)),
@@ -60,6 +61,7 @@ EngravingFont::EngravingFont(const std::string& name, const std::string& family,
 }
 
 EngravingFont::EngravingFont(const EngravingFont& other)
+    : muse::Contextable(other.iocContext())
 {
     m_loaded = false;
     m_symbols = other.m_symbols;
@@ -67,6 +69,13 @@ EngravingFont::EngravingFont(const EngravingFont& other)
     m_family = other.m_family;
     m_fontDevice = other.m_fontDevice;
     m_metadataDevice = other.m_metadataDevice;
+}
+
+EngravingFont::~EngravingFont()
+{
+    if (m_symbolFontId != -1) {
+        fontProvider()->removeSymbolFont(m_symbolFontId);
+    }
 }
 
 // =============================================
@@ -104,7 +113,10 @@ void EngravingFont::ensureLoad()
     }
 
     const String family = String::fromStdString(m_family);
-    if (!m_fontDevice || -1 == fontProvider()->addSymbolFont(family, m_fontDevice)) {
+    if (m_symbolFontId == -1 && m_fontDevice) {
+        m_symbolFontId = fontProvider()->addSymbolFont(family, m_fontDevice);
+    }
+    if (m_symbolFontId == -1) {
         LOGE() << "fatal error: cannot load font: " << m_name;
         return;
     }

@@ -50,16 +50,17 @@ class Painter;
 namespace mu::engraving {
 class Shape;
 
-class EngravingFont : public IEngravingFont
+class EngravingFont : public IEngravingFont, public muse::Contextable
 {
-    muse::GlobalInject<muse::draw::IFontProvider> fontProvider;
-    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<muse::draw::IFontProvider> fontProvider = { this };
+    muse::ContextInject<IEngravingFontsProvider> engravingFonts = { this };
 public:
     EngravingFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
-                  const muse::io::path_t& metadataPath);
+                  const muse::io::path_t& metadataPath, const muse::modularity::ContextPtr& iocCtx);
     EngravingFont(const std::string& name, const std::string& family, std::shared_ptr<muse::io::IODevice> font,
-                  std::shared_ptr<muse::io::IODevice> metadata);
+                  std::shared_ptr<muse::io::IODevice> metadata, const muse::modularity::ContextPtr& iocCtx);
     EngravingFont(const EngravingFont& other);
+    ~EngravingFont() override;
 
     const std::string& name() const override;
     const std::string& family() const override;
@@ -143,6 +144,7 @@ private:
     std::string m_family;
     std::shared_ptr<muse::io::IODevice> m_fontDevice;
     std::shared_ptr<muse::io::IODevice> m_metadataDevice;
+    int m_symbolFontId = -1;
 
     std::unordered_map<Sid, PropertyValue> m_engravingDefaults;
     double m_textEnclosureThickness = 0;

@@ -41,14 +41,12 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
-    void onDeinit() override;
 
     muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
 
     std::shared_ptr<EngravingConfiguration> m_configuration;
-    std::shared_ptr<EngravingFontsProvider> m_engravingfonts;
 };
 
 class EngravingContext : public muse::modularity::IContextSetup
@@ -60,10 +58,12 @@ public:
 
     void registerExports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
+    void onDeinit() override;
     void onDestroy() override;
 
 private:
 
+    std::shared_ptr<EngravingFontsProvider> m_engravingfonts;
     std::shared_ptr<PaletteScoreProvider> m_paletteScoreProvider;
 };
 }

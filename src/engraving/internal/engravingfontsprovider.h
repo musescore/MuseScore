@@ -30,9 +30,10 @@
 
 namespace mu::engraving {
 class EngravingFont;
-class EngravingFontsProvider : public IEngravingFontsProvider
+class EngravingFontsProvider : public IEngravingFontsProvider, public muse::Contextable
 {
 public:
+    explicit EngravingFontsProvider(const muse::modularity::ContextPtr& iocCtx);
 
     void deinit();
 

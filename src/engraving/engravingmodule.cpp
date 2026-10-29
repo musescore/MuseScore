@@ -103,10 +103,8 @@ void EngravingModule::registerExports()
 #ifndef ENGRAVING_NO_INTERNAL
 
     m_configuration = std::make_shared<EngravingConfiguration>();
-    m_engravingfonts = std::make_shared<EngravingFontsProvider>();
 
     globalIoc()->registerExport<IEngravingConfiguration>(mname, m_configuration);
-    globalIoc()->registerExport<IEngravingFontsProvider>(mname, m_engravingfonts);
 #endif
 
     // internal
@@ -158,14 +156,14 @@ void EngravingModule::registerUiTypes()
     MScore::registerUiTypes();
 }
 
-void EngravingModule::onInit(const IApplication::RunMode&)
+void EngravingContext::onInit(const muse::IApplication::RunMode&)
 {
 #ifndef ENGRAVING_NO_INTERNAL
     // Init fonts
     {
         using namespace muse::draw;
 
-        std::shared_ptr<IFontsDatabase> fdb = globalIoc()->resolve<IFontsDatabase>(mname);
+        std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(mname);
 
         // Text
         fdb->addFont(FontDataKey(u"Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");
@@ -240,7 +238,6 @@ void EngravingModule::onInit(const IApplication::RunMode&)
         fdb->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
 
         // Symbols
-        Smufl::init();
 
         //! NOTE It may be necessary to draw something with these fonts without requesting the fonts themselves
         //! (for example, simply specifying the family name for painter).
@@ -248,6 +245,15 @@ void EngravingModule::onInit(const IApplication::RunMode&)
         //! accordingly, they are drawn incorrectly
         m_engravingfonts->loadAllFonts();
     }
+
+    m_paletteScoreProvider->init();
+#endif
+}
+
+void EngravingModule::onInit(const IApplication::RunMode&)
+{
+#ifndef ENGRAVING_NO_INTERNAL
+    Smufl::init();
 
     m_configuration->init();
 
@@ -274,7 +280,7 @@ void EngravingModule::onInit(const IApplication::RunMode&)
     //! NOTE And some initialization in the `Notation::init()`
 }
 
-void EngravingModule::onDeinit()
+void EngravingContext::onDeinit()
 {
 #ifndef ENGRAVING_NO_INTERNAL
     m_engravingfonts->deinit();
@@ -289,17 +295,13 @@ IContextSetup* EngravingModule::newContext(const muse::modularity::ContextPtr& c
 void EngravingContext::registerExports()
 {
 #ifndef ENGRAVING_NO_INTERNAL
+    m_engravingfonts = std::make_shared<EngravingFontsProvider>(iocContext());
+    ioc()->registerExport<IEngravingFontsProvider>(mname, m_engravingfonts);
+
     m_paletteScoreProvider = std::make_shared<PaletteScoreProvider>(iocContext());
     ioc()->registerExport<IPaletteScoreProvider>(mname, m_paletteScoreProvider);
     ioc()->registerExport<IEngravingElementsProvider>(mname, new EngravingElementsProvider());
     ioc()->registerExport<IEngravingContextConfiguration>(mname, new EngravingContextConfiguration(iocContext()));
-#endif
-}
-
-void EngravingContext::onInit(const muse::IApplication::RunMode&)
-{
-#ifndef ENGRAVING_NO_INTERNAL
-    m_paletteScoreProvider->init();
 #endif
 }
 

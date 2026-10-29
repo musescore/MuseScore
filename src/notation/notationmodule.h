@@ -45,7 +45,6 @@ public:
 private:
     std::shared_ptr<NotationConfiguration> m_configuration;
     std::shared_ptr<InstrumentsRepository> m_instrumentsRepository;
-    std::shared_ptr<EngravingFontsController> m_engravingFontsController;
 };
 
 class NotationContext : public muse::modularity::IContextSetup
@@ -55,5 +54,9 @@ public:
         : muse::modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<EngravingFontsController> m_engravingFontsController;
 };
 }
