@@ -1794,7 +1794,10 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
         s = m->mmRestFirst()->findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
     }
     if (s) {
-        Clef* c = toClef(s->element(track));
+        const Staff* originStaff = staff->part()->isSharedPart()
+                                   ? toSharedPart(staff->part())->originStaffForStaff(staffIdx, m->tick()) : nullptr;
+        const track_idx_t clefChangeTrack = originStaff ? staff2track(originStaff->idx()) : track;
+        Clef* c = toClef(s->element(clefChangeTrack));
         if (c) {
             cl = c->clefTypeList();
             showCourtesy = c->showCourtesy();
