@@ -46,7 +46,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install cmake
 
-        buildscripts/ci/release/make_tag_name.sh | tee -a "${GITHUB_OUTPUT}"
+        muse/buildscripts/ci/release/make_tag_name.sh | tee -a "${GITHUB_OUTPUT}"
         echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
         echo ==========
         # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions
