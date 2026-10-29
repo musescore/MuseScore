@@ -36,7 +36,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Quit"),
         TranslatableString("action", "Quit"),
         InputSchema({
-        { "all_instances", Arg(DataType::Boolean, u"All instances (optional)") },
+        { "all_instances", Arg(DataType::Bool, u"All instances (optional)") },
         { "installer_path", Arg(DataType::String, u"Installer path (optional)") } }),
         Decoration(),
         Availability::All
