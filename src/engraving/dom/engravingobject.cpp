@@ -432,7 +432,7 @@ static void changeProperties(EngravingObject* object, Pid propertyId, const Prop
         case PropertyPropagation::NONE:
             break;
         case PropertyPropagation::PROPAGATE:
-            changeProperty(linkedObject, propertyId, item->propertyValueForLinkedItem(propertyId, propertyValue, linkedItem), propertyFlag);
+            changeProperty(linkedObject, propertyId, propertyValue, propertyFlag);
             break;
         case PropertyPropagation::UNLINK:
             item->unlinkPropertyFromMaster(propertyId);

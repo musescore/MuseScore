@@ -96,7 +96,6 @@ public:
 
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;
-    PropertyValue propertyValueForLinkedItem(Pid propertyId, const PropertyValue& value, const EngravingItem* linkedItem) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override;

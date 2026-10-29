@@ -662,13 +662,6 @@ public:
     void relinkPropertiesToMaster(PropertyGroup propGroup);
     void relinkPropertyToMaster(Pid propertyId);
     PropertyPropagation propertyPropagation(const EngravingItem* destinationItem, Pid propertyId) const;
-    //! The value a linked copy of this item (e.g. in a part) should get for a property of this item,
-    //! for properties whose values depend on the score they're in, e.g. on its spatium
-    virtual PropertyValue propertyValueForLinkedItem(Pid, const PropertyValue& value, const EngravingItem* /*linkedItem*/) const
-    {
-        return value;
-    }
-
     virtual bool canBeExcludedFromOtherParts() const { return false; }
     virtual void manageExclusionFromParts(bool exclude);
 

@@ -3358,13 +3358,12 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
         }
         PropertyPropagation propertyPropagate = item->propertyPropagation(toEngravingItem(linkedItem), propId);
         switch (propertyPropagate) {
-        case PropertyPropagation::PROPAGATE: {
-            const PropertyValue linkedValue = item->propertyValueForLinkedItem(propId, currentPropValue, toEngravingItem(linkedItem));
-            if (linkedItem->getProperty(propId) != linkedValue) {
-                tx.push(new ChangeProperty(linkedItem, propId, linkedValue, propFlags));
+        case PropertyPropagation::PROPAGATE:
+            if (linkedItem->getProperty(propId) != currentPropValue) {
+                tx.push(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags));
                 changed = true;
             }
-        } break;
+            break;
         case PropertyPropagation::UNLINK:
             item->unlinkPropertyFromMaster(propId);
             break;
