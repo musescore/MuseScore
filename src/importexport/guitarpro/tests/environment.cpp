@@ -35,7 +35,7 @@
 
 using namespace mu::iex::guitarpro;
 
-static muse::testing::SuiteEnvironment importexport_se(
+static muse::testing::SuiteEnvironment importexport_se = muse::testing::SuiteEnvironment(
 {
     new muse::draw::DrawModule(),         // needs for engraving
     new mu::engraving::EngravingModule(),
@@ -53,4 +53,4 @@ static muse::testing::SuiteEnvironment importexport_se(
 
     mu::engraving::loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 }
-    );
+    ).setContext(mu::engraving::ScoreRW::iocContext());

@@ -31,7 +31,7 @@
 
 #include "log.h"
 
-static muse::testing::SuiteEnvironment importexport_se(
+static muse::testing::SuiteEnvironment importexport_se = muse::testing::SuiteEnvironment(
 {
     new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule()
@@ -47,4 +47,4 @@ static muse::testing::SuiteEnvironment importexport_se(
 
     mu::engraving::loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 }
-    );
+    ).setContext(mu::engraving::ScoreRW::iocContext());

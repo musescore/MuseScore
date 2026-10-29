@@ -32,6 +32,7 @@
 static muse::testing::SuiteEnvironment notation_se
     = muse::testing::SuiteEnvironment()
       .setDependencyModules({ new muse::draw::DrawModule(), new mu::engraving::EngravingModule() })
+      .setContext(mu::engraving::ScoreRW::iocContext())
       .setPostInit([]() {
     LOGI() << "notationscene_qml tests suite post init";
 
