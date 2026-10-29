@@ -1960,12 +1960,12 @@ void ChordLayout::layoutVoiceOffsets(System* system, staff_idx_t staffIdx, Layou
                 // chord bbox is derived from its shape; slurPos() reads it later
                 fillShape(grace, grace->mutldata());
             }
-            fillShape(chord, chord->mutldata());
             // duration lines are positioned relative to the chord, not the note, so they
             // don't follow the note shift above and need to be moved explicitly
             for (DurationLine* dl : chord->durationLines()) {
                 dl->mutldata()->moveY(dy);
             }
+            fillShape(chord, chord->mutldata());
         } else if (e->isRest()) {
             Rest* rest = toRest(e);
             rest->mutldata()->moveY(dy);
@@ -3958,6 +3958,10 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
 
     for (const LedgerLine* l : item->ledgerLines()) {
         shape.add(l->shape().translate(l->pos()));
+    }
+
+    for (const DurationLine* line : item->durationLines()) {
+        shape.add(line->shape().translate(line->pos()));
     }
 
     if (beamlet && stem) {

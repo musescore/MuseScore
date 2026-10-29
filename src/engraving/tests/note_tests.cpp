@@ -27,6 +27,7 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
+#include "engraving/dom/durationline.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
@@ -544,6 +545,39 @@ TEST_F(Engraving_NoteTests, jianpuChordNotesAlignHorizontally)
         chord->setStemDirection(direction);
         score->doLayout();
         EXPECT_NE(chord->notes()[0]->x(), chord->notes()[1]->x());
+    }
+
+    delete score;
+}
+
+TEST_F(Engraving_NoteTests, jianpuDurationLinesReserveSpace)
+{
+    MasterScore* score = ScoreRW::readScore(u"beam_data/jianpuBeam.mscx");
+    ASSERT_TRUE(score);
+    ChordRest* chordRest = chordRestAtTick(score, Fraction(0, 1), 0);
+    ASSERT_TRUE(chordRest);
+    ASSERT_TRUE(chordRest->isChord());
+    Chord* chord = toChord(chordRest);
+
+    for (DurationType duration : { DurationType::V_HALF, DurationType::V_WHOLE, DurationType::V_BREVE }) {
+        chord->setDurationType(TDuration(duration));
+        score->doLayout();
+        ASSERT_FALSE(chord->durationLines().empty());
+        for (const DurationLine* line : chord->durationLines()) {
+            const double right = line->pos().x() + line->ldata()->bbox().right();
+            const Shape chordShape = chord->shape();
+            EXPECT_GE(chordShape.right(), right);
+            EXPECT_GE(chord->segment()->staffShape(chord->vStaffIdx()).right(), chord->pos().x() + right);
+
+            bool found = false;
+            for (const ShapeElement& element : chordShape.elements()) {
+                if (element.item() == line) {
+                    found = true;
+                    break;
+                }
+            }
+            EXPECT_TRUE(found);
+        }
     }
 
     delete score;
