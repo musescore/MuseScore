@@ -1431,9 +1431,10 @@ ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& in
             return std::nullopt;
         }
 
+        // Repeat passes hold the same points, so with Play Repeats off the first pass wins (insert doesn't overwrite)
         AutomationEnvelope envelope;
-        for (const auto& [tick, point] : curve) {
-            envelope.insert({ playedTickToSecs(tick), point.value });
+        for (const auto& [utick, point] : curve) {
+            envelope.insert({ notationPlayback()->utickToSec(utick), point.value });
         }
         return envelope;
     };

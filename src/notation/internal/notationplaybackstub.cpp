@@ -121,6 +121,11 @@ muse::audio::secs_t NotationPlaybackStub::playedTickToSec(tick_t) const
     return muse::audio::secs_t();
 }
 
+muse::audio::secs_t NotationPlaybackStub::utickToSec(tick_t) const
+{
+    return muse::audio::secs_t();
+}
+
 tick_t NotationPlaybackStub::secToPlayedTick(muse::audio::secs_t) const
 {
     return 0;
