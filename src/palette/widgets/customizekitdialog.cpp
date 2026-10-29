@@ -122,14 +122,14 @@ struct SymbolIcon {
         : id(i), icon(j)
     {}
 
-    static SymbolIcon generateIcon(const SymId& id, double w, double h, double defaultScale)
+    static SymbolIcon generateIcon(const mu::engraving::IEngravingFontPtr& font, const SymId& id, double w, double h, double defaultScale)
     {
         QIcon icon;
         QPixmap image(w, h);
         image.fill(Qt::transparent);
         muse::draw::Painter painter(&image, "generateicon");
 
-        const muse::RectF& bbox = CustomizeKitDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
+        const muse::RectF& bbox = font->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);
         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag * bbox.left();
@@ -139,7 +139,7 @@ struct SymbolIcon {
         painter.setPen(Color(CustomizeKitDialog::uiConfiguration()->currentTheme().values[muse::ui::FONT_PRIMARY_COLOR].toString()));
         painter.setBrush(Color::transparent);
 
-        CustomizeKitDialog::engravingFonts()->fallbackFont()->draw(id, &painter, mag, stPtPos);
+        font->draw(id, &painter, mag, stPtPos);
 
         icon.addPixmap(image);
 
@@ -233,15 +233,17 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     //default scale is 0.3, will use smaller scale for large noteheads symbols
     const qreal defaultScale = 0.3 * qApp->devicePixelRatio();
 
+    const IEngravingFontPtr fallbackFont = engravingFonts()->fallbackFont();
+
     QList<SymbolIcon> resNoteheads;
     for (SymId symId : primaryNoteheads) {
-        resNoteheads.append(SymbolIcon::generateIcon(symId, w, h, defaultScale));
+        resNoteheads.append(SymbolIcon::generateIcon(fallbackFont, symId, w, h, defaultScale));
     }
 
     for (const String& range : validNoteheadRanges) {
         for (SymId symId : Smufl::smuflRanges().at(range)) {
             if (!excludedSyms.contains(symId) && !primaryNoteheads.contains(symId)) {
-                resNoteheads.append(SymbolIcon::generateIcon(symId, w, h, defaultScale));
+                resNoteheads.append(SymbolIcon::generateIcon(fallbackFont, symId, w, h, defaultScale));
             }
         }
     }

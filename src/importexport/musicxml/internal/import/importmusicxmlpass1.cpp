@@ -65,11 +65,6 @@ static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration(
     return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
 }
 
-static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
-{
-    return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
-}
-
 static bool musicXmlImportBreaks()
 {
     auto conf = configuration();
@@ -1577,7 +1572,7 @@ void MusicXmlParserPass1::identification()
  Convert SMuFL code points to MuseScore <sym>...</sym>
  */
 
-static String text2syms(const String& t)
+static String text2syms(const String& t, const Score* score)
 {
     //QTime time;
     //time.start();
@@ -1586,7 +1581,7 @@ static String text2syms(const String& t)
     // note that this takes about 1 msec on a Core i5,
     // caching does not gain much
 
-    IEngravingFontPtr sf = engravingFonts()->fallbackFont();
+    IEngravingFontPtr sf = score->engravingFonts()->fallbackFont();
     std::map<String, SymId> map;
     size_t maxStringSize = 0;          // maximum string size found
 
@@ -1647,7 +1642,7 @@ static String text2syms(const String& t)
  Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
  */
 
-static String nextPartOfFormattedString(XmlStreamReader& e)
+static String nextPartOfFormattedString(XmlStreamReader& e, const Score* score)
 {
     //String lang       = e.attribute(String("xml:lang"), "it");
     String fontWeight = e.attribute("font-weight");
@@ -1661,7 +1656,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
     String txt = e.readText();
     // replace HTML entities
     txt = String::decodeXmlEntities(txt);
-    String syms       = text2syms(txt);
+    String syms       = text2syms(txt, score);
     if (overrideTextStyleForComposer(syms)) {
         return syms;
     }
@@ -1768,7 +1763,7 @@ void MusicXmlParserPass1::credit(CreditWordsList& credits)
                 valign   = m_e.attribute("valign");
                 creditWordsRead = true;
             }
-            crwords += nextPartOfFormattedString(m_e);
+            crwords += nextPartOfFormattedString(m_e, m_score);
         } else if (m_e.name() == "credit-type") {
             // multiple credit-type elements may be present, supported by
             // e.g. Finale v26.3 for Mac.

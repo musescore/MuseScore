@@ -1200,7 +1200,7 @@ bool MeiImporter::readLinesWithSmufl(pugi::xml_node parentNode, StringList& line
         }
         // A line break, already convert the current text blocks
         else if (this->isNode(child, u"lb")) {
-            Convert::textFromMEI(line, lineBlocks);
+            Convert::textFromMEI(line, lineBlocks, m_score);
             lines.push_back(line);
             lineBlocks.clear();
         } else {
@@ -1209,7 +1209,7 @@ bool MeiImporter::readLinesWithSmufl(pugi::xml_node parentNode, StringList& line
     }
 
     // At the end, convert the remaining text blocks
-    Convert::textFromMEI(line, lineBlocks);
+    Convert::textFromMEI(line, lineBlocks, m_score);
     lines.push_back(line);
 
     return true;
@@ -2332,7 +2332,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
     }
 
     String syllable;
-    Convert::textFromMEI(syllable, textBlocks);
+    Convert::textFromMEI(syllable, textBlocks, m_score);
 
     lyrics->setXmlText(syllable);
     lyrics->setVerse(no);

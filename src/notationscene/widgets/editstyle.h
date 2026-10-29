@@ -50,7 +50,7 @@ class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
 
     muse::GlobalInject<mu::notation::INotationSceneConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::ui::IUiEngine> uiEngine = { this };

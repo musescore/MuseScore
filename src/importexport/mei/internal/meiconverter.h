@@ -88,8 +88,6 @@ enum ElisionType {
 
 class Convert
 {
-    // The fallback font is used to convert smufl codes (char32_t) to engraving::SymId
-    static muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
     static muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
 public:
 
@@ -328,7 +326,7 @@ public:
 
     using textWithSmufl = std::vector<std::pair<bool, muse::String> >;
 
-    static void textFromMEI(muse::String& text, const textWithSmufl& textBlocks);
+    static void textFromMEI(muse::String& text, const textWithSmufl& textBlocks, const engraving::Score* score);
     static void textToMEI(textWithSmufl& textBlocks, const muse::String& text);
 
     static void tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, bool& warning);

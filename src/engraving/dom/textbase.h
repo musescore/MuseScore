@@ -224,9 +224,6 @@ private:
 class TextFragment
 {
 public:
-    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-
-public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;

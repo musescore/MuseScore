@@ -67,7 +67,6 @@ using namespace muse;
 
 StringList Convert::logs;
 
-muse::GlobalInject<engraving::IEngravingFontsProvider> Convert::engravingFonts;
 muse::GlobalInject<engraving::IEngravingConfiguration> Convert::engravingConfiguration;
 
 engraving::ElementType Convert::elementTypeForDir(const libmei::Element& meiElement)
@@ -710,7 +709,7 @@ void Convert::breathFromMEI(engraving::Breath* breath, const libmei::Breath& mei
     }
     // This is for loading MEI files not written by MuseScore and that use @glyph.num instead of @glyph.name
     else if (smufl && meiBreath.HasGlyphNum()) {
-        symId = engravingFonts()->fallbackFont()->fromCode(meiBreath.GetGlyphNum());
+        symId = breath->score()->engravingFonts()->fallbackFont()->fromCode(meiBreath.GetGlyphNum());
         if (symId == engraving::SymId::noSym) {
             warning = true;
         }
@@ -768,7 +767,7 @@ void Convert::caesuraFromMEI(engraving::Breath* breath, const libmei::Caesura& m
     }
     // This is for loading MEI files not written by MuseScore and that use @glyph.num instead of @glyph.name
     else if (smufl && meiCeasura.HasGlyphNum()) {
-        symId = engravingFonts()->fallbackFont()->fromCode(meiCeasura.GetGlyphNum());
+        symId = breath->score()->engravingFonts()->fallbackFont()->fromCode(meiCeasura.GetGlyphNum());
         if (symId == engraving::SymId::noSym) {
             warning = true;
         }
@@ -1546,7 +1545,7 @@ void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata&
     }
     // This is for loading MEI files not written by MuseScore and that use @glyph.num instead of @glyph.name
     else if (smufl && meiFermata.HasGlyphNum()) {
-        symId = engravingFonts()->fallbackFont()->fromCode(meiFermata.GetGlyphNum());
+        symId = fermata->score()->engravingFonts()->fallbackFont()->fromCode(meiFermata.GetGlyphNum());
         if (symId == engraving::SymId::noSym) {
             warning = true;
         }
@@ -2361,7 +2360,7 @@ Convert::OrnamStruct Convert::mordentFromMEI(engraving::Ornament* ornament, cons
     }
     // This is for loading MEI files not written by MuseScore and that use @glyph.num instead of @glyph.name
     else if (smufl && meiMordent.HasGlyphNum()) {
-        symId = engravingFonts()->fallbackFont()->fromCode(meiMordent.GetGlyphNum());
+        symId = ornament->score()->engravingFonts()->fallbackFont()->fromCode(meiMordent.GetGlyphNum());
         if (symId == engraving::SymId::noSym) {
             warning = true;
         }
@@ -3462,7 +3461,7 @@ std::tuple<libmei::Rend, TextCell, String> Convert::textToMEI(const engraving::T
  * The text block are {bool, string} pairs with true for smufl and false for plain text
  */
 
-void Convert::textFromMEI(String& text, const textWithSmufl& textBlocks)
+void Convert::textFromMEI(String& text, const textWithSmufl& textBlocks, const engraving::Score* score)
 {
     text.clear();
 
@@ -3475,7 +3474,7 @@ void Convert::textFromMEI(String& text, const textWithSmufl& textBlocks)
                 if (c < u'\uE000' || c > u'\uF8FF') {
                     continue; // this should not happen because the char should be smufl
                 }
-                engraving::SymId symId = engravingFonts()->fallbackFont()->fromCode(c);
+                engraving::SymId symId = score->engravingFonts()->fallbackFont()->fromCode(c);
                 if (symId == engraving::SymId::noSym) {
                     continue; // smufl code not found
                 }
@@ -3566,7 +3565,7 @@ Convert::OrnamStruct Convert::trillFromMEI(engraving::Ornament* ornament, const 
     }
     // This is for loading MEI files not written by MuseScore and that use @glyph.num instead of @glyph.name
     else if (smufl && meiTrill.HasGlyphNum()) {
-        symId = engravingFonts()->fallbackFont()->fromCode(meiTrill.GetGlyphNum());
+        symId = ornament->score()->engravingFonts()->fallbackFont()->fromCode(meiTrill.GetGlyphNum());
         if (symId == engraving::SymId::noSym) {
             warning = true;
         }
@@ -3692,7 +3691,7 @@ Convert::OrnamStruct Convert::turnFromMEI(engraving::Ornament* ornament, const l
     }
     // This is for loading MEI files not written by MuseScore and that use @glyph.num instead of @glyph.name
     else if (smufl && meiTurn.HasGlyphNum()) {
-        symId = engravingFonts()->fallbackFont()->fromCode(meiTurn.GetGlyphNum());
+        symId = ornament->score()->engravingFonts()->fallbackFont()->fromCode(meiTurn.GetGlyphNum());
         if (symId == engraving::SymId::noSym) {
             warning = true;
         }

@@ -881,7 +881,8 @@ Font TextFragment::font(const TextBase* t) const
     Font::Type fontType = Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->hasSymbolScale()) {
-            std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
+            std::string fontName
+                = t->score()->engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = Font::Type::MusicSymbol;
 
@@ -892,7 +893,8 @@ Font TextFragment::font(const TextBase* t) const
             }
 
             if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                std::string fontName2
+                    = t->score()->engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                 family = String::fromStdString(fontName2);
             }
 
@@ -1498,11 +1500,9 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c, const TextBase* t)
 {
-    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
-
     SymId symId = t->score()->engravingFont()->fromCode(c.unicode());
     if (symId == SymId::noSym) {
-        symId = provider->fallbackFont()->fromCode(c.unicode());
+        symId = t->score()->engravingFonts()->fallbackFont()->fromCode(c.unicode());
     }
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
 }
