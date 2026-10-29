@@ -79,6 +79,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rhythmicgrouping_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectionfilter_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectionrange_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/slur_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/spanners_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/split_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/splitstaff_tests.cpp
