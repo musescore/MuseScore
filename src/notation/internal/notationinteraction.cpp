@@ -2878,16 +2878,16 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
             }
         }
 
-        if (firstItem == secondItem && (!firstItem || firstItem->isChordRest())) {
-            ChordRestNavigateOptions options;
-            options.disableOverRepeats = true;
-            secondItem = engraving::Navigation::nextChordRest(toChordRest(firstItem), options);
-        }
-
         bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
         bool secondCrTrill = secondItem && secondItem->isChord() && toChord(secondItem)->isTrillCueNote();
 
-        if (firstItem && secondItem && (firstItem->isChordRest() || secondItem->isChordRest()) && !(firstCrTrill || secondCrTrill)) {
+        if (firstItem && firstItem == secondItem) {
+            // A single chord is slurred as a single note is
+            if (firstItem->isChord() && !firstCrTrill) {
+                doAddSlur(firstItem, nullptr, slurTemplate);
+            }
+        } else if (firstItem && secondItem && (firstItem->isChordRest() || secondItem->isChordRest())
+                   && !(firstCrTrill || secondCrTrill)) {
             doAddSlur(firstItem, secondItem, slurTemplate);
         }
     }
