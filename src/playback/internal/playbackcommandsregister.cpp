@@ -206,14 +206,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TOGGLE_AUX_SEND_COMMAND,
         TranslatableString("playback", "Toggle aux send"),
         TranslatableString("playback", "Toggle aux send"),
-        InputSchema({ { "auxsend-index", Arg(DataType::Integer, u"Aux send index") } }),
+        InputSchema({ { "auxsend-index", Arg(DataType::Int, u"Aux send index") } }),
         Decoration()
     },
     CommandInfo{
         TOGGLE_AUX_CHANNEL_COMMAND,
         TranslatableString("playback", "Toggle aux channel"),
         TranslatableString("playback", "Toggle aux channel"),
-        InputSchema({ { "auxchannel-index", Arg(DataType::Integer, u"Aux channel index") } }),
+        InputSchema({ { "auxchannel-index", Arg(DataType::Int, u"Aux channel index") } }),
         Decoration()
     }
 };

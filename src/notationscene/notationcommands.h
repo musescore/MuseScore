@@ -29,20 +29,53 @@ namespace mu::notation {
 using muse::rcommand::Field;
 using muse::MnemonicString;
 using muse::TranslatableString;
+// A few typed commands as an example. Eventually, all commands should be made typed.
+
+#define sci_auto static const inline auto
+#define sce_auto static constexpr auto
+
+struct FlipCommand {
+    sci_auto id = muse::rcommand::Command("command://notation/flip");
+    sci_auto title = MnemonicString("action", "Flip direction");
+    sci_auto description = TranslatableString("action", "Flip direction");
+    sci_auto decoration = muse::rcommand::Decoration(muse::ui::IconCode::Code::NOTE_FLIP);
+};
 
 struct AddNoteCommand {
-    static constexpr std::string_view id = "command://notation/add-note";
-    static const inline auto title = MnemonicString("action", "Add note");
-    static const inline auto description = TranslatableString("action", "Add note");
+    sci_auto id = muse::rcommand::Command("command://notation/add-note");
+    sci_auto title = MnemonicString("action", "Add note");
+    sci_auto description = TranslatableString("action", "Add note");
 
     NoteName note = NoteName::C;
     NoteAddingMode mode = NoteAddingMode::CurrentChord;
 
-    static constexpr auto fields = std::tuple {
-        Field{ "note", &AddNoteCommand::note, "Note name (c, d, e, f, g, a, b)" },
-        Field{ "mode", &AddNoteCommand::mode, "Adding mode (current, next, insert)" },
+    sce_auto input = std::tuple {
+        Field{ "note", &AddNoteCommand::note, "Note name" },
+        Field{ "mode", &AddNoteCommand::mode, "Adding mode" },
     };
 };
+
+//! NOTE "Read" commands for MCP and maybe API
+struct GetNoteInputStateCommand {
+    sci_auto id = muse::rcommand::Command("command://notation/get-noteinput-state");
+    sci_auto title = MnemonicString("action", "Get note input state");
+    sci_auto description = TranslatableString("action", "Get note input state");
+    sci_auto availability = muse::rcommand::Availability::MCP;
+
+    struct Output {
+        bool enabled = false;
+        NoteInputMethod method = NoteInputMethod::BY_NOTE_NAME;
+    };
+
+    using O = GetNoteInputStateCommand::Output;
+    sce_auto output = std::tuple {
+        Field{ "enabled", &O::enabled, "Flag indicating whether the note input mode is enabled" },
+        Field{ "method", &O::method, "The method used to input the note" },
+    };
+};
+
+#undef sci_auto
+#undef sce_auto
 }
 
 namespace mu::notation {
@@ -200,10 +233,10 @@ inline static const muse::rcommand::Command SWAP_VOICE_X34_COMMAND("command://no
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND("command://notation/voice-assignment-all-in-instrument");
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
 
-inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
+//inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
 inline static const muse::rcommand::Command FLIP_HORIZONTALLY_COMMAND("command://notation/flip-horizontally");
 
-inline static const muse::rcommand::Command ADD_NOTE_COMMAND("command://notation/add-note"); // with params
+//inline static const muse::rcommand::Command ADD_NOTE_COMMAND("command://notation/add-note"); // with params
 inline static const muse::rcommand::Command ADD_DRUM_NOTE_COMMAND("command://notation/add-drum-note"); // with params
 
 inline static const muse::rcommand::Command ENTER_NOTE_C_COMMAND("command://notation/enter-note-c");
@@ -602,5 +635,5 @@ inline static const muse::rcommand::Command SHOW_ORIGIN_AND_COMBINED_COMMAND("co
 inline static const muse::rcommand::Command CHECK_FOR_SCORE_CORRUPTIONS_COMMAND("command://notation/diagnostic/check-for-score-corruptions");
 
 //! NOTE "Read" commands for MCP and maybe API
-inline static const muse::rcommand::Command GET_NOTEINPUT_STATE_COMMAND("command://notation/get-noteinput-state");
+//inline static const muse::rcommand::Command GET_NOTEINPUT_STATE_COMMAND("command://notation/get-noteinput-state");
 }

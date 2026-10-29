@@ -189,7 +189,7 @@ void NotationActionController::init()
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
-    registerGetCommand(GET_NOTEINPUT_STATE_COMMAND, &NotationActionController::requestNoteInputState);
+    registerGetCommand<GetNoteInputStateCommand>(&NotationActionController::getNoteInputState);
 
     registerCommand(SET_DURATION_LONGA_COMMAND, [this]() { setDuration(DurationType::V_LONG); });
     registerCommand(SET_DURATION_BREVE_COMMAND, [this]() { setDuration(DurationType::V_BREVE); });
@@ -250,10 +250,10 @@ void NotationActionController::init()
     registerCommand(SWAP_VOICE_X24_COMMAND, [this]() { swapVoices(1, 3); });
     registerCommand(SWAP_VOICE_X34_COMMAND, [this]() { swapVoices(2, 3); });
 
-    registerCommand(FLIP_COMMAND, &Interaction::flipSelection);
+    registerCommand<FlipCommand>(&Controller::flipSelection);
     registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
 
-    registerCommandWithParams(ADD_NOTE_COMMAND, &Controller::addNote);
+    registerCommand<AddNoteCommand>(&Controller::addNote);
     registerCommandWithParams(ADD_DRUM_NOTE_COMMAND, &Controller::addDrumNote);
 
     registerNoteCommand(ENTER_NOTE_C_COMMAND, NoteName::C);
@@ -914,33 +914,37 @@ void NotationActionController::toggleNoteInputInsert()
     }
 }
 
-muse::RetVal<muse::rcommand::Params> NotationActionController::requestNoteInputState() const
+muse::RetVal<GetNoteInputStateCommand::Output> NotationActionController::getNoteInputState() const
 {
     INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
-        return RetVal<rcommand::Params>::make_ret(Ret::Code::InternalError);
+        return muse::RetVal<GetNoteInputStateCommand::Output>::make_ret(Ret::Code::InternalError);
     }
 
-    if (!noteInput->isNoteInputMode()) {
-        return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({ { "noteinputmode", Val("disabled") } }));
+    GetNoteInputStateCommand::Output output;
+    output.enabled = noteInput->isNoteInputMode();
+    if (output.enabled) {
+        const NoteInputState& state = noteInput->state();
+        output.method = state.noteEntryMethod();
     }
 
-    const NoteInputState& state = noteInput->state();
-
-    return RetVal<rcommand::Params>::make_ok(muse::rcommand::Params({
-        { "noteinputmode", Val("enabled") },
-        Contract<NoteInputMethod>::param(state.noteEntryMethod())
-    }));
+    return muse::RetVal<GetNoteInputStateCommand::Output>::make_ok(output);
 }
 
-muse::Ret NotationActionController::addNote(const muse::rcommand::Params& params)
+muse::Ret NotationActionController::flipSelection()
 {
-    TRACEFUNC;
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
 
-    NoteName note = Contract<NoteName>::get(params);
-    NoteAddingMode mode = Contract<NoteAddingMode>::get(params);
+    interaction->flipSelection();
+    return muse::make_ok();
+}
 
-    addNote(note, mode);
+muse::Ret NotationActionController::addNote(const AddNoteCommand& command)
+{
+    addNote(command.note, command.mode);
     return muse::make_ok();
 }
 
@@ -2886,6 +2890,55 @@ void NotationActionController::select(SelectionTarget target, PlayMode playMode)
 }
 
 // COMMANDS
+template<muse::rcommand::TypedCommand C>
+void NotationActionController::registerCommand(muse::Ret (NotationActionController::* handler)())
+{
+    commandDispatcher()->onRequest<C>(this, [this, handler](const C&) {
+        if (!commandsState()->commandState(C::id).enabled) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+        return (this->*handler)();
+    });
+}
+
+template<muse::rcommand::TypedCommand C>
+void NotationActionController::registerCommand(muse::Ret (NotationActionController::* handler)(const C&))
+{
+    commandDispatcher()->onRequest<C>(this, [this, handler](const C& command) {
+        if (!commandsState()->commandState(C::id).enabled) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+
+        muse::Ret ret = (this->*handler)(command);
+        return ret;
+    });
+}
+
+template<muse::rcommand::HasOutput C>
+void NotationActionController::registerGetCommand(muse::RetVal<typename C::Output>(NotationActionController::* handler)() const)
+{
+    commandDispatcher()->onRequest<C>(this, [this, handler](const C&) {
+        if (!commandsState()->commandState(C::id).enabled) {
+            return muse::RetVal<typename C::Output>::make_ret(Ret::Code::NotSupported);
+        }
+
+        muse::RetVal<typename C::Output> ret = (this->*handler)();
+        return ret;
+    });
+}
+
+template<muse::rcommand::HasOutput C>
+void NotationActionController::registerGetCommand(muse::RetVal<typename C::Output>(NotationActionController::* handler)(const C&) const)
+{
+    commandDispatcher()->onRequest<C>(this, [this, handler](const C& command) {
+        if (!commandsState()->commandState(C::id).enabled) {
+            return muse::RetVal<typename C::Output>::make_ret(Ret::Code::NotSupported);
+        }
+
+        muse::RetVal<typename C::Output> ret = (this->*handler)(command);
+        return ret;
+    });
+}
 
 void NotationActionController::registerCommand(const muse::rcommand::Command& command, std::function<void()> handler)
 {

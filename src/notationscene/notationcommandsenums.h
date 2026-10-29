@@ -38,13 +38,13 @@ struct NoteNameContract {
     static constexpr std::string_view key = "note";
     static constexpr NoteName def = NoteName::C;
     static constexpr Table<NoteName, 7> table = { {
-        { "c", NoteName::C },
-        { "d", NoteName::D },
-        { "e", NoteName::E },
-        { "f", NoteName::F },
-        { "g", NoteName::G },
-        { "a", NoteName::A },
-        { "b", NoteName::B },
+        { "c", NoteName::C, "note C" },
+        { "d", NoteName::D, "note D" },
+        { "e", NoteName::E, "note E" },
+        { "f", NoteName::F, "note F" },
+        { "g", NoteName::G, "note G" },
+        { "a", NoteName::A, "note A" },
+        { "b", NoteName::B, "note B" },
     } };
 };
 
@@ -52,13 +52,13 @@ struct NoteInputMethodContract {
     static constexpr std::string_view key = "method";
     static constexpr NoteInputMethod def = NoteInputMethod::BY_NOTE_NAME;
     static constexpr Table<NoteInputMethod, 7 > table { {
-        { "by-note-name", NoteInputMethod::BY_NOTE_NAME },
-        { "by-duration", NoteInputMethod::BY_DURATION },
-        { "repitch", NoteInputMethod::REPITCH },
-        { "rhythm", NoteInputMethod::RHYTHM },
-        { "realtime-auto", NoteInputMethod::REALTIME_AUTO },
-        { "realtime-manual", NoteInputMethod::REALTIME_MANUAL },
-        { "timewise", NoteInputMethod::TIMEWISE },
+        { "by-note-name", NoteInputMethod::BY_NOTE_NAME, "input by note name" },
+        { "by-duration", NoteInputMethod::BY_DURATION, "input by duration" },
+        { "repitch", NoteInputMethod::REPITCH, "repitch" },
+        { "rhythm", NoteInputMethod::RHYTHM, "rhythm" },
+        { "realtime-auto", NoteInputMethod::REALTIME_AUTO, "realtime auto" },
+        { "realtime-manual", NoteInputMethod::REALTIME_MANUAL, "realtime manual" },
+        { "timewise", NoteInputMethod::TIMEWISE, "timewise" },
     } };
 };
 
@@ -66,9 +66,9 @@ struct NoteAddingModeContract {
     static constexpr std::string_view key = "mode";
     static constexpr NoteAddingMode def = NoteAddingMode::CurrentChord;
     static constexpr Table<NoteAddingMode, 3> table { {
-        { "current", NoteAddingMode::CurrentChord },
-        { "next", NoteAddingMode::NextChord },
-        { "insert", NoteAddingMode::InsertChord },
+        { "current", NoteAddingMode::CurrentChord, "add to current chord" },
+        { "next", NoteAddingMode::NextChord, "add to next chord" },
+        { "insert", NoteAddingMode::InsertChord, "insert to chord" },
     } };
 };
 
@@ -76,9 +76,9 @@ struct TupletNumberTypeContract {
     static constexpr std::string_view key = "number-type";
     static constexpr engraving::TupletNumberType def = engraving::TupletNumberType::SHOW_NUMBER;
     static constexpr Table<engraving::TupletNumberType, 3> table { {
-        { "number", engraving::TupletNumberType::SHOW_NUMBER },
-        { "relation", engraving::TupletNumberType::SHOW_RELATION },
-        { "none", engraving::TupletNumberType::NO_TEXT },
+        { "number", engraving::TupletNumberType::SHOW_NUMBER, "show number" },
+        { "relation", engraving::TupletNumberType::SHOW_RELATION, "show relation" },
+        { "none", engraving::TupletNumberType::NO_TEXT, "no text" },
     } };
 };
 
@@ -86,9 +86,9 @@ struct TupletBracketTypeContract {
     static constexpr std::string_view key = "bracket-type";
     static constexpr engraving::TupletBracketType def = engraving::TupletBracketType::AUTO_BRACKET;
     static constexpr Table<engraving::TupletBracketType, 3> table { {
-        { "auto", engraving::TupletBracketType::AUTO_BRACKET },
-        { "show", engraving::TupletBracketType::SHOW_BRACKET },
-        { "none", engraving::TupletBracketType::SHOW_NO_BRACKET },
+        { "auto", engraving::TupletBracketType::AUTO_BRACKET, "auto bracket" },
+        { "show", engraving::TupletBracketType::SHOW_BRACKET, "show bracket" },
+        { "none", engraving::TupletBracketType::SHOW_NO_BRACKET, "no bracket" },
     } };
 };
 
@@ -96,36 +96,36 @@ struct SelectionTargetContract {
     static constexpr std::string_view key = "target";
     static constexpr SelectionTarget def = SelectionTarget::FirstItem;
     static constexpr Table<SelectionTarget, 30> table { {
-        { "first-item", SelectionTarget::FirstItem },
-        { "last-item", SelectionTarget::LastItem },
-        { "next-item", SelectionTarget::NextItem },
-        { "prev-item", SelectionTarget::PrevItem },
-        { "next-segment-item", SelectionTarget::NextSegmentItem },
-        { "prev-segment-item", SelectionTarget::PrevSegmentItem },
-        { "next-chord", SelectionTarget::NextChord },
-        { "prev-chord", SelectionTarget::PrevChord },
-        { "next-measure", SelectionTarget::NextMeasure },
-        { "prev-measure", SelectionTarget::PrevMeasure },
-        { "next-track", SelectionTarget::NextTrack },
-        { "prev-track", SelectionTarget::PrevTrack },
-        { "next-frame", SelectionTarget::NextFrame },
-        { "prev-frame", SelectionTarget::PrevFrame },
-        { "next-system", SelectionTarget::NextSystem },
-        { "prev-system", SelectionTarget::PrevSystem },
-        { "above-staff", SelectionTarget::AboveStaff },
-        { "below-staff", SelectionTarget::BelowStaff },
-        { "up-note-in-chord", SelectionTarget::UpNoteInChord },
-        { "down-note-in-chord", SelectionTarget::DownNoteInChord },
-        { "top-note-in-chord", SelectionTarget::TopNoteInChord },
-        { "bottom-note-in-chord", SelectionTarget::BottomNoteInChord },
-        { "top-staff", SelectionTarget::TopStaff },
-        { "notes-in-chord", SelectionTarget::NotesInChord },
-        { "empty-trailing-measure", SelectionTarget::EmptyTrailingMeasure },
-        { "similar", SelectionTarget::Similar },
-        { "similar-in-staff", SelectionTarget::SimilarInStaff },
-        { "similar-in-range", SelectionTarget::SimilarInRange },
-        { "all", SelectionTarget::All },
-        { "section", SelectionTarget::Section },
+        { "first-item", SelectionTarget::FirstItem, "select first item" },
+        { "last-item", SelectionTarget::LastItem, "select last item" },
+        { "next-item", SelectionTarget::NextItem, "select next item" },
+        { "prev-item", SelectionTarget::PrevItem, "select previous item" },
+        { "next-segment-item", SelectionTarget::NextSegmentItem, "select next segment item" },
+        { "prev-segment-item", SelectionTarget::PrevSegmentItem, "select previous segment item" },
+        { "next-chord", SelectionTarget::NextChord, "select next chord" },
+        { "prev-chord", SelectionTarget::PrevChord, "select previous chord" },
+        { "next-measure", SelectionTarget::NextMeasure, "select next measure" },
+        { "prev-measure", SelectionTarget::PrevMeasure, "select previous measure" },
+        { "next-track", SelectionTarget::NextTrack, "select next track" },
+        { "prev-track", SelectionTarget::PrevTrack, "select previous track" },
+        { "next-frame", SelectionTarget::NextFrame, "select next frame" },
+        { "prev-frame", SelectionTarget::PrevFrame, "select previous frame" },
+        { "next-system", SelectionTarget::NextSystem, "select next system" },
+        { "prev-system", SelectionTarget::PrevSystem, "select previous system" },
+        { "above-staff", SelectionTarget::AboveStaff, "select above staff" },
+        { "below-staff", SelectionTarget::BelowStaff, "select below staff" },
+        { "up-note-in-chord", SelectionTarget::UpNoteInChord, "select up note in chord" },
+        { "down-note-in-chord", SelectionTarget::DownNoteInChord, "select down note in chord" },
+        { "top-note-in-chord", SelectionTarget::TopNoteInChord, "select top note in chord" },
+        { "bottom-note-in-chord", SelectionTarget::BottomNoteInChord, "select bottom note in chord" },
+        { "top-staff", SelectionTarget::TopStaff, "select top staff" },
+        { "notes-in-chord", SelectionTarget::NotesInChord, "select notes in chord" },
+        { "empty-trailing-measure", SelectionTarget::EmptyTrailingMeasure, "select empty trailing measure" },
+        { "similar", SelectionTarget::Similar, "select similar" },
+        { "similar-in-staff", SelectionTarget::SimilarInStaff, "select similar in staff" },
+        { "similar-in-range", SelectionTarget::SimilarInRange, "select similar in range" },
+        { "all", SelectionTarget::All, "select all" },
+        { "section", SelectionTarget::Section, "select section" },
     } };
 };
 
@@ -133,9 +133,9 @@ struct PlayModeContract {
     static constexpr std::string_view key = "play-mode";
     static constexpr PlayMode def = PlayMode::NoPlay;
     static constexpr Table<PlayMode, 3> table { {
-        { "none", PlayMode::NoPlay },
-        { "note", PlayMode::PlayNote },
-        { "chord", PlayMode::PlayChord },
+        { "none", PlayMode::NoPlay, "no play" },
+        { "note", PlayMode::PlayNote, "play note" },
+        { "chord", PlayMode::PlayChord, "play chord" },
     } };
 };
 }
