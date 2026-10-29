@@ -133,7 +133,7 @@ void PlaybackController::init()
 
         // Tempo/repeat/duration changes shift what secs_t a given tick maps to,
         // which invalidates any Volume/Pan automation envelope already sent to the engine
-        resendAutomatedControlParams();
+        resendAutomationEnvelopes();
     });
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
@@ -1468,6 +1468,12 @@ void PlaybackController::onAutomationDataChanged(const AutomationChanges& change
         return;
     }
 
+    // Envelopes are in seconds, so a tempo change moves them even if the total length doesn't change
+    if (muse::contains(changes.affectedKeys, TEMPO_KEY)) {
+        resendAutomationEnvelopes();
+        return;
+    }
+
     InstrumentTrackIdSet volumeTrackIds;
     InstrumentTrackIdSet panTrackIds;
 
@@ -1481,6 +1487,27 @@ void PlaybackController::onAutomationDataChanged(const AutomationChanges& change
             volumeTrackIds.insert(*trackId);
         } else if (key.type == AutomationType::Pan) {
             panTrackIds.insert(*trackId);
+        }
+    }
+
+    if (volumeTrackIds.empty() && panTrackIds.empty()) {
+        return;
+    }
+
+    resendAutomatedControlParams(volumeTrackIds, panTrackIds);
+}
+
+void PlaybackController::resendAutomationEnvelopes()
+{
+    InstrumentTrackIdSet volumeTrackIds;
+    InstrumentTrackIdSet panTrackIds;
+
+    for (const auto& [trackId, envelopes] : m_automationEnvelopesCache) {
+        if (envelopes.volume) {
+            volumeTrackIds.insert(trackId);
+        }
+        if (envelopes.pan) {
+            panTrackIds.insert(trackId);
         }
     }
 

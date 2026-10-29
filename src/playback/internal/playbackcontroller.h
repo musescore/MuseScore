@@ -236,6 +236,7 @@ private:
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
     void onAutomationDataChanged(const notation::AutomationChanges& changes);
+    void resendAutomationEnvelopes();
     void resendAutomatedControlParams(std::optional<engraving::InstrumentTrackIdSet> volumeTrackIds = std::nullopt,
                                       std::optional<engraving::InstrumentTrackIdSet> panTrackIds = std::nullopt);
 
