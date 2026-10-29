@@ -374,18 +374,31 @@ void RepeatList::flatten()
     muse::DeleteAll(*this);
     clear();
 
-    Measure* m = m_score->firstMeasure();
-    if (!m) {
+    MeasureBase* mb = m_score->firstMeasure();
+    if (!mb) {
         return;
     }
 
     RepeatSegment* s = new RepeatSegment(1);
     do {
-        s->addMeasure(m);
-        m = m->nextMeasure();
-    } while (m);
-    push_back(s);
+        if (mb->isMeasure()) {
+            s->addMeasure(toMeasure(mb));
+        }
+        if (mb->sectionBreak()) {
+            s->pause += mb->pause();
+            push_back(s);
+            s = new RepeatSegment(1);
+        }
+        mb = mb->next();
+    } while (mb);
 
+    if (!s->isEmpty()) {
+        push_back(s);
+    } else {
+        delete s;
+    }
+
+    updateTempo();
     m_expanded = false;
 }
 
