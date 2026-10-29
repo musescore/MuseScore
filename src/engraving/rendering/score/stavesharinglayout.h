@@ -85,7 +85,7 @@ private:
                                  std::unordered_set<Note*>& localUnisonNotes);
 
     static bool checkSegmentForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
-    static bool checkClefKeyTimeSigForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
+    static bool checkClefKeyTimeSigForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, const StaveSharingContext& ctx);
     static bool checkSegmentAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool checkItemsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack,
                                        const std::function<bool(const EngravingItem*, const EngravingItem*)>& isEqual);
