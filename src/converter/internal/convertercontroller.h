@@ -37,6 +37,7 @@
 namespace mu::converter {
 class ConverterController : public IConverterController, public muse::Contextable
 {
+public:
     muse::GlobalInject<project::IProjectCreator> notationCreator;
     muse::GlobalInject<project::INotationWritersRegister> writers;
     muse::ContextInject<project::IProjectSession> projectSession = { this };
