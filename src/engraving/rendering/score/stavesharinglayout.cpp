@@ -473,6 +473,10 @@ bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, 
         }
     }
 
+    if (!checkClefKeyTimeSigForSameVoice(prevTrack, nextTrack, ctx)) {
+        return false;
+    }
+
     for (Segment* segment : ctx.allSegmentsInRange()) {
         if (!checkSegmentForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
@@ -590,6 +594,10 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
         }
     }
 
+    if (!checkClefKeyTimeSigForSameVoice(prevTrack, nextTrack, ctx)) {
+        return false;
+    }
+
     for (Segment* segment : ctx.allSegmentsInRange()) {
         if (!checkSegmentForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
@@ -613,10 +621,6 @@ bool StaveSharingLayout::checkSegmentForSameVoice(Segment* segment, track_idx_t 
         return true;
     }
 
-    if (!checkClefKeyTimeSigForSameVoice(segment, prevTrack, nextTrack)) {
-        return false;
-    }
-
     if (segment->isBreathType()
         && !checkItemsForSameVoice(segment, prevTrack, nextTrack, [](const EngravingItem* item1, const EngravingItem* item2) {
         return toBreath(item1)->symId() == toBreath(item2)->symId();
@@ -631,28 +635,36 @@ bool StaveSharingLayout::checkSegmentForSameVoice(Segment* segment, track_idx_t 
     return true;
 }
 
-bool StaveSharingLayout::checkClefKeyTimeSigForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack)
+bool StaveSharingLayout::checkClefKeyTimeSigForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, const StaveSharingContext& ctx)
 {
-    const Score* score = segment->score();
-
-    const staff_idx_t prevStaffIdx = track2staff(prevTrack);
-    const staff_idx_t nextStaffIdx = track2staff(nextTrack);
-    const Staff* prevStaff = score->staff(prevStaffIdx);
-    const Staff* nextStaff = score->staff(nextStaffIdx);
-    const Fraction tick = segment->tick();
-
-    if (prevStaff->clefType(tick) != nextStaff->clefType(tick)) {
-        return false;
+    if (ctx.crSegments.empty()) {
+        return true;
     }
 
-    if (!prevStaff->isDrumStaff(tick) && !nextStaff->isDrumStaff(tick) && prevStaff->keySigEvent(tick) != nextStaff->keySigEvent(tick)) {
-        return false;
+    const Staff* prevStaff = ctx.score->staff(track2staff(prevTrack));
+    const Staff* nextStaff = ctx.score->staff(track2staff(nextTrack));
+
+    for (Fraction tick = ctx.sTick; tick < ctx.eTick;
+         tick = std::min(prevStaff->nextClefTick(tick), nextStaff->nextClefTick(tick))) {
+        if (prevStaff->clefType(tick) != nextStaff->clefType(tick)) {
+            return false;
+        }
     }
 
-    const TimeSig* prevStaffTimeSig = prevStaff->timeSig(tick);
-    const TimeSig* nextStaffTimeSig = nextStaff->timeSig(tick);
-    if (prevStaffTimeSig && nextStaffTimeSig && *prevStaffTimeSig != *nextStaffTimeSig) {
-        return false;
+    for (Fraction tick = ctx.sTick; tick < ctx.eTick;
+         tick = std::min(prevStaff->nextKeyTick(tick), nextStaff->nextKeyTick(tick))) {
+        if (!prevStaff->isDrumStaff(tick) && !nextStaff->isDrumStaff(tick)
+            && prevStaff->keySigEvent(tick) != nextStaff->keySigEvent(tick)) {
+            return false;
+        }
+    }
+
+    for (const Measure* m = ctx.crSegments.front()->measure(); m && m->tick() < ctx.eTick; m = m->nextMeasure()) {
+        const TimeSig* prevStaffTimeSig = prevStaff->timeSig(m->tick());
+        const TimeSig* nextStaffTimeSig = nextStaff->timeSig(m->tick());
+        if (prevStaffTimeSig && nextStaffTimeSig && *prevStaffTimeSig != *nextStaffTimeSig) {
+            return false;
+        }
     }
 
     return true;
@@ -851,6 +863,10 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
 
 bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, bool allowVoiceCrossing, StaveSharingContext& ctx)
 {
+    if (!checkClefKeyTimeSigForSameVoice(prevTrack, nextTrack, ctx)) {
+        return false;
+    }
+
     for (Segment* segment : ctx.allSegmentsInRange()) {
         if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
             return false;
@@ -858,10 +874,6 @@ bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nex
 
         if (segment->header()) {
             continue;
-        }
-
-        if (!checkClefKeyTimeSigForSameVoice(segment, prevTrack, nextTrack)) {
-            return false;
         }
 
         if (!segment->isChordRestType() || allowVoiceCrossing) {
@@ -1123,14 +1135,41 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
     // Time signatures and key signatures applying to all staves already exist on the shared staves,
     // so these are reused when they match the origin's
 
+    auto clefsEqual = [](const EngravingItem* origin, const EngravingItem* shared) {
+        return toClef(shared)->clefType() == toClef(origin)->clefType();
+    };
+
     for (Segment* seg : ctx.segmentsToUpdate) {
         if (seg->header() || (!seg->isClefType() && !seg->isKeySigType() && !seg->isTimeSigType())) {
             continue;
         }
-        const SharedTrackMap& trackMap = ctx.curStaveSharingState(seg->tick()).sharedTrackMap();
+        // An end of system clef belongs to the map before eTick, not the next system's
+        const Fraction stateTick = seg->tick() == ctx.eTick ? seg->tick() - Fraction::eps() : seg->tick();
+        const SharedTrackMap& trackMap = ctx.curStaveSharingState(stateTick).sharedTrackMap();
         if (trackMap.empty()) {
             continue;
         }
+
+        if (seg->isClefType() && seg->tick() == ctx.eTick) {
+            // A clef change at the end of the system applies to the next system, where these staves may no longer be shared
+            // Only show it if a single origin stave changes clef, as a clef from multiple origin staves would be ambiguous
+            std::map<staff_idx_t, std::vector<Clef*> > originClefsBySharedStaff;
+            for (const auto& [originTrack, sharedTrack] : trackMap) {
+                EngravingItem* originItem = seg->element(originTrack);
+                if (originItem && !originItem->generated()) {
+                    originClefsBySharedStaff[track2staff(sharedTrack)].push_back(toClef(originItem));
+                }
+            }
+
+            for (const auto& [sharedStaffIdx, originClefs] : originClefsBySharedStaff) {
+                if (originClefs.size() == 1) {
+                    const track_idx_t sharedTrack = staff2track(sharedStaffIdx);
+                    makeSharedItem(originClefs.front(), seg->element(sharedTrack), sharedTrack, seg, clefsEqual);
+                }
+            }
+            continue;
+        }
+
         for (const auto& [originTrack, sharedTrack] : trackMap) {
             if (track2voice(sharedTrack) != 0) {
                 // Clefs, key, and time signatures can only appear in the 1st voice
@@ -1146,10 +1185,7 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
             if (seg->isClefType()) {
                 Clef* originClef = toClef(originItem);
                 if (originClef) {
-                    makeSharedItem(originClef, seg->element(sharedTrack), sharedTrack, seg,
-                                   [](const EngravingItem* origin, const EngravingItem* shared) {
-                        return toClef(shared)->clefType() == toClef(origin)->clefType();
-                    });
+                    makeSharedItem(originClef, seg->element(sharedTrack), sharedTrack, seg, clefsEqual);
                 }
             }
 
