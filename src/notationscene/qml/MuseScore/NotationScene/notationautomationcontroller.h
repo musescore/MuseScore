@@ -64,8 +64,7 @@ public:
     void setViewMatrix(const muse::draw::Transform& viewMatrix);
 
 private:
-    // Necessary since SysStaff doesn't hold a reference to its system, which is needed
-    // for calculating a SysStaff's relative position...
+    // A polyline can be uniquely identified using the system, staff, and startTick...
     struct PolylineKey {
         const System* system = nullptr;
         const staff_idx_t staffIdx = muse::nidx;
@@ -159,7 +158,7 @@ private:
     void rebuildAllPolylines();
     void buildAndAddPolylinesForSystem(const System* system);
     void buildAndAddPolylinesForStaff(const System* system, staff_idx_t staffIdx);
-    void buildAndAddPolylineForStaffRegion(const System* system, staff_idx_t staffIdx, const Measure* startMeasure,
+    void buildAndAddPolylineForStaffRegion(const System* system, const mu::engraving::Staff* staff, const Measure* startMeasure,
                                            const Measure* endMeasure);
 
     void rebuildPolylinePoints(const PolylineKey& key);
@@ -174,6 +173,9 @@ private:
     bool requestAddPoint(const PolylineKey& key, qreal x, qreal y);
     bool requestRemovePoint(const PointData& pointData, const PolylineKey& key);
     void editAutomationPoints(const mu::engraving::AutomationCurveKey& key, mu::engraving::AutomationPointEdits& edits);
+
+    PolylineData polylineData(const PolylineKey& key) const;
+    void setPolylinePointsData(const PolylineKey& key, const QVector<PointData>& pointsData);
 
     const mu::engraving::AutomationPoint* automationPointAt(const PolylineKey& key, int tick) const;
 
