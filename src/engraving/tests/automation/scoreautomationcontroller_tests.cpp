@@ -1098,6 +1098,35 @@ TEST_F(ScoreAutomationController_Tests, Update_DynamicFromTick_RebuildsOnlyFromT
     checkCurvesMatch(controller.automationData()->curve(key), expectedCurve);
 }
 
+// A dynamics change right after an sf or a pf keeps the points they generate after the change's tick
+TEST_F(ScoreAutomationController_Tests, Update_DynamicAfterSfOrPf_KeepsTheirLaterPoints)
+{
+    // [GIVEN] dynamics.mscx M2: an sf at 1920 recovering at 2400, and a pf at 2880 ending at 3264
+    ScoreAutomationController controller;
+    controller.init(s_dynamicsScore);
+
+    const AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_dynamicsScore->staff(0)->id());
+
+    ScoreChanges changes;
+    changes.changedTypes = { ElementType::DYNAMIC };
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = 0;
+
+    // [WHEN] A dynamics change arrives from the sf's recovery tick
+    changes.tickFrom = 2400;
+    controller.update(changes);
+
+    // [THEN] The curve matches a full rebuild, including the sf recovery
+    checkCurvesMatch(controller.automationData()->curve(key), expectedDynamicsCurve());
+
+    // [WHEN] A dynamics change arrives from inside the pf's change
+    changes.tickFrom = 3000;
+    controller.update(changes);
+
+    // [THEN] The curve matches a full rebuild, including the pf end
+    checkCurvesMatch(controller.automationData()->curve(key), expectedDynamicsCurve());
+}
+
 // Volume/Pan curves keep their user points through a rebuild, and drop stale generated ones
 TEST_F(ScoreAutomationController_Tests, Update_InstrumentCurve_KeepsUserPointsOnly)
 {
@@ -1170,12 +1199,32 @@ TEST_F(ScoreAutomationController_Tests, SetTempoMultiplier_StretchesCompoundDyna
 
     const AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_dynamicsScore->staff(0)->id());
 
-    // [WHEN] Playback is set to double speed and the dynamics are rebuilt
+    // [WHEN] Playback is set to double speed
     controller.setTempoMultiplier(BeatsPerSecond(2.0));
 
-    ScoreChanges changes;
-    changes.changedTypes = { ElementType::DYNAMIC };
-    controller.update(changes);
+    // [THEN] The pf's end point moves from 3264 to 3648 (2 * 384 ticks after its start)
+    const AutomationCurve& curve = controller.automationData()->curve(key);
+    EXPECT_FALSE(curve.contains(3264));
+
+    const auto endIt = curve.upper_bound(2880);
+    ASSERT_TRUE(endIt != curve.cend());
+    EXPECT_NEAR(endIt->first, 3648, 1);
+    EXPECT_NEAR(endIt->second.value.outValue, F_VALUE, 0.0001);
+}
+
+// A tempo point edit also rebuilds compound dynamics, whose change length depends on tempo
+TEST_F(ScoreAutomationController_Tests, EditPoints_Tempo_StretchesCompoundDynamic)
+{
+    // [GIVEN] dynamics.mscx M2's pf (tick 2880), whose change takes 384 ticks at the default 120bpm
+    ScoreAutomationController controller;
+    controller.init(s_dynamicsScore);
+
+    const AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_dynamicsScore->staff(0)->id());
+
+    // [WHEN] The user sets 240bpm at the start
+    const double tempo4 = normalizeTempo(BeatsPerSecond(4.0));
+    AutomationPointEdits edits { { 0, AutomationPointEdit::SetPoint { customPoint(tempo4, tempo4) } } };
+    controller.editPoints(TEMPO_KEY, edits);
 
     // [THEN] The pf's end point moves from 3264 to 3648 (2 * 384 ticks after its start)
     const AutomationCurve& curve = controller.automationData()->curve(key);

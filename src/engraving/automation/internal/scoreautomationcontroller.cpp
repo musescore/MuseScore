@@ -208,6 +208,18 @@ static std::optional<real_t> endHairpinValue(const Hairpin* hairpin)
     return dynamicValue(type, true);
 }
 
+static int dynamicEndTick(const Dynamic* dynamic, const BeatsPerSecond& tempo)
+{
+    const int tick = dynamic->tick().ticks();
+
+    if (muse::contains(SINGLE_NOTE_DYNAMIC_VALUES, dynamic->dynamicType())) {
+        const Segment* nextSeg = dynamic->segment()->next();
+        return nextSeg ? nextSeg->tick().ticks() : tick;
+    }
+
+    return tick + dynamic->velocityChangeLength(tempo).ticks();
+}
+
 static int dynamicPriority(const EngravingItem* item)
 {
     return static_cast<int>(item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>());
@@ -345,6 +357,12 @@ void ScoreAutomationController::setTempoMultiplier(const BeatsPerSecond& bps)
 {
     m_tempoTimeline.setTempoMultiplier(bps);
     m_flattenedTempoTimeline.setTempoMultiplier(bps);
+
+    // fp/pf lengths depend on tempo
+    if (m_score && m_automationData && m_hasTempoDependentDynamics) {
+        const UpdateRequest request { 0, muse::nidx, muse::nidx, /*includeTempo*/ false, /*includeDynamics*/ true };
+        update(request, m_automationData->curves());
+    }
 }
 
 void ScoreAutomationController::setTempoTimelineOverride(std::optional<TempoTimeline> timeline)
@@ -446,7 +464,7 @@ void ScoreAutomationController::update(const ScoreChanges& changes)
 
     UpdateRequest request;
     request.includeTempo = relevance.tempo;
-    request.includeDynamics = relevance.dynamics;
+    request.includeDynamics = relevance.dynamics || (relevance.tempo && m_hasTempoDependentDynamics); // fp/pf lengths depend on tempo
 
     // When tempo is relevant, the whole score must be reparsed in one full pass,
     // so tickFrom/staffIdxFrom/staffIdxTo are left at their defaults (0/nidx/nidx)
@@ -491,7 +509,7 @@ void ScoreAutomationController::editPoints(const AutomationCurveKey& key, Automa
             }
         }
 
-        fullRebuild(curves, /*includeTempo*/ true, /*includeDynamics*/ false);
+        fullRebuild(curves, /*includeTempo*/ true, /*includeDynamics*/ m_hasTempoDependentDynamics);
         return;
     }
 
@@ -513,8 +531,13 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
         return;
     }
 
-    const auto repeatFromIt = std::find_if(repeatList.cbegin(), repeatList.cend(),
-                                           [tickFrom = request.tickFrom](const RepeatSegment* seg) {
+    const StaffRange range(m_score, request.staffIdxFrom, request.staffIdxTo);
+
+    const int tickFrom = request.includeDynamics && request.tickFrom > 0
+                         ? dynamicsRebuildStart(request.tickFrom, range)
+                         : request.tickFrom;
+
+    const auto repeatFromIt = std::find_if(repeatList.cbegin(), repeatList.cend(), [tickFrom](const RepeatSegment* seg) {
         return seg->endTick() > tickFrom;
     });
 
@@ -522,15 +545,15 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
         return;
     }
 
-    const StaffRange range(m_score, request.staffIdxFrom, request.staffIdxTo);
     const RepeatSegment* firstSeg = *repeatFromIt;
 
     UpdateContext ctx;
     ctx.request = request;
+    ctx.request.tickFrom = tickFrom;
     ctx.tempoMultiplier = m_tempoTimeline.tempoMultiplier();
 
     // The first utick the rebuild will regenerate; everything before it is kept as is
-    ctx.clearFromUTick = std::max(firstSeg->utick, request.tickFrom + (firstSeg->utick - firstSeg->tick));
+    ctx.clearFromUTick = std::max(firstSeg->utick, tickFrom + (firstSeg->utick - firstSeg->tick));
 
     // Copy only the curves this update can affect, dropping the generated points that the rebuild
     // below re-creates; all other curves stay untouched
@@ -564,7 +587,7 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
 
         // tickFrom limits only the first affected repeat segment: later segments may replay
         // measures from before tickFrom, and all their points were cleared, so rebuild them in full
-        const int measureFrom = (it == repeatFromIt) ? std::max(seg->tick, request.tickFrom) : seg->tick;
+        const int measureFrom = (it == repeatFromIt) ? std::max(seg->tick, tickFrom) : seg->tick;
 
         const std::vector<const Measure*>& segMeasures = seg->measureList();
         for (size_t mi = 0; mi < segMeasures.size(); ++mi) {
@@ -631,6 +654,12 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
         m_flattenedTempoTimeline.rebuild(ctx.noRepeatTempoCurve, ctx.noRepeatPauses);
     }
 
+    if (request.includeDynamics) {
+        // A partial rebuild can't tell whether the last fp/pf was removed
+        const bool isFullRebuild = tickFrom == 0 && range.isFull;
+        m_hasTempoDependentDynamics = ctx.hasTempoDependentDynamics || (!isFullRebuild && m_hasTempoDependentDynamics);
+    }
+
     // Passed through as-is: replaceCurves() clears a key when given an empty curve for it
     m_automationData->replaceCurves(ctx.curves);
 }
@@ -688,6 +717,32 @@ void ScoreAutomationController::mirrorAuthoredPointsToRepeats(UpdateContext& ctx
             curve.insert_or_assign(edit.tick, setPoint->point);
         }
     }
+}
+
+int ScoreAutomationController::dynamicsRebuildStart(int tickFrom, const StaffRange& range) const
+{
+    // The score's max tempo overestimates compound dynamic lengths, so nothing reaching tickFrom is missed
+    const BeatsPerSecond maxTempo = m_tempoTimeline.maxTempo() * m_tempoTimeline.tempoMultiplier();
+    const int lookback = Dynamic::maxVelocityChangeLength(maxTempo).ticks();
+
+    const Measure* measure = m_score->tick2measure(Fraction::fromTicks(std::max(0, tickFrom - lookback)));
+    const Segment* segment = measure ? measure->first(RELEVANT_SEGMENT_TYPES) : nullptr;
+
+    for (; segment && segment->tick().ticks() < tickFrom; segment = segment->next1(RELEVANT_SEGMENT_TYPES)) {
+        for (const EngravingItem* annotation : segment->annotations()) {
+            if (!annotation || !annotation->isDynamic() || !range.contains(annotation->staffIdx())) {
+                continue;
+            }
+
+            const Dynamic* dynamic = toDynamic(annotation);
+            if (dynamic->playDynamic() && dynamicEndTick(dynamic, maxTempo) >= tickFrom) {
+                // An earlier dynamic may reach the new start
+                return dynamicsRebuildStart(segment->tick().ticks(), range);
+            }
+        }
+    }
+
+    return tickFrom;
 }
 
 void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
@@ -783,6 +838,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         info.kind = singleNote;
     } else if (auto compoundIt = COMPOUND_DYNAMIC_VALUES.find(dynamicType); compoundIt != COMPOUND_DYNAMIC_VALUES.end()) {
         const BeatsPerSecond tempo = denormalizeTempo(currentTempoAt(*ctx.tempoCurve, tick)) * ctx.tempoMultiplier;
+        ctx.hasTempoDependentDynamics = true;
         info.kind = DynamicInfo::Compound { compoundIt->second.first, compoundIt->second.second,
                                             tick + dynamic->velocityChangeLength(tempo).ticks() };
     } else {
@@ -907,6 +963,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
             // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
             const BeatsPerSecond tempo = denormalizeTempo(currentTempoAt(*ctx.tempoCurve, info.from)) * ctx.tempoMultiplier;
             info.from += startDynamic->velocityChangeLength(tempo).ticks();
+            ctx.hasTempoDependentDynamics = true;
         }
     }
 

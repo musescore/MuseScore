@@ -80,6 +80,7 @@ public:
     int changeInVelocity() const;
     void setChangeInVelocity(int val);
     Fraction velocityChangeLength(BeatsPerSecond tempo) const;
+    static Fraction maxVelocityChangeLength(BeatsPerSecond tempo);
     bool isVelocityChangeAvailable() const;
 
     DynamicSpeed velChangeSpeed() const { return m_velChangeSpeed; }
