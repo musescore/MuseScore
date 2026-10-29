@@ -99,7 +99,7 @@ jobs:
         path: build.artifacts
     - name: Collate release binaries
       run: |
-        buildscripts/ci/release/collate_release_binaries.sh
+        muse/buildscripts/ci/release/collate_release_binaries.sh
     - name: Create tag # do this as late as possible so we're not left with a useless tag if something fails
       env:
         TAG_NAME: ${{ needs.plan.outputs.tag_name }}
