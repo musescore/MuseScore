@@ -10,6 +10,7 @@ public:
 
     int addSymbolFont(const String& family, const io::path_t& path) override;
     int addSymbolFont(const String& family, std::shared_ptr<io::IODevice> device) override;
+    void removeSymbolFont(int id) override;
 
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
