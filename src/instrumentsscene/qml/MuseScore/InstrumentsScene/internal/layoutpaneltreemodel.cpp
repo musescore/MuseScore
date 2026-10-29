@@ -714,7 +714,7 @@ QString LayoutPanelTreeModel::movePartsToSharedGroup(const QStringList& partIds,
                 mode = INotationParts::InsertMode::Before;
             }
         }
-    } else if (const Part* anchor = parts->part(destinationPartId); anchor && anchor->sharedPart()) {
+    } else if (const Part* anchor = parts->part(destinationPartId); anchor&& anchor->sharedPart()) {
         // After the anchor's whole group
         for (const Part* p : parts->partList()) {
             if (p->sharedPart() == anchor->sharedPart()) {
