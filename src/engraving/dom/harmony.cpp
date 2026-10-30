@@ -794,7 +794,7 @@ void Harmony::endEdit(EditData& ed)
     // if user explicitly added symbols to the text,
     // convert them back to their respective replacement texts
     if (harmonyType() != HarmonyType::ROMAN) {
-        s.replace(u"\u1d12b", u"bb");     // double-flat
+        s.replace(u"\U0001D12B", u"bb");     // double-flat
         s.replace(u"\u266d",  u"b");      // flat
         s.replace(u"\ue260",  u"b");      // flat
         // do not replace natural sign
@@ -803,9 +803,9 @@ void Harmony::endEdit(EditData& ed)
         //s.replace("\ue261",  "n");  // natural, if one day we support that too
         s.replace(u"\u266f",  u"#");      // sharp
         s.replace(u"\ue262",  u"#");      // sharp
-        s.replace(u"\u1d12a", u"x");      // double-sharp
+        s.replace(u"\U0001D12A", u"x");      // double-sharp
         s.replace(u"\u0394",  u"^");      // &Delta;
-        s.replace(u"\u00d0",  u"o");      // &deg;
+        s.replace(u"\u00B0",  u"o");      // &deg;
         s.replace(u"\u00f8",  u"0");      // &oslash;
         s.replace(u"\u00d8",  u"0");      // &Oslash;
     } else {
