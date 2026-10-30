@@ -558,7 +558,7 @@ public:
     Box* cmdNextPrevFrame(MeasureBase*, bool) const;
     EngravingItem* cmdNextPrevSection(EngravingItem*, bool) const;
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
-    EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
+    EngravingItem* getScoreElementOfMeasureBase(MeasureBase*, track_idx_t) const;
 
     int fileDivision(int t) const { return static_cast<int>(((int64_t)t * Constants::DIVISION + m_fileDivision / 2) / m_fileDivision); }
     void setFileDivision(int t) { m_fileDivision = t; }
