@@ -101,6 +101,7 @@ private:
 
     bool m_needUnprepareProcessData = false;
     bool m_needUpdateState = false;
+    bool m_isProcessingSetUp = false;
 
     audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
     audio::OutputSpec m_outputSpec;
