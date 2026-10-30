@@ -204,6 +204,16 @@ TEST_F(Project_ConvertFileToScoreModelTest, GuidelinesUrl_ComesFromConfiguration
     EXPECT_EQ(m_model.guidelinesUrl(), "test://guidelines");
 }
 
+TEST_F(Project_ConvertFileToScoreModelTest, TermsOfUseUrl_ComesFromConfiguration)
+{
+    // [GIVEN] The configured terms of use url
+    ON_CALL(*m_configuration, termsOfUseUrl())
+    .WillByDefault(Return(QUrl("test://terms")));
+
+    // [THEN] The model exposes it
+    EXPECT_EQ(m_model.termsOfUseUrl(), "test://terms");
+}
+
 // ==================================================
 // load()
 // ==================================================

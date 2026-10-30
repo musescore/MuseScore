@@ -123,6 +123,7 @@ public:
     MOCK_METHOD(QUrl, dotComBugReportUrl, (), (const, override));
 
     MOCK_METHOD(QUrl, scoreUploadingGuidelinesUrl, (), (const, override));
+    MOCK_METHOD(QUrl, termsOfUseUrl, (), (const, override));
 
     MOCK_METHOD(bool, openDetailedProjectUploadedDialog, (), (const, override));
     MOCK_METHOD(void, setOpenDetailedProjectUploadedDialog, (bool), (override));

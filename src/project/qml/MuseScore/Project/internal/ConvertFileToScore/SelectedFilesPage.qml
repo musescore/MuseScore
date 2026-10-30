@@ -37,6 +37,7 @@ Item {
 
     property var fileRequirements: []
     property bool canSelectMultipleFiles: true
+    property string termsOfUseUrl: ""
 
     property NavigationSection navigationSection: null
 
@@ -85,13 +86,30 @@ Item {
             navigationOrder: 0
         }
 
+        TermsOfUseCheckBox {
+            id: termsOfUseCheckBox
+
+            Layout.fillWidth: true
+
+            termsOfUseUrl: root.termsOfUseUrl
+
+            navigation.panel: NavigationPanel {
+                name: "SelectedFilesPageTermsOfUse"
+                section: root.navigationSection
+                order: 3
+                enabled: root.enabled && root.visible
+            }
+            navigation.order: 0
+        }
+
         ConvertButtonBox {
             Layout.fillWidth: true
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 3
+            navigationPanel.order: 4
 
             convertEnabled: Boolean(saveAsField.currentText) && !saveAsField.errorText && !root.fileListModel.exceedsLimits
+                            && termsOfUseCheckBox.checked
 
             onCancelRequested: root.cancelRequested()
             onBackRequested: root.backRequested()

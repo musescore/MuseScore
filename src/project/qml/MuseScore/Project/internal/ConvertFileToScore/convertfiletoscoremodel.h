@@ -46,6 +46,7 @@ class ConvertFileToScoreModel : public QObject, public muse::async::Asyncable, p
 
     Q_PROPERTY(QString accountAvatarUrl READ accountAvatarUrl CONSTANT)
     Q_PROPERTY(QString guidelinesUrl READ guidelinesUrl CONSTANT)
+    Q_PROPERTY(QString termsOfUseUrl READ termsOfUseUrl CONSTANT)
 
     Q_PROPERTY(int convertType READ convertType NOTIFY convertTypeChanged)
     Q_PROPERTY(FileListModel * fileListModel READ fileListModel CONSTANT)
@@ -75,6 +76,7 @@ public:
 
     QString accountAvatarUrl() const;
     QString guidelinesUrl() const;
+    QString termsOfUseUrl() const;
 
     int convertType() const; // OMR = 0, Audio2Score = 1
     FileListModel* fileListModel() const;

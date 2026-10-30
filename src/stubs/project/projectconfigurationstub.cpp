@@ -325,6 +325,11 @@ QUrl ProjectConfigurationStub::scoreUploadingGuidelinesUrl() const
     return QUrl();
 }
 
+QUrl ProjectConfigurationStub::termsOfUseUrl() const
+{
+    return QUrl();
+}
+
 bool ProjectConfigurationStub::openDetailedProjectUploadedDialog() const
 {
     return false;
