@@ -1916,7 +1916,7 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
         } else {
             a->setSymId(SymNames::symIdByName(s));
         }
-    } else if (tag == "channel") {
+    } else if (tag == "channel" || tag == "channe") {
         a->setChannelName(xml.attribute("name"));
         xml.readNext();
     } else if (tag == "anchor") {
