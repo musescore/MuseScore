@@ -1318,7 +1318,7 @@ static void addTapToChord(const Notation& notation, ChordRest* cr)
 //---------------------------------------------------------
 
 /**
- Add Mordent to Chord.
+ Add mordent to chord.
  */
 
 static void addMordentToChord(const Notation& notation, ChordRest* cr)
@@ -1378,7 +1378,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
 //---------------------------------------------------------
 
 /**
- Add Turn to Chord.
+ Add turn to chord.
  */
 
 static void addTurnToChord(const Notation& notation, ChordRest* cr)
@@ -1408,7 +1408,7 @@ static void addTurnToChord(const Notation& notation, ChordRest* cr)
 //---------------------------------------------------------
 
 /**
- Add Other Ornament to Chord.
+ Add other-ornament to chord.
  */
 
 static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
@@ -1427,6 +1427,26 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
     } else {
         LOGD("unknown ornament: name '%s': '%s'.", muPrintable(name), muPrintable(symname));
     }
+}
+
+//---------------------------------------------------------
+//   addOtherNotationToChord
+//---------------------------------------------------------
+
+/**
+ Add other-notation to chord.
+ */
+
+static void addOtherNotationToChord(const Notation& notation, ChordRest* cr)
+{
+    const Color color = Color::fromString(notation.attribute(u"color"));
+    Symbol* symbol = Factory::createSymbol(cr);
+    symbol->setSym(notation.symId());
+    if (color.isValid()) {
+        symbol->setColor(color);
+    }
+    symbol->setVisible(notation.visible());
+    cr->add(symbol);
 }
 
 //---------------------------------------------------------
@@ -6212,16 +6232,12 @@ void MusicXmlParserPass2::clef(const String& partId, Measure* measure, const Fra
             line = m_e.readInt();
         } else if (m_e.name() == "clef-octave-change") {
             i = m_e.readInt();
-            if (i && !(c == "F" || c == "G" || c == "C")) {
-                LOGD("clef-octave-change only implemented for F and G key");          // TODO
-            }
         } else {
             skipLogCurrElem();
         }
     }
 
-    //some software (Primus) don't include line and assume some default
-    // it's permitted by MusicXML 2.0 XSD
+    // some software (Primus) don't include line and assume some default
     if (line == -1) {
         if (c == u"G") {
             line = 2;
@@ -6258,22 +6274,21 @@ void MusicXmlParserPass2::clef(const String& partId, Measure* measure, const Fra
         clef = ClefType::F15_MB;
     } else if (c == u"F" && i == 0 && line == 5) {
         clef = ClefType::F_C;
-    } else if (c == u"C") {
-        if (line == 5) {
-            clef = ClefType::C5;
-        } else if (line == 4) {
-            if (i == -1) {
-                clef = ClefType::C4_8VB;
-            } else {
-                clef = ClefType::C4;
-            }
-        } else if (line == 3) {
-            clef = ClefType::C3;
-        } else if (line == 2) {
-            clef = ClefType::C2;
-        } else if (line == 1) {
-            clef = ClefType::C1;
-        }
+    } else if (c == u"C" && i == 0 && line == 5) {
+        clef = ClefType::C5;
+    } else if (c == u"C" && i == 0 && line == 4) {
+        clef = ClefType::C4;
+    } else if (c == u"C" && i == -1 && line == 4) {
+        clef = ClefType::C4_8VB;
+    } else if (c == u"C" && i == 0 && line == 3) {
+        clef = ClefType::C3;
+    } else if (c == u"C" && i != 0 && line == 3) {
+        clef = ClefType::C3;
+        LOGD("clef: unsupported clef clef-octave-change %d", i);
+    } else if (c == u"C" && i == 0 && line == 2) {
+        clef = ClefType::C2;
+    } else if (c == u"C" && i == 0 && line == 1) {
+        clef = ClefType::C1;
     } else if (c == u"percussion") {
         clef = ClefType::PERC;
         if (m_hasDrumset) {
@@ -6283,7 +6298,7 @@ void MusicXmlParserPass2::clef(const String& partId, Measure* measure, const Fra
         clef = ClefType::TAB;
         st= StaffTypes::TAB_DEFAULT;
     } else {
-        LOGD("clef: unknown clef <sign=%s line=%d oct ch=%d>", muPrintable(c), line, i);      // TODO
+        LOGD("clef: unknown clef <sign=%s line=%d oct ch=%d>", muPrintable(c), line, i);
     }
 
     Part* part = m_pass1.getPart(partId);
@@ -8186,12 +8201,12 @@ void MusicXmlParserLyric::skipLogCurrElem()
 
 void MusicXmlParserLyric::readElision(String& formattedText)
 {
-    const String text = m_e.readText();
     const String smufl = m_e.attribute("smufl");
-    if (!text.empty()) {
-        formattedText += text;
-    } else if (!smufl.empty()) {
+    const String text = m_e.readText();
+    if (!smufl.empty()) {
         formattedText += u"<sym>" + smufl + u"</sym>";
+    } else if (!text.empty()) {
+        formattedText += text;
     } else {
         formattedText += u"<sym>lyricsElision</sym>";
     }
@@ -9494,6 +9509,8 @@ void MusicXmlParserNotations::addNotation(const Notation& notation, ChordRest* c
             terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), cr->tick(), cr->track());
         } else if (notation.parent() == u"ornaments") {
             addTurnToChord(notation, cr);
+        } else if (notation.name() == u"other-notation") {
+            addOtherNotationToChord(notation, cr);
         } else {
             addArticulationToChord(notation, cr);
         }
@@ -9665,15 +9682,28 @@ void MusicXmlParserNotations::otherNotation()
 {
     const String type = m_e.attribute("type");
     const String smufl = m_e.attribute("smufl");
+    const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
+    const String text = m_e.readText();
+
+    if (type != u"single") {
+        m_logger->logError(String(u"other-notation of type %1 cannot be imported").arg(type), &m_e);
+        return;
+    }
+
+    SymId id = SymId::noSym;
 
     if (!smufl.empty()) {
-        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
-        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                             m_e.attributes(), u"notations", id);
-        notation.setVisible(m_visible);
-        m_notations.push_back(notation);
-        m_e.skipCurrentElement();
+        id = SymNames::symIdByName(smufl, SymId::noSym);
+    } else {
+        id = SymNames::symIdByName(text, SymId::noSym);
     }
+    if (id == SymId::noSym) {
+        return;
+    }
+    Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                         attributes, u"notations", id);
+    notation.setVisible(m_visible);
+    m_notations.push_back(notation);
 }
 
 //---------------------------------------------------------
