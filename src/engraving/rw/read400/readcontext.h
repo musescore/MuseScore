@@ -71,9 +71,6 @@ struct TextStyleMap {
 class ReadContext : public muse::Contextable
 {
 public:
-    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-
-public:
     ReadContext(const muse::modularity::ContextPtr& iocCtx);
     ReadContext(Score* score);
     ~ReadContext();
@@ -82,6 +79,7 @@ public:
     Score* score() const;
 
     const MStyle& style() const;
+    std::shared_ptr<IEngravingFontsProvider> engravingFonts() const;
 
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }

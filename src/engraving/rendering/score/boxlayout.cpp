@@ -354,7 +354,7 @@ void BoxLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const Layo
 
     double h = 0.0;
     if (item->text()->empty()) {
-        h = FontMetrics::ascent(item->text()->font());
+        h = FontMetrics::ascent(item->text()->font(), item->iocContext());
     } else {
         h = textLD->bbox().height();
     }

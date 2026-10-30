@@ -261,7 +261,7 @@ int MuseScoreConsoleApp::processConverter(const MuseScoreCmdOptions::ConverterTa
     return ret.code();
 }
 
-int MuseScoreConsoleApp::processDiagnostic(const MuseScoreCmdOptions::Diagnostic& task, const muse::modularity::ContextPtr&)
+int MuseScoreConsoleApp::processDiagnostic(const MuseScoreCmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx)
 {
     if (!diagnosticDrawProvider()) {
         return make_ret(Ret::Code::NotSupported);
@@ -286,16 +286,16 @@ int MuseScoreConsoleApp::processDiagnostic(const MuseScoreCmdOptions::Diagnostic
 
     switch (task.type) {
     case DiagnosticType::GenDrawData:
-        ret = diagnosticDrawProvider()->generateDrawData(input.front(), output);
+        ret = diagnosticDrawProvider()->generateDrawData(input.front(), output, ctx);
         break;
     case DiagnosticType::ComDrawData: {
         IF_ASSERT_FAILED(input.size() == 2) {
             return make_ret(Ret::Code::UnknownError);
         }
-        ret = diagnosticDrawProvider()->compareDrawData(input.at(0), input.at(1), output);
+        ret = diagnosticDrawProvider()->compareDrawData(input.at(0), input.at(1), output, ctx);
     } break;
     case DiagnosticType::DrawDataToPng:
-        ret = diagnosticDrawProvider()->drawDataToPng(input.front(), output);
+        ret = diagnosticDrawProvider()->drawDataToPng(input.front(), output, ctx);
         break;
     case DiagnosticType::DrawDiffToPng: {
         muse::io::path_t diffPath = input.at(0);
@@ -303,7 +303,7 @@ int MuseScoreConsoleApp::processDiagnostic(const MuseScoreCmdOptions::Diagnostic
         if (input.size() > 1) {
             refPath = input.at(1);
         }
-        ret = diagnosticDrawProvider()->drawDiffToPng(diffPath, refPath, output);
+        ret = diagnosticDrawProvider()->drawDiffToPng(diffPath, refPath, output, ctx);
     } break;
     default:
         break;

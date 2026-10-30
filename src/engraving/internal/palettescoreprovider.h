@@ -29,7 +29,7 @@
 namespace mu::engraving {
 class PaletteScoreProvider : public IPaletteScoreProvider, public muse::Contextable
 {
-    muse::GlobalInject<IEngravingFontsProvider> engravingfonts;
+    muse::ContextInject<IEngravingFontsProvider> engravingfonts = { this };
 public:
     PaletteScoreProvider(const muse::modularity::ContextPtr& iocCtx);
     ~PaletteScoreProvider() override;

@@ -31,14 +31,17 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class EngravingFontsController : public muse::async::Asyncable
+class EngravingFontsController : public muse::async::Asyncable, public muse::Contextable
 {
-    muse::GlobalInject<muse::draw::IFontsDatabase> fontsDatabase;
+    muse::ContextInject<muse::draw::IFontsDatabase> fontsDatabase = { this };
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<mu::notation::INotationConfiguration> configuration;
-    muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
 
 public:
+    EngravingFontsController(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Contextable(iocCtx) {}
+
     void init();
 
 private:

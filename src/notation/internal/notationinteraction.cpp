@@ -1339,7 +1339,7 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
 
     QPainter qp(&pixmap);
 
-    Painter p(&qp, "startOutgoingDragElement");
+    Painter p(&qp, "startOutgoingDragElement", iocContext());
     p.setAntialiasing(true);
 
     p.scale(physDpiRatio, physDpiRatio);

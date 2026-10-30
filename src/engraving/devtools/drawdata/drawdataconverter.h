@@ -26,12 +26,13 @@
 #include "global/io/path.h"
 #include "draw/types/drawdata.h"
 #include "draw/types/pixmap.h"
+#include "modularity/ioc.h"
 
 namespace mu::engraving {
-class DrawDataConverter
+class DrawDataConverter : public muse::Contextable
 {
 public:
-    DrawDataConverter() = default;
+    DrawDataConverter(const muse::modularity::ContextPtr& iocCtx);
 
     muse::Ret drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile);
     muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile);

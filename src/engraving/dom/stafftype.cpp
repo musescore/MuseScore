@@ -406,7 +406,7 @@ void StaffType::setDurationMetrics()
 // use a scaled up font and then scale computed values down
     Font font(durationFont());
     font.setPointSizeF(m_durationFontSize);
-    FontMetrics fm(font);
+    FontMetrics fm(font, m_score->iocContext());
     String txt(m_durationFonts[m_durationFontIdx].displayValue, size_t(TabVal::NUM_OF));
     RectF bb(fm.tightBoundingRect(txt));
     // raise symbols by a default margin and, if marks are above lines, by half the line distance
@@ -428,7 +428,7 @@ void StaffType::setFretMetrics()
         return;
     }
 
-    FontMetrics fm(fretFont());
+    FontMetrics fm(fretFont(), m_score->iocContext());
     RectF bb;
     // compute vertical displacement
     if (m_useNumbers) {

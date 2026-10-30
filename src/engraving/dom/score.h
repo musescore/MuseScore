@@ -279,7 +279,7 @@ class Score : public EngravingObject, public muse::Contextable
     DECLARE_CLASSOF(ElementType::SCORE)
 
     muse::GlobalInject<class IEngravingConfiguration> configuration;
-    muse::GlobalInject<class IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<class IEngravingFontsProvider> engravingFonts = { this };
     muse::ContextInject<class IEngravingContextConfiguration> contextConfiguration;
     muse::ContextInject<class IEngravingElementsProvider> elementsProvider;
     muse::ContextInject<class IPaletteScoreProvider> paletteScoreProvider;

@@ -484,7 +484,7 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
     double extension = 0.1 * spatium * (parent->size() / 10.0);
     double bottom = parent->baseLine() + extension;
 
-    double defaultCapHeight = muse::draw::FontMetrics::capHeight(parent->font());
+    double defaultCapHeight = muse::draw::FontMetrics::capHeight(parent->font(), parent->iocContext());
 
     double topCapHeight = DBL_MAX;
     const TextSegment* rootTextSeg = nullptr;

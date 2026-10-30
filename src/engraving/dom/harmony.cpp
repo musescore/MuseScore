@@ -1185,22 +1185,22 @@ void Harmony::setColor(const Color& color)
 
 double TextSegment::width() const
 {
-    return FontMetrics::width(m_font, m_text);
+    return FontMetrics::width(m_font, m_text, m_iocCtx);
 }
 
 double TextSegment::capHeight() const
 {
-    return FontMetrics::capHeight(m_font);
+    return FontMetrics::capHeight(m_font, m_iocCtx);
 }
 
 RectF TextSegment::tightBoundingRect() const
 {
-    return FontMetrics::tightBoundingRect(m_font, m_text);
+    return FontMetrics::tightBoundingRect(m_font, m_text, m_iocCtx);
 }
 
 RectF TextSegment::boundingRect() const
 {
-    return FontMetrics::boundingRect(m_font, m_text);
+    return FontMetrics::boundingRect(m_font, m_text, m_iocCtx);
 }
 
 void TextSegment::setFont(const muse::draw::Font& f)
@@ -1211,7 +1211,7 @@ void TextSegment::setFont(const muse::draw::Font& f)
     }
 
     // Check all symbols in string are available in this font
-    FontMetrics fm(f);
+    FontMetrics fm(f, m_iocCtx);
     bool fail = false;
     for (size_t i = 0; i < m_text.size(); ++i) {
         const Char& c = m_text.at(i);

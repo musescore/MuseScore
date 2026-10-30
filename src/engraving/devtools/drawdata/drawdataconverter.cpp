@@ -37,6 +37,11 @@ using namespace muse::draw;
 static const Color REF_COLOR("#999999");
 static const Color ADDED_COLOR("#ff0000");
 
+DrawDataConverter::DrawDataConverter(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Contextable(iocCtx)
+{
+}
+
 Ret DrawDataConverter::drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile)
 {
     RetVal<DrawDataPtr> drawData = DrawDataRW::readData(dataFile);
@@ -93,7 +98,7 @@ Pixmap DrawDataConverter::drawDataToPixmap(const DrawDataPtr& data)
 
     image.fill(Qt::white);
 
-    Painter painter(&image, "DrawData");
+    Painter painter(&image, "DrawData", iocContext());
 
     DrawDataPaint::paint(&painter, data);
 
@@ -109,7 +114,7 @@ void DrawDataConverter::drawOnPixmap(Pixmap& px, const DrawDataPtr& data, const 
     qim.setDotsPerMeterX(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
     qim.setDotsPerMeterY(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
 
-    Painter painter(&qim, "DrawData");
+    Painter painter(&qim, "DrawData", iocContext());
     DrawDataPaint::paint(&painter, data, overlay);
     painter.endDraw();
 

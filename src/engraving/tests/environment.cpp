@@ -36,7 +36,7 @@
 
 static const mu::engraving::IEngravingConfiguration::DebuggingOptions debugOpt {};
 
-static muse::testing::SuiteEnvironment engraving_se(
+static muse::testing::SuiteEnvironment engraving_se = muse::testing::SuiteEnvironment(
 {
     new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule()
@@ -77,4 +77,4 @@ static muse::testing::SuiteEnvironment engraving_se(
     mu::engraving::IEngravingConfiguration* ecptr = mock.get();
     delete ecptr;
 }
-    );
+    ).setContext(mu::engraving::ScoreRW::iocContext());

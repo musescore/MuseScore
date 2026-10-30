@@ -43,7 +43,11 @@ using namespace mu::engraving;
 String ScoreRW::m_rootPath;
 
 //! NOTE Temporary for testing
-static const muse::modularity::ContextPtr utestCtx = std::make_shared<muse::modularity::Context>(1);
+const muse::modularity::ContextPtr& ScoreRW::iocContext()
+{
+    static const muse::modularity::ContextPtr utestCtx = std::make_shared<muse::modularity::Context>(1);
+    return utestCtx;
+}
 
 void ScoreRW::setRootPath(const String& path)
 {
@@ -58,7 +62,7 @@ String ScoreRW::rootPath()
 MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportFunc importFunc,
                                 const muse::modularity::ContextPtr& iocCtx_)
 {
-    const muse::modularity::ContextPtr iocCtx = iocCtx_ ? iocCtx_ : utestCtx;
+    const muse::modularity::ContextPtr iocCtx = iocCtx_ ? iocCtx_ : iocContext();
 
     muse::io::path_t path = isAbsolutePath ? name : (rootPath() + u"/" + name);
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(iocCtx);

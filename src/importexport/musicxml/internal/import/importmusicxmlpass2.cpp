@@ -120,11 +120,6 @@ static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration(
     return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
 }
 
-static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
-{
-    return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
-}
-
 //---------------------------------------------------------
 //   local defines for debug output
 //---------------------------------------------------------
@@ -762,7 +757,7 @@ static void setPartInstruments(MusicXmlLogger* logger, const XmlStreamReader* xm
  characters are preserved as-is.
  */
 namespace xmlpass2 {
-static String text2syms(const String& t, bool isDolet = false)
+static String text2syms(const String& t, const Score* score, bool isDolet = false)
 {
     //QTime time;
     //time.start();
@@ -771,7 +766,7 @@ static String text2syms(const String& t, bool isDolet = false)
     // note that this takes about 1 msec on a Core i5,
     // caching does not gain much
 
-    IEngravingFontPtr sf = engravingFonts()->fallbackFont();
+    IEngravingFontPtr sf = score->engravingFonts()->fallbackFont();
     std::map<String, SymId> map;
     size_t maxStringSize = 0;          // maximum string size found
 
@@ -836,7 +831,7 @@ static String text2syms(const String& t, bool isDolet = false)
 // TODO: probably should be shared between pass 1 and 2
 
 namespace xmlpass2 {
-static String nextPartOfFormattedString(XmlStreamReader& e, bool isDolet = false)
+static String nextPartOfFormattedString(XmlStreamReader& e, const Score* score, bool isDolet = false)
 {
     //String lang       = e.attribute(String("xml:lang"), "it");
     String fontWeight = e.attribute("font-weight");
@@ -850,7 +845,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e, bool isDolet = false
     String txt = e.readText();
     // replace HTML entities
     txt = String::decodeXmlEntities(txt);
-    String syms = xmlpass2::text2syms(txt, isDolet);
+    String syms = xmlpass2::text2syms(txt, score, isDolet);
 
     String importedtext;
 
@@ -4043,7 +4038,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         } else if (m_e.name() == "words") {
             m_enclosure = m_e.attribute("enclosure");
             m_fontFamily = m_e.attribute("font-family");
-            String nextPart = xmlpass2::nextPartOfFormattedString(m_e, m_pass1.dolet());
+            String nextPart = xmlpass2::nextPartOfFormattedString(m_e, m_score, m_pass1.dolet());
 
             textToDynamic(nextPart);
             textToCrescLine(nextPart);
@@ -4054,7 +4049,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             if (m_enclosure.empty()) {
                 m_enclosure = u"square";          // note different default
             }
-            m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e, m_pass1.dolet());
+            m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e, m_score, m_pass1.dolet());
         } else if (m_e.name() == "harp-pedals") {
             harpPedal();
         } else if (m_e.name() == "pedal") {
@@ -8237,7 +8232,7 @@ void MusicXmlParserLyric::parse(bool visibility)
                 LOGD("unknown syllabic %s", muPrintable(syll));                      // TODO
             }
         } else if (m_e.name() == "text") {
-            formattedText += xmlpass2::nextPartOfFormattedString(m_e);
+            formattedText += xmlpass2::nextPartOfFormattedString(m_e, m_score);
         } else {
             skipLogCurrElem();
         }

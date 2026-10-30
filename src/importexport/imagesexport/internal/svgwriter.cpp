@@ -102,7 +102,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     printer.setSize(QSize(width, height));
     printer.setViewBox(QRectF(0, 0, width, height));
 
-    muse::draw::Painter painter(&printer, "svgwriter");
+    muse::draw::Painter painter(&printer, "svgwriter", score->iocContext());
     painter.setAntialiasing(true);
     if (TRIM_MARGIN_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());

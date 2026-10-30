@@ -205,7 +205,7 @@ void FretCanvas::draw(QPainter* painter)
     if (m_diagram->showFingering()) {
         // Copy-pasted from layout and drawing code. Needs cleanup in future. (M.S.)
         const double padding = 0.2 * _spatium;
-        muse::draw::FontMetrics fontMetrics(muse::draw::Font::fromQFont(font, muse::draw::Font::Type::Text));
+        muse::draw::FontMetrics fontMetrics(muse::draw::Font::fromQFont(font, muse::draw::Font::Type::Text), iocContext());
         double fontHeight = fontMetrics.capHeight();
         for (size_t i = 0; i < m_diagram->fingering().size(); ++i) {
             int finger = m_diagram->fingering()[i];

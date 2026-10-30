@@ -40,7 +40,7 @@ class PaletteWidget;
 class SymbolDialog : public QWidget, Ui::SymbolDialogBase, public muse::Contextable
 {
     Q_OBJECT
-    muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<engraving::IEngravingFontsProvider> engravingFonts = { this };
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 

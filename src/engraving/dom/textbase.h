@@ -224,9 +224,6 @@ private:
 class TextFragment
 {
 public:
-    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-
-public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;
@@ -247,7 +244,8 @@ public:
     void changeFormat(FormatId id, const FormatValue& data);
 
 private:
-    void resolveFallback(muse::draw::Font::Type fontType, const muse::draw::FontMetrics& fm, String& family) const;
+    void resolveFallback(muse::draw::Font::Type fontType, const muse::draw::FontMetrics& fm, String& family,
+                         const muse::modularity::ContextPtr& iocCtx) const;
 };
 
 //---------------------------------------------------------

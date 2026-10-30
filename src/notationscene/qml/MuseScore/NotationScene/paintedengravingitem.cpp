@@ -83,7 +83,11 @@ void PaintedEngravingItem::setSpatium(double spatium)
 
 void PaintedEngravingItem::paint(QPainter* painter)
 {
-    muse::draw::Painter p(painter, "paintedengravingitem");
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
+    muse::draw::Painter p(painter, "paintedengravingitem", m_item->iocContext());
     p.save();
     p.setAntialiasing(true);
     paintNotationPreview(p);

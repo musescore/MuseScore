@@ -712,9 +712,7 @@ void MnxExporter::createArpeggios(const Part* part, const Measure* measure, mnx:
 /// describe -- the caller must not export a partial reading of it.
 static bool splitDynamicText(const Dynamic* dynamic, String& prefix, std::vector<SymId>& symIds, String& suffix)
 {
-    const auto engravingFonts = [&]() -> std::shared_ptr<mu::engraving::IEngravingFontsProvider> {
-        return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("engraving");
-    }();
+    const std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts = dynamic->score()->engravingFonts();
 
     bool gotGlyph{};
     bool gotSuffix{};

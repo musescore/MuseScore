@@ -36,7 +36,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-static muse::testing::SuiteEnvironment musicxml_se(
+static muse::testing::SuiteEnvironment musicxml_se = muse::testing::SuiteEnvironment(
 {
     new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule(),
@@ -53,4 +53,4 @@ static muse::testing::SuiteEnvironment musicxml_se(
 
     loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 }
-    );
+    ).setContext(mu::engraving::ScoreRW::iocContext());

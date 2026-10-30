@@ -48,7 +48,7 @@ class CustomizeKitDialog : public muse::ui::WidgetDialog, private Ui::CustomizeK
     Q_OBJECT
 
 public:
-    inline static muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<engraving::IEngravingFontsProvider> engravingFonts = { this };
     inline static muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
@@ -73,6 +73,7 @@ private slots:
     void defineShortcut();
 
 private:
+    void initNoteheadsCombos();
     void initDrumsetAndKey();
 
     void apply();

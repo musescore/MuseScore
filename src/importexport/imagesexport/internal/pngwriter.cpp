@@ -72,7 +72,7 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
                                                     Val(configuration()->exportPngWithTransparentBackground())).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
-    muse::draw::Painter painter(&image, "pngwriter");
+    muse::draw::Painter painter(&image, "pngwriter", notation->elements()->msScore()->iocContext());
 
     notation->painting()->paintPng(&painter, opt);
 

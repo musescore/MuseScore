@@ -330,7 +330,7 @@ void SingleLayout::layout(Accidental* item, const Context&)
 
 void SingleLayout::layout(ActionIcon* item, const Context&)
 {
-    FontMetrics fontMetrics(item->iconFont());
+    FontMetrics fontMetrics(item->iconFont(), item->iocContext());
     item->setbbox(fontMetrics.boundingRect(Char(item->icon())));
 }
 
@@ -672,7 +672,7 @@ void SingleLayout::layout(Bend* item, const Context&)
 
     RectF bb;
 
-    FontMetrics fm(item->font(spatium));
+    FontMetrics fm(item->font(spatium), item->iocContext());
 
     size_t n   = item->points().size();
     double x = ldata->noteWidth;
@@ -997,7 +997,7 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
         Font scaledFont(item->fretNumFont());
         scaledFont.setPointSizeF(item->fretNumFont().pointSizeF() * item->userMag());
 
-        FontMetrics fm2(scaledFont);
+        FontMetrics fm2(scaledFont, item->iocContext());
         double numw = fm2.width(String::number(item->fretOffset() + 1));
         double xdiff = numw + ldata->stringDist * .4;
         w += xdiff;
@@ -1014,7 +1014,7 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
 
 void SingleLayout::layout(FSymbol* item, const Context&)
 {
-    item->setbbox(FontMetrics::boundingRect(item->font(), item->toString()));
+    item->setbbox(FontMetrics::boundingRect(item->font(), item->toString(), item->iocContext()));
     item->setOffset(0.0, 0.0);
     item->setPos(0.0, 0.0);
 }
@@ -1399,7 +1399,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
 
 void SingleLayout::layout(LayoutBreak* item, const Context&)
 {
-    FontMetrics metrics(item->font());
+    FontMetrics metrics(item->font(), item->iocContext());
     RectF bbox = metrics.boundingRect(item->iconCode());
     item->mutldata()->setShape(Shape(bbox, item));
 }

@@ -50,10 +50,6 @@ void NotationModule::registerExports()
     m_configuration = std::make_shared<NotationConfiguration>();
     m_instrumentsRepository = std::make_shared<InstrumentsRepository>();
 
-#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
-    m_engravingFontsController = std::make_shared<EngravingFontsController>();
-#endif
-
     globalIoc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IInstrumentsRepository>(mname, m_instrumentsRepository);
 }
@@ -85,10 +81,6 @@ void NotationModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
     m_instrumentsRepository->init();
 
-#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
-    m_engravingFontsController->init();
-#endif
-
     bool isVertical = m_configuration->canvasOrientation().val == muse::Orientation::Vertical;
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 
@@ -111,5 +103,16 @@ IContextSetup* NotationModule::newContext(const ContextPtr& ctx) const
 
 void NotationContext::registerExports()
 {
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
+    m_engravingFontsController = std::make_shared<EngravingFontsController>(iocContext());
+#endif
+
     ioc()->registerExport<INotationContextConfiguration>(mname, new NotationContextConfiguration(iocContext()));
+}
+
+void NotationContext::onInit(const IApplication::RunMode&)
+{
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
+    m_engravingFontsController->init();
+#endif
 }

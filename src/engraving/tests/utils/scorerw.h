@@ -38,6 +38,7 @@ class ScoreRW
 public:
     ScoreRW() = default;
 
+    static const muse::modularity::ContextPtr& iocContext();
     static void setRootPath(const String& path);
     static String rootPath();
 

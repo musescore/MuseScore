@@ -13,6 +13,10 @@ int FontProviderStub::addSymbolFont(const String&, std::shared_ptr<io::IODevice>
     return -1;
 }
 
+void FontProviderStub::removeSymbolFont(int)
+{
+}
+
 double FontProviderStub::lineSpacing(const Font&) const
 {
     return 0.0;

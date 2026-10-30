@@ -292,7 +292,7 @@ static void fixupScore(MasterScore* score)
 MasterScore* Mnx_Tests::readMnxScore(const String& fileName, bool isAbsolutePath)
 {
     const muse::io::path_t path = isAbsolutePath ? fileName : (ScoreRW::rootPath() + u"/" + fileName);
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(muse::modularity::globalCtx());
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(ScoreRW::iocContext());
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
     NotationMnxReader reader(muse::modularity::globalCtx());
