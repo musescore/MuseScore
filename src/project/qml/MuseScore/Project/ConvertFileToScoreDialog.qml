@@ -207,6 +207,7 @@ StyledDialogView {
             fileListModel: convertModel.fileListModel
             canSelectMultipleFiles: convertModel.canSelectMultipleFiles
             fileRequirements: convertModel.fileRequirements
+            termsOfUseUrl: convertModel.termsOfUseUrl
 
             onCancelRequested: convertModel.confirmCancel()
             onBackRequested: convertModel.confirmGoingBack()
@@ -234,6 +235,7 @@ StyledDialogView {
             hintText: convertModel.linkPageHintText
             hintPlainText: convertModel.linkPageHintPlainText
             audioComUrl: convertModel.audioComUrl
+            termsOfUseUrl: convertModel.termsOfUseUrl
             maxLinkLength: convertModel.maxLinkLength
             navigationSection: root.navigationSection
 

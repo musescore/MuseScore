@@ -679,6 +679,14 @@ QUrl ProjectConfiguration::scoreUploadingGuidelinesUrl() const
     return QUrl("https://musescore.com/score-uploading-guidelines");
 }
 
+QUrl ProjectConfiguration::termsOfUseUrl() const
+{
+    return QUrl("https://musescore.com/redirect/af?mu_target=https%3A%2F%2Fmusescore.com%2Flegal%2Fterms"
+                "%3Futm_medium%3DReferral%26utm_source%3Dmss%26utm_campaign%3DMU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
+                "%26utm_content%3Dconvert_to_score"
+                "&utm_medium=Referral&utm_source=mss&utm_campaign=MU_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=convert_to_score");
+}
+
 bool ProjectConfiguration::openDetailedProjectUploadedDialog() const
 {
     return settings()->value(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG).toBool();
