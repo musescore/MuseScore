@@ -219,6 +219,8 @@ enum class ElementType : unsigned char {
     TAPPING_HALF_SLUR_SEGMENT,
     TAPPING_TEXT,
 
+    STAVE_SHARING_CHANGE,
+
     ROOT_ITEM,
     DUMMY,
 
@@ -291,7 +293,7 @@ constexpr bool autoplaceAppliesToType(ElementType type)
     case ElementType::MEASURE_NUMBER:
     case ElementType::MMREST_RANGE:
 
-    // Note/measure-attached texts and symbols
+    // Note/measure/segment-attached texts and symbols
     case ElementType::TIMESIG:
     case ElementType::REST:
     case ElementType::MMREST:
@@ -321,6 +323,7 @@ constexpr bool autoplaceAppliesToType(ElementType type)
     case ElementType::HARMONY:
     case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING:
+    case ElementType::STAVE_SHARING_CHANGE:
         return true;
     default:
         return false;
@@ -1578,7 +1581,10 @@ enum class ActionIconType : signed char {
     NOTE_ANCHORED_LINE,
 
     SYSTEM_LOCK,
-    PAGE_LOCK
+    PAGE_LOCK,
+
+    STAVE_SHARING_CHANGE,
+    RESET_STAVE_SHARING_CHANGE
 };
 } // mu::engraving
 

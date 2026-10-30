@@ -36,22 +36,25 @@
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/staff.h"
+#include "dom/stavesharingchange.h"
 #include "dom/system.h"
 #include "dom/timesig.h"
 
 using namespace mu::engraving;
 
 namespace mu::engraving::rendering::score {
-void StaveSharingLayout::updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx)
+bool StaveSharingLayout::updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx)
 {
     StaveSharingContext ssctx(firstMB, lastMB, ctx);
     if (ssctx.crSegments.empty()) {
-        return;
+        return false;
     }
 
     ssctx.updateForLastAdded = false;
 
     updateStaveSharing(ssctx);
+
+    return ssctx.trackMapChanged;
 }
 
 bool StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx)
@@ -68,23 +71,27 @@ bool StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, L
     ssctx.updateForLastAdded = true;
 
     updateStaveSharing(ssctx);
-
     if (ssctx.trackMapChanged) {
-        SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
-
-        for (MeasureBase* mb = system->first(); mb; mb = mb->next()) {
-            if (mb->isMeasure()) {
-                toMeasure(mb)->mutldata()->setNeedLayout(true);
-                // TODO: only relayout shared staves
-                MeasureLayout::layoutMeasure(mb, ctx);
-            }
-            if (mb == system->last()) {
-                break;
-            }
-        }
+        relayoutMeasuresOnTrackMapChanged(system, ctx);
     }
 
     return ssctx.trackMapChanged;
+}
+
+void StaveSharingLayout::relayoutMeasuresOnTrackMapChanged(System* system, LayoutContext& ctx)
+{
+    SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
+
+    for (MeasureBase* mb = system->first(); mb; mb = mb->next()) {
+        if (mb->isMeasure()) {
+            toMeasure(mb)->mutldata()->setNeedLayout(true);
+            // TODO: only relayout shared staves
+            MeasureLayout::layoutMeasure(mb, ctx);
+        }
+        if (mb == system->last()) {
+            break;
+        }
+    }
 }
 
 void StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx)
@@ -118,17 +125,140 @@ void StaveSharingLayout::updateStaveSharing(StaveSharingContext& ctx)
     }
 }
 
-void StaveSharingLayout::updateTrackMaps(StaveSharingContext& ctx)
+bool StaveSharingLayout::isValid(const SharedTrackMap& userMap, StaveSharingLayout::StaveSharingContext& ctx)
 {
-    const SharedTrackMap& oldTrackMap = ctx.curSharedPart->trackMapAtTick(ctx.sTick);
+    // Make sure that the origin tracks which are mapped to shared tracks can be combined
+    // Make sure we don't leave voice 1 of a shared stave empty when subsequent voices are filled
 
-    ctx.curTrackMap = computeTrackMap(ctx);
-    if (ctx.curTrackMap != oldTrackMap) {
-        ctx.trackMapChanged = true;
+    // Group origin tracks by the shared track they map to
+    std::map<track_idx_t, TrackGroup> originTracksBySharedTrack;
+    for (const auto& [originTrack, sharedTrack] : userMap) {
+        originTracksBySharedTrack[sharedTrack].push_back(originTrack);
     }
 
-    ctx.curSharedPart->removeMapsBetweenTicks(ctx.sTick, ctx.eTick);
-    ctx.curSharedPart->setTrackMapAtTick(ctx.curTrackMap, ctx.sTick);
+    track_idx_t prevSharedTrack = muse::nidx;
+    track_idx_t lastTrackOnPrevVoice = muse::nidx;
+    for (const auto& [sharedTrack, originTracks] : originTracksBySharedTrack) {
+        // Origin tracks mapped to the same shared track must be able to go in the same voice
+        TrackGroup curTrackGroup = { originTracks.front() };
+        std::unordered_set<Note*> localUnisonNotes;
+        for (size_t i = 1; i < originTracks.size(); ++i) {
+            if (!canGoToSameVoice(originTracks[i - 1], originTracks[i], ctx, curTrackGroup, localUnisonNotes)) {
+                return false;
+            }
+            curTrackGroup.push_back(originTracks[i]);
+        }
+
+        // Voices on the same shared stave must be able to go on the same stave
+        bool sameStaveAsPrev = prevSharedTrack != muse::nidx && track2staff(prevSharedTrack) == track2staff(sharedTrack);
+        if (sameStaveAsPrev
+            && !canGoToSameStave(lastTrackOnPrevVoice, originTracks.front(), true, ctx)) {
+            return false;
+        }
+
+        prevSharedTrack = sharedTrack;
+        lastTrackOnPrevVoice = originTracks.back();
+    }
+
+    // Shared staves must have a mapping to voice 1 if they have mappings to voices 2, 3 or 4
+    std::unordered_set<staff_idx_t> stavesWithVoice1;
+    for (const auto& [sharedTrack, originTrack] : originTracksBySharedTrack) {
+        if (track2voice(sharedTrack) == 0) {
+            stavesWithVoice1.insert(track2staff(sharedTrack));
+        }
+    }
+    for (const auto& [sharedTrack, originTrack] : originTracksBySharedTrack) {
+        if (track2voice(sharedTrack) != 0 && !muse::contains(stavesWithVoice1, track2staff(sharedTrack))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void StaveSharingLayout::updateTrackMaps(StaveSharingContext& ctx)
+{
+    // 1. Clear all non-user states
+    // 2. Create a computed state at sTick, up to the first user state or the end of the system
+    // 3. Go through the user states. Copy the user map into the cached map if valid, compute the default if not
+    // 4. Also compute the default for resets
+
+    SharedPart* sharedPart = ctx.curSharedPart;
+    const Fraction sTick = ctx.sTick;
+    const Fraction eTick = ctx.eTick;
+
+    // Keep the old states so we can tell whether anything changed
+    const std::map<Fraction, StaveSharingState> oldStates = sharedPart->staveSharingStatesBetweenTicks(sTick, eTick);
+
+    sharedPart->removeStaveSharingStatesBetweenTicks(sTick, eTick, false);
+
+    // Only user states remain
+    std::map<Fraction, StaveSharingState> states = sharedPart->staveSharingStatesBetweenTicks(sTick, eTick);
+
+    // Systems must start with a computed track map if not preceded by a user track map
+    auto precededByValidUserTrackMap = [&]() {
+        if (sTick.isZero()) {
+            return false;
+        }
+        StaveSharingState& prevState = sharedPart->staveSharingStateAtTick(sTick);
+        if (!prevState.isUserModified() || prevState.isReset()) {
+            return false;
+        }
+
+        // Get the tick for the next user state. Check the active change is valid up to this or the end of the system
+        // The active change is on a previous system
+        const Fraction nextUserTick = !states.empty() ? states.begin()->first : eTick;
+
+        ctx.eTick = nextUserTick;
+        const SharedTrackMap& userMap = prevState.userTrackMap().value();
+        const bool valid = isValid(userMap, ctx);
+        ctx.eTick = eTick;
+
+        prevState.setIsUserMapValid(valid);
+        return valid;
+    };
+
+    if (!muse::contains(states, sTick) && !precededByValidUserTrackMap()) {
+        states.emplace(sTick, StaveSharingState());
+    }
+
+    for (auto it = states.begin(); it != states.end(); ++it) {
+        const Fraction& tick = it->first;
+        StaveSharingState& state = it->second;
+
+        auto nextIt = std::next(it);
+        ctx.sTick = tick;
+        ctx.eTick = nextIt != states.end() ? nextIt->first : eTick;
+
+        if (state.isUserModified() && !state.isReset()) {
+            // User track map - copy into the cached layout map if valid
+            const SharedTrackMap& userMap = state.userTrackMap().value();
+            const bool valid = isValid(userMap, ctx);
+            state.setIsUserMapValid(valid);
+            if (valid) {
+                state.setSharedTrackMap(userMap);
+                sharedPart->setStaveSharingStateAtTick(state, tick);
+                continue;
+            }
+        }
+
+        // Computed track map at start of system, user reset, or invalid user map
+        // Compute up to the next user state or the end of the system
+
+        state.setSharedTrackMap(computeTrackMap(ctx));
+        sharedPart->setStaveSharingStateAtTick(state, tick);
+    }
+
+    ctx.sTick = sTick;
+    ctx.eTick = eTick;
+
+    const bool sameTrackMaps = std::equal(oldStates.begin(), oldStates.end(), states.begin(), states.end(),
+                                          [](const auto& oldState, const auto& newState) {
+        return oldState.first == newState.first && oldState.second.sharedTrackMap() == newState.second.sharedTrackMap();
+    });
+    if (!sameTrackMaps) {
+        ctx.trackMapChanged = true;
+    }
 }
 
 SharedTrackMap StaveSharingLayout::computeTrackMap(StaveSharingContext& ctx)
@@ -210,7 +340,7 @@ SharedTrackMap StaveSharingLayout::computeTrackMap(StaveSharingContext& ctx)
 
         bool canGoOnThisStave = track2voice(curSharedTrack) == 0
                                 || lastAssignedTrack == muse::nidx
-                                || canGoToSameStave(lastAssignedTrack, track, ctx);
+                                || canGoToSameStave(lastAssignedTrack, track, ctx.style.styleB(Sid::allowVoiceCrossing), ctx);
         if (!canGoOnThisStave) {
             curSharedTrack = trackZeroVoice(curSharedTrack + VOICES);
         }
@@ -237,7 +367,7 @@ SharedTrackMap StaveSharingLayout::computeTrackMap(StaveSharingContext& ctx)
 
 bool StaveSharingLayout::isEmpty(track_idx_t track, StaveSharingContext& ctx)
 {
-    for (Segment* seg : ctx.crSegments) {
+    for (Segment* seg : ctx.crSegmentsInRange()) {
         ChordRest* cr = toChordRest(seg->element(track));
         if (cr && !(cr->isRest() && toRest(cr)->isFullMeasureRest())) {
             return false;
@@ -266,7 +396,7 @@ bool StaveSharingLayout::sameInstrument(track_idx_t prevTrack, track_idx_t nextT
 
 bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx)
 {
-    for (Segment* segment : ctx.crSegments) {
+    for (Segment* segment : ctx.crSegmentsInRange()) {
         if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
             return false;
         }
@@ -343,7 +473,7 @@ bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, 
         }
     }
 
-    for (Segment* segment : ctx.allSegments) {
+    for (Segment* segment : ctx.allSegmentsInRange()) {
         if (!checkSegmentForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
@@ -361,7 +491,7 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
 {
     std::vector<Note*> potentialUnisonNotes;
 
-    for (Segment* segment : ctx.crSegments) {
+    for (Segment* segment : ctx.crSegmentsInRange()) {
         if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
             return false;
         }
@@ -460,7 +590,7 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
         }
     }
 
-    for (Segment* segment : ctx.allSegments) {
+    for (Segment* segment : ctx.allSegmentsInRange()) {
         if (!checkSegmentForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
@@ -697,6 +827,10 @@ bool StaveSharingLayout::checkSpannersForSameVoice(track_idx_t prevTrack, track_
     std::multimap<ElementType, Spanner*> spannersOnNextTrack;
 
     for (Spanner* spanner : ctx.overlappingSpanners) {
+        const bool hasOverlap = spanner->tick() < ctx.eTick && spanner->tick2() >= ctx.sTick;
+        if (!hasOverlap) {
+            continue;
+        }
         if (spanner->track() == prevTrack) {
             spannersOnPrevTrack.insert({ spanner->type(), spanner });
         } else if (spanner->track() == nextTrack) {
@@ -752,12 +886,9 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
     return true;
 }
 
-bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack,
-                                          StaveSharingContext& ctx)
+bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, bool allowVoiceCrossing, StaveSharingContext& ctx)
 {
-    const bool allowVoiceCrossing = ctx.style.styleB(Sid::allowVoiceCrossing);
-
-    for (Segment* segment : ctx.allSegments) {
+    for (Segment* segment : ctx.allSegmentsInRange()) {
         if (!sameInstrument(prevTrack, nextTrack, segment->tick(), ctx)) {
             return false;
         }
@@ -810,6 +941,8 @@ void StaveSharingLayout::computeSegmentsToUpdate(StaveSharingContext& ctx)
         return;
     }
 
+    ctx.segmentsToUpdate.clear();
+    ctx.crSegmentsToUpdate.clear();
     Measure* lastMeasure = ctx.crSegments.back()->measure();
     for (Segment& seg : lastMeasure->segments()) {
         ctx.segmentsToUpdate.push_back(&seg);
@@ -827,6 +960,8 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
 
     ctx.oldStaveSharingLabels.clear();
     ctx.updatedStaveSharingLabels.clear();
+    ctx.oldStaveSharingChanges.clear();
+    ctx.updatedStaveSharingChanges.clear();
 
     for (Segment* seg : ctx.segmentsToUpdate) {
         for (EngravingItem* item : seg->annotations()) {
@@ -835,6 +970,9 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
 
                 if (item->isStaveSharingLabel()) {
                     ctx.oldStaveSharingLabels.push_back(toStaveSharingLabel(item));
+                }
+                if (item->isStaveSharingChange()) {
+                    ctx.oldStaveSharingChanges.push_back(toStaveSharingChange(item));
                 }
             }
         }
@@ -934,6 +1072,7 @@ void StaveSharingLayout::makeSharedNotation(StaveSharingContext& ctx)
     makeSharedAnnotations(ctx);
     makeSharedSpanners(ctx);
     makeStaveSharingLabels(ctx);
+    makeStaveSharingChanges(ctx);
 }
 
 EngravingItem* StaveSharingLayout::makeSharedItem(EngravingItem* originItem, EngravingItem* possibleSharedItem, track_idx_t sharedTrack,
@@ -971,19 +1110,18 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
     // These items only apply to a single staff. Time signatures and key signatures applying to all staves
     // were added at the same time as the origin items
 
-    const SharedTrackMap& trackMap = ctx.curTrackMap;
-    if (trackMap.empty()) {
-        return;
-    }
-
     for (Segment* seg : ctx.segmentsToUpdate) {
+        const SharedTrackMap& trackMap = ctx.curStaveSharingState(seg->tick()).sharedTrackMap();
+        if (trackMap.empty()) {
+            continue;
+        }
         if (seg->header() || (!seg->isClefType() && !seg->isKeySigType() && !seg->isTimeSigType())) {
             continue;
         }
         if (seg->isKeySigType() && !segHasLocalKeySig(seg, ctx.curSharedPart)) {
             continue;
         }
-        for (const auto& [originTrack, sharedTrack] : ctx.curTrackMap) {
+        for (const auto& [originTrack, sharedTrack] : trackMap) {
             if (track2voice(sharedTrack) != 0) {
                 // Clefs, key, and time signatures can only appear in the 1st voice
                 // At this point, any items in subsequent voices should match what is in voice 1
@@ -1036,7 +1174,7 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
     ctx.sharedUnisonNotes.clear();
 
     for (Segment* seg : ctx.crSegmentsToUpdate) {
-        for (const auto& [originTrack, sharedTrack] : ctx.curTrackMap) {
+        for (const auto& [originTrack, sharedTrack] : ctx.curStaveSharingState(seg->tick()).sharedTrackMap()) {
             ChordRest* originCR = toChordRest(seg->element(originTrack));
             if (!originCR) {
                 continue;
@@ -1158,19 +1296,18 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
 
 void StaveSharingLayout::makeSharedBreaths(StaveSharingContext& ctx)
 {
-    std::vector<EngravingItem*> sharedBreaths;
-
-    const SharedTrackMap& trackMap = ctx.curTrackMap;
-    if (trackMap.empty()) {
-        return;
-    }
-    track_idx_t startOriginTrack = trackMap.begin()->first;
-    track_idx_t endOriginTrack = trackMap.rbegin()->first;
-
     for (Segment* seg : ctx.segmentsToUpdate) {
+        std::vector<EngravingItem*> sharedBreaths;
         if (!seg->isBreathType()) {
             continue;
         }
+
+        const SharedTrackMap& trackMap = ctx.curStaveSharingState(seg->tick()).sharedTrackMap();
+        if (trackMap.empty()) {
+            continue;
+        }
+        track_idx_t startOriginTrack = trackMap.begin()->first;
+        track_idx_t endOriginTrack = trackMap.rbegin()->first;
 
         for (const auto& [originTrack, sharedTrack] : trackMap) {
             Breath* originBreath = toBreath(seg->element(originTrack));
@@ -1184,9 +1321,8 @@ void StaveSharingLayout::makeSharedBreaths(StaveSharingContext& ctx)
             });
             sharedBreaths.push_back(sharedBreath);
         }
+        manageVoicePropertyAndTrackForSharedItems(sharedBreaths, startOriginTrack, endOriginTrack, trackMap);
     }
-
-    manageVoicePropertyAndTrackForSharedItems(sharedBreaths, startOriginTrack, endOriginTrack, trackMap);
 }
 
 void StaveSharingLayout::makeSharedArticulations(Chord* originChord, Chord* sharedChord)
@@ -1220,10 +1356,22 @@ void StaveSharingLayout::makeSharedTiesAndNoteSpanners(Note* originNote, Note* s
 
     Tie* tieBack = originNote->tieBack();
     if (tieBack) {
+        Note* sharedStartNote = tieBack->startNote() ? toNote(tieBack->startNote()->sharedItem()) : nullptr;
         Tie* sharedTieBack = sharedNote->tieBack();
+
+        // The start note has changed for this tie and it is stale, remove it first
+        if (sharedTieBack && sharedTieBack->startNote() != sharedStartNote) {
+            score->undoRemoveElement(sharedTieBack);
+            sharedTieBack = nullptr;
+        }
+
         if (!sharedTieBack) {
+            // We are replacing a stale tie, remove it first
+            if (Tie* staleTieFor = sharedStartNote ? sharedStartNote->tieFor() : nullptr) {
+                score->undoRemoveElement(staleTieFor);
+            }
+
             sharedTieBack = toTie(tieBack->clone());
-            Note* sharedStartNote = tieBack->startNote() ? toNote(tieBack->startNote()->sharedItem()) : nullptr;
             sharedTieBack->setNoteSpan(sharedStartNote, sharedNote);
 
             score->undoAddElement(sharedTieBack);
@@ -1297,16 +1445,14 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
 {
     Score* score = ctx.score;
 
-    const SharedTrackMap& trackMap = ctx.curTrackMap;
-    if (trackMap.empty()) {
-        return;
-    }
-    track_idx_t startOriginTrack = trackMap.begin()->first;
-    track_idx_t endOriginTrack = trackMap.rbegin()->first;
-
-    std::vector<EngravingItem*> sharedAnnotations;
-
     for (Segment* seg : ctx.segmentsToUpdate) {
+        std::vector<EngravingItem*> sharedAnnotations;
+        const SharedTrackMap& trackMap = ctx.curStaveSharingState(seg->tick()).sharedTrackMap();
+        if (trackMap.empty()) {
+            continue;
+        }
+        track_idx_t startOriginTrack = trackMap.begin()->first;
+        track_idx_t endOriginTrack = trackMap.rbegin()->first;
         std::vector<EngravingItem*> annotations = seg->annotations(); // Copy because we are about to add
         for (EngravingItem* originItem : annotations) {
             track_idx_t originTrack = originItem->track();
@@ -1327,6 +1473,11 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                     // chordrests can't be linked, need to scan notes & check
                     continue;
                 }
+            }
+
+            // Stave sharing text should never make it onto an origin stave
+            IF_ASSERT_FAILED(!originItem->isStaveSharingLabel()) {
+                continue;
             }
 
             track_idx_t sharedTrack = trackMap.at(originTrack);
@@ -1363,34 +1514,31 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                 sharedChange->setXmlText(text);
             }
         }
+        manageVoicePropertyAndTrackForSharedItems(sharedAnnotations, startOriginTrack, endOriginTrack, trackMap);
     }
-
-    manageVoicePropertyAndTrackForSharedItems(sharedAnnotations, startOriginTrack, endOriginTrack, trackMap);
 }
 
 void StaveSharingLayout::makeSharedSpanners(StaveSharingContext& ctx)
 {
-    const SharedTrackMap& trackMap = ctx.curTrackMap;
-    if (trackMap.empty()) {
-        return;
-    }
-    track_idx_t startOriginTrack = trackMap.begin()->first;
-    track_idx_t endOriginTrack = trackMap.rbegin()->first;
-
-    std::vector<EngravingItem*> sharedSpanners;
-
     std::vector<Spanner*> overlappingSpanners = ctx.overlappingSpanners; // copy because we may add
     for (Spanner* spanner : overlappingSpanners) {
+        std::vector<EngravingItem*> sharedSpanners;
+        const SharedTrackMap& sharedTrackMap = ctx.curStaveSharingState(spanner->tick()).sharedTrackMap();
+        if (sharedTrackMap.empty()) {
+            continue;
+        }
+        track_idx_t startOriginTrack = sharedTrackMap.begin()->first;
+        track_idx_t endOriginTrack = sharedTrackMap.rbegin()->first;
         if (spanner->track() < startOriginTrack || spanner->track() > endOriginTrack) {
             continue;
         }
 
         track_idx_t originTrack = spanner->track();
-        IF_ASSERT_FAILED(muse::contains(trackMap, originTrack)) {
+        IF_ASSERT_FAILED(muse::contains(sharedTrackMap, originTrack)) {
             continue;
         }
 
-        track_idx_t sharedTrack = trackMap.at(originTrack);
+        track_idx_t sharedTrack = sharedTrackMap.at(originTrack);
 
         Spanner* sharedSpanner = nullptr;
         for (Spanner* possibleSharedSpanner : ctx.overlappingSpanners) {
@@ -1418,18 +1566,15 @@ void StaveSharingLayout::makeSharedSpanners(StaveSharingContext& ctx)
         EngravingItem::connectSharedItem(sharedSpanner, spanner);
 
         sharedSpanners.push_back(sharedSpanner);
+        manageVoicePropertyAndTrackForSharedItems(sharedSpanners, startOriginTrack, endOriginTrack, sharedTrackMap);
     }
-
-    manageVoicePropertyAndTrackForSharedItems(sharedSpanners, startOriginTrack, endOriginTrack, trackMap);
 }
 
 void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
 {
-    const SharedTrackMap& trackMap = ctx.curTrackMap;
-
-    std::vector<EngravingItem*> updatedStaveSharingLabels;
-
     for (Note* unisonNote : ctx.sharedUnisonNotes) {
+        std::vector<EngravingItem*> updatedStaveSharingLabels;
+        const SharedTrackMap& trackMap = ctx.curStaveSharingState(unisonNote->tick()).sharedTrackMap();
         bool needsRestateOnNewSystem = false;
         if (!unisonNoteNeedsLabel(unisonNote, needsRestateOnNewSystem, ctx)) {
             continue;
@@ -1456,15 +1601,13 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
         }
 
         updatedStaveSharingLabels.push_back(label);
-    }
+        const TrackRange curSharedPartTrackRange = ctx.curSharedPart->trackRange();
+        manageVoicePropertyAndTrackForSharedItems(updatedStaveSharingLabels, curSharedPartTrackRange.startTrack,
+                                                  curSharedPartTrackRange.endTrack, trackMap);
 
-    const TrackRange curSharedPartTrackRange = ctx.curSharedPart->trackRange();
-    manageVoicePropertyAndTrackForSharedItems(updatedStaveSharingLabels, curSharedPartTrackRange.startTrack,
-                                              curSharedPartTrackRange.endTrack, trackMap);
-
-    ctx.updatedStaveSharingLabels.reserve(updatedStaveSharingLabels.size());
-    for (EngravingItem* el : updatedStaveSharingLabels) {
-        ctx.updatedStaveSharingLabels.push_back(toStaveSharingLabel(el));
+        for (EngravingItem* el : updatedStaveSharingLabels) {
+            ctx.updatedStaveSharingLabels.push_back(toStaveSharingLabel(el));
+        }
     }
 }
 
@@ -1618,6 +1761,34 @@ String StaveSharingLayout::formatInstrumentChangeLable(const InstrumentChange* o
     return prefix + u" " + originChange->xmlText();
 }
 
+void StaveSharingLayout::makeStaveSharingChanges(StaveSharingContext& ctx)
+{
+    Score* score = ctx.score;
+    const track_idx_t track = ctx.curSharedPart->trackRange().startTrack;
+
+    for (auto& [tick, state] : ctx.curSharedPart->staveSharingStatesBetweenTicks(ctx.sTick, ctx.eTick)) {
+        if (!state.isUserModified()) {
+            continue;
+        }
+        Measure* measure = score->tick2measure(tick);
+        Segment* seg = measure ? measure->findSegment(SegmentType::ChordRest, tick) : nullptr;
+        IF_ASSERT_FAILED(seg) {
+            continue;
+        }
+        if (EngravingItem* existingChange = seg->findAnnotation(ElementType::STAVE_SHARING_CHANGE, track, track)) {
+            ctx.updatedStaveSharingChanges.push_back(toStaveSharingChange(existingChange));
+            continue;
+        }
+
+        StaveSharingChange* ssc = Factory::createStaveSharingChange(seg);
+        ssc->setOwnershipParent(seg);
+        ssc->setTrack(trackZeroVoice(track));
+        score->undoAddElement(ssc, false);
+
+        ctx.updatedStaveSharingChanges.push_back(ssc);
+    }
+}
+
 void StaveSharingLayout::manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems,
                                                                    track_idx_t startOriginTrack, track_idx_t endOriginTrack,
                                                                    const SharedTrackMap& trackMap)
@@ -1668,7 +1839,8 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
     for (Segment* seg : ctx.segmentsToUpdate) {
         std::vector<EngravingItem*> annotations = seg->annotations(); // Copy because we may remove elements
         for (EngravingItem* item : annotations) {
-            if (!item->systemFlag() && !item->isStaveSharingLabel() && item->track() >= range.startTrack && item->track() < range.endTrack
+            if (!item->systemFlag() && !item->isStaveSharingLabel() && !item->isStaveSharingChange() && item->track() >= range.startTrack
+                && item->track() < range.endTrack
                 && item->originItems().empty()) {
                 score->undoRemoveElement(item);
             }
@@ -1767,7 +1939,7 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
         }
     }
 
-    addMeasureRestsIfNeed(ctx);
+    fillRestsIfNeed(ctx);
 
     for (Spanner* spanner : ctx.overlappingSpanners) {
         if (!spanner->systemFlag() && spanner->track() >= range.startTrack && spanner->track() < range.endTrack
@@ -1781,29 +1953,74 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
             ctx.score->undoRemoveElement(oldLabel);
         }
     }
-}
 
-void StaveSharingLayout::addMeasureRestsIfNeed(StaveSharingContext& ctx)
-{
-    Measure* startMeas = ctx.segmentsToUpdate.front()->measure();
-    Measure* endMeas = ctx.segmentsToUpdate.back()->measure();
-
-    TrackRange trackRange = ctx.curSharedPart->trackRange();
-    staff_idx_t startStaff = track2staff(trackRange.startTrack);
-    staff_idx_t endStaff = track2staff(trackRange.endTrack);
-
-    for (Measure* measure = startMeas; measure && measure->isBeforeOrEqual(endMeas); measure = measure->nextMeasure()) {
-        for (staff_idx_t staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
-            if (!measure->isEmpty(staffIdx)) {
-                continue;
-            }
-            if (ChordRest* firstCR = measure->firstChordRest(staffIdx * VOICES); firstCR && firstCR->isFullMeasureRest()) {
-                continue;
-            }
-
-            ctx.score->setRest(measure->tick(), staffIdx * VOICES, measure->ticks(), false, nullptr);
+    for (StaveSharingChange* oldChange : ctx.oldStaveSharingChanges) {
+        if (!muse::contains(ctx.updatedStaveSharingChanges, oldChange)) {
+            ctx.score->undoRemoveElement(oldChange);
         }
     }
+}
+
+void StaveSharingLayout::fillRestsIfNeed(StaveSharingContext& ctx)
+{
+    // Make sure voice 1 is filled with rests
+    const TrackRange trackRange = ctx.curSharedPart->trackRange();
+    for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; track += VOICES) {
+        Fraction filledUntil = ctx.crSegmentsToUpdate.front()->tick();
+        ChordRest* prevCr = nullptr;
+        for (const Segment* seg : ctx.crSegmentsToUpdate) {
+            ChordRest* cr = toChordRest(seg->element(track));
+            if (!cr) {
+                continue;
+            }
+            if (seg->tick() > filledUntil) {
+                ctx.score->setRest(filledUntil, track, seg->tick() - filledUntil, false, nullptr);
+            } else if (seg->tick() < filledUntil && prevCr) {
+                // The previous chordrest extends past this one
+                // This should be a stale full measure rest from the last run of this function as cleanup skips full measure rests
+                IF_ASSERT_FAILED(prevCr->isRest() && toRest(prevCr)->isFullMeasureRest()) {
+                    continue;
+                }
+                // Replace the previous rest with rest of the correct length
+                const Fraction prevTick = prevCr->tick();
+                ctx.score->undoRemoveElement(prevCr);
+                ctx.score->setRest(prevTick, track, seg->tick() - prevTick, false, nullptr);
+                filledUntil = seg->tick();
+            }
+            filledUntil = std::max(filledUntil, seg->tick() + cr->actualTicks());
+            prevCr = cr;
+        }
+        if (filledUntil < ctx.eTick) {
+            ctx.score->setRest(filledUntil, track, ctx.eTick - filledUntil, false, nullptr);
+        }
+    }
+}
+
+std::span<Segment* const> StaveSharingLayout::StaveSharingContext::allSegmentsInRange() const
+{
+    auto begin = std::lower_bound(allSegments.begin(), allSegments.end(), sTick, [](const Segment* s, const Fraction& t) {
+        return s->tick() < t;
+    });
+    auto end = std::lower_bound(begin, allSegments.end(), eTick, [](const Segment* s, const Fraction& t) {
+        return s->tick() < t;
+    });
+    return { begin, end };
+}
+
+std::span<Segment* const> StaveSharingLayout::StaveSharingContext::crSegmentsInRange() const
+{
+    auto begin = std::lower_bound(crSegments.begin(), crSegments.end(), sTick, [](const Segment* s, const Fraction& t) {
+        return s->tick() < t;
+    });
+    auto end = std::lower_bound(begin, crSegments.end(), eTick, [](const Segment* s, const Fraction& t) {
+        return s->tick() < t;
+    });
+    return { begin, end };
+}
+
+const StaveSharingState& StaveSharingLayout::StaveSharingContext::curStaveSharingState(const Fraction& tick) const
+{
+    return curSharedPart->staveSharingStateAtTick(tick);
 }
 
 StaveSharingLayout::StaveSharingContext::StaveSharingContext(MeasureBase* first, MeasureBase* last, LayoutContext& ctx)

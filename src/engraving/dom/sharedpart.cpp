@@ -24,6 +24,7 @@
 #include "staff.h"
 
 #include <sstream>
+#include <utility>
 
 namespace mu::engraving {
 std::string dump(const SharedTrackMap& map)
@@ -82,7 +83,7 @@ void SharedPart::removeOriginPart(Part* p)
 
 Part* SharedPart::mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const
 {
-    const SharedTrackMap& trackMap = trackMapAtTick(tick.negative() ? Fraction(0, 1) : tick);
+    const SharedTrackMap& trackMap = staveSharingStateAtTick(tick.negative() ? Fraction(0, 1) : tick).sharedTrackMap();
 
     track_idx_t originTrack = muse::key(trackMap, sharedTrack, muse::nidx);
 
@@ -106,47 +107,100 @@ Part* SharedPart::originPartForStaff(staff_idx_t sharedStaffIdx, const Fraction&
     return mappedOriginPart(staff2track(sharedStaffIdx, 0), tick);
 }
 
-const SharedTrackMap& SharedPart::trackMapAtTick(const Fraction& tick) const
+const StaveSharingState& SharedPart::staveSharingStateAtTick(const Fraction& tick) const
 {
     static constexpr Fraction TICK_ZERO = Fraction(0, 1);
 
-    IF_ASSERT_FAILED(m_trackMapsByTick.size() > 0) {
-        const_cast<SharedPart*>(this)->m_trackMapsByTick[TICK_ZERO] = SharedTrackMap();
-        return m_trackMapsByTick.at(TICK_ZERO);
+    IF_ASSERT_FAILED(m_staveSharingStateByTick.size() > 0) {
+        const_cast<SharedPart*>(this)->m_staveSharingStateByTick[TICK_ZERO] = SharedTrackMap();
+        return m_staveSharingStateByTick.at(TICK_ZERO);
     }
 
-    DO_ASSERT(muse::contains(m_trackMapsByTick, TICK_ZERO));
+    DO_ASSERT(muse::contains(m_staveSharingStateByTick, TICK_ZERO));
 
     IF_ASSERT_FAILED(tick.positive()) {
-        return m_trackMapsByTick.at(TICK_ZERO);
+        return m_staveSharingStateByTick.at(TICK_ZERO);
     }
 
-    auto upperBound = m_trackMapsByTick.upper_bound(tick);
-    DO_ASSERT(upperBound != m_trackMapsByTick.begin());
+    auto upperBound = m_staveSharingStateByTick.upper_bound(tick);
+    DO_ASSERT(upperBound != m_staveSharingStateByTick.begin());
 
     --upperBound;
 
     return upperBound->second;
 }
 
-void SharedPart::setTrackMapAtTick(const SharedTrackMap& map, const Fraction& tick)
+StaveSharingState& SharedPart::staveSharingStateAtTick(const Fraction& tick)
 {
-    m_trackMapsByTick[tick] = map;
+    return const_cast<StaveSharingState&>(std::as_const(*this).staveSharingStateAtTick(tick));
 }
 
-void mu::engraving::SharedPart::removeMapsBetweenTicks(const Fraction& startTick, const Fraction& endTick)
+std::optional<StaveSharingState> SharedPart::exactStaveSharingStateAtTick(const Fraction& tick) const
 {
-    auto upperBound = m_trackMapsByTick.lower_bound(startTick);
-    if (upperBound == m_trackMapsByTick.end()) {
+    auto it = m_staveSharingStateByTick.find(tick);
+    if (it == m_staveSharingStateByTick.end()) {
+        return std::nullopt;
+    }
+
+    return it->second;
+}
+
+void SharedPart::setStaveSharingStateAtTick(const StaveSharingState& state, const Fraction& tick)
+{
+    m_staveSharingStateByTick[tick] = state;
+}
+
+void SharedPart::removeStaveSharingStateAtTick(const Fraction& tick)
+{
+    m_staveSharingStateByTick.erase(tick);
+
+    // We must always have a state at the start of the score
+    if (tick == Fraction(0, 1)) {
+        setStaveSharingStateAtTick(StaveSharingState(), tick);
+    }
+}
+
+void SharedPart::removeStaveSharingStatesBetweenTicks(const Fraction& startTick, const Fraction& endTick, bool removeUserChanges)
+{
+    auto upperBound = m_staveSharingStateByTick.lower_bound(startTick);
+    if (upperBound == m_staveSharingStateByTick.end()) {
         return;
     }
 
-    for (auto iter = upperBound; iter != m_trackMapsByTick.end();) {
+    for (auto iter = upperBound; iter != m_staveSharingStateByTick.end();) {
         if (iter->first >= endTick) {
             break;
         }
-        iter = m_trackMapsByTick.erase(iter);
+        if (iter->second.isUserModified() && !removeUserChanges) {
+            ++iter;
+            continue;
+        }
+        iter = m_staveSharingStateByTick.erase(iter);
     }
+}
+
+std::map<Fraction, StaveSharingState> SharedPart::staveSharingStatesBetweenTicks(const Fraction& startTick,
+                                                                                 const Fraction& endTick) const
+{
+    std::map<Fraction, StaveSharingState> result;
+
+    auto lowerBound = m_staveSharingStateByTick.lower_bound(startTick);
+    for (auto iter = lowerBound; iter != m_staveSharingStateByTick.end() && iter->first < endTick; ++iter) {
+        result.emplace(iter->first, iter->second);
+    }
+
+    return result;
+}
+
+Fraction SharedPart::nextStaveSharingTick(const Fraction& tick)
+{
+    const auto& entry = m_staveSharingStateByTick.upper_bound(tick);
+
+    if (entry == m_staveSharingStateByTick.end()) {
+        return score()->endTick();
+    }
+
+    return entry->first;
 }
 
 bool SharedPart::isSameInstrumentsAtTick(const Fraction& tick)
@@ -170,7 +224,7 @@ void SharedPart::computeIsSameInstruments()
     m_isSameInstruments = isSameInstrumentsAtTick(Fraction(0, 1));
 }
 
-mu::engraving::String mu::engraving::SharedPart::partName() const
+String SharedPart::partName() const
 {
     const Instrument* i = instrument();
     String fullName = i->longName();
@@ -241,5 +295,32 @@ bool SharedPart::enabled() const
 bool SharedPart::show() const
 {
     return m_show && m_enabled && style().styleB(Sid::enableStaveSharing);
+}
+
+void SharedPart::insertTime(const Fraction& tick, const Fraction& len)
+{
+    if (len.isZero()) {
+        return;
+    }
+
+    if (len < Fraction(0, 1)) {
+        m_staveSharingStateByTick.erase(m_staveSharingStateByTick.lower_bound(tick), m_staveSharingStateByTick.lower_bound(tick - len));
+    }
+
+    std::map<Fraction, StaveSharingState> newSharedStaves;
+
+    for (auto s = m_staveSharingStateByTick.lower_bound(tick); s != m_staveSharingStateByTick.end();) {
+        StaveSharingState state = s->second;
+        Fraction t = s->first;
+        m_staveSharingStateByTick.erase(s++);
+        newSharedStaves[t + len] = state;
+    }
+    m_staveSharingStateByTick.insert(newSharedStaves.begin(), newSharedStaves.end());
+
+    if (!muse::contains(m_staveSharingStateByTick, Fraction(0, 1))) {
+        m_staveSharingStateByTick.emplace(Fraction(0, 1), StaveSharingState());
+    }
+
+    Part::insertTime(tick, len);
 }
 }
