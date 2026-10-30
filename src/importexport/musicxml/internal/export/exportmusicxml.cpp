@@ -8074,8 +8074,10 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vecto
         const Color lineColor = st->color(Fraction(0, 1));
         const bool invis = st->isLinesInvisible(Fraction(0, 1));
         const bool needsLineDetails = invis || lineColor != engravingConfiguration()->defaultColor();
+        // the same music as the staff above (a linked staff), shown another way
+        const bool alternate = i > 0 && st->links() && st->links()->contains(part->staff(i - 1));
         if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !muse::RealIsEqual(mag, 1.0)
-            || hidden || needsLineDetails) {
+            || hidden || needsLineDetails || alternate) {
             XmlWriter::Attributes attributes;
             if (staves > 1) {
                 attributes.emplace_back(std::make_pair("number", i + 1));
@@ -8092,7 +8094,7 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vecto
 
             xml.startElement("staff-details", attributes);
 
-            if (i > 0 && st->links() && st->links()->contains(part->staff(i - 1))) {
+            if (alternate) {
                 xml.tag("staff-type", "alternate");
             }
 
