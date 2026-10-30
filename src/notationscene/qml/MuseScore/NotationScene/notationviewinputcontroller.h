@@ -223,7 +223,7 @@ private:
     bool mousePress_considerDragOutgoingRange(const ClickContext& ctx);
     bool mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx);
     void handleLeftClick(const ClickContext& ctx);
-    void handleRightClick(const ClickContext& ctx);
+    void handleRightClick();
     void handleLeftClickRelease(const QPointF& releasePoint);
 
     bool startTextEditingAllowed() const;
