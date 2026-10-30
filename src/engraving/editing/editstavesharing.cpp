@@ -120,7 +120,9 @@ protected:
 private:
     void triggerLayout()
     {
-        m_sharedPart->score()->setLayout(m_tick, m_sharedPart->staves().front()->idx());
+        const staff_idx_t staff = m_sharedPart->staves().front()->idx();
+        const Fraction& tick2 = m_sharedPart->nextStaveSharingTick(m_tick);
+        m_sharedPart->score()->setLayout(m_tick, tick2, staff, staff);
     }
 };
 

@@ -108,6 +108,7 @@ public:
     void removeStaveSharingStateAtTick(const Fraction& tick);
     void removeStaveSharingStatesBetweenTicks(const Fraction& startTick, const Fraction& endTick, bool removeUserChanges);
     std::map<Fraction, StaveSharingState> staveSharingStatesBetweenTicks(const Fraction& startTick, const Fraction& endTick) const;
+    Fraction nextStaveSharingTick(const Fraction& tick);
 
     bool isSameInstrumentsAtTick(const Fraction& tick);
 
