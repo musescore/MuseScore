@@ -93,7 +93,8 @@ void ChangeClefType::flip()
     clef->staff()->setClef(clef);
     Segment* segment = clef->segment();
     updateNoteLines(segment, clef->track());
-    clef->triggerLayoutAll(); // TODO: reduce layout to clef range
+    clef->triggerLayout();
+    clef->score()->setLayout(clef->staff()->nextClefTick(segment->tick()), clef->staffIdx());
 
     concertClef     = ocl;
     transposingClef = otc;
