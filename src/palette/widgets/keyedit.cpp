@@ -112,7 +112,7 @@ void KeyCanvas::clear()
 
 void KeyCanvas::paintEvent(QPaintEvent*)
 {
-    muse::draw::Painter painter(this, "keycanvas");
+    muse::draw::Painter painter(this, "keycanvas", iocContext());
     painter.setAntialiasing(true);
     qreal wh = double(height());
     qreal ww = double(width());

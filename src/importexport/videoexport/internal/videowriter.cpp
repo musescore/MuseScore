@@ -425,7 +425,7 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     qp.setRenderHint(QPainter::Antialiasing, true);
     qp.setRenderHint(QPainter::TextAntialiasing, true);
 
-    Painter painter(&qp, "video_writer");
+    Painter painter(&qp, "video_writer", notation->elements()->msScore()->iocContext());
 
     // Setup duration
     INotationPlaybackPtr playback = notation->masterNotation()->playback();

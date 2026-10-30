@@ -76,7 +76,7 @@ Ret PrintProvider::printNotation(INotationPtr notation)
         return muse::make_ret(Ret::Code::Cancel);
     }
 
-    Painter painter(&printerDev, "print");
+    Painter painter(&printerDev, "print", iocContext());
 
     INotationPainting::Options opt;
     opt.fromPage = printerDev.fromPage() - 1;

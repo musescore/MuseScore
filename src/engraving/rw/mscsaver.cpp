@@ -261,7 +261,7 @@ std::shared_ptr<muse::draw::Pixmap> MscSaver::createThumbnail(Score* score)
 
     auto pixmap = imageProvider()->createPixmap(w, h, dpm, configuration()->thumbnailBackgroundColor());
 
-    auto painterProvider = imageProvider()->painterForImage(pixmap);
+    auto painterProvider = imageProvider()->painterForImage(pixmap, score->iocContext());
     muse::draw::Painter p(painterProvider, "thumbnail");
 
     p.setAntialiasing(true);

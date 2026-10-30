@@ -61,7 +61,7 @@ Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     QPdfWriter pdfWriter(&buf);
     preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName(), notation->painting()->pageSizeInch().toQSizeF());
 
-    Painter painter(&pdfWriter, "pdfwriter");
+    Painter painter(&pdfWriter, "pdfwriter", notation->elements()->msScore()->iocContext());
     if (!painter.isActive()) {
         return false;
     }
@@ -113,7 +113,7 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
     QPdfWriter pdfWriter(&buf);
     preparePdfWriter(pdfWriter, firstNotation->projectWorkTitle(), firstNotation->painting()->pageSizeInch().toQSizeF());
 
-    Painter painter(&pdfWriter, "pdfwriter");
+    Painter painter(&pdfWriter, "pdfwriter", firstNotation->elements()->msScore()->iocContext());
     if (!painter.isActive()) {
         return false;
     }

@@ -122,12 +122,13 @@ struct SymbolIcon {
         : id(i), icon(j)
     {}
 
-    static SymbolIcon generateIcon(const mu::engraving::IEngravingFontPtr& font, const SymId& id, double w, double h, double defaultScale)
+    static SymbolIcon generateIcon(const mu::engraving::IEngravingFontPtr& font, const SymId& id, double w, double h, double defaultScale,
+                                   const muse::modularity::ContextPtr& iocCtx)
     {
         QIcon icon;
         QPixmap image(w, h);
         image.fill(Qt::transparent);
-        muse::draw::Painter painter(&image, "generateicon");
+        muse::draw::Painter painter(&image, "generateicon", iocCtx);
 
         const muse::RectF& bbox = font->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
@@ -237,13 +238,13 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
 
     QList<SymbolIcon> resNoteheads;
     for (SymId symId : primaryNoteheads) {
-        resNoteheads.append(SymbolIcon::generateIcon(fallbackFont, symId, w, h, defaultScale));
+        resNoteheads.append(SymbolIcon::generateIcon(fallbackFont, symId, w, h, defaultScale, iocContext()));
     }
 
     for (const String& range : validNoteheadRanges) {
         for (SymId symId : Smufl::smuflRanges().at(range)) {
             if (!excludedSyms.contains(symId) && !primaryNoteheads.contains(symId)) {
-                resNoteheads.append(SymbolIcon::generateIcon(fallbackFont, symId, w, h, defaultScale));
+                resNoteheads.append(SymbolIcon::generateIcon(fallbackFont, symId, w, h, defaultScale, iocContext()));
             }
         }
     }

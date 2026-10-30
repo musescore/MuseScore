@@ -604,7 +604,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     QPixmap pm(w, h);
     pm.fill(configuration()->elementsBackgroundColor());
 
-    muse::draw::Painter painter(&pm, "palette");
+    muse::draw::Painter painter(&pm, "palette", iocContext());
     painter.setAntialiasing(true);
 
     painter.scale(cellMag, cellMag);
@@ -950,7 +950,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
     qreal mag      = magS / _spatium;
     paletteScore->style().setSpatium(paletteScore->style().defaultSpatium());
 
-    muse::draw::Painter painter(this, "palette");
+    muse::draw::Painter painter(this, "palette", iocContext());
     painter.setAntialiasing(true);
 
     if (m_paintOptions.backgroundColor.isValid()) {

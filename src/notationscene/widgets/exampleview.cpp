@@ -151,7 +151,7 @@ void ExampleView::paintEvent(QPaintEvent* event)
         return;
     }
 
-    Painter painter(this, "exampleview");
+    Painter painter(this, "exampleview", m_score->iocContext());
     painter.setAntialiasing(true);
     const RectF rect = RectF::fromQRectF(event->rect());
 

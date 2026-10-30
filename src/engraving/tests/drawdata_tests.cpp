@@ -34,6 +34,8 @@
 #include "engraving/devtools/drawdata/drawdataconverter.h"
 #include "engraving/devtools/drawdata/drawdatagenerator.h"
 
+#include "utils/scorerw.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -50,14 +52,14 @@ public:
 
 void saveAsPng(const muse::io::path_t& path, const DrawDataPtr& data)
 {
-    DrawDataConverter c;
+    DrawDataConverter c(ScoreRW::iocContext());
     Pixmap px = c.drawDataToPixmap(data);
     io::File::writeFile(path, px.data());
 }
 
 void saveDiff(const muse::io::path_t& path, const DrawDataPtr& origin, const DrawDataPtr& diff)
 {
-    DrawDataConverter c;
+    DrawDataConverter c(ScoreRW::iocContext());
     Pixmap px(std::lrint(origin->viewport.width()), std::lrint(origin->viewport.height()));
     c.drawOnPixmap(px, origin, Color("#999999"));
     c.drawOnPixmap(px, diff, Color("#ff0000"));
@@ -68,7 +70,7 @@ TEST_F(Engraving_DrawDataTests, DISABLED_Rw)
 {
     DrawDataPtr origin;
     {
-        DrawDataGenerator g;
+        DrawDataGenerator g(ScoreRW::iocContext());
         origin = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
         DrawDataRW::writeData("rw_data.origin.json", origin);
     }
@@ -155,7 +157,7 @@ TEST_F(Engraving_DrawDataTests, SimpleDraw)
 
     // convert
     {
-        DrawDataConverter c;
+        DrawDataConverter c(ScoreRW::iocContext());
         Pixmap px = c.drawDataToPixmap(data);
         io::File::writeFile("1_data.png", px.data());
     }
@@ -165,14 +167,14 @@ TEST_F(Engraving_DrawDataTests, ScoreDraw)
 {
     Pixmap originImage;
     {
-        DrawDataGenerator g;
+        DrawDataGenerator g(ScoreRW::iocContext());
         originImage = g.genImage(VTEST_SCORES + "/accidental-1.mscx");
         io::File::writeFile("2_accidental-1.origin.png", originImage.data());
     }
 
     {
         PainterItemMarker::enabled = false;
-        DrawDataGenerator g;
+        DrawDataGenerator g(ScoreRW::iocContext());
         DrawDataPtr drawData = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
         DrawDataRW::writeData("2_accidental-1_no_objects.json", drawData);
         PainterItemMarker::enabled = true;
@@ -180,14 +182,14 @@ TEST_F(Engraving_DrawDataTests, ScoreDraw)
 
     DrawDataPtr drawData;
     {
-        DrawDataGenerator g;
+        DrawDataGenerator g(ScoreRW::iocContext());
         drawData = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
         DrawDataRW::writeData("2_accidental-1.json", drawData);
     }
 
     Pixmap dataImage;
     {
-        DrawDataConverter c;
+        DrawDataConverter c(ScoreRW::iocContext());
         dataImage = c.drawDataToPixmap(drawData);
         io::File::writeFile("2_accidental-1.data.png", dataImage.data());
     }
@@ -283,13 +285,13 @@ TEST_F(Engraving_DrawDataTests, ScoreDrawDiff)
 {
     DrawDataPtr data1;
     {
-        DrawDataGenerator g;
+        DrawDataGenerator g(ScoreRW::iocContext());
         data1 = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
     }
 
     DrawDataPtr data2;
     {
-        DrawDataGenerator g;
+        DrawDataGenerator g(ScoreRW::iocContext());
         data2 = g.genDrawData(VTEST_SCORES + "/accidental-2.mscx");
     }
 

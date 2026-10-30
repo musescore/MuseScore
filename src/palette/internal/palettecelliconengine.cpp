@@ -46,7 +46,7 @@ QIconEngine* PaletteCellIconEngine::clone() const
 
 void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode mode, QIcon::State state)
 {
-    Painter p(qp, "palettecell");
+    Painter p(qp, "palettecell", m_cell->iocContext());
     p.save();
     p.setAntialiasing(true);
     paintCell(p, RectF::fromQRectF(rect), mode == QIcon::Selected, state == QIcon::On);

@@ -41,10 +41,11 @@ using namespace mu::engraving;
 // ./vtest/scores/accidental-1.mscx -o ./work/1_accidental-1.exp.png
 // ./vtest/scores/emmentaler-text-3.mscx -o ./work/emmentaler-text-3.png
 
-Ret DiagnosticDrawProvider::generateDrawData(const muse::io::path_t& dirOrFile, const muse::io::path_t& outDirOrFile, const GenOpt& opt)
+Ret DiagnosticDrawProvider::generateDrawData(const muse::io::path_t& dirOrFile, const muse::io::path_t& outDirOrFile,
+                                             const muse::modularity::ContextPtr& iocCtx, const GenOpt& opt)
 {
     LOGI() << "scoresDir: " << dirOrFile << ", outDir: " << outDirOrFile;
-    DrawDataGenerator g;
+    DrawDataGenerator g(iocCtx);
 
     if (io::FileInfo(dirOrFile).entryType() == io::EntryType::File) {
         return g.processFile(dirOrFile, outDirOrFile, opt);
@@ -54,7 +55,7 @@ Ret DiagnosticDrawProvider::generateDrawData(const muse::io::path_t& dirOrFile, 
 }
 
 Ret DiagnosticDrawProvider::compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outDiff,
-                                            const ComOpt& opt)
+                                            const muse::modularity::ContextPtr& iocCtx, const ComOpt& opt)
 {
     LOGI() << "ref: " << ref << ", test: " << test << ", outDiff: " << outDiff;
     DrawDataComparator c;
@@ -72,7 +73,7 @@ Ret DiagnosticDrawProvider::compareDrawData(const muse::io::path_t& ref, const m
     }
 
     if (opt.isMakePng) {
-        DrawDataConverter c2;
+        DrawDataConverter c2(iocCtx);
         c2.drawDataToPng(ref, outDir + "/" + io::FileInfo(ref).completeBaseName() + ".ref.png");
         c2.drawDataToPng(test, outDir + "/" + io::FileInfo(test).completeBaseName() + ".png");
         c2.drawDiffToPng(outDiff, ref, outDir + "/" + io::FileInfo(outDiff).completeBaseName() + ".diff.png");
@@ -81,17 +82,18 @@ Ret DiagnosticDrawProvider::compareDrawData(const muse::io::path_t& ref, const m
     return ret;
 }
 
-Ret DiagnosticDrawProvider::drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile)
+Ret DiagnosticDrawProvider::drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile,
+                                          const muse::modularity::ContextPtr& iocCtx)
 {
     LOGI() << "dataFile: " << dataFile << ", outFile: " << outFile;
-    DrawDataConverter c;
+    DrawDataConverter c(iocCtx);
     return c.drawDataToPng(dataFile, outFile);
 }
 
 Ret DiagnosticDrawProvider::drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile,
-                                          const muse::io::path_t& outFile)
+                                          const muse::io::path_t& outFile, const muse::modularity::ContextPtr& iocCtx)
 {
     LOGI() << "diffFile: " << diffFile << ", refFile: " << refFile << ", outFile: " << outFile;
-    DrawDataConverter c;
+    DrawDataConverter c(iocCtx);
     return c.drawDiffToPng(diffFile, refFile, outFile);
 }

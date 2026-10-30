@@ -730,7 +730,7 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
     rect = correctDrawRect(rect);
 
-    muse::draw::Painter mup(qp, objectName().toStdString());
+    muse::draw::Painter mup(qp, objectName().toStdString(), iocContext());
     muse::draw::Painter* painter = &mup;
 
     paintBackground(rect, painter);
