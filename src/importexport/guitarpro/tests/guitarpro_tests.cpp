@@ -31,7 +31,9 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/text.h"
 
 #include "modularity/ioc.h"
 
@@ -1033,5 +1035,54 @@ TEST_F(GuitarPro_Tests, ptbTrackWithoutStrings) {
     // is unaffected.
     EXPECT_EQ(collect(score, ElementType::NOTE), 1u);
     delete score;
+}
+
+// Guitar Pro 3-5 files do not record the encoding of their text: Guitar Pro
+// writes the system's code page, usually Windows-1252, and other programs
+// write UTF-8. Both must be read, in the song information (here the title,
+// and the artist shown as the subtitle) and in the track names.
+// text-cp1252.gp5 also uses characters from Windows-1252's 0x80-0x9F range.
+//
+// Verified pre-fix failure mode (MuseScore Studio 4.7.5): readDelphiString()
+// read neither encoding and readPascalString() not Windows-1252, turning
+// bytes 0x80-0xFF into U+FF80-U+FFFF (an e acute, 0xE9, became U+FFE9); only
+// the UTF-8 track name came through.
+TEST_F(GuitarPro_Tests, gp5TextEncodings) {
+    struct Expected {
+        const char* file;
+        String title;
+        String artist;
+        String track;
+    };
+    const Expected cases[] = {
+        { "text-utf8", u"Café crème 练习曲", u"Zoë", u"木吉他" },
+        { "text-cp1252", u"Café “crème” – 5 €", u"Zoë", u"Guitare à six cordes" },
+    };
+    for (const Expected& expected : cases) {
+        Err err = Err::UnknownError;
+        MasterScore* score = gpRead(expected.file, "gp5", err);
+        ASSERT_TRUE(score);
+        EXPECT_EQ(err, Err::NoError);
+
+        String title;
+        String subtitle;
+        MeasureBase* first = score->measures()->first();
+        ASSERT_TRUE(first && first->isVBox());
+        for (EngravingItem* item : first->el()) {
+            if (!item->isText()) {
+                continue;
+            }
+            const Text* text = toText(item);
+            if (text->textStyleType() == TextStyleType::TITLE) {
+                title = text->plainText();
+            } else if (text->textStyleType() == TextStyleType::SUBTITLE) {
+                subtitle = text->plainText();
+            }
+        }
+        EXPECT_EQ(title, expected.title) << expected.file;
+        EXPECT_EQ(subtitle, expected.artist) << expected.file;
+        EXPECT_EQ(score->parts().front()->longName(), expected.track) << expected.file;
+        delete score;
+    }
 }
 }
