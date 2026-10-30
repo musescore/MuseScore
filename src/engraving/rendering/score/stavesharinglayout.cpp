@@ -1475,6 +1475,11 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                 }
             }
 
+            // Stave sharing text should never make it onto an origin stave
+            IF_ASSERT_FAILED(!originItem->isStaveSharingLabel()) {
+                continue;
+            }
+
             track_idx_t sharedTrack = trackMap.at(originTrack);
             EngravingItem* sharedItem = nullptr;
             for (EngravingItem* item : seg->annotations()) {
