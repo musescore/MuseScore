@@ -437,11 +437,13 @@ void VstAudioClient::updateProcessSetup()
     setup.sampleRate = m_outputSpec.sampleRate;
 
     if (processor->setupProcessing(setup) != Steinberg::kResultOk) {
+        m_isProcessingSetUp = false;
         return;
     }
 
     setUpProcessData();
     flushBuffers();
+    m_isProcessingSetUp = true;
 
     ensureActivity();
 }
@@ -548,6 +550,13 @@ void VstAudioClient::processOutputEvents()
 void VstAudioClient::ensureActivity()
 {
     if (m_isActive) {
+        return;
+    }
+
+    //! NOTE: The plugin may finish loading after the track has already been
+    //! switched on (e.g. right before an export). Activating it before
+    //! setupProcessing() would let process() run without output buffers
+    if (!m_isProcessingSetUp) {
         return;
     }
 
