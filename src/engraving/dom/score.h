@@ -669,6 +669,9 @@ public:
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
 
+    /// For data stored in expanded uticks (e.g. automation curves). With repeats off, all passes map to the same time
+    double utickToPlayedTime(int utick, bool expandRepeats) const;
+
     const TempoTimeline& tempoTimeline() const;
     const TempoTimeline& tempoTimeline(bool expandRepeats) const;
     void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
