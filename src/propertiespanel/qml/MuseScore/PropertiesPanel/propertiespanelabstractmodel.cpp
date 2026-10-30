@@ -354,13 +354,13 @@ static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& sele
     return false;
 }
 
-static bool hasValidTextLineBaseSegment(const QList<mu::engraving::EngravingItem*>& selectedElementList)
+static bool hasValidTextLineBaseSegment(const QList<mu::engraving::EngravingItem*>& elementList)
 {
-    if (selectedElementList.empty()) {
+    if (elementList.empty()) {
         return false;
     }
 
-    for (const EngravingItem* item : selectedElementList) {
+    for (const EngravingItem* item : elementList) {
         if (!item->isTextLineBaseSegment()) {
             continue;
         }
@@ -378,8 +378,7 @@ static bool hasValidTextLineBaseSegment(const QList<mu::engraving::EngravingItem
 }
 
 PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
-                                                                                      const QList<mu::engraving::EngravingItem*>&
-                                                                                      selectedElementList)
+                                                                                      const QList<mu::engraving::EngravingItem*>& elementList)
 {
     PropertiesPanelSectionTypeSet types;
 
@@ -390,11 +389,6 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
         ElementType::FBOX,
     };
 
-    static const PropertiesPanelSectionTypeSet measureBaseModels {
-        PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT,
-        PropertiesPanelSectionType::SECTION_EMPTY_STAVES,
-    };
-
     for (const ElementKey& key : elementKeySet) {
         if (NOTATION_ELEMENT_MODEL_TYPES.contains(key.type)
             && (modelTypeByElementKey(key) != PropertiesPanelModelType::TYPE_UNDEFINED)) {
@@ -402,12 +396,12 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
         }
 
         // Don't show the "Text" propertiespanel panel for "pure" dynamics (i.e. without custom text)
-        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) || barlineWithPlayText(selectedElementList)) {
+        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(elementList)) || barlineWithPlayText(elementList)) {
             types << PropertiesPanelSectionType::SECTION_TEXT;
         }
 
         // Look for a TextLineBaseSegment with begin, continue, or end text...
-        if (hasValidTextLineBaseSegment(selectedElementList)) {
+        if (hasValidTextLineBaseSegment(elementList)) {
             types << PropertiesPanelSectionType::SECTION_TEXT;
         }
 
@@ -416,26 +410,29 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
         }
 
         if (boxTypes.contains(key.type)) {
-            types.insert(measureBaseModels.begin(), measureBaseModels.end());
+            types << PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT;
         }
     }
 
     if (isRange) {
-        if (!selectedElementList.empty()) {
-            //! NOTE: "Box only" selections will be empty...
+        const bool rangeHasNonBoxes = std::any_of(elementList.cbegin(), elementList.cend(), [](const EngravingItem* item) {
+            return !item->isBox();
+        });
+        if (rangeHasNonBoxes) {
             types << PropertiesPanelSectionType::SECTION_MEASURES;
+            types << PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT;
+            types << PropertiesPanelSectionType::SECTION_EMPTY_STAVES;
         }
-        types.insert(measureBaseModels.begin(), measureBaseModels.end());
     }
 
-    if (showPartsSection(selectedElementList)) {
+    if (showPartsSection(elementList)) {
         types << PropertiesPanelSectionType::SECTION_PARTS;
     }
 
     return types;
 }
 
-bool PropertiesPanelAbstractModel::showPartsSection(const QList<EngravingItem*>& selectedElementList)
+bool PropertiesPanelAbstractModel::showPartsSection(const QList<EngravingItem*>& elementList)
 {
     static const std::unordered_set<ElementType> noAvailableChangePartsSettingsTypes {
         ElementType::LAYOUT_BREAK,
@@ -443,7 +440,7 @@ bool PropertiesPanelAbstractModel::showPartsSection(const QList<EngravingItem*>&
         ElementType::SOUND_FLAG
     };
 
-    for (EngravingItem* element : selectedElementList) {
+    for (EngravingItem* element : elementList) {
         if ((!element->score()->isMaster() && !muse::contains(noAvailableChangePartsSettingsTypes, element->type()))
             || element->canBeExcludedFromOtherParts()) {
             return true;
