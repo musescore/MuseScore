@@ -74,7 +74,7 @@ EngravingFont::EngravingFont(const EngravingFont& other)
 EngravingFont::~EngravingFont()
 {
     if (m_symbolFontId != -1) {
-        fontProvider()->removeSymbolFont(m_symbolFontId);
+        m_symbolFontProvider->removeSymbolFont(m_symbolFontId);
     }
 }
 
@@ -114,7 +114,8 @@ void EngravingFont::ensureLoad()
 
     const String family = String::fromStdString(m_family);
     if (m_symbolFontId == -1 && m_fontDevice) {
-        m_symbolFontId = fontProvider()->addSymbolFont(family, m_fontDevice);
+        m_symbolFontProvider = fontProvider();
+        m_symbolFontId = m_symbolFontProvider->addSymbolFont(family, m_fontDevice);
     }
     if (m_symbolFontId == -1) {
         LOGE() << "fatal error: cannot load font: " << m_name;

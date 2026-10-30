@@ -145,6 +145,7 @@ private:
     std::shared_ptr<muse::io::IODevice> m_fontDevice;
     std::shared_ptr<muse::io::IODevice> m_metadataDevice;
     int m_symbolFontId = -1;
+    std::shared_ptr<muse::draw::IFontProvider> m_symbolFontProvider;
 
     std::unordered_map<Sid, PropertyValue> m_engravingDefaults;
     double m_textEnclosureThickness = 0;
