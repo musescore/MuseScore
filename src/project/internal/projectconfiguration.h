@@ -138,6 +138,7 @@ public:
     QUrl dotComBugReportUrl() const override;
 
     QUrl scoreUploadingGuidelinesUrl() const override;
+    QUrl termsOfUseUrl() const override;
 
     bool openDetailedProjectUploadedDialog() const override;
     void setOpenDetailedProjectUploadedDialog(bool show) override;
