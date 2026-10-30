@@ -262,10 +262,10 @@ enum class Pid : short {
     USER_STRETCH,
     MEASURE_NUMBER_OFFSET,
     EXCLUDE_FROM_NUMBERING,
-    SLUR_UOFF1,
-    SLUR_UOFF2,
-    SLUR_UOFF3,
-    SLUR_UOFF4,
+    BEZIER_OFFSET1,
+    BEZIER_OFFSET2,
+    BEZIER_OFFSET3,
+    BEZIER_OFFSET4,
     STAFF_MOVE,
     VERSE,
 
@@ -471,8 +471,6 @@ enum class Pid : short {
     START_WITH_LONG_NAMES,
     START_WITH_MEASURE_ONE,
     FIRST_SYSTEM_INDENTATION,
-
-    PATH,   // for ChordLine to make its shape changes undoable
 
     PREFER_SHARP_FLAT,
     PLAY_TECH_TYPE,

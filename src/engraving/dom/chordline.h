@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <array>
+
 #include "engravingitem.h"
 #include "draw/types/painterpath.h"
 
@@ -56,12 +58,26 @@ public:
     void setStraight(bool straight) { m_straight =  straight; }
     bool isWavy() const { return m_wavy; }
     void setWavy(bool wavy) { m_wavy =  wavy; }
-    void setLengthX(double length) { m_lengthX = length; }
-    double lengthX() const { return m_lengthX; }
-    void setLengthY(double length) { m_lengthY = length; }
-    double lengthY() const { return m_lengthY; }
-    void setModified(bool m) { m_modified = m; }
-    bool modified() const { return m_modified; }
+
+    // The shape is described by up to four points: the default points, in spatium units, plus the user's
+    // offsets of these points, in absolute units. Both are at the chord's normal size: layout scales the
+    // whole shape by the chord's intrinsic mag.
+    enum class Point : unsigned char {
+        START,
+        BEZIER1,
+        BEZIER2,
+        END,
+        POINTS_COUNT
+    };
+    using Points = std::array<PointF, static_cast<size_t>(Point::POINTS_COUNT)>;
+
+    Points defaultPoints() const;
+    const Points& bezierOffsets() const { return m_bezierOffsets; }
+    const PointF& bezierOffset(Point point) const { return m_bezierOffsets[size_t(point)]; }
+    void setBezierOffset(Point point, const PointF& offset) { m_bezierOffsets[size_t(point)] = offset; }
+    static Pid bezierOffsetPid(Point point);
+
+    double chordMag() const;
 
     const TranslatableString& chordLineTypeName() const;
 
@@ -76,9 +92,13 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    void reset() override;
+
+    void spatiumChanged(double oldValue, double newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return m_straight ? 1 : static_cast<int>(ldata()->path.elementCount()); }
+    int gripsCount() const override;
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<PointF> gripsPositions(const EditData&) const override;
@@ -106,13 +126,13 @@ private:
     ChordLine(DummyParentOr<Chord> parent);
     ChordLine(const ChordLine&);
 
+    Point gripPoint(Grip grip) const;
+
     bool m_straight = false;
     bool m_wavy = false;
 
     ChordLineType m_chordLineType = ChordLineType::NOTYPE;
-    bool m_modified = false;
-    double m_lengthX = 0.0;
-    double m_lengthY = 0.0;
+    Points m_bezierOffsets;
     bool m_playChordLine = true;
     Note* m_note = nullptr;
 };
