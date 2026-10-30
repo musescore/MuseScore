@@ -495,11 +495,11 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         return std::max(1, static_cast<int>(std::ceil(textWidth / maxTextWidth)));
     };
 
-    FontMetrics titleFontMetrics(titleFont, iocContext());
+    FontMetrics titleFontMetrics(titleFont, notation->elements()->msScore()->iocContext());
     const int titleLines = lineCount(titleFontMetrics, title);
     const double titleHeight = titleLines * titleFontMetrics.lineSpacing();
 
-    FontMetrics subtitleFontMetrics(subtitleFont, iocContext());
+    FontMetrics subtitleFontMetrics(subtitleFont, notation->elements()->msScore()->iocContext());
     const int subtitleLines = lineCount(subtitleFontMetrics, subtitle);
     const double subtitleHeight = subtitleLines * subtitleFontMetrics.lineSpacing();
 
@@ -577,7 +577,7 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
 
     const Color CURSOR_COLOR = Color(2, 109, 203, 127);
 
-    PlaybackCursor cursor(iocContext());
+    PlaybackCursor cursor(notation->elements()->msScore()->iocContext());
     cursor.setNotation(notation);
 
     for (int f = 0; f < scoreFrameCount; f++) {
