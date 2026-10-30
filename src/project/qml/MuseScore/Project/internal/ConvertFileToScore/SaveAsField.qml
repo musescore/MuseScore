@@ -54,6 +54,7 @@ Column {
         width: parent.width
 
         maximumLength: 255
+        contextMenuEnabled: true
 
         navigation.panel: root.navigationPanel
         navigation.order: root.navigationOrder

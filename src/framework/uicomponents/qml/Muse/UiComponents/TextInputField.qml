@@ -40,6 +40,7 @@ FocusScope {
     property alias hint: valueInput.placeholderText
     property alias hintIcon: hintIcon.iconCode
     property bool clearTextButtonVisible: false
+    property bool contextMenuEnabled: false
 
     property alias textHorizontalAlignment: valueInput.horizontalAlignment
     property alias textVerticalAlignment: valueInput.verticalAlignment
@@ -341,11 +342,31 @@ FocusScope {
         propagateComposedEvents: true
         hoverEnabled: true
         cursorShape: root.readOnly ? Qt.ArrowCursor : Qt.IBeamCursor
+        acceptedButtons: root.contextMenuEnabled ? Qt.LeftButton | Qt.RightButton : Qt.LeftButton
 
         onPressed: function(mouse) {
             root.ensureActiveFocus()
             navCtrl.requestActiveByInteraction()
+
+            if (mouse.button === Qt.RightButton) {
+                editMenuLoader.active = true
+                editMenuLoader.item.open(Qt.point(mouse.x, mouse.y))
+                return
+            }
+
             mouse.accepted = false
+        }
+
+        Loader {
+            id: editMenuLoader
+
+            active: false
+            // Absolute, as this file is also copied to MuseApi.Controls without internal/
+            source: "qrc:/qt/qml/Muse/UiComponents/internal/TextInputContextMenu.qml"
+
+            onLoaded: {
+                editMenuLoader.item.textInput = valueInput
+            }
         }
     }
 }
