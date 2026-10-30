@@ -179,6 +179,14 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     pitchList->setColumnWidth(1, 60);
     pitchList->setColumnWidth(2, 30);
 
+    connect(customGbox, &QGroupBox::toggled, this, &CustomizeKitDialog::customGboxToggled);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
+}
+
+void CustomizeKitDialog::initNoteheadsCombos()
+{
     StringList validNoteheadRanges = {
         u"Noteheads",
         u"Round and square noteheads",
@@ -263,20 +271,18 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     quarterCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(SymId::noteheadBlack)));
     doubleWholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(SymId::noteheadDoubleWhole)));
 
-    connect(customGbox, &QGroupBox::toggled, this, &CustomizeKitDialog::customGboxToggled);
     connect(quarterCmb, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::customQuarterChanged);
 
     quarterCmb->setAccessibleName(quarterLbl->text() + " " + quarterCmb->currentText());
     halfCmb->setAccessibleName(halfLbl->text() + " " + halfCmb->currentText());
     wholeCmb->setAccessibleName(wholeLbl->text() + " " + wholeCmb->currentText());
     doubleWholeCmb->setAccessibleName(doubleWholeLbl->text() + " " + doubleWholeCmb->currentText());
-
-    //! NOTE: It is necessary for the correct start of navigation in the dialog
-    setFocus();
 }
 
 void CustomizeKitDialog::componentComplete()
 {
+    initNoteheadsCombos();
+
     m_notation = projectSession()->currentNotation();
     if (!m_notation) {
         return;

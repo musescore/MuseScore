@@ -73,6 +73,7 @@ private slots:
     void defineShortcut();
 
 private:
+    void initNoteheadsCombos();
     void initDrumsetAndKey();
 
     void apply();
