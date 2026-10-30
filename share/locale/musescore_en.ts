@@ -5644,6 +5644,7 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="238"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="87"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="88"/>
         <source>Copy</source>
         <translation type="unfinished">Copy</translation>
@@ -5656,6 +5657,7 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="246"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="86"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="95"/>
         <source>Cut</source>
         <translation type="unfinished">Cut</translation>
@@ -5668,6 +5670,7 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="254"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="88"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="102"/>
         <source>Paste</source>
         <translation type="unfinished">Paste</translation>
@@ -6393,6 +6396,7 @@ followed by dashes</translation>
         <translation type="unfinished">Select &amp;all</translation>
     </message>
     <message>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="90"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="367"/>
         <source>Select all</source>
         <translation type="unfinished">Select all</translation>
@@ -21679,7 +21683,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="143"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="80"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="284"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="285"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="184"/>
         <source>Clear</source>
         <translation type="unfinished">Clear</translation>
@@ -21745,7 +21749,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchButton.qml" line="82"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PartsDialog.qml" line="99"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="141"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="142"/>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="266"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="68"/>
         <source>Close</source>
@@ -37167,13 +37171,13 @@ failed: %2</translation>
         <translation type="unfinished">Convert from link</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="121"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="122"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkPastePanel.qml" line="82"/>
         <source>Link</source>
         <translation type="unfinished">Link</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="132"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="133"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="264"/>
         <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="395"/>
         <source>Recommended for solo arrangements only</source>
@@ -37213,18 +37217,18 @@ failed: %2</translation>
         <translation type="unfinished">Tell us how your score could look better</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="88"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="89"/>
         <source>Feedback</source>
         <translation type="unfinished">Feedback</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="114"/>
         <source>%1/%2 characters</source>
         <extracomment>%1 is the current number of characters typed, %2 is the maximum allowed</extracomment>
         <translation type="unfinished">%1/%2 characters</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="118"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="119"/>
         <source>Submit feedback</source>
         <translation type="unfinished">Submit feedback</translation>
     </message>
