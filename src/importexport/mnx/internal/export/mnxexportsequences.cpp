@@ -34,6 +34,7 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordline.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/instrument.h"
@@ -79,6 +80,39 @@ static void exportAccidentalDetails(mnx::sequence::Note& mnxNote, const Note* no
                                       : mnx::AccidentalEnclosureSymbol::Brackets;
                 auto enclosure = accDisp.ensure_enclosure(mnxAcciBracket);
             }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   exportNoteMarkings
+//---------------------------------------------------------
+
+static void exportNoteMarkings(mnx::sequence::Note& mnxNote, const Note* note)
+{
+    for (const EngravingItem* item : note->chord()->el()) {
+        if (!item->isChordLine()) {
+            continue;
+        }
+        const ChordLine* line = toChordLine(item);
+        if (line->note() != note && (line->note() || note != note->chord()->upNote())) {
+            continue;
+        }
+        switch (line->chordLineType()) {
+        case ChordLineType::SCOOP:
+            mnxNote.ensure_markings().ensure_slideIn(mnx::SlideIntoNoteType::Scoop);
+            break;
+        case ChordLineType::PLOP:
+            mnxNote.ensure_markings().ensure_slideIn(mnx::SlideIntoNoteType::Plop);
+            break;
+        case ChordLineType::FALL:
+            mnxNote.ensure_markings().ensure_slideOut(mnx::SlideOutOfNoteType::Falloff);
+            break;
+        case ChordLineType::DOIT:
+            mnxNote.ensure_markings().ensure_slideOut(mnx::SlideOutOfNoteType::Doit);
+            break;
+        default:
+            break;
         }
     }
 }
@@ -134,8 +168,8 @@ static int calcWrittenDiatonicDelta(const Note* note)
 //   export lyrics on a chord/rest into mnxEvent
 //---------------------------------------------------------
 
-static void createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
-                         std::set<std::string>& lyricLineIds)
+void MnxExporter::createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
+                               std::set<std::string>& lyricLineIds)
 {
     IF_ASSERT_FAILED(cr) {
         return;
@@ -155,7 +189,18 @@ static void createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
         auto mnxLine = mnxLines.append(lineId, lyric->plainText().toStdString());
         mnxLine.set_type(toMnxLyricLineType(lyric->syllabic()));
         /// @todo export styled text when supported by MNX.
-        /// @todo export word extension span when supported by MNX.
+        if (lyric->ticks() > Fraction(0, 1)) {
+            const Fraction lastTick = cr->tick() + lyric->ticks();
+            const ChordRest* target = cr;
+            for (const Segment* segment = cr->segment()->next1(SegmentType::ChordRest);
+                 segment && segment->tick() <= lastTick; segment = segment->next1(SegmentType::ChordRest)) {
+                const EngravingItem* item = segment->element(cr->track());
+                if (item && item->isChordRest() && !(item->isRest() && toRest(item)->isGap())) {
+                    target = toChordRest(item);
+                }
+            }
+            mnxLine.ensure_extender().set_target(getOrAssignEID(const_cast<ChordRest*>(target)).toStdString());
+        }
     }
 }
 
@@ -248,8 +293,8 @@ void static processAnnotations(EventType& mnxEvent, ChordRest* cr)
 
 //---------------------------------------------------------
 //   createMarkings
-//   export articulations, breath marks, single-note
-//   tremolo
+//   export articulations, breath marks, caesuras,
+//   single-note tremolo
 //---------------------------------------------------------
 
 void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
@@ -266,7 +311,7 @@ void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
             }
             auto mnxMarkings = mnxEvent.ensure_markings();
             if (auto marking = createMarking(a, mnxMarkings)) {
-                marking->set_or_clear_orient(toMnxOrientation(a->anchor()));
+                marking->set_or_clear_placement(toMnxPlacement(a->anchor()));
             }
         }
 
@@ -282,10 +327,20 @@ void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
 
     if (Breath* breath = cr->hasBreathMark()) {
         auto mnxMarkings = mnxEvent.ensure_markings();
-        auto mnxBreath = mnxMarkings.ensure_breath();
-        mnxBreath.set_or_clear_orient(toMnxOrientation(breath->placement()));
-        if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
-            mnxBreath.set_symbol(breathSym.value());
+        if (breath->isCaesura()) {
+            const MnxCaesura caesura = toMnxCaesura(breath->symId());
+            const auto globalMeasure = m_mnxDocument.global().measures()[m_measToMnxMeas.at(cr->measure())];
+            const auto globalCaesura = globalMeasure.caesura();
+            if (!globalCaesura || breath->tick() != cr->measure()->endTick()
+                || globalCaesura->shape() != caesura.shape || globalCaesura->marks() != caesura.marks) {
+                auto mnxCaesura = mnxMarkings.ensure_caesura();
+                mnxCaesura.set_or_clear_shape(caesura.shape);
+                mnxCaesura.set_or_clear_marks(caesura.marks);
+            }
+        } else {
+            auto mnxBreath = mnxMarkings.ensure_breath();
+            mnxBreath.set_or_clear_placement(toMnxPlacement(breath->placement()));
+            mnxBreath.set_or_clear_symbol(toMnxBreathMarkSym(breath->symId()));
         }
     }
 
@@ -452,6 +507,7 @@ bool MnxExporter::createNotes(mnx::sequence::Event& mnxEvent, ChordRest* chordRe
         mnxNote.set_id(getOrAssignEID(note).toStdString());
         createTies(mnxNote, note);
         exportAccidentalDetails(mnxNote, note);
+        exportNoteMarkings(mnxNote, note);
         const int delta = calcWrittenDiatonicDelta(note);
         if (delta != 0) {
             mnxNote.ensure_written().set_diatonicDelta(delta);
@@ -735,6 +791,8 @@ bool MnxExporter::appendEvent(mnx::sequence::SequenceContent content, ExportCont
         }
     }
     if (chordRest->isChord()) {
+        // Only stems the score forces are written. The stems MuseScore gives a voice on a staff
+        // with several voices are carried by the sequence's direction hint (see createSequences).
         DirectionV stemDir = chordRest->beam() ? chordRest->beam()->direction() : DirectionV::AUTO;
         if (stemDir == DirectionV::AUTO) {
             stemDir = toChord(chordRest)->stemDirection();
@@ -868,6 +926,7 @@ size_t MnxExporter::appendTuplet(mnx::sequence::SequenceContent content, ExportC
     auto mnxTuplet = content.appendTuplet(inner, outer);
     mnxTuplet.set_or_clear_showNumber(toMnxTupletNumberType(tuplet->numberType()));
     mnxTuplet.set_or_clear_bracket(toMnxTupletBracketType(tuplet->bracketType()));
+    mnxTuplet.set_or_clear_placement(toMnxPlacement(tuplet->direction()));
     /// @todo add `showValue` if MuseScore supports showing note values on tuplet relation text.
 
     ctx.tupletStack.push_back(tuplet);
@@ -1043,6 +1102,8 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
     auto mnxSequences = mnxMeasure.sequences();
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+        // (sequence index, voice) for each sequence written for this staff
+        std::vector<std::pair<size_t, voice_idx_t> > staffSequences;
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             const track_idx_t curTrackIdx = partStartTrack + VOICES * staffIdx + voice;
             std::vector<ChordRest*> chordRests;
@@ -1087,6 +1148,7 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
                                 }
                             }
                             processAnnotations(fullMeasure, rest);
+                            staffSequences.emplace_back(mnxSequences.size() - 1, voice);
                         } else {
                             /// @todo If MNX adds explicit rest visibility, export hidden (non-gap) full-measure rests; keep omitting gap rests.
                             // Hidden/gap measure rests should not generate a sequence.
@@ -1099,17 +1161,20 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
 
             ExportContext ctx(part, measure, mnxMeasure, static_cast<staff_idx_t>(staffIdx), voice, mnxSequence.staff());
             appendContent(mnxSequence.content(), ctx, chordRests, ContentContext::Sequence);
+            staffSequences.emplace_back(mnxSequences.size() - 1, voice);
         }
-    }
 
-    // Avoid cluttering the output with unnecessary full-measure rests.
-    // Keep a solitary full-measure sequence only when the full measure rest
-    // carries additional information, such as a staff position or fermata.
-    if (mnxSequences.size() == 1) {
-        auto onlySequence = mnxSequences.at(0);
-        const auto fullMeasure = onlySequence.fullMeasure();
-        if (fullMeasure && onlySequence.content().empty() && fullMeasure->empty()) {
-            mnxSequences.erase(0);
+        // MuseScore points stems up in voices 1 and 3 and down in voices 2 and 4 when a staff has
+        // more than one voice. MNX carries that as each sequence's direction hint, so stems are
+        // written only where the score forces them. A lone sequence in voice 2 or 4 is still a
+        // lower voice: its upper voice holds only hidden rests, which are not exported.
+        const bool isMultiVoice = staffSequences.size() > 1;
+        for (const auto& [sequenceIdx, voice] : staffSequences) {
+            const bool isLowerVoice = (voice % 2) != 0;
+            if (isMultiVoice || isLowerVoice) {
+                mnxSequences[sequenceIdx].set_or_clear_directionHint(isLowerVoice ? mnx::DirectionHint::Lower
+                                                                     : mnx::DirectionHint::Upper);
+            }
         }
     }
 }
