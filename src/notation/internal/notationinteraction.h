@@ -511,6 +511,7 @@ private:
         muse::PointF elementOffset;
         mu::engraving::EditData ed;
         std::vector<EngravingItem*> elements;
+        std::vector<muse::RectF> dropRects;
         std::vector<std::unique_ptr<mu::engraving::ElementGroup> > dragGroups;
         void reset();
     };

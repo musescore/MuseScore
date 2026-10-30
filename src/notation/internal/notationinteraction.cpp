@@ -1067,6 +1067,7 @@ void NotationInteraction::DragData::reset()
     beginMove = QPointF();
     elementOffset = QPointF();
     ed = mu::engraving::EditData(ed.view());
+    dropRects.clear();
     dragGroups.clear();
 }
 
@@ -1206,8 +1207,18 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
             addHairpinOnGripDrag(m_editData, isLeftGrip);
         }
     } else {
+        m_dragData.dropRects.clear();
         for (auto& group : m_dragData.dragGroups) {
             score()->addRefresh(group->drag(m_dragData.ed));
+        }
+        for (EngravingItem* item : m_dragData.elements) {
+            if (!item->isStaffTypeChange()) {
+                continue;
+            }
+            Measure* target = toStaffTypeChange(item)->dragTargetMeasure();
+            if (target && target->system()) {
+                m_dragData.dropRects.push_back(target->staffPageBoundingRect(item->staffIdx()).translated(target->system()->page()->pos()));
+            }
         }
     }
 
@@ -3727,6 +3738,12 @@ void NotationInteraction::drawLasso(muse::draw::Painter* painter, const engravin
 
 void NotationInteraction::drawDrop(muse::draw::Painter* painter)
 {
+    for (const RectF& rect : m_dragData.dropRects) {
+        if (rect.isValid()) {
+            painter->fillRect(rect, configuration()->dropRectColor());
+        }
+    }
+
     if (m_dropData.elementDropData.has_value()) {
         const ElementDropData& edd = m_dropData.elementDropData.value();
 
