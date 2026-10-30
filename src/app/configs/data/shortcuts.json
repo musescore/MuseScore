@@ -219,6 +219,7 @@
         {"command": "command://notation/paste-double",  "sequences": ["Ctrl+Shift+W"]},
         {"command": "command://notation/cut",  "sequences": ["Ctrl+X"]},
         {"command": "command://notation/delete",  "sequences": ["Del","Backspace"]},
+        {"command": "command://notation/edit-element",  "sequences": ["F2", "Alt+Shift+E"], "autorepeat": false},
         {"command": "command://notation/remove-selected-range",  "sequences": ["Ctrl+Del","Ctrl+Backspace"]},
         {"command": "command://notation/flip",  "sequences": ["X"]},
         {"command": "command://notation/flip-horizontally",  "sequences": ["Alt+X"]},

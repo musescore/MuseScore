@@ -400,6 +400,8 @@ inline static const muse::rcommand::Command PASTE_DOUBLE_COMMAND("command://nota
 inline static const muse::rcommand::Command PASTE_SPECIAL_COMMAND("command://notation/paste-special");
 inline static const muse::rcommand::Command DELETE_COMMAND("command://notation/delete");
 
+inline static const muse::rcommand::Command EDIT_ELEMENT_COMMAND("command://notation/edit-element");
+
 // move commands
 inline static const muse::rcommand::Command MOVE_RIGHT_COMMAND("command://notation/move-right");
 inline static const muse::rcommand::Command MOVE_LEFT_COMMAND("command://notation/move-left");

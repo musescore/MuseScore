@@ -551,6 +551,8 @@ void NotationActionController::init()
     registerCommandWithParams(SCREEN_EDIT_TEXT_COMMAND, &Controller::startEditSelectedText);
     registerCommandWithParams(SCREEN_EDIT_ELEMENT_COMMAND, &Controller::startEditSelectedElement);
 
+    registerCommandWithParams(EDIT_ELEMENT_COMMAND, &Controller::startEditSelectedElement); // same as screen edit element command, no params
+
     // others commands
     registerCommand(REGROUP_RHYTHMS_COMMAND, &Interaction::regroupNotesAndRests);
     registerCommand(RESEQUENCE_REHEARSAL_MARKS_COMMAND, &Interaction::resequenceRehearsalMarks);

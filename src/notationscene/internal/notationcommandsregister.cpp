@@ -2983,14 +2983,22 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        EDIT_ELEMENT_COMMAND,
+        TranslatableString("action", "Edit element"),
+        TranslatableString("action", "Edit current element"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         SCREEN_EDIT_ELEMENT_COMMAND,
         TranslatableString("action", "Edit element"),
-        TranslatableString("action", "Edit element"),
+        TranslatableString("action", "Edit screen element"),
         InputSchema({
             { "pos_x", Arg(DataType::Float, u"X cursor position") },
             { "pos_y", Arg(DataType::Float, u"Y cursor position") },
         }),
-        Decoration()
+        Decoration(),
+        Availability::Dispatch  // only dispatch from view
     },
 
     // view commands
