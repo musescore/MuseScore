@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
@@ -36,7 +37,9 @@ static const String TRANSPOSE_DATA_DIR("transpose_data/");
 class Engraving_TransposeTests : public ::testing::Test
 {
 public:
-    void undoTransposeTest(String scoreName)
+    //! NOTE: by default, transposes a major second up, with double sharps/flats allowed
+    void undoTransposeTest(String scoreName, int interval = 4, TransposeDirection direction = TransposeDirection::UP,
+                           bool useDoubleSharpsFlats = true)
     {
         String readFile(TRANSPOSE_DATA_DIR + scoreName + ".mscx");
         String writeFile1(scoreName + "01-test.mscx");
@@ -49,10 +52,10 @@ public:
         // select all
         score->cmdSelectAll();
 
-        // transpose major second up
+        // transpose by interval in given direction
         score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving transpose tests"), [&](auto& tx) {
-            Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4,
-                                 true, true, true);
+            Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, direction, Key::C, interval,
+                                 true, true, useDoubleSharpsFlats);
         });
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -102,6 +105,11 @@ TEST_F(Engraving_TransposeTests, undoTranspose)
 TEST_F(Engraving_TransposeTests, undoTransposeChordSymbols)
 {
     undoTransposeTest(u"undoTransposeChordSymbols");
+}
+
+TEST_F(Engraving_TransposeTests, undoTransposeSingleAccidentals)
+{
+    undoTransposeTest(u"undoTransposeSingleAccidentals", 11, TransposeDirection::DOWN, /*useDoubleSharpsFlats=*/ false);
 }
 
 TEST_F(Engraving_TransposeTests, undoTransposeFretDiagramsChordSymbols)
