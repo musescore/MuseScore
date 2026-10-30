@@ -215,11 +215,7 @@ class FilterPaletteTreeModel : public QSortFilterProxyModel
 private slots:
     void invalidateFilter()
     {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
         QSortFilterProxyModel::endFilterChange(QSortFilterProxyModel::Direction::Rows);
-#else
-        QSortFilterProxyModel::invalidateFilter();
-#endif
     }
 
 public:
