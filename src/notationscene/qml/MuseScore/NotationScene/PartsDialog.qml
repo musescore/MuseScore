@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick
 import QtQuick.Layouts
 
@@ -57,6 +58,8 @@ StyledDialogView {
         spacing: 0
 
         PartsTopPanel {
+            id: topPanel
+
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
             Layout.topMargin: privateProperties.sideMargin
@@ -67,6 +70,7 @@ StyledDialogView {
             navigationPanel.order: 1
 
             onCreateNewPartRequested: {
+                topPanel.clearSearch()
                 partsModel.createNewPart()
             }
         }
@@ -79,6 +83,7 @@ StyledDialogView {
             Layout.bottomMargin: 24
 
             model: partsModel
+            searchText: topPanel.searchText
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 2
