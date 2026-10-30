@@ -529,6 +529,9 @@ enum class Pid : short {
 
     SHARED_PART_ENABLED,
 
+    PLAYBACK_START_OFFSET,
+    PLAYBACK_DURATION_OFFSET,
+
     END
 };
 

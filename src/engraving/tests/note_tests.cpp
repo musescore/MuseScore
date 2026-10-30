@@ -149,6 +149,14 @@ TEST_F(Engraving_NoteTests, note)
     EXPECT_EQ(n->userVelocity(), 71);
     delete n;
 
+    // playback start/duration offset
+    note->setPlaybackStartOffset(120);
+    note->setPlaybackDurationOffset(-60);
+    n = toNote(ScoreRW::writeReadElement(note));
+    EXPECT_EQ(n->playbackStartOffset(), 120);
+    EXPECT_EQ(n->playbackDurationOffset(), -60);
+    delete n;
+
     // tuning
     note->setTuning(1.3);
     n = toNote(ScoreRW::writeReadElement(note));
