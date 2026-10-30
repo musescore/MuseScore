@@ -928,6 +928,113 @@ static void colorItem(EngravingItem* item, const Color color)
 }
 
 //---------------------------------------------------------
+//   dynamics helpers
+//---------------------------------------------------------
+
+static bool isDynamicsString(const String& str)
+{
+    if (str.empty()) {
+        return false;
+    }
+    for (size_t i = 0; i < str.size(); ++i) {
+        char16_t u = str.at(i).unicode();
+        if (u != u'f' && u != u'm' && u != u'n' && u != u'p' && u != u'r' && u != u's' && u != u'z') {
+            return false;
+        }
+    }
+    return true;
+}
+
+static String dynamicTagToSym(const String& tag)
+{
+    if (isDynamicsString(tag)) {
+        String res;
+        for (size_t i = 0; i < tag.size(); ++i) {
+            char16_t u = tag.at(i).unicode();
+            switch (u) {
+            case u'p':
+                res += u"<sym>dynamicPiano</sym>";
+                break;
+            case u'm':
+                res += u"<sym>dynamicMezzo</sym>";
+                break;
+            case u'f':
+                res += u"<sym>dynamicForte</sym>";
+                break;
+            case u'r':
+                res += u"<sym>dynamicRinforzando</sym>";
+                break;
+            case u's':
+                res += u"<sym>dynamicSforzando</sym>";
+                break;
+            case u'z':
+                res += u"<sym>dynamicZ</sym>";
+                break;
+            case u'n':
+                res += u"<sym>dynamicNiente</sym>";
+                break;
+            default:
+                break;
+            }
+        }
+        return res;
+    }
+
+    return tag;
+}
+
+static void parseDynamicsChildren(XmlStreamReader& e, StringList& dynamicsList, MusicXmlLogger* logger)
+{
+    String dynamicStr;
+    while (e.readNextStartElement()) {
+        if (e.name() == "other-dynamics") {
+            const String smufl = e.attribute("smufl");
+            if (!smufl.empty()) {
+                dynamicStr += u"<sym>" + smufl + u"</sym>";
+                e.skipCurrentElement();
+            } else {
+                const String text = e.readText();
+                // ‘other-dynamics’ is often mistakenly used to refer to non-dynamic characters
+                if (!isDynamicsString(text)) {
+                    if (logger) {
+                        logger->logError(String(u"other-dynamics '%1' contains non-dynamics characters").arg(text), &e);
+                    }
+                    dynamicStr += text;
+                } else {
+                    dynamicStr += dynamicTagToSym(text);
+                }
+            }
+        } else {
+            dynamicStr += dynamicTagToSym(String::fromAscii(e.name().ascii()));
+            e.skipCurrentElement();
+        }
+    }
+    if (!dynamicStr.empty()) {
+        dynamicsList.push_back(dynamicStr);
+    }
+}
+
+static Dynamic* createDynamicElement(Score* score, const String& dynStr, const Color& color,
+                                     const String& enclosure, bool visible)
+{
+    Dynamic* dynamic = Factory::createDynamic(score->dummy());
+    dynamic->setDynamicType(dynStr);
+    colorItem(dynamic, color);
+
+    if (enclosure == u"circle") {
+        dynamic->setFrameType(FrameType::CIRCLE);
+    } else if (enclosure == u"none") {
+        dynamic->setFrameType(FrameType::NO_FRAME);
+    } else if (enclosure == u"rectangle") {
+        dynamic->setFrameType(FrameType::RECTANGLE);
+        dynamic->setFrameRound(0_sp);
+    }
+
+    dynamic->setVisible(visible);
+    return dynamic;
+}
+
+//---------------------------------------------------------
 //   addLyric
 //---------------------------------------------------------
 
@@ -3711,20 +3818,8 @@ void MusicXmlParserDirection::direction(const String& partId,
     Dynamic* firstDyn = nullptr;
 
     // do dynamics
-    // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     for (StringList::iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
-        Dynamic* dynamic = Factory::createDynamic(m_score->dummy());
-        dynamic->setDynamicType(*it);
-        colorItem(dynamic, m_dynamicsColor);
-
-        if (m_enclosure == "circle") {
-            dynamic->setFrameType(FrameType::CIRCLE);
-        } else if (m_enclosure == "none") {
-            dynamic->setFrameType(FrameType::NO_FRAME);
-        } else if (m_enclosure == "rectangle") {
-            dynamic->setFrameType(FrameType::RECTANGLE);
-            dynamic->setFrameRound(0_sp);
-        }
+        Dynamic* dynamic = createDynamicElement(m_score, *it, m_dynamicsColor, m_enclosure, m_visible);
 
         if (isDynamicRange) {
             if (it == m_dynamicsList.begin()) {
@@ -3739,15 +3834,9 @@ void MusicXmlParserDirection::direction(const String& partId,
 
         if (!m_dynaVelocity.empty()) {
             int dynaValue = round(m_dynaVelocity.toDouble() * 0.9);
-            if (dynaValue > 127) {
-                dynaValue = 127;
-            } else if (dynaValue < 0) {
-                dynaValue = 0;
-            }
+            dynaValue = std::clamp(dynaValue, 0, 127);
             dynamic->setVelocity(dynaValue);
         }
-
-        dynamic->setVisible(m_visible);
 
         String dynamicsPlacement = placement();
         // Case-based defaults
@@ -4221,14 +4310,7 @@ void MusicXmlParserDirection::dynamics()
     m_enclosure = m_e.attribute("enclosure");
     m_dynamicsPlacement = m_e.attribute("placement");
 
-    while (m_e.readNextStartElement()) {
-        if (m_e.name() == "other-dynamics") {
-            m_dynamicsList.push_back(m_e.readText());
-        } else {
-            m_dynamicsList.push_back(String::fromAscii(m_e.name().ascii()));
-            m_e.skipCurrentElement();
-        }
-    }
+    parseDynamicsChildren(m_e, m_dynamicsList, m_logger);
 }
 
 //---------------------------------------------------------
@@ -8508,14 +8590,7 @@ void MusicXmlParserNotations::dynamics()
     m_dynamicsColor = Color::fromString(m_e.attribute("color"));
     m_dynamicsPlacement = m_e.attribute("placement");
 
-    while (m_e.readNextStartElement()) {
-        if (m_e.name() == "other-dynamics") {
-            m_dynamicsList.push_back(m_e.readText());
-        } else {
-            m_dynamicsList.push_back(String::fromAscii(m_e.name().ascii()));
-            m_e.skipCurrentElement();  // skip but don't log
-        }
-    }
+    parseDynamicsChildren(m_e, m_dynamicsList, m_logger);
 }
 
 //---------------------------------------------------------
@@ -9548,13 +9623,8 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
         }
     }
 
-    // more than one dynamic ???
-    // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
-    // TODO: remove duplicate code (see MusicXml::direction)
     for (const String& d : std::as_const(m_dynamicsList)) {
-        Dynamic* dynamic = Factory::createDynamic(m_score->dummy());
-        dynamic->setDynamicType(d);
-        colorItem(dynamic, m_dynamicsColor);
+        Dynamic* dynamic = createDynamicElement(m_score, d, m_dynamicsColor, u"", m_visible);
         m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), tick);
     }
 }
