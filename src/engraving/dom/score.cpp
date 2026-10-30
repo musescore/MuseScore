@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
  *
@@ -429,6 +429,12 @@ void Score::setUpTempoMap()
 
     for (Staff* staff : m_staves) {
         staff->clearTimeSig();
+    }
+
+    if (!isMaster()) {
+        masterScore()->setUpTempoMap();
+        m_needSetUpTempoMap = false;
+        return;
     }
 
     if (isMaster()) {
