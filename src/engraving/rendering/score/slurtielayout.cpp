@@ -2508,21 +2508,24 @@ bool SlurTieLayout::hasEndPointAboveNote(TieSegment* tieSegment)
     Note* startNote = tieSegment->tie()->startNote();
     Note* endNote = tieSegment->tie()->endNote();
 
-    if ((tieSegment->isSingleBeginType() && !startNote) || (tieSegment->isSingleEndType() && !endNote)) {
-        return false;
+    // Check whether moving this tie vertically towards its noteheads could cause a collision. We check each endpoint independently: the first check tests whether the start point lies before the start notehead's right edge; the second tests whether the end point lies after the end notehead's left edge. Note that while l.v. ties have no end note, their start point still needs to be checked.
+    if (tieSegment->isSingleBeginType() && startNote && !startNote->shouldHideFret()) {
+        Chord* startChord = startNote->chord();
+        PointF startNotePos = startNote->pos() + startChord->pos() + startChord->segment()->pos() + startChord->measure()->pos();
+        if (tieSegment->ups(Grip::START).pos().x() < startNotePos.x() + startNote->width()) {
+            return true;
+        }
     }
 
-    Chord* startChord = startNote->chord();
-    PointF startNotePos = startNote->pos() + startChord->pos() + startChord->segment()->pos() + startChord->measure()->pos();
+    if (tieSegment->isSingleEndType() && endNote && !endNote->shouldHideFret()) {
+        Chord* endChord = endNote->chord();
+        PointF endNotePos = endNote->pos() + endChord->pos() + endChord->segment()->pos() + endChord->measure()->pos();
+        if (tieSegment->ups(Grip::END).pos().x() > endNotePos.x()) {
+            return true;
+        }
+    }
 
-    Chord* endChord = endNote->chord();
-    PointF endNotePos = endNote->pos() + endChord->pos() + endChord->segment()->pos() + endChord->measure()->pos();
-
-    PointF tieStartPos = tieSegment->ups(Grip::START).pos();
-    PointF tieEndPos = tieSegment->ups(Grip::END).pos();
-
-    return (tieStartPos.x() < startNotePos.x() + startNote->width() && !startNote->shouldHideFret())
-           || (tieEndPos.x() > endNotePos.x() && !endNote->shouldHideFret());
+    return false;
 }
 
 void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies)
