@@ -637,7 +637,7 @@ void PaletteProvider::setFilter(const QString& filter)
     // speed up the search in certain other scenarios,
     // e.g. when deleting search characters (going from fewer to more search results).
     m_searchFilterModel->setSourceModel(nullptr);
-    m_searchFilterModel->setFilterFixedString(filter);
+    m_searchFilterModel->setSearchText(filter);
     if (!filter.isEmpty()) {
         m_searchFilterModel->setSourceModel(m_masterPaletteModel);
     }
