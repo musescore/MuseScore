@@ -2307,6 +2307,12 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("mode", TConv::toXml(item->mode()));
     }
 
+    if (item->jianpuNumbering() != JianpuTonicMode::FOLLOW_SCORE_KEY) {
+        xml.tag("jianpuNumbering", int(item->jianpuNumbering()));
+        xml.tag("jianpuTonicKey", int(item->jianpuTonicKey()));
+        xml.tag("jianpuTonicMode", TConv::toXml(item->jianpuTonicMode()));
+    }
+
     writeProperty(item, xml, Pid::SHOW_COURTESY);
     writeProperty(item, xml, Pid::IS_COURTESY);
 
@@ -3114,6 +3120,9 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
     }
     if (item->group() == StaffGroup::STANDARD) {
         xml.tag("noteheadScheme", TConv::toXml(item->noteHeadScheme()), TConv::toXml(NoteHeadScheme::HEAD_NORMAL));
+        if (item->xmlName() == u"stdJianpu") {
+            xml.tag("jianpuTextStyle", TConv::toXml(item->jianpuTextStyle()));
+        }
     }
     xml.tag("instrumentLabelVisibility", TConv::toXml(item->instrumentLabelVisibility()),
             TConv::toXml(InstrumentLabelVisibility::AUTO));

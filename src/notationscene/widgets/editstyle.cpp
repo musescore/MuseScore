@@ -107,6 +107,7 @@ static const QStringList ALL_PAGE_CODES {
     "chord-symbols",
     "fretboard-diagrams",
     "tablature-styles",
+    "jianpu",
     "text-styles"
 };
 
@@ -161,6 +162,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "fretboard-diagram-fret-number",
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
+    "jianpu-number",
     "text-line",
     "system-text-line",
     "note-line",
@@ -718,6 +720,15 @@ void EditStyle::classBegin()
         { StyleId::tabShowTiedFret, false, tabShowTiedFrets, 0 },
         { StyleId::tabParenthesizeTiedFret, false, tabParenthFrets, 0 },
         { StyleId::parenthesizeTiedFretIfArticulation, false, tabParenthArticulation, 0 },
+
+        { StyleId::jianpuNumberVerticalDistance, false, jianpuNumberVerticalDistance, jianpuNumberVerticalDistanceReset },
+        { StyleId::jianpuVoiceVerticalDistance, false, jianpuVoiceVerticalDistance, jianpuVoiceVerticalDistanceReset },
+        { StyleId::jianpuOctaveDotRadius, false, jianpuOctaveDotRadius, jianpuOctaveDotRadiusReset },
+        { StyleId::jianpuOctaveDotDistance, false, jianpuOctaveDotDistance, jianpuOctaveDotDistanceReset },
+        { StyleId::jianpuDiminutionBeamThickness, false, jianpuDiminutionBeamThickness, jianpuDiminutionBeamThicknessReset },
+        { StyleId::jianpuDiminutionBeamDistance, false, jianpuDiminutionBeamDistance, jianpuDiminutionBeamDistanceReset },
+        { StyleId::jianpuDiminutionBeamPlacement, false, jianpuDiminutionBeamPlacement, jianpuDiminutionBeamPlacementReset },
+        { StyleId::jianpuDurationLineThickness, false, jianpuDurationLineThickness, jianpuDurationLineThicknessReset },
     };
 
     // ====================================================
@@ -782,6 +793,7 @@ void EditStyle::classBegin()
         tempoTextPlacement,
         staffTextPlacement,
         rehearsalMarkPlacement,
+        jianpuDiminutionBeamPlacement,
     };
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {

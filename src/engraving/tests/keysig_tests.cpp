@@ -27,6 +27,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/editing/editkeysig.h"
@@ -266,4 +267,220 @@ TEST_F(Engraving_KeySigTests, linkedPrecedingKeyDeletion)
             ASSERT_NO_FATAL_FAILURE(checkInstrumentChangeKey(target, Key::C, Key::D));
         }
     }
+}
+
+//---------------------------------------------------------
+//   KeySigEvent equality must take the per-keysignature Jianpu tonic
+//   override fields into account, since they are independent of key/mode/custom.
+//---------------------------------------------------------
+TEST_F(Engraving_KeySigTests, jianpuKeySigEventEquality)
+{
+    KeySigEvent a;
+    a.setConcertKey(Key::G);
+    KeySigEvent b = a;
+    EXPECT_TRUE(a == b);
+
+    b.setJianpuNumbering(JianpuTonicMode::CUSTOM);
+    EXPECT_FALSE(a == b);
+    EXPECT_TRUE(a != b);
+
+    KeySigEvent c = a;
+    c.setJianpuTonicKey(Key::D);
+    EXPECT_FALSE(a == c);
+
+    KeySigEvent d = a;
+    d.setJianpuTonicMode(KeyMode::DORIAN);
+    EXPECT_FALSE(a == d);
+}
+
+//---------------------------------------------------------
+//   jianpuKeyMapping should mirror the staff's key/mode when FOLLOW_SCORE_KEY
+//   is selected, and use the explicit override fields when CUSTOM is selected.
+//---------------------------------------------------------
+TEST_F(Engraving_KeySigTests, jianpuKeyMapping)
+{
+    KeySigEvent ks;
+    ks.setConcertKey(Key::D);
+    ks.setMode(KeyMode::DORIAN);
+
+    KeyMode mode;
+    int tonicTpc;
+
+    jianpuKeyMapping(ks, mode, tonicTpc);
+    EXPECT_EQ(mode, KeyMode::DORIAN);
+    EXPECT_EQ(tonicTpc, jianpuTonicTpc(Key::D, KeyMode::DORIAN));
+
+    ks.setJianpuNumbering(JianpuTonicMode::CUSTOM);
+    ks.setJianpuTonicKey(Key::A_B);
+    ks.setJianpuTonicMode(KeyMode::LYDIAN);
+
+    jianpuKeyMapping(ks, mode, tonicTpc);
+    EXPECT_EQ(mode, KeyMode::LYDIAN);
+    EXPECT_EQ(tonicTpc, key2Tpc(Key::A_B));
+}
+
+//---------------------------------------------------------
+//   jianpuKeyLabel should produce the "<degree>=<tonic>" label used for the
+//   Jianpu key signature, falling back to the major mapping when the mode
+//   is UNKNOWN or NONE (mode is never guessed from the music).
+//---------------------------------------------------------
+TEST_F(Engraving_KeySigTests, jianpuKeyLabel)
+{
+    // Follow mode, unmarked major/minor (UNKNOWN): falls back to major
+    KeySigEvent unknown;
+    unknown.setConcertKey(Key::C);
+    EXPECT_EQ(jianpuKeyLabel(unknown), u"1=C");
+
+    // Follow mode, unmarked, one sharp (UNKNOWN): falls back to G major
+    KeySigEvent oneSharp;
+    oneSharp.setConcertKey(Key::G);
+    EXPECT_EQ(jianpuKeyLabel(oneSharp), u"1=G");
+
+    // Follow mode, atonal (NONE): falls back to major (fixed at C)
+    KeySigEvent atonal;
+    atonal.setConcertKey(Key::C);
+    atonal.setMode(KeyMode::NONE);
+    EXPECT_EQ(jianpuKeyLabel(atonal), u"1=C");
+
+    // Follow mode, C major
+    KeySigEvent cMajor;
+    cMajor.setConcertKey(Key::C);
+    cMajor.setMode(KeyMode::MAJOR);
+    EXPECT_EQ(jianpuKeyLabel(cMajor), u"1=C");
+
+    // Follow mode, A minor (same key signature as C major)
+    KeySigEvent aMinor;
+    aMinor.setConcertKey(Key::C);
+    aMinor.setMode(KeyMode::MINOR);
+    EXPECT_EQ(jianpuKeyLabel(aMinor), u"6=A");
+
+    // Follow mode, C Dorian (relative major is Bb major)
+    KeySigEvent cDorian;
+    cDorian.setConcertKey(Key::B_B);
+    cDorian.setMode(KeyMode::DORIAN);
+    EXPECT_EQ(jianpuKeyLabel(cDorian), u"2=C");
+
+    // Custom numbering always shows a label, regardless of the score's mode
+    KeySigEvent custom;
+    custom.setConcertKey(Key::G);
+    custom.setJianpuNumbering(JianpuTonicMode::CUSTOM);
+    custom.setJianpuTonicKey(Key::C);
+    custom.setJianpuTonicMode(KeyMode::MAJOR);
+    EXPECT_EQ(jianpuKeyLabel(custom), u"1=C");
+}
+
+//---------------------------------------------------------
+//   The three new Jianpu Pids must round-trip through KeySig::setProperty /
+//   getProperty and report the documented defaults via propertyDefault.
+//---------------------------------------------------------
+TEST_F(Engraving_KeySigTests, jianpuKeySigProperties)
+{
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx");
+    EXPECT_TRUE(score);
+    Measure* m1 = score->firstMeasure();
+    KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
+
+    EXPECT_EQ(ke->propertyDefault(Pid::JIANPU_NUMBERING).toInt(), int(JianpuTonicMode::FOLLOW_SCORE_KEY));
+    EXPECT_EQ(Key(ke->propertyDefault(Pid::JIANPU_TONIC_KEY).toInt()), Key::C);
+    EXPECT_EQ(ke->propertyDefault(Pid::JIANPU_TONIC_MODE).value<KeyMode>(), KeyMode::MAJOR);
+
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).toInt(), int(JianpuTonicMode::FOLLOW_SCORE_KEY));
+
+    ke->setProperty(Pid::JIANPU_NUMBERING, int(JianpuTonicMode::CUSTOM));
+    ke->setProperty(Pid::JIANPU_TONIC_KEY, int(Key::E_B));
+    ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::PHRYGIAN);
+
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).toInt(), int(JianpuTonicMode::CUSTOM));
+    EXPECT_EQ(Key(ke->getProperty(Pid::JIANPU_TONIC_KEY).toInt()), Key::E_B);
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_TONIC_MODE).value<KeyMode>(), KeyMode::PHRYGIAN);
+
+    delete score;
+}
+
+TEST_F(Engraving_KeySigTests, jianpuLinkedKeySigProperties)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx"));
+    ASSERT_TRUE(score);
+    Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+    Segment* segment = measure->findSegment(SegmentType::KeySig, measure->tick());
+    ASSERT_TRUE(segment);
+    KeySig* source = toKeySig(segment->element(0));
+    KeySig* linked = toKeySig(segment->element(4));
+    ASSERT_TRUE(source);
+    ASSERT_TRUE(linked);
+    linked->linkTo(source);
+
+    const Pid properties[] = { Pid::JIANPU_NUMBERING, Pid::JIANPU_TONIC_KEY, Pid::JIANPU_TONIC_MODE };
+    const PropertyValue values[] = { int(JianpuTonicMode::CUSTOM), int(Key::E_B), KeyMode::PHRYGIAN };
+    PropertyValue originalValues[3];
+    for (size_t index = 0; index < 3; ++index) {
+        originalValues[index] = source->getProperty(properties[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+
+    score->startCmd(TranslatableString::untranslatable("Key signature tests"));
+    for (size_t index = 0; index < 3; ++index) {
+        source->undoChangeProperty(properties[index], values[index]);
+    }
+    score->endCmd();
+
+    for (size_t index = 0; index < 3; ++index) {
+        EXPECT_EQ(source->getProperty(properties[index]), values[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+    EXPECT_EQ(source->staff()->keySigEvent(source->tick()), source->keySigEvent());
+    EXPECT_EQ(linked->staff()->keySigEvent(linked->tick()), linked->keySigEvent());
+
+    EditData editData;
+    score->transactionManager()->undoRedo(true, &editData);
+    for (size_t index = 0; index < 3; ++index) {
+        EXPECT_EQ(source->getProperty(properties[index]), originalValues[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+
+    score->transactionManager()->undoRedo(false, &editData);
+    for (size_t index = 0; index < 3; ++index) {
+        EXPECT_EQ(source->getProperty(properties[index]), values[index]);
+        EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
+    }
+}
+
+//---------------------------------------------------------
+//   End-to-end check that TLayout::layoutKeySig actually populates
+//   KeySig::LayoutData::jianpuLabel on a real Jianpu staff: the major
+//   fallback label for the untouched (mode == UNKNOWN) header key sig, a
+//   label once Mode is set, and a label for Custom numbering.
+//---------------------------------------------------------
+TEST_F(Engraving_KeySigTests, jianpuKeyLabelLayout)
+{
+    MasterScore* score = ScoreRW::readScore(u"beam_data/jianpuBeam.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    EXPECT_TRUE(m1);
+    Segment* keySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());
+    EXPECT_TRUE(keySigSeg);
+    KeySig* ke = toKeySig(keySigSeg->element(0));
+    EXPECT_TRUE(ke);
+    EXPECT_TRUE(ke->staff()->isJianpuStaff(ke->tick()));
+
+    // Untouched header key sig: mode defaults to UNKNOWN, falls back to major
+    EXPECT_EQ(ke->ldata()->jianpuLabel, u"1=C");
+
+    ke->setProperty(Pid::KEYSIG_MODE, KeyMode::MAJOR);
+    score->doLayout();
+    keySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());
+    ke = toKeySig(keySigSeg->element(0));
+    EXPECT_EQ(ke->ldata()->jianpuLabel, u"1=C");
+
+    ke->setProperty(Pid::JIANPU_NUMBERING, int(JianpuTonicMode::CUSTOM));
+    ke->setProperty(Pid::JIANPU_TONIC_KEY, int(Key::D));
+    ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::MAJOR);
+    score->doLayout();
+    keySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());
+    ke = toKeySig(keySigSeg->element(0));
+    EXPECT_EQ(ke->ldata()->jianpuLabel, u"1=D");
+
+    delete score;
 }

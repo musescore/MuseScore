@@ -189,6 +189,98 @@ TEST_F(Engraving_BeamTests, wideBeams)
     beam("wideBeams.mscx");
 }
 
+TEST_F(Engraving_BeamTests, jianpuBeam)
+{
+    beam("jianpuBeam.mscx");
+}
+
+TEST_F(Engraving_BeamTests, jianpuDraggedBeamKeepsDurationLineStyle)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BEAM_DATA_DIR + u"jianpuBeam.mscx"));
+    ASSERT_TRUE(score);
+    ChordRest* first = score->firstMeasure()->firstChordRest(0);
+    ASSERT_TRUE(first);
+    Beam* beam = first->beam();
+    ASSERT_TRUE(beam);
+    ASSERT_TRUE(beam->isJianpuStaff());
+    ASSERT_FALSE(beam->beamFragments().empty());
+    const double width = beam->beamWidth();
+    const double distance = beam->beamDist();
+    beam->setProperty(Pid::BEAM_NO_SLOPE, false);
+    beam->setPropertyFlags(Pid::BEAM_NO_SLOPE, PropertyFlags::UNSTYLED);
+    const PairF position = beam->beamPos();
+    beam->setBeamPos(PairF(position.first, position.second + 1.0));
+
+    score->doLayout();
+
+    EXPECT_FALSE(beam->getProperty(Pid::BEAM_NO_SLOPE).toBool());
+    EXPECT_TRUE(beam->userModified());
+    EXPECT_DOUBLE_EQ(beam->beamWidth(), width);
+    EXPECT_DOUBLE_EQ(beam->beamDist(), distance);
+    EXPECT_NE(beam->slope(), 0.0);
+
+    beam->resetProperty(Pid::BEAM_NO_SLOPE);
+    score->doLayout();
+
+    EXPECT_TRUE(beam->getProperty(Pid::BEAM_NO_SLOPE).toBool());
+    EXPECT_DOUBLE_EQ(beam->slope(), 0.0);
+}
+
+TEST_F(Engraving_BeamTests, jianpuBeamDefaultsToForceHorizontal)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(BEAM_DATA_DIR + u"jianpuBeam.mscx"));
+    ASSERT_TRUE(score);
+    ChordRest* first = score->firstMeasure()->firstChordRest(0);
+    ASSERT_TRUE(first);
+    Beam* beam = first->beam();
+    ASSERT_TRUE(beam);
+    EXPECT_TRUE(beam->getProperty(Pid::BEAM_NO_SLOPE).toBool());
+
+    const PairF position = beam->beamPos();
+    beam->setBeamPos(PairF(position.first + 1.0, position.second + 2.0));
+    score->doLayout();
+
+    EXPECT_TRUE(beam->userModified());
+    EXPECT_DOUBLE_EQ(beam->beamPos().first, beam->beamPos().second);
+    EXPECT_DOUBLE_EQ(beam->slope(), 0.0);
+}
+
+TEST_F(Engraving_BeamTests, singleGraceNoteBeam)
+{
+    for (bool jianpu : { false, true }) {
+        for (int duration : { Constants::DIVISION / 2, Constants::DIVISION / 4 }) {
+            std::unique_ptr<MasterScore> score(ScoreRW::readScore(jianpu
+                                                                  ? BEAM_DATA_DIR + u"jianpuBeam.mscx"
+                                                                  : u"note_data/grace.mscx"));
+            ASSERT_TRUE(score);
+            Chord* chord = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+            ASSERT_TRUE(chord);
+            score->setGraceNote(chord, chord->upNote()->pitch(), NoteType::APPOGGIATURA, duration);
+            ASSERT_EQ(chord->graceNotes().size(), 1);
+            Chord* grace = chord->graceNotes().front();
+            score->doLayout();
+            if (!jianpu) {
+                EXPECT_EQ(grace->beam(), nullptr);
+                continue;
+            }
+            Beam* beam = grace->beam();
+            ASSERT_TRUE(beam);
+            EXPECT_TRUE(beam->isGrace());
+            ASSERT_EQ(beam->elements().size(), 1);
+            EXPECT_EQ(beam->elements().front(), grace);
+            ASSERT_EQ(beam->beamSegments().size(), duration == Constants::DIVISION / 2 ? 1 : 2);
+            for (const BeamSegment* segment : beam->beamSegments()) {
+                EXPECT_NEAR(segment->line.x2() - segment->line.x1(), grace->ldata()->bbox().width(), 0.001);
+            }
+            score->doLayout();
+            EXPECT_EQ(grace->beam(), beam);
+            grace->setBeamMode(BeamMode::NONE);
+            score->doLayout();
+            EXPECT_EQ(grace->beam(), nullptr);
+        }
+    }
+}
+
 TEST_F(Engraving_BeamTests, flatBeams)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"flatBeams.mscx");

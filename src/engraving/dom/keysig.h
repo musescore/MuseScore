@@ -71,6 +71,13 @@ public:
     KeyMode mode() const { return m_sig.mode(); }
     void setMode(KeyMode v) { m_sig.setMode(v); }
 
+    JianpuTonicMode jianpuNumbering() const { return m_sig.jianpuNumbering(); }
+    void setJianpuNumbering(JianpuTonicMode v) { m_sig.setJianpuNumbering(v); }
+    Key jianpuTonicKey() const { return m_sig.jianpuTonicKey(); }
+    void setJianpuTonicKey(Key v) { m_sig.setJianpuTonicKey(v); }
+    KeyMode jianpuTonicMode() const { return m_sig.jianpuTonicMode(); }
+    void setJianpuTonicMode(KeyMode v) { m_sig.setJianpuTonicMode(v); }
+
     PointF staffOffset() const override;
 
     bool hideNaturals() const { return m_hideNaturals; }
@@ -95,6 +102,7 @@ public:
 
     struct LayoutData : public EngravingItem::LayoutData {
         std::vector<KeySym> keySymbols;
+        String jianpuLabel;    // Jianpu key label (e.g. "1=C"); drawn instead of keySymbols when non-empty
     };
     DECLARE_LAYOUTDATA_METHODS(KeySig)
 

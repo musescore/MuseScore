@@ -34,6 +34,10 @@ class KeySignatureSettingsModel : public PropertiesPanelAbstractModel
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * hasToShowCourtesy READ hasToShowCourtesy CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * mode READ mode CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * jianpuNumbering READ jianpuNumbering CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * jianpuTonicKey READ jianpuTonicKey CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * jianpuTonicMode READ jianpuTonicMode CONSTANT)
+    Q_PROPERTY(bool isJianpuStaff READ isJianpuStaff NOTIFY isJianpuStaffChanged)
 public:
     explicit KeySignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
@@ -43,9 +47,22 @@ public:
 
     PropertyItem* hasToShowCourtesy() const;
     PropertyItem* mode() const;
+    PropertyItem* jianpuNumbering() const;
+    PropertyItem* jianpuTonicKey() const;
+    PropertyItem* jianpuTonicMode() const;
+    bool isJianpuStaff() const;
+
+signals:
+    void isJianpuStaffChanged(bool isJianpuStaff);
 
 private:
+    void updateIsJianpuStaff();
+
     PropertyItem* m_hasToShowCourtesy = nullptr;
     PropertyItem* m_mode = nullptr;
+    PropertyItem* m_jianpuNumbering = nullptr;
+    PropertyItem* m_jianpuTonicKey = nullptr;
+    PropertyItem* m_jianpuTonicMode = nullptr;
+    bool m_isJianpuStaff = false;
 };
 }
