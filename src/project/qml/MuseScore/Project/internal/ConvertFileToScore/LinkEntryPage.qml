@@ -35,6 +35,7 @@ Item {
     property string hintText: ""
     property string hintPlainText: ""
     property string audioComUrl: ""
+    property string termsOfUseUrl: ""
     property int maxLinkLength: 0
 
     property NavigationSection navigationSection: null
@@ -152,13 +153,30 @@ Item {
             navigationOrder: 0
         }
 
+        TermsOfUseCheckBox {
+            id: termsOfUseCheckBox
+
+            Layout.fillWidth: true
+
+            termsOfUseUrl: root.termsOfUseUrl
+
+            navigation.panel: NavigationPanel {
+                name: "LinkEntryPageTermsOfUse"
+                section: root.navigationSection
+                order: 3
+                enabled: root.enabled && root.visible
+            }
+            navigation.order: 0
+        }
+
         ConvertButtonBox {
             Layout.fillWidth: true
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 3
+            navigationPanel.order: 4
 
             convertEnabled: Boolean(linkInputField.trimmedText) && Boolean(saveAsField.currentText) && !saveAsField.errorText
+                            && termsOfUseCheckBox.checked
 
             onCancelRequested: root.cancelRequested()
             onBackRequested: root.backRequested()
