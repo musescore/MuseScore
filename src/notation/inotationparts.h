@@ -101,6 +101,24 @@ public:
 
     virtual void toggleStaveSharing(bool on) = 0;
 
+    // Creates a shared part (stave sharing group) with the given parts, as one undoable step: the parts are first moved
+    // next to `destinationPartId` (if valid; else next to the first part), and the shared part is created before them.
+    // Returns the new shared part's id
+    virtual muse::ID createSharedPart(const muse::IDList& partIds,
+                                      const muse::ID& destinationPartId = muse::ID(), InsertMode mode = InsertMode::After) = 0;
+    // Adds the given parts to the given shared part (leaving their current ones, if any), as one undoable step:
+    // the parts are first moved after the shared part's last part
+    virtual void addPartsToSharedPart(const muse::IDList& partIds, const muse::ID& sharedPartId) = 0;
+    // Removes the shared part; its instruments stay where they are
+    virtual void ungroupSharedPart(const muse::ID& sharedPartId) = 0;
+    // Removes the given part from its shared part, as one undoable step: the part is first moved next to
+    // `destinationPartId` (if valid)
+    virtual void removePartFromSharedPart(const muse::ID& partId,
+                                          const muse::ID& destinationPartId = muse::ID(), InsertMode mode = InsertMode::After) = 0;
+
+    // Adds a new (empty) instrument of the same kind after each of the given parts (after its group, if it's in one)
+    virtual void duplicateParts(const muse::IDList& partIds) = 0;
+
     virtual muse::async::Notification partsChanged() const = 0;
     virtual muse::async::Notification scoreOrderChanged() const = 0;
 

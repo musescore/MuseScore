@@ -267,6 +267,60 @@ void EditStaveSharing::disconnectSharedPart(Transaction& tx, SharedPart* sharedP
     score->undoRemoveStaff(sharedPart->staves().back());
 }
 
+void EditStaveSharing::disconnectFromCurrentSharedPart(Transaction& tx, Part* part)
+{
+    SharedPart* currentSharedPart = part->sharedPart();
+    if (!currentSharedPart) {
+        return;
+    }
+
+    disconnectSharedPart(tx, currentSharedPart, part);
+    if (currentSharedPart->originParts().empty()) {
+        part->score()->cmdRemovePart(currentSharedPart);
+    }
+}
+
+SharedPart* EditStaveSharing::cmdCreateSharedPartForPart(Transaction& tx, Score* score, Part* part)
+{
+    disconnectFromCurrentSharedPart(tx, part);
+
+    const size_t idx = muse::indexOf(score->parts(), part);
+    SharedPart* sharedPart = createSharedPart(score, idx, part->instrument());
+    connectSharedPart(tx, sharedPart, part);
+
+    score->setBracketsAndBarlines();
+    score->update();
+
+    return sharedPart;
+}
+
+void EditStaveSharing::cmdAddPartToSharedPart(Transaction& tx, SharedPart* sharedPart, Part* part)
+{
+    if (part->sharedPart() == sharedPart) {
+        return;
+    }
+
+    disconnectFromCurrentSharedPart(tx, part);
+    connectSharedPart(tx, sharedPart, part);
+
+    Score* score = part->score();
+    score->setBracketsAndBarlines();
+    score->update();
+}
+
+void EditStaveSharing::cmdRemovePartFromSharedPart(Transaction& tx, Part* part)
+{
+    if (!part->sharedPart()) {
+        return;
+    }
+
+    disconnectFromCurrentSharedPart(tx, part);
+
+    Score* score = part->score();
+    score->setBracketsAndBarlines();
+    score->update();
+}
+
 void EditStaveSharing::handleRemovePart(Transaction& tx, Part* part)
 {
     Score* score = part->score();

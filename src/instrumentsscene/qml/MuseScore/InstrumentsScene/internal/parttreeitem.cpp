@@ -57,7 +57,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
     }
 
     bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
-    bool enabled = !(part->sharedPart() && part->sharedPart()->enabled());
+    bool enabled = !isCombinedOntoSharedStaves(part);
 
     setId(part->id());
 
@@ -66,13 +66,25 @@ void PartTreeItem::init(const notation::Part* masterPart)
 
     setIsVisible(visible);
     setIsEnabled(enabled);
-    setSettingsAvailable(m_partExists);
-    setSettingsEnabled(m_partExists);
-    setIsExpandable(m_partExists);
+    // Instruments that aren't in the current part can still be expanded and show their cog (as in the main score)
+    setSettingsAvailable(true);
+    setSettingsEnabled(true);
+    setIsExpandable(true);
     setIsRemovable(m_partExists);
+    setExistsInScore(m_partExists);
 
     m_part = part;
     m_ignoreVisibilityChange = false;
+}
+
+bool PartTreeItem::isCombinedOntoSharedStaves(const Part* part) const
+{
+    // Shared staves aren't shown in parts: there, instruments are shown as they are without combining
+    if (!notation()->isMaster()) {
+        return false;
+    }
+
+    return part->sharedPart() && part->sharedPart()->enabled();
 }
 
 const Part* PartTreeItem::part() const
@@ -92,7 +104,7 @@ void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
     m_ignoreVisibilityChange = true;
     setIsVisible(m_partExists && m_part->getProperty(Pid::VISIBLE).toBool());
     if (!m_part->isSharedPart()) {
-        setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
+        setIsEnabled(!isCombinedOntoSharedStaves(m_part));
     }
     m_ignoreVisibilityChange = false;
 }
@@ -126,7 +138,12 @@ void PartTreeItem::createAndAddPart(const ID& masterPartId)
 
     size_t index = resolveNewPartIndex(masterPartId);
 
-    notation()->parts()->insertPart(masterPart->clone(), index);
+    // The clone would keep the main score's shared part, which doesn't exist in parts; while that shared part is
+    // enabled (instruments combined), the instrument would never show in the part, nor could it be hidden again
+    Part* part = masterPart->clone();
+    part->setSharedPart(nullptr);
+
+    notation()->parts()->insertPart(part, index);
 }
 
 size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
@@ -233,6 +250,13 @@ bool PartTreeItem::canAcceptDrop(const QVariant& obj) const
 {
     if (auto item = dynamic_cast<const AbstractLayoutPanelTreeItem*>(obj.value<QObject*>())) {
         if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            return true;
+        }
+
+        // Instruments and shared-staves groups (moved as a whole, by their header) can be reordered among each other
+        const bool isPartOrGroup = item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART
+                                   || item->type() == LayoutPanelItemType::EMPTY_SHARED_GROUP;
+        if (isPartOrGroup && item->parentItem() == parentItem()) {
             return true;
         }
     }

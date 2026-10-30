@@ -23,6 +23,8 @@
 #include "layoutpaneltreemodel.h"
 
 #include <algorithm>
+#include <functional>
+#include <set>
 
 #include "async/notifylist.h"
 
@@ -30,6 +32,7 @@
 #include "defer.h"
 
 #include "engraving/dom/score.h"
+#include "engraving/dom/sharedpart.h"
 
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationselection.h" // IWYU pragma: keep
@@ -53,6 +56,12 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
 
+// Ids of empty shared-staves groups (which only exist in the panel), out of the range of score element ids
+static muse::ID emptySharedGroupId(int number)
+{
+    return muse::ID(uint64_t(0xFFFF000000000000ULL) + uint64_t(number));
+}
+
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -74,6 +83,7 @@ void LayoutPanelTreeModel::init()
             this, [this](const QItemSelection& selected, const QItemSelection& deselected) {
         setItemsSelected(deselected.indexes(), false);
         setItemsSelected(selected.indexes(), true);
+        syncItemsSelection();
 
         updateRearrangementAvailability();
         updateRemovingAvailability();
@@ -236,6 +246,7 @@ void LayoutPanelTreeModel::setupPartsConnections()
 
     m_notation->parts()->sharedPartsChanged().onNotify(this, [this]() {
         updateIsStaveSharingEnabled();
+        updateSharedGroupRoles();
     }, Mode::SetReplace);
 }
 
@@ -360,10 +371,13 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& cha
     }
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
 
     for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
         item->onScoreChanged(changes);
     }
+
+    updateSharedGroupRoles();
 
     m_scoreChanged = false;
 }
@@ -424,7 +438,14 @@ void LayoutPanelTreeModel::load()
             }
         }
 
-        m_rootItem->appendChild(part->isSharedPart() ? buildSharedPartItem(part) : buildMasterPartItem(part));
+        if (part->isSharedPart()) {
+            // Shared staves aren't shown in parts: there, instruments are shown as they are without combining
+            if (isMasterScore()) {
+                m_rootItem->appendChild(buildSharedPartItem(part));
+            }
+        } else {
+            m_rootItem->appendChild(buildMasterPartItem(part));
+        }
 
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
@@ -432,6 +453,51 @@ void LayoutPanelTreeModel::load()
                     m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
                 }
             }
+        }
+    }
+
+    // Empty shared-staves groups: those added via the Add menu go after the last instrument (above system markings
+    // at the bottom); those left by their instruments stay where the group was (after the instrument above it).
+    // One whose shared part exists again (e.g. after undo) isn't shown
+    if (isMasterScore() && !m_emptySharedGroups.empty()) {
+        for (const EmptySharedGroup& group : m_emptySharedGroups) {
+            if (group.originSharedPartId.isValid() && m_masterNotation->parts()->partExists(group.originSharedPartId)) {
+                continue;
+            }
+
+            int row = 0;
+            if (group.atBottom) {
+                row = m_rootItem->childCount();
+                while (row > 0 && m_rootItem->childType(row - 1) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+                    --row;
+                }
+            } else if (const AbstractLayoutPanelTreeItem* anchor = findEmptyGroupAnchor(group.anchorPartId)) {
+                row = anchor->row() + 1;
+                // After the anchor's whole group, if it's in one (or is one)
+                const Part* anchorPart = static_cast<const PartTreeItem*>(anchor)->part();
+                const Part* anchorGroup = anchorPart && anchorPart->isSharedPart() ? anchorPart
+                                          : anchorPart ? anchorPart->sharedPart() : nullptr;
+                while (anchorGroup && row < m_rootItem->childCount() && m_rootItem->childType(row) == LayoutPanelItemType::PART
+                       && static_cast<const PartTreeItem*>(m_rootItem->childAtRow(row))->part()->sharedPart() == anchorGroup) {
+                    ++row;
+                }
+            } else {
+                // At the top (below system markings there)
+                while (row < m_rootItem->childCount() && m_rootItem->childType(row) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+                    ++row;
+                }
+            }
+
+            auto item = new AbstractLayoutPanelTreeItem(LayoutPanelItemType::EMPTY_SHARED_GROUP, m_masterNotation, m_notation,
+                                                        m_rootItem);
+            item->setId(emptySharedGroupId(group.number));
+            item->setTitle(group.title);
+            item->setIsVisible(true);
+            item->setIsExpandable(true);
+            item->setSettingsAvailable(true);
+            item->setSettingsEnabled(true);
+            item->setIsSelectable(true); // to be moved
+            m_rootItem->insertChild(item, row);
         }
     }
 
@@ -443,15 +509,276 @@ void LayoutPanelTreeModel::load()
     updateIsAddingSystemMarkingsAvailable();
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
+    updateSharedGroupRoles();
 
+    emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
+}
+
+void LayoutPanelTreeModel::addEmptySharedGroup()
+{
+    if (!isMasterScore()) {
+        return;
+    }
+
+    EmptySharedGroup group;
+    group.number = ++m_lastEmptySharedGroupNumber;
+    //: The name of a new shared-staves group, before any instruments are added to it; %1 is a number
+    group.title = muse::qtrc("layoutpanel", "Group %1").arg(group.number);
+    group.atBottom = true;
+    m_emptySharedGroups.push_back(group);
+
+    // A group only makes sense while instruments are combined
+    if (!isStaveSharingEnabled()) {
+        toggleStaveSharing(true); // reloads
+    } else {
+        load();
+    }
+}
+
+const AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::findEmptyGroupAnchor(const muse::ID& anchorPartId) const
+{
+    if (!anchorPartId.isValid() || !m_rootItem) {
+        return nullptr;
+    }
+    if (const AbstractLayoutPanelTreeItem* item = m_rootItem->childAtId(anchorPartId, LayoutPanelItemType::PART)) {
+        return item;
+    }
+    return m_rootItem->childAtId(anchorPartId, LayoutPanelItemType::SHARED_PART);
+}
+
+void LayoutPanelTreeModel::updateEmptySharedGroupPositions()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    // Each empty group's position is the instrument (or group) above it in the panel
+    ID anchorPartId;
+    for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        if (item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART) {
+            anchorPartId = item->id();
+        } else if (item->type() == LayoutPanelItemType::EMPTY_SHARED_GROUP) {
+            if (EmptySharedGroup* group = findEmptySharedGroup(item->idStr())) {
+                group->anchorPartId = anchorPartId;
+                group->atBottom = false;
+            }
+        }
+    }
+}
+
+LayoutPanelTreeModel::EmptySharedGroup* LayoutPanelTreeModel::findEmptySharedGroup(const QString& emptyGroupId)
+{
+    for (EmptySharedGroup& group : m_emptySharedGroups) {
+        if (emptySharedGroupId(group.number).toQString() == emptyGroupId) {
+            return &group;
+        }
+    }
+    return nullptr;
+}
+
+void LayoutPanelTreeModel::keepEmptiedSharedGroups(const QStringList& leavingPartIds, const QString& destinationGroupId)
+{
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts || !m_rootItem) {
+        return;
+    }
+
+    std::set<const SharedPart*> leftGroups;
+    for (const QString& partId : leavingPartIds) {
+        const Part* part = parts->part(ID(partId));
+        if (part && part->sharedPart() && part->sharedPart()->id().toQString() != destinationGroupId) {
+            leftGroups.insert(part->sharedPart());
+        }
+    }
+
+    for (const SharedPart* sharedPart : leftGroups) {
+        bool allLeaving = true;
+        for (const Part* originPart : sharedPart->originParts()) {
+            if (!leavingPartIds.contains(originPart->id().toQString())) {
+                allLeaving = false;
+            }
+        }
+        if (!allLeaving) {
+            continue;
+        }
+
+        // The group stays where it is, as an empty group
+        EmptySharedGroup group;
+        group.number = ++m_lastEmptySharedGroupNumber;
+        group.originSharedPartId = sharedPart->id();
+
+        const AbstractLayoutPanelTreeItem* header = m_rootItem->childAtId(sharedPart->id(), LayoutPanelItemType::SHARED_PART);
+        group.title = header ? header->title() : muse::qtrc("layoutpanel", "Group %1").arg(group.number);
+
+        // Anchor: the nearest instrument above the group (if none, the group goes at the top)
+        for (int row = header ? header->row() - 1 : -1; row >= 0; --row) {
+            const AbstractLayoutPanelTreeItem* item = m_rootItem->childAtRow(row);
+            if (item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART) {
+                group.anchorPartId = item->id();
+                break;
+            }
+        }
+
+        m_emptySharedGroups.push_back(group);
+    }
+}
+
+QString LayoutPanelTreeModel::fillEmptySharedGroup(const QString& emptyGroupId, const QString& partId)
+{
+    return movePartsToSharedGroup({ partId }, emptyGroupId, true);
+}
+
+void LayoutPanelTreeModel::addPartToSharedGroup(const QString& partId, const QString& sharedPartId)
+{
+    movePartsToSharedGroup({ partId }, sharedPartId, false);
+}
+
+void LayoutPanelTreeModel::ungroupSharedGroup(const QString& sharedPartId)
+{
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts) {
+        return;
+    }
+
+    // Ungrouping deliberately removes the group (also any empty group it left behind earlier)
+    m_emptySharedGroups.removeIf([&](const EmptySharedGroup& group) {
+        return group.originSharedPartId == ID(sharedPartId);
+    });
+
+    parts->ungroupSharedPart(ID(sharedPartId));
+}
+
+void LayoutPanelTreeModel::removePartFromSharedGroup(const QString& partId)
+{
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts) {
+        return;
+    }
+
+    keepEmptiedSharedGroups({ partId }, QString());
+    parts->removePartFromSharedPart(ID(partId));
+}
+
+void LayoutPanelTreeModel::duplicateParts(const QStringList& partIds)
+{
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts) {
+        return;
+    }
+
+    IDList ids;
+    for (const QString& id : partIds) {
+        ids.push_back(ID(id));
+    }
+
+    parts->duplicateParts(ids);
+}
+
+QString LayoutPanelTreeModel::movePartsToSharedGroup(const QStringList& partIds, const QString& groupId, bool isEmptyGroup)
+{
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts || partIds.empty()) {
+        return QString();
+    }
+
+    IDList ids;
+    for (const QString& id : partIds) {
+        ids.push_back(ID(id));
+    }
+
+    if (!isEmptyGroup) {
+        keepEmptiedSharedGroups(partIds, groupId);
+        parts->addPartsToSharedPart(ids, ID(groupId));
+        return groupId;
+    }
+
+    EmptySharedGroup* emptyGroup = findEmptySharedGroup(groupId);
+    if (!emptyGroup) {
+        return QString();
+    }
+
+    // Where the empty group is: after its anchor, at the bottom (after the last instrument), or at the top
+    ID destinationPartId = emptyGroup->anchorPartId;
+    INotationParts::InsertMode mode = INotationParts::InsertMode::After;
+    if (emptyGroup->atBottom || !destinationPartId.isValid()) {
+        for (const Part* p : parts->partList()) {
+            if (emptyGroup->atBottom) {
+                if (!p->isSharedPart()) {
+                    destinationPartId = p->id(); // the last instrument
+                }
+            } else if (!destinationPartId.isValid()) {
+                destinationPartId = p->id(); // the first instrument
+                mode = INotationParts::InsertMode::Before;
+            }
+        }
+    } else if (const Part* anchor = parts->part(destinationPartId); anchor&& anchor->sharedPart()) {
+        // After the anchor's whole group
+        for (const Part* p : parts->partList()) {
+            if (p->sharedPart() == anchor->sharedPart()) {
+                destinationPartId = p->id();
+            }
+        }
+    }
+
+    const int number = emptyGroup->number;
+    keepEmptiedSharedGroups(partIds, QString());
+    m_emptySharedGroups.removeIf([number](const EmptySharedGroup& group) { return group.number == number; });
+
+    const QString sharedPartId = parts->createSharedPart(ids, destinationPartId, mode).toQString();
+    return sharedPartId == ID().toQString() ? QString() : sharedPartId;
+}
+
+QString LayoutPanelTreeModel::createSharedGroupWithParts(const QStringList& partIds)
+{
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts || partIds.empty()) {
+        return QString();
+    }
+
+    if (!isStaveSharingEnabled()) {
+        toggleStaveSharing(true);
+    }
+
+    IDList ids;
+    for (const QString& id : partIds) {
+        ids.push_back(ID(id));
+    }
+
+    keepEmptiedSharedGroups(partIds, QString());
+
+    const QString sharedPartId = parts->createSharedPart(ids).toQString();
+    return sharedPartId == ID().toQString() ? QString() : sharedPartId;
+}
+
+void LayoutPanelTreeModel::deleteEmptySharedGroup(const QString& emptyGroupId)
+{
+    if (EmptySharedGroup* group = findEmptySharedGroup(emptyGroupId)) {
+        const int number = group->number;
+        m_emptySharedGroups.removeIf([number](const EmptySharedGroup& g) { return g.number == number; });
+        load();
+    }
 }
 
 void LayoutPanelTreeModel::toggleStaveSharing(bool on)
 {
     m_notation->parts()->toggleStaveSharing(on);
     updateIsStaveSharingEnabled();
+}
+
+void LayoutPanelTreeModel::toggleHideEmptyStaves(bool on)
+{
+    if (!m_notation || isHideEmptyStavesEnabled() == on) {
+        return;
+    }
+
+    m_notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Hide empty staves"));
+    m_notation->style()->setStyleValue(StyleId::hideEmptyStaves, on);
+    m_notation->undoStack()->commitChanges();
+
+    updateIsHideEmptyStavesEnabled();
 }
 
 void LayoutPanelTreeModel::sortParts(PartList& parts, const PartList& referenceParts)
@@ -540,8 +867,18 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
     });
 
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
+    const int count = movedRowCount(selectedIndexList);
+    int destinationRow = skipOtherSharedGroup(sourceRowFirst, sourceRowFirst.row() - 1, /*up*/ true);
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowFirst.row() - 1);
+    // Nothing goes above the first system markings row
+    if (!sourceRowFirst.parent().isValid() && m_rootItem && m_rootItem->childType(0) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+        destinationRow = std::max(destinationRow, 1);
+    }
+    if (destinationRow >= sourceRowFirst.row()) {
+        return;
+    }
+
+    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), count, sourceRowFirst.parent(), destinationRow);
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsDown()
@@ -560,9 +897,86 @@ void LayoutPanelTreeModel::moveSelectedRowsDown()
     });
 
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
-    const QModelIndex& sourceRowLast = selectedIndexList.last();
+    const int count = movedRowCount(selectedIndexList);
+    const int destinationRow = skipOtherSharedGroup(sourceRowFirst, sourceRowFirst.row() + count, /*up*/ false);
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowLast.row() + 1);
+    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), count, sourceRowFirst.parent(), destinationRow);
+}
+
+int LayoutPanelTreeModel::movedRowCount(const QModelIndexList& sortedSelectedIndexes) const
+{
+    const int selectedCount = sortedSelectedIndexes.count();
+    const QModelIndex& last = sortedSelectedIndexes.last();
+    if (last.parent().isValid() || !m_rootItem) {
+        return selectedCount;
+    }
+
+    // A selected group header (at the end of the selection) brings its instruments along
+    const AbstractLayoutPanelTreeItem* lastItem = m_rootItem->childAtRow(last.row());
+    if (!lastItem || lastItem->sharedGroupRole() != LayoutPanelItemType::GROUP_HEADER) {
+        return selectedCount;
+    }
+
+    int lastRow = last.row();
+    while (lastRow + 1 < m_rootItem->childCount()) {
+        const AbstractLayoutPanelTreeItem* next = m_rootItem->childAtRow(lastRow + 1);
+        const bool isMember = next->sharedGroupRole() == LayoutPanelItemType::GROUP_MEMBER
+                              || next->sharedGroupRole() == LayoutPanelItemType::GROUP_LAST_MEMBER;
+        if (!isMember || next->sharedGroupId() != lastItem->sharedGroupId()) {
+            break;
+        }
+        ++lastRow;
+    }
+
+    return lastRow - sortedSelectedIndexes.first().row() + 1;
+}
+
+int LayoutPanelTreeModel::skipOtherSharedGroup(const QModelIndex& movedIndex, int destinationRow, bool up) const
+{
+    // Only top level rows (instruments, groups, system markings) can be moved past groups
+    if (movedIndex.parent().isValid() || !m_rootItem) {
+        return destinationRow;
+    }
+
+    auto isMember = [](const AbstractLayoutPanelTreeItem* item) {
+        return item->sharedGroupRole() == LayoutPanelItemType::GROUP_MEMBER
+               || item->sharedGroupRole() == LayoutPanelItemType::GROUP_LAST_MEMBER;
+    };
+
+    const AbstractLayoutPanelTreeItem* moved = m_rootItem->childAtRow(movedIndex.row());
+    const QString movedGroupId = moved && isMember(moved) ? moved->sharedGroupId() : QString();
+
+    const AbstractLayoutPanelTreeItem* destination = m_rootItem->childAtRow(destinationRow);
+    if (!destination || destination->sharedGroupId().isEmpty() || destination->sharedGroupId() == movedGroupId) {
+        return destinationRow;
+    }
+
+    const QString groupId = destination->sharedGroupId();
+
+    if (up) {
+        // Moving up from below another group: go above its header, rather than in among its instruments
+        if (!isMember(destination)) {
+            return destinationRow;
+        }
+        while (destinationRow > 0 && m_rootItem->childAtRow(destinationRow)->sharedGroupId() == groupId
+               && isMember(m_rootItem->childAtRow(destinationRow))) {
+            --destinationRow;
+        }
+        return destinationRow; // the group's header
+    }
+
+    // Moving down onto another group's header: go after its last instrument
+    if (destination->sharedGroupRole() != LayoutPanelItemType::GROUP_HEADER) {
+        return destinationRow;
+    }
+    while (destinationRow + 1 < m_rootItem->childCount()) {
+        const AbstractLayoutPanelTreeItem* next = m_rootItem->childAtRow(destinationRow + 1);
+        if (next->sharedGroupId() != groupId || !isMember(next)) {
+            break;
+        }
+        ++destinationRow;
+    }
+    return destinationRow;
 }
 
 void LayoutPanelTreeModel::removeSelectedRows()
@@ -632,7 +1046,29 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         return false;
     }
 
-    if (m_dragInProgress) {
+    // Empty groups only exist in the panel: moving them, or moving rows past nothing but them, doesn't change the score
+    bool panelOnly = false;
+    if (sourceParentItem == m_rootItem && destinationParentItem == m_rootItem) {
+        auto isEmptyGroup = [this](int row) {
+            return m_rootItem->childType(row) == LayoutPanelItemType::EMPTY_SHARED_GROUP;
+        };
+
+        bool movingEmptyGroups = true;
+        for (int row = sourceFirstRow; row <= sourceLastRow; ++row) {
+            movingEmptyGroups = movingEmptyGroups && isEmptyGroup(row);
+        }
+
+        bool passingEmptyGroupsOnly = true;
+        const int passedFirst = destinationRow < sourceFirstRow ? destinationRow : sourceLastRow + 1;
+        const int passedLast = destinationRow < sourceFirstRow ? sourceFirstRow - 1 : destinationRow - 1;
+        for (int row = passedFirst; row <= passedLast; ++row) {
+            passingEmptyGroupsOnly = passingEmptyGroupsOnly && isEmptyGroup(row);
+        }
+
+        panelOnly = movingEmptyGroups || passingEmptyGroupsOnly;
+    }
+
+    if (m_dragInProgress && !panelOnly) {
         MoveParams params = sourceParentItem->buildMoveParams(sourceRow, count, destinationParentItem, destinationRow);
         if (!params.isValid()) {
             return false;
@@ -643,12 +1079,19 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     }
 
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
+    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress && !panelOnly);
     endMoveRows();
+
+    updateEmptySharedGroupPositions();
+
+    // The selection follows the moved rows, but the items' selected state must be brought in line
+    syncItemsSelection();
 
     if (!m_dragInProgress) {
         updateSystemObjectLayers();
     }
+
+    updateSharedGroupRoles();
 
     updateRearrangementAvailability();
 
@@ -658,6 +1101,29 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
 void LayoutPanelTreeModel::startActiveDrag()
 {
     m_dragInProgress = true;
+}
+
+void LayoutPanelTreeModel::cancelActiveDrag()
+{
+    m_dragSourceParentItem = nullptr;
+    m_activeDragMoveParams = MoveParams();
+    m_dragInProgress = false;
+}
+
+void LayoutPanelTreeModel::endActiveDragLeavingSharedGroup(const QString& partId)
+{
+    const MoveParams params = m_activeDragMoveParams;
+    cancelActiveDrag();
+
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts) {
+        return;
+    }
+
+    const bool moved = params.isValid() && params.objectsType == LayoutPanelItemType::PART;
+
+    keepEmptiedSharedGroups({ partId }, QString());
+    parts->removePartFromSharedPart(ID(partId), moved ? params.destinationObjectId : ID(), params.insertMode);
 }
 
 void LayoutPanelTreeModel::endActiveDrag()
@@ -845,6 +1311,16 @@ bool LayoutPanelTreeModel::isEmpty() const
 int LayoutPanelTreeModel::selectedItemsType() const
 {
     return static_cast<int>(m_selectedItemsType);
+}
+
+QString LayoutPanelTreeModel::scoreName() const
+{
+    return m_notation ? m_notation->name() : QString();
+}
+
+bool LayoutPanelTreeModel::isHideEmptyStavesEnabled() const
+{
+    return m_isHideEmptyStavesEnabled;
 }
 
 bool LayoutPanelTreeModel::isStaveSharingEnabled() const
@@ -1054,6 +1530,106 @@ void LayoutPanelTreeModel::updateIsStaveSharingEnabled()
 
     m_isStaveSharingEnabled = enabled;
     emit isStaveSharingEnabledChanged(enabled);
+}
+
+void LayoutPanelTreeModel::updateIsHideEmptyStavesEnabled()
+{
+    bool enabled = m_notation && m_notation->style()->styleValue(StyleId::hideEmptyStaves).toBool();
+    if (enabled == m_isHideEmptyStavesEnabled) {
+        return;
+    }
+
+    m_isHideEmptyStavesEnabled = enabled;
+    emit isHideEmptyStavesEnabledChanged(enabled);
+}
+
+void LayoutPanelTreeModel::updateSharedGroupRoles()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    // Shared parts are inserted directly before their origin parts, so a group is
+    // a SHARED_PART row followed by the consecutive PART rows that belong to it.
+    const QList<AbstractLayoutPanelTreeItem*>& items = m_rootItem->childItems();
+    const Part* currentSharedPart = nullptr;
+    AbstractLayoutPanelTreeItem* lastMember = nullptr;
+
+    auto closeGroup = [&]() {
+        if (lastMember) {
+            lastMember->setSharedGroupRole(LayoutPanelItemType::GROUP_LAST_MEMBER);
+        }
+        currentSharedPart = nullptr;
+        lastMember = nullptr;
+    };
+
+    for (AbstractLayoutPanelTreeItem* item : items) {
+        if (item->type() == LayoutPanelItemType::EMPTY_SHARED_GROUP) {
+            // A group of its own, without instruments
+            closeGroup();
+            item->setSharedGroupRole(LayoutPanelItemType::GROUP_HEADER);
+            item->setSharedGroupId(item->idStr());
+            continue;
+        }
+
+        int role = LayoutPanelItemType::NOT_IN_GROUP;
+
+        if (item->type() == LayoutPanelItemType::SHARED_PART) {
+            closeGroup();
+            currentSharedPart = static_cast<PartTreeItem*>(item)->part();
+            role = LayoutPanelItemType::GROUP_HEADER;
+        } else if (item->type() == LayoutPanelItemType::PART && currentSharedPart) {
+            const Part* part = static_cast<PartTreeItem*>(item)->part();
+            if (part && part->sharedPart() == currentSharedPart) {
+                role = LayoutPanelItemType::GROUP_MEMBER;
+                lastMember = item;
+            } else {
+                closeGroup();
+            }
+        } else {
+            closeGroup();
+        }
+
+        const QString groupId = currentSharedPart ? currentSharedPart->id().toQString() : QString();
+
+        item->setSharedGroupRole(role);
+        item->setSharedGroupId(groupId);
+        for (AbstractLayoutPanelTreeItem* child : item->childItems()) {
+            child->setSharedGroupRole(role);
+            child->setSharedGroupId(groupId);
+        }
+    }
+
+    closeGroup();
+
+    // Children of the last member inherit its role, so that the group background closes below them
+    for (AbstractLayoutPanelTreeItem* item : items) {
+        if (item->sharedGroupRole() == LayoutPanelItemType::GROUP_LAST_MEMBER) {
+            for (AbstractLayoutPanelTreeItem* child : item->childItems()) {
+                child->setSharedGroupRole(LayoutPanelItemType::GROUP_LAST_MEMBER);
+            }
+        }
+    }
+}
+
+void LayoutPanelTreeModel::syncItemsSelection()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    // The selection deltas reported around row moves can refer to rows' old positions,
+    // so derive each item's selected state from the selection model itself
+    std::function<void(AbstractLayoutPanelTreeItem*)> sync = [&](AbstractLayoutPanelTreeItem* parent) {
+        for (AbstractLayoutPanelTreeItem* item : parent->childItems()) {
+            if (item->isSelectable()) {
+                item->setIsSelected(m_selectionModel->isSelected(createIndex(item->row(), 0, item)));
+            }
+            sync(item);
+        }
+    };
+
+    sync(m_rootItem);
 }
 
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)

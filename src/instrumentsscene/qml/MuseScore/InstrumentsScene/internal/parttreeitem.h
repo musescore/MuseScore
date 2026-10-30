@@ -68,6 +68,8 @@ protected:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
 private:
+    bool isCombinedOntoSharedStaves(const notation::Part* part) const;
+
     void createAndAddPart(const muse::ID& masterPartId);
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;

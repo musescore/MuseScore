@@ -178,7 +178,8 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
 
     auto resolveDstStaff = [](const AbstractLayoutPanelTreeItem* item) -> const Staff* {
         if (item) {
-            if (item->type() == LayoutPanelItemType::PART) {
+            // A shared-staves group's top staff is its shared staff
+            if (item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART) {
                 return static_cast<const PartTreeItem*>(item)->part()->staff(0);
             } else if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
                 return static_cast<const SystemObjectsLayerTreeItem*>(item)->staff();
@@ -215,7 +216,7 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
     bool moveUp = destinationRow < sourceRow;
     bool moveDown = destinationRow > sourceRow;
     bool sourceIsSystemObjectLayer = srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
-    bool sourceIsPartLayer = srcItem->type() == LayoutPanelItemType::PART;
+    bool sourceIsPartLayer = srcItem->type() == LayoutPanelItemType::PART || srcItem->type() == LayoutPanelItemType::SHARED_PART;
     if (srcStaff->hasSystemObjectsBelowBottomStaff()) {
         if ((sourceIsSystemObjectLayer && moveUp) || (sourceIsPartLayer && moveDown)) {
             moveParams.moveSysObjAboveBottomStaff = true;
