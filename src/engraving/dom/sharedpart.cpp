@@ -192,6 +192,17 @@ std::map<Fraction, StaveSharingState> SharedPart::staveSharingStatesBetweenTicks
     return result;
 }
 
+Fraction SharedPart::nextUserModifiedStaveSharingTick(const Fraction& tick) const
+{
+    for (auto iter = m_staveSharingStateByTick.upper_bound(tick); iter != m_staveSharingStateByTick.end(); ++iter) {
+        if (iter->second.isUserModified()) {
+            return iter->first;
+        }
+    }
+
+    return score()->endTick();
+}
+
 bool SharedPart::isSameInstrumentsAtTick(const Fraction& tick)
 {
     if (m_originParts.empty()) {
